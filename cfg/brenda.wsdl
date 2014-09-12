@@ -1,0 +1,3232 @@
+<?xml version ="1.0" encoding ="UTF-8" ?> 
+<definitions 
+        name="brenda_ws" 
+        targetNamespace="ws.brenda" 
+        xmlns:typens="ws.brenda" 
+        xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+        xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 
+        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+        xmlns="http://schemas.xmlsoap.org/wsdl/"> 
+
+    <types>
+        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="ws.brenda">
+            <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+            <xsd:import namespace="http://schemas.xmlsoap.org/wsdl/"/>
+        </xsd:schema>
+        <xsd:complexType name="ArrayOfIntegers">
+            <xsd:complexContent>
+                <xsd:restriction base="soapenc:Array">
+                    <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:int[]"/>
+                </xsd:restriction>
+            </xsd:complexContent>
+        </xsd:complexType>
+
+        <xsd:complexType name="ArrayOfStrings">
+            <xsd:complexContent>
+                <xsd:restriction base="soapenc:Array">
+                    <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:string[]"/>
+                </xsd:restriction>
+            </xsd:complexContent>
+        </xsd:complexType>
+        
+                <xsd:complexType name="elementaryReference">
+                        <xsd:all>
+                        <xsd:element name="authors" type="xsd:string"/>
+                        <xsd:element name="title" type="xsd:string"/>
+                        <xsd:element name="journal" type="xsd:string"/>
+                        <xsd:element name="volume" type="xsd:string"/>
+                        <xsd:element name="pages" type="xsd:string"/>
+                        <xsd:element name="year" type="xsd:string"/>
+                        <xsd:element name="pubmedId" type="xsd:string"/>
+                        </xsd:all>
+                </xsd:complexType>
+
+
+		<xsd:complexType name="reference">
+			<xsd:all>
+			<xsd:element name="reference" type="xsd:string"/>
+			<xsd:element name="title" type="xsd:string"/>
+			<xsd:element name="journal" type="xsd:string"/>
+			<xsd:element name="year" type="xsd:string"/>
+			<xsd:element name="pubmedId" type="xsd:string"/>
+			<xsd:element name="textmining" type="xsd:string"/>
+			<xsd:element name="volume" type="xsd:string"/>
+			<xsd:element name="authors" type="xsd:string"/>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="pages" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfReferences">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:reference[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="sequence">
+			<xsd:all>
+			<xsd:element name="firstAccessionCode" type="xsd:string"/>
+			<xsd:element name="noOfAminoAcids" type="xsd:string"/>
+			<xsd:element name="sequence" type="xsd:string"/>
+			<xsd:element name="source" type="xsd:string"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="id" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfSequences">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:sequence[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="kmValue">
+			<xsd:all>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="substrate" type="xsd:string"/>
+			<xsd:element name="kmValue" type="xsd:string"/>
+			<xsd:element name="kmValueMaximum" type="xsd:string"/>
+			<xsd:element name="filename" type="xsd:string"/>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfKmvalues">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:kmValue[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="phStability">
+			<xsd:all>
+			<xsd:element name="phStabilityMaximum" type="xsd:string"/>
+			<xsd:element name="phStability" type="xsd:string"/>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfPhstabilitys">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:phStability[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="oxidationStability">
+			<xsd:all>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="oxidationStability" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfOxidationstabilitys">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:oxidationStability[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="naturalSubstratesProducts">
+			<xsd:all>
+			<xsd:element name="organismNaturalProducts" type="xsd:string"/>
+			<xsd:element name="commentaryNaturalSubstrates" type="xsd:string"/>
+			<xsd:element name="reversibility" type="xsd:string"/>
+			<xsd:element name="organismNaturalSubstrates" type="xsd:string"/>
+			<xsd:element name="naturalProducts" type="xsd:string"/>
+			<xsd:element name="commentaryNaturalProducts" type="xsd:string"/>
+			<xsd:element name="naturalSubstrates" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfNaturalsubstratesproductss">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:naturalSubstratesProducts[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="engineering">
+			<xsd:all>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="engineering" type="xsd:string"/>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfEngineerings">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:engineering[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="naturalProduct">
+			<xsd:all>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="filename" type="xsd:string"/>
+			<xsd:element name="naturalReactionPartners" type="xsd:string"/>
+			<xsd:element name="naturalProduct" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfNaturalproducts">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:naturalProduct[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="metalsIons">
+			<xsd:all>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="filename" type="xsd:string"/>
+			<xsd:element name="metalsIons" type="xsd:string"/>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfMetalsionss">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:metalsIons[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="activatingCompound">
+			<xsd:all>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="activatingCompound" type="xsd:string"/>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="filename" type="xsd:string"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfActivatingcompounds">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:activatingCompound[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="inhibitors">
+			<xsd:all>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="inhibitors" type="xsd:string"/>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="filename" type="xsd:string"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfInhibitorss">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:inhibitors[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="cofactor">
+			<xsd:all>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="filename" type="xsd:string"/>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="cofactor" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfCofactors">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:cofactor[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="generalStability">
+			<xsd:all>
+			<xsd:element name="generalStability" type="xsd:string"/>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfGeneralstabilitys">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:generalStability[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="naturalSubstrate">
+			<xsd:all>
+			<xsd:element name="naturalReactionPartners" type="xsd:string"/>
+			<xsd:element name="filename" type="xsd:string"/>
+			<xsd:element name="naturalSubstrate" type="xsd:string"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfNaturalsubstrates">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:naturalSubstrate[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="molecularWeight">
+			<xsd:all>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="molecularWeight" type="xsd:string"/>
+			<xsd:element name="molecularWeightMaximum" type="xsd:string"/>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfMolecularweights">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:molecularWeight[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="crystallization">
+			<xsd:all>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfCrystallizations">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:crystallization[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="substratesProducts">
+			<xsd:all>
+			<xsd:element name="literatureProducts" type="xsd:string"/>
+			<xsd:element name="literatureSubstrates" type="xsd:string"/>
+			<xsd:element name="organismSubstrates" type="xsd:string"/>
+			<xsd:element name="commentarySubstrates" type="xsd:string"/>
+			<xsd:element name="reversibility" type="xsd:string"/>
+			<xsd:element name="organismProducts" type="xsd:string"/>
+			<xsd:element name="products" type="xsd:string"/>
+			<xsd:element name="commentaryProducts" type="xsd:string"/>
+			<xsd:element name="substrates" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfSubstratesproductss">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:substratesProducts[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="reactionType">
+			<xsd:all>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="reactionType" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfReactiontypes">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:reactionType[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="organismSynonyms">
+			<xsd:all>
+			<xsd:element name="otherName" type="xsd:string"/>
+			<xsd:element name="brendaName" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfOrganismsynonymss">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:organismSynonyms[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="enzymeNames">
+			<xsd:all>
+			<xsd:element name="synonyms" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfEnzymenamess">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:enzymeNames[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="organicSolventStability">
+			<xsd:all>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="organicSolvent" type="xsd:string"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfOrganicsolventstabilitys">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:organicSolventStability[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="application">
+			<xsd:all>
+			<xsd:element name="application" type="xsd:string"/>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfApplications">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:application[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="synonyms">
+			<xsd:all>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="synonyms" type="xsd:string"/>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfSynonymss">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:synonyms[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="temperatureOptimum">
+			<xsd:all>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="temperatureOptimumMaximum" type="xsd:string"/>
+			<xsd:element name="temperatureOptimum" type="xsd:string"/>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfTemperatureoptimums">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:temperatureOptimum[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="temperatureStability">
+			<xsd:all>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="temperatureStabilityMaximum" type="xsd:string"/>
+			<xsd:element name="temperatureStability" type="xsd:string"/>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfTemperaturestabilitys">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:temperatureStability[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="piValue">
+			<xsd:all>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="piValueMaximum" type="xsd:string"/>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="piValue" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfPivalues">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:piValue[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="temperatureRange">
+			<xsd:all>
+			<xsd:element name="temperatureRangeMaximum" type="xsd:string"/>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="temperatureRange" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfTemperatureranges">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:temperatureRange[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="recommendedName">
+			<xsd:all>
+			<xsd:element name="goNumber" type="xsd:string"/>
+			<xsd:element name="recommendedName" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfRecommendednames">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:recommendedName[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="product">
+			<xsd:all>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="product" type="xsd:string"/>
+			<xsd:element name="filename" type="xsd:string"/>
+			<xsd:element name="reactionPartners" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfProducts">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:product[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="casRegistryNumber">
+			<xsd:all>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="casRegistryNumber" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfCasregistrynumbers">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:casRegistryNumber[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="localization">
+			<xsd:all>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="idGo" type="xsd:string"/>
+			<xsd:element name="localization" type="xsd:string"/>
+			<xsd:element name="textmining" type="xsd:string"/>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfLocalizations">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:localization[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="posttranslationalModification">
+			<xsd:all>
+			<xsd:element name="posttranslationalModification" type="xsd:string"/>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfPosttranslationalmodifications">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:posttranslationalModification[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="systematicName">
+			<xsd:all>
+			<xsd:element name="systematicName" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfSystematicnames">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:systematicName[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="cloned">
+			<xsd:all>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfCloneds">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:cloned[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="specificActivity">
+			<xsd:all>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="specificActivityMaximum" type="xsd:string"/>
+			<xsd:element name="specificActivity" type="xsd:string"/>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfSpecificactivitys">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:specificActivity[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="subunits">
+			<xsd:all>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="subunits" type="xsd:string"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfSubunitss">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:subunits[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="ligands">
+			<xsd:all>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="filename" type="xsd:string"/>
+			<xsd:element name="role" type="xsd:string"/>
+			<xsd:element name="ligand" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfLigandss">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:ligands[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="turnoverNumber">
+			<xsd:all>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="substrate" type="xsd:string"/>
+			<xsd:element name="turnoverNumberMaximum" type="xsd:string"/>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="filename" type="xsd:string"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="turnoverNumber" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfTurnovernumbers">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:turnoverNumber[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="ecNumber">
+			<xsd:all>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfEcnumbers">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:ecNumber[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="reaction">
+			<xsd:all>
+			<xsd:element name="reaction" type="xsd:string"/>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfReactions">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:reaction[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="sourceTissue">
+			<xsd:all>
+			<xsd:element name="sourceTissue" type="xsd:string"/>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="textmining" type="xsd:string"/>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfSourcetissues">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:sourceTissue[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="substrate">
+			<xsd:all>
+			<xsd:element name="reactionPartners" type="xsd:string"/>
+			<xsd:element name="filename" type="xsd:string"/>
+			<xsd:element name="substrate" type="xsd:string"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfSubstrates">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:substrate[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="phRange">
+			<xsd:all>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="phRange" type="xsd:string"/>
+			<xsd:element name="phRangeMaximum" type="xsd:string"/>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfPhranges">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:phRange[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="storageStability">
+			<xsd:all>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="storageStability" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfStoragestabilitys">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:storageStability[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="phOptimum">
+			<xsd:all>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="phOptimum" type="xsd:string"/>
+			<xsd:element name="phOptimumMaximum" type="xsd:string"/>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfPhoptimums">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:phOptimum[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="disease">
+			<xsd:all>
+			<xsd:element name="titlePub" type="xsd:string"/>
+			<xsd:element name="disease" type="xsd:string"/>
+			<xsd:element name="pubmedId" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfDiseases">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:disease[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="purification">
+			<xsd:all>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfPurifications">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:purification[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="renatured">
+			<xsd:all>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfRenatureds">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:renatured[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="kiValue">
+			<xsd:all>
+			<xsd:element name="kiValueMaximum" type="xsd:string"/>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="filename" type="xsd:string"/>
+			<xsd:element name="kiValue" type="xsd:string"/>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="inhibitor" type="xsd:string"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfKivalues">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:kiValue[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="keggPathway">
+			<xsd:all>
+			<xsd:element name="keggPathway" type="xsd:string"/>
+			<xsd:element name="keggLink" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfKeggpathways">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:keggPathway[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="organism">
+			<xsd:all>
+			<xsd:element name="sequenceCode" type="xsd:string"/>
+			<xsd:element name="commentary" type="xsd:string"/>
+			<xsd:element name="literature" type="typens:ArrayOfIntegers"/>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="textmining" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfOrganisms">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:organism[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="pdb">
+			<xsd:all>
+			<xsd:element name="organism" type="xsd:string"/>
+			<xsd:element name="pdb" type="xsd:string"/>
+			<xsd:element name="ecNumber" type="xsd:string"/>
+			</xsd:all>
+		</xsd:complexType>
+		<xsd:complexType name="ArrayOfPdbs">
+			<xsd:complexContent>
+				<xsd:restriction base="soapenc:Array">
+					<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:pdb[]"/>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</types>
+        <message name="getReferenceByIdRequest">
+                <part name="id"  element="xsd:string"/>
+        </message>
+        <message name="getReferenceByIdResponse">
+                <part name="return" element="typens:elementaryReference"/>
+        </message>
+        <message name="getLigandStructureIdByCompoundNameRequest">
+                <part name="id"  element="xsd:string"/>
+        </message>
+        <message name="getLigandStructureIdByCompoundNameResponse">
+                <part name="return" element="xsd:int"/>
+        </message>
+
+	<message name="getReferenceRequest">
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getReferenceResponse">
+		<part name="return" element="typens:reference"/>
+	</message>
+	<message name="getEcNumbersFromReferenceResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromReferenceResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getSequenceRequest">
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getSequenceResponse">
+		<part name="return" element="typens:sequence"/>
+	</message>
+	<message name="getEcNumbersFromSequenceResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromSequenceResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getKmValueRequest">
+		<part name="ligandStructureId"  element="xsd:string"/>
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getKmValueResponse">
+		<part name="return" element="typens:kmValue"/>
+	</message>
+	<message name="getEcNumbersFromKmValueResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromKmValueResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getPhStabilityRequest">
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getPhStabilityResponse">
+		<part name="return" element="typens:phStability"/>
+	</message>
+	<message name="getEcNumbersFromPhStabilityResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromPhStabilityResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOxidationStabilityRequest">
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getOxidationStabilityResponse">
+		<part name="return" element="typens:oxidationStability"/>
+	</message>
+	<message name="getEcNumbersFromOxidationStabilityResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromOxidationStabilityResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getNaturalSubstratesProductsRequest">
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getNaturalSubstratesProductsResponse">
+		<part name="return" element="typens:naturalSubstratesProducts"/>
+	</message>
+	<message name="getEcNumbersFromNaturalSubstratesProductsResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromNaturalSubstratesProductsResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getEngineeringRequest">
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getEngineeringResponse">
+		<part name="return" element="typens:engineering"/>
+	</message>
+	<message name="getEcNumbersFromEngineeringResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromEngineeringResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getNaturalProductRequest">
+		<part name="organism"  element="xsd:string"/>
+		<part name="ligandStructureId"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getNaturalProductResponse">
+		<part name="return" element="typens:naturalProduct"/>
+	</message>
+	<message name="getEcNumbersFromNaturalProductResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromNaturalProductResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getMetalsIonsRequest">
+		<part name="ligandStructureId"  element="xsd:string"/>
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getMetalsIonsResponse">
+		<part name="return" element="typens:metalsIons"/>
+	</message>
+	<message name="getEcNumbersFromMetalsIonsResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromMetalsIonsResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getActivatingCompoundRequest">
+		<part name="ligandStructureId"  element="xsd:string"/>
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getActivatingCompoundResponse">
+		<part name="return" element="typens:activatingCompound"/>
+	</message>
+	<message name="getEcNumbersFromActivatingCompoundResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromActivatingCompoundResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getInhibitorsRequest">
+		<part name="ligandStructureId"  element="xsd:string"/>
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getInhibitorsResponse">
+		<part name="return" element="typens:inhibitors"/>
+	</message>
+	<message name="getEcNumbersFromInhibitorsResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromInhibitorsResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getCofactorRequest">
+		<part name="ligandStructureId"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+		<part name="organism"  element="xsd:string"/>
+	</message>
+	<message name="getCofactorResponse">
+		<part name="return" element="typens:cofactor"/>
+	</message>
+	<message name="getEcNumbersFromCofactorResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromCofactorResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getGeneralStabilityRequest">
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getGeneralStabilityResponse">
+		<part name="return" element="typens:generalStability"/>
+	</message>
+	<message name="getEcNumbersFromGeneralStabilityResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromGeneralStabilityResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getNaturalSubstrateRequest">
+		<part name="ligandStructureId"  element="xsd:string"/>
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getNaturalSubstrateResponse">
+		<part name="return" element="typens:naturalSubstrate"/>
+	</message>
+	<message name="getEcNumbersFromNaturalSubstrateResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromNaturalSubstrateResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getMolecularWeightRequest">
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getMolecularWeightResponse">
+		<part name="return" element="typens:molecularWeight"/>
+	</message>
+	<message name="getEcNumbersFromMolecularWeightResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromMolecularWeightResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getCrystallizationRequest">
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getCrystallizationResponse">
+		<part name="return" element="typens:crystallization"/>
+	</message>
+	<message name="getEcNumbersFromCrystallizationResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromCrystallizationResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getSubstratesProductsRequest">
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getSubstratesProductsResponse">
+		<part name="return" element="typens:substratesProducts"/>
+	</message>
+	<message name="getEcNumbersFromSubstratesProductsResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromSubstratesProductsResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getReactionTypeRequest">
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getReactionTypeResponse">
+		<part name="return" element="typens:reactionType"/>
+	</message>
+	<message name="getEcNumbersFromReactionTypeResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromReactionTypeResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismSynonymsRequest">
+	</message>
+	<message name="getOrganismSynonymsResponse">
+		<part name="return" element="typens:organismSynonyms"/>
+	</message>
+	<message name="getEcNumbersFromOrganismSynonymsResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromOrganismSynonymsResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getEnzymeNamesRequest">
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getEnzymeNamesResponse">
+		<part name="return" element="typens:enzymeNames"/>
+	</message>
+	<message name="getEcNumbersFromEnzymeNamesResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromEnzymeNamesResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganicSolventStabilityRequest">
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getOrganicSolventStabilityResponse">
+		<part name="return" element="typens:organicSolventStability"/>
+	</message>
+	<message name="getEcNumbersFromOrganicSolventStabilityResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromOrganicSolventStabilityResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getApplicationRequest">
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getApplicationResponse">
+		<part name="return" element="typens:application"/>
+	</message>
+	<message name="getEcNumbersFromApplicationResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromApplicationResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getSynonymsRequest">
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getSynonymsResponse">
+		<part name="return" element="typens:synonyms"/>
+	</message>
+	<message name="getEcNumbersFromSynonymsResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromSynonymsResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getTemperatureOptimumRequest">
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getTemperatureOptimumResponse">
+		<part name="return" element="typens:temperatureOptimum"/>
+	</message>
+	<message name="getEcNumbersFromTemperatureOptimumResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromTemperatureOptimumResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getTemperatureStabilityRequest">
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getTemperatureStabilityResponse">
+		<part name="return" element="typens:temperatureStability"/>
+	</message>
+	<message name="getEcNumbersFromTemperatureStabilityResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromTemperatureStabilityResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getPiValueRequest">
+		<part name="ecNumber"  element="xsd:string"/>
+		<part name="organism"  element="xsd:string"/>
+	</message>
+	<message name="getPiValueResponse">
+		<part name="return" element="typens:piValue"/>
+	</message>
+	<message name="getEcNumbersFromPiValueResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromPiValueResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getTemperatureRangeRequest">
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getTemperatureRangeResponse">
+		<part name="return" element="typens:temperatureRange"/>
+	</message>
+	<message name="getEcNumbersFromTemperatureRangeResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromTemperatureRangeResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getRecommendedNameRequest">
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getRecommendedNameResponse">
+		<part name="return" element="typens:recommendedName"/>
+	</message>
+	<message name="getEcNumbersFromRecommendedNameResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromRecommendedNameResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getProductRequest">
+		<part name="organism"  element="xsd:string"/>
+		<part name="ligandStructureId"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getProductResponse">
+		<part name="return" element="typens:product"/>
+	</message>
+	<message name="getEcNumbersFromProductResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromProductResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getCasRegistryNumberRequest">
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getCasRegistryNumberResponse">
+		<part name="return" element="typens:casRegistryNumber"/>
+	</message>
+	<message name="getEcNumbersFromCasRegistryNumberResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromCasRegistryNumberResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getLocalizationRequest">
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getLocalizationResponse">
+		<part name="return" element="typens:localization"/>
+	</message>
+	<message name="getEcNumbersFromLocalizationResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromLocalizationResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getPosttranslationalModificationRequest">
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getPosttranslationalModificationResponse">
+		<part name="return" element="typens:posttranslationalModification"/>
+	</message>
+	<message name="getEcNumbersFromPosttranslationalModificationResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromPosttranslationalModificationResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getSystematicNameRequest">
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getSystematicNameResponse">
+		<part name="return" element="typens:systematicName"/>
+	</message>
+	<message name="getEcNumbersFromSystematicNameResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromSystematicNameResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getClonedRequest">
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getClonedResponse">
+		<part name="return" element="typens:cloned"/>
+	</message>
+	<message name="getEcNumbersFromClonedResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromClonedResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getSpecificActivityRequest">
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getSpecificActivityResponse">
+		<part name="return" element="typens:specificActivity"/>
+	</message>
+	<message name="getEcNumbersFromSpecificActivityResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromSpecificActivityResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getSubunitsRequest">
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getSubunitsResponse">
+		<part name="return" element="typens:subunits"/>
+	</message>
+	<message name="getEcNumbersFromSubunitsResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromSubunitsResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getLigandsRequest">
+		<part name="organism"  element="xsd:string"/>
+		<part name="ligandStructureId"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getLigandsResponse">
+		<part name="return" element="typens:ligands"/>
+	</message>
+	<message name="getEcNumbersFromLigandsResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromLigandsResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getTurnoverNumberRequest">
+		<part name="ligandStructureId"  element="xsd:string"/>
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getTurnoverNumberResponse">
+		<part name="return" element="typens:turnoverNumber"/>
+	</message>
+	<message name="getEcNumbersFromTurnoverNumberResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromTurnoverNumberResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getEcNumberRequest">
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getEcNumberResponse">
+		<part name="return" element="typens:ecNumber"/>
+	</message>
+	<message name="getEcNumbersFromEcNumberResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromEcNumberResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getReactionRequest">
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getReactionResponse">
+		<part name="return" element="typens:reaction"/>
+	</message>
+	<message name="getEcNumbersFromReactionResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromReactionResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getSourceTissueRequest">
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getSourceTissueResponse">
+		<part name="return" element="typens:sourceTissue"/>
+	</message>
+	<message name="getEcNumbersFromSourceTissueResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromSourceTissueResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getSubstrateRequest">
+		<part name="ligandStructureId"  element="xsd:string"/>
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getSubstrateResponse">
+		<part name="return" element="typens:substrate"/>
+	</message>
+	<message name="getEcNumbersFromSubstrateResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromSubstrateResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getPhRangeRequest">
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getPhRangeResponse">
+		<part name="return" element="typens:phRange"/>
+	</message>
+	<message name="getEcNumbersFromPhRangeResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromPhRangeResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getStorageStabilityRequest">
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getStorageStabilityResponse">
+		<part name="return" element="typens:storageStability"/>
+	</message>
+	<message name="getEcNumbersFromStorageStabilityResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromStorageStabilityResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getPhOptimumRequest">
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getPhOptimumResponse">
+		<part name="return" element="typens:phOptimum"/>
+	</message>
+	<message name="getEcNumbersFromPhOptimumResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromPhOptimumResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getDiseaseRequest">
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getDiseaseResponse">
+		<part name="return" element="typens:disease"/>
+	</message>
+	<message name="getEcNumbersFromDiseaseResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromDiseaseResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getPurificationRequest">
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getPurificationResponse">
+		<part name="return" element="typens:purification"/>
+	</message>
+	<message name="getEcNumbersFromPurificationResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromPurificationResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getRenaturedRequest">
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getRenaturedResponse">
+		<part name="return" element="typens:renatured"/>
+	</message>
+	<message name="getEcNumbersFromRenaturedResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromRenaturedResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getKiValueRequest">
+		<part name="ligandStructureId"  element="xsd:string"/>
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getKiValueResponse">
+		<part name="return" element="typens:kiValue"/>
+	</message>
+	<message name="getEcNumbersFromKiValueResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromKiValueResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getKeggPathwayRequest">
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getKeggPathwayResponse">
+		<part name="return" element="typens:keggPathway"/>
+	</message>
+	<message name="getEcNumbersFromKeggPathwayResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromKeggPathwayResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismRequest">
+		<part name="organism"  element="xsd:string"/>
+	</message>
+	<message name="getOrganismResponse">
+		<part name="return" element="typens:organism"/>
+	</message>
+	<message name="getEcNumbersFromOrganismResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromOrganismResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getPdbRequest">
+		<part name="organism"  element="xsd:string"/>
+		<part name="ecNumber"  element="xsd:string"/>
+	</message>
+	<message name="getPdbResponse">
+		<part name="return" element="typens:pdb"/>
+	</message>
+	<message name="getEcNumbersFromPdbResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<message name="getOrganismsFromPdbResponse">
+		<part name="return" element="typens:ArrayOfStrings"/>
+	</message>
+	<portType name="brendaPortType">
+                <operation name="getReferenceById">
+                        <input  message="typens:getReferenceByIdRequest"/>
+                        <output message="typens:getReferenceByIdResponse"/>
+                </operation>
+                <operation name="getLigandStructureIdByCompoundName">
+                        <input  message="typens:getLigandStructureIdByCompoundNameRequest"/>
+                        <output message="typens:getLigandStructureIdByCompoundNameResponse"/>
+                </operation>
+
+		<operation name="getEcNumbersFromReference">
+			<output message="typens:getEcNumbersFromReferenceResponse"/>
+		</operation>
+		<operation name="getOrganismsFromReference">
+			<output message="typens:getOrganismsFromReferenceResponse"/>
+		</operation>
+		<operation name="getReference">
+			<input  message="typens:getReferenceRequest"/>
+			<output message="typens:getReferenceResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromSequence">
+			<output message="typens:getEcNumbersFromSequenceResponse"/>
+		</operation>
+		<operation name="getOrganismsFromSequence">
+			<output message="typens:getOrganismsFromSequenceResponse"/>
+		</operation>
+		<operation name="getSequence">
+			<input  message="typens:getSequenceRequest"/>
+			<output message="typens:getSequenceResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromKmValue">
+			<output message="typens:getEcNumbersFromKmValueResponse"/>
+		</operation>
+		<operation name="getOrganismsFromKmValue">
+			<output message="typens:getOrganismsFromKmValueResponse"/>
+		</operation>
+		<operation name="getKmValue">
+			<input  message="typens:getKmValueRequest"/>
+			<output message="typens:getKmValueResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromPhStability">
+			<output message="typens:getEcNumbersFromPhStabilityResponse"/>
+		</operation>
+		<operation name="getOrganismsFromPhStability">
+			<output message="typens:getOrganismsFromPhStabilityResponse"/>
+		</operation>
+		<operation name="getPhStability">
+			<input  message="typens:getPhStabilityRequest"/>
+			<output message="typens:getPhStabilityResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromOxidationStability">
+			<output message="typens:getEcNumbersFromOxidationStabilityResponse"/>
+		</operation>
+		<operation name="getOrganismsFromOxidationStability">
+			<output message="typens:getOrganismsFromOxidationStabilityResponse"/>
+		</operation>
+		<operation name="getOxidationStability">
+			<input  message="typens:getOxidationStabilityRequest"/>
+			<output message="typens:getOxidationStabilityResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromNaturalSubstratesProducts">
+			<output message="typens:getEcNumbersFromNaturalSubstratesProductsResponse"/>
+		</operation>
+		<operation name="getOrganismsFromNaturalSubstratesProducts">
+			<output message="typens:getOrganismsFromNaturalSubstratesProductsResponse"/>
+		</operation>
+		<operation name="getNaturalSubstratesProducts">
+			<input  message="typens:getNaturalSubstratesProductsRequest"/>
+			<output message="typens:getNaturalSubstratesProductsResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromEngineering">
+			<output message="typens:getEcNumbersFromEngineeringResponse"/>
+		</operation>
+		<operation name="getOrganismsFromEngineering">
+			<output message="typens:getOrganismsFromEngineeringResponse"/>
+		</operation>
+		<operation name="getEngineering">
+			<input  message="typens:getEngineeringRequest"/>
+			<output message="typens:getEngineeringResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromNaturalProduct">
+			<output message="typens:getEcNumbersFromNaturalProductResponse"/>
+		</operation>
+		<operation name="getOrganismsFromNaturalProduct">
+			<output message="typens:getOrganismsFromNaturalProductResponse"/>
+		</operation>
+		<operation name="getNaturalProduct">
+			<input  message="typens:getNaturalProductRequest"/>
+			<output message="typens:getNaturalProductResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromMetalsIons">
+			<output message="typens:getEcNumbersFromMetalsIonsResponse"/>
+		</operation>
+		<operation name="getOrganismsFromMetalsIons">
+			<output message="typens:getOrganismsFromMetalsIonsResponse"/>
+		</operation>
+		<operation name="getMetalsIons">
+			<input  message="typens:getMetalsIonsRequest"/>
+			<output message="typens:getMetalsIonsResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromActivatingCompound">
+			<output message="typens:getEcNumbersFromActivatingCompoundResponse"/>
+		</operation>
+		<operation name="getOrganismsFromActivatingCompound">
+			<output message="typens:getOrganismsFromActivatingCompoundResponse"/>
+		</operation>
+		<operation name="getActivatingCompound">
+			<input  message="typens:getActivatingCompoundRequest"/>
+			<output message="typens:getActivatingCompoundResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromInhibitors">
+			<output message="typens:getEcNumbersFromInhibitorsResponse"/>
+		</operation>
+		<operation name="getOrganismsFromInhibitors">
+			<output message="typens:getOrganismsFromInhibitorsResponse"/>
+		</operation>
+		<operation name="getInhibitors">
+			<input  message="typens:getInhibitorsRequest"/>
+			<output message="typens:getInhibitorsResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromCofactor">
+			<output message="typens:getEcNumbersFromCofactorResponse"/>
+		</operation>
+		<operation name="getOrganismsFromCofactor">
+			<output message="typens:getOrganismsFromCofactorResponse"/>
+		</operation>
+		<operation name="getCofactor">
+			<input  message="typens:getCofactorRequest"/>
+			<output message="typens:getCofactorResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromGeneralStability">
+			<output message="typens:getEcNumbersFromGeneralStabilityResponse"/>
+		</operation>
+		<operation name="getOrganismsFromGeneralStability">
+			<output message="typens:getOrganismsFromGeneralStabilityResponse"/>
+		</operation>
+		<operation name="getGeneralStability">
+			<input  message="typens:getGeneralStabilityRequest"/>
+			<output message="typens:getGeneralStabilityResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromNaturalSubstrate">
+			<output message="typens:getEcNumbersFromNaturalSubstrateResponse"/>
+		</operation>
+		<operation name="getOrganismsFromNaturalSubstrate">
+			<output message="typens:getOrganismsFromNaturalSubstrateResponse"/>
+		</operation>
+		<operation name="getNaturalSubstrate">
+			<input  message="typens:getNaturalSubstrateRequest"/>
+			<output message="typens:getNaturalSubstrateResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromMolecularWeight">
+			<output message="typens:getEcNumbersFromMolecularWeightResponse"/>
+		</operation>
+		<operation name="getOrganismsFromMolecularWeight">
+			<output message="typens:getOrganismsFromMolecularWeightResponse"/>
+		</operation>
+		<operation name="getMolecularWeight">
+			<input  message="typens:getMolecularWeightRequest"/>
+			<output message="typens:getMolecularWeightResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromCrystallization">
+			<output message="typens:getEcNumbersFromCrystallizationResponse"/>
+		</operation>
+		<operation name="getOrganismsFromCrystallization">
+			<output message="typens:getOrganismsFromCrystallizationResponse"/>
+		</operation>
+		<operation name="getCrystallization">
+			<input  message="typens:getCrystallizationRequest"/>
+			<output message="typens:getCrystallizationResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromSubstratesProducts">
+			<output message="typens:getEcNumbersFromSubstratesProductsResponse"/>
+		</operation>
+		<operation name="getOrganismsFromSubstratesProducts">
+			<output message="typens:getOrganismsFromSubstratesProductsResponse"/>
+		</operation>
+		<operation name="getSubstratesProducts">
+			<input  message="typens:getSubstratesProductsRequest"/>
+			<output message="typens:getSubstratesProductsResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromReactionType">
+			<output message="typens:getEcNumbersFromReactionTypeResponse"/>
+		</operation>
+		<operation name="getOrganismsFromReactionType">
+			<output message="typens:getOrganismsFromReactionTypeResponse"/>
+		</operation>
+		<operation name="getReactionType">
+			<input  message="typens:getReactionTypeRequest"/>
+			<output message="typens:getReactionTypeResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromOrganismSynonyms">
+			<output message="typens:getEcNumbersFromOrganismSynonymsResponse"/>
+		</operation>
+		<operation name="getOrganismsFromOrganismSynonyms">
+			<output message="typens:getOrganismsFromOrganismSynonymsResponse"/>
+		</operation>
+		<operation name="getOrganismSynonyms">
+			<input  message="typens:getOrganismSynonymsRequest"/>
+			<output message="typens:getOrganismSynonymsResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromEnzymeNames">
+			<output message="typens:getEcNumbersFromEnzymeNamesResponse"/>
+		</operation>
+		<operation name="getOrganismsFromEnzymeNames">
+			<output message="typens:getOrganismsFromEnzymeNamesResponse"/>
+		</operation>
+		<operation name="getEnzymeNames">
+			<input  message="typens:getEnzymeNamesRequest"/>
+			<output message="typens:getEnzymeNamesResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromOrganicSolventStability">
+			<output message="typens:getEcNumbersFromOrganicSolventStabilityResponse"/>
+		</operation>
+		<operation name="getOrganismsFromOrganicSolventStability">
+			<output message="typens:getOrganismsFromOrganicSolventStabilityResponse"/>
+		</operation>
+		<operation name="getOrganicSolventStability">
+			<input  message="typens:getOrganicSolventStabilityRequest"/>
+			<output message="typens:getOrganicSolventStabilityResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromApplication">
+			<output message="typens:getEcNumbersFromApplicationResponse"/>
+		</operation>
+		<operation name="getOrganismsFromApplication">
+			<output message="typens:getOrganismsFromApplicationResponse"/>
+		</operation>
+		<operation name="getApplication">
+			<input  message="typens:getApplicationRequest"/>
+			<output message="typens:getApplicationResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromSynonyms">
+			<output message="typens:getEcNumbersFromSynonymsResponse"/>
+		</operation>
+		<operation name="getOrganismsFromSynonyms">
+			<output message="typens:getOrganismsFromSynonymsResponse"/>
+		</operation>
+		<operation name="getSynonyms">
+			<input  message="typens:getSynonymsRequest"/>
+			<output message="typens:getSynonymsResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromTemperatureOptimum">
+			<output message="typens:getEcNumbersFromTemperatureOptimumResponse"/>
+		</operation>
+		<operation name="getOrganismsFromTemperatureOptimum">
+			<output message="typens:getOrganismsFromTemperatureOptimumResponse"/>
+		</operation>
+		<operation name="getTemperatureOptimum">
+			<input  message="typens:getTemperatureOptimumRequest"/>
+			<output message="typens:getTemperatureOptimumResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromTemperatureStability">
+			<output message="typens:getEcNumbersFromTemperatureStabilityResponse"/>
+		</operation>
+		<operation name="getOrganismsFromTemperatureStability">
+			<output message="typens:getOrganismsFromTemperatureStabilityResponse"/>
+		</operation>
+		<operation name="getTemperatureStability">
+			<input  message="typens:getTemperatureStabilityRequest"/>
+			<output message="typens:getTemperatureStabilityResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromPiValue">
+			<output message="typens:getEcNumbersFromPiValueResponse"/>
+		</operation>
+		<operation name="getOrganismsFromPiValue">
+			<output message="typens:getOrganismsFromPiValueResponse"/>
+		</operation>
+		<operation name="getPiValue">
+			<input  message="typens:getPiValueRequest"/>
+			<output message="typens:getPiValueResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromTemperatureRange">
+			<output message="typens:getEcNumbersFromTemperatureRangeResponse"/>
+		</operation>
+		<operation name="getOrganismsFromTemperatureRange">
+			<output message="typens:getOrganismsFromTemperatureRangeResponse"/>
+		</operation>
+		<operation name="getTemperatureRange">
+			<input  message="typens:getTemperatureRangeRequest"/>
+			<output message="typens:getTemperatureRangeResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromRecommendedName">
+			<output message="typens:getEcNumbersFromRecommendedNameResponse"/>
+		</operation>
+		<operation name="getOrganismsFromRecommendedName">
+			<output message="typens:getOrganismsFromRecommendedNameResponse"/>
+		</operation>
+		<operation name="getRecommendedName">
+			<input  message="typens:getRecommendedNameRequest"/>
+			<output message="typens:getRecommendedNameResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromProduct">
+			<output message="typens:getEcNumbersFromProductResponse"/>
+		</operation>
+		<operation name="getOrganismsFromProduct">
+			<output message="typens:getOrganismsFromProductResponse"/>
+		</operation>
+		<operation name="getProduct">
+			<input  message="typens:getProductRequest"/>
+			<output message="typens:getProductResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromCasRegistryNumber">
+			<output message="typens:getEcNumbersFromCasRegistryNumberResponse"/>
+		</operation>
+		<operation name="getOrganismsFromCasRegistryNumber">
+			<output message="typens:getOrganismsFromCasRegistryNumberResponse"/>
+		</operation>
+		<operation name="getCasRegistryNumber">
+			<input  message="typens:getCasRegistryNumberRequest"/>
+			<output message="typens:getCasRegistryNumberResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromLocalization">
+			<output message="typens:getEcNumbersFromLocalizationResponse"/>
+		</operation>
+		<operation name="getOrganismsFromLocalization">
+			<output message="typens:getOrganismsFromLocalizationResponse"/>
+		</operation>
+		<operation name="getLocalization">
+			<input  message="typens:getLocalizationRequest"/>
+			<output message="typens:getLocalizationResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromPosttranslationalModification">
+			<output message="typens:getEcNumbersFromPosttranslationalModificationResponse"/>
+		</operation>
+		<operation name="getOrganismsFromPosttranslationalModification">
+			<output message="typens:getOrganismsFromPosttranslationalModificationResponse"/>
+		</operation>
+		<operation name="getPosttranslationalModification">
+			<input  message="typens:getPosttranslationalModificationRequest"/>
+			<output message="typens:getPosttranslationalModificationResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromSystematicName">
+			<output message="typens:getEcNumbersFromSystematicNameResponse"/>
+		</operation>
+		<operation name="getOrganismsFromSystematicName">
+			<output message="typens:getOrganismsFromSystematicNameResponse"/>
+		</operation>
+		<operation name="getSystematicName">
+			<input  message="typens:getSystematicNameRequest"/>
+			<output message="typens:getSystematicNameResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromCloned">
+			<output message="typens:getEcNumbersFromClonedResponse"/>
+		</operation>
+		<operation name="getOrganismsFromCloned">
+			<output message="typens:getOrganismsFromClonedResponse"/>
+		</operation>
+		<operation name="getCloned">
+			<input  message="typens:getClonedRequest"/>
+			<output message="typens:getClonedResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromSpecificActivity">
+			<output message="typens:getEcNumbersFromSpecificActivityResponse"/>
+		</operation>
+		<operation name="getOrganismsFromSpecificActivity">
+			<output message="typens:getOrganismsFromSpecificActivityResponse"/>
+		</operation>
+		<operation name="getSpecificActivity">
+			<input  message="typens:getSpecificActivityRequest"/>
+			<output message="typens:getSpecificActivityResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromSubunits">
+			<output message="typens:getEcNumbersFromSubunitsResponse"/>
+		</operation>
+		<operation name="getOrganismsFromSubunits">
+			<output message="typens:getOrganismsFromSubunitsResponse"/>
+		</operation>
+		<operation name="getSubunits">
+			<input  message="typens:getSubunitsRequest"/>
+			<output message="typens:getSubunitsResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromLigands">
+			<output message="typens:getEcNumbersFromLigandsResponse"/>
+		</operation>
+		<operation name="getOrganismsFromLigands">
+			<output message="typens:getOrganismsFromLigandsResponse"/>
+		</operation>
+		<operation name="getLigands">
+			<input  message="typens:getLigandsRequest"/>
+			<output message="typens:getLigandsResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromTurnoverNumber">
+			<output message="typens:getEcNumbersFromTurnoverNumberResponse"/>
+		</operation>
+		<operation name="getOrganismsFromTurnoverNumber">
+			<output message="typens:getOrganismsFromTurnoverNumberResponse"/>
+		</operation>
+		<operation name="getTurnoverNumber">
+			<input  message="typens:getTurnoverNumberRequest"/>
+			<output message="typens:getTurnoverNumberResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromEcNumber">
+			<output message="typens:getEcNumbersFromEcNumberResponse"/>
+		</operation>
+		<operation name="getOrganismsFromEcNumber">
+			<output message="typens:getOrganismsFromEcNumberResponse"/>
+		</operation>
+		<operation name="getEcNumber">
+			<input  message="typens:getEcNumberRequest"/>
+			<output message="typens:getEcNumberResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromReaction">
+			<output message="typens:getEcNumbersFromReactionResponse"/>
+		</operation>
+		<operation name="getOrganismsFromReaction">
+			<output message="typens:getOrganismsFromReactionResponse"/>
+		</operation>
+		<operation name="getReaction">
+			<input  message="typens:getReactionRequest"/>
+			<output message="typens:getReactionResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromSourceTissue">
+			<output message="typens:getEcNumbersFromSourceTissueResponse"/>
+		</operation>
+		<operation name="getOrganismsFromSourceTissue">
+			<output message="typens:getOrganismsFromSourceTissueResponse"/>
+		</operation>
+		<operation name="getSourceTissue">
+			<input  message="typens:getSourceTissueRequest"/>
+			<output message="typens:getSourceTissueResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromSubstrate">
+			<output message="typens:getEcNumbersFromSubstrateResponse"/>
+		</operation>
+		<operation name="getOrganismsFromSubstrate">
+			<output message="typens:getOrganismsFromSubstrateResponse"/>
+		</operation>
+		<operation name="getSubstrate">
+			<input  message="typens:getSubstrateRequest"/>
+			<output message="typens:getSubstrateResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromPhRange">
+			<output message="typens:getEcNumbersFromPhRangeResponse"/>
+		</operation>
+		<operation name="getOrganismsFromPhRange">
+			<output message="typens:getOrganismsFromPhRangeResponse"/>
+		</operation>
+		<operation name="getPhRange">
+			<input  message="typens:getPhRangeRequest"/>
+			<output message="typens:getPhRangeResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromStorageStability">
+			<output message="typens:getEcNumbersFromStorageStabilityResponse"/>
+		</operation>
+		<operation name="getOrganismsFromStorageStability">
+			<output message="typens:getOrganismsFromStorageStabilityResponse"/>
+		</operation>
+		<operation name="getStorageStability">
+			<input  message="typens:getStorageStabilityRequest"/>
+			<output message="typens:getStorageStabilityResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromPhOptimum">
+			<output message="typens:getEcNumbersFromPhOptimumResponse"/>
+		</operation>
+		<operation name="getOrganismsFromPhOptimum">
+			<output message="typens:getOrganismsFromPhOptimumResponse"/>
+		</operation>
+		<operation name="getPhOptimum">
+			<input  message="typens:getPhOptimumRequest"/>
+			<output message="typens:getPhOptimumResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromDisease">
+			<output message="typens:getEcNumbersFromDiseaseResponse"/>
+		</operation>
+		<operation name="getOrganismsFromDisease">
+			<output message="typens:getOrganismsFromDiseaseResponse"/>
+		</operation>
+		<operation name="getDisease">
+			<input  message="typens:getDiseaseRequest"/>
+			<output message="typens:getDiseaseResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromPurification">
+			<output message="typens:getEcNumbersFromPurificationResponse"/>
+		</operation>
+		<operation name="getOrganismsFromPurification">
+			<output message="typens:getOrganismsFromPurificationResponse"/>
+		</operation>
+		<operation name="getPurification">
+			<input  message="typens:getPurificationRequest"/>
+			<output message="typens:getPurificationResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromRenatured">
+			<output message="typens:getEcNumbersFromRenaturedResponse"/>
+		</operation>
+		<operation name="getOrganismsFromRenatured">
+			<output message="typens:getOrganismsFromRenaturedResponse"/>
+		</operation>
+		<operation name="getRenatured">
+			<input  message="typens:getRenaturedRequest"/>
+			<output message="typens:getRenaturedResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromKiValue">
+			<output message="typens:getEcNumbersFromKiValueResponse"/>
+		</operation>
+		<operation name="getOrganismsFromKiValue">
+			<output message="typens:getOrganismsFromKiValueResponse"/>
+		</operation>
+		<operation name="getKiValue">
+			<input  message="typens:getKiValueRequest"/>
+			<output message="typens:getKiValueResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromKeggPathway">
+			<output message="typens:getEcNumbersFromKeggPathwayResponse"/>
+		</operation>
+		<operation name="getOrganismsFromKeggPathway">
+			<output message="typens:getOrganismsFromKeggPathwayResponse"/>
+		</operation>
+		<operation name="getKeggPathway">
+			<input  message="typens:getKeggPathwayRequest"/>
+			<output message="typens:getKeggPathwayResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromOrganism">
+			<output message="typens:getEcNumbersFromOrganismResponse"/>
+		</operation>
+		<operation name="getOrganismsFromOrganism">
+			<output message="typens:getOrganismsFromOrganismResponse"/>
+		</operation>
+		<operation name="getOrganism">
+			<input  message="typens:getOrganismRequest"/>
+			<output message="typens:getOrganismResponse"/>
+		</operation>
+		<operation name="getEcNumbersFromPdb">
+			<output message="typens:getEcNumbersFromPdbResponse"/>
+		</operation>
+		<operation name="getOrganismsFromPdb">
+			<output message="typens:getOrganismsFromPdbResponse"/>
+		</operation>
+		<operation name="getPdb">
+			<input  message="typens:getPdbRequest"/>
+			<output message="typens:getPdbResponse"/>
+		</operation>
+	</portType>
+	<binding name="brendaBinding" type="typens:brendaPortType">
+		<soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+                <operation name="getReferenceById">
+                        <soap:operation soapAction="ws.brenda#getReferenceById"/>
+                        <input>
+                                <soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+                        </input>
+                        <output>
+                                <soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+                        </output>
+                </operation>
+                <operation name="getLigandStructureIdByCompoundName">
+                        <soap:operation soapAction="ws.brenda#getLigandStructureIdByCompoundName"/>
+                        <input>
+                                <soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+                        </input>
+                        <output>
+                                <soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+                        </output>
+                </operation>
+
+		<operation name="getEcNumbersFromReference">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromReference"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromReference">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromReference"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getReference">
+			<soap:operation soapAction="ws.brenda#getReference"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromSequence">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromSequence"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromSequence">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromSequence"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getSequence">
+			<soap:operation soapAction="ws.brenda#getSequence"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromKmValue">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromKmValue"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromKmValue">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromKmValue"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getKmValue">
+			<soap:operation soapAction="ws.brenda#getKmValue"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromPhStability">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromPhStability"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromPhStability">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromPhStability"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getPhStability">
+			<soap:operation soapAction="ws.brenda#getPhStability"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromOxidationStability">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromOxidationStability"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromOxidationStability">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromOxidationStability"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOxidationStability">
+			<soap:operation soapAction="ws.brenda#getOxidationStability"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromNaturalSubstratesProducts">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromNaturalSubstratesProducts"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromNaturalSubstratesProducts">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromNaturalSubstratesProducts"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getNaturalSubstratesProducts">
+			<soap:operation soapAction="ws.brenda#getNaturalSubstratesProducts"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromEngineering">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromEngineering"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromEngineering">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromEngineering"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEngineering">
+			<soap:operation soapAction="ws.brenda#getEngineering"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromNaturalProduct">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromNaturalProduct"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromNaturalProduct">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromNaturalProduct"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getNaturalProduct">
+			<soap:operation soapAction="ws.brenda#getNaturalProduct"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromMetalsIons">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromMetalsIons"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromMetalsIons">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromMetalsIons"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getMetalsIons">
+			<soap:operation soapAction="ws.brenda#getMetalsIons"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromActivatingCompound">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromActivatingCompound"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromActivatingCompound">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromActivatingCompound"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getActivatingCompound">
+			<soap:operation soapAction="ws.brenda#getActivatingCompound"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromInhibitors">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromInhibitors"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromInhibitors">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromInhibitors"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getInhibitors">
+			<soap:operation soapAction="ws.brenda#getInhibitors"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromCofactor">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromCofactor"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromCofactor">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromCofactor"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getCofactor">
+			<soap:operation soapAction="ws.brenda#getCofactor"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromGeneralStability">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromGeneralStability"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromGeneralStability">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromGeneralStability"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getGeneralStability">
+			<soap:operation soapAction="ws.brenda#getGeneralStability"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromNaturalSubstrate">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromNaturalSubstrate"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromNaturalSubstrate">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromNaturalSubstrate"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getNaturalSubstrate">
+			<soap:operation soapAction="ws.brenda#getNaturalSubstrate"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromMolecularWeight">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromMolecularWeight"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromMolecularWeight">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromMolecularWeight"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getMolecularWeight">
+			<soap:operation soapAction="ws.brenda#getMolecularWeight"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromCrystallization">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromCrystallization"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromCrystallization">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromCrystallization"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getCrystallization">
+			<soap:operation soapAction="ws.brenda#getCrystallization"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromSubstratesProducts">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromSubstratesProducts"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromSubstratesProducts">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromSubstratesProducts"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getSubstratesProducts">
+			<soap:operation soapAction="ws.brenda#getSubstratesProducts"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromReactionType">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromReactionType"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromReactionType">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromReactionType"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getReactionType">
+			<soap:operation soapAction="ws.brenda#getReactionType"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromOrganismSynonyms">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromOrganismSynonyms"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromOrganismSynonyms">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromOrganismSynonyms"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismSynonyms">
+			<soap:operation soapAction="ws.brenda#getOrganismSynonyms"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromEnzymeNames">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromEnzymeNames"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromEnzymeNames">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromEnzymeNames"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEnzymeNames">
+			<soap:operation soapAction="ws.brenda#getEnzymeNames"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromOrganicSolventStability">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromOrganicSolventStability"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromOrganicSolventStability">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromOrganicSolventStability"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganicSolventStability">
+			<soap:operation soapAction="ws.brenda#getOrganicSolventStability"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromApplication">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromApplication"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromApplication">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromApplication"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getApplication">
+			<soap:operation soapAction="ws.brenda#getApplication"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromSynonyms">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromSynonyms"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromSynonyms">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromSynonyms"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getSynonyms">
+			<soap:operation soapAction="ws.brenda#getSynonyms"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromTemperatureOptimum">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromTemperatureOptimum"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromTemperatureOptimum">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromTemperatureOptimum"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getTemperatureOptimum">
+			<soap:operation soapAction="ws.brenda#getTemperatureOptimum"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromTemperatureStability">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromTemperatureStability"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromTemperatureStability">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromTemperatureStability"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getTemperatureStability">
+			<soap:operation soapAction="ws.brenda#getTemperatureStability"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromPiValue">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromPiValue"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromPiValue">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromPiValue"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getPiValue">
+			<soap:operation soapAction="ws.brenda#getPiValue"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromTemperatureRange">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromTemperatureRange"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromTemperatureRange">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromTemperatureRange"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getTemperatureRange">
+			<soap:operation soapAction="ws.brenda#getTemperatureRange"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromRecommendedName">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromRecommendedName"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromRecommendedName">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromRecommendedName"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getRecommendedName">
+			<soap:operation soapAction="ws.brenda#getRecommendedName"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromProduct">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromProduct"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromProduct">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromProduct"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getProduct">
+			<soap:operation soapAction="ws.brenda#getProduct"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromCasRegistryNumber">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromCasRegistryNumber"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromCasRegistryNumber">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromCasRegistryNumber"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getCasRegistryNumber">
+			<soap:operation soapAction="ws.brenda#getCasRegistryNumber"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromLocalization">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromLocalization"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromLocalization">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromLocalization"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getLocalization">
+			<soap:operation soapAction="ws.brenda#getLocalization"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromPosttranslationalModification">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromPosttranslationalModification"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromPosttranslationalModification">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromPosttranslationalModification"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getPosttranslationalModification">
+			<soap:operation soapAction="ws.brenda#getPosttranslationalModification"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromSystematicName">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromSystematicName"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromSystematicName">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromSystematicName"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getSystematicName">
+			<soap:operation soapAction="ws.brenda#getSystematicName"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromCloned">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromCloned"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromCloned">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromCloned"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getCloned">
+			<soap:operation soapAction="ws.brenda#getCloned"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromSpecificActivity">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromSpecificActivity"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromSpecificActivity">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromSpecificActivity"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getSpecificActivity">
+			<soap:operation soapAction="ws.brenda#getSpecificActivity"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromSubunits">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromSubunits"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromSubunits">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromSubunits"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getSubunits">
+			<soap:operation soapAction="ws.brenda#getSubunits"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromLigands">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromLigands"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromLigands">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromLigands"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getLigands">
+			<soap:operation soapAction="ws.brenda#getLigands"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromTurnoverNumber">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromTurnoverNumber"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromTurnoverNumber">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromTurnoverNumber"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getTurnoverNumber">
+			<soap:operation soapAction="ws.brenda#getTurnoverNumber"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromEcNumber">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromEcNumber"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromEcNumber">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromEcNumber"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumber">
+			<soap:operation soapAction="ws.brenda#getEcNumber"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromReaction">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromReaction"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromReaction">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromReaction"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getReaction">
+			<soap:operation soapAction="ws.brenda#getReaction"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromSourceTissue">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromSourceTissue"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromSourceTissue">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromSourceTissue"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getSourceTissue">
+			<soap:operation soapAction="ws.brenda#getSourceTissue"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromSubstrate">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromSubstrate"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromSubstrate">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromSubstrate"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getSubstrate">
+			<soap:operation soapAction="ws.brenda#getSubstrate"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromPhRange">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromPhRange"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromPhRange">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromPhRange"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getPhRange">
+			<soap:operation soapAction="ws.brenda#getPhRange"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromStorageStability">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromStorageStability"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromStorageStability">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromStorageStability"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getStorageStability">
+			<soap:operation soapAction="ws.brenda#getStorageStability"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromPhOptimum">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromPhOptimum"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromPhOptimum">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromPhOptimum"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getPhOptimum">
+			<soap:operation soapAction="ws.brenda#getPhOptimum"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromDisease">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromDisease"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromDisease">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromDisease"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getDisease">
+			<soap:operation soapAction="ws.brenda#getDisease"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromPurification">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromPurification"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromPurification">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromPurification"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getPurification">
+			<soap:operation soapAction="ws.brenda#getPurification"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromRenatured">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromRenatured"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromRenatured">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromRenatured"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getRenatured">
+			<soap:operation soapAction="ws.brenda#getRenatured"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromKiValue">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromKiValue"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromKiValue">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromKiValue"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getKiValue">
+			<soap:operation soapAction="ws.brenda#getKiValue"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromKeggPathway">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromKeggPathway"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromKeggPathway">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromKeggPathway"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getKeggPathway">
+			<soap:operation soapAction="ws.brenda#getKeggPathway"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromOrganism">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromOrganism"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromOrganism">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromOrganism"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganism">
+			<soap:operation soapAction="ws.brenda#getOrganism"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getEcNumbersFromPdb">
+			<soap:operation soapAction="ws.brenda#getEcNumbersFromPdb"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getOrganismsFromPdb">
+			<soap:operation soapAction="ws.brenda#getOrganismsFromPdb"/>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+		<operation name="getPdb">
+			<soap:operation soapAction="ws.brenda#getPdb"/>
+			<input>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" namespace="ws.brenda" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="brenda_webservice"> 
+		<port name="brendaPort" binding="typens:brendaBinding"> 
+			<soap:address location="http://134.169.106.59:8084/soap/brenda_server.php"/> 
+		</port> 
+	</service>
+</definitions>

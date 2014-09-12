@@ -1,0 +1,11 @@
+XstartPosition; 14
+YstartPosition; 22
+startHeight; 815
+startWidth; 1180
+startDirectory; /Users/max_neal/_UW/VPR/compositionTasks
+autoAnnotate; true
+showImports; true
+displayMarkers; true
+organizeByPropertyType; true
+treeView; false
+helpURL; http://sbp.bhi.washington.edu/projects/semgen/semgenhelp

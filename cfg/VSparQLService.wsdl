@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://rdfservice.sig.washington.edu" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://rdfservice.sig.washington.edu" xmlns:intf="http://rdfservice.sig.washington.edu" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema elementFormDefault="qualified" targetNamespace="http://rdfservice.sig.washington.edu" xmlns="http://www.w3.org/2001/XMLSchema">
+   <element name="executeQuery">
+    <complexType>
+     <sequence>
+      <element name="queryString" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="executeQueryResponse">
+    <complexType>
+     <sequence>
+      <element name="executeQueryReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="executeQueryResponse">
+
+      <wsdl:part element="impl:executeQueryResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="executeQueryRequest">
+
+      <wsdl:part element="impl:executeQuery" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:portType name="VSparQLService">
+
+      <wsdl:operation name="executeQuery">
+
+         <wsdl:input message="impl:executeQueryRequest" name="executeQueryRequest"/>
+
+         <wsdl:output message="impl:executeQueryResponse" name="executeQueryResponse"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="VSparQLServiceSoapBinding" type="impl:VSparQLService">
+
+      <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="executeQuery">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="executeQueryRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="executeQueryResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="VSparQLServiceService">
+
+      <wsdl:port binding="impl:VSparQLServiceSoapBinding" name="VSparQLService">
+
+         <wsdlsoap:address location="http://axon.biostr.washington.edu:8080/VSparQL_Service/services/VSparQLService"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

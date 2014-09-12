@@ -1,0 +1,12 @@
+longestOnly; false
+wholeWordOnly; true
+filterNumber; false
+withDefaultStopWords; false
+isStopWordsCaseSensitive; false
+minTermSize; 2
+scored; true
+withSynonyms; true
+ontologiesToKeepInResult; 1141, 1053, 1007, 1070, 1009
+isVirtualOntologyId; true
+levelMax; 0
+mappingTypes; null

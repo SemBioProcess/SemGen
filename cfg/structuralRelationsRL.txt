@@ -1,0 +1,4 @@
+component_in; http://www.bhi.washington.edu/SemSim#component_in
+contains; http://www.obofoundry.org/ro/ro.owl#contains
+has_part; http://www.obofoundry.org/ro/ro.owl#has_part
+

@@ -1,0 +1,215 @@
+package semgen.annotation.composites;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import org.semanticweb.owlapi.model.OWLException;
+
+import semgen.SemGenGUI;
+import semgen.annotation.AnnotationDialog;
+import semgen.annotation.CodewordButton;
+import semsim.Annotatable;
+import semsim.SemSimConstants;
+import semsim.model.SemSimComponent;
+import semsim.model.SemSimModel;
+import semsim.model.annotation.StructuralRelation;
+import semsim.model.computational.DataStructure;
+import semsim.model.physical.CompositePhysicalEntity;
+import semsim.model.physical.PhysicalEntity;
+import semsim.model.physical.PhysicalModelComponent;
+import semsim.model.physical.PhysicalProcess;
+
+public class CompositeAnnotationPanel extends Box implements ActionListener{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3955122899870904199L;
+	public SemSimModel semsimmodel;
+	public DataStructure datastructure;
+	public AnnotationDialog ad;
+	public Component propertycomponent;
+	public JButton addpropertybutton = new JButton("Add property");
+	public JLabel propertyoflabel = new JLabel("property_of");
+	public JPanel addentprocpanel = new JPanel();
+	public JButton addentbutton = new JButton("Add entity");
+	public JButton addprocbutton = new JButton("Add process");
+	
+	public CompositeAnnotationPanel(int orientation, AnnotationDialog ad){
+		super(orientation);
+		this.setBackground(new Color(207, 215, 252));
+		this.ad = ad;
+		setAlignmentX(Box.LEFT_ALIGNMENT);
+		semsimmodel = ad.semsimmodel;
+		datastructure = (DataStructure)ad.smc;
+		//refreshUI();
+	}
+		
+	public void refreshUI(){
+		removeAll();
+		if(addentbutton.getActionListeners().length==0 && addprocbutton.getActionListeners().length==0){
+			addentbutton.addActionListener(this);
+			addprocbutton.addActionListener(this);
+		}
+		JPanel addempanel = new JPanel(new BorderLayout());
+		addentprocpanel.setLayout(new BoxLayout(addentprocpanel, BoxLayout.X_AXIS));
+		addentprocpanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		addentprocpanel.add(addentbutton);
+		addentprocpanel.add(addprocbutton);
+		addentprocpanel.setBackground(SemGenGUI.lightblue);
+		addempanel.add(addentprocpanel, BorderLayout.WEST);
+		
+		if(datastructure.getPhysicalProperty()!=null){
+			add(new SemSimComponentAnnotationPanel(ad, datastructure.getPhysicalProperty()));
+		}
+		else{
+			add(addpropertybutton);
+		}
+		JPanel propofpanel = new JPanel( new BorderLayout() );
+        propertyoflabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        propertyoflabel.setFont(new Font("SansSerif", Font.ITALIC, SemGenGUI.defaultfontsize));
+        propertyoflabel.setBorder(BorderFactory.createEmptyBorder(0, ad.indent, 0, 0));
+        propofpanel.add(propertyoflabel);
+        add(propofpanel);
+		
+		if(datastructure.getPhysicalProperty()!=null){
+			// If we've got a target for the property
+			if(datastructure.getPhysicalProperty().getPhysicalPropertyOf()!=null){
+				PhysicalModelComponent pmc = datastructure.getPhysicalProperty().getPhysicalPropertyOf();
+				// If it's a composite physical entity, enter iteratively
+				if(pmc instanceof CompositePhysicalEntity){
+					CompositePhysicalEntity cpe = (CompositePhysicalEntity)pmc;
+					int s = 0;
+					for(PhysicalEntity ent : cpe.getArrayListOfEntities()){
+						add(new SemSimComponentAnnotationPanel(ad, ent));
+						if(s<cpe.getArrayListOfStructuralRelations().size()){
+							add(new StructuralRelationPanel(ad, cpe.getArrayListOfStructuralRelations().get(s)));
+						}
+						s++;
+					}
+				}
+				// Else the property target is a single physical entity or process
+				else{
+					add(new SemSimComponentAnnotationPanel(ad, pmc));
+				}
+			}
+		}
+		add(addempanel);
+		alignAndPaint();
+	}
+	
+	
+	public void alignAndPaint(){
+		int x = ad.indent;
+		for(Component c : getComponents()){
+			if(c instanceof JComponent) ((JComponent)c).setBorder(BorderFactory.createEmptyBorder(0, x, 5, 0));
+			c.setBackground(SemGenGUI.lightblue);
+			x = x + 15;
+		}
+		setAddButtonsEnabled();
+		validate();
+	}
+	
+	
+	public void setAddButtonsEnabled(){
+		// If we can edit the composite annotation
+		if(ad.thebutton.editable){
+			// If the physical property is specified and there is either a process or entity that it is a property of
+			if(getComponent(2) instanceof SemSimComponentAnnotationPanel){
+				if(((SemSimComponentAnnotationPanel)getComponent(2)).smc instanceof PhysicalProcess){
+					addentbutton.setEnabled(false);
+					addprocbutton.setEnabled(false);
+				}
+				else{
+					addentbutton.setEnabled(true);
+					addprocbutton.setEnabled(false);
+				}
+			}
+			// Otherwise there is no process or entity specified. Set the add entity/ add process buttons
+			// based on type of physical property specified 
+			else if(datastructure.getPhysicalProperty().hasRefersToAnnotation()){
+				int type = SemGenGUI.getPropertyType(datastructure);
+				if(type == SemSimConstants.PROPERTY_OF_PHYSICAL_ENTITY){
+					addentbutton.setEnabled(true);
+					addprocbutton.setEnabled(false);
+				}
+				else if(type == SemSimConstants.PROPERTY_OF_PHYSICAL_PROCESS){
+					addentbutton.setEnabled(false);
+					addprocbutton.setEnabled(true);
+				}
+				else{
+					addentbutton.setEnabled(false);
+					addprocbutton.setEnabled(false);
+				}
+			}
+			// Otherwise no annotation for property specified, enable both add process and add entity buttons
+			else{
+				addentbutton.setEnabled(true);
+				addprocbutton.setEnabled(true);
+			}
+		}
+		else{
+			addentbutton.setEnabled(false);
+			addprocbutton.setEnabled(false);
+		}
+	}
+	
+
+	public void actionPerformed(ActionEvent arg0) {
+		
+		// If the "Add entity" button is pressed
+		if(arg0.getSource() == addentbutton){
+			if(datastructure.getPhysicalProperty().getPhysicalPropertyOf()==null){
+				datastructure.getPhysicalProperty().setPhysicalPropertyOf(semsimmodel.getCustomPhysicalEntityByName(SemGenGUI.unspecifiedName));
+			}
+			else{
+				ArrayList<PhysicalEntity> ents = new ArrayList<PhysicalEntity>();
+				ArrayList<StructuralRelation> rels = new ArrayList<StructuralRelation>();
+				for(Component c : getComponents()){
+					if(c instanceof SemSimComponentAnnotationPanel){
+						Annotatable smc = ((SemSimComponentAnnotationPanel)c).smc;
+						if(smc instanceof PhysicalEntity){
+							ents.add((PhysicalEntity)smc);
+						}
+					}
+					if(c instanceof StructuralRelationPanel){
+						StructuralRelationPanel srp = (StructuralRelationPanel)c;
+						rels.add(srp.structuralRelation);
+					}
+				}
+				ents.add(semsimmodel.getCustomPhysicalEntityByName(SemGenGUI.unspecifiedName));
+				rels.add(SemSimConstants.CONTAINED_IN_RELATION);
+				datastructure.getPhysicalProperty().setPhysicalPropertyOf(semsimmodel.addCompositePhysicalEntity(ents, rels));
+			}
+			ad.annotator.setModelSaved(false);
+			
+			if(ad.thebutton.refreshAllCodes() && SemGenGUI.annotateitemsortbytype.isSelected()){
+				ad.annotator.AlphabetizeAndSetCodewordsbyMarker();
+				if(!SemGenGUI.annotateitemtreeview.isSelected())
+					SemGenGUI.scrollToComponent(ad.annotator.codewordpanel, ad.thebutton);
+			}
+			refreshUI();
+		}
+		// If "Add process" button pressed
+		if(arg0.getSource() == addprocbutton){
+			if(datastructure.getPhysicalProperty().getPhysicalPropertyOf()==null){
+				// THIS DOESN"T RETURN NULL: System.out.println("HERE: " + semsimmodel.getCustomPhysicalProcessByName(SemGenGUI.unspecifiedName));
+				datastructure.getPhysicalProperty().setPhysicalPropertyOf(semsimmodel.getCustomPhysicalProcessByName(SemGenGUI.unspecifiedName));
+				ad.annotator.setModelSaved(false);
+			}
+			refreshUI();
+		}
+	}
+}

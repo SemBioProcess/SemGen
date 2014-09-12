@@ -1,0 +1,2 @@
+jsbatch; /Applications/JSim_macos/macos/bin/jsbatch
+jsimhome; /Applications/JSim_macos

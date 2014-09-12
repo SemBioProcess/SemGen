@@ -1,0 +1,313 @@
+package semsim.model.computational;
+
+
+import java.net.URI;
+import java.util.HashSet;
+import java.util.Set;
+
+import semsim.Annotatable;
+import semsim.SemSimConstants;
+import semsim.model.annotation.Annotation;
+import semsim.model.annotation.ReferenceOntologyAnnotation;
+import semsim.model.annotation.SemSimRelation;
+import semsim.model.computational.units.UnitOfMeasurement;
+import semsim.model.physical.PhysicalProperty;
+
+/**
+ * This class represents a named element in a simulation model that
+ * is assigned some computational value during simulation.
+ */
+public class DataStructure extends ComputationalModelComponent implements Annotatable, Cloneable{
+	
+	private Computation computation;
+	private PhysicalProperty physicalProperty;
+	private DataStructure solutionDomain;
+	private Set<DataStructure> usedToCompute = new HashSet<DataStructure>();
+	private Set<Annotation> annotations = new HashSet<Annotation>();
+	private boolean isSolutionDomain, isDiscrete, isDeclared, isImported;
+	private String startValue;
+	private UnitOfMeasurement unit;
+	
+	/**
+	 * Append the list of DataStructures that this DataStructure
+	 * is used to compute
+	 * @param ds A DataStructure that is computed from this DataStructure
+	 */
+	public void addUsedToCompute(DataStructure ds){
+		if(!getUsedToCompute().contains(ds) && ds.isDeclared){
+			usedToCompute.add(ds);
+		}
+	}
+	
+	/**
+	 * Append the list of DataStructures that this DataStructure
+	 * is used to compute
+	 * @param ds A set of DataStructures that are computed from this DataStructure
+	 */
+	public void addUsedToCompute(Set<DataStructure> dss){
+		for(DataStructure ds : dss){
+			if(!getUsedToCompute().contains(ds)){ // && ds.isDeclared){
+				usedToCompute.add(ds);
+			}
+		}
+	}
+	
+	/**
+	 * @return The {@link Computation} that solves the DataStructure
+	 */
+	public Computation getComputation(){
+		return computation;
+	}
+	
+	/**
+	 * @return The {@link PhysicalProperty} simulated by the DataStructure
+	 */
+	public PhysicalProperty getPhysicalProperty(){
+		return physicalProperty;
+	}
+	
+	/** @return The domain in which the data structure is solved
+	 *  (time, length, height, breadth, e.g.)
+	 */
+	public DataStructure getSolutionDomain(){
+		return solutionDomain;
+	}
+	
+	/** @return The DataStructure's value at the beginning of the simulation */
+	public String getStartValue(){
+		return startValue;
+	}
+	
+	/** @return The DataStructure's unit of measurement*/
+	public UnitOfMeasurement getUnit() {
+		return unit;
+	}
+	
+	/** @return Whether the DataStructure has been assigned a unit of measurement */
+	public boolean hasUnits(){
+		return getUnit()!=null;
+	}
+	
+	/** @return Whether the DataStructure has been associated with a physical property */
+	public Boolean hasPhysicalProperty(){
+		return (physicalProperty != null);
+	}
+	
+	/** @return Whether the DataStructure has been assigned a start value */
+	public Boolean hasStartValue(){
+		return (startValue != null);
+	}
+	
+	/** @return Whether the DataStructure has been assigned a solution domaint */
+	public Boolean hasSolutionDomain(){
+		return (solutionDomain != null);
+	}
+	
+	/** @return Whether the DataStructure is explicitly declared in the simulation code */
+	public boolean isDeclared() {
+		return isDeclared;
+	}
+	
+	/** @return Whether the DataStructure is solved as a non-continuous variable */
+	public Boolean isDiscrete(){
+		return isDiscrete;
+	}
+	
+	/** @return Whether the DataStructure is a solution domain for the model */
+	public Boolean isSolutionDomain(){
+		return isSolutionDomain;
+	}
+	
+	/**
+	 * Set the start value of the DataStructure for the simulation
+	 * @param val A string representing the start value
+	 */
+	public void setStartValue(String val){
+		startValue = val;
+	}
+	
+	/**
+	 * Assign a Computation instance to the DataStructure to specify
+	 * how it is solved during simulation
+	 * @param computation The Computation instance to assign
+	 */
+	public void setComputation(Computation computation){
+		this.computation = computation;
+	}
+	
+	/**
+	 * Assign a {@link PhysicalProperty} to the DataStructure 
+	 * @param pp The PhysicalProperty instance to assign to the DataStructure
+	 */
+	public void setPhysicalProperty(PhysicalProperty pp){
+		physicalProperty = pp;
+		if(pp!=null){
+			pp.setAssociatedDataStructure(this);
+		}
+	}
+	
+	/** Set whether this DataStructure is explicitly declared in the model or not */
+
+	public void setDeclared(boolean isDeclared) {
+		this.isDeclared = isDeclared;
+	}
+	
+	/** Set whether this DataStructure is solved as a non-continuous variable or not */
+	public void setDiscrete(boolean isdisc){
+		this.isDiscrete = isdisc;
+	}
+	
+	/** Set whether this DataStructure is a solution domain in the model or not */
+	public void setIsSolutionDomain(boolean issoldom){
+		isSolutionDomain = issoldom;
+	}
+	
+	/** Set the solution domain in which this DataStructure is solved */
+	public void setSolutionDomain(DataStructure soldom){
+		solutionDomain = soldom;
+	}
+
+	/** Set the unit of measurement assigned to the DataStructure */
+	public void setUnit(UnitOfMeasurement unit) {
+		this.unit = unit;
+	}
+
+	/** Get a string representation of the composite annotation applied to 
+	 * the DataStructure.
+	 * @param appendcodeword Whether to add the DataStructure's name in parentheses at the end of the string 
+	 */
+	public String getCompositeAnnotationAsString(Boolean appendcodeword) {
+		String compann = "[unspecified]";
+		if(getPhysicalProperty()!=null){
+			compann = "[unspecified property] of ";
+			if(getPhysicalProperty().hasRefersToAnnotation()){
+				compann = getPhysicalProperty().getFirstRefersToReferenceOntologyAnnotation().getValueDescription() + " of ";
+			}
+			// if physical entity or process
+			String target = "?";
+			if(getPhysicalProperty().getPhysicalPropertyOf()!=null){
+				if(getPhysicalProperty().getPhysicalPropertyOf().hasRefersToAnnotation()){
+					target = getPhysicalProperty().getPhysicalPropertyOf().getFirstRefersToReferenceOntologyAnnotation().getValueDescription();
+				}
+				// otherwise it's a composite physical entity or custom term
+				else{
+					target = getPhysicalProperty().getPhysicalPropertyOf().getName();
+				}
+			}
+			compann = compann + target; 
+
+		}
+		if (appendcodeword) {
+			compann = compann + " (" + getName() + ") ";
+		}
+		return compann;
+	}
+
+	/** Specify which DataStructures in the model are computationally dependent on this DataStructure */
+	public void setUsedToCompute(Set<DataStructure> usedToCompute) {
+		this.usedToCompute = usedToCompute;
+	}
+
+	/** @return The set of DataStructures that are computationally dependent on this DataStructure */
+	public Set<DataStructure> getUsedToCompute() {
+		return usedToCompute;
+	}
+	
+	
+	// Required by annotable interface:
+	public Set<Annotation> getAnnotations() {
+		return annotations;
+	}
+	
+	public void setAnnotations(Set<Annotation> annset){
+		annotations.clear();
+		annotations.addAll(annset);
+	}
+
+	public void addAnnotation(Annotation ann) {
+		annotations.add(ann);
+	}
+	
+	public void addReferenceOntologyAnnotation(SemSimRelation relation, URI uri, String description){
+		addAnnotation(new ReferenceOntologyAnnotation(relation, uri, description));
+	}
+
+	
+	public Set<ReferenceOntologyAnnotation> getAllReferenceOntologyAnnotations(){
+		Set<ReferenceOntologyAnnotation> raos = new HashSet<ReferenceOntologyAnnotation>();
+		for(Annotation ann : getAnnotations()){
+			if(ann instanceof ReferenceOntologyAnnotation){
+				raos.add((ReferenceOntologyAnnotation) ann);
+			}
+		}
+		return raos;
+	}
+	
+	
+	public Set<ReferenceOntologyAnnotation> getReferenceOntologyAnnotations(SemSimRelation relation) {
+		Set<ReferenceOntologyAnnotation> raos = new HashSet<ReferenceOntologyAnnotation>();
+		for(ReferenceOntologyAnnotation ann : getAllReferenceOntologyAnnotations()){
+			if(ann.getRelation()==relation){
+				raos.add((ReferenceOntologyAnnotation)ann);
+			}
+		}
+		return raos;
+	}
+	
+	
+	public ReferenceOntologyAnnotation getFirstRefersToReferenceOntologyAnnotation(){
+		if(!getReferenceOntologyAnnotations(SemSimConstants.REFERS_TO_RELATION).isEmpty()){
+			return getReferenceOntologyAnnotations(SemSimConstants.REFERS_TO_RELATION).toArray(new ReferenceOntologyAnnotation[]{})[0];
+		}
+		else{
+			return null;
+		}
+	}
+	
+	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotationByURI(URI uri){
+		for(ReferenceOntologyAnnotation ann : getReferenceOntologyAnnotations(SemSimConstants.REFERS_TO_RELATION)){
+			if(ann.getReferenceURI().compareTo(uri)==0){
+				return ann;
+			}
+		}
+		return null;
+	}
+	
+	public Boolean isAnnotated(){
+		return !getAnnotations().isEmpty();
+	}
+	
+	public Boolean hasRefersToAnnotation(){
+		return getFirstRefersToReferenceOntologyAnnotation()!=null;
+	}
+
+	public void removeAllReferenceAnnotations() {
+		Set<Annotation> newset = new HashSet<Annotation>();
+		for(Annotation ann : this.getAnnotations()){
+			if(!(ann instanceof ReferenceOntologyAnnotation)){
+				newset.add(ann);
+			}
+		}
+		annotations.clear();
+		annotations.addAll(newset);
+	}
+	
+	/** Clone this DataStructure */
+	public DataStructure clone() throws CloneNotSupportedException {
+        return (DataStructure) super.clone();
+	}
+
+	/** Specify whether this DataStructure is included in the model via an imported {@link Submodel} */
+	public void setImportedViaSubmodel(boolean isImported) {
+		this.isImported = isImported;
+	}
+
+	/** @return Whether this DataStructure instance is included in the model via an imported {@link Submodel}.*/
+	public boolean isImportedViaSubmodel() {
+		return isImported;
+	}
+	
+	public boolean isReal() {
+		return false;
+	}
+}

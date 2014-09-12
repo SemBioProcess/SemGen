@@ -1,0 +1,17 @@
+ECG Ontology (ECG); 1146
+Phenotype and Trait Ontology (PATO); 1107
+Chemical Entities of Biological Interest (ChEBI); 1007
+Ontology of Physics for Biology (OPB); 1141
+NCI Thesaurus; 1032
+NCI METAThesaurus; 1499
+Foundational Model of Anatomy (FMA); 1053
+GeneOntology (GO); 1070
+Systems Biology Ontology (SBO); 1046
+SNOMED Clinical Terms (SNOMEDCT); 1353
+PRotein Ontology (PR); 1062
+Cell Type (CL); 1006
+BRENDA tissue/enzyme source; 1005
+Uber Anatomy Ontology (UBERON); 1404
+Clinical Measurement Ontology (CMO); 1583
+Human Disease Ontology (DOID); 1009
+Mouse adult gross anatomy (MA); 1000
