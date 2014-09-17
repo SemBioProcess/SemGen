@@ -13,17 +13,28 @@ import java.util.Set;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
+import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLException;
+import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import edu.uci.ics.jung.graph.util.Pair;
+import semgen.SemGen;
+import semgen.SemGenGUI;
+import semgen.encoding.Encoder;
 import semgen.extraction.Clusterer;
 import semgen.extraction.ExtractorJCheckBox;
+import semgen.resource.SemGenError;
 import semgen.resource.SemGenTask;
 import semgen.resource.Workbench;
 import semgen.resource.file.FileFilter;
 import semgen.resource.file.LoadSemSimModel;
 import semgen.resource.file.SemGenOpenFileChooser;
+import semgen.resource.file.SemGenSaveFileChooser;
 import semgen.resource.uicomponents.ProgressBar;
+import semsim.SemSimUtil;
+import semsim.extraction.Extractor;
 import semsim.model.SemSimModel;
 import semsim.model.computational.DataStructure;
 import semsim.model.computational.MappableVariable;
@@ -32,14 +43,18 @@ import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.PhysicalProperty;
 import semsim.model.physical.Submodel;
 import semsim.reading.ModelClassifier;
+import semsim.writing.CellMLwriter;
 
 
 public class ExtractorWorkbench implements Workbench {
+	private OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	private SemSimModel semsimmodel;
-	public File sourcefile; 
+	private File sourcefile; 
 	private boolean modelsaved = true;
-	private int lastsavedas = -1;
+	
 	public PrintWriter clusterwriter;
+	public SemSimModel extractedmodel;
+	private File extractedfile;
 	
 	public Hashtable<PhysicalEntity, Set<DataStructure>> entsanddatastrs = new Hashtable<PhysicalEntity, Set<DataStructure>>();
 	public Hashtable<DataStructure, PhysicalEntity> datastrsandents = new Hashtable<DataStructure, PhysicalEntity>();
@@ -59,9 +74,31 @@ public class ExtractorWorkbench implements Workbench {
 		semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(sourcefile);
 		
 		if(ModelClassifier.classify(sourcefile)==ModelClassifier.CELLML_MODEL || semsimmodel.getFunctionalSubmodels().size()>0){
-			JOptionPane.showMessageDialog(this, "Sorry. Extraction of models with CellML-type components not yet supported.");
+			JOptionPane.showMessageDialog(null, "Sorry. Extraction of models with CellML-type components not yet supported.");
 			return;
 		}
+	}
+	
+	public void startExtraction() throws IOException, OWLException {
+		Map<DataStructure, Set<? extends DataStructure>> table = primeextraction();
+		if (table.size() != 0) {
+			extractedfile = saveModelAs();
+			if (extractedfile != null) {
+				try {
+					extractedmodel = Extractor.extract(semsimmodel, table);
+				} catch (CloneNotSupportedException e1) {e1.printStackTrace();}
+				manager.saveOntology(extractedmodel.toOWLOntology(), new RDFXMLOntologyFormat(),IRI.create(extractedfile));
+				optionToEncode(extractedfile.getName());
+			}
+		} else {
+			JOptionPane.showMessageDialog(null,"Nothing to extract because no check boxes selected in extraction panels");
+		}
+	}
+	
+	public void startBatchClustering() throws IOException{
+		SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select a SemSim model for automated cluster analysis");
+		
+		batchCluster();
 	}
 	
 	public void includeInputsInExtraction(DataStructure onedatastr) throws OWLException{
@@ -332,7 +369,7 @@ public class ExtractorWorkbench implements Workbench {
 		Boolean saveok = false;
 		File batchclusterfile = null;
 		while (!saveok) {
-			int returnVal = filec.showSaveDialog(this);
+			int returnVal = filec.showSaveDialog(null);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				batchclusterfile = new File(filec.getSelectedFile().getAbsolutePath());
 				if (!batchclusterfile.getAbsolutePath().endsWith(".txt")
@@ -340,7 +377,7 @@ public class ExtractorWorkbench implements Workbench {
 					batchclusterfile = new File(filec.getSelectedFile().getAbsolutePath() + ".txt");
 				}
 				if (batchclusterfile.exists()) {
-					int overwriteval = JOptionPane.showConfirmDialog(this, "Overwrite existing file?",
+					int overwriteval = JOptionPane.showConfirmDialog(null, "Overwrite existing file?",
 							batchclusterfile.getName() + " already exists",JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE);
 					if (overwriteval == JOptionPane.OK_OPTION) {
 						saveok = true;
@@ -416,8 +453,6 @@ public class ExtractorWorkbench implements Workbench {
 	
 			JOptionPane.showMessageDialog(null, "Finished clustering analysis");
 		}
-
-
 	}
 	
 	@Override
@@ -432,28 +467,67 @@ public class ExtractorWorkbench implements Workbench {
 
 	@Override
 	public String getCurrentModelName() {
-
-		return null;
+		return semsimmodel.getName();
 	}
 
 	@Override
 	public String getModelSourceFile() {
 		// TODO Auto-generated method stub
-		return null;
+		return semsimmodel.getLegacyCodeLocation();
 	}
 
 	@Override
 	public File saveModel() {
-		// TODO Auto-generated method stub
-		return null;
+		setModelSaved(true);	
+		return sourcefile;
 	}
 
 	@Override
 	public File saveModelAs() {
-		// TODO Auto-generated method stub
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("Choose location to save file", new String[]{"cellml","owl"});
+		if (filec.SaveAsAction()!=null) {
+			sourcefile = filec.getSelectedFile();
+			semsimmodel.setName(sourcefile.getName().substring(0, sourcefile.getName().lastIndexOf(".")));
+			return sourcefile;
+		}
 		return null;
 	}
 
+	public String getExtractedFileName() {
+		return extractedfile.getName();
+	}
+	
+	public File getSourceFile() {
+		return sourcefile;
+	}
+	
+	public void optionToEncode(String filenamesuggestion) {
+		int x = JOptionPane.showConfirmDialog(null, "Finished extracting "
+				+ getExtractedFileName()
+				+ "\nGenerate simulation code from extracted model?", "",
+				JOptionPane.YES_NO_OPTION);
+		if (x == JOptionPane.YES_OPTION) {
+				new Encoder(extractedmodel, filenamesuggestion);
+		}
+	}
+	
+	public void getAllDataStructures(Hashtable<DataStructure, Set<? extends DataStructure>> alldatastrs) {
+		for(DataStructure ds : semsimmodel.getDataStructures()){
+			if(ds.getComputation()!=null)
+				alldatastrs.put(ds, ds.getComputation().getInputs());
+			else if(ds instanceof MappableVariable)
+				alldatastrs.put(ds, ((MappableVariable)ds).getMappedTo());
+		}
+	}
+	
+	public void getSolutionDomains(Set<DataStructure> domaincodewords ) {
+		for(DataStructure ds : semsimmodel.getSolutionDomains()){
+			domaincodewords.add(semsimmodel.getDataStructure(ds.getName() + ".min"));
+			domaincodewords.add(semsimmodel.getDataStructure(ds.getName() + ".max"));
+			domaincodewords.add(semsimmodel.getDataStructure(ds.getName() + ".delta"));
+		}
+	}
+	
 	public class NewExtractorTask extends SemGenTask {
 		public File file;
         public NewExtractorTask(){
@@ -475,5 +549,7 @@ public class ExtractorWorkbench implements Workbench {
             return null;
         }
     }
+	
+
 	
 }

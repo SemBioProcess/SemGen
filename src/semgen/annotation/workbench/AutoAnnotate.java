@@ -42,7 +42,7 @@ public class AutoAnnotate {
 				boolean online = WebserviceTester.testBioPortalWebservice("Annotation via web services failed.");
 				if(!online) 
 					SemGenError.showWebConnectionError(null, "BioPortal search service");
-				SBMLAnnotator.annotate(sourcefile, semsimmodel, online, SemSim.semsimlib.getOntTermsandNamesCache());
+				SBMLAnnotator.annotate(sourcefile, semsimmodel, online, semsimlib.getOntTermsandNamesCache());
 				ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel, semsimlib.getOntTermsandNamesCache(), online);
 				SBMLAnnotator.setFreeTextDefinitionsForDataStructuresAndSubmodels(semsimmodel);
 				progframe.requestFocusInWindow();
@@ -75,13 +75,13 @@ public class AutoAnnotate {
 				if(roa!=null){
 
 					// If the codeword represents an OPB:Amount property (OPB_00135)
-					if(SemSim.semsimlib.OPBhasAmountProperty(roa))
+					if(semsimlib.OPBhasAmountProperty(roa))
 						candidateamounts.add(ds);
 					// If the codeword represents an OPB:Force property (OPB_00574)
-					else if(SemSim.semsimlib.OPBhasForceProperty(roa))
+					else if(semsimlib.OPBhasForceProperty(roa))
 						candidateforces.add(ds);
 					// If the codeword represents an OPB:Flow rate property (OPB_00573)
-					else if(SemSim.semsimlib.OPBhasFlowProperty(roa)){
+					else if(semsimlib.OPBhasFlowProperty(roa)){
 						candidateflows.add(ds);
 					}
 				}
@@ -108,7 +108,7 @@ public class AutoAnnotate {
 		for(DataStructure camount : temp){
 			for(DataStructure newcamount : getDownstreamDataStructures(unconfirmedamounts, camount, camount)){
 				confirmedamounts.add(newcamount);
-				ReferenceOntologyAnnotation roa = SemSim.semsimlib.getOPBAnnotationFromPhysicalUnit(newcamount);
+				ReferenceOntologyAnnotation roa = semsimlib.getOPBAnnotationFromPhysicalUnit(newcamount);
 				if(!newcamount.getPhysicalProperty().hasRefersToAnnotation())
 					newcamount.getPhysicalProperty().addReferenceOntologyAnnotation(
 						SemSimConstants.REFERS_TO_RELATION, roa.getReferenceURI(), roa.getValueDescription());
@@ -129,7 +129,7 @@ public class AutoAnnotate {
 			// If already decided to annotate, or the candidate is solved with an ODE and it's not a discrete variable, annotate it
 			if((cforce.hasStartValue() || annotate) && !cforce.isDiscrete() 
 					&& !cforce.getPhysicalProperty().hasRefersToAnnotation()){
-				ReferenceOntologyAnnotation roa = SemSim.semsimlib.getOPBAnnotationFromPhysicalUnit(cforce);
+				ReferenceOntologyAnnotation roa = semsimlib.getOPBAnnotationFromPhysicalUnit(cforce);
 				cforce.getPhysicalProperty().addReferenceOntologyAnnotation(
 						SemSimConstants.REFERS_TO_RELATION, roa.getReferenceURI(), roa.getValueDescription());
 				confirmedforces.add(cforce);
@@ -144,9 +144,9 @@ public class AutoAnnotate {
 			for(DataStructure newcforce : getDownstreamDataStructures(unconfirmedforces, cforce, cforce)){
 				confirmedforces.add(newcforce);
 				if(!newcforce.getPhysicalProperty().hasRefersToAnnotation()){
-					ReferenceOntologyAnnotation roa = SemSim.semsimlib.getOPBAnnotationFromPhysicalUnit(newcforce);
+					ReferenceOntologyAnnotation roa = semsimlib.getOPBAnnotationFromPhysicalUnit(newcforce);
 					newcforce.getPhysicalProperty().addReferenceOntologyAnnotation(
-						SemSimConstants.REFERS_TO_RELATION, roa.getReferenceURI(), roa.getValueDescription());
+							SemSimConstants.REFERS_TO_RELATION, roa.getReferenceURI(), roa.getValueDescription());
 				}
 			}
 		}

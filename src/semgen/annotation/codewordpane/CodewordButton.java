@@ -7,7 +7,6 @@ import javax.swing.JLabel;
 
 import semgen.annotation.uicomponents.AnnotationObjectButton;
 import semgen.resource.SemGenFont;
-import semgen.resource.SemGenResource;
 import semsim.SemSimConstants;
 import semsim.model.computational.DataStructure;
 
@@ -16,6 +15,8 @@ public class CodewordButton extends AnnotationObjectButton {
 	private JLabel compannlabel = new JLabel("_");
 	public DataStructure ds;
 	public PropertyMarker propoflabel = new PropertyMarker(Color.white, null);
+	private Color dependencycolor = new Color(205, 92, 92, 255);
+	private Color processgreen = new Color(50,205,50);
 
 	public CodewordButton() {
 		namelabel.setFont(SemGenFont.defaultItalic());
@@ -59,11 +60,11 @@ public class CodewordButton extends AnnotationObjectButton {
 				tooltip = "<html>Codeword identified as a property of a physical <i>entity</i></html>";
 				break;
 			case SemSimConstants.PROPERTY_OF_PHYSICAL_PROCESS:
-				col = SemGenResource.processgreen;
+				col = processgreen;
 				tooltip = "<html>Codeword identified as a property of a physical <i>process</i></html>";
 				break;
 			default:
-				col = SemGenResource.dependencycolor;
+				col = dependencycolor;
 				tooltip = "<html>Codeword identified as a property of a <i>constitutive</i> relation.</htm>";
 				break;
 		}

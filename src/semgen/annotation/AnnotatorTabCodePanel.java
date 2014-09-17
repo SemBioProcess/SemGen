@@ -25,22 +25,17 @@ import java.util.regex.Pattern;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
-import javax.swing.JTextArea;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultHighlighter;
-import javax.swing.text.Highlighter;
-import javax.swing.text.Highlighter.HighlightPainter;
 
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.resource.SemGenFont;
-import semgen.resource.SemGenResource;
 import semgen.resource.uicomponents.ProgressBar;
+import semgen.resource.uicomponents.SemGenTextArea;
 
-public class AnnotatorTabCodePanel extends JTextArea {
+public class AnnotatorTabCodePanel extends SemGenTextArea {
 	private static final long serialVersionUID = 1L;
 	private int currentindexforcaret;
-	private Highlighter hilit = new DefaultHighlighter();
-	private HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(SemGenResource.lightblue);
+
 	private ArrayList<Integer> indexesOfHighlightedTerms;
 	private String codeword = "";
 	private CodePopUp popup = new CodePopUp();
@@ -49,11 +44,8 @@ public class AnnotatorTabCodePanel extends JTextArea {
 	public AnnotatorTabCodePanel(AnnotatorWorkbench can) {
 		canvas = can;
 		setFont(SemGenFont.Bold("Monospaced"));
-		setHighlighter(hilit);
-		setBackground(new Color(250, 250, 227));
 		setMargin(new Insets(5, 15, 5, 5));
 		setForeground(Color.black);
-		setEditable(false);
 		addMouseListener(new PopupListener());
 	}
 	
@@ -160,40 +152,7 @@ public class AnnotatorTabCodePanel extends JTextArea {
 		}
 		currentindexforcaret = 0;
 	}
-	
-	public ArrayList<Integer> highlightAll(String origword, Boolean forcdwd, Boolean caseinsensitive) {
-		ArrayList<Integer> listofindexes = new ArrayList<Integer>();
-		Pattern pattern = Pattern.compile("[\\W_]" + Pattern.quote(origword) + "[\\W_]");
-		if(caseinsensitive){
-			pattern = Pattern.compile("[\\W_]" + Pattern.quote(origword) + "[\\W_]", Pattern.CASE_INSENSITIVE);
-		}
-		HighlightPainter allpainter = new DefaultHighlighter.DefaultHighlightPainter(Color.yellow);
-		
-		Boolean match = true;
-		Matcher m = pattern.matcher(getText());
-		while(match){
-			if(m.find()){
-				int index = m.start();
-				
-				try{
-					hilit.addHighlight(index+1, m.end()-1, allpainter);
-				} catch (BadLocationException e) {
-					e.printStackTrace();
-				}
-				listofindexes.add(index);
-			}
-			else{
-				match = false;
-			}
-		}
-		if(!forcdwd && listofindexes.size()>0){setCaretPosition(0);}
-		return listofindexes;
-	}
-	
-	public void removeAllHighlights() {
-		hilit.removeAllHighlights();
-	}
-	
+
 	public void getIndexesForCodewordOccurrences(String origword, Boolean caseinsensitive) {
 		indexesOfHighlightedTerms = new ArrayList<Integer>();
 		hilit.removeAllHighlights();

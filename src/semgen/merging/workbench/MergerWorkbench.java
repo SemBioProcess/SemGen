@@ -11,9 +11,11 @@ import java.util.Set;
 import javax.swing.JOptionPane;
 
 import org.jdom.JDOMException;
+import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLException;
+import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import JSim.util.Xcept;
 import semgen.encoding.Encoder;
@@ -34,6 +36,7 @@ import semsim.model.physical.Submodel;
 import semsim.reading.ModelClassifier;
 
 public class MergerWorkbench implements Workbench {
+	private OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	public File file1, file2, mergedfile;
 	public SemSimModel semsimmodel1, semsimmodel2;
 	

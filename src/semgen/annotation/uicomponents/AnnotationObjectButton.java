@@ -17,8 +17,8 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import semgen.SemGenSettings;
 import semgen.resource.SemGenFont;
-import semgen.resource.SemGenResource;
 
 public abstract class AnnotationObjectButton extends JPanel implements FocusListener {
 	private static final long serialVersionUID = 1L;
@@ -126,7 +126,7 @@ public abstract class AnnotationObjectButton extends JPanel implements FocusList
 	}
 
 	protected void changeBackground(Color col) {
-		if (getBackground()!=SemGenResource.lightblue)
+		if (getBackground()!=SemGenSettings.lightblue)
 				setBackground(col);
 	}
 		
@@ -168,7 +168,7 @@ public abstract class AnnotationObjectButton extends JPanel implements FocusList
 	}
 	
 	public void focusGained(FocusEvent e) {
-		setBackground(SemGenResource.lightblue);
+		setBackground(SemGenSettings.lightblue);
 	}
 
 	public void focusLost(FocusEvent e) {

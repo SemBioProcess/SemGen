@@ -1,9 +1,13 @@
 package semgen.annotation.workbench;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import semgen.annotation.dialog.referencedialog.SingularAnnotationEditor;
+import semgen.annotation.dialog.selectordialog.SemSimComponentSelectorDialog;
+import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
 import semsim.model.computational.DataStructure;
@@ -28,6 +32,7 @@ public class SubModelAnnotations extends AnnotatorObservable {
 	public void addSubModel(String name) {
 		semsimmodel.addSubmodel(new Submodel(name));
 		generateList();
+		setChanged();
 		notifyObservers();
 	}
 
@@ -61,6 +66,53 @@ public class SubModelAnnotations extends AnnotatorObservable {
 		return getSubModel(index).getFirstRefersToReferenceOntologyAnnotation();
 	}
 	
+	public void assignSubModelstoSubmodel(Integer index) {
+		Submodel target = getSubModel(index);
+		
+		ArrayList<Integer> children = new ArrayList<Integer>(getAllDownstreamSubmodelIndicies(target));
+		Collections.sort(children);
+		
+		ArrayList<Integer> substodisable = new ArrayList<Integer>();
+		substodisable.add(index);
+		
+		SemSimComponentSelectorDialog dss 
+			= new SemSimComponentSelectorDialog(
+					SemSimUtil.getNamesfromComponentSet(ComponentList, false), children, substodisable,
+					"Select components for " + target.getName());
+		if (dss.isChanged()) {
+			Set<Submodel> selection = new HashSet<Submodel>(getSubmodelsfromIndicies(dss.getUserSelections()));
+			target.setSubmodels(selection);
+		}
+	}
+	
+	public Set<Integer> getAllDownstreamSubmodelIndicies(Submodel model) {
+		Set<Submodel> childsubs = model.getSubmodels();
+		Set<Integer> children = new HashSet<Integer>();
+		for (Submodel child : childsubs) {
+			if (!child.getSubmodels().isEmpty()) {
+				children.addAll(getAllDownstreamSubmodelIndicies(child));
+			}
+			children.add(ComponentList.indexOf(child));
+		}
+		return children;
+	}
+	
+	protected ArrayList<Integer> getListofIndicies(ArrayList<Submodel> subs) {
+		ArrayList<Integer> indicies = new ArrayList<Integer>();
+		for (Submodel sub : subs) {
+			indicies.add(ComponentList.indexOf(sub));
+		}
+		return indicies;
+	}
+	
+	protected ArrayList<Submodel> getSubmodelsfromIndicies(ArrayList<Integer> indicies) {
+		ArrayList<Submodel> models = new ArrayList<Submodel>();
+		for (Integer index : indicies) {
+			models.add((Submodel) ComponentList.get(index));
+		}
+		return models;
+	}
+	
 	@Override
 	public boolean hasSingular(int index) {
 		 return !getSubModel(index).hasRefersToAnnotation();
@@ -91,7 +143,7 @@ public class SubModelAnnotations extends AnnotatorObservable {
 		notifyObservers();
 	}
 	
-	private Submodel getSubModel(Integer index) {
+	Submodel getSubModel(Integer index) {
 		return ((Submodel)ComponentList.get(index));
 	}
 }

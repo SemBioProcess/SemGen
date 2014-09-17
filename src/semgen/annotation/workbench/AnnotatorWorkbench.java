@@ -1,6 +1,5 @@
 package semgen.annotation.workbench;
 
-import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,7 +8,6 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
 
-import javax.swing.JCheckBox;
 import javax.xml.rpc.ServiceException;
 
 import org.jdom.JDOMException;
@@ -28,7 +26,6 @@ import semgen.annotation.dialog.selectordialog.RemovePhysicalComponentDialog;
 import semgen.encoding.Encoder;
 import semgen.resource.CSVExporter;
 import semgen.resource.SemGenError;
-import semgen.resource.SemGenResource;
 import semgen.resource.SemGenTask;
 import semgen.resource.Workbench;
 import semgen.resource.file.LoadSemSimModel;
@@ -46,12 +43,13 @@ import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.PhysicalProperty;
+import semsim.model.physical.Submodel;
 import semsim.reading.ModelClassifier;
 import semsim.writing.CellMLwriter;
 
 public class AnnotatorWorkbench implements Workbench, Observer {
 	public File sourcefile; //File originally loaded at start of Annotation session (could be in SBML, MML, CellML or SemSim format)
-	
+
 	private OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	protected AnnotatorObservable aofocus;
 	public CodewordAnnotations cwa;
@@ -61,8 +59,6 @@ public class AnnotatorWorkbench implements Workbench, Observer {
 	//private SemSimLibrary semsimlib = SemSim.semsimlib;
 	private boolean modelsaved = true;
 	private int lastsavedas = -1;
-	public Set<String> recententitiesset = new HashSet<String>();
-	public Set<String> recentdependenciesset = new HashSet<String>();
 	
 	public AnnotatorWorkbench(File file, Boolean autoann) {
 		sourcefile = file;
@@ -195,8 +191,8 @@ public class AnnotatorWorkbench implements Workbench, Observer {
 			if(getModelSaved()) lastsavedas = semsimmodel.getSourceModelType();
 					
 			// Add unspecified physical model components for use during annotation
-			semsimmodel.addCustomPhysicalEntity(SemGenResource.unspecifiedName, "Non-specific entity for use as a placeholder during annotation");
-			semsimmodel.addCustomPhysicalProcess(SemGenResource.unspecifiedName, "Non-specific process for use as a placeholder during annotation");
+			semsimmodel.addCustomPhysicalEntity(semsimmodel.unspecifiedName, "Non-specific entity for use as a placeholder during annotation");
+			semsimmodel.addCustomPhysicalProcess(semsimmodel.unspecifiedName, "Non-specific process for use as a placeholder during annotation");
 
 			}
 		}
@@ -270,6 +266,10 @@ public class AnnotatorWorkbench implements Workbench, Observer {
 		} catch (Exception e1) {e1.printStackTrace();} 
 	}
 	
+	public void requestModelLevelAnnotator() {
+		mla.editModelAnnotations();
+	}
+	
 	public void importandAnnotate() {
 		try {
 			new AnnotationCopier();
@@ -277,6 +277,18 @@ public class AnnotatorWorkbench implements Workbench, Observer {
 			e1.printStackTrace();
 		} 
 	}
+	
+	public void assignCodewordstoSubmodel(Integer index) {
+		Submodel target = sma.getSubModel(index);
+		
+		ArrayList<DataStructure> selection = cwa.codewordSelectionDialog(
+				"Select codewords for " + target.getName(), (ArrayList<DataStructure>) target.getAssociatedDataStructures());
+		if (selection != null) {
+			
+			target.setAssociatedDataStructures((Set<DataStructure>) selection);
+		}
+	}
+	
 	// This replaces the physical component with the *unspecified* component place-holder
 		public void removeComponentFromModel(PhysicalModelComponent removedComp) {
 			for(PhysicalProperty prop: semsimmodel.getPhysicalProperties()){
@@ -284,10 +296,10 @@ public class AnnotatorWorkbench implements Workbench, Observer {
 				if(prop.getPhysicalPropertyOf()==removedComp){
 
 					if(prop.getPhysicalPropertyOf() instanceof PhysicalEntity)
-						prop.setPhysicalPropertyOf(semsimmodel.getCustomPhysicalEntityByName(SemGenResource.unspecifiedName));
+						prop.setPhysicalPropertyOf(semsimmodel.getCustomPhysicalEntityByName(semsimmodel.unspecifiedName));
 					if(prop.getPhysicalPropertyOf() instanceof PhysicalProcess){
 						// Need to do sources, sinks, meds here?
-						prop.setPhysicalPropertyOf(semsimmodel.getCustomPhysicalProcessByName(SemGenResource.unspecifiedName));
+						prop.setPhysicalPropertyOf(semsimmodel.getCustomPhysicalProcessByName(semsimmodel.unspecifiedName));
 					}
 
 				}
@@ -297,7 +309,7 @@ public class AnnotatorWorkbench implements Workbench, Observer {
 
 					for(int k=0; k<cpe.getArrayListOfEntities().size(); k++){
 						if(cpe.getArrayListOfEntities().get(k)==removedComp)
-							cpe.getArrayListOfEntities().set(k, semsimmodel.getCustomPhysicalEntityByName(SemGenResource.unspecifiedName));
+							cpe.getArrayListOfEntities().set(k, semsimmodel.getCustomPhysicalEntityByName(semsimmodel.unspecifiedName));
 					}
 				}
 			}

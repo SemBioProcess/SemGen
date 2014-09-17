@@ -1,20 +1,18 @@
 package semgen.annotation.annotationpane;
 
 import semgen.SemGenGUI;
+import semgen.SemGenSettings;
 import semgen.annotation.AnnotationCopier;
 import semgen.annotation.AnnotatorTab;
 import semgen.annotation.codewordpane.CodewordButton;
 import semgen.annotation.dialog.AnnotationDialogClickableTextPane;
 import semgen.annotation.dialog.HumanDefEditor;
 import semgen.annotation.dialog.referencedialog.SingularAnnotationEditor;
-import semgen.annotation.dialog.selectordialog.SelectorDialogForCodewordsOfSubmodel;
-import semgen.annotation.dialog.selectordialog.SelectorDialogForSubmodelsOfSubmodel;
 import semgen.annotation.submodelpane.SubmodelButton;
 import semgen.annotation.uicomponents.AnnotationObjectButton;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.resource.SemGenIcon;
 import semgen.resource.SemGenFont;
-import semgen.resource.SemGenResource;
 import semgen.resource.uicomponents.SemGenSeparator;
 import semsim.Annotatable;
 import semsim.model.Importable;
@@ -71,7 +69,7 @@ public class AnnotationPanel extends JPanel implements MouseListener, Observer{
 	public AnnotationPanel(AnnotatorWorkbench can) throws IOException{
 		canvas = can;
 
-		setBackground(SemGenResource.lightblue);
+		setBackground(SemGenSettings.lightblue);
 		setLayout(new BorderLayout());
 
 		codewordlabel = new JLabel(canvas.getFocusName());
@@ -84,28 +82,30 @@ public class AnnotationPanel extends JPanel implements MouseListener, Observer{
 		
 		humapplyelsewherebutton.setVisible(false);
 
-		humandefpanel.setBackground(SemGenResource.lightblue);
+		humandefpanel.setBackground(SemGenSettings.lightblue);
 		humandefpanel.setBorder(BorderFactory.createEmptyBorder(0, indent, 0, 0));
+		humandefpanel.setLayout(new BorderLayout());
+		humandefpanel.add(humandefsubpanel, BorderLayout.WEST);
+		humandefpanel.add(Box.createGlue(), BorderLayout.EAST);
 		
 		JLabel nohumdeflabel = new JLabel("");
 		nohumdeflabel.addMouseListener(this);
 		nohumdeflabel.setForeground(Color.gray);
 		
 		JPanel humandefsubpanel = new JPanel();
-		humandefsubpanel.setBackground(SemGenResource.lightblue);
+		humandefsubpanel.setBackground(SemGenSettings.lightblue);
 		humandefsubpanel.setLayout(new BoxLayout(humandefsubpanel, BoxLayout.X_AXIS));
 		humandefpane = new AnnotationDialogClickableTextPane("[unspecified]",this, indent, thebutton.editable);
 		humandefpane.setAlignmentX(JTextArea.LEFT_ALIGNMENT);
-		humandefpanel.setLayout(new BorderLayout());
+		
 		humandefsubpanel.add(humandefpane);
 		humandefsubpanel.add(humremovebutton);
-		humandefpanel.add(humandefsubpanel, BorderLayout.WEST);
-		humandefpanel.add(Box.createGlue(), BorderLayout.EAST);
+		
 		
 		JPanel subtitlepanel = new JPanel();
 		subtitlepanel.setLayout(new BoxLayout(subtitlepanel, BoxLayout.Y_AXIS));
 		subtitlepanel.setBorder(BorderFactory.createEmptyBorder(0, indent, 0, indent));
-		subtitlepanel.setBackground(SemGenResource.lightblue);
+		subtitlepanel.setBackground(SemGenSettings.lightblue);
 		
 		JPanel codewordspanel = new JPanel();
 		JEditorPane eqpane = null;
@@ -119,14 +119,14 @@ public class AnnotationPanel extends JPanel implements MouseListener, Observer{
 			codewordspanel.setLayout(new BorderLayout());
 			codewordspanel.add(subtitlefield, BorderLayout.NORTH);
 			codewordspanel.add(Box.createHorizontalGlue(), BorderLayout.EAST);
-			codewordspanel.setBackground(SemGenResource.lightblue);
+			codewordspanel.setBackground(SemGenSettings.lightblue);
 			subtitlepanel.add(codewordspanel);
 			
 			JPanel nestedsubmodelpanel = new JPanel();
 			nestedsubmodelpanel.setLayout(new BorderLayout());
 			nestedsubmodelpanel.add(nestedsubmodelpane, BorderLayout.WEST);
 			nestedsubmodelpanel.add(Box.createGlue(), BorderLayout.EAST);
-			nestedsubmodelpanel.setBackground(SemGenResource.lightblue);
+			nestedsubmodelpanel.setBackground(SemGenSettings.lightblue);
 			subtitlepanel.add(nestedsubmodelpanel);
 		}
 		// If viewing a codeword, get the equation and units associated with the codeword
@@ -158,7 +158,7 @@ public class AnnotationPanel extends JPanel implements MouseListener, Observer{
 		refreshData();
 
 		Box mainheader = Box.createHorizontalBox();
-		mainheader.setBackground(SemGenResource.lightblue);
+		mainheader.setBackground(SemGenSettings.lightblue);
 		mainheader.setAlignmentX(LEFT_ALIGNMENT);
 		
 		codewordlabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
@@ -213,7 +213,7 @@ public class AnnotationPanel extends JPanel implements MouseListener, Observer{
 		singularannpanel.setAlignmentX(JPanel.LEFT_ALIGNMENT);
 		mainpanel.add(singularannlabel);
 		mainpanel.add(singularannpanel);
-		mainpanel.setBackground(SemGenResource.lightblue);
+		mainpanel.setBackground(SemGenSettings.lightblue);
 		
 		add(mainpanel, BorderLayout.NORTH);
 		add(Box.createVerticalGlue(), BorderLayout.SOUTH);
@@ -500,14 +500,6 @@ public class AnnotationPanel extends JPanel implements MouseListener, Observer{
 	public void mouseEntered(MouseEvent e) {
 		Component component = e.getComponent();
 		component.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		if (component instanceof AnnotationDialogClickableTextPane) {
-			// Paint underline on mouse entered
-			AnnotationDialogClickableTextPane jtp = (AnnotationDialogClickableTextPane) component;
-	        MutableAttributeSet attrs = jtp.getInputAttributes();
-	        StyleConstants.setUnderline(attrs, true);
-	        StyledDocument doc = jtp.getStyledDocument();
-	        doc.setCharacterAttributes(0, doc.getLength() + 1, attrs, false);		
-		}
 		if(component==codewordlabel && thebutton instanceof SubmodelButton){
 			codewordlabel.setForeground(Color.blue);
 		}
@@ -516,14 +508,6 @@ public class AnnotationPanel extends JPanel implements MouseListener, Observer{
 	public void mouseExited(MouseEvent e) {
 		Component component = e.getComponent();
 		component.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-		if (component instanceof AnnotationDialogClickableTextPane) {
-			// Remove underline on mouse exit
-			AnnotationDialogClickableTextPane jtp = (AnnotationDialogClickableTextPane) component;
-	        MutableAttributeSet attrs = jtp.getInputAttributes();
-	        StyleConstants.setUnderline(attrs, false);
-	        StyledDocument doc = jtp.getStyledDocument();
-	        doc.setCharacterAttributes(0, doc.getLength() + 1, attrs, false);	
-		}
 		if(component==codewordlabel && thebutton instanceof SubmodelButton){
 			codewordlabel.setForeground(Color.black);
 		}

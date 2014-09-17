@@ -23,7 +23,6 @@ import semgen.resource.CSVExporter;
 import semgen.resource.NewTaskDialog;
 import semgen.resource.SemGenError;
 import semgen.resource.SemGenFont;
-import semgen.resource.SemGenResource;
 import semgen.resource.SemGenTask;
 import semgen.resource.file.LoadSemSimModel;
 import semgen.resource.file.SemGenOpenFileChooser;

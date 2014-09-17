@@ -5,7 +5,9 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import semgen.annotation.dialog.referencedialog.SingularAnnotationEditor;
+import semgen.annotation.dialog.selectordialog.SemSimComponentSelectorDialog;
 import semsim.SemSimConstants;
+import semsim.SemSimUtil;
 import semsim.model.SemSimComponent;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
@@ -113,5 +115,31 @@ public class CodewordAnnotations extends AnnotatorObservable {
 	
 	public int countDataStructures() {
 		return semsimmodel.getDataStructures().size();
+	}
+	
+	protected ArrayList<DataStructure> getDataStructuresfromIndicies(ArrayList<Integer> indicies) {
+		ArrayList<DataStructure> dss = new ArrayList<DataStructure>();
+		for (Integer index : indicies) {
+			dss.add((DataStructure) ComponentList.get(index));
+		}
+		return dss;
+	}
+	
+	protected ArrayList<Integer> getListofIndicies(ArrayList<DataStructure> dss) {
+		ArrayList<Integer> indicies = new ArrayList<Integer>();
+		for (DataStructure ds : dss) {
+			indicies.add(ComponentList.indexOf(ds));
+		}
+		return indicies;
+	}
+	
+	public ArrayList<DataStructure> codewordSelectionDialog(String title, ArrayList<DataStructure> structstoCheck) {
+		SemSimComponentSelectorDialog dss = new SemSimComponentSelectorDialog(
+				SemSimUtil.getNamesfromComponentSet(ComponentList, false), 
+				getListofIndicies(structstoCheck), null, title);
+		if (dss.isChanged()) {
+			return getDataStructuresfromIndicies(dss.getUserSelections());
+		}
+		return null;
 	}
 }

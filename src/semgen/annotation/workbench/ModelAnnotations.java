@@ -3,6 +3,7 @@ package semgen.annotation.workbench;
 import java.util.Observable;
 
 import semgen.annotation.dialog.LegacyCodeChooser;
+import semgen.annotation.dialog.ModelLevelMetadataEditor;
 import semsim.SemSimConstants;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.Annotation;
@@ -22,6 +23,7 @@ public class ModelAnnotations extends Observable {
 	
 	public void setModelSourceFile(String loc) {
 		addModelAnnotation(SemSimConstants.LEGACY_CODE_LOCATION_RELATION, loc);
+		setChanged();
 		notifyObservers(CODEREFRESH);
 	}
 	
@@ -31,5 +33,12 @@ public class ModelAnnotations extends Observable {
 		if (loc != null && !loc.equals("")) {
 			setModelSourceFile(loc);
 		}
+	}
+	
+	public void editModelAnnotations() {
+		ModelLevelMetadataEditor dialog = new ModelLevelMetadataEditor(semsimmodel.getAnnotations());
+		semsimmodel.setAnnotations(dialog.getModelAnnotations());
+		setChanged();
+		notifyObservers();
 	}
 }

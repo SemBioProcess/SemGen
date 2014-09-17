@@ -19,7 +19,6 @@ import javax.swing.UIManager;
 
 import org.semanticweb.owlapi.model.OWLException;
 
-import semgen.resource.SemGenResource;
 import semgen.semgenmenu.SemGenMenuBar;
 import semsim.SemSimLibrary;
 
@@ -95,7 +94,7 @@ public class SemGen extends JFrame{
 		
 		this.pack();
 		
-		logfilewriter.println("Session started on: " + SemGenResource.sdflog.format(datenow) + "\n");
+		logfilewriter.println("Session started on: " + SemGenSettings.sdflog.format(datenow) + "\n");
 	}
 	
 	private void OSValidation() {
