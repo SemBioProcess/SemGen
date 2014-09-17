@@ -32,7 +32,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -40,33 +42,32 @@ import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
 
+import semgen.annotation.AnnotatorTab;
+import semgen.annotation.AnnotatorTabCodePanel;
+import semgen.annotation.codewordpane.CodewordButton;
 import semgen.resource.GenericThread;
 import semgen.resource.SemGenIcon;
 import semgen.resource.SemGenError;
 import semgen.resource.SemGenFont;
 import semgen.resource.uicomponents.SemGenScrollPane;
-import semgen.resource.uicomponents.SemGenTextArea;
 import semsim.ResourcesManager;
 import semsim.SemSimConstants;
-import semsim.model.physical.ReferencePhysicalEntity;
-import semsim.model.physical.ReferencePhysicalProcess;
 import semsim.webservices.BioPortalAnnotatorClient;
 import semsim.webservices.BioPortalConstants;
 
 public class TextMinerDialog extends JDialog implements PropertyChangeListener, ActionListener{
 	private static final long serialVersionUID = -4832887891785870465L;
 	public JButton parsebutton;
-	public JTextField pmarea = new JTextField() ;
+	public JTextField pmarea = new JTextField();
 	public JButton pmbutton = new JButton("Find abstract");
 	public String pubmedid;
-	public SemGenTextArea inputtextarea;
+	public JTextArea inputtextarea;
 	public SemGenScrollPane spresults;
 	public JOptionPane optionPane;
 	public JPanel sppanel;
 	public JPanel resultspanel;
+	
 	public JButton loadingbutton;
-	protected Set<ReferencePhysicalEntity> collectedents = new HashSet<ReferencePhysicalEntity>();
-	protected Set<ReferencePhysicalProcess> collectedproc = new HashSet<ReferencePhysicalProcess>();
 
 	public TextMinerDialog() throws FileNotFoundException{		
 		setTitle("Parse text for ontology terms");
@@ -82,7 +83,7 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 		JPanel pmpanel = new JPanel();
 		pmbutton.addActionListener(this);
 		pmarea.setPreferredSize(new Dimension(150,30));
-		pmarea.setMaximumSize(new Dimension(150,30));
+		pmarea .setMaximumSize(new Dimension(150,30));
 		pmarea.addActionListener(this);
 		pmpanel.add(new JLabel("Enter PubMed ID"));
 		pmpanel.add(pmarea);
@@ -92,7 +93,7 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 		parsepanel.add(parsebutton);
 		parsepanel.add(loadingbutton);
 		
-		inputtextarea = new SemGenTextArea();
+		inputtextarea = new JTextArea();
 		inputtextarea.setLineWrap(true);
 		inputtextarea.setWrapStyleWord(true);
 		inputtextarea.setFont(SemGenFont.defaultPlain(-1));
@@ -269,7 +270,7 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 	}
 	
 	// Add the ontology terms to the SemSim model
-	private Boolean collect(){
+	public Boolean collect(){
 		Component[] comps = resultspanel.getComponents();
 		for(int c=0;c<comps.length;c++){
 			if(comps[c] instanceof TextMinerPanel){
@@ -285,17 +286,17 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 								new Object[]{"Entity","Process","Cancel"},
 								"Entity");
 						if(choice == JOptionPane.YES_OPTION){
-							collectedents.add(new ReferencePhysicalEntity(URI.create(panel.box.uri), termname));
+							annotator.semsimmodel.addReferencePhysicalEntity(URI.create(panel.box.uri), termname);
 						}
 						else if(choice == JOptionPane.NO_OPTION){
-							collectedproc.add(new ReferencePhysicalProcess(URI.create(panel.box.uri), termname));
+							annotator.semsimmodel.addReferencePhysicalProcess(URI.create(panel.box.uri), termname);
 						}
 						else if(choice == JOptionPane.CANCEL_OPTION){
 							return false;
 						}
 					}
 					else{
-						collectedents.add(new ReferencePhysicalEntity(URI.create(panel.box.uri), termname));
+						annotator.semsimmodel.addReferencePhysicalEntity(URI.create(panel.box.uri), termname);
 					}
 				}
 			}
@@ -358,17 +359,19 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 	public void propertyChange(PropertyChangeEvent arg0) {
 		String value = optionPane.getValue().toString();
 		if (value == "Collect"){
+			optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 			collect(); 
 		}
 		if (value == "Close"){
-			dispose();
+			optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+			setVisible(false);
 		}
-		if (value == "Collect & Close"){			
+		if (value == "Collect & Close"){
+			optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 			if(collect()){
-				dispose();
+				setVisible(false);
 			}
 		}
-		optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
@@ -391,12 +394,4 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 	public void setPubMedID(String id) {
 		pubmedid = id;
 	}
-	
-	public Set<ReferencePhysicalEntity> getCollectedEntities() {
-		return collectedents;
-	}
-	public Set<ReferencePhysicalProcess> getCollectedProcesses() {
-		return collectedproc;
-	}
-
 	}  

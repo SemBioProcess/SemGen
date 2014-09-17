@@ -8,20 +8,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashSet;
 import java.util.Set;
-<<<<<<< HEAD
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-=======
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -33,7 +24,6 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
-<<<<<<< HEAD
 import semgen.resource.SemGenIcon;
 import semgen.resource.SemGenFont;
 import semgen.resource.uicomponents.SemGenScrollPane;
@@ -96,142 +86,10 @@ public class ResolutionPanel extends JPanel implements ActionListener {
 		JRadioButton rb3 = new JRadioButton("Ignore equivalency");
 		rb1.setSelected(true);
 		
-=======
-import semgen.SemGenGUI;
-import semgen.SemGenScrollPane;
-import semsim.model.SemSimModel;
-import semsim.model.computational.DataStructure;
-
-
-public class ResolutionPanel extends JPanel implements ActionListener {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -618244272904338963L;
-	public Merger merger;
-	public JComboBox chooser;
-	public JPanel annotationpanel;
-	public JPanel actionpanel;
-	public JPanel thirdpanel;
-	public JPanel couplepanel;
-	public JPanel keeppanel;
-	public JLabel mappedtolabel;
-
-	public SemSimModel semsimmodel1;
-	public SemSimModel semsimmodel2;
-	public JLabel model1label;
-	public JLabel model2label;
-	public DataStructure ds1;
-	public DataStructure ds2;
-	public Boolean manualmapping;
-	public JRadioButton rb1;
-	public JRadioButton rb2;
-	public JRadioButton rb3;
-	public JButton questionbutton;
-
-	ImageIcon question = SemGenGUI.createImageIcon("icons/questionicon.gif");
-
-	public ResolutionPanel(Merger merger, DataStructure ds1, DataStructure ds2,
-			SemSimModel semsimmodel1, SemSimModel semsimmodel2,
-			String matchdescription, Boolean manualmapping) {
-
-		this.merger = merger;
-		this.ds1 = ds1;
-		this.ds2 = ds2;
-		this.semsimmodel1 = semsimmodel1;
-		this.semsimmodel2 = semsimmodel2;
-		this.manualmapping = manualmapping;
-
-		this.setLayout(new BorderLayout());
-		this.setAlignmentX(LEFT_ALIGNMENT);
-		this.setBackground(Color.white);
-		this.setOpaque(true);
-
-		annotationpanel = new JPanel();
-		annotationpanel.setLayout(new BorderLayout());
-		annotationpanel.setBackground(Color.white);
-		annotationpanel.setAlignmentX(LEFT_ALIGNMENT);
-		annotationpanel.setOpaque(true);
-
-		model1label = new JLabel(ds1.getDescription() + " (" + ds1.getName() + ")");
-		//model1label.setWrapStyleWord(true);
-		//model1label.setLineWrap(true);
-		model1label.setFont(new Font("SansSerif", Font.BOLD,
-				SemGenGUI.defaultfontsize));
-		model1label.setForeground(Color.blue);
-		//model1label.setMaximumSize(new Dimension(700, 9999999));
-		model1label.setAlignmentX(LEFT_ALIGNMENT);
-		//model1label.setBackground(Color.white);
-		//model1label.setOpaque(true);
-		// model1label.setPreferredSize(new Dimension(600,1));
-		model1label.setBorder(BorderFactory.createEmptyBorder(3, 3, 0, 3));
-
-		model2label = new JLabel(ds2.getDescription() + " (" + ds2.getName() + ")");
-		//model2label.setWrapStyleWord(true);
-		//model2label.setLineWrap(true);
-		model2label.setFont(new Font("SansSerif", Font.BOLD, SemGenGUI.defaultfontsize));
-		model2label.setForeground(Color.red);
-		//model2label.setMaximumSize(new Dimension(700, 9999999));
-		model2label.setAlignmentX(LEFT_ALIGNMENT);
-		//model2label.setBackground(Color.white);
-		//model2label.setOpaque(true);
-		// model2label.setPreferredSize(new Dimension(600,1));
-		model2label.setBorder(BorderFactory.createEmptyBorder(3, 3, 0, 3));
-
-		
-
-		mappedtolabel = new JLabel("  mapped to  ");
-		mappedtolabel.setBackground(Color.white);
-		mappedtolabel.setFont(new Font("SansSerif", Font.ITALIC,
-				SemGenGUI.defaultfontsize - 1));
-		//if (!ds1.getDescription().equals(ds2.getDescription())) {
-		
-		JPanel annotationsubpanel = new JPanel();
-		annotationsubpanel.setBackground(Color.white);
-		annotationsubpanel.add(model1label); // , BorderLayout.CENTER);
-		annotationsubpanel.add(mappedtolabel);
-		annotationsubpanel.add(model2label);
-		//}
-		annotationpanel.add(annotationsubpanel, BorderLayout.WEST);
-		annotationpanel.add(Box.createGlue(), BorderLayout.EAST);
-
-		chooser = new JComboBox(new String[] {
-				"Keep data structure from " + ds1.getDescription(),
-				"Keep data structure from " + ds2.getDescription(),
-				"Keep data structures disjoint (ignore overlap)" });
-		ButtonGroup bg = new ButtonGroup();
-		rb1 = new JRadioButton("Use " + ds1.getName() + " (" + semsimmodel1.getName() + ")");
-		rb1.setForeground(Color.blue);
-		rb1.setBackground(Color.white);
-		if(ds1.getComputation().getComputationalCode()!=null)
-			rb1.setToolTipText(ds1.getComputation().getComputationalCode());
-		else rb1.setToolTipText("user-defined input");
-		rb2 = new JRadioButton("Use " + ds2.getName() + " (" + semsimmodel2.getName() + ")");
-		rb2.setForeground(Color.red);
-		rb2.setBackground(Color.white);
-		rb2.setOpaque(false);
-		if(ds2.getComputation().getComputationalCode()!=null)
-			rb2.setToolTipText(ds2.getComputation().getComputationalCode());
-		else rb2.setToolTipText("user-defined input");
-		rb2.setToolTipText(ds2.getComputation().getComputationalCode());
-		
-		rb3 = new JRadioButton("Ignore equivalency");
-		rb3.setToolTipText("Preserve both codewords and their equations in the merged model");
-		rb3.setBackground(Color.white);
-		rb1.setSelected(true);
-		
-		bg.add(rb1);
-		bg.add(rb2);
-		bg.add(rb3);
-
-		questionbutton = new JButton(question);
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		questionbutton.addActionListener(this);
 		questionbutton.setBorderPainted(false);
 		questionbutton.setContentAreaFilled(false);
 		questionbutton.setMaximumSize(new Dimension(20, 20));
-<<<<<<< HEAD
 		
 		JLabel equalslabel = new JLabel(matchdescription);
 		equalslabel.setOpaque(false);
@@ -250,40 +108,11 @@ public class ResolutionPanel extends JPanel implements ActionListener {
 		equalslabel.setFont(SemGenFont.defaultItalic());
 
 		JPanel mainpanel = new JPanel(new BorderLayout());
-=======
-
-		actionpanel = new JPanel();
-		actionpanel.setBackground(Color.white);
-		actionpanel.setAlignmentX(LEFT_ALIGNMENT);
-
-		JPanel actionsubpanel = new JPanel();
-		actionsubpanel.setLayout(new BorderLayout());
-
-		JLabel cdwd1label = new JLabel(ds1.getName() + ", ");
-		cdwd1label.setForeground(Color.blue);
-		JLabel cdwd2label = new JLabel(ds2.getName());
-		cdwd2label.setForeground(Color.red);
-		JLabel equalslabel = new JLabel(matchdescription);
-		equalslabel.setOpaque(false);
-		equalslabel.setBorder(BorderFactory.createEmptyBorder(0,0,0,25));
-
-		actionpanel.add(equalslabel);
-		actionpanel.add(rb1);
-		actionpanel.add(rb2);
-		actionpanel.add(rb3);
-		actionpanel.add(questionbutton);
-
-		equalslabel.setFont(new Font("SansSerif", Font.ITALIC, 12));
-
-		JPanel mainpanel = new JPanel();
-		mainpanel.setLayout(new BorderLayout());
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		mainpanel.add(annotationpanel, BorderLayout.NORTH);
 		mainpanel.add(actionpanel, BorderLayout.SOUTH);
 		this.add(mainpanel, BorderLayout.NORTH);
 		this.add(Box.createVerticalGlue(), BorderLayout.SOUTH);
 	}
-<<<<<<< HEAD
 	
 	private void formatComponent(JPanel comp) {
 		comp.setAlignmentX(LEFT_ALIGNMENT);
@@ -320,12 +149,6 @@ public class ResolutionPanel extends JPanel implements ActionListener {
 	
 	public void actionPerformed(ActionEvent arg0) {
 		if (arg0.getSource() == questionbutton) questionButtonAction();
-=======
-
-	public void actionPerformed(ActionEvent arg0) {
-		Object o = arg0.getSource();
-		if (o == questionbutton) questionButtonAction();
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	}
 
 	public void questionButtonAction() {
@@ -353,15 +176,10 @@ public class ResolutionPanel extends JPanel implements ActionListener {
 				hasinput2list, isinputfor1list, isinputfor2list,
 				isinputforbothlist);
 		
-<<<<<<< HEAD
-=======
-		// textpane.setPreferredSize(new Dimension(600, 600));
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		SemGenScrollPane scroller = new SemGenScrollPane(textpane);
 		textpane.setCaretPosition(0);
 		scroller.setPreferredSize(new Dimension(600, 600));
 		scroller.getVerticalScrollBar().setUnitIncrement(12);
-<<<<<<< HEAD
 		JOptionPane.showMessageDialog(this, scroller, "Information about resolution step", JOptionPane.PLAIN_MESSAGE);
 	}
 
@@ -375,28 +193,6 @@ public class ResolutionPanel extends JPanel implements ActionListener {
 		String stringlist = "  ";
 		for (DataStructure ds : dsset) {
 				stringlist = stringlist + ds.getDescription() + "\n ";
-=======
-		JOptionPane.showMessageDialog(SemGenGUI.desktop, scroller, "Information about resolution step", JOptionPane.PLAIN_MESSAGE);
-	}
-
-	public String makeStringListFromSet(Set<DataStructure> dsset, Boolean forInput) {
-		String stringlist = "";
-		int n = 0;
-		for (DataStructure ds : dsset) {
-			if (n == 0) {
-				stringlist = "  " + ds.getDescription();
-			} else {
-				stringlist = stringlist + "\n" + "  " + ds.getDescription();
-			}
-			n++;
-		}
-		if (dsset.isEmpty()) {
-			if (forInput) {
-				stringlist = "  user-defined (external) input";
-			} else {
-				stringlist = "  nothing";
-			}
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		}
 		return stringlist;
 	}

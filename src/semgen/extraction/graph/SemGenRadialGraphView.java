@@ -68,7 +68,6 @@ import prefuse.visual.VisualItem;
 import prefuse.visual.expression.InGroupPredicate;
 import prefuse.visual.sort.TreeDepthItemSorter;
 import semgen.extraction.ExtractorTab;
-import semgen.extraction.workbench.ExtractorWorkbench;
 import semsim.model.SemSimModel;
 
 /**
@@ -93,13 +92,12 @@ public class SemGenRadialGraphView extends Display {
     public final static Predicate isinputfilter = ExpressionParser.predicate("input==true");
     public final static Predicate isvar2inputfilter = ExpressionParser.predicate("var2input==true");
     private Dimension DispSize;
-	private ExtractorWorkbench workbench;
     
-	public SemGenRadialGraphView(Graph g, String label, ExtractorWorkbench wb, Dimension ds) {
+	public SemGenRadialGraphView(Graph g, String label, SemSimModel semsimmodel, Dimension ds) {
 		super(new Visualization());
 		DispSize =ds;
 		this.g = g;
-		workbench = wb;
+		this.semsimmodel = semsimmodel;
 		base = semsimmodel.getNamespace();
 
 		// -- set up visualization --
@@ -253,7 +251,7 @@ public class SemGenRadialGraphView extends Display {
 
 	public JPanel demo(Graph g, final String label, ExtractorTab eTab) {
 		// create a new radial tree view
-		final SemGenRadialGraphView gview = new SemGenRadialGraphView(g, label, workbench, DispSize);
+		final SemGenRadialGraphView gview = new SemGenRadialGraphView(g, label, semsimmodel, DispSize);
 		Visualization vis = gview.getVisualization();
 		
 
@@ -289,7 +287,7 @@ public class SemGenRadialGraphView extends Display {
 		return panel;
 	}
 
-	public class PopupControlAdapter extends ControlAdapter implements ActionListener {
+	public static class PopupControlAdapter extends ControlAdapter implements ActionListener {
 		public Graph g;
 		public String focusname;
 		public ExtractorTab eTab;
@@ -314,7 +312,7 @@ public class SemGenRadialGraphView extends Display {
 			eTab.codewordspanel.termandcheckboxmap.get(focusname).setSelected(true);
 			eTab.codewordspanel.scroller.scrollToComponent(eTab.codewordspanel.termandcheckboxmap.get(focusname));
 			try {
-				eTab.visualize(workbench.primeextraction(), false);
+				eTab.visualize(eTab.primeextraction(), false);
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
@@ -322,6 +320,7 @@ public class SemGenRadialGraphView extends Display {
 	}
 	
 	public class NeighborHighlightControl extends ControlAdapter {
+
 		private Visualization visu;
 		String activity = "repaint";
 		String sourceGroupName;

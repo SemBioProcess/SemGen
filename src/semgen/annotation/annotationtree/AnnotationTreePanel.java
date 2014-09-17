@@ -3,7 +3,6 @@ package semgen.annotation.annotationtree;
 import java.util.Observable;
 
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
 
 import semgen.SemGenSettings;
 import semgen.annotation.uicomponents.ComponentPane;
@@ -21,17 +20,8 @@ public class AnnotationTreePanel extends ComponentPane {
 	
 	@Override
 	public void update(Observable o, Object arg) {
-		setFocusNode();
 		repaint();
 		validate();
-	}
-	
-	public void setFocusNode() {
-		// If focusbutton in Annotator associated with focusnode here, set the selected node
-		if(tree.focusnode!=null){
-			tree.setSelectionPath(new TreePath(tree.focusnode.getPath()));
-			tree.scrollPathToVisible(new TreePath(tree.focusnode.getPath()));
-		}
 	}
 	
 	public void updateTreeNode(){
@@ -47,18 +37,6 @@ public class AnnotationTreePanel extends ComponentPane {
 
 	@Override
 	public void makeButtons() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void freeTextRequest(int index) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void singAnnRequest(int index) {
 		// TODO Auto-generated method stub
 		
 	}

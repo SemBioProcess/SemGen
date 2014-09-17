@@ -1,9 +1,5 @@
 package semgen.extraction;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 import java.util.HashSet;
 import java.util.Set;
 import javax.swing.JCheckBox;
@@ -11,16 +7,8 @@ import javax.swing.JCheckBox;
 import semsim.model.computational.DataStructure;
 import semsim.model.physical.PhysicalModelComponent;
 
-<<<<<<< HEAD
 public class ExtractorJCheckBox extends JCheckBox {
 
-=======
-
-public class ExtractorJCheckBox extends JCheckBox {
-	/**
-	 * 
-	 */
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	private static final long serialVersionUID = -3088569216874092127L;
 	// data structures are the codewords, not the URIs
 	public Set<DataStructure> associateddatastructures = new HashSet<DataStructure>();

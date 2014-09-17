@@ -28,9 +28,8 @@ import javax.swing.JPanel;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.SemGenGUI;
-import semgen.annotation.dialog.customcompdialog.CustomPhysicalComponentEditor;
+import semgen.annotation.dialog.CustomPhysicalComponentEditor;
 import semgen.annotation.dialog.referencedialog.CompositeAnnotationComponentSearchDialog;
-import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.resource.SemGenIcon;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenResource;
@@ -54,6 +53,7 @@ import semsim.writing.CaseInsensitiveComparator;
 public class SemSimComponentAnnotationPanel extends JPanel implements MouseListener, ActionListener{
 
 	private static final long serialVersionUID = -6606265105415658572L;
+	public Annotatable smc;
 	public JComboBox<String> combobox = new JComboBox<String>(new String[]{});
 	public JLabel searchlabel = new JLabel(SemGenIcon.searchicon);
 	public JLabel createlabel = new JLabel(SemGenIcon.createicon);
@@ -62,11 +62,10 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 	public JLabel modifylabel = new JLabel(SemGenIcon.modifyicon);
 	public Map<String,SemSimComponent> listdataandsmcmap = new HashMap<String, SemSimComponent>();
 	public Object selecteditem;
-	private AnnotatorWorkbench canvas;
 	
-	public SemSimComponentAnnotationPanel(AnnotatorWorkbench can ){
+	public SemSimComponentAnnotationPanel(Annotatable smc){
+		this.smc = smc;
 		this.setBackground(new Color(207, 215, 252));
-		canvas = can;
 		
 		Boolean editable = anndialog.thebutton.editable;
 	

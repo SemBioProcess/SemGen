@@ -1,52 +1,85 @@
 package semgen.annotation;
 
+import org.semanticweb.owlapi.model.OWLException;
+
 import semgen.SemGen;
+import semgen.SemGenGUI;
 import semgen.SemGenSettings;
 import semgen.UniversalActions;
 import semgen.annotation.annotationpane.AnnotationPanel;
-import semgen.annotation.annotationtree.AnnotationTreePanel;
+import semgen.annotation.annotationtree.AnnotatorButtonTree;
 import semgen.annotation.codewordpane.CodewordButton;
 import semgen.annotation.codewordpane.CodewordPanel;
+import semgen.annotation.dialog.HumanDefEditor;
+import semgen.annotation.dialog.textminer.TextMinerDialog;
 import semgen.annotation.submodelpane.SubModelPanel;
 import semgen.annotation.submodelpane.SubmodelButton;
-import semgen.annotation.uicomponents.ComponentPane;
+import semgen.annotation.uicomponents.AnnotationObjectButton;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.ReferenceTermToolbox;
+import semgen.resource.ComparatorByName;
 import semgen.resource.SemGenIcon;
 import semgen.resource.SemGenFont;
+import semgen.resource.SemGenResource;
+import semgen.resource.SemGenTask;
+import semgen.resource.file.LoadSemSimModel;
+import semgen.resource.file.SemGenOpenFileChooser;
 import semgen.resource.uicomponents.ProgressBar;
 import semgen.resource.uicomponents.SemGenScrollPane;
 import semgen.resource.uicomponents.SemGenTab;
+import semsim.Annotatable;
+import semsim.SemSimConstants;
+import semsim.model.SemSimModel;
+import semsim.model.computational.DataStructure;
+import semsim.model.computational.MappableVariable;
+import semsim.model.physical.FunctionalSubmodel;
+import semsim.model.physical.Submodel;
+import semsim.reading.ModelClassifier;
 
 import java.net.URI;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.BadLocationException;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 
+import java.awt.event.*;
 import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
+import java.util.Hashtable;
+import java.util.HashSet;
 import java.awt.BorderLayout;
 import java.io.IOException;
+import java.util.Comparator;
+import java.util.Arrays;
 
 public class AnnotatorTab extends SemGenTab implements Observer {
 
 	private static final long serialVersionUID = -5360722647774877228L;
 	public File sourcefile; //File originally loaded at start of Annotation session (could be in SBML, MML, CellML or SemSim format)
 	public URI fileURI;
+	
+	public HumanDefEditor humdefeditor;
 
 	private JSplitPane splitpane, eastsplitpane, westsplitpane;
-	private ButtonScrollPane submodelscrollpane, codewordscrollpane, treeviewscrollpane, focusPane;
-	private SemGenScrollPane dialogscrollpane;
-
+	public SemGenScrollPane submodelscrollpane, codewordscrollpane, treeviewscrollpane;
+	public SemGenScrollPane dialogscrollpane;
+	
 	public AnnotationPanel anndialog;
-	public AnnotationTreePanel treepanel;
+	public AnnotationObjectButton focusbutton;
 
 	public CodewordPanel codewordpanel;
-	private SubModelPanel submodelpanel;
+	private JPanel submodelpanel;
 	private AnnotatorTabCodePanel codearea;
 
 	JPanel genmodinfo = new JPanel(new BorderLayout());
@@ -71,19 +104,19 @@ public class AnnotatorTab extends SemGenTab implements Observer {
 		codearea = new AnnotatorTabCodePanel(canvas);
 		
 		submodelpanel = new SubModelPanel(canvas.sma, settings);
-		submodelscrollpane = new ButtonScrollPane(submodelpanel);
+		submodelscrollpane = new SemGenScrollPane(submodelpanel);
 		
 		dialogscrollpane = new SemGenScrollPane();
-		dialogscrollpane.setBackground(SemGenSettings.lightblue);
+		dialogscrollpane.setBackground(SemGenResource.lightblue);
 		
 		codewordpanel = new CodewordPanel(canvas.cwa, settings);
-		codewordscrollpane = new ButtonScrollPane(codewordpanel);
+		codewordscrollpane = new SemGenScrollPane(codewordpanel);
 		InputMap im = codewordscrollpane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 		// Override up and down key functions so user can use arrows to move between codewords
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "none");
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "none");
 		
-		treeviewscrollpane = new ButtonScrollPane(treepanel);
+		treeviewscrollpane = new SemGenScrollPane();
 		
 		westsplitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, codewordscrollpane, submodelscrollpane);
 		westsplitpane.setOneTouchExpandable(true);
@@ -159,13 +192,25 @@ public class AnnotatorTab extends SemGenTab implements Observer {
 		// If the "Tree view" menu item is selected...
 		if(settings.useTreeView()){
 			splitpane.setTopComponent(treeviewscrollpane);
-			treepanel.setFocusNode();
+			treeviewscrollpane.getViewport().removeAll();
+			treeviewscrollpane.getViewport().add(tree);
+			
+			// If focusbutton in Annotator associated with focusnode here, set the selected node
+			if(tree.focusnode!=null){
+				tree.setSelectionPath(new TreePath(tree.focusnode.getPath()));
+				tree.scrollPathToVisible(new TreePath(tree.focusnode.getPath()));
+			}
 			treeviewscrollpane.scrollToLeft();
 		}
 		else{
 			splitpane.setTopComponent(westsplitpane);
 						
-			focusPane.scrolltoFocusButton();
+			if(focusbutton!=null){
+				if(focusbutton instanceof CodewordButton)
+					codewordscrollpane.scrollToComponent(focusbutton);
+				else if(focusbutton instanceof SubmodelButton)
+					submodelscrollpane.scrollToComponent(focusbutton);
+			}
 		}
 		splitpane.setDividerLocation(divLoc);
 	}
@@ -184,13 +229,7 @@ public class AnnotatorTab extends SemGenTab implements Observer {
 		System.gc();		
 		return -1;
 }
-	
-	public void scrolltoButton(CodewordButton aob) {
-		codewordscrollpane.scrollToComponent(aob);
-	}
-	public void scrolltoButton(SubmodelButton aob) {
-		submodelscrollpane.scrollToComponent(aob);
-	}
+
 
 	@Override
 	public int getTabType() {
@@ -214,10 +253,9 @@ public class AnnotatorTab extends SemGenTab implements Observer {
 	public boolean checkFile(URI uri) {
 			return (uri.toString().equals(fileURI.toString()));
 	}
-	
+
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		//Show code from new file
 		if (arg0.equals(300)) {
 			showModelSourceCode();
 		}
@@ -228,17 +266,5 @@ public class AnnotatorTab extends SemGenTab implements Observer {
 	public boolean isSaved() {
 		return canvas.getModelSaved();
 	}
-	
-	class ButtonScrollPane extends SemGenScrollPane {
-		private static final long serialVersionUID = 1L;
-		ComponentPane buttonpane;
-		ButtonScrollPane(ComponentPane view) {
-			super(view);
-			buttonpane = view;
-		}
 		
-		public void scrolltoFocusButton() {
-			this.scrollToComponent(buttonpane.getFocusButton());
-		}
-	}
 }

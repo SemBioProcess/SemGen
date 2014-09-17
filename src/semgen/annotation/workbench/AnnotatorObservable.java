@@ -60,7 +60,6 @@ public abstract class AnnotatorObservable extends Observable {
 		String newdef = humdefeditor.getFreeTextAnnotation();
 		if (newdef!=ssc.getDescription()){
 			ComponentList.get(index).setDescription(newdef);
-			setChanged();
 			notifyObservers();
 		}
 	}

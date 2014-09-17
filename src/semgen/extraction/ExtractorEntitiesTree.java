@@ -1,13 +1,5 @@
 package semgen.extraction;
 
-<<<<<<< HEAD
-=======
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
@@ -16,20 +8,12 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-<<<<<<< HEAD
 
 import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeSelectionModel;
 
-=======
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTree;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeSelectionModel;
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -38,29 +22,11 @@ import org.jdom.input.SAXBuilder;
 
 import semsim.owl.SemSimOWLFactory;
 
-<<<<<<< HEAD
 public class ExtractorEntitiesTree extends JPanel{
 	private static final long serialVersionUID = 1L;
 	
 	public ExtractorEntitiesTree(File file) {
 		Set<DefaultMutableTreeNode> roots = makeTreeFromQueryResult(file);
-=======
-
-public class ExtractorEntitiesTree extends JPanel implements ActionListener, ItemListener{
-
-	public JTree tree;
-	public String result;
-	public File testfile;
-	public JTree testtree;
-	
-	public ExtractorEntitiesTree(File file) {
-
-		testfile = file;
-
-		Set<DefaultMutableTreeNode> roots = makeTreeFromQueryResult();
-		// tree = new JTree((DefaultMutableTreeNode[])roots.toArray(new
-		// DefaultMutableTreeNode[]{}));
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		DefaultMutableTreeNode[] testarray = (DefaultMutableTreeNode[]) roots
 				.toArray(new DefaultMutableTreeNode[] {});
 		DefaultMutableTreeNode bodyroot = new DefaultMutableTreeNode(
@@ -72,7 +38,6 @@ public class ExtractorEntitiesTree extends JPanel implements ActionListener, Ite
 		} else if (testarray.length == 1) {
 			bodyroot.add(testarray[0]);
 		}
-<<<<<<< HEAD
 		JTree tree = new JTree(bodyroot);
 		tree.getSelectionModel().setSelectionMode(
 				TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
@@ -94,52 +59,14 @@ public class ExtractorEntitiesTree extends JPanel implements ActionListener, Ite
 		Iterator<?> iterator = rootchildren.iterator();
 		Namespace rdfns = doc.getRootElement().getNamespace("rdf");
 		Hashtable<String, Set<String>> urisandparents = new Hashtable<String, Set<String>>();
-=======
-		tree = new JTree(bodyroot);
-		tree.getSelectionModel().setSelectionMode(
-				TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
-		// scroller = new JScrollPane(tree);
-
-		this.add(tree);
-		this.setVisible(true);
-	}
-
-	public Set<DefaultMutableTreeNode> makeTreeFromQueryResult() {
-		SAXBuilder builder = new SAXBuilder();
-		Document doc = new Document();
-		try {
-			doc = builder.build(testfile);
-		} catch (JDOMException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		Element root = doc.getRootElement();
-
-		// System.out.println(root.toString());
-		List rootchildren = root.getChildren();
-		Iterator iterator = rootchildren.iterator();
-		Namespace heirns = doc.getRootElement().getNamespace("hier");
-		Namespace rdfns = doc.getRootElement().getNamespace("rdf");
-		Hashtable urisandparents = new Hashtable();
-		Hashtable uriswithmultparents = new Hashtable();
-		Hashtable uriswithsingleparents = new Hashtable();
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		while (iterator.hasNext()) {
 			Element el = (Element) iterator.next();
 
 			String clsname = el.getAttributeValue("about", rdfns);
 			// Confusing: Parents for FMA classes, but children in query result
-<<<<<<< HEAD
 			List<?> children = el.getChildren();
 			Iterator<?> childit = children.iterator();
 			Set<String> parentset = new HashSet<String>();
-=======
-			List children = el.getChildren();
-			Iterator childit = children.iterator();
-			Set<String> parentset = new HashSet();
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 
 			while (childit.hasNext()) {
 				Element parentel = (Element) childit.next();
@@ -148,20 +75,8 @@ public class ExtractorEntitiesTree extends JPanel implements ActionListener, Ite
 				parentset.add(parenturi);
 			}
 			urisandparents.put(clsname, parentset);
-<<<<<<< HEAD
 		}
 		Hashtable<String, DefaultMutableTreeNode> urisandnodes = new Hashtable<String, DefaultMutableTreeNode>();
-=======
-			// if(parentset.size()==1){
-			// uriswithsingleparents.put(clsname, parentset);
-			// }
-			// else if(parentset.size()>1){
-			// uriswithmultparents.put(clsname, parentset);
-			// }
-		}
-		Hashtable urisandnodes = new Hashtable();
-		Set<DefaultMutableTreeNode> nodeset = new HashSet();
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		for (String child : (Set<String>) urisandparents.keySet()) {
 			Set<String> parents = (Set<String>) urisandparents.get(child);
 			for (String parent : parents) {
@@ -187,15 +102,9 @@ public class ExtractorEntitiesTree extends JPanel implements ActionListener, Ite
 					DefaultMutableTreeNode tempnode = (DefaultMutableTreeNode) childnode
 							.clone();
 					// copy over the parents of the node
-<<<<<<< HEAD
 
 					// and copy over the children
 					Enumeration<?> en = childnode.children();
-=======
-					// tempnode.setParent((DefaultMutableTreeNode)childnode.getParent());
-					// and copy over the children
-					Enumeration en = childnode.children();
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 					while (en.hasMoreElements()) {
 						DefaultMutableTreeNode onechild = (DefaultMutableTreeNode) en
 								.nextElement();
@@ -208,11 +117,7 @@ public class ExtractorEntitiesTree extends JPanel implements ActionListener, Ite
 			}
 		}
 
-<<<<<<< HEAD
 		Set<DefaultMutableTreeNode> roots = new HashSet<DefaultMutableTreeNode>();
-=======
-		Set<DefaultMutableTreeNode> roots = new HashSet();
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		for (String key : (Set<String>) urisandnodes.keySet()) {
 			System.out.println("Looking at; " + key);
 			DefaultMutableTreeNode node = (DefaultMutableTreeNode) urisandnodes
@@ -227,17 +132,4 @@ public class ExtractorEntitiesTree extends JPanel implements ActionListener, Ite
 		return roots;
 	}
 
-<<<<<<< HEAD
-=======
-	public void itemStateChanged(ItemEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 }

@@ -1,9 +1,14 @@
 package semgen.annotation;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
@@ -14,12 +19,27 @@ import javax.swing.JSeparator;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 
+import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLException;
+
 import semgen.SemGenSettings;
 import semgen.UniversalActions;
+import semgen.annotation.codewordpane.CodewordButton;
+import semgen.annotation.dialog.LegacyCodeChooser;
+import semgen.annotation.dialog.ModelLevelMetadataEditor;
+import semgen.annotation.dialog.SemanticSummaryDialog;
+import semgen.annotation.dialog.referencedialog.AddReferenceClassDialog;
+import semgen.annotation.dialog.selectordialog.AnnotationComponentReplacer;
+import semgen.annotation.dialog.selectordialog.RemovePhysicalComponentDialog;
+import semgen.annotation.dialog.textminer.TextMinerDialog;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.ReferenceTermToolbox;
+import semgen.resource.CSVExporter;
 import semgen.resource.SemGenIcon;
 import semgen.resource.uicomponents.SemGenMenu;
+import semsim.SemSimConstants;
+import semsim.model.physical.CompositePhysicalEntity;
+import semsim.model.physical.PhysicalModelComponent;
 
 public class AnnotatorToolbar extends JToolBar implements ActionListener {
 	private static final long serialVersionUID = 1L;
@@ -96,6 +116,11 @@ public class AnnotatorToolbar extends JToolBar implements ActionListener {
 		annotateitemtreeview.setToolTipText("Display codewords and submodels within the submodel tree");
 		add(annotateitemtreeview);
 		
+		if(!settings){
+			annotateitemaddrefterm.setEnabled(true);
+			annotateitemremoverefterm.setEnabled(true);
+		}
+		
 		addButton(extractorbutton);
 		addButton(coderbutton);
 		setAlignmentY(JPanel.TOP_ALIGNMENT);
@@ -136,7 +161,7 @@ public class AnnotatorToolbar extends JToolBar implements ActionListener {
 	}
 	
 	if(o == annotateitemeditmodelanns){
-		canvas.requestModelLevelAnnotator();
+			new ModelLevelMetadataEditor();
 	}
 
 	if (o == annotateitemreplacerefterm) {
