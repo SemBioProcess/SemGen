@@ -4,16 +4,11 @@ package semsim;
 import java.net.URI;
 import java.util.Collections;
 import java.util.HashMap;
-<<<<<<< HEAD
-import java.util.Hashtable;
-import java.util.Map;
-=======
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import semsim.model.SemSimComponent;
@@ -301,11 +296,8 @@ public class SemSimConstants {
 	public static final Map<Class<?>, URI> SEMSIM_BASE_CLASSES_AND_URIS;
 	public static final Map<URI, SemSimRelation> URIS_AND_SEMSIM_RELATIONS;
 	public static final Map<URI,URI> INVERSE_STRUCTURAL_RELATIONS_MAP;
-<<<<<<< HEAD
-=======
 	public static final Map<String, Boolean> JSIM_UNITS_AND_PREFIXABLE_MAP;
 	public static final Set<String> JSIM_PREFIXES;
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	public static final Map<Integer, SemSimRelation> BIOLOGICAL_QUALIFIER_TYPES_AND_RELATIONS;
 	public static final Map<Integer, SemSimRelation> MODEL_QUALIFIER_TYPES_AND_RELATIONS;
 	
@@ -499,8 +491,6 @@ public class SemSimConstants {
 		aMap2.put(CONTAINED_IN_URI, CONTAINS_URI);
 		INVERSE_STRUCTURAL_RELATIONS_MAP = Collections.unmodifiableMap(aMap2);
 		
-<<<<<<< HEAD
-=======
 		// JSimUnitsAndPrefixable
 		Map<String, Boolean> aMap3 = new HashMap<String, Boolean>();
 		
@@ -644,7 +634,6 @@ public class SemSimConstants {
 		aSet.add("yocto");
 		JSIM_PREFIXES = Collections.unmodifiableSet(aSet);
 		
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		// BiologicalQualifierTypesAndRelations Map
 		Map<Integer, SemSimRelation> aMap4 = new HashMap<Integer, SemSimRelation>();
 		aMap4.put(0, BQB_IS_RELATION);

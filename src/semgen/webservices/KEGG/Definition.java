@@ -8,29 +8,16 @@
 package semgen.webservices.KEGG;
 
 public class Definition  implements java.io.Serializable {
-<<<<<<< HEAD
-	private static final long serialVersionUID = 1L;
-
-	private String entry_id;
-
-    private String definition;
-=======
     private java.lang.String entry_id;
 
     private java.lang.String definition;
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 
     public Definition() {
     }
 
     public Definition(
-<<<<<<< HEAD
-           String entry_id,
-           String definition) {
-=======
            java.lang.String entry_id,
            java.lang.String definition) {
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
            this.entry_id = entry_id;
            this.definition = definition;
     }
@@ -41,11 +28,7 @@ public class Definition  implements java.io.Serializable {
      * 
      * @return entry_id
      */
-<<<<<<< HEAD
-    public String getEntry_id() {
-=======
     public java.lang.String getEntry_id() {
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
         return entry_id;
     }
 
@@ -55,11 +38,7 @@ public class Definition  implements java.io.Serializable {
      * 
      * @param entry_id
      */
-<<<<<<< HEAD
-    public void setEntry_id(String entry_id) {
-=======
     public void setEntry_id(java.lang.String entry_id) {
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
         this.entry_id = entry_id;
     }
 
@@ -69,11 +48,7 @@ public class Definition  implements java.io.Serializable {
      * 
      * @return definition
      */
-<<<<<<< HEAD
-    public String getDefinition() {
-=======
     public java.lang.String getDefinition() {
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
         return definition;
     }
 
@@ -83,11 +58,7 @@ public class Definition  implements java.io.Serializable {
      * 
      * @param definition
      */
-<<<<<<< HEAD
-    public void setDefinition(String definition) {
-=======
     public void setDefinition(java.lang.String definition) {
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
         this.definition = definition;
     }
 
@@ -95,10 +66,7 @@ public class Definition  implements java.io.Serializable {
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof Definition)) return false;
         Definition other = (Definition) obj;
-<<<<<<< HEAD
-=======
         if (obj == null) return false;
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
         if (this == obj) return true;
         if (__equalsCalc != null) {
             return (__equalsCalc == obj);
@@ -164,12 +132,8 @@ public class Definition  implements java.io.Serializable {
      * Get Custom Serializer
      */
     public static org.apache.axis.encoding.Serializer getSerializer(
-<<<<<<< HEAD
-           Class<?> _javaType,  
-=======
            java.lang.String mechType, 
            java.lang.Class _javaType,  
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
            javax.xml.namespace.QName _xmlType) {
         return 
           new  org.apache.axis.encoding.ser.BeanSerializer(
@@ -180,12 +144,8 @@ public class Definition  implements java.io.Serializable {
      * Get Custom Deserializer
      */
     public static org.apache.axis.encoding.Deserializer getDeserializer(
-<<<<<<< HEAD
-           Class<?> _javaType,  
-=======
            java.lang.String mechType, 
            java.lang.Class _javaType,  
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
            javax.xml.namespace.QName _xmlType) {
         return 
           new  org.apache.axis.encoding.ser.BeanDeserializer(

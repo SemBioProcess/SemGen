@@ -6,34 +6,18 @@ import java.util.HashSet;
 import java.util.Set;
 
 import semsim.Annotatable;
-<<<<<<< HEAD
-import semsim.SemSim;
 import semsim.SemSimConstants;
-import semsim.SemSimLibrary;
-import semsim.model.SemSimComponent;
-=======
-import semsim.SemSimConstants;
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 import semsim.model.annotation.Annotation;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
 import semsim.model.annotation.SemSimRelation;
 import semsim.model.computational.units.UnitOfMeasurement;
-<<<<<<< HEAD
-import semsim.model.physical.PhysicalEntity;
-import semsim.model.physical.PhysicalProcess;
-=======
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 import semsim.model.physical.PhysicalProperty;
 
 /**
  * This class represents a named element in a simulation model that
  * is assigned some computational value during simulation.
  */
-<<<<<<< HEAD
-public class DataStructure extends SemSimComponent implements Annotatable, Cloneable{
-=======
 public class DataStructure extends ComputationalModelComponent implements Annotatable, Cloneable{
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	
 	private Computation computation;
 	private PhysicalProperty physicalProperty;
@@ -43,10 +27,6 @@ public class DataStructure extends ComputationalModelComponent implements Annota
 	private boolean isSolutionDomain, isDiscrete, isDeclared, isImported;
 	private String startValue;
 	private UnitOfMeasurement unit;
-<<<<<<< HEAD
-	protected SemSimLibrary semsimlib = SemSim.semsimlib;
-=======
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	
 	/**
 	 * Append the list of DataStructures that this DataStructure
@@ -113,11 +93,6 @@ public class DataStructure extends ComputationalModelComponent implements Annota
 		return (physicalProperty != null);
 	}
 	
-<<<<<<< HEAD
-
-	
-=======
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	/** @return Whether the DataStructure has been assigned a start value */
 	public Boolean hasStartValue(){
 		return (startValue != null);
@@ -151,11 +126,6 @@ public class DataStructure extends ComputationalModelComponent implements Annota
 		startValue = val;
 	}
 	
-<<<<<<< HEAD
-	
-	
-=======
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	/**
 	 * Assign a Computation instance to the DataStructure to specify
 	 * how it is solved during simulation
@@ -261,15 +231,7 @@ public class DataStructure extends ComputationalModelComponent implements Annota
 	public void addReferenceOntologyAnnotation(SemSimRelation relation, URI uri, String description){
 		addAnnotation(new ReferenceOntologyAnnotation(relation, uri, description));
 	}
-<<<<<<< HEAD
-	
-	@Override
-	public void addReferenceOntologyAnnotation(ReferenceOntologyAnnotation roa){
-		addAnnotation(roa);
-	}
-=======
 
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	
 	public Set<ReferenceOntologyAnnotation> getAllReferenceOntologyAnnotations(){
 		Set<ReferenceOntologyAnnotation> raos = new HashSet<ReferenceOntologyAnnotation>();
@@ -345,34 +307,6 @@ public class DataStructure extends ComputationalModelComponent implements Annota
 		return isImported;
 	}
 	
-<<<<<<< HEAD
-	public int getPropertyType(){
-		if(hasPhysicalProperty()){
-			// If there's already an OPB reference annotation
-			if(getPhysicalProperty().hasRefersToAnnotation()){
-				ReferenceOntologyAnnotation roa = (getPhysicalProperty().getFirstRefersToReferenceOntologyAnnotation());
-				
-				if(SemSim.semsimlib.OPBhasStateProperty(roa) ||
-						SemSim.semsimlib.OPBhasForceProperty(roa)){
-					return SemSimConstants.PROPERTY_OF_PHYSICAL_ENTITY;
-				}
-				else if(SemSim.semsimlib.OPBhasProcessProperty(roa)){
-					return SemSimConstants.PROPERTY_OF_PHYSICAL_PROCESS;
-				}
-			}
-			// Otherwise, see if there is already an entity or process associated with the codeword
-			else if(getPhysicalProperty().getPhysicalPropertyOf() instanceof PhysicalEntity){
-				return SemSimConstants.PROPERTY_OF_PHYSICAL_ENTITY;
-			}
-			else if(getPhysicalProperty().getPhysicalPropertyOf() instanceof PhysicalProcess){
-				return SemSimConstants.PROPERTY_OF_PHYSICAL_PROCESS;
-			}
-		}
-		return SemSimConstants.UNKNOWN_PROPERTY_TYPE;
-	}
-	
-=======
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	public boolean isReal() {
 		return false;
 	}

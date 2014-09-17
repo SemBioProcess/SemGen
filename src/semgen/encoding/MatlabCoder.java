@@ -4,34 +4,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-<<<<<<< HEAD
-=======
 import java.util.Arrays;
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
 
 import org.sbml.libsbml.ASTNode;
 import org.sbml.libsbml.libsbml;
-<<<<<<< HEAD
-import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLDataFactory;
-import org.semanticweb.owlapi.model.OWLException;
-
-import semgen.SemGen;
-import semgen.resource.GenericThread;
-import semgen.resource.uicomponents.ProgressBar;
-import semsim.SemSimConstants;
-import semsim.SemSimUtil;
-import semsim.owl.SemSimOWLFactory;
-
-public class MatlabCoder extends Coder{
-	public PrintWriter writer;
-
-	private String statevarvectorname, solutiondomain;
-=======
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLException;
 
@@ -51,7 +30,6 @@ public class MatlabCoder extends Coder{
 	public String statevarvectorname;
 	public String solutiondomain;
 	public String modelname;
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	
 	public MatlabCoder(File afile, String extension, File outputfile, Boolean autoencode) throws OWLException {
 		super(afile, extension, outputfile, autoencode);
@@ -60,19 +38,6 @@ public class MatlabCoder extends Coder{
 	public void encode(Boolean suppressfinish) throws IOException, OWLException {
 		if (outputfile != null) {
 			// Need to make this a task
-<<<<<<< HEAD
-			
-			GenericThread task = new GenericThread(this, "writefile");
-			task.start();
-		}
-		else {System.out.println("Cancelled coding operation");}
-	}
-	
-	public void writefile() throws OWLException, IOException{		
-		// Find the solution domain
-		ProgressBar progframe = new ProgressBar("Creating Matlab file", false);
-		for(String ds : SemSimOWLFactory.getIndividualsInTreeAsStrings(ontology, SemSimConstants.SEMSIM_NAMESPACE + "Data_structure")){
-=======
 			progframe = new ProgressFrame("Creating Matlab file", false, null);
 			GenericThread task = new GenericThread(this, "writefile");
 			task.start();
@@ -89,7 +54,6 @@ public class MatlabCoder extends Coder{
 		// Find the solution domain
 		for(String ds : SemSimOWLFactory.getIndividualsInTreeAsStrings(ontology, SemSimConstants.SEMSIM_NAMESPACE + "Data_structure")){
 			//System.out.println(ds + " " + OWLMethods.getFunctionalIndDatatypeProperty(ontology, ds, SemSimConstants.SEMSIM_NAMESPACE + "isSolutionDomain"));
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 			if(SemSimOWLFactory.getFunctionalIndDatatypeProperty(ontology, ds, SemSimConstants.SEMSIM_NAMESPACE + "isSolutionDomain").equals("true")){
 				solutiondomain = ds;
 			}
@@ -107,12 +71,6 @@ public class MatlabCoder extends Coder{
 		
 		Set<String> cdwdnames = new HashSet<String>();
 
-<<<<<<< HEAD
-		for(String computation : computations){
-			// Use libSBML to convert MathML to infix notation
-			String mathmlstring = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ontology, computation, SemSimConstants.SEMSIM_NAMESPACE + "hasMathML");
-			String ast_as_string = libsbml.formulaToString(libsbml.readMathMLFromString(mathmlstring));
-=======
 		
 		for(String computation : computations){
 			
@@ -120,7 +78,6 @@ public class MatlabCoder extends Coder{
 			String mathmlstring = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ontology, computation, SemSimConstants.SEMSIM_NAMESPACE + "hasMathML");
 			ASTNode ast_result   = libsbml.readMathMLFromString(mathmlstring);
 			String ast_as_string = libsbml.formulaToString(ast_result);
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 			
 			String cdwduri = SemSimOWLFactory.getFunctionalIndObjectProperty(ontology, computation, SemSimConstants.SEMSIM_NAMESPACE + "hasOutput");
 			String cdwdname = SemSimOWLFactory.getIRIfragment(cdwduri);
@@ -128,12 +85,8 @@ public class MatlabCoder extends Coder{
 			
 			cdwdurisandinputs.put(cdwduri, SemSimOWLFactory.getIndObjectProperty(ontology, computation, SemSimConstants.SEMSIM_NAMESPACE + "hasInput"));
 			if(ast_as_string!=null){
-<<<<<<< HEAD
-				cdwdurisandformulas.put(cdwduri, ast_as_string + ";");
-=======
 				String formula = ast_as_string + ";";
 				cdwdurisandformulas.put(cdwduri, formula);
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 			}
 			
 			String startval = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ontology, cdwduri, SemSimConstants.SEMSIM_NAMESPACE + "hasStartValue");
@@ -155,40 +108,24 @@ public class MatlabCoder extends Coder{
 			}
      
 		     // update progress for user
-<<<<<<< HEAD
-			if(progframe!=null){
-				float frac = 1.0f / computations.size();
-=======
 		    cnt++;
 			cntfloat = cnt;
 			frac = cntfloat / computations.size();
 			if(progframe!=null){
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 				progframe.bar.setValue(Math.round(99 * frac));
 			}
 		}
 		
-<<<<<<< HEAD
-		String modelname = outputfile.getName().replace(".m", "");
-		String timevectorname = createUniqueNameForMatlabVariable("t", cdwdnames);
-=======
 		modelname = outputfile.getName().replace(".m", "");
 		timevectorname = createUniqueNameForMatlabVariable("t", cdwdnames);
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		statevarvectorname = createUniqueNameForMatlabVariable("y", cdwdnames);
 		
 		// write out header and rest of file
 		writer = new PrintWriter(new FileWriter(outputfile));
-<<<<<<< HEAD
-		writer.println("% Autogenerated by SemGen version " + SemGen.version);
-		writer.println("function [ T,Y ] = " + modelname + "( input_args )");
-		writer.println();
-=======
 		writer.println("% Autogenerated by SemGen version " + SemGenGUI.version);
 		writer.println("function [ T,Y ] = " + modelname + "( input_args )");
 		writer.println();
 		//writer.println("options - odeset('RelTol',1e-4,'AbsTol',[1e-4 1e-4 1e-5]);");
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		
 		// sort codewords so they are in the order needed for procedural execution
 		orderedcdwduris = (ArrayList<String>) cdwduris.clone();
@@ -198,10 +135,7 @@ public class MatlabCoder extends Coder{
 			for(int x=0; x<cdwduris.size(); x++){
 				
 				String cdwduri = orderedcdwduris.get(x);
-<<<<<<< HEAD
-=======
 				String cdwdname = SemSimOWLFactory.getIRIfragment(cdwduri);
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 				Set<String> inputuris = cdwdurisandinputs.get(cdwduri);
 				for(String inputuri : inputuris){
 					if(orderedcdwduris.indexOf(inputuri) > orderedcdwduris.indexOf(cdwduri) 
@@ -242,17 +176,11 @@ public class MatlabCoder extends Coder{
 		writer.println();
 		writer.println("\tdy = zeros(" + ODEcdwduris.size() + ", 1);");
 		writer.println("\t" + SemSimOWLFactory.getIRIfragment(solutiondomain) + " = " + timevectorname + ";");
-<<<<<<< HEAD
-
-		// write out the algebraic formulas in the necessary order, ignore MML-specific solution domain codewords
-		for(String cdwduri : orderedcdwduris){
-=======
 		
 		
 		// write out the algebraic formulas in the necessary order, ignore MML-specific solution domain codewords
 		for(String cdwduri : orderedcdwduris){
 			//System.out.println("looking at: " + OWLMethods.getOWLEntityNameFromIRI(cdwduri) + " " + cdwdurisandformulas.get(cdwduri)); 
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 			String cdwdname = SemSimOWLFactory.getIRIfragment(cdwduri);
 			if(!ODEcdwduris.contains(cdwduri) && cdwdurisandformulas.get(cdwduri)!=null 
 					&& !cdwdname.equals(SemSimOWLFactory.getIRIfragment(solutiondomain) + ".min")
@@ -264,16 +192,9 @@ public class MatlabCoder extends Coder{
 		}
 		// write out the ODEs
 		writer.println();
-<<<<<<< HEAD
-		OWLDataFactory factory = OWLManager.createOWLOntologyManager().getOWLDataFactory();
-		for(int y=0; y<ODEcdwduriarray.length; y++){
-			writer.println("\t% " + SemSimOWLFactory.getIRIfragment(ODEcdwduriarray[y]) + ": " + 
-					SemSimOWLFactory.getRDFcomment(ontology, factory.getOWLNamedIndividual(IRI.create(ODEcdwduriarray[y]))));
-=======
 		for(int y=0; y<ODEcdwduriarray.length; y++){
 			writer.println("\t% " + SemSimOWLFactory.getIRIfragment(ODEcdwduriarray[y]) + ": " + 
 					SemSimOWLFactory.getRDFcomment(ontology, SemGenGUI.factory.getOWLNamedIndividual(IRI.create(ODEcdwduriarray[y]))));
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 			String neweq = replaceCodewordsWithMatlabPointers(cdwdurisandformulas.get(ODEcdwduriarray[y]), ODEcdwduriarray[y], ODEcdwduris);
 			writer.println("\t\tdy(" + (ODEcdwduris.indexOf(ODEcdwduriarray[y])+1) + ") = " + neweq); 
 			writer.println();
@@ -283,11 +204,7 @@ public class MatlabCoder extends Coder{
 		writer.close();
 		
 		if(progframe!=null){
-<<<<<<< HEAD
-			progframe.dispose();
-=======
 			progframe.setVisible(false);
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		}
 	}
 	
@@ -306,10 +223,7 @@ public class MatlabCoder extends Coder{
 			list.set(j, list.get(j+1));
 		}
 		list.set(newindexforcdwd, arg0);
-<<<<<<< HEAD
-=======
 		//System.out.println("Swapped " + OWLMethods.getOWLEntityNameFromIRI(arg0) + " at pos " + list.indexOf(arg0) + " with " + OWLMethods.getOWLEntityNameFromIRI(arg1) + " at pos " + list.indexOf(arg1));
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		return list;
 	}
 	
