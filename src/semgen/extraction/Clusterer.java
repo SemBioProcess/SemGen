@@ -17,7 +17,10 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
+<<<<<<< HEAD
+=======
 import java.awt.Font;
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 import java.awt.GridLayout;
 import java.awt.Paint;
 import java.awt.Stroke;
@@ -33,10 +36,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+<<<<<<< HEAD
+
+=======
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+<<<<<<< HEAD
+import javax.swing.JComponent;
+=======
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -47,12 +58,25 @@ import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+<<<<<<< HEAD
+
+=======
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.ChainedTransformer;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 import org.apache.commons.collections15.functors.MapTransformer;
 import org.apache.commons.collections15.map.LazyMap;
 
+<<<<<<< HEAD
+import semgen.extraction.workbench.ExtractorWorkbench;
+import semgen.resource.SemGenFont;
+import semgen.resource.uicomponents.SemGenScrollPane;
+import semgen.resource.uicomponents.SemGenTab;
+import semsim.model.computational.DataStructure;
+import semsim.model.physical.PhysicalModelComponent;
+import semsim.model.physical.PhysicalProcess;
+=======
 import semgen.SemGenGUI;
 import semgen.SemGenScrollPane;
 import semsim.model.computational.DataStructure;
@@ -61,6 +85,7 @@ import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.owl.SemSimOWLFactory;
 
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 import edu.uci.ics.jung.algorithms.cluster.EdgeBetweennessClusterer;
 import edu.uci.ics.jung.algorithms.layout.AggregateLayout;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
@@ -68,7 +93,10 @@ import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.util.Relaxer;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
+<<<<<<< HEAD
+=======
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
@@ -89,9 +117,13 @@ import edu.uci.ics.jung.visualization.renderers.VertexLabelAsShapeRenderer;
 public class Clusterer extends JFrame {
 
 	VisualizationViewer<String, Number> vv;
+<<<<<<< HEAD
+	ExtractorWorkbench workbench;
+=======
 
 	// Factory<Graph<Number,Number>> graphFactory;
 
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	@SuppressWarnings("unchecked")
 	Map<String, Paint> vertexPaints = LazyMap.<String, Paint> decorate(
 			new HashMap<String, Paint>(), new ConstantTransformer(Color.white));
@@ -99,13 +131,19 @@ public class Clusterer extends JFrame {
 	Map<Number, Paint> edgePaints = LazyMap.<Number, Paint> decorate(
 			new HashMap<Number, Paint>(), new ConstantTransformer(Color.blue));
 	public static JFrame jf;
+<<<<<<< HEAD
+=======
 	//public static JFrame semframe = new JFrame();
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	public JSplitPane splitpane;
 	public JPanel clusterpanel;
 	public JPanel sempanel;
 	public SemGenScrollPane semscroller;
 	public SparseMultigraph<String, Number> mygraph;
+<<<<<<< HEAD
+=======
 	public ExtractorTab extractor;
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	public ExtractorJCheckBox selectioncheckbox;
 	public AggregateLayout<String, Number> layout;
 	public static JToggleButton groupVertices;
@@ -119,19 +157,34 @@ public class Clusterer extends JFrame {
 			new Color(103, 148, 255), new Color(60, 220, 220),
 			new Color(30, 250, 100) };
 
+<<<<<<< HEAD
+	public Clusterer(SparseMultigraph<String, Number> mygraph,ExtractorWorkbench wb) throws IOException {
+		this.mygraph = mygraph;
+		workbench = wb;
+		this.setTitle(SemGenTab.formatTabName(workbench.getCurrentModelName()));
+		setUpView();
+	}
+
+	public void setUpView() throws IOException {
+=======
 	public Clusterer(SparseMultigraph<String, Number> mygraph, ExtractorTab extractor) throws IOException {
 		this.mygraph = mygraph;
 		this.extractor = extractor;
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		semscroller = new SemGenScrollPane(sempanel);
 		sempanel = new JPanel();
 		sempanel.setLayout(new BoxLayout(sempanel, BoxLayout.Y_AXIS));
 		sempanel.setOpaque(true);
+<<<<<<< HEAD
+		
+=======
 		setUpView();
 	}
 
 
 	public void setUpView() throws IOException {
 		this.setTitle(SemGenGUI.formatTabName(extractor.semsimmodel.getName()));
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		layout = new AggregateLayout<String, Number>(new SemGenFRLayout<String, Number>(mygraph));
 
 		vv = new VisualizationViewer<String, Number>(layout);
@@ -155,9 +208,12 @@ public class Clusterer extends JFrame {
 		vv.getRenderContext().setEdgeStrokeTransformer(new ConstantTransformer(new BasicStroke(2.5f)));
 
 		// customize the renderer
+<<<<<<< HEAD
+=======
 		// vv.getRenderer().setVertexRenderer(new
 		// GradientVertexRenderer<String,Number>(Color.gray, Color.white,
 		// true));
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		vv.getRenderer().setVertexLabelRenderer(vlasr);
 
 		vv.setBackground(Color.white);
@@ -177,7 +233,10 @@ public class Clusterer extends JFrame {
 							extractor.clusterpanel.checkboxpanel.removeAll();
 							for (int x = -1; x < clusters.length; x++) {
 								if (x == -1 && selectioncheckbox==null) {
+<<<<<<< HEAD
+=======
 //									System.out.println("here1");
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 									selectioncheckbox = new ExtractorJCheckBox("Selected node(s)", dsuris);
 									selectioncheckbox.addItemListener(extractor);
 									extractor.clusterpanel.checkboxpanel.add(selectioncheckbox);
@@ -221,7 +280,11 @@ public class Clusterer extends JFrame {
 		JButton scramble = new JButton("Shake");
 		scramble.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+<<<<<<< HEAD
+				Layout<String, Number> layout = vv.getGraphLayout();
+=======
 				Layout layout = vv.getGraphLayout();
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 				layout.initialize();
 				Relaxer relaxer = vv.getModel().getRelaxer();
 				if (relaxer != null) {
@@ -232,7 +295,11 @@ public class Clusterer extends JFrame {
 			}
 		});
 
+<<<<<<< HEAD
+		DefaultModalGraphMouse<Object, Object> gm = new DefaultModalGraphMouse<Object, Object>();
+=======
 		DefaultModalGraphMouse gm = new DefaultModalGraphMouse();
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		vv.setGraphMouse(gm);
 
 		groupVertices = new JToggleButton("Group Clusters");
@@ -253,10 +320,13 @@ public class Clusterer extends JFrame {
 		edgeBetweennessSlider.setPaintLabels(true);
 		edgeBetweennessSlider.setPaintTicks(true);
 
+<<<<<<< HEAD
+=======
 		// edgeBetweennessSlider.setBorder(BorderFactory.createLineBorder(Color.black));
 		// TO DO: edgeBetweennessSlider.add(new
 		// JLabel("Node Size (PageRank With Priors):"));
 		// I also want the slider value to appear
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		final JPanel eastControls = new JPanel();
 		eastControls.setOpaque(true);
 		eastControls.setLayout(new BoxLayout(eastControls, BoxLayout.Y_AXIS));
@@ -268,7 +338,10 @@ public class Clusterer extends JFrame {
 
 		final TitledBorder sliderBorder = BorderFactory.createTitledBorder(eastSize);
 		eastControls.setBorder(sliderBorder);
+<<<<<<< HEAD
+=======
 		// eastControls.add(eastSize);
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		eastControls.add(Box.createVerticalGlue());
 
 		groupVertices.addItemListener(new ItemListener() {
@@ -288,8 +361,12 @@ public class Clusterer extends JFrame {
 					clusterAndRecolor(layout, numEdgesToRemove, similarColors, groupVertices.isSelected());
 					sliderBorder.setTitle(COMMANDSTRING + edgeBetweennessSlider.getValue());
 					eastControls.repaint();
+<<<<<<< HEAD
+					update(vv);
+=======
 					vv.validate();
 					vv.repaint();
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 				}
 			}
 		});
@@ -297,12 +374,17 @@ public class Clusterer extends JFrame {
 		
 		clusterAndRecolor(layout, 0, similarColors, groupVertices.isSelected());
 
+<<<<<<< HEAD
+		clusterpanel = new JPanel();
+		clusterpanel.setLayout(new BoxLayout(clusterpanel, BoxLayout.Y_AXIS));
+=======
 		// Container content = jf.getContentPane();
 		clusterpanel = new JPanel();
 		clusterpanel.setLayout(new BoxLayout(clusterpanel, BoxLayout.Y_AXIS));
 		GraphZoomScrollPane gzsp = new GraphZoomScrollPane(vv);
 		//gzsp.setPreferredSize(new Dimension(700, 700));
 		clusterpanel.add(gzsp); // , BorderLayout.NORTH);
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		JPanel south = new JPanel();
 		JPanel grid = new JPanel(new GridLayout(2, 1));
 		grid.add(scramble);
@@ -313,11 +395,18 @@ public class Clusterer extends JFrame {
 		p.setBorder(BorderFactory.createTitledBorder("Mouse Mode"));
 		p.add(gm.getModeComboBox());
 		south.add(p);
+<<<<<<< HEAD
+		clusterpanel.add(south);
+		clusterpanel.add(Box.createGlue());
+		semscroller = new SemGenScrollPane(sempanel);
+		splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,semscroller,clusterpanel);
+=======
 		clusterpanel.add(south); // , BorderLayout.SOUTH);
 		clusterpanel.add(Box.createGlue());
 		semscroller = new SemGenScrollPane(sempanel);
 		splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,semscroller,clusterpanel);
 		splitpane.setDividerLocation(initsempanelwidth);
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		splitpane.setDividerLocation(initsempanelwidth+10);
 		this.add(splitpane);
 		this.setPreferredSize(new Dimension(950,800));
@@ -340,7 +429,10 @@ public class Clusterer extends JFrame {
 		int i = 0;
 		// Set the colors of each node so that each cluster's vertices have the same color
 		extractor.clusterpanel.checkboxpanel.removeAll();
+<<<<<<< HEAD
+=======
 		//refreshModulePanel();
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		for (Iterator<Set<String>> cIt = clusterSet.iterator(); cIt.hasNext();) {
 			moduletable = moduletable + "\nCLUSTER " + (i + 1);
 			Set<String> vertices = cIt.next();
@@ -352,7 +444,11 @@ public class Clusterer extends JFrame {
 
 			JLabel modulelabel = new JLabel("Cluster " + (i + 1));
 			modulelabel.setOpaque(true);
+<<<<<<< HEAD
+			modulelabel.setFont(SemGenFont.defaultBold());
+=======
 			modulelabel.setFont(new Font("SansSerif", Font.BOLD, SemGenGUI.defaultfontsize));
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 			modulelabel.setBackground(c);
 			modulelabel.setAlignmentX(LEFT_ALIGNMENT);
 			sempanel.add(modulelabel);
@@ -375,15 +471,24 @@ public class Clusterer extends JFrame {
 							JTextArea enttext = new JTextArea(name);
 							enttext.setOpaque(true);
 							enttext.setBackground(c);
+<<<<<<< HEAD
+							enttext.setFont(SemGenFont.defaultPlain(-2));
+							if(pmc instanceof PhysicalProcess){
+								enttext.setFont(SemGenFont.defaultItalic(-2));
+=======
 							enttext.setFont(new Font("SansSerif", Font.PLAIN, SemGenGUI.defaultfontsize - 2));
 							if(pmc instanceof PhysicalProcess){
 								enttext.setFont(new Font("SansSerif", Font.ITALIC, SemGenGUI.defaultfontsize - 2));
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 								name = "Process: " + name;
 							}
 							else name = "Entity: " + name;
 							enttext.setWrapStyleWord(true);
 							enttext.setLineWrap(true);
+<<<<<<< HEAD
+=======
 							//enttext.setMaximumSize(new Dimension(200, 1000));
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 							enttext.setBorder(BorderFactory.createEmptyBorder(7, 7, 0, 0));
 							enttext.setAlignmentX(LEFT_ALIGNMENT);
 							sempanel.add(enttext);
@@ -392,10 +497,15 @@ public class Clusterer extends JFrame {
 					}
 				}
 			}
+<<<<<<< HEAD
+			update(sempanel);
+			update(semscroller);
+=======
 			sempanel.validate();
 			sempanel.repaint();
 			semscroller.repaint();
 			semscroller.validate();
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 			this.repaint();
 			this.validate();
 
@@ -451,11 +561,22 @@ public class Clusterer extends JFrame {
 		}
 		
 		extractor.clusterpanel.titlelabel.setText("Clusters (" + numclusters + ")");
+<<<<<<< HEAD
+		update(extractor);
+		update(extractor.clusterpanel);
+		update(extractor.clusterpanel.scroller);
+	}
+	
+	private void update(JComponent panel) {
+		panel.validate();
+		panel.repaint();
+=======
 		extractor.validate();
 		extractor.repaint();
 		extractor.clusterpanel.validate();
 		extractor.clusterpanel.repaint();
 		extractor.clusterpanel.scroller.validate();
 		extractor.clusterpanel.scroller.repaint();
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	}
 }

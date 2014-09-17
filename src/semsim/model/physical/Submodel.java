@@ -65,6 +65,14 @@ public class Submodel extends PhysicalModelComponent implements Cloneable, Impor
 		addAnnotation(new ReferenceOntologyAnnotation(relation, uri, description));
 	}
 	
+<<<<<<< HEAD
+	@Override
+	public void addReferenceOntologyAnnotation(ReferenceOntologyAnnotation roa){
+		addAnnotation(roa);
+	}
+	
+=======
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	public Submodel clone() throws CloneNotSupportedException {
         return (Submodel) super.clone();
 	}
@@ -78,8 +86,13 @@ public class Submodel extends PhysicalModelComponent implements Cloneable, Impor
 		return isImported;
 	}
 
+<<<<<<< HEAD
+	public void setHrefValue(String hrefVal) {
+		this.hrefValue = hrefVal;
+=======
 	public void setHrefValue(String hrefValue) {
 		this.hrefValue = hrefValue;
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		if(hrefValue!=null) setImported(true);
 	}
 
@@ -88,7 +101,11 @@ public class Submodel extends PhysicalModelComponent implements Cloneable, Impor
 	}
 
 	public void setReferencedName(String name) {
+<<<<<<< HEAD
+		referencedName = name;
+=======
 		this.referencedName = name;
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		if(name!=null) this.setImported(true);
 	}
 

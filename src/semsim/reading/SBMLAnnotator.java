@@ -199,7 +199,11 @@ public class SBMLAnnotator {
 						PhysicalEntity reac = speciesandphysents.get(speciesreact);
 						if(pmc instanceof PhysicalProcess){
 							PhysicalProcess pmcp = (PhysicalProcess)pmc;
+<<<<<<< HEAD
+							pmcp.addSource(reac);
+=======
 							pmcp.addSource(reac, rxn.getReactant(l).getStoichiometry());
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 						}
 					}
 				}
@@ -209,7 +213,11 @@ public class SBMLAnnotator {
 						PhysicalEntity prod = speciesandphysents.get(speciesprod);
 						if(pmc instanceof PhysicalProcess){
 							PhysicalProcess pmcp = (PhysicalProcess)pmc;
+<<<<<<< HEAD
+							pmcp.addSink(prod);
+=======
 							pmcp.addSink(prod, rxn.getProduct(l).getStoichiometry());
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 						}
 					}
 				}
@@ -219,7 +227,11 @@ public class SBMLAnnotator {
 						PhysicalEntity mod = speciesandphysents.get(speciesmod);
 						if(pmc instanceof PhysicalProcess){
 							PhysicalProcess pmcp = (PhysicalProcess)pmc;
+<<<<<<< HEAD
+							pmcp.addMediator(mod);
+=======
 							pmcp.addMediator(mod, 1);
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 						}
 					}
 				}

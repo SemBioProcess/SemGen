@@ -8,7 +8,13 @@
 package semgen.webservices.KEGG;
 
 public class StructureAlignment  implements java.io.Serializable {
+<<<<<<< HEAD
+	private static final long serialVersionUID = 1L;
+
+	private java.lang.String target_id;
+=======
     private java.lang.String target_id;
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 
     private float score;
 
@@ -16,8 +22,12 @@ public class StructureAlignment  implements java.io.Serializable {
 
     private int[] target_nodes;
 
+<<<<<<< HEAD
+    public StructureAlignment() {}
+=======
     public StructureAlignment() {
     }
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 
     public StructureAlignment(
            java.lang.String target_id,
@@ -114,7 +124,10 @@ public class StructureAlignment  implements java.io.Serializable {
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof StructureAlignment)) return false;
         StructureAlignment other = (StructureAlignment) obj;
+<<<<<<< HEAD
+=======
         if (obj == null) return false;
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
         if (this == obj) return true;
         if (__equalsCalc != null) {
             return (__equalsCalc == obj);
@@ -217,7 +230,11 @@ public class StructureAlignment  implements java.io.Serializable {
      */
     public static org.apache.axis.encoding.Serializer getSerializer(
            java.lang.String mechType, 
+<<<<<<< HEAD
+           Class<?> _javaType,  
+=======
            java.lang.Class _javaType,  
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
            javax.xml.namespace.QName _xmlType) {
         return 
           new  org.apache.axis.encoding.ser.BeanSerializer(
@@ -229,7 +246,11 @@ public class StructureAlignment  implements java.io.Serializable {
      */
     public static org.apache.axis.encoding.Deserializer getDeserializer(
            java.lang.String mechType, 
+<<<<<<< HEAD
+           Class<?> _javaType,  
+=======
            java.lang.Class _javaType,  
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
            javax.xml.namespace.QName _xmlType) {
         return 
           new  org.apache.axis.encoding.ser.BeanDeserializer(

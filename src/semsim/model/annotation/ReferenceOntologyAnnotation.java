@@ -126,6 +126,16 @@ public class ReferenceOntologyAnnotation extends Annotation{
 	}
 	
 	/**
+<<<<<<< HEAD
+	 * @return The URI used as the annotation value as String
+	 */
+	public String getReferenceURIasString() {
+		return referenceUri.toString();
+	}
+		
+	/**
+=======
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	 * Convenience method for getting the namespace of a URI
 	 * @param uri A URI
 	 * @return The namespace of the URI
@@ -149,4 +159,19 @@ public class ReferenceOntologyAnnotation extends Annotation{
 	public void setAltNumericalID(String ID){
 		altNumericalID = ID;
 	}
+<<<<<<< HEAD
+	
+	
+	public Boolean matches(ReferenceOntologyAnnotation roa) {
+		return getReferenceURIasString().matches(roa.getReferenceURIasString());
+	}
+	
+	/**
+	 * @return whether Reference Ontology Annotations have equivalent URIs
+	 */
+	public Boolean matches(String roa) {
+		return getReferenceURIasString().matches(roa);
+	}
+=======
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 }

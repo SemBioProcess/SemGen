@@ -11,6 +11,10 @@ import edu.uci.ics.jung.graph.util.Pair;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.map.LazyMap;
 
+<<<<<<< HEAD
+import semgen.extraction.graph.SemGenJungGraph;
+=======
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 
 import java.awt.Dimension;
 import java.awt.geom.Point2D;
@@ -40,7 +44,10 @@ import java.util.Map;
 public class SemGenFRLayout<V, E> extends AbstractLayout<V, E> implements
 		IterativeContext {
 
+<<<<<<< HEAD
+=======
 	private double forceConstant;
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	private double temperature;
 	private int currentIteration;
 	private int mMaxIterations = 700;
@@ -57,14 +64,26 @@ public class SemGenFRLayout<V, E> extends AbstractLayout<V, E> implements
 	private double repulsion_multiplier = 0.75;
 	private double repulsion_constant;
 	private double max_dimension;
+<<<<<<< HEAD
+	private double EPSILON = 0.000001D;
+=======
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 
 	/**
 	 * Creates an instance for the specified graph.
 	 */
+<<<<<<< HEAD
+	@SuppressWarnings("unchecked")
+=======
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	public SemGenFRLayout(SparseMultigraph<String, Number> g) {
 		super((Graph<V, E>) g);
 	}
 
+<<<<<<< HEAD
+	@SuppressWarnings("unchecked")
+=======
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	public SemGenFRLayout(SemGenJungGraph<V, E> g) {
 		super((Graph<V, E>) g);
 	}
@@ -116,7 +135,11 @@ public class SemGenFRLayout<V, E> extends AbstractLayout<V, E> implements
 			currentIteration = 0;
 			temperature = d.getWidth() / 10;
 
+<<<<<<< HEAD
+			double forceConstant = Math.sqrt(d.getHeight() * d.getWidth()
+=======
 			forceConstant = Math.sqrt(d.getHeight() * d.getWidth()
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 					/ graph.getVertexCount());
 
 			attraction_constant = attraction_multiplier * forceConstant;
@@ -124,8 +147,11 @@ public class SemGenFRLayout<V, E> extends AbstractLayout<V, E> implements
 		}
 	}
 
+<<<<<<< HEAD
+=======
 	private double EPSILON = 0.000001D;
 
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	/**
 	 * Moves the iteration forward one notch, calculation attraction and
 	 * repulsion between vertices and edges and cooling the temperature.
@@ -262,8 +288,11 @@ public class SemGenFRLayout<V, E> extends AbstractLayout<V, E> implements
 
 		try {
 			for (V v2 : getGraph().getVertices()) {
+<<<<<<< HEAD
+=======
 
 				// if (isLocked(v2)) continue;
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 				if (v1 != v2) {
 					Point2D p1 = transform(v1);
 					Point2D p2 = transform(v2);
@@ -327,6 +356,12 @@ public class SemGenFRLayout<V, E> extends AbstractLayout<V, E> implements
 	}
 
 	protected static class FRVertexData extends Point2D.Double {
+<<<<<<< HEAD
+
+		private static final long serialVersionUID = 1L;
+
+=======
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		protected void offset(double x, double y) {
 			this.x += x;
 			this.y += y;

@@ -58,7 +58,10 @@ public class CellMLwriter implements Writer{
 	public String writeToString(SemSimModel model){
 		Document doc = null;
 		try{
+<<<<<<< HEAD
+=======
 			
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 			this.semsimmodel = model;
 			
 			mainNS = CellMLconstants.cellml1_1NS;

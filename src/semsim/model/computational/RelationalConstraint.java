@@ -3,10 +3,19 @@ package semsim.model.computational;
 import java.util.HashSet;
 import java.util.Set;
 
+<<<<<<< HEAD
+import semsim.model.SemSimComponent;
+
+/** A class to represent relational statements in simulation models that express non-equivalencies.
+ * Examples: x > y, z <= 0;
+ */
+public class RelationalConstraint extends SemSimComponent{
+=======
 /** A class to represent relational statements in simulation models that express non-equivalencies.
  * Examples: x > y, z <= 0;
  */
 public class RelationalConstraint extends ComputationalModelComponent{
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	private Set<DataStructure> inputs = new HashSet<DataStructure>();
 	private String computationalCode;
 	private String mathML;
