@@ -7,22 +7,12 @@ import java.util.Set;
 import semsim.Annotatable;
 import semsim.SemSimConstants;
 import semsim.model.Importable;
-<<<<<<< HEAD
 import semsim.model.SemSimComponent;
 import semsim.model.annotation.Annotation;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
 import semsim.model.annotation.SemSimRelation;
 
 public class UnitOfMeasurement extends SemSimComponent implements Annotatable, Importable, Cloneable{
-=======
-import semsim.model.annotation.Annotation;
-import semsim.model.annotation.ReferenceOntologyAnnotation;
-import semsim.model.annotation.SemSimRelation;
-import semsim.model.computational.ComputationalModelComponent;
-
-
-public class UnitOfMeasurement extends ComputationalModelComponent implements Annotatable, Importable, Cloneable{
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	private Set<Annotation> annotations = new HashSet<Annotation>();
 	private String computationalCode;
 	private String customDeclaration;
@@ -86,16 +76,12 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 		}
 		addAnnotation(new ReferenceOntologyAnnotation(relation, uri, description));
 	}
-<<<<<<< HEAD
 	
 	@Override
 	public void addReferenceOntologyAnnotation(ReferenceOntologyAnnotation roa){
 		addAnnotation(roa);
 	}
 	
-=======
-
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	public Set<ReferenceOntologyAnnotation> getReferenceOntologyAnnotations(SemSimRelation relation) {
 		Set<ReferenceOntologyAnnotation> raos = new HashSet<ReferenceOntologyAnnotation>();
 		for(Annotation ann : getAnnotations()){

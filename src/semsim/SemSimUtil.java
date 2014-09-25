@@ -6,29 +6,20 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URI;
-<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.Collections;
-=======
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-<<<<<<< HEAD
 import semsim.model.SemSimComponent;
-=======
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 import semsim.model.SemSimModel;
 import semsim.model.computational.DataStructure;
 import semsim.model.physical.CompositePhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
-<<<<<<< HEAD
 import semsim.writing.CaseInsensitiveComparator;
-=======
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 
 /**
  * A collection of utility methods for working with SemSim models
@@ -178,7 +169,6 @@ public class SemSimUtil {
 		}
 		// If we've gotten here, then there isn't a match, return the cpe argument
 		if(cpe == null) System.out.println("Next cpe was null");
-<<<<<<< HEAD
 		
 		return cpe;
 	}	
@@ -193,8 +183,4 @@ public class SemSimUtil {
 		}
 		return namelist;
 	}
-=======
-		return cpe;
-	}	
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 }

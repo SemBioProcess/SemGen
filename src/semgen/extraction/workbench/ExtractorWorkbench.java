@@ -94,7 +94,7 @@ public class ExtractorWorkbench implements Workbench {
 			JOptionPane.showMessageDialog(null,"Nothing to extract because no check boxes selected in extraction panels");
 		}
 	}
-	
+
 	public void startBatchClustering() throws IOException{
 		SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select a SemSim model for automated cluster analysis");
 		

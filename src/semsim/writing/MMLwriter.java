@@ -8,10 +8,7 @@ import java.util.Set;
 import java.util.HashSet;
 
 import semsim.SemSimConstants;
-<<<<<<< HEAD
 import semsim.SemSimLibrary;
-=======
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
 import semsim.model.computational.DataStructure;
@@ -20,10 +17,6 @@ import semsim.model.computational.MappableVariable;
 import semsim.model.computational.RelationalConstraint;
 import semsim.model.computational.SemSimInteger;
 import semsim.model.computational.units.UnitOfMeasurement;
-<<<<<<< HEAD
-=======
-
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 import JSim.aserver.ASModel;
 import JSim.aserver.ASServer;
 import JSim.data.NamedVal;
@@ -35,11 +28,7 @@ public class MMLwriter implements Writer{
 	public String writeToString(SemSimModel model){
 		String base = model.getNamespace();
 		String output = "";
-<<<<<<< HEAD
 		SemSimLibrary sslib = new SemSimLibrary();
-=======
-		
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		
 		// If the SemSim model contains Functional Submodels ala CellML models, output the CellML code first,
 		// then attempt to translate to MML
@@ -83,10 +72,6 @@ public class MMLwriter implements Writer{
 		// First find the "fundamental" units and declare them first
 		Set<UnitOfMeasurement> nonfundamentalunits = new HashSet<UnitOfMeasurement>();
 		nonfundamentalunits.addAll(model.getUnits());
-<<<<<<< HEAD
-=======
-		
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 
 		for (UnitOfMeasurement unit : model.getUnits()) {
 
@@ -107,7 +92,6 @@ public class MMLwriter implements Writer{
 			// If going from a CellML file with units not recognized by JSim, declare them in the output
 			else{
 				Boolean testprefixed = false;
-<<<<<<< HEAD
 				for(String prefix : sslib.getAllJSimUnits()){
 					
 					if(unit.getComputationalCode().startsWith(prefix)){
@@ -117,17 +101,6 @@ public class MMLwriter implements Writer{
 				}
 
 				if(!sslib.jsimHasUnit(code) && !code.equals("") && !testprefixed
-=======
-				for(String prefix : SemSimConstants.JSIM_UNITS_AND_PREFIXABLE_MAP.keySet()){
-					
-					if(unit.getComputationalCode().startsWith(prefix)){
-						String minusprefix = code.replaceFirst(prefix, "");
-						if(SemSimConstants.JSIM_UNITS_AND_PREFIXABLE_MAP.containsKey(minusprefix)){testprefixed = true;}
-					}
-				}
-
-				if(!SemSimConstants.JSIM_UNITS_AND_PREFIXABLE_MAP.containsKey(code) && !code.equals("") && !testprefixed
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 						&& !code.equals("dimensionless") && !code.contains("*") && !code.contains("/") && !code.contains("^")){
 					output = output.concat("unit " + code + " = dimensionless;\n");  // Hack until units stuff w/Jsim gets sorted
 				}
@@ -170,15 +143,7 @@ public class MMLwriter implements Writer{
 			Decimal onedecimal = (Decimal) model.getDataStructure(onedecimalstr);
 			
 			// If the codeword is declared
-<<<<<<< HEAD
 			if (testifDeclared(onedecimal,domainnames)) {
-=======
-			if (onedecimal.isDeclared() && !onedecimal.isSolutionDomain()
-					// If the codeword is part of a solution domain declaration, don't declare it.
-					&& !domainnames.contains(onedecimal.getName().replace(".delta", ""))
-					&& !domainnames.contains(onedecimal.getName().replace(".min", ""))
-					&& !domainnames.contains(onedecimal.getName().replace(".max",""))) {
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 				String unitcode = "";
 				
 				if(onedecimal.getUnit()!=null){
@@ -217,14 +182,7 @@ public class MMLwriter implements Writer{
 		
 		for (String oneintstr : intarray) {
 			SemSimInteger oneint = (SemSimInteger) model.getDataStructure(oneintstr);
-<<<<<<< HEAD
 			if (testifDeclared(oneint,domainnames)) {
-=======
-			if (oneint.isDeclared() && !oneint.isSolutionDomain()
-					&& !domainnames.contains(oneint.getName().replace(".delta", ""))
-					&& !domainnames.contains(oneint.getName().replace(".min", ""))
-					&& !domainnames.contains(oneint.getName().replace(".max",""))) {
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 				String unitcode = "";
 				if(oneint.getUnit()!=null){
 					unitcode = oneint.getUnit().getComputationalCode();
@@ -283,16 +241,7 @@ public class MMLwriter implements Writer{
 		// Logic for this might be a little different than previous versions
 		for (String onedsstr : alldsarray) {
 			DataStructure ds = (DataStructure) model.getDataStructure(onedsstr);
-<<<<<<< HEAD
 			if (testifDeclared(ds,domainnames)) {
-=======
-			if (ds.isDeclared() && !ds.isSolutionDomain() 
-					&& !domainnames.contains(ds.getName().replace(".delta", ""))
-					&& !domainnames.contains(ds.getName().replace(".min", ""))
-					&& !domainnames.contains(ds.getName().replace(".max",""))
-					&& ds.getComputation().getComputationalCode()!=null){
-				
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 				String code = ds.getComputation().getComputationalCode();
 				output = output.concat("\t" + code + getLineEnd(code) + "\n");
 			}
@@ -305,13 +254,7 @@ public class MMLwriter implements Writer{
 
 		output = output.concat("}\n");
 		output = output.concat("// END OF SIMULATION CODE\n");
-<<<<<<< HEAD
 		output = output.concat("\n\n\n");
-=======
-		output = output.concat("\n");
-		output = output.concat("\n");
-		output = output.concat("\n");
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 
 		// Print the reference table of codeword annotations.
 		output = output.concat("/*\n");
@@ -331,7 +274,6 @@ public class MMLwriter implements Writer{
 
 	}
 	
-<<<<<<< HEAD
 	private boolean testifDeclared(DataStructure ds,Set<String> domainnames) {
 		return (ds.isDeclared() && !ds.isSolutionDomain() 
 				// If the codeword is part of a solution domain declaration, don't declare it.
@@ -346,16 +288,6 @@ public class MMLwriter implements Writer{
 			return "";
 		}
 		return ";";
-=======
-	private String getLineEnd(String code){
-		String lineend;
-		if (code.endsWith("}")) {
-			lineend = "";
-		} else {
-			lineend = ";";
-		}
-		return lineend;
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	}
 	
 	public void writeToFile(SemSimModel model, File destination){
