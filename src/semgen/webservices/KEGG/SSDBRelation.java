@@ -8,13 +8,7 @@
 package semgen.webservices.KEGG;
 
 public class SSDBRelation  implements java.io.Serializable {
-<<<<<<< HEAD
-	private static final long serialVersionUID = 1L;
-
-	private java.lang.String genes_id1;
-=======
     private java.lang.String genes_id1;
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 
     private java.lang.String genes_id2;
 
@@ -408,10 +402,7 @@ public class SSDBRelation  implements java.io.Serializable {
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof SSDBRelation)) return false;
         SSDBRelation other = (SSDBRelation) obj;
-<<<<<<< HEAD
-=======
         if (obj == null) return false;
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
         if (this == obj) return true;
         if (__equalsCalc != null) {
             return (__equalsCalc == obj);
@@ -597,12 +588,8 @@ public class SSDBRelation  implements java.io.Serializable {
      * Get Custom Serializer
      */
     public static org.apache.axis.encoding.Serializer getSerializer(
-<<<<<<< HEAD
-           Class<?> _javaType,  
-=======
            java.lang.String mechType, 
            java.lang.Class _javaType,  
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
            javax.xml.namespace.QName _xmlType) {
         return 
           new  org.apache.axis.encoding.ser.BeanSerializer(
@@ -612,14 +599,9 @@ public class SSDBRelation  implements java.io.Serializable {
     /**
      * Get Custom Deserializer
      */
-<<<<<<< HEAD
-    public static org.apache.axis.encoding.Deserializer getDeserializer( 
-           Class<?> _javaType,  
-=======
     public static org.apache.axis.encoding.Deserializer getDeserializer(
            java.lang.String mechType, 
            java.lang.Class _javaType,  
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
            javax.xml.namespace.QName _xmlType) {
         return 
           new  org.apache.axis.encoding.ser.BeanDeserializer(

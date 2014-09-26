@@ -19,10 +19,7 @@ import semsim.model.annotation.Annotation;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
 import semsim.model.annotation.SemSimRelation;
 import semsim.model.annotation.StructuralRelation;
-<<<<<<< HEAD
-=======
 import semsim.model.computational.ComputationalModelComponent;
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 import semsim.model.computational.DataStructure;
 import semsim.model.computational.Decimal;
 import semsim.model.computational.MMLchoice;
@@ -97,11 +94,7 @@ public class SemSimModel extends SemSimComponent implements Cloneable, Annotatab
 	private static SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmssSSSZ");
 	private double semSimVersion = SemSimConstants.SEMSIM_VERSION;
 	private int sourceModelType;
-<<<<<<< HEAD
-	public final String unspecifiedName = "*unspecified*";
-=======
 
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	
 	/**
 	 * Constructor without namespace
@@ -110,10 +103,7 @@ public class SemSimModel extends SemSimComponent implements Cloneable, Annotatab
 		setNamespace(generateNamespaceFromDateAndTime());
 	}
 	
-<<<<<<< HEAD
-=======
 	
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	/**
 	 * Constructor with namespace
 	 */
@@ -281,11 +271,7 @@ public class SemSimModel extends SemSimComponent implements Cloneable, Annotatab
 		return rpe;
 	}
 	
-<<<<<<< HEAD
-		
-=======
 	
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	/**
 	 * Add a new ReferencePhysicalProcess to the model. ReferencePhysicalProcesses are subclasses of
 	 * PhysicalProcesses that are defined by their annotation against a reference ontology URI. In
@@ -348,13 +334,8 @@ public class SemSimModel extends SemSimComponent implements Cloneable, Annotatab
 	 * @return The set of all computational elements in the model.
 	 * This includes DataStructures, Computations, UnitsOfMeasurement and RelationalConstraints.
 	 */
-<<<<<<< HEAD
-	public Set<SemSimComponent> getComputationalModelComponents(){
-		Set<SemSimComponent> set = new HashSet<SemSimComponent>();
-=======
 	public Set<ComputationalModelComponent> getComputationalModelComponents(){
 		Set<ComputationalModelComponent> set = new HashSet<ComputationalModelComponent>();
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		for(DataStructure ds : getDataStructures()){
 			set.add(ds);
 			if(ds.getComputation()!=null) set.add(ds.getComputation());
@@ -404,29 +385,6 @@ public class SemSimModel extends SemSimComponent implements Cloneable, Annotatab
 		return dsset;
 	}
 	
-<<<<<<< HEAD
-	public Set<DataStructure> getDataStructuresWithUnspecifiedAnnotations(){
-		Set<DataStructure> dsset = new HashSet<DataStructure>();
-		for(DataStructure ds : getDataStructures()){
-			if(ds.hasPhysicalProperty()){
-				if(ds.getPhysicalProperty().getPhysicalPropertyOf()!=null){
-					if(ds.getPhysicalProperty().getPhysicalPropertyOf().getName().equals(unspecifiedName)){
-						dsset.add(ds);
-					}
-					if(ds.getPhysicalProperty().getPhysicalPropertyOf() instanceof CompositePhysicalEntity){
-						for(PhysicalEntity pe : ((CompositePhysicalEntity)ds.getPhysicalProperty().getPhysicalPropertyOf()).getArrayListOfEntities()){
-							if(pe.getName().equals(unspecifiedName))
-								dsset.add(ds);
-						}
-					}
-				}
-			}
-			else System.out.println(ds.getName() + " didn't have a physical property");
-		}
-		return dsset;
-	}
-=======
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	
 	/**
 	 * @return All Decimals, Integers and MMLchoiceVariables in the model.
@@ -939,14 +897,11 @@ public class SemSimModel extends SemSimComponent implements Cloneable, Annotatab
 	public void writeCellMLFile(File destination){
 		new CellMLwriter().writeToFile(this, destination);
 	}
-<<<<<<< HEAD
-=======
 	
 //	public File writePhysioMap(File file) throws IOException, OWLException{
 //		return PhysioMapWriter.translate(this, file);
 //	}
 
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 
 	/**
 	 * @return A new SemSim model namespace from the current date and time
@@ -1150,20 +1105,6 @@ public class SemSimModel extends SemSimComponent implements Cloneable, Annotatab
 		return sourceModelType;
 	}
 	
-<<<<<<< HEAD
-	/**
-	 * @return The location of the original model code
-	 */
-	public Annotation getSourceModelLocation() {
-		for(Annotation a : annotations){
-			if(a.getRelation()==SemSimConstants.LEGACY_CODE_LOCATION_RELATION){
-				return a;
-			}
-		}
-		return null;
-	}
-=======
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	
 	// Required by annotable interface:
 	/**
@@ -1192,24 +1133,6 @@ public class SemSimModel extends SemSimComponent implements Cloneable, Annotatab
 		annotations.add(ann);
 	}
 	
-<<<<<<< HEAD
-	//If model already has annotation, modify it. Otherwise add a new annotation
-	public void addAnnotation(SemSimRelation rel, Object value) {
-		Annotation a = getAnnotation(rel);
-		if (a!=null) {
-			a.setValue(value);
-		}
-		else addAnnotation(new Annotation(rel, value));
-	}
-	
-	public Annotation getAnnotation(SemSimRelation rel) {
-		for (Annotation a : annotations) {
-			if (a.getRelation()==rel) return a;
-		}
-		return null;
-	}
-=======
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	
 	/**
 	 * Add a SemSim {@link ReferenceOntologyAnnotation} to an object
@@ -1225,13 +1148,6 @@ public class SemSimModel extends SemSimComponent implements Cloneable, Annotatab
 		addAnnotation(new ReferenceOntologyAnnotation(relation, uri, description));
 	}
 
-<<<<<<< HEAD
-	@Override
-	public void addReferenceOntologyAnnotation(ReferenceOntologyAnnotation roa){
-		addAnnotation(roa);
-	}
-=======
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	
 	/**
 	 * Get all SemSim {@link ReferenceOntologyAnnotation}s applied to an object

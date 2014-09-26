@@ -45,11 +45,7 @@ public interface Annotatable {
 	 */
 	public void addReferenceOntologyAnnotation(SemSimRelation relation, URI uri, String description);
 
-<<<<<<< HEAD
-	public void addReferenceOntologyAnnotation(ReferenceOntologyAnnotation roa);	
-=======
 	
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	/**
 	 * Get all SemSim {@link ReferenceOntologyAnnotation}s applied to an object
 	 * that have a specific {@link SemSimRelation}.

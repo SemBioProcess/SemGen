@@ -49,13 +49,6 @@ public class CustomRestrictionVisitor extends OWLClassExpressionVisitorAdapter {
 	}
 
 	public OWLLiteral getValueForDataProperty(OWLDataPropertyExpression exp) {
-<<<<<<< HEAD
-		return (OWLLiteral) restrictedDataPropertiesTable.get(exp);
-	}
-
-	public OWLLiteral getValueObjectProperty(OWLObjectPropertyExpression exp) {
-		return (OWLLiteral) restrictedValueObjectPropertiesTable.get(exp);
-=======
 		OWLLiteral con = (OWLLiteral) restrictedDataPropertiesTable.get(exp);
 		return con;
 	}
@@ -63,7 +56,6 @@ public class CustomRestrictionVisitor extends OWLClassExpressionVisitorAdapter {
 	public OWLLiteral getValueObjectProperty(OWLObjectPropertyExpression exp) {
 		OWLLiteral con = (OWLLiteral) restrictedValueObjectPropertiesTable.get(exp);
 		return con;
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	}
 
 	public Set<String> getSomeObjectProperty(OWLObjectPropertyExpression exp) {

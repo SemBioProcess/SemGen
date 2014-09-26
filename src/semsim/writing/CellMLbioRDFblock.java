@@ -38,10 +38,7 @@ public class CellMLbioRDFblock {
 	public Map<URI, Resource> refURIsandresources;
 	public Set<String> localids = new HashSet<String>();
 	public String modelns;
-<<<<<<< HEAD
-=======
 	//public Map<CompositePhysicalEntity,URI> compositeEntitiesAndIndexes = new HashMap<CompositePhysicalEntity,URI>();
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	
 	public static Property hassourceparticipant = ResourceFactory.createProperty(SemSimConstants.HAS_SOURCE_PARTICIPANT_URI.toString());
 	public static Property hassinkparticipant = ResourceFactory.createProperty(SemSimConstants.HAS_SINK_PARTICIPANT_URI.toString());
@@ -171,14 +168,11 @@ public class CellMLbioRDFblock {
 		else{
 			System.err.println("Error in setting participants for process: null value for Resource corresponding to " + pe.getName());
 		}
-<<<<<<< HEAD
-=======
 		
 		// Add the multiplier information
 		double multiplier = participant.getMultiplier();
 		Statement multst = rdf.createLiteralStatement(participantres, hasmultiplier, multiplier);
 		if(!rdf.contains(multst))rdf.add(multst);
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	}
 	
 	// Add statements that describe a composite physical entity in the model
@@ -267,11 +261,6 @@ public class CellMLbioRDFblock {
 	
 	
 	protected Resource getResourceForPMCandAnnotate(Model rdf, PhysicalModelComponent pmc){
-<<<<<<< HEAD
-		if(!pmcsandresourceURIs.containsKey(pmc)){
-			System.out.println(pmc.getName());			
-			String resname = modelns;
-=======
 		if(pmcsandresourceURIs.containsKey(pmc)){
 			return rdf.getResource(pmcsandresourceURIs.get(pmc).toString());
 		}
@@ -282,7 +271,6 @@ public class CellMLbioRDFblock {
 			
 			String resname = modelns;
 //			String resname = "#";
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 			
 			String typeprefix = "unknown";
 			if(pmc instanceof PhysicalProperty)
@@ -309,10 +297,6 @@ public class CellMLbioRDFblock {
 			
 			return res;
 		}
-<<<<<<< HEAD
-		return rdf.getResource(pmcsandresourceURIs.get(pmc).toString());
-=======
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	}
 	
 	
