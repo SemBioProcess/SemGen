@@ -24,13 +24,8 @@ import semsim.owl.SemSimOWLFactory;
 
 //Class for holding reference terms and data required for SemGen - intended to replace SemSimConstants class
 public class SemSimLibrary {
-<<<<<<< HEAD
-	private OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-	public static File ontologyTermsAndNamesCacheFile = new File("cfg/ontologyTermsAndNamesCache.txt");
-=======
 	public static File ontologyTermsAndNamesCacheFile = new File("cfg/ontologyTermsAndNamesCache.txt");
 	private OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	public OWLOntology OPB;
 	
 	private Hashtable<String, String[]> OPBClassesForUnitsTable = new Hashtable<String, String[]>();
@@ -38,13 +33,8 @@ public class SemSimLibrary {
 	private Hashtable<String, String[]> compositeAnnRelationsTableRL = new Hashtable<String, String[]>();
 	private Hashtable<String, String[]> metadataRelationsTable = new Hashtable<String, String[]>();
 	private Hashtable<String, String[]> ontologyTermsAndNamesCache = new Hashtable<String,String[]>();
-<<<<<<< HEAD
-	private Hashtable<String, Boolean> jsimUnitsTable = new Hashtable<String, Boolean>();
-	private Hashtable<String, String[]> jsimUnitPrefixesTable = new Hashtable<String, String[]>();
-=======
 	private Hashtable<String, String[]> jsimUnitsTable;
 	private Hashtable<String, String[]> jsimUnitPrefixesTable;
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	
 	private static Set<String> OPBproperties = new HashSet<String>();
 	private static Set<String> OPBflowProperties = new HashSet<String>();
@@ -64,11 +54,7 @@ public class SemSimLibrary {
 			compositeAnnRelationsTableRL = ResourcesManager.createHashtableFromFile("cfg/structuralRelationsRL.txt");
 			metadataRelationsTable = ResourcesManager.createHashtableFromFile("cfg/metadataRelations.txt");
 			ontologyTermsAndNamesCache = ResourcesManager.createHashtableFromFile("cfg/ontologyTermsAndNamesCache.txt");
-<<<<<<< HEAD
-			buildJSimUnitsTable();
-=======
 			jsimUnitsTable = ResourcesManager.createHashtableFromFile("cfg/jsimUnits");
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 			jsimUnitPrefixesTable = ResourcesManager.createHashtableFromFile("cfg/jsimUnitPrefixes");
 			OPBClassesForUnitsTable = ResourcesManager.createHashtableFromFile("cfg/OPBClassesForUnits.txt");
 		} catch (FileNotFoundException e3) {e3.printStackTrace();}	
@@ -93,18 +79,6 @@ public class SemSimLibrary {
 		} catch (OWLException e2) {e2.printStackTrace();}
 	}
 	
-<<<<<<< HEAD
-	private void buildJSimUnitsTable() throws FileNotFoundException {
-		Hashtable<String, String[]> table = ResourcesManager.createHashtableFromFile("cfg/jsimUnits");
-		Boolean bool;
-		for (String term : table.keySet()) {
-			bool = table.get(term)[0].equals("true") ? true : false;
-			jsimUnitsTable.put(term, bool);
-		}
-	}
-	
-=======
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	public String[] getOPBUnitRefTerm(String unit) {
 		return OPBClassesForUnitsTable.get(unit);
 	}
@@ -117,20 +91,6 @@ public class SemSimLibrary {
 		return metadataRelationsTable.keySet().toArray(new String[]{});
 	}
 	
-<<<<<<< HEAD
-	public Set<String> getAllJSimUnits() {
-		return jsimUnitsTable.keySet();
-	}
-	public boolean jsimHasUnit(String unit) {
-		return jsimUnitsTable.containsKey(unit);
-	}
-	
-	public boolean jsimUnitHasPrefix(String unit) {
-		return jsimUnitsTable.get(unit);
-	}
-	
-=======
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	public ReferenceOntologyAnnotation getOPBAnnotationFromPhysicalUnit(DataStructure ds){
 		ReferenceOntologyAnnotation roa = null;
 		String[] candidateOPBclasses = getOPBUnitRefTerm(ds.getUnit().getName());

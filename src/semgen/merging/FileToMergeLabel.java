@@ -1,37 +1,6 @@
 package semgen.merging;
 
 import java.awt.Color;
-<<<<<<< HEAD
-import javax.swing.JLabel;
-
-public class FileToMergeLabel extends JLabel {
-
-	private static final long serialVersionUID = -9210035304014498845L;
-	private Boolean selected;
-	private String filepath;
-
-	public FileToMergeLabel(String path) {
-		this.filepath = path;
-		setOpaque(true);
-		this.setText(filepath);
-		setSelected(false);
-	}
-
-	public void setSelected(Boolean sel) {
-		this.selected = sel;
-		if (sel) setBackground(new Color(207, 215, 252));
-			else setBackground(Color.white);
-		validate();
-	}
-	
-	public String getFilePath() {
-		return filepath;
-	}
-	
-	public Boolean isSelected() {
-		return selected;
-	}
-=======
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -103,5 +72,4 @@ public class FileToMergeLabel extends JLabel implements ActionListener,
 
 	}
 
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 }

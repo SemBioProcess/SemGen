@@ -12,34 +12,6 @@ public class OSXAdapter implements InvocationHandler {
 	protected String proxySignature;
 
 	static Object macOSXApplication;
-<<<<<<< HEAD
-	
-	SemGen mainframe;
-	
-	// Generic registration with the Mac OS X application menu
-	// Checks the platform, then attempts to register with the Apple EAWT
-	// See OSXAdapter.java to see how this is done without directly referencing
-	// any Apple APIs
-	public OSXAdapter(SemGen frame) {
-		mainframe = frame;
-		try {
-				// Generate and register the OSXAdapter, passing it a hash of
-				// all the methods we wish to
-				// use as delegates for various
-				// com.apple.eawt.ApplicationListener methods
-				setQuitHandler(this,
-						getClass().getDeclaredMethod("quit", (Class[]) null));
-
-				setAboutHandler(this,
-				 getClass().getDeclaredMethod("AboutAction", (Class[])null));
-				
-			} catch (Exception e) {
-				System.err.println("Error while loading the OSXAdapter:");
-				e.printStackTrace();
-			}
-	}
-=======
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 
 	// Pass this method an Object and Method equipped to perform application
 	// shutdown logic
@@ -50,15 +22,6 @@ public class OSXAdapter implements InvocationHandler {
 			public boolean callTarget(Object appleEvent) {
 				Boolean oktoquit = false;
 				try {
-<<<<<<< HEAD
-					oktoquit = mainframe.quit();
-				} catch (HeadlessException | OWLException e) {
-					e.printStackTrace();
-				} 
-				return oktoquit;
-			}
-		});
-=======
 					oktoquit = SemGenGUI.quit();
 				} catch (HeadlessException e) {
 					e.printStackTrace();
@@ -69,7 +32,6 @@ public class OSXAdapter implements InvocationHandler {
 			}
 		});
 		
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	}
 
 	// Pass this method an Object and Method equipped to display application
@@ -104,12 +66,8 @@ public class OSXAdapter implements InvocationHandler {
 			setHandler(new OSXAdapter("handlePreferences", target, prefsHandler));
 		}
 		// If we're setting a handler, enable the Preferences menu item by
-<<<<<<< HEAD
-		// calling com.apple.eawt.Application reflectively
-=======
 		// calling
 		// com.apple.eawt.Application reflectively
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		try {
 			Method enablePrefsMethod = macOSXApplication.getClass().getDeclaredMethod("setEnabledPreferencesMenu", new Class[] { boolean.class });
 			enablePrefsMethod.invoke(macOSXApplication,
@@ -152,20 +110,12 @@ public class OSXAdapter implements InvocationHandler {
 	// as an ApplicationListener
 	public static void setHandler(OSXAdapter adapter) {
 		try {
-<<<<<<< HEAD
-			Class<?> applicationClass = Class.forName("com.apple.eawt.Application");
-=======
 			Class applicationClass = Class.forName("com.apple.eawt.Application");
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 			if (macOSXApplication == null) {
 				macOSXApplication = applicationClass.getConstructor(
 						(Class[]) null).newInstance((Object[]) null);
 			}
-<<<<<<< HEAD
-			Class<?> applicationListenerClass = Class.forName("com.apple.eawt.ApplicationListener");
-=======
 			Class applicationListenerClass = Class.forName("com.apple.eawt.ApplicationListener");
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 			Method addListenerMethod = applicationClass.getDeclaredMethod("addApplicationListener",
 					new Class[] { applicationListenerClass });
 			// Create a proxy object around this handler that can be

@@ -21,10 +21,7 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
-<<<<<<< HEAD
-=======
 import com.hp.hpl.jena.rdf.model.Literal;
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.NodeIterator;
 import com.hp.hpl.jena.rdf.model.Property;
@@ -681,12 +678,8 @@ public class CellMLreader {
 						Resource sourceres = (Resource) sourceit.next();
 						Resource physentres = sourceres.getPropertyResourceValue(CellMLbioRDFblock.hasphysicalentityreference);
 						PhysicalModelComponent sourcepmc = getPMCfromRDFresourceAndAnnotate(physentres);
-<<<<<<< HEAD
-						process.addSource((PhysicalEntity) sourcepmc);
-=======
 						Literal multiplier = sourceres.getProperty(CellMLbioRDFblock.hasmultiplier).getObject().asLiteral();
 						process.addSource((PhysicalEntity) sourcepmc, multiplier.getDouble());
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 					}
 					// Read in the sink participants
 					NodeIterator sinkit = rdfblock.rdf.listObjectsOfProperty(propertyofres, CellMLbioRDFblock.hassinkparticipant);
@@ -694,13 +687,8 @@ public class CellMLreader {
 						Resource sinkres = (Resource) sinkit.next();
 						Resource physentres = sinkres.getPropertyResourceValue(CellMLbioRDFblock.hasphysicalentityreference);
 						PhysicalModelComponent sinkpmc = getPMCfromRDFresourceAndAnnotate(physentres);
-<<<<<<< HEAD
-				
-						process.addSink((PhysicalEntity) sinkpmc);
-=======
 						Literal multiplier = sinkres.getProperty(CellMLbioRDFblock.hasmultiplier).getObject().asLiteral();
 						process.addSink((PhysicalEntity) sinkpmc, multiplier.getDouble());
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 					}
 					// Read in the mediator participants
 					NodeIterator mediatorit = rdfblock.rdf.listObjectsOfProperty(propertyofres, CellMLbioRDFblock.hasmediatorparticipant);
@@ -708,12 +696,8 @@ public class CellMLreader {
 						Resource mediatorres = (Resource) mediatorit.next();
 						Resource physentres = mediatorres.getPropertyResourceValue(CellMLbioRDFblock.hasphysicalentityreference);
 						PhysicalModelComponent mediatorpmc = getPMCfromRDFresourceAndAnnotate(physentres);
-<<<<<<< HEAD
-						process.addMediator((PhysicalEntity) mediatorpmc);
-=======
 						Literal multiplier = mediatorres.getProperty(CellMLbioRDFblock.hasmultiplier).getObject().asLiteral();
 						process.addMediator((PhysicalEntity) mediatorpmc, multiplier.getDouble());
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 					}
 				}
 			}

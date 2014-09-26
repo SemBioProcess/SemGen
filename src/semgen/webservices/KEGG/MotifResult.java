@@ -8,16 +8,6 @@
 package semgen.webservices.KEGG;
 
 public class MotifResult  implements java.io.Serializable {
-<<<<<<< HEAD
-
-	private static final long serialVersionUID = 1L;
-	private String motif_id;
-    private String definition;
-    private String genes_id;
-    private int start_position;
-    private int end_position;
-    private float score;
-=======
     private java.lang.String motif_id;
 
     private java.lang.String definition;
@@ -30,22 +20,15 @@ public class MotifResult  implements java.io.Serializable {
 
     private float score;
 
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
     private double evalue;
 
     public MotifResult() {
     }
 
     public MotifResult(
-<<<<<<< HEAD
-           String motif_id,
-           String definition,
-           String genes_id,
-=======
            java.lang.String motif_id,
            java.lang.String definition,
            java.lang.String genes_id,
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
            int start_position,
            int end_position,
            float score,
@@ -65,11 +48,7 @@ public class MotifResult  implements java.io.Serializable {
      * 
      * @return motif_id
      */
-<<<<<<< HEAD
-    public String getMotif_id() {
-=======
     public java.lang.String getMotif_id() {
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
         return motif_id;
     }
 
@@ -79,11 +58,7 @@ public class MotifResult  implements java.io.Serializable {
      * 
      * @param motif_id
      */
-<<<<<<< HEAD
-    public void setMotif_id(String motif_id) {
-=======
     public void setMotif_id(java.lang.String motif_id) {
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
         this.motif_id = motif_id;
     }
 
@@ -93,11 +68,7 @@ public class MotifResult  implements java.io.Serializable {
      * 
      * @return definition
      */
-<<<<<<< HEAD
-    public String getDefinition() {
-=======
     public java.lang.String getDefinition() {
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
         return definition;
     }
 
@@ -107,11 +78,7 @@ public class MotifResult  implements java.io.Serializable {
      * 
      * @param definition
      */
-<<<<<<< HEAD
-    public void setDefinition(String definition) {
-=======
     public void setDefinition(java.lang.String definition) {
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
         this.definition = definition;
     }
 
@@ -121,11 +88,7 @@ public class MotifResult  implements java.io.Serializable {
      * 
      * @return genes_id
      */
-<<<<<<< HEAD
-    public String getGenes_id() {
-=======
     public java.lang.String getGenes_id() {
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
         return genes_id;
     }
 
@@ -135,11 +98,7 @@ public class MotifResult  implements java.io.Serializable {
      * 
      * @param genes_id
      */
-<<<<<<< HEAD
-    public void setGenes_id(String genes_id) {
-=======
     public void setGenes_id(java.lang.String genes_id) {
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
         this.genes_id = genes_id;
     }
 
@@ -227,10 +186,7 @@ public class MotifResult  implements java.io.Serializable {
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof MotifResult)) return false;
         MotifResult other = (MotifResult) obj;
-<<<<<<< HEAD
-=======
         if (obj == null) return false;
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
         if (this == obj) return true;
         if (__equalsCalc != null) {
             return (__equalsCalc == obj);
@@ -340,12 +296,8 @@ public class MotifResult  implements java.io.Serializable {
      * Get Custom Serializer
      */
     public static org.apache.axis.encoding.Serializer getSerializer(
-<<<<<<< HEAD
-           Class<?> _javaType,  
-=======
            java.lang.String mechType, 
            java.lang.Class _javaType,  
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
            javax.xml.namespace.QName _xmlType) {
         return 
           new  org.apache.axis.encoding.ser.BeanSerializer(
@@ -356,12 +308,8 @@ public class MotifResult  implements java.io.Serializable {
      * Get Custom Deserializer
      */
     public static org.apache.axis.encoding.Deserializer getDeserializer(
-<<<<<<< HEAD
-           Class<?> _javaType,  
-=======
            java.lang.String mechType, 
            java.lang.Class _javaType,  
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
            javax.xml.namespace.QName _xmlType) {
         return 
           new  org.apache.axis.encoding.ser.BeanDeserializer(
