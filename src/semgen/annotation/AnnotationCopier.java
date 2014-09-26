@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-<<<<<<< HEAD
 import javax.swing.JOptionPane;
 
 import org.semanticweb.owlapi.model.OWLException;
@@ -15,20 +14,6 @@ import semgen.resource.SemGenTask;
 import semgen.resource.file.LoadSemSimModel;
 import semgen.resource.file.SemGenOpenFileChooser;
 import semgen.resource.uicomponents.ProgressBar;
-=======
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.SwingWorker;
-
-import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLClass;
-import org.semanticweb.owlapi.model.OWLClassExpression;
-import org.semanticweb.owlapi.model.OWLException;
-import org.semanticweb.owlapi.model.OWLOntology;
-
-import semgen.ProgressFrame;
-import semgen.SemGenGUI;
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 import semsim.SemSimConstants;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.Annotation;
@@ -36,16 +21,11 @@ import semsim.model.annotation.ReferenceOntologyAnnotation;
 import semsim.model.annotation.StructuralRelation;
 import semsim.model.computational.DataStructure;
 import semsim.model.computational.MappableVariable;
-<<<<<<< HEAD
-=======
-import semsim.model.physical.CustomPhysicalProcess;
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 import semsim.model.physical.MediatorParticipant;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.CompositePhysicalEntity;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
-<<<<<<< HEAD
 import semsim.model.physical.SinkParticipant;
 import semsim.model.physical.SourceParticipant;
 import semsim.model.physical.Submodel;
@@ -54,51 +34,18 @@ public class AnnotationCopier {
 	private SemSimModel sourcemod;
 
 	public AnnotationCopier() throws OWLException, CloneNotSupportedException {
+
 		CopierTask task = new CopierTask();
 		task.execute();
 	}
 	
-	public static Set<MappableVariable> copyAllAnnotationsToMappedVariables(MappableVariable ds){
-=======
-import semsim.model.physical.ReferencePhysicalProcess;
-import semsim.model.physical.SinkParticipant;
-import semsim.model.physical.SourceParticipant;
-import semsim.model.physical.Submodel;
-import semsim.reading.SemSimOWLreader;
-
-public class AnnotationCopier {
-
-	private Annotator targetann;
-	private SemSimModel sourcemod;
-
-	public AnnotationCopier(Annotator targetann) throws OWLException, CloneNotSupportedException {
-		this.targetann = targetann;
-		int choice = SemGenGUI.showSemGenFileChooser(SemGenGUI.currentdirectory, new String[] { "owl","cellml", "xml" }, "Select SemSim model containing annotations",
-				0, false);
-		if(choice==JFileChooser.APPROVE_OPTION){
-			File file = SemGenGUI.fc.getSelectedFile();
-			CopierTask task = new CopierTask(file);
-			task.execute();
-			SemGenGUI.progframe = new ProgressFrame("Loading model...",true, task);
-		}
-	}
-	
-//	// Constructor to copy one composite annotation from a mappablevariable to another
-//	public AnnotationCopier(MappableVariable ds, SemSimModel targetmod){
-//		this.targetmod = targetmod;
-//	}
-	
-	public static Set<MappableVariable> copyAllAnnotationsToMappedVariables(Annotator ann, MappableVariable ds){
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
+	public static Set<MappableVariable> copyAllAnnotationsToMappedVariables(AnnotatorTab ann, MappableVariable ds){
 		Set<MappableVariable> allmappedvars = new HashSet<MappableVariable>();
 		allmappedvars.addAll(getAllMappedVariables(ds, ds, new HashSet<MappableVariable>()));
 		for(MappableVariable otherds : allmappedvars){
 			System.out.println("Copying to " + otherds.getName());
 			if(!otherds.isImportedViaSubmodel()){
-<<<<<<< HEAD
-=======
 				ann.setModelSaved(false);
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 				copyFreeTextDescription(ds, otherds);
 				copySingularAnnotations(ds, otherds);
 				copyCompositeAnnotation(ann.semsimmodel, ann.semsimmodel, ds, otherds);
@@ -107,21 +54,22 @@ public class AnnotationCopier {
 		return allmappedvars;
 	}
 	
-<<<<<<< HEAD
-=======
 	// Copy all annotations
-	class CopierTask extends SwingWorker<Void,Void>{
-		public File sourcefile;
-		public CopierTask(File file){
-			this.sourcefile = file;
+	class CopierTask extends SemGenTask {
+		public File sourcefile = null;
+		
+		public CopierTask(){//new String[] { "owl","cellml", "xml" },
+			SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select SemSim model containing annotations");
+			sourcefile = sgc.getSelectedFile();
 		}
+		
 		@Override
 		protected Void doInBackground() throws Exception {
-			
-			sourcemod = SemGenGUI.loadSemSimModelFromFile(sourcefile, true);
+			if (sourcefile==null) endTask();
+			sourcemod = LoadSemSimModel.loadSemSimModelFromFile(sourcefile);
 			
 			if (sourcemod.getNumErrors() == 0) {
-				SemGenGUI.progframe.updateMessage("Copying...");
+				progframe = new ProgressBar("Copying...", true);
 				SemSimModel targetmod = targetann.semsimmodel;
 				boolean changemadetodatastructures = false;
 				for(DataStructure ds : targetmod.getDataStructures()){
@@ -145,20 +93,14 @@ public class AnnotationCopier {
 				for(String err : sourcemod.getErrors()){
 					System.err.println(err);
 				}
-				JOptionPane.showMessageDialog(SemGenGUI.desktop, "There were errors associated with the selected model. Not copying.");
+				JOptionPane.showMessageDialog(null, "There were errors associated with the selected model. Not copying.");
 				
 			}
 			return null;
 		}
-		
-		@Override
-		public void done(){
-			SemGenGUI.progframe.setVisible(false);
-		}
 	}
 	
 	
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	private static PhysicalModelComponent copyPhysicalModelComponent(SemSimModel targetmod, PhysicalModelComponent pmc) throws CloneNotSupportedException{
 		PhysicalModelComponent pmccopy = null;
 		
@@ -183,17 +125,6 @@ public class AnnotationCopier {
 			PhysicalProcess srcprocess = (PhysicalProcess)pmc;
 			for(SourceParticipant source : srcprocess.getSources()){
 				PhysicalEntity sourceentcopy = (PhysicalEntity) copyPhysicalModelComponent(targetmod, source.getPhysicalEntity());
-<<<<<<< HEAD
-				((PhysicalProcess) pmccopy).addSource(sourceentcopy);
-			}
-			for(SinkParticipant sink : srcprocess.getSinks()){
-				PhysicalEntity sinkentcopy = (PhysicalEntity) copyPhysicalModelComponent(targetmod, sink.getPhysicalEntity());
-				((PhysicalProcess) pmccopy).addSink(sinkentcopy);
-			}
-			for(MediatorParticipant med : srcprocess.getMediators()){
-				PhysicalEntity medentcopy = (PhysicalEntity) copyPhysicalModelComponent(targetmod, med.getPhysicalEntity());
-				((PhysicalProcess) pmccopy).addMediator(medentcopy);
-=======
 				((PhysicalProcess) pmccopy).addSource(sourceentcopy, source.getMultiplier());
 			}
 			for(SinkParticipant sink : srcprocess.getSinks()){
@@ -203,17 +134,13 @@ public class AnnotationCopier {
 			for(MediatorParticipant med : srcprocess.getMediators()){
 				PhysicalEntity medentcopy = (PhysicalEntity) copyPhysicalModelComponent(targetmod, med.getPhysicalEntity());
 				((PhysicalProcess) pmccopy).addMediator(medentcopy, med.getMultiplier());
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 			}
 		}
 		return pmccopy;
 	}
 	
-<<<<<<< HEAD
-=======
 	
 	
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	private static PhysicalModelComponent copySingularPhysicalModelComponent(SemSimModel targetmod, PhysicalModelComponent pmc) throws CloneNotSupportedException{
 		PhysicalModelComponent pmccopy = null;
 		
@@ -288,10 +215,7 @@ public class AnnotationCopier {
 	}
 	
 	public static void copyCompositeAnnotation(SemSimModel targetmod, SemSimModel sourcemod, DataStructure srcds, DataStructure ds) {
-<<<<<<< HEAD
-=======
 		
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		if(srcds.getPhysicalProperty().hasRefersToAnnotation()){
 			ds.getPhysicalProperty().removeAllReferenceAnnotations();
 			ReferenceOntologyAnnotation roa = srcds.getPhysicalProperty().getFirstRefersToReferenceOntologyAnnotation();
@@ -300,19 +224,13 @@ public class AnnotationCopier {
 		PhysicalModelComponent srcpropof = srcds.getPhysicalProperty().getPhysicalPropertyOf();
 		
 		// If we're just copying a composite annotation within the same model...
-<<<<<<< HEAD
 		if(targetmod==sourcemod) { 
 			ds.getPhysicalProperty().setPhysicalPropertyOf(srcpropof);
 		}
-=======
-		if(targetmod==sourcemod) ds.getPhysicalProperty().setPhysicalPropertyOf(srcpropof);
-
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		// otherwise...
 		else{
 			try{
 				// If there is a property_of specified
-<<<<<<< HEAD
 				if(srcpropof!=null) {
 					ds.getPhysicalProperty().setPhysicalPropertyOf(copyPhysicalModelComponent(targetmod, srcpropof));
 				}
@@ -320,13 +238,6 @@ public class AnnotationCopier {
 				else {
 					ds.getPhysicalProperty().setPhysicalPropertyOf(null);
 				}
-=======
-				if(srcpropof!=null)
-					ds.getPhysicalProperty().setPhysicalPropertyOf(copyPhysicalModelComponent(targetmod, srcpropof));
-				
-				// otherwise there is no specified target for the physical property
-				else ds.getPhysicalProperty().setPhysicalPropertyOf(null);
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 			} catch (CloneNotSupportedException e) {
 				e.printStackTrace();
 			}
@@ -334,10 +245,6 @@ public class AnnotationCopier {
 	}
 	
 	public static Set<MappableVariable> getAllMappedVariables(MappableVariable rootds, MappableVariable ds, Set<MappableVariable> runningset){
-<<<<<<< HEAD
-=======
-		
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		Set<MappableVariable> allmappedvars  = new HashSet<MappableVariable>();
 		allmappedvars.addAll(ds.getMappedTo());
 		allmappedvars.addAll(ds.getMappedFrom());
@@ -355,49 +262,5 @@ public class AnnotationCopier {
 	    return returnset;
 	}
 	
-<<<<<<< HEAD
-	// Copy all annotations
-		class CopierTask extends SemGenTask {
-			public File sourcefile = null;
-			
-			public CopierTask(){//new String[] { "owl","cellml", "xml" },
-				SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select SemSim model containing annotations");
-				sourcefile = sgc.getSelectedFile();
-			}
-			
-			@Override
-			protected Void doInBackground() throws Exception {
-				if (sourcefile==null) endTask();
-				sourcemod = LoadSemSimModel.loadSemSimModelFromFile(sourcefile);
-				
-				if (sourcemod.getNumErrors() == 0) {
-					progframe = new ProgressBar("Copying...", true);
-					SemSimModel targetmod = targetann.semsimmodel;
-					boolean changemadetodatastructures = false;
-					for(DataStructure ds : targetmod.getDataStructures()){
-						if(sourcemod.containsDataStructure(ds.getName())){
-							changemadetodatastructures = true;
-							DataStructure srcds = sourcemod.getDataStructure(ds.getName());
-							
-							copyFreeTextDescription(srcds, ds);
-							copySingularAnnotations(srcds, ds);
-							copyCompositeAnnotation(targetmod, sourcemod, srcds, ds);
-							
-						} // otherwise no matching data structure found in source model
-					} // end of data structure loop
-					boolean changemadetosubmodels = copySubmodels(targetmod);
-				}
-				else{
-					for(String err : sourcemod.getErrors()){
-						System.err.println(err);
-					}
-					JOptionPane.showMessageDialog(null, "There were errors associated with the selected model. Not copying.");
-					
-				}
-				return null;
-			}
-		}
-=======
 	
->>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 }

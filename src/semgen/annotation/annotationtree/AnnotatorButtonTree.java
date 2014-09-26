@@ -47,6 +47,7 @@ import semsim.writing.CaseInsensitiveComparator;
 public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 	
 	private static final long serialVersionUID = 7868541704010347520L;
+	public Set<DataStructure> looseds;
 	public DefaultMutableTreeNode focusnode;
 	public Map<AnnotationObjectButton, DefaultMutableTreeNode> nodebuttonmap = new HashMap<AnnotationObjectButton, DefaultMutableTreeNode>();
 	private SubModelAnnotations sma;
@@ -69,7 +70,10 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 		setLargeModel(true);
 		addTreeSelectionListener(this);
 		
-		for(String subname : getSortedNamesOfSemSimComponents(semsimmodel.getSubmodels())){
+		looseds = new HashSet<DataStructure>();
+		looseds.addAll(semsimmodel.getDataStructures());
+		
+		for(String subname : getSortedNamesOfSemSimComponents(ann.semsimmodel.getSubmodels())){
     		Submodel sub = semsimmodel.getSubmodel(subname);
     		traverseSubmodelBranch(root, sub);
 		}
@@ -95,7 +99,7 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 		setSelectionPath(new TreePath(((DefaultMutableTreeNode)firstChild).getPath()));
 	}
 	
-	private void traverseSubmodelBranch(DefaultMutableTreeNode curroot){
+	private void traverseSubmodelBranch(DefaultMutableTreeNode curroot, Submodel sub){
 		DefaultMutableTreeNode submodelnode = new DefaultMutableTreeNode(submodelbuttontable.get(sub.getName()));
 		
 		if(SemGenGUI.annotateitemshowimports.isSelected() || submodelbuttontable.get(sub.getName()).getSubmodelButtonVisibility()){
@@ -134,22 +138,6 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 	        	((DefaultTreeModel) tree.getModel()).nodeChanged(node);
 	        }
 	    });
-	}
-	
-	public void valueChanged(TreeSelectionEvent arg0) {
-	    DefaultMutableTreeNode node = (DefaultMutableTreeNode) this.getLastSelectedPathComponent();
-
-	    if (node == null) return;//Nothing is selected. 
-
-	    Object nodeObj = node.getUserObject();
-	    
-	    if(nodeObj instanceof AnnotationObjectButton){
-	    	try {
-				annotationObjectAction((AnnotationObjectButton)nodeObj);
-			} catch (BadLocationException|IOException e) {
-				e.printStackTrace();
-			}
-	    }
 	}
 	
 	class MyRenderer extends DefaultTreeCellRenderer {
@@ -199,5 +187,19 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 		return ar;
 	}
 	
+	public void valueChanged(TreeSelectionEvent arg0) {
+	    DefaultMutableTreeNode node = (DefaultMutableTreeNode) this.getLastSelectedPathComponent();
 
+	    if (node == null) return;//Nothing is selected. 
+
+	    Object nodeObj = node.getUserObject();
+	    
+	    if(nodeObj instanceof AnnotationObjectButton){
+	    	try {
+				annotationObjectAction((AnnotationObjectButton)nodeObj);
+			} catch (BadLocationException|IOException e) {
+				e.printStackTrace();
+			}
+	    }
+	}
 }

@@ -1,5 +1,7 @@
 package semgen.annotation.workbench;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +14,7 @@ import semsim.model.physical.PhysicalProperty;
 import semsim.model.physical.ReferencePhysicalEntity;
 import semsim.model.physical.ReferencePhysicalProcess;
 
-public class ReferenceTermToolbox {
+public class ReferenceTermToolbox implements PropertyChangeListener {
 	private HashMap<String, ReferencePhysicalEntity> rpeset = new HashMap<String, ReferencePhysicalEntity>();
 	private HashMap<String, ReferencePhysicalProcess> rppset = new HashMap<String, ReferencePhysicalProcess>();
 	private HashMap<String, CompositePhysicalEntity> cpeset = new HashMap<String, CompositePhysicalEntity>();
@@ -93,39 +95,22 @@ public class ReferenceTermToolbox {
 		return list;
 	}
 	
-	public void removeReferenceTerm() {
+	public void removeTermRequest() {
 		
 	}
 
 	public void addTermRequest() {
-		AddReferenceClassDialog dialog = new AddReferenceClassDialog(SemSimConstants.ALL_SEARCHABLE_ONTOLOGIES, 
-				new Object[]{"Add as entity","Add as process","Close"});
-		dialog.packAndSetModality();
-		if (!dialog.getCollectedEntities().isEmpty()) {
-			for (ReferencePhysicalEntity rpe : dialog.getCollectedEntities()) {
-				addRefComponent(rpe);
-			}
-		}
-		if (!dialog.getCollectedProcesses().isEmpty()) {
-			for (ReferencePhysicalEntity rpe : dialog.getCollectedEntities()) {
-				addRefComponent(rpe);
-			}
-		}
+		new AddReferenceClassDialog(SemSimConstants.ALL_SEARCHABLE_ONTOLOGIES, 
+				new Object[]{"Add as entity","Add as process","Close"}).packAndSetModality();
+	}
+	
+	public void propertyChange(PropertyChangeEvent arg0) {
+		
 	}
 
 	public void runTextMiner() {
 		try {
-			TextMinerDialog dialog = new TextMinerDialog();
-			if (!dialog.getCollectedEntities().isEmpty()) {
-				for (ReferencePhysicalEntity rpe : dialog.getCollectedEntities()) {
-					addRefComponent(rpe);
-				}
-			}
-			if (!dialog.getCollectedProcesses().isEmpty()) {
-				for (ReferencePhysicalEntity rpe : dialog.getCollectedEntities()) {
-					addRefComponent(rpe);
-				}
-			}
+			new TextMinerDialog();
 		} 
 		catch (FileNotFoundException e1) {
 			e1.printStackTrace();

@@ -18,9 +18,11 @@ import semsim.model.physical.ReferencePhysicalEntity;
 public class CompositeAnnotationComponentSearchDialog extends AddReferenceClassDialog{
 
 	private static final long serialVersionUID = -6053255066931420852L;
+	public SemSimComponentAnnotationPanel pmcPanel;
 	
-	public CompositeAnnotationComponentSearchDialog(String[] ontList, Object[] options){
+	public CompositeAnnotationComponentSearchDialog(SemSimComponentAnnotationPanel pmcpanel, String[] ontList, Object[] options){
 		super(ontList, options);
+		pmcPanel = pmcpanel;
 		utilarea.setText("Current annotation: " + pmcPanel.combobox.getSelectedItem());
 		refclasspanel.ontologychooser.addActionListener(refclasspanel);
 		packAndSetModality();
