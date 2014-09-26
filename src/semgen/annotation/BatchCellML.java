@@ -1,8 +1,12 @@
 package semgen.annotation;
 
+<<<<<<< HEAD
+import java.io.File;
+=======
 
 import java.io.File;
 import java.io.FileNotFoundException;
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 import java.io.IOException;
 import java.util.Iterator;
 
@@ -14,6 +18,18 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
+<<<<<<< HEAD
+
+import semgen.SemGenGUI;
+import semgen.annotation.dialog.textminer.TextMinerDialog;
+import semgen.resource.file.SemGenOpenFileChooser;
+import semsim.SemSimConstants;
+import semsim.model.SemSimModel;
+import semsim.model.annotation.Annotation;
+import semsim.reading.ModelClassifier;
+
+public class BatchCellML{
+=======
 import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
 import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
@@ -30,12 +46,30 @@ import semsim.reading.ModelClassifier;
 public class BatchCellML{
 	public Annotator ann;
 	
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	public Namespace docns = Namespace.getNamespace("http://cellml.org/tmp-documentation");
 	public Namespace cellmlns = Namespace.getNamespace("http://www.cellml.org/cellml/1.0#");
 	public Namespace cmetans = Namespace.getNamespace("cmeta", "http://www.cellml.org/metadata/1.0#");
 	public Namespace rdfns = Namespace.getNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
 	public Namespace bqsns = Namespace.getNamespace("bqs", "http://www.cellml.org/bqs/1.0#");
 	public int numidsfromrdf = 0;
+<<<<<<< HEAD
+	SemSimModel semsimmodel;
+	
+	public BatchCellML(SemSimModel ssm) throws Exception{
+		semsimmodel = ssm;
+		JFileChooser fc = new JFileChooser();
+		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		fc.setCurrentDirectory(SemGenOpenFileChooser.currentdirectory);
+		fc.setDialogTitle("Select directory containing cellml models");
+		int returnVal = fc.showOpenDialog(null);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			File file = new File(fc.getSelectedFile().getAbsolutePath());
+			SemGenOpenFileChooser.currentdirectory = fc.getCurrentDirectory();
+			if (file != null) {
+				processmodels(file);
+				JOptionPane.showMessageDialog(null, "Finished processing CellML models");
+=======
 	
 	public BatchCellML() throws Exception{
 		JFileChooser fc = new JFileChooser();
@@ -49,15 +83,20 @@ public class BatchCellML{
 			if (file != null) {
 				processmodels(file);
 				JOptionPane.showMessageDialog(SemGenGUI.desktop, "Finished processing CellML models");
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 			}
 		}
 	}
 	
+<<<<<<< HEAD
+	public void processmodels(File file) throws Exception{
+=======
 	
 	public void processmodels(File file) throws Exception{
 //		File bridgefile = new File("cfg/libcellml_java_bridge.0.so");
 //		System.load(bridgefile.getAbsolutePath());
 	//	System.load("~/_UW/BHI/SEMGEN/APIs/");
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		File[] cellmlfiles = file.listFiles();
 		String lastpubmedid = "";
 		String lastabstract = "";
@@ -70,10 +109,15 @@ public class BatchCellML{
 				
 				try {
 					// Make this into a task
+<<<<<<< HEAD
+					SemGenGUI.AnnotateAction(cellmlfile, true);
+					TextMinerDialog tmd = new TextMinerDialog();
+=======
 //					SemGenGUI.NewAnnotatorTask task = new SemGenGUI.NewAnnotatorTask(cellmlfile, true);
 //					task.execute();
 					ann = SemGenGUI.AnnotateAction(cellmlfile, true);
 					TextMinerDialog tmd = new TextMinerDialog(ann);
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 					
 					tmd.pubmedid = getModelIDAndPubMedIdFromCellMLModel(cellmlfile);
 					// If we don't have a proper pubmed ID
@@ -91,7 +135,11 @@ public class BatchCellML{
 					// If we DO have a proper pubmed ID
 					else{
 						Annotation dpa = new Annotation(SemSimConstants.REFERENCE_PUBLICATION_PUBMED_ID_RELATION, tmd.pubmedid);
+<<<<<<< HEAD
+						semsimmodel.addAnnotation(dpa);
+=======
 						ann.semsimmodel.addAnnotation(dpa);
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 						// If ID is same as last model, use it
 						if(tmd.pubmedid.equals(lastpubmedid)){
 							tmd.inputtextarea.setText(lastabstract);
@@ -102,7 +150,11 @@ public class BatchCellML{
 						
 						// If there's a pubmed id AND abstract text
 						if(!tmd.inputtextarea.getText().equals("")){
+<<<<<<< HEAD
+							semsimmodel.addAnnotation(new Annotation(SemSimConstants.REFERENCE_PUBLICATION_ABSTRACT_TEXT_RELATION, tmd.inputtextarea.getText()));
+=======
 							ann.semsimmodel.addAnnotation(new Annotation(SemSimConstants.REFERENCE_PUBLICATION_ABSTRACT_TEXT_RELATION, tmd.inputtextarea.getText()));
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 						}
 						// If there's a pubmed id but no abstract, do a scrape of the <para> tags in the cellml file
 						else{
@@ -117,6 +169,11 @@ public class BatchCellML{
 						}
 					}
 					
+<<<<<<< HEAD
+					SemGenGUI.SaveAction(ann, ModelClassifier.CELLML_MODEL);
+					SemGenGUI.closeTabAction(ann);
+				} catch (IOException | JDOMException e) {
+=======
 					tmd.setVisible(false);
 					SemGenGUI.SaveAction(ann, ModelClassifier.CELLML_MODEL);
 					SemGenGUI.closeTabAction(ann);
@@ -125,11 +182,15 @@ public class BatchCellML{
 				} catch (IOException e) {
 					e.printStackTrace();
 				} catch (JDOMException e) {
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 					e.printStackTrace();
 				}
 			}
 		}
+<<<<<<< HEAD
+=======
 		System.out.println(numidsfromrdf + " models had pubmed ids in their rdf tags");
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	}
 	
 	public String getModelIDAndPubMedIdFromCellMLModel(File cellmlfile){
@@ -143,9 +204,15 @@ public class BatchCellML{
 				String name = doc.getRootElement().getAttributeValue("name");
 				String id = doc.getRootElement().getAttribute("id",cmetans).getValue();
 				System.out.println("ID: " + id);
+<<<<<<< HEAD
+				System.out.println(manager.toString());
+				semsimmodel.addAnnotation(new Annotation(SemSimConstants.MODEL_ID_RELATION, id));
+				semsimmodel.addAnnotation(new Annotation(SemSimConstants.MODEL_NAME_RELATION, name));
+=======
 				System.out.println(ann.manager.toString());
 				ann.semsimmodel.addAnnotation(new Annotation(SemSimConstants.MODEL_ID_RELATION, id));
 				ann.semsimmodel.addAnnotation(new Annotation(SemSimConstants.MODEL_NAME_RELATION, name));
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 				
 				// Try to get pubmed ID from RDF tags
 				if(doc.getRootElement().getChild("RDF",rdfns).getChildren("Description", rdfns)!=null){
@@ -170,7 +237,10 @@ public class BatchCellML{
 					}
 				}
 				
+<<<<<<< HEAD
+=======
 				
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 				// Try to get ID from documentation tags if not in RDF
 				if(doc.getRootElement().getChild("documentation",docns)!=null){
 					System.out.println("documentation");
@@ -209,11 +279,17 @@ public class BatchCellML{
 				}
 				// end documentation processing
 			}
+<<<<<<< HEAD
+		} catch (JDOMException | IOException e) {
+			e.printStackTrace();
+		} 
+=======
 		} catch (JDOMException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		System.out.println("pubmed id: " + ab);
 		return ab;
 	}
@@ -237,9 +313,13 @@ public class BatchCellML{
 								Iterator<Element> it = nextsect1.getChildren("para",docns).iterator();
 								System.out.println("paras");
 								while(it.hasNext()){
+<<<<<<< HEAD
+									text = text + " " + it.next().getText();	
+=======
 									
 									text = text + " " + it.next().getText();
 									
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 								}
 							}
 						}
@@ -250,6 +330,8 @@ public class BatchCellML{
 		System.out.println("Scraped text: " + text);
 		return text;
 	}
+<<<<<<< HEAD
+=======
 	
 	
 	
@@ -263,4 +345,5 @@ public class BatchCellML{
 //	public static Model createModel(CellMLBootstrap cb, String modelString){
 //		return cb.createModel(modelString);
 //	}
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 }

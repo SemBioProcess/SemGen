@@ -3,10 +3,15 @@ package semgen.encoding;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+<<<<<<< HEAD
+import java.util.HashSet;
+import java.util.Hashtable;
+=======
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 import java.util.Set;
 
 import org.jdom.Document;
@@ -19,8 +24,11 @@ import org.semanticweb.owlapi.model.OWLException;
 import semgen.SemGenGUI;
 import semsim.SemSimConstants;
 import semsim.model.SemSimModel;
+<<<<<<< HEAD
+=======
 import semsim.model.computational.DataStructure;
 import semsim.model.physical.CompositePhysicalEntity;
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 import semsim.model.physical.CustomPhysicalEntity;
 import semsim.model.physical.CustomPhysicalProcess;
 import semsim.model.physical.PhysicalEntity;
@@ -29,6 +37,13 @@ import semsim.model.physical.PhysicalProperty;
 import semsim.owl.SemSimOWLFactory;
 
 public class ChalkboardCoder {
+<<<<<<< HEAD
+	public static Hashtable<String,CustomPhysicalEntity> nounnamesandphysents;
+	private static int x;
+	public static Set<Element> nouncollection = new HashSet<Element>();
+
+	public static void translate(SemSimModel semsimmodel, File outputfile) throws JDOMException, IOException, OWLException {		
+=======
 
 	public static Set<PhysicalEntity> physicalents;
 	public static Hashtable<String,CustomPhysicalEntity> nounnamesandphysents;
@@ -41,6 +56,7 @@ public class ChalkboardCoder {
 	
 	public static void translate(SemSimModel semsimmodel, File outputfile) throws JDOMException, IOException, OWLException {
 		
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		// Create top of CB xml file
 		Element root = new Element("BioDModel");
 		root.setAttribute("BioDMLversion", "0.02");
@@ -51,6 +67,12 @@ public class ChalkboardCoder {
 		
 		Element nounlist = new Element("nounList");
 		Element verblist = new Element("verbList");
+<<<<<<< HEAD
+		
+		root.addContent(nounlist);
+		root.addContent(verblist);
+
+=======
 		//Element socketlist = new Element("socketList");
 		
 		root.addContent(nounlist);
@@ -58,6 +80,7 @@ public class ChalkboardCoder {
 		//root.addContent(socketlist);
 		
 		nouncollection = new HashSet<Element>();
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		Set<Element> verbcollection = new HashSet<Element>();
 		
 		Set<CustomPhysicalProcess> setofverbobjects = new HashSet<CustomPhysicalProcess>();
@@ -66,6 +89,10 @@ public class ChalkboardCoder {
 		
 		x = 1;
 		
+<<<<<<< HEAD
+		Set<String> allflowrates = SemSimOWLFactory.getAllSubclasses(SemGenGUI.semsimlib.OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00573", false);
+
+=======
 		physicalents = semsimmodel.getPhysicalEntities();
 		Set<String> allflowrates = SemSimOWLFactory.getAllSubclasses(SemGenGUI.OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00573", false);
 		allrateprops = SemSimOWLFactory.getAllSubclasses(SemGenGUI.OPB, SemSimConstants.OPB_NAMESPACE + "OPB00093", false);
@@ -74,6 +101,7 @@ public class ChalkboardCoder {
 		Float count = (float) 1;
 		Float frac;
 		
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		/* For each data structure
 		if has a property that is a flow, get entity-flow physiomap
 		else
@@ -95,7 +123,10 @@ public class ChalkboardCoder {
 		for(PhysicalProperty prop : semsimmodel.getPhysicalProperties()){
 			if(prop.hasRefersToAnnotation()){
 				if(allflowrates.contains(prop.getFirstRefersToReferenceOntologyAnnotation().getReferenceURI().toString())){  // If we have terms annotated against OPB flow rates
+<<<<<<< HEAD
+=======
 					DataStructure datastructure = prop.getAssociatedDataStructure();
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 					PhysicalProcess proc = (PhysicalProcess) prop.getPhysicalPropertyOf();
 					String processname = "Process " + Integer.toString(x);
 					
@@ -140,6 +171,9 @@ public class ChalkboardCoder {
 				}
 			}
 		}
+<<<<<<< HEAD
+				
+=======
 		
 		// Remove redundant physical entity annotations from the role players list
 		// When add inputs and outputs, test to see if the noun added should be
@@ -153,6 +187,7 @@ public class ChalkboardCoder {
 //			nounnamesandcompositeanns.put(nm, ental);
 //		}
 		
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		// Set the input/output relationships in the XML document
 		for(CustomPhysicalProcess verb : setofverbobjects){
 			Element verbel = new Element("verb").setAttribute("name",verb.getName());
@@ -177,6 +212,13 @@ public class ChalkboardCoder {
 		xmlOutput.output(doc, new FileWriter(outputfile));
 	}
 	
+<<<<<<< HEAD
+	private static CustomPhysicalEntity collectNounData(PhysicalEntity ent, String verbID){
+		CustomPhysicalEntity noun = null;
+		String compositename = ent.getName();
+		if(!nounnamesandphysents.keySet().contains(compositename)){
+			String nounID = Integer.toString(x);
+=======
 	
 	
 	public static CustomPhysicalEntity collectNounData(PhysicalEntity ent, String verbID){
@@ -185,6 +227,7 @@ public class ChalkboardCoder {
 		String nounID = null; 
 		if(!nounnamesandphysents.keySet().contains(compositename)){
 			nounID = Integer.toString(x);
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 			noun = new CustomPhysicalEntity(ent.getName(), ent.getName());
 			Element nounel = new Element("noun");
 			nounel.setAttribute("ID", nounID);

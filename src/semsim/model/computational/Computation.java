@@ -3,11 +3,19 @@ package semsim.model.computational;
 import java.util.HashSet;
 import java.util.Set;
 
+<<<<<<< HEAD
+import semsim.model.SemSimComponent;
+=======
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 import semsim.model.physical.PhysicalDependency;
 
 /** A Computation represents how the value of a SemSim {@link DataStructure} is determined, computationally. */
 
+<<<<<<< HEAD
+public class Computation extends SemSimComponent{
+=======
 public class Computation extends ComputationalModelComponent{
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 
 	private PhysicalDependency physicalDependency;
 	private Set<DataStructure> outputs = new HashSet<DataStructure>();

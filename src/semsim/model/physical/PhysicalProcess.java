@@ -10,6 +10,18 @@ public class PhysicalProcess extends PhysicalModelComponent{
 	private Set<MediatorParticipant> mediators = new HashSet<MediatorParticipant>();
 	
 	
+<<<<<<< HEAD
+	public void addSource(PhysicalEntity entity){
+		sources.add(new SourceParticipant(entity));
+	}
+	
+	public void addSink(PhysicalEntity entity){
+		sinks.add(new SinkParticipant(entity));
+	}
+	
+	public void addMediator(PhysicalEntity entity){
+		mediators.add(new MediatorParticipant(entity));
+=======
 	public void addSource(PhysicalEntity entity, double cardinality){
 		sources.add(new SourceParticipant(entity, cardinality));
 	}
@@ -20,6 +32,7 @@ public class PhysicalProcess extends PhysicalModelComponent{
 	
 	public void addMediator(PhysicalEntity entity, double cardinality){
 		mediators.add(new MediatorParticipant(entity, cardinality));
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	}
 	
 	public Set<PhysicalEntity> getSourcePhysicalEntities(){

@@ -22,7 +22,10 @@ public class MMLreader {
 
 	public int srcType = -1;
 	protected SemSimModel semsimmodel;
+<<<<<<< HEAD
+=======
 	protected Document doc;
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	public String jsimBuildDir;
 
 	public MMLreader(String jsimBuildDir){
@@ -60,7 +63,11 @@ public class MMLreader {
 	    }
 	    
 		SAXBuilder builder = new SAXBuilder();
+<<<<<<< HEAD
+		Document doc = new Document();
+=======
 		doc = new Document();
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		InputStream is = new ByteArrayInputStream(xmlstring.getBytes("UTF-8"));
 		doc = builder.build(is);
 		
