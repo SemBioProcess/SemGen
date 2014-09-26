@@ -305,7 +305,12 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		
 		// Needed because JSim API uses libSBML native library
 		if(libsbmlfile.exists()){
-			System.load(libsbmlfile.getAbsolutePath());
+			try {
+				System.load(libsbmlfile.getAbsolutePath());
+			}
+			catch (UnsatisfiedLinkError e){
+				JOptionPane.showMessageDialog(this, "Unable to load " + libsbmlfile.getAbsolutePath() + ". JSim may not work properly. Error: {0}" + e.getMessage());
+			}
 		}
 		else 
 			JOptionPane.showMessageDialog(this, "Couldn't open " + libsbmlfile.getAbsolutePath() + " for loading.");
