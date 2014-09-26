@@ -26,7 +26,7 @@ import semsim.model.annotation.ReferenceOntologyAnnotation;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.writing.CaseInsensitiveComparator;
 
-public class AnnotationComponentReplacer extends JDialog implements
+public class AnnotationComponentReplacer extends SemSimComponentSelectorDialog implements
 		PropertyChangeListener {
 
 	private static final long serialVersionUID = 5155214590420468140L;
@@ -57,7 +57,6 @@ public class AnnotationComponentReplacer extends JDialog implements
 		setTitle("Select a term to replace from the top list, then a term to replace it");
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		pack();
-		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 	
@@ -72,7 +71,7 @@ public class AnnotationComponentReplacer extends JDialog implements
 				String newclassuri = (String) refclasspanel.resultsanduris.get(refclasspanel.resultslistright.getSelectedValue());
 				String oldclassuri = (String) oldclsnamesanduris.get(oldclass);
 				
-				for(PhysicalModelComponent pmc : ann.semsimmodel.getPhysicalModelComponents()){
+				for(PhysicalModelComponent pmc : semsimmodel.getPhysicalModelComponents()){
 					for(Annotation anno : pmc.getAnnotations()){
 						if(anno instanceof ReferenceOntologyAnnotation){
 							ReferenceOntologyAnnotation refann = (ReferenceOntologyAnnotation)anno;
@@ -80,7 +79,6 @@ public class AnnotationComponentReplacer extends JDialog implements
 								refann.setValueDescription((String) refclasspanel.resultslistright.getSelectedValue());
 								refann.setReferenceURI(URI.create(newclassuri));
 								refann.setReferenceOntologyAbbreviation(URI.create(newclassuri));
-								ann.setModelSaved(false);
 							}
 						}
 					}
@@ -88,11 +86,8 @@ public class AnnotationComponentReplacer extends JDialog implements
 				
 				JOptionPane.showMessageDialog(this, "Finished replacement");
 				refreshListData();
-				ann.setModelSaved(false);
-				if(ann.focusbutton instanceof CodewordButton) ann.anndialog.compositepanel.refreshUI();
 				optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 			} else if (value.equals("Close")) {
-				setVisible(false);
 				dispose();
 			}
 		}
@@ -100,7 +95,7 @@ public class AnnotationComponentReplacer extends JDialog implements
 	
 	public void refreshListData() {
 		Set<String> refclassnames = new HashSet<String>();
-		for(PhysicalModelComponent pmc : ann.semsimmodel.getPhysicalModelComponents()){
+		for(PhysicalModelComponent pmc : semsimmodel.getPhysicalModelComponents()){
 			if(pmc.hasRefersToAnnotation()){
 				ReferenceOntologyAnnotation ann = pmc.getFirstRefersToReferenceOntologyAnnotation();
 				String label = ann.getValueDescription();

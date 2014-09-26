@@ -12,7 +12,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import semgen.merging.MergerTab;
 import semgen.resource.uicomponents.SemGenTextArea;
 
 public class ConversionFactorDialog extends JDialog implements
@@ -28,7 +27,7 @@ public class ConversionFactorDialog extends JDialog implements
 	public String cdwdAndConversionFactor;
 	public double conversionfactor;
 
-	public ConversionFactorDialog(MergerTab merger, String cdwd2keep, String cdwd2discard,
+	public ConversionFactorDialog(String cdwd2keep, String cdwd2discard,
 			String cdwd2keepunits, String cdwd2discardunits) {
 
 		this.cdwd2keep = cdwd2keep;
@@ -64,7 +63,6 @@ public class ConversionFactorDialog extends JDialog implements
 		setContentPane(optionPane);
 
 		pack();
-		setLocationRelativeTo(merger);
 		setVisible(true);
 	}
 

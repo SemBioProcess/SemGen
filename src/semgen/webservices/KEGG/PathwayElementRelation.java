@@ -8,10 +8,14 @@
 package semgen.webservices.KEGG;
 
 public class PathwayElementRelation  implements java.io.Serializable {
+<<<<<<< HEAD
 
 	private static final long serialVersionUID = 1L;
 
 	private int element_id1;
+=======
+    private int element_id1;
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 
     private int element_id2;
 
@@ -117,6 +121,10 @@ public class PathwayElementRelation  implements java.io.Serializable {
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof PathwayElementRelation)) return false;
         PathwayElementRelation other = (PathwayElementRelation) obj;
+<<<<<<< HEAD
+=======
+        if (obj == null) return false;
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
         if (this == obj) return true;
         if (__equalsCalc != null) {
             return (__equalsCalc == obj);
@@ -206,7 +214,12 @@ public class PathwayElementRelation  implements java.io.Serializable {
      * Get Custom Serializer
      */
     public static org.apache.axis.encoding.Serializer getSerializer(
+<<<<<<< HEAD
            Class<?> _javaType,  
+=======
+           java.lang.String mechType, 
+           java.lang.Class _javaType,  
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
            javax.xml.namespace.QName _xmlType) {
         return 
           new  org.apache.axis.encoding.ser.BeanSerializer(
@@ -217,7 +230,12 @@ public class PathwayElementRelation  implements java.io.Serializable {
      * Get Custom Deserializer
      */
     public static org.apache.axis.encoding.Deserializer getDeserializer(
+<<<<<<< HEAD
            Class<?> _javaType,  
+=======
+           java.lang.String mechType, 
+           java.lang.Class _javaType,  
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
            javax.xml.namespace.QName _xmlType) {
         return 
           new  org.apache.axis.encoding.ser.BeanDeserializer(

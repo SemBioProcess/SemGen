@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
@@ -15,17 +17,16 @@ import javax.swing.JPanel;
 import semgen.resource.SemGenFont;
 import semgen.resource.uicomponents.SemGenScrollPane;
 
-public class SemSimComponentSelectorDialog extends JDialog implements ActionListener {
+public class SemSimComponentSelectorDialog extends JDialog implements ActionListener, PropertyChangeListener {
 
 	private static final long serialVersionUID = -1776906245210358895L;
 	public JPanel panel = new JPanel();
 	private JCheckBox markallbox = new JCheckBox("Mark all/none");
 	public JOptionPane optionPane;
 	protected ArrayList<JCheckBox> compboxes = new ArrayList<JCheckBox>();
-
+	boolean changemade = false;
 	public ArrayList<String> selectableset; 
 	public ArrayList<Integer> preselectedset, sscstodisable;
-	public String ssctoignore;
 	
 	public SemSimComponentSelectorDialog(
 			ArrayList<String> settolist,
@@ -52,6 +53,7 @@ public class SemSimComponentSelectorDialog extends JDialog implements ActionList
 		for (String name : selectableset) {
 			checkbox = new JCheckBox(name);
 			checkbox.setName(name);
+			checkbox.addActionListener(new CheckAction());
 			compboxes.add(checkbox);
 			panel.add(checkbox);
 		}
@@ -65,12 +67,13 @@ public class SemSimComponentSelectorDialog extends JDialog implements ActionList
 		optionPane = new JOptionPane(new SemGenScrollPane(panel), JOptionPane.PLAIN_MESSAGE,
 				JOptionPane.OK_CANCEL_OPTION, null);
 		
+		optionPane.addPropertyChangeListener(this);		
 		// Need an argument to this function for the parent of the addPropertyChangeListener so can use ObjectPropertyEditor function
 		optionPane.setOptions(options);
 		optionPane.setInitialValue(options[0]);
 
 		setContentPane(optionPane);
-
+		changemade = false;
 		setModalityType(ModalityType.APPLICATION_MODAL);  // If put before pack() get null pointer error when hit OK, if here doesn't act modal
 		pack();
 		setVisible(true);
@@ -85,13 +88,35 @@ public class SemSimComponentSelectorDialog extends JDialog implements ActionList
 		}
 	}
 	
-	public ArrayList<Integer> getSelected() {
-		ArrayList<Integer> selected = new ArrayList<Integer>();
+	private void getSelected() {
+		preselectedset = new ArrayList<Integer>();
 		for (JCheckBox checkbox : compboxes) {
 			if (checkbox.isSelected()) {
-				selected.add(compboxes.indexOf(checkbox));
+				preselectedset.add(compboxes.indexOf(checkbox));
 			}
 		}
-		return selected;
+	}
+	
+	public boolean isChanged() {
+		return changemade;
+	}
+	
+	public ArrayList<Integer> getUserSelections() {
+		return preselectedset;
+	}
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent e) {
+		String value = optionPane.getValue().toString();
+		if (value == "OK") {
+			getSelected();
+		}
+		dispose();
+	}
+	
+	class CheckAction implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			changemade = true;		
+		}
 	}
 }

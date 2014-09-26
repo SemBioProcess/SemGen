@@ -1,7 +1,5 @@
 package semgen.annotation.workbench;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +12,7 @@ import semsim.model.physical.PhysicalProperty;
 import semsim.model.physical.ReferencePhysicalEntity;
 import semsim.model.physical.ReferencePhysicalProcess;
 
-public class ReferenceTermToolbox implements PropertyChangeListener {
+public class ReferenceTermToolbox {
 	private HashMap<String, ReferencePhysicalEntity> rpeset = new HashMap<String, ReferencePhysicalEntity>();
 	private HashMap<String, ReferencePhysicalProcess> rppset = new HashMap<String, ReferencePhysicalProcess>();
 	private HashMap<String, CompositePhysicalEntity> cpeset = new HashMap<String, CompositePhysicalEntity>();
@@ -95,22 +93,39 @@ public class ReferenceTermToolbox implements PropertyChangeListener {
 		return list;
 	}
 	
-	public void removeTermRequest() {
+	public void removeReferenceTerm() {
 		
 	}
 
 	public void addTermRequest() {
-		new AddReferenceClassDialog(SemSimConstants.ALL_SEARCHABLE_ONTOLOGIES, 
-				new Object[]{"Add as entity","Add as process","Close"}).packAndSetModality();
-	}
-	
-	public void propertyChange(PropertyChangeEvent arg0) {
-		
+		AddReferenceClassDialog dialog = new AddReferenceClassDialog(SemSimConstants.ALL_SEARCHABLE_ONTOLOGIES, 
+				new Object[]{"Add as entity","Add as process","Close"});
+		dialog.packAndSetModality();
+		if (!dialog.getCollectedEntities().isEmpty()) {
+			for (ReferencePhysicalEntity rpe : dialog.getCollectedEntities()) {
+				addRefComponent(rpe);
+			}
+		}
+		if (!dialog.getCollectedProcesses().isEmpty()) {
+			for (ReferencePhysicalEntity rpe : dialog.getCollectedEntities()) {
+				addRefComponent(rpe);
+			}
+		}
 	}
 
 	public void runTextMiner() {
 		try {
-			new TextMinerDialog();
+			TextMinerDialog dialog = new TextMinerDialog();
+			if (!dialog.getCollectedEntities().isEmpty()) {
+				for (ReferencePhysicalEntity rpe : dialog.getCollectedEntities()) {
+					addRefComponent(rpe);
+				}
+			}
+			if (!dialog.getCollectedProcesses().isEmpty()) {
+				for (ReferencePhysicalEntity rpe : dialog.getCollectedEntities()) {
+					addRefComponent(rpe);
+				}
+			}
 		} 
 		catch (FileNotFoundException e1) {
 			e1.printStackTrace();

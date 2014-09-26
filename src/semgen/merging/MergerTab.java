@@ -65,7 +65,6 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 
 	private static final long serialVersionUID = -1383642730474574843L;
 
-	public File file1, file2;
 	private MergerWorkbench workbench;
 	
 	private int dividerlocation = 350;

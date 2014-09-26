@@ -1,14 +1,12 @@
 package semgen.annotation.dialog;
 
 import semgen.SemGenGUI;
-import semgen.annotation.AnnotatorTab;
 import semgen.resource.SemGenIcon;
 import semgen.resource.uicomponents.SemGenScrollPane;
 import semsim.SemSimConstants;
 import semsim.model.annotation.Annotation;
 
 import java.net.URI;
-import java.util.HashSet;
 import java.util.Set;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -41,8 +39,10 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 	private SemGenScrollPane scrollpane;
 	private JPanel genmodinfo = new JPanel();
 	public JButton addbutton = new JButton("Add annotation");
+	private Set<Annotation> modelanns;
 	
-	public ModelLevelMetadataEditor() {
+	public ModelLevelMetadataEditor(Set<Annotation> anns) {
+		modelanns=anns;
 		setSize(700, 655);
 		setTitle("Edit model-level annotations");
 		setResizable(true);
@@ -56,7 +56,7 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 
 		genmodinfo.setBorder(BorderFactory.createEmptyBorder(0, 12, 24, 24));
 		genmodinfo.setLayout(new BoxLayout(genmodinfo, BoxLayout.Y_AXIS));
-		getModelLevelAnnotations();
+		listModelLevelAnnotations();
 				
 		scrollpane = new SemGenScrollPane(genmodinfo);
 		scrollpane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -74,8 +74,92 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 		setVisible(true);
 	}
 	
-	public class MetadataItem extends JPanel implements MouseListener, ActionListener{
+	// Retrieve the model-level annotations
+	public void listModelLevelAnnotations(){
+		for(Annotation ann : modelanns){
+			if(ann.getRelation()==SemSimConstants.KEY_TERM_RELATION || ann.getRelation()==SemSimConstants.SEMSIM_VERSION_RELATION){
+				String label = null;
+				if(ann.getValueDescription()!=null){
+					label = ann.getValueDescription();
+				}
+				else{
+					label = ann.getValue().toString();
+				}
+				genmodinfo.add(new MetadataItem(ann.getRelation().getName(), label, ann, this, false));
+			}
+			else{
+				String fragment = "?";
+				if(ann.getRelation().getURI().toString().contains("#")) fragment = ann.getRelation().getURI().getFragment();
+				else{
+					fragment = ann.getRelation().getURI().toString();
+					fragment = fragment.substring(fragment.lastIndexOf("/")+1,fragment.length());
+				}
+				if(ann.getValue()!=null){
+					genmodinfo.add(new MetadataItem(fragment, ann.getValue().toString(), ann, this, true));
+				}
+			}
+		}
+		genmodinfo.add(Box.createGlue());
+	}
 
+	public final void propertyChange(PropertyChangeEvent e) {
+		// Set the model-level annotations
+		if (optionPane.getValue().toString() == "Apply") {
+			// Test to make sure all annotations are complete
+			Component[] cmpnts = genmodinfo.getComponents();
+			for(int g=0; g<cmpnts.length; g++){
+				if(cmpnts[g] instanceof MetadataItem){
+					MetadataItem mi = (MetadataItem)cmpnts[g];
+					if(mi.editable){
+						if(mi.ta.getText()==null || mi.ta.getText().equals("")){
+							JOptionPane.showMessageDialog(this, "Please complete or remove all annotations first.", "Error", JOptionPane.ERROR_MESSAGE);
+							optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+							return;
+						}
+					}
+				}
+			}		
+			// Remove all existing model-level annotations
+			modelanns.clear();
+			for(int g=0; g<cmpnts.length; g++){
+				if(cmpnts[g] instanceof MetadataItem){
+					MetadataItem mi = (MetadataItem)cmpnts[g];
+					// This will probably need to be edited so that working with combo boxes functions correctly
+					if(mi.editable){
+						if(mi.cb!=null){
+							modelanns.add(
+								new Annotation(SemSimConstants.getRelationFromURI(URI.create(SemSimConstants.SEMSIM_NAMESPACE + (String)mi.cb.getSelectedItem())), mi.ta.getText()));
+						}
+						else if(mi.ann.getValue() instanceof String){
+							modelanns.add(new Annotation(mi.ann.getRelation(), mi.ta.getText()));
+						}
+					}
+					else{
+						modelanns.add(new Annotation(mi.ann.getRelation(), mi.ann.getValue()));
+					}
+				}
+			}
+		}
+		dispose();
+	}
+	
+	public Set<Annotation> getModelAnnotations() {
+		return modelanns;
+	}
+	
+	public void actionPerformed(ActionEvent arg0) {
+		if(arg0.getSource() == addbutton){
+			MetadataItem mi = new MetadataItem("", null, this, true);
+			genmodinfo.add(mi,0);
+			genmodinfo.validate();
+			genmodinfo.repaint();
+			scrollpane.validate();
+			scrollpane.repaint();
+			scrollpane.scrollToComponent(mi);
+		}
+	}
+	
+	public class MetadataItem extends JPanel implements MouseListener, ActionListener{
 		private static final long serialVersionUID = 3245322304789828616L;
 		public JButton removebutton = new JButton();
 		public ModelLevelMetadataEditor ed;
@@ -168,89 +252,4 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 		public void mouseClicked(MouseEvent arg0) {}
 	}
 	// End of MetadataItem class
-
-	// Retrieve the model-level annotations
-	public Set<Annotation> getModelLevelAnnotations(){
-		for(Annotation ann : semsimmodel.getAnnotations()){
-			if(ann.getRelation()==SemSimConstants.KEY_TERM_RELATION || ann.getRelation()==SemSimConstants.SEMSIM_VERSION_RELATION){
-				String label = null;
-				if(ann.getValueDescription()!=null){
-					label = ann.getValueDescription();
-				}
-				else{
-					label = ann.getValue().toString();
-				}
-				genmodinfo.add(new MetadataItem(ann.getRelation().getName(), label, ann, this, false));
-			}
-			else{
-				String fragment = "?";
-				if(ann.getRelation().getURI().toString().contains("#")) fragment = ann.getRelation().getURI().getFragment();
-				else{
-					fragment = ann.getRelation().getURI().toString();
-					fragment = fragment.substring(fragment.lastIndexOf("/")+1,fragment.length());
-				}
-				if(ann.getValue()!=null){
-					genmodinfo.add(new MetadataItem(fragment, ann.getValue().toString(), ann, this, true));
-				}
-			}
-		}
-		genmodinfo.add(Box.createGlue());
-		return semsimmodel.getAnnotations();
-	}
-
-	
-	public final void propertyChange(PropertyChangeEvent e) {
-		// Set the model-level annotations
-		if (optionPane.getValue().toString() == "Apply") {
-			// Test to make sure all annotations are complete
-			Component[] cmpnts = genmodinfo.getComponents();
-			for(int g=0; g<cmpnts.length; g++){
-				if(cmpnts[g] instanceof MetadataItem){
-					MetadataItem mi = (MetadataItem)cmpnts[g];
-					if(mi.editable){
-						if(mi.ta.getText()==null || mi.ta.getText().equals("")){
-							JOptionPane.showMessageDialog(this, "Please complete or remove all annotations first.", "Error", JOptionPane.ERROR_MESSAGE);
-							optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-							return;
-						}
-					}
-				}
-			}
-			
-			// Remove all existing model-level annotations
-			semsimmodel.setAnnotations(new HashSet<Annotation>());
-			for(int g=0; g<cmpnts.length; g++){
-				if(cmpnts[g] instanceof MetadataItem){
-					MetadataItem mi = (MetadataItem)cmpnts[g];
-					// This will probably need to be edited so that working with combo boxes functions correctly
-					if(mi.editable){
-						if(mi.cb!=null){
-							semsimmodel.addAnnotation(
-								new Annotation(SemSimConstants.getRelationFromURI(URI.create(SemSimConstants.SEMSIM_NAMESPACE + (String)mi.cb.getSelectedItem())), mi.ta.getText()));
-						}
-						else if(mi.ann.getValue() instanceof String){
-							semsimmodel.addAnnotation(new Annotation(mi.ann.getRelation(), mi.ta.getText()));
-						}
-					}
-					else{
-						semsimmodel.addAnnotation(new Annotation(mi.ann.getRelation(), mi.ann.getValue()));
-					}
-				}
-			}
-		}
-		setVisible(false);
-
-	}
-	
-	public void actionPerformed(ActionEvent arg0) {
-		if(arg0.getSource() == addbutton){
-			MetadataItem mi = new MetadataItem("", null, this, true);
-			genmodinfo.add(mi,0);
-			genmodinfo.validate();
-			genmodinfo.repaint();
-			scrollpane.validate();
-			scrollpane.repaint();
-			scrollpane.scrollToComponent(mi);
-		}
-	}
 }
