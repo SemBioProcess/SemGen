@@ -41,6 +41,10 @@ import semsim.model.physical.FunctionalSubmodel;
 import semsim.model.physical.MediatorParticipant;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
+<<<<<<< HEAD
+=======
+import semsim.model.physical.ProcessParticipant;
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 import semsim.model.physical.ReferencePhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.ReferencePhysicalProcess;
@@ -61,6 +65,10 @@ public class SemSimOWLwriter {
 	public Map<CompositePhysicalEntity,URI> compositeEntitiesAndIndexes = new HashMap<CompositePhysicalEntity,URI>();
 	public Set<String> singularphysentinds;
 	public String base = SemSimConstants.SEMSIM_NAMESPACE;
+<<<<<<< HEAD
+=======
+	protected SemSimConstants constants = new SemSimConstants();
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	private Set<DataStructure> localdss = new HashSet<DataStructure>();
 	
 	public OWLOntology createOWLOntologyFromModel(SemSimModel model) throws OWLException{
@@ -328,6 +336,7 @@ public class SemSimOWLwriter {
 				for(SourceParticipant sourcep : proc.getSources()){
 					PhysicalEntity source = sourcep.getPhysicalEntity();
 					
+<<<<<<< HEAD
 					SemSimOWLFactory.setIndObjectPropertyWithAnnotations(ont, singularPMCsAndUrisForDataStructures.get(proc).toString(),
 							singularPMCsAndUrisForDataStructures.get(source).toString(), SemSimConstants.HAS_SOURCE_URI.toString(),
 							"", null, null, manager);
@@ -343,6 +352,27 @@ public class SemSimOWLwriter {
 					SemSimOWLFactory.setIndObjectPropertyWithAnnotations(ont, singularPMCsAndUrisForDataStructures.get(proc).toString(),
 							singularPMCsAndUrisForDataStructures.get(mediator).toString(), SemSimConstants.HAS_MEDIATOR_URI.toString(),
 							"", null, null, manager);
+=======
+					// Annotate the source with the multiplier (stoichiometry)
+					Set<OWLAnnotation> anns = makeMultiplierAnnotation(sourcep);
+					SemSimOWLFactory.setIndObjectPropertyWithAnnotations(ont, singularPMCsAndUrisForDataStructures.get(proc).toString(),
+							singularPMCsAndUrisForDataStructures.get(source).toString(), SemSimConstants.HAS_SOURCE_URI.toString(),
+							"", anns, null, manager);
+				}
+				for(SinkParticipant sinkp : proc.getSinks()){
+					PhysicalEntity sink = sinkp.getPhysicalEntity();
+					Set<OWLAnnotation> anns = makeMultiplierAnnotation(sinkp);
+					SemSimOWLFactory.setIndObjectPropertyWithAnnotations(ont, singularPMCsAndUrisForDataStructures.get(proc).toString(),
+							singularPMCsAndUrisForDataStructures.get(sink).toString(), SemSimConstants.HAS_SINK_URI.toString(),
+							"", anns, null, manager);
+				}
+				for(MediatorParticipant mediatorp : proc.getMediators()){
+					PhysicalEntity mediator = mediatorp.getPhysicalEntity();
+					Set<OWLAnnotation> anns = makeMultiplierAnnotation(mediatorp);
+					SemSimOWLFactory.setIndObjectPropertyWithAnnotations(ont, singularPMCsAndUrisForDataStructures.get(proc).toString(),
+							singularPMCsAndUrisForDataStructures.get(mediator).toString(), SemSimConstants.HAS_MEDIATOR_URI.toString(),
+							"", anns, null, manager);
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 				}
 			}
 		}
@@ -351,6 +381,10 @@ public class SemSimOWLwriter {
 		Set<Subsumption> cellmlsubsumptions = new HashSet<Subsumption>();
 		
 		for(Submodel sub : model.getSubmodels()){
+<<<<<<< HEAD
+=======
+			
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 			Boolean toplevelimport = false;
 			Boolean sublevelimport = false;
 			if(sub instanceof FunctionalSubmodel){
@@ -559,6 +593,13 @@ public class SemSimOWLwriter {
 		return indexuri;
 	}
 	
+<<<<<<< HEAD
+=======
+	
+	
+	
+	
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	private static URI makeURIForCompositeEntity(CompositePhysicalEntity cpe, String namespace){
 		String uristring = namespace;
 		for(int y=0; y<cpe.getArrayListOfEntities().size();y++){
@@ -688,7 +729,20 @@ public class SemSimOWLwriter {
 			SemSimOWLFactory.setRDFComment(ont, factory.getOWLNamedIndividual(IRI.create(uriforind)), description, manager);
 		}
 	}
+<<<<<<< HEAD
 		
+=======
+	
+	// Assert the multiplier on process participants
+	private Set<OWLAnnotation> makeMultiplierAnnotation(ProcessParticipant pp){
+		Set<OWLAnnotation> anns = new HashSet<OWLAnnotation>();
+		OWLLiteral lit = factory.getOWLLiteral(pp.getMultiplier());
+		OWLAnnotation anno = factory.getOWLAnnotation(factory.getOWLAnnotationProperty(IRI.create(SemSimConstants.HAS_MULTIPLIER_URI)), lit);
+		anns.add(anno);
+		return anns;
+	}
+	
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	// Assert a public interface annotation (for CellML-derived models)
 	private Set<OWLAnnotation> makeSubmodelSubsumptionAnnotation(String type){
 		Set<OWLAnnotation> anns = new HashSet<OWLAnnotation>();

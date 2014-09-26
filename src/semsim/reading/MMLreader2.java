@@ -41,8 +41,12 @@ public class MMLreader2 extends MMLreader {
 	private Namespace mathmlns = Namespace.getNamespace("", "http://www.w3.org/1998/Math/MathML");
 	private XMLOutputter xmloutputter = new XMLOutputter();
 	private Set<Element> toolset = new HashSet<Element>(); 
+<<<<<<< HEAD
 	private Document doc;
+	
+=======
 
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	protected MMLreader2(File filetoparse, Document doc, String jsimBuildDir) throws Xcept {
 		super(jsimBuildDir);
 		this.doc = doc;

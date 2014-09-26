@@ -20,6 +20,10 @@ import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotation;
 import org.semanticweb.owlapi.model.OWLAnnotationProperty;
+<<<<<<< HEAD
+=======
+import org.semanticweb.owlapi.model.OWLAnonymousIndividual;
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
@@ -61,6 +65,10 @@ public class SemSimOWLreader {
 	private Map<URI, PhysicalModelComponent> URIandPMCmap = new HashMap<URI, PhysicalModelComponent>();
 	private XMLOutputter xmloutputter = new XMLOutputter();
 	
+<<<<<<< HEAD
+=======
+	
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	public SemSimModel readFromFile(File file) throws OWLException, CloneNotSupportedException{
 		
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -79,6 +87,11 @@ public class SemSimOWLreader {
 					
 					semsimmodel.addAnnotation(new Annotation(SemSimConstants.getRelationFromURI(propertyuri), val.getLiteral()));
 				}
+<<<<<<< HEAD
+=======
+				else if(ann.getValue() instanceof IRI){}
+				else if(ann.getValue() instanceof OWLAnonymousIndividual){}
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 			}
 		}
 		OWLClass topclass = factory.getOWLClass(IRI.create(SemSimConstants.SEMSIM_NAMESPACE + "SemSim_component"));
@@ -235,8 +248,14 @@ public class SemSimOWLreader {
 			}
 			
 			String isfundamental = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, unitind, SemSimConstants.IS_FUNDAMENTAL_UNIT_URI.toString());
+<<<<<<< HEAD
 			
 			uom.setFundamental(isfundamental.equals("true"));
+=======
+			if(isfundamental.equals("true")){
+				uom.setFundamental(true);
+			}
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 			
 			// Store the unit's factoring info
 			for(String baseunitind : SemSimOWLFactory.getIndObjectProperty(ont, unitind, SemSimConstants.HAS_UNIT_FACTOR_URI.toString())){
@@ -254,6 +273,10 @@ public class SemSimOWLreader {
 			}
 		}
 		
+<<<<<<< HEAD
+=======
+		
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		// Go through existing data structures and establish the hasInput relationships
 		for(String dsind : SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimConstants.DATA_STRUCTURE_CLASS_URI.toString())){
 			String name = SemSimOWLFactory.getURIdecodedFragmentFromIRI(dsind);
@@ -267,6 +290,15 @@ public class SemSimOWLreader {
 			// set the data structure's solution domain
 			String soldom = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, dsind, SemSimConstants.HAS_SOLUTION_DOMAIN_URI.toString());
 			semsimmodel.getDataStructure(name).setSolutionDomain(semsimmodel.getDataStructure(SemSimOWLFactory.getURIdecodedFragmentFromIRI(soldom)));
+<<<<<<< HEAD
+=======
+			
+			// Also set the CellML-type mappings
+//			for(String mapds : SemSimOWLFactory.getIndObjectProperty(ont, dsind, SemSimConstants.MAPPED_TO_URI.toString())){
+//				MappableVariable mapvar = (MappableVariable) semsimmodel.getDataStructure(SemSimOWLFactory.getURIdecodedOWLEntityNameFromIRI(mapds));
+//				((MappableVariable)ds).addVariableMapping(mapvar);
+//			}
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 		}
 		
 		// Collect the relational constraints
@@ -317,17 +349,35 @@ public class SemSimOWLreader {
 					// Enter source information
 					for(String src : srcs){
 						PhysicalEntity srcent = getPhysicalEntityFromURI(ont, URI.create(src));
+<<<<<<< HEAD
 						pproc.addSource(srcent);
+=======
+						double m = getMultiplierForProcessParticipant(ont, processind, 
+								SemSimConstants.HAS_SOURCE_URI.toString(), src);
+						pproc.addSource(srcent, m);
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 					}
 					// Enter sink info
 					for(String sink : sinks){
 						PhysicalEntity sinkent = getPhysicalEntityFromURI(ont, URI.create(sink));
+<<<<<<< HEAD
 						pproc.addSink(sinkent);
+=======
+						double m = getMultiplierForProcessParticipant(ont, processind, 
+								SemSimConstants.HAS_SINK_URI.toString(), sink);
+						pproc.addSink(sinkent, m);
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 					}
 					// Enter mediator info
 					for(String med : mediators){
 						PhysicalEntity medent = getPhysicalEntityFromURI(ont, URI.create(med));
+<<<<<<< HEAD
 						pproc.addMediator(medent);
+=======
+						double m = getMultiplierForProcessParticipant(ont, processind, 
+								SemSimConstants.HAS_MEDIATOR_URI.toString(), med);
+						pproc.addMediator(medent, m);
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 					}
 					URIandPMCmap.put(URI.create(processind), pproc);
 				}
@@ -382,8 +432,15 @@ public class SemSimOWLreader {
 		Set<String> subset = SemSimOWLFactory.getIndividualsAsStrings(ont, SemSimConstants.SUBMODEL_CLASS_URI.toString());
 		
 		for(String sub : subset){
+<<<<<<< HEAD
 			String subname = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, sub, SemSimConstants.HAS_NAME_URI.toString());
 			String description = SemSimOWLFactory.getRDFcomment(ont, factory.getOWLNamedIndividual(IRI.create(sub)));
+=======
+			
+			String subname = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, sub, SemSimConstants.HAS_NAME_URI.toString());
+			String description = SemSimOWLFactory.getRDFcomment(ont, factory.getOWLNamedIndividual(IRI.create(sub)));
+			String componentmathml = null;
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 			
 			boolean hascomputation = !SemSimOWLFactory.getIndObjectProperty(ont, sub, SemSimConstants.HAS_COMPUTATATIONAL_COMPONENT_URI.toString()).isEmpty();
 			
@@ -396,7 +453,10 @@ public class SemSimOWLreader {
 			
 			// If submodel IS NOT imported
 			if(importval.equals("") || importval==null){
+<<<<<<< HEAD
 				String componentmathml = null;
+=======
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 				sssubmodel = (hascomputation) ? new FunctionalSubmodel(subname, subname, null, null) : new Submodel(subname);
 				
 				// If computation associated with submodel, store mathml
@@ -431,9 +491,17 @@ public class SemSimOWLreader {
 									CellMLreader.whiteBoxFunctionalSubmodelEquations(varmathml, subname, semsimmodel, theds);
 								}
 							}
+<<<<<<< HEAD
 						} catch (JDOMException | IOException e) {
 							e.printStackTrace();
 						} 
+=======
+						} catch (JDOMException e) {
+							e.printStackTrace();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 					}
 				}
 				
@@ -574,6 +642,29 @@ public class SemSimOWLreader {
 		return ent;
 	}
 	
+<<<<<<< HEAD
+=======
+	// Get the multiplier for a process participant
+	private double getMultiplierForProcessParticipant(OWLOntology ont, String process, String prop, String ent){
+		double val = 1.0;
+		OWLIndividual procind = factory.getOWLNamedIndividual(IRI.create(process));
+		OWLIndividual entind = factory.getOWLNamedIndividual(IRI.create(ent));
+		OWLObjectProperty owlprop = factory.getOWLObjectProperty(IRI.create(prop));
+		OWLAxiom axiom = factory.getOWLObjectPropertyAssertionAxiom(owlprop, procind, entind);
+		
+		OWLAnnotationProperty annprop = factory.getOWLAnnotationProperty(IRI.create(SemSimConstants.HAS_MULTIPLIER_URI));
+		for(OWLAxiom ax : ont.getAxioms(procind)){
+			if(ax.equalsIgnoreAnnotations(axiom)){
+				if(!ax.getAnnotations(annprop).isEmpty()){
+					OWLLiteral litval = (OWLLiteral) ax.getAnnotations(annprop).toArray(new OWLAnnotation[]{})[0].getValue();
+					val = litval.parseDouble();
+				}
+			}
+		}
+		return val;
+	}
+	
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	// Get the relationship for a submodel subsumption
 	private Set<String> getSubmodelSubsumptionRelationship(OWLOntology ont, String submodel, String prop, String subsubmodel){
 		Set<String> vals = new HashSet<String>();

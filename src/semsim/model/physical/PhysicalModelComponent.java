@@ -14,6 +14,10 @@ import semsim.model.annotation.SemSimRelation;
 public class PhysicalModelComponent extends SemSimComponent implements Annotatable, Cloneable{
 	private Set<Annotation> annotations = new HashSet<Annotation>();
 
+<<<<<<< HEAD
+=======
+	
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	// Required by annotable interface:
 	public Set<Annotation> getAnnotations() {
 		return annotations;
@@ -29,6 +33,7 @@ public class PhysicalModelComponent extends SemSimComponent implements Annotatab
 	}
 	
 	public void addReferenceOntologyAnnotation(SemSimRelation relation, URI uri, String description){
+<<<<<<< HEAD
 		addAnnotation(new ReferenceOntologyAnnotation(relation, uri, description));
 	}
 	
@@ -36,6 +41,11 @@ public class PhysicalModelComponent extends SemSimComponent implements Annotatab
 	public void addReferenceOntologyAnnotation(ReferenceOntologyAnnotation roa){
 		addAnnotation(roa);
 	}
+=======
+		//if(!this.hasRefersToAnnotation() && this.getName()==null && relation==SemSimConstants.REFERS_TO_RELATION) setName(description);
+		addAnnotation(new ReferenceOntologyAnnotation(relation, uri, description));
+	}
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 
 	public Set<ReferenceOntologyAnnotation> getReferenceOntologyAnnotations(SemSimRelation relation) {
 		Set<ReferenceOntologyAnnotation> raos = new HashSet<ReferenceOntologyAnnotation>();
@@ -52,7 +62,13 @@ public class PhysicalModelComponent extends SemSimComponent implements Annotatab
 		if(!getReferenceOntologyAnnotations(SemSimConstants.REFERS_TO_RELATION).isEmpty()){
 			return getReferenceOntologyAnnotations(SemSimConstants.REFERS_TO_RELATION).toArray(new ReferenceOntologyAnnotation[]{})[0];
 		}
+<<<<<<< HEAD
 		return null;
+=======
+		else{
+			return null;
+		}
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 	}
 	
 	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotationByURI(URI uri){

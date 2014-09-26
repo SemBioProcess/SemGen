@@ -159,7 +159,9 @@ public class ReferenceOntologyAnnotation extends Annotation{
 	public void setAltNumericalID(String ID){
 		altNumericalID = ID;
 	}
-
+<<<<<<< HEAD
+	
+	
 	public Boolean matches(ReferenceOntologyAnnotation roa) {
 		return getReferenceURIasString().matches(roa.getReferenceURIasString());
 	}
@@ -170,5 +172,6 @@ public class ReferenceOntologyAnnotation extends Annotation{
 	public Boolean matches(String roa) {
 		return getReferenceURIasString().matches(roa);
 	}
-
+=======
+>>>>>>> 2eb394907b98577f1b916408cf22a2de6952b22d
 }

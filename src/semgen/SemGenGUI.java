@@ -1,39 +1,103 @@
 package semgen;
 
+import org.jdom.JDOMException;
+import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
+import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLException;
 
+import semgen.annotation.codewordpane.CodewordButton;
+import semgen.annotation.AnnotationCopier;
 import semgen.annotation.AnnotatorTab;
+import semgen.annotation.BatchCellML;
+import semgen.annotation.dialog.LegacyCodeChooser;
+import semgen.annotation.dialog.ModelLevelMetadataEditor;
+import semgen.annotation.dialog.SemanticSummaryDialog;
+import semgen.annotation.dialog.referencedialog.AddReferenceClassDialog;
+import semgen.annotation.dialog.selectordialog.AnnotationComponentReplacer;
+import semgen.annotation.dialog.selectordialog.RemovePhysicalComponentDialog;
+import semgen.annotation.dialog.textminer.TextMinerDialog;
+import semgen.encoding.Encoder;
 import semgen.extraction.ExtractorTab;
 import semgen.merging.MergerTab;
+import semgen.resource.CSVExporter;
+import semgen.resource.NewTaskDialog;
+import semgen.resource.SemGenError;
 import semgen.resource.SemGenFont;
+import semgen.resource.SemGenTask;
+import semgen.resource.file.LoadSemSimModel;
 import semgen.resource.file.SemGenOpenFileChooser;
-
+import semgen.resource.file.SemGenSaveFileChooser;
+import semgen.resource.uicomponents.ProgressBar;
 import semgen.resource.uicomponents.SemGenTab;
+import semgen.resource.uicomponents.TabCloser;
+import semgen.semgenmenu.HelpMenu;
+import semsim.SemSimConstants;
 import semsim.SemSimLibrary;
+import semsim.SemSimUtil;
+import semsim.model.SemSimModel;
+import semsim.model.computational.DataStructure;
+import semsim.model.physical.CompositePhysicalEntity;
+import semsim.model.physical.PhysicalEntity;
+import semsim.model.physical.PhysicalModelComponent;
+import semsim.reading.ModelClassifier;
+import semsim.reading.SemSimOWLreader;
+import semsim.writing.CellMLwriter;
+import semsim.writing.MMLwriter;
+import semsim.writing.Writer;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.HeadlessException;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JFileChooser;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
+import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Scanner;
+import java.util.HashSet;
+import java.util.Set;
 
-public class SemGenGUI extends JTabbedPane implements ChangeListener, Observer {
+import javax.xml.rpc.ServiceException;
+
+public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeListener, Observer {
 
 	private static final long serialVersionUID = 3618439495848469800L;
+
+	private JMenuItem extractoritembatchcluster;
+	public JMenuItem extractoritemopenann;
+	
 	private int numtabs = 0;
 
 	private ArrayList<AnnotatorTab> anntabs = new ArrayList<AnnotatorTab>();
@@ -57,9 +121,41 @@ public class SemGenGUI extends JTabbedPane implements ChangeListener, Observer {
 		numtabs = 0;
 		StyleConstants.setFontSize(new SimpleAttributeSet(), 13);
 		SemGenFont.defaultUIFont();
+		
+		fileitemopen.doClick();
 	}
 	
+	private void createMenu(JMenuBar menubar) {
+		// Create the menu bar.
+				
+				extractoritembatchcluster = formatMenuItem(extractoritembatchcluster, "Automated clustering analysis", KeyEvent.VK_B,true,true);
+				extractoritembatchcluster.setToolTipText("Performs clustering analysis on model");
+				extractmenu.add(extractoritembatchcluster);
 
+				extractoritemopenann = formatMenuItem(extractoritemopenann, "Open model in AnnotatorTab", null, true, true);
+				extractmenu.add(extractoritemopenann);	
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+		Object o = e.getSource();
+
+		if (o == extractoritembatchcluster) {
+				try {
+					extractor.batchCluster();
+				} catch (IOException e1) {e1.printStackTrace();}
+		}
+
+		if (o == extractoritemopenann) {
+				newAnnotatorTabAction(extractor.sourcefile);
+		}
+	}
+		
+	public void startBatchClustering(){
+		SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select a SemSim model for automated cluster analysis");		
+		newExtractorTabAction(sgc.getSelectedFile());
+		
+		extractor.batchCluster();
+	}
 			
 	public Boolean isOntologyOpenForEditing(URI uritocheck) {
 		for (AnnotatorTab at : anntabs) {
