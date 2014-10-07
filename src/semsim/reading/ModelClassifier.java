@@ -24,6 +24,7 @@ public class ModelClassifier {
 			if (file.toString().toLowerCase().endsWith(".mod")){
 				type = MML_MODEL;
 			}
+			else if (file.toString().endsWith(".owl")) type =  SEMSIM_MODEL;
 			else if(isCellMLmodel(file)){
 				type =  CELLML_MODEL;
 			}
@@ -35,7 +36,7 @@ public class ModelClassifier {
 				else
 					if(isCellMLmodel(file)) type =  CELLML_MODEL;
 			}
-			else if (file.toString().endsWith(".owl")) type =  SEMSIM_MODEL;
+			
 		}
 		catch(Exception e) {
 			e.printStackTrace();
