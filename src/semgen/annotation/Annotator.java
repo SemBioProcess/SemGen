@@ -21,7 +21,6 @@ import semsim.model.physical.Submodel;
 
 import java.net.HttpURLConnection;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.awt.*;
@@ -29,13 +28,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 import javax.swing.text.Highlighter.HighlightPainter;
-import javax.swing.text.SimpleAttributeSet;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
@@ -43,43 +42,28 @@ import javax.swing.tree.TreePath;
 import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
-import java.util.Set;
 import java.util.Hashtable;
-import java.util.HashSet;
-import java.io.PrintWriter;
 import java.awt.BorderLayout;
 import java.io.IOException;
-import java.util.Comparator;
-import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Annotator extends JPanel implements ActionListener, MouseListener,
 		KeyListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -5360722647774877228L;
 	public OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	public File sourcefile; //File originally loaded at start of Annotation session (could be in SBML, MML, CellML or SemSim format)
-	public String base;
-	public URI tempURI;
+	private URI tempURI;
 	public URI fileURI;
 	public IRI tempIRI;
-	public Set<String> recententitiesset = new HashSet<String>();
-	public Set<String> recentdependenciesset = new HashSet<String>();
 	public String[] entityKBlist = { "-none selected-" };
-	public String[] allKBlist = { "-none selected-" };
 	public String[] propertyKBlist = { "-none selected-" };
 	public String[] depKBlist = { "-none selected-" };
-	public File ontfile;
-	public PrintWriter localontwriter;
-
 	public SingularAnnotationEditor noncompeditor;
 	public HumanDefEditor humdefeditor;
 
@@ -87,10 +71,9 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 	private JSplitPane eastsplitpane;
 	public JSplitPane westsplitpane;
 	public SemGenScrollPane submodelscrollpane;
-	public SemGenScrollPane legacycodescrollpane;
 	public SemGenScrollPane codewordscrollpane;
 	public SemGenScrollPane dialogscrollpane;
-	public SemGenScrollPane treeviewscrollpane;
+	private SemGenScrollPane treeviewscrollpane;
 	
 	public AnnotatorButtonTree tree;
 
@@ -104,12 +87,7 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 	public JPanel submodelpanel;
 	public JTextArea codearea;
 	private JPanel genmodinfo;
-	private JLabel modname;
-	private JTextField modnamefield;
-	private JLabel editmeta;
-	private JButton editmetabutton;
 	public JTextPane annotationpane;
-	private Scanner importfilescanner;
 	private String nextline;
 	public JButton addsubmodelbutton = new JButton(SemGenGUI.plusicon);
 	public JButton removesubmodelbutton = new JButton(SemGenGUI.minusicon);
@@ -119,21 +97,13 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 	public Highlighter.HighlightPainter allpainter;
 	public Highlighter.HighlightPainter onepainter;
 
-	public SimpleAttributeSet attrs;
-	//public int numcdwds;
 	public int numcomponents;
 	public static int initwidth = 900;
 	public static int initheight = 700;
 	public static int leftsidewidth = 275;
-	public float percentProps;
-	public float numprops = 0;
-	public int compositeannpref = 0;
-	public int depannpref = 0;
 	public String ontspref;
 	public JButton extractorbutton;
 	public JButton coderbutton;
-	public int numID;
-	public JOptionPane optionpane = new JOptionPane();
 	public TextMinerDialog tmd;
 	public ProgressFrame progframe;
 	public ArrayList<Integer> indexesOfHighlightedTerms;
@@ -148,7 +118,6 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 			String[] allKBs) {
 		
 		this.sourcefile = sourcefile;
-		ontfile = new File("cfg/allontologies.txt");
 
 		tempURI = temploc;
 		tempIRI = IRI.create(tempURI);
@@ -156,7 +125,6 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		entityKBlist = entityKBs;
 		propertyKBlist = propKBs;
 		depKBlist = depKBs;
-		allKBlist = allKBs;
 
 		setOpaque(false);
 		setLayout(new BorderLayout());
@@ -189,18 +157,14 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		addsubmodelbutton.addActionListener(this);
 		removesubmodelbutton.addActionListener(this);
 		
-		legacycodescrollpane = new SemGenScrollPane();
+		SemGenScrollPane legacycodescrollpane = new SemGenScrollPane();
 		
 		legacycodescrollpane.getViewport().add(codearea);
-		//simcodescrollpane.setPreferredSize(new Dimension(SemGen.initwidth, Math
-		//		.round(SemGen.initheight / 26) * 10));
 		dialogscrollpane = new SemGenScrollPane();
 		dialogscrollpane.setBackground(SemGenGUI.lightblue);
 		dialogscrollpane.getViewport().setBackground(SemGenGUI.lightblue);
 		
 		codewordscrollpane = new SemGenScrollPane(codewordpanel);
-		//codewordscrollpane.setPreferredSize(new Dimension(Math.round(SemGen.initwidth / 33) * 10, Math.round(SemGen.initheight / 80) * 10)); // Math.round(SemGen.initwidth/3),
-														// Math.round(SemGen.initheight/25)/10));
 		InputMap im = codewordscrollpane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 		// Override up and down key functions so user can use arrows to move between codewords
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "none");
@@ -218,34 +182,17 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		splitpane.setOneTouchExpandable(true);
 
 		// Create the general model information panel
-		modname = new JLabel("Model name");
-		modname.setFont(new Font("SansSerif", Font.ITALIC, 12));
-		modnamefield = new JTextField(10);
-		modnamefield.setFont(new Font("SansSerif", Font.PLAIN, 12));
-		modnamefield.setForeground(Color.blue);
 
-		editmeta = new JLabel("Curation data:");
-		editmeta.setFont(new Font("SansSerif", Font.ITALIC, 12));
-		editmetabutton = new JButton("Curation data");
-		// editmetabutton.setPreferredSize(new Dimension(100, 40));
-		editmetabutton.setFont(new Font("SansSerif", Font.PLAIN, 11));
-		editmetabutton.setOpaque(false);
-		editmetabutton.setEnabled(false);
-		editmetabutton.addActionListener(this);
-		editmetabutton.setVisible(false);
-
-		extractorbutton = new JButton();
+		extractorbutton = new JButton(SemGenGUI.extractoricon);
 		extractorbutton.setToolTipText("Open this model in Extractor");
-		extractorbutton.setIcon(SemGenGUI.extractoricon);
 		extractorbutton.setSize(new Dimension(10, 10));
 		extractorbutton.setRolloverEnabled(true);
 		extractorbutton.addActionListener(this);
 		extractorbutton.setPreferredSize(new Dimension(20, 20));
 		extractorbutton.setAlignmentY(JButton.TOP_ALIGNMENT);
 
-		coderbutton = new JButton();
+		coderbutton = new JButton(SemGenGUI.codericon);
 		coderbutton.setToolTipText("Encode this model for simulation");
-		coderbutton.setIcon(SemGenGUI.codericon);
 		coderbutton.setRolloverEnabled(true);
 		coderbutton.addActionListener(this);
 		coderbutton.setAlignmentY(JButton.TOP_ALIGNMENT);
@@ -268,13 +215,8 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		closebutton.setAlignmentY(JButton.TOP_ALIGNMENT);
 
 		genmodinfo = new JPanel(new BorderLayout());
-		// genmodinfo.setPreferredSize(new Dimension(initwidth, 32));
 		genmodinfo.setOpaque(true);
 		genmodinfo.add(toolpanel, BorderLayout.WEST);
-		// genmodinfo.add(editmetabutton, BorderLayout.WEST);
-		// genmodinfo.add(graphs, BorderLayout.CENTER);
-		//genmodinfo.add(closebutton, BorderLayout.EAST);
-
 	}
 	
 	
@@ -302,7 +244,6 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 				}
 			}
 		}
-		if (o == editmetabutton) {MetadataAction();}
 		if (o == closebutton) {closeAction();}
 		if (o == extractorbutton) {
 			try {
@@ -417,9 +358,7 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		
 		return semsimmodel;
 	}
-	
 
-	
 	public void addPanelTitle(String type, int totalcount, int displayedcount, SemGenScrollPane scrollpane, String zerocountmsg) {
 		scrollpane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.gray), 
 				type + "(" + totalcount + " total, " + displayedcount + " editable)", 
@@ -427,14 +366,6 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		if (totalcount == 0 && type.equals("Codeword ")) {
 			scrollpane.getViewport().add(new JLabel(zerocountmsg));
 		} 
-//		else {
-//			// Put label into panel
-//			JLabel label = new JLabel(type +  "(" + count + ")");
-//			label.setFont(new Font("SansSerif", Font.BOLD, SemGenGUI.defaultfontsize + 1));
-//			label.setAlignmentX(Component.CENTER_ALIGNMENT);
-//			label.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-//			panel.add(label);
-//		}
 	}
 
 	public AnnotationDialog annotationObjectAction(AnnotationObjectButton aob) throws BadLocationException, IOException {
@@ -511,21 +442,18 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		
 		codewordpanel.removeAll();
 		int numcdwdsshowing = updateCodewordButtonTable();
-		AnnotationObjectButton[] aobarray = getAnnotationObjectButtonArray(codewordbuttontable);
+		ArrayList<AnnotationObjectButton> aobarray = getAnnotationObjectButtonArray(codewordbuttontable);
 		
-		// Sort the array alphabetically using the custom Comparator
-		Comparator<Component> byVarName = new ComparatorByName();
-		Arrays.sort(aobarray, byVarName);
-		addPanelTitle("Codewords ", aobarray.length, numcdwdsshowing, codewordscrollpane, "No codewords or dependencies found");
+		addPanelTitle("Codewords ", aobarray.size(), numcdwdsshowing, codewordscrollpane, "No codewords or dependencies found");
 		
-		for (int x = 0; x < aobarray.length; x++) {
-			aobarray[x].refreshAllCodes();
-			codewordpanel.add(aobarray[x]);
+		for (AnnotationObjectButton aob : aobarray) {
+			aob.refreshAllCodes();
+			codewordpanel.add(aob);
 			
-			CodewordButton cb = (CodewordButton) aobarray[x];
+			CodewordButton cb = (CodewordButton) aob;
 			
 			// Set visibility
-			aobarray[x].setVisible(getCodewordButtonVisibility(cb));
+			aob.setVisible(getCodewordButtonVisibility(cb));
 			
 			// Set name
 			if(!SemGenGUI.annotateitemtreeview.isSelected()) cb.namelabel.setText(cb.ds.getName());
@@ -539,17 +467,17 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		// First put all the codeword buttons in an array so they can be sorted
 		codewordpanel.removeAll();
 		int numcdwdsshowing = updateCodewordButtonTable();
-		AnnotationObjectButton[] aobarray = getAnnotationObjectButtonArray(codewordbuttontable);
+		ArrayList<AnnotationObjectButton> aobarray = getAnnotationObjectButtonArray(codewordbuttontable);
 		
-		Set<CodewordButton> entset = new HashSet<CodewordButton>();
-		Set<CodewordButton> procset = new HashSet<CodewordButton>();
-		Set<CodewordButton> depset = new HashSet<CodewordButton>();
+		ArrayList<CodewordButton> entset = new ArrayList<CodewordButton>();
+		ArrayList<CodewordButton> procset = new ArrayList<CodewordButton>();
+		ArrayList<CodewordButton> depset = new ArrayList<CodewordButton>();
 
-		for (int i = 0; i < aobarray.length; i++) {
-			CodewordButton cb = (CodewordButton) aobarray[i];
+		for (AnnotationObjectButton aob : aobarray) {
+			CodewordButton cb = (CodewordButton)aob;
 			DataStructure ds = cb.ds;
-			aobarray[i].namelabel.setText(ds.getName());  // Need to do this when switching from tree view to flat list
-			aobarray[i].refreshAllCodes();
+			aob.namelabel.setText(ds.getName());  // Need to do this when switching from tree view to flat list
+			aob.refreshAllCodes();
 
 			int type = SemGenGUI.getPropertyType(ds);
 			
@@ -560,31 +488,21 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 				procset.add(cb);
 			else depset.add(cb);
 			
+			
 			// Set visibility
 			cb.setVisible(getCodewordButtonVisibility(cb));
 			
 			// Set name
 			if(!SemGenGUI.annotateitemtreeview.isSelected()) cb.namelabel.setText(ds.getName());
 		}
-		CodewordButton[] entbuttonarray = entset.toArray(new CodewordButton[] {});
-		CodewordButton[] procbuttonarray = procset.toArray(new CodewordButton[] {});
-		CodewordButton[] depbuttonarray = depset.toArray(new CodewordButton[] {});
 		
-		// Sort the arrays alphabetically using the custom Comparator
-		Comparator<Component> byVarName = new ComparatorByName();
-		Arrays.sort(entbuttonarray, byVarName);
-		Arrays.sort(procbuttonarray, byVarName);
-		Arrays.sort(depbuttonarray, byVarName);
+		ArrayList<CodewordButton> cdlist = new ArrayList<CodewordButton>(entset);
+		cdlist.addAll(procset);
+		cdlist.addAll(depset);
 		
-		addPanelTitle("Codewords ", (entset.size()+procset.size()+depset.size()), numcdwdsshowing, codewordscrollpane, "No codewords or dependencies found");
-		for (int x = 0; x < entbuttonarray.length; x++) {
-			codewordpanel.add(entbuttonarray[x]);
-		}
-		for (int x = 0; x < procbuttonarray.length; x++) {
-			codewordpanel.add(procbuttonarray[x]);
-		}
-		for (int x = 0; x < depbuttonarray.length; x++) {
-			codewordpanel.add(depbuttonarray[x]);
+		addPanelTitle("Codewords ", (cdlist.size()), numcdwdsshowing, codewordscrollpane, "No codewords or dependencies found");
+		for (CodewordButton cdb : cdlist) {
+			codewordpanel.add(cdb);
 		}
 		codewordpanel.add(Box.createGlue());
 	}
@@ -604,26 +522,23 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		componentaddremovepanel.add(removesubmodelbutton);
 		submodelpanel.add(componentaddremovepanel);
 		
-		AnnotationObjectButton[] aobarray = getAnnotationObjectButtonArray(submodelbuttontable);
+		ArrayList<AnnotationObjectButton> aobarray = getAnnotationObjectButtonArray(submodelbuttontable);
 		
 		// Sort the array alphabetically using the custom Comparator
-		Comparator<Component> byVarName = new ComparatorByName();
-		Arrays.sort(aobarray, byVarName);
-		for (int x = 0; x < aobarray.length; x++) {
-			aobarray[x].setVisible(getSubmodelButtonVisibility((SubmodelButton)aobarray[x]));
-			submodelpanel.add(aobarray[x]);
+		for (AnnotationObjectButton aob : aobarray) {
+			aob.setVisible(getSubmodelButtonVisibility((SubmodelButton)aob));
+			submodelpanel.add(aob);
 		}
 		submodelpanel.add(Box.createGlue());
 	}
-	
-	
-	public AnnotationObjectButton[] getAnnotationObjectButtonArray(Hashtable<String, ? extends AnnotationObjectButton> table){
-		Set<AnnotationObjectButton> bset = new HashSet<AnnotationObjectButton>();
+
+	public ArrayList<AnnotationObjectButton> getAnnotationObjectButtonArray(Hashtable<String, ? extends AnnotationObjectButton> table){
+		ArrayList<AnnotationObjectButton> bset = new ArrayList<AnnotationObjectButton>();
 		for (String key : table.keySet())
 			bset.add(table.get(key));
-		return bset.toArray(new AnnotationObjectButton[]{});
+		Collections.sort(bset, new ComparatorByName());
+		return bset;
 	}
-	
 	
 	public int updateCodewordButtonTable(){
 		
@@ -646,8 +561,6 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		}
 		return numdisplayed;
 	}
-	
-	
 	
 	public int updateSubmodelButtonTable(){
 		
@@ -747,7 +660,7 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 					// Read in the model code and append it to the codearea
 					// JTextArea in the top pane
 					String filename = modelfile.getAbsolutePath();
-					importfilescanner = new Scanner(new File(filename));
+					Scanner importfilescanner = new Scanner(new File(filename));
 	
 					while (importfilescanner.hasNextLine()) {
 						nextline = importfilescanner.nextLine();
@@ -755,6 +668,7 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 						codearea.append("\n");
 						codearea.setCaretPosition(0);
 					}
+					importfilescanner.close();
 				} else cont = false;
 			}
 		}
@@ -793,10 +707,9 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 			}
 			else{
 				if(cb.ds.getPhysicalProperty().getPhysicalPropertyOf()!=null) return "_+X";
-				else return "_";
 			}
 		}
-		else return "_";
+		return "_";
 	}
 	
 	
@@ -805,15 +718,10 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 			if(((Annotatable)aob.ssc).hasRefersToAnnotation()){
 				return "S";
 			}
-			else return "_";
 		}
 		return "_";
 	}
-	
-	
-	private void MetadataAction() {new ModelLevelMetadataEditor(this);}
-	
-	
+
 	public void addNewSubmodelButton() throws OWLException {
 		String newname = JOptionPane.showInputDialog(SemGenGUI.desktop,"Enter a name for the new sub-model");
 		if(newname !=null && !newname.equals("")){
@@ -863,12 +771,10 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		}
 		Boolean match = true;
 		Matcher m = pattern.matcher(codearea.getText());
-		int nummatches = 0;
 		while(match){
 			if(m.find()){
 				int index = m.start();
 				indexesOfHighlightedTerms.add(index);
-				nummatches++;
 			}
 			else{
 				match = false;
@@ -886,7 +792,6 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		String content = area.getText();
 		Boolean match = true;
 		Matcher m = pattern.matcher(content);
-		int nummatches = 0;
 		while(match){
 			if(m.find()){
 				int index = m.start();
@@ -897,7 +802,6 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 					e.printStackTrace();
 				}
 				listofindexes.add(index);
-				nummatches++;
 			}
 			else{
 				match = false;
@@ -940,33 +844,6 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 	
 	public void setModelSaved(boolean val){
 		modelsaved = val;
-	}
-
-	public void appendOntFile(String name, String path) throws IOException {
-//		PrintWriter ontwriter = new PrintWriter(new FileWriter(ontfile));
-//		Set<String> keyset = SemGenGUI.RefOntologiesAndURIsTable_all.keySet();
-//		String[] valarray = {};
-//		for (String str : keyset) {
-//			valarray = (String[]) SemGenGUI.RefOntologiesAndURIsTable_all.get(str);
-//			ontwriter.println(str + "; " + valarray[0]);
-//		}
-//		ontwriter.println(name + "; " + path);
-//		ontwriter.flush();
-//		ontwriter.close();
-	}
-
-	public void removeOntFromFile(String name) throws IOException {
-//		PrintWriter ontwriter = new PrintWriter(new FileWriter(ontfile));
-//		Set<String> keyset = SemGenGUI.RefOntologiesAndURIsTable_all.keySet();
-//		String[] valarray = {};
-//		for (String str : keyset) {
-//			valarray = (String[]) SemGenGUI.RefOntologiesAndURIsTable_all.get(str);
-//			if (!str.equals(name)) {
-//				ontwriter.println(str + "; " + valarray[0]);
-//			}
-//		}
-//		ontwriter.flush();
-//		ontwriter.close();
 	}
 
 	public void mouseEntered(MouseEvent e) {
@@ -1078,9 +955,7 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 	}
 	
 	public boolean getCodewordButtonVisibility(CodewordButton cb){
-		if(cb.ds.isImportedViaSubmodel() && !SemGenGUI.annotateitemshowimports.isSelected())
-			return false;
-		else return true;
+		return !(cb.ds.isImportedViaSubmodel() && !SemGenGUI.annotateitemshowimports.isSelected());
 	}
 	
 	public boolean getSubmodelButtonVisibility(SubmodelButton sb){
@@ -1088,9 +963,6 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 			if(((Importable)sb.sub).getParentImport()!=null && !SemGenGUI.annotateitemshowimports.isSelected()){
 				return false;
 			}
-//			if(((Importable)sb.sub).getParentImport()!=null && !SemGenGUI.annotateitemshowimports.isSelected()){
-//				return false;
-//			}
 		}
 		return true;
 	}
