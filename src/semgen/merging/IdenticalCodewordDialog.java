@@ -10,7 +10,6 @@ import java.io.File;
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -18,27 +17,16 @@ import javax.swing.JTextField;
 
 import semgen.SemGenGUI;
 
-
-
-
-
-
-
 public class IdenticalCodewordDialog extends JDialog implements PropertyChangeListener, ItemListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 7836229234967611648L;
 	public JOptionPane optionPane;
 	public JTextField mantextfield;
 	public JTextArea area;
 	public JPanel mainpanel;
-	public JLabel msglabel;
 	public String cdwd;
-	public String newcdwd;
-	public File file1;
-	public File file2;
+	private File file1;
+	private File file2;
 	public JComboBox box;
 	public String[] selections;
 	public Boolean process;
@@ -61,8 +49,6 @@ public class IdenticalCodewordDialog extends JDialog implements PropertyChangeLi
 		area.setLineWrap(true);
 		area.setWrapStyleWord(true);
 		area.setOpaque(false);
-		msglabel = new JLabel("\nChoose a resolution option:"
-				+ "\n(This change will only appear in the merged model)");
 
 		box = new JComboBox(selections);
 		box.addItemListener(this);
@@ -99,7 +85,6 @@ public class IdenticalCodewordDialog extends JDialog implements PropertyChangeLi
 
 				if (!mantextfield.getText().equals("")
 						&& mantextfield.getText() != null) {
-					newcdwd = mantextfield.getText();
 					System.out.println(mantextfield.getText());
 					setVisible(false);
 				} else {

@@ -11,7 +11,6 @@ import semgen.SemGenGUI;
 import semsim.model.SemSimComponent;
 import semsim.model.physical.CompositePhysicalEntity;
 import semsim.model.physical.PhysicalEntity;
-import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.PhysicalProperty;
 
@@ -70,8 +69,6 @@ public class RemovePhysicalComponentDialog extends SemSimComponentSelectorDialog
 							if(prop.getPhysicalPropertyOf() instanceof PhysicalEntity)
 								prop.setPhysicalPropertyOf(annotator.semsimmodel.getCustomPhysicalEntityByName(SemGenGUI.unspecifiedName));
 							if(prop.getPhysicalPropertyOf() instanceof PhysicalProcess){
-//								PhysicalProcess
-//								for(PhysicalEntity source : (PhysicalProcess))
 								// Need to do sources, sinks, meds here?
 								prop.setPhysicalPropertyOf(annotator.semsimmodel.getCustomPhysicalProcessByName(SemGenGUI.unspecifiedName));
 							}
@@ -87,11 +84,6 @@ public class RemovePhysicalComponentDialog extends SemSimComponentSelectorDialog
 							}
 						}
 					}
-					// Remove the component entirely???
-//					if(removedComp instanceof PhysicalEntity)
-//						annotator.semsimmodel.removePhysicalEntityFromCache((PhysicalEntity)removedComp);
-//					else if(removedComp instanceof PhysicalProcess)
-//						annotator.semsimmodel.removePhysicalProcessFromCache((PhysicalProcess)removedComp);
 					annotator.setModelSaved(false);
 				}
 			}

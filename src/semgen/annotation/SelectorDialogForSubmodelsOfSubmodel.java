@@ -2,6 +2,7 @@ package semgen.annotation;
 
 import java.awt.Component;
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,7 +11,7 @@ import javax.swing.JCheckBox;
 import semsim.model.computational.DataStructure;
 import semsim.model.physical.Submodel;
 
-public class SelectorDialogForSubmodelsOfSubmodel extends SemSimComponentSelectorDialog {
+public class SelectorDialogForSubmodelsOfSubmodel extends SemSimComponentSelectorDialog implements  PropertyChangeListener{
 
 	/**
 	 * 

@@ -17,16 +17,4 @@ public class SemGenTextArea extends JTextArea{
 		setEditable(false);
 		this.bgcolor = bgcolor;
     }
-
-//    @Override
-//    protected void paintComponent(Graphics g) {
-//        g.setColor(new Color(0,255,255,255));
-//        Insets insets = getInsets();
-//        int x = insets.left;
-//        int y = insets.top;
-//        int width = getWidth() - (insets.left + insets.right);
-//        int height = getHeight() - (insets.top + insets.bottom);
-//        g.fillRect(x, y, width, height);
-//        super.paintComponent(g);
-//    }
 }

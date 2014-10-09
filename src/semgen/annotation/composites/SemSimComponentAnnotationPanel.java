@@ -57,10 +57,8 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 	public AnnotationDialog anndialog;
 	public SemSimModel semsimmodel;
 	public JComboBox combobox;
-	public JPanel itempanel;
 	public JLabel searchlabel = new JLabel(SemGenGUI.searchicon);
 	public JLabel createlabel = new JLabel(SemGenGUI.createicon);
-	//public MoreInfoButton more411label = new MoreInfoButton();
 	public ExternalURLButton urlbutton = new ExternalURLButton();
 	public JLabel eraselabel = new JLabel(SemGenGUI.eraseicon);
 	public JLabel modifylabel = new JLabel(SemGenGUI.modifyicon);
@@ -84,7 +82,6 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 		refreshComboBoxItemsAndButtonVisibility();
 		
 		if(smc.hasRefersToAnnotation())
-			//more411label.termuri = pmc.getFirstRefersToReferenceOntologyAnnotation().getReferenceURI().toString();
 			urlbutton.setTermURI(smc.getFirstRefersToReferenceOntologyAnnotation().getReferenceURI());
 		
 		searchlabel.setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
@@ -109,10 +106,9 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 		modifylabel.setEnabled(editable);
 		
 		setLayout(new BorderLayout());
-		itempanel = new JPanel();
+		JPanel itempanel = new JPanel();
 		itempanel.setBackground(SemGenGUI.lightblue);
 		itempanel.add(combobox);
-		//itempanel.add(more411label);
 		itempanel.add(urlbutton);
 		itempanel.add(searchlabel);
 		itempanel.add(createlabel);
@@ -201,7 +197,6 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 			listdataandsmcmap.put(SemGenGUI.unspecifiedName, null);
 		}
 		else if(smc instanceof PhysicalProcess) combobox.setFont(new Font("SansSerif", Font.ITALIC, SemGenGUI.defaultfontsize));
-		else if(smc instanceof PhysicalEntity){} // combobox.setForeground(Color.black);
 		
 		stringarray = stringlist.toArray(new String[]{});
 		String text = null;
@@ -234,18 +229,15 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 			PhysicalModelComponent pmc = (PhysicalModelComponent)smc;
 			if(!pmc.getName().equals(SemGenGUI.unspecifiedName)){
 				modifylabel.setVisible(true);
-				//more411label.setVisible(false);
 				urlbutton.setVisible(false);
 			}
 		}
 		else{
 			modifylabel.setVisible(false);
-			//more411label.setVisible(true);
 			urlbutton.setVisible(true);
 		}
 		if(combobox.getSelectedItem().equals(SemGenGUI.unspecifiedName)){
 			modifylabel.setVisible(false);
-			//more411label.setVisible(false);
 			urlbutton.setVisible(false);
 		}
 		if(smc instanceof PhysicalProcess) searchlabel.setVisible(false);
@@ -406,7 +398,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 				// Update the annotation button codes and the order of the button in the scrollpane
 				boolean rescroll = anndialog.thebutton.refreshAllCodes();
 				if(rescroll && SemGenGUI.annotateitemsortbytype.isSelected()){
-					anndialog.annotator.AlphabetizeAndSetCodewordsbyMarker();
+					anndialog.annotator.AlphabetizeAndSetCodewords();
 					SemGenGUI.scrollToComponent(anndialog.annotator.codewordpanel, anndialog.thebutton);
 				}
 			}

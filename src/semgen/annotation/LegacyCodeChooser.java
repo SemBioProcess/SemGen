@@ -93,7 +93,6 @@ public class LegacyCodeChooser extends JDialog implements ActionListener,
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
 		Object o = arg0.getSource();
 		if (o == locbutton) {
 			int val = SemGenGUI.showSemGenFileChooser(SemGenGUI.currentdirectory, null, "Select legacy model code", 0, false);

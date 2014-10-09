@@ -25,7 +25,6 @@ public class GenericThread implements Runnable {
 	}
 
 	public void run() {
-		//while(running){
 		try {
 			method = sourceobj.getClass().getDeclaredMethod(runningmethod,
 					(Class[]) null);

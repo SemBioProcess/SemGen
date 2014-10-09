@@ -16,14 +16,10 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.semanticweb.owlapi.model.OWLException;
-
 import semgen.SemGenGUI;
 import semgen.annotation.AnnotationDialog;
-import semgen.annotation.CodewordButton;
 import semsim.Annotatable;
 import semsim.SemSimConstants;
-import semsim.model.SemSimComponent;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.StructuralRelation;
 import semsim.model.computational.DataStructure;
@@ -33,14 +29,11 @@ import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 
 public class CompositeAnnotationPanel extends Box implements ActionListener{
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -3955122899870904199L;
 	public SemSimModel semsimmodel;
 	public DataStructure datastructure;
 	public AnnotationDialog ad;
-	public Component propertycomponent;
 	public JButton addpropertybutton = new JButton("Add property");
 	public JLabel propertyoflabel = new JLabel("property_of");
 	public JPanel addentprocpanel = new JPanel();
@@ -54,7 +47,6 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 		setAlignmentX(Box.LEFT_ALIGNMENT);
 		semsimmodel = ad.semsimmodel;
 		datastructure = (DataStructure)ad.smc;
-		//refreshUI();
 	}
 		
 	public void refreshUI(){
@@ -196,7 +188,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 			ad.annotator.setModelSaved(false);
 			
 			if(ad.thebutton.refreshAllCodes() && SemGenGUI.annotateitemsortbytype.isSelected()){
-				ad.annotator.AlphabetizeAndSetCodewordsbyMarker();
+				ad.annotator.AlphabetizeAndSetCodewords();
 				if(!SemGenGUI.annotateitemtreeview.isSelected())
 					SemGenGUI.scrollToComponent(ad.annotator.codewordpanel, ad.thebutton);
 			}

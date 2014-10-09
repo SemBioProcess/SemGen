@@ -1,7 +1,5 @@
 package semgen.annotation;
 
-
-
 import org.semanticweb.owlapi.model.*;
 
 import semgen.SemGenGUI;
@@ -147,7 +145,6 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 			label.setAlignmentX(Component.LEFT_ALIGNMENT);
 			
 			area.setEditable(editable);
-			//area.setBorder(BorderFactory.createBevelBorder(1));
 			area.setAlignmentX(Component.LEFT_ALIGNMENT);
 			area.setFont(new Font("SansSerif", Font.PLAIN, 12));
 			area.setForeground(Color.blue);

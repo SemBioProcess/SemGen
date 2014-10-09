@@ -11,14 +11,11 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import semgen.annotation.AddReferenceClassDialog;
 import semgen.annotation.AnnotationComponentReplacer;
 import semgen.annotation.AnnotationCopier;
 import semgen.annotation.Annotator;
 import semgen.annotation.BatchCellML;
-import semgen.annotation.BatchSBML;
 import semgen.annotation.CodewordButton;
 import semgen.annotation.LegacyCodeChooser;
 import semgen.annotation.ModelLevelMetadataEditor;
@@ -123,7 +120,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 	private static final long serialVersionUID = 3618439495848469800L;
 	public static OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	public static OWLDataFactory factory;
-	public static File semgenhomedir = new File(".");
 	public static OWLOntology OPB;
 	public static OWLOntology SemSimBase;
 	public static SemSimModelCache modelCache = new SemSimModelCache();
@@ -197,23 +193,14 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 	public static Date datenow;
 	public static SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmssSSSZ");
 	public SimpleDateFormat sdflog = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
-	public String owlfile;
-	public String savefilename;
-	public static String jsimhome;
-	public static String jsimcmdloc;
-	public static String jsbatchloc;
 	public static String JSimBuildDir = "./jsimhome";
 	public static JMenu extractmenu;
 	public static JMenu filemenu;
-	private JMenuItem fileitemnew;
 	private JMenuItem fileitemopen;
 	private JMenuItem fileitemsave;
 	private JMenuItem fileitemsaveas;
 	public JMenuItem fileitemclose;
 	public JMenuItem fileitemexit;
-	private JMenuItem edititemcut;
-	private JMenuItem edititemcopy;
-	private JMenuItem edititempaste;
 	public static JMenuItem semanticsummary;
 	public static JMenuItem annotateitemfindnext;
 	private JMenuItem toolsitemannotate;
@@ -221,7 +208,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 	private static JMenuItem annotateitemremoverefterm;
 	public static JCheckBoxMenuItem autoannotate;
 	private JMenuItem annotateitemchangesourcemodelcode;
-	//public JMenuItem annotateitemfindjsbatch;
 	public JMenuItem annotateitemreplacerefterm;
 	public JMenuItem annotateitemcopy;
 	public JMenuItem annotateitemharvestfromtext;
@@ -229,11 +215,8 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 	public JMenuItem annotateitemcleanup;
 	public JMenuItem annotateitemexportcsv;
 	public JMenuItem annotateitemthai;
-	public JMenuItem batchsbml;
-	public static ButtonGroup querybuttons;
 	public static ButtonGroup sortbuttons;
 	public static JRadioButtonMenuItem annotateitemusebioportal;
-	public static JRadioButtonMenuItem annotateitemusevsparql;
 	public static JCheckBoxMenuItem annotateitemshowimports;
 	public static JRadioButtonMenuItem annotateitemsortbytype;
 	public static JRadioButtonMenuItem annotateitemsortalphabetically;
@@ -245,9 +228,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 	private JMenuItem extractoritematomicdecomp;
 	private JMenuItem extractoritembatchcluster;
 	public JMenuItem extractoritemopenann;
-	public JMenuItem encodeitemVPHcomposites;
 	private JMenuItem viewlog;
-	public JMenuItem upfont;
 	private JMenuItem helpitemabout;
 	private JMenuItem helpitemweb;
 	private JMenuBar menubar;
@@ -260,12 +241,10 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 	public static int numtabs = 0;
 	public static int initwidth = 900;
 	public static int initheight = 720;
-	public static String initdir;
 	public static int defaultfontsize = 12;
 	public static Map<TextAttribute, Integer> fontAttributes = new HashMap<TextAttribute, Integer>();
 	public static Font underlinefont;
 	public static Hashtable<String, String[]> startsettingstable;
-	public static Map<String, String> envvars = System.getenv();
 	public static SemGenGUI frame;
 	public static boolean LINUXorUNIX;
 	public static boolean WINDOWS;
@@ -299,7 +278,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		
 		File libsbmlfile = null;
 		
-		if(WINDOWS) libsbmlfile = new File("cfg/sbmlj.dll"); ///ResourcesManager.writeResourceToTempDir("sbmlj.dll");}
+		if(WINDOWS) libsbmlfile = new File("cfg/sbmlj.dll"); 
 		else if(MACOSX) libsbmlfile = new File("cfg/libsbmlj.jnilib");
 		else libsbmlfile = new File("cfg/libsbmlj.so");
 		
@@ -332,8 +311,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		} catch (OWLOntologyCreationException e3) {
 			e3.printStackTrace();
 		}
-		//OntologyNicknamesTable = ResourcesManager.createHashtableFromFile("cfg/OntologyBaseNicknames.txt");
-		
+
 		try {
 			compositeAnnRelationsTableLR = ResourcesManager.createHashtableFromFile("cfg/structuralRelationsLR.txt");
 			compositeAnnRelationsTableRL = ResourcesManager.createHashtableFromFile("cfg/structuralRelationsRL.txt");
@@ -377,7 +355,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		logfilewriter.println("Session started on: " + sdflog.format(datenow) + "\n");
 
 		desktop = new JTabbedPane(); // a specialized layered pane
-		//desktop.setUI(new CustomTabbedPaneUI());
 		desktop.setOpaque(true);
 		desktop.setBackground(Color.white);
 		desktop.addChangeListener(this);
@@ -399,7 +376,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		filemenu.addMenuListener(this);
 
 		// File menu items
-		fileitemnew = formatMenuItem(fileitemnew,"New",KeyEvent.VK_N,false,true);
 		fileitemopen = formatMenuItem(fileitemopen,"Open",KeyEvent.VK_O,true,true);
 		filemenu.add(fileitemopen);
 		fileitemsave = formatMenuItem(fileitemsave,"Save",KeyEvent.VK_S,true,true);
@@ -414,22 +390,8 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		filemenu.add(new JSeparator());
 		filemenu.add(fileitemexit);
 
-		// Build the Edit menu
-		JMenu editmenu = new JMenu("Edit");
-		editmenu.setMnemonic(KeyEvent.VK_D);
-		editmenu.getAccessibleContext().setAccessibleDescription("Cut, copy, paste, etc.");
-
-		// Edit menu items
-		edititemcut = formatMenuItem(edititemcut, "Cut", KeyEvent.VK_X,true,true);
-		editmenu.add(edititemcut);
-		edititemcopy = formatMenuItem(edititemcopy, "Copy", KeyEvent.VK_C,true,true);
-		editmenu.add(edititemcopy);
-		edititempaste = formatMenuItem(edititempaste,"Paste",KeyEvent.VK_V,true,true);
-		editmenu.add(edititempaste);
-
 		// Build the Annotator menu
 		JMenu annotatemenu = new JMenu("Annotate");
-		// filemenu.setMnemonic(KeyEvent.VK_F);
 		annotatemenu.getAccessibleContext().setAccessibleDescription("Annotate a model");
 
 		toolsitemannotate = formatMenuItem(toolsitemannotate, "New Annotator",KeyEvent.VK_A,true,true);
@@ -439,9 +401,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		
 		semanticsummary = formatMenuItem(semanticsummary, "Biological summary", KeyEvent.VK_U, true, true);
 		semanticsummary.setToolTipText("View summary of the biological concepts used in the model");
-//		annotatemenu.add(semanticsummary);
-//		annotatemenu.add(new JSeparator());
-		
+
 		autoannotate = new JCheckBoxMenuItem("Auto-annotate during translation");
 		autoannotate.setSelected(startsettingstable.get("autoAnnotate")[0].trim().equals("true"));
 		autoannotate.addActionListener(this);
@@ -451,9 +411,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		
 		annotateitemharvestfromtext = formatMenuItem(annotateitemharvestfromtext, "Find terms in text", KeyEvent.VK_F, true, true);
 		annotateitemharvestfromtext.setToolTipText("Use natural language processing to find reference ontology terms in a block of text");
-		//annotatemenu.add(annotateitemharvestfromtext);
-		//annotatemenu.add(new JSeparator());
-		
+
 		annotateitemaddrefterm = formatMenuItem(annotateitemaddrefterm, "Add reference term", KeyEvent.VK_D,true,true);
 		annotateitemaddrefterm.setToolTipText("Add a reference ontology term to use for annotating this model");
 		annotatemenu.add(annotateitemaddrefterm);
@@ -469,9 +427,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		
 		annotateitemcleanup = formatMenuItem(annotateitemcleanup, "Remove unused terms",null, true,true);
 		annotateitemcleanup.setToolTipText("Remove unused reference ontology terms");
-		//annotatemenu.add(annotateitemcleanup);
-		//annotateitemcleanup.setEnabled(false);
-		
+
 		annotateitemreplacerefterm = formatMenuItem(annotateitemreplacerefterm, "Replace reference term", KeyEvent.VK_P, true, true);
 		annotateitemreplacerefterm.setToolTipText("Replace a reference ontology term with another");
 		annotatemenu.add(annotateitemreplacerefterm);
@@ -495,25 +451,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		annotatemenu.add(annotateitemeditmodelanns);
 		annotatemenu.add(new JSeparator());
 		
-		JMenu ontsearchmenu = new JMenu("Set query service");
-		annotateitemusebioportal = new JRadioButtonMenuItem("BioPortal");
-		annotateitemusebioportal.setSelected(true);
-		annotateitemusevsparql = new JRadioButtonMenuItem("vSPARQL");
-		annotateitemusevsparql.setSelected(false);
-		
-		//annotateitemthai = formatMenuItem(annotateitemthai, "Batch process CellML models", KeyEvent.VK_0,true, true);
-		//batchsbml = formatMenuItem(batchsbml, "Batch process SBML models", KeyEvent.VK_9,true, true);
-		//annotatemenu.add(batchsbml);
-		
-		querybuttons = new ButtonGroup();
-		querybuttons.add(annotateitemusebioportal);
-		querybuttons.add(annotateitemusevsparql);
-
-		ontsearchmenu.add(annotateitemusebioportal);
-		ontsearchmenu.add(annotateitemusevsparql);
-		//annotatemenu.add(ontsearchmenu);
-		
-		//annotatemenu.add(new JSeparator());
 		annotateitemfindnext = formatMenuItem(annotateitemfindnext, "Find next instance of codeword in code", KeyEvent.VK_N, true, true);
 		annotatemenu.add(annotateitemfindnext);
 		
@@ -525,7 +462,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		annotateitemshowimports.setToolTipText("Make imported codewords and submodels visible");
 		annotatemenu.add(annotateitemshowimports);
 
-		
 		annotateitemshowmarkers = new JCheckBoxMenuItem("Display physical type markers");
 		annotateitemshowmarkers.setSelected(startsettingstable.get("displayMarkers")[0].trim().equals("true"));
 		annotateitemshowmarkers.addActionListener(this);
@@ -554,12 +490,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		sortCodewordsMenu.add(annotateitemsortalphabetically);
 		annotateitemsortbytype.setToolTipText("Sort codewords according to whether they represent a property of a physical entity, process, or dependency");
 		annotatemenu.add(sortCodewordsMenu);
-		
-		
-		//annotateitemthai = formatMenuItem(annotateitemthai, "Batch process CellML models", KeyEvent.VK_0,true, true);
-		//batchsbml = formatMenuItem(batchsbml, "Batch process SBML models", KeyEvent.VK_9,true, true);
-		//annotatemenu.add(batchsbml);
-		
+
 		// Extract menu
 		extractmenu = new JMenu("Extract");
 		extractmenu.getAccessibleContext().setAccessibleDescription("Extract out a portion of a SemSim model");
@@ -570,7 +501,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		
 		extractoritematomicdecomp = formatMenuItem(extractoritematomicdecomp, "Atomic decomposition",KeyEvent.VK_Y,true,true);
 		extractoritematomicdecomp.setToolTipText("Extract separate SemSim models for each physical entity");
-		//extractmenu.add(extractoritematomicdecomp);
 
 		extractoritembatchcluster = formatMenuItem(extractoritembatchcluster, "Automated clustering analysis", KeyEvent.VK_B,true,true);
 		extractoritembatchcluster.setToolTipText("Performs clustering analysis on model");
@@ -594,19 +524,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		toolsitemcode.setToolTipText("Open a new code generator tool");
 		codegenmenu.add(toolsitemcode);
 
-		encodeitemVPHcomposites = new JMenuItem("Encode composite annotations for VPH repository");
-		encodeitemVPHcomposites.setEnabled(true);
-		encodeitemVPHcomposites.addActionListener(this);
-		//codegenmenu.add(encodeitemVPHcomposites);
-
-		// upfont = new JMenuItem("Increase font size");
-		// upfont.setEnabled(true);
-		// upfont.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U,
-		// maskkey));
-		// viewmenu.add(upfont);
-		// upfont.setToolTipText("Create a new model from selected subcomponents of a SemSim model");
-		// upfont.addActionListener(this);
-
 		// Help menu
 		JMenu helpmenu = new JMenu("Help");
 		helpmenu.getAccessibleContext().setAccessibleDescription("User help, Versioning, etc.");
@@ -614,13 +531,10 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		helpmenu.add(helpitemabout);
 		helpitemweb = formatMenuItem(helpitemweb,"Help manual (opens browser)",KeyEvent.VK_H,true,true);
 		helpmenu.add(helpitemweb);
-		//helpmenu.add(new JSeparator());
 		viewlog = formatMenuItem(viewlog,"Session log",KeyEvent.VK_L,true,true);
 		viewlog.setToolTipText("View the current session's log file");
-		//helpmenu.add(viewlog);
 
 		menubar.add(filemenu);
-		// menubar.add(editmenu);
 		menubar.add(annotatemenu);
 		menubar.add(extractmenu);
 		menubar.add(mergermenu);
@@ -674,8 +588,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 			fileitemsave.setEnabled(!((Annotator)desktop.getSelectedComponent()).getModelSaved());
 		}
 	}
-	
-	
 	
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
@@ -822,8 +734,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 
 		if (o == annotateitemcleanup) {
 			if (desktop.getSelectedComponent() instanceof Annotator) {
-				//Annotator ann = (Annotator) desktop.getSelectedComponent();
-				//...
+
 			} else {
 				JOptionPane.showMessageDialog(this,"Please select an Annotator tab or open a new Annotator");
 			}
@@ -834,14 +745,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 				Annotator ann = (Annotator) desktop.getSelectedComponent();
 				String name = ann.getLookupNameForAnnotationObjectButton(ann.focusbutton);
 				ann.findNextStringInText(name);
-			}
-		}
-		
-		if(o == batchsbml){
-			try {
-				new BatchSBML();
-			} catch (Exception e1) {
-				e1.printStackTrace();
 			}
 		}
 		
@@ -929,7 +832,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 				try {
 					NewAnnotatorTask task = new NewAnnotatorTask(new File[]{extractor.sourcefile}, false);
 					task.execute();
-					//progframe = new ProgressFrame("Loading model for annotation...", true, task);
 				} catch (Exception e1) {e1.printStackTrace();} 
 			} else {
 				JOptionPane.showMessageDialog(this,"Please first select an Extractor tab or open a new Extractor");
@@ -955,10 +857,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 				new LogViewer();
 			} catch (FileNotFoundException k) {k.printStackTrace();}
 		}
-
-		if (o == upfont) 
-			setUIFont(new javax.swing.plaf.FontUIResource("SansSerif",
-					Font.PLAIN, SemGenGUI.defaultfontsize));
 
 		if (o == helpitemabout) 
 			AboutAction();
@@ -1529,26 +1427,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 			outputfile = SemGenGUI.SaveAsAction(null, filenamesuggestion, new FileNameExtensionFilter[]{mmlfilter});
 			outwriter = (Writer)new MMLwriter();
 		}
-//			if(selection == optionsarray[1]){
-//				File outputfile = SemGenGUI.SaveAsAction(null, filenamesuggestion, "m");
-//				//MatlabCoder.translate(model, outputfile);
-//			}
-//			else if(selection == optionsarray[2]){
-//				File outputfile = SemGenGUI.SaveAsAction(null, filenamesuggestion, "mod");
-//				MMLwriter.translate(model, outputfile);
-//			}
-//			else if(selection == optionsarray[0]){
-//				File outputfile = SemGenGUI.SaveAsAction(null, filenamesuggestion, "xml");
-//				ChalkboardCoder.translate(model, outputfile);
-//			}
-//			else if(selection == optionsarray[3]){
-//				File outputfile = SemGenGUI.SaveAsAction(null, filenamesuggestion, "rdf");
-//				PhysioMapWriter.translate(model, outputfile);
-//			}
-//			else if(selection == optionsarray[4]){
-//				File outputfile = SemGenGUI.SaveAsAction(null, filenamesuggestion, "rdf");
-//				SemSimRDFwriter.translate(model.toOWLOntology(), outputfile);
-//			}
 		if(outputfile!=null){
 			CoderTask task = null;
 			if(inputfileormodel instanceof File){
@@ -1579,7 +1457,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 	
 	private void OpenFileAction(){
 		opendialog = new JDialog();
-		//opendialog.setBackground(Color.white);
 		opendialog.setTitle("OPEN: Select action");
 		
 		annotatebutton = new JButton("Annotate a model");
@@ -1613,7 +1490,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		JPanel openpanel = new JPanel();
 		openpanel.setLayout(new BoxLayout(openpanel, BoxLayout.Y_AXIS));
 		openpanel.setAlignmentX(JPanel.CENTER_ALIGNMENT);
-		//openpanel.setBackground(Color.white);
 		openpanel.add(annotatebutton);
 		openpanel.add(openmenuextractbutton);
 		openpanel.add(openmenumergebutton);
@@ -1622,10 +1498,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		openpanel.setBorder(BorderFactory.createEmptyBorder(5,0,0,0));
 		
 		JOptionPane selectopentype = new JOptionPane(openpanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_OPTION, null);
-		//selectopentype.setBackground(Color.white);
-		//Object[] optionsarray = new Object[] {"Cancel"};
 		selectopentype.setOptions(new Object[]{});
-		//selectopentype.setInitialValue("Cancel");
 		opendialog.setContentPane(selectopentype);
 		opendialog.setModal(true);
 		opendialog.pack();
@@ -1712,10 +1585,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		File file = null;
 		Boolean saveok = false;
 		while (!saveok) {
-//			if(selectedfilepath!=null && !selectedfilepath.equals("")){
-//				filec.setSelectedFile(new File(selectedfilepath + "." + extensions[0]));
-//			}
-			
 			filec.setCurrentDirectory(currentdirectory);
 			filec.setDialogTitle("Choose location to save file");
 			filec.setPreferredSize(filechooserdims);
@@ -1965,11 +1834,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 
 				OSXAdapter.setAboutHandler(this,
 				 getClass().getDeclaredMethod("AboutAction", (Class[])null));
-				// OSXAdapter.setPreferencesHandler(this,
-				// getClass().getDeclaredMethod("preferences", (Class[])null));
-				// OSXAdapter.setFileHandler(this,
-				// getClass().getDeclaredMethod("loadImageFile", new Class[] {
-				// String.class }));
 				
 			} catch (Exception e) {
 				System.err.println("Error while loading the OSXAdapter:");
@@ -1994,15 +1858,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 					quit = false;
 				}
 			}
-//			if (desktopcomponents[x] instanceof Extractor) {
-//				Extractor temp = (Extractor) desktopcomponents[x];
-//				desktop.setSelectedComponent(temp);
-//				try {
-//					OWLMethods.closeTabAction(temp, temp.sourcefile.toURI(), temp.sourcefile.toURI());
-//				} catch (IOException ioe) {
-//					ioe.printStackTrace();
-//				}
-//			}
 		}
 		if(quit){
 			try {
@@ -2011,7 +1866,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 				System.exit(0);
 			} 
 			catch (URISyntaxException e) {e.printStackTrace();}
-			//deleteTempFiles();
 		}
 		return quit;
 	}

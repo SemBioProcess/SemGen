@@ -1,6 +1,5 @@
 package semgen;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -8,21 +7,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Scanner;
 
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -30,8 +25,6 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 
-import semgen.SemGenGUI.NewAnnotatorTask;
-import semgen.annotation.Annotator;
 import semgen.merging.Merger;
 import semsim.SemSimUtil;
 

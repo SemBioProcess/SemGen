@@ -1,10 +1,5 @@
 package semgen.extraction;
 
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
@@ -14,7 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeSelectionModel;
@@ -27,8 +21,9 @@ import org.jdom.input.SAXBuilder;
 import semsim.owl.SemSimOWLFactory;
 
 
-public class ExtractorEntitiesTree extends JPanel implements ActionListener, ItemListener{
+public class ExtractorEntitiesTree extends JPanel {
 
+	private static final long serialVersionUID = 1L;
 	public JTree tree;
 	public String result;
 	public File testfile;
@@ -39,8 +34,6 @@ public class ExtractorEntitiesTree extends JPanel implements ActionListener, Ite
 		testfile = file;
 
 		Set<DefaultMutableTreeNode> roots = makeTreeFromQueryResult();
-		// tree = new JTree((DefaultMutableTreeNode[])roots.toArray(new
-		// DefaultMutableTreeNode[]{}));
 		DefaultMutableTreeNode[] testarray = (DefaultMutableTreeNode[]) roots
 				.toArray(new DefaultMutableTreeNode[] {});
 		DefaultMutableTreeNode bodyroot = new DefaultMutableTreeNode(
@@ -55,7 +48,6 @@ public class ExtractorEntitiesTree extends JPanel implements ActionListener, Ite
 		tree = new JTree(bodyroot);
 		tree.getSelectionModel().setSelectionMode(
 				TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
-		// scroller = new JScrollPane(tree);
 
 		this.add(tree);
 		this.setVisible(true);
@@ -98,12 +90,6 @@ public class ExtractorEntitiesTree extends JPanel implements ActionListener, Ite
 				parentset.add(parenturi);
 			}
 			urisandparents.put(clsname, parentset);
-			// if(parentset.size()==1){
-			// uriswithsingleparents.put(clsname, parentset);
-			// }
-			// else if(parentset.size()>1){
-			// uriswithmultparents.put(clsname, parentset);
-			// }
 		}
 		Hashtable urisandnodes = new Hashtable();
 		Set<DefaultMutableTreeNode> nodeset = new HashSet();
@@ -160,16 +146,6 @@ public class ExtractorEntitiesTree extends JPanel implements ActionListener, Ite
 			}
 		}
 		return roots;
-	}
-
-	public void itemStateChanged(ItemEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

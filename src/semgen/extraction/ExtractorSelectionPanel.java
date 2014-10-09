@@ -37,25 +37,18 @@ import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.Submodel;
 
 public class ExtractorSelectionPanel extends JPanel implements ActionListener, MouseListener {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -487389420876921191L;
-	public JPanel titlepanel;
 	public JLabel titlelabel;
-	public JPanel utilpanel;
 	public JCheckBox markallbox = new JCheckBox("");
 	public JPanel checkboxpanel = new JPanel();
 	public SemGenScrollPane scroller;
 	public Hashtable<? extends SemSimComponent,Set<DataStructure>> termandcdwdstable;
 	public Map<String, JCheckBox> termandcheckboxmap = new HashMap<String,JCheckBox>();
+	JPanel titlepanel = new JPanel();
 	public ExtractorTab extractor;
 	public JButton expandcontractbutton = new JButton(SemGenGUI.expendcontracticon);
-	public Component glue;
-
 
 	public ExtractorSelectionPanel(ExtractorTab extractor, String title, Hashtable<? extends SemSimComponent,Set<DataStructure>> table, JComponent addon){
-		
 		this.extractor = extractor;
 		markallbox.setFont(new Font("SansSerif", Font.ITALIC, SemGenGUI.defaultfontsize-2));
 		markallbox.setToolTipText("Select all/none");
@@ -64,8 +57,7 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		checkboxpanel.setLayout(new BoxLayout(checkboxpanel, BoxLayout.Y_AXIS));
 		checkboxpanel.setBackground(Color.white);
-		
-		titlepanel = new JPanel();
+
 		titlepanel.setLayout(new BoxLayout(titlepanel, BoxLayout.X_AXIS));
 		titlepanel.setPreferredSize(new Dimension(ExtractorTab.leftpanewidth, 30));
 		titlepanel.setMaximumSize(new Dimension(9999999,35));
@@ -77,8 +69,6 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 		expandcontractbutton.setContentAreaFilled(false);
 		expandcontractbutton.setAlignmentX(RIGHT_ALIGNMENT);
 		expandcontractbutton.setToolTipText("Expand/collapse panel");
-		
-		//titlepanel.add(expandcontractbutton);
 		
 		titlelabel = new JLabel();
 		titlelabel.addMouseListener(this);

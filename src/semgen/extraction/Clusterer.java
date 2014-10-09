@@ -56,10 +56,8 @@ import org.apache.commons.collections15.map.LazyMap;
 import semgen.SemGenGUI;
 import semgen.SemGenScrollPane;
 import semsim.model.computational.DataStructure;
-import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
-import semsim.owl.SemSimOWLFactory;
 
 import edu.uci.ics.jung.algorithms.cluster.EdgeBetweennessClusterer;
 import edu.uci.ics.jung.algorithms.layout.AggregateLayout;
@@ -90,8 +88,6 @@ public class Clusterer extends JFrame {
 
 	VisualizationViewer<String, Number> vv;
 
-	// Factory<Graph<Number,Number>> graphFactory;
-
 	@SuppressWarnings("unchecked")
 	Map<String, Paint> vertexPaints = LazyMap.<String, Paint> decorate(
 			new HashMap<String, Paint>(), new ConstantTransformer(Color.white));
@@ -99,7 +95,6 @@ public class Clusterer extends JFrame {
 	Map<Number, Paint> edgePaints = LazyMap.<Number, Paint> decorate(
 			new HashMap<Number, Paint>(), new ConstantTransformer(Color.blue));
 	public static JFrame jf;
-	//public static JFrame semframe = new JFrame();
 	public JSplitPane splitpane;
 	public JPanel clusterpanel;
 	public JPanel sempanel;
@@ -155,9 +150,6 @@ public class Clusterer extends JFrame {
 		vv.getRenderContext().setEdgeStrokeTransformer(new ConstantTransformer(new BasicStroke(2.5f)));
 
 		// customize the renderer
-		// vv.getRenderer().setVertexRenderer(new
-		// GradientVertexRenderer<String,Number>(Color.gray, Color.white,
-		// true));
 		vv.getRenderer().setVertexLabelRenderer(vlasr);
 
 		vv.setBackground(Color.white);
@@ -177,7 +169,6 @@ public class Clusterer extends JFrame {
 							extractor.clusterpanel.checkboxpanel.removeAll();
 							for (int x = -1; x < clusters.length; x++) {
 								if (x == -1 && selectioncheckbox==null) {
-//									System.out.println("here1");
 									selectioncheckbox = new ExtractorJCheckBox("Selected node(s)", dsuris);
 									selectioncheckbox.addItemListener(extractor);
 									extractor.clusterpanel.checkboxpanel.add(selectioncheckbox);
@@ -253,9 +244,6 @@ public class Clusterer extends JFrame {
 		edgeBetweennessSlider.setPaintLabels(true);
 		edgeBetweennessSlider.setPaintTicks(true);
 
-		// edgeBetweennessSlider.setBorder(BorderFactory.createLineBorder(Color.black));
-		// TO DO: edgeBetweennessSlider.add(new
-		// JLabel("Node Size (PageRank With Priors):"));
 		// I also want the slider value to appear
 		final JPanel eastControls = new JPanel();
 		eastControls.setOpaque(true);
@@ -268,8 +256,7 @@ public class Clusterer extends JFrame {
 
 		final TitledBorder sliderBorder = BorderFactory.createTitledBorder(eastSize);
 		eastControls.setBorder(sliderBorder);
-		// eastControls.add(eastSize);
-		eastControls.add(Box.createVerticalGlue());
+				eastControls.add(Box.createVerticalGlue());
 
 		groupVertices.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -297,12 +284,10 @@ public class Clusterer extends JFrame {
 		
 		clusterAndRecolor(layout, 0, similarColors, groupVertices.isSelected());
 
-		// Container content = jf.getContentPane();
 		clusterpanel = new JPanel();
 		clusterpanel.setLayout(new BoxLayout(clusterpanel, BoxLayout.Y_AXIS));
 		GraphZoomScrollPane gzsp = new GraphZoomScrollPane(vv);
-		//gzsp.setPreferredSize(new Dimension(700, 700));
-		clusterpanel.add(gzsp); // , BorderLayout.NORTH);
+		clusterpanel.add(gzsp);
 		JPanel south = new JPanel();
 		JPanel grid = new JPanel(new GridLayout(2, 1));
 		grid.add(scramble);
@@ -313,7 +298,7 @@ public class Clusterer extends JFrame {
 		p.setBorder(BorderFactory.createTitledBorder("Mouse Mode"));
 		p.add(gm.getModeComboBox());
 		south.add(p);
-		clusterpanel.add(south); // , BorderLayout.SOUTH);
+		clusterpanel.add(south);
 		clusterpanel.add(Box.createGlue());
 		semscroller = new SemGenScrollPane(sempanel);
 		splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,semscroller,clusterpanel);
@@ -340,7 +325,6 @@ public class Clusterer extends JFrame {
 		int i = 0;
 		// Set the colors of each node so that each cluster's vertices have the same color
 		extractor.clusterpanel.checkboxpanel.removeAll();
-		//refreshModulePanel();
 		for (Iterator<Set<String>> cIt = clusterSet.iterator(); cIt.hasNext();) {
 			moduletable = moduletable + "\nCLUSTER " + (i + 1);
 			Set<String> vertices = cIt.next();
@@ -383,7 +367,6 @@ public class Clusterer extends JFrame {
 							else name = "Entity: " + name;
 							enttext.setWrapStyleWord(true);
 							enttext.setLineWrap(true);
-							//enttext.setMaximumSize(new Dimension(200, 1000));
 							enttext.setBorder(BorderFactory.createEmptyBorder(7, 7, 0, 0));
 							enttext.setAlignmentX(LEFT_ALIGNMENT);
 							sempanel.add(enttext);

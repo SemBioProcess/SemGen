@@ -2,19 +2,16 @@ package semgen.annotation;
 
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Set;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
@@ -26,25 +23,13 @@ import semgen.SemGenGUI;
 import semsim.model.SemSimComponent;
 import semsim.model.computational.DataStructure;
 
-public class SemSimComponentSelectorDialog extends JDialog implements ActionListener, PropertyChangeListener {
-
-	/**
-	 * 
-	 */
+public class SemSimComponentSelectorDialog extends JDialog implements ActionListener {
 	private static final long serialVersionUID = -1776906245210358895L;
-	public SemSimComponent ssc;
-	public String type;
-	public String annotation;
-	public String shortname;
-	public Scanner entimportfilescanner;
-	public Scanner propimportfilescanner;
-	public Scanner depimportfilescanner;
 	public JPanel panel;
 	protected JScrollPane scroller;
 	public JCheckBox markallbox;
 	public JOptionPane optionPane;
 	protected Object[] options;
-	public Component[] componentarray;
 
 	public ObjectPropertyEditor opeditor;
 	public Map<String, Object> nameobjectmap = new HashMap<String, Object>();
@@ -71,7 +56,6 @@ public class SemSimComponentSelectorDialog extends JDialog implements ActionList
 		this.ssctoignore = ssctoignore;
 		this.sscstodisable = sscstodisable;
 		this.title = title;
-		//setUpUI();
 	}
 	
 	
@@ -152,6 +136,4 @@ public class SemSimComponentSelectorDialog extends JDialog implements ActionList
 		}
 	}
 
-	public void propertyChange(PropertyChangeEvent arg0) {
-	}
 }

@@ -13,11 +13,7 @@ import semsim.model.physical.Submodel;
 
 public class SelectorDialogForCodewordsOfSubmodel extends SemSimComponentSelectorDialog implements PropertyChangeListener{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -1981003062200298737L;
-	public Set<DataStructure> cdwdsfromcomps;
 	public Submodel submodel;
 
 	

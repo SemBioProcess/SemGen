@@ -97,12 +97,8 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 		
 		ontidsandns.put("chebi","http://purl.obolibrary.org/obo/");
 		ontidsandns.put("go","http://purl.org/obo/owl/GO#");
-		//ontidsandns.put("swissprot", "whoknows");
 		ontidsandns.put("fma","http://sig.uw.edu/fma#");
-		//ontidsandns.put("disease","unknown");
-		//ontidsandns.put("drug","unknowndrugs");
 		ontidsandns.put("opb", "http://bhi.washington.edu/OPB#");
-		//ontidsandns.put("disease", "http://purl.org/obo/owl/DOID#");
 		
 		this.setTitle("Parse text for ontology terms");
 		toplabel = new JLabel("Enter text to parse, or find a PubMed abstract by its ID, then hit \"Parse\" to identify ontology terms");
@@ -149,23 +145,14 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 		
 		sppanel = new JPanel();
 		sppanel.setLayout(new BoxLayout(sppanel, BoxLayout.Y_AXIS));
-		//JCheckBox opbbox = new JCheckBox("Ontology of Physics for Biology (OPB)");
 		JCheckBox fmabox = new JCheckBox(SemSimConstants.FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME);
 		JCheckBox chebibox = new JCheckBox(SemSimConstants.CHEMICAL_ENTITIES_OF_BIOLOGICAL_INTEREST_FULLNAME);
 		JCheckBox gobox = new JCheckBox(SemSimConstants.GENE_ONTOLOGY_FULLNAME);
-//		JCheckBox orgbox = new JCheckBox("Organisms");
-		//JCheckBox diseasebox = new JCheckBox("Human Disease Ontology (DOID)");
-//		JCheckBox drugsbox = new JCheckBox("Drugs");
-		
+
 		JCheckBox[] checkboxarray = new JCheckBox[]{
-				//opbbox,
 				fmabox,
 				chebibox,
 				gobox
-//				//uniprotbox,
-//				orgbox,
-				//diseasebox
-//				drugsbox
 				};
 		for(int c=0; c<checkboxarray.length; c++){
 			sppanel.add(checkboxarray[c]);
@@ -414,7 +401,6 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 				}
 			}
 			loadingbutton.setIcon(SemGenGUI.blankloadingicon);
-			//if(!hasabstract){JOptionPane.showMessageDialog(null, "No abstract associated with that PubMed ID");}
 		}
 		return abstr;
 	}
@@ -425,7 +411,6 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 		String value = optionPane.getValue().toString();
 		if (value == "Collect"){
 			optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-			collect(); //(inputtextarea.getText());
 			if(annotator.focusbutton instanceof CodewordButton) annotator.anndialog.compositepanel.refreshUI();
 		}
 		if (value == "Close"){

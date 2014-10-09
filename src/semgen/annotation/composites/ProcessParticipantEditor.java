@@ -11,38 +11,28 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
 
 import semgen.SemGenGUI;
 import semgen.SemGenScrollPane;
 import semgen.annotation.SemSimComponentSelectorDialog;
-import semsim.Annotatable;
 import semsim.SemSimConstants;
 import semsim.model.SemSimComponent;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.SemSimRelation;
-import semsim.model.physical.MediatorParticipant;
 import semsim.model.physical.PhysicalEntity;
-import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.ProcessParticipant;
-import semsim.model.physical.SinkParticipant;
-import semsim.model.physical.SourceParticipant;
 
 public class ProcessParticipantEditor extends JPanel implements ActionListener, PropertyChangeListener {
 	
@@ -52,7 +42,6 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 	private static final long serialVersionUID = 5639851498722801279L;
 	public SemSimModel model;
 	public SemSimRelation relation;
-	public SemSimRelation invrelation;
 	public PhysicalProcess process;
 	public JPanel headerpanel;
 	public JLabel headerlabel;
@@ -69,11 +58,10 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 	public int scrollerwidth = 550;
 	public int multcolwidth = 100;
 
-	public ProcessParticipantEditor(SemSimModel model, SemSimRelation relation, SemSimRelation invrelation, PhysicalProcess process) {
+	public ProcessParticipantEditor(SemSimModel model, SemSimRelation relation, PhysicalProcess process) {
 		
 		this.model = model;
 		this.relation = relation;
-		this.invrelation = invrelation;
 		this.process = process;
 		
 		headerlabel = new JLabel(relation.getName());
@@ -119,9 +107,6 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 		tablemod = new ProcessParticipantTableModel(temp);
 		table = new JTable(tablemod);
 		table.setFillsViewportHeight(false);
-//		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-//		table.getColumnModel().getColumn(0).setPreferredWidth(scrollerwidth-multcolwidth);
-//		table.getColumnModel().getColumn(1).setPreferredWidth(multcolwidth);
 	}
 	
 	public class ProcessParticipantTableModel extends AbstractTableModel{

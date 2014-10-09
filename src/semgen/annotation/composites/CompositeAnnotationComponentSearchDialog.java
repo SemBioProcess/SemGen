@@ -94,7 +94,6 @@ public class CompositeAnnotationComponentSearchDialog extends AddReferenceClassD
 				pmcPanel.anndialog.singularannpanel.refreshComboBoxItemsAndButtonVisibility();
 				
 				if(pmcPanel.smc.hasRefersToAnnotation()) 
-					//pmcPanel.more411label.termuri = pmcPanel.pmc.getFirstRefersToReferenceOntologyAnnotation().getReferenceURI().toString();
 					pmcPanel.urlbutton.setTermURI(pmcPanel.smc.getFirstRefersToReferenceOntologyAnnotation().getReferenceURI());
 				optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 				if(refclasspanel.ontologychooser.getComponentCount()>2){

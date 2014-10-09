@@ -21,7 +21,6 @@ import semgen.SemGenScrollPane;
 import semsim.SemSimConstants;
 import semsim.model.annotation.Annotation;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
-import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 
 public class AnnotationComponentReplacer extends JDialog implements
@@ -47,8 +46,6 @@ public class AnnotationComponentReplacer extends JDialog implements
 		scpn = new SemGenScrollPane(list);
 		
 		refclasspanel = new ReferenceClassFinderPanel(ann, SemSimConstants.ALL_SEARCHABLE_ONTOLOGIES);
-		refclasspanel.rightscrollerapplybutton.setEnabled(false);
-		refclasspanel.leftscrollerapplybutton.setEnabled(false);
 
 		Object[] dialogarray = { scpn, refclasspanel };
 
@@ -77,7 +74,6 @@ public class AnnotationComponentReplacer extends JDialog implements
 				String oldclass = (String) list.getSelectedValue();
 				
 				String newclassuri = (String) refclasspanel.resultsanduris.get(refclasspanel.resultslistright.getSelectedValue());
-				//String newclassrefont = refclasspanel.currentonturi.toString();
 				String oldclassuri = (String) oldclsnamesanduris.get(oldclass);
 				
 				for(PhysicalModelComponent pmc : ann.semsimmodel.getPhysicalModelComponents()){

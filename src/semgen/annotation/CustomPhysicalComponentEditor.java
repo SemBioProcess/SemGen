@@ -2,7 +2,6 @@ package semgen.annotation;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -19,14 +18,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.table.TableCellEditor;
 
 import semgen.SemGenGUI;
 import semgen.annotation.composites.ProcessParticipantEditor;
 import semsim.SemSimConstants;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
-import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.ProcessParticipant;
@@ -102,22 +99,17 @@ public class CustomPhysicalComponentEditor extends JDialog implements ActionList
 		if(pmc instanceof PhysicalProcess){
 			title = title + "process";
 			versionofeditor = new ObjectPropertyEditor(model, SemSimConstants.BQB_IS_VERSION_OF_RELATION, null, this.pmc);
-			hassourceeditor = new ProcessParticipantEditor(model, SemSimConstants.HAS_SOURCE_RELATION, null, (PhysicalProcess)pmc);
-			hassinkeditor = new ProcessParticipantEditor(model, SemSimConstants.HAS_SINK_RELATION, null, (PhysicalProcess)pmc);
-			hasmediatoreditor = new ProcessParticipantEditor(model, SemSimConstants.HAS_MEDIATOR_RELATION, null, (PhysicalProcess)pmc);
+			hassourceeditor = new ProcessParticipantEditor(model, SemSimConstants.HAS_SOURCE_RELATION, (PhysicalProcess)pmc);
+			hassinkeditor = new ProcessParticipantEditor(model, SemSimConstants.HAS_SINK_RELATION, (PhysicalProcess)pmc);
+			hasmediatoreditor = new ProcessParticipantEditor(model, SemSimConstants.HAS_MEDIATOR_RELATION, (PhysicalProcess)pmc);
 			
-			objectpropertyeditors = new JComponent[]{hassourceeditor, hassinkeditor, hasmediatoreditor, versionofeditor}; //, partofeditor, hasparteditor};
+			objectpropertyeditors = new JComponent[]{hassourceeditor, hassinkeditor, hasmediatoreditor, versionofeditor};
 		}
 		else{
 			title = title + "entity";
 			versionofeditor = new ObjectPropertyEditor(model, SemSimConstants.BQB_IS_VERSION_OF_RELATION, null, this.pmc);
-			//partofeditor = new ObjectPropertyEditor(model, SemSimConstants.PartOfRelation, SemSimConstants.HasPartRelation, pmc);
-			//hasparteditor = new ObjectPropertyEditor(model, SemSimConstants.HasPartRelation, SemSimConstants.PartOfRelation, pmc);
-			//containedineditor = new ObjectPropertyEditor(model, SemSimConstants.ContainedInRelation, SemSimConstants.ContainsRelation, null);
-			//containseditor = new ObjectPropertyEditor(model, SemSimConstants.ContainsRelation, SemSimConstants.ContainedInRelation, null);
-			//adjacenttoeditor = new ObjectPropertyEditor(model, SemSimConstants.AdjacentToRelation, SemSimConstants.AdjacentToRelation, null);
-			
-			objectpropertyeditors = new ObjectPropertyEditor[]{versionofeditor}; //, partofeditor, hasparteditor};
+
+			objectpropertyeditors = new ObjectPropertyEditor[]{versionofeditor}; 
 		}
 		
 		mainpanel.setLayout(new BoxLayout(mainpanel, BoxLayout.Y_AXIS));
@@ -162,7 +154,7 @@ public class CustomPhysicalComponentEditor extends JDialog implements ActionList
 				else pmc.setDescription(pmc.getName());
 				
 				pmc.removeAllReferenceAnnotations();
-				ObjectPropertyEditor[] refanneds = new ObjectPropertyEditor[]{versionofeditor}; //, partofeditor, hasparteditor};
+				ObjectPropertyEditor[] refanneds = new ObjectPropertyEditor[]{versionofeditor}; 
 				
 				// Iterate through the object property editors shared by physical entities and processes and add the annotations
 				for(ObjectPropertyEditor ed : refanneds){

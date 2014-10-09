@@ -11,8 +11,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -66,23 +64,16 @@ import java.awt.HeadlessException;
 
 public class Merger extends JPanel implements ActionListener, MouseListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -1383642730474574843L;
 	public OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	public File file1;
 	public File file2;
 	public SemSimModel semsimmodel1;
 	public SemSimModel semsimmodel2;
-	public String base1;
-	public String base2;
 	public File mergedfile;
-	public int custheight = 32;
 	public int dividerlocation = 350;
 	public JButton closebutton;
 	public JPanel filepanel;
-	public JPanel filelistheader;
 	public JPanel filelistpanel;
 	public JScrollPane filelistscroller;
 	public JLabel filelisttitle;
@@ -91,13 +82,11 @@ public class Merger extends JPanel implements ActionListener, MouseListener {
 	public JButton minusbutton;
 
 	public JPanel resolvepanel;
-	public JPanel resolveheaderpanel;
 	public SemGenScrollPane resolvescroller;
 	public JButton mergetempbutton;
 	public JButton mergebutton;
 	public JPanel mergebuttonpanel;
 
-	public JPanel mainmappingpanel;
 	public JSplitPane mappingsplitpane;
 	public JSplitPane resmapsplitpane;
 	public MappingPanel mappingpanelleft;
@@ -115,7 +104,6 @@ public class Merger extends JPanel implements ActionListener, MouseListener {
 	public Hashtable<String, String> codewordpairstoresolve = new Hashtable<String, String>();
 	public Set<String> samedomainnames;
 	public JFileChooser fc;
-	public JPanel mappingbuttonpanel;
 	public GenericThread mergethread;
 	public Boolean contmerging;
 
@@ -129,9 +117,7 @@ public class Merger extends JPanel implements ActionListener, MouseListener {
 	public Merger(final JTabbedPane pane) {
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-		filelistheader = new JPanel();
-		//filelistheader.setPreferredSize(new Dimension(SemGenGUI.desktop.getWidth() - 10, custheight));
-		//filelistheader.setMaximumSize(new Dimension(99999, custheight));
+		JPanel filelistheader = new JPanel();
 		filelisttitle = new JLabel("Models to merge");
 		filelisttitle.setBorder(BorderFactory.createEmptyBorder(0,0,0,10));
 
@@ -151,9 +137,7 @@ public class Merger extends JPanel implements ActionListener, MouseListener {
 		plusminuspanel.add(plusbutton);
 		plusminuspanel.add(minusbutton);
 
-		//plusminuspanel.add(loadingbutton);
 		filelistheader.add(plusminuspanel);
-		//filelistheader.setAlignmentX(LEFT_ALIGNMENT);
 
 		closebutton = new JButton("Close tab");
 		closebutton.setForeground(Color.blue);
@@ -169,11 +153,7 @@ public class Merger extends JPanel implements ActionListener, MouseListener {
 		filelistpanel.setBackground(Color.white);
 		filelistpanel.setLayout(new BoxLayout(filelistpanel, BoxLayout.Y_AXIS));
 
-		//filelistheader.add(closebutton, BorderLayout.EAST);
 		filelistscroller = new JScrollPane(filelistpanel);
-		//filelistscroller.setAlignmentX(LEFT_ALIGNMENT);
-//		filelistscroller.setPreferredSize(new Dimension(500, 32));
-		//filelistscroller.setMaximumSize(new Dimension(99999, 175));
 
 		mergebuttonpanel = new JPanel();
 
@@ -186,10 +166,7 @@ public class Merger extends JPanel implements ActionListener, MouseListener {
 		mergetempbutton.setForeground(Color.blue);
 		mergetempbutton.addActionListener(this);
 
-		//mergebuttonpanel.add(loadingbutton);
 		mergebuttonpanel.add(mergebutton);
-		
-		//mergebuttonpanel.add(mergetempbutton);
 		
 		JPanel filelistpanel = new JPanel();
 		filelistpanel.setLayout(new BorderLayout());
@@ -221,16 +198,13 @@ public class Merger extends JPanel implements ActionListener, MouseListener {
 		resmapsplitpane.setOneTouchExpandable(true);
 		resmapsplitpane.setDividerLocation(dividerlocation);
 
-		mappingbuttonpanel = new JPanel();
-		//mappingbuttonpanel.setPreferredSize(new Dimension(SemGenGUI.desktop.getWidth() - 10, custheight));
-		//mappingbuttonpanel.setMaximumSize(new Dimension(99999, custheight));
+		JPanel mappingbuttonpanel = new JPanel();
 		mappingbuttonpanel.setAlignmentX(LEFT_ALIGNMENT);
 		addmanualmappingbutton = new JButton("Add manual mapping");
 		addmanualmappingbutton.addActionListener(this);
 		mergingwizardbutton = new JButton("Merging wizard");
 		mergingwizardbutton.setEnabled(false);
 		mappingbuttonpanel.add(addmanualmappingbutton);
-		//mappingbuttonpanel.add(mergingwizardbutton);
 
 		this.add(filelistpanel);
 		this.add(resmapsplitpane);
@@ -823,47 +797,6 @@ public class Merger extends JPanel implements ActionListener, MouseListener {
 			subclassset.add(subclass.asOWLClass().getIRI().toString());
 		}
 		return subclassset;
-	}
-
-	public void makeArraysOfCompAnnValues(String propuri, int ontnum)
-			throws OWLException {
-//		OWLOntology ont;
-//		if (ontnum == 1) {ont = ont1;} 
-//		else {ont = ont2;}
-//		Boolean cont = true;
-//		String ind = propuri;
-//		ArrayList<String> referstolist = new ArrayList<String>();
-//		ArrayList<String> ontURIlist = new ArrayList<String>();
-//		ArrayList<String> relationlist = new ArrayList<String>();
-//		String relationval = "";
-//		while (cont) {
-//			cont = false;
-//			referstolist.add(OWLMethods.getFunctionalIndDatatypeProperty(ont, ind, SemSimConstants.SemSimNamespace + "refersTo"));
-//			ontURIlist.add(OWLMethods.getFunctionalIndDatatypeProperty(ont, ind, SemSimConstants.SemSimNamespace + "referenceOntologyURI"));
-//			String[] relationstocheck = new String[] {
-//					SemSimConstants.SemSimNamespace + "physicalPropertyOf",
-//					SemSimConstants.ContainedInURI.toString(), SemSimConstants.PartOfURI.toString(),
-//					SemSimConstants.SemSimNamespace + "composed_of" };
-//			for (int i = 0; i < relationstocheck.length; i++) {
-//				relationval = OWLMethods.getFunctionalIndObjectProperty(ont, ind, relationstocheck[i]);
-//				if (!relationval.equals("")) {
-//					relationlist.add(relationstocheck[i]);
-//					cont = true;
-//					ind = relationval;
-//					break;
-//				}
-//			}
-//		}
-//		if (ontnum == 1) {
-//			referstoarray1 = referstolist.toArray(new String[] {});
-//			ontURIarray1 = ontURIlist.toArray(new String[] {});
-//			relationsarray1 = relationlist.toArray(new String[] {});
-//		}
-//		if (ontnum == 2) {
-//			referstoarray2 = referstolist.toArray(new String[] {});
-//			ontURIarray2 = ontURIlist.toArray(new String[] {});
-//			relationsarray2 = relationlist.toArray(new String[] {});
-//		}
 	}
 
 	public void mouseClicked(MouseEvent arg0) {

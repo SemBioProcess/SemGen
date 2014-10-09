@@ -28,8 +28,6 @@ public class AddReferenceClassDialog extends JDialog implements
 		this.annotator = ann;
 		setTitle("Select reference concept");
 		refclasspanel = new ReferenceClassFinderPanel(annotator, annotatable, ontList);
-		refclasspanel.rightscrollerapplybutton.setEnabled(false);
-		refclasspanel.leftscrollerapplybutton.setEnabled(false);
 		this.options = options;
 
 		utilarea = new JTextArea();
@@ -37,7 +35,6 @@ public class AddReferenceClassDialog extends JDialog implements
 		utilarea.setBackground(new Color(0,0,0,0));
 		utilarea.setLineWrap(true);
 		utilarea.setWrapStyleWord(true);
-		//utilarea.setOpaque(false);
 		utilarea.setEditable(false);
 		utilarea.setFont(new Font("SansSerif", Font.BOLD, SemGenGUI.defaultfontsize - 1));
 

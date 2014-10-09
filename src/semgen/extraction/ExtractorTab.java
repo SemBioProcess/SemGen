@@ -55,9 +55,6 @@ import java.awt.BorderLayout;
 
 public class ExtractorTab extends JPanel implements ActionListener, ItemListener {
 
-	/**
-	 * 
-	 */
 	public static final long serialVersionUID = -5142058482154697778L;
 	public SemSimModel semsimmodel;
 	public OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -83,24 +80,18 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 	public static final Schema TOOLTIP_SCHEMA = new Schema();
 	static {TOOLTIP_SCHEMA.addColumn(TOOLTIP, String.class, "");}
 	
-
 	public final JTabbedPane pane;
 	public static int leftpanewidth = 400;
 	public File sourcefile;
-	public JButton sourcebutton;
-	// public JButton annotatorbutton;
 	public JButton vizsourcebutton;
 	public JButton closebutton;
 	public JButton clusterbutton;
 	public JCheckBox extractionlevelchooserentities;
 	public JCheckBox includepartipantscheckbox;
 	public JCheckBox extractionlevelchooser2;
-	public JComboBox vizchooser;
 	public JButton extractbutton;
-	public JTextField sourcetextfield;
 	public JPanel toppanel;
 	public JPanel leftpanel;
-	public JPanel rightpanel;
 	public ExtractorSelectionPanel processespanel;
 	public ExtractorSelectionPanel entitiespanel;
 	public ExtractorSelectionPanel submodelspanel;
@@ -109,19 +100,14 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 	public JPanel physiomappanel;
 	public JTabbedPane graphtabpane;
 	public JSplitPane centersplitpane;
-	//public OWLOntology ontology;
 	public String base;
 	public SemSimModel extractedmodel;
-	public ExtractorJCheckBox checkbox;
 	public File extractedfile;
 	public SemGenRadialGraphView view;
-	public Graph g;
 	public Graph tempgraph;
 	public Graph physiomapgraph;
 	public SparseMultigraph<String, Number> junggraph;
 
-	public JPanel graphpanel;
-	public JPanel PMgraphpanel;
 	public String initialfocusnodename;
 	public Map<DataStructure, Set<? extends DataStructure>> allpreserveddatastructures;
 	public Hashtable<PhysicalEntity, Set<DataStructure>> entsanddatastrs = new Hashtable<PhysicalEntity, Set<DataStructure>>();
@@ -129,12 +115,11 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 	public Hashtable<PhysicalProcess, Set<DataStructure>> processesanddatastrs = new Hashtable<PhysicalProcess, Set<DataStructure>>();
 	public Hashtable<DataStructure, PhysicalProcess> datastrsandprocesses = new Hashtable<DataStructure, PhysicalProcess>();
 	public File autogendirectory;
-	public float maxclusteringiterations;
+	private float maxclusteringiterations;
 	public ProgressFrame progframe;
 
 	public Clusterer cd;
 	public PrintWriter clusterwriter;
-	public File clusterfile;
 
 	public ExtractorTab(final JTabbedPane pane, SemSimModel semsimmodel, File sourcefile) throws OWLException {
 		this.pane = pane;
@@ -144,8 +129,7 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 
 		base = semsimmodel.getNamespace();
 
-		toppanel = new JPanel();
-		toppanel.setLayout(new BorderLayout());
+		toppanel = new JPanel(new BorderLayout());
 		toppanel.setOpaque(true);
 		vizsourcebutton = new JButton("Show source model");
 		vizsourcebutton.setFont(new Font("SansSerif", Font.PLAIN, SemGenGUI.defaultfontsize));
@@ -154,7 +138,6 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 		extractbutton = new JButton("EXTRACT");
 		extractbutton.setForeground(Color.blue);
 		extractbutton.setFont(new Font("SansSerif", Font.BOLD, SemGenGUI.defaultfontsize));
-		//extractbutton.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
 		extractbutton.addActionListener(this);
 		closebutton = new JButton("Close tab");
 		closebutton.setForeground(Color.blue);
@@ -166,12 +149,7 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 		closebutton.addMouseListener(buttonMouseListener);
 		closebutton.setRolloverEnabled(true);
 		JPanel buttonpanel = new JPanel();
-		//buttonpanel.add(vizsourcebutton);
-		//buttonpanel.add(extractbutton);
 		buttonpanel.add(closebutton);
-//		toppanel.add(Box.createGlue(), BorderLayout.WEST);
-//		toppanel.add(buttonpanel, BorderLayout.EAST);
-		//toppanel.setMaximumSize(new Dimension(999999,35));
 		
 		extractionlevelchooserentities = new JCheckBox("More inclusive");
 		extractionlevelchooserentities.setFont(new Font("SansSerif",Font.PLAIN, SemGenGUI.defaultfontsize-2));
@@ -192,7 +170,6 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 		clusterbutton.addActionListener(this);
 		
 		// List entities first because listprocesses needs data in entitiespanel
-		//entitiespanel = new ExtractorSelectionPanel(this, "Entities", listentities(), extractionlevelchooserentities);
 		entitiespanel = new ExtractorSelectionPanel(this, "Entities", listentities(), null);
 		
 		processespanel = new ExtractorSelectionPanel(this, "Processes", listprocesses(), includepartipantscheckbox);
@@ -205,8 +182,6 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 		AlphabetizeCheckBoxes(entitiespanel);
 		AlphabetizeCheckBoxes(submodelspanel);
 		AlphabetizeCheckBoxes(codewordspanel);
-		
-		// testGroupingQuery();
 
 		leftpanel = new JPanel();
 		leftpanel.setLayout(new BoxLayout(leftpanel, BoxLayout.Y_AXIS));
@@ -224,17 +199,11 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 
 		graphtabpane = new JTabbedPane();
 		physiomappanel = new JPanel();
-		//graphtabpane.addTab("PhysioMap", physiomappanel);
-		
-		//vizpanel.setBackground(Color.white);
-		rightpanel = new JPanel();
+		JPanel rightpanel = new JPanel();
 		rightpanel.setLayout(new BoxLayout(rightpanel,BoxLayout.Y_AXIS));
-		//rightpanel.add(toppanel);
 		rightpanel.add(graphtabpane);
-		//rightpanel.add(Box.createGlue());
 		centersplitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftpanel, rightpanel);
 		centersplitpane.setOneTouchExpandable(true);
-		//add(toppanel, BorderLayout.NORTH);
 		add(centersplitpane, BorderLayout.CENTER);
 		setVisible(true);
 		visualizeAllDataStructures(false);
@@ -301,16 +270,12 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 		// Iinda weird that we do it this way, but it's because of the way it used to be
 		Hashtable<DataStructure, Set<DataStructure>> table = new Hashtable<DataStructure, Set<DataStructure>>();
 		for(DataStructure ds : semsimmodel.getDataStructures()){
-			//if(ds.isDeclared()){
 			Set<DataStructure> dsset = new HashSet<DataStructure>();
 			dsset.add(ds);
 			table.put(ds, dsset);
-			//}
 		}
 		return table;
 	}
-
-	
 
 	// returns the preserved data structures in the extract
 	public Map<DataStructure, Set<? extends DataStructure>> primeextraction() throws IOException, OWLException {
@@ -330,9 +295,7 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 					for (DataStructure onedatastr : tempbox.associateddatastructures) {
 						// Need to reroute for components
 						Set<DataStructure> requiredinputs = onedatastr.getComputation().getInputs();
-						allpreserveddatastructures.put(onedatastr, requiredinputs);
-						
-						//includeInputsInExtraction(onedatastr);
+						allpreserveddatastructures.put(onedatastr, requiredinputs);						
 						
 						// Un-comment this block and comment out "includeInputsInExtraction", above, to make the extraction more limited
 						for(DataStructure oneinput : requiredinputs){
@@ -350,7 +313,6 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 										// Maybe change so that if a cdwd that we're including is dependent on another that's
 										// a participant, make sure to include its inputs (all inputs?)
 										allpreserveddatastructures.put(entds, entds.getComputation().getInputs());
-										//includeInputsInExtraction(entds);
 //										// Add the entity's inputs, make them terminal
 										for(DataStructure oneentin : entds.getComputation().getInputs()){
 											if(!allpreserveddatastructures.containsKey(oneentin)){
@@ -390,7 +352,6 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 				}
 			}
 		}
-
 		
 		// Collect the data structures to preserve from the sub-models checkboxes
 		for (int x = 0; x < submodelspanel.checkboxpanel.getComponentCount(); x++) {
@@ -409,7 +370,6 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 							if(!allpreserveddatastructures.containsKey(oneinput)){
 								allpreserveddatastructures.put(oneinput, new HashSet<DataStructure>());
 							}
-							else{} //leave alone
 						}
 					}
 				}
@@ -431,7 +391,6 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 				}
 			}
 		}
-
 
 		for (DataStructure pds : outputspreserveddatastructures) {
 			// If the full dependency chain is requested
@@ -501,10 +460,6 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 			}
 		}
 		allpreserveddatastructures.putAll(tempmap);
-//		for(DataStructure ds : tempmap.keySet()){
-//			allpreserveddatastructures.remove(ds);
-//			allpreserveddatastructures.put(ds, tempmap.get(ds));
-//		}
 		return allpreserveddatastructures;
 	}
 	
@@ -719,7 +674,6 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 				int selectedview = graphtabpane.getSelectedIndex();
 				graphtabpane.removeAll();
 				graphtabpane.add("Computational network", view.demo(tempgraph, LABEL, this));
-				//graphtabpane.add("PhysioMap",PMview.demo(physiomapgraph, LABEL));
 				if(selectedview!=-1)
 					graphtabpane.setSelectedIndex(selectedview);
 				else graphtabpane.setSelectedIndex(0);
@@ -884,133 +838,6 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 		}
 		visualize(alldatastrs, clusteringonly);
 	}
-/*
-	public void testGroupingQuery() {
-		Set<String> entnames = new HashSet<String>();
-		for(PhysicalEntity ent : semsimmodel.getPhysicalEntities()){
-			if(ent.hasRefersToAnnotation()) entnames.add(ent.getFirstRefersToReferenceOntologyAnnotation().getDescription());
-			else entnames.add(ent.getName());
-		}
-
-		String entquerystring = "";
-		for (String oneent : entnames) {
-			if (oneent.startsWith("http://sig.biostr.washington.edu/fma3.0#")) {
-				entquerystring = entquerystring + "set:set1 set:member fma:" + SemSimOWLFactory.getIRIfragment(oneent) + ". ";
-			}
-		}
-		String results = "";
-		VSparQLService service = new VSparQLServiceProxy();
-		try {
-			results = service.executeQuery("PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>"
-							+ "PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
-							+ "PREFIX owl:<http://www.w3.org/2002/07/owl#>"
-							+ "PREFIX gleen:<java:edu.washington.sig.gleen.>"
-							+ "PREFIX hier:<http://sig.biostr.washington.edu/hier#>"
-							+ "PREFIX set:<http://sig.biostr.washington.edu/set#>"
-							+ "PREFIX fma:<http://sig.biostr.washington.edu/fma3.0#>"
-							+
-							"CONSTRUCT { ?a hier:child_of ?c. }"
-							+ "FROM <http://sig.biostr.washington.edu/fma3.0>"
-							+ "FROM NAMED <input_list> [  " + "CONSTRUCT" + "{"
-							+ entquerystring
-							+
-							/*
-							 * "set:set1 set:member fma:Pulmonary_valve. "+
-							 * "set:set1 set:member fma:Blood_in_left_ventricle. "
-							 * + "set:set1 set:member fma:Mitral_valve. "+
-							 * "set:set1 set:member fma:Wall_of_left_ventricle. "
-							 * + "set:set1 set:member fma:Aortic_valve. "+
-							 * "set:set1 set:member fma:Blood_in_left_atrium. "+
-							 * "set:set1 set:member fma:Wall_of_left_atrium. "+
-							 */
-	/*
-							"}"
-							+ "FROM <http://sig.biostr.washington.edu/fma3.0>"
-							+ "WHERE{}"
-							+ "]"
-							+ "FROM NAMED <temp_hierarchy> ["
-							+ "CONSTRUCT "
-							+ "{"
-							+ "?x hier:temp ?z. "
-							+ "}"
-							+ "FROM NAMED <input_list> "
-							+ "FROM <http://sig.biostr.washington.edu/fma3.0> "
-							+ "WHERE"
-							+ "{"
-							+ "GRAPH <input_list> {set:set1 set:member ?a.} "
-							+ "(?a \"(([fma:constitutional_part_of]|[fma:regional_part_of]))+\" ?b) gleen:Subgraph (?x ?y ?z). "
-							+
-							// |[fma:regional_part_of]|[fma:contained_in]|[fma:subClassOf]
-							"}"
-							+ "] "
-							+ "FROM NAMED <inter_hierarchy> [ "
-							+ "CONSTRUCT {?a ?b ?c. hier:sink hier:perm ?x.} "
-							+ "FROM <temp_hierarchy> "
-							+ "WHERE"
-							+ "{"
-							+ "{?a ?b ?c.} "
-							+ "UNION"
-							+ "{"
-							+ "?x ?y ?z. "
-							+ "OPTIONAL {?child ?rel ?x.} "
-							+ "FILTER(!bound(?child)). "
-							+ "}"
-							+ "} "
-							+ "UNION"
-							+ "CONSTRUCT {?child hier:perm ?parent.?child_prime hier:temp ?parent_prime} "
-							+ "FROM NAMED <inter_hierarchy> "
-							+ "WHERE"
-							+ "{"
-							+ "GRAPH <inter_hierarchy> "
-							+ "{"
-							+
-							// "#case1: parent has other children"+
-							"{"
-							+ "?x hier:perm ?child. "
-							+ "?child hier:temp ?parent. "
-							+ "OPTIONAL {?y hier:perm ?child2. ?child2 hier:temp ?parent.FILTER(?child!=?child2)} "
-							+ "FILTER(bound(?child2)). "
-							+ "}"
-							+
-
-							// "#case2: parent has no other children"+
-							"UNION"
-							+ "{"
-							+ "?x2 hier:perm ?child_prime. "
-							+ "?child_prime hier:temp ?temp_parent. "
-							+ "OPTIONAL {?child2_prime hier:temp ?temp_parent.FILTER(?child_prime!=?child2_prime)}"
-							+ "FILTER(!bound(?child2_prime)). "
-							+ "?temp_parent hier:temp ?parent_prime "
-							+ "}"
-							+ "}"
-							+ "}"
-							+ "]"
-							+ "WHERE"
-							+ "{"
-							+ "GRAPH <inter_hierarchy> {?a hier:perm ?c. FILTER(?a!=hier:sink)} "
-							+ "}");
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
-		// System.out.println(results);
-		File testfile = new File("temp/test.txt");
-		Scanner scanner = new Scanner(results);
-		PrintWriter outfile = null;
-		try {
-			outfile = new PrintWriter(new FileWriter(testfile));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		while (scanner.hasNextLine()) {
-			String nextline = scanner.nextLine();
-			outfile.println(nextline);
-		}
-		outfile.close();
-		ExtractorEntitiesTree tree = new ExtractorEntitiesTree(testfile);
-		entitiespanel.checkboxpanel = tree;
-	}
-	*/
-
 	
 	public void atomicDecomposition() {
 		JFileChooser fc = new JFileChooser();
@@ -1030,7 +857,6 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 		}
 	}
 
-	
 	public void decompose() {
 		Component[][] setofcomponentsinpanels = new Component[][]{
 				processespanel.checkboxpanel.getComponents(),
@@ -1081,8 +907,6 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 		progframe.setVisible(false);
 	}
 
-	
-	
 	public void batchCluster() throws IOException {
 		visualizeAllDataStructures(false);
 		cd = new Clusterer(junggraph, this);
@@ -1130,8 +954,6 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 			clusterwriter.println("-----Removing 0 edges-----");
 
 			// Need task here
-			//SemGenGUI.pft = new ProgressFrameThread("Clustering...", false);
-			//new Thread(SemGenGUI.pft).start();
 			BatchClusterTask task = new BatchClusterTask();
 			task.execute();
 			SemGenGUI.progframe = new ProgressFrame("Performing clustering analysis...", false, task);
@@ -1155,10 +977,6 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
         }
     }
 
-	
-	
-
-	
 	public void performClusteringAnalysis() throws IOException {
 		// Make sure to ignore edges for state variables that are inputs to themselves
 		int statevars = 0;
@@ -1176,7 +994,6 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 
 			clusterwriter.println("\n-----Removing " + y + " edges-----");
 			System.out.println("-----Removing " + y + " edges-----");
-			//System.out.println("Layout: " + cd.layout.getGraph());
 			String newmoduletable = cd.clusterAndRecolor(cd.layout, y, cd.similarColors, Clusterer.groupVertices.isSelected());
 			clusterwriter.println("-----Found " + cd.nummodules + " modules-----");
 			if (!newmoduletable.equals(moduletable)) {

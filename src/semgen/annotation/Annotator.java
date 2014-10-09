@@ -104,6 +104,7 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 	public String ontspref;
 	public JButton extractorbutton;
 	public JButton coderbutton;
+	public JButton sortbycompletenessbutton = new JButton("Sort");
 	public TextMinerDialog tmd;
 	public ProgressFrame progframe;
 	public ArrayList<Integer> indexesOfHighlightedTerms;
@@ -376,7 +377,7 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		focusbutton = aob;
 
 		dialogscrollpane.getViewport().removeAll();
-		anndialog = new AnnotationDialog(this, aob, fileURI, entityKBlist, propertyKBlist, depKBlist);
+		anndialog = new AnnotationDialog(this, aob, entityKBlist, propertyKBlist, depKBlist);
 		dialogscrollpane.getViewport().add(anndialog);
 		
 		// Highlight occurrences of codeword in legacy code
@@ -422,8 +423,7 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		}
 		else{
 			splitpane.setTopComponent(westsplitpane);
-			if(SemGenGUI.annotateitemsortbytype.isSelected()) AlphabetizeAndSetCodewordsbyMarker();
-			else AlphabetizeAndSetCodewords();
+			AlphabetizeAndSetCodewords();
 			AlphabetizeAndSetSubmodels();
 			if(focusbutton!=null){
 				if(!SemGenGUI.annotateitemtreeview.isSelected()){
@@ -436,17 +436,15 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		}
 		splitpane.setDividerLocation(divLoc);
 	}
-
 	
 	public void AlphabetizeAndSetCodewords(){
-		
 		codewordpanel.removeAll();
 		int numcdwdsshowing = updateCodewordButtonTable();
-		ArrayList<AnnotationObjectButton> aobarray = getAnnotationObjectButtonArray(codewordbuttontable);
+		ArrayList<AnnotationObjectButton> aoblist = getAnnotationObjectButtonArray(codewordbuttontable);
 		
-		addPanelTitle("Codewords ", aobarray.size(), numcdwdsshowing, codewordscrollpane, "No codewords or dependencies found");
-		
-		for (AnnotationObjectButton aob : aobarray) {
+		addPanelTitle("Codewords ", aoblist.size(), numcdwdsshowing, codewordscrollpane, "No codewords or dependencies found");
+		if(SemGenGUI.annotateitemsortbytype.isSelected()) setCodewordsbyMarker(aoblist);
+		for (AnnotationObjectButton aob : aoblist) {
 			aob.refreshAllCodes();
 			codewordpanel.add(aob);
 			
@@ -458,26 +456,18 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 			// Set name
 			if(!SemGenGUI.annotateitemtreeview.isSelected()) cb.namelabel.setText(cb.ds.getName());
 		}
+
 		codewordpanel.add(Box.createGlue());
 	}
-	
-	
-	public void AlphabetizeAndSetCodewordsbyMarker(){
-		
-		// First put all the codeword buttons in an array so they can be sorted
-		codewordpanel.removeAll();
-		int numcdwdsshowing = updateCodewordButtonTable();
-		ArrayList<AnnotationObjectButton> aobarray = getAnnotationObjectButtonArray(codewordbuttontable);
-		
+
+	public void setCodewordsbyMarker(ArrayList<AnnotationObjectButton> aoblist){
 		ArrayList<CodewordButton> entset = new ArrayList<CodewordButton>();
 		ArrayList<CodewordButton> procset = new ArrayList<CodewordButton>();
 		ArrayList<CodewordButton> depset = new ArrayList<CodewordButton>();
 
-		for (AnnotationObjectButton aob : aobarray) {
+		for (AnnotationObjectButton aob : aoblist) {
 			CodewordButton cb = (CodewordButton)aob;
 			DataStructure ds = cb.ds;
-			aob.namelabel.setText(ds.getName());  // Need to do this when switching from tree view to flat list
-			aob.refreshAllCodes();
 
 			int type = SemGenGUI.getPropertyType(ds);
 			
@@ -487,26 +477,17 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 			else if(type==SemSimConstants.PROPERTY_OF_PHYSICAL_PROCESS)
 				procset.add(cb);
 			else depset.add(cb);
-			
-			
-			// Set visibility
-			cb.setVisible(getCodewordButtonVisibility(cb));
-			
-			// Set name
-			if(!SemGenGUI.annotateitemtreeview.isSelected()) cb.namelabel.setText(ds.getName());
 		}
 		
-		ArrayList<CodewordButton> cdlist = new ArrayList<CodewordButton>(entset);
-		cdlist.addAll(procset);
-		cdlist.addAll(depset);
-		
-		addPanelTitle("Codewords ", (cdlist.size()), numcdwdsshowing, codewordscrollpane, "No codewords or dependencies found");
-		for (CodewordButton cdb : cdlist) {
-			codewordpanel.add(cdb);
-		}
-		codewordpanel.add(Box.createGlue());
+		aoblist.clear();
+		aoblist.addAll(entset);
+		aoblist.addAll(procset);
+		aoblist.addAll(depset);
 	}
 	
+	public void setCodewordsbyAnnCompleteness(ArrayList<AnnotationObjectButton> aoblist) {
+		
+	}
 	
 	public void AlphabetizeAndSetSubmodels(){
 		int numsubshowing = updateSubmodelButtonTable();

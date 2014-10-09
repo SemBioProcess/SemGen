@@ -10,11 +10,6 @@ import javax.swing.JPanel;
 import semgen.ExternalURLButton;
 import semgen.MoreInfoButton;
 
-
-
-
-
-
 public class TextMinerPanel extends JPanel{
 	/**
 	 * 

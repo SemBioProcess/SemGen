@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.net.URI;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
@@ -19,7 +18,6 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
 import semgen.SemGenGUI;
 import semgen.SemGenScrollPane;
@@ -95,14 +93,6 @@ public class ObjectPropertyEditor extends JPanel implements ActionListener, Prop
 				for(Annotation ann : subject.getAnnotations()){
 					if(ann.getRelation()==relation && (ann instanceof ReferenceOntologyAnnotation)){
 						String desc = ((ReferenceOntologyAnnotation)ann).getValueDescription();
-//						URI refuri = ((ReferenceOntologyAnnotation)ann).getReferenceURI();
-						
-//						PhysicalModelComponent refpmc = (PhysicalModelComponent)subject; 
-//						if(((ReferenceOntologyAnnotation)ann).getRelation()==SemSimConstants.REFERS_TO_RELATION)
-//							refpmc = model.getPhysicalModelComponentByReferenceURI(refuri);
-//						else if(((ReferenceOntologyAnnotation)ann).getRelation()==SemSimConstants.BQB_IS_VERSION_OF_RELATION
-//								&& (subject instanceof PhysicalModelComponent))
-//							refpmc = (PhysicalModelComponent)subject;
 						namesandobjects.put(
 								desc + " (" + ((ReferenceOntologyAnnotation)ann).getOntologyAbbreviation() + ")",
 								subject);
@@ -171,7 +161,6 @@ public class ObjectPropertyEditor extends JPanel implements ActionListener, Prop
 				}
 				sscsd = new SemSimComponentSelectorDialog(model.getPhysicalEntities(), null, sscs, null, false, "Physical entities");
 				sscsd.setUpUI(this);
-				//sscsd.optionPane.addPropertyChangeListener(this);
 			}
 		}
 
@@ -208,8 +197,6 @@ public class ObjectPropertyEditor extends JPanel implements ActionListener, Prop
 							namesandobjects.put(box.getName(), 
 									((PhysicalModelComponent)sscsd.nameobjectmap.get(box.getName())));
 						}
-						// If include other types of annotations in custom model component editor, need to deal with them here
-						//else namesandobjects.put(box.getName(), sscsd.nameobjectmap.get(box.getName()));
 					}
 				}
 			}
