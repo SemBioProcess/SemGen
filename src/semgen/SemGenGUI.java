@@ -276,7 +276,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		WINDOWS = OSValidator.isWindows();
 		LINUXorUNIX = OSValidator.isUnix();
 		
-		/*File libsbmlfile = null;
+		File libsbmlfile = null;
 		
 		if(WINDOWS) libsbmlfile = new File("cfg/sbmlj.dll"); 
 		else if(MACOSX) libsbmlfile = new File("cfg/libsbmlj.jnilib");
@@ -293,7 +293,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		}
 		else 
 			JOptionPane.showMessageDialog(this, "Couldn't open " + libsbmlfile.getAbsolutePath() + " for loading.");
-		*/
+
 		factory = manager.getOWLDataFactory();
 
 		registerForMacOSXEvents();

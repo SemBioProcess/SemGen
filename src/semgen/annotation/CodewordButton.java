@@ -37,7 +37,7 @@ public class CodewordButton extends AnnotationObjectButton implements MouseListe
 	}
 	
 	public void refreshCompositeAnnotationCode() {
-		String companncode = setCompositeAnnotationCodeforButton();
+		String companncode = annotater.getCompositeAnnotationCodeForButton(this);
 		compannlabel.setText(companncode);
 		if(companncode.equals("_")) annotationNotAdded(compannlabel);
 		else annotationAdded(compannlabel, true);
@@ -72,33 +72,5 @@ public class CodewordButton extends AnnotationObjectButton implements MouseListe
 			return true;  // Indicates to re-scroll to this button
 		}
 		return false;  // Indicates not to re-scroll to this button
-	}
-	
-	private String setCompositeAnnotationCodeforButton() {
-		switch (getCompositeAnnotationCodeForButton()) {
-		case 1:
-			return "P+_";
-		case 2:
-			return "_+X";
-		case 3:
-			return "P+X";
-		default:
-			return "_";
-		}
-	}
-	
-	public int getCompositeAnnotationCodeForButton(){
-		if(ds.getPhysicalProperty()!=null){
-			if(ds.getPhysicalProperty().hasRefersToAnnotation()){
-				if(ds.getPhysicalProperty().getPhysicalPropertyOf()!=null) 
-					return 3;//Property with Physical Entity
-				else return 1; //Property only
-			}
-			else{
-				if(ds.getPhysicalProperty().getPhysicalPropertyOf()!=null) 
-					return 2; //Physical Entity Only
-			}
-		}
-		return 0;
 	}
 }
