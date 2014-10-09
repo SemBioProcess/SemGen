@@ -104,7 +104,7 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 	public String ontspref;
 	public JButton extractorbutton;
 	public JButton coderbutton;
-	public JButton sortbycompletenessbutton = new JButton("Sort");
+	private JCheckBox sortbycompletenessbutton = new JCheckBox("Sort by Composite Completeness");
 	public TextMinerDialog tmd;
 	public ProgressFrame progframe;
 	public ArrayList<Integer> indexesOfHighlightedTerms;
@@ -117,7 +117,6 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 
 	public Annotator(File sourcefile, URI temploc, URI fileloc, String[] entityKBs, String[] propKBs, String[] depKBs,
 			String[] allKBs) {
-		
 		this.sourcefile = sourcefile;
 
 		tempURI = temploc;
@@ -183,7 +182,6 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		splitpane.setOneTouchExpandable(true);
 
 		// Create the general model information panel
-
 		extractorbutton = new JButton(SemGenGUI.extractoricon);
 		extractorbutton.setToolTipText("Open this model in Extractor");
 		extractorbutton.setSize(new Dimension(10, 10));
@@ -199,9 +197,12 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		coderbutton.setAlignmentY(JButton.TOP_ALIGNMENT);
 		coderbutton.setPreferredSize(new Dimension(20, 20));
 
+		sortbycompletenessbutton.addActionListener(this);
+		
 		JPanel toolpanel = new JPanel();
 		toolpanel.add(extractorbutton);
 		toolpanel.add(coderbutton);
+		toolpanel.add(sortbycompletenessbutton);
 		toolpanel.setAlignmentY(JPanel.TOP_ALIGNMENT);
 
 		closebutton = new JButton("Close tab");
@@ -219,8 +220,7 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		genmodinfo.setOpaque(true);
 		genmodinfo.add(toolpanel, BorderLayout.WEST);
 	}
-	
-	
+
 	// --------------------------------//
 	// METHODS
 	// --------------------------------//
@@ -266,15 +266,19 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 					SemGenGUI.NewExtractorTask task = new SemGenGUI.NewExtractorTask(sourcefile);
 					task.execute();
 				}
-			} catch (Exception e1) {e1.printStackTrace();}
+			} catch (Exception e1) {
+				e1.printStackTrace();}
 		}
-
+		if (o == sortbycompletenessbutton) {
+			AlphabetizeAndSetCodewords();
+		}
+		
 		if (o == coderbutton) {
 			String filenamesuggestion = null;
 			if(sourcefile!=null) filenamesuggestion = sourcefile.getName().substring(0, sourcefile.getName().lastIndexOf("."));
 			try {
 				if (!getModelSaved()) {
-					int savefilechoice = JOptionPane.showConfirmDialog(SemGenGUI.desktop,
+					int savefilechoice = JOptionPane.showConfirmDialog(this,
 							"Save changes before encoding model?",
 							"There are unsaved changes",
 							JOptionPane.YES_NO_CANCEL_OPTION,
@@ -301,11 +305,8 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 			e.printStackTrace();
 		}
 	}
-
-	
 	
 	public SemSimModel NewAnnotatorAction(){
-		
 		SemGenGUI.logfilewriter.println("Started new annotater");
 		annotationpane.setText(null);
 		annotationpane.setCaretPosition(0);
@@ -351,11 +352,9 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		if(initialaob!=null)
 			try {
 				annotationObjectAction(initialaob);
-			} catch (BadLocationException e) {
+			} catch (BadLocationException | IOException e) {
 				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			} 
 		
 		return semsimmodel;
 	}
@@ -407,6 +406,7 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		
 		// If the "Tree view" menu item is selected...
 		if(SemGenGUI.annotateitemtreeview.isSelected()){
+			sortbycompletenessbutton.setEnabled(false);
 			updateCodewordButtonTable();
 			updateSubmodelButtonTable();
 			splitpane.setTopComponent(treeviewscrollpane);
@@ -422,6 +422,7 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 			SemGenGUI.scrollToLeft(treeviewscrollpane);
 		}
 		else{
+			sortbycompletenessbutton.setEnabled(true);
 			splitpane.setTopComponent(westsplitpane);
 			AlphabetizeAndSetCodewords();
 			AlphabetizeAndSetSubmodels();
@@ -443,10 +444,12 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		ArrayList<AnnotationObjectButton> aoblist = getAnnotationObjectButtonArray(codewordbuttontable);
 		
 		addPanelTitle("Codewords ", aoblist.size(), numcdwdsshowing, codewordscrollpane, "No codewords or dependencies found");
+		if(sortbycompletenessbutton.isSelected()) setCodewordsbyAnnCompleteness(aoblist);
 		if(SemGenGUI.annotateitemsortbytype.isSelected()) setCodewordsbyMarker(aoblist);
+		
 		for (AnnotationObjectButton aob : aoblist) {
 			aob.refreshAllCodes();
-			codewordpanel.add(aob);
+			
 			
 			CodewordButton cb = (CodewordButton) aob;
 			
@@ -455,6 +458,7 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 			
 			// Set name
 			if(!SemGenGUI.annotateitemtreeview.isSelected()) cb.namelabel.setText(cb.ds.getName());
+			codewordpanel.add(aob);
 		}
 
 		codewordpanel.add(Box.createGlue());
@@ -486,7 +490,31 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 	}
 	
 	public void setCodewordsbyAnnCompleteness(ArrayList<AnnotationObjectButton> aoblist) {
+		ArrayList<CodewordButton> noneset = new ArrayList<CodewordButton>();
+		ArrayList<CodewordButton> ppset = new ArrayList<CodewordButton>();
+		ArrayList<CodewordButton> peset = new ArrayList<CodewordButton>();
+		ArrayList<CodewordButton> allset = new ArrayList<CodewordButton>();
 		
+		for (AnnotationObjectButton aob : aoblist) {
+			CodewordButton cb = (CodewordButton)aob;
+
+			int type = cb.getCompositeAnnotationCodeForButton();
+			
+			// Group according to physical property type
+			if(type==0)
+				noneset.add(cb);
+			else if(type==1)
+				ppset.add(cb);
+			else if(type==2)
+				peset.add(cb);
+			else allset.add(cb);
+		}
+		
+		aoblist.clear();
+		aoblist.addAll(noneset);
+		aoblist.addAll(ppset);
+		aoblist.addAll(peset);
+		aoblist.addAll(allset);
 	}
 	
 	public void AlphabetizeAndSetSubmodels(){
@@ -579,8 +607,6 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		}
 		hilit.removeAllHighlights();
 	}
-	
-	
 
 	public void setCodeViewer(String loc, Boolean startann) throws IOException {
 		codearea.setText(null);
@@ -665,7 +691,6 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		}
 	}
 	
-	
 	public static void showAnnotaterPanes(final Annotator ann){
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 		   public void run() { 
@@ -677,23 +702,7 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		   }
 		});
 	}
-	
-	
-	
-	public String getCompositeAnnotationCodeForButton(CodewordButton cb){
-		if(cb.ds.getPhysicalProperty()!=null){
-			if(cb.ds.getPhysicalProperty().hasRefersToAnnotation()){
-				if(cb.ds.getPhysicalProperty().getPhysicalPropertyOf()!=null) return "P+X";
-				else return "P+_";
-			}
-			else{
-				if(cb.ds.getPhysicalProperty().getPhysicalPropertyOf()!=null) return "_+X";
-			}
-		}
-		return "_";
-	}
-	
-	
+
 	public String getNonCompositeAnnotationCodeForButton(AnnotationObjectButton aob) {
 		if(aob.ssc instanceof Annotatable){
 			if(((Annotatable)aob.ssc).hasRefersToAnnotation()){
@@ -724,7 +733,6 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		}
 	}
 	
-	
 	public void removeSubmodel(SubmodelButton cb) throws IOException{
 		semsimmodel.removeSubmodel(cb.sub);
 		setModelSaved(false);
@@ -737,9 +745,9 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 			else
 				dialogscrollpane.getViewport().add(new JLabel("No codewords or sub-models to annotate"));
 		} 
-		catch (BadLocationException e) {e.printStackTrace();}
+		catch (BadLocationException e) {
+			e.printStackTrace();}
 	}
-	
 	
 	public void getIndexesForCodewordOccurrences(String origword, Boolean caseinsensitive) {
 		indexesOfHighlightedTerms = new ArrayList<Integer>();
@@ -917,9 +925,7 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		SemGenGUI.scrollToComponent(panel, aob);
 		try {
 			annotationObjectAction(aob);
-		} catch (BadLocationException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (BadLocationException | IOException e) {
 			e.printStackTrace();
 		}
 		
