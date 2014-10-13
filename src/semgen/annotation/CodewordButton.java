@@ -11,12 +11,9 @@ import semsim.SemSimConstants;
 import semsim.model.computational.DataStructure;
 
 public class CodewordButton extends AnnotationObjectButton implements MouseListener {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -7555259367118052593L;
 	
+	public enum cwCompletion {noAnnotations, hasPhysProp, hasPhysEnt, hasAll}
 	public DataStructure ds;
 
 	public CodewordButton(Annotator ann, DataStructure ssc, boolean compannfilled,
@@ -74,31 +71,33 @@ public class CodewordButton extends AnnotationObjectButton implements MouseListe
 		return false;  // Indicates not to re-scroll to this button
 	}
 	
+	//Generates the codes in the codeword panel (northwest panel) indicating whether a 
+	//codeword has Physical Property and/or Physical Entity annotations
 	private String setCompositeAnnotationCodeforButton() {
 		switch (getCompositeAnnotationCodeForButton()) {
-		case 1:
+		case hasPhysProp:
 			return "P+_";
-		case 2:
+		case hasPhysEnt:
 			return "_+X";
-		case 3:
+		case hasAll:
 			return "P+X";
 		default:
 			return "_";
 		}
 	}
 	
-	public int getCompositeAnnotationCodeForButton(){
+	public cwCompletion getCompositeAnnotationCodeForButton(){
 		if(ds.getPhysicalProperty()!=null){
 			if(ds.getPhysicalProperty().hasRefersToAnnotation()){
 				if(ds.getPhysicalProperty().getPhysicalPropertyOf()!=null) 
-					return 3;//Property with Physical Entity
-				else return 1; //Property only
+					return cwCompletion.hasAll;//Property with Physical Entity
+				else return cwCompletion.hasPhysProp; //Property only
 			}
 			else{
 				if(ds.getPhysicalProperty().getPhysicalPropertyOf()!=null) 
-					return 2; //Physical Entity Only
+					return cwCompletion.hasPhysEnt; //Physical Entity Only
 			}
 		}
-		return 0;
+		return cwCompletion.noAnnotations;
 	}
 }

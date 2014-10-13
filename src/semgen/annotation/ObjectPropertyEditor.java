@@ -37,9 +37,7 @@ import semsim.model.physical.SourceParticipant;
 import semsim.owl.SemSimOWLFactory;
 
 public class ObjectPropertyEditor extends JPanel implements ActionListener, PropertyChangeListener {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 2140271391558665212L;
 	public SemSimModel model;
 	public String propertyname;
@@ -69,13 +67,11 @@ public class ObjectPropertyEditor extends JPanel implements ActionListener, Prop
 
 		headerlabel = new JLabel(propertyname);
 
-		plusbutton = new JButton();
-		plusbutton.setIcon(plusicon);
+		plusbutton = new JButton(plusicon);
 		plusbutton.addActionListener(this);
 		plusbutton.setToolTipText("Add reference term");
 
-		minusbutton = new JButton();
-		minusbutton.setIcon(minusicon);
+		minusbutton = new JButton(minusicon);
 		minusbutton.addActionListener(this);
 		minusbutton.setToolTipText("Remove selected reference term");
 
@@ -173,8 +169,6 @@ public class ObjectPropertyEditor extends JPanel implements ActionListener, Prop
 		}
 	}
 
-	
-	
 	public void propertyChange(PropertyChangeEvent e) {
 		String value = sscsd.optionPane.getValue().toString();
 		if (value == "OK") {

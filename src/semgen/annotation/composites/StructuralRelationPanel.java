@@ -17,7 +17,6 @@ public class StructuralRelationPanel extends JPanel{
 	public AnnotationDialog anndialog;
 	public StructuralRelation structuralRelation;
 
-
 	public StructuralRelationPanel(AnnotationDialog anndialog, StructuralRelation relation){
 		this.anndialog = anndialog;
 		structuralRelation = relation;

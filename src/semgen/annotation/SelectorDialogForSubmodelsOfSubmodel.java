@@ -8,19 +8,12 @@ import java.util.Set;
 
 import javax.swing.JCheckBox;
 
-import semsim.model.computational.DataStructure;
 import semsim.model.physical.Submodel;
 
 public class SelectorDialogForSubmodelsOfSubmodel extends SemSimComponentSelectorDialog implements  PropertyChangeListener{
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	public String componenturi;
-	public Set<DataStructure> associateddatastructures;
 	public Submodel submodel;
-
 
 	public SelectorDialogForSubmodelsOfSubmodel(
 			AnnotationDialog anndia,

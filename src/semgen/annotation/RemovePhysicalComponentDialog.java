@@ -17,9 +17,6 @@ import semsim.model.physical.PhysicalProperty;
 public class RemovePhysicalComponentDialog extends SemSimComponentSelectorDialog implements
 		PropertyChangeListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -3622371132272217159L;
 	public Annotator annotator;
 
@@ -43,8 +40,6 @@ public class RemovePhysicalComponentDialog extends SemSimComponentSelectorDialog
 				removeComponentFromModel();
 				setVisible(false);
 				if(annotator.focusbutton instanceof CodewordButton) annotator.anndialog.compositepanel.refreshUI();
-			}
-			else{
 			}
 		}
 		else if(value == "Cancel"){

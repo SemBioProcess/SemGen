@@ -21,14 +21,12 @@ public class AddReferenceClassDialog extends JDialog implements
 	public ReferenceClassFinderPanel refclasspanel;
 	public Annotator annotator;
 	public JOptionPane optionPane;
-	public Object[] options;
 	public JTextArea utilarea;
 
 	public AddReferenceClassDialog(Annotator ann, String[] ontList, Object[] options, Annotatable annotatable) {
 		this.annotator = ann;
 		setTitle("Select reference concept");
 		refclasspanel = new ReferenceClassFinderPanel(annotator, annotatable, ontList);
-		this.options = options;
 
 		utilarea = new JTextArea();
 		utilarea.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
@@ -43,7 +41,6 @@ public class AddReferenceClassDialog extends JDialog implements
 		optionPane = new JOptionPane(array, JOptionPane.PLAIN_MESSAGE,
 				JOptionPane.OK_CANCEL_OPTION, null);
 		optionPane.addPropertyChangeListener(this);
-		this.options = options;
 		optionPane.setOptions(options);
 		optionPane.setInitialValue(options[0]);
 		setContentPane(optionPane);
@@ -52,11 +49,9 @@ public class AddReferenceClassDialog extends JDialog implements
 	public void packAndSetModality(){
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		pack();
-		setLocationRelativeTo(SemGenGUI.desktop);
 		setVisible(true);
 	}
 	
-
 	public void propertyChange(PropertyChangeEvent arg0) {
 		String value = optionPane.getValue().toString();
 		String selectedname = (String) refclasspanel.resultslistright.getSelectedValue();

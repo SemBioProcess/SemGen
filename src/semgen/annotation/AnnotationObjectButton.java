@@ -5,8 +5,6 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -22,7 +20,7 @@ import semgen.annotation.composites.PropertyMarker;
 import semsim.Annotatable;
 import semsim.model.SemSimComponent;
 
-public class AnnotationObjectButton extends JPanel implements MouseListener, ActionListener{
+public class AnnotationObjectButton extends JPanel implements MouseListener{
 	/**
 	 * 
 	 */
@@ -101,8 +99,6 @@ public class AnnotationObjectButton extends JPanel implements MouseListener, Act
 		humdeflabel.setAlignmentY(JComponent.CENTER_ALIGNMENT);
 		compannlabel.setFont(new Font("Serif", Font.PLAIN, SemGenGUI.defaultfontsize-3));
 
-
-		
 		deplabel.setText("_");
 		deplabel.setName("D");
 		
@@ -114,7 +110,6 @@ public class AnnotationObjectButton extends JPanel implements MouseListener, Act
 		}
 		else namelabel.setForeground(Color.gray);
 
-		
 		if (compannfilled) {
 			annotationAdded(compannlabel, true);
 			compannlabel.setText(companntext);
@@ -153,12 +148,10 @@ public class AnnotationObjectButton extends JPanel implements MouseListener, Act
 		setVisible(true);
 	}
 	
-
 	public void setIdentifyingData(String name){
 		this.setName(name);
 		namelabel.setText(name);
 	}
-	
 	
 	public boolean refreshAllCodes(){
 		refreshFreeTextCode();
@@ -166,8 +159,7 @@ public class AnnotationObjectButton extends JPanel implements MouseListener, Act
 		annotater.updateTreeNode();
 		return true;
 	}
-	
-	
+		
 	public void refreshSingularAnnotationCode(){
 		if(((Annotatable)ssc).hasRefersToAnnotation()){
 			annotationAdded(singularannlabel, false);
@@ -176,12 +168,10 @@ public class AnnotationObjectButton extends JPanel implements MouseListener, Act
 		
 	}
 	
-	
 	public void refreshFreeTextCode(){
 		if(ssc.getDescription()==null) annotationNotAdded(humdeflabel);
 		else annotationAdded(humdeflabel, false);
 	}
-
 
 	public void annotationAdded(JLabel label, Boolean iscompann) {
 		label.setFont(new Font("Serif", Font.BOLD, SemGenGUI.defaultfontsize-2));
@@ -201,9 +191,6 @@ public class AnnotationObjectButton extends JPanel implements MouseListener, Act
 		repaint();
 		validate();
 	}
-
-	public void mouseClicked(MouseEvent e) {}
-
 
 	public void mouseEntered(MouseEvent e) {
 		if (e.getComponent() instanceof JLabel && e.getComponent()!=compannlabel) {
@@ -238,11 +225,8 @@ public class AnnotationObjectButton extends JPanel implements MouseListener, Act
 			annotater.focusbutton = this;
 		}
 	}
+	
+	public void mouseClicked(MouseEvent e) {}
+	public void mouseReleased(MouseEvent e) {}
 
-	public void mouseReleased(MouseEvent e) {
-	}
-
-
-	public void actionPerformed(ActionEvent arg0) {
-	}
 }

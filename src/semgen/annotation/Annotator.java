@@ -61,9 +61,6 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 	private URI tempURI;
 	public URI fileURI;
 	public IRI tempIRI;
-	public String[] entityKBlist = { "-none selected-" };
-	public String[] propertyKBlist = { "-none selected-" };
-	public String[] depKBlist = { "-none selected-" };
 	public SingularAnnotationEditor noncompeditor;
 	public HumanDefEditor humdefeditor;
 
@@ -115,17 +112,12 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 	
 	public SemSimModel semsimmodel;
 
-	public Annotator(File sourcefile, URI temploc, URI fileloc, String[] entityKBs, String[] propKBs, String[] depKBs,
-			String[] allKBs) {
+	public Annotator(File sourcefile, URI temploc, URI fileloc) {
 		this.sourcefile = sourcefile;
 
 		tempURI = temploc;
 		tempIRI = IRI.create(tempURI);
 		fileURI = fileloc;
-		entityKBlist = entityKBs;
-		propertyKBlist = propKBs;
-		depKBlist = depKBs;
-
 		setOpaque(false);
 		setLayout(new BorderLayout());
 
@@ -197,6 +189,7 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		coderbutton.setAlignmentY(JButton.TOP_ALIGNMENT);
 		coderbutton.setPreferredSize(new Dimension(20, 20));
 
+		sortbycompletenessbutton.setFont(new Font("SansSerif", Font.PLAIN, 11));
 		sortbycompletenessbutton.addActionListener(this);
 		
 		JPanel toolpanel = new JPanel();
@@ -376,7 +369,7 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		focusbutton = aob;
 
 		dialogscrollpane.getViewport().removeAll();
-		anndialog = new AnnotationDialog(this, aob, entityKBlist, propertyKBlist, depKBlist);
+		anndialog = new AnnotationDialog(this, aob);
 		dialogscrollpane.getViewport().add(anndialog);
 		
 		// Highlight occurrences of codeword in legacy code
@@ -490,31 +483,37 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 	}
 	
 	public void setCodewordsbyAnnCompleteness(ArrayList<AnnotationObjectButton> aoblist) {
-		ArrayList<CodewordButton> noneset = new ArrayList<CodewordButton>();
-		ArrayList<CodewordButton> ppset = new ArrayList<CodewordButton>();
-		ArrayList<CodewordButton> peset = new ArrayList<CodewordButton>();
-		ArrayList<CodewordButton> allset = new ArrayList<CodewordButton>();
+		ArrayList<CodewordButton> nonelist = new ArrayList<CodewordButton>();
+		ArrayList<CodewordButton> physproplist = new ArrayList<CodewordButton>();
+		ArrayList<CodewordButton> physentlist = new ArrayList<CodewordButton>();
+		ArrayList<CodewordButton> alllist = new ArrayList<CodewordButton>();
 		
 		for (AnnotationObjectButton aob : aoblist) {
 			CodewordButton cb = (CodewordButton)aob;
 
-			int type = cb.getCompositeAnnotationCodeForButton();
+			switch (cb.getCompositeAnnotationCodeForButton()) {
 			
 			// Group according to physical property type
-			if(type==0)
-				noneset.add(cb);
-			else if(type==1)
-				ppset.add(cb);
-			else if(type==2)
-				peset.add(cb);
-			else allset.add(cb);
+			case noAnnotations:
+				nonelist.add(cb);
+				break;
+			case hasPhysProp:
+				physproplist.add(cb);
+				break;
+			case hasPhysEnt:
+				physentlist.add(cb);
+				break;
+			default:
+				alllist.add(cb);
+				break;
+			}
 		}
 		
 		aoblist.clear();
-		aoblist.addAll(noneset);
-		aoblist.addAll(ppset);
-		aoblist.addAll(peset);
-		aoblist.addAll(allset);
+		aoblist.addAll(nonelist);
+		aoblist.addAll(physproplist);
+		aoblist.addAll(physentlist);
+		aoblist.addAll(alllist);
 	}
 	
 	public void AlphabetizeAndSetSubmodels(){

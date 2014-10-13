@@ -46,17 +46,15 @@ import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.PhysicalProperty;
 import semsim.model.physical.Submodel;
+import semsim.writing.CaseInsensitiveComparator;
 
 public class SemSimComponentAnnotationPanel extends JPanel implements MouseListener, ActionListener{
-	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -6606265105415658572L;
 	public Annotatable smc;
 	public AnnotationDialog anndialog;
 	public SemSimModel semsimmodel;
-	public JComboBox combobox;
+	public JComboBox<String> combobox;
 	public JLabel searchlabel = new JLabel(SemGenGUI.searchicon);
 	public JLabel createlabel = new JLabel(SemGenGUI.createicon);
 	public ExternalURLButton urlbutton = new ExternalURLButton();
@@ -74,7 +72,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 		
 		editable = anndialog.thebutton.editable;
 		
-		combobox = new JComboBox(new String[]{});
+		combobox = new JComboBox<String>(new String[]{});
 		combobox.setPreferredSize(new Dimension(350,30));
 		combobox.setMaximumSize(new Dimension(350,30));
 		combobox.setEnabled(editable);
@@ -189,7 +187,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 			}
 		}
 		
-		Collections.sort(stringlist, SemGenGUI.cic);
+		Collections.sort(stringlist, new CaseInsensitiveComparator());
 
 		// Allow the use of the *unspecified* option for select types of Annotatable structures
 		if(smc instanceof PhysicalProperty || smc instanceof DataStructure || smc instanceof Submodel){
@@ -212,7 +210,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 				text = SemGenGUI.unspecifiedName;
 			else text = ((SemSimComponent)smc).getName();
 		}
-		combobox.setModel(new DefaultComboBoxModel(stringarray));
+		combobox.setModel(new DefaultComboBoxModel<String>(stringarray));
 		combobox.setSelectedItem(text);
 		combobox.validate();
 		selecteditem = combobox.getSelectedItem();
@@ -322,18 +320,17 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 			// If we're erasing a component in a composite annotation...
 			if(smc instanceof PhysicalModelComponent && !(smc instanceof Submodel)){
 				int componentindex = 0;
-				int compositecomponents = 0;
 				Component[] comps = anndialog.compositepanel.getComponents();
 				for(int c=0; c<comps.length; c++){
 					if(comps[c] == this) componentindex = c;
-					if(comps[c] instanceof SemSimComponentAnnotationPanel) compositecomponents++;
+					if(comps[c] instanceof SemSimComponentAnnotationPanel) {
+					}
 				}
 				// If we're removing a property annotation, just remove reference anns from property and refresh
 				if(componentindex==0){
 					removeAsPhysicalPropertyAnnotation();
 					// If only the physical property part of the composite is left, and we're removing it, set the 
 					// data structure's physical property to null
-					//if(compositecomponents == 1) anndialog.compositepanel.datastructure.setPhysicalProperty();
 				}
 				// Otherwise, actually remove the physicalmodelcomponentpanel and structuralrelationpanel, if present
 				else{
@@ -475,7 +472,6 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 	public void applyReferenceOntologyAnnotation(ReferenceOntologyAnnotation ann, boolean refreshCodes){
 		smc.removeAllReferenceAnnotations();
 		smc.addAnnotation(ann);
-		//more411label.termuri = pmc.getFirstRefersToReferenceOntologyAnnotation().getReferenceURI().toString();
 		urlbutton.setTermURI(ann.getReferenceURI());
 		anndialog.annotator.setModelSaved(false);
 		if(refreshCodes) anndialog.thebutton.refreshAllCodes();

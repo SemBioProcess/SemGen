@@ -183,10 +183,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 	public JButton openmenuextractbutton;
 	public JButton openmenumergebutton;
 	public JButton encodebutton;
-	public static String[] entityKBlist;
-	public static String[] propertyKBlist;
-	public static String[] depKBlist;
-	public static String[] allKBlist;
 	public static String logfileloc = tempdir.getAbsolutePath() + "/SemGen_log.txt";
 	public static File logfile;
 	public static PrintWriter logfilewriter;
@@ -260,7 +256,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 	public static FileNameExtensionFilter mmlfilter = new FileNameExtensionFilter("MML (*.mod)", "mod");
 	public static FileNameExtensionFilter csvfilter = new FileNameExtensionFilter("CSV (*.csv)", "csv");
 
-
 	public SemGenGUI(){
 		super("OSXAdapter");
 		
@@ -276,7 +271,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		WINDOWS = OSValidator.isWindows();
 		LINUXorUNIX = OSValidator.isUnix();
 		
-		/*File libsbmlfile = null;
+		File libsbmlfile = null;
 		
 		if(WINDOWS) libsbmlfile = new File("cfg/sbmlj.dll"); 
 		else if(MACOSX) libsbmlfile = new File("cfg/libsbmlj.jnilib");
@@ -293,7 +288,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		}
 		else 
 			JOptionPane.showMessageDialog(this, "Couldn't open " + libsbmlfile.getAbsolutePath() + " for loading.");
-		*/
+	
 		factory = manager.getOWLDataFactory();
 
 		registerForMacOSXEvents();
@@ -347,7 +342,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		
 		namestructuralrelationmap.put("contained_in", SemSimConstants.CONTAINED_IN_RELATION);
 		namestructuralrelationmap.put("part_of", SemSimConstants.PART_OF_RELATION);
-
 
 		setTitle(":: S e m  G e n ::");
 
@@ -625,13 +619,13 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 				}
 		}
 
-		if (o == fileitemexit) {try {
-			quit();
-		} catch (HeadlessException e1) {
-			e1.printStackTrace();
-		} catch (OWLException e1) {
-			e1.printStackTrace();
-		}}
+		if (o == fileitemexit) {
+			try {
+				quit();
+			} catch (HeadlessException | OWLException e1 ) {
+				e1.printStackTrace();
+			} 
+		}
 
 		if (o == toolsitemannotate || o == annotatebutton) {
 			opendialog.dispose();
@@ -887,7 +881,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		return returnVal;
 	}
 	
-	
 	public static int showSemGenFileChooser(File currentdirectory, String[] fileextensions, String title, 
 			int taskType, Boolean canselectmultiplefiles){
 		return showSemGenFileChooser(currentdirectory, fileextensions, title, taskType, canselectmultiplefiles, null);
@@ -908,15 +901,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		ExtractorTab extractor = null;
 		try {
 			extractor = NewExtractorAction(file);
-		} catch (OWLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (JDOMException e) {
-			e.printStackTrace();
-		} catch (ServiceException e) {
+		} catch (OWLException | IOException| InterruptedException | JDOMException | ServiceException e) {
 			e.printStackTrace();
 		}
 		if (extractor != null) 
@@ -937,11 +922,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 			e3.printStackTrace();
 		}
 	}
-	
-	public static void startMergingTask(){
-		
-	}
-	
 	
 	public static class NewAnnotatorTask extends SwingWorker<Void, Void> {
 		public File[] files;
@@ -1026,8 +1006,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
     }
 	
 
-	public static Annotator AnnotateAction(File file, Boolean autosave) {
-		
+	public static Annotator AnnotateAction(File file, Boolean autosave) {	
 		SemSimModel semsimmodel = loadSemSimModelFromFile(file, true);
 		
 		Annotator annotator = null;
@@ -1054,7 +1033,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 			if (newannok && !isOntologyOpenForEditing(existingURI)) {
 	
 				// Create new Annotater object in SemGen desktop
-				annotator = new Annotator(file, tempURI, saveURI, entityKBlist, propertyKBlist, depKBlist, allKBlist);
+				annotator = new Annotator(file, tempURI, saveURI);
 				annotator.semsimmodel = semsimmodel; 
 				
 				if(annotator.semsimmodel.getErrors().isEmpty()){
@@ -1081,7 +1060,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 							   desktop.getComponentAt(numtabs - 1).validate();
 						   }
 						});
-	//						
+
 						if(!autosave){
 							annotateitemaddrefterm.setEnabled(true);
 							annotateitemremoverefterm.setEnabled(true);

@@ -2,14 +2,11 @@ package semgen.annotation;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -19,7 +16,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import semgen.SemGenGUI;
 import semgen.annotation.composites.ProcessParticipantEditor;
 import semsim.SemSimConstants;
 import semsim.model.SemSimModel;
@@ -29,26 +25,16 @@ import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.ProcessParticipant;
 
 
-public class CustomPhysicalComponentEditor extends JDialog implements ActionListener, PropertyChangeListener {
-
-	/**
-	 * 
-	 */
+public class CustomPhysicalComponentEditor extends JDialog implements PropertyChangeListener {
 	private static final long serialVersionUID = 1L;
 	
 	public SemSimModel model;
 	public PhysicalModelComponent pmc;
 	public AnnotationDialog anndia;
-	
-	public String indname = "";
-	public String clsuri = "";
+
 	public JTextField mantextfield;
 	public JScrollPane descscroller;
 	public JTextArea descriptionarea;
-	public JButton newbutton;
-	public JButton openbutton;
-	public JButton savebutton;
-	public JButton saveapplybutton;
 	
 	public JPanel namepanel = new JPanel();
 	public JPanel descriptionpanel = new JPanel();
@@ -56,17 +42,10 @@ public class CustomPhysicalComponentEditor extends JDialog implements ActionList
 	public JOptionPane optionPane;
 
 	public ObjectPropertyEditor versionofeditor;
-	public ObjectPropertyEditor partofeditor;
-	public ObjectPropertyEditor hasparteditor;
-	public ObjectPropertyEditor containedineditor;
-	public ObjectPropertyEditor containseditor;
-	public ObjectPropertyEditor adjacenttoeditor;
-	public ObjectPropertyEditor isaeditor;
 	public ProcessParticipantEditor hassourceeditor;
 	public ProcessParticipantEditor hassinkeditor;
 	public ProcessParticipantEditor hasmediatoreditor;
 	public JComponent[] objectpropertyeditors;
-	public JPanel editorspanel;
 	public Object[] options;
 
 	public CustomPhysicalComponentEditor(AnnotationDialog anndia, PhysicalModelComponent pmc) {
@@ -131,17 +110,7 @@ public class CustomPhysicalComponentEditor extends JDialog implements ActionList
 		setTitle(title);
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		pack();
-		setLocationRelativeTo(null);
 		setVisible(true);
-	}
-
-	
-	public void actionPerformed(ActionEvent arg0) {
-	}
-
-	// THIS NEEDS TO BE REDONE
-	public void setCustomRestrictions(ObjectPropertyEditor aneditor) {
-		JOptionPane.showMessageDialog(SemGenGUI.desktop, "Deadly Light RULZ!");
 	}
 
 	public void propertyChange(PropertyChangeEvent arg0) {

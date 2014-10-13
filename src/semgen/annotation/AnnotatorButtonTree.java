@@ -23,7 +23,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
-
 import javax.swing.Painter;
 
 import semgen.SemGenGUI;
@@ -33,12 +32,9 @@ import semsim.model.computational.DataStructure;
 import semsim.model.computational.MappableVariable;
 import semsim.model.physical.FunctionalSubmodel;
 import semsim.model.physical.Submodel;
+import semsim.writing.CaseInsensitiveComparator;
 
 public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 7868541704010347520L;
 	public Annotator ann;
 	public Set<DataStructure> looseds;
@@ -110,8 +106,6 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 		}
 	}
 
-	
-	
 	class MyPainter implements Painter{
 		public void paint(Graphics2D arg0, Object arg1, int arg2, int arg3) {
 			arg0.setColor(SemGenGUI.lightblue);
@@ -128,8 +122,9 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 	}
 	
 	class MyRenderer extends DefaultTreeCellRenderer {
+		private static final long serialVersionUID = 1L;
 
-	    public Component getTreeCellRendererComponent(
+		public Component getTreeCellRendererComponent(
 	                        JTree tree,
 	                        Object value,
 	                        boolean sel,
@@ -168,7 +163,7 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 			ar[i] = ssc.getName();
 			i++;
 		}
-		Arrays.sort(ar, SemGenGUI.cic);
+		Arrays.sort(ar, new CaseInsensitiveComparator());
 		return ar;
 	}
 	
@@ -185,11 +180,9 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 	    if(nodeObj instanceof AnnotationObjectButton){
 	    	try {
 				ann.annotationObjectAction((AnnotationObjectButton)nodeObj);
-			} catch (BadLocationException e) {
+			} catch (BadLocationException | IOException e) {
 				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			} 
 	    }
 	    else if(nodeObj instanceof SemSimModel){
 	    	ann.showSelectAnnotationObjectMessage();

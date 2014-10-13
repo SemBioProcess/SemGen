@@ -41,9 +41,7 @@ import javax.swing.text.StyledDocument;
 import org.semanticweb.owlapi.model.OWLException;
 
 public class AnnotationDialog extends JPanel implements MouseListener{
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -7946871333815617810L;
 	public Annotator annotator;
 	public SemSimModel semsimmodel;
@@ -54,7 +52,6 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 	public SemSimComponentAnnotationPanel singularannpanel;
 	private JPanel humandefpanel;
 	private JLabel codewordlabel;
-	public JPanel subtitlepanel;
 	public AnnotationDialogClickableTextPane subtitlefield;
 	public AnnotationDialogClickableTextPane nestedsubmodelpane;
 	private JLabel compositelabel;
@@ -67,14 +64,11 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 	public SelectorDialogForCodewordsOfSubmodel sdfcoc;
 	public SelectorDialogForSubmodelsOfSubmodel sdfcomp;
 	public Set<DataStructure> cdwdsfromcomps;
-	public String[] entitybases;
-	public String[] propbases;
-	public String[] depbases;
 	public String codeword;
 	
 	public int indent = 15;
 
-	public AnnotationDialog(Annotator ann, AnnotationObjectButton aob, String[] entityKBs, String[] propKBs, String[] depKBs) throws IOException{
+	public AnnotationDialog(Annotator ann, AnnotationObjectButton aob) throws IOException{
 		annotator = ann;
 		thebutton = aob;
 		codeword = aob.getName();
@@ -83,10 +77,6 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 		if(aob instanceof SubmodelButton)
 			smc = ((SubmodelButton)aob).sub;
 		else smc = ((CodewordButton)aob).ds;
-		
-		entitybases = entityKBs;
-		propbases = propKBs;
-		depbases = depKBs;
 		
 		setBackground(SemGenGUI.lightblue);
 		setLayout(new BorderLayout());
@@ -114,7 +104,6 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 		humandefpanel.setBackground(SemGenGUI.lightblue);
 		humandefpanel.setBorder(BorderFactory.createEmptyBorder(0, indent, 0, 0));
 
-		
 		JPanel humandefsubpanel = new JPanel();
 		humandefsubpanel.setBackground(SemGenGUI.lightblue);
 		humandefsubpanel.setLayout(new BoxLayout(humandefsubpanel, BoxLayout.X_AXIS));
@@ -126,7 +115,7 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 		humandefpanel.add(humandefsubpanel, BorderLayout.WEST);
 		humandefpanel.add(Box.createGlue(), BorderLayout.EAST);
 		
-		subtitlepanel = new JPanel();
+		JPanel subtitlepanel = new JPanel();
 		subtitlepanel.setLayout(new BoxLayout(subtitlepanel, BoxLayout.Y_AXIS));
 		
 		JPanel codewordspanel = new JPanel();
@@ -266,7 +255,6 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 	}
 
 	public void refreshData() {
-		//removeAll();
 		// If a submodel, refresh the associated codewords
 		if(thebutton instanceof SubmodelButton)
 			refreshSubmodelData();
@@ -353,11 +341,7 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 		annotator.updateTreeNode();
 	}
 	
-	
-	
-	
-	public void setSubmodelDataOnScreen(Submodel sub, AnnotationDialogClickableTextPane pane, Set<? extends SemSimComponent> associatedsscs, String title){
-		
+	public void setSubmodelDataOnScreen(Submodel sub, AnnotationDialogClickableTextPane pane, Set<? extends SemSimComponent> associatedsscs, String title){	
 		if(thebutton.ssc instanceof FunctionalSubmodel) pane.setForeground(Color.black);
 		else pane.setForeground(Color.blue);
 		

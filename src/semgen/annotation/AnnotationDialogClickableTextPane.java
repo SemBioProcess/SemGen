@@ -10,9 +10,6 @@ import semgen.SemGenGUI;
 
 
 public class AnnotationDialogClickableTextPane extends JTextPane {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -1862678829844737844L;
 
 	public AnnotationDialogClickableTextPane(String text, AnnotationDialog dialog, int indent, boolean addMouseListener){

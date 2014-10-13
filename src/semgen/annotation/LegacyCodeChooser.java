@@ -24,9 +24,6 @@ import semsim.model.annotation.Annotation;
 public class LegacyCodeChooser extends JDialog implements ActionListener,
 		PropertyChangeListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 5097390254331353085L;
 	public JOptionPane optionPane;
 	public JTextField txtfld;
@@ -86,10 +83,8 @@ public class LegacyCodeChooser extends JDialog implements ActionListener,
 				}
 				ann.setModelSaved(false);
 			}
-			setVisible(false);
-		} else if (value == "Cancel") {
-			setVisible(false);
-		}
+		} 
+		setVisible(false);
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
