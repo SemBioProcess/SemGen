@@ -32,6 +32,8 @@ import semgen.ExternalURLButton;
 import semgen.SemGenGUI;
 import semgen.annotation.AnnotationDialog;
 import semgen.annotation.CustomPhysicalComponentEditor;
+import semgen.resource.SemGenFont;
+import semgen.resource.SemGenIcon;
 import semsim.Annotatable;
 import semsim.SemSimConstants;
 import semsim.model.SemSimComponent;
@@ -55,11 +57,11 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 	public AnnotationDialog anndialog;
 	public SemSimModel semsimmodel;
 	public JComboBox<String> combobox;
-	public JLabel searchlabel = new JLabel(SemGenGUI.searchicon);
-	public JLabel createlabel = new JLabel(SemGenGUI.createicon);
+	public JLabel searchlabel = new JLabel(SemGenIcon.searchicon);
+	public JLabel createlabel = new JLabel(SemGenIcon.createicon);
 	public ExternalURLButton urlbutton = new ExternalURLButton();
-	public JLabel eraselabel = new JLabel(SemGenGUI.eraseicon);
-	public JLabel modifylabel = new JLabel(SemGenGUI.modifyicon);
+	public JLabel eraselabel = new JLabel(SemGenIcon.eraseicon);
+	public JLabel modifylabel = new JLabel(SemGenIcon.modifyicon);
 	public Map<String,SemSimComponent> listdataandsmcmap = new HashMap<String, SemSimComponent>();
 	public Object selecteditem;
 	public Boolean editable;
@@ -194,7 +196,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 			stringlist.add(0,SemGenGUI.unspecifiedName);
 			listdataandsmcmap.put(SemGenGUI.unspecifiedName, null);
 		}
-		else if(smc instanceof PhysicalProcess) combobox.setFont(new Font("SansSerif", Font.ITALIC, SemGenGUI.defaultfontsize));
+		else if(smc instanceof PhysicalProcess) combobox.setFont(SemGenFont.defaultItalic());
 		
 		stringarray = stringlist.toArray(new String[]{});
 		String text = null;

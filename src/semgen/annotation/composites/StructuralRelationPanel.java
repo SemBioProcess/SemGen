@@ -2,14 +2,12 @@ package semgen.annotation.composites;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Font;
-
 import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import semgen.SemGenGUI;
 import semgen.annotation.AnnotationDialog;
+import semgen.resource.SemGenFont;
 import semsim.model.annotation.StructuralRelation;
 
 public class StructuralRelationPanel extends JPanel{
@@ -23,7 +21,7 @@ public class StructuralRelationPanel extends JPanel{
 		setLayout(new BorderLayout());
 		
 		JLabel partOf = new JLabel("part_of");
-		partOf.setFont(new Font("SansSerif", Font.ITALIC, SemGenGUI.defaultfontsize));
+		partOf.setFont(SemGenFont.defaultItalic());
 		partOf.setPreferredSize(new Dimension(135,30));
 		partOf.setMaximumSize(new Dimension(135,30));
 		

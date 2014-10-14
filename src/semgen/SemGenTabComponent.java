@@ -2,7 +2,6 @@ package semgen;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -15,6 +14,8 @@ import javax.swing.JPanel;
 import semgen.annotation.Annotator;
 import semgen.extraction.ExtractorTab;
 import semgen.merging.Merger;
+import semgen.resource.SemGenFont;
+import semgen.resource.SemGenIcon;
 
 public class SemGenTabComponent extends JPanel implements MouseListener{
 
@@ -27,19 +28,19 @@ public class SemGenTabComponent extends JPanel implements MouseListener{
 		this.setOpaque(false);
 		JLabel iconlabel = new JLabel();
 		ImageIcon icon = null;
-		if(tool instanceof Annotator) icon = SemGenGUI.annotatoricon;
-		else if(tool instanceof ExtractorTab) icon = SemGenGUI.extractoricon;
-		else if(tool instanceof Merger) icon = SemGenGUI.mergeicon;
+		if(tool instanceof Annotator) icon = SemGenIcon.annotatoricon;
+		else if(tool instanceof ExtractorTab) icon = SemGenIcon.extractoricon;
+		else if(tool instanceof Merger) icon = SemGenIcon.mergeicon;
 		iconlabel.setIcon(icon);
 		
 		removelabel = new JLabel();
 		removelabel.setOpaque(false);
-		removelabel.setIcon(SemGenGUI.eraseiconsmall);
+		removelabel.setIcon(SemGenIcon.eraseiconsmall);
 		removelabel.addMouseListener(this);
 		removelabel.setEnabled(false);
 		removelabel.setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
 		JLabel titlelabel = new JLabel(title);
-		titlelabel.setFont(new Font("SansSerif", Font.PLAIN, SemGenGUI.defaultfontsize));
+		titlelabel.setFont(SemGenFont.defaultPlain());
 		
 		add(iconlabel);
 		add(titlelabel);

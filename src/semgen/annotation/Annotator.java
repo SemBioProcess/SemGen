@@ -10,6 +10,8 @@ import semgen.ComparatorByName;
 import semgen.ProgressFrame;
 import semgen.SemGenGUI;
 import semgen.SemGenScrollPane;
+import semgen.resource.SemGenFont;
+import semgen.resource.SemGenIcon;
 import semsim.Annotatable;
 import semsim.SemSimConstants;
 import semsim.model.Importable;
@@ -86,8 +88,8 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 	private JPanel genmodinfo;
 	public JTextPane annotationpane;
 	private String nextline;
-	public JButton addsubmodelbutton = new JButton(SemGenGUI.plusicon);
-	public JButton removesubmodelbutton = new JButton(SemGenGUI.minusicon);
+	public JButton addsubmodelbutton = new JButton(SemGenIcon.plusicon);
+	public JButton removesubmodelbutton = new JButton(SemGenIcon.minusicon);
 	public CustomPhysicalComponentEditor customtermeditor;
 
 	public Highlighter hilit;
@@ -128,7 +130,7 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		codearea.setText(null);
 		codearea.setMargin(new Insets(5, 15, 5, 5));
 		codearea.setForeground(Color.black);
-		codearea.setFont(new Font("Monospaced", Font.PLAIN, SemGenGUI.defaultfontsize));
+		codearea.setFont(SemGenFont.Plain("Monospaced"));
 
 		hilit = new DefaultHighlighter();
 		onepainter = new DefaultHighlighter.DefaultHighlightPainter(SemGenGUI.lightblue);
@@ -174,7 +176,7 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		splitpane.setOneTouchExpandable(true);
 
 		// Create the general model information panel
-		extractorbutton = new JButton(SemGenGUI.extractoricon);
+		extractorbutton = new JButton(SemGenIcon.extractoricon);
 		extractorbutton.setToolTipText("Open this model in Extractor");
 		extractorbutton.setSize(new Dimension(10, 10));
 		extractorbutton.setRolloverEnabled(true);
@@ -182,7 +184,7 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		extractorbutton.setPreferredSize(new Dimension(20, 20));
 		extractorbutton.setAlignmentY(JButton.TOP_ALIGNMENT);
 
-		coderbutton = new JButton(SemGenGUI.codericon);
+		coderbutton = new JButton(SemGenIcon.codericon);
 		coderbutton.setToolTipText("Encode this model for simulation");
 		coderbutton.setRolloverEnabled(true);
 		coderbutton.addActionListener(this);
@@ -355,7 +357,7 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 	public void addPanelTitle(String type, int totalcount, int displayedcount, SemGenScrollPane scrollpane, String zerocountmsg) {
 		scrollpane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.gray), 
 				type + "(" + totalcount + " total, " + displayedcount + " editable)", 
-				TitledBorder.CENTER, TitledBorder.TOP, new Font("SansSerif", Font.BOLD, SemGenGUI.defaultfontsize + 2)));
+				TitledBorder.CENTER, TitledBorder.TOP, SemGenFont.defaultBold(2)));
 		if (totalcount == 0 && type.equals("Codeword ")) {
 			scrollpane.getViewport().add(new JLabel(zerocountmsg));
 		} 

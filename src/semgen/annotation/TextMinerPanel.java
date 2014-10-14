@@ -18,22 +18,16 @@ public class TextMinerPanel extends JPanel{
 	public TextMinerCheckBox box;
 	public TextMinerDialog dialog;
 	public String bioportalID;
-	public String shortid;
-	public String termuri;
-	public String onturi;
 	
 	public TextMinerPanel(TextMinerCheckBox box, String onturi, String bioportalID, String termuri, String shortid, TextMinerDialog dialog){
 		this.dialog = dialog;
 		this.box = box;
-		this.onturi = onturi;
 		this.bioportalID = bioportalID;
-		this.shortid = shortid;
-		this.termuri = termuri;
-		this.setPreferredSize(new Dimension(700,35));	
-		this.setMaximumSize(new Dimension(700,35));		
-		this.setMinimumSize(new Dimension(700,35));		
-
-		
+		Dimension dim = new Dimension(700,35);
+		this.setPreferredSize(dim);	
+		this.setMaximumSize(dim);		
+		this.setMinimumSize(dim);		
+	
 		setLayout(new BorderLayout());
 		add(box, BorderLayout.WEST);
 		JPanel moreinfopanel = new JPanel();

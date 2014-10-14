@@ -327,6 +327,11 @@ public class SemGenFRLayout<V, E> extends AbstractLayout<V, E> implements
 	}
 
 	protected static class FRVertexData extends Point2D.Double {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		protected void offset(double x, double y) {
 			this.x += x;
 			this.y += y;

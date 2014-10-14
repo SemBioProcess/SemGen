@@ -3,7 +3,6 @@ package semgen;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Dialog.ModalityType;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -20,6 +19,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JDialog;
@@ -29,6 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
+
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -41,6 +42,9 @@ import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
+
+import semgen.resource.SemGenFont;
+import semgen.resource.SemGenIcon;
 import semsim.SemSimConstants;
 import semsim.owl.CustomRestrictionVisitor;
 import semsim.owl.SemSimOWLFactory;
@@ -86,17 +90,15 @@ public class MoreInfoButton extends JLabel implements PropertyChangeListener, Mo
 	}
 
 	public void getMoreInfo(){
-		if(this.getIcon()!=SemGenGUI.loadingiconsmall){
-			//this.setBorderPainted(true);
-			setIcon(SemGenGUI.loadingiconsmall);
+		if(this.getIcon()!=SemGenIcon.loadingiconsmall){
+			setIcon(SemGenIcon.loadingiconsmall);
 			goOnAndGetIt(onturi,termuri,bioportalID,shortid);
 		}
 	}
 	
 	public void getMoreInfo(String onturi1, String termuri1, String bioportalID1, String shortid1){
-		if(this.getIcon()!=SemGenGUI.loadingiconsmall){
-			//this.setBorderPainted(true);
-			setIcon(SemGenGUI.loadingiconsmall);
+		if(this.getIcon()!=SemGenIcon.loadingiconsmall){
+			setIcon(SemGenIcon.loadingiconsmall);
 			goOnAndGetIt(onturi1,termuri1,bioportalID1,shortid1);
 		}
 	}
@@ -106,7 +108,7 @@ public class MoreInfoButton extends JLabel implements PropertyChangeListener, Mo
 		// If the term can't be found on bioportal
 		System.out.println("term: " + termuri);
 		if(termuri == null){
-			setIcon(SemGenGUI.moreinfoicon);
+			setIcon(SemGenIcon.moreinfoicon);
 			return;
 		}
 
@@ -139,9 +141,6 @@ public class MoreInfoButton extends JLabel implements PropertyChangeListener, Mo
 				if(ontabbrev.equals("FMA")){
 					shortid = ontabbrev.toLowerCase() + ":" + shortid;
 				}
-//				else{
-//					shortid = ontabbrev + ":" + shortid;
-//				}
 			}
 		}
 		
@@ -156,7 +155,6 @@ public class MoreInfoButton extends JLabel implements PropertyChangeListener, Mo
 		
 
 		if (bioportalID!=null && !bioportalID.equals("") && SemGenGUI.annotateitemusebioportal.isSelected()) {
-			//String shortid = classnamesandshortconceptids.get(resultslistright.getSelectedValue());
 			// Get the selected ontology's latest version id
 			SAXBuilder builder = new SAXBuilder();
 			Document doc = new Document();
@@ -262,72 +260,7 @@ public class MoreInfoButton extends JLabel implements PropertyChangeListener, Mo
 			}
 		}
 
-		// if we're using the vSPARQL webservice (i.e. we're not querying a local file and not using BioPortal)
-		/*
-		else if (!onturi.startsWith("file:")) {
-			try {
-				VSparQLService service = new VSparQLServiceProxy();
-				results = service.executeQuery(" PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>"
-								+ " PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
-								+ " PREFIX owl:<http://www.w3.org/2002/07/owl#>"
-								+ " PREFIX gleen:<java:edu.washington.sig.gleen.>"
-								+ " SELECT ?rel ?c"
-								+ " FROM <"
-								+ onturi
-								+ ">" + " WHERE { <" + termuri + "> ?rel ?c }");
-			} catch (RemoteException e) {e.printStackTrace();this.reset();}
-
-			// Process the results from the web service query
-			Scanner resultsscanner = new Scanner(results);
-			resultsscanner.nextLine();
-			resultsscanner.nextLine();
-			resultsscanner.nextLine();
-			while (resultsscanner.hasNext()) {
-				String nextline = resultsscanner.nextLine();
-				// System.out.println(nextline);
-				if (nextline.startsWith("|")) {
-					nextline = nextline.substring(2, nextline.length() - 1);
-					String propuri = nextline.substring(0,
-							nextline.indexOf("|"));
-					String val = nextline.substring(nextline.indexOf("|") + 1,
-							nextline.length());
-					val = val.replace("\"", "");
-
-					if (val.contains("^^")) {
-						val = val.substring(0, val.indexOf("^^"));
-					}
-					if (val.contains(">") && val.contains("#")) {
-						String newval = val.substring(val.lastIndexOf("#") + 1,
-								val.lastIndexOf(">"));
-						// Hack to accomodate XML that might end up as a data
-						// property (like in the SBO)
-						if (newval.contains(">")) {
-							val = val.substring(0, val.lastIndexOf(">") + 1);
-						} else {
-							val = newval;
-						}
-					}
-					if (val.contains("@")) {
-						val = val.substring(0, val.indexOf("@"));
-					}
-
-					if (propuri.startsWith("<")) {
-						propuri = propuri.substring(propuri.indexOf("<") + 1,propuri.indexOf(">"));
-						if (propuri.contains("#")) {
-							propuri = propuri.substring(propuri.indexOf("#") + 1, propuri.length());
-						}
-					}
-					if (propsandvals.get(propuri.trim()) != null) {
-						propsandvals.get(propuri.trim()).add(val.trim());
-					} else {
-						Set<String> set = new HashSet<String>();
-						set.add(val.trim());
-						propsandvals.put(propuri.trim(), set);
-					}
-				}
-			}
-		}
-		*/
+		
 		// Otherwise we're using a local file and we need to access it with the OWL API (sigh)
 		else {
 			OWLOntology localont = null;
@@ -352,12 +285,8 @@ public class MoreInfoButton extends JLabel implements PropertyChangeListener, Mo
 			Set<OWLDataPropertyExpression> owldataprops = rv.getRestrictedDataProperties();
 
 			for (OWLObjectPropertyExpression objectprop : owlobjectprops) {
-				Set<String> objectvals = new HashSet<String>(); // OWLMethods.getClsValueObjectProperty(localont, uri,
-																// objectprop.asOWLClass().getIRI().toString());
-				Set<String> objectvals2 = new HashSet<String>(); // OWLMethods.getClsValueObjectProperty(localont,
-																	// uri,
-																	// objectprop.asOWLClass().getIRI().toString());
-
+				Set<String> objectvals = new HashSet<String>(); 
+				Set<String> objectvals2 = new HashSet<String>();
 				// For now we only get some, value and cardinality restrictions
 				if (rv.restrictedSomeObjectPropertiesTable.keySet().contains(objectprop)) {
 					objectvals.addAll(rv.getSomeObjectProperty(objectprop));
@@ -403,8 +332,7 @@ public class MoreInfoButton extends JLabel implements PropertyChangeListener, Mo
 				for (String val : propsandvals.get(prop)) {
 					JPanel subpanel = new JPanel();
 					JLabel proplabel = new JLabel(prop + ": ");
-					proplabel.setFont(new Font("SansSerif", Font.BOLD,
-							SemGenGUI.defaultfontsize));
+					proplabel.setFont(SemGenFont.defaultBold());
 					JTextArea vallabel = new JTextArea();
 					vallabel.setEditable(false);
 					vallabel.setText(val);
@@ -458,30 +386,24 @@ public class MoreInfoButton extends JLabel implements PropertyChangeListener, Mo
 			}
 		}
 	}
-	
-	
+
 	public void activate(){
 		setText("");
-		setIcon(SemGenGUI.moreinfoicon);
+		setIcon(SemGenIcon.moreinfoicon);
 		setEnabled(true);
 		setToolTipText("Get more info about term");
-		//this.setBorderPainted(false);
 		setOpaque(false);
-		//this.setContentAreaFilled(false);
 		addMouseListener(this);
 		setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
 	}
 	
 	public void reset(){
 		this.setText("");
-		this.setIcon(SemGenGUI.moreinfoicon);
+		this.setIcon(SemGenIcon.moreinfoicon);
 		this.setEnabled(true);
-		//this.setBorderPainted(false);
-		//this.setContentAreaFilled(false);
+
 	}
-	
-	
-	
+
 	public void mouseClicked(MouseEvent arg0) {
 		if(arg0.getSource()==this){
 			GenericThread querythread = new GenericThread(this, "getMoreInfo");

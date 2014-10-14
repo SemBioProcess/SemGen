@@ -7,8 +7,10 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
 import java.awt.event.*;
 import java.io.File;
 import java.io.FileWriter;
@@ -22,6 +24,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
 import org.semanticweb.owlapi.model.IRI;
@@ -37,6 +40,7 @@ import semgen.FileFilter;
 import semgen.GenericThread;
 import semgen.ProgressFrame;
 import semgen.SemGenGUI;
+import semgen.resource.SemGenFont;
 import semsim.SemSimUtil;
 import semsim.extraction.Extractor;
 import semsim.model.SemSimModel;
@@ -132,16 +136,16 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 		toppanel = new JPanel(new BorderLayout());
 		toppanel.setOpaque(true);
 		vizsourcebutton = new JButton("Show source model");
-		vizsourcebutton.setFont(new Font("SansSerif", Font.PLAIN, SemGenGUI.defaultfontsize));
+		vizsourcebutton.setFont(SemGenFont.defaultPlain());
 		vizsourcebutton.addActionListener(this);
 
 		extractbutton = new JButton("EXTRACT");
 		extractbutton.setForeground(Color.blue);
-		extractbutton.setFont(new Font("SansSerif", Font.BOLD, SemGenGUI.defaultfontsize));
+		extractbutton.setFont(SemGenFont.defaultBold());
 		extractbutton.addActionListener(this);
 		closebutton = new JButton("Close tab");
 		closebutton.setForeground(Color.blue);
-		closebutton.setFont(new Font("SansSerif", Font.ITALIC, 11));
+		closebutton.setFont(SemGenFont.defaultItalic(-1));
 		closebutton.setBorderPainted(false);
 		closebutton.setContentAreaFilled(false);
 		closebutton.setOpaque(false);
@@ -152,18 +156,18 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 		buttonpanel.add(closebutton);
 		
 		extractionlevelchooserentities = new JCheckBox("More inclusive");
-		extractionlevelchooserentities.setFont(new Font("SansSerif",Font.PLAIN, SemGenGUI.defaultfontsize-2));
+		extractionlevelchooserentities.setFont(SemGenFont.defaultPlain(-2));
 		extractionlevelchooserentities.setBorder(BorderFactory.createEmptyBorder(0,35,0,0));
 		extractionlevelchooserentities.addItemListener(this);
 		
 		includepartipantscheckbox = new JCheckBox("Include participants");
-		includepartipantscheckbox.setFont(new Font("SansSerif",Font.PLAIN, SemGenGUI.defaultfontsize-2));
+		includepartipantscheckbox.setFont(SemGenFont.defaultPlain(-2));
 		includepartipantscheckbox.setBorder(BorderFactory.createEmptyBorder(0,35,0,0));
 		includepartipantscheckbox.setSelected(true);
 		includepartipantscheckbox.addItemListener(this);
 
 		extractionlevelchooser2 = new JCheckBox("Include full dependency chain");
-		extractionlevelchooser2.setFont(new Font("SansSerif", Font.PLAIN,SemGenGUI.defaultfontsize - 2));
+		extractionlevelchooser2.setFont(SemGenFont.defaultPlain(-2));
 		extractionlevelchooser2.addItemListener(this);
 
 		clusterbutton = new JButton("Cluster");
@@ -670,7 +674,6 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 			if (!clusteringonly) {
 				// display the graphs
 				view = new SemGenRadialGraphView(tempgraph, LABEL, semsimmodel);
-				PhysioMapRadialGraphView PMview = new PhysioMapRadialGraphView(physiomapgraph, LABEL, semsimmodel);
 				int selectedview = graphtabpane.getSelectedIndex();
 				graphtabpane.removeAll();
 				graphtabpane.add("Computational network", view.demo(tempgraph, LABEL, this));
@@ -874,8 +877,6 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 			}
 		}
 		
-		// Go through the entities list and create one model for each physical entity
-		int num = 0;
 		for (int x = 0; x < setofcomponentsinpanels[1].length; x++) {
 			ExtractorJCheckBox ebox = (ExtractorJCheckBox) setofcomponentsinpanels[1][x];
 			if (x > 0) {
@@ -891,7 +892,6 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 				String out = null;
 					out = new MMLwriter().writeToString(extractedmodel);
 					SemSimUtil.writeStringToFile(out, coderfile);
-				num++;
 			} else {
 				System.out.println("ERROR in creating file during atomic decomposition");
 			}

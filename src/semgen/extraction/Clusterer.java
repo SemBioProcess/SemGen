@@ -17,7 +17,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Paint;
 import java.awt.Stroke;
@@ -33,6 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -47,6 +47,7 @@ import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.ChainedTransformer;
 import org.apache.commons.collections15.functors.ConstantTransformer;
@@ -55,10 +56,10 @@ import org.apache.commons.collections15.map.LazyMap;
 
 import semgen.SemGenGUI;
 import semgen.SemGenScrollPane;
+import semgen.resource.SemGenFont;
 import semsim.model.computational.DataStructure;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
-
 import edu.uci.ics.jung.algorithms.cluster.EdgeBetweennessClusterer;
 import edu.uci.ics.jung.algorithms.layout.AggregateLayout;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
@@ -336,7 +337,7 @@ public class Clusterer extends JFrame {
 
 			JLabel modulelabel = new JLabel("Cluster " + (i + 1));
 			modulelabel.setOpaque(true);
-			modulelabel.setFont(new Font("SansSerif", Font.BOLD, SemGenGUI.defaultfontsize));
+			modulelabel.setFont(SemGenFont.defaultBold());
 			modulelabel.setBackground(c);
 			modulelabel.setAlignmentX(LEFT_ALIGNMENT);
 			sempanel.add(modulelabel);
@@ -359,9 +360,9 @@ public class Clusterer extends JFrame {
 							JTextArea enttext = new JTextArea(name);
 							enttext.setOpaque(true);
 							enttext.setBackground(c);
-							enttext.setFont(new Font("SansSerif", Font.PLAIN, SemGenGUI.defaultfontsize - 2));
+							enttext.setFont(SemGenFont.defaultPlain(-2));
 							if(pmc instanceof PhysicalProcess){
-								enttext.setFont(new Font("SansSerif", Font.ITALIC, SemGenGUI.defaultfontsize - 2));
+								enttext.setFont(SemGenFont.defaultItalic(-2));
 								name = "Process: " + name;
 							}
 							else name = "Entity: " + name;

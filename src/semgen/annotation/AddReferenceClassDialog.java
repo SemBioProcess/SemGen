@@ -1,7 +1,6 @@
 package semgen.annotation;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.net.URI;
@@ -11,7 +10,7 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
-import semgen.SemGenGUI;
+import semgen.resource.SemGenFont;
 import semsim.Annotatable;
 
 public class AddReferenceClassDialog extends JDialog implements
@@ -34,7 +33,7 @@ public class AddReferenceClassDialog extends JDialog implements
 		utilarea.setLineWrap(true);
 		utilarea.setWrapStyleWord(true);
 		utilarea.setEditable(false);
-		utilarea.setFont(new Font("SansSerif", Font.BOLD, SemGenGUI.defaultfontsize - 1));
+		utilarea.setFont(SemGenFont.defaultBold(-1));
 
 		Object[] array = { utilarea, refclasspanel };
 

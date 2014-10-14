@@ -17,6 +17,7 @@ import javax.swing.JTextPane;
 
 import semgen.SemGenGUI;
 import semgen.SemGenScrollPane;
+import semgen.resource.SemGenFont;
 import semsim.SemSimConstants;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.Annotation;
@@ -65,7 +66,7 @@ public class SemanticSummaryDialog extends JDialog implements PropertyChangeList
 		// Display model-level info
 		JTextPane modelnamepane = new JTextPane();
 		modelnamepane.setText(semsimmodel.getName());
-		modelnamepane.setFont(new Font("SansSerif", Font.BOLD, SemGenGUI.defaultfontsize + 3));
+		modelnamepane.setFont(SemGenFont.defaultBold(3));
 		mainpanel.add(modelnamepane);
 		for(Annotation ann : semsimmodel.getAnnotations()){
 			if(ann.getRelation()==SemSimConstants.BQB_OCCURS_IN_RELATION){
@@ -77,7 +78,7 @@ public class SemanticSummaryDialog extends JDialog implements PropertyChangeList
 		// Display the physical properties
 		JTextPane propslabel = new JTextPane();
 		propslabel.setText("Physical properties");
-		propslabel.setFont(new Font("SansSerif", Font.BOLD, SemGenGUI.defaultfontsize + 2));
+		propslabel.setFont(SemGenFont.defaultPlain(2));
 		mainpanel.add(propslabel);
 		for(PhysicalProperty prop : semsimmodel.getPhysicalProperties()){
 			if(prop.getPhysicalPropertyOf()!=null){
@@ -89,7 +90,7 @@ public class SemanticSummaryDialog extends JDialog implements PropertyChangeList
 		mainpanel.add(new JSeparator());
 		JTextPane entitieslabel = new JTextPane();
 		entitieslabel.setText("Physical entities");
-		entitieslabel.setFont(new Font("SansSerif", Font.BOLD, SemGenGUI.defaultfontsize + 2));
+		entitieslabel.setFont(SemGenFont.defaultBold(2));
 		mainpanel.add(entitieslabel);
 		
 		// Display the entities
@@ -108,7 +109,7 @@ public class SemanticSummaryDialog extends JDialog implements PropertyChangeList
 		// Display the processes
 		JTextPane proclabel = new JTextPane();
 		proclabel.setText("Physical processes");
-		proclabel.setFont(new Font("SansSerif", Font.BOLD, SemGenGUI.defaultfontsize + 2));
+		proclabel.setFont(SemGenFont.defaultBold(2));
 		mainpanel.add(proclabel);
 		for(PhysicalProcess proc : semsimmodel.getPhysicalProcesses()){
 			String suffix = "";
@@ -127,7 +128,6 @@ public class SemanticSummaryDialog extends JDialog implements PropertyChangeList
 		JPanel subpanel = new JPanel();
 		JLabel label = new JLabel(rel);
 		JTextPane valuepane = new JTextPane();
-		//valuepane.setPreferredSize(new Dimension(400,100));
 		valuepane.setText(val);
 		subpanel.add(label);
 		subpanel.add(valuepane);

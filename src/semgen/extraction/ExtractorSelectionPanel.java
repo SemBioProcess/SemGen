@@ -3,7 +3,6 @@ package semgen.extraction;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -29,8 +28,9 @@ import javax.swing.JPanel;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.ComparatorByName;
-import semgen.SemGenGUI;
 import semgen.SemGenScrollPane;
+import semgen.resource.SemGenFont;
+import semgen.resource.SemGenIcon;
 import semsim.model.SemSimComponent;
 import semsim.model.computational.DataStructure;
 import semsim.model.physical.PhysicalModelComponent;
@@ -46,11 +46,11 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 	public Map<String, JCheckBox> termandcheckboxmap = new HashMap<String,JCheckBox>();
 	JPanel titlepanel = new JPanel();
 	public ExtractorTab extractor;
-	public JButton expandcontractbutton = new JButton(SemGenGUI.expendcontracticon);
+	public JButton expandcontractbutton = new JButton(SemGenIcon.expendcontracticon);
 
 	public ExtractorSelectionPanel(ExtractorTab extractor, String title, Hashtable<? extends SemSimComponent,Set<DataStructure>> table, JComponent addon){
 		this.extractor = extractor;
-		markallbox.setFont(new Font("SansSerif", Font.ITALIC, SemGenGUI.defaultfontsize-2));
+		markallbox.setFont(SemGenFont.defaultItalic(-2));
 		markallbox.setToolTipText("Select all/none");
 		termandcdwdstable = (Hashtable<? extends SemSimComponent, Set<DataStructure>>) table;
 		setBackground(Color.white);
@@ -72,7 +72,7 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 		
 		titlelabel = new JLabel();
 		titlelabel.addMouseListener(this);
-		titlelabel.setFont(new Font("SansSerif", Font.BOLD, SemGenGUI.defaultfontsize));
+		titlelabel.setFont(SemGenFont.defaultBold());
 		titlelabel.setForeground(Color.blue);
 		titlelabel.setBorder(BorderFactory.createEmptyBorder(0,5,0,5));
 		
@@ -126,7 +126,7 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 			checkbox.setSelected(false);
 			checkbox.addActionListener(this);
 			checkbox.addItemListener(extractor);
-			checkbox.setFont(new Font("SansSerif", Font.BOLD, SemGenGUI.defaultfontsize-1));
+			checkbox.setFont(SemGenFont.defaultBold(-1));
 			cbarray.add(checkbox);
 			termandcheckboxmap.put(checkboxtext, checkbox);
 		}

@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
+
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -39,12 +40,13 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import JSim.util.Xcept;
-
 import semgen.GenericThread;
 import semgen.ProgressFrame;
 import semgen.SemGenFileChooser;
 import semgen.SemGenGUI;
 import semgen.SemGenScrollPane;
+import semgen.resource.SemGenFont;
+import semgen.resource.SemGenIcon;
 import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
@@ -54,6 +56,7 @@ import semsim.model.physical.PhysicalProperty;
 import semsim.model.physical.Submodel;
 import semsim.owl.SemSimOWLFactory;
 import semsim.reading.ModelClassifier;
+import semsim.writing.CaseInsensitiveComparator;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -122,15 +125,14 @@ public class Merger extends JPanel implements ActionListener, MouseListener {
 		filelisttitle.setBorder(BorderFactory.createEmptyBorder(0,0,0,10));
 
 		plusminuspanel = new JPanel();
-		plusbutton = new JButton(SemGenGUI.plusicon);
+		plusbutton = new JButton(SemGenIcon.plusicon);
 		plusbutton.addActionListener(this);
-		minusbutton = new JButton(SemGenGUI.minusicon);
+		minusbutton = new JButton(SemGenIcon.minusicon);
 		minusbutton.addActionListener(this);
 
-		loadingbutton = new JButton();
+		loadingbutton = new JButton(SemGenIcon.blankloadingiconsmall);
 		loadingbutton.setBorderPainted(false);
 		loadingbutton.setContentAreaFilled(false);
-		loadingbutton.setIcon(SemGenGUI.blankloadingiconsmall);
 
 		plusminuspanel.setLayout(new BoxLayout(plusminuspanel, BoxLayout.X_AXIS));
 		plusminuspanel.add(filelisttitle);
@@ -158,7 +160,7 @@ public class Merger extends JPanel implements ActionListener, MouseListener {
 		mergebuttonpanel = new JPanel();
 
 		mergebutton = new JButton("MERGE");
-		mergebutton.setFont(new Font("SansSerif", Font.BOLD, SemGenGUI.defaultfontsize));
+		mergebutton.setFont(SemGenFont.defaultBold());
 		mergebutton.setForeground(Color.blue);
 		mergebutton.addActionListener(this);
 
@@ -168,8 +170,7 @@ public class Merger extends JPanel implements ActionListener, MouseListener {
 
 		mergebuttonpanel.add(mergebutton);
 		
-		JPanel filelistpanel = new JPanel();
-		filelistpanel.setLayout(new BorderLayout());
+		JPanel filelistpanel = new JPanel(new BorderLayout());
 		filelistpanel.add(filelistheader, BorderLayout.WEST);
 		filelistpanel.add(filelistscroller, BorderLayout.CENTER);
 		filelistpanel.add(mergebuttonpanel, BorderLayout.EAST);
@@ -245,7 +246,7 @@ public class Merger extends JPanel implements ActionListener, MouseListener {
 					if (filelistpanel.getComponents().length > 1) {
 						filelistpanel.getComponent(1).setForeground(Color.red);
 						GenericThread primethread = new GenericThread(this, "primeForMergingStep");
-						loadingbutton.setIcon(SemGenGUI.loadingiconsmall);
+						loadingbutton.setIcon(SemGenIcon.loadingiconsmall);
 						primethread.start();
 					}
 				}
@@ -409,7 +410,7 @@ public class Merger extends JPanel implements ActionListener, MouseListener {
 		initialidenticalinds.addAll(identicaldsnames);
 		identifyExactSemanticOverlap();
 		resmapsplitpane.setDividerLocation(dividerlocation);
-		loadingbutton.setIcon(SemGenGUI.blankloadingiconsmall);
+		loadingbutton.setIcon(SemGenIcon.blankloadingiconsmall);
 	}
 
 	public void populateMappingPanel(String filename, SemSimModel model, MappingPanel mappingpanel, Color color) {
@@ -423,12 +424,12 @@ public class Merger extends JPanel implements ActionListener, MouseListener {
 			}
 			else nodescannset.add(desc);
 		}
-		JList list = new JList();
+		JList<String> list = new JList<String>();
 		list.setForeground(color);
 		String[] descannarray = (String[]) descannset.toArray(new String[] {});
 		String[] nodescannarray = (String[]) nodescannset.toArray(new String[] {});
-		Arrays.sort(descannarray,SemGenGUI.cic);
-		Arrays.sort(nodescannarray,SemGenGUI.cic);
+		Arrays.sort(descannarray,new CaseInsensitiveComparator());
+		Arrays.sort(nodescannarray,new CaseInsensitiveComparator());
 		String[] comboarray = new String[descannarray.length + nodescannarray.length];
 		for(int i=0; i<comboarray.length; i++){
 			if(i<descannarray.length) comboarray[i] = descannarray[i];
@@ -454,15 +455,10 @@ public class Merger extends JPanel implements ActionListener, MouseListener {
 		resolvepanel.validate();
 
 		SemGenGUI.progframe.updateMessage("Comparing models...");
-		float cntfloat = 0;
-		
 		// Only include the annotated data structures in the resolution process
 		for(DataStructure ds1 : semsimmodel1.getDataStructures()){
 			for(DataStructure ds2 : semsimmodel2.getDataStructures()){
-				float frac = cntfloat / semsimmodel1.getDataStructures().size();
 				SemGenGUI.progframe.bar.setValue(101);
-				cntfloat++;
-				
 				Boolean match = false;
 				
 				// Test singular annotations

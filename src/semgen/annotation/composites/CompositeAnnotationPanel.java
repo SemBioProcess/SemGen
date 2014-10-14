@@ -3,7 +3,6 @@ package semgen.annotation.composites;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -18,6 +17,7 @@ import javax.swing.JPanel;
 
 import semgen.SemGenGUI;
 import semgen.annotation.AnnotationDialog;
+import semgen.resource.SemGenFont;
 import semsim.Annotatable;
 import semsim.SemSimConstants;
 import semsim.model.SemSimModel;
@@ -36,7 +36,6 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 	public AnnotationDialog ad;
 	public JButton addpropertybutton = new JButton("Add property");
 	public JLabel propertyoflabel = new JLabel("property_of");
-	public JPanel addentprocpanel = new JPanel();
 	public JButton addentbutton = new JButton("Add entity");
 	public JButton addprocbutton = new JButton("Add process");
 	
@@ -55,12 +54,15 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 			addentbutton.addActionListener(this);
 			addprocbutton.addActionListener(this);
 		}
-		JPanel addempanel = new JPanel(new BorderLayout());
+		
+		JPanel addentprocpanel = new JPanel();
 		addentprocpanel.setLayout(new BoxLayout(addentprocpanel, BoxLayout.X_AXIS));
 		addentprocpanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		addentprocpanel.add(addentbutton);
 		addentprocpanel.add(addprocbutton);
 		addentprocpanel.setBackground(SemGenGUI.lightblue);
+		
+		JPanel addempanel = new JPanel(new BorderLayout());
 		addempanel.add(addentprocpanel, BorderLayout.WEST);
 		
 		if(datastructure.getPhysicalProperty()!=null){
@@ -71,7 +73,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 		}
 		JPanel propofpanel = new JPanel( new BorderLayout() );
         propertyoflabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        propertyoflabel.setFont(new Font("SansSerif", Font.ITALIC, SemGenGUI.defaultfontsize));
+        propertyoflabel.setFont(SemGenFont.defaultItalic());
         propertyoflabel.setBorder(BorderFactory.createEmptyBorder(0, ad.indent, 0, 0));
         propofpanel.add(propertyoflabel);
         add(propofpanel);
@@ -197,7 +199,6 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 		// If "Add process" button pressed
 		if(arg0.getSource() == addprocbutton){
 			if(datastructure.getPhysicalProperty().getPhysicalPropertyOf()==null){
-				// THIS DOESN"T RETURN NULL: System.out.println("HERE: " + semsimmodel.getCustomPhysicalProcessByName(SemGenGUI.unspecifiedName));
 				datastructure.getPhysicalProperty().setPhysicalPropertyOf(semsimmodel.getCustomPhysicalProcessByName(SemGenGUI.unspecifiedName));
 				ad.annotator.setModelSaved(false);
 			}

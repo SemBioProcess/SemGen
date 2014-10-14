@@ -24,6 +24,8 @@ import semgen.annotation.SemanticSummaryDialog;
 import semgen.annotation.TextMinerDialog;
 import semgen.extraction.ExtractorTab;
 import semgen.merging.Merger;
+import semgen.resource.SemGenFont;
+import semgen.resource.SemGenIcon;
 import semsim.SemSimConstants;
 import semsim.SemSimModelCache;
 import semsim.SemSimUtil;
@@ -45,7 +47,6 @@ import semsim.reading.SemSimOWLreader;
 import semsim.reading.MMLreader;
 import semsim.webservices.BioPortalConstants;
 import semsim.webservices.WebserviceTester;
-import semsim.writing.CaseInsensitiveComparator;
 import semsim.writing.CellMLwriter;
 import semsim.writing.MMLwriter;
 import semsim.writing.Writer;
@@ -87,7 +88,6 @@ import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingWorker;
-import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.MenuEvent;
@@ -95,6 +95,7 @@ import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -107,7 +108,7 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.HashSet;
 import java.util.Set;
-import javax.swing.ImageIcon;
+
 import javax.xml.rpc.ServiceException;
 
 import java.text.SimpleDateFormat;
@@ -142,32 +143,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 	public static File ontologyTermsAndNamesCacheFile = new File("cfg/ontologyTermsAndNamesCache.txt");
 	public static Hashtable<String, String[]> jsimUnitsTable;
 	public static Hashtable<String, String[]> jsimUnitPrefixesTable;
-	public static CaseInsensitiveComparator cic = new CaseInsensitiveComparator();
-	public static ImageIcon plusicon = createImageIcon("icons/plus.gif");
-	public static ImageIcon minusicon = createImageIcon("icons/minus.gif");
-	public static ImageIcon loadingicon = createImageIcon("icons/blackspinnerclear.gif");
-	public static ImageIcon loadingiconsmall = createImageIcon("icons/preloader20x20.gif");
-	public static ImageIcon blankloadingicon = createImageIcon("icons/blackspinnerclearempty.gif");
-	public static ImageIcon blankloadingiconsmall = createImageIcon("icons/blackspinnersmallempty.gif");
-	public static ImageIcon searchicon = createImageIcon("icons/Search2020.png");
-	public static ImageIcon copyicon = createImageIcon("icons/Copy2020.png");
-	public static ImageIcon createicon = createImageIcon("icons/Create2020.png");
-	public static ImageIcon eraseicon = createImageIcon("icons/Erase2020.png");
-	public static ImageIcon eraseiconsmall = createImageIcon("icons/Erase1313.png");
-	public static ImageIcon modifyicon = createImageIcon("icons/Modify2020.png");
-	public static ImageIcon loadsourceofimporticon = createImageIcon("icons/Load2020.png");
-	public static ImageIcon homeicon = createImageIcon("icons/Home2020.png");
-	public static ImageIcon homeiconsmall = createImageIcon("icons/Home1515.png");
-	
-	
-	public static ImageIcon extractoricon = createImageIcon("icons/extractoricon2020.png");
-	public static ImageIcon annotatoricon = createImageIcon("icons/annotatoricon2020.png");
-	public static ImageIcon annotatoriconsmall = createImageIcon("icons/annotatoricon1515.png");
-	public static ImageIcon codericon = createImageIcon("icons/codericon2020.png");
-	public static ImageIcon mergeicon = createImageIcon("icons/mergeicon2020.png");
-	public static ImageIcon moreinfoicon = createImageIcon("icons/moreinfoicon2020.png");
-	public static ImageIcon externalURLicon = createImageIcon("icons/externalURL2020.png");
-	public static ImageIcon expendcontracticon = createImageIcon("icons/expandcontracticon1.gif");
+
 	public static Color lightblue = new Color(207, 215, 252, 255);
 	public static Color lightgreen = new Color(204, 255, 204, 255);
 	public static Color darkerblue = new Color(134, 156, 255, 255);
@@ -237,9 +213,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 	public static int numtabs = 0;
 	public static int initwidth = 900;
 	public static int initheight = 720;
-	public static int defaultfontsize = 12;
 	public static Map<TextAttribute, Integer> fontAttributes = new HashMap<TextAttribute, Integer>();
-	public static Font underlinefont;
 	public static Hashtable<String, String[]> startsettingstable;
 	public static SemGenGUI frame;
 	public static boolean LINUXorUNIX;
@@ -297,7 +271,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		logfilewriter.println("Loading SemGen");
 
 		fontAttributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-		underlinefont = new Font("SansSerif",Font.PLAIN, defaultfontsize).deriveFont(fontAttributes);
 
 		// Load the local copy of the OPB and the SemSim base ontology, and other config files into memory
 		try {
@@ -556,7 +529,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		setLocation(initxpos, initypos);
 		setVisible(true);
 		System.out.println("Loaded.");
-		setUIFont(new javax.swing.plaf.FontUIResource("SansSerif", Font.PLAIN, SemGenGUI.defaultfontsize));
+		SemGenFont.defaultUIFont();
 		OpenFileAction();
 	}
 	
@@ -1048,7 +1021,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 	
 					if(annotator.semsimmodel!=null){
 						numtabs++;
-						desktop.addTab(formatTabName(file.getName()), annotatoricon, annotator, "Annotating " + file.getName());
+						desktop.addTab(formatTabName(file.getName()), SemGenIcon.annotatoricon, annotator, "Annotating " + file.getName());
 						desktop.setTabComponentAt(numtabs-1, new SemGenTabComponent(formatTabName(file.getName()), annotator));
 						
 						annotator.NewAnnotatorAction();
@@ -1085,7 +1058,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 			extractor = new ExtractorTab(desktop, semsimmodel, file);
 			numtabs++;
 			desktop.addTab(formatTabName(extractor.semsimmodel.getName()),
-					extractoricon, extractor,
+					SemGenIcon.extractoricon, extractor,
 					"Extracting from " + file.getName());
 			desktop.setTabComponentAt(numtabs-1, new SemGenTabComponent(formatTabName(file.getName()), extractor));
 			desktop.setMnemonicAt(0, KeyEvent.VK_1);
@@ -1100,7 +1073,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		opendialog.setVisible(false);
 		Merger merger = new Merger(desktop);
 		numtabs++;
-		desktop.addTab("Merger", mergeicon, merger, "Tab for merging SemSim models");
+		desktop.addTab("Merger", SemGenIcon.mergeicon, merger, "Tab for merging SemSim models");
 		desktop.setTabComponentAt(numtabs-1, new SemGenTabComponent("Merger", merger));
 
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -1439,7 +1412,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		opendialog.setTitle("OPEN: Select action");
 		
 		annotatebutton = new JButton("Annotate a model");
-		annotatebutton.setIcon(annotatoricon);
+		annotatebutton.setIcon(SemGenIcon.annotatoricon);
 		annotatebutton.setFont(new Font("SansSerif", Font.PLAIN, 13));
 		annotatebutton.addActionListener(this);
 		annotatebutton.setAlignmentX(JButton.CENTER_ALIGNMENT);
@@ -1447,21 +1420,21 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 
 		openmenuextractbutton = new JButton("Extract a model");
 		openmenuextractbutton.setEnabled(true);
-		openmenuextractbutton.setIcon(extractoricon);
+		openmenuextractbutton.setIcon(SemGenIcon.extractoricon);
 		openmenuextractbutton.setFont(new Font("SansSerif", Font.PLAIN, 13));
 		openmenuextractbutton.addActionListener(this);
 		openmenuextractbutton.setAlignmentX(JButton.CENTER_ALIGNMENT);
 		
 		openmenumergebutton = new JButton("Merge models");
 		openmenumergebutton.setEnabled(true);
-		openmenumergebutton.setIcon(mergeicon);
+		openmenumergebutton.setIcon(SemGenIcon.mergeicon);
 		openmenumergebutton.setFont(new Font("SansSerif", Font.PLAIN, 13));
 		openmenumergebutton.addActionListener(this);
 		openmenumergebutton.setAlignmentX(JButton.CENTER_ALIGNMENT);
 
 		encodebutton = new JButton("Encode a model");
 		encodebutton.setEnabled(true);
-		encodebutton.setIcon(codericon);
+		encodebutton.setIcon(SemGenIcon.codericon);
 		encodebutton.setFont(new Font("SansSerif", Font.PLAIN, 13));
 		encodebutton.addActionListener(this);
 		encodebutton.setAlignmentX(JButton.CENTER_ALIGNMENT);
@@ -1693,15 +1666,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 				"Please make sure you are online, otherwise the website or service \n" + 
 				"may be experiencing difficulties.", "Error connecting to " + location, JOptionPane.ERROR_MESSAGE);
 	}
-	
-
-	public static void setUIFont(javax.swing.plaf.FontUIResource f) {
-		java.util.Enumeration<Object> keys = UIManager.getDefaults().keys();
-		while (keys.hasMoreElements()) {
-			Object key = keys.nextElement();
-			Object value = UIManager.get(key);
-			if (value instanceof javax.swing.plaf.FontUIResource)UIManager.put(key, f);}
-	}
 
 	public boolean AboutAction() {
 		String COPYRIGHT = "\u00a9";
@@ -1784,17 +1748,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 			numtabs = numtabs - 1;
 		}
 		return returnval;
-	}
-
-	/** Returns an ImageIcon, or null if the path was invalid. */
-	public static ImageIcon createImageIcon(String path) {
-		java.net.URL imgURL = SemGenGUI.class.getResource(path);
-		if (imgURL != null) {
-			return new ImageIcon(imgURL);
-		} else {
-			System.err.println("Couldn't find file: " + path);
-			return null;
-		}
 	}
 
 	// Generic registration with the Mac OS X application menu

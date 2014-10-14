@@ -1,7 +1,6 @@
 package semgen.annotation;
 
 import java.awt.Component;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.io.IOException;
 import java.util.Arrays;
@@ -26,6 +25,8 @@ import javax.swing.tree.TreeSelectionModel;
 import javax.swing.Painter;
 
 import semgen.SemGenGUI;
+import semgen.resource.SemGenFont;
+import semgen.resource.SemGenIcon;
 import semsim.model.SemSimComponent;
 import semsim.model.SemSimModel;
 import semsim.model.computational.DataStructure;
@@ -145,8 +146,8 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 	        }
 	        else if(userObj instanceof SemSimModel){
 	        	JLabel label = new JLabel(((SemSimModel)userObj).getName());
-	        	label.setIcon(SemGenGUI.homeiconsmall);
-	        	label.setFont(new Font("SansSerif", Font.BOLD, SemGenGUI.defaultfontsize+1));
+	        	label.setIcon(SemGenIcon.homeiconsmall);
+	        	label.setFont(SemGenFont.defaultBold(1));
 	        	JPanel panel = new JPanel();
 	        	panel.setOpaque(false);
 	        	panel.add(label);

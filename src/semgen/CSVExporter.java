@@ -8,8 +8,10 @@ import java.util.Arrays;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.semanticweb.owlapi.model.OWLException;
+
 import semsim.model.SemSimModel;
 import semsim.model.computational.DataStructure;
+import semsim.writing.CaseInsensitiveComparator;
 
 public class CSVExporter {
 	public String savelocation;
@@ -23,7 +25,7 @@ public class CSVExporter {
 		datatosave = "Codeword, Units, Value (if static), Definition\n";
 		
 		String[] array = semsimmodel.getDataStructureNames().toArray(new String[]{});
-		Arrays.sort(array, SemGenGUI.cic);
+		Arrays.sort(array, new CaseInsensitiveComparator());
 		for(int i=0; i<array.length; i++){
 			DataStructure ds = semsimmodel.getDataStructure(array[i]);
 			if(ds.isDeclared() && !ds.getName().equals("")){

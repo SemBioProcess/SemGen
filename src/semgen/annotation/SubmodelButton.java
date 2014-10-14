@@ -1,9 +1,7 @@
 package semgen.annotation;
 
 import java.awt.Dimension;
-import java.awt.Font;
-
-import semgen.SemGenGUI;
+import semgen.resource.SemGenFont;
 import semsim.model.physical.Submodel;
 
 
@@ -18,10 +16,11 @@ public class SubmodelButton extends AnnotationObjectButton{
 		super(ann, ssc, compannfilled, companntext, noncompannfilled, humdeffilled, depfilled, editable);
 		sub = (Submodel)ssc;
 		compannlabel.setVisible(false);
-		namelabel.setFont(new Font("SansSerif", Font.BOLD, SemGenGUI.defaultfontsize));
-		indicatorspanel.setPreferredSize(new Dimension(40, 17));
-		indicatorspanel.setMinimumSize(new Dimension(40, 17));
-		indicatorspanel.setMaximumSize(new Dimension(40, 17));
+		namelabel.setFont(SemGenFont.defaultBold());
+		Dimension dim = new Dimension(40, 17);
+		indicatorspanel.setPreferredSize(dim);
+		indicatorspanel.setMinimumSize(dim);
+		indicatorspanel.setMaximumSize(dim);
 		indicatorspanel.repaint();
 		refreshAllCodes();
 	}

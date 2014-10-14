@@ -2,11 +2,10 @@ package semgen.annotation;
 
 
 import java.awt.Color;
-import java.awt.Font;
 import javax.swing.BorderFactory;
 import javax.swing.JTextPane;
 
-import semgen.SemGenGUI;
+import semgen.resource.SemGenFont;
 
 
 public class AnnotationDialogClickableTextPane extends JTextPane {
@@ -21,11 +20,11 @@ public class AnnotationDialogClickableTextPane extends JTextPane {
 
 		if(addMouseListener){  // If need mouse listener, then it's clickable, if not, customize for computational code field
 			addMouseListener(dialog);
-			setFont(new Font("SansSerif", Font.PLAIN, SemGenGUI.defaultfontsize));
+			setFont(SemGenFont.defaultPlain());
 		}
 		else{
 			setContentType("text/html");
-			setFont(new Font("SansSerif", Font.ITALIC, SemGenGUI.defaultfontsize-1));
+			setFont(SemGenFont.defaultItalic(-1));
 		}
 		setCustomText(text);
 

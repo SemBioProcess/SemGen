@@ -1,6 +1,5 @@
 package semgen.annotation;
 
-
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,15 +19,14 @@ import semgen.SemGenGUI;
 import semsim.SemSimConstants;
 import semsim.model.annotation.Annotation;
 
-
 public class LegacyCodeChooser extends JDialog implements ActionListener,
 		PropertyChangeListener {
 
 	private static final long serialVersionUID = 5097390254331353085L;
 	public JOptionPane optionPane;
-	public JTextField txtfld;
+	public JTextField txtfld = new JTextField();
 	public Annotator ann;
-	public JButton locbutton;
+	public JButton locbutton = new JButton("or choose local file");
 	public Annotation existingann;
 
 	public LegacyCodeChooser(Annotator ann) {
@@ -41,9 +39,7 @@ public class LegacyCodeChooser extends JDialog implements ActionListener,
 		}
 
 		JPanel srcmodpanel = new JPanel();
-		txtfld = new JTextField();
 		txtfld.setPreferredSize(new Dimension(250, 25));
-		locbutton = new JButton("or choose local file");
 		locbutton.addActionListener(this);
 		srcmodpanel.add(txtfld);
 		srcmodpanel.add(locbutton);
@@ -60,7 +56,6 @@ public class LegacyCodeChooser extends JDialog implements ActionListener,
 
 		this.setTitle("Enter URL of legacy code or choose a local file");
 		this.pack();
-		this.setLocationRelativeTo(SemGenGUI.desktop);
 		this.setVisible(true);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	}

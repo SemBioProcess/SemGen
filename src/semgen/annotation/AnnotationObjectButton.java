@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 
 import semgen.SemGenGUI;
 import semgen.annotation.composites.PropertyMarker;
+import semgen.resource.SemGenFont;
 import semsim.Annotatable;
 import semsim.model.SemSimComponent;
 
@@ -64,7 +65,7 @@ public class AnnotationObjectButton extends JPanel implements MouseListener{
 		((BorderLayout)this.getLayout()).setHgap(0);
 
 		namelabel = new JLabel();
-		namelabel.setFont(new Font("SansSerif", Font.PLAIN, SemGenGUI.defaultfontsize));
+		namelabel.setFont(SemGenFont.defaultPlain());
 		namelabel.setOpaque(false);
 		namelabel.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 10));
 		namelabel.setBackground(new Color(0,0,0,0));
@@ -82,14 +83,14 @@ public class AnnotationObjectButton extends JPanel implements MouseListener{
 		compannlabel.setToolTipText("Indicates status of codeword's composite annotation");
 		compannlabel.setBorder(BorderFactory.createEmptyBorder(0, 2, 0, 2));
 		compannlabel.setAlignmentY(JComponent.CENTER_ALIGNMENT);
-		compannlabel.setFont(new Font("Serif", Font.PLAIN, SemGenGUI.defaultfontsize-3));
+		compannlabel.setFont(SemGenFont.Plain("Serif", -3));
 
 		singularannlabel.setText("_");
 		singularannlabel.setName("S");
 		singularannlabel.setToolTipText("Click to set singular reference annotation");
 		singularannlabel.setBorder(BorderFactory.createEmptyBorder(0, 2, 0, 2));
 		singularannlabel.setAlignmentY(JComponent.CENTER_ALIGNMENT);
-		compannlabel.setFont(new Font("Serif", Font.PLAIN, SemGenGUI.defaultfontsize-3));
+		compannlabel.setFont(SemGenFont.Plain("Serif", -3));
 
 		
 		humdeflabel.setText("_");
@@ -97,7 +98,7 @@ public class AnnotationObjectButton extends JPanel implements MouseListener{
 		humdeflabel.setToolTipText("Click to set free-text description");
 		humdeflabel.setBorder(BorderFactory.createEmptyBorder(0, 1, 0, 1));
 		humdeflabel.setAlignmentY(JComponent.CENTER_ALIGNMENT);
-		compannlabel.setFont(new Font("Serif", Font.PLAIN, SemGenGUI.defaultfontsize-3));
+		compannlabel.setFont(SemGenFont.Plain("Serif", -3));
 
 		deplabel.setText("_");
 		deplabel.setName("D");
@@ -174,7 +175,7 @@ public class AnnotationObjectButton extends JPanel implements MouseListener{
 	}
 
 	public void annotationAdded(JLabel label, Boolean iscompann) {
-		label.setFont(new Font("Serif", Font.BOLD, SemGenGUI.defaultfontsize-2));
+		label.setFont(SemGenFont.Bold("Serif", -2));
 		if(editable) label.setForeground(Color.blue);
 		else label.setForeground(Color.gray);
 		validate();
@@ -185,7 +186,7 @@ public class AnnotationObjectButton extends JPanel implements MouseListener{
 	}
 
 	public void annotationNotAdded(JLabel label) {
-		label.setFont(new Font("Serif", Font.PLAIN, SemGenGUI.defaultfontsize-2));
+		label.setFont(SemGenFont.Plain("Serif", -2));
 		label.setForeground(Color.gray);
 		label.setText("_");
 		repaint();

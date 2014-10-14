@@ -1,13 +1,9 @@
 package semgen.annotation;
 
-
-
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -43,7 +39,6 @@ import javax.swing.JTextField;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 
-import org.apache.commons.httpclient.HttpException;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -54,6 +49,8 @@ import semgen.GenericThread;
 import semgen.ResourcesManager;
 import semgen.SemGenGUI;
 import semgen.SemGenScrollPane;
+import semgen.resource.SemGenFont;
+import semgen.resource.SemGenIcon;
 import semsim.SemSimConstants;
 import semsim.webservices.BioPortalAnnotatorClient;
 import semsim.webservices.BioPortalConstants;
@@ -77,7 +74,6 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 	public SemGenScrollPane spboxes;
 	public SemGenScrollPane spresults;
 	public JOptionPane optionPane;
-	public Object[] options;
 	public JPanel sppanel;
 	public JPanel resultspanel;
 	public JSplitPane splitpane;
@@ -89,8 +85,6 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 	public Highlighter.HighlightPainter areapainter;
 	public Color HILIT_COLOR = Color.yellow;
 	public JButton loadingbutton;
-	
-	
 
 	public TextMinerDialog(Annotator ann) throws FileNotFoundException{
 		annotator = ann;
@@ -109,7 +103,7 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 		loadingbutton = new JButton();
 		loadingbutton.setBorderPainted(false);
 		loadingbutton.setContentAreaFilled(false);
-		loadingbutton.setIcon(SemGenGUI.blankloadingicon);
+		loadingbutton.setIcon(SemGenIcon.blankloadingicon);
 		
 		pmpanel = new JPanel();
 		pmlabel = new JLabel("Enter PubMed ID");
@@ -130,7 +124,7 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 		inputtextarea = new JTextArea();
 		inputtextarea.setLineWrap(true);
 		inputtextarea.setWrapStyleWord(true);
-		inputtextarea.setFont(new Font("SansSerif", Font.PLAIN, SemGenGUI.defaultfontsize-1));
+		inputtextarea.setFont(SemGenFont.defaultPlain(-1));
 		
 		areahilit = new DefaultHighlighter();
 		areapainter = new DefaultHighlighter.DefaultHighlightPainter(HILIT_COLOR);
@@ -174,7 +168,7 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 		optionPane = new JOptionPane(array, JOptionPane.PLAIN_MESSAGE,
 				JOptionPane.OK_CANCEL_OPTION, null);
 		optionPane.addPropertyChangeListener(this);
-		options = new Object[] { "Collect & Close", "Collect", "Close" };
+		Object[] options = new Object[] { "Collect & Close", "Collect", "Close" };
 		optionPane.setOptions(options);
 		optionPane.setInitialValue(options[0]);
 		pmarea.requestFocusInWindow();
@@ -211,15 +205,14 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 		String xmlresult = null;
 		try {
 			xmlresult = client.annotate();
-		} catch (HttpException e1) {
-			SemGenGUI.showWebConnectionError("BioPortal Annotator service");
 		} catch (IOException e1) {
 			SemGenGUI.showWebConnectionError("BioPortal Annotator service");
-		}
-		SAXBuilder builder = new SAXBuilder();
+		} 
+		
 		try {
 			Document doc = new Document();
 			Reader in = new StringReader(xmlresult);
+			SAXBuilder builder = new SAXBuilder();
 			doc = builder.build(in);
 			Iterator<Element> annit = doc.getRootElement().getChild("data").getChild("annotatorResultBean").getChild("annotations").getChildren("annotationBean").iterator();
 			if(!annit.hasNext()){resultspanel.add(new JLabel("NCBO annotator did not find any ontology terms"));}
@@ -261,13 +254,11 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 					}
 				}
 			}
-		} catch (JDOMException e) {
+		} catch (JDOMException | IOException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		} 
 		resultspanel.add(Box.createGlue());		
-		loadingbutton.setIcon(SemGenGUI.blankloadingicon);
+		loadingbutton.setIcon(SemGenIcon.blankloadingicon);
 		spresults.validate();
 		spresults.repaint();
 	}
@@ -296,8 +287,6 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 							idset.add(oneid);
 							allfoundids.add(oneid);
 						}
-						else{
-						}
 					}
 					String key = nextel.getText() + " (" + ontid.toUpperCase() + ")";
 					if(!termsanduris.keySet().contains(key) && !idset.isEmpty()){
@@ -305,11 +294,9 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 					}
 				}
 			}
-		} catch (JDOMException e) {
+		} catch (JDOMException | IOException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		} 
 		return termsanduris;
 	}
 	
@@ -372,7 +359,7 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 								"Please make sure you are connected to the web, \notherwise the PubMed service may be experiencing difficulties.",
 								"Problem querying PubMed",
 								JOptionPane.ERROR_MESSAGE);
-				loadingbutton.setIcon(SemGenGUI.blankloadingicon);
+				loadingbutton.setIcon(SemGenIcon.blankloadingicon);
 				return "";
 			} catch (JDOMException e) {
 				e.printStackTrace();
@@ -400,28 +387,22 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 					}
 				}
 			}
-			loadingbutton.setIcon(SemGenGUI.blankloadingicon);
+			loadingbutton.setIcon(SemGenIcon.blankloadingicon);
 		}
 		return abstr;
 	}
-	
-	
-	
+
 	public void propertyChange(PropertyChangeEvent arg0) {
 		String value = optionPane.getValue().toString();
+		optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 		if (value == "Collect"){
-			optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 			if(annotator.focusbutton instanceof CodewordButton) annotator.anndialog.compositepanel.refreshUI();
 		}
 		if (value == "Close"){
-			optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 			this.setVisible(false);
 		}
 		if (value == "Collect & Close"){
-			optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-			if(collect()){
-				this.setVisible(false);
-			}
+			setVisible(!collect());
 			if(annotator.focusbutton instanceof CodewordButton) annotator.anndialog.compositepanel.refreshUI();
 		}
 	}
@@ -431,14 +412,14 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 		if(o == parsebutton){
 			if(inputtextarea.getText()!=null && !inputtextarea.getText().equals("")){
 				GenericThread parsethread = new GenericThread(this, "parse");
-				loadingbutton.setIcon(SemGenGUI.loadingicon);
+				loadingbutton.setIcon(SemGenIcon.loadingicon);
 				parsethread.start();
 			}
 		}
 		if(o == pmarea || o == pmbutton){
 			pubmedid = pmarea.getText();
 			GenericThread pubmedthread = new GenericThread(this, "findpubmedabstract");
-			loadingbutton.setIcon(SemGenGUI.loadingicon);
+			loadingbutton.setIcon(SemGenIcon.loadingicon);
 			pubmedthread.start();
 		}
 	}

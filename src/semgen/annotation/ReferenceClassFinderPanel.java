@@ -3,7 +3,6 @@ package semgen.annotation;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -12,6 +11,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -34,10 +34,11 @@ import org.jdom.JDOMException;
 import semgen.ExternalURLButton;
 import semgen.GenericThread;
 import semgen.SemGenGUI;
+import semgen.resource.SemGenFont;
+import semgen.resource.SemGenIcon;
 import semsim.Annotatable;
 import semsim.SemSimConstants;
 import semsim.model.physical.PhysicalProperty;
-import semsim.owl.SemSimOWLFactory;
 import semsim.webservices.BioPortalConstants;
 import semsim.webservices.BioPortalSearcher;
 import semsim.webservices.UniProtSearcher;
@@ -57,9 +58,9 @@ public class ReferenceClassFinderPanel extends JPanel implements
 	private JPanel selectKBsourcepanel;
 	private JLabel selectKBsource;
 
-	public JComboBox ontologychooser;
+	public JComboBox<String> ontologychooser;
 	public Map<String,String> ontologySelectionsAndBioPortalIDmap = new HashMap<String,String>();
-	private JComboBox findchooser;
+	private JComboBox<String> findchooser;
 
 
 	public String[] existingresultskeysetarray;
@@ -76,7 +77,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 	private JPanel resultspanelrightheader;
 	private JPanel resultspanelright;
 	private JLabel resultslabelright;
-	public JList resultslistright = new JList();
+	public JList<String> resultslistright = new JList<String>();
 	private JScrollPane resultsscrollerright;
 
 	public Hashtable<String,String> resultsanduris = new Hashtable<String,String>();
@@ -129,10 +130,10 @@ public class ReferenceClassFinderPanel extends JPanel implements
 
 		selectKBsourcepanel = new JPanel();
 		selectKBsource = new JLabel("Select ontology: ");
-		selectKBsource.setFont(new Font("SansSerif", Font.PLAIN, SemGenGUI.defaultfontsize));
+		selectKBsource.setFont(SemGenFont.defaultPlain());
 
-		ontologychooser = new JComboBox(ontologyboxitems);
-		ontologychooser.setFont(new Font("SansSerif", Font.PLAIN, SemGenGUI.defaultfontsize));
+		ontologychooser = new JComboBox<String>(ontologyboxitems);
+		ontologychooser.setFont(SemGenFont.defaultPlain());
 		
 		// Set ontology chooser to recently used ontology
 		ontologychooser.setSelectedIndex(0);
@@ -153,10 +154,10 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		querypanel.setLayout(new BoxLayout(querypanel, BoxLayout.X_AXIS));
 
 		findtext = new JLabel("Term search:  ");
-		findtext.setFont(new Font("SansSerif", Font.PLAIN,SemGenGUI.defaultfontsize));
+		findtext.setFont(SemGenFont.defaultPlain());
 
-		findchooser = new JComboBox();
-		findchooser.setFont(new Font("SansSerif", Font.ITALIC, SemGenGUI.defaultfontsize - 1));
+		findchooser = new JComboBox<String>();
+		findchooser.setFont(SemGenFont.defaultItalic(-1));
 		findchooser.addItem("contains");
 		findchooser.addItem("exact match");
 		findchooser.setMaximumSize(new Dimension(125, 25));
@@ -164,7 +165,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		findbox = new JTextField();
 		findbox.setForeground(Color.blue);
 		findbox.setBorder(BorderFactory.createBevelBorder(1));
-		findbox.setFont(new Font("SansSerif", Font.PLAIN, SemGenGUI.defaultfontsize));
+		findbox.setFont(SemGenFont.defaultPlain());
 		findbox.setMaximumSize(new Dimension(300, 25));
 		findbox.addActionListener(this);
 
@@ -182,7 +183,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		loadingbutton = new JButton();
 		loadingbutton.setBorderPainted(false);
 		loadingbutton.setContentAreaFilled(false);
-		loadingbutton.setIcon(SemGenGUI.blankloadingicon);
+		loadingbutton.setIcon(SemGenIcon.blankloadingicon);
 		findpanel.add(loadingbutton);
 
 		resultspanelright = new JPanel();
@@ -193,10 +194,10 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		resultspanelrightheader.setOpaque(false);
 
 		resultslabelright = new JLabel("Search results");
-		resultslabelright.setFont(new Font("SansSerif", Font.PLAIN,SemGenGUI.defaultfontsize));
+		resultslabelright.setFont(SemGenFont.defaultPlain());
 		resultslabelright.setEnabled(true);
 
-		resultslistright = new JList();
+		resultslistright = new JList<String>();
 		resultslistright.addListSelectionListener(this);
 		resultslistright.setBackground(Color.white);
 		resultslistright.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -243,10 +244,10 @@ public class ReferenceClassFinderPanel extends JPanel implements
 	public void actionPerformed(ActionEvent arg0) {
 		Object o = arg0.getSource();
 		if ((o == findbox || o == findbutton || o == findchooser) && !findbox.getText().equals("")) {
-			loadingbutton.setIcon(SemGenGUI.loadingicon);
+			loadingbutton.setIcon(SemGenIcon.loadingicon);
 			findbox.setEnabled(false);
 			findbutton.setEnabled(false);
-			resultslistright.setListData(new Object[] {});
+			resultslistright.setListData(new String[] {});
 			externalURLbutton.setTermURI(null);
 			querythread = new GenericThread(this, "performSearch");
 			querythread.start();
@@ -315,7 +316,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		}
 
 		findbutton.setText("Go");
-		loadingbutton.setIcon(SemGenGUI.blankloadingicon);
+		loadingbutton.setIcon(SemGenIcon.blankloadingicon);
 		findbox.setEnabled(true);
 		findbutton.setEnabled(true);
 	}
@@ -334,12 +335,10 @@ public class ReferenceClassFinderPanel extends JPanel implements
 	public void valueChanged(ListSelectionEvent arg0) {
         boolean adjust = arg0.getValueIsAdjusting();
         if (!adjust) {
-          JList list = (JList) arg0.getSource();
+          JList<?> list = (JList<?>) arg0.getSource();
           if(list.getSelectedValue()!=null){
         	  String termuri = (String) resultsanduris.get(list.getSelectedValue());
-        	  externalURLbutton.setTermURI(URI.create(termuri)); 
-        	  Boolean uniprotterm = SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.get(
-    					SemSimOWLFactory.getNamespaceFromIRI(termuri))==SemSimConstants.UNIPROT_FULLNAME;
+        	  externalURLbutton.setTermURI(URI.create(termuri));
           }
         }
 	}

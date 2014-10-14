@@ -8,10 +8,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -27,6 +27,8 @@ import javax.swing.text.StyledDocument;
 
 import semgen.SemGenGUI;
 import semgen.SemGenScrollPane;
+import semgen.resource.SemGenFont;
+import semgen.resource.SemGenIcon;
 import semsim.model.SemSimModel;
 import semsim.model.computational.DataStructure;
 
@@ -38,7 +40,7 @@ public class ResolutionPanel extends JPanel implements ActionListener {
 	 */
 	private static final long serialVersionUID = -618244272904338963L;
 	public Merger merger;
-	public JComboBox chooser;
+	public JComboBox<String> chooser;
 	public JPanel annotationpanel;
 	public JPanel actionpanel;
 	public JPanel thirdpanel;
@@ -57,8 +59,6 @@ public class ResolutionPanel extends JPanel implements ActionListener {
 	public JRadioButton rb2;
 	public JRadioButton rb3;
 	public JButton questionbutton;
-
-	ImageIcon question = SemGenGUI.createImageIcon("icons/questionicon.gif");
 
 	public ResolutionPanel(Merger merger, DataStructure ds1, DataStructure ds2,
 			SemSimModel semsimmodel1, SemSimModel semsimmodel2,
@@ -83,48 +83,34 @@ public class ResolutionPanel extends JPanel implements ActionListener {
 		annotationpanel.setOpaque(true);
 
 		model1label = new JLabel(ds1.getDescription() + " (" + ds1.getName() + ")");
-		//model1label.setWrapStyleWord(true);
-		//model1label.setLineWrap(true);
-		model1label.setFont(new Font("SansSerif", Font.BOLD,
-				SemGenGUI.defaultfontsize));
+
+		model1label.setFont(SemGenFont.defaultBold());
 		model1label.setForeground(Color.blue);
-		//model1label.setMaximumSize(new Dimension(700, 9999999));
 		model1label.setAlignmentX(LEFT_ALIGNMENT);
-		//model1label.setBackground(Color.white);
-		//model1label.setOpaque(true);
-		// model1label.setPreferredSize(new Dimension(600,1));
 		model1label.setBorder(BorderFactory.createEmptyBorder(3, 3, 0, 3));
 
 		model2label = new JLabel(ds2.getDescription() + " (" + ds2.getName() + ")");
-		//model2label.setWrapStyleWord(true);
-		//model2label.setLineWrap(true);
-		model2label.setFont(new Font("SansSerif", Font.BOLD, SemGenGUI.defaultfontsize));
+		model2label.setFont(SemGenFont.defaultBold());
 		model2label.setForeground(Color.red);
-		//model2label.setMaximumSize(new Dimension(700, 9999999));
 		model2label.setAlignmentX(LEFT_ALIGNMENT);
-		//model2label.setBackground(Color.white);
-		//model2label.setOpaque(true);
-		// model2label.setPreferredSize(new Dimension(600,1));
 		model2label.setBorder(BorderFactory.createEmptyBorder(3, 3, 0, 3));
 
 		
 
 		mappedtolabel = new JLabel("  mapped to  ");
 		mappedtolabel.setBackground(Color.white);
-		mappedtolabel.setFont(new Font("SansSerif", Font.ITALIC,
-				SemGenGUI.defaultfontsize - 1));
-		//if (!ds1.getDescription().equals(ds2.getDescription())) {
+		mappedtolabel.setFont(SemGenFont.defaultItalic(-1));
 		
 		JPanel annotationsubpanel = new JPanel();
 		annotationsubpanel.setBackground(Color.white);
-		annotationsubpanel.add(model1label); // , BorderLayout.CENTER);
+		annotationsubpanel.add(model1label);
 		annotationsubpanel.add(mappedtolabel);
 		annotationsubpanel.add(model2label);
-		//}
+
 		annotationpanel.add(annotationsubpanel, BorderLayout.WEST);
 		annotationpanel.add(Box.createGlue(), BorderLayout.EAST);
 
-		chooser = new JComboBox(new String[] {
+		chooser = new JComboBox<String>(new String[] {
 				"Keep data structure from " + ds1.getDescription(),
 				"Keep data structure from " + ds2.getDescription(),
 				"Keep data structures disjoint (ignore overlap)" });
@@ -153,7 +139,7 @@ public class ResolutionPanel extends JPanel implements ActionListener {
 		bg.add(rb2);
 		bg.add(rb3);
 
-		questionbutton = new JButton(question);
+		questionbutton = new JButton(SemGenIcon.questionicon);
 		questionbutton.addActionListener(this);
 		questionbutton.setBorderPainted(false);
 		questionbutton.setContentAreaFilled(false);
@@ -220,7 +206,6 @@ public class ResolutionPanel extends JPanel implements ActionListener {
 				hasinput2list, isinputfor1list, isinputfor2list,
 				isinputforbothlist);
 		
-		// textpane.setPreferredSize(new Dimension(600, 600));
 		SemGenScrollPane scroller = new SemGenScrollPane(textpane);
 		textpane.setCaretPosition(0);
 		scroller.setPreferredSize(new Dimension(600, 600));

@@ -2,11 +2,11 @@ package semgen.annotation;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.*;
 
 import semgen.SemGenGUI;
 import semgen.annotation.composites.PropertyMarker;
+import semgen.resource.SemGenFont;
 import semsim.SemSimConstants;
 import semsim.model.computational.DataStructure;
 
@@ -21,7 +21,7 @@ public class CodewordButton extends AnnotationObjectButton implements MouseListe
 			boolean depfilled, boolean editable) {
 		super(ann, ssc, compannfilled, companntext, noncompannfilled, humdeffilled, depfilled, editable);
 		ds = (DataStructure)ssc;
-		namelabel.setFont(new Font("SansSerif", Font.ITALIC, SemGenGUI.defaultfontsize));
+		namelabel.setFont(SemGenFont.defaultItalic());
 		refreshAllCodes();
 	}
 	

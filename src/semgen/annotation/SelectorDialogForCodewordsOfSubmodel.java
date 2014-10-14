@@ -16,7 +16,6 @@ public class SelectorDialogForCodewordsOfSubmodel extends SemSimComponentSelecto
 	private static final long serialVersionUID = -1981003062200298737L;
 	public Submodel submodel;
 
-	
 	public SelectorDialogForCodewordsOfSubmodel(
 			AnnotationDialog anndia,
 			Set<DataStructure> dss,
@@ -47,9 +46,8 @@ public class SelectorDialogForCodewordsOfSubmodel extends SemSimComponentSelecto
 				}
 			}
 			anndia.annotator.setModelSaved(false);
-			anndia.refreshSubmodelData();
-			setVisible(false);
+			anndia.refreshSubmodelData();	
 		}
-		else if(value == "Cancel") setVisible(false);
+		setVisible(false);
 	}
 }

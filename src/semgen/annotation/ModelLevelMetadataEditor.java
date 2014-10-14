@@ -4,6 +4,7 @@ import org.semanticweb.owlapi.model.*;
 
 import semgen.SemGenGUI;
 import semgen.SemGenScrollPane;
+import semgen.resource.SemGenIcon;
 import semsim.SemSimConstants;
 import semsim.model.annotation.Annotation;
 
@@ -21,6 +22,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -44,7 +46,6 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 	public Annotator annotator;
 	private JScrollPane scrollpane;
 	private JPanel genmodinfo;
-	public JPanel toppanel;
 	public JPanel mainpanel;
 	public JButton addbutton;
 	public Set<OWLAnnotation> modellevelanns = new HashSet<OWLAnnotation>();
@@ -60,7 +61,7 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 		this.setResizable(true);
 		this.annotator = annotator;
 		
-		toppanel = new JPanel();
+		JPanel toppanel = new JPanel();
 		addbutton = new JButton("Add annotation");
 		addbutton.addActionListener(this);
 		toppanel.setLayout(new BorderLayout());
@@ -100,7 +101,7 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 		public ModelLevelMetadataEditor ed;
 		public Annotation ann;
 		public Boolean editable;
-		public JComboBox cb;
+		public JComboBox<String> cb;
 		public JTextArea ta;
 		public JLabel label;
 		public SemGenScrollPane sgsp;
@@ -125,7 +126,7 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 			this.ed = ed;
 			this.editable = editable;
 			
-			cb = new JComboBox(SemGenGUI.metadataRelationsTable.keySet().toArray(new String[]{}));
+			cb = new JComboBox<String>(SemGenGUI.metadataRelationsTable.keySet().toArray(new String[]{}));
 			cb.setSelectedItem(cb.getItemAt(0));
 			
 			ta = new JTextArea(tatext);
@@ -161,7 +162,7 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 			removebutton.setOpaque(false);
 			removebutton.setBorderPainted(false);
 			removebutton.setContentAreaFilled(false);
-			removebutton.setIcon(SemGenGUI.eraseicon);
+			removebutton.setIcon(SemGenIcon.eraseicon);
 			removebutton.setEnabled(editable);
 		}
 		

@@ -1,26 +1,21 @@
 package semgen.merging;
 
-
-
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -30,20 +25,18 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
 import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntology;
 
 import semgen.SemGenGUI;
 import semgen.SemGenScrollPane;
+import semgen.resource.SemGenIcon;
 import semsim.SemSimConstants;
 import semsim.owl.SemSimOWLFactory;
 
-
-
-
-
 public class FlowMergerDialog extends JDialog implements
-		PropertyChangeListener, ActionListener, ItemListener {
+		PropertyChangeListener, ActionListener{
 
 	/**
 	 * 
@@ -58,7 +51,7 @@ public class FlowMergerDialog extends JDialog implements
 	public String newcdwd;
 	public File file1;
 	public File file2;
-	public JComboBox box;
+	public JComboBox<String> box;
 	public String[] selections;
 	public Boolean process;
 	public String disp;
@@ -70,11 +63,8 @@ public class FlowMergerDialog extends JDialog implements
 	public SemGenScrollPane scrollpane;
 	public JButton questionbutton;
 
-	ImageIcon question = SemGenGUI.createImageIcon("icons/questionicon.gif");
-
 	public FlowMergerDialog(String disp, Set<String> flowdepsfromdiscarded,
 			OWLOntology discardedont, OWLOntology keptont, Merger merger) {
-		// this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.disp = disp;
 		this.flowdepsfromdiscarded = flowdepsfromdiscarded;
 		this.discardedont = discardedont;
@@ -83,7 +73,7 @@ public class FlowMergerDialog extends JDialog implements
 
 		mainpanel = new JPanel();
 		mainpanel.setLayout(new BoxLayout(mainpanel, BoxLayout.Y_AXIS));
-		questionbutton = new JButton(question);
+		questionbutton = new JButton(SemGenIcon.questionicon);
 		questionbutton.addActionListener(this);
 		questionbutton.setBorderPainted(false);
 		questionbutton.setContentAreaFilled(false);
@@ -96,7 +86,6 @@ public class FlowMergerDialog extends JDialog implements
 						.getIRIfragment(flowdep).replace(
 								"_dependency", ""));
 				flowbutton.setName(flowdep.replace("_dependency", ""));
-				// flowbutton.setBorderPainted(false);
 				flowbutton.setRolloverEnabled(true);
 				flowbutton.setForeground(Color.blue);
 				flowbutton.addActionListener(this);
@@ -176,7 +165,7 @@ public class FlowMergerDialog extends JDialog implements
 		if (o instanceof JButton && o != questionbutton) {
 			JButton button = (JButton) o;
 			// FIX ME!
-			String[] anns = null; //OWLMethods.getAllAnnotationsForCodeword(discardedont, button.getName());
+			String[] anns = { "" };
 			Object[] panestuff = new Object[] {
 					new JLabel("Composite annotation: " + anns[0]),
 					new JLabel("Singular annotation: " + anns[1]),
@@ -187,7 +176,7 @@ public class FlowMergerDialog extends JDialog implements
 		if (o == questionbutton) {
 			try {
 				// FIX ME!
-				String[] anns = null; //OWLMethods.getAllAnnotationsForCodeword(keptont, disp);
+				String[] anns = null;
 				JOptionPane.showMessageDialog(this,
 								"SemGen uses the semantics of model codewords to identify\n"
 										+ "conservation equations that may need to be extended to account for\n"
@@ -249,7 +238,6 @@ public class FlowMergerDialog extends JDialog implements
 				}
 			}
 			if (!choicesmade.contains(false)) {
-				// optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 				if (setofadds.size() > 0) {
 					merger.dispandsetofadds.put(disp, setofadds);
 				}
@@ -262,9 +250,5 @@ public class FlowMergerDialog extends JDialog implements
 			setVisible(false);
 			merger.contmerging = false;
 		}
-	}
-
-	public void itemStateChanged(ItemEvent arg0) {
-
 	}
 }

@@ -13,15 +13,18 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+
 import semgen.SemGenGUI;
 import semsim.model.SemSimComponent;
 import semsim.model.computational.DataStructure;
+import semsim.writing.CaseInsensitiveComparator;
 
 public class SemSimComponentSelectorDialog extends JDialog implements ActionListener {
 	private static final long serialVersionUID = -1776906245210358895L;
@@ -78,7 +81,7 @@ public class SemSimComponentSelectorDialog extends JDialog implements ActionList
 		
 		results = nameobjectmap.keySet().toArray(new String[]{});
 		
-		Arrays.sort(results, SemGenGUI.cic);
+		Arrays.sort(results, new CaseInsensitiveComparator());
 
 		setPreferredSize(new Dimension(500, 600));
 		setTitle(this.title);

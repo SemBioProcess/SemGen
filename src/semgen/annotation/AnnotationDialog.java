@@ -6,6 +6,8 @@ import semgen.SemGenSeparator;
 import semgen.annotation.composites.CompositeAnnotationPanel;
 import semgen.annotation.composites.SemSimComponentAnnotationPanel;
 import semgen.annotation.composites.StructuralRelationPanel;
+import semgen.resource.SemGenFont;
+import semgen.resource.SemGenIcon;
 import semsim.Annotatable;
 import semsim.model.Importable;
 import semsim.model.SemSimComponent;
@@ -18,6 +20,7 @@ import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.Submodel;
 import semsim.model.physical.FunctionalSubmodel;
 import semsim.owl.SemSimOWLFactory;
+import semsim.writing.CaseInsensitiveComparator;
 
 import java.io.File;
 import java.io.IOException;
@@ -59,8 +62,8 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 	public AnnotationDialogClickableTextPane humandefpane;
 	private JButton humapplyelsewherebutton;
 	public JLabel humremovebutton;
-	private JLabel copyannsbutton = new JLabel(SemGenGUI.copyicon);
-	private JLabel loadsourcemodelbutton = new JLabel(SemGenGUI.annotatoricon);
+	private JLabel copyannsbutton = new JLabel(SemGenIcon.copyicon);
+	private JLabel loadsourcemodelbutton = new JLabel(SemGenIcon.annotatoricon);
 	public SelectorDialogForCodewordsOfSubmodel sdfcoc;
 	public SelectorDialogForSubmodelsOfSubmodel sdfcomp;
 	public Set<DataStructure> cdwdsfromcomps;
@@ -83,10 +86,10 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 
 		codewordlabel = new JLabel(codeword);
 		codewordlabel.setBorder(BorderFactory.createEmptyBorder(5, indent, 5, 10));
-		codewordlabel.setFont(new Font("SansSerif", Font.BOLD,SemGenGUI.defaultfontsize + 3));
+		codewordlabel.setFont(SemGenFont.defaultBold(3));
 		
 		humapplyelsewherebutton = new JButton();
-		humremovebutton = new JLabel(SemGenGUI.eraseiconsmall);
+		humremovebutton = new JLabel(SemGenIcon.eraseiconsmall);
 
 		FormatButton(humremovebutton, "Remove this annotation", thebutton.editable);
 		
@@ -149,7 +152,7 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 			eqpane = new JEditorPane();
 			eqpane.setEditable(false);
 			eqpane.setText(code);
-			eqpane.setFont(new Font("SansSerif", Font.ITALIC, SemGenGUI.defaultfontsize-1));
+			eqpane.setFont(SemGenFont.defaultItalic(-1));
 			eqpane.setOpaque(false);
 			eqpane.setAlignmentX(JEditorPane.LEFT_ALIGNMENT);
 			eqpane.setBorder(BorderFactory.createEmptyBorder(2, 2*indent, 2, 2));
@@ -165,7 +168,7 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 		subtitlepanel.setBackground(SemGenGUI.lightblue);
 		
 		singularannlabel = new JLabel("Singular annotation");
-		singularannlabel.setFont(new Font("SansSerif", Font.BOLD, SemGenGUI.defaultfontsize));
+		singularannlabel.setFont(SemGenFont.defaultBold());
 		singularannlabel.setBorder(BorderFactory.createEmptyBorder(10, indent, 5, 0));
 
 		refreshData();
@@ -213,7 +216,7 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 			mainpanel.add(new SemGenSeparator());
 			
 			compositelabel = new JLabel("Composite annotation");
-			compositelabel.setFont(new Font("SansSerif", Font.BOLD, SemGenGUI.defaultfontsize));
+			compositelabel.setFont(SemGenFont.defaultBold());
 			compositelabel.setBorder(BorderFactory.createEmptyBorder(10, indent, 0, 0));
 			
 			mainpanel.add(compositelabel);
@@ -244,7 +247,7 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 		panel.setBorder(BorderFactory.createEmptyBorder(0, panelindent, 0, 15));
 		panel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		label.setBorder(BorderFactory.createEmptyBorder(10, panelindent/2, 3, 15));
-		label.setFont(new Font("SansSerif", Font.BOLD, SemGenGUI.defaultfontsize));
+		label.setFont(SemGenFont.defaultBold());
 	}
 
 	public void FormatButton(JLabel label, String tooltip, Boolean enabled) {
@@ -356,7 +359,7 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 			for(int y=0;y<sarray.length;y++){
 				sarray[y] = templist.get(y).getName();
 			}
-			Arrays.sort(sarray, SemGenGUI.cic);
+			Arrays.sort(sarray, new CaseInsensitiveComparator());
 			for(String s : sarray){
 				String name = s;
 				if(sub instanceof FunctionalSubmodel){ // Get rid of prepended submodel names if submodel is functional

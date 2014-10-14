@@ -14,7 +14,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -26,6 +25,7 @@ import javax.swing.table.AbstractTableModel;
 import semgen.SemGenGUI;
 import semgen.SemGenScrollPane;
 import semgen.annotation.SemSimComponentSelectorDialog;
+import semgen.resource.SemGenIcon;
 import semsim.SemSimConstants;
 import semsim.model.SemSimComponent;
 import semsim.model.SemSimModel;
@@ -45,15 +45,13 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 	public PhysicalProcess process;
 	public JPanel headerpanel;
 	public JLabel headerlabel;
-	public JButton plusbutton;
-	public JButton minusbutton;
+	public JButton plusbutton = new JButton(SemGenIcon.plusicon);
+	public JButton minusbutton = new JButton(SemGenIcon.minusicon);
 	public SemGenScrollPane scroller;
 	public JTable table;
 	public ProcessParticipantTableModel tablemod;
 	public String[] columnNames = {"Physical entity", "Multiplier"};
 	public Map<String,ProcessParticipant> namesandparticipantmap = new HashMap<String,ProcessParticipant>();
-	public ImageIcon plusicon = SemGenGUI.createImageIcon("icons/plus.gif");
-	public ImageIcon minusicon = SemGenGUI.createImageIcon("icons/minus.gif");
 	public SemSimComponentSelectorDialog sscsd; 
 	public int scrollerwidth = 550;
 	public int multcolwidth = 100;
@@ -65,11 +63,9 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 		
 		headerlabel = new JLabel(relation.getName());
 
-		plusbutton = new JButton(plusicon);
 		plusbutton.addActionListener(this);
 		plusbutton.setToolTipText("Add process participant");
 
-		minusbutton = new JButton(minusicon);
 		minusbutton.addActionListener(this);
 		minusbutton.setToolTipText("Remove selected process participant");
 
@@ -135,8 +131,7 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 		
 		@Override
 		public boolean isCellEditable(int x, int y){
-			if(y==1) return true;
-			else return false;
+			return (y==1);
 		}
 		
 		public void addRow(Object[] rowData){
@@ -205,11 +200,11 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 				}
 			}
 			sscsd.optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-			sscsd.setVisible(false);
 		}
 		if (value == "Cancel") {
 			sscsd.optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-			sscsd.setVisible(false);
+			
 		}
+		sscsd.setVisible(false);
 	}
 }

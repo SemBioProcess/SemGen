@@ -10,7 +10,7 @@ import java.beans.PropertyChangeListener;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
-import javax.swing.ImageIcon;
+
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -19,8 +19,8 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import semgen.SemGenGUI;
 import semgen.SemGenScrollPane;
+import semgen.resource.SemGenIcon;
 import semsim.Annotatable;
 import semsim.SemSimConstants;
 import semsim.model.SemSimComponent;
@@ -44,16 +44,14 @@ public class ObjectPropertyEditor extends JPanel implements ActionListener, Prop
 	public SemSimRelation relation;
 	public SemSimRelation invrelation;
 	public Annotatable subject;
-	public JPanel headerpanel;
+	public JPanel headerpanel = new JPanel();
 	public JLabel headerlabel;
-	public JButton plusbutton;
-	public JButton minusbutton;
-	public JComponent listcomponent;
+	public JButton plusbutton = new JButton(SemGenIcon.plusicon);
+	public JButton minusbutton = new JButton(SemGenIcon.minusicon);
+	public JComponent listcomponent = new JList<String>();
 	public String[] listdata = {};
 	public SemGenScrollPane scroller;
 	public Hashtable<String,Object> namesandobjects = new Hashtable<String,Object>();
-	public ImageIcon plusicon = SemGenGUI.createImageIcon("icons/plus.gif");
-	public ImageIcon minusicon = SemGenGUI.createImageIcon("icons/minus.gif");
 	public SemSimComponentSelectorDialog sscsd; 
 
 	public ObjectPropertyEditor(SemSimModel model, SemSimRelation rel, SemSimRelation invrel, Annotatable subject) {
@@ -67,21 +65,17 @@ public class ObjectPropertyEditor extends JPanel implements ActionListener, Prop
 
 		headerlabel = new JLabel(propertyname);
 
-		plusbutton = new JButton(plusicon);
 		plusbutton.addActionListener(this);
 		plusbutton.setToolTipText("Add reference term");
 
-		minusbutton = new JButton(minusicon);
 		minusbutton.addActionListener(this);
 		minusbutton.setToolTipText("Remove selected reference term");
 
-		headerpanel = new JPanel();
 		headerpanel.setOpaque(false);
 		headerpanel.add(headerlabel);
 		headerpanel.add(plusbutton);
 		headerpanel.add(minusbutton);
 
-		listcomponent = new JList();
 		// get the list contents
 		if (this.subject != null) {
 			if(relation!=SemSimConstants.HAS_SOURCE_RELATION && relation!=SemSimConstants.HAS_SINK_RELATION
@@ -161,10 +155,10 @@ public class ObjectPropertyEditor extends JPanel implements ActionListener, Prop
 		}
 
 		if (o == minusbutton) {
-			if (((JList) listcomponent).getSelectedValue() != null) {
-				String removestring = (String) ((JList) listcomponent).getSelectedValue();
+			if (((JList<String>)listcomponent).getSelectedValue() != null) {
+				String removestring = ((JList<String>) listcomponent).getSelectedValue();
 				namesandobjects.remove(removestring);
-				((JList) listcomponent).setListData((String[]) namesandobjects.keySet().toArray(new String[] {}));
+				((JList<String>) listcomponent).setListData((String[]) namesandobjects.keySet().toArray(new String[] {}));
 			}
 		}
 	}
@@ -194,7 +188,7 @@ public class ObjectPropertyEditor extends JPanel implements ActionListener, Prop
 					}
 				}
 			}
-			((JList) listcomponent).setListData((String[]) namesandobjects.keySet().toArray(new String[]{}));
+			((JList<String>) listcomponent).setListData((String[]) namesandobjects.keySet().toArray(new String[]{}));
 			
 			sscsd.optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 			sscsd.setVisible(false);
