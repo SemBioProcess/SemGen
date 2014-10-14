@@ -1,6 +1,4 @@
-package semgen;
-
-
+package semgen.resource.uicomponent;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -16,41 +14,27 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 
-
 public class ProgressFrame extends JFrame implements ActionListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -408262547613352487L;
-	public JPanel progpanel;
 	public JLabel msglabel;
-	public JProgressBar bar;
-	public int bmar = 5;
-	public JButton cancelbutton;
+	public JProgressBar bar = new JProgressBar();
+	public JButton cancelbutton = new JButton("Cancel");
 	public SwingWorker<Void,Void> worker;
 
 	public ProgressFrame(String msg, Boolean isindeterminant, SwingWorker<Void,Void> worker) {
 		this.worker = worker;
-		
 		setPreferredSize(new Dimension(300, 65));
-		progpanel = new JPanel();
+		JPanel progpanel = new JPanel();
 		progpanel.setBorder(BorderFactory.createLineBorder(Color.gray));
 		progpanel.setLayout(new BorderLayout());
-		
-		bar = new JProgressBar();
+		int bmar = 5;
 		bar.setIndeterminate(isindeterminant);
 		bar.setStringPainted(!isindeterminant);
 		bar.setVisible(true);
 		bar.setBorder(BorderFactory.createEmptyBorder(bmar, bmar, bmar, bmar));
-		
-		cancelbutton = new JButton("Cancel");
+
 		cancelbutton.addActionListener(this);
-		
-//		JPanel bottompanel = new JPanel();
-//		bottompanel.add(bar);
-		//bottompanel.add(Box.createGlue());
-		//bottompanel.add(cancelbutton);
 		
 		msglabel = new JLabel(msg);
 		msglabel.setBorder(BorderFactory.createEmptyBorder(bmar, bmar, bmar, bmar));
@@ -62,7 +46,7 @@ public class ProgressFrame extends JFrame implements ActionListener {
 		if(isindeterminant) bar.setValue(101);
 		requestFocusInWindow();
 		pack();
-		setLocationRelativeTo(SemGenGUI.desktop);
+		setLocationRelativeTo(getParent());
 	}
 	
 	public void updateMessage(String message){

@@ -30,8 +30,8 @@ import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntology;
 
 import semgen.SemGenGUI;
-import semgen.SemGenScrollPane;
 import semgen.resource.SemGenIcon;
+import semgen.resource.uicomponent.SemGenScrollPane;
 import semsim.SemSimConstants;
 import semsim.owl.SemSimOWLFactory;
 
@@ -59,12 +59,12 @@ public class FlowMergerDialog extends JDialog implements
 	public OWLOntology discardedont;
 	public OWLOntology keptont;
 	public Hashtable<String, Set<String>> dispandsetofadds;
-	public Merger merger;
+	public MergerTab merger;
 	public SemGenScrollPane scrollpane;
 	public JButton questionbutton;
 
 	public FlowMergerDialog(String disp, Set<String> flowdepsfromdiscarded,
-			OWLOntology discardedont, OWLOntology keptont, Merger merger) {
+			OWLOntology discardedont, OWLOntology keptont, MergerTab merger) {
 		this.disp = disp;
 		this.flowdepsfromdiscarded = flowdepsfromdiscarded;
 		this.discardedont = discardedont;

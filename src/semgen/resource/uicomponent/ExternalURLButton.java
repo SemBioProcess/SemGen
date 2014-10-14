@@ -1,26 +1,22 @@
-package semgen;
+package semgen.resource.uicomponent;
 
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.net.URI;
-import java.net.URL;
-
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import semgen.resource.BrowserLauncher;
 import semgen.resource.SemGenIcon;
 import semsim.SemSimConstants;
 import semsim.owl.SemSimOWLFactory;
 
 public class ExternalURLButton extends JLabel implements MouseListener{
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
-	public URL url;
 	private URI termuri;
 
 	public ExternalURLButton(){
@@ -36,9 +32,6 @@ public class ExternalURLButton extends JLabel implements MouseListener{
 	public void setTermURI(URI uri){
 		termuri = uri;
 	}
-	public void setURL(URL theurl){
-		this.url = theurl;
-	}
 
 	public void mouseClicked(MouseEvent arg0) {
 		if(termuri!=null){
@@ -49,7 +42,6 @@ public class ExternalURLButton extends JLabel implements MouseListener{
 			
 			if(abbrev!=null){
 				if(abbrev.equals("BRENDA")) abbrev = "BTO";
-				
 				String urlstring = "http://bioportal.bioontology.org/ontologies/" + abbrev + "/?p=classes&conceptid=" + SemSimOWLFactory.URIencoding(termuri.toString());
 				
 				BrowserLauncher.openURL(urlstring);
@@ -63,7 +55,7 @@ public class ExternalURLButton extends JLabel implements MouseListener{
 			}
 			// Else the knowledge resource is not available through BioPortal
 			else{
-				JOptionPane.showMessageDialog(SemGenGUI.desktop, "Sorry, BioPortal does not provide information about that resource.");
+				JOptionPane.showMessageDialog(getParent(), "Sorry, BioPortal does not provide information about that resource.");
 			}
 		}
 	}

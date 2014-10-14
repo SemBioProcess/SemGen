@@ -23,9 +23,9 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
 import semgen.SemGenGUI;
-import semgen.SemGenScrollPane;
 import semgen.annotation.SemSimComponentSelectorDialog;
 import semgen.resource.SemGenIcon;
+import semgen.resource.uicomponent.SemGenScrollPane;
 import semsim.SemSimConstants;
 import semsim.model.SemSimComponent;
 import semsim.model.SemSimModel;

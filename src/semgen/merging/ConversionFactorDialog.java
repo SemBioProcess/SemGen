@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -15,7 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import semgen.SemGenGUI;
-import semgen.SemGenTextArea;
+import semgen.resource.uicomponent.SemGenTextArea;
 
 
 
@@ -27,7 +28,7 @@ public class ConversionFactorDialog extends JDialog implements
 	 */
 	private static final long serialVersionUID = -3182047942231432822L;
 	public JOptionPane optionPane;
-	public Merger merger;
+	public MergerTab merger;
 	public JTextField mantextfield;
 	public SemGenTextArea area;
 	public JPanel conpanel;
@@ -45,7 +46,7 @@ public class ConversionFactorDialog extends JDialog implements
 	public String cdwdAndConversionFactor;
 	public double conversionfactor;
 
-	public ConversionFactorDialog(Merger merger, String cdwd2keep, String cdwd2discard,
+	public ConversionFactorDialog(MergerTab merger, String cdwd2keep, String cdwd2discard,
 			String cdwd2keepunits, String cdwd2discardunits) {
 
 		this.merger = merger;

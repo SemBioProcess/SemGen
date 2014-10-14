@@ -25,7 +25,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 
-import semgen.merging.Merger;
+import semgen.merging.MergerTab;
 import semsim.SemSimUtil;
 
 public class SemGenFileChooser extends JFileChooser implements ActionListener{
@@ -34,7 +34,7 @@ public class SemGenFileChooser extends JFileChooser implements ActionListener{
 	 * 
 	 */
 	public int toolType;
-	public Merger merger;
+	public MergerTab merger;
 	private JPanel chooseURLpanel;
 	private JTextField textField;
 	private JButton URLselectButton;
@@ -55,7 +55,7 @@ public class SemGenFileChooser extends JFileChooser implements ActionListener{
 	
 	private static final long serialVersionUID = -9040553448654731532L;
 	
-	public SemGenFileChooser(int toolType, Merger merger){
+	public SemGenFileChooser(int toolType, MergerTab merger){
 		super();
 		this.merger = merger;
 		initialize(toolType);

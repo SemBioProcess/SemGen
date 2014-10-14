@@ -27,7 +27,7 @@ public class AnnotationObjectButton extends JPanel implements MouseListener{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public Annotator annotater;
+	public AnnotatorTab annotater;
 	public SemSimComponent ssc;
 	public Boolean compannfilled;
 	public String companntext;
@@ -46,7 +46,7 @@ public class AnnotationObjectButton extends JPanel implements MouseListener{
 	public int maxHeight = 35;
 	public int ipph = 18;
 	
-	public AnnotationObjectButton(Annotator ann, SemSimComponent ssc, boolean compannfilled, String companntext, 
+	public AnnotationObjectButton(AnnotatorTab ann, SemSimComponent ssc, boolean compannfilled, String companntext, 
 			boolean noncompannfilled, boolean humdeffilled, boolean depfilled, boolean editable) {
 		this.annotater = ann;
 		this.ssc = ssc;

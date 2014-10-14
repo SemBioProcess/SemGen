@@ -40,13 +40,13 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import JSim.util.Xcept;
-import semgen.GenericThread;
-import semgen.ProgressFrame;
 import semgen.SemGenFileChooser;
 import semgen.SemGenGUI;
-import semgen.SemGenScrollPane;
+import semgen.resource.GenericThread;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
+import semgen.resource.uicomponent.ProgressFrame;
+import semgen.resource.uicomponent.SemGenScrollPane;
 import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
@@ -65,7 +65,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.HeadlessException;
 
-public class Merger extends JPanel implements ActionListener, MouseListener {
+public class MergerTab extends JPanel implements ActionListener, MouseListener {
 
 	private static final long serialVersionUID = -1383642730474574843L;
 	public OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -117,7 +117,7 @@ public class Merger extends JPanel implements ActionListener, MouseListener {
 	public static String[] relationsarray1;
 	public static String[] relationsarray2;
 
-	public Merger(final JTabbedPane pane) {
+	public MergerTab(final JTabbedPane pane) {
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
 		JPanel filelistheader = new JPanel();
@@ -278,21 +278,20 @@ public class Merger extends JPanel implements ActionListener, MouseListener {
 				String cdwd2 = (String) mappingpanelright.scrollercontent.getSelectedValue();
 				cdwd1 = cdwd1.substring(cdwd1.lastIndexOf("(") + 1, cdwd1.lastIndexOf(")"));
 				cdwd2 = cdwd2.substring(cdwd2.lastIndexOf("(") + 1, cdwd2.lastIndexOf(")"));
-				
-				ResolutionPanel newrespanel = null;
+
 				if (!codewordsAlreadyMapped(cdwd1, cdwd2, true)) {
 					if(resolvepanel.getComponentCount()!=0) resolvepanel.add(new JSeparator());
-					newrespanel = new ResolutionPanel(this, semsimmodel1.getDataStructure(cdwd1),
+					ResolutionPanel newrespanel = new ResolutionPanel(this, semsimmodel1.getDataStructure(cdwd1),
 							semsimmodel2.getDataStructure(cdwd2),
 							semsimmodel1, semsimmodel2, "(manual mapping)", true);
 					resolvepanel.add(newrespanel);
 					resolvepanel.repaint();
 					resolvepanel.validate();
 					this.validate();
-					SemGenGUI.scrollToComponent(resolvepanel, newrespanel);
+					resolvescroller.scrollToComponent(newrespanel);
 				}
 			} else {
-				JOptionPane.showMessageDialog(SemGenGUI.desktop,"Please select a codeword from both component models","", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this,"Please select a codeword from both component models","", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}

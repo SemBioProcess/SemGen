@@ -2,12 +2,12 @@ package semgen.annotation;
 
 import semgen.SemGenGUI;
 import semgen.SemGenGUI.NewAnnotatorTask;
-import semgen.SemGenSeparator;
 import semgen.annotation.composites.CompositeAnnotationPanel;
 import semgen.annotation.composites.SemSimComponentAnnotationPanel;
 import semgen.annotation.composites.StructuralRelationPanel;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
+import semgen.resource.uicomponent.SemGenSeparator;
 import semsim.Annotatable;
 import semsim.model.Importable;
 import semsim.model.SemSimComponent;
@@ -46,7 +46,7 @@ import org.semanticweb.owlapi.model.OWLException;
 public class AnnotationDialog extends JPanel implements MouseListener{
 
 	private static final long serialVersionUID = -7946871333815617810L;
-	public Annotator annotator;
+	public AnnotatorTab annotator;
 	public SemSimModel semsimmodel;
 	public SemSimComponent smc;
 	public AnnotationObjectButton thebutton;
@@ -71,7 +71,7 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 	
 	public int indent = 15;
 
-	public AnnotationDialog(Annotator ann, AnnotationObjectButton aob) throws IOException{
+	public AnnotationDialog(AnnotatorTab ann, AnnotationObjectButton aob) throws IOException{
 		annotator = ann;
 		thebutton = aob;
 		codeword = aob.getName();
@@ -236,7 +236,7 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 		add(Box.createVerticalGlue(), BorderLayout.SOUTH);
 		
 		setVisible(true);
-		SemGenGUI.scrollToLeft(ann.dialogscrollpane);
+		ann.dialogscrollpane.scrollToLeft();
 		this.validate();
 		this.repaint();
 	}
@@ -302,7 +302,7 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 			nestedsubmodelpane.setCustomText(editcomptext);
 			nestedsubmodelpane.setForeground(Color.gray);
 		}
-		SemGenGUI.scrollToLeft(annotator.dialogscrollpane);
+		annotator.dialogscrollpane.scrollToLeft();
 	}
 	
 	public void refreshCompositeAnnotation(){
@@ -422,7 +422,7 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 			if(SemGenGUI.annotateitemsortbytype.isSelected() && !SemGenGUI.annotateitemtreeview.isSelected()) // Not able to sort codewords by marker in tree view yet
 				annotator.AlphabetizeAndSetCodewords();
 			if(!SemGenGUI.annotateitemtreeview.isSelected())
-				SemGenGUI.scrollToComponent(annotator.codewordpanel, thebutton);
+				annotator.codewordscrollpane.scrollToComponent(thebutton);
 		}
 	}
 	
@@ -524,7 +524,7 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 				// Update the codeword button markers, re-sort if needed
 				if(SemGenGUI.annotateitemsortbytype.isSelected()){
 					annotator.AlphabetizeAndSetCodewords();
-					SemGenGUI.scrollToComponent(annotator.codewordpanel, thebutton);
+					annotator.codewordscrollpane.scrollToComponent(thebutton);
 				}
 			}
 		}

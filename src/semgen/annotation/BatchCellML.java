@@ -22,7 +22,7 @@ import semsim.reading.ModelClassifier;
 
 
 public class BatchCellML{
-	public Annotator ann;
+	public AnnotatorTab ann;
 	
 	public Namespace docns = Namespace.getNamespace("http://cellml.org/tmp-documentation");
 	public Namespace cellmlns = Namespace.getNamespace("http://www.cellml.org/cellml/1.0#");

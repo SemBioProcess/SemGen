@@ -13,9 +13,9 @@ import org.sbml.libsbml.libsbml;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLException;
 
-import semgen.GenericThread;
-import semgen.ProgressFrame;
 import semgen.SemGenGUI;
+import semgen.resource.GenericThread;
+import semgen.resource.uicomponent.ProgressFrame;
 import semsim.SemSimConstants;
 import semsim.SemSimUtil;
 import semsim.owl.SemSimOWLFactory;

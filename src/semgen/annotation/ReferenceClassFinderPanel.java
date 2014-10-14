@@ -31,11 +31,11 @@ import javax.swing.event.ListSelectionListener;
 
 import org.jdom.JDOMException;
 
-import semgen.ExternalURLButton;
-import semgen.GenericThread;
 import semgen.SemGenGUI;
+import semgen.resource.GenericThread;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
+import semgen.resource.uicomponent.ExternalURLButton;
 import semsim.Annotatable;
 import semsim.SemSimConstants;
 import semsim.model.physical.PhysicalProperty;
@@ -52,7 +52,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 	private static final long serialVersionUID = -7884648622981159203L;
 	public Dimension scrollerdim;
 	public JPanel panelright;
-	public Annotator annotator;
+	public AnnotatorTab annotator;
 	public String codeword;
 	public AnnotationDialog anndialog;
 	private JPanel selectKBsourcepanel;
@@ -93,14 +93,14 @@ public class ReferenceClassFinderPanel extends JPanel implements
 	public String[] ontList;
 
 	
-	public ReferenceClassFinderPanel(Annotator ann, Annotatable annotatable, String[] ontList) {
+	public ReferenceClassFinderPanel(AnnotatorTab ann, Annotatable annotatable, String[] ontList) {
 		annotator = ann;
 		this.ontList = ontList;
 		this.annotatable = annotatable;
 		setUpUI();
 	}
 	
-	public ReferenceClassFinderPanel(Annotator ann, String[] ontList) {
+	public ReferenceClassFinderPanel(AnnotatorTab ann, String[] ontList) {
 		annotator = ann;
 		this.ontList = ontList;
 		setUpUI();

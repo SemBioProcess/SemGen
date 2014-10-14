@@ -14,7 +14,7 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import semgen.annotation.AddReferenceClassDialog;
 import semgen.annotation.AnnotationComponentReplacer;
 import semgen.annotation.AnnotationCopier;
-import semgen.annotation.Annotator;
+import semgen.annotation.AnnotatorTab;
 import semgen.annotation.BatchCellML;
 import semgen.annotation.CodewordButton;
 import semgen.annotation.LegacyCodeChooser;
@@ -23,9 +23,15 @@ import semgen.annotation.RemovePhysicalComponentDialog;
 import semgen.annotation.SemanticSummaryDialog;
 import semgen.annotation.TextMinerDialog;
 import semgen.extraction.ExtractorTab;
-import semgen.merging.Merger;
+import semgen.merging.MergerTab;
+import semgen.resource.BrowserLauncher;
+import semgen.resource.CSVExporter;
+import semgen.resource.LogViewer;
 import semgen.resource.SemGenFont;
-import semgen.resource.SemGenIcon;
+import semgen.resource.SemGenIcon; 
+import semgen.resource.uicomponent.ProgressFrame;
+import semgen.resource.uicomponent.SemGenTab;
+import semgen.resource.uicomponent.TabCloser;
 import semsim.SemSimConstants;
 import semsim.SemSimModelCache;
 import semsim.SemSimUtil;
@@ -59,7 +65,6 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.HeadlessException;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -73,7 +78,6 @@ import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -83,7 +87,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
@@ -115,9 +118,6 @@ import java.text.SimpleDateFormat;
 
 public class SemGenGUI extends JFrame implements ActionListener, MenuListener, ChangeListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 3618439495848469800L;
 	public static OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	public static OWLDataFactory factory;
@@ -551,8 +551,8 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 	}
 
 	public void menuSelected(MenuEvent arg0) {
-		if(desktop.getSelectedComponent() instanceof Annotator){
-			fileitemsave.setEnabled(!((Annotator)desktop.getSelectedComponent()).getModelSaved());
+		if(desktop.getSelectedComponent() instanceof AnnotatorTab){
+			fileitemsave.setEnabled(!((AnnotatorTab)desktop.getSelectedComponent()).getModelSaved());
 		}
 	}
 	
@@ -564,8 +564,8 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		}
 
 		if (o == fileitemsave) {
-			if(desktop.getSelectedComponent() instanceof Annotator){
-				Annotator ann = (Annotator)desktop.getSelectedComponent();
+			if(desktop.getSelectedComponent() instanceof AnnotatorTab){
+				AnnotatorTab ann = (AnnotatorTab)desktop.getSelectedComponent();
 				SaveAction(ann, ann.lastSavedAs);
 			}
 		}
@@ -575,14 +575,14 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		}
 		if( o == fileitemclose){
 			Component x = null;
-			if(desktop.getSelectedComponent() instanceof Annotator){
-				x = (Annotator)desktop.getSelectedComponent();
+			if(desktop.getSelectedComponent() instanceof AnnotatorTab){
+				x = (AnnotatorTab)desktop.getSelectedComponent();
 			}
 			else if(desktop.getSelectedComponent() instanceof ExtractorTab){
 				x = (ExtractorTab)desktop.getSelectedComponent();
 			}
-			else if(desktop.getSelectedComponent() instanceof Merger){
-				x = (Merger)desktop.getSelectedComponent();
+			else if(desktop.getSelectedComponent() instanceof MergerTab){
+				x = (MergerTab)desktop.getSelectedComponent();
 			}
 			if(x !=null)
 				try {
@@ -610,15 +610,15 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		}
 		
 		if(o == semanticsummary){
-			if(desktop.getSelectedComponent() instanceof Annotator){
-				Annotator ann = (Annotator)desktop.getSelectedComponent();
+			if(desktop.getSelectedComponent() instanceof AnnotatorTab){
+				AnnotatorTab ann = (AnnotatorTab)desktop.getSelectedComponent();
 				new SemanticSummaryDialog(ann.semsimmodel);
 			}
 		}
 		
 		if(o == annotateitemharvestfromtext){
-			if(desktop.getSelectedComponent() instanceof Annotator){
-				Annotator ann = (Annotator)desktop.getSelectedComponent();
+			if(desktop.getSelectedComponent() instanceof AnnotatorTab){
+				AnnotatorTab ann = (AnnotatorTab)desktop.getSelectedComponent();
 				if(ann.tmd == null){
 					try {ann.tmd = new TextMinerDialog(ann);} 
 					catch (FileNotFoundException e1) {e1.printStackTrace();}
@@ -629,8 +629,8 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		} 
 
 		if (o == annotateitemaddrefterm) {
-			if (desktop.getSelectedComponent() instanceof Annotator) {
-				Annotator ann = (Annotator) desktop.getSelectedComponent();
+			if (desktop.getSelectedComponent() instanceof AnnotatorTab) {
+				AnnotatorTab ann = (AnnotatorTab) desktop.getSelectedComponent();
 				new AddReferenceClassDialog(ann, SemSimConstants.ALL_SEARCHABLE_ONTOLOGIES, 
 						new Object[]{"Add as entity","Add as process","Close"}, ann.semsimmodel).packAndSetModality();
 			} else {
@@ -638,8 +638,8 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 			}
 		}
 		if (o == annotateitemremoverefterm) {
-			if (desktop.getSelectedComponent() instanceof Annotator) {
-				Annotator ann = (Annotator) desktop.getSelectedComponent();
+			if (desktop.getSelectedComponent() instanceof AnnotatorTab) {
+				AnnotatorTab ann = (AnnotatorTab) desktop.getSelectedComponent();
 				Set<PhysicalModelComponent> pmcs = new HashSet<PhysicalModelComponent>();
 				for(PhysicalModelComponent pmc : ann.semsimmodel.getPhysicalModelComponents()){
 					if(!(pmc instanceof CompositePhysicalEntity) && (pmc instanceof PhysicalEntity || pmc instanceof PhysicalProcess))
@@ -652,15 +652,15 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		}
 
 		if (o == annotateitemchangesourcemodelcode) {
-			if (desktop.getSelectedComponent() instanceof Annotator) {
-				Annotator ann = (Annotator) desktop.getSelectedComponent();
+			if (desktop.getSelectedComponent() instanceof AnnotatorTab) {
+				AnnotatorTab ann = (AnnotatorTab) desktop.getSelectedComponent();
 				new LegacyCodeChooser(ann);
 			} else {JOptionPane.showMessageDialog(this,"Please select an Annotator tab or open a new Annotator");}
 		}
 
 		if(o == annotateitemexportcsv){
-			if (desktop.getSelectedComponent() instanceof Annotator) {
-				Annotator ann = (Annotator) desktop.getSelectedComponent();
+			if (desktop.getSelectedComponent() instanceof AnnotatorTab) {
+				AnnotatorTab ann = (AnnotatorTab) desktop.getSelectedComponent();
 				try {
 					new CSVExporter(ann.semsimmodel).exportCodewords();
 				} catch (Exception e1) {e1.printStackTrace();} 
@@ -668,15 +668,15 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		}
 		
 		if(o == annotateitemeditmodelanns){
-			if (desktop.getSelectedComponent() instanceof Annotator) {
-				Annotator ann = (Annotator) desktop.getSelectedComponent();
+			if (desktop.getSelectedComponent() instanceof AnnotatorTab) {
+				AnnotatorTab ann = (AnnotatorTab) desktop.getSelectedComponent();
 				new ModelLevelMetadataEditor(ann);
 			}
 		}
 
 		if (o == annotateitemreplacerefterm) {
-			if (desktop.getSelectedComponent() instanceof Annotator) {
-				Annotator ann = (Annotator) desktop.getSelectedComponent();
+			if (desktop.getSelectedComponent() instanceof AnnotatorTab) {
+				AnnotatorTab ann = (AnnotatorTab) desktop.getSelectedComponent();
 				try {
 					new AnnotationComponentReplacer(ann);
 				} catch (OWLException e1) {
@@ -686,8 +686,8 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		}
 
 		if (o == annotateitemcopy) {
-			if (desktop.getSelectedComponent() instanceof Annotator) {
-				Annotator ann = (Annotator) desktop.getSelectedComponent();
+			if (desktop.getSelectedComponent() instanceof AnnotatorTab) {
+				AnnotatorTab ann = (AnnotatorTab) desktop.getSelectedComponent();
 				try {
 					new AnnotationCopier(ann);
 				} catch (OWLException e1) {
@@ -700,7 +700,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		}
 
 		if (o == annotateitemcleanup) {
-			if (desktop.getSelectedComponent() instanceof Annotator) {
+			if (desktop.getSelectedComponent() instanceof AnnotatorTab) {
 
 			} else {
 				JOptionPane.showMessageDialog(this,"Please select an Annotator tab or open a new Annotator");
@@ -708,8 +708,8 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		}
 		
 		if( o == annotateitemfindnext){
-			if (desktop.getSelectedComponent() instanceof Annotator) {
-				Annotator ann = (Annotator) desktop.getSelectedComponent();
+			if (desktop.getSelectedComponent() instanceof AnnotatorTab) {
+				AnnotatorTab ann = (AnnotatorTab) desktop.getSelectedComponent();
 				String name = ann.getLookupNameForAnnotationObjectButton(ann.focusbutton);
 				ann.findNextStringInText(name);
 			}
@@ -722,8 +722,8 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		
 		if (o == annotateitemshowmarkers){
 			for(Component c : desktop.getComponents()){
-				if(c instanceof Annotator){
-					Annotator temp = (Annotator)c;
+				if(c instanceof AnnotatorTab){
+					AnnotatorTab temp = (AnnotatorTab)c;
 					for(String s : temp.codewordbuttontable.keySet()){
 						CodewordButton cb = temp.codewordbuttontable.get(s);
 						((CodewordButton)cb).propoflabel.setVisible(annotateitemshowmarkers.isSelected());
@@ -736,16 +736,16 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		if(o == annotateitemshowimports){
 			
 			// Set visbility of imported codewords and submodels
-			if(desktop.getSelectedComponent() instanceof Annotator){
-				Annotator temp = (Annotator)desktop.getSelectedComponent();
+			if(desktop.getSelectedComponent() instanceof AnnotatorTab){
+				AnnotatorTab temp = (AnnotatorTab)desktop.getSelectedComponent();
 				temp.refreshAnnotatableElements();
 			}
 		}
 		
 		if(o == annotateitemsortbytype || o == annotateitemsortalphabetically || o == annotateitemtreeview){
 			for(Component c : desktop.getComponents()){
-				if(c instanceof Annotator){
-					Annotator temp = (Annotator)c;
+				if(c instanceof AnnotatorTab){
+					AnnotatorTab temp = (AnnotatorTab)c;
 					temp.refreshAnnotatableElements();
 					temp.codewordpanel.validate();
 					temp.codewordpanel.repaint();
@@ -840,7 +840,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 	
 	
 	public static int showSemGenFileChooser(File currentdirectory, String[] fileextensions, String title, 
-			int taskType, Boolean canselectmultiplefiles, Merger merger){
+			int taskType, Boolean canselectmultiplefiles, MergerTab merger){
 		fc = new SemGenFileChooser(taskType, merger);
 		fc.setPreferredSize(filechooserdims);
 		fc.setMultiSelectionEnabled(canselectmultiplefiles);
@@ -979,10 +979,10 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
     }
 	
 
-	public static Annotator AnnotateAction(File file, Boolean autosave) {	
+	public static AnnotatorTab AnnotateAction(File file, Boolean autosave) {	
 		SemSimModel semsimmodel = loadSemSimModelFromFile(file, true);
 		
-		Annotator annotator = null;
+		AnnotatorTab annotator = null;
 		URI selectedURI = file.toURI(); // The selected file for annotation
 		URI existingURI = URI.create(""); // The existing file from which to
 											// load the SemSim framework
@@ -1006,7 +1006,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 			if (newannok && !isOntologyOpenForEditing(existingURI)) {
 	
 				// Create new Annotater object in SemGen desktop
-				annotator = new Annotator(file, tempURI, saveURI);
+				annotator = new AnnotatorTab(file, tempURI, saveURI);
 				annotator.semsimmodel = semsimmodel; 
 				
 				if(annotator.semsimmodel.getErrors().isEmpty()){
@@ -1022,7 +1022,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 					if(annotator.semsimmodel!=null){
 						numtabs++;
 						desktop.addTab(formatTabName(file.getName()), SemGenIcon.annotatoricon, annotator, "Annotating " + file.getName());
-						desktop.setTabComponentAt(numtabs-1, new SemGenTabComponent(formatTabName(file.getName()), annotator));
+						desktop.setTabComponentAt(numtabs-1, new SemGenTab(formatTabName(file.getName()), annotator));
 						
 						annotator.NewAnnotatorAction();
 						
@@ -1060,7 +1060,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 			desktop.addTab(formatTabName(extractor.semsimmodel.getName()),
 					SemGenIcon.extractoricon, extractor,
 					"Extracting from " + file.getName());
-			desktop.setTabComponentAt(numtabs-1, new SemGenTabComponent(formatTabName(file.getName()), extractor));
+			desktop.setTabComponentAt(numtabs-1, new SemGenTab(formatTabName(file.getName()), extractor));
 			desktop.setMnemonicAt(0, KeyEvent.VK_1);
 			desktop.setSelectedComponent(desktop.getComponentAt(numtabs - 1));
 		}
@@ -1071,10 +1071,10 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 
 	public void NewMergerAction(){
 		opendialog.setVisible(false);
-		Merger merger = new Merger(desktop);
+		MergerTab merger = new MergerTab(desktop);
 		numtabs++;
 		desktop.addTab("Merger", SemGenIcon.mergeicon, merger, "Tab for merging SemSim models");
-		desktop.setTabComponentAt(numtabs-1, new SemGenTabComponent("Merger", merger));
+		desktop.setTabComponentAt(numtabs-1, new SemGenTab("Merger", merger));
 
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			   public void run() { 
@@ -1462,8 +1462,8 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 	// SAVE ACTION 
 	public static boolean SaveAction(Object object, int modeltype){
 		boolean success = false;
-		if (object instanceof Annotator) {
-			Annotator ann = (Annotator) object;
+		if (object instanceof AnnotatorTab) {
+			AnnotatorTab ann = (AnnotatorTab) object;
 			if(ann.fileURI!=null){
 				Set<DataStructure> unspecds = new HashSet<DataStructure>();
 
@@ -1489,7 +1489,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 					if(desktop.getComponentCount()>0){
 						desktop.setTitleAt(desktop.indexOfComponent(ann), formatTabName(targetfile.getName()));
 						desktop.setTabComponentAt(desktop.indexOfComponent(ann),
-								new SemGenTabComponent(formatTabName(targetfile.getName()), ann));
+								new SemGenTab(formatTabName(targetfile.getName()), ann));
 						ann.semsimmodel.setName(targetfile.getName().substring(0, targetfile.getName().lastIndexOf(".")));
 						desktop.setToolTipTextAt(desktop.indexOfComponent(ann), "Annotating " + targetfile.getName());
 					}
@@ -1586,8 +1586,8 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 				} 
 				else saveok = true;
 
-				if (object instanceof Annotator && saveok == true) {
-					Annotator ann = (Annotator) desktop.getSelectedComponent();
+				if (object instanceof AnnotatorTab && saveok == true) {
+					AnnotatorTab ann = (AnnotatorTab) desktop.getSelectedComponent();
 					Set<DataStructure> unspecds = getDataStructuresWithUnspecifiedAnnotations(ann.semsimmodel);
 					if(unspecds.isEmpty()){
 						ann.fileURI = file.toURI();
@@ -1647,8 +1647,8 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 	public static Boolean isOntologyOpenForEditing(URI uritocheck) {
 		Boolean open = false;
 		for (int t = 0; t < desktop.getComponents().length; t++) {
-			if (desktop.getComponent(t) instanceof Annotator) {
-				Annotator tempann = (Annotator) desktop.getComponent(t);
+			if (desktop.getComponent(t) instanceof AnnotatorTab) {
+				AnnotatorTab tempann = (AnnotatorTab) desktop.getComponent(t);
 				if(tempann.fileURI!=null){
 					if (uritocheck.toString().equals(tempann.fileURI.toString())) {
 						open = true;
@@ -1676,40 +1676,13 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		return true;
 	}
 	
-	
-	public static void scrollToTop(final JScrollPane scroller){
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-		   public void run() { 
-		       scroller.getVerticalScrollBar().setValue(0);
-		   }
-		});
-	}
-	
-	public static void scrollToLeft(final JScrollPane scroller){
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-			   public void run() { 
-			       scroller.getHorizontalScrollBar().setValue(0);
-			   }
-			});
-	}
-	
-	public static void scrollToComponent(final JComponent component, final Component cp){
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-			   public void run() { 
-			       Rectangle rc = cp.getBounds();
-				   component.scrollRectToVisible(rc);
-			   }
-			});
-	}
-	
-	
 	// WHEN THE CLOSE TAB ACTION IS PERFORMED ON AN annotator, MERGER OR EXTRACTOR FRAME
 	public static int closeTabAction(Component component) {
 		int returnval = -1;
 		int i = SemGenGUI.desktop.indexOfComponent(component);
 		// If the file has been altered, prompt for a save
-		if(component instanceof Annotator){
-			Annotator ann = (Annotator)component;
+		if(component instanceof AnnotatorTab){
+			AnnotatorTab ann = (AnnotatorTab)component;
 			if (ann.getModelSaved()==false) {
 				String title = "[unsaved file]";
 				if(ann.fileURI!=null){
@@ -1743,7 +1716,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 			}
 			System.gc();
 		}
-		else if (component instanceof ExtractorTab || component instanceof Merger){
+		else if (component instanceof ExtractorTab || component instanceof MergerTab){
 			desktop.remove(desktop.indexOfComponent(component));
 			numtabs = numtabs - 1;
 		}
@@ -1780,8 +1753,8 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		Boolean quit = true;
 		Boolean contchecking = true;
 		for (int x = 0; x < desktopcomponents.length; x++) {
-			if (desktopcomponents[x] instanceof Annotator && contchecking) {
-				Annotator temp = (Annotator) desktopcomponents[x];
+			if (desktopcomponents[x] instanceof AnnotatorTab && contchecking) {
+				AnnotatorTab temp = (AnnotatorTab) desktopcomponents[x];
 				desktop.setSelectedComponent(temp);
 				int val = 0;
 				val = SemGenGUI.closeTabAction(temp);
@@ -1850,24 +1823,24 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 	public void updateSemGenMenuOptions(){
 		Component comp = desktop.getSelectedComponent();
 		
-		annotateitemharvestfromtext.setEnabled(comp instanceof Annotator);
-		annotateitemaddrefterm.setEnabled(comp instanceof Annotator);
-		annotateitemremoverefterm.setEnabled(comp instanceof Annotator);
-		annotateitemcopy.setEnabled(comp instanceof Annotator);
-		annotateitemreplacerefterm.setEnabled(comp instanceof Annotator);
-		annotateitemchangesourcemodelcode.setEnabled(comp instanceof Annotator);
-		annotateitemexportcsv.setEnabled(comp instanceof Annotator);
-		annotateitemeditmodelanns.setEnabled(comp instanceof Annotator);
-		annotateitemfindnext.setEnabled(comp instanceof Annotator);
+		annotateitemharvestfromtext.setEnabled(comp instanceof AnnotatorTab);
+		annotateitemaddrefterm.setEnabled(comp instanceof AnnotatorTab);
+		annotateitemremoverefterm.setEnabled(comp instanceof AnnotatorTab);
+		annotateitemcopy.setEnabled(comp instanceof AnnotatorTab);
+		annotateitemreplacerefterm.setEnabled(comp instanceof AnnotatorTab);
+		annotateitemchangesourcemodelcode.setEnabled(comp instanceof AnnotatorTab);
+		annotateitemexportcsv.setEnabled(comp instanceof AnnotatorTab);
+		annotateitemeditmodelanns.setEnabled(comp instanceof AnnotatorTab);
+		annotateitemfindnext.setEnabled(comp instanceof AnnotatorTab);
 		
 		extractoritembatchcluster.setEnabled(comp instanceof ExtractorTab);
 		extractoritemopenann.setEnabled(comp instanceof ExtractorTab);
 		
-		if(comp instanceof Annotator){
-			Annotator ann = (Annotator)comp;
+		if(comp instanceof AnnotatorTab){
+			AnnotatorTab ann = (AnnotatorTab)comp;
 			fileitemsave.setEnabled(!ann.getModelSaved());
 		}
 		else fileitemsave.setEnabled(false);
-		fileitemsaveas.setEnabled(comp instanceof Annotator);
+		fileitemsaveas.setEnabled(comp instanceof AnnotatorTab);
 	}
 }

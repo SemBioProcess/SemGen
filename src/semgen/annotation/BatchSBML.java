@@ -37,7 +37,7 @@ public class BatchSBML {
 				if(!outputfiles.contains(outfile.getName())){
 					if(ModelClassifier.classify(sbmlfiles[x]) == ModelClassifier.SBML_MODEL){
 						System.out.println("Processing " + sbmlfiles[x].getName());
-						Annotator ann = SemGenGUI.AnnotateAction(sbmlfiles[x], true);
+						AnnotatorTab ann = SemGenGUI.AnnotateAction(sbmlfiles[x], true);
 						ann.fileURI = outfile.toURI();
 						SemGenGUI.SaveAction(ann, ModelClassifier.SBML_MODEL);
 					}

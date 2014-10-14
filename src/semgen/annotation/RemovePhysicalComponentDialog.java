@@ -18,9 +18,9 @@ public class RemovePhysicalComponentDialog extends SemSimComponentSelectorDialog
 		PropertyChangeListener {
 
 	private static final long serialVersionUID = -3622371132272217159L;
-	public Annotator annotator;
+	public AnnotatorTab annotator;
 
-	public RemovePhysicalComponentDialog(Annotator ann,
+	public RemovePhysicalComponentDialog(AnnotatorTab ann,
 			Set<? extends SemSimComponent> settolist, SemSimComponent ssctoignore, Boolean withdescriptions, String title){
 		super(settolist, ssctoignore, null, null, withdescriptions, title);
 		this.annotator = ann;

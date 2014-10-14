@@ -45,12 +45,12 @@ import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
 
-import semgen.GenericThread;
 import semgen.ResourcesManager;
 import semgen.SemGenGUI;
-import semgen.SemGenScrollPane;
+import semgen.resource.GenericThread;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
+import semgen.resource.uicomponent.SemGenScrollPane;
 import semsim.SemSimConstants;
 import semsim.webservices.BioPortalAnnotatorClient;
 import semsim.webservices.BioPortalConstants;
@@ -80,13 +80,13 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 	public HashMap<String, String> ontidsandns = new HashMap<String,String>();
 	public Namespace zns = Namespace.getNamespace("z", "http://www.ebi.ac.uk/z");
 	public Set<String> ontologyids = new HashSet<String>();
-	public Annotator annotator;
+	public AnnotatorTab annotator;
 	public Highlighter areahilit; 
 	public Highlighter.HighlightPainter areapainter;
 	public Color HILIT_COLOR = Color.yellow;
 	public JButton loadingbutton;
 
-	public TextMinerDialog(Annotator ann) throws FileNotFoundException{
+	public TextMinerDialog(AnnotatorTab ann) throws FileNotFoundException{
 		annotator = ann;
 		
 		ontidsandns.put("chebi","http://purl.obolibrary.org/obo/");

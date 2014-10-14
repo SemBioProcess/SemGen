@@ -27,10 +27,10 @@ import javax.swing.JPanel;
 
 import org.semanticweb.owlapi.model.OWLException;
 
-import semgen.ComparatorByName;
-import semgen.SemGenScrollPane;
+import semgen.resource.ComparatorByName;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
+import semgen.resource.uicomponent.SemGenScrollPane;
 import semsim.model.SemSimComponent;
 import semsim.model.computational.DataStructure;
 import semsim.model.physical.PhysicalModelComponent;

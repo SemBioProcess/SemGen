@@ -55,8 +55,8 @@ import org.apache.commons.collections15.functors.MapTransformer;
 import org.apache.commons.collections15.map.LazyMap;
 
 import semgen.SemGenGUI;
-import semgen.SemGenScrollPane;
 import semgen.resource.SemGenFont;
+import semgen.resource.uicomponent.SemGenScrollPane;
 import semsim.model.computational.DataStructure;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;

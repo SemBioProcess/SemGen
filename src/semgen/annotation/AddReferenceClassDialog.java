@@ -18,11 +18,11 @@ public class AddReferenceClassDialog extends JDialog implements
 
 	private static final long serialVersionUID = -3830623199860161812L;
 	public ReferenceClassFinderPanel refclasspanel;
-	public Annotator annotator;
+	public AnnotatorTab annotator;
 	public JOptionPane optionPane;
 	public JTextArea utilarea;
 
-	public AddReferenceClassDialog(Annotator ann, String[] ontList, Object[] options, Annotatable annotatable) {
+	public AddReferenceClassDialog(AnnotatorTab ann, String[] ontList, Object[] options, Annotatable annotatable) {
 		this.annotator = ann;
 		setTitle("Select reference concept");
 		refclasspanel = new ReferenceClassFinderPanel(annotator, annotatable, ontList);

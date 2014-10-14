@@ -16,7 +16,7 @@ public class CodewordButton extends AnnotationObjectButton implements MouseListe
 	public enum cwCompletion {noAnnotations, hasPhysProp, hasPhysEnt, hasAll}
 	public DataStructure ds;
 
-	public CodewordButton(Annotator ann, DataStructure ssc, boolean compannfilled,
+	public CodewordButton(AnnotatorTab ann, DataStructure ssc, boolean compannfilled,
 			String companntext, boolean noncompannfilled, boolean humdeffilled,
 			boolean depfilled, boolean editable) {
 		super(ann, ssc, compannfilled, companntext, noncompannfilled, humdeffilled, depfilled, editable);

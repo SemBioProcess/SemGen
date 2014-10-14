@@ -37,12 +37,12 @@ import semsim.writing.CaseInsensitiveComparator;
 
 public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 	private static final long serialVersionUID = 7868541704010347520L;
-	public Annotator ann;
+	public AnnotatorTab ann;
 	public Set<DataStructure> looseds;
 	public DefaultMutableTreeNode focusnode;
 	public Map<AnnotationObjectButton, DefaultMutableTreeNode> nodebuttonmap = new HashMap<AnnotationObjectButton, DefaultMutableTreeNode>();
 
-	public AnnotatorButtonTree(Annotator ann, DefaultMutableTreeNode root){
+	public AnnotatorButtonTree(AnnotatorTab ann, DefaultMutableTreeNode root){
 		super(root);
 		
 		this.ann = ann;

@@ -192,7 +192,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 			if(ad.thebutton.refreshAllCodes() && SemGenGUI.annotateitemsortbytype.isSelected()){
 				ad.annotator.AlphabetizeAndSetCodewords();
 				if(!SemGenGUI.annotateitemtreeview.isSelected())
-					SemGenGUI.scrollToComponent(ad.annotator.codewordpanel, ad.thebutton);
+					ad.annotator.codewordscrollpane.scrollToComponent(ad.thebutton);
 			}
 			refreshUI();
 		}

@@ -1,6 +1,7 @@
 package semgen.encoding;
 
 import java.io.File;
+
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
@@ -9,8 +10,8 @@ import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
 
 import semgen.FileFilter;
-import semgen.ProgressFrame;
 import semgen.SemGenGUI;
+import semgen.resource.uicomponent.ProgressFrame;
 
 public class Coder {
 	public OWLOntologyManager manager = OWLManager.createOWLOntologyManager();

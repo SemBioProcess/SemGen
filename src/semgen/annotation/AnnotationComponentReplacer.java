@@ -16,7 +16,7 @@ import javax.swing.ListSelectionModel;
 
 import org.semanticweb.owlapi.model.OWLException;
 
-import semgen.SemGenScrollPane;
+import semgen.resource.uicomponent.SemGenScrollPane;
 import semsim.SemSimConstants;
 import semsim.model.annotation.Annotation;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
@@ -28,13 +28,13 @@ public class AnnotationComponentReplacer extends JDialog implements
 
 	private static final long serialVersionUID = 5155214590420468140L;
 	public ReferenceClassFinderPanel refclasspanel;
-	public Annotator ann;
+	public AnnotatorTab ann;
 	public SemGenScrollPane scpn;
 	public JOptionPane optionPane;
 	public Hashtable<String, String> oldclsnamesanduris = new Hashtable<String, String>();
 	public JList<String> list= new JList<String>();
 
-	public AnnotationComponentReplacer(Annotator ann) throws OWLException {
+	public AnnotationComponentReplacer(AnnotatorTab ann) throws OWLException {
 		this.ann = ann;
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -67,8 +67,8 @@ public class AnnotationComponentReplacer extends JDialog implements
 			if (value.equals("Replace all")) {
 				String oldclass = (String) list.getSelectedValue();
 				
-				String newclassuri = (String) refclasspanel.resultsanduris.get(refclasspanel.resultslistright.getSelectedValue());
-				String oldclassuri = (String) oldclsnamesanduris.get(oldclass);
+				String newclassuri = refclasspanel.resultsanduris.get(refclasspanel.resultslistright.getSelectedValue());
+				String oldclassuri = oldclsnamesanduris.get(oldclass);
 				
 				for(PhysicalModelComponent pmc : ann.semsimmodel.getPhysicalModelComponents()){
 					for(Annotation anno : pmc.getAnnotations()){

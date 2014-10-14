@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -28,12 +27,12 @@ import javax.swing.JPanel;
 
 import org.semanticweb.owlapi.model.OWLException;
 
-import semgen.ExternalURLButton;
 import semgen.SemGenGUI;
 import semgen.annotation.AnnotationDialog;
 import semgen.annotation.CustomPhysicalComponentEditor;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
+import semgen.resource.uicomponent.ExternalURLButton;
 import semsim.Annotatable;
 import semsim.SemSimConstants;
 import semsim.model.SemSimComponent;
@@ -118,7 +117,6 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 		add(itempanel, BorderLayout.WEST);
 		add(Box.createGlue(), BorderLayout.EAST);
 	}
-	
 	
 	public void refreshComboBoxItemsAndButtonVisibility(){
 		
@@ -398,7 +396,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 				boolean rescroll = anndialog.thebutton.refreshAllCodes();
 				if(rescroll && SemGenGUI.annotateitemsortbytype.isSelected()){
 					anndialog.annotator.AlphabetizeAndSetCodewords();
-					SemGenGUI.scrollToComponent(anndialog.annotator.codewordpanel, anndialog.thebutton);
+					anndialog.annotator.codewordscrollpane.scrollToComponent(anndialog.thebutton);
 				}
 			}
 			// If not for a physical property, get the reference annotation for the selected item and apply it to whatever is being annotated
@@ -413,7 +411,6 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 					}
 					// This happens for singular annotations and non-composite physical entity annotations
 					if(selectedsmc.hasRefersToAnnotation()){
-						//more411label.termuri = pmc.getFirstRefersToReferenceOntologyAnnotation().getReferenceURI().toString();
 						urlbutton.setTermURI(selectedsmc.getFirstRefersToReferenceOntologyAnnotation().getReferenceURI());
 					}
 				}

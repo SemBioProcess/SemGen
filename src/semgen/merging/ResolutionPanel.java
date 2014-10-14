@@ -26,9 +26,9 @@ import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
 import semgen.SemGenGUI;
-import semgen.SemGenScrollPane;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
+import semgen.resource.uicomponent.SemGenScrollPane;
 import semsim.model.SemSimModel;
 import semsim.model.computational.DataStructure;
 
@@ -39,7 +39,7 @@ public class ResolutionPanel extends JPanel implements ActionListener {
 	 * 
 	 */
 	private static final long serialVersionUID = -618244272904338963L;
-	public Merger merger;
+	public MergerTab merger;
 	public JComboBox<String> chooser;
 	public JPanel annotationpanel;
 	public JPanel actionpanel;
@@ -60,7 +60,7 @@ public class ResolutionPanel extends JPanel implements ActionListener {
 	public JRadioButton rb3;
 	public JButton questionbutton;
 
-	public ResolutionPanel(Merger merger, DataStructure ds1, DataStructure ds2,
+	public ResolutionPanel(MergerTab merger, DataStructure ds1, DataStructure ds2,
 			SemSimModel semsimmodel1, SemSimModel semsimmodel2,
 			String matchdescription, Boolean manualmapping) {
 

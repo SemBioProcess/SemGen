@@ -1,4 +1,4 @@
-package semgen;
+package semgen.resource;
 
 import javax.swing.JOptionPane;
 import java.util.Arrays;

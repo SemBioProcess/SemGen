@@ -3,8 +3,8 @@ package semgen.annotation;
 import org.semanticweb.owlapi.model.*;
 
 import semgen.SemGenGUI;
-import semgen.SemGenScrollPane;
 import semgen.resource.SemGenIcon;
+import semgen.resource.uicomponent.SemGenScrollPane;
 import semsim.SemSimConstants;
 import semsim.model.annotation.Annotation;
 
@@ -37,14 +37,12 @@ import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 
 public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeListener, ActionListener {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 222072128470808990L;
 	private JOptionPane optionPane;
 	private Object[] options;
-	public Annotator annotator;
-	private JScrollPane scrollpane;
+	public AnnotatorTab annotator;
+	private SemGenScrollPane scrollpane;
 	private JPanel genmodinfo;
 	public JPanel mainpanel;
 	public JButton addbutton;
@@ -53,7 +51,7 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 	private int initwidth = 700;
 	private int initheight = 655;
 
-	public ModelLevelMetadataEditor(Annotator annotator) {
+	public ModelLevelMetadataEditor(AnnotatorTab annotator) {
 
 		this.setSize(initwidth, initheight);
 		this.setLocationRelativeTo(null);
@@ -75,7 +73,7 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 		genmodinfo.setLayout(new BoxLayout(genmodinfo, BoxLayout.Y_AXIS));
 		getModelLevelAnnotations();
 				
-		scrollpane = new JScrollPane(genmodinfo);
+		scrollpane = new SemGenScrollPane(genmodinfo);
 		scrollpane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollpane.getVerticalScrollBar().setUnitIncrement(12);
 		mainpanel.add(scrollpane, BorderLayout.CENTER);
@@ -93,29 +91,24 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 	
 	
 	public class MetadataItem extends JPanel implements MouseListener, ActionListener{
-		/**
-		 * 
-		 */
+
 		private static final long serialVersionUID = 3245322304789828616L;
-		public JButton removebutton;
+		public JButton removebutton = new JButton();
 		public ModelLevelMetadataEditor ed;
 		public Annotation ann;
 		public Boolean editable;
 		public JComboBox<String> cb;
 		public JTextArea ta;
-		public JLabel label;
-		public SemGenScrollPane sgsp;
+		public SemGenScrollPane sgsp = new SemGenScrollPane(ta);
 		
 		public MetadataItem(String labeltext, String tatext, Annotation ann, ModelLevelMetadataEditor ed, Boolean editable){
 			this.ann = ann;
 			this.ed = ed;
 			this.editable = editable;
 			
-			label = new JLabel(labeltext);
+			JLabel label = new JLabel(labeltext);
 			ta = new JTextArea(tatext);
-			removebutton = new JButton();
-			sgsp = new SemGenScrollPane(ta);
-			Format(label, sgsp, ta, removebutton, editable);
+			Format(label, ta, removebutton, editable);
 			this.add(label);
 			this.add(sgsp);
 			this.add(removebutton);
@@ -130,17 +123,14 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 			cb.setSelectedItem(cb.getItemAt(0));
 			
 			ta = new JTextArea(tatext);
-			removebutton = new JButton();
 			JLabel label = new JLabel();
-			sgsp = new SemGenScrollPane(ta);
-			Format(label, sgsp, ta, removebutton, editable);
+			Format(label, ta, removebutton, editable);
 			this.add(cb);
 			this.add(sgsp);
 			this.add(removebutton);
 		}
 		
-		
-		private void Format(JLabel label, SemGenScrollPane pane, JTextArea area, JButton removebutton, Boolean editable) {
+		private void Format(JLabel label, JTextArea area, JButton removebutton, Boolean editable) {
 			label.setFont(new Font("SansSerif", Font.ITALIC, 12));
 			label.setBorder(BorderFactory.createEmptyBorder(15, 0, 5, 8));
 			label.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -269,14 +259,9 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 				}
 			}
 			annotator.setModelSaved(false);
-			setVisible(false);
 		}
-		else if(value == "Cancel"){
-			setVisible(false);
-		}
+		setVisible(false);
 	}
-
-
 
 	public void actionPerformed(ActionEvent arg0) {
 		Object o = arg0.getSource();
@@ -287,7 +272,7 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 			genmodinfo.repaint();
 			scrollpane.validate();
 			scrollpane.repaint();
-			SemGenGUI.scrollToComponent(genmodinfo, mi);
+			scrollpane.scrollToComponent(mi);
 		}
 	}
 }

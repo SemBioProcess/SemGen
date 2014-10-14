@@ -1,4 +1,4 @@
-package semgen;
+package semgen.resource;
 
 
 
@@ -9,6 +9,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.semanticweb.owlapi.model.OWLException;
 
+import semgen.SemGenGUI;
 import semsim.model.SemSimModel;
 import semsim.model.computational.DataStructure;
 import semsim.writing.CaseInsensitiveComparator;

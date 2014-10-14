@@ -1,4 +1,4 @@
-package semgen;
+package semgen.resource.uicomponent;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -43,17 +43,16 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 
+import semgen.SemGenGUI;
+import semgen.resource.GenericThread;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
 import semsim.SemSimConstants;
 import semsim.owl.CustomRestrictionVisitor;
 import semsim.owl.SemSimOWLFactory;
 
-
 public class MoreInfoButton extends JLabel implements PropertyChangeListener, MouseListener{
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1701314749125646788L;
 	public JDialog moreinfodialog;
 	public JOptionPane optionPane;
@@ -388,9 +387,7 @@ public class MoreInfoButton extends JLabel implements PropertyChangeListener, Mo
 	}
 
 	public void activate(){
-		setText("");
-		setIcon(SemGenIcon.moreinfoicon);
-		setEnabled(true);
+		reset();
 		setToolTipText("Get more info about term");
 		setOpaque(false);
 		addMouseListener(this);
@@ -401,7 +398,6 @@ public class MoreInfoButton extends JLabel implements PropertyChangeListener, Mo
 		this.setText("");
 		this.setIcon(SemGenIcon.moreinfoicon);
 		this.setEnabled(true);
-
 	}
 
 	public void mouseClicked(MouseEvent arg0) {

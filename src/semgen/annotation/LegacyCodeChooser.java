@@ -25,11 +25,11 @@ public class LegacyCodeChooser extends JDialog implements ActionListener,
 	private static final long serialVersionUID = 5097390254331353085L;
 	public JOptionPane optionPane;
 	public JTextField txtfld = new JTextField();
-	public Annotator ann;
+	public AnnotatorTab ann;
 	public JButton locbutton = new JButton("or choose local file");
 	public Annotation existingann;
 
-	public LegacyCodeChooser(Annotator ann) {
+	public LegacyCodeChooser(AnnotatorTab ann) {
 		this.ann = ann;
 		
 		for(Annotation a : ann.semsimmodel.getAnnotations()){

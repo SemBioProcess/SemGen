@@ -6,12 +6,12 @@ import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
-import semgen.ComparatorByName;
-import semgen.ProgressFrame;
 import semgen.SemGenGUI;
-import semgen.SemGenScrollPane;
+import semgen.resource.ComparatorByName;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
+import semgen.resource.uicomponent.ProgressFrame;
+import semgen.resource.uicomponent.SemGenScrollPane;
 import semsim.Annotatable;
 import semsim.SemSimConstants;
 import semsim.model.Importable;
@@ -54,7 +54,7 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Annotator extends JPanel implements ActionListener, MouseListener,
+public class AnnotatorTab extends JPanel implements ActionListener, MouseListener,
 		KeyListener {
 
 	private static final long serialVersionUID = -5360722647774877228L;
@@ -114,7 +114,7 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 	
 	public SemSimModel semsimmodel;
 
-	public Annotator(File sourcefile, URI temploc, URI fileloc) {
+	public AnnotatorTab(File sourcefile, URI temploc, URI fileloc) {
 		this.sourcefile = sourcefile;
 
 		tempURI = temploc;
@@ -191,7 +191,7 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		coderbutton.setAlignmentY(JButton.TOP_ALIGNMENT);
 		coderbutton.setPreferredSize(new Dimension(20, 20));
 
-		sortbycompletenessbutton.setFont(new Font("SansSerif", Font.PLAIN, 11));
+		sortbycompletenessbutton.setFont(SemGenFont.defaultPlain(-1));
 		sortbycompletenessbutton.addActionListener(this);
 		
 		JPanel toolpanel = new JPanel();
@@ -203,7 +203,7 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		closebutton = new JButton("Close tab");
 		closebutton.setContentAreaFilled(false);
 		closebutton.setForeground(Color.blue);
-		closebutton.setFont(new Font("SansSerif", Font.ITALIC, 11));
+		closebutton.setFont(SemGenFont.defaultItalic(-1));
 		closebutton.setBorderPainted(false);
 		closebutton.setOpaque(false);
 		closebutton.addActionListener(this);
@@ -321,8 +321,8 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 			SemGenGUI.desktop.setSelectedComponent(SemGenGUI.desktop.getComponentAt(SemGenGUI.numtabs - 1));
 		}
 		
-		SemGenGUI.scrollToTop(codewordscrollpane);
-		SemGenGUI.scrollToTop(submodelscrollpane);
+		codewordscrollpane.scrollToTop();
+		submodelscrollpane.scrollToTop();
 		
 		AnnotationObjectButton initialaob = null; 
 		// If tree view is selected, select first child of the root node
@@ -387,7 +387,7 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 			codearea.setCaretPosition(indexesOfHighlightedTerms.get(0));
 		}
 		currentindexforcaret = 0;
-		SemGenGUI.scrollToTop(dialogscrollpane);
+		dialogscrollpane.scrollToTop();
 
 		return anndialog;
 	}
@@ -414,7 +414,7 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 				tree.setSelectionPath(new TreePath(tree.focusnode.getPath()));
 				tree.scrollPathToVisible(new TreePath(tree.focusnode.getPath()));
 			}
-			SemGenGUI.scrollToLeft(treeviewscrollpane);
+			treeviewscrollpane.scrollToLeft();
 		}
 		else{
 			sortbycompletenessbutton.setEnabled(true);
@@ -424,9 +424,9 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 			if(focusbutton!=null){
 				if(!SemGenGUI.annotateitemtreeview.isSelected()){
 					if(focusbutton instanceof CodewordButton)
-						SemGenGUI.scrollToComponent(codewordpanel, focusbutton);
+						codewordscrollpane.scrollToComponent(focusbutton);
 					else if(focusbutton instanceof SubmodelButton)
-						SemGenGUI.scrollToComponent(submodelpanel, focusbutton);
+						submodelscrollpane.scrollToComponent(focusbutton);
 				}
 			}
 		}
@@ -596,13 +596,12 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 	
 	public void showSelectAnnotationObjectMessage(){
 		dialogscrollpane.getViewport().removeAll();
-		JPanel panel = new JPanel();
-		panel.setLayout(new BorderLayout());
+		JPanel panel = new JPanel(new BorderLayout());
 		JLabel label = new JLabel("Select a codeword or submodel to view annotations");
 		label.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 0));
 		panel.add(label, BorderLayout.CENTER);
 		dialogscrollpane.getViewport().add(panel);
-		SemGenGUI.scrollToTop(dialogscrollpane);
+		dialogscrollpane.scrollToTop();
 		if(focusbutton!=null){
 			focusbutton.setBackground(Color.white);
 		}
@@ -692,7 +691,7 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		}
 	}
 	
-	public static void showAnnotaterPanes(final Annotator ann){
+	public static void showAnnotaterPanes(final AnnotatorTab ann){
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 		   public void run() { 
 			   ann.add(ann.genmodinfo, BorderLayout.NORTH);
@@ -860,9 +859,7 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 		if (e.getSource() instanceof AnnotationObjectButton) {
 			try {
 				annotationObjectAction((AnnotationObjectButton) e.getSource());
-			} catch (BadLocationException e1) {
-				e1.printStackTrace();
-			} catch (IOException e1) {
+			} catch (BadLocationException | IOException e1) {
 				e1.printStackTrace();
 			}
 		}
@@ -919,11 +916,11 @@ public class Annotator extends JPanel implements ActionListener, MouseListener,
 	public void keyTyped(KeyEvent e) {}
 
 	public void changeButtonFocus(AnnotationObjectButton thebutton, AnnotationObjectButton aob, JLabel whichann) {
-		JPanel panel = codewordpanel;
+		SemGenScrollPane pane = codewordscrollpane;
 		if(aob instanceof SubmodelButton){
-			panel = submodelpanel;
+			pane = submodelscrollpane;
 		}
-		SemGenGUI.scrollToComponent(panel, aob);
+		pane.scrollToComponent(aob);
 		try {
 			annotationObjectAction(aob);
 		} catch (BadLocationException | IOException e) {

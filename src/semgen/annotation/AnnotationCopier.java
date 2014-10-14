@@ -12,8 +12,8 @@ import javax.swing.SwingWorker;
 
 import org.semanticweb.owlapi.model.OWLException;
 
-import semgen.ProgressFrame;
 import semgen.SemGenGUI;
+import semgen.resource.uicomponent.ProgressFrame;
 import semsim.SemSimConstants;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.Annotation;
@@ -32,10 +32,10 @@ import semsim.model.physical.Submodel;
 
 public class AnnotationCopier {
 
-	private Annotator targetann;
+	private AnnotatorTab targetann;
 	private SemSimModel sourcemod;
 
-	public AnnotationCopier(Annotator targetann) throws OWLException, CloneNotSupportedException {
+	public AnnotationCopier(AnnotatorTab targetann) throws OWLException, CloneNotSupportedException {
 		this.targetann = targetann;
 		int choice = SemGenGUI.showSemGenFileChooser(SemGenGUI.currentdirectory, new String[] { "owl","cellml", "xml" }, "Select SemSim model containing annotations",
 				0, false);
@@ -47,7 +47,7 @@ public class AnnotationCopier {
 		}
 	}
 	
-	public static Set<MappableVariable> copyAllAnnotationsToMappedVariables(Annotator ann, MappableVariable ds){
+	public static Set<MappableVariable> copyAllAnnotationsToMappedVariables(AnnotatorTab ann, MappableVariable ds){
 		Set<MappableVariable> allmappedvars = new HashSet<MappableVariable>();
 		allmappedvars.addAll(getAllMappedVariables(ds, ds, new HashSet<MappableVariable>()));
 		for(MappableVariable otherds : allmappedvars){

@@ -19,8 +19,8 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import semgen.SemGenScrollPane;
 import semgen.resource.SemGenIcon;
+import semgen.resource.uicomponent.SemGenScrollPane;
 import semsim.Annotatable;
 import semsim.SemSimConstants;
 import semsim.model.SemSimComponent;

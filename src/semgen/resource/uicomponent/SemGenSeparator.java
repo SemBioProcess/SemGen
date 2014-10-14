@@ -1,4 +1,4 @@
-package semgen;
+package semgen.resource.uicomponent;
 
 import java.awt.Color;
 

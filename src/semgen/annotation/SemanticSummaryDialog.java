@@ -2,7 +2,6 @@ package semgen.annotation;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -16,8 +15,8 @@ import javax.swing.JSeparator;
 import javax.swing.JTextPane;
 
 import semgen.SemGenGUI;
-import semgen.SemGenScrollPane;
 import semgen.resource.SemGenFont;
+import semgen.resource.uicomponent.SemGenScrollPane;
 import semsim.SemSimConstants;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.Annotation;
@@ -27,14 +26,11 @@ import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.PhysicalProperty;
 
 public class SemanticSummaryDialog extends JDialog implements PropertyChangeListener{
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -1850501792672929694L;
 	public JOptionPane optionPane;
 	public Object[] options = new Object[]{"OK"};
 	public JPanel mainpanel;
-	public SemGenScrollPane scroller;
 	public SemSimModel semsimmodel;
 	
 	public SemanticSummaryDialog(SemSimModel semsimmodel){
@@ -44,10 +40,9 @@ public class SemanticSummaryDialog extends JDialog implements PropertyChangeList
 		mainpanel = new JPanel();
 		mainpanel.setLayout(new BoxLayout(mainpanel, BoxLayout.Y_AXIS));
 		setDataInUI();
-		scroller = new SemGenScrollPane(mainpanel);
+		SemGenScrollPane scroller = new SemGenScrollPane(mainpanel);
 		scroller.setPreferredSize(new Dimension(800, 700));
-		SemGenGUI.scrollToLeft(scroller);
-		SemGenGUI.scrollToTop(scroller);
+		scroller.scrollToTopLeft();
 		
 		Object[] array = { scroller };
 		
