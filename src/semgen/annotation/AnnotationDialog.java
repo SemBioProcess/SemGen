@@ -1,6 +1,5 @@
 package semgen.annotation;
 
-import semgen.ExternalURLButton;
 import semgen.SemGenGUI;
 import semgen.SemGenGUI.NewAnnotatorTask;
 import semgen.SemGenSeparator;
@@ -11,25 +10,19 @@ import semsim.Annotatable;
 import semsim.model.Importable;
 import semsim.model.SemSimComponent;
 import semsim.model.SemSimModel;
-import semsim.model.annotation.ReferenceOntologyAnnotation;
 import semsim.model.annotation.StructuralRelation;
 import semsim.model.computational.DataStructure;
 import semsim.model.computational.MappableVariable;
-import semsim.model.physical.CompositePhysicalEntity;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
-import semsim.model.physical.PhysicalProcess;
-import semsim.model.physical.PhysicalProperty;
 import semsim.model.physical.Submodel;
 import semsim.model.physical.FunctionalSubmodel;
 import semsim.owl.SemSimOWLFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.ListIterator;
 import java.util.Set;
 import java.awt.event.MouseEvent;
@@ -38,76 +31,52 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Rectangle;
 
 import javax.swing.*;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 
 import org.semanticweb.owlapi.model.OWLException;
 
-public class AnnotationDialog extends JPanel implements MouseListener, Scrollable{
-	/**
-	 * 
-	 */
+public class AnnotationDialog extends JPanel implements MouseListener{
+
 	private static final long serialVersionUID = -7946871333815617810L;
 	public Annotator annotator;
 	public SemSimModel semsimmodel;
 	public SemSimComponent smc;
 	public AnnotationObjectButton thebutton;
-	public URI fileURI;
-	public String entannotation;
-	public String propannotation;
-	public String depannotation;
 	public CompositeAnnotationPanel compositepanel;
 	public JPanel mainpanel;
 	public SemSimComponentAnnotationPanel singularannpanel;
 	private JPanel humandefpanel;
-	public JLabel nohumdeflabel;
 	private JLabel codewordlabel;
-	public JPanel subtitlepanel;
 	public AnnotationDialogClickableTextPane subtitlefield;
 	public AnnotationDialogClickableTextPane nestedsubmodelpane;
 	private JLabel compositelabel;
 	private JLabel singularannlabel;
 	public AnnotationDialogClickableTextPane humandefpane;
-	public AnnotationDialogClickableTextPane depfield;
-	private JLabel marginlabel;
-	//public MoreInfoButton noncompmoreinfobutton;
 	private JButton humapplyelsewherebutton;
 	public JLabel humremovebutton;
-	private JButton depapplyelsewherebutton;
 	private JLabel copyannsbutton = new JLabel(SemGenGUI.copyicon);
 	private JLabel loadsourcemodelbutton = new JLabel(SemGenGUI.annotatoricon);
 	public SelectorDialogForCodewordsOfSubmodel sdfcoc;
 	public SelectorDialogForSubmodelsOfSubmodel sdfcomp;
 	public Set<DataStructure> cdwdsfromcomps;
-	public String[] entitybases;
-	public String[] propbases;
-	public String[] depbases;
 	public String codeword;
 	
 	public int indent = 15;
 
-	public AnnotationDialog(Annotator ann, AnnotationObjectButton aob, URI fileloc, String[] entityKBs, String[] propKBs, String[] depKBs) throws IOException{
+	public AnnotationDialog(Annotator ann, AnnotationObjectButton aob) throws IOException{
 		annotator = ann;
 		thebutton = aob;
-		fileURI = fileloc;
 		codeword = aob.getName();
 		semsimmodel = annotator.semsimmodel;
 
 		if(aob instanceof SubmodelButton)
 			smc = ((SubmodelButton)aob).sub;
 		else smc = ((CodewordButton)aob).ds;
-		
-		entitybases = entityKBs;
-		propbases = propKBs;
-		depbases = depKBs;
 		
 		setBackground(SemGenGUI.lightblue);
 		setLayout(new BorderLayout());
@@ -117,7 +86,6 @@ public class AnnotationDialog extends JPanel implements MouseListener, Scrollabl
 		codewordlabel.setFont(new Font("SansSerif", Font.BOLD,SemGenGUI.defaultfontsize + 3));
 		
 		humapplyelsewherebutton = new JButton();
-		depapplyelsewherebutton = new JButton();
 		humremovebutton = new JLabel(SemGenGUI.eraseiconsmall);
 
 		FormatButton(humremovebutton, "Remove this annotation", thebutton.editable);
@@ -131,30 +99,23 @@ public class AnnotationDialog extends JPanel implements MouseListener, Scrollabl
 		loadsourcemodelbutton.setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
 
 		humapplyelsewherebutton.setVisible(false);
-		depapplyelsewherebutton.setVisible(false);
 
 		humandefpanel = new JPanel();
 		humandefpanel.setBackground(SemGenGUI.lightblue);
 		humandefpanel.setBorder(BorderFactory.createEmptyBorder(0, indent, 0, 0));
-		
-		nohumdeflabel = new JLabel("");
-		nohumdeflabel.addMouseListener(this);
-		nohumdeflabel.setForeground(Color.gray);
-		
+
 		JPanel humandefsubpanel = new JPanel();
 		humandefsubpanel.setBackground(SemGenGUI.lightblue);
 		humandefsubpanel.setLayout(new BoxLayout(humandefsubpanel, BoxLayout.X_AXIS));
 		humandefpane = new AnnotationDialogClickableTextPane("[unspecified]",this, indent, thebutton.editable);
 		humandefpane.setAlignmentX(JTextArea.LEFT_ALIGNMENT);
-		//humandefpane.setToolTipText("Free-text definition");
 		humandefpanel.setLayout(new BorderLayout());
-		//humandefsubpanel.add(nohumdeflabel);
 		humandefsubpanel.add(humandefpane);
 		humandefsubpanel.add(humremovebutton);
 		humandefpanel.add(humandefsubpanel, BorderLayout.WEST);
 		humandefpanel.add(Box.createGlue(), BorderLayout.EAST);
 		
-		subtitlepanel = new JPanel();
+		JPanel subtitlepanel = new JPanel();
 		subtitlepanel.setLayout(new BoxLayout(subtitlepanel, BoxLayout.Y_AXIS));
 		
 		JPanel codewordspanel = new JPanel();
@@ -194,12 +155,10 @@ public class AnnotationDialog extends JPanel implements MouseListener, Scrollabl
 			eqpane.setBorder(BorderFactory.createEmptyBorder(2, 2*indent, 2, 2));
 			eqpane.setBackground(new Color(0,0,0,0));
 
-			//subtitlefield = new AnnotationDialogClickableTextPane(code, this, 2*indent, false);
 			String units = "dimensionless";
 			if(((DataStructure)thebutton.ssc).hasUnits())
 				units = ((DataStructure)thebutton.ssc).getUnit().getName();
 			codewordlabel.setText(codewordlabel.getText() + " (" + units + ")");
-			//subtitlepanel.add(subtitlefield);
 			compositepanel = new CompositeAnnotationPanel(BoxLayout.Y_AXIS, this);
 		}
 		subtitlepanel.setBorder(BorderFactory.createEmptyBorder(0, indent, 0, indent));
@@ -208,9 +167,6 @@ public class AnnotationDialog extends JPanel implements MouseListener, Scrollabl
 		singularannlabel = new JLabel("Singular annotation");
 		singularannlabel.setFont(new Font("SansSerif", Font.BOLD, SemGenGUI.defaultfontsize));
 		singularannlabel.setBorder(BorderFactory.createEmptyBorder(10, indent, 5, 0));
-		
-		marginlabel = new JLabel();
-		marginlabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 
 		refreshData();
 
@@ -226,7 +182,6 @@ public class AnnotationDialog extends JPanel implements MouseListener, Scrollabl
 
 		if(smc instanceof MappableVariable){
 			MappableVariable mvar = (MappableVariable)smc;
-			//if(!mvar.isImportedViaSubmodel() && (!mvar.getMappedTo().isEmpty() || !mvar.getMappedFrom().isEmpty())){
 			if(!mvar.getMappedTo().isEmpty() || !mvar.getMappedFrom().isEmpty()){
 				mainheader.add(copyannsbutton);
 				codewordlabel.setBorder(BorderFactory.createEmptyBorder(5, indent, 5, 10));
@@ -243,10 +198,7 @@ public class AnnotationDialog extends JPanel implements MouseListener, Scrollabl
 		mainheader.add(Box.createGlue());
 		
 		mainpanel.add(mainheader);
-
-		//mainpanel.add(Box.createGlue());
 		mainpanel.add(humandefpanel);
-		//mainpanel.add(Box.createGlue());
 		
 		if(thebutton instanceof SubmodelButton){
 			subtitlefield.setAlignmentX(JPanel.LEFT_ALIGNMENT);
@@ -303,7 +255,6 @@ public class AnnotationDialog extends JPanel implements MouseListener, Scrollabl
 	}
 
 	public void refreshData() {
-		//removeAll();
 		// If a submodel, refresh the associated codewords
 		if(thebutton instanceof SubmodelButton)
 			refreshSubmodelData();
@@ -390,11 +341,7 @@ public class AnnotationDialog extends JPanel implements MouseListener, Scrollabl
 		annotator.updateTreeNode();
 	}
 	
-	
-	
-	
-	public void setSubmodelDataOnScreen(Submodel sub, AnnotationDialogClickableTextPane pane, Set<? extends SemSimComponent> associatedsscs, String title){
-		
+	public void setSubmodelDataOnScreen(Submodel sub, AnnotationDialogClickableTextPane pane, Set<? extends SemSimComponent> associatedsscs, String title){	
 		if(thebutton.ssc instanceof FunctionalSubmodel) pane.setForeground(Color.black);
 		else pane.setForeground(Color.blue);
 		
@@ -470,7 +417,7 @@ public class AnnotationDialog extends JPanel implements MouseListener, Scrollabl
 		
 		if(thebutton.refreshAllCodes()){
 			if(SemGenGUI.annotateitemsortbytype.isSelected() && !SemGenGUI.annotateitemtreeview.isSelected()) // Not able to sort codewords by marker in tree view yet
-				annotator.AlphabetizeAndSetCodewordsbyMarker();
+				annotator.AlphabetizeAndSetCodewords();
 			if(!SemGenGUI.annotateitemtreeview.isSelected())
 				SemGenGUI.scrollToComponent(annotator.codewordpanel, thebutton);
 		}
@@ -573,7 +520,7 @@ public class AnnotationDialog extends JPanel implements MouseListener, Scrollabl
 				
 				// Update the codeword button markers, re-sort if needed
 				if(SemGenGUI.annotateitemsortbytype.isSelected()){
-					annotator.AlphabetizeAndSetCodewordsbyMarker();
+					annotator.AlphabetizeAndSetCodewords();
 					SemGenGUI.scrollToComponent(annotator.codewordpanel, thebutton);
 				}
 			}
@@ -588,10 +535,6 @@ public class AnnotationDialog extends JPanel implements MouseListener, Scrollabl
 				task.execute();
 			}
 			else{JOptionPane.showMessageDialog(SemGenGUI.desktop, "Could not locate source file for this sub-model.", "ERROR", JOptionPane.ERROR_MESSAGE);}
-		}
-		
-		if (arg0.getComponent() == depfield) {
-			//new DependencyAnnotationEditor(annotator, annotator.tempURI, this, thebutton.urisafename, true);
 		}
 	}
 
@@ -612,13 +555,6 @@ public class AnnotationDialog extends JPanel implements MouseListener, Scrollabl
 		if(component==codewordlabel && thebutton instanceof SubmodelButton){
 			codewordlabel.setForeground(Color.blue);
 			codewordlabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		}
-		
-		if(component==nohumdeflabel){
-//			original = e.getComponent().getFont();
-//	        Map attributes = original.getAttributes();
-//	        attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-//	        e.getComponent().setFont(original.deriveFont(attributes));
 		}
 	}
 
@@ -653,32 +589,5 @@ public class AnnotationDialog extends JPanel implements MouseListener, Scrollabl
 		if (component instanceof JLabel && component!=codewordlabel) {
 			((JLabel)component).setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
 		}
-	}
-
-	public Dimension getPreferredScrollableViewportSize() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public int getScrollableBlockIncrement(Rectangle visibleRect,
-			int orientation, int direction) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public boolean getScrollableTracksViewportHeight() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public boolean getScrollableTracksViewportWidth() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	public int getScrollableUnitIncrement(Rectangle visibleRect,
-			int orientation, int direction) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 }

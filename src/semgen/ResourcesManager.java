@@ -107,7 +107,6 @@ public class ResourcesManager {
 	
 	
 	public static File writeResourceToTempDir(String nameoffile) throws IOException{
-		//InputStream in = SemGen.class.getResourceAsStream("cfg/" + nameoffile);
 		InputStream in = new FileInputStream(new File("cfg/" + nameoffile));
 		File file = new File(SemGenGUI.tempdir + "/" + nameoffile);
 		if (file.exists()){}

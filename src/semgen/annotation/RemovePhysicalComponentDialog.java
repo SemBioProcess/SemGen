@@ -11,16 +11,12 @@ import semgen.SemGenGUI;
 import semsim.model.SemSimComponent;
 import semsim.model.physical.CompositePhysicalEntity;
 import semsim.model.physical.PhysicalEntity;
-import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.PhysicalProperty;
 
 public class RemovePhysicalComponentDialog extends SemSimComponentSelectorDialog implements
 		PropertyChangeListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -3622371132272217159L;
 	public Annotator annotator;
 
@@ -45,8 +41,6 @@ public class RemovePhysicalComponentDialog extends SemSimComponentSelectorDialog
 				setVisible(false);
 				if(annotator.focusbutton instanceof CodewordButton) annotator.anndialog.compositepanel.refreshUI();
 			}
-			else{
-			}
 		}
 		else if(value == "Cancel"){
 			setVisible(false);
@@ -70,8 +64,6 @@ public class RemovePhysicalComponentDialog extends SemSimComponentSelectorDialog
 							if(prop.getPhysicalPropertyOf() instanceof PhysicalEntity)
 								prop.setPhysicalPropertyOf(annotator.semsimmodel.getCustomPhysicalEntityByName(SemGenGUI.unspecifiedName));
 							if(prop.getPhysicalPropertyOf() instanceof PhysicalProcess){
-//								PhysicalProcess
-//								for(PhysicalEntity source : (PhysicalProcess))
 								// Need to do sources, sinks, meds here?
 								prop.setPhysicalPropertyOf(annotator.semsimmodel.getCustomPhysicalProcessByName(SemGenGUI.unspecifiedName));
 							}
@@ -87,11 +79,6 @@ public class RemovePhysicalComponentDialog extends SemSimComponentSelectorDialog
 							}
 						}
 					}
-					// Remove the component entirely???
-//					if(removedComp instanceof PhysicalEntity)
-//						annotator.semsimmodel.removePhysicalEntityFromCache((PhysicalEntity)removedComp);
-//					else if(removedComp instanceof PhysicalProcess)
-//						annotator.semsimmodel.removePhysicalProcessFromCache((PhysicalProcess)removedComp);
 					annotator.setModelSaved(false);
 				}
 			}

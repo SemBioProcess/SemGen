@@ -16,39 +16,32 @@ import javax.swing.ListSelectionModel;
 
 import org.semanticweb.owlapi.model.OWLException;
 
-import semgen.SemGenGUI;
 import semgen.SemGenScrollPane;
 import semsim.SemSimConstants;
 import semsim.model.annotation.Annotation;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
-import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
+import semsim.writing.CaseInsensitiveComparator;
 
 public class AnnotationComponentReplacer extends JDialog implements
 		PropertyChangeListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 5155214590420468140L;
 	public ReferenceClassFinderPanel refclasspanel;
 	public Annotator ann;
 	public SemGenScrollPane scpn;
 	public JOptionPane optionPane;
 	public Hashtable<String, String> oldclsnamesanduris = new Hashtable<String, String>();
-	public JList list;
+	public JList<String> list= new JList<String>();
 
 	public AnnotationComponentReplacer(Annotator ann) throws OWLException {
 		this.ann = ann;
-		list = new JList();
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		refreshListData();
 		scpn = new SemGenScrollPane(list);
 		
 		refclasspanel = new ReferenceClassFinderPanel(ann, SemSimConstants.ALL_SEARCHABLE_ONTOLOGIES);
-		refclasspanel.rightscrollerapplybutton.setEnabled(false);
-		refclasspanel.leftscrollerapplybutton.setEnabled(false);
 
 		Object[] dialogarray = { scpn, refclasspanel };
 
@@ -64,10 +57,8 @@ public class AnnotationComponentReplacer extends JDialog implements
 		setTitle("Select a term to replace from the top list, then a term to replace it");
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		pack();
-		setLocationRelativeTo(null);
 		setVisible(true);
 	}
-	
 
 	public void propertyChange(PropertyChangeEvent arg0) {
 		String propertyfired = arg0.getPropertyName();
@@ -77,7 +68,6 @@ public class AnnotationComponentReplacer extends JDialog implements
 				String oldclass = (String) list.getSelectedValue();
 				
 				String newclassuri = (String) refclasspanel.resultsanduris.get(refclasspanel.resultslistright.getSelectedValue());
-				//String newclassrefont = refclasspanel.currentonturi.toString();
 				String oldclassuri = (String) oldclsnamesanduris.get(oldclass);
 				
 				for(PhysicalModelComponent pmc : ann.semsimmodel.getPhysicalModelComponents()){
@@ -100,14 +90,11 @@ public class AnnotationComponentReplacer extends JDialog implements
 				if(ann.focusbutton instanceof CodewordButton) ann.anndialog.compositepanel.refreshUI();
 				optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 			} else if (value.equals("Close")) {
-				setVisible(false);
 				dispose();
 			}
 		}
 	}
 
-	
-	
 	public void refreshListData() {
 		Set<String> refclassnames = new HashSet<String>();
 		for(PhysicalModelComponent pmc : ann.semsimmodel.getPhysicalModelComponents()){
@@ -122,7 +109,7 @@ public class AnnotationComponentReplacer extends JDialog implements
 		}
 
 		String[] array = refclassnames.toArray(new String[] {});
-		Arrays.sort(array, SemGenGUI.cic);
+		Arrays.sort(array, new CaseInsensitiveComparator());
 		list.setListData(array);
 	}
 }

@@ -15,10 +15,6 @@ import semsim.model.physical.ReferencePhysicalEntity;
 import semsim.Annotatable;
 
 public class CompositeAnnotationComponentSearchDialog extends AddReferenceClassDialog{
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -6053255066931420852L;
 	public SemSimComponentAnnotationPanel pmcPanel;
 	
@@ -94,7 +90,6 @@ public class CompositeAnnotationComponentSearchDialog extends AddReferenceClassD
 				pmcPanel.anndialog.singularannpanel.refreshComboBoxItemsAndButtonVisibility();
 				
 				if(pmcPanel.smc.hasRefersToAnnotation()) 
-					//pmcPanel.more411label.termuri = pmcPanel.pmc.getFirstRefersToReferenceOntologyAnnotation().getReferenceURI().toString();
 					pmcPanel.urlbutton.setTermURI(pmcPanel.smc.getFirstRefersToReferenceOntologyAnnotation().getReferenceURI());
 				optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 				if(refclasspanel.ontologychooser.getComponentCount()>2){
@@ -102,13 +97,12 @@ public class CompositeAnnotationComponentSearchDialog extends AddReferenceClassD
 				
 				// Refresh the combobox items for the Singular Annotation panel in the AnnotationDialog
 				pmcPanel.anndialog.refreshSingularAnnotation();
-				dispose();
 			}
 		}
 		else if (value == "Cancel") {
 			refclasspanel.querythread.stop();
 			optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-			dispose();
 		}
+		dispose();
 	}
 }

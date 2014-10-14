@@ -10,11 +10,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
-import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLClass;
-import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLException;
-import org.semanticweb.owlapi.model.OWLOntology;
 
 import semgen.ProgressFrame;
 import semgen.SemGenGUI;
@@ -25,17 +21,14 @@ import semsim.model.annotation.ReferenceOntologyAnnotation;
 import semsim.model.annotation.StructuralRelation;
 import semsim.model.computational.DataStructure;
 import semsim.model.computational.MappableVariable;
-import semsim.model.physical.CustomPhysicalProcess;
 import semsim.model.physical.MediatorParticipant;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.CompositePhysicalEntity;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
-import semsim.model.physical.ReferencePhysicalProcess;
 import semsim.model.physical.SinkParticipant;
 import semsim.model.physical.SourceParticipant;
 import semsim.model.physical.Submodel;
-import semsim.reading.SemSimOWLreader;
 
 public class AnnotationCopier {
 
@@ -53,11 +46,6 @@ public class AnnotationCopier {
 			SemGenGUI.progframe = new ProgressFrame("Loading model...",true, task);
 		}
 	}
-	
-//	// Constructor to copy one composite annotation from a mappablevariable to another
-//	public AnnotationCopier(MappableVariable ds, SemSimModel targetmod){
-//		this.targetmod = targetmod;
-//	}
 	
 	public static Set<MappableVariable> copyAllAnnotationsToMappedVariables(Annotator ann, MappableVariable ds){
 		Set<MappableVariable> allmappedvars = new HashSet<MappableVariable>();

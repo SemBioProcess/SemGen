@@ -14,16 +14,10 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
-import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
-import org.semanticweb.owlapi.model.OWLException;
-import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 
 import semgen.SemGenGUI;
 import semsim.SemSimConstants;
 import semsim.model.annotation.Annotation;
-import semsim.owl.SemSimOWLFactory;
-import semsim.reading.MMLreader2;
-import semsim.reading.MMLreader;
 import semsim.reading.ModelClassifier;
 
 
@@ -55,9 +49,6 @@ public class BatchCellML{
 	
 	
 	public void processmodels(File file) throws Exception{
-//		File bridgefile = new File("cfg/libcellml_java_bridge.0.so");
-//		System.load(bridgefile.getAbsolutePath());
-	//	System.load("~/_UW/BHI/SEMGEN/APIs/");
 		File[] cellmlfiles = file.listFiles();
 		String lastpubmedid = "";
 		String lastabstract = "";
@@ -70,8 +61,6 @@ public class BatchCellML{
 				
 				try {
 					// Make this into a task
-//					SemGenGUI.NewAnnotatorTask task = new SemGenGUI.NewAnnotatorTask(cellmlfile, true);
-//					task.execute();
 					ann = SemGenGUI.AnnotateAction(cellmlfile, true);
 					TextMinerDialog tmd = new TextMinerDialog(ann);
 					
@@ -250,17 +239,4 @@ public class BatchCellML{
 		System.out.println("Scraped text: " + text);
 		return text;
 	}
-	
-	
-	
-//	public static Model loadFromURL(CellMLBootstrap cb, String inputFileName)	{
-//		return cb.getModelLoader().loadFromURL(inputFileName);
-//	}
-//
-//	/**
-//	 * Creating a CellML model
-//	 */
-//	public static Model createModel(CellMLBootstrap cb, String modelString){
-//		return cb.createModel(modelString);
-//	}
 }

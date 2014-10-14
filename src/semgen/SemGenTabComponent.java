@@ -6,29 +6,23 @@ import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.semanticweb.owlapi.model.OWLException;
-
 import semgen.annotation.Annotator;
 import semgen.extraction.ExtractorTab;
 import semgen.merging.Merger;
 
 public class SemGenTabComponent extends JPanel implements MouseListener{
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 6580200707569122340L;
 	public Component tool;
 	public JLabel removelabel;
 
 	public SemGenTabComponent(String title, Component tool){
-		//super(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		this.tool = tool;
 		this.setOpaque(false);
 		JLabel iconlabel = new JLabel();
@@ -45,10 +39,8 @@ public class SemGenTabComponent extends JPanel implements MouseListener{
 		removelabel.setEnabled(false);
 		removelabel.setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
 		JLabel titlelabel = new JLabel(title);
-		//titlelabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 100, 0));
 		titlelabel.setFont(new Font("SansSerif", Font.PLAIN, SemGenGUI.defaultfontsize));
 		
-		//this.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 		add(iconlabel);
 		add(titlelabel);
 		add(removelabel);

@@ -3,8 +3,6 @@ package semgen;
 import java.io.File;
 
 public class FileFilter extends javax.swing.filechooser.FileFilter {
-	// public String extension = "";
-	// public String uppercase = extension.toUpperCase();
 	public String[] filetypes;
 
 	public FileFilter(String[] filetypes) {
@@ -28,15 +26,6 @@ public class FileFilter extends javax.swing.filechooser.FileFilter {
 		}
 		return match;
 	}
-
-	/*
-	 * 
-	 * 
-	 * public boolean accept(File afile) { String afilename = afile.getName();
-	 * if (afilename.endsWith("." + extension)) return true; if
-	 * (afilename.endsWith("." + uppercase)) return true; if
-	 * (afile.isDirectory()) return true; return false; }
-	 */
 
 	public String getDescription() {
 		String desc = "";

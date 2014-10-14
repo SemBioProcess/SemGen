@@ -1,9 +1,7 @@
 package semgen.annotation;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.io.IOException;
 import java.util.Arrays;
@@ -24,15 +22,9 @@ import javax.swing.text.BadLocationException;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
-
 import javax.swing.Painter;
 
-//import com.sun.java.swing.Painter;
-
-import semgen.ComparatorByName;
 import semgen.SemGenGUI;
 import semsim.model.SemSimComponent;
 import semsim.model.SemSimModel;
@@ -40,12 +32,9 @@ import semsim.model.computational.DataStructure;
 import semsim.model.computational.MappableVariable;
 import semsim.model.physical.FunctionalSubmodel;
 import semsim.model.physical.Submodel;
+import semsim.writing.CaseInsensitiveComparator;
 
 public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 7868541704010347520L;
 	public Annotator ann;
 	public Set<DataStructure> looseds;
@@ -64,7 +53,6 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 		putClientProperty("Nimbus.Overrides", dialogTheme);
 		
 		MyRenderer renderer = new MyRenderer();
-		//renderer.setIcon(null);
 		renderer.setIconTextGap(0);
 	    setCellRenderer(renderer);
 		setLargeModel(true);
@@ -101,11 +89,6 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 			ann.submodelbuttontable.get(sub.getName()).refreshAllCodes();
 		}
 		
-//		for(String subname :  getSortedNamesOfSemSimComponents(sub.getSubmodels())){
-//			System.out.println("looking for " + subname);
-//			traverseSubmodelBranch(submodelnode, ann.semsimmodel.getSubmodel(subname));
-//		}
-		
 		// Get all the data structures in the submodel
 		for(String name : getSortedNamesOfSemSimComponents(sub.getAssociatedDataStructures())){
 			DataStructure ds = ann.semsimmodel.getDataStructure(name);
@@ -114,19 +97,15 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
         		cbutton.namelabel.setText(name.substring(name.lastIndexOf(".")+1)); // Needed to keep codeword names short
         		DefaultMutableTreeNode dsnode = new DefaultMutableTreeNode(ann.codewordbuttontable.get(name));
         		
-        		//if(SemGenGUI.annotateitemshowimports.isSelected() || ann.getCodewordButtonVisibility(ann.codewordbuttontable.get(name))){
         			submodelnode.add(dsnode);
         			nodebuttonmap.put(ann.codewordbuttontable.get(name), dsnode);
-        		//}
-        	}
+        		        	}
 			if(sub instanceof FunctionalSubmodel && ds instanceof MappableVariable){
 				looseds.remove(ds);
 			}
 		}
 	}
 
-	
-	
 	class MyPainter implements Painter{
 		public void paint(Graphics2D arg0, Object arg1, int arg2, int arg3) {
 			arg0.setColor(SemGenGUI.lightblue);
@@ -143,8 +122,9 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 	}
 	
 	class MyRenderer extends DefaultTreeCellRenderer {
+		private static final long serialVersionUID = 1L;
 
-	    public Component getTreeCellRendererComponent(
+		public Component getTreeCellRendererComponent(
 	                        JTree tree,
 	                        Object value,
 	                        boolean sel,
@@ -183,21 +163,9 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 			ar[i] = ssc.getName();
 			i++;
 		}
-		Arrays.sort(ar, SemGenGUI.cic);
+		Arrays.sort(ar, new CaseInsensitiveComparator());
 		return ar;
 	}
-	
-//	public String[] getSortedLocalNamesOfSubmodels(Set<Submodel> set){
-//		String[] ar = new String[set.size()];
-//		int i = 0;
-//		for(Submodel sub : set ){
-//			ar[i] = sub.getName();
-//			i++;
-//		}
-//		Arrays.sort(ar, SemGenGUI.cic);
-//		return ar;
-//	}
-	
 	
 	public void valueChanged(TreeSelectionEvent arg0) {
 		
@@ -212,11 +180,9 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 	    if(nodeObj instanceof AnnotationObjectButton){
 	    	try {
 				ann.annotationObjectAction((AnnotationObjectButton)nodeObj);
-			} catch (BadLocationException e) {
+			} catch (BadLocationException | IOException e) {
 				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			} 
 	    }
 	    else if(nodeObj instanceof SemSimModel){
 	    	ann.showSelectAnnotationObjectMessage();

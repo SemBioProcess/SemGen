@@ -4,10 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -23,7 +20,7 @@ import semgen.annotation.composites.PropertyMarker;
 import semsim.Annotatable;
 import semsim.model.SemSimComponent;
 
-public class AnnotationObjectButton extends JPanel implements MouseListener, ActionListener{
+public class AnnotationObjectButton extends JPanel implements MouseListener{
 	/**
 	 * 
 	 */
@@ -70,7 +67,6 @@ public class AnnotationObjectButton extends JPanel implements MouseListener, Act
 		namelabel.setFont(new Font("SansSerif", Font.PLAIN, SemGenGUI.defaultfontsize));
 		namelabel.setOpaque(false);
 		namelabel.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 10));
-		//namelabel.setOpaque(false);  // In nimbus this does not seem changeable - it is always opaque, but setBackground below makes it transparent
 		namelabel.setBackground(new Color(0,0,0,0));
 		namelabel.addMouseListener(this);
 		
@@ -79,7 +75,6 @@ public class AnnotationObjectButton extends JPanel implements MouseListener, Act
 		indicatorspanel.setPreferredSize(new Dimension(50, ipph));
 		indicatorspanel.setLayout(new BoxLayout(indicatorspanel, BoxLayout.X_AXIS));
 		indicatorspanel.setAlignmentY(TOP_ALIGNMENT);
-//		indicatorspanel.setMinimumSize(new Dimension(70, 18));
 		indicatorspanel.setOpaque(false);
 
 		compannlabel.setText("_");
@@ -104,8 +99,6 @@ public class AnnotationObjectButton extends JPanel implements MouseListener, Act
 		humdeflabel.setAlignmentY(JComponent.CENTER_ALIGNMENT);
 		compannlabel.setFont(new Font("Serif", Font.PLAIN, SemGenGUI.defaultfontsize-3));
 
-
-		
 		deplabel.setText("_");
 		deplabel.setName("D");
 		
@@ -117,7 +110,6 @@ public class AnnotationObjectButton extends JPanel implements MouseListener, Act
 		}
 		else namelabel.setForeground(Color.gray);
 
-		
 		if (compannfilled) {
 			annotationAdded(compannlabel, true);
 			compannlabel.setText(companntext);
@@ -133,9 +125,6 @@ public class AnnotationObjectButton extends JPanel implements MouseListener, Act
 		if (depfilled) {annotationAdded(deplabel, false);}
 		else {annotationNotAdded(deplabel);}
 		
-		
-		
-		//indicatorspanel.add(Box.createHorizontalGlue());
 		indicatorspanel.add(compannlabel);
 		indicatorspanel.add(singularannlabel);
 		indicatorspanel.add(humdeflabel);
@@ -145,12 +134,8 @@ public class AnnotationObjectButton extends JPanel implements MouseListener, Act
 		indicatorssuperpanel.setLayout(new BorderLayout());
 		indicatorssuperpanel.add(Box.createGlue(), BorderLayout.WEST);
 		indicatorssuperpanel.add(indicatorspanel, BorderLayout.CENTER);
-//		indicatorssuperpanel.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
 		propoflabel.setVisible(false);
 		indicatorssuperpanel.add(propoflabel, BorderLayout.EAST);
-		
-//		((BorderLayout)indicatorssuperpanel.getLayout()).setHgap(0);
-//		((BorderLayout)indicatorssuperpanel.getLayout()).setVgap(0);
 
 		add(Box.createGlue(), BorderLayout.EAST);
 		add(namelabel, BorderLayout.CENTER);
@@ -163,12 +148,10 @@ public class AnnotationObjectButton extends JPanel implements MouseListener, Act
 		setVisible(true);
 	}
 	
-
 	public void setIdentifyingData(String name){
 		this.setName(name);
 		namelabel.setText(name);
 	}
-	
 	
 	public boolean refreshAllCodes(){
 		refreshFreeTextCode();
@@ -176,8 +159,7 @@ public class AnnotationObjectButton extends JPanel implements MouseListener, Act
 		annotater.updateTreeNode();
 		return true;
 	}
-	
-	
+		
 	public void refreshSingularAnnotationCode(){
 		if(((Annotatable)ssc).hasRefersToAnnotation()){
 			annotationAdded(singularannlabel, false);
@@ -186,12 +168,10 @@ public class AnnotationObjectButton extends JPanel implements MouseListener, Act
 		
 	}
 	
-	
 	public void refreshFreeTextCode(){
 		if(ssc.getDescription()==null) annotationNotAdded(humdeflabel);
 		else annotationAdded(humdeflabel, false);
 	}
-
 
 	public void annotationAdded(JLabel label, Boolean iscompann) {
 		label.setFont(new Font("Serif", Font.BOLD, SemGenGUI.defaultfontsize-2));
@@ -212,9 +192,6 @@ public class AnnotationObjectButton extends JPanel implements MouseListener, Act
 		validate();
 	}
 
-	public void mouseClicked(MouseEvent e) {}
-
-
 	public void mouseEntered(MouseEvent e) {
 		if (e.getComponent() instanceof JLabel && e.getComponent()!=compannlabel) {
 			JLabel label = (JLabel) e.getComponent();
@@ -224,7 +201,6 @@ public class AnnotationObjectButton extends JPanel implements MouseListener, Act
 				label.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			}
 		}
-		//if( e.getComponent() == namelabel) namelabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 	}
 
 	public void mouseExited(MouseEvent e) {
@@ -236,7 +212,6 @@ public class AnnotationObjectButton extends JPanel implements MouseListener, Act
 				label.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			}
 		}
-		//if( e.getComponent() == namelabel) namelabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 
 	public void mousePressed(MouseEvent e) {
@@ -250,11 +225,8 @@ public class AnnotationObjectButton extends JPanel implements MouseListener, Act
 			annotater.focusbutton = this;
 		}
 	}
+	
+	public void mouseClicked(MouseEvent e) {}
+	public void mouseReleased(MouseEvent e) {}
 
-	public void mouseReleased(MouseEvent e) {
-	}
-
-
-	public void actionPerformed(ActionEvent arg0) {
-	}
 }

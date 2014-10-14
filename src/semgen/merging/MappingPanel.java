@@ -10,10 +10,6 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
 public class MappingPanel extends JPanel {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 2776275290257952399L;
 	public JLabel title;
 	public String filename;

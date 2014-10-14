@@ -1,10 +1,6 @@
 package semgen.encoding;
 
-
-
-
 import java.io.File;
-import java.io.PrintWriter;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
@@ -16,10 +12,6 @@ import semgen.FileFilter;
 import semgen.ProgressFrame;
 import semgen.SemGenGUI;
 
-
-
-
-
 public class Coder {
 	public OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	public File file;
@@ -27,7 +19,7 @@ public class Coder {
 	
 	public String base;
 	public File outputfile;
-	public PrintWriter writer;
+
 	public String onedom = "";
 	public static ProgressFrame progframe;
 
@@ -71,11 +63,7 @@ public class Coder {
 							outputfile.getName() + " already exists",
 							JOptionPane.OK_CANCEL_OPTION,
 							JOptionPane.QUESTION_MESSAGE);
-					if (overwriteval == JOptionPane.OK_OPTION) {
-						saveok = true;
-					} else {
-						saveok = false;
-					}
+					saveok = (overwriteval == JOptionPane.OK_OPTION);
 				} else {
 					saveok = true;
 				}

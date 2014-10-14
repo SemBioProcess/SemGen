@@ -1,9 +1,5 @@
 package semgen.annotation;
 
-
-
-
-
 import java.beans.PropertyChangeEvent;
 import java.net.URI;
 
