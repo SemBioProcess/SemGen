@@ -1,3 +1,4 @@
+package semgen;
 
 import java.awt.Color;
 

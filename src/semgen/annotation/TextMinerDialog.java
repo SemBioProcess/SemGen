@@ -45,9 +45,9 @@ import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
 
-import semgen.ResourcesManager;
-import semgen.SemGenGUI;
+import semsim.ResourcesManager;
 import semgen.resource.GenericThread;
+import semgen.resource.SemGenError;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
 import semgen.resource.uicomponent.SemGenScrollPane;
@@ -60,21 +60,14 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 	 * 
 	 */
 	private static final long serialVersionUID = -4832887891785870465L;
-	public JLabel toplabel;
-	public JPanel toppanel;
-	public JPanel parsepanel;
-	public JButton parsebutton;
-	public JPanel pmpanel;
-	public JLabel pmlabel;
-	public JTextField pmarea;
-	public JButton pmbutton;
+	public JButton parsebutton = new JButton("Parse");
+	public JTextField pmarea = new JTextField();
+	public JButton pmbutton = new JButton("Find abstract");
 	public String pubmedid;
 	public JTextArea inputtextarea;
-	public SemGenScrollPane sptext;
-	public SemGenScrollPane spboxes;
 	public SemGenScrollPane spresults;
 	public JOptionPane optionPane;
-	public JPanel sppanel;
+	public JPanel sppanel = new JPanel();
 	public JPanel resultspanel;
 	public JSplitPane splitpane;
 	public HashMap<String, String> ontidsandns = new HashMap<String,String>();
@@ -84,7 +77,7 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 	public Highlighter areahilit; 
 	public Highlighter.HighlightPainter areapainter;
 	public Color HILIT_COLOR = Color.yellow;
-	public JButton loadingbutton;
+	public JButton loadingbutton = new JButton(SemGenIcon.blankloadingicon);
 
 	public TextMinerDialog(AnnotatorTab ann) throws FileNotFoundException{
 		annotator = ann;
@@ -95,20 +88,15 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 		ontidsandns.put("opb", "http://bhi.washington.edu/OPB#");
 		
 		this.setTitle("Parse text for ontology terms");
-		toplabel = new JLabel("Enter text to parse, or find a PubMed abstract by its ID, then hit \"Parse\" to identify ontology terms");
-		parsebutton = new JButton("Parse");
+		JLabel toplabel = new JLabel("Enter text to parse, or find a PubMed abstract by its ID, then hit \"Parse\" to identify ontology terms");
 		parsebutton.setMaximumSize(new Dimension(100,999999));
 		parsebutton.addActionListener(this);
-		
-		loadingbutton = new JButton();
+
 		loadingbutton.setBorderPainted(false);
 		loadingbutton.setContentAreaFilled(false);
-		loadingbutton.setIcon(SemGenIcon.blankloadingicon);
 		
-		pmpanel = new JPanel();
-		pmlabel = new JLabel("Enter PubMed ID");
-		pmarea = new JTextField();
-		pmbutton = new JButton("Find abstract");
+		JPanel pmpanel = new JPanel();
+		JLabel pmlabel = new JLabel("Enter PubMed ID");
 		pmbutton.addActionListener(this);
 		pmarea.setPreferredSize(new Dimension(150,30));
 		pmarea .setMaximumSize(new Dimension(150,30));
@@ -117,7 +105,7 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 		pmpanel.add(pmarea);
 		pmpanel.add(pmbutton);
 		
-		parsepanel = new JPanel();
+		JPanel parsepanel = new JPanel();
 		parsepanel.add(parsebutton);
 		parsepanel.add(loadingbutton);
 		
@@ -130,14 +118,13 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 		areapainter = new DefaultHighlighter.DefaultHighlightPainter(HILIT_COLOR);
 		inputtextarea.setHighlighter(areahilit);
 		
-		sptext = new SemGenScrollPane(inputtextarea);
+		SemGenScrollPane sptext = new SemGenScrollPane(inputtextarea);
 		sptext.setPreferredSize(new Dimension(350,230));
-		toppanel = new JPanel();
+		JPanel toppanel = new JPanel();
 		toppanel.setLayout(new BorderLayout());
 		toppanel.add(parsepanel, BorderLayout.WEST);
 		toppanel.add(pmpanel, BorderLayout.EAST);
 		
-		sppanel = new JPanel();
 		sppanel.setLayout(new BoxLayout(sppanel, BoxLayout.Y_AXIS));
 		JCheckBox fmabox = new JCheckBox(SemSimConstants.FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME);
 		JCheckBox chebibox = new JCheckBox(SemSimConstants.CHEMICAL_ENTITIES_OF_BIOLOGICAL_INTEREST_FULLNAME);
@@ -153,7 +140,7 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 			checkboxarray[c].setSelected(true);
 		}
 		
-		spboxes = new SemGenScrollPane(sppanel);
+		SemGenScrollPane spboxes = new SemGenScrollPane(sppanel);
 		spboxes.setPreferredSize(new Dimension(350,230));
 		
 		resultspanel = new JPanel();
@@ -175,7 +162,6 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 		
 		setContentPane(optionPane);
 		pack();
-		setLocationRelativeTo(SemGenGUI.desktop);
 		setModal(false);
 		setVisible(true);
 	}
@@ -206,7 +192,7 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 		try {
 			xmlresult = client.annotate();
 		} catch (IOException e1) {
-			SemGenGUI.showWebConnectionError("BioPortal Annotator service");
+			SemGenError.showWebConnectionError(null, "BioPortal Annotator service");
 		} 
 		
 		try {

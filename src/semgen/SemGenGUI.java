@@ -27,13 +27,14 @@ import semgen.merging.MergerTab;
 import semgen.resource.BrowserLauncher;
 import semgen.resource.CSVExporter;
 import semgen.resource.LogViewer;
+import semgen.resource.SemGenError;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon; 
 import semgen.resource.uicomponent.ProgressFrame;
 import semgen.resource.uicomponent.SemGenTab;
 import semgen.resource.uicomponent.TabCloser;
+import semsim.ResourcesManager;
 import semsim.SemSimConstants;
-import semsim.SemSimModelCache;
 import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
@@ -71,7 +72,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.font.TextAttribute;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -96,8 +96,6 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -122,8 +120,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 	public static OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	public static OWLDataFactory factory;
 	public static OWLOntology OPB;
-	public static OWLOntology SemSimBase;
-	public static SemSimModelCache modelCache = new SemSimModelCache();
 	
 	public static Set<String> OPBproperties = new HashSet<String>();
 	public static Set<String> OPBflowProperties = new HashSet<String>();
@@ -145,11 +141,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 	public static Hashtable<String, String[]> jsimUnitPrefixesTable;
 
 	public static Color lightblue = new Color(207, 215, 252, 255);
-	public static Color lightgreen = new Color(204, 255, 204, 255);
-	public static Color darkerblue = new Color(134, 156, 255, 255);
-	public static Color dependencycolor = new Color(205, 92, 92, 255);
-	public static Color entityblack = Color.black;
-	public static Color processgreen = new Color(50,205,50);
 	
 	public static Dimension filechooserdims = new Dimension(550,550);
 	
@@ -166,8 +157,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 	public static SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmssSSSZ");
 	public SimpleDateFormat sdflog = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
 	public static String JSimBuildDir = "./jsimhome";
-	public static JMenu extractmenu;
-	public static JMenu filemenu;
 	private JMenuItem fileitemopen;
 	private JMenuItem fileitemsave;
 	private JMenuItem fileitemsaveas;
@@ -205,7 +194,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 	private JMenuItem helpitemweb;
 	private JMenuBar menubar;
 	public static JFileChooser fc;
-	private SimpleAttributeSet attrs;
 	public static JTabbedPane desktop;
 	public static double version = 2.0;
 	public static int initxpos = 0;
@@ -213,7 +201,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 	public static int numtabs = 0;
 	public static int initwidth = 900;
 	public static int initheight = 720;
-	public static Map<TextAttribute, Integer> fontAttributes = new HashMap<TextAttribute, Integer>();
 	public static Hashtable<String, String[]> startsettingstable;
 	public static SemGenGUI frame;
 	public static boolean LINUXorUNIX;
@@ -270,12 +257,9 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		System.out.print("Loading SemGen...");
 		logfilewriter.println("Loading SemGen");
 
-		fontAttributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-
 		// Load the local copy of the OPB and the SemSim base ontology, and other config files into memory
 		try {
 			OPB = manager.loadOntologyFromOntologyDocument(new File("cfg/OPB.970.owl"));
-			SemSimBase = manager.loadOntologyFromOntologyDocument(new File("cfg/SemSimBase.owl"));
 		} catch (OWLOntologyCreationException e3) {
 			e3.printStackTrace();
 		}
@@ -328,9 +312,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		setContentPane(desktop);
 
 		numtabs = 0;
-		attrs = new SimpleAttributeSet();
-		StyleConstants.setFontSize(attrs, 13);
-
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		// Create the menu bar.
 		menubar = new JMenuBar();
@@ -338,7 +319,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		menubar.setPreferredSize(new Dimension(initwidth, 20));
 
 		// Build the File menu
-		filemenu = new JMenu("File");
+		JMenu filemenu = new JMenu("File");
 		filemenu.getAccessibleContext().setAccessibleDescription("Create new files, opening existing files, import raw model code, etc.");
 		filemenu.addMenuListener(this);
 
@@ -459,7 +440,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		annotatemenu.add(sortCodewordsMenu);
 
 		// Extract menu
-		extractmenu = new JMenu("Extract");
+		JMenu extractmenu = new JMenu("Extract");
 		extractmenu.getAccessibleContext().setAccessibleDescription("Extract out a portion of a SemSim model");
 
 		toolsitemextract = formatMenuItem(toolsitemextract,"New Extractor",KeyEvent.VK_E,true,true);
@@ -515,9 +496,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 			public void windowClosing(WindowEvent e) {
 				try {
 					quit();
-				} catch (HeadlessException e1) {
-					e1.printStackTrace();
-				} catch (OWLException e1) {
+				} catch (HeadlessException | OWLException e1) {
 					e1.printStackTrace();
 				}
 			}
@@ -543,7 +522,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 	}
 
 	// METHODS
-	
 	public void menuCanceled(MenuEvent arg0) {
 	}
 
@@ -690,9 +668,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 				AnnotatorTab ann = (AnnotatorTab) desktop.getSelectedComponent();
 				try {
 					new AnnotationCopier(ann);
-				} catch (OWLException e1) {
-					e1.printStackTrace();
-				} catch (CloneNotSupportedException e1) {
+				} catch (OWLException | CloneNotSupportedException e1) {
 					e1.printStackTrace();
 				}
 			}
@@ -734,7 +710,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		}
 	
 		if(o == annotateitemshowimports){
-			
 			// Set visbility of imported codewords and submodels
 			if(desktop.getSelectedComponent() instanceof AnnotatorTab){
 				AnnotatorTab temp = (AnnotatorTab)desktop.getSelectedComponent();
@@ -838,7 +813,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		}
 	}
 	
-	
 	public static int showSemGenFileChooser(File currentdirectory, String[] fileextensions, String title, 
 			int taskType, Boolean canselectmultiplefiles, MergerTab merger){
 		fc = new SemGenFileChooser(taskType, merger);
@@ -858,7 +832,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 			int taskType, Boolean canselectmultiplefiles){
 		return showSemGenFileChooser(currentdirectory, fileextensions, title, taskType, canselectmultiplefiles, null);
 	}
-	
 	
 	public static void startNewAnnotatorTask(File[] files){
 		NewAnnotatorTask task = new NewAnnotatorTask(files, false);
@@ -965,7 +938,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
     		if(model == null){
         		model = loadSemSimModelFromFile(inputfile, true);
     			if(!model.getErrors().isEmpty()){
-    				JOptionPane.showMessageDialog(desktop, "Selected model had errors:", "Could not encode model", JOptionPane.ERROR_MESSAGE);
+    				JOptionPane.showMessageDialog(null, "Selected model had errors:", "Could not encode model", JOptionPane.ERROR_MESSAGE);
     				return null;
     			}
     		}
@@ -978,28 +951,25 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
         }
     }
 	
-
 	public static AnnotatorTab AnnotateAction(File file, Boolean autosave) {	
 		SemSimModel semsimmodel = loadSemSimModelFromFile(file, true);
-		
 		AnnotatorTab annotator = null;
-		URI selectedURI = file.toURI(); // The selected file for annotation
-		URI existingURI = URI.create(""); // The existing file from which to
-											// load the SemSim framework
-		Boolean newannok = true;
 
 		// Create a new tempfile using the date
 		datenow = new Date();
 		File tempfile = new File(tempdir.getAbsoluteFile() + "/" + sdf.format(datenow) + ".owl");
 		URI tempURI = tempfile.toURI();
-		URI saveURI = null;
 
 		if(semsimmodel!=null){
+		
+		URI selectedURI = file.toURI(); // The selected file for annotation
+		URI existingURI = URI.create(""); // The existing file from which to
+			Boolean newannok = true;
+			URI saveURI = null;
 			// If we are annotating an existing SemSim or CellML file...
 			if (semsimmodel.getSourceModelType()==ModelClassifier.SEMSIM_MODEL || semsimmodel.getSourceModelType()==ModelClassifier.CELLML_MODEL) {
 				existingURI = selectedURI;
 				saveURI = selectedURI;
-				newannok = true;
 			}
 			
 			// Check to make sure SemSim model isn't already being annotated before proceeding
@@ -1045,7 +1015,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		return annotator;
 	}
 	
-	
 	// Make this into task
 	private static ExtractorTab NewExtractorAction(File file) throws OWLException, IOException, InterruptedException, JDOMException, ServiceException {
 		ExtractorTab extractor = null;
@@ -1067,8 +1036,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		return extractor;
 	}
 	
-	
-
 	public void NewMergerAction(){
 		opendialog.setVisible(false);
 		MergerTab merger = new MergerTab(desktop);
@@ -1082,8 +1049,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 			   }});
 		merger.PlusButtonAction();
 	}
-	
-	
+
 	public static SemSimModel loadSemSimModelFromFile(File file, Boolean testifonline) {
 		
 		SemSimModel semsimmodel = null;
@@ -1110,7 +1076,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 							progframe.updateMessage("Annotating with web services...");
 						boolean online = WebserviceTester.testBioPortalWebservice("Annotation via web services failed.");
 						if(!online) 
-							SemGenGUI.showWebConnectionError("BioPortal search service");
+							SemGenError.showWebConnectionError(desktop, "BioPortal search service");
 						SBMLAnnotator.annotate(file, semsimmodel, online, ontologyTermsAndNamesCache);
 						ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel, ontologyTermsAndNamesCache, online);
 						SBMLAnnotator.setFreeTextDefinitionsForDataStructuresAndSubmodels(semsimmodel);
@@ -1128,7 +1094,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 						Boolean online = true;
 						if(testifonline){
 							online = WebserviceTester.testBioPortalWebservice("Annotation via web services failed.");
-							if(!online) SemGenGUI.showWebConnectionError("BioPortal search service");
+							if(!online) SemGenError.showWebConnectionError(desktop, "BioPortal search service");
 						}
 						if(progframe!=null) progframe.requestFocusInWindow();
 						ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel, ontologyTermsAndNamesCache, online);
@@ -1309,7 +1275,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		String[] candidateOPBclasses = (String[]) SemGenGUI.OPBClassesForUnitsTable.get(ds.getUnit().getName());
 		if (candidateOPBclasses != null && candidateOPBclasses.length == 1) {
 			OWLClass cls = factory.getOWLClass(IRI.create(SemSimConstants.OPB_NAMESPACE + candidateOPBclasses[0]));
-			String OPBpropname = SemSimOWLFactory.getRDFLabels(SemGenGUI.OPB, cls)[0];
+			String OPBpropname = SemSimOWLFactory.getRDFLabels(OPB, cls)[0];
 			roa = new ReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, cls.getIRI().toURI(), OPBpropname);
 		}
 		return roa;
@@ -1342,7 +1308,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		else return SemSimConstants.UNKNOWN_PROPERTY_TYPE;
 	}
 	
-	
 	public static String formatTabName(String filename){
 		String tabname = filename; //filename.replace(".owl", "");
 		if(tabname.length()>=30)
@@ -1359,7 +1324,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		}
 		return null;
 	}
-	
 	
 	public static void startEncoding(Object inputfileormodel, String filenamesuggestion){
 		
@@ -1392,8 +1356,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		}
 	}
 
-	
-	
 	public static void CoderAction(SemSimModel model, File outputfile, Writer writer){
 		progframe.updateMessage("Encoding...");
 		String content = writer.writeToString(model);
@@ -1404,9 +1366,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 					"\nThe JSim API threw an exception.",  
 					"Error", JOptionPane.ERROR_MESSAGE);
 	}
-	
-	
-	
+
 	private void OpenFileAction(){
 		opendialog = new JDialog();
 		opendialog.setTitle("OPEN: Select action");
@@ -1458,7 +1418,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		opendialog.setVisible(true);
 	}
 	
-
 	// SAVE ACTION 
 	public static boolean SaveAction(Object object, int modeltype){
 		boolean success = false;
@@ -1498,7 +1457,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 					success = true;
 				}
 				else{
-					showUnspecifiedAnnotationError(unspecds);
+					SemGenError.showUnspecifiedAnnotationError(desktop, unspecds);
 					success = false;
 				}
 			}
@@ -1531,7 +1490,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		return success;
 	}
 
-	
 	public static File SaveAsAction(Object object, String selectedfilepath, FileNameExtensionFilter[] filters){
 		JFileChooser filec = new JFileChooser();
 		File file = null;
@@ -1594,7 +1552,7 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 						SaveAction(ann, modeltype);
 					}
 					else{
-						showUnspecifiedAnnotationError(unspecds);
+						SemGenError.showUnspecifiedAnnotationError(desktop,unspecds);
 					}
 
 				}
@@ -1611,7 +1569,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		}
 		return file;
 	}
-	
 	
 	public static Set<DataStructure> getDataStructuresWithUnspecifiedAnnotations(SemSimModel model){
 		Set<DataStructure> dsset = new HashSet<DataStructure>();
@@ -1634,16 +1591,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		return dsset;
 	}
 	
-	public static void showUnspecifiedAnnotationError(Set<DataStructure> unspecds){
-		String listofds = "";
-		for(DataStructure ds : unspecds){
-			listofds = listofds + ds.getName() + "\n";
-		}
-		JOptionPane.showMessageDialog(desktop, "Please first remove unspecified annotations for the following codewords:\n" + listofds);
-		
-	}
-	
-	
 	public static Boolean isOntologyOpenForEditing(URI uritocheck) {
 		Boolean open = false;
 		for (int t = 0; t < desktop.getComponents().length; t++) {
@@ -1659,12 +1606,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 			}
 		}
 		return open;
-	}
-	
-	public static void showWebConnectionError(String location){
-		JOptionPane.showMessageDialog(desktop,
-				"Please make sure you are online, otherwise the website or service \n" + 
-				"may be experiencing difficulties.", "Error connecting to " + location, JOptionPane.ERROR_MESSAGE);
 	}
 
 	public boolean AboutAction() {
@@ -1747,7 +1688,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		}
 	}
 	
-
 	public static boolean quit() throws HeadlessException, OWLException {
 		Component[] desktopcomponents = desktop.getComponents();
 		Boolean quit = true;
@@ -1774,7 +1714,6 @@ public class SemGenGUI extends JFrame implements ActionListener, MenuListener, C
 		}
 		return quit;
 	}
-
 
 	public static void storeGUIsettings() throws URISyntaxException {
 		int endx = frame.getLocation().x;

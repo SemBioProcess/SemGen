@@ -14,6 +14,10 @@ public class CodewordButton extends AnnotationObjectButton implements MouseListe
 	private static final long serialVersionUID = -7555259367118052593L;
 	
 	public enum cwCompletion {noAnnotations, hasPhysProp, hasPhysEnt, hasAll}
+	
+	public Color dependencycolor = new Color(205, 92, 92, 255);
+	public Color entityblack = Color.black;
+	public Color processgreen = new Color(50,205,50);
 	public DataStructure ds;
 
 	public CodewordButton(AnnotatorTab ann, DataStructure ssc, boolean compannfilled,
@@ -52,11 +56,11 @@ public class CodewordButton extends AnnotationObjectButton implements MouseListe
 			tooltip = "<html>Codeword identified as a property of a physical <i>entity</i></html>";
 		}
 		else if(type == SemSimConstants.PROPERTY_OF_PHYSICAL_PROCESS){
-			col = SemGenGUI.processgreen;
+			col = processgreen;
 			tooltip = "<html>Codeword identified as a property of a physical <i>process</i></html>";
 		}
 		else{
-			col = SemGenGUI.dependencycolor;
+			col = dependencycolor;
 			tooltip = "<html>Codeword identified as a property of a <i>constitutive</i> relation.</htm>";
 		}
 		propoflabel = new PropertyMarker(col, tooltip);

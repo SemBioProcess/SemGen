@@ -33,6 +33,7 @@ import org.jdom.JDOMException;
 
 import semgen.SemGenGUI;
 import semgen.resource.GenericThread;
+import semgen.resource.SemGenError;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
 import semgen.resource.uicomponent.ExternalURLButton;
@@ -61,7 +62,6 @@ public class ReferenceClassFinderPanel extends JPanel implements
 	public JComboBox<String> ontologychooser;
 	public Map<String,String> ontologySelectionsAndBioPortalIDmap = new HashMap<String,String>();
 	private JComboBox<String> findchooser;
-
 
 	public String[] existingresultskeysetarray;
 	private JPanel querypanel;
@@ -231,7 +231,6 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		findbox.requestFocusInWindow();
 	}
 
-
 	// Show the RDF labels for the classes in the results list instead of the class names
 	public void showRDFlabels() {
 		resultsanduris = rdflabelsanduris;
@@ -277,7 +276,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 				bps.search(text, bioportalID, findchooser.getSelectedIndex());
 			} catch (IOException e) {
 				e.printStackTrace();
-				SemGenGUI.showWebConnectionError("BioPortal web service");
+				SemGenError.showWebConnectionError(null, "BioPortal web service");
 			} catch (JDOMException e) {e.printStackTrace();}
 			
 			rdflabelsanduris = bps.rdflabelsanduris;
@@ -298,7 +297,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
-				SemGenGUI.showWebConnectionError("UniProt web service");
+				SemGenError.showWebConnectionError(null, "UniProt web service");
 			}
 			rdflabelsanduris = ups.rdflabelsanduris;
 		}
@@ -320,7 +319,6 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		findbox.setEnabled(true);
 		findbutton.setEnabled(true);
 	}
-	
 	
 	// Remove any OPB terms that are not Physical Properties
 	public Hashtable<String,String> removeNonPropertiesFromOPB(Hashtable<String, String> table){

@@ -26,6 +26,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 
 import semgen.merging.MergerTab;
+import semgen.resource.SemGenError;
 import semsim.SemSimUtil;
 
 public class SemGenFileChooser extends JFileChooser implements ActionListener{
@@ -41,7 +42,6 @@ public class SemGenFileChooser extends JFileChooser implements ActionListener{
 	public String buttonActiveText = "Open from URL";
 	public String buttonInactiveText = "Opening...";
 	public JButton stopButton;
-	public String URLcontent;
 	public JProgressBar progbar;
 	private LoadFromURLTask task;
 	
@@ -51,7 +51,6 @@ public class SemGenFileChooser extends JFileChooser implements ActionListener{
 	public static final int BATCH_CLUSTER_TASK = 3;
 	public static final int ENCODING_TASK = 4;
 	public static final int MERGING_TASK = 5;
-	
 	
 	private static final long serialVersionUID = -9040553448654731532L;
 	
@@ -99,7 +98,6 @@ public class SemGenFileChooser extends JFileChooser implements ActionListener{
 		}
 	}
 	
-	
 	public void toggleOKandCancelButtons(JComponent c, boolean value){
 		for(Component csub : c.getComponents()){
 			if(csub instanceof JButton){
@@ -117,10 +115,8 @@ public class SemGenFileChooser extends JFileChooser implements ActionListener{
 			}
 		}
 	}
-	
 
 	public void actionPerformed(ActionEvent arg0) {
-		
 		Object o = arg0.getSource();
 		if(o == URLselectButton){
 			String text = textField.getText();
@@ -148,7 +144,6 @@ public class SemGenFileChooser extends JFileChooser implements ActionListener{
 			}
 		}
 	}
-	
 	
 	public static class LoadFromURLTask extends SwingWorker<Void, Void> {
 		public URL url;
@@ -218,7 +213,7 @@ public class SemGenFileChooser extends JFileChooser implements ActionListener{
 					}
 				} 
 				else{
-					SemGenGUI.showWebConnectionError(url.toString());
+					SemGenError.showWebConnectionError(null, url.toString());
 					return null;
 				}
 				fc.closeAndWriteStringAsModelContent(url, content);
@@ -235,9 +230,7 @@ public class SemGenFileChooser extends JFileChooser implements ActionListener{
         	fc.toggleOKandCancelButtons(fc, true);
         }
     }
-	
-	
-	
+
 	public void closeAndWriteStringAsModelContent(URL url, String content){
 		
 		this.cancelSelection();
