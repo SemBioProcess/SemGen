@@ -16,7 +16,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 
-import semgen.SemGenGUI;
+import semgen.SemGen;
 
 public class LogViewer extends JDialog implements PropertyChangeListener {
 
@@ -35,9 +35,9 @@ public class LogViewer extends JDialog implements PropertyChangeListener {
 		textarea.setMargin(new Insets(5, 15, 5, 5));
 		textarea.setForeground(Color.DARK_GRAY);
 		textarea.setFont(SemGenFont.defaultPlain());
-		SemGenGUI.logfilewriter.flush();
+		SemGen.logfilewriter.flush();
 
-		File logfile = new File(SemGenGUI.logfileloc);
+		File logfile = new File(SemGen.logfileloc);
 		Scanner logscanner = new Scanner(logfile);
 		String nextline;
 		while (logscanner.hasNextLine()) {

@@ -6,7 +6,9 @@ import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
+import semgen.SemGen;
 import semgen.SemGenGUI;
+import semgen.SemGenSettings;
 import semgen.resource.ComparatorByName;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
@@ -63,6 +65,8 @@ public class AnnotatorTab extends JPanel implements ActionListener, MouseListene
 	private URI tempURI;
 	public URI fileURI;
 	public IRI tempIRI;
+	SemGenSettings settings;
+	
 	public SingularAnnotationEditor noncompeditor;
 	public HumanDefEditor humdefeditor;
 
@@ -97,9 +101,8 @@ public class AnnotatorTab extends JPanel implements ActionListener, MouseListene
 	public Highlighter.HighlightPainter onepainter;
 
 	public int numcomponents;
-	public static int initwidth = 900;
-	public static int initheight = 700;
-	public static int leftsidewidth = 275;
+	public static int initwidth;
+	public static int initheight;
 	public String ontspref;
 	public JButton extractorbutton;
 	public JButton coderbutton;
@@ -114,12 +117,14 @@ public class AnnotatorTab extends JPanel implements ActionListener, MouseListene
 	
 	public SemSimModel semsimmodel;
 
-	public AnnotatorTab(File sourcefile, URI temploc, URI fileloc) {
+	public AnnotatorTab(SemGenSettings sets, File sourcefile, URI temploc, URI fileloc) {
 		this.sourcefile = sourcefile;
-
+		settings = sets;
 		tempURI = temploc;
 		tempIRI = IRI.create(tempURI);
 		fileURI = fileloc;
+		initwidth = settings.getAppWidth();
+		initheight = settings.getAppHeight();
 		setOpaque(false);
 		setLayout(new BorderLayout());
 
@@ -302,7 +307,7 @@ public class AnnotatorTab extends JPanel implements ActionListener, MouseListene
 	}
 	
 	public SemSimModel NewAnnotatorAction(){
-		SemGenGUI.logfilewriter.println("Started new annotater");
+		SemGen.logfilewriter.println("Started new annotater");
 		annotationpane.setText(null);
 		annotationpane.setCaretPosition(0);
 		
@@ -397,7 +402,7 @@ public class AnnotatorTab extends JPanel implements ActionListener, MouseListene
 		
 		int divLoc = splitpane.getDividerLocation();
 		if(divLoc==-1)
-			divLoc = (int)(SemGenGUI.initwidth)/3;
+			divLoc = (int)(settings.getAppWidth())/3;
 		
 		// If the "Tree view" menu item is selected...
 		if(SemGenGUI.annotateitemtreeview.isSelected()){
@@ -697,8 +702,8 @@ public class AnnotatorTab extends JPanel implements ActionListener, MouseListene
 			   ann.add(ann.genmodinfo, BorderLayout.NORTH);
 				ann.add(ann.splitpane, BorderLayout.CENTER);
 				ann.setVisible(true);
-				ann.eastsplitpane.setDividerLocation((int)(SemGenGUI.initheight-150)/2);
-				ann.westsplitpane.setDividerLocation((int)(SemGenGUI.initheight-150)/2);
+				ann.eastsplitpane.setDividerLocation((int)(initheight-150)/2);
+				ann.westsplitpane.setDividerLocation((int)(initheight-150)/2);
 		   }
 		});
 	}

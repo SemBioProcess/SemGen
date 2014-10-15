@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -15,6 +16,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.ToolTipManager;
+
 import prefuse.Constants;
 import prefuse.Display;
 import prefuse.Visualization;
@@ -64,7 +66,7 @@ import prefuse.visual.NodeItem;
 import prefuse.visual.VisualItem;
 import prefuse.visual.expression.InGroupPredicate;
 import prefuse.visual.sort.TreeDepthItemSorter;
-import semgen.SemGenGUI;
+import semgen.SemGenSettings;
 import semsim.model.SemSimModel;
 
 /**
@@ -76,6 +78,8 @@ import semsim.model.SemSimModel;
 public class SemGenRadialGraphView extends Display {
 	private static final long serialVersionUID = 8464331927479988729L;
 
+	SemGenSettings settings;
+	
 	public static final String DATA_FILE = "/socialnet.xml";
 	private static final String tree = "tree";
 	private static final String treeNodes = "tree.nodes";
@@ -94,8 +98,9 @@ public class SemGenRadialGraphView extends Display {
     public final static Predicate isvar2inputfilter = ExpressionParser.predicate("var2input==true");
 
     
-	public SemGenRadialGraphView(Graph g, String label, SemSimModel semsimmodel) {
+	public SemGenRadialGraphView(SemGenSettings sets, Graph g, String label, SemSimModel semsimmodel) {
 		super(new Visualization());
+		settings = sets;
 		this.g = g;
 		this.semsimmodel = semsimmodel;
 		base = semsimmodel.getNamespace();
@@ -188,7 +193,7 @@ public class SemGenRadialGraphView extends Display {
 		// ------------------------------------------------
 
 		// initialize the display
-		setSize(SemGenGUI.frame.getWidth()-ExtractorTab.leftpanewidth-50, SemGenGUI.initheight-235);
+		setSize(settings.getAppWidth()-ExtractorTab.leftpanewidth-50, settings.getAppHeight()-235);
 		setItemSorter(new TreeDepthItemSorter());
 		addControlListener(new DragControl());
 		addControlListener(new ZoomToFitControl());
@@ -251,7 +256,7 @@ public class SemGenRadialGraphView extends Display {
 
 	public JPanel demo(Graph g, final String label, ExtractorTab eTab) {
 		// create a new radial tree view
-		final SemGenRadialGraphView gview = new SemGenRadialGraphView(g, label, semsimmodel);
+		final SemGenRadialGraphView gview = new SemGenRadialGraphView(settings, g, label, semsimmodel);
 		Visualization vis = gview.getVisualization();
 		
 

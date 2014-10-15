@@ -12,6 +12,31 @@ public class OSXAdapter implements InvocationHandler {
 	protected String proxySignature;
 
 	static Object macOSXApplication;
+	
+	SemGen mainframe;
+	
+	// Generic registration with the Mac OS X application menu
+	// Checks the platform, then attempts to register with the Apple EAWT
+	// See OSXAdapter.java to see how this is done without directly referencing
+	// any Apple APIs
+	public OSXAdapter(SemGen frame) {
+		mainframe = frame;
+		try {
+				// Generate and register the OSXAdapter, passing it a hash of
+				// all the methods we wish to
+				// use as delegates for various
+				// com.apple.eawt.ApplicationListener methods
+				setQuitHandler(this,
+						getClass().getDeclaredMethod("quit", (Class[]) null));
+
+				setAboutHandler(this,
+				 getClass().getDeclaredMethod("AboutAction", (Class[])null));
+				
+			} catch (Exception e) {
+				System.err.println("Error while loading the OSXAdapter:");
+				e.printStackTrace();
+			}
+	}
 
 	// Pass this method an Object and Method equipped to perform application
 	// shutdown logic
@@ -22,16 +47,13 @@ public class OSXAdapter implements InvocationHandler {
 			public boolean callTarget(Object appleEvent) {
 				Boolean oktoquit = false;
 				try {
-					oktoquit = SemGenGUI.quit();
-				} catch (HeadlessException e) {
+					oktoquit = mainframe.quit();
+				} catch (HeadlessException | OWLException e) {
 					e.printStackTrace();
-				} catch (OWLException e) {
-					e.printStackTrace();
-				}
+				} 
 				return oktoquit;
 			}
 		});
-		
 	}
 
 	// Pass this method an Object and Method equipped to display application
@@ -66,8 +88,7 @@ public class OSXAdapter implements InvocationHandler {
 			setHandler(new OSXAdapter("handlePreferences", target, prefsHandler));
 		}
 		// If we're setting a handler, enable the Preferences menu item by
-		// calling
-		// com.apple.eawt.Application reflectively
+		// calling com.apple.eawt.Application reflectively
 		try {
 			Method enablePrefsMethod = macOSXApplication.getClass().getDeclaredMethod("setEnabledPreferencesMenu", new Class[] { boolean.class });
 			enablePrefsMethod.invoke(macOSXApplication,

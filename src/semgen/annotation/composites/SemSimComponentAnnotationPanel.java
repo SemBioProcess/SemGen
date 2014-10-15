@@ -27,6 +27,7 @@ import javax.swing.JPanel;
 
 import org.semanticweb.owlapi.model.OWLException;
 
+import semgen.SemGen;
 import semgen.SemGenGUI;
 import semgen.annotation.AnnotationDialog;
 import semgen.annotation.CustomPhysicalComponentEditor;
@@ -55,7 +56,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 	public Annotatable smc;
 	public AnnotationDialog anndialog;
 	public SemSimModel semsimmodel;
-	public JComboBox<String> combobox;
+	public JComboBox<String> combobox = new JComboBox<String>(new String[]{});
 	public JLabel searchlabel = new JLabel(SemGenIcon.searchicon);
 	public JLabel createlabel = new JLabel(SemGenIcon.createicon);
 	public ExternalURLButton urlbutton = new ExternalURLButton();
@@ -73,7 +74,6 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 		
 		editable = anndialog.thebutton.editable;
 		
-		combobox = new JComboBox<String>(new String[]{});
 		combobox.setPreferredSize(new Dimension(350,30));
 		combobox.setMaximumSize(new Dimension(350,30));
 		combobox.setEnabled(editable);
@@ -446,11 +446,9 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 			// This conditional statement makes sure that physical processes are annotated with appropriate OPB terms
 			// It only limits physical entity properties to non-process properties. It does not limit based on whether
 			// the OPB term is for a constitutive property. Not sure if it should, yet.
-			if((prop.getPhysicalPropertyOf() instanceof PhysicalEntity && 
-					(SemGenGUI.OPBflowProperties.contains(OPBuri.toString()) || SemGenGUI.OPBprocessProperties.contains(OPBuri.toString())))
-					|| (prop.getPhysicalPropertyOf() instanceof PhysicalProcess &&
-				(!SemGenGUI.OPBflowProperties.contains(OPBuri.toString()) && !SemGenGUI.OPBprocessProperties.contains(OPBuri.toString())))){
-						isvalid = false;
+			if((prop.getPhysicalPropertyOf() instanceof PhysicalEntity || prop.getPhysicalPropertyOf() instanceof PhysicalProcess ) && 
+				(SemGen.semsimlib.OPBhasFlowProperty(OPBuri) || SemGen.semsimlib.OPBhasProcessProperty(OPBuri))) {
+				isvalid = false;
 			}
 		}
 		return isvalid;

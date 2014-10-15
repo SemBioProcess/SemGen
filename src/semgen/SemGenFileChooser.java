@@ -232,12 +232,11 @@ public class SemGenFileChooser extends JFileChooser implements ActionListener{
     }
 
 	public void closeAndWriteStringAsModelContent(URL url, String content){
-		
 		this.cancelSelection();
 		String urlstring = url.toString();
 		String name = urlstring.substring(urlstring.lastIndexOf("/"));
 		
-		File tempfile = new File(SemGenGUI.tempdir.getAbsoluteFile() + "/" + name);
+		File tempfile = new File(SemGen.tempdir.getAbsoluteFile() + "/" + name);
 		SemSimUtil.writeStringToFile(content, tempfile);
 		
 		if(toolType==NEW_ANNOTATOR_TASK){

@@ -43,6 +43,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 
+import semgen.SemGen;
 import semgen.SemGenGUI;
 import semgen.resource.GenericThread;
 import semgen.resource.SemGenFont;
@@ -270,7 +271,7 @@ public class MoreInfoButton extends JLabel implements PropertyChangeListener, Mo
 				}
 			} catch (OWLOntologyCreationException e) {
 				JOptionPane.showMessageDialog(this,"Could not load the local ontology");
-				SemGenGUI.logfilewriter.println(e.toString());
+				SemGen.logfilewriter.println(e.toString());
 				this.reset();
 			}
 			OWLClass selectedclass = SemGenGUI.factory.getOWLClass(IRI.create(termuri));

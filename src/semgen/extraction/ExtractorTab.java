@@ -37,6 +37,7 @@ import prefuse.data.Node;
 import prefuse.data.Schema;
 import semgen.FileFilter;
 import semgen.SemGenGUI;
+import semgen.SemGenSettings;
 import semgen.resource.ComparatorByName;
 import semgen.resource.GenericThread;
 import semgen.resource.SemGenFont;
@@ -60,6 +61,7 @@ import java.awt.BorderLayout;
 public class ExtractorTab extends JPanel implements ActionListener, ItemListener {
 
 	public static final long serialVersionUID = -5142058482154697778L;
+	SemGenSettings settings;
 	public SemSimModel semsimmodel;
 	public OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	public static final String LABEL = "codeword";
@@ -125,7 +127,8 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 	public Clusterer cd;
 	public PrintWriter clusterwriter;
 
-	public ExtractorTab(final JTabbedPane pane, SemSimModel semsimmodel, File sourcefile) throws OWLException {
+	public ExtractorTab(SemGenSettings sets, final JTabbedPane pane, SemSimModel semsimmodel, File sourcefile) throws OWLException {
+		settings = sets;
 		this.pane = pane;
 		this.setLayout(new BorderLayout());
 		this.semsimmodel = semsimmodel;
@@ -673,7 +676,7 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 
 			if (!clusteringonly) {
 				// display the graphs
-				view = new SemGenRadialGraphView(tempgraph, LABEL, semsimmodel);
+				view = new SemGenRadialGraphView(settings, tempgraph, LABEL, semsimmodel);
 				int selectedview = graphtabpane.getSelectedIndex();
 				graphtabpane.removeAll();
 				graphtabpane.add("Computational network", view.demo(tempgraph, LABEL, this));
@@ -686,7 +689,7 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 		else{
 			tempgraph = new Graph(true);
 			tempgraph.getNodeTable().addColumns(LABEL_SCHEMA);
-			view = new SemGenRadialGraphView(tempgraph, LABEL, semsimmodel);
+			view = new SemGenRadialGraphView(settings, tempgraph, LABEL, semsimmodel);
 			graphtabpane.removeAll();
 			graphtabpane.add("Computational network", view.demo(tempgraph, LABEL, this));
 		}

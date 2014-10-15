@@ -31,6 +31,7 @@ import javax.swing.event.ListSelectionListener;
 
 import org.jdom.JDOMException;
 
+import semgen.SemGen;
 import semgen.SemGenGUI;
 import semgen.resource.GenericThread;
 import semgen.resource.SemGenError;
@@ -324,7 +325,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 	public Hashtable<String,String> removeNonPropertiesFromOPB(Hashtable<String, String> table){
 		Hashtable<String,String> newtable = new Hashtable<String,String>();
 		for(String key : table.keySet()){
-			if(SemGenGUI.OPBproperties.contains(table.get(key)))
+			if(SemGen.semsimlib.OPBhasProperty(table.get(key)))
 				newtable.put(key, table.get(key));
 		}
 		return newtable;

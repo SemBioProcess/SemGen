@@ -8,6 +8,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -62,6 +63,7 @@ import prefuse.visual.VisualItem;
 import prefuse.visual.expression.InGroupPredicate;
 import prefuse.visual.sort.TreeDepthItemSorter;
 import semgen.SemGenGUI;
+import semgen.SemGenSettings;
 import semsim.model.SemSimModel;
 
 /**
@@ -75,17 +77,13 @@ public class PhysioMapRadialGraphView extends Display {
 	 * 
 	 */
 	private static final long serialVersionUID = 8464331927479988729L;
-
+	SemGenSettings settings;
+	
 	public static final String DATA_FILE = "/socialnet.xml";
 	private static final String tree = "tree";
 	private static final String treeNodes = "tree.nodes";
 	private static final String treeEdges = "tree.edges";
-	//private static final String treeArrows = "tree.arrows";
 	private static final String linear = "linear";
-
-	//private static final Schema LABEL_SCHEMA = null;
-
-	//private static final String LABEL = null;
 
 	private LabelRenderer m_nodeRenderer;
 	private EdgeRenderer m_edgeRenderer;
@@ -97,7 +95,7 @@ public class PhysioMapRadialGraphView extends Display {
 	
 	 public final static Predicate isprocessfilter = ExpressionParser.predicate("process==true");
 
-	public PhysioMapRadialGraphView(Graph g, String label, SemSimModel semsimmodel) {
+	public PhysioMapRadialGraphView(SemGenSettings sets, Graph g, String label, SemSimModel semsimmodel) {
 		super(new Visualization());
 		this.g = g;
 		m_label = label;
@@ -137,9 +135,6 @@ public class PhysioMapRadialGraphView extends Display {
 		ItemAction arrowColor = new ArrowColorAction(treeEdges);
 		m_vis.putAction("arrowColor", arrowColor);
 
-		// ItemAction edgeColor2 = new DataColorAction("tree.edges",
-		// ÒCOLORÓ, Constants.NOMINAL, VisualItem.FILLCOLOR, edgeColorpalette);
-
 		FontAction fonts = new FontAction(treeNodes, FontLib.getFont("Verdana",12));
 		fonts.add("ingroup('_focus_')", FontLib.getFont("Verdana", 12));
 
@@ -166,9 +161,6 @@ public class PhysioMapRadialGraphView extends Display {
 
 		// create the tree layout action
 		RadialTreeLayout treeLayout = new RadialTreeLayout(tree);
-		//InvertedRadialTreeLayout treeLayout = new InvertedRadialTreeLayout("test");
-//		treeLayout.setRadiusIncrement(100);
-		//treeLayout.setAngularBounds(-Math.PI, Math.PI);
 		treeLayout.setAutoScale(true);
 		m_vis.putAction("treeLayout", treeLayout);
 
@@ -202,7 +194,7 @@ public class PhysioMapRadialGraphView extends Display {
 
 		// initialize the display
 
-		setSize(SemGenGUI.frame.getWidth()-ExtractorTab.leftpanewidth-50, SemGenGUI.initheight-235);
+		setSize(sets.getAppWidth()-ExtractorTab.leftpanewidth-50, sets.getAppHeight()-235);
 		setItemSorter(new TreeDepthItemSorter());
 		addControlListener(new DragControl());
 		addControlListener(new ZoomToFitControl());
@@ -244,20 +236,6 @@ public class PhysioMapRadialGraphView extends Display {
 	}
 
 	// ------------------------------------------------------------------------
-	/*
-	 * public static void main(String argv[]) { String infile = DATA_FILE;
-	 * String label = "name";
-	 * 
-	 * if ( argv.length > 1 ) { infile = argv[0]; label = argv[1]; }
-	 * 
-	 * UILib.setPlatformLookAndFeel();
-	 * 
-	 * JFrame frame = new
-	 * JFrame("p r e f u s e  |  r a d i a l g r a p h v i e w");
-	 * frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	 * frame.setContentPane(demo(infile, label)); frame.pack();
-	 * frame.setVisible(true); }
-	 */
 
 	public JPanel demo() {
 		return demo(DATA_FILE, "name");
@@ -278,7 +256,7 @@ public class PhysioMapRadialGraphView extends Display {
 
 	public JPanel demo(Graph g, final String label) {
 		// create a new radial tree view
-		final PhysioMapRadialGraphView gview = new PhysioMapRadialGraphView(g, label, semsimmodel);
+		final PhysioMapRadialGraphView gview = new PhysioMapRadialGraphView(settings, g, label, semsimmodel);
 		Visualization vis = gview.getVisualization();
 		
 
@@ -298,15 +276,11 @@ public class PhysioMapRadialGraphView extends Display {
 		title.setAlignmentY(CENTER_ALIGNMENT);
 		title.setLineWrap(true);
 		title.setWrapStyleWord(true);
-		// title.setVerticalAlignment(SwingConstants.BOTTOM);
-		title.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
+				title.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
 		title.setFont(FontLib.getFont("Verdana", Font.PLAIN, 11));
 
 		gview.addControlListener(new ControlAdapter() {
-			public void itemEntered(VisualItem item, MouseEvent e) {
-				if (item.canGetString(label)){ // && (e.getButton() == MouseEvent.BUTTON2 || e.isControlDown())) {
-				}
-			}
+			public void itemEntered(VisualItem item, MouseEvent e) {}
 
 			public void itemExited(VisualItem item, MouseEvent e) {
 				title.setText(null);
@@ -388,7 +362,6 @@ public class PhysioMapRadialGraphView extends Display {
 	public static class ArrowColorAction extends ColorAction {
 		public ArrowColorAction(String group) {
 			super(group, VisualItem.FILLCOLOR, ColorLib.rgb(0, 0, 0));
-			//add("_hover", ColorLib.rgb(176, 23, 31));
 		}
 	} // end of inner class ArrowColorAction
 	

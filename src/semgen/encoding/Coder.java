@@ -10,6 +10,7 @@ import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
 
 import semgen.FileFilter;
+import semgen.SemGen;
 import semgen.SemGenGUI;
 import semgen.resource.uicomponent.ProgressFrame;
 
@@ -30,7 +31,7 @@ public class Coder {
 		try {
 			ontology = manager.loadOntologyFromOntologyDocument(file);
 		} catch (OWLOntologyCreationException err) {
-			SemGenGUI.logfilewriter.println("The ontology could not be created: "+ err.getMessage());
+			SemGen.logfilewriter.println("The ontology could not be created: "+ err.getMessage());
 		}
 		base = ontology.getOntologyID().toString();
 		base = base.substring(base.indexOf("<") + 1, base.indexOf(">")) + "#";

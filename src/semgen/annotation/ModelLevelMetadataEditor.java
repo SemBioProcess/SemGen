@@ -2,7 +2,7 @@ package semgen.annotation;
 
 import org.semanticweb.owlapi.model.*;
 
-import semgen.SemGenGUI;
+import semgen.SemGen;
 import semgen.resource.SemGenIcon;
 import semgen.resource.uicomponent.SemGenScrollPane;
 import semsim.SemSimConstants;
@@ -32,7 +32,6 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 
@@ -119,7 +118,7 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 			this.ed = ed;
 			this.editable = editable;
 			
-			cb = new JComboBox<String>(SemGenGUI.metadataRelationsTable.keySet().toArray(new String[]{}));
+			cb = new JComboBox<String>(SemGen.semsimlib.getListofMetaDataRelations());
 			cb.setSelectedItem(cb.getItemAt(0));
 			
 			ta = new JTextArea(tatext);
