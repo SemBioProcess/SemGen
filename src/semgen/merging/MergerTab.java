@@ -25,7 +25,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
 import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -36,17 +35,19 @@ import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLException;
-import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import JSim.util.Xcept;
 import semgen.SemGenFileChooser;
 import semgen.SemGenGUI;
+import semgen.SemGenSettings;
 import semgen.resource.GenericThread;
+import semgen.resource.SemGenError;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
 import semgen.resource.uicomponent.ProgressFrame;
 import semgen.resource.uicomponent.SemGenScrollPane;
+import semgen.resource.uicomponent.SemGenTab;
 import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
@@ -65,7 +66,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.HeadlessException;
 
-public class MergerTab extends JPanel implements ActionListener, MouseListener {
+public class MergerTab extends SemGenTab implements ActionListener, MouseListener {
 
 	private static final long serialVersionUID = -1383642730474574843L;
 	public OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -76,55 +77,34 @@ public class MergerTab extends JPanel implements ActionListener, MouseListener {
 	public File mergedfile;
 	public int dividerlocation = 350;
 	public JButton closebutton;
-	public JPanel filepanel;
 	public JPanel filelistpanel;
-	public JScrollPane filelistscroller;
-	public JLabel filelisttitle;
-	public JPanel plusminuspanel;
 	public JButton plusbutton;
 	public JButton minusbutton;
 
-	public JPanel resolvepanel;
+	public JPanel resolvepanel = new JPanel();
 	public SemGenScrollPane resolvescroller;
-	public JButton mergetempbutton;
 	public JButton mergebutton;
-	public JPanel mergebuttonpanel;
 
-	public JSplitPane mappingsplitpane;
 	public JSplitPane resmapsplitpane;
 	public MappingPanel mappingpanelleft;
 	public MappingPanel mappingpanelright;
-	public SemGenScrollPane mappingscrollerleft;
-	public SemGenScrollPane mappingscrollerright;
 	public JButton addmanualmappingbutton;
-	public JButton mergingwizardbutton;
 	public JButton loadingbutton;
 	public Set<String> initialidenticalinds = new HashSet<String>();
 	public Set<String> identicaldsnames = new HashSet<String>();
-	public Hashtable<String, OWLOntology> discardedcodewordsandontURIs = new Hashtable<String, OWLOntology>();
-	public Hashtable<String,String> nodesforflowdistribution = new Hashtable<String,String>();
 	public Hashtable<String,Set<String>> dispandsetofadds = new Hashtable<String,Set<String>>();
-	public Hashtable<String, String> codewordpairstoresolve = new Hashtable<String, String>();
-	public Set<String> samedomainnames;
 	public JFileChooser fc;
-	public GenericThread mergethread;
 	public Boolean contmerging;
 
-	public static String[] referstoarray1;
-	public static String[] referstoarray2;
-	public static String[] ontURIarray1;
-	public static String[] ontURIarray2;
-	public static String[] relationsarray1;
-	public static String[] relationsarray2;
-
-	public MergerTab(final JTabbedPane pane) {
+	public MergerTab(SemGenSettings sets) {
+		super("Merger", SemGenIcon.mergeicon, "Tab for Merging SemSim Models", sets);
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
 		JPanel filelistheader = new JPanel();
-		filelisttitle = new JLabel("Models to merge");
+		JLabel filelisttitle = new JLabel("Models to merge");
 		filelisttitle.setBorder(BorderFactory.createEmptyBorder(0,0,0,10));
 
-		plusminuspanel = new JPanel();
+		JPanel plusminuspanel = new JPanel();
 		plusbutton = new JButton(SemGenIcon.plusicon);
 		plusbutton.addActionListener(this);
 		minusbutton = new JButton(SemGenIcon.minusicon);
@@ -155,18 +135,14 @@ public class MergerTab extends JPanel implements ActionListener, MouseListener {
 		filelistpanel.setBackground(Color.white);
 		filelistpanel.setLayout(new BoxLayout(filelistpanel, BoxLayout.Y_AXIS));
 
-		filelistscroller = new JScrollPane(filelistpanel);
+		JScrollPane filelistscroller = new JScrollPane(filelistpanel);
 
-		mergebuttonpanel = new JPanel();
+		JPanel mergebuttonpanel = new JPanel();
 
 		mergebutton = new JButton("MERGE");
 		mergebutton.setFont(SemGenFont.defaultBold());
 		mergebutton.setForeground(Color.blue);
 		mergebutton.addActionListener(this);
-
-		mergetempbutton = new JButton("MERGE INTO TEMP FILE");
-		mergetempbutton.setForeground(Color.blue);
-		mergetempbutton.addActionListener(this);
 
 		mergebuttonpanel.add(mergebutton);
 		
@@ -178,7 +154,6 @@ public class MergerTab extends JPanel implements ActionListener, MouseListener {
 		filelistpanel.setPreferredSize(new Dimension(SemGenGUI.desktop.getWidth() - 200, 60));
 		filelistpanel.setMaximumSize(new Dimension(99999, 175));
 		
-		resolvepanel = new JPanel();
 		resolvepanel.setLayout(new BoxLayout(resolvepanel, BoxLayout.Y_AXIS));
 		resolvepanel.setBackground(Color.white);
 		resolvescroller = new SemGenScrollPane(resolvepanel);
@@ -187,10 +162,7 @@ public class MergerTab extends JPanel implements ActionListener, MouseListener {
 
 		mappingpanelleft = new MappingPanel("[ ]");
 		mappingpanelright = new MappingPanel("[ ]");
-		mappingscrollerleft = new SemGenScrollPane(mappingpanelleft);
-		mappingscrollerright = new SemGenScrollPane(mappingpanelright);
-
-		mappingsplitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mappingpanelleft, mappingpanelright);
+		JSplitPane mappingsplitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mappingpanelleft, mappingpanelright);
 		mappingsplitpane.setOneTouchExpandable(true);
 		mappingsplitpane.setAlignmentX(LEFT_ALIGNMENT);
 		mappingsplitpane.setDividerLocation((SemGenGUI.desktop.getWidth() - 20) / 2);
@@ -203,15 +175,12 @@ public class MergerTab extends JPanel implements ActionListener, MouseListener {
 		mappingbuttonpanel.setAlignmentX(LEFT_ALIGNMENT);
 		addmanualmappingbutton = new JButton("Add manual mapping");
 		addmanualmappingbutton.addActionListener(this);
-		mergingwizardbutton = new JButton("Merging wizard");
-		mergingwizardbutton.setEnabled(false);
 		mappingbuttonpanel.add(addmanualmappingbutton);
 
 		this.add(filelistpanel);
 		this.add(resmapsplitpane);
 		this.add(mappingbuttonpanel);
 		this.add(Box.createGlue());
-		this.mergetempbutton.setVisible(false);
 		this.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
 	}
 
@@ -281,7 +250,7 @@ public class MergerTab extends JPanel implements ActionListener, MouseListener {
 
 				if (!codewordsAlreadyMapped(cdwd1, cdwd2, true)) {
 					if(resolvepanel.getComponentCount()!=0) resolvepanel.add(new JSeparator());
-					ResolutionPanel newrespanel = new ResolutionPanel(this, semsimmodel1.getDataStructure(cdwd1),
+					ResolutionPanel newrespanel = new ResolutionPanel(semsimmodel1.getDataStructure(cdwd1),
 							semsimmodel2.getDataStructure(cdwd2),
 							semsimmodel1, semsimmodel2, "(manual mapping)", true);
 					resolvepanel.add(newrespanel);
@@ -295,8 +264,7 @@ public class MergerTab extends JPanel implements ActionListener, MouseListener {
 			}
 		}
 	}
-	
-	
+
 	public int PlusButtonAction(){
 		int choice = SemGenGUI.showSemGenFileChooser(SemGenGUI.currentdirectory,
 				new String[]{"owl", "xml", "sbml", "cellml", "mod"}, "Select SemSim models to merge", 
@@ -306,16 +274,12 @@ public class MergerTab extends JPanel implements ActionListener, MouseListener {
 		}
 		return choice;
 	}
-	
-	
-	
+
 	public void startAdditionOfModels(File[] files){
 		AddModelsToMergeTask task = new AddModelsToMergeTask(files);
 		task.execute();
 		SemGenGUI.progframe = new ProgressFrame("Loading models...", true, task);
 	}
-	
-	
 	
 	private class AddModelsToMergeTask extends SwingWorker<Void, Void> {
 		public File[] files;
@@ -342,7 +306,7 @@ public class MergerTab extends JPanel implements ActionListener, MouseListener {
 		identicaldsnames = new HashSet<String>();
 		for (int x = 0; x < files.length; x++) {
 			if(ModelClassifier.classify(files[x])==ModelClassifier.CELLML_MODEL){
-				showFunctionalSubmodelError(files[x]);
+				SemGenError.showFunctionalSubmodelError(this,files[x]);
 			}
 			else{
 				FileToMergeLabel templabel = new FileToMergeLabel(files[x].getAbsolutePath());
@@ -358,13 +322,6 @@ public class MergerTab extends JPanel implements ActionListener, MouseListener {
 		validate();
 		repaint();
 	}
-	
-	
-	private void showFunctionalSubmodelError(File file){
-		JOptionPane.showMessageDialog(SemGenGUI.progframe, "Did not load " + file.getName() + 
-		"\n\nSemGen does not support merging of models with CellML-type components yet.");
-	}
-	
 	
 	public class MergeTask extends SwingWorker<Void,Void>{
 		public MergeTask(){}
@@ -384,7 +341,6 @@ public class MergerTab extends JPanel implements ActionListener, MouseListener {
         }
 	}
 
-	
 	public void primeForMergingStep() {
 		mergebutton.setEnabled(true);
 		Component[] filecomponents = filelistpanel.getComponents();
@@ -504,7 +460,7 @@ public class MergerTab extends JPanel implements ActionListener, MouseListener {
 					}
 				}
 				if(match){
-					resolvepanel.add(new ResolutionPanel(this, ds1, ds2,
+					resolvepanel.add(new ResolutionPanel(ds1, ds2,
 							semsimmodel1, semsimmodel2, "(exact semantic match)", false));
 					resolvepanel.add(new JSeparator());
 					resolvepanel.validate();
@@ -520,9 +476,7 @@ public class MergerTab extends JPanel implements ActionListener, MouseListener {
 	}
 
 	public Boolean testNonCompositeAnnotations(ReferenceOntologyAnnotation ann1, ReferenceOntologyAnnotation ann2){
-		if(ann1.getReferenceURI().toString().equals(ann2.getReferenceURI().toString()))
-			return true;
-		else return false;
+		return (ann1.getReferenceURI().toString().equals(ann2.getReferenceURI().toString()));
 	}
 	
 	public Boolean testCompositePhysicalEntityEquivalency(CompositePhysicalEntity cpe1, CompositePhysicalEntity cpe2){
@@ -539,9 +493,6 @@ public class MergerTab extends JPanel implements ActionListener, MouseListener {
 			else return false;
 		}
 		return true;
-	}
-	
-	public void examineflowdistribution(OWLOntology dstokeepont, OWLOntology dstodiscardont, String dstokeep, String dstodiscard) {
 	}
 
 	public Boolean codewordsAlreadyMapped(String cdwd1uri, String cdwd2uri,
@@ -580,7 +531,7 @@ public class MergerTab extends JPanel implements ActionListener, MouseListener {
 		DataStructure soldom1 = ssm1clone.getSolutionDomains().toArray(new DataStructure[]{})[0];
 		DataStructure soldom2 = ssm2clone.getSolutionDomains().toArray(new DataStructure[]{})[0];
 		
-		resolutionpanels[resolutionpanels.length-1] = new ResolutionPanel(this, soldom1, soldom2, ssm1clone, ssm2clone, 
+		resolutionpanels[resolutionpanels.length-1] = new ResolutionPanel(soldom1, soldom2, ssm1clone, ssm2clone, 
 				"automated solution domain mapping", false);
 		
 		for (int x = 0; x < resolutionpanels.length; x++) {
@@ -609,7 +560,7 @@ public class MergerTab extends JPanel implements ActionListener, MouseListener {
 					double conversionfactor = 1;
 					if(keptds.hasUnits() && discardedds.hasUnits()){
 						if (!keptds.getUnit().getComputationalCode().equals(discardedds.getUnit().getComputationalCode())){
-							ConversionFactorDialog condia = new ConversionFactorDialog(this,
+							ConversionFactorDialog condia = new ConversionFactorDialog(
 									keptds.getName(), discardedds.getName(), keptds.getUnit().getComputationalCode(),
 									discardedds.getUnit().getComputationalCode());
 							replacementtext = condia.cdwdAndConversionFactor;
@@ -624,7 +575,7 @@ public class MergerTab extends JPanel implements ActionListener, MouseListener {
 					if(!discardedds.getName().equals(keptds.getName()) || conversionfactor!=1){
 						SemSimUtil.replaceCodewordInAllEquations(discardedds, keptds, modelfordiscardedds, discardedds.getName(), replacementtext, conversionfactor);
 					}
-					else{}// What to do about sol doms that have different units?
+					// What to do about sol doms that have different units?
 					
 					if(discardedds.isSolutionDomain()){
 					  // Re-set the solution domain designations for all DataStructures in model 2
@@ -694,7 +645,6 @@ public class MergerTab extends JPanel implements ActionListener, MouseListener {
 				else if(newdsname.equals(dsname)){
 					JOptionPane.showMessageDialog(SemGenGUI.progframe, "That is the existing name. Please choose a new one.");
 				}
-				else {}
 			}
 		}
 		
@@ -771,11 +721,11 @@ public class MergerTab extends JPanel implements ActionListener, MouseListener {
 		
 		semsimmodel1 = SemGenGUI.loadSemSimModelFromFile(file1, true);
 		
-		if(semsimmodel1.getFunctionalSubmodels().size()>0) showFunctionalSubmodelError(file1);
+		if(semsimmodel1.getFunctionalSubmodels().size()>0) SemGenError.showFunctionalSubmodelError(this, file1);
 		
 		semsimmodel2 = SemGenGUI.loadSemSimModelFromFile(file2, true);
 		
-		if(semsimmodel2.getFunctionalSubmodels().size()>0) showFunctionalSubmodelError(file1);
+		if(semsimmodel2.getFunctionalSubmodels().size()>0) SemGenError.showFunctionalSubmodelError(this, file1);
 		
 		Set<SemSimModel> models = new HashSet<SemSimModel>();
 		models.add(semsimmodel1);
@@ -792,9 +742,6 @@ public class MergerTab extends JPanel implements ActionListener, MouseListener {
 			subclassset.add(subclass.asOWLClass().getIRI().toString());
 		}
 		return subclassset;
-	}
-
-	public void mouseClicked(MouseEvent arg0) {
 	}
 
 	public void mouseEntered(MouseEvent arg0) {
@@ -838,6 +785,7 @@ public class MergerTab extends JPanel implements ActionListener, MouseListener {
 		filelistpanel.validate();
 		filelistpanel.repaint();
 	}
-
+	
+	public void mouseClicked(MouseEvent arg0) {}
 	public void mouseReleased(MouseEvent arg0) {}
 }

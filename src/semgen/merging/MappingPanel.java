@@ -13,7 +13,7 @@ public class MappingPanel extends JPanel {
 	private static final long serialVersionUID = 2776275290257952399L;
 	public JLabel title;
 	public String filename;
-	public JList scrollercontent;
+	public JList<String> scrollercontent = new JList<String>();
 	public JScrollPane scroller;
 
 	public MappingPanel(String filename) {
@@ -23,7 +23,6 @@ public class MappingPanel extends JPanel {
 		title.setAlignmentX(LEFT_ALIGNMENT);
 		title.setFont(new Font("SansSerif", Font.BOLD, 12));
 
-		scrollercontent = new JList();
 		scrollercontent.setBackground(Color.white);
 		scrollercontent.setFont(new Font("SansSerif", Font.PLAIN, 10));
 		scrollercontent.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

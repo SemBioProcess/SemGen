@@ -14,7 +14,7 @@ import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
 import semgen.resource.uicomponent.ProgressFrame;
 import semgen.resource.uicomponent.SemGenScrollPane;
-import semsim.Annotatable;
+import semgen.resource.uicomponent.SemGenTab;
 import semsim.SemSimConstants;
 import semsim.model.Importable;
 import semsim.model.SemSimModel;
@@ -56,16 +56,13 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class AnnotatorTab extends JPanel implements ActionListener, MouseListener,
+public class AnnotatorTab extends SemGenTab implements ActionListener, MouseListener,
 		KeyListener {
 
 	private static final long serialVersionUID = -5360722647774877228L;
 	public OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	public File sourcefile; //File originally loaded at start of Annotation session (could be in SBML, MML, CellML or SemSim format)
-	private URI tempURI;
 	public URI fileURI;
-	public IRI tempIRI;
-	SemGenSettings settings;
 	
 	public SingularAnnotationEditor noncompeditor;
 	public HumanDefEditor humdefeditor;
@@ -117,12 +114,10 @@ public class AnnotatorTab extends JPanel implements ActionListener, MouseListene
 	
 	public SemSimModel semsimmodel;
 
-	public AnnotatorTab(SemGenSettings sets, File sourcefile, URI temploc, URI fileloc) {
-		this.sourcefile = sourcefile;
-		settings = sets;
-		tempURI = temploc;
-		tempIRI = IRI.create(tempURI);
-		fileURI = fileloc;
+	public AnnotatorTab(File srcfile, SemGenSettings sets) {
+		super(srcfile.getName(), SemGenIcon.annotatoricon, "Annotating " + srcfile.getName(), sets);
+		this.sourcefile = srcfile;
+		fileURI = srcfile.toURI();
 		initwidth = settings.getAppWidth();
 		initheight = settings.getAppHeight();
 		setOpaque(false);
@@ -284,7 +279,9 @@ public class AnnotatorTab extends JPanel implements ActionListener, MouseListene
 							JOptionPane.YES_NO_CANCEL_OPTION,
 							JOptionPane.QUESTION_MESSAGE);
 					if (savefilechoice == JOptionPane.YES_OPTION) {
-						manager.saveOntology(semsimmodel.toOWLOntology(), new RDFXMLOntologyFormat(), tempIRI);
+						File tempfile = new File(SemGen.tempdir.getAbsoluteFile() + "/" + SemGenSettings.sdf.format(SemGen.datenow) + ".owl");
+
+						manager.saveOntology(semsimmodel.toOWLOntology(), new RDFXMLOntologyFormat(), IRI.create(tempfile));
 						if(SemGenGUI.SaveAction(this, lastSavedAs)) SemGenGUI.startEncoding(semsimmodel, filenamesuggestion);
 					}
 					else if(savefilechoice == JOptionPane.NO_OPTION)
@@ -399,7 +396,6 @@ public class AnnotatorTab extends JPanel implements ActionListener, MouseListene
 	
 	// Refresh the display of codewords and submodels based on the view options selected in the Annotate menu
 	public void refreshAnnotatableElements(){
-		
 		int divLoc = splitpane.getDividerLocation();
 		if(divLoc==-1)
 			divLoc = (int)(settings.getAppWidth())/3;
@@ -706,15 +702,6 @@ public class AnnotatorTab extends JPanel implements ActionListener, MouseListene
 				ann.westsplitpane.setDividerLocation((int)(initheight-150)/2);
 		   }
 		});
-	}
-
-	public String getNonCompositeAnnotationCodeForButton(AnnotationObjectButton aob) {
-		if(aob.ssc instanceof Annotatable){
-			if(((Annotatable)aob.ssc).hasRefersToAnnotation()){
-				return "S";
-			}
-		}
-		return "_";
 	}
 
 	public void addNewSubmodelButton() throws OWLException {

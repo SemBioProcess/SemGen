@@ -2,12 +2,8 @@ package semgen.merging;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
-
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -18,47 +14,29 @@ import javax.swing.JTextField;
 import semgen.SemGenGUI;
 import semgen.resource.uicomponent.SemGenTextArea;
 
-
-
 public class ConversionFactorDialog extends JDialog implements
-		PropertyChangeListener, ActionListener {
+		PropertyChangeListener {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3182047942231432822L;
 	public JOptionPane optionPane;
-	public MergerTab merger;
 	public JTextField mantextfield;
-	public SemGenTextArea area;
-	public JPanel conpanel;
-	public JLabel label;
 	public String cdwd2keep;
-	public String cdwd2keepunits;
-	public String cdwd2discard;
-	public String cdwd2discardunits;
-	public String newcdwd;
-	public File file1;
-	public File file2;
-	public JComboBox box;
-	public String[] selections;
+	public JComboBox<String> box;
 	public Boolean process;
 	public String cdwdAndConversionFactor;
 	public double conversionfactor;
 
-	public ConversionFactorDialog(MergerTab merger, String cdwd2keep, String cdwd2discard,
+	public ConversionFactorDialog(String cdwd2keep, String cdwd2discard,
 			String cdwd2keepunits, String cdwd2discardunits) {
-
-		this.merger = merger;
-		this.cdwd2keepunits = cdwd2keepunits;
-		this.cdwd2discardunits = cdwd2discardunits;
 
 		process = true;
 		this.cdwd2keep = cdwd2keep;
-		this.cdwd2discard = cdwd2discard;
-		selections = new String[] { "*", "/" };
+		String[] selections = new String[] { "*", "/" };
 		
-		area = new SemGenTextArea(Color.white);
+		SemGenTextArea area = new SemGenTextArea(Color.white);
 
 		area.setText(cdwd2discard + " has units \"" + cdwd2discardunits + "\"" + "\n"
 				+ cdwd2keep + " has units \"" + cdwd2keepunits + "\""
@@ -66,11 +44,11 @@ public class ConversionFactorDialog extends JDialog implements
 		area.setLineWrap(true);
 		area.setWrapStyleWord(true);
 		
-		label = new JLabel(cdwd2discard + " (" + cdwd2discardunits + ") = " + cdwd2keep + " (" + cdwd2keepunits + ") ");
+		JLabel label = new JLabel(cdwd2discard + " (" + cdwd2discardunits + ") = " + cdwd2keep + " (" + cdwd2keepunits + ") ");
 
-		conpanel = new JPanel();
+		JPanel conpanel = new JPanel();
 
-		box = new JComboBox(selections);
+		box = new JComboBox<String>(selections);
 		mantextfield = new JTextField();
 		mantextfield.setPreferredSize(new Dimension(250, 30));
 		mantextfield.setForeground(Color.blue);
@@ -95,9 +73,6 @@ public class ConversionFactorDialog extends JDialog implements
 		pack();
 		setLocationRelativeTo(SemGenGUI.desktop);
 		setVisible(true);
-	}
-
-	public void actionPerformed(ActionEvent e) {
 	}
 
 	public void propertyChange(PropertyChangeEvent e) {

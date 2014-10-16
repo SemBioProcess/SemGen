@@ -121,7 +121,6 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 	public void refreshComboBoxItemsAndButtonVisibility(){
 		
 		ArrayList<String> stringlist = new ArrayList<String>();
-		String[] stringarray;
 		removeComboBoxActionListeners(this);
 		combobox.removeAllItems();
 		
@@ -196,7 +195,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 		}
 		else if(smc instanceof PhysicalProcess) combobox.setFont(SemGenFont.defaultItalic());
 		
-		stringarray = stringlist.toArray(new String[]{});
+		String[] stringarray = stringlist.toArray(new String[]{});
 		String text = null;
 		
 		// If annotation present, select it in the combo box...

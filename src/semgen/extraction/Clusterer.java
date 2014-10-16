@@ -54,9 +54,9 @@ import org.apache.commons.collections15.functors.ConstantTransformer;
 import org.apache.commons.collections15.functors.MapTransformer;
 import org.apache.commons.collections15.map.LazyMap;
 
-import semgen.SemGenGUI;
 import semgen.resource.SemGenFont;
 import semgen.resource.uicomponent.SemGenScrollPane;
+import semgen.resource.uicomponent.SemGenTab;
 import semsim.model.computational.DataStructure;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
@@ -127,7 +127,7 @@ public class Clusterer extends JFrame {
 
 
 	public void setUpView() throws IOException {
-		this.setTitle(SemGenGUI.formatTabName(extractor.semsimmodel.getName()));
+		setTitle(SemGenTab.formatTabName(extractor.semsimmodel.getName()));
 		layout = new AggregateLayout<String, Number>(new SemGenFRLayout<String, Number>(mygraph));
 
 		vv = new VisualizationViewer<String, Number>(layout);

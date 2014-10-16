@@ -79,12 +79,9 @@ public class HumanDefEditor extends JDialog implements PropertyChangeListener {
 				anndialog.annotator.setModelSaved(false);
 				anndialog.humremovebutton.setEnabled(true);
 				anndialog.refreshHumanReadableDefinition();
-				setVisible(false);
 				remove(this);
 			}
-			if (value.equals("Cancel")) {
-				setVisible(false);
-			}
+			setVisible(false);
 		}
 	}
 }

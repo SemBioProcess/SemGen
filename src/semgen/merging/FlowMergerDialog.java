@@ -8,28 +8,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Set;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
-
 import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntology;
 
-import semgen.SemGenGUI;
 import semgen.resource.SemGenIcon;
 import semgen.resource.uicomponent.SemGenScrollPane;
 import semsim.SemSimConstants;
@@ -43,37 +37,20 @@ public class FlowMergerDialog extends JDialog implements
 	 */
 	private static final long serialVersionUID = 7845342502406090947L;
 	public JOptionPane optionPane;
-	public JTextField mantextfield;
-	public JTextArea area;
-	public JPanel mainpanel;
-	public JLabel displabel;
-	public String cdwd;
-	public String newcdwd;
-	public File file1;
-	public File file2;
-	public JComboBox<String> box;
-	public String[] selections;
-	public Boolean process;
+	public JPanel mainpanel = new JPanel();
 	public String disp;
-	public Set<String> flowdepsfromdiscarded;
-	public OWLOntology discardedont;
 	public OWLOntology keptont;
-	public Hashtable<String, Set<String>> dispandsetofadds;
 	public MergerTab merger;
 	public SemGenScrollPane scrollpane;
-	public JButton questionbutton;
+	public JButton questionbutton = new JButton(SemGenIcon.questionicon);
 
 	public FlowMergerDialog(String disp, Set<String> flowdepsfromdiscarded,
 			OWLOntology discardedont, OWLOntology keptont, MergerTab merger) {
 		this.disp = disp;
-		this.flowdepsfromdiscarded = flowdepsfromdiscarded;
-		this.discardedont = discardedont;
 		this.keptont = keptont;
 		this.merger = merger;
 
-		mainpanel = new JPanel();
 		mainpanel.setLayout(new BoxLayout(mainpanel, BoxLayout.Y_AXIS));
-		questionbutton = new JButton(SemGenIcon.questionicon);
 		questionbutton.addActionListener(this);
 		questionbutton.setBorderPainted(false);
 		questionbutton.setContentAreaFilled(false);
@@ -155,7 +132,6 @@ public class FlowMergerDialog extends JDialog implements
 		setContentPane(optionPane);
 
 		this.pack();
-		this.setLocationRelativeTo(SemGenGUI.desktop);
 		this.setVisible(true);
 	}
 
@@ -196,18 +172,14 @@ public class FlowMergerDialog extends JDialog implements
 										+ "  Human readable definition: "
 										+ anns[2] + "\n\n");
 
-			} catch (HeadlessException e1) {
-				e1.printStackTrace();
-			} catch (OWLException e1) {
+			} catch (HeadlessException  | OWLException e1) {
 				e1.printStackTrace();
 			}
 		}
-
 	}
 
 	public void propertyChange(PropertyChangeEvent e) {
 		Set<String> setofadds = new HashSet<String>();
-		dispandsetofadds = new Hashtable<String, Set<String>>();
 		String value = optionPane.getValue().toString();
 		Set<Boolean> choicesmade = new HashSet<Boolean>();
 		if (value == "OK") {

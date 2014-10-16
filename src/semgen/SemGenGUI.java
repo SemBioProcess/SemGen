@@ -30,7 +30,6 @@ import semgen.resource.SemGenError;
 import semgen.resource.SemGenIcon; 
 import semgen.resource.uicomponent.ProgressFrame;
 import semgen.resource.uicomponent.SemGenTab;
-import semgen.resource.uicomponent.TabCloser;
 import semsim.SemSimConstants;
 import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
@@ -66,6 +65,8 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -161,7 +162,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 	private JMenuItem helpitemweb;
 
 	public static JFileChooser fc;
-	public static JTabbedPane desktop;
+	public static SemGenGUI desktop;
 	public static double version = 2.0;
 	public static int numtabs = 0;
 	public static int maskkey = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
@@ -377,11 +378,9 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 	}
 
 	// METHODS
-	public void menuCanceled(MenuEvent arg0) {
-	}
+	public void menuCanceled(MenuEvent arg0) {}
 
-	public void menuDeselected(MenuEvent arg0) {
-	}
+	public void menuDeselected(MenuEvent arg0) {}
 
 	public void menuSelected(MenuEvent arg0) {
 		if(desktop.getSelectedComponent() instanceof AnnotatorTab){
@@ -661,11 +660,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		if (o == helpitemweb) 
 			BrowserLauncher.openURL(settings.getHelpURL());
 
-		if (o instanceof TabCloser) {
-			Component component = (Component) o;
-			int i = desktop.indexOfComponent(component);
-			desktop.remove(i);
-		}
 	}
 	
 	public static int showSemGenFileChooser(File currentdirectory, String[] fileextensions, String title, 
@@ -713,7 +707,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		ExtractorTab extractor;
 		try {
 			SemSimModel ssm = new SemSimOWLreader().readFromFile(file);
-			extractor = new ExtractorTab(settingshandle, desktop, ssm, file);
+			extractor = new ExtractorTab(file, ssm, settingshandle);
 			extractor.batchCluster();
 		} catch (OWLException e1) {
 			e1.printStackTrace();
@@ -811,26 +805,22 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		AnnotatorTab annotator = null;
 
 		// Create a new tempfile using the date
-		File tempfile = new File(SemGen.tempdir.getAbsoluteFile() + "/" + SemGenSettings.sdf.format(SemGen.datenow) + ".owl");
-		URI tempURI = tempfile.toURI();
 
 		if(semsimmodel!=null){
 		
 		URI selectedURI = file.toURI(); // The selected file for annotation
 		URI existingURI = URI.create(""); // The existing file from which to
 			Boolean newannok = true;
-			URI saveURI = null;
 			// If we are annotating an existing SemSim or CellML file...
 			if (semsimmodel.getSourceModelType()==ModelClassifier.SEMSIM_MODEL || semsimmodel.getSourceModelType()==ModelClassifier.CELLML_MODEL) {
 				existingURI = selectedURI;
-				saveURI = selectedURI;
 			}
 			
 			// Check to make sure SemSim model isn't already being annotated before proceeding
 			if (newannok && !isOntologyOpenForEditing(existingURI)) {
 	
 				// Create new Annotater object in SemGen desktop
-				annotator = new AnnotatorTab(settingshandle, file, tempURI, saveURI);
+				annotator = new AnnotatorTab(file,settingshandle);
 				annotator.semsimmodel = semsimmodel; 
 				
 				if(annotator.semsimmodel.getErrors().isEmpty()){
@@ -844,9 +834,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 					annotator.semsimmodel.addCustomPhysicalProcess(unspecifiedName, "Non-specific process for use as a placeholder during annotation");
 	
 					if(annotator.semsimmodel!=null){
-						numtabs++;
-						desktop.addTab(formatTabName(file.getName()), SemGenIcon.annotatoricon, annotator, "Annotating " + file.getName());
-						desktop.setTabComponentAt(numtabs-1, new SemGenTab(formatTabName(file.getName()), annotator));
+						desktop.addTab(annotator);
 						
 						annotator.NewAnnotatorAction();
 						
@@ -878,29 +866,18 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 			return null;
 		}
 		if(semsimmodel!=null){
-			extractor = new ExtractorTab(settingshandle, desktop, semsimmodel, file);
-			numtabs++;
-			desktop.addTab(formatTabName(extractor.semsimmodel.getName()),
-					SemGenIcon.extractoricon, extractor,
-					"Extracting from " + file.getName());
-			desktop.setTabComponentAt(numtabs-1, new SemGenTab(formatTabName(file.getName()), extractor));
+			extractor = new ExtractorTab(file, semsimmodel, settingshandle);
+			desktop.addTab(extractor);
 			desktop.setMnemonicAt(0, KeyEvent.VK_1);
-			desktop.setSelectedComponent(desktop.getComponentAt(numtabs - 1));
 		}
 		return extractor;
 	}
 	
 	public void NewMergerAction(){
 		opendialog.setVisible(false);
-		MergerTab merger = new MergerTab(desktop);
-		numtabs++;
-		desktop.addTab("Merger", SemGenIcon.mergeicon, merger, "Tab for merging SemSim models");
-		desktop.setTabComponentAt(numtabs-1, new SemGenTab("Merger", merger));
+		MergerTab merger = new MergerTab(settings);
+		desktop.addTab(merger);
 
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-			   public void run() { 
-				   desktop.setSelectedComponent(desktop.getComponentAt(numtabs - 1));
-			   }});
 		merger.PlusButtonAction();
 	}
 
@@ -1162,13 +1139,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		else return SemSimConstants.UNKNOWN_PROPERTY_TYPE;
 	}
 	
-	public static String formatTabName(String filename){
-		String tabname = filename; //filename.replace(".owl", "");
-		if(tabname.length()>=30)
-			tabname = tabname.substring(0, 30) + "...";
-		return tabname;
-	}
-	
 	public static String getBioPortalIDfromTermURI(String termuri){
 		if(SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.containsKey(SemSimOWLFactory.getNamespaceFromIRI(termuri.toString()))){
 			String fullname = SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.get(SemSimOWLFactory.getNamespaceFromIRI(termuri.toString()));
@@ -1230,7 +1200,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		annotatebutton.setFont(new Font("SansSerif", Font.PLAIN, 13));
 		annotatebutton.addActionListener(this);
 		annotatebutton.setAlignmentX(JButton.CENTER_ALIGNMENT);
-
 
 		openmenuextractbutton = new JButton("Extract a model");
 		openmenuextractbutton.setEnabled(true);
@@ -1300,9 +1269,8 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 					} catch (Exception e) {e.printStackTrace();}
 					
 					if(desktop.getComponentCount()>0){
-						desktop.setTitleAt(desktop.indexOfComponent(ann), formatTabName(targetfile.getName()));
-						desktop.setTabComponentAt(desktop.indexOfComponent(ann),
-								new SemGenTab(formatTabName(targetfile.getName()), ann));
+						ann.setTabName(targetfile.getName());
+						desktop.setTabComponentAt(desktop.indexOfComponent(ann), ann);
 						ann.semsimmodel.setName(targetfile.getName().substring(0, targetfile.getName().lastIndexOf(".")));
 						desktop.setToolTipTextAt(desktop.indexOfComponent(ann), "Annotating " + targetfile.getName());
 					}
@@ -1474,7 +1442,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 	// WHEN THE CLOSE TAB ACTION IS PERFORMED ON AN annotator, MERGER OR EXTRACTOR FRAME
 	public static int closeTabAction(Component component) {
 		int returnval = -1;
-		int i = SemGenGUI.desktop.indexOfComponent(component);
+		int i = desktop.indexOfComponent(component);
 		// If the file has been altered, prompt for a save
 		if(component instanceof AnnotatorTab){
 			AnnotatorTab ann = (AnnotatorTab)component;
@@ -1483,7 +1451,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 				if(ann.fileURI!=null){
 					title =  new File(ann.fileURI).getName();
 				}
-				int savefilechoice = JOptionPane.showConfirmDialog(SemGenGUI.desktop,
+				int savefilechoice = JOptionPane.showConfirmDialog(desktop,
 						"Save changes before closing?", title,
 						JOptionPane.YES_NO_CANCEL_OPTION,
 						JOptionPane.QUESTION_MESSAGE);
@@ -1527,7 +1495,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 				AnnotatorTab temp = (AnnotatorTab) desktopcomponents[x];
 				desktop.setSelectedComponent(temp);
 				int val = 0;
-				val = SemGenGUI.closeTabAction(temp);
+				val = closeTabAction(temp);
 				if (val == JOptionPane.CANCEL_OPTION) {
 					contchecking = false;
 					quit = false;
@@ -1571,5 +1539,26 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		}
 		else fileitemsave.setEnabled(false);
 		fileitemsaveas.setEnabled(comp instanceof AnnotatorTab);
+	}
+	
+	public void addTab(SemGenTab tab) {
+		numtabs++;
+		addTab(tab.getName(), tab);
+		setTabComponentAt(numtabs-1, tab.getTabLabel());
+		tab.setClosePolicy(new tabCloseListener(tab));
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			   public void run() { 
+				   setSelectedComponent(getComponentAt(numtabs - 1));
+		}});
+	}
+	
+	private class tabCloseListener extends MouseAdapter {
+		SemGenTab tab;
+		tabCloseListener(SemGenTab t) {
+			tab = t;
+		}
+		public void mouseClicked(MouseEvent arg0) {
+			closeTabAction(tab);
+		}
 	}
 }

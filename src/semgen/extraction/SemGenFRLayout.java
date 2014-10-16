@@ -262,8 +262,6 @@ public class SemGenFRLayout<V, E> extends AbstractLayout<V, E> implements
 
 		try {
 			for (V v2 : getGraph().getVertices()) {
-
-				// if (isLocked(v2)) continue;
 				if (v1 != v2) {
 					Point2D p1 = transform(v1);
 					Point2D p2 = transform(v2);

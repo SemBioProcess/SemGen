@@ -26,7 +26,6 @@ import semsim.owl.SemSimOWLFactory;
 
 public class ChalkboardCoder {
 
-	public static Set<PhysicalEntity> physicalents;
 	public static Hashtable<String,CustomPhysicalEntity> nounnamesandphysents;
 	public static int x;
 	public static Set<Element> nouncollection;
@@ -55,7 +54,6 @@ public class ChalkboardCoder {
 		
 		x = 1;
 		
-		physicalents = semsimmodel.getPhysicalEntities();
 		Set<String> allflowrates = SemSimOWLFactory.getAllSubclasses(SemGenGUI.OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00573", false);
 		SemSimOWLFactory.getAllSubclasses(SemGenGUI.OPB, SemSimConstants.OPB_NAMESPACE + "OPB00093", false);
 		SemSimOWLFactory.getAllSubclasses(SemGenGUI.OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00569", false);

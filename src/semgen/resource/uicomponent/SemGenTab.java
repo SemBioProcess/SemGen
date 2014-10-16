@@ -2,7 +2,6 @@ package semgen.resource.uicomponent;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.HeadlessException;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -11,72 +10,96 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import semgen.SemGenGUI;
-import semgen.annotation.AnnotatorTab;
-import semgen.extraction.ExtractorTab;
-import semgen.merging.MergerTab;
+import semgen.SemGenSettings;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
 
-public class SemGenTab extends JPanel implements MouseListener{
+public class SemGenTab extends JPanel {
 
 	private static final long serialVersionUID = 6580200707569122340L;
+	protected SemGenSettings settings;
 	public Component tool;
-	public JLabel removelabel = new JLabel();
 
-	public SemGenTab(String title, Component tool){
-		this.tool = tool;
-		this.setOpaque(false);
-		JLabel iconlabel = new JLabel();
-		ImageIcon icon = null;
-		if(tool instanceof AnnotatorTab) icon = SemGenIcon.annotatoricon;
-		else if(tool instanceof ExtractorTab) icon = SemGenIcon.extractoricon;
-		else if(tool instanceof MergerTab) icon = SemGenIcon.mergeicon;
-		iconlabel.setIcon(icon);
+	protected TabTitle tablabel = null;
 
-		removelabel.setOpaque(false);
-		removelabel.setIcon(SemGenIcon.eraseiconsmall);
-		removelabel.addMouseListener(this);
-		removelabel.setEnabled(false);
-		removelabel.setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
-		JLabel titlelabel = new JLabel(title);
-		titlelabel.setFont(SemGenFont.defaultPlain());
-		
-		add(iconlabel);
-		add(titlelabel);
-		add(removelabel);
-	}
-
-	public void mouseClicked(MouseEvent arg0) {
-		try {
-			SemGenGUI.closeTabAction(tool);
-		} catch (HeadlessException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void mouseEntered(MouseEvent arg0) {
-		Object x = arg0.getSource();
-		if(x == removelabel){
-			((JLabel)x).setEnabled(true);
-		}
-
+	public SemGenTab(String title, ImageIcon icon, String tooltip, SemGenSettings sets){
+		tablabel = new TabTitle(this, title, icon, tooltip);	
+		settings = new SemGenSettings(sets);
 	}
 	
-	public void mouseExited(MouseEvent arg0) {
-		Object x = arg0.getSource();
-		if(x == removelabel){
-			((JLabel)x).setEnabled(false);
-			((JLabel)x).setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
-		}
+	public TabTitle getTabLabel() {
+		return tablabel;
 	}
-
-	public void mousePressed(MouseEvent arg0) {
-		Object x = arg0.getSource();
-		if(x == removelabel){
-			((JLabel)x).setBorder(BorderFactory.createLineBorder(Color.blue,1));
-		}
+	
+	public static String formatTabName(String filename){
+		String tabname = filename; 
+		if(tabname.length()>=30)
+			tabname = tabname.substring(0, 30) + "...";
+		return tabname;
 	}
+	
+	public int closeTab() {
+		return -1;
+	}
+		
+	public void setClosePolicy(MouseListener ml) {
+		tablabel.removelabel.addMouseListener(ml);
+	}
+	
+	public void setTabName(String title) {
+		tablabel.titlelabel.setText(formatTabName(title));
+	}
+	
+	public class TabTitle extends JPanel implements MouseListener {
+		private static final long serialVersionUID = 1L;
+		SemGenTab parent;
+		JLabel titlelabel;
+		JLabel removelabel = new JLabel(SemGenIcon.eraseiconsmall);
+		
+		protected TabTitle(SemGenTab pcmp, String title, ImageIcon icon, String tooltip) {
+			parent = pcmp;
+			setOpaque(false);
+			JLabel iconlabel = new JLabel(icon);
+			
+			removelabel.setOpaque(false);
+			removelabel.addMouseListener(this);
+			removelabel.setEnabled(false);
+			removelabel.setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
+			titlelabel = new JLabel(formatTabName(title));
+			titlelabel.setFont(SemGenFont.defaultPlain());
+			
+			add(iconlabel);
+			add(titlelabel);
+			add(removelabel);
+			setToolTipText(tooltip);
+		}
+							
+		public void mouseEntered(MouseEvent arg0) {
+			Object x = arg0.getSource();
+			if(x == removelabel){
+				((JLabel)x).setEnabled(true);
+			}
+	
+		}
+	
+		public void mouseExited(MouseEvent arg0) {
+			Object x = arg0.getSource();
+			if(x == removelabel){
+				((JLabel)x).setEnabled(false);
+				((JLabel)x).setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
+			}
+		}
+	
+		public void mousePressed(MouseEvent arg0) {
+			Object x = arg0.getSource();
+			if(x == removelabel){
+				((JLabel)x).setBorder(BorderFactory.createLineBorder(Color.blue,1));
+			}
+		}
+	
+		public void mouseReleased(MouseEvent arg0) {}
 
-	public void mouseReleased(MouseEvent arg0) {}
+		@Override
+		public void mouseClicked(MouseEvent arg0) {}
+	}
 }

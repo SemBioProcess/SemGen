@@ -24,7 +24,7 @@ public class CodewordButton extends AnnotationObjectButton implements MouseListe
 			String companntext, boolean noncompannfilled, boolean humdeffilled,
 			boolean depfilled, boolean editable) {
 		super(ann, ssc, compannfilled, companntext, noncompannfilled, humdeffilled, depfilled, editable);
-		ds = (DataStructure)ssc;
+		ds = ssc;
 		namelabel.setFont(SemGenFont.defaultItalic());
 		refreshAllCodes();
 	}

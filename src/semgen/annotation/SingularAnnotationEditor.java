@@ -5,12 +5,9 @@ import java.net.URI;
 
 import javax.swing.JOptionPane;
 
-import semgen.SemGenGUI;
 import semsim.Annotatable;
 import semsim.SemSimConstants;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
-
-
 
 public class SingularAnnotationEditor extends AddReferenceClassDialog {
 	/**
@@ -39,7 +36,6 @@ public class SingularAnnotationEditor extends AddReferenceClassDialog {
 	public void packAndSetModality(){
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		pack();
-		setLocationRelativeTo(SemGenGUI.desktop);
 		setVisible(true);
 	}
 
@@ -54,7 +50,6 @@ public class SingularAnnotationEditor extends AddReferenceClassDialog {
 		dia.singularannpanel.refreshComboBoxItemsAndButtonVisibility();
 	}
 	
-	
 	public void propertyChange(PropertyChangeEvent arg0) {
 		String value = optionPane.getValue().toString();
 
@@ -63,10 +58,7 @@ public class SingularAnnotationEditor extends AddReferenceClassDialog {
 			addClassToOntology();
 			dia.annotator.setModelSaved(false);
 			optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-			this.setVisible(false);
 		}
-		else if (value == "Close") {
-			this.setVisible(false);
-		}
+		this.setVisible(false);
 	}
 }

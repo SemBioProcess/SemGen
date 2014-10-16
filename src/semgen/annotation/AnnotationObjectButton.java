@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -15,7 +14,6 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import semgen.SemGenGUI;
 import semgen.annotation.composites.PropertyMarker;
 import semgen.resource.SemGenFont;
 import semsim.Annotatable;
@@ -35,7 +33,7 @@ public class AnnotationObjectButton extends JPanel implements MouseListener{
 	public Boolean humdeffilled;
 	public Boolean depfilled;
 	public Boolean editable;
-	public JLabel namelabel;
+	public JLabel namelabel = new JLabel();
 	public JLabel compannlabel = new JLabel();
 	public JLabel singularannlabel = new JLabel();
 	public JLabel humdeflabel = new JLabel();
@@ -64,7 +62,6 @@ public class AnnotationObjectButton extends JPanel implements MouseListener{
 		((BorderLayout)this.getLayout()).setVgap(0);
 		((BorderLayout)this.getLayout()).setHgap(0);
 
-		namelabel = new JLabel();
 		namelabel.setFont(SemGenFont.defaultPlain());
 		namelabel.setOpaque(false);
 		namelabel.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 10));
@@ -192,7 +189,7 @@ public class AnnotationObjectButton extends JPanel implements MouseListener{
 		repaint();
 		validate();
 	}
-
+	
 	public void mouseEntered(MouseEvent e) {
 		if (e.getComponent() instanceof JLabel && e.getComponent()!=compannlabel) {
 			JLabel label = (JLabel) e.getComponent();

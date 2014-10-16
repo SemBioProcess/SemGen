@@ -20,14 +20,13 @@ public class AddReferenceClassDialog extends JDialog implements
 	public ReferenceClassFinderPanel refclasspanel;
 	public AnnotatorTab annotator;
 	public JOptionPane optionPane;
-	public JTextArea utilarea;
+	public JTextArea utilarea = new JTextArea();
 
 	public AddReferenceClassDialog(AnnotatorTab ann, String[] ontList, Object[] options, Annotatable annotatable) {
 		this.annotator = ann;
 		setTitle("Select reference concept");
 		refclasspanel = new ReferenceClassFinderPanel(annotator, annotatable, ontList);
 
-		utilarea = new JTextArea();
 		utilarea.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 		utilarea.setBackground(new Color(0,0,0,0));
 		utilarea.setLineWrap(true);
@@ -54,25 +53,20 @@ public class AddReferenceClassDialog extends JDialog implements
 	public void propertyChange(PropertyChangeEvent arg0) {
 		String value = optionPane.getValue().toString();
 		String selectedname = (String) refclasspanel.resultslistright.getSelectedValue();
-
+		optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 		if (value == "Add as entity" && this.getFocusOwner() != refclasspanel.findbox) {
 			annotator.semsimmodel.addReferencePhysicalEntity(URI.create(refclasspanel.resultsanduris.get(selectedname)), selectedname);
-			annotator.setModelSaved(false);
-			optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 			JOptionPane.showMessageDialog(this,"Added " + (String) refclasspanel.resultslistright.getSelectedValue() + " as reference physical enitity", "",
 					JOptionPane.PLAIN_MESSAGE);
 			annotator.setModelSaved(false);
 		}
 		else if(value == "Add as process" && this.getFocusOwner() != refclasspanel.findbox){
 			annotator.semsimmodel.addReferencePhysicalProcess(URI.create(refclasspanel.resultsanduris.get(selectedname)), selectedname);
-			annotator.setModelSaved(false);
-			optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 			JOptionPane.showMessageDialog(this,"Added " + (String) refclasspanel.resultslistright.getSelectedValue() + " as reference physical process", "",
 					JOptionPane.PLAIN_MESSAGE);
 			annotator.setModelSaved(false);
 		}
 		else if (value == "Close") {
-			optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 			this.dispose();
 		}
 		if(annotator.focusbutton instanceof CodewordButton) annotator.anndialog.compositepanel.refreshUI();

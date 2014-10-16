@@ -41,7 +41,9 @@ import semgen.SemGenSettings;
 import semgen.resource.ComparatorByName;
 import semgen.resource.GenericThread;
 import semgen.resource.SemGenFont;
+import semgen.resource.SemGenIcon;
 import semgen.resource.uicomponent.ProgressFrame;
+import semgen.resource.uicomponent.SemGenTab;
 import semsim.SemSimUtil;
 import semsim.extraction.Extractor;
 import semsim.model.SemSimModel;
@@ -58,7 +60,7 @@ import edu.uci.ics.jung.graph.util.Pair;
 
 import java.awt.BorderLayout;
 
-public class ExtractorTab extends JPanel implements ActionListener, ItemListener {
+public class ExtractorTab extends SemGenTab implements ActionListener, ItemListener {
 
 	public static final long serialVersionUID = -5142058482154697778L;
 	SemGenSettings settings;
@@ -85,19 +87,17 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 	public static final String TOOLTIP = "tooltip";
 	public static final Schema TOOLTIP_SCHEMA = new Schema();
 	static {TOOLTIP_SCHEMA.addColumn(TOOLTIP, String.class, "");}
-	
-	public final JTabbedPane pane;
+
 	public static int leftpanewidth = 400;
 	public File sourcefile;
-	public JButton vizsourcebutton;
-	public JButton closebutton;
-	public JButton clusterbutton;
-	public JCheckBox extractionlevelchooserentities;
-	public JCheckBox includepartipantscheckbox;
-	public JCheckBox extractionlevelchooser2;
-	public JButton extractbutton;
-	public JPanel toppanel;
-	public JPanel leftpanel;
+	public JButton vizsourcebutton = new JButton("Show source model");
+	public JButton closebutton = new JButton("Close tab");
+	public JButton clusterbutton = new JButton("Cluster");
+	public JCheckBox extractionlevelchooserentities = new JCheckBox("More inclusive");
+	public JCheckBox includepartipantscheckbox = new JCheckBox("Include participants");
+	public JCheckBox extractionlevelchooser2 = new JCheckBox("Include full dependency chain");
+	public JButton extractbutton = new JButton("EXTRACT");
+	public JPanel toppanel = new JPanel(new BorderLayout());
 	public ExtractorSelectionPanel processespanel;
 	public ExtractorSelectionPanel entitiespanel;
 	public ExtractorSelectionPanel submodelspanel;
@@ -105,7 +105,6 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 	public ExtractorSelectionPanel clusterpanel;
 	public JPanel physiomappanel;
 	public JTabbedPane graphtabpane;
-	public JSplitPane centersplitpane;
 	public String base;
 	public SemSimModel extractedmodel;
 	public File extractedfile;
@@ -127,26 +126,23 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 	public Clusterer cd;
 	public PrintWriter clusterwriter;
 
-	public ExtractorTab(SemGenSettings sets, final JTabbedPane pane, SemSimModel semsimmodel, File sourcefile) throws OWLException {
+	public ExtractorTab(File srcfile, SemSimModel ssmodel, SemGenSettings sets) throws OWLException {
+		super(srcfile.getName(), SemGenIcon.extractoricon, "Extracting from " + srcfile.getName(), sets);
 		settings = sets;
-		this.pane = pane;
 		this.setLayout(new BorderLayout());
-		this.semsimmodel = semsimmodel;
-		this.sourcefile = sourcefile;
+		this.semsimmodel = ssmodel;
+		this.sourcefile = srcfile;
 
 		base = semsimmodel.getNamespace();
 
-		toppanel = new JPanel(new BorderLayout());
 		toppanel.setOpaque(true);
-		vizsourcebutton = new JButton("Show source model");
 		vizsourcebutton.setFont(SemGenFont.defaultPlain());
 		vizsourcebutton.addActionListener(this);
 
-		extractbutton = new JButton("EXTRACT");
 		extractbutton.setForeground(Color.blue);
 		extractbutton.setFont(SemGenFont.defaultBold());
 		extractbutton.addActionListener(this);
-		closebutton = new JButton("Close tab");
+
 		closebutton.setForeground(Color.blue);
 		closebutton.setFont(SemGenFont.defaultItalic(-1));
 		closebutton.setBorderPainted(false);
@@ -158,22 +154,18 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 		JPanel buttonpanel = new JPanel();
 		buttonpanel.add(closebutton);
 		
-		extractionlevelchooserentities = new JCheckBox("More inclusive");
 		extractionlevelchooserentities.setFont(SemGenFont.defaultPlain(-2));
 		extractionlevelchooserentities.setBorder(BorderFactory.createEmptyBorder(0,35,0,0));
 		extractionlevelchooserentities.addItemListener(this);
 		
-		includepartipantscheckbox = new JCheckBox("Include participants");
 		includepartipantscheckbox.setFont(SemGenFont.defaultPlain(-2));
 		includepartipantscheckbox.setBorder(BorderFactory.createEmptyBorder(0,35,0,0));
 		includepartipantscheckbox.setSelected(true);
 		includepartipantscheckbox.addItemListener(this);
 
-		extractionlevelchooser2 = new JCheckBox("Include full dependency chain");
 		extractionlevelchooser2.setFont(SemGenFont.defaultPlain(-2));
 		extractionlevelchooser2.addItemListener(this);
 
-		clusterbutton = new JButton("Cluster");
 		clusterbutton.addActionListener(this);
 		
 		// List entities first because listprocesses needs data in entitiespanel
@@ -190,7 +182,7 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 		AlphabetizeCheckBoxes(submodelspanel);
 		AlphabetizeCheckBoxes(codewordspanel);
 
-		leftpanel = new JPanel();
+		JPanel leftpanel = new JPanel();
 		leftpanel.setLayout(new BoxLayout(leftpanel, BoxLayout.Y_AXIS));
 
 		leftpanel.add(processespanel.titlepanel);
@@ -209,7 +201,7 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 		JPanel rightpanel = new JPanel();
 		rightpanel.setLayout(new BoxLayout(rightpanel,BoxLayout.Y_AXIS));
 		rightpanel.add(graphtabpane);
-		centersplitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftpanel, rightpanel);
+		JSplitPane centersplitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftpanel, rightpanel);
 		centersplitpane.setOneTouchExpandable(true);
 		add(centersplitpane, BorderLayout.CENTER);
 		setVisible(true);
@@ -481,9 +473,6 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 			}
 		}
 	}
-	
-	
-	
 
 	public void optionToEncode(String filenamesuggestion) {
 		int x = JOptionPane.showConfirmDialog(this, "Finished extracting "
@@ -717,7 +706,7 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 	public Node retrieveNodeByLabel(Graph g, String label){
 		Boolean otheradd = true;
 		Node othernode = null;
-		Iterator othernodeit = g.nodes();
+		Iterator<Node> othernodeit = g.nodes();
 		// check if the input has already been added to the graph
 		while (othernodeit.hasNext()) {
 			Node theothernode = (Node) othernodeit.next();

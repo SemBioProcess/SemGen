@@ -1,7 +1,7 @@
-XstartPosition; 1429
-YstartPosition; 121
-startHeight; 815
-startWidth; 1180
+XstartPosition; 1358
+YstartPosition; -8
+startHeight; 1000
+startWidth; 1296
 startDirectory; C:\Users\thomp_000\Dropbox\Work Related
 autoAnnotate; true
 showImports; true

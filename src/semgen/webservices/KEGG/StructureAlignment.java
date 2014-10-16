@@ -8,7 +8,9 @@
 package semgen.webservices.KEGG;
 
 public class StructureAlignment  implements java.io.Serializable {
-    private java.lang.String target_id;
+	private static final long serialVersionUID = 1L;
+
+	private java.lang.String target_id;
 
     private float score;
 
@@ -16,8 +18,7 @@ public class StructureAlignment  implements java.io.Serializable {
 
     private int[] target_nodes;
 
-    public StructureAlignment() {
-    }
+    public StructureAlignment() {}
 
     public StructureAlignment(
            java.lang.String target_id,
@@ -114,7 +115,6 @@ public class StructureAlignment  implements java.io.Serializable {
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof StructureAlignment)) return false;
         StructureAlignment other = (StructureAlignment) obj;
-        if (obj == null) return false;
         if (this == obj) return true;
         if (__equalsCalc != null) {
             return (__equalsCalc == obj);
@@ -217,7 +217,7 @@ public class StructureAlignment  implements java.io.Serializable {
      */
     public static org.apache.axis.encoding.Serializer getSerializer(
            java.lang.String mechType, 
-           java.lang.Class _javaType,  
+           Class<?> _javaType,  
            javax.xml.namespace.QName _xmlType) {
         return 
           new  org.apache.axis.encoding.ser.BeanSerializer(
@@ -229,7 +229,7 @@ public class StructureAlignment  implements java.io.Serializable {
      */
     public static org.apache.axis.encoding.Deserializer getDeserializer(
            java.lang.String mechType, 
-           java.lang.Class _javaType,  
+           Class<?> _javaType,  
            javax.xml.namespace.QName _xmlType) {
         return 
           new  org.apache.axis.encoding.ser.BeanDeserializer(

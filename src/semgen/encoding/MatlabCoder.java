@@ -43,7 +43,6 @@ public class MatlabCoder extends Coder{
 	
 	
 	public void writefile() throws OWLException, IOException{
-		
 		int cnt = 0;
 		float frac = 0;
 		float cntfloat = 0;
@@ -123,14 +122,13 @@ public class MatlabCoder extends Coder{
 		writer.println();
 		
 		// sort codewords so they are in the order needed for procedural execution
-		orderedcdwduris = (ArrayList<String>) cdwduris.clone();
+		orderedcdwduris = (ArrayList<String>)cdwduris.clone();
 		Boolean moveneeded = true;
 		while(moveneeded){
 			moveneeded = false;
 			for(int x=0; x<cdwduris.size(); x++){
 				
 				String cdwduri = orderedcdwduris.get(x);
-				String cdwdname = SemSimOWLFactory.getIRIfragment(cdwduri);
 				Set<String> inputuris = cdwdurisandinputs.get(cdwduri);
 				for(String inputuri : inputuris){
 					if(orderedcdwduris.indexOf(inputuri) > orderedcdwduris.indexOf(cdwduri) 

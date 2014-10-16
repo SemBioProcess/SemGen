@@ -7,13 +7,15 @@
 
 package semgen.webservices.KEGG;
 
-import java.net.URL;
+import java.util.HashSet;
+import java.util.Iterator;
 
-import javax.xml.rpc.ServiceException;
+import javax.xml.namespace.QName;
 
 public class KEGGLocator extends org.apache.axis.client.Service implements KEGG {
+	private static final long serialVersionUID = 1L;
 
-    public KEGGLocator() {
+	public KEGGLocator() {
     }
 
 
@@ -112,12 +114,12 @@ public class KEGGLocator extends org.apache.axis.client.Service implements KEGG 
         return new javax.xml.namespace.QName("SOAP/KEGG", "KEGG");
     }
 
-    private java.util.HashSet ports = null;
+    private HashSet<QName> ports = null;
 
-    public java.util.Iterator getPorts() {
+    public Iterator getPorts() {
         if (ports == null) {
-            ports = new java.util.HashSet();
-            ports.add(new javax.xml.namespace.QName("SOAP/KEGG", "KEGGPort"));
+            ports = new HashSet<QName>();
+            ports.add(new QName("SOAP/KEGG", "KEGGPort"));
         }
         return ports.iterator();
     }

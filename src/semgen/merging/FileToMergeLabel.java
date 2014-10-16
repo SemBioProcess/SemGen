@@ -1,16 +1,9 @@
 package semgen.merging;
 
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import javax.swing.JLabel;
 
-public class FileToMergeLabel extends JLabel implements ActionListener,
-		MouseListener, PropertyChangeListener {
+public class FileToMergeLabel extends JLabel {
 
 	/**
 	 * 
@@ -37,39 +30,6 @@ public class FileToMergeLabel extends JLabel implements ActionListener,
 		selected = false;
 		setBackground(Color.white);
 		validate();
-	}
-
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void propertyChange(PropertyChangeEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void mouseClicked(MouseEvent arg0) {
-	}
-
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

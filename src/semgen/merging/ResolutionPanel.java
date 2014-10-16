@@ -13,7 +13,6 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -39,32 +38,21 @@ public class ResolutionPanel extends JPanel implements ActionListener {
 	 * 
 	 */
 	private static final long serialVersionUID = -618244272904338963L;
-	public MergerTab merger;
-	public JComboBox<String> chooser;
-	public JPanel annotationpanel;
-	public JPanel actionpanel;
-	public JPanel thirdpanel;
-	public JPanel couplepanel;
-	public JPanel keeppanel;
-	public JLabel mappedtolabel;
 
 	public SemSimModel semsimmodel1;
 	public SemSimModel semsimmodel2;
-	public JLabel model1label;
-	public JLabel model2label;
 	public DataStructure ds1;
 	public DataStructure ds2;
 	public Boolean manualmapping;
 	public JRadioButton rb1;
 	public JRadioButton rb2;
 	public JRadioButton rb3;
-	public JButton questionbutton;
+	public JButton questionbutton = new JButton(SemGenIcon.questionicon);
 
-	public ResolutionPanel(MergerTab merger, DataStructure ds1, DataStructure ds2,
+	public ResolutionPanel(DataStructure ds1, DataStructure ds2,
 			SemSimModel semsimmodel1, SemSimModel semsimmodel2,
 			String matchdescription, Boolean manualmapping) {
 
-		this.merger = merger;
 		this.ds1 = ds1;
 		this.ds2 = ds2;
 		this.semsimmodel1 = semsimmodel1;
@@ -76,28 +64,25 @@ public class ResolutionPanel extends JPanel implements ActionListener {
 		this.setBackground(Color.white);
 		this.setOpaque(true);
 
-		annotationpanel = new JPanel();
-		annotationpanel.setLayout(new BorderLayout());
+		JPanel annotationpanel = new JPanel(new BorderLayout());
 		annotationpanel.setBackground(Color.white);
 		annotationpanel.setAlignmentX(LEFT_ALIGNMENT);
 		annotationpanel.setOpaque(true);
 
-		model1label = new JLabel(ds1.getDescription() + " (" + ds1.getName() + ")");
+		JLabel model1label = new JLabel(ds1.getDescription() + " (" + ds1.getName() + ")");
 
 		model1label.setFont(SemGenFont.defaultBold());
 		model1label.setForeground(Color.blue);
 		model1label.setAlignmentX(LEFT_ALIGNMENT);
 		model1label.setBorder(BorderFactory.createEmptyBorder(3, 3, 0, 3));
 
-		model2label = new JLabel(ds2.getDescription() + " (" + ds2.getName() + ")");
+		JLabel model2label = new JLabel(ds2.getDescription() + " (" + ds2.getName() + ")");
 		model2label.setFont(SemGenFont.defaultBold());
 		model2label.setForeground(Color.red);
 		model2label.setAlignmentX(LEFT_ALIGNMENT);
 		model2label.setBorder(BorderFactory.createEmptyBorder(3, 3, 0, 3));
 
-		
-
-		mappedtolabel = new JLabel("  mapped to  ");
+		JLabel mappedtolabel = new JLabel("  mapped to  ");
 		mappedtolabel.setBackground(Color.white);
 		mappedtolabel.setFont(SemGenFont.defaultItalic(-1));
 		
@@ -110,10 +95,6 @@ public class ResolutionPanel extends JPanel implements ActionListener {
 		annotationpanel.add(annotationsubpanel, BorderLayout.WEST);
 		annotationpanel.add(Box.createGlue(), BorderLayout.EAST);
 
-		chooser = new JComboBox<String>(new String[] {
-				"Keep data structure from " + ds1.getDescription(),
-				"Keep data structure from " + ds2.getDescription(),
-				"Keep data structures disjoint (ignore overlap)" });
 		ButtonGroup bg = new ButtonGroup();
 		rb1 = new JRadioButton("Use " + ds1.getName() + " (" + semsimmodel1.getName() + ")");
 		rb1.setForeground(Color.blue);
@@ -139,23 +120,18 @@ public class ResolutionPanel extends JPanel implements ActionListener {
 		bg.add(rb2);
 		bg.add(rb3);
 
-		questionbutton = new JButton(SemGenIcon.questionicon);
 		questionbutton.addActionListener(this);
 		questionbutton.setBorderPainted(false);
 		questionbutton.setContentAreaFilled(false);
 		questionbutton.setMaximumSize(new Dimension(20, 20));
 
-		actionpanel = new JPanel();
+		JPanel actionpanel = new JPanel();
 		actionpanel.setBackground(Color.white);
 		actionpanel.setAlignmentX(LEFT_ALIGNMENT);
 
 		JPanel actionsubpanel = new JPanel();
 		actionsubpanel.setLayout(new BorderLayout());
 
-		JLabel cdwd1label = new JLabel(ds1.getName() + ", ");
-		cdwd1label.setForeground(Color.blue);
-		JLabel cdwd2label = new JLabel(ds2.getName());
-		cdwd2label.setForeground(Color.red);
 		JLabel equalslabel = new JLabel(matchdescription);
 		equalslabel.setOpaque(false);
 		equalslabel.setBorder(BorderFactory.createEmptyBorder(0,0,0,25));
@@ -168,8 +144,7 @@ public class ResolutionPanel extends JPanel implements ActionListener {
 
 		equalslabel.setFont(new Font("SansSerif", Font.ITALIC, 12));
 
-		JPanel mainpanel = new JPanel();
-		mainpanel.setLayout(new BorderLayout());
+		JPanel mainpanel = new JPanel(new BorderLayout());
 		mainpanel.add(annotationpanel, BorderLayout.NORTH);
 		mainpanel.add(actionpanel, BorderLayout.SOUTH);
 		this.add(mainpanel, BorderLayout.NORTH);
@@ -214,11 +189,11 @@ public class ResolutionPanel extends JPanel implements ActionListener {
 	}
 
 	public String makeStringListFromSet(Set<DataStructure> dsset, Boolean forInput) {
-		String stringlist = "";
+		String stringlist = "  ";
 		int n = 0;
 		for (DataStructure ds : dsset) {
 			if (n == 0) {
-				stringlist = "  " + ds.getDescription();
+				stringlist = ds.getDescription();
 			} else {
 				stringlist = stringlist + "\n" + "  " + ds.getDescription();
 			}
