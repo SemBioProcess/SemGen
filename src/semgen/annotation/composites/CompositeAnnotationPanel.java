@@ -15,6 +15,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import semgen.SemGen;
 import semgen.SemGenGUI;
 import semgen.annotation.AnnotationDialog;
 import semgen.resource.SemGenFont;
@@ -134,7 +135,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 			// Otherwise there is no process or entity specified. Set the add entity/ add process buttons
 			// based on type of physical property specified 
 			else if(datastructure.getPhysicalProperty().hasRefersToAnnotation()){
-				int type = SemGenGUI.getPropertyType(datastructure);
+				int type = datastructure.getPropertyType(SemGen.semsimlib);
 				if(type == SemSimConstants.PROPERTY_OF_PHYSICAL_ENTITY){
 					addentbutton.setEnabled(true);
 					addprocbutton.setEnabled(false);

@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.*;
 
+import semgen.SemGen;
 import semgen.SemGenGUI;
 import semgen.annotation.composites.PropertyMarker;
 import semgen.resource.SemGenFont;
@@ -50,7 +51,7 @@ public class CodewordButton extends AnnotationObjectButton implements MouseListe
 		Color oldcolor = propoflabel.color;
 		Color col = Color.white; 
 		String tooltip = null;
-		int type = SemGenGUI.getPropertyType(ds);
+		int type = ds.getPropertyType(SemGen.semsimlib);
 		if(type == SemSimConstants.PROPERTY_OF_PHYSICAL_ENTITY){
 			col = Color.black;
 			tooltip = "<html>Codeword identified as a property of a physical <i>entity</i></html>";

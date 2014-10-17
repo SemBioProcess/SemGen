@@ -51,6 +51,7 @@ import semgen.resource.SemGenIcon;
 import semsim.SemSimConstants;
 import semsim.owl.CustomRestrictionVisitor;
 import semsim.owl.SemSimOWLFactory;
+import semsim.webservices.BioPortalConstants;
 
 public class MoreInfoButton extends JLabel implements PropertyChangeListener, MouseListener{
 
@@ -72,7 +73,7 @@ public class MoreInfoButton extends JLabel implements PropertyChangeListener, Mo
 	public MoreInfoButton(String onturi, String termuri){
 		this.onturi = onturi;
 		this.termuri = termuri;
-		this.bioportalID = SemGenGUI.getBioPortalIDfromTermURI(termuri);
+		this.bioportalID = BioPortalConstants.getBioPortalIDfromTermURI(termuri);
 		this.activate();
 	}
 	public MoreInfoButton(String onturi, String termuri, String bioportalID){
@@ -113,7 +114,7 @@ public class MoreInfoButton extends JLabel implements PropertyChangeListener, Mo
 		}
 
 		System.out.println("namespace: " + SemSimOWLFactory.getNamespaceFromIRI(termuri));
-		bioportalID = SemGenGUI.getBioPortalIDfromTermURI(termuri);
+		bioportalID = BioPortalConstants.getBioPortalIDfromTermURI(termuri);
 		if(bioportalID == null){
 			JOptionPane.showMessageDialog(null, "Cannot get info on this term.\nThe source ontology is not available through BioPortal");
 			reset();

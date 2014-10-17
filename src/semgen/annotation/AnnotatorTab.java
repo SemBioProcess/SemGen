@@ -81,7 +81,6 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	public AnnotationObjectButton focusbutton;
 	public Hashtable<String, CodewordButton> codewordbuttontable = new Hashtable<String, CodewordButton>();
 	public Hashtable<String, SubmodelButton> submodelbuttontable = new Hashtable<String, SubmodelButton>();
-	private JButton closebutton;
 
 	public JPanel codewordpanel;
 	public JPanel submodelpanel;
@@ -200,17 +199,6 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		toolpanel.add(sortbycompletenessbutton);
 		toolpanel.setAlignmentY(JPanel.TOP_ALIGNMENT);
 
-		closebutton = new JButton("Close tab");
-		closebutton.setContentAreaFilled(false);
-		closebutton.setForeground(Color.blue);
-		closebutton.setFont(SemGenFont.defaultItalic(-1));
-		closebutton.setBorderPainted(false);
-		closebutton.setOpaque(false);
-		closebutton.addActionListener(this);
-		closebutton.addMouseListener(this);
-		closebutton.setRolloverEnabled(true);
-		closebutton.setAlignmentY(JButton.TOP_ALIGNMENT);
-
 		genmodinfo = new JPanel(new BorderLayout());
 		genmodinfo.setOpaque(true);
 		genmodinfo.add(toolpanel, BorderLayout.WEST);
@@ -240,7 +228,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 				}
 			}
 		}
-		if (o == closebutton) {closeAction();}
+		//if (o == closebutton) {closeAction();}
 		if (o == extractorbutton) {
 			try {
 				Boolean open = true;
@@ -292,14 +280,6 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 			catch (OWLException e3) {
 				e3.printStackTrace();
 			} 
-		}
-	}
-
-	public void closeAction() {
-		try {
-			SemGenGUI.closeTabAction(this);
-		} catch (HeadlessException e) {
-			e.printStackTrace();
 		}
 	}
 	
@@ -445,8 +425,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		
 		for (AnnotationObjectButton aob : aoblist) {
 			aob.refreshAllCodes();
-			
-			
+
 			CodewordButton cb = (CodewordButton) aob;
 			
 			// Set visibility
@@ -469,7 +448,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 			CodewordButton cb = (CodewordButton)aob;
 			DataStructure ds = cb.ds;
 
-			int type = SemGenGUI.getPropertyType(ds);
+			int type = ds.getPropertyType(SemGen.semsimlib);
 			
 			// Group according to physical property type
 			if(type==SemSimConstants.PROPERTY_OF_PHYSICAL_ENTITY)
@@ -954,4 +933,29 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 			tree.update(node, tree);
 		}
 	}
+	
+	public boolean checkFile(URI uri) {
+		return (uri.toString().equals(fileURI.toString()));
+	}
+	
+	public int closeTab() {
+		int returnval = -1;
+		if (!getModelSaved()) {
+			String title = "[unsaved file]";
+			if(fileURI!=null){
+				title =  new File(fileURI).getName();
+			}
+			returnval= JOptionPane.showConfirmDialog(getParent(),
+					"Save changes before closing?", title,
+					JOptionPane.YES_NO_CANCEL_OPTION,
+					JOptionPane.QUESTION_MESSAGE);
+			if (returnval == JOptionPane.YES_OPTION) {
+				if(!SemGenGUI.SaveAction(this, lastSavedAs)){
+					return JOptionPane.CANCEL_OPTION;
+				}
+			} 
+		}  
+		System.gc();		
+		return returnval;
+}
 }

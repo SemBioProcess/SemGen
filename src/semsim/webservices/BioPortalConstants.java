@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import semsim.SemSimConstants;
+import semsim.owl.SemSimOWLFactory;
 
 public class BioPortalConstants {
 	
@@ -29,4 +30,14 @@ public class BioPortalConstants {
 
 	        ONTOLOGY_FULL_NAMES_AND_BIOPORTAL_IDS = Collections.unmodifiableMap(aMap);
 	    }
+	    
+		public static String getBioPortalIDfromTermURI(String termuri){
+			if(SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.containsKey(SemSimOWLFactory.getNamespaceFromIRI(termuri.toString()))){
+				String fullname = SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.get(SemSimOWLFactory.getNamespaceFromIRI(termuri.toString()));
+				if(BioPortalConstants.ONTOLOGY_FULL_NAMES_AND_BIOPORTAL_IDS.containsKey(fullname)){
+					return BioPortalConstants.ONTOLOGY_FULL_NAMES_AND_BIOPORTAL_IDS.get(fullname);
+				}
+			}
+			return null;
+		}
 }
