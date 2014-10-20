@@ -12,7 +12,7 @@ import semgen.SemGenSettings;
 import semgen.resource.ComparatorByName;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
-import semgen.resource.uicomponent.ProgressFrame;
+import semgen.resource.uicomponent.SemGenProgressBar;
 import semgen.resource.uicomponent.SemGenScrollPane;
 import semgen.resource.uicomponent.SemGenTab;
 import semsim.SemSimConstants;
@@ -72,8 +72,8 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	public JSplitPane westsplitpane;
 	public SemGenScrollPane submodelscrollpane;
 	public SemGenScrollPane codewordscrollpane;
-	public SemGenScrollPane dialogscrollpane;
-	private SemGenScrollPane treeviewscrollpane;
+	public SemGenScrollPane dialogscrollpane = new SemGenScrollPane();
+	private SemGenScrollPane treeviewscrollpane = new SemGenScrollPane();
 	
 	public AnnotatorButtonTree tree;
 
@@ -82,29 +82,28 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	public Hashtable<String, CodewordButton> codewordbuttontable = new Hashtable<String, CodewordButton>();
 	public Hashtable<String, SubmodelButton> submodelbuttontable = new Hashtable<String, SubmodelButton>();
 
-	public JPanel codewordpanel;
-	public JPanel submodelpanel;
-	public JTextArea codearea;
+	public JPanel codewordpanel = new JPanel();
+	public JPanel submodelpanel = new JPanel();
+	public JTextArea codearea = new JTextArea("");
 	private JPanel genmodinfo;
-	public JTextPane annotationpane;
+	public JTextPane annotationpane = new JTextPane();
 	private String nextline;
 	public JButton addsubmodelbutton = new JButton(SemGenIcon.plusicon);
 	public JButton removesubmodelbutton = new JButton(SemGenIcon.minusicon);
 	public CustomPhysicalComponentEditor customtermeditor;
 
-	public Highlighter hilit;
-	public Highlighter.HighlightPainter allpainter;
-	public Highlighter.HighlightPainter onepainter;
+	public Highlighter hilit = new DefaultHighlighter();
+	public Highlighter.HighlightPainter allpainter = new DefaultHighlighter.DefaultHighlightPainter(Color.yellow);
+	public Highlighter.HighlightPainter onepainter = new DefaultHighlighter.DefaultHighlightPainter(SemGenGUI.lightblue);
 
 	public int numcomponents;
 	public static int initwidth;
 	public static int initheight;
 	public String ontspref;
-	public JButton extractorbutton;
+	public JButton extractorbutton = new JButton(SemGenIcon.extractoricon);
 	public JButton coderbutton;
 	private JCheckBox sortbycompletenessbutton = new JCheckBox("Sort by Composite Completeness");
 	public TextMinerDialog tmd;
-	public ProgressFrame progframe;
 	public ArrayList<Integer> indexesOfHighlightedTerms;
 	public int currentindexforcaret;
 	public int lastSavedAs = -1;
@@ -123,27 +122,16 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		setLayout(new BorderLayout());
 
 		// Create the scroll pane for the imported model code
-		codearea = new JTextArea();
 		codearea.setEditable(false);
 		codearea.setBackground(new Color(250, 250, 227));
-		codearea.setText(null);
 		codearea.setMargin(new Insets(5, 15, 5, 5));
 		codearea.setForeground(Color.black);
 		codearea.setFont(SemGenFont.Plain("Monospaced"));
-
-		hilit = new DefaultHighlighter();
-		onepainter = new DefaultHighlighter.DefaultHighlightPainter(SemGenGUI.lightblue);
-		allpainter = new DefaultHighlighter.DefaultHighlightPainter(Color.yellow);
-		
 		codearea.setHighlighter(hilit);
 
-		annotationpane = new JTextPane();
-
-		codewordpanel = new JPanel();
 		codewordpanel.setBackground(Color.white);
 		codewordpanel.setLayout(new BoxLayout(codewordpanel, BoxLayout.Y_AXIS));
 		
-		submodelpanel = new JPanel();
 		submodelpanel.setBackground(Color.white);
 		submodelpanel.setLayout(new BoxLayout(submodelpanel, BoxLayout.Y_AXIS));
 		submodelscrollpane = new SemGenScrollPane(submodelpanel);
@@ -153,7 +141,6 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		SemGenScrollPane legacycodescrollpane = new SemGenScrollPane();
 		
 		legacycodescrollpane.getViewport().add(codearea);
-		dialogscrollpane = new SemGenScrollPane();
 		dialogscrollpane.setBackground(SemGenGUI.lightblue);
 		dialogscrollpane.getViewport().setBackground(SemGenGUI.lightblue);
 		
@@ -162,9 +149,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		// Override up and down key functions so user can use arrows to move between codewords
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "none");
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "none");
-		
-		treeviewscrollpane = new SemGenScrollPane();
-		
+
 		westsplitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, codewordscrollpane, submodelscrollpane);
 		westsplitpane.setOneTouchExpandable(true);
 		
@@ -175,7 +160,6 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		splitpane.setOneTouchExpandable(true);
 
 		// Create the general model information panel
-		extractorbutton = new JButton(SemGenIcon.extractoricon);
 		extractorbutton.setToolTipText("Open this model in Extractor");
 		extractorbutton.setSize(new Dimension(10, 10));
 		extractorbutton.setRolloverEnabled(true);
@@ -217,7 +201,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		}
 		if(o == removesubmodelbutton){
 			if(focusbutton instanceof SubmodelButton){
-				int choice = JOptionPane.showConfirmDialog(SemGenGUI.desktop, 
+				int choice = JOptionPane.showConfirmDialog(this, 
 						"Are you sure you want to remove component " + focusbutton.namelabel.getText() + "?", "Confirm removal", JOptionPane.YES_NO_OPTION);
 				if(choice == JOptionPane.YES_OPTION){
 					try {
@@ -228,24 +212,9 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 				}
 			}
 		}
-		//if (o == closebutton) {closeAction();}
 		if (o == extractorbutton) {
 			try {
-				Boolean open = true;
-				if (!getModelSaved()) {
-					int savefilechoice = JOptionPane.showConfirmDialog(SemGenGUI.desktop,
-							"Save changes before opening Extractor?",
-							"There are unsaved changes",
-							JOptionPane.YES_NO_CANCEL_OPTION,
-							JOptionPane.QUESTION_MESSAGE);
-					if(savefilechoice == JOptionPane.CANCEL_OPTION){open = false;}
-					else {
-						if (savefilechoice == JOptionPane.YES_OPTION) {
-							open = SemGenGUI.SaveAction(this, lastSavedAs);
-						}
-					}
-				}
-				if(open){
+				if(unsavedChanges()){
 					SemGenGUI.NewExtractorTask task = new SemGenGUI.NewExtractorTask(sourcefile);
 					task.execute();
 				}
@@ -294,7 +263,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 			e1.printStackTrace();
 		}
 	
-		SemGenGUI.progframe.updateMessage("Sorting codewords...");
+		SemGenProgressBar progframe = new SemGenProgressBar("Sorting codewords...", true);
 		
 		refreshAnnotatableElements();
 		showAnnotaterPanes(this);
@@ -332,7 +301,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 			} catch (BadLocationException | IOException e) {
 				e.printStackTrace();
 			} 
-		
+		if (progframe!=null) progframe.dispose();
 		return semsimmodel;
 	}
 
@@ -531,7 +500,6 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	}
 	
 	public int updateCodewordButtonTable(){
-		
 		int numdisplayed = semsimmodel.getDataStructures().size();
 		// Associate codeword names with their buttons
 		for(DataStructure ds : semsimmodel.getDataStructures()){
@@ -594,9 +562,10 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		File modelfile = null;
 		Boolean cont = true;
 		if(loc!=null && !loc.equals("")){
+			SemGenProgressBar progframe = null;
 			// If the legacy model code is on the web
 			if (loc.startsWith("http://")) {
-				SemGenGUI.progframe.updateMessage("Retrieving legacy code...");
+				progframe = new SemGenProgressBar("Retrieving legacy code...", false);
 				
 				Boolean online = true;
 				modelfile = new File(loc);
@@ -610,8 +579,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 					httpcon.getResponseCode();
 				} catch (Exception e) {e.printStackTrace(); online = false;}
 				if (online) {
-					SemGenGUI.progframe.bar.setIndeterminate(false);
-					SemGenGUI.progframe.bar.setValue(0);
+					progframe.setProgressValue(0);
 					
 					URLConnection urlcon = url.openConnection();
 					urlcon.setDoInput(true);
@@ -628,7 +596,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 							codearea.append("\n");
 							charsremaining = charsremaining - s.length();
 							int x = Math.round(100*(totallength-charsremaining)/totallength);
-							SemGenGUI.progframe.bar.setValue(x);
+							progframe.setProgressValue(x);
 						}
 						d.close();
 						codearea.setCaretPosition(0);
@@ -637,8 +605,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 				} 
 				else cont = false;
 				
-				SemGenGUI.progframe.bar.setIndeterminate(true);
-				SemGenGUI.progframe.bar.setValue(101);
+				progframe.dispose();
 			}
 			// Otherwise it's a local file
 			else {
@@ -697,7 +664,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 				if(c instanceof SubmodelButton){
 					SubmodelButton cb = (SubmodelButton)c;
 					if(cb.namelabel.getText().equals(newsub.getName())){
-						changeButtonFocus(focusbutton, cb, null);
+						changeButtonFocus(cb, null);
 					}
 				}
 			}
@@ -841,7 +808,9 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	public void keyPressed(KeyEvent e) {
 		int id = e.getKeyCode();
 		JPanel panel = codewordpanel;
-		if(focusbutton instanceof SubmodelButton){panel = submodelpanel;}
+		if(focusbutton instanceof SubmodelButton){
+			panel = submodelpanel;
+			}
 		
 		// Up arrow key
 		if (id == 38) {
@@ -856,7 +825,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 			if(index!=-1){
 				for(int y=(index-1); y>=0; y--){
 					if(panel.getComponent(y).isVisible() && panel.getComponent(y) instanceof AnnotationObjectButton){
-						changeButtonFocus(focusbutton, (AnnotationObjectButton) panel.getComponent(y), null);
+						changeButtonFocus((AnnotationObjectButton) panel.getComponent(y), null);
 						break;
 					}
 				}
@@ -875,7 +844,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 			if(index!=-1){
 				for(int y=(index+1); y<panel.getComponentCount(); y++){
 					if(panel.getComponent(y).isVisible() && panel.getComponent(y) instanceof AnnotationObjectButton){
-						changeButtonFocus(focusbutton, (AnnotationObjectButton) panel.getComponent(y), null);
+						changeButtonFocus((AnnotationObjectButton) panel.getComponent(y), null);
 						break;
 					}
 				}
@@ -886,7 +855,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	public void keyReleased(KeyEvent e) {}
 	public void keyTyped(KeyEvent e) {}
 
-	public void changeButtonFocus(AnnotationObjectButton thebutton, AnnotationObjectButton aob, JLabel whichann) {
+	public void changeButtonFocus(AnnotationObjectButton aob, JLabel whichann) {
 		SemGenScrollPane pane = codewordscrollpane;
 		if(aob instanceof SubmodelButton){
 			pane = submodelscrollpane;
@@ -909,7 +878,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 			anndialog.showSingularAnnotationEditor();
 		}
 	}
-	
+
 	public boolean getCodewordButtonVisibility(CodewordButton cb){
 		return !(cb.ds.isImportedViaSubmodel() && !SemGenGUI.annotateitemshowimports.isSelected());
 	}
@@ -938,24 +907,28 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		return (uri.toString().equals(fileURI.toString()));
 	}
 	
-	public int closeTab() {
-		int returnval = -1;
+	public boolean unsavedChanges() {
 		if (!getModelSaved()) {
 			String title = "[unsaved file]";
 			if(fileURI!=null){
 				title =  new File(fileURI).getName();
 			}
-			returnval= JOptionPane.showConfirmDialog(getParent(),
-					"Save changes before closing?", title,
+			int returnval= JOptionPane.showConfirmDialog(getParent(),
+					"Save changes?", title + " has unsaved changes",
 					JOptionPane.YES_NO_CANCEL_OPTION,
 					JOptionPane.QUESTION_MESSAGE);
+			if (returnval == JOptionPane.CANCEL_OPTION)
+				return false;
 			if (returnval == JOptionPane.YES_OPTION) {
 				if(!SemGenGUI.SaveAction(this, lastSavedAs)){
-					return JOptionPane.CANCEL_OPTION;
+					return false;
 				}
-			} 
-		}  
-		System.gc();		
-		return returnval;
+			}
+		}
+		return true;
+	}
+	
+	public boolean closeTab() {
+		return unsavedChanges();
 }
 }

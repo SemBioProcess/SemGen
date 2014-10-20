@@ -22,6 +22,7 @@ import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.SemGenGUI;
 import semgen.resource.SemGenFont;
+import semgen.resource.file.SemGenOpenFileChooser;
 import semsim.SemSimLibrary;
 
 public class SemGen extends JFrame{
@@ -77,7 +78,8 @@ public class SemGen extends JFrame{
 		super("OSXAdapter");
 		
 		OSValidation();
-
+		
+		SemGenOpenFileChooser.currentdirectory = new File(settings.getStartDirectory());
 		// Need this for programmatic use of jsbatch
 		System.setProperty("jsim.home", "./jsimhome");
 		SemGenFont.defaultUIFont();

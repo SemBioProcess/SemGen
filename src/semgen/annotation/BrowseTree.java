@@ -9,9 +9,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeSelectionModel;
 
 public class BrowseTree extends JPanel {
-
 	private static final long serialVersionUID = -6159443940192255692L;
-	private JScrollPane scroller;
 	private String[] test = { "file" };
 	public JTree tree;
 
@@ -28,7 +26,7 @@ public class BrowseTree extends JPanel {
 		tree.setVisible(true);
 		tree.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-		scroller = new JScrollPane(tree);
+		JScrollPane scroller = new JScrollPane(tree);
 
 		this.add(scroller);
 		this.setVisible(true);

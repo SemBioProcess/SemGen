@@ -1,4 +1,4 @@
-package semgen;
+package semgen.resource.file;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -13,6 +13,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Set;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -20,72 +21,67 @@ import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
-import javax.swing.SwingWorker;
 
-import semgen.merging.MergerTab;
+import semgen.SemGen;
 import semgen.resource.SemGenError;
+import semgen.resource.SemGenTask;
+import semgen.resource.uicomponent.SemGenProgressBar;
 import semsim.SemSimUtil;
 
-public class SemGenFileChooser extends JFileChooser implements ActionListener{
+public class SemGenOpenFileChooser extends SemGenFileChooser implements ActionListener {
 
-	/**
-	 * 
-	 */
-	public int toolType;
-	public MergerTab merger;
-	private JPanel chooseURLpanel;
-	private JTextField textField;
+	private JTextField textField = new JTextField();
 	private JButton URLselectButton;
 	public String buttonActiveText = "Open from URL";
 	public String buttonInactiveText = "Opening...";
-	public JButton stopButton;
-	public JProgressBar progbar;
-	private LoadFromURLTask task;
-	
-	public static final int NEW_ANNOTATOR_TASK = 0;
-	public static final int NEW_EXTRACTOR_TASK = 1;
-	public static final int ATOMIC_DECOMPOSITION_TASK = 2;
-	public static final int BATCH_CLUSTER_TASK = 3;
-	public static final int ENCODING_TASK = 4;
-	public static final int MERGING_TASK = 5;
 	
 	private static final long serialVersionUID = -9040553448654731532L;
-	
-	public SemGenFileChooser(int toolType, MergerTab merger){
-		super();
-		this.merger = merger;
-		initialize(toolType);
-	}
-
-	public SemGenFileChooser(int toolType){
-		super();
-		initialize(toolType);
-	}
-	
-	private void initialize(int toolType){
-		this.toolType = toolType;
-		chooseURLpanel = new JPanel();
 		
-		textField = new JTextField();
+	public SemGenOpenFileChooser(String title){
+		super(title);
+		setMultiSelectionEnabled(false);
+		initialize();
+		openFile();
+	}
+	
+	public SemGenOpenFileChooser(String title, String[] filters){
+		super(title, filters);
+		setMultiSelectionEnabled(false);
+		initialize();
+		openFile();
+	}
+	
+	public SemGenOpenFileChooser(Set<File> file, String title){
+		super(title);
+		setMultiSelectionEnabled(true);
+		initialize();
+		openFile(file);
+	}
+	
+	public SemGenOpenFileChooser(Set<File> file, String title, String[] filters){
+		super(title, filters);
+		setMultiSelectionEnabled(true);
+		initialize();
+		openFile(file);
+	}
+	
+	private void initialize(){
+		setPreferredSize(filechooserdims);
+
+		addChoosableFileFilter(fileextensions);
+		setFileFilter(fileextensions);
+		JPanel chooseURLpanel = new JPanel();
+
 		textField.setForeground(Color.blue);
 		textField.setPreferredSize(new Dimension(300, 25));
 		
 		URLselectButton = new JButton(buttonActiveText);
 		URLselectButton.addActionListener(this);
 		
-		stopButton = new JButton("Stop");
-		stopButton.addActionListener(this);
-		stopButton.setVisible(false);
-		
-		progbar = new JProgressBar();
-		progbar.setVisible(false);
-		
 		chooseURLpanel.add(textField);
 		chooseURLpanel.add(URLselectButton);
-		chooseURLpanel.add(stopButton);
 		
 		Component c = getComponent(getComponentCount()-1); // This is the bottom-most component
 		if(c instanceof JPanel){
@@ -93,12 +89,26 @@ public class SemGenFileChooser extends JFileChooser implements ActionListener{
 			((JPanel)c).add(new JSeparator());
 			((JPanel)c).add(Box.createVerticalStrut(5));
 			((JPanel)c).add(chooseURLpanel);
-			((JPanel)c).add(progbar);
 			((JPanel)c).add(Box.createVerticalStrut(5));
 		}
 	}
+		
+	private void openFile(Set<File> files) {	
+		if (showOpenDialog(getParent()) == JFileChooser.APPROVE_OPTION) {
+			currentdirectory = getCurrentDirectory();
+			for (File file : getSelectedFiles()) {
+				files.add(file);
+			}
+		}
+	}
 	
-	public void toggleOKandCancelButtons(JComponent c, boolean value){
+	private void openFile() {	
+		if (showOpenDialog(getParent()) == JFileChooser.APPROVE_OPTION) {
+			currentdirectory = getCurrentDirectory();
+		}
+	}
+	
+	private void toggleOKandCancelButtons(JComponent c, boolean value){
 		for(Component csub : c.getComponents()){
 			if(csub instanceof JButton){
 				JButton button = (JButton)csub;
@@ -115,8 +125,8 @@ public class SemGenFileChooser extends JFileChooser implements ActionListener{
 			}
 		}
 	}
-
-	public void actionPerformed(ActionEvent arg0) {
+	
+	public void actionPerformed(ActionEvent arg0) {		
 		Object o = arg0.getSource();
 		if(o == URLselectButton){
 			String text = textField.getText();
@@ -124,11 +134,14 @@ public class SemGenFileChooser extends JFileChooser implements ActionListener{
 				if(text.startsWith("http")){
 					try {
 						toggleOKandCancelButtons(this, false);
-						task = new LoadFromURLTask(text, this);
+						LoadFromURLTask task = new LoadFromURLTask(text, this);
 						URLselectButton.setEnabled(false);
-						stopButton.setVisible(true);
 						URLselectButton.setText(buttonInactiveText);
 						task.execute();
+			        	URLselectButton.setText(buttonActiveText);
+			        	URLselectButton.setEnabled(true);
+			        	toggleOKandCancelButtons(this, true);
+						
 					} catch (MalformedURLException e) {
 						e.printStackTrace();
 					}
@@ -138,28 +151,25 @@ public class SemGenFileChooser extends JFileChooser implements ActionListener{
 				}
 			}
 		}
-		else if(o == stopButton){
-			if(task!=null){
-				task.interrupt = true;
-			}
-		}
 	}
 	
-	public static class LoadFromURLTask extends SwingWorker<Void, Void> {
-		public URL url;
-		public String content = "";
-		public SemGenFileChooser fc;
-		public boolean interrupt;
-        public LoadFromURLTask(String text, SemGenFileChooser fc) throws MalformedURLException{
+	public static class LoadFromURLTask extends SemGenTask {
+		private URL url;
+		private SemGenOpenFileChooser fc;
+		private boolean interrupt;
+		
+        public LoadFromURLTask(String text, SemGenOpenFileChooser fc) throws MalformedURLException{
         	url = new URL(text);
         	this.fc = fc;
         }
+        
         @Override
         public Void doInBackground(){
-        	
-			try{
+			try {
+				String content = "";
 				Boolean online = true;
 				interrupt = false;
+
 				HttpURLConnection.setFollowRedirects(false);
 				HttpURLConnection httpcon = (HttpURLConnection) url.openConnection();
 				httpcon.setReadTimeout(60000);
@@ -168,13 +178,15 @@ public class SemGenFileChooser extends JFileChooser implements ActionListener{
 				try {
 					httpcon.getResponseCode();
 				} 
-				catch (Exception e) {e.printStackTrace(); online = false;}
+				catch (Exception e) {
+					e.printStackTrace(); 
+					online = false;
+				}
 				
 				if (online) {
-					
-					fc.progbar.setIndeterminate(false);
-					fc.progbar.setValue(0);
-					fc.progbar.setVisible(true);
+					progframe = new SemGenProgressBar("Retreiving", false);
+					progframe.bar.setIndeterminate(false);
+					progframe.bar.setValue(0);
 					
 					URLConnection urlcon = url.openConnection();
 					urlcon.setDoInput(true);
@@ -188,76 +200,48 @@ public class SemGenFileChooser extends JFileChooser implements ActionListener{
 							String s;
 							float charsremaining = urlcon.getContentLength();
 							float totallength = charsremaining;
+							
 							while ((s = d.readLine()) != null) {
 								content = content + s + "\n";
 								charsremaining = charsremaining - s.length();
 								int x = Math.round(100*(totallength-charsremaining)/totallength);
 					        	fc.URLselectButton.setText(fc.buttonInactiveText + x + "%");
-								fc.progbar.setValue(x);
+								progframe.bar.setValue(x);
 								
-								if(interrupt)
-									return null;
+								if(interrupt) break;
 							}
 							d.close();
 						}
 						catch(Exception x){
-							JOptionPane.showMessageDialog(SemGenGUI.desktop, "Problem retrieving URL content: \n\n" + x.getLocalizedMessage(),
+							JOptionPane.showMessageDialog(fc, "Problem retrieving URL content: \n\n" + x.getLocalizedMessage(),
 								"Error", JOptionPane.ERROR_MESSAGE);
-							return null;
 						}
 					}
 					else{
-						JOptionPane.showMessageDialog(SemGenGUI.desktop, "Did not find content at that URL",
+						JOptionPane.showMessageDialog(fc, "Did not find content at that URL",
 								"Error", JOptionPane.ERROR_MESSAGE);
-							return null;
 					}
 				} 
 				else{
-					SemGenError.showWebConnectionError(null, url.toString());
-					return null;
+					SemGenError.showWebConnectionError(fc, url.toString());
 				}
 				fc.closeAndWriteStringAsModelContent(url, content);
 			}
-			catch(IOException x){x.printStackTrace();}
+			catch(IOException x){
+				x.printStackTrace();
+				}
             return null;	
         }
-        @Override
-        public void done() {
-        	fc.progbar.setVisible(false);
-        	fc.stopButton.setVisible(false);
-        	fc.URLselectButton.setText(fc.buttonActiveText);
-        	fc.URLselectButton.setEnabled(true);
-        	fc.toggleOKandCancelButtons(fc, true);
-        }
     }
-
+	
 	public void closeAndWriteStringAsModelContent(URL url, String content){
-		this.cancelSelection();
+		cancelSelection();
 		String urlstring = url.toString();
 		String name = urlstring.substring(urlstring.lastIndexOf("/"));
 		
 		File tempfile = new File(SemGen.tempdir.getAbsoluteFile() + "/" + name);
 		SemSimUtil.writeStringToFile(content, tempfile);
 		
-		if(toolType==NEW_ANNOTATOR_TASK){
-			SemGenGUI.startNewAnnotatorTask(new File[]{tempfile});
-		}
-		if(toolType==NEW_EXTRACTOR_TASK){
-			SemGenGUI.startNewExtractorTask(tempfile);
-		}
-		if(toolType==ATOMIC_DECOMPOSITION_TASK){
-			SemGenGUI.startAtomicDecomposition(tempfile);
-		}
-		if(toolType==BATCH_CLUSTER_TASK){
-			SemGenGUI.startBatchClustering(tempfile);
-		}
-		if(toolType==MERGING_TASK){
-			if(merger!=null){
-				merger.startAdditionOfModels(new File[]{tempfile});
-			}
-		}
-		if(this.toolType==ENCODING_TASK){
-			SemGenGUI.startEncoding(tempfile, null);
-		}
 	}
+	
 }

@@ -9,10 +9,11 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
 
-import semgen.FileFilter;
 import semgen.SemGen;
 import semgen.SemGenGUI;
-import semgen.resource.uicomponent.ProgressFrame;
+import semgen.resource.file.FileFilter;
+import semgen.resource.file.SemGenFileChooser;
+import semgen.resource.uicomponent.SemGenProgressBar;
 
 public class Coder {
 	public OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -23,7 +24,7 @@ public class Coder {
 	public File outputfile;
 
 	public String onedom = "";
-	public static ProgressFrame progframe;
+	public static SemGenProgressBar progframe;
 
 	public Coder(File afile, String extension, File outputfile, Boolean autoencode) {
 		this.file = afile;
@@ -46,7 +47,7 @@ public class Coder {
 		JFileChooser fc2 = new JFileChooser();
 		Boolean saveok = false;
 		while (!saveok) {
-			fc2.setCurrentDirectory(SemGenGUI.currentdirectory);
+			fc2.setCurrentDirectory(SemGenFileChooser.currentdirectory);
 			fc2.setDialogTitle("Choose location to save output");
 			fc2.addChoosableFileFilter(new FileFilter(new String[] { extension }));
 			int returnVal2 = fc2.showSaveDialog(SemGenGUI.desktop);
@@ -57,7 +58,7 @@ public class Coder {
 				else{
 					outputfile = new File(fc2.getSelectedFile().getAbsolutePath());
 				}
-				SemGenGUI.currentdirectory = fc2.getCurrentDirectory();
+				SemGenFileChooser.currentdirectory = fc2.getCurrentDirectory();
 				// Prompt for overwrite
 				if (outputfile.exists()) {
 					int overwriteval = JOptionPane.showConfirmDialog(

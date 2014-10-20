@@ -3,6 +3,7 @@ package semgen.annotation;
 import org.semanticweb.owlapi.model.*;
 
 import semgen.SemGen;
+import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
 import semgen.resource.uicomponent.SemGenScrollPane;
 import semsim.SemSimConstants;
@@ -15,7 +16,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -42,9 +42,9 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 	private Object[] options;
 	public AnnotatorTab annotator;
 	private SemGenScrollPane scrollpane;
-	private JPanel genmodinfo;
-	public JPanel mainpanel;
-	public JButton addbutton;
+	private JPanel genmodinfo = new JPanel();
+	public JPanel mainpanel = new JPanel(new BorderLayout());
+	public JButton addbutton = new JButton("Add annotation");
 	public Set<OWLAnnotation> modellevelanns = new HashSet<OWLAnnotation>();
 
 	private int initwidth = 700;
@@ -58,16 +58,11 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 		this.setResizable(true);
 		this.annotator = annotator;
 		
-		JPanel toppanel = new JPanel();
-		addbutton = new JButton("Add annotation");
+		JPanel toppanel = new JPanel(new BorderLayout());
 		addbutton.addActionListener(this);
-		toppanel.setLayout(new BorderLayout());
 		toppanel.add(addbutton, BorderLayout.WEST);
-		mainpanel = new JPanel();
-		mainpanel.setLayout(new BorderLayout());
 		mainpanel.add(toppanel, BorderLayout.NORTH);
 
-		genmodinfo = new JPanel();
 		genmodinfo.setBorder(BorderFactory.createEmptyBorder(0, 12, 24, 24));
 		genmodinfo.setLayout(new BoxLayout(genmodinfo, BoxLayout.Y_AXIS));
 		getModelLevelAnnotations();
@@ -130,13 +125,13 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 		}
 		
 		private void Format(JLabel label, JTextArea area, JButton removebutton, Boolean editable) {
-			label.setFont(new Font("SansSerif", Font.ITALIC, 12));
+			label.setFont(SemGenFont.defaultItalic());
 			label.setBorder(BorderFactory.createEmptyBorder(15, 0, 5, 8));
 			label.setAlignmentX(Component.LEFT_ALIGNMENT);
 			
 			area.setEditable(editable);
 			area.setAlignmentX(Component.LEFT_ALIGNMENT);
-			area.setFont(new Font("SansSerif", Font.PLAIN, 12));
+			area.setFont(SemGenFont.defaultPlain());
 			area.setForeground(Color.blue);
 			area.setLineWrap(true);
 			area.setWrapStyleWord(true);

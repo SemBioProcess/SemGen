@@ -40,30 +40,24 @@ public class ObjectPropertyEditor extends JPanel implements ActionListener, Prop
 
 	private static final long serialVersionUID = 2140271391558665212L;
 	public SemSimModel model;
-	public String propertyname;
 	public SemSimRelation relation;
-	public SemSimRelation invrelation;
 	public Annotatable subject;
 	public JPanel headerpanel = new JPanel();
-	public JLabel headerlabel;
 	public JButton plusbutton = new JButton(SemGenIcon.plusicon);
 	public JButton minusbutton = new JButton(SemGenIcon.minusicon);
 	public JComponent listcomponent = new JList<String>();
-	public String[] listdata = {};
-	public SemGenScrollPane scroller;
 	public Hashtable<String,Object> namesandobjects = new Hashtable<String,Object>();
 	public SemSimComponentSelectorDialog sscsd; 
 
-	public ObjectPropertyEditor(SemSimModel model, SemSimRelation rel, SemSimRelation invrel, Annotatable subject) {
+	public ObjectPropertyEditor(SemSimModel model, SemSimRelation rel, Annotatable subject) {
 		this.model = model;
 		relation = rel;
-		invrelation = invrel;
-		propertyname = SemSimOWLFactory.getIRIfragment(relation.getURI().toString());
+		String propertyname = SemSimOWLFactory.getIRIfragment(relation.getURI().toString());
 		this.subject = subject;
 
 		setOpaque(false);
 
-		headerlabel = new JLabel(propertyname);
+		JLabel headerlabel = new JLabel(propertyname);
 
 		plusbutton.addActionListener(this);
 		plusbutton.setToolTipText("Add reference term");
@@ -107,10 +101,10 @@ public class ObjectPropertyEditor extends JPanel implements ActionListener, Prop
 					}
 				}
 			}
-			((JList) listcomponent).setListData((String[]) namesandobjects.keySet().toArray(new String[] {}));
+			((JList<String>) listcomponent).setListData((String[]) namesandobjects.keySet().toArray(new String[] {}));
 		}
 
-		scroller = new SemGenScrollPane(listcomponent);
+		SemGenScrollPane scroller = new SemGenScrollPane(listcomponent);
 		scroller.setPreferredSize(new Dimension(150, 70));
 
 		setLayout(new BorderLayout());
@@ -120,7 +114,7 @@ public class ObjectPropertyEditor extends JPanel implements ActionListener, Prop
 
 	public void refreshListData() {
 		String[] namesarray = (String[]) namesandobjects.keySet().toArray(new String[] {});
-		((JList) listcomponent).setListData(namesarray);
+		((JList<String>) listcomponent).setListData(namesarray);
 	}
 
 	public void actionPerformed(ActionEvent ae) {
@@ -189,13 +183,8 @@ public class ObjectPropertyEditor extends JPanel implements ActionListener, Prop
 				}
 			}
 			((JList<String>) listcomponent).setListData((String[]) namesandobjects.keySet().toArray(new String[]{}));
-			
+		}
 			sscsd.optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 			sscsd.setVisible(false);
-		}
-		if (value == "Cancel") {
-			sscsd.optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-			sscsd.setVisible(false);
-		}
 	}
 }

@@ -48,9 +48,8 @@ public class SelectorDialogForSubmodelsOfSubmodel extends SemSimComponentSelecto
 			}
 			anndia.refreshSubmodelData();
 			anndia.annotator.setModelSaved(false);
-			setVisible(false);
 		}
-		else if(value == "Cancel") setVisible(false);
+		setVisible(false);
 		
 	}
 }

@@ -23,18 +23,15 @@ import javax.swing.JScrollPane;
 
 import semgen.SemGenGUI;
 import semsim.model.SemSimComponent;
-import semsim.model.computational.DataStructure;
 import semsim.writing.CaseInsensitiveComparator;
 
 public class SemSimComponentSelectorDialog extends JDialog implements ActionListener {
 	private static final long serialVersionUID = -1776906245210358895L;
 	public JPanel panel;
-	protected JScrollPane scroller;
-	public JCheckBox markallbox;
+	public JCheckBox markallbox = new JCheckBox("Mark all/none");
 	public JOptionPane optionPane;
 	protected Object[] options;
 
-	public ObjectPropertyEditor opeditor;
 	public Map<String, Object> nameobjectmap = new HashMap<String, Object>();
 	public String[] results = null;
 	public Set<? extends SemSimComponent> selectableset;
@@ -42,9 +39,7 @@ public class SemSimComponentSelectorDialog extends JDialog implements ActionList
 	public SemSimComponent ssctoignore;
 	public Set<? extends SemSimComponent> sscstodisable;
 	public AnnotationDialog anndia;
-	public Set<DataStructure> utilset;
 	public String title;
-	public Boolean isforcomponent = false;
 
 	public SemSimComponentSelectorDialog(
 			Set<? extends SemSimComponent> settolist,
@@ -86,7 +81,6 @@ public class SemSimComponentSelectorDialog extends JDialog implements ActionList
 		setPreferredSize(new Dimension(500, 600));
 		setTitle(this.title);
 
-		markallbox = new JCheckBox("Mark all/none");
 		markallbox.setFont(new Font("SansSerif", Font.ITALIC, 11));
 		markallbox.setForeground(Color.blue);
 		markallbox.setSelected(false);
@@ -105,7 +99,7 @@ public class SemSimComponentSelectorDialog extends JDialog implements ActionList
 				checkbox.setEnabled(!sscstodisable.contains(nameobjectmap.get(results[y])));
 		}
 
-		scroller = new JScrollPane(panel);
+		JScrollPane scroller = new JScrollPane(panel);
 		scroller.getVerticalScrollBar().setUnitIncrement(12);
 		
 		Object[] array = {scroller};

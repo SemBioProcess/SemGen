@@ -15,7 +15,7 @@ import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.SemGenGUI;
 import semgen.resource.GenericThread;
-import semgen.resource.uicomponent.ProgressFrame;
+import semgen.resource.uicomponent.SemGenProgressBar;
 import semsim.SemSimConstants;
 import semsim.SemSimUtil;
 import semsim.owl.SemSimOWLFactory;
@@ -35,7 +35,7 @@ public class MatlabCoder extends Coder{
 	public void encode(Boolean suppressfinish) throws IOException, OWLException {
 		if (outputfile != null) {
 			// Need to make this a task
-			progframe = new ProgressFrame("Creating Matlab file", false, null);
+			progframe = new SemGenProgressBar("Creating Matlab file", false, null);
 			GenericThread task = new GenericThread(this, "writefile");
 			task.start();
 		} else {System.out.println("Cancelled coding operation");}

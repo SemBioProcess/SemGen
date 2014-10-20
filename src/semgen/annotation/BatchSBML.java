@@ -20,7 +20,6 @@ import semsim.reading.ModelClassifier;
 public class BatchSBML {
 	
 	public BatchSBML() throws FileNotFoundException, IOException, OWLException, InterruptedException, URISyntaxException, JDOMException, Xcept, ServiceException{
-		
 		File outputdir = new File("/Users/max_neal/Documents/workspace/PhysiomeKBgenerator/semsim_models/");
 		File[] outputfilesarray = outputdir.listFiles();
 		Set<String> outputfiles = new HashSet<String>();

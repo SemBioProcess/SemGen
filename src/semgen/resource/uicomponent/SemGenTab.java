@@ -38,8 +38,8 @@ public class SemGenTab extends JPanel {
 		return tabname;
 	}
 	
-	public int closeTab() {
-		return -1;
+	public boolean closeTab() {
+		return true;
 	}
 		
 	public void setClosePolicy(MouseListener ml) {

@@ -16,6 +16,7 @@ import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
 
 import semgen.SemGenGUI;
+import semgen.resource.file.SemGenOpenFileChooser;
 import semsim.SemSimConstants;
 import semsim.model.annotation.Annotation;
 import semsim.reading.ModelClassifier;
@@ -34,12 +35,12 @@ public class BatchCellML{
 	public BatchCellML() throws Exception{
 		JFileChooser fc = new JFileChooser();
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		fc.setCurrentDirectory(SemGenGUI.currentdirectory);
+		fc.setCurrentDirectory(SemGenOpenFileChooser.currentdirectory);
 		fc.setDialogTitle("Select directory containing cellml models");
-		int returnVal = fc.showOpenDialog(SemGenGUI.desktop);
+		int returnVal = fc.showOpenDialog(null);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File file = new File(fc.getSelectedFile().getAbsolutePath());
-			SemGenGUI.currentdirectory = fc.getCurrentDirectory();
+			SemGenOpenFileChooser.currentdirectory = fc.getCurrentDirectory();
 			if (file != null) {
 				processmodels(file);
 				JOptionPane.showMessageDialog(SemGenGUI.desktop, "Finished processing CellML models");

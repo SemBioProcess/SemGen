@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Hashtable;
 import java.util.Observable;
 
+import semgen.resource.file.SemGenOpenFileChooser;
 import semsim.ResourcesManager;
 
 public class SemGenSettings extends Observable{
@@ -129,7 +130,7 @@ public class SemGenSettings extends Observable{
 			writer.println("YstartPosition; " + ypos);
 			writer.println("startHeight; " + height);
 			writer.println("startWidth; " + width);
-			writer.println("startDirectory; " + SemGenGUI.currentdirectory.getAbsolutePath());
+			writer.println("startDirectory; " + SemGenOpenFileChooser.currentdirectory.getAbsolutePath());
 			writer.println("autoAnnotate; " + doAutoAnnotate().toString());
 			writer.println("showImports; " + showImports().toString());
 			writer.println("displayMarkers; " + useDisplayMarkers().toString());

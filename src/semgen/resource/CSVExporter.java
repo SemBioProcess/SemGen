@@ -10,6 +10,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.SemGenGUI;
+import semgen.resource.file.SemGenOpenFileChooser;
 import semsim.model.SemSimModel;
 import semsim.model.computational.DataStructure;
 import semsim.writing.CaseInsensitiveComparator;
@@ -47,6 +48,6 @@ public class CSVExporter {
 				datatosave = datatosave + ds.getName() + ", " + unitname + ", " + valueifstatic + ", " + desc + "\n";
 			}
 		}
-		SemGenGUI.SaveAsAction(this, "", new FileNameExtensionFilter[]{SemGenGUI.csvfilter});
+		SemGenGUI.SaveAsAction(this, "", new FileNameExtensionFilter[]{SemGenOpenFileChooser.csvfilter});
 	}
 }

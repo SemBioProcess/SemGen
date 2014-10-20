@@ -34,7 +34,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
-import java.awt.Font;
 
 import javax.swing.*;
 import javax.swing.text.MutableAttributeSet;
@@ -53,15 +52,13 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 	public CompositeAnnotationPanel compositepanel;
 	public JPanel mainpanel;
 	public SemSimComponentAnnotationPanel singularannpanel;
-	private JPanel humandefpanel;
 	private JLabel codewordlabel;
 	public AnnotationDialogClickableTextPane subtitlefield;
 	public AnnotationDialogClickableTextPane nestedsubmodelpane;
 	private JLabel compositelabel;
-	private JLabel singularannlabel;
+	private JLabel singularannlabel = new JLabel("Singular annotation");
 	public AnnotationDialogClickableTextPane humandefpane;
-	private JButton humapplyelsewherebutton;
-	public JLabel humremovebutton;
+	public JLabel humremovebutton = new JLabel(SemGenIcon.eraseiconsmall);
 	private JLabel copyannsbutton = new JLabel(SemGenIcon.copyicon);
 	private JLabel loadsourcemodelbutton = new JLabel(SemGenIcon.annotatoricon);
 	public SelectorDialogForCodewordsOfSubmodel sdfcoc;
@@ -88,9 +85,6 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 		codewordlabel.setBorder(BorderFactory.createEmptyBorder(5, indent, 5, 10));
 		codewordlabel.setFont(SemGenFont.defaultBold(3));
 		
-		humapplyelsewherebutton = new JButton();
-		humremovebutton = new JLabel(SemGenIcon.eraseiconsmall);
-
 		FormatButton(humremovebutton, "Remove this annotation", thebutton.editable);
 		
 		copyannsbutton.setToolTipText("Copy annotations to all mapped variables");
@@ -101,9 +95,7 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 		loadsourcemodelbutton.addMouseListener(this);
 		loadsourcemodelbutton.setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
 
-		humapplyelsewherebutton.setVisible(false);
-
-		humandefpanel = new JPanel();
+		JPanel humandefpanel = new JPanel();
 		humandefpanel.setBackground(SemGenGUI.lightblue);
 		humandefpanel.setBorder(BorderFactory.createEmptyBorder(0, indent, 0, 0));
 
@@ -167,7 +159,6 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 		subtitlepanel.setBorder(BorderFactory.createEmptyBorder(0, indent, 0, indent));
 		subtitlepanel.setBackground(SemGenGUI.lightblue);
 		
-		singularannlabel = new JLabel("Singular annotation");
 		singularannlabel.setFont(SemGenFont.defaultBold());
 		singularannlabel.setBorder(BorderFactory.createEmptyBorder(10, indent, 5, 0));
 
@@ -285,8 +276,6 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 		Set<Submodel> associatedcomponents = submod.getSubmodels();
 		
 		// Include the codewords that are in the subcomponents in the list of associated codewords
-		ArrayList<DataStructure> listofdss = new ArrayList<DataStructure>();
-		listofdss.addAll(associatedcodewords);
 		cdwdsfromcomps = SemSimOWLFactory.getCodewordsAssociatedWithNestedSubmodels(submod);
 		associatedcodewords.addAll(cdwdsfromcomps);
 		if(!associatedcodewords.isEmpty())
@@ -311,17 +300,14 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 	
 	public void refreshHumanReadableDefinition(){
 		// Refresh the human readable definition
-		String comment = "";
-		if(smc.getDescription()!=null){
-			comment = smc.getDescription();
-		}
+		String comment = smc.getDescription();
+
 		// Get the human readable definition for the codeword
 		if (!comment.equals("") && comment!=null) {
 			humandefpane.setCustomText(comment);
 			humandefpane.setForeground(Color.blue);
 			// Refresh the indicator icons next to the codeword in the bottom left of the Annotator
 			thebutton.annotationAdded(thebutton.humdeflabel, false);
-			humapplyelsewherebutton.setEnabled(true);
 			humremovebutton.setEnabled(thebutton.editable);
 		} else {
 			String msg = "Click to set free-text description";
@@ -331,7 +317,6 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 			humandefpane.setForeground(Color.gray);
 			// Refresh the indicator icons next to the codeword in the bottom left of the Annotator
 			thebutton.annotationNotAdded(thebutton.humdeflabel);
-			humapplyelsewherebutton.setEnabled(false);
 			humremovebutton.setEnabled(false);
 		}
 		annotator.updateTreeNode();
@@ -381,7 +366,7 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 		if(!newname.equals("") && !annotator.submodelbuttontable.containsKey(newname) &&
 			!annotator.codewordbuttontable.containsKey(newname) && !newname.contains("--"))
 			return true;
-		else return false;
+		return false;
 	}
 	
 	
@@ -470,7 +455,7 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 				annotator.submodelbuttontable.remove(thebutton.namelabel.getText());
 				annotator.submodelbuttontable.put(newcompname, (SubmodelButton)thebutton);
 				thebutton.setIdentifyingData(newcompname);
-				annotator.changeButtonFocus(thebutton, thebutton, null);
+				annotator.changeButtonFocus(thebutton, null);
 				annotator.focusbutton = thebutton;
 			}
 		}
@@ -534,7 +519,7 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 			File file = new File(annotator.sourcefile.getParent() + "/" + ((Submodel)smc).getHrefValue());
 
 			if(file.exists()){
-				NewAnnotatorTask task = new SemGenGUI.NewAnnotatorTask(new File[]{file}, false);
+				NewAnnotatorTask task = new SemGenGUI.NewAnnotatorTask(false);
 				task.execute();
 			}
 			else{JOptionPane.showMessageDialog(SemGenGUI.desktop, "Could not locate source file for this sub-model.", "ERROR", JOptionPane.ERROR_MESSAGE);}

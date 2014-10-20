@@ -25,7 +25,7 @@ public class AddReferenceClassDialog extends JDialog implements
 	public AddReferenceClassDialog(AnnotatorTab ann, String[] ontList, Object[] options, Annotatable annotatable) {
 		this.annotator = ann;
 		setTitle("Select reference concept");
-		refclasspanel = new ReferenceClassFinderPanel(annotator, annotatable, ontList);
+		refclasspanel = new ReferenceClassFinderPanel(ann, annotatable, ontList);
 
 		utilarea.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 		utilarea.setBackground(new Color(0,0,0,0));

@@ -35,14 +35,15 @@ import edu.uci.ics.jung.graph.SparseMultigraph;
 import prefuse.data.Graph;
 import prefuse.data.Node;
 import prefuse.data.Schema;
-import semgen.FileFilter;
 import semgen.SemGenGUI;
 import semgen.SemGenSettings;
 import semgen.resource.ComparatorByName;
 import semgen.resource.GenericThread;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
-import semgen.resource.uicomponent.ProgressFrame;
+import semgen.resource.file.FileFilter;
+import semgen.resource.file.SemGenFileChooser;
+import semgen.resource.uicomponent.SemGenProgressBar;
 import semgen.resource.uicomponent.SemGenTab;
 import semsim.SemSimUtil;
 import semsim.extraction.Extractor;
@@ -121,7 +122,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	public Hashtable<DataStructure, PhysicalProcess> datastrsandprocesses = new Hashtable<DataStructure, PhysicalProcess>();
 	public File autogendirectory;
 	private float maxclusteringiterations;
-	public ProgressFrame progframe;
+	public SemGenProgressBar progframe;
 
 	public Clusterer cd;
 	public PrintWriter clusterwriter;
@@ -752,7 +753,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 				Map<DataStructure, Set<? extends DataStructure>> table = primeextraction();
 				if (table.size() != 0) {
 					extractedfile = SemGenGUI.SaveAsAction(SemGenGUI.desktop, null, new FileNameExtensionFilter[]{
-							SemGenGUI.cellmlfilter, SemGenGUI.owlfilter});
+							SemGenFileChooser.cellmlfilter, SemGenFileChooser.owlfilter});
 					if (extractedfile != null) {
 						try {
 							extractedmodel = Extractor.extract(semsimmodel, table);
@@ -837,15 +838,15 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	public void atomicDecomposition() {
 		JFileChooser fc = new JFileChooser();
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		fc.setCurrentDirectory(SemGenGUI.currentdirectory);
+		fc.setCurrentDirectory(SemGenFileChooser.currentdirectory);
 		fc.setDialogTitle("Select directory for extracted models");
 		int returnVal = fc.showOpenDialog(this);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File file = new File(fc.getSelectedFile().getAbsolutePath());
-			SemGenGUI.currentdirectory = fc.getCurrentDirectory();
+			SemGenFileChooser.currentdirectory = fc.getCurrentDirectory();
 			if (file != null) {
 				autogendirectory = file;
-				progframe = new ProgressFrame("Performing decomposition", false, null);
+				progframe = new SemGenProgressBar("Performing decomposition", false, null);
 				GenericThread task = new GenericThread(this, "decompose");
 				task.start();
 			}
@@ -905,11 +906,11 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		cd.setVisible(false);
 
 		JFileChooser filec = new JFileChooser();
-		filec.setPreferredSize(SemGenGUI.filechooserdims);
+		filec.setPreferredSize(new Dimension(550,550));
 		Boolean saveok = false;
 		File batchclusterfile = null;
 		while (!saveok) {
-			filec.setCurrentDirectory(SemGenGUI.currentdirectory);
+			filec.setCurrentDirectory(SemGenFileChooser.currentdirectory);
 			filec.setDialogTitle("Choose location to save clustering results");
 			filec.addChoosableFileFilter(new FileFilter(new String[] { "txt" }));
 			int returnVal = filec.showSaveDialog(SemGenGUI.desktop);
@@ -948,7 +949,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 			// Need task here
 			BatchClusterTask task = new BatchClusterTask();
 			task.execute();
-			SemGenGUI.progframe = new ProgressFrame("Performing clustering analysis...", false, task);
+			
 		}
 	}
 	
@@ -956,6 +957,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
         public BatchClusterTask(){}
         @Override
         public Void doInBackground() {
+        	progframe = new SemGenProgressBar("Performing clustering analysis...", false);
         	try {
         		performClusteringAnalysis();
 			} catch (Exception e) {
@@ -963,13 +965,8 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 			}
             return null;
         }
-        @Override
-        public void done() {
-        	SemGenGUI.progframe.setVisible(false);
-        }
-    }
-
-	public void performClusteringAnalysis() throws IOException {
+        
+        public void performClusteringAnalysis() throws IOException {
 		// Make sure to ignore edges for state variables that are inputs to themselves
 		int statevars = 0;
 		for (Number edge : cd.mygraph.getEdges()) {
@@ -998,13 +995,15 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 			float fltnum = y;
 			float fltmaxnum = maxclusteringiterations;
 
-			SemGenGUI.progframe.bar.setValue(Math.round(100 * (fltnum / fltmaxnum)));
+			progframe.bar.setValue(Math.round(100 * (fltnum / fltmaxnum)));
 		}
 		clusterwriter.flush();
 		clusterwriter.close();
-		SemGenGUI.progframe.bar.setVisible(false);
 		JOptionPane.showMessageDialog(SemGenGUI.desktop, "Finished clustering analysis");
-	}
+        }
+    }
+
+
 
 
 	public void itemStateChanged(ItemEvent arg0) {

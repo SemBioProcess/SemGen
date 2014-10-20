@@ -52,7 +52,6 @@ public class ReferenceClassFinderPanel extends JPanel implements
 	 * 
 	 */
 	private static final long serialVersionUID = -7884648622981159203L;
-	public Dimension scrollerdim;
 	public JPanel panelright;
 	public AnnotatorTab annotator;
 	public String codeword;
@@ -68,16 +67,13 @@ public class ReferenceClassFinderPanel extends JPanel implements
 	private JPanel querypanel;
 	private JButton findbutton;
 	private ExternalURLButton externalURLbutton;
-	public JButton loadingbutton;
-
-	private JPanel rightscrollerbuttonpanel;
+	public JButton loadingbutton = new JButton(SemGenIcon.blankloadingicon);
 
 	private JLabel findtext;
 	private JPanel findpanel;
 	public JTextField findbox;
 	private JPanel resultspanelrightheader;
 	private JPanel resultspanelright;
-	private JLabel resultslabelright;
 	public JList<String> resultslistright = new JList<String>();
 	private JScrollPane resultsscrollerright;
 
@@ -85,15 +81,11 @@ public class ReferenceClassFinderPanel extends JPanel implements
 	public Hashtable<String,String> rdflabelsanduris = new Hashtable<String,String>();
 	public Hashtable<String, String> classnamesandshortconceptids = new Hashtable<String, String>();
 	public JOptionPane optionPane;
-	public JDialog weborlocaldia;
-	public JButton fromwebbutton;
-	public JButton fromlocalbutton;
 	public String bioportalID = null;
 	public GenericThread querythread = new GenericThread(this, "performSearch");
 	public Annotatable annotatable;
-	public String[] ontList;
+	private String[] ontList;
 
-	
 	public ReferenceClassFinderPanel(AnnotatorTab ann, Annotatable annotatable, String[] ontList) {
 		annotator = ann;
 		this.ontList = ontList;
@@ -181,20 +173,17 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		findpanel.add(findbox);
 		findpanel.add(findbutton);
 
-		loadingbutton = new JButton();
 		loadingbutton.setBorderPainted(false);
 		loadingbutton.setContentAreaFilled(false);
-		loadingbutton.setIcon(SemGenIcon.blankloadingicon);
 		findpanel.add(loadingbutton);
 
 		resultspanelright = new JPanel();
 		resultspanelright.setLayout(new BoxLayout(resultspanelright,BoxLayout.Y_AXIS));
 		
-		resultspanelrightheader = new JPanel();
-		resultspanelrightheader.setLayout(new BorderLayout());
+		resultspanelrightheader = new JPanel(new BorderLayout());
 		resultspanelrightheader.setOpaque(false);
 
-		resultslabelright = new JLabel("Search results");
+		JLabel resultslabelright = new JLabel("Search results");
 		resultslabelright.setFont(SemGenFont.defaultPlain());
 		resultslabelright.setEnabled(true);
 
@@ -205,15 +194,14 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		resultslistright.setBorder(BorderFactory.createBevelBorder(1));
 		resultslistright.setEnabled(true);
 
-		scrollerdim = new Dimension(650, 400);
+		Dimension scrollerdim = new Dimension(650, 400);
 		resultsscrollerright = new JScrollPane(resultslistright);
 		resultsscrollerright.setBorder(BorderFactory.createTitledBorder("Search results"));
 		resultsscrollerright.setPreferredSize(scrollerdim);
 
 		externalURLbutton = new ExternalURLButton();
 
-		rightscrollerbuttonpanel = new JPanel();
-		rightscrollerbuttonpanel.setLayout(new BorderLayout());
+		JPanel rightscrollerbuttonpanel = new JPanel(new BorderLayout());
 		rightscrollerbuttonpanel.setOpaque(false);
 		JPanel rightscrollerinfobuttonpanel = new JPanel();
 		rightscrollerinfobuttonpanel.add(externalURLbutton);

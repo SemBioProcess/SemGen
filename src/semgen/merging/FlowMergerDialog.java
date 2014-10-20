@@ -40,15 +40,13 @@ public class FlowMergerDialog extends JDialog implements
 	public JPanel mainpanel = new JPanel();
 	public String disp;
 	public OWLOntology keptont;
-	public MergerTab merger;
 	public SemGenScrollPane scrollpane;
 	public JButton questionbutton = new JButton(SemGenIcon.questionicon);
 
 	public FlowMergerDialog(String disp, Set<String> flowdepsfromdiscarded,
-			OWLOntology discardedont, OWLOntology keptont, MergerTab merger) {
+			OWLOntology discardedont, OWLOntology keptont) {
 		this.disp = disp;
 		this.keptont = keptont;
-		this.merger = merger;
 
 		mainpanel.setLayout(new BoxLayout(mainpanel, BoxLayout.Y_AXIS));
 		questionbutton.addActionListener(this);
@@ -210,9 +208,6 @@ public class FlowMergerDialog extends JDialog implements
 				}
 			}
 			if (!choicesmade.contains(false)) {
-				if (setofadds.size() > 0) {
-					merger.dispandsetofadds.put(disp, setofadds);
-				}
 				setVisible(false);
 			} else {
 				optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
@@ -220,7 +215,6 @@ public class FlowMergerDialog extends JDialog implements
 		}
 		if (value == "Cancel") {
 			setVisible(false);
-			merger.contmerging = false;
 		}
 	}
 }

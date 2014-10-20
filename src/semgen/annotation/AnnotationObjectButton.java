@@ -219,7 +219,7 @@ public class AnnotationObjectButton extends JPanel implements MouseListener{
 				label = (JLabel) e.getComponent();
 			}
 			requestFocusInWindow();
-			annotater.changeButtonFocus(annotater.focusbutton, this, label);
+			annotater.changeButtonFocus(this, label);
 			annotater.focusbutton = this;
 		}
 	}

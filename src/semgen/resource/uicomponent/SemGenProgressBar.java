@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -12,28 +14,36 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.SwingWorker;
 
-public class ProgressFrame extends JFrame implements ActionListener {
+public class SemGenProgressBar extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = -408262547613352487L;
-	public JLabel msglabel;
+	private JLabel msglabel;
 	public JProgressBar bar = new JProgressBar();
-	public JButton cancelbutton = new JButton("Cancel");
-	public SwingWorker<Void,Void> worker;
-
-	public ProgressFrame(String msg, Boolean isindeterminant, SwingWorker<Void,Void> worker) {
-		this.worker = worker;
+	private JButton cancelbutton = new JButton("Cancel");
+	private CancelEvent onCancel = null;
+	
+	public SemGenProgressBar(String msg, Boolean isindeterminant) {
+		createBar(msg, isindeterminant);
+	}
+	
+	public SemGenProgressBar(String msg, Boolean isindeterminant, Observer obs) {
+		onCancel = new CancelEvent(obs);
+		createBar(msg, isindeterminant);
+	}
+	
+	private void createBar(String msg, Boolean isindeterminant) {	
 		setPreferredSize(new Dimension(300, 65));
 		JPanel progpanel = new JPanel();
 		progpanel.setBorder(BorderFactory.createLineBorder(Color.gray));
 		progpanel.setLayout(new BorderLayout());
+		
 		int bmar = 5;
 		bar.setIndeterminate(isindeterminant);
 		bar.setStringPainted(!isindeterminant);
 		bar.setVisible(true);
 		bar.setBorder(BorderFactory.createEmptyBorder(bmar, bmar, bmar, bmar));
-
+		
 		cancelbutton.addActionListener(this);
 		
 		msglabel = new JLabel(msg);
@@ -59,10 +69,21 @@ public class ProgressFrame extends JFrame implements ActionListener {
 
 	public void actionPerformed(ActionEvent arg0) {
 		if(arg0.getSource()==cancelbutton){
-			worker.cancel(true);
-			if(worker.isDone()){
-				
-			}
+			onCancel.cancel();
+		}
+	}
+	
+	public void setProgressValue(int i) {
+		bar.setValue(i);
+	}
+	
+	public class CancelEvent extends Observable{
+		public CancelEvent(Observer obs) {
+			addObserver(obs);
+		}
+		public void cancel() {
+			setChanged();
+			notifyObservers();
 		}
 	}
 }

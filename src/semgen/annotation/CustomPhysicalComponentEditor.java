@@ -33,7 +33,6 @@ public class CustomPhysicalComponentEditor extends JDialog implements PropertyCh
 	public AnnotationDialog anndia;
 
 	public JTextField mantextfield;
-	public JScrollPane descscroller;
 	public JTextArea descriptionarea;
 	
 	public JPanel namepanel = new JPanel();
@@ -46,7 +45,6 @@ public class CustomPhysicalComponentEditor extends JDialog implements PropertyCh
 	public ProcessParticipantEditor hassinkeditor;
 	public ProcessParticipantEditor hasmediatoreditor;
 	public JComponent[] objectpropertyeditors;
-	public Object[] options;
 
 	public CustomPhysicalComponentEditor(AnnotationDialog anndia, PhysicalModelComponent pmc) {
 
@@ -59,13 +57,12 @@ public class CustomPhysicalComponentEditor extends JDialog implements PropertyCh
 		mantextfield.setForeground(Color.blue);
 		mantextfield.setPreferredSize(new Dimension(450, 28));
 		
-		descriptionarea = new JTextArea();
+		descriptionarea = new JTextArea(pmc.getDescription());
 		descriptionarea.setForeground(Color.blue);
-		descriptionarea.setText(pmc.getDescription());
 		descriptionarea.setLineWrap(true);
 		descriptionarea.setWrapStyleWord(true);
 		
-		descscroller = new JScrollPane(descriptionarea);
+		JScrollPane descscroller = new JScrollPane(descriptionarea);
 		descscroller.setPreferredSize(new Dimension(450,100));
 		
 		namepanel.add(new JLabel("Name: "));
@@ -77,7 +74,7 @@ public class CustomPhysicalComponentEditor extends JDialog implements PropertyCh
 		String title = "Edit custom physical ";
 		if(pmc instanceof PhysicalProcess){
 			title = title + "process";
-			versionofeditor = new ObjectPropertyEditor(model, SemSimConstants.BQB_IS_VERSION_OF_RELATION, null, this.pmc);
+			versionofeditor = new ObjectPropertyEditor(model, SemSimConstants.BQB_IS_VERSION_OF_RELATION, this.pmc);
 			hassourceeditor = new ProcessParticipantEditor(model, SemSimConstants.HAS_SOURCE_RELATION, (PhysicalProcess)pmc);
 			hassinkeditor = new ProcessParticipantEditor(model, SemSimConstants.HAS_SINK_RELATION, (PhysicalProcess)pmc);
 			hasmediatoreditor = new ProcessParticipantEditor(model, SemSimConstants.HAS_MEDIATOR_RELATION, (PhysicalProcess)pmc);
@@ -86,7 +83,7 @@ public class CustomPhysicalComponentEditor extends JDialog implements PropertyCh
 		}
 		else{
 			title = title + "entity";
-			versionofeditor = new ObjectPropertyEditor(model, SemSimConstants.BQB_IS_VERSION_OF_RELATION, null, this.pmc);
+			versionofeditor = new ObjectPropertyEditor(model, SemSimConstants.BQB_IS_VERSION_OF_RELATION, this.pmc);
 
 			objectpropertyeditors = new ObjectPropertyEditor[]{versionofeditor}; 
 		}
@@ -99,7 +96,7 @@ public class CustomPhysicalComponentEditor extends JDialog implements PropertyCh
 		
 		Object[] array = {mainpanel};
 
-		options = new Object[]{"OK","Cancel"};
+		Object[] options = new Object[]{"OK","Cancel"};
 		optionPane = new JOptionPane(array, JOptionPane.PLAIN_MESSAGE,
 				JOptionPane.OK_CANCEL_OPTION, null);
 		optionPane.addPropertyChangeListener(this);
@@ -162,17 +159,15 @@ public class CustomPhysicalComponentEditor extends JDialog implements PropertyCh
 				}
 				anndia.refreshCompositeAnnotation();
 				anndia.annotator.setModelSaved(false);
-				optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 				dispose();
 			}
 			else{
-				optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 				JOptionPane.showMessageDialog(this, "Please enter a name.");
 			}
 		}
 		else if(value == "Cancel"){
-			optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 			dispose();
 		}
+		optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 	}
 }

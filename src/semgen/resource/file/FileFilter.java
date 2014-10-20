@@ -1,4 +1,4 @@
-package semgen;
+package semgen.resource.file;
 
 import java.io.File;
 

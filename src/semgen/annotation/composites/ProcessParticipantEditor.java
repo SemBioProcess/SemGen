@@ -47,10 +47,8 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 	public JLabel headerlabel;
 	public JButton plusbutton = new JButton(SemGenIcon.plusicon);
 	public JButton minusbutton = new JButton(SemGenIcon.minusicon);
-	public SemGenScrollPane scroller;
 	public JTable table;
 	public ProcessParticipantTableModel tablemod;
-	public String[] columnNames = {"Physical entity", "Multiplier"};
 	public Map<String,ProcessParticipant> namesandparticipantmap = new HashMap<String,ProcessParticipant>();
 	public SemSimComponentSelectorDialog sscsd; 
 	public int scrollerwidth = 550;
@@ -77,7 +75,7 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 		
 		setTableData();
 		
-		scroller = new SemGenScrollPane(table);
+		SemGenScrollPane scroller = new SemGenScrollPane(table);
 		scroller.setPreferredSize(new Dimension(scrollerwidth, 100));
 		scroller.getViewport().setBackground(Color.white);
 		
@@ -102,7 +100,6 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 	}
 	
 	public class ProcessParticipantTableModel extends AbstractTableModel{
-
 		private static final long serialVersionUID = 1L;
 		private String[] columnNames = new String[]{"Physical entity", "Multiplier"};
 		public ArrayList<ProcessParticipant> data = new ArrayList<ProcessParticipant>();
@@ -166,8 +163,6 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 		    fireTableCellUpdated(row, col);
 		}
 	}
-	
-	
 
 	public void actionPerformed(ActionEvent ae) {
 		Object o = ae.getSource();
@@ -199,12 +194,8 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 					}
 				}
 			}
-			sscsd.optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 		}
-		if (value == "Cancel") {
-			sscsd.optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-			
-		}
+		sscsd.optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 		sscsd.setVisible(false);
 	}
 }

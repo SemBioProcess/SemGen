@@ -6,14 +6,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.SwingWorker;
-
 import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.SemGenGUI;
-import semgen.resource.uicomponent.ProgressFrame;
+import semgen.resource.SemGenTask;
+import semgen.resource.file.LoadSemSimModel;
+import semgen.resource.file.SemGenOpenFileChooser;
+import semgen.resource.uicomponent.SemGenProgressBar;
 import semsim.SemSimConstants;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.Annotation;
@@ -37,14 +37,9 @@ public class AnnotationCopier {
 
 	public AnnotationCopier(AnnotatorTab targetann) throws OWLException, CloneNotSupportedException {
 		this.targetann = targetann;
-		int choice = SemGenGUI.showSemGenFileChooser(SemGenGUI.currentdirectory, new String[] { "owl","cellml", "xml" }, "Select SemSim model containing annotations",
-				0, false);
-		if(choice==JFileChooser.APPROVE_OPTION){
-			File file = SemGenGUI.fc.getSelectedFile();
-			CopierTask task = new CopierTask(file);
-			task.execute();
-			SemGenGUI.progframe = new ProgressFrame("Loading model...",true, task);
-		}
+		CopierTask task = new CopierTask();
+		task.execute();
+
 	}
 	
 	public static Set<MappableVariable> copyAllAnnotationsToMappedVariables(AnnotatorTab ann, MappableVariable ds){
@@ -63,18 +58,19 @@ public class AnnotationCopier {
 	}
 	
 	// Copy all annotations
-	class CopierTask extends SwingWorker<Void,Void>{
+	class CopierTask extends SemGenTask {
 		public File sourcefile;
-		public CopierTask(File file){
-			this.sourcefile = file;
+		public CopierTask(){
+			SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select SemSim model containing annotations");
+			sourcefile = sgc.getSelectedFile();
 		}
 		@Override
 		protected Void doInBackground() throws Exception {
-			
-			sourcemod = SemGenGUI.loadSemSimModelFromFile(sourcefile, true);
+			progframe = new SemGenProgressBar("Loading model...",true);
+			sourcemod = LoadSemSimModel.loadSemSimModelFromFile(sourcefile);
 			
 			if (sourcemod.getNumErrors() == 0) {
-				SemGenGUI.progframe.updateMessage("Copying...");
+				progframe.updateMessage("Copying...");
 				SemSimModel targetmod = targetann.semsimmodel;
 				boolean changemadetodatastructures = false;
 				for(DataStructure ds : targetmod.getDataStructures()){
@@ -102,11 +98,6 @@ public class AnnotationCopier {
 				
 			}
 			return null;
-		}
-		
-		@Override
-		public void done(){
-			SemGenGUI.progframe.setVisible(false);
 		}
 	}
 	

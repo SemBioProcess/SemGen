@@ -14,7 +14,7 @@ public class SubmodelButton extends AnnotationObjectButton{
 	public SubmodelButton(AnnotatorTab ann, Submodel ssc, boolean compannfilled, String companntext, boolean noncompannfilled,
 			boolean humdeffilled, boolean depfilled, boolean editable) {
 		super(ann, ssc, compannfilled, companntext, noncompannfilled, humdeffilled, depfilled, editable);
-		sub = (Submodel)ssc;
+		sub = ssc;
 		compannlabel.setVisible(false);
 		namelabel.setFont(SemGenFont.defaultBold());
 		Dimension dim = new Dimension(40, 17);
