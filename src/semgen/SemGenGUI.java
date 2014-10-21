@@ -112,12 +112,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 	
 	public static Color lightblue = new Color(207, 215, 252, 255);
 
-	public JDialog opendialog;
-	public JButton annotatebutton;
-	public JButton openmenuextractbutton;
-	public JButton openmenumergebutton;
-	public JButton encodebutton;
-
 	public static String JSimBuildDir = "./jsimhome";
 	private JMenuBar menubar;
 	private JMenuItem fileitemopen;
@@ -234,9 +228,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		annotateitemcopy.setToolTipText("Annotate codewords using data from identical codewords in another model");
 		annotatemenu.add(annotateitemcopy);
 		annotateitemcopy.setEnabled(true);
-		
-		annotateitemcleanup = formatMenuItem(annotateitemcleanup, "Remove unused terms",null, true,true);
-		annotateitemcleanup.setToolTipText("Remove unused reference ontology terms");
 
 		annotateitemreplacerefterm = formatMenuItem(annotateitemreplacerefterm, "Replace reference term", KeyEvent.VK_P, true, true);
 		annotateitemreplacerefterm.setToolTipText("Replace a reference ontology term with another");
@@ -350,8 +341,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		menubar.add(mergermenu);
 		menubar.add(codegenmenu);
 		menubar.add(helpmenu);
-
-		OpenFileAction();
 	}
 	
 	// Format menu items, assign shortcuts, action listeners
@@ -363,6 +352,26 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		return item;
 	}
 
+	public void startNewTaskDialog() {
+		NewTaskDialog ntd = new NewTaskDialog();
+		switch (ntd.getChoice()) {
+		case Annotate:
+			startNewAnnotatorTask();
+			break;
+		case Encode:
+			toolsitemcode.doClick();
+			break;
+		case Extract:
+			startNewExtractorTask();
+			break;
+		case Merge:
+			NewMergerAction();
+			break;
+		default:
+			break;
+		}
+	}
+	
 	// METHODS
 	public void menuCanceled(MenuEvent arg0) {}
 
@@ -378,7 +387,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		Object o = e.getSource();
 
 		if (o == fileitemopen) {
-			OpenFileAction();
+			startNewTaskDialog();
 		}
 
 		if (o == fileitemsave) {
@@ -393,16 +402,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 					new FileNameExtensionFilter[]{SemGenFileChooser.cellmlfilter, SemGenFileChooser.owlfilter});
 		}
 		if( o == fileitemclose){
-			Component x = null;
-			if(desktop.getSelectedComponent() instanceof AnnotatorTab){
-				x = (AnnotatorTab)desktop.getSelectedComponent();
-			}
-			else if(desktop.getSelectedComponent() instanceof ExtractorTab){
-				x = (ExtractorTab)desktop.getSelectedComponent();
-			}
-			else if(desktop.getSelectedComponent() instanceof MergerTab){
-				x = (MergerTab)desktop.getSelectedComponent();
-			}
+			Component x = desktop.getSelectedComponent();
 			if(x !=null)
 				try {
 					closeTabAction((SemGenTab)x);
@@ -419,8 +419,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 			} 
 		}
 
-		if (o == toolsitemannotate || o == annotatebutton) {
-			opendialog.dispose();
+		if (o == toolsitemannotate) {
 			startNewAnnotatorTask();
 		}
 		
@@ -511,14 +510,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 			}
 			else JOptionPane.showMessageDialog(this,"Please select an Annotator tab or open a new Annotator");
 		}
-
-		if (o == annotateitemcleanup) {
-			if (desktop.getSelectedComponent() instanceof AnnotatorTab) {
-
-			} else {
-				JOptionPane.showMessageDialog(this,"Please select an Annotator tab or open a new Annotator");
-			}
-		}
 		
 		if( o == annotateitemfindnext){
 			if (desktop.getSelectedComponent() instanceof AnnotatorTab) {
@@ -565,8 +556,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 			}
 		}
 		
-		if (o == toolsitemextract || o == openmenuextractbutton) {
-			opendialog.dispose();
+		if (o == toolsitemextract) {
 			startNewExtractorTask();
 		}
 
@@ -604,12 +594,11 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 			}
 		}
 
-		if (o == toolsitemmerge || o == openmenumergebutton){
+		if (o == toolsitemmerge){
 			NewMergerAction();
 		}
 		
-		if (o == toolsitemcode || o == encodebutton) {
-			opendialog.dispose();
+		if (o == toolsitemcode) {
 			SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select SemSim model to encode", 
 					new String[] {"owl"});
 
@@ -822,7 +811,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 	}
 	
 	public void NewMergerAction(){
-		opendialog.setVisible(false);
 		MergerTab merger = new MergerTab(settings);
 		desktop.addTab(merger);
 
@@ -1226,55 +1214,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		return true;
 	}
 
-	private void OpenFileAction(){
-		opendialog = new JDialog();
-		opendialog.setTitle("OPEN: Select action");
-		
-		annotatebutton = new JButton("Annotate a model");
-		annotatebutton.setIcon(SemGenIcon.annotatoricon);
-		annotatebutton.setFont(new Font("SansSerif", Font.PLAIN, 13));
-		annotatebutton.addActionListener(this);
-		annotatebutton.setAlignmentX(JButton.CENTER_ALIGNMENT);
-
-		openmenuextractbutton = new JButton("Extract a model", SemGenIcon.extractoricon);
-		openmenuextractbutton.setEnabled(true);
-		openmenuextractbutton.setFont(new Font("SansSerif", Font.PLAIN, 13));
-		openmenuextractbutton.addActionListener(this);
-		openmenuextractbutton.setAlignmentX(JButton.CENTER_ALIGNMENT);
-		
-		openmenumergebutton = new JButton("Merge models");
-		openmenumergebutton.setEnabled(true);
-		openmenumergebutton.setIcon(SemGenIcon.mergeicon);
-		openmenumergebutton.setFont(new Font("SansSerif", Font.PLAIN, 13));
-		openmenumergebutton.addActionListener(this);
-		openmenumergebutton.setAlignmentX(JButton.CENTER_ALIGNMENT);
-
-		encodebutton = new JButton("Encode a model");
-		encodebutton.setEnabled(true);
-		encodebutton.setIcon(SemGenIcon.codericon);
-		encodebutton.setFont(new Font("SansSerif", Font.PLAIN, 13));
-		encodebutton.addActionListener(this);
-		encodebutton.setAlignmentX(JButton.CENTER_ALIGNMENT);
-
-		JPanel openpanel = new JPanel();
-		openpanel.setLayout(new BoxLayout(openpanel, BoxLayout.Y_AXIS));
-		openpanel.setAlignmentX(JPanel.CENTER_ALIGNMENT);
-		openpanel.add(annotatebutton);
-		openpanel.add(openmenuextractbutton);
-		openpanel.add(openmenumergebutton);
-		openpanel.add(encodebutton);
-		openpanel.setPreferredSize(new Dimension(250,135));
-		openpanel.setBorder(BorderFactory.createEmptyBorder(5,0,0,0));
-		
-		JOptionPane selectopentype = new JOptionPane(openpanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_OPTION, null);
-		selectopentype.setOptions(new Object[]{});
-		opendialog.setContentPane(selectopentype);
-		opendialog.setModal(true);
-		opendialog.pack();
-		opendialog.setLocationRelativeTo(this);
-		opendialog.setVisible(true);
-	}
-	
 	public boolean quit() throws HeadlessException, OWLException {
 		Component[] desktopcomponents = desktop.getComponents();
 		Boolean quit = true;

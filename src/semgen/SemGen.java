@@ -100,6 +100,8 @@ public class SemGen extends JFrame{
 		
 		System.out.println("Loaded.");
 		logfilewriter.println("Session started on: " + sdflog.format(datenow) + "\n");
+		
+		contentpane.startNewTaskDialog();
 	}
 	//Check which OS SemGen is being run under
 	private void OSValidation() {
