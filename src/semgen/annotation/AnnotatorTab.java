@@ -9,8 +9,8 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import semgen.SemGen;
 import semgen.SemGenGUI;
 import semgen.SemGenSettings;
+import semgen.annotation.annotatorpane.AnnotationPanel;
 import semgen.annotation.buttontree.AnnotatorButtonTree;
-import semgen.annotation.dialog.CustomPhysicalComponentEditor;
 import semgen.annotation.dialog.HumanDefEditor;
 import semgen.annotation.dialog.textminer.TextMinerDialog;
 import semgen.resource.ComparatorByName;
@@ -91,7 +91,6 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	private String nextline;
 	public JButton addsubmodelbutton = new JButton(SemGenIcon.plusicon);
 	public JButton removesubmodelbutton = new JButton(SemGenIcon.minusicon);
-	public CustomPhysicalComponentEditor customtermeditor;
 
 	public Highlighter hilit = new DefaultHighlighter();
 	public Highlighter.HighlightPainter allpainter = new DefaultHighlighter.DefaultHighlightPainter(Color.yellow);
@@ -894,7 +893,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		return (aob.ssc instanceof MappableVariable) ? aob.ssc.getName().substring(aob.ssc.getName().lastIndexOf(".")+1) : aob.ssc.getName();
 	}
 	
-	protected void updateTreeNode(){
+	public void updateTreeNode(){
 		if(tree!=null && SemGenGUI.annotateitemtreeview.isSelected()){
 			DefaultMutableTreeNode node = (DefaultMutableTreeNode) (tree.getSelectionPath().getLastPathComponent()); 
 			tree.update(node, tree);

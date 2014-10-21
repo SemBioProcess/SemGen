@@ -1,4 +1,4 @@
-package semgen.annotation.composites;
+package semgen.annotation.annotatorpane.composites;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -29,7 +29,7 @@ import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.SemGen;
 import semgen.SemGenGUI;
-import semgen.annotation.AnnotationPanel;
+import semgen.annotation.annotatorpane.AnnotationPanel;
 import semgen.annotation.dialog.CustomPhysicalComponentEditor;
 import semgen.annotation.dialog.referenceclass.CompositeAnnotationComponentSearchDialog;
 import semgen.resource.SemGenFont;
@@ -312,7 +312,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 			}
 		}
 		else if(clickedcomponent == modifylabel && smc instanceof PhysicalModelComponent){
-			anndialog.annotator.customtermeditor = new CustomPhysicalComponentEditor(anndialog, (PhysicalModelComponent)smc);
+			new CustomPhysicalComponentEditor(anndialog, (PhysicalModelComponent)smc);
 		}
 		// If we're removing a component of the annotation
 		else if(clickedcomponent == eraselabel){

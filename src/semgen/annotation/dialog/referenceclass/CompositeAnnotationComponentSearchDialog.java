@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.SemGenGUI;
-import semgen.annotation.composites.SemSimComponentAnnotationPanel;
+import semgen.annotation.annotatorpane.composites.SemSimComponentAnnotationPanel;
 import semsim.SemSimConstants;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;

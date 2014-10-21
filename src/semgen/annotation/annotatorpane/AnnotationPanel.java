@@ -1,10 +1,15 @@
-package semgen.annotation;
+package semgen.annotation.annotatorpane;
 
 import semgen.SemGenGUI;
 import semgen.SemGenGUI.NewAnnotatorTask;
-import semgen.annotation.composites.CompositeAnnotationPanel;
-import semgen.annotation.composites.SemSimComponentAnnotationPanel;
-import semgen.annotation.composites.StructuralRelationPanel;
+import semgen.annotation.AnnotationCopier;
+import semgen.annotation.AnnotationObjectButton;
+import semgen.annotation.AnnotatorTab;
+import semgen.annotation.CodewordButton;
+import semgen.annotation.SubmodelButton;
+import semgen.annotation.annotatorpane.composites.CompositeAnnotationPanel;
+import semgen.annotation.annotatorpane.composites.SemSimComponentAnnotationPanel;
+import semgen.annotation.annotatorpane.composites.StructuralRelationPanel;
 import semgen.annotation.dialog.HumanDefEditor;
 import semgen.annotation.dialog.referenceclass.SingularAnnotationEditor;
 import semgen.annotation.dialog.selector.SelectorDialogForCodewordsOfSubmodel;
@@ -40,10 +45,6 @@ import java.awt.Component;
 import java.awt.Cursor;
 
 import javax.swing.*;
-import javax.swing.text.MutableAttributeSet;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
-
 import org.semanticweb.owlapi.model.OWLException;
 
 public class AnnotationPanel extends JPanel implements MouseListener{
@@ -98,16 +99,15 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 		loadsourcemodelbutton.addMouseListener(this);
 		loadsourcemodelbutton.setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
 
-		JPanel humandefpanel = new JPanel();
+		JPanel humandefpanel = new JPanel(new BorderLayout());
 		humandefpanel.setBackground(SemGenGUI.lightblue);
 		humandefpanel.setBorder(BorderFactory.createEmptyBorder(0, indent, 0, 0));
 
 		JPanel humandefsubpanel = new JPanel();
 		humandefsubpanel.setBackground(SemGenGUI.lightblue);
 		humandefsubpanel.setLayout(new BoxLayout(humandefsubpanel, BoxLayout.X_AXIS));
-		humandefpane = new AnnotationClickableTextPane("[unspecified]",this, indent, thebutton.editable);
+		humandefpane = new AnnotationClickableTextPane("[unspecified]",indent, thebutton.editable);
 		humandefpane.setAlignmentX(JTextArea.LEFT_ALIGNMENT);
-		humandefpanel.setLayout(new BorderLayout());
 		humandefsubpanel.add(humandefpane);
 		humandefsubpanel.add(humremovebutton);
 		humandefpanel.add(humandefsubpanel, BorderLayout.WEST);
@@ -116,23 +116,21 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 		JPanel subtitlepanel = new JPanel();
 		subtitlepanel.setLayout(new BoxLayout(subtitlepanel, BoxLayout.Y_AXIS));
 		
-		JPanel codewordspanel = new JPanel();
+		JPanel codewordspanel = new JPanel(new BorderLayout());
 		JEditorPane eqpane = null;
 		
 		// If viewing a submodel
 		if(thebutton instanceof SubmodelButton){
 			if(thebutton.editable) codewordlabel.addMouseListener(this);
-			subtitlefield = new AnnotationClickableTextPane("", this, 2*indent, (thebutton.editable && !(thebutton.ssc instanceof FunctionalSubmodel)));
-			nestedsubmodelpane = new AnnotationClickableTextPane("", this, 2*indent, (thebutton.editable && !(thebutton.ssc instanceof FunctionalSubmodel)));
+			subtitlefield = new AnnotationClickableTextPane("", 2*indent, (thebutton.editable && !(thebutton.ssc instanceof FunctionalSubmodel)));
+			nestedsubmodelpane = new AnnotationClickableTextPane("", 2*indent, (thebutton.editable && !(thebutton.ssc instanceof FunctionalSubmodel)));
 			
-			codewordspanel.setLayout(new BorderLayout());
 			codewordspanel.add(subtitlefield, BorderLayout.NORTH);
 			codewordspanel.add(Box.createHorizontalGlue(), BorderLayout.EAST);
 			codewordspanel.setBackground(SemGenGUI.lightblue);
 			subtitlepanel.add(codewordspanel);
 			
-			JPanel nestedsubmodelpanel = new JPanel();
-			nestedsubmodelpanel.setLayout(new BorderLayout());
+			JPanel nestedsubmodelpanel = new JPanel(new BorderLayout());
 			nestedsubmodelpanel.add(nestedsubmodelpane, BorderLayout.WEST);
 			nestedsubmodelpanel.add(Box.createGlue(), BorderLayout.EAST);
 			nestedsubmodelpanel.setBackground(SemGenGUI.lightblue);
@@ -522,15 +520,6 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 
 	public void mouseEntered(MouseEvent e) {
 		Component component = e.getComponent();
-		if (component instanceof AnnotationClickableTextPane) {
-			// Paint underline on mouse entered
-			AnnotationClickableTextPane jtp = (AnnotationClickableTextPane) component;
-	        MutableAttributeSet attrs = jtp.getInputAttributes();
-	        StyleConstants.setUnderline(attrs, true);
-	        StyledDocument doc = jtp.getStyledDocument();
-	        doc.setCharacterAttributes(0, doc.getLength() + 1, attrs, false);
-			component.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		}
 		if(component instanceof JLabel){
 			((JLabel)component).setCursor(new Cursor(Cursor.HAND_CURSOR));
 		}
@@ -542,15 +531,6 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 
 	public void mouseExited(MouseEvent e) {
 		Component component = e.getComponent();
-		if (component instanceof AnnotationClickableTextPane) {
-			// Remove underline on mouse exit
-			AnnotationClickableTextPane jtp = (AnnotationClickableTextPane) component;
-	        MutableAttributeSet attrs = jtp.getInputAttributes();
-	        StyleConstants.setUnderline(attrs, false);
-	        StyledDocument doc = jtp.getStyledDocument();
-	        doc.setCharacterAttributes(0, doc.getLength() + 1, attrs, false);
-			component.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-		}
 		if(component instanceof JLabel){
 			((JLabel)component).setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}

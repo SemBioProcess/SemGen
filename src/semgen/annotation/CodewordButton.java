@@ -6,7 +6,7 @@ import java.awt.event.*;
 
 import semgen.SemGen;
 import semgen.SemGenGUI;
-import semgen.annotation.composites.PropertyMarker;
+import semgen.annotation.annotatorpane.composites.PropertyMarker;
 import semgen.resource.SemGenFont;
 import semsim.SemSimConstants;
 import semsim.model.computational.DataStructure;

@@ -32,8 +32,8 @@ import org.jdom.JDOMException;
 
 import semgen.SemGen;
 import semgen.SemGenGUI;
-import semgen.annotation.AnnotationPanel;
 import semgen.annotation.AnnotatorTab;
+import semgen.annotation.annotatorpane.AnnotationPanel;
 import semgen.resource.GenericThread;
 import semgen.resource.SemGenError;
 import semgen.resource.SemGenFont;

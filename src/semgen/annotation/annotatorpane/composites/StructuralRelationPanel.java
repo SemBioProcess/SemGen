@@ -1,12 +1,13 @@
-package semgen.annotation.composites;
+package semgen.annotation.annotatorpane.composites;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+
 import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import semgen.annotation.AnnotationPanel;
+import semgen.annotation.annotatorpane.AnnotationPanel;
 import semgen.resource.SemGenFont;
 import semsim.model.annotation.StructuralRelation;
 

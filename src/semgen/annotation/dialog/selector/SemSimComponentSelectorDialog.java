@@ -22,7 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import semgen.SemGenGUI;
-import semgen.annotation.AnnotationPanel;
+import semgen.annotation.annotatorpane.AnnotationPanel;
 import semsim.model.SemSimComponent;
 import semsim.writing.CaseInsensitiveComparator;
 

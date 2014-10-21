@@ -16,8 +16,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import semgen.annotation.AnnotationPanel;
-import semgen.annotation.composites.ProcessParticipantEditor;
+import semgen.annotation.annotatorpane.AnnotationPanel;
+import semgen.annotation.annotatorpane.composites.ProcessParticipantEditor;
 import semgen.annotation.dialog.referenceclass.ObjectPropertyEditor;
 import semsim.SemSimConstants;
 import semsim.model.SemSimModel;

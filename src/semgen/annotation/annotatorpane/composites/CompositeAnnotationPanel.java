@@ -1,4 +1,4 @@
-package semgen.annotation.composites;
+package semgen.annotation.annotatorpane.composites;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 
 import semgen.SemGen;
 import semgen.SemGenGUI;
-import semgen.annotation.AnnotationPanel;
+import semgen.annotation.annotatorpane.AnnotationPanel;
 import semgen.resource.SemGenFont;
 import semsim.Annotatable;
 import semsim.SemSimConstants;

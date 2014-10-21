@@ -1,4 +1,4 @@
-package semgen.annotation.composites;
+package semgen.annotation.annotatorpane.composites;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

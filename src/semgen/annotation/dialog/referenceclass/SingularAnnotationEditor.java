@@ -5,7 +5,7 @@ import java.net.URI;
 
 import javax.swing.JOptionPane;
 
-import semgen.annotation.AnnotationPanel;
+import semgen.annotation.annotatorpane.AnnotationPanel;
 import semsim.Annotatable;
 import semsim.SemSimConstants;
 import semsim.model.annotation.ReferenceOntologyAnnotation;

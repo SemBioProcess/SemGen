@@ -8,7 +8,7 @@ import java.util.Set;
 
 import javax.swing.JCheckBox;
 
-import semgen.annotation.AnnotationPanel;
+import semgen.annotation.annotatorpane.AnnotationPanel;
 import semsim.model.physical.Submodel;
 
 public class SelectorDialogForSubmodelsOfSubmodel extends SemSimComponentSelectorDialog implements  PropertyChangeListener{
