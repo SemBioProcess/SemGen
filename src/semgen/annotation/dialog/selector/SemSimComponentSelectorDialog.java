@@ -1,4 +1,4 @@
-package semgen.annotation;
+package semgen.annotation.dialog.selector;
 
 
 import java.awt.Color;
@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import semgen.SemGenGUI;
+import semgen.annotation.AnnotationPanel;
 import semsim.model.SemSimComponent;
 import semsim.writing.CaseInsensitiveComparator;
 
@@ -38,7 +39,7 @@ public class SemSimComponentSelectorDialog extends JDialog implements ActionList
 	public Set<? extends SemSimComponent> preselectedset;
 	public SemSimComponent ssctoignore;
 	public Set<? extends SemSimComponent> sscstodisable;
-	public AnnotationDialog anndia;
+	public AnnotationPanel anndia;
 	public String title;
 
 	public SemSimComponentSelectorDialog(

@@ -16,6 +16,7 @@ import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
 
 import semgen.SemGenGUI;
+import semgen.annotation.dialog.textminer.TextMinerDialog;
 import semgen.resource.file.SemGenOpenFileChooser;
 import semsim.SemSimConstants;
 import semsim.model.annotation.Annotation;

@@ -6,16 +6,16 @@ import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import semgen.annotation.AnnotationDialog;
+import semgen.annotation.AnnotationPanel;
 import semgen.resource.SemGenFont;
 import semsim.model.annotation.StructuralRelation;
 
 public class StructuralRelationPanel extends JPanel{
 	private static final long serialVersionUID = 4319031091828000135L;
-	public AnnotationDialog anndialog;
+	public AnnotationPanel anndialog;
 	public StructuralRelation structuralRelation;
 
-	public StructuralRelationPanel(AnnotationDialog anndialog, StructuralRelation relation){
+	public StructuralRelationPanel(AnnotationPanel anndialog, StructuralRelation relation){
 		this.anndialog = anndialog;
 		structuralRelation = relation;
 		setLayout(new BorderLayout());

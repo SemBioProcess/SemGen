@@ -1,4 +1,4 @@
-package semgen.annotation;
+package semgen.annotation.dialog.referenceclass;
 
 import java.awt.Color;
 import java.beans.PropertyChangeEvent;
@@ -10,6 +10,8 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
+import semgen.annotation.AnnotatorTab;
+import semgen.annotation.CodewordButton;
 import semgen.resource.SemGenFont;
 import semsim.Annotatable;
 

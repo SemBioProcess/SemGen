@@ -1,4 +1,4 @@
-package semgen.annotation;
+package semgen.annotation.buttontree;
 
 import java.awt.Component;
 import java.awt.Graphics2D;
@@ -25,6 +25,9 @@ import javax.swing.tree.TreeSelectionModel;
 import javax.swing.Painter;
 
 import semgen.SemGenGUI;
+import semgen.annotation.AnnotationObjectButton;
+import semgen.annotation.AnnotatorTab;
+import semgen.annotation.CodewordButton;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
 import semsim.model.SemSimComponent;

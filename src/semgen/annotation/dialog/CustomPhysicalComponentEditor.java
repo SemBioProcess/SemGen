@@ -1,4 +1,4 @@
-package semgen.annotation;
+package semgen.annotation.dialog;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -16,7 +16,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import semgen.annotation.AnnotationPanel;
 import semgen.annotation.composites.ProcessParticipantEditor;
+import semgen.annotation.dialog.referenceclass.ObjectPropertyEditor;
 import semsim.SemSimConstants;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
@@ -30,7 +32,7 @@ public class CustomPhysicalComponentEditor extends JDialog implements PropertyCh
 	
 	public SemSimModel model;
 	public PhysicalModelComponent pmc;
-	public AnnotationDialog anndia;
+	public AnnotationPanel anndia;
 
 	public JTextField mantextfield;
 	public JTextArea descriptionarea;
@@ -46,7 +48,7 @@ public class CustomPhysicalComponentEditor extends JDialog implements PropertyCh
 	public ProcessParticipantEditor hasmediatoreditor;
 	public JComponent[] objectpropertyeditors;
 
-	public CustomPhysicalComponentEditor(AnnotationDialog anndia, PhysicalModelComponent pmc) {
+	public CustomPhysicalComponentEditor(AnnotationPanel anndia, PhysicalModelComponent pmc) {
 
 		this.anndia = anndia;
 		this.model = anndia.semsimmodel;

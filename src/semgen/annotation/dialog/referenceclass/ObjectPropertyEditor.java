@@ -1,4 +1,4 @@
-package semgen.annotation;
+package semgen.annotation.dialog.referenceclass;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -19,6 +19,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import semgen.annotation.dialog.selector.SemSimComponentSelectorDialog;
 import semgen.resource.SemGenIcon;
 import semgen.resource.uicomponent.SemGenScrollPane;
 import semsim.Annotatable;

@@ -1,10 +1,11 @@
-package semgen.annotation;
+package semgen.annotation.dialog.referenceclass;
 
 import java.beans.PropertyChangeEvent;
 import java.net.URI;
 
 import javax.swing.JOptionPane;
 
+import semgen.annotation.AnnotationPanel;
 import semsim.Annotatable;
 import semsim.SemSimConstants;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
@@ -14,10 +15,10 @@ public class SingularAnnotationEditor extends AddReferenceClassDialog {
 	 * 
 	 */
 	private static final long serialVersionUID = -293956235473792163L;
-	public AnnotationDialog dia;
+	public AnnotationPanel dia;
 	public String codeword;
 
-	public SingularAnnotationEditor(AnnotationDialog anndialog, Object[] options) {
+	public SingularAnnotationEditor(AnnotationPanel anndialog, Object[] options) {
 		super(anndialog.annotator, SemSimConstants.ALL_SEARCHABLE_ONTOLOGIES, options, (Annotatable)anndialog.smc);
 		dia = anndialog;
 		codeword = dia.codeword;
@@ -51,14 +52,17 @@ public class SingularAnnotationEditor extends AddReferenceClassDialog {
 	}
 	
 	public void propertyChange(PropertyChangeEvent arg0) {
-		String value = optionPane.getValue().toString();
+		String propertyfired = arg0.getPropertyName();
+		if (propertyfired.equals("value")) {
+			String value = optionPane.getValue().toString();
 
-//	 If we're using this dialog to apply a non-composite annotation
-		if(value == "Annotate" && this.getFocusOwner() != refclasspanel.findbox){
-			addClassToOntology();
-			dia.annotator.setModelSaved(false);
-			optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+			//	 If we're using this dialog to apply a non-composite annotation
+			if(value == "Annotate" && this.getFocusOwner() != refclasspanel.findbox){
+				addClassToOntology();
+				dia.annotator.setModelSaved(false);
+				optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+			}
+			dispose();
 		}
-		this.setVisible(false);
 	}
 }

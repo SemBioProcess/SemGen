@@ -1,4 +1,4 @@
-package semgen.annotation;
+package semgen.annotation.dialog;
 
 
 import java.beans.PropertyChangeEvent;
@@ -16,6 +16,9 @@ import javax.swing.ListSelectionModel;
 
 import org.semanticweb.owlapi.model.OWLException;
 
+import semgen.annotation.AnnotatorTab;
+import semgen.annotation.CodewordButton;
+import semgen.annotation.dialog.referenceclass.ReferenceClassFinderPanel;
 import semgen.resource.uicomponent.SemGenScrollPane;
 import semsim.SemSimConstants;
 import semsim.model.annotation.Annotation;

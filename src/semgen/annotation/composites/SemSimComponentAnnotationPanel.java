@@ -29,8 +29,9 @@ import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.SemGen;
 import semgen.SemGenGUI;
-import semgen.annotation.AnnotationDialog;
-import semgen.annotation.CustomPhysicalComponentEditor;
+import semgen.annotation.AnnotationPanel;
+import semgen.annotation.dialog.CustomPhysicalComponentEditor;
+import semgen.annotation.dialog.referenceclass.CompositeAnnotationComponentSearchDialog;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
 import semgen.resource.uicomponent.ExternalURLButton;
@@ -54,7 +55,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 
 	private static final long serialVersionUID = -6606265105415658572L;
 	public Annotatable smc;
-	public AnnotationDialog anndialog;
+	public AnnotationPanel anndialog;
 	public SemSimModel semsimmodel;
 	public JComboBox<String> combobox = new JComboBox<String>(new String[]{});
 	public JLabel searchlabel = new JLabel(SemGenIcon.searchicon);
@@ -66,7 +67,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 	public Object selecteditem;
 	public Boolean editable;
 	
-	public SemSimComponentAnnotationPanel(AnnotationDialog anndia, Annotatable smc){
+	public SemSimComponentAnnotationPanel(AnnotationPanel anndia, Annotatable smc){
 		this.anndialog = anndia;
 		this.smc = smc;
 		this.semsimmodel = anndia.semsimmodel;

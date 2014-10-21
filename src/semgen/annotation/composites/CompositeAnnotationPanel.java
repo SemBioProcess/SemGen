@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 
 import semgen.SemGen;
 import semgen.SemGenGUI;
-import semgen.annotation.AnnotationDialog;
+import semgen.annotation.AnnotationPanel;
 import semgen.resource.SemGenFont;
 import semsim.Annotatable;
 import semsim.SemSimConstants;
@@ -34,13 +34,13 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 	private static final long serialVersionUID = -3955122899870904199L;
 	public SemSimModel semsimmodel;
 	public DataStructure datastructure;
-	public AnnotationDialog ad;
+	public AnnotationPanel ad;
 	public JButton addpropertybutton = new JButton("Add property");
 	public JLabel propertyoflabel = new JLabel("property_of");
 	public JButton addentbutton = new JButton("Add entity");
 	public JButton addprocbutton = new JButton("Add process");
 	
-	public CompositeAnnotationPanel(int orientation, AnnotationDialog ad){
+	public CompositeAnnotationPanel(int orientation, AnnotationPanel ad){
 		super(orientation);
 		this.setBackground(new Color(207, 215, 252));
 		this.ad = ad;

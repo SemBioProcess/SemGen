@@ -38,7 +38,6 @@ public class CellMLbioRDFblock {
 	public Map<URI, Resource> refURIsandresources;
 	public Set<String> localids = new HashSet<String>();
 	public String modelns;
-	//public Map<CompositePhysicalEntity,URI> compositeEntitiesAndIndexes = new HashMap<CompositePhysicalEntity,URI>();
 	
 	public static Property hassourceparticipant = ResourceFactory.createProperty(SemSimConstants.HAS_SOURCE_PARTICIPANT_URI.toString());
 	public static Property hassinkparticipant = ResourceFactory.createProperty(SemSimConstants.HAS_SINK_PARTICIPANT_URI.toString());
@@ -270,7 +269,6 @@ public class CellMLbioRDFblock {
 
 			
 			String resname = modelns;
-//			String resname = "#";
 			
 			String typeprefix = "unknown";
 			if(pmc instanceof PhysicalProperty)

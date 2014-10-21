@@ -1,16 +1,18 @@
-package semgen.annotation;
+package semgen.annotation.dialog;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
+
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import semgen.annotation.AnnotationPanel;
 import semsim.model.SemSimComponent;
 
 public class HumanDefEditor extends JDialog implements PropertyChangeListener {
@@ -22,9 +24,9 @@ public class HumanDefEditor extends JDialog implements PropertyChangeListener {
 	private JOptionPane optionPane;
 	private JTextArea defarea = new JTextArea();
 	public SemSimComponent ssc;
-	public AnnotationDialog anndialog;
+	public AnnotationPanel anndialog;
 
-	public HumanDefEditor(SemSimComponent ssc, AnnotationDialog dialog, Boolean isvisible) {
+	public HumanDefEditor(SemSimComponent ssc, AnnotationPanel dialog, Boolean isvisible) {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.ssc = ssc;
 		anndialog = dialog;
@@ -73,7 +75,8 @@ public class HumanDefEditor extends JDialog implements PropertyChangeListener {
 				anndialog.refreshHumanReadableDefinition();
 				remove(this);
 			}
-			setVisible(false);
+			dispose();
 		}
+		
 	}
 }

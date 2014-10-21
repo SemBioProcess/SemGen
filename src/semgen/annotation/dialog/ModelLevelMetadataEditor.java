@@ -1,8 +1,9 @@
-package semgen.annotation;
+package semgen.annotation.dialog;
 
 import org.semanticweb.owlapi.model.*;
 
 import semgen.SemGen;
+import semgen.annotation.AnnotatorTab;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
 import semgen.resource.uicomponent.SemGenScrollPane;

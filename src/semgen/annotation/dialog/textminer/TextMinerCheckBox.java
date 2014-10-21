@@ -1,4 +1,4 @@
-package semgen.annotation;
+package semgen.annotation.dialog.textminer;
 
 import javax.swing.JCheckBox;
 

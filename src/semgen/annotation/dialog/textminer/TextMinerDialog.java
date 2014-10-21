@@ -1,4 +1,4 @@
-package semgen.annotation;
+package semgen.annotation.dialog.textminer;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -46,6 +46,8 @@ import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
 
 import semsim.ResourcesManager;
+import semgen.annotation.AnnotatorTab;
+import semgen.annotation.CodewordButton;
 import semgen.resource.GenericThread;
 import semgen.resource.SemGenError;
 import semgen.resource.SemGenFont;

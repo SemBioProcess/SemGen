@@ -9,6 +9,10 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import semgen.SemGen;
 import semgen.SemGenGUI;
 import semgen.SemGenSettings;
+import semgen.annotation.buttontree.AnnotatorButtonTree;
+import semgen.annotation.dialog.CustomPhysicalComponentEditor;
+import semgen.annotation.dialog.HumanDefEditor;
+import semgen.annotation.dialog.textminer.TextMinerDialog;
 import semgen.resource.ComparatorByName;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
@@ -64,9 +68,6 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	public File sourcefile; //File originally loaded at start of Annotation session (could be in SBML, MML, CellML or SemSim format)
 	public URI fileURI;
 	
-	public SingularAnnotationEditor noncompeditor;
-	public HumanDefEditor humdefeditor;
-
 	private JSplitPane splitpane;
 	private JSplitPane eastsplitpane;
 	public JSplitPane westsplitpane;
@@ -77,7 +78,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	
 	public AnnotatorButtonTree tree;
 
-	public AnnotationDialog anndialog;
+	public AnnotationPanel anndialog;
 	public AnnotationObjectButton focusbutton;
 	public Hashtable<String, CodewordButton> codewordbuttontable = new Hashtable<String, CodewordButton>();
 	public Hashtable<String, SubmodelButton> submodelbuttontable = new Hashtable<String, SubmodelButton>();
@@ -314,7 +315,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		} 
 	}
 
-	public AnnotationDialog annotationObjectAction(AnnotationObjectButton aob) throws BadLocationException, IOException {
+	public AnnotationPanel annotationObjectAction(AnnotationObjectButton aob) throws BadLocationException, IOException {
 		if(focusbutton!=null){
 			focusbutton.setBackground(Color.white);
 		}
@@ -322,7 +323,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		focusbutton = aob;
 
 		dialogscrollpane.getViewport().removeAll();
-		anndialog = new AnnotationDialog(this, aob);
+		anndialog = new AnnotationPanel(this, aob);
 		dialogscrollpane.getViewport().add(anndialog);
 		
 		// Highlight occurrences of codeword in legacy code
@@ -869,10 +870,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		
 		focusbutton = aob;
 		if (whichann == aob.humdeflabel) {
-			if (humdefeditor != null)
-				humdefeditor.dispose();
-			humdefeditor = new HumanDefEditor(aob.ssc, anndialog, true);
-			humdefeditor.setVisible(true);
+			new HumanDefEditor(aob.ssc, anndialog, true);
 		}
 		if(whichann == aob.singularannlabel){
 			anndialog.showSingularAnnotationEditor();

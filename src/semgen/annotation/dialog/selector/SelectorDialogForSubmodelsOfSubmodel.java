@@ -1,4 +1,4 @@
-package semgen.annotation;
+package semgen.annotation.dialog.selector;
 
 import java.awt.Component;
 import java.beans.PropertyChangeEvent;
@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.swing.JCheckBox;
 
+import semgen.annotation.AnnotationPanel;
 import semsim.model.physical.Submodel;
 
 public class SelectorDialogForSubmodelsOfSubmodel extends SemSimComponentSelectorDialog implements  PropertyChangeListener{
@@ -16,7 +17,7 @@ public class SelectorDialogForSubmodelsOfSubmodel extends SemSimComponentSelecto
 	public Submodel submodel;
 
 	public SelectorDialogForSubmodelsOfSubmodel(
-			AnnotationDialog anndia,
+			AnnotationPanel anndia,
 			Set<Submodel> setofsubs, 
 			Submodel sub2ignore,
 			Submodel sub,
@@ -49,7 +50,7 @@ public class SelectorDialogForSubmodelsOfSubmodel extends SemSimComponentSelecto
 			anndia.refreshSubmodelData();
 			anndia.annotator.setModelSaved(false);
 		}
-		setVisible(false);
+		dispose();
 		
 	}
 }

@@ -5,6 +5,10 @@ import semgen.SemGenGUI.NewAnnotatorTask;
 import semgen.annotation.composites.CompositeAnnotationPanel;
 import semgen.annotation.composites.SemSimComponentAnnotationPanel;
 import semgen.annotation.composites.StructuralRelationPanel;
+import semgen.annotation.dialog.HumanDefEditor;
+import semgen.annotation.dialog.referenceclass.SingularAnnotationEditor;
+import semgen.annotation.dialog.selector.SelectorDialogForCodewordsOfSubmodel;
+import semgen.annotation.dialog.selector.SelectorDialogForSubmodelsOfSubmodel;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
 import semgen.resource.uicomponent.SemGenSeparator;
@@ -42,7 +46,7 @@ import javax.swing.text.StyledDocument;
 
 import org.semanticweb.owlapi.model.OWLException;
 
-public class AnnotationDialog extends JPanel implements MouseListener{
+public class AnnotationPanel extends JPanel implements MouseListener{
 
 	private static final long serialVersionUID = -7946871333815617810L;
 	public AnnotatorTab annotator;
@@ -53,11 +57,10 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 	public JPanel mainpanel;
 	public SemSimComponentAnnotationPanel singularannpanel;
 	private JLabel codewordlabel;
-	public AnnotationDialogClickableTextPane subtitlefield;
-	public AnnotationDialogClickableTextPane nestedsubmodelpane;
-	private JLabel compositelabel;
+	public AnnotationClickableTextPane subtitlefield;
+	public AnnotationClickableTextPane nestedsubmodelpane;
 	private JLabel singularannlabel = new JLabel("Singular annotation");
-	public AnnotationDialogClickableTextPane humandefpane;
+	public AnnotationClickableTextPane humandefpane;
 	public JLabel humremovebutton = new JLabel(SemGenIcon.eraseiconsmall);
 	private JLabel copyannsbutton = new JLabel(SemGenIcon.copyicon);
 	private JLabel loadsourcemodelbutton = new JLabel(SemGenIcon.annotatoricon);
@@ -68,7 +71,7 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 	
 	public int indent = 15;
 
-	public AnnotationDialog(AnnotatorTab ann, AnnotationObjectButton aob) throws IOException{
+	public AnnotationPanel(AnnotatorTab ann, AnnotationObjectButton aob) throws IOException{
 		annotator = ann;
 		thebutton = aob;
 		codeword = aob.getName();
@@ -102,7 +105,7 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 		JPanel humandefsubpanel = new JPanel();
 		humandefsubpanel.setBackground(SemGenGUI.lightblue);
 		humandefsubpanel.setLayout(new BoxLayout(humandefsubpanel, BoxLayout.X_AXIS));
-		humandefpane = new AnnotationDialogClickableTextPane("[unspecified]",this, indent, thebutton.editable);
+		humandefpane = new AnnotationClickableTextPane("[unspecified]",this, indent, thebutton.editable);
 		humandefpane.setAlignmentX(JTextArea.LEFT_ALIGNMENT);
 		humandefpanel.setLayout(new BorderLayout());
 		humandefsubpanel.add(humandefpane);
@@ -119,8 +122,8 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 		// If viewing a submodel
 		if(thebutton instanceof SubmodelButton){
 			if(thebutton.editable) codewordlabel.addMouseListener(this);
-			subtitlefield = new AnnotationDialogClickableTextPane("", this, 2*indent, (thebutton.editable && !(thebutton.ssc instanceof FunctionalSubmodel)));
-			nestedsubmodelpane = new AnnotationDialogClickableTextPane("", this, 2*indent, (thebutton.editable && !(thebutton.ssc instanceof FunctionalSubmodel)));
+			subtitlefield = new AnnotationClickableTextPane("", this, 2*indent, (thebutton.editable && !(thebutton.ssc instanceof FunctionalSubmodel)));
+			nestedsubmodelpane = new AnnotationClickableTextPane("", this, 2*indent, (thebutton.editable && !(thebutton.ssc instanceof FunctionalSubmodel)));
 			
 			codewordspanel.setLayout(new BorderLayout());
 			codewordspanel.add(subtitlefield, BorderLayout.NORTH);
@@ -206,7 +209,7 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 			mainpanel.add(eqpane);
 			mainpanel.add(new SemGenSeparator());
 			
-			compositelabel = new JLabel("Composite annotation");
+			JLabel compositelabel = new JLabel("Composite annotation");
 			compositelabel.setFont(SemGenFont.defaultBold());
 			compositelabel.setBorder(BorderFactory.createEmptyBorder(10, indent, 0, 0));
 			
@@ -329,7 +332,7 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 		annotator.updateTreeNode();
 	}
 	
-	public void setSubmodelDataOnScreen(Submodel sub, AnnotationDialogClickableTextPane pane, Set<? extends SemSimComponent> associatedsscs, String title){	
+	public void setSubmodelDataOnScreen(Submodel sub, AnnotationClickableTextPane pane, Set<? extends SemSimComponent> associatedsscs, String title){	
 		if(thebutton.ssc instanceof FunctionalSubmodel) pane.setForeground(Color.black);
 		else pane.setForeground(Color.blue);
 		
@@ -412,9 +415,7 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 	}
 	
 	public void showSingularAnnotationEditor(){
-		if (annotator.noncompeditor != null)
-			annotator.noncompeditor.dispose();
-		annotator.noncompeditor = new SingularAnnotationEditor(this, new Object[]{"Annotate","Close"});
+		new SingularAnnotationEditor(this, new Object[]{"Annotate","Close"});
 	}	
 	
 	
@@ -461,7 +462,6 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 		}
 		// Actions for when user clicks on an AnnotationDialogTextArea
 		if (arg0.getComponent() == subtitlefield) {
-			if(sdfcoc!=null){sdfcoc.dispose();}
 			Submodel sub = ((SubmodelButton)thebutton).sub;
 			sdfcoc = new SelectorDialogForCodewordsOfSubmodel(
 					this,
@@ -475,7 +475,6 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 		}
 		
 		if( arg0.getComponent() == nestedsubmodelpane){
-			if(sdfcomp!=null){sdfcomp.dispose();}
 			Submodel sub = (Submodel)thebutton.ssc;
 			sdfcomp = new SelectorDialogForSubmodelsOfSubmodel(
 					this,
@@ -488,13 +487,8 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 					"Select components");
 		}
 		
-		if (arg0.getComponent() == this.humandefpane) {
-			if (annotator.humdefeditor != null) {
-				annotator.humdefeditor.dispose();
-			}
-			
-			annotator.humdefeditor = new HumanDefEditor(smc, this, true);
-			annotator.humdefeditor.setVisible(true);
+		if (arg0.getComponent() == humandefpane) {
+			new HumanDefEditor(smc, this, true);
 		}
 		
 		if(arg0.getComponent() == copyannsbutton){
@@ -528,9 +522,9 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 
 	public void mouseEntered(MouseEvent e) {
 		Component component = e.getComponent();
-		if (component instanceof AnnotationDialogClickableTextPane) {
+		if (component instanceof AnnotationClickableTextPane) {
 			// Paint underline on mouse entered
-			AnnotationDialogClickableTextPane jtp = (AnnotationDialogClickableTextPane) component;
+			AnnotationClickableTextPane jtp = (AnnotationClickableTextPane) component;
 	        MutableAttributeSet attrs = jtp.getInputAttributes();
 	        StyleConstants.setUnderline(attrs, true);
 	        StyledDocument doc = jtp.getStyledDocument();
@@ -548,9 +542,9 @@ public class AnnotationDialog extends JPanel implements MouseListener{
 
 	public void mouseExited(MouseEvent e) {
 		Component component = e.getComponent();
-		if (component instanceof AnnotationDialogClickableTextPane) {
+		if (component instanceof AnnotationClickableTextPane) {
 			// Remove underline on mouse exit
-			AnnotationDialogClickableTextPane jtp = (AnnotationDialogClickableTextPane) component;
+			AnnotationClickableTextPane jtp = (AnnotationClickableTextPane) component;
 	        MutableAttributeSet attrs = jtp.getInputAttributes();
 	        StyleConstants.setUnderline(attrs, false);
 	        StyledDocument doc = jtp.getStyledDocument();

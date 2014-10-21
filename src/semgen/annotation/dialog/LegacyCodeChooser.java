@@ -1,4 +1,4 @@
-package semgen.annotation;
+package semgen.annotation.dialog;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
+import semgen.annotation.AnnotatorTab;
 import semgen.resource.file.SemGenOpenFileChooser;
 import semsim.SemSimConstants;
 import semsim.model.annotation.Annotation;

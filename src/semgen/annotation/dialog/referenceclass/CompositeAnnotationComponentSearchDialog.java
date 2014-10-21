@@ -1,12 +1,15 @@
-package semgen.annotation.composites;
+package semgen.annotation.dialog.referenceclass;
 
 import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 import java.net.URI;
+
 import javax.swing.JOptionPane;
+
 import org.semanticweb.owlapi.model.OWLException;
+
 import semgen.SemGenGUI;
-import semgen.annotation.AddReferenceClassDialog;
+import semgen.annotation.composites.SemSimComponentAnnotationPanel;
 import semsim.SemSimConstants;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;

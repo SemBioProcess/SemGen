@@ -1,4 +1,4 @@
-package semgen.annotation;
+package semgen.annotation.dialog;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;

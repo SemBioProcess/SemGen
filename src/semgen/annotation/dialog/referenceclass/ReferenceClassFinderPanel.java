@@ -1,4 +1,4 @@
-package semgen.annotation;
+package semgen.annotation.dialog.referenceclass;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -18,7 +18,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -33,6 +32,8 @@ import org.jdom.JDOMException;
 
 import semgen.SemGen;
 import semgen.SemGenGUI;
+import semgen.annotation.AnnotationPanel;
+import semgen.annotation.AnnotatorTab;
 import semgen.resource.GenericThread;
 import semgen.resource.SemGenError;
 import semgen.resource.SemGenFont;
@@ -55,7 +56,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 	public JPanel panelright;
 	public AnnotatorTab annotator;
 	public String codeword;
-	public AnnotationDialog anndialog;
+	public AnnotationPanel anndialog;
 	private JPanel selectKBsourcepanel;
 	private JLabel selectKBsource;
 

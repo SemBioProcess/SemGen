@@ -23,7 +23,7 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
 import semgen.SemGenGUI;
-import semgen.annotation.SemSimComponentSelectorDialog;
+import semgen.annotation.dialog.selector.SemSimComponentSelectorDialog;
 import semgen.resource.SemGenIcon;
 import semgen.resource.uicomponent.SemGenScrollPane;
 import semsim.SemSimConstants;
