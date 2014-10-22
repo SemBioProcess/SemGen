@@ -30,7 +30,6 @@ import javax.swing.event.ListSelectionListener;
 import org.jdom.JDOMException;
 
 import semgen.SemGen;
-import semgen.SemGenGUI;
 import semgen.annotation.AnnotatorTab;
 import semgen.resource.GenericThread;
 import semgen.resource.SemGenError;
@@ -51,7 +50,6 @@ public class ReferenceClassFinderPanel extends JPanel implements
 	 * 
 	 */
 	private static final long serialVersionUID = -7884648622981159203L;
-	public JPanel panelright;
 	public AnnotatorTab annotator;
 	
 	public JComboBox<String> ontologychooser;
@@ -241,7 +239,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		resultslistright.removeAll();
 
 		// If the user is searching BioPortal
-		if (bioportalID!=null && SemGenGUI.annotateitemusebioportal.isSelected()) {
+		if (bioportalID!=null) {
 			BioPortalSearcher bps = new BioPortalSearcher();
 			try {
 				bps.search(text, bioportalID, findchooser.getSelectedIndex());

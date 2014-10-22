@@ -25,6 +25,7 @@ import javax.swing.tree.TreeSelectionModel;
 import javax.swing.Painter;
 
 import semgen.SemGenGUI;
+import semgen.SemGenSettings;
 import semgen.annotation.AnnotationObjectButton;
 import semgen.annotation.AnnotatorTab;
 import semgen.annotation.CodewordButton;
@@ -110,9 +111,9 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 		}
 	}
 
-	class MyPainter implements Painter{
+	class MyPainter implements Painter<Object>{
 		public void paint(Graphics2D arg0, Object arg1, int arg2, int arg3) {
-			arg0.setColor(SemGenGUI.lightblue);
+			arg0.setColor(SemGenSettings.lightblue);
 			arg0.fillRect( 0, 0, arg2, arg3 );
 		}
 	}

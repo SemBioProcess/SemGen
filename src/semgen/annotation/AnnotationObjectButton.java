@@ -27,11 +27,8 @@ public class AnnotationObjectButton extends JPanel implements MouseListener{
 
 	public AnnotatorTab annotater;
 	public SemSimComponent ssc;
-	public Boolean compannfilled;
 	public String companntext;
-	public Boolean noncompannfilled;
-	public Boolean humdeffilled;
-	public Boolean depfilled;
+
 	public Boolean editable;
 	public JLabel namelabel = new JLabel();
 	public JLabel compannlabel = new JLabel();
@@ -45,15 +42,12 @@ public class AnnotationObjectButton extends JPanel implements MouseListener{
 	public int ipph = 18;
 	
 	public AnnotationObjectButton(AnnotatorTab ann, SemSimComponent ssc, boolean compannfilled, String companntext, 
-			boolean noncompannfilled, boolean humdeffilled, boolean depfilled, boolean editable) {
+			boolean noncompannfilled, boolean humdeffilled, boolean editable) {
 		this.annotater = ann;
 		this.ssc = ssc;
 		this.setLayout(new BorderLayout());
-		this.noncompannfilled = noncompannfilled;
 		this.companntext = companntext;
-		this.compannfilled = compannfilled;
-		this.humdeffilled = humdeffilled;
-		this.depfilled = depfilled;
+		
 		this.editable = editable;
 		this.setFocusable(true);
 		this.addKeyListener(ann);
@@ -87,7 +81,7 @@ public class AnnotationObjectButton extends JPanel implements MouseListener{
 		singularannlabel.setToolTipText("Click to set singular reference annotation");
 		singularannlabel.setBorder(BorderFactory.createEmptyBorder(0, 2, 0, 2));
 		singularannlabel.setAlignmentY(JComponent.CENTER_ALIGNMENT);
-		compannlabel.setFont(SemGenFont.Plain("Serif", -3));
+		singularannlabel.setFont(SemGenFont.Plain("Serif", -3));
 
 		
 		humdeflabel.setText("_");
@@ -95,7 +89,7 @@ public class AnnotationObjectButton extends JPanel implements MouseListener{
 		humdeflabel.setToolTipText("Click to set free-text description");
 		humdeflabel.setBorder(BorderFactory.createEmptyBorder(0, 1, 0, 1));
 		humdeflabel.setAlignmentY(JComponent.CENTER_ALIGNMENT);
-		compannlabel.setFont(SemGenFont.Plain("Serif", -3));
+		humdeflabel.setFont(SemGenFont.Plain("Serif", -3));
 
 		deplabel.setText("_");
 		deplabel.setName("D");
@@ -119,10 +113,7 @@ public class AnnotationObjectButton extends JPanel implements MouseListener{
 		
 		if (humdeffilled) {annotationAdded(humdeflabel, false);} 
 		else {annotationNotAdded(humdeflabel);}
-		
-		if (depfilled) {annotationAdded(deplabel, false);}
-		else {annotationNotAdded(deplabel);}
-		
+				
 		indicatorspanel.add(compannlabel);
 		indicatorspanel.add(singularannlabel);
 		indicatorspanel.add(humdeflabel);
@@ -167,7 +158,7 @@ public class AnnotationObjectButton extends JPanel implements MouseListener{
 	}
 	
 	public void refreshFreeTextCode(){
-		if(ssc.getDescription()==null) annotationNotAdded(humdeflabel);
+		if(ssc.getDescription().isEmpty()) annotationNotAdded(humdeflabel);
 		else annotationAdded(humdeflabel, false);
 	}
 
@@ -175,11 +166,11 @@ public class AnnotationObjectButton extends JPanel implements MouseListener{
 		label.setFont(SemGenFont.Bold("Serif", -2));
 		if(editable) label.setForeground(Color.blue);
 		else label.setForeground(Color.gray);
-		validate();
-		repaint();
 		if (!iscompann) {
 			label.setText(label.getName());
 		}
+		validate();
+		repaint();
 	}
 
 	public void annotationNotAdded(JLabel label) {

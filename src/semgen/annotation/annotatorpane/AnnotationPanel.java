@@ -2,6 +2,7 @@ package semgen.annotation.annotatorpane;
 
 import semgen.SemGenGUI;
 import semgen.SemGenGUI.NewAnnotatorTask;
+import semgen.SemGenSettings;
 import semgen.annotation.AnnotationCopier;
 import semgen.annotation.AnnotationObjectButton;
 import semgen.annotation.AnnotatorTab;
@@ -45,6 +46,7 @@ import java.awt.Component;
 import java.awt.Cursor;
 
 import javax.swing.*;
+
 import org.semanticweb.owlapi.model.OWLException;
 
 public class AnnotationPanel extends JPanel implements MouseListener{
@@ -65,8 +67,6 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 	public JLabel humremovebutton = new JLabel(SemGenIcon.eraseiconsmall);
 	private JLabel copyannsbutton = new JLabel(SemGenIcon.copyicon);
 	private JLabel loadsourcemodelbutton = new JLabel(SemGenIcon.annotatoricon);
-	public SelectorDialogForCodewordsOfSubmodel sdfcoc;
-	public SelectorDialogForSubmodelsOfSubmodel sdfcomp;
 	public Set<DataStructure> cdwdsfromcomps;
 	public String codeword;
 	
@@ -82,7 +82,7 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 			smc = ((SubmodelButton)aob).sub;
 		else smc = ((CodewordButton)aob).ds;
 		
-		setBackground(SemGenGUI.lightblue);
+		setBackground(SemGenSettings.lightblue);
 		setLayout(new BorderLayout());
 
 		codewordlabel = new JLabel(codeword);
@@ -100,11 +100,11 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 		loadsourcemodelbutton.setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
 
 		JPanel humandefpanel = new JPanel(new BorderLayout());
-		humandefpanel.setBackground(SemGenGUI.lightblue);
+		humandefpanel.setBackground(SemGenSettings.lightblue);
 		humandefpanel.setBorder(BorderFactory.createEmptyBorder(0, indent, 0, 0));
 
 		JPanel humandefsubpanel = new JPanel();
-		humandefsubpanel.setBackground(SemGenGUI.lightblue);
+		humandefsubpanel.setBackground(SemGenSettings.lightblue);
 		humandefsubpanel.setLayout(new BoxLayout(humandefsubpanel, BoxLayout.X_AXIS));
 		humandefpane = new AnnotationClickableTextPane("[unspecified]",indent, thebutton.editable);
 		humandefpane.setAlignmentX(JTextArea.LEFT_ALIGNMENT);
@@ -127,13 +127,13 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 			
 			codewordspanel.add(subtitlefield, BorderLayout.NORTH);
 			codewordspanel.add(Box.createHorizontalGlue(), BorderLayout.EAST);
-			codewordspanel.setBackground(SemGenGUI.lightblue);
+			codewordspanel.setBackground(SemGenSettings.lightblue);
 			subtitlepanel.add(codewordspanel);
 			
 			JPanel nestedsubmodelpanel = new JPanel(new BorderLayout());
 			nestedsubmodelpanel.add(nestedsubmodelpane, BorderLayout.WEST);
 			nestedsubmodelpanel.add(Box.createGlue(), BorderLayout.EAST);
-			nestedsubmodelpanel.setBackground(SemGenGUI.lightblue);
+			nestedsubmodelpanel.setBackground(SemGenSettings.lightblue);
 			subtitlepanel.add(nestedsubmodelpanel);
 		}
 		// If viewing a codeword, get the equation and units associated with the codeword
@@ -158,7 +158,7 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 			compositepanel = new CompositeAnnotationPanel(BoxLayout.Y_AXIS, this);
 		}
 		subtitlepanel.setBorder(BorderFactory.createEmptyBorder(0, indent, 0, indent));
-		subtitlepanel.setBackground(SemGenGUI.lightblue);
+		subtitlepanel.setBackground(SemGenSettings.lightblue);
 		
 		singularannlabel.setFont(SemGenFont.defaultBold());
 		singularannlabel.setBorder(BorderFactory.createEmptyBorder(10, indent, 5, 0));
@@ -169,7 +169,7 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 		mainpanel.setLayout(new BoxLayout(mainpanel, BoxLayout.Y_AXIS));
 		
 		Box mainheader = Box.createHorizontalBox();
-		mainheader.setBackground(SemGenGUI.lightblue);
+		mainheader.setBackground(SemGenSettings.lightblue);
 		mainheader.setAlignmentX(LEFT_ALIGNMENT);
 		
 		codewordlabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
@@ -222,7 +222,7 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 		singularannpanel.setAlignmentX(JPanel.LEFT_ALIGNMENT);
 		mainpanel.add(singularannlabel);
 		mainpanel.add(singularannpanel);
-		mainpanel.setBackground(SemGenGUI.lightblue);
+		mainpanel.setBackground(SemGenSettings.lightblue);
 		
 		add(mainpanel, BorderLayout.NORTH);
 		add(Box.createVerticalGlue(), BorderLayout.SOUTH);
@@ -235,7 +235,7 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 
 	public void FormatComponents(JPanel panel, JLabel label, int panelindent) {
 		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
-		panel.setBackground(SemGenGUI.lightblue);
+		panel.setBackground(SemGenSettings.lightblue);
 		panel.setBorder(BorderFactory.createEmptyBorder(0, panelindent, 0, 15));
 		panel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		label.setBorder(BorderFactory.createEmptyBorder(10, panelindent/2, 3, 15));
@@ -461,7 +461,7 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 		// Actions for when user clicks on an AnnotationDialogTextArea
 		if (arg0.getComponent() == subtitlefield) {
 			Submodel sub = ((SubmodelButton)thebutton).sub;
-			sdfcoc = new SelectorDialogForCodewordsOfSubmodel(
+			new SelectorDialogForCodewordsOfSubmodel(
 					this,
 					semsimmodel.getDataStructures(), 
 					null,
@@ -474,7 +474,7 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 		
 		if( arg0.getComponent() == nestedsubmodelpane){
 			Submodel sub = (Submodel)thebutton.ssc;
-			sdfcomp = new SelectorDialogForSubmodelsOfSubmodel(
+			new SelectorDialogForSubmodelsOfSubmodel(
 					this,
 					semsimmodel.getSubmodels(),
 					sub,

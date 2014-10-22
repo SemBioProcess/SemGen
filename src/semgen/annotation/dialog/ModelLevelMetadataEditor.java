@@ -214,48 +214,51 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 	
 	public final void propertyChange(PropertyChangeEvent e) {
 		// Set the model-level annotations
-		String value = optionPane.getValue().toString();
-		if (value == "Apply") {
-			
-			// Test to make sure all annotations are complete
-			Component[] cmpnts = genmodinfo.getComponents();
-			for(int g=0; g<cmpnts.length; g++){
-				if(cmpnts[g] instanceof MetadataItem){
-					MetadataItem mi = (MetadataItem)cmpnts[g];
-					if(mi.editable){
-						if(mi.ta.getText()==null || mi.ta.getText().equals("")){
-							JOptionPane.showMessageDialog(this, "Please complete or remove all annotations first.", "Error", JOptionPane.ERROR_MESSAGE);
-							optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-							return;
+		String propertyfired = e.getPropertyName();
+		if (propertyfired.equals("value")) {
+			String value = optionPane.getValue().toString();
+			if (value == "Apply") {
+				
+				// Test to make sure all annotations are complete
+				Component[] cmpnts = genmodinfo.getComponents();
+				for(int g=0; g<cmpnts.length; g++){
+					if(cmpnts[g] instanceof MetadataItem){
+						MetadataItem mi = (MetadataItem)cmpnts[g];
+						if(mi.editable){
+							if(mi.ta.getText()==null || mi.ta.getText().equals("")){
+								JOptionPane.showMessageDialog(this, "Please complete or remove all annotations first.", "Error", JOptionPane.ERROR_MESSAGE);
+								optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+								return;
+							}
 						}
 					}
 				}
-			}
-			
-			// Remove all existing model-level annotations
-			annotator.semsimmodel.setAnnotations(new HashSet<Annotation>());
-			for(int g=0; g<cmpnts.length; g++){
-				if(cmpnts[g] instanceof MetadataItem){
-					MetadataItem mi = (MetadataItem)cmpnts[g];
-					
-					// This will probably need to be edited so that working with combo boxes functions correctly
-					if(mi.editable){
-						if(mi.cb!=null){
-							annotator.semsimmodel.addAnnotation(
-								new Annotation(SemSimConstants.getRelationFromURI(URI.create(SemSimConstants.SEMSIM_NAMESPACE + (String)mi.cb.getSelectedItem())), mi.ta.getText()));
+				
+				// Remove all existing model-level annotations
+				annotator.semsimmodel.setAnnotations(new HashSet<Annotation>());
+				for(int g=0; g<cmpnts.length; g++){
+					if(cmpnts[g] instanceof MetadataItem){
+						MetadataItem mi = (MetadataItem)cmpnts[g];
+						
+						// This will probably need to be edited so that working with combo boxes functions correctly
+						if(mi.editable){
+							if(mi.cb!=null){
+								annotator.semsimmodel.addAnnotation(
+									new Annotation(SemSimConstants.getRelationFromURI(URI.create(SemSimConstants.SEMSIM_NAMESPACE + (String)mi.cb.getSelectedItem())), mi.ta.getText()));
+							}
+							else if(mi.ann.getValue() instanceof String){
+								annotator.semsimmodel.addAnnotation(new Annotation(mi.ann.getRelation(), mi.ta.getText()));
+							}
 						}
-						else if(mi.ann.getValue() instanceof String){
-							annotator.semsimmodel.addAnnotation(new Annotation(mi.ann.getRelation(), mi.ta.getText()));
+						else{
+							annotator.semsimmodel.addAnnotation(new Annotation(mi.ann.getRelation(), mi.ann.getValue()));
 						}
-					}
-					else{
-						annotator.semsimmodel.addAnnotation(new Annotation(mi.ann.getRelation(), mi.ann.getValue()));
 					}
 				}
+				annotator.setModelSaved(false);
 			}
-			annotator.setModelSaved(false);
+			dispose();
 		}
-		setVisible(false);
 	}
 
 	public void actionPerformed(ActionEvent arg0) {

@@ -13,11 +13,9 @@ import semsim.model.annotation.StructuralRelation;
 
 public class StructuralRelationPanel extends JPanel{
 	private static final long serialVersionUID = 4319031091828000135L;
-	public AnnotationPanel anndialog;
 	public StructuralRelation structuralRelation;
 
-	public StructuralRelationPanel(AnnotationPanel anndialog, StructuralRelation relation){
-		this.anndialog = anndialog;
+	public StructuralRelationPanel(StructuralRelation relation){
 		structuralRelation = relation;
 		setLayout(new BorderLayout());
 		

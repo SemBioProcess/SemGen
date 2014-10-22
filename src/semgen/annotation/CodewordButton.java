@@ -15,7 +15,6 @@ public class CodewordButton extends AnnotationObjectButton implements MouseListe
 	private static final long serialVersionUID = -7555259367118052593L;
 	
 	public enum cwCompletion {noAnnotations, hasPhysProp, hasPhysEnt, hasAll}
-	
 	public Color dependencycolor = new Color(205, 92, 92, 255);
 	public Color entityblack = Color.black;
 	public Color processgreen = new Color(50,205,50);
@@ -24,8 +23,10 @@ public class CodewordButton extends AnnotationObjectButton implements MouseListe
 	public CodewordButton(AnnotatorTab ann, DataStructure ssc, boolean compannfilled,
 			String companntext, boolean noncompannfilled, boolean humdeffilled,
 			boolean depfilled, boolean editable) {
-		super(ann, ssc, compannfilled, companntext, noncompannfilled, humdeffilled, depfilled, editable);
+		super(ann, ssc, compannfilled, companntext, noncompannfilled, humdeffilled, editable);
 		ds = ssc;
+		if (depfilled) {annotationAdded(deplabel, false);}
+		else {annotationNotAdded(deplabel);}
 		namelabel.setFont(SemGenFont.defaultItalic());
 		refreshAllCodes();
 	}

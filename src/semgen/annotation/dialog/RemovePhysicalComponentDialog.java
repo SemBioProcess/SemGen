@@ -32,21 +32,21 @@ public class RemovePhysicalComponentDialog extends SemSimComponentSelectorDialog
 	}
 
 	@Override
-	public void propertyChange(PropertyChangeEvent arg0) {
-		String value = optionPane.getValue().toString();
-		if (value == "OK") {
-			optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-			int choice = JOptionPane.showConfirmDialog(this, 
-					"This will remove all selected terms from existing annotations.\nAre you sure you want to continue?",
-					"Confirm",
-					JOptionPane.YES_NO_OPTION);
-			if(JOptionPane.YES_OPTION == choice){
-				removeComponentFromModel();
-				dispose();
-				if(annotator.focusbutton instanceof CodewordButton) annotator.anndialog.compositepanel.refreshUI();
+	public void propertyChange(PropertyChangeEvent e) {
+		String propertyfired = e.getPropertyName();
+		if (propertyfired.equals("value")) {
+			String value = optionPane.getValue().toString();
+			if (value == "OK") {
+				optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+				int choice = JOptionPane.showConfirmDialog(this, 
+						"This will remove all selected terms from existing annotations.\nAre you sure you want to continue?",
+						"Confirm",
+						JOptionPane.YES_NO_OPTION);
+				if(JOptionPane.YES_OPTION == choice){
+					removeComponentFromModel();
+					if(annotator.focusbutton instanceof CodewordButton) annotator.anndialog.compositepanel.refreshUI();
+				}
 			}
-		}
-		else if(value == "Cancel"){
 			dispose();
 		}
 	}

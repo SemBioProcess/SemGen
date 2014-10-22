@@ -29,6 +29,7 @@ import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.SemGen;
 import semgen.SemGenGUI;
+import semgen.SemGenSettings;
 import semgen.annotation.annotatorpane.AnnotationPanel;
 import semgen.annotation.dialog.CustomPhysicalComponentEditor;
 import semgen.annotation.dialog.referenceclass.CompositeAnnotationComponentSearchDialog;
@@ -107,7 +108,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 		
 		setLayout(new BorderLayout());
 		JPanel itempanel = new JPanel();
-		itempanel.setBackground(SemGenGUI.lightblue);
+		itempanel.setBackground(SemGenSettings.lightblue);
 		itempanel.add(combobox);
 		itempanel.add(urlbutton);
 		itempanel.add(searchlabel);

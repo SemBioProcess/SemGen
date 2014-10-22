@@ -116,7 +116,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		SemGenScrollPane legacycodescrollpane = new SemGenScrollPane();
 		legacycodescrollpane.getViewport().add(codearea);
 		
-		dialogscrollpane.setBackground(SemGenGUI.lightblue);
+		dialogscrollpane.setBackground(SemGenSettings.lightblue);
 		dialogscrollpane.getViewport().setBackground(SemGenSettings.lightblue);
 		
 		codewordscrollpane = new SemGenScrollPane(codewordpanel);
@@ -292,7 +292,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		if(focusbutton!=null){
 			focusbutton.setBackground(Color.white);
 		}
-		aob.setBackground(SemGenGUI.lightblue);
+		aob.setBackground(SemGenSettings.lightblue);
 		focusbutton = aob;
 
 		dialogscrollpane.getViewport().removeAll();
@@ -498,7 +498,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 					if(!editable) numdisplayed--;
 				}
 				SubmodelButton sb = new SubmodelButton(this, sub,
-					false, null, sub.hasRefersToAnnotation(), (sub.getDescription()!=null), false, editable);
+					false, null, sub.hasRefersToAnnotation(), (sub.getDescription()!=null), editable);
 				submodelbuttontable.put(sub.getName(), sb);
 			}
 			else if(!submodelbuttontable.get(sub.getName()).editable){

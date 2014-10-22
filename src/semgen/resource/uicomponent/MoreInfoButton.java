@@ -155,7 +155,7 @@ public class MoreInfoButton extends JLabel implements PropertyChangeListener, Mo
 		String termlabel = "";
 		
 
-		if (bioportalID!=null && !bioportalID.equals("") && SemGenGUI.annotateitemusebioportal.isSelected()) {
+		if (bioportalID!=null && !bioportalID.equals("")) {
 			// Get the selected ontology's latest version id
 			SAXBuilder builder = new SAXBuilder();
 			Document doc = new Document();

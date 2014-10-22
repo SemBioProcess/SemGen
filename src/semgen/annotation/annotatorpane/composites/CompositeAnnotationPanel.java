@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 
 import semgen.SemGen;
 import semgen.SemGenGUI;
+import semgen.SemGenSettings;
 import semgen.annotation.annotatorpane.AnnotationPanel;
 import semgen.resource.SemGenFont;
 import semsim.Annotatable;
@@ -61,7 +62,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 		addentprocpanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		addentprocpanel.add(addentbutton);
 		addentprocpanel.add(addprocbutton);
-		addentprocpanel.setBackground(SemGenGUI.lightblue);
+		addentprocpanel.setBackground(SemGenSettings.lightblue);
 		
 		JPanel addempanel = new JPanel(new BorderLayout());
 		addempanel.add(addentprocpanel, BorderLayout.WEST);
@@ -90,7 +91,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 					for(PhysicalEntity ent : cpe.getArrayListOfEntities()){
 						add(new SemSimComponentAnnotationPanel(ad, ent));
 						if(s<cpe.getArrayListOfStructuralRelations().size()){
-							add(new StructuralRelationPanel(ad, cpe.getArrayListOfStructuralRelations().get(s)));
+							add(new StructuralRelationPanel(cpe.getArrayListOfStructuralRelations().get(s)));
 						}
 						s++;
 					}
@@ -110,7 +111,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 		int x = ad.indent;
 		for(Component c : getComponents()){
 			if(c instanceof JComponent) ((JComponent)c).setBorder(BorderFactory.createEmptyBorder(0, x, 5, 0));
-			c.setBackground(SemGenGUI.lightblue);
+			c.setBackground(SemGenSettings.lightblue);
 			x = x + 15;
 		}
 		setAddButtonsEnabled();

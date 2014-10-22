@@ -4,7 +4,6 @@ import org.jdom.JDOMException;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
 import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntology;
@@ -12,7 +11,6 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import semgen.annotation.AnnotationCopier;
 import semgen.annotation.AnnotatorTab;
-import semgen.annotation.BatchCellML;
 import semgen.annotation.CodewordButton;
 import semgen.annotation.dialog.AnnotationComponentReplacer;
 import semgen.annotation.dialog.ModelLevelMetadataEditor;
@@ -42,7 +40,6 @@ import semsim.model.physical.CompositePhysicalEntity;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.PhysicalModelComponent;
-import semsim.owl.SemSimOWLFactory;
 import semsim.reading.ModelClassifier;
 import semsim.reading.SemSimOWLreader;
 import semsim.writing.CellMLwriter;
@@ -102,10 +99,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 	private SemGenSettings settings;
 	private static SemGenSettings settingshandle; //Temporary work around for static functions
 	
-	public static Color lightblue = new Color(207, 215, 252, 255);
-
-	public static String JSimBuildDir = "./jsimhome";
-	private JMenuBar menubar;
 	private JMenuItem fileitemopen;
 	private JMenuItem fileitemsave;
 	private JMenuItem fileitemsaveas;
@@ -121,10 +114,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 	public JMenuItem annotateitemcopy;
 	public JMenuItem annotateitemharvestfromtext;
 	public JMenuItem annotateitemeditmodelanns;
-	public JMenuItem annotateitemcleanup;
 	public JMenuItem annotateitemexportcsv;
-	public JMenuItem annotateitemthai;
-	public static JRadioButtonMenuItem annotateitemusebioportal;
 	public static JCheckBoxMenuItem annotateitemshowimports;
 	public static JRadioButtonMenuItem annotateitemsortbytype;
 	public static JRadioButtonMenuItem annotateitemsortalphabetically;
@@ -147,10 +137,9 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 	public static int maskkey = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 	public static String unspecifiedName = "*unspecified*";
 
-	public SemGenGUI(SemGenSettings sets, JMenuBar mbar){
+	public SemGenGUI(SemGenSettings sets, JMenuBar menubar){
 		settings = sets;
 		settingshandle = sets;
-		menubar = mbar;
 		factory = manager.getOWLDataFactory();
 
 		setPreferredSize(settings.getAppSize());
@@ -499,11 +488,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 			else JOptionPane.showMessageDialog(this,"Please select an Annotator tab or open a new Annotator");
 		}
 		
-		if(o == annotateitemthai){
-			try {new BatchCellML();}
-			catch (Exception e1) {e1.printStackTrace();}
-		}
-		
 		if (o == annotateitemshowmarkers){
 			for(Component c : desktop.getComponents()){
 				if(c instanceof AnnotatorTab){
@@ -622,7 +606,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		}
 	}
 	
-	public static void startBatchClustering(){
+	public void startBatchClustering(){
 		SemGenOpenFileChooser sgc = 
 				new SemGenOpenFileChooser("Select a SemSim model for automated cluster analysis", 
 						new String[] {"owl",".xml",".sbml",".mod",".cellml"} );
@@ -630,7 +614,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 				File file = sgc.getSelectedFile();
 				if (file.exists()) {
 				SemSimModel ssm = new SemSimOWLreader().readFromFile(file);
-				ExtractorTab extractor = new ExtractorTab(file, ssm, settingshandle);
+				ExtractorTab extractor = new ExtractorTab(file, ssm, settings);
 				extractor.batchCluster();
 			}
 		} catch (OWLException e1) {
@@ -778,7 +762,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		if (!file.exists()) return null;
 		SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(file);
 		if(ModelClassifier.classify(file)==ModelClassifier.CELLML_MODEL || semsimmodel.getFunctionalSubmodels().size()>0){
-			JOptionPane.showMessageDialog(desktop, "Sorry. Extraction of models with CellML-type components not yet supported.");
+			JOptionPane.showMessageDialog(null, "Sorry. Extraction of models with CellML-type components not yet supported.");
 			return null;
 		}
 		ExtractorTab extractor = null;
@@ -807,7 +791,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		// If units present, set up physical property connected to each data structure
 		for(DataStructure ds : semsimmodel.getDataStructures()){
 			if(ds.hasUnits()){
-				ReferenceOntologyAnnotation roa = SemGenGUI.getOPBAnnotationFromPhysicalUnit(ds);
+				ReferenceOntologyAnnotation roa = SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(ds);
 				if(roa!=null){
 
 					// If the codeword represents an OPB:Amount property (OPB_00135)
@@ -831,7 +815,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 			if((camount instanceof MappableVariable)) hasinitval = (((MappableVariable)camount).getCellMLinitialValue()!=null);
 			if(hasinitval && !camount.isDiscrete() 
 					&& !camount.getPhysicalProperty().hasRefersToAnnotation()){
-				ReferenceOntologyAnnotation roa = getOPBAnnotationFromPhysicalUnit(camount);
+				ReferenceOntologyAnnotation roa = SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(camount);
 				camount.getPhysicalProperty().addReferenceOntologyAnnotation(
 						SemSimConstants.REFERS_TO_RELATION, roa.getReferenceURI(), roa.getValueDescription());
 				confirmedamounts.add(camount);
@@ -844,7 +828,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		for(DataStructure camount : temp){
 			for(DataStructure newcamount : getDownstreamDataStructures(unconfirmedamounts, camount, camount)){
 				confirmedamounts.add(newcamount);
-				ReferenceOntologyAnnotation roa = getOPBAnnotationFromPhysicalUnit(newcamount);
+				ReferenceOntologyAnnotation roa = SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(newcamount);
 				if(!newcamount.getPhysicalProperty().hasRefersToAnnotation())
 					newcamount.getPhysicalProperty().addReferenceOntologyAnnotation(
 						SemSimConstants.REFERS_TO_RELATION, roa.getReferenceURI(), roa.getValueDescription());
@@ -864,7 +848,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 			// If already decided to annotate, or the candidate is solved with an ODE and it's not a discrete variable, annotate it
 			if((cforce.hasStartValue() || annotate) && !cforce.isDiscrete() 
 					&& !cforce.getPhysicalProperty().hasRefersToAnnotation()){
-				ReferenceOntologyAnnotation roa = getOPBAnnotationFromPhysicalUnit(cforce);
+				ReferenceOntologyAnnotation roa = SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(cforce);
 				cforce.getPhysicalProperty().addReferenceOntologyAnnotation(
 						SemSimConstants.REFERS_TO_RELATION, roa.getReferenceURI(), roa.getValueDescription());
 				confirmedforces.add(cforce);
@@ -879,7 +863,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 			for(DataStructure newcforce : getDownstreamDataStructures(unconfirmedforces, cforce, cforce)){
 				confirmedforces.add(newcforce);
 				if(!newcforce.getPhysicalProperty().hasRefersToAnnotation()){
-					ReferenceOntologyAnnotation roa = getOPBAnnotationFromPhysicalUnit(newcforce);
+					ReferenceOntologyAnnotation roa = SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(newcforce);
 					newcforce.getPhysicalProperty().addReferenceOntologyAnnotation(
 						SemSimConstants.REFERS_TO_RELATION, roa.getReferenceURI(), roa.getValueDescription());
 				}
@@ -900,7 +884,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 			// If already decided to annotate, or the candidate is solved with an ODE and it's not a discrete variable, annotate it
 			if((cflow.hasStartValue() || annotate || cflow.getName().contains(":")) && !cflow.isDiscrete()
 					&& !cflow.getPhysicalProperty().hasRefersToAnnotation()){
-				ReferenceOntologyAnnotation roa = getOPBAnnotationFromPhysicalUnit(cflow);
+				ReferenceOntologyAnnotation roa = SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(cflow);
 				cflow.getPhysicalProperty().addReferenceOntologyAnnotation(
 						SemSimConstants.REFERS_TO_RELATION, roa.getReferenceURI(), roa.getValueDescription());
 				confirmedflows.add(cflow);
@@ -914,7 +898,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 			for(DataStructure newcflow : getDownstreamDataStructures(unconfirmedflows, cflow, cflow)){
 				confirmedforces.add(newcflow);
 				if(!newcflow.getPhysicalProperty().hasRefersToAnnotation()){
-					ReferenceOntologyAnnotation roa = getOPBAnnotationFromPhysicalUnit(newcflow);
+					ReferenceOntologyAnnotation roa = SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(newcflow);
 					newcflow.getPhysicalProperty().addReferenceOntologyAnnotation(
 						SemSimConstants.REFERS_TO_RELATION, roa.getReferenceURI(), roa.getValueDescription());
 				}
@@ -935,20 +919,12 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		return newamounts;
 	}
 	
-	public static ReferenceOntologyAnnotation getOPBAnnotationFromPhysicalUnit(DataStructure ds){
-		String[] candidateOPBclasses = (String[])SemGen.semsimlib.getOPBUnitRefTerm(ds.getUnit().getName());
-		if (candidateOPBclasses != null && candidateOPBclasses.length == 1) {
-			OWLClass cls = factory.getOWLClass(IRI.create(SemSimConstants.OPB_NAMESPACE + candidateOPBclasses[0]));
-			String OPBpropname = SemSimOWLFactory.getRDFLabels(OPB, cls)[0];
-			return new ReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, cls.getIRI().toURI(), OPBpropname);
-		}
-		return null;
-	}
+
 	
 	public static void startEncoding(Object inputfileormodel, String filenamesuggestion){
 		File outputfile = null;
 		Object[] optionsarray = new Object[] {"CellML", "MML (JSim)"};
-		Object selection = JOptionPane.showInputDialog(desktop, "Select output format", "SemGen coder", JOptionPane.PLAIN_MESSAGE, null, optionsarray, "CellML");
+		Object selection = JOptionPane.showInputDialog(null, "Select output format", "SemGen coder", JOptionPane.PLAIN_MESSAGE, null, optionsarray, "CellML");
 		
 		if(filenamesuggestion!=null && filenamesuggestion.contains(".")) filenamesuggestion = filenamesuggestion.substring(0, filenamesuggestion.lastIndexOf("."));
 		
@@ -982,7 +958,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		if(content!=null)
 			SemSimUtil.writeStringToFile(content, outputfile);
 		else
-			JOptionPane.showMessageDialog(desktop, "Sorry. There was a problem encoding " + model.getName() + 
+			JOptionPane.showMessageDialog(null, "Sorry. There was a problem encoding " + model.getName() + 
 					"\nThe JSim API threw an exception.",  
 					"Error", JOptionPane.ERROR_MESSAGE);
 	}

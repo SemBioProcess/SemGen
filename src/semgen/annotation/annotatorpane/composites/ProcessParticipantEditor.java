@@ -43,8 +43,6 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 	public SemSimModel model;
 	public SemSimRelation relation;
 	public PhysicalProcess process;
-	public JPanel headerpanel;
-	public JLabel headerlabel;
 	public JButton plusbutton = new JButton(SemGenIcon.plusicon);
 	public JButton minusbutton = new JButton(SemGenIcon.minusicon);
 	public JTable table;
@@ -52,24 +50,21 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 	public Map<String,ProcessParticipant> namesandparticipantmap = new HashMap<String,ProcessParticipant>();
 	public SemSimComponentSelectorDialog sscsd; 
 	public int scrollerwidth = 550;
-	public int multcolwidth = 100;
 
 	public ProcessParticipantEditor(SemSimModel model, SemSimRelation relation, PhysicalProcess process) {	
 		this.model = model;
 		this.relation = relation;
 		this.process = process;
-		
-		headerlabel = new JLabel(relation.getName());
 
 		plusbutton.addActionListener(this);
 		plusbutton.setToolTipText("Add process participant");
 
 		minusbutton.addActionListener(this);
 		minusbutton.setToolTipText("Remove selected process participant");
-
-		headerpanel = new JPanel();
+		
+		JPanel headerpanel = new JPanel();
 		headerpanel.setOpaque(false);
-		headerpanel.add(headerlabel);
+		headerpanel.add(new JLabel(relation.getName()));
 		headerpanel.add(plusbutton);
 		headerpanel.add(minusbutton);
 		
@@ -181,21 +176,23 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 		}
 	}
 
-	public void propertyChange(PropertyChangeEvent evt) {
-		String value = sscsd.optionPane.getValue().toString();
-		if (value == "OK") {
-			namesandparticipantmap.clear();
-			for(Component c : sscsd.panel.getComponents()){
-				if(c instanceof JCheckBox){
-					JCheckBox box = (JCheckBox)c;
-					if(box.isSelected()){
-						ProcessParticipant pp = new ProcessParticipant((PhysicalEntity) sscsd.nameobjectmap.get(box.getText()), 1.0);
-						tablemod.addRow(new Object[]{pp});
+	public void propertyChange(PropertyChangeEvent e) {
+		String propertyfired = e.getPropertyName();
+		if (propertyfired.equals("value")) {
+			String value = sscsd.optionPane.getValue().toString();
+			if (value == "OK") {
+				namesandparticipantmap.clear();
+				for(Component c : sscsd.panel.getComponents()){
+					if(c instanceof JCheckBox){
+						JCheckBox box = (JCheckBox)c;
+						if(box.isSelected()){
+							ProcessParticipant pp = new ProcessParticipant((PhysicalEntity) sscsd.nameobjectmap.get(box.getText()), 1.0);
+							tablemod.addRow(new Object[]{pp});
+						}
 					}
 				}
 			}
+			sscsd.dispose();
 		}
-		sscsd.optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-		sscsd.setVisible(false);
 	}
 }
