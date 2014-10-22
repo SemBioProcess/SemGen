@@ -42,12 +42,12 @@ public class RemovePhysicalComponentDialog extends SemSimComponentSelectorDialog
 					JOptionPane.YES_NO_OPTION);
 			if(JOptionPane.YES_OPTION == choice){
 				removeComponentFromModel();
-				setVisible(false);
+				dispose();
 				if(annotator.focusbutton instanceof CodewordButton) annotator.anndialog.compositepanel.refreshUI();
 			}
 		}
 		else if(value == "Cancel"){
-			setVisible(false);
+			dispose();
 		}
 	}
 
@@ -71,7 +71,6 @@ public class RemovePhysicalComponentDialog extends SemSimComponentSelectorDialog
 								// Need to do sources, sinks, meds here?
 								prop.setPhysicalPropertyOf(annotator.semsimmodel.getCustomPhysicalProcessByName(SemGenGUI.unspecifiedName));
 							}
-							
 						}
 						// Remove the component's use from composite physical entities
 						else if(prop.getPhysicalPropertyOf() instanceof CompositePhysicalEntity){

@@ -20,7 +20,6 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -33,7 +32,6 @@ import org.jdom.JDOMException;
 import semgen.SemGen;
 import semgen.SemGenGUI;
 import semgen.annotation.AnnotatorTab;
-import semgen.annotation.annotatorpane.AnnotationPanel;
 import semgen.resource.GenericThread;
 import semgen.resource.SemGenError;
 import semgen.resource.SemGenFont;
@@ -55,33 +53,21 @@ public class ReferenceClassFinderPanel extends JPanel implements
 	private static final long serialVersionUID = -7884648622981159203L;
 	public JPanel panelright;
 	public AnnotatorTab annotator;
-	public String codeword;
-	public AnnotationPanel anndialog;
-	private JPanel selectKBsourcepanel;
-	private JLabel selectKBsource;
-
+	
 	public JComboBox<String> ontologychooser;
 	public Map<String,String> ontologySelectionsAndBioPortalIDmap = new HashMap<String,String>();
-	private JComboBox<String> findchooser;
+	private JComboBox<String> findchooser = new JComboBox<String>();
 
-	public String[] existingresultskeysetarray;
-	private JPanel querypanel;
-	private JButton findbutton;
-	private ExternalURLButton externalURLbutton;
+	private JButton findbutton = new JButton("Go");
+	private ExternalURLButton externalURLbutton = new ExternalURLButton();
 	public JButton loadingbutton = new JButton(SemGenIcon.blankloadingicon);
 
-	private JLabel findtext;
-	private JPanel findpanel;
-	public JTextField findbox;
-	private JPanel resultspanelrightheader;
-	private JPanel resultspanelright;
+	public JTextField findbox = new JTextField();
 	public JList<String> resultslistright = new JList<String>();
-	private JScrollPane resultsscrollerright;
 
 	public Hashtable<String,String> resultsanduris = new Hashtable<String,String>();
 	public Hashtable<String,String> rdflabelsanduris = new Hashtable<String,String>();
 	public Hashtable<String, String> classnamesandshortconceptids = new Hashtable<String, String>();
-	public JOptionPane optionPane;
 	public String bioportalID = null;
 	public GenericThread querythread = new GenericThread(this, "performSearch");
 	public Annotatable annotatable;
@@ -122,8 +108,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		String[] ontologyboxitems = ontologySelectionsAndBioPortalIDmap.keySet().toArray(new String[]{});
 		Arrays.sort(ontologyboxitems);
 
-		selectKBsourcepanel = new JPanel();
-		selectKBsource = new JLabel("Select ontology: ");
+		JLabel selectKBsource = new JLabel("Select ontology: ");
 		selectKBsource.setFont(SemGenFont.defaultPlain());
 
 		ontologychooser = new JComboBox<String>(ontologyboxitems);
@@ -139,35 +124,33 @@ public class ReferenceClassFinderPanel extends JPanel implements
 			}
 		}
 		ontologychooser.addActionListener(this);
-
+		
+		JPanel selectKBsourcepanel = new JPanel();
 		selectKBsourcepanel.add(selectKBsource);
 		selectKBsourcepanel.add(ontologychooser);
 		selectKBsourcepanel.setMaximumSize(new Dimension(900, 40));
 
-		querypanel = new JPanel();
+		JPanel querypanel = new JPanel();
 		querypanel.setLayout(new BoxLayout(querypanel, BoxLayout.X_AXIS));
 
-		findtext = new JLabel("Term search:  ");
+		JLabel findtext = new JLabel("Term search:  ");
 		findtext.setFont(SemGenFont.defaultPlain());
 
-		findchooser = new JComboBox<String>();
 		findchooser.setFont(SemGenFont.defaultItalic(-1));
 		findchooser.addItem("contains");
 		findchooser.addItem("exact match");
 		findchooser.setMaximumSize(new Dimension(125, 25));
 
-		findbox = new JTextField();
 		findbox.setForeground(Color.blue);
 		findbox.setBorder(BorderFactory.createBevelBorder(1));
 		findbox.setFont(SemGenFont.defaultPlain());
 		findbox.setMaximumSize(new Dimension(300, 25));
 		findbox.addActionListener(this);
 
-		findbutton = new JButton("Go");
 		findbutton.setVisible(true);
 		findbutton.addActionListener(this);
 
-		findpanel = new JPanel();
+		JPanel findpanel = new JPanel();
 		findpanel.setLayout(new BoxLayout(findpanel, BoxLayout.X_AXIS));
 		findpanel.add(findtext);
 		findpanel.add(findchooser);
@@ -178,10 +161,10 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		loadingbutton.setContentAreaFilled(false);
 		findpanel.add(loadingbutton);
 
-		resultspanelright = new JPanel();
+		JPanel resultspanelright = new JPanel();
 		resultspanelright.setLayout(new BoxLayout(resultspanelright,BoxLayout.Y_AXIS));
 		
-		resultspanelrightheader = new JPanel(new BorderLayout());
+		JPanel resultspanelrightheader = new JPanel(new BorderLayout());
 		resultspanelrightheader.setOpaque(false);
 
 		JLabel resultslabelright = new JLabel("Search results");
@@ -196,11 +179,9 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		resultslistright.setEnabled(true);
 
 		Dimension scrollerdim = new Dimension(650, 400);
-		resultsscrollerright = new JScrollPane(resultslistright);
+		JScrollPane resultsscrollerright = new JScrollPane(resultslistright);
 		resultsscrollerright.setBorder(BorderFactory.createTitledBorder("Search results"));
 		resultsscrollerright.setPreferredSize(scrollerdim);
-
-		externalURLbutton = new ExternalURLButton();
 
 		JPanel rightscrollerbuttonpanel = new JPanel(new BorderLayout());
 		rightscrollerbuttonpanel.setOpaque(false);

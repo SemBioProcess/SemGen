@@ -12,6 +12,7 @@ import semgen.SemGenSettings;
 import semgen.annotation.annotatorpane.AnnotationPanel;
 import semgen.annotation.buttontree.AnnotatorButtonTree;
 import semgen.annotation.dialog.HumanDefEditor;
+import semgen.annotation.dialog.LegacyCodeChooser;
 import semgen.annotation.dialog.textminer.TextMinerDialog;
 import semgen.resource.ComparatorByName;
 import semgen.resource.SemGenFont;
@@ -27,10 +28,7 @@ import semsim.model.computational.MappableVariable;
 import semsim.model.physical.FunctionalSubmodel;
 import semsim.model.physical.Submodel;
 
-import java.net.HttpURLConnection;
 import java.net.URI;
-import java.net.URL;
-import java.net.URLConnection;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -40,25 +38,17 @@ import java.awt.event.MouseListener;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultHighlighter;
-import javax.swing.text.Highlighter;
-import javax.swing.text.Highlighter.HighlightPainter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import java.awt.event.*;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Scanner;
 import java.util.Hashtable;
 import java.awt.BorderLayout;
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class AnnotatorTab extends SemGenTab implements ActionListener, MouseListener,
 		KeyListener {
@@ -85,16 +75,11 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 
 	public JPanel codewordpanel = new JPanel();
 	public JPanel submodelpanel = new JPanel();
-	public JTextArea codearea = new JTextArea("");
-	private JPanel genmodinfo;
+	public AnnotatorTabCodePanel codearea = new AnnotatorTabCodePanel();
+	private JPanel genmodinfo = new JPanel(new BorderLayout());
 	public JTextPane annotationpane = new JTextPane();
-	private String nextline;
 	public JButton addsubmodelbutton = new JButton(SemGenIcon.plusicon);
 	public JButton removesubmodelbutton = new JButton(SemGenIcon.minusicon);
-
-	public Highlighter hilit = new DefaultHighlighter();
-	public Highlighter.HighlightPainter allpainter = new DefaultHighlighter.DefaultHighlightPainter(Color.yellow);
-	public Highlighter.HighlightPainter onepainter = new DefaultHighlighter.DefaultHighlightPainter(SemGenGUI.lightblue);
 
 	public int numcomponents;
 	public static int initwidth;
@@ -104,8 +89,6 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	public JButton coderbutton;
 	private JCheckBox sortbycompletenessbutton = new JCheckBox("Sort by Composite Completeness");
 	public TextMinerDialog tmd;
-	public ArrayList<Integer> indexesOfHighlightedTerms;
-	public int currentindexforcaret;
 	public int lastSavedAs = -1;
 	
 	private boolean modelsaved = false;
@@ -121,14 +104,6 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		setOpaque(false);
 		setLayout(new BorderLayout());
 
-		// Create the scroll pane for the imported model code
-		codearea.setEditable(false);
-		codearea.setBackground(new Color(250, 250, 227));
-		codearea.setMargin(new Insets(5, 15, 5, 5));
-		codearea.setForeground(Color.black);
-		codearea.setFont(SemGenFont.Plain("Monospaced"));
-		codearea.setHighlighter(hilit);
-
 		codewordpanel.setBackground(Color.white);
 		codewordpanel.setLayout(new BoxLayout(codewordpanel, BoxLayout.Y_AXIS));
 		
@@ -139,10 +114,10 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		removesubmodelbutton.addActionListener(this);
 		
 		SemGenScrollPane legacycodescrollpane = new SemGenScrollPane();
-		
 		legacycodescrollpane.getViewport().add(codearea);
+		
 		dialogscrollpane.setBackground(SemGenGUI.lightblue);
-		dialogscrollpane.getViewport().setBackground(SemGenGUI.lightblue);
+		dialogscrollpane.getViewport().setBackground(SemGenSettings.lightblue);
 		
 		codewordscrollpane = new SemGenScrollPane(codewordpanel);
 		InputMap im = codewordscrollpane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
@@ -183,7 +158,6 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		toolpanel.add(sortbycompletenessbutton);
 		toolpanel.setAlignmentY(JPanel.TOP_ALIGNMENT);
 
-		genmodinfo = new JPanel(new BorderLayout());
 		genmodinfo.setOpaque(true);
 		genmodinfo.add(toolpanel, BorderLayout.WEST);
 	}
@@ -258,7 +232,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		annotationpane.setCaretPosition(0);
 		
 		try {
-			setCodeViewer(semsimmodel.getLegacyCodeLocation(), true);
+			codearea.setCodeView(semsimmodel.getLegacyCodeLocation());
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -326,18 +300,10 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		dialogscrollpane.getViewport().add(anndialog);
 		
 		// Highlight occurrences of codeword in legacy code
-		hilit.removeAllHighlights();
-		String name = getLookupNameForAnnotationObjectButton(aob);
-		getIndexesForCodewordOccurrences(name, false);
 		
-		if(indexesOfHighlightedTerms.size()>0){
-			hilit.addHighlight(indexesOfHighlightedTerms.get(0).intValue()+1, 
-				(indexesOfHighlightedTerms.get(0).intValue()+1+name.length()), onepainter);
-			
-			highlightAllOccurrencesOfString(name);
-			codearea.setCaretPosition(indexesOfHighlightedTerms.get(0));
-		}
-		currentindexforcaret = 0;
+		codearea.setCodeword(getLookupNameForAnnotationObjectButton(aob));
+		codearea.HighlightOccurances(true);
+
 		dialogscrollpane.scrollToTop();
 
 		return anndialog;
@@ -553,91 +519,9 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		if(focusbutton!=null){
 			focusbutton.setBackground(Color.white);
 		}
-		hilit.removeAllHighlights();
+		codearea.removeAllHighlights();
 	}
 
-	public void setCodeViewer(String loc, Boolean startann) throws IOException {
-		codearea.setText(null);
-		String modelloc = loc; 
-		File modelfile = null;
-		Boolean cont = true;
-		if(loc!=null && !loc.equals("")){
-			SemGenProgressBar progframe = null;
-			// If the legacy model code is on the web
-			if (loc.startsWith("http://")) {
-				progframe = new SemGenProgressBar("Retrieving legacy code...", false);
-				
-				Boolean online = true;
-				modelfile = new File(loc);
-	
-				URL url = new URL(loc);
-				HttpURLConnection.setFollowRedirects(false);
-				HttpURLConnection httpcon = (HttpURLConnection) url.openConnection();
-				httpcon.setReadTimeout(60000);
-				httpcon.setRequestMethod("HEAD");
-				try {
-					httpcon.getResponseCode();
-				} catch (Exception e) {e.printStackTrace(); online = false;}
-				if (online) {
-					progframe.setProgressValue(0);
-					
-					URLConnection urlcon = url.openConnection();
-					urlcon.setDoInput(true);
-					urlcon.setUseCaches(false);
-					urlcon.setReadTimeout(60000);
-					// If there's no file at the URL
-					if(urlcon.getContentLength()>0){
-						BufferedReader d = new BufferedReader(new InputStreamReader(urlcon.getInputStream()));
-						String s;
-						float charsremaining = urlcon.getContentLength();
-						float totallength = charsremaining;
-						while ((s = d.readLine()) != null) {
-							codearea.append(s);
-							codearea.append("\n");
-							charsremaining = charsremaining - s.length();
-							int x = Math.round(100*(totallength-charsremaining)/totallength);
-							progframe.setProgressValue(x);
-						}
-						d.close();
-						codearea.setCaretPosition(0);
-					}
-					else cont = false;
-				} 
-				else cont = false;
-				
-				progframe.dispose();
-			}
-			// Otherwise it's a local file
-			else {
-				modelfile = new File(loc);
-				if (modelfile.exists()) {
-					// Read in the model code and append it to the codearea
-					// JTextArea in the top pane
-					String filename = modelfile.getAbsolutePath();
-					Scanner importfilescanner = new Scanner(new File(filename));
-	
-					while (importfilescanner.hasNextLine()) {
-						nextline = importfilescanner.nextLine();
-						codearea.append(nextline);
-						codearea.append("\n");
-						codearea.setCaretPosition(0);
-					}
-					importfilescanner.close();
-				} else cont = false;
-			}
-		}
-		else{ cont = false; modelloc = "<file location not specified>";}
-
-		if (!cont) {
-			modelloc = " at " + modelloc;
-			codearea.setText("ERROR: Could not access model code"
-					+ modelloc
-					+ "\n\nIf the file is on the web, make sure you are connected to the internet."
-					+ "\nIf the file is local, make sure it exists at the location above."
-					+ "\n\nUse the 'Change Associated Legacy Code' menu item to specify this SemSim model's legacy code.");
-		}
-	}
-	
 	public static void showAnnotaterPanes(final AnnotatorTab ann){
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 		   public void run() { 
@@ -685,84 +569,6 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		} 
 		catch (BadLocationException e) {
 			e.printStackTrace();}
-	}
-	
-	public void getIndexesForCodewordOccurrences(String origword, Boolean caseinsensitive) {
-		indexesOfHighlightedTerms = new ArrayList<Integer>();
-		String word = origword;
-		hilit.removeAllHighlights();
-		
-		Pattern pattern = Pattern.compile("[\\W_]" + Pattern.quote(word) + "[\\W_]");
-		if(caseinsensitive){
-			pattern = Pattern.compile("[\\W_]" + Pattern.quote(word) + "[\\W_]", Pattern.CASE_INSENSITIVE);
-		}
-		Boolean match = true;
-		Matcher m = pattern.matcher(codearea.getText());
-		while(match){
-			if(m.find()){
-				int index = m.start();
-				indexesOfHighlightedTerms.add(index);
-			}
-			else{
-				match = false;
-			}
-		}
-	}
-	
-	public ArrayList<Integer> highlightAll(String origword, Highlighter lighter, HighlightPainter pntr, JTextArea area, Boolean forcdwd, Boolean caseinsensitive) {
-		ArrayList<Integer> listofindexes = new ArrayList<Integer>();
-		String word = origword;
-		Pattern pattern = Pattern.compile("[\\W_]" + Pattern.quote(word) + "[\\W_]");
-		if(caseinsensitive){
-			pattern = Pattern.compile("[\\W_]" + Pattern.quote(word) + "[\\W_]", Pattern.CASE_INSENSITIVE);
-		}
-		String content = area.getText();
-		Boolean match = true;
-		Matcher m = pattern.matcher(content);
-		while(match){
-			if(m.find()){
-				int index = m.start();
-				int end = m.end();
-				try{
-					lighter.addHighlight(index+1, end-1, pntr);
-				} catch (BadLocationException e) {
-					e.printStackTrace();
-				}
-				listofindexes.add(index);
-			}
-			else{
-				match = false;
-			}
-		}
-		if(!forcdwd && listofindexes.size()>0){area.setCaretPosition(0);}
-		return listofindexes;
-	}
-	
-	public void findNextStringInText(String string){
-		if(!indexesOfHighlightedTerms.isEmpty()){
-			hilit.removeAllHighlights();
-			if(indexesOfHighlightedTerms.size()-1>currentindexforcaret){
-				currentindexforcaret++;
-				codearea.setCaretPosition(indexesOfHighlightedTerms.get(currentindexforcaret));
-			}
-			else if(indexesOfHighlightedTerms.size()-1==currentindexforcaret){
-				// Wrap and beep
-				Toolkit.getDefaultToolkit().beep();
-				codearea.setCaretPosition(indexesOfHighlightedTerms.get(0));
-				currentindexforcaret = 0;
-			}
-			try {
-				hilit.addHighlight(codearea.getCaretPosition()+1, codearea.getCaretPosition() + 1 + string.length(), onepainter);
-			} catch (BadLocationException e) {
-				e.printStackTrace();
-			}
-			highlightAllOccurrencesOfString(string);
-		}
-	}
-	
-	public void highlightAllOccurrencesOfString(String string){
-		if(focusbutton!=null)
-			indexesOfHighlightedTerms = highlightAll(string, hilit, allpainter, codearea, true, false);
 	}
 	
 	public boolean getModelSaved(){
@@ -902,6 +708,16 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	
 	public boolean checkFile(URI uri) {
 		return (uri.toString().equals(fileURI.toString()));
+	}
+	
+	public void changeLegacyLocation() {
+		LegacyCodeChooser lcc = new LegacyCodeChooser(this);
+		try {
+			if (lcc.wasChanged()) 
+				codearea.setCodeView(semsimmodel.getLegacyCodeLocation());
+			} catch (IOException e1) {
+				e1.printStackTrace();
+		}
 	}
 	
 	public boolean unsavedChanges() {

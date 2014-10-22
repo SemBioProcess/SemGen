@@ -15,7 +15,6 @@ import semgen.annotation.AnnotatorTab;
 import semgen.annotation.BatchCellML;
 import semgen.annotation.CodewordButton;
 import semgen.annotation.dialog.AnnotationComponentReplacer;
-import semgen.annotation.dialog.LegacyCodeChooser;
 import semgen.annotation.dialog.ModelLevelMetadataEditor;
 import semgen.annotation.dialog.RemovePhysicalComponentDialog;
 import semgen.annotation.dialog.SemanticSummaryDialog;
@@ -113,7 +112,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 	public JMenuItem fileitemclose;
 	public JMenuItem fileitemexit;
 	public static JMenuItem semanticsummary;
-	public static JMenuItem annotateitemfindnext;
 	private JMenuItem toolsitemannotate;
 	private static JMenuItem annotateitemaddrefterm;
 	private static JMenuItem annotateitemremoverefterm;
@@ -244,9 +242,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		annotateitemeditmodelanns.setToolTipText("Edit metadata for this SemSim model");
 		annotatemenu.add(annotateitemeditmodelanns);
 		annotatemenu.add(new JSeparator());
-		
-		annotateitemfindnext = formatMenuItem(annotateitemfindnext, "Find next instance of codeword in code", KeyEvent.VK_N, true, true);
-		annotatemenu.add(annotateitemfindnext);
 		
 		annotatemenu.add(new JSeparator());
 		
@@ -461,7 +456,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		if (o == annotateitemchangesourcemodelcode) {
 			if (desktop.getSelectedComponent() instanceof AnnotatorTab) {
 				AnnotatorTab ann = (AnnotatorTab) desktop.getSelectedComponent();
-				new LegacyCodeChooser(ann);
+				ann.changeLegacyLocation();
 			} else {JOptionPane.showMessageDialog(this,"Please select an Annotator tab or open a new Annotator");}
 		}
 
@@ -502,14 +497,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 				}
 			}
 			else JOptionPane.showMessageDialog(this,"Please select an Annotator tab or open a new Annotator");
-		}
-		
-		if( o == annotateitemfindnext){
-			if (desktop.getSelectedComponent() instanceof AnnotatorTab) {
-				AnnotatorTab ann = (AnnotatorTab) desktop.getSelectedComponent();
-				String name = ann.getLookupNameForAnnotationObjectButton(ann.focusbutton);
-				ann.findNextStringInText(name);
-			}
 		}
 		
 		if(o == annotateitemthai){
@@ -1247,7 +1234,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		annotateitemchangesourcemodelcode.setEnabled(comp instanceof AnnotatorTab);
 		annotateitemexportcsv.setEnabled(comp instanceof AnnotatorTab);
 		annotateitemeditmodelanns.setEnabled(comp instanceof AnnotatorTab);
-		annotateitemfindnext.setEnabled(comp instanceof AnnotatorTab);
 		
 		extractoritembatchcluster.setEnabled(comp instanceof ExtractorTab);
 		extractoritemopenann.setEnabled(comp instanceof ExtractorTab);

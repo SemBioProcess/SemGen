@@ -16,13 +16,10 @@ public class SingularAnnotationEditor extends AddReferenceClassDialog {
 	 */
 	private static final long serialVersionUID = -293956235473792163L;
 	public AnnotationPanel dia;
-	public String codeword;
 
 	public SingularAnnotationEditor(AnnotationPanel anndialog, Object[] options) {
 		super(anndialog.annotator, SemSimConstants.ALL_SEARCHABLE_ONTOLOGIES, options, (Annotatable)anndialog.smc);
 		dia = anndialog;
-		codeword = dia.codeword;
-		refclasspanel.codeword = codeword;
 		utilarea.setText("Old annotation: <none>");
 		if(dia.smc instanceof Annotatable){
 			Annotatable x = ((Annotatable)dia.smc);

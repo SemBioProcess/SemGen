@@ -6,8 +6,6 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.IOException;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -26,6 +24,7 @@ public class LegacyCodeChooser extends JDialog implements ActionListener,
 	private static final long serialVersionUID = 5097390254331353085L;
 	public JOptionPane optionPane;
 	public JTextField txtfld = new JTextField();
+	private boolean changed = false;
 	public AnnotatorTab ann;
 	public JButton locbutton = new JButton("or choose local file");
 	public Annotation existingann;
@@ -54,33 +53,33 @@ public class LegacyCodeChooser extends JDialog implements ActionListener,
 		optionPane.setInitialValue(options[0]);
 
 		setContentPane(optionPane);
-
+		setModal(true);
 		this.setTitle("Enter URL of legacy code or choose a local file");
 		this.pack();
 		this.setVisible(true);
+		setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	}
 
 	public void propertyChange(PropertyChangeEvent e) {
-		String value = optionPane.getValue().toString();
-		if (value == "OK") {
-			String urltoadd = txtfld.getText();
-			if (urltoadd != null && ann.semsimmodel != null && !urltoadd.equals("")) {
-				if(this.existingann!=null){
-					this.existingann.setValue(urltoadd);
+		String propertyfired = e.getPropertyName();
+		if (propertyfired.equals("value")) {
+			String value = optionPane.getValue().toString();
+			if (value == "OK") {
+				String urltoadd = txtfld.getText();
+				if (urltoadd != null && ann.semsimmodel != null && !urltoadd.equals("")) {
+					changed=true;
+					if(this.existingann!=null){
+						existingann.setValue(urltoadd);
+					}
+					else{
+						existingann = new Annotation(SemSimConstants.LEGACY_CODE_LOCATION_RELATION, urltoadd);
+					}
+					ann.setModelSaved(false);
 				}
-				else{
-					ann.semsimmodel.addAnnotation(new Annotation(SemSimConstants.LEGACY_CODE_LOCATION_RELATION, urltoadd));
-				}
-				try {
-					ann.setCodeViewer(urltoadd, false);
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-				ann.setModelSaved(false);
 			}
+			dispose();
 		} 
-		setVisible(false);
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
@@ -90,5 +89,9 @@ public class LegacyCodeChooser extends JDialog implements ActionListener,
 			File file = sgc.getSelectedFile();
 			if (file!=null) txtfld.setText(file.getAbsolutePath());
 		}
+	}
+	
+	public boolean wasChanged() {
+		return changed;
 	}
 }

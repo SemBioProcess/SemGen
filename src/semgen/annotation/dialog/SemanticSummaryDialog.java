@@ -14,7 +14,6 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextPane;
 
-import semgen.SemGenGUI;
 import semgen.resource.SemGenFont;
 import semgen.resource.uicomponent.SemGenScrollPane;
 import semsim.SemSimConstants;
@@ -30,14 +29,13 @@ public class SemanticSummaryDialog extends JDialog implements PropertyChangeList
 	private static final long serialVersionUID = -1850501792672929694L;
 	public JOptionPane optionPane;
 	public Object[] options = new Object[]{"OK"};
-	public JPanel mainpanel;
+	public JPanel mainpanel = new JPanel();
 	public SemSimModel semsimmodel;
 	
 	public SemanticSummaryDialog(SemSimModel semsimmodel){
 		setVisible(false);
 		setTitle("Biological summary");
 		this.semsimmodel = semsimmodel;
-		mainpanel = new JPanel();
 		mainpanel.setLayout(new BoxLayout(mainpanel, BoxLayout.Y_AXIS));
 		setDataInUI();
 		SemGenScrollPane scroller = new SemGenScrollPane(mainpanel);
@@ -53,7 +51,7 @@ public class SemanticSummaryDialog extends JDialog implements PropertyChangeList
 		optionPane.addPropertyChangeListener(this);
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		pack();
-		setLocationRelativeTo(SemGenGUI.desktop);
+		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 	
@@ -118,13 +116,11 @@ public class SemanticSummaryDialog extends JDialog implements PropertyChangeList
 	}
 	
 	public JPanel createPanelForAnnotation(String rel, String val){
-		JPanel panel = new JPanel();
-		panel.setLayout(new BorderLayout());
+		JPanel panel = new JPanel(new BorderLayout());
 		JPanel subpanel = new JPanel();
-		JLabel label = new JLabel(rel);
 		JTextPane valuepane = new JTextPane();
 		valuepane.setText(val);
-		subpanel.add(label);
+		subpanel.add(new JLabel(rel));
 		subpanel.add(valuepane);
 		panel.add(subpanel, BorderLayout.WEST);
 		panel.add(Box.createGlue(), BorderLayout.EAST);

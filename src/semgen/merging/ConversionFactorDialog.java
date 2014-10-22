@@ -4,15 +4,14 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
-
-import semgen.SemGenGUI;
-import semgen.resource.uicomponent.SemGenTextArea;
 
 public class ConversionFactorDialog extends JDialog implements
 		PropertyChangeListener {
@@ -22,21 +21,21 @@ public class ConversionFactorDialog extends JDialog implements
 	 */
 	private static final long serialVersionUID = -3182047942231432822L;
 	public JOptionPane optionPane;
-	public JTextField mantextfield;
+	public JTextField mantextfield = new JTextField();
 	public String cdwd2keep;
 	public JComboBox<String> box;
-	public Boolean process;
+	public Boolean process = true;
 	public String cdwdAndConversionFactor;
 	public double conversionfactor;
 
 	public ConversionFactorDialog(String cdwd2keep, String cdwd2discard,
 			String cdwd2keepunits, String cdwd2discardunits) {
-
-		process = true;
 		this.cdwd2keep = cdwd2keep;
-		String[] selections = new String[] { "*", "/" };
 		
-		SemGenTextArea area = new SemGenTextArea(Color.white);
+		JTextArea area = new JTextArea();
+		area.setOpaque(false);
+		area.setEditable(false);
+		area.setBackground(Color.white);
 
 		area.setText(cdwd2discard + " has units \"" + cdwd2discardunits + "\"" + "\n"
 				+ cdwd2keep + " has units \"" + cdwd2keepunits + "\""
@@ -46,13 +45,11 @@ public class ConversionFactorDialog extends JDialog implements
 		
 		JLabel label = new JLabel(cdwd2discard + " (" + cdwd2discardunits + ") = " + cdwd2keep + " (" + cdwd2keepunits + ") ");
 
-		JPanel conpanel = new JPanel();
-
-		box = new JComboBox<String>(selections);
-		mantextfield = new JTextField();
+		box = new JComboBox<String>(new String[] { "*", "/" });
 		mantextfield.setPreferredSize(new Dimension(250, 30));
 		mantextfield.setForeground(Color.blue);
-
+		
+		JPanel conpanel = new JPanel();
 		conpanel.add(label);
 		conpanel.add(box);
 		conpanel.add(mantextfield);
@@ -71,7 +68,7 @@ public class ConversionFactorDialog extends JDialog implements
 		setContentPane(optionPane);
 
 		pack();
-		setLocationRelativeTo(SemGenGUI.desktop);
+		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 
@@ -94,7 +91,6 @@ public class ConversionFactorDialog extends JDialog implements
 				setVisible(false);
 			} 
 			else {
-				optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 				JOptionPane.showMessageDialog(this, "Please enter a valid conversion factor");
 			}
 		} 

@@ -53,6 +53,7 @@ import semgen.resource.SemGenError;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
 import semgen.resource.uicomponent.SemGenScrollPane;
+import semgen.resource.uicomponent.SemGenTextArea;
 import semsim.SemSimConstants;
 import semsim.webservices.BioPortalAnnotatorClient;
 import semsim.webservices.BioPortalConstants;
@@ -66,7 +67,7 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 	public JTextField pmarea = new JTextField();
 	public JButton pmbutton = new JButton("Find abstract");
 	public String pubmedid;
-	public JTextArea inputtextarea;
+	public SemGenTextArea inputtextarea = new SemGenTextArea();
 	public SemGenScrollPane spresults;
 	public JOptionPane optionPane;
 	public JPanel sppanel = new JPanel();
@@ -76,9 +77,6 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 	public Namespace zns = Namespace.getNamespace("z", "http://www.ebi.ac.uk/z");
 	public Set<String> ontologyids = new HashSet<String>();
 	public AnnotatorTab annotator;
-	public Highlighter areahilit; 
-	public Highlighter.HighlightPainter areapainter;
-	public Color HILIT_COLOR = Color.yellow;
 	public JButton loadingbutton = new JButton(SemGenIcon.blankloadingicon);
 
 	public TextMinerDialog(AnnotatorTab ann) throws FileNotFoundException{
@@ -111,15 +109,10 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 		parsepanel.add(parsebutton);
 		parsepanel.add(loadingbutton);
 		
-		inputtextarea = new JTextArea();
 		inputtextarea.setLineWrap(true);
 		inputtextarea.setWrapStyleWord(true);
 		inputtextarea.setFont(SemGenFont.defaultPlain(-1));
-		
-		areahilit = new DefaultHighlighter();
-		areapainter = new DefaultHighlighter.DefaultHighlightPainter(HILIT_COLOR);
-		inputtextarea.setHighlighter(areahilit);
-		
+
 		SemGenScrollPane sptext = new SemGenScrollPane(inputtextarea);
 		sptext.setPreferredSize(new Dimension(350,230));
 		JPanel toppanel = new JPanel();
@@ -173,7 +166,7 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 		if(!inputtextarea.getText().startsWith("\\W")){inputtextarea.setText(" " + inputtextarea.getText());}
 		if(!inputtextarea.getText().endsWith("\\W")){inputtextarea.append(" ");}
 		String texttoparse = inputtextarea.getText().trim();
-		areahilit.removeAllHighlights();
+		inputtextarea.removeAllHighlights();
 		resultspanel.removeAll();
 		
 		// Limit the annotation to just the selected ontologies 
@@ -198,10 +191,9 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 		} 
 		
 		try {
-			Document doc = new Document();
 			Reader in = new StringReader(xmlresult);
 			SAXBuilder builder = new SAXBuilder();
-			doc = builder.build(in);
+			Document doc = builder.build(in);
 			Iterator<Element> annit = doc.getRootElement().getChild("data").getChild("annotatorResultBean").getChild("annotations").getChildren("annotationBean").iterator();
 			if(!annit.hasNext()){resultspanel.add(new JLabel("NCBO annotator did not find any ontology terms"));}
 			else{
@@ -213,9 +205,9 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 					String uri = concept.getChildText("fullId");
 					Iterator<Element> synonymsit = concept.getChild("synonyms").getChildren("string").iterator();
 					while(synonymsit.hasNext()){
-						annotator.highlightAll(synonymsit.next().getText(), areahilit, areapainter, inputtextarea, false, true);
+						inputtextarea.highlightAll(synonymsit.next().getText(), false, true);
 					}
-					annotator.highlightAll(prefname, areahilit, areapainter, inputtextarea, false, true);
+					inputtextarea.highlightAll(prefname, false, true);
 			    	
 					String localconceptid = concept.getChildText("localConceptId");
 					String shortid = localconceptid.substring(localconceptid.indexOf("/")+1,localconceptid.length());
@@ -250,7 +242,6 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 		spresults.validate();
 		spresults.repaint();
 	}
-	
 	
 	public HashMap<String,String[]> processqueryresult(String xml, String ontid){
 		HashMap<String,String[]> termsanduris = new HashMap<String,String[]>();

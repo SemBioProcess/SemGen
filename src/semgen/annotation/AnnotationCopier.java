@@ -39,7 +39,6 @@ public class AnnotationCopier {
 		this.targetann = targetann;
 		CopierTask task = new CopierTask();
 		task.execute();
-
 	}
 	
 	public static Set<MappableVariable> copyAllAnnotationsToMappedVariables(AnnotatorTab ann, MappableVariable ds){
@@ -66,6 +65,7 @@ public class AnnotationCopier {
 		}
 		@Override
 		protected Void doInBackground() throws Exception {
+			if (sourcefile==null) return null;
 			progframe = new SemGenProgressBar("Loading model...",true);
 			sourcemod = LoadSemSimModel.loadSemSimModelFromFile(sourcefile);
 			
