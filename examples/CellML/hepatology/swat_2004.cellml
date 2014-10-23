@@ -1,0 +1,961 @@
+<?xml version="1.0"?>
+<!--
+This CellML file was generated on 18/03/2011 at 4:17:40 at p.m. using:
+
+COR (0.9.31.1409) 
+Copyright 2002-2011 Dr Alan Garny
+http://cor.physiol.ox.ac.uk/ - cor@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.cellml.org/
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" cmeta:id="swat_2004" name="swat_2004">
+   <units name="hour">
+      <unit multiplier="3600" units="second"/>
+   </units>
+   <units name="CONC">
+      <unit units="mole"/>
+      <unit exponent="-1" units="litre"/>
+   </units>
+   <component name="environment">
+      <variable cmeta:id="environment_time" name="time" public_interface="out" units="hour"/>
+   </component>
+   <component name="pRB">
+      <variable cmeta:id="pRB_pRB" initial_value="0" name="pRB" public_interface="out" units="CONC"/>
+      <variable name="k1" public_interface="in" units="dimensionless"/>
+      <variable name="E2F1" public_interface="in" units="CONC"/>
+      <variable name="km1" public_interface="in" units="dimensionless"/>
+      <variable name="j11" public_interface="in" units="dimensionless"/>
+      <variable name="j61" public_interface="in" units="dimensionless"/>
+      <variable name="k16" public_interface="in" units="dimensionless"/>
+      <variable name="CycDa" public_interface="in" units="CONC"/>
+      <variable name="k61" public_interface="in" units="dimensionless"/>
+      <variable name="pRBp" public_interface="in" units="CONC"/>
+      <variable name="phi_pRB" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>pRB</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <times/>
+                        <ci>k1</ci>
+                        <apply>
+                           <divide/>
+                           <ci>E2F1</ci>
+                           <apply>
+                              <plus/>
+                              <ci>km1</ci>
+                              <ci>E2F1</ci>
+                           </apply>
+                        </apply>
+                        <apply>
+                           <divide/>
+                           <ci>j11</ci>
+                           <apply>
+                              <times/>
+                              <ci>j11</ci>
+                              <ci>pRB</ci>
+                           </apply>
+                        </apply>
+                        <apply>
+                           <divide/>
+                           <ci>j61</ci>
+                           <apply>
+                              <times/>
+                              <ci>j61</ci>
+                              <ci>pRBp</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k16</ci>
+                        <ci>pRB</ci>
+                        <ci>CycDa</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k61</ci>
+                     <ci>pRBp</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>phi_pRB</ci>
+                  <ci>pRB</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="E2F1">
+      <variable cmeta:id="E2F1_E2F1" initial_value="0" name="E2F1" public_interface="out" units="CONC"/>
+      <variable name="kp" public_interface="in" units="dimensionless"/>
+      <variable name="k2" public_interface="in" units="dimensionless"/>
+      <variable name="a" public_interface="in" units="dimensionless"/>
+      <variable name="km2" public_interface="in" units="dimensionless"/>
+      <variable name="j12" public_interface="in" units="dimensionless"/>
+      <variable name="pRB" public_interface="in" units="CONC"/>
+      <variable name="j62" public_interface="in" units="dimensionless"/>
+      <variable name="pRBp" public_interface="in" units="CONC"/>
+      <variable name="phi_E2F1" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>E2F1</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <ci>kp</ci>
+                  <apply>
+                     <times/>
+                     <ci>k2</ci>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <plus/>
+                           <apply>
+                              <power/>
+                              <ci>a</ci>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                           </apply>
+                           <apply>
+                              <power/>
+                              <ci>E2F1</ci>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                           </apply>
+                        </apply>
+                        <apply>
+                           <plus/>
+                           <apply>
+                              <power/>
+                              <ci>km2</ci>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                           </apply>
+                           <apply>
+                              <power/>
+                              <ci>E2F1</ci>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <divide/>
+                        <ci>j12</ci>
+                        <apply>
+                           <plus/>
+                           <ci>j12</ci>
+                           <ci>pRBp</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <divide/>
+                        <ci>j62</ci>
+                        <apply>
+                           <plus/>
+                           <ci>j62</ci>
+                           <ci>pRBp</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>phi_E2F1</ci>
+                  <ci>E2F1</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="CycDa">
+      <variable cmeta:id="CycDa_CycDa" initial_value="0" name="CycDa" public_interface="out" units="CONC"/>
+      <variable name="k34" public_interface="in" units="dimensionless"/>
+      <variable name="CycDi" public_interface="in" units="CONC"/>
+      <variable name="km4" public_interface="in" units="dimensionless"/>
+      <variable name="k43" public_interface="in" units="dimensionless"/>
+      <variable name="phi_CycDa" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>CycDa</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>k34</ci>
+                        <ci>CycDi</ci>
+                        <ci>CycDa</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci>km4</ci>
+                        <ci>CycDa</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k34</ci>
+                     <ci>CycDa</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>phi_CycDa</ci>
+                  <ci>CycDa</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="CycDi">
+      <variable cmeta:id="CycDi_CycDi" initial_value="0" name="CycDi" public_interface="out" units="CONC"/>
+      <variable name="CycDa" public_interface="in" units="CONC"/>
+      <variable name="k3" public_interface="in" units="dimensionless"/>
+      <variable name="AP1" public_interface="in" units="CONC"/>
+      <variable name="k23" public_interface="in" units="dimensionless"/>
+      <variable name="E2F1" public_interface="in" units="CONC"/>
+      <variable name="j13" public_interface="in" units="dimensionless"/>
+      <variable name="pRB" public_interface="in" units="CONC"/>
+      <variable name="j63" public_interface="in" units="dimensionless"/>
+      <variable name="pRBp" public_interface="in" units="CONC"/>
+      <variable name="k43" public_interface="in" units="dimensionless"/>
+      <variable name="k34" public_interface="in" units="dimensionless"/>
+      <variable name="km4" public_interface="in" units="dimensionless"/>
+      <variable name="phi_CycDi" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>CycDi</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>k3</ci>
+                        <ci>AP1</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k23</ci>
+                        <ci>E2F1</ci>
+                        <apply>
+                           <divide/>
+                           <ci>j13</ci>
+                           <apply>
+                              <plus/>
+                              <ci>j13</ci>
+                              <ci>pRB</ci>
+                           </apply>
+                        </apply>
+                        <apply>
+                           <divide/>
+                           <ci>j63</ci>
+                           <apply>
+                              <plus/>
+                              <ci>j63</ci>
+                              <ci>pRBp</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k43</ci>
+                        <ci>CycDa</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k34</ci>
+                     <ci>CycDi</ci>
+                     <apply>
+                        <divide/>
+                        <ci>CycDa</ci>
+                        <apply>
+                           <plus/>
+                           <ci>km4</ci>
+                           <ci>CycDa</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>phi_CycDi</ci>
+                  <ci>CycDi</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="AP1">
+      <variable cmeta:id="AP1_AP1" initial_value="0" name="AP1" public_interface="out" units="CONC"/>
+      <variable name="Fm" public_interface="in" units="dimensionless"/>
+      <variable name="k25" public_interface="in" units="dimensionless"/>
+      <variable name="E2F1" public_interface="in" units="CONC"/>
+      <variable name="j15" public_interface="in" units="dimensionless"/>
+      <variable name="pRB" public_interface="in" units="CONC"/>
+      <variable name="j65" public_interface="in" units="dimensionless"/>
+      <variable name="pRBp" public_interface="in" units="CONC"/>
+      <variable name="phi_AP1" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>AP1</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <ci>Fm</ci>
+                  <apply>
+                     <times/>
+                     <ci>k25</ci>
+                     <ci>E2F1</ci>
+                     <apply>
+                        <divide/>
+                        <ci>j15</ci>
+                        <apply>
+                           <plus/>
+                           <ci>j15</ci>
+                           <ci>pRB</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <divide/>
+                        <ci>j65</ci>
+                        <apply>
+                           <plus/>
+                           <ci>j65</ci>
+                           <ci>pRBp</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>phi_AP1</ci>
+                  <ci>AP1</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="pRBp">
+      <variable cmeta:id="pRBp_pRBp" initial_value="0" name="pRBp" public_interface="out" units="CONC"/>
+      <variable name="k16" public_interface="in" units="dimensionless"/>
+      <variable name="pRB" public_interface="in" units="CONC"/>
+      <variable name="CycDa" public_interface="in" units="CONC"/>
+      <variable name="k61" public_interface="in" units="dimensionless"/>
+      <variable name="k67" public_interface="in" units="dimensionless"/>
+      <variable name="CycEa" public_interface="in" units="CONC"/>
+      <variable name="k76" public_interface="in" units="dimensionless"/>
+      <variable name="pRBpp" public_interface="in" units="CONC"/>
+      <variable name="phi_pRBp" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>pRBp</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <times/>
+                           <ci>k16</ci>
+                           <ci>pRB</ci>
+                           <ci>CycDa</ci>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>k61</ci>
+                           <ci>pRBp</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k67</ci>
+                        <ci>pRBp</ci>
+                        <ci>CycEa</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k76</ci>
+                     <ci>pRBpp</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>phi_pRBp</ci>
+                  <ci>pRBp</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="pRBpp">
+      <variable cmeta:id="pRBpp_pRBpp" initial_value="0" name="pRBpp" public_interface="out" units="CONC"/>
+      <variable name="k67" public_interface="in" units="dimensionless"/>
+      <variable name="pRBp" public_interface="in" units="CONC"/>
+      <variable name="CycEa" public_interface="in" units="CONC"/>
+      <variable name="k76" public_interface="in" units="dimensionless"/>
+      <variable name="phi_pRBpp" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>pRBpp</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>k67</ci>
+                     <ci>pRBp</ci>
+                     <ci>CycEa</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k76</ci>
+                     <ci>pRBpp</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>phi_pRBpp</ci>
+                  <ci>pRBpp</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="CycEi">
+      <variable cmeta:id="CycEi_CycEi" initial_value="0" name="CycEi" public_interface="out" units="CONC"/>
+      <variable name="k28" public_interface="in" units="dimensionless"/>
+      <variable name="E2F1" public_interface="in" units="CONC"/>
+      <variable name="j18" public_interface="in" units="dimensionless"/>
+      <variable name="pRB" public_interface="in" units="CONC"/>
+      <variable name="j68" public_interface="in" units="dimensionless"/>
+      <variable name="pRBp" public_interface="in" units="CONC"/>
+      <variable name="CycEa" public_interface="in" units="CONC"/>
+      <variable name="k98" public_interface="in" units="dimensionless"/>
+      <variable name="k89" public_interface="in" units="dimensionless"/>
+      <variable name="km9" public_interface="in" units="dimensionless"/>
+      <variable name="phi_CycEi" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>CycEi</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>k28</ci>
+                        <ci>E2F1</ci>
+                        <apply>
+                           <divide/>
+                           <ci>j18</ci>
+                           <apply>
+                              <plus/>
+                              <ci>j18</ci>
+                              <ci>pRB</ci>
+                           </apply>
+                        </apply>
+                        <apply>
+                           <divide/>
+                           <ci>j68</ci>
+                           <apply>
+                              <plus/>
+                              <ci>j68</ci>
+                              <ci>pRBp</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k98</ci>
+                        <ci>CycEa</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k89</ci>
+                     <ci>CycEi</ci>
+                     <apply>
+                        <divide/>
+                        <ci>CycEa</ci>
+                        <apply>
+                           <plus/>
+                           <ci>km9</ci>
+                           <ci>CycEa</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>phi_CycEi</ci>
+                  <ci>CycEi</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="CycEa">
+      <variable cmeta:id="CycEa_CycEa" initial_value="0" name="CycEa" public_interface="out" units="CONC"/>
+      <variable name="k89" public_interface="in" units="dimensionless"/>
+      <variable name="CycEi" public_interface="in" units="CONC"/>
+      <variable name="km9" public_interface="in" units="dimensionless"/>
+      <variable name="k98" public_interface="in" units="dimensionless"/>
+      <variable name="phi_CycEa" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>CycEa</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>k89</ci>
+                     <ci>CycEi</ci>
+                     <apply>
+                        <divide/>
+                        <ci>CycEa</ci>
+                        <apply>
+                           <plus/>
+                           <ci>km9</ci>
+                           <ci>CycEa</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k98</ci>
+                     <ci>CycEa</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>phi_CycEa</ci>
+                  <ci>CycEa</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="model_parameters">
+      <variable initial_value="1" name="k1" public_interface="out" units="dimensionless"/>
+      <variable initial_value="1.6" name="k2" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.05" name="k3" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.4" name="k16" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.04" name="k34" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.01" name="k43" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.3" name="k61" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.7" name="k67" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.1" name="k76" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.3" name="k23" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.9" name="k25" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.06" name="k28" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.07" name="k89" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.01" name="k98" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.04" name="a" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.5" name="j11" public_interface="out" units="dimensionless"/>
+      <variable initial_value="5" name="j12" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.001" name="j15" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.6" name="j18" public_interface="out" units="dimensionless"/>
+      <variable initial_value="5" name="j61" public_interface="out" units="dimensionless"/>
+      <variable initial_value="8" name="j62" public_interface="out" units="dimensionless"/>
+      <variable initial_value="6" name="j65" public_interface="out" units="dimensionless"/>
+      <variable initial_value="7" name="j68" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.002" name="j13" public_interface="out" units="dimensionless"/>
+      <variable initial_value="2" name="j63" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.5" name="km1" public_interface="out" units="dimensionless"/>
+      <variable initial_value="4" name="km2" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.3" name="km4" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.005" name="km9" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.05" name="kp" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.005" name="phi_pRB" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.1" name="phi_E2F1" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.023" name="phi_CycDi" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.03" name="phi_CycDa" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.01" name="phi_AP1" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.06" name="phi_pRBp" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.04" name="phi_pRBpp" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.06" name="phi_CycEi" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.05" name="phi_CycEa" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0" name="Fm" public_interface="out" units="dimensionless"/>
+   </component>
+   <connection>
+      <map_components component_1="environment" component_2="pRB"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="E2F1"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="CycDi"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="CycDa"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="AP1"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="pRBp"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="pRBpp"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="CycEi"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="CycEa"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="pRB" component_2="model_parameters"/>
+      <map_variables variable_1="k1" variable_2="k1"/>
+      <map_variables variable_1="km1" variable_2="km1"/>
+      <map_variables variable_1="j61" variable_2="j61"/>
+      <map_variables variable_1="j11" variable_2="j11"/>
+      <map_variables variable_1="k16" variable_2="k16"/>
+      <map_variables variable_1="k61" variable_2="k61"/>
+      <map_variables variable_1="phi_pRB" variable_2="phi_pRB"/>
+   </connection>
+   <connection>
+      <map_components component_1="E2F1" component_2="model_parameters"/>
+      <map_variables variable_1="kp" variable_2="kp"/>
+      <map_variables variable_1="k2" variable_2="k2"/>
+      <map_variables variable_1="a" variable_2="a"/>
+      <map_variables variable_1="km2" variable_2="km2"/>
+      <map_variables variable_1="j12" variable_2="j12"/>
+      <map_variables variable_1="j62" variable_2="j62"/>
+      <map_variables variable_1="phi_E2F1" variable_2="phi_E2F1"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycDi" component_2="model_parameters"/>
+      <map_variables variable_1="k3" variable_2="k3"/>
+      <map_variables variable_1="k23" variable_2="k23"/>
+      <map_variables variable_1="j13" variable_2="j13"/>
+      <map_variables variable_1="j63" variable_2="j63"/>
+      <map_variables variable_1="k43" variable_2="k43"/>
+      <map_variables variable_1="k34" variable_2="k34"/>
+      <map_variables variable_1="km4" variable_2="km4"/>
+      <map_variables variable_1="phi_CycDi" variable_2="phi_CycDi"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycDa" component_2="model_parameters"/>
+      <map_variables variable_1="k34" variable_2="k34"/>
+      <map_variables variable_1="km4" variable_2="km4"/>
+      <map_variables variable_1="k43" variable_2="k43"/>
+      <map_variables variable_1="phi_CycDa" variable_2="phi_CycDa"/>
+   </connection>
+   <connection>
+      <map_components component_1="AP1" component_2="model_parameters"/>
+      <map_variables variable_1="Fm" variable_2="Fm"/>
+      <map_variables variable_1="k25" variable_2="k25"/>
+      <map_variables variable_1="j15" variable_2="j15"/>
+      <map_variables variable_1="j65" variable_2="j65"/>
+      <map_variables variable_1="phi_AP1" variable_2="phi_AP1"/>
+   </connection>
+   <connection>
+      <map_components component_1="pRBp" component_2="model_parameters"/>
+      <map_variables variable_1="k16" variable_2="k16"/>
+      <map_variables variable_1="k61" variable_2="k61"/>
+      <map_variables variable_1="k67" variable_2="k67"/>
+      <map_variables variable_1="k76" variable_2="k76"/>
+      <map_variables variable_1="phi_pRBp" variable_2="phi_pRBp"/>
+   </connection>
+   <connection>
+      <map_components component_1="pRBpp" component_2="model_parameters"/>
+      <map_variables variable_1="k67" variable_2="k67"/>
+      <map_variables variable_1="k76" variable_2="k76"/>
+      <map_variables variable_1="phi_pRBpp" variable_2="phi_pRBpp"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycEi" component_2="model_parameters"/>
+      <map_variables variable_1="k28" variable_2="k28"/>
+      <map_variables variable_1="k98" variable_2="k98"/>
+      <map_variables variable_1="k89" variable_2="k89"/>
+      <map_variables variable_1="km9" variable_2="km9"/>
+      <map_variables variable_1="j18" variable_2="j18"/>
+      <map_variables variable_1="j68" variable_2="j68"/>
+      <map_variables variable_1="phi_CycEi" variable_2="phi_CycEi"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycEa" component_2="model_parameters"/>
+      <map_variables variable_1="k98" variable_2="k98"/>
+      <map_variables variable_1="k89" variable_2="k89"/>
+      <map_variables variable_1="km9" variable_2="km9"/>
+      <map_variables variable_1="phi_CycEa" variable_2="phi_CycEa"/>
+   </connection>
+   <connection>
+      <map_components component_1="pRB" component_2="E2F1"/>
+      <map_variables variable_1="E2F1" variable_2="E2F1"/>
+      <map_variables variable_1="pRB" variable_2="pRB"/>
+   </connection>
+   <connection>
+      <map_components component_1="pRB" component_2="CycDa"/>
+      <map_variables variable_1="CycDa" variable_2="CycDa"/>
+   </connection>
+   <connection>
+      <map_components component_1="pRB" component_2="pRBp"/>
+      <map_variables variable_1="pRBp" variable_2="pRBp"/>
+      <map_variables variable_1="pRB" variable_2="pRB"/>
+   </connection>
+   <connection>
+      <map_components component_1="E2F1" component_2="pRBp"/>
+      <map_variables variable_1="pRBp" variable_2="pRBp"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycDi" component_2="AP1"/>
+      <map_variables variable_1="AP1" variable_2="AP1"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycDi" component_2="E2F1"/>
+      <map_variables variable_1="E2F1" variable_2="E2F1"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycDi" component_2="pRB"/>
+      <map_variables variable_1="pRB" variable_2="pRB"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycDi" component_2="pRBp"/>
+      <map_variables variable_1="pRBp" variable_2="pRBp"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycDi" component_2="CycDa"/>
+      <map_variables variable_1="CycDi" variable_2="CycDi"/>
+      <map_variables variable_1="CycDa" variable_2="CycDa"/>
+   </connection>
+   <connection>
+      <map_components component_1="AP1" component_2="pRB"/>
+      <map_variables variable_1="pRB" variable_2="pRB"/>
+   </connection>
+   <connection>
+      <map_components component_1="AP1" component_2="pRBp"/>
+      <map_variables variable_1="pRBp" variable_2="pRBp"/>
+   </connection>
+   <connection>
+      <map_components component_1="AP1" component_2="E2F1"/>
+      <map_variables variable_1="E2F1" variable_2="E2F1"/>
+   </connection>
+   <connection>
+      <map_components component_1="pRBp" component_2="CycDa"/>
+      <map_variables variable_1="CycDa" variable_2="CycDa"/>
+   </connection>
+   <connection>
+      <map_components component_1="pRBp" component_2="CycEa"/>
+      <map_variables variable_1="CycEa" variable_2="CycEa"/>
+   </connection>
+   <connection>
+      <map_components component_1="pRBp" component_2="pRBpp"/>
+      <map_variables variable_1="pRBpp" variable_2="pRBpp"/>
+      <map_variables variable_1="pRBp" variable_2="pRBp"/>
+   </connection>
+   <connection>
+      <map_components component_1="pRBpp" component_2="CycEa"/>
+      <map_variables variable_1="CycEa" variable_2="CycEa"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycEi" component_2="E2F1"/>
+      <map_variables variable_1="E2F1" variable_2="E2F1"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycEi" component_2="pRB"/>
+      <map_variables variable_1="pRB" variable_2="pRB"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycEi" component_2="pRBp"/>
+      <map_variables variable_1="pRBp" variable_2="pRBp"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycEi" component_2="CycEa"/>
+      <map_variables variable_1="CycEa" variable_2="CycEa"/>
+      <map_variables variable_1="CycEi" variable_2="CycEi"/>
+   </connection>
+
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#">
+  <rdf:Description rdf:about="">
+    <dc:creator rdf:parseType="Resource">
+      <vCard:N rdf:parseType="Resource">
+        <vCard:Family>Nielsen</vCard:Family>
+        <vCard:Given>Hanne</vCard:Given>
+    
+      </vCard:N>
+      <vCard:EMAIL rdf:parseType="Resource">
+        <rdf:value>hnie010@aucklanduni.ac.nz</rdf:value>
+        <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+      </vCard:EMAIL>
+      <vCard:ORG rdf:parseType="Resource">
+        <vCard:Orgname>The University of Auckland</vCard:Orgname>
+        <vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+      </vCard:ORG>
+    </dc:creator>
+    <dcterms:created rdf:parseType="Resource">
+      <dcterms:W3CDTF>2009-10-08</dcterms:W3CDTF>
+    </dcterms:created>
+  </rdf:Description>
+  <rdf:Description rdf:about="#swat_2004">
+    <cmeta:species>Human</cmeta:species>
+    <cmeta:bio_entity>Liver</cmeta:bio_entity>
+    <cmeta:bio_entity>hepatocyte</cmeta:bio_entity>
+    <bqs:reference rdf:parseType="Resource">
+      <dc:subject rdf:parseType="Resource">
+        <bqs:subject_type>keyword</bqs:subject_type>
+        <rdf:value>
+          <rdf:Bag>
+            <rdf:li>hepatology</rdf:li>
+            <rdf:li>liver</rdf:li>
+          </rdf:Bag>
+        </rdf:value>
+      </dc:subject>
+    </bqs:reference>
+    <bqs:reference rdf:parseType="Resource">
+      <bqs:Pubmed_id> 11093832 </bqs:Pubmed_id>
+      <bqs:JournalArticle rdf:parseType="Resource">
+        <dc:creator>
+          <rdf:Seq>
+            <rdf:li rdf:parseType="Resource">
+              <bqs:Person rdf:parseType="Resource">
+                <vCard:N rdf:parseType="Resource">
+                  <vCard:Family>Swat</vCard:Family>
+                  <vCard:Given>M</vCard:Given>
+                </vCard:N>
+              </bqs:Person>
+            </rdf:li>
+            <rdf:li rdf:parseType="Resource">
+              <bqs:Person rdf:parseType="Resource">
+                <vCard:N rdf:parseType="Resource">
+                  <vCard:Family>Kel</vCard:Family>
+                  <vCard:Given>A</vCard:Given>
+                </vCard:N>
+              </bqs:Person>
+            </rdf:li>
+            <rdf:li rdf:parseType="Resource">
+              <bqs:Person rdf:parseType="Resource">
+                <vCard:N rdf:parseType="Resource">
+                  <vCard:Family>Herzel</vCard:Family>
+                  <vCard:Given>H</vCard:Given>
+                </vCard:N>
+              </bqs:Person>
+            </rdf:li>
+                      </rdf:Seq>
+        </dc:creator>
+        <dc:title>
+          Bifurcation analysis of the regulatory modules of the mammalian G1/S transition
+          </dc:title>
+        <dcterms:issued rdf:parseType="Resource">
+          <dcterms:W3CDTF>2009-07-08</dcterms:W3CDTF>
+        </dcterms:issued>
+        <bqs:Journal rdf:parseType="Resource">
+          <dc:title>Bioinformatics</dc:title>
+        </bqs:Journal>
+        <bqs:volume>20(10)</bqs:volume>
+        <bqs:first_page>1506</bqs:first_page>
+        <bqs:last_page>1511</bqs:last_page>
+      </bqs:JournalArticle>
+    </bqs:reference>
+  </rdf:Description>
+</rdf:RDF>
+
+
+
+</model>

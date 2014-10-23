@@ -1,0 +1,619 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--  FILE :  lebeau_model_1999_version02.xml
+
+CREATED :  21st May 2007
+
+LAST MODIFIED : 21st May 2007
+
+AUTHOR :  Catherine Lloyd
+          The Bioengineering Institute
+          The University of Auckland
+          
+MODEL STATUS :  This model conforms to the CellML 1.1 Specification.
+
+DESCRIPTION :  This file contains a CellML description of Andrew LeBeau et al's 1999 model for agonist-specific calcium oscillations in pancreatic acinar cells.
+
+CHANGES:  
+  
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="lebeau_model_1999_version02" name="lebeau_yule_groblewski_sneyd_1999_version01">
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Agonist-Dependent Phosphorylation Of The Inositol 1,4,5-Triphosphate Receptor</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Bioengineering Institute, University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+The production of the intracellular signalling factor inositol 1,4,5-triphosphate (IP<subscript>3</subscript>) and the subsequent release of Ca<superscript>2+</superscript> stored in intracellular organelles is a fundamental cellular signalling function.  The inositol triphosphate receptor (IPR) is an IP<subscript>3</subscript>-activated Ca<superscript>2+</superscript> channel in the ER.  The properties of IP<subscript>3</subscript>-dependent intracellular calcium oscillations in pancreatic acinar cells depend on the agonist used to stimulate them.  
+</para>
+
+<para>  
+This agonist-dependency is captured in Andrew P. LeBeau <emphasis>et al's</emphasis> 1999 mathematical model of agonist-specific intracellular calcium oscillations in pancreatic acinar cells.  They assume that the complete IPR is composed of four functionally identical, independent subunits, (see <xref linkend="fig_simplified_diagram"/> below).  IP<subscript>3</subscript> must be bound to all four subunits for the receptor to be in the conducting state. 
+</para>
+
+<para>
+The complete original paper reference is cited below:
+</para>
+
+<para>
+<ulink url="http://www.jgp.org/cgi/content/abstract/113/6/851">Agonist-dependent Phosphorylation of the Inositol 1,4,5-Triphosphate Receptor.  A Possible Mechanism for Agonist-specific Calcium Oscillations in Pancreatic Acinar Cells</ulink>, Andrew P. LeBeau, David I. Yule, Guy E. Groblewski and James Sneyd, 1999, <ulink url="http://www.jgp.org/">
+            <emphasis>The Journal Of General Physiology</emphasis>
+          </ulink>, 113, 851-871. (<ulink url="http://www.jgp.org/cgi/content/full/113/6/851">Full text</ulink> and <ulink url="http://www.jgp.org/cgi/reprint/113/6/851.pdf">PDF</ulink> versions of the article are available to subscribers of the JGP website.)  <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;list_uids=10352035&amp;dopt=Abstract">PubMed ID: 10352035</ulink> 
+</para>
+
+<para>
+The raw CellML description of the dynamic model of the type-2 inositol triphosphate receptor can be downloaded in various formats as described in <xref linkend="sec_download_this_model"/>.
+</para>
+
+<informalfigure float="0" id="fig_simplified_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>A simplified diagram of the IPR model</title>
+    </objectinfo>
+    <imagedata fileref="lebeau_1999.png"/>
+  </imageobject>
+</mediaobject>
+<caption>A diagram of the receptor states of the model of the IP<subscript>3</subscript> receptor.  S denotes the fraction of the subunits in the shut state.  Binding of IP<subscript>3</subscript> causes the receptor to be converted to the open state O.  O is a relatively unstable state and the subunits will progress through to the more stable I<subscript>1</subscript> (inactivated) state in which IP<subscript>3</subscript> is still bound but the channels do not conduct.  I<subscript>2</subscript> represents a second inactivated state of the receptor in which IP<subscript>3</subscript> is no longer bound.</caption>
+</informalfigure>
+
+</sect1>
+</article>
+</documentation>
+
+  
+  
+  
+  <units name="micromolar">
+    <unit units="mole" prefix="micro"/>
+    <unit units="litre" exponent="-1"/>
+  </units>
+  
+  <units name="flux">
+    <unit units="micromolar"/>
+    <unit units="second" exponent="-1"/>
+  </units>
+  
+  <units name="first_order_rate_constant">
+    <unit units="second" exponent="-1"/>
+  </units>
+  
+  <units name="second_order_rate_constant">
+    <unit units="micromolar" exponent="-1"/>
+    <unit units="second" exponent="-1"/>
+  </units>
+  
+  
+  <component name="environment">
+    <variable units="second" public_interface="out" name="time"/>
+  </component>
+  
+  
+  <component cmeta:id="O" name="O">
+     
+    <variable units="dimensionless" public_interface="out" name="O"/> 
+    
+    <variable units="micromolar" name="S"/>
+    
+    <variable units="micromolar" public_interface="in" name="I1"/>
+    <variable units="micromolar" public_interface="in" name="I2"/>
+    <variable units="micromolar" public_interface="in" name="p"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="k1"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="k1_"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="k2"/>
+    <variable units="second" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>O</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> k1 </ci>
+            <ci> p </ci>
+            <ci> S </ci>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> k1_  </ci>
+              <ci> O  </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> k2  </ci>
+              <ci> O  </ci>
+            </apply>
+          </apply> 
+        </apply> 
+      </apply>
+
+      <apply>
+        <eq/> 
+        <ci>S</ci> 
+        <apply>
+          <minus/>
+          <cn cellml:units="dimensionless"> 4.0 </cn>
+          <apply>
+            <plus/>
+            <ci> O </ci>
+            <ci> I1 </ci>
+            <ci> I2 </ci>
+          </apply> 
+        </apply> 
+      </apply>
+    </math> 
+  </component>
+   
+  <component cmeta:id="I1" name="I1">
+     
+    <variable units="dimensionless" public_interface="out" name="I1"/> 
+    
+    <variable units="micromolar" public_interface="in" name="O"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="k2"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="k3"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="k4"/>
+    <variable units="second" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>I1</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> k2 </ci>
+            <ci> O </ci>
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <ci> k3  </ci>
+              <ci> k4  </ci>
+            </apply>
+            <ci> I1  </ci>
+          </apply> 
+        </apply> 
+      </apply>
+    </math> 
+  </component> 
+
+  <component cmeta:id="I2" name="I2">
+     
+    <variable units="dimensionless" public_interface="out" name="I2"/> 
+    
+    <variable units="micromolar" public_interface="in" name="I1"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="k4"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="k5"/>
+    <variable units="second" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>I2</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> k4 </ci>
+            <ci> I1 </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> k5  </ci>
+            <ci> I2  </ci>
+          </apply> 
+        </apply> 
+      </apply>
+    </math> 
+  </component>           
+  
+  <component cmeta:id="c" name="c">
+     
+    <variable units="micromolar" public_interface="out" name="c"/> 
+   
+    <variable units="flux" name="J_rel"/>
+    <variable units="flux" name="J_pump"/>
+    <variable units="flux" name="J_influx" initial_value="0.4"/>
+    <variable units="flux" name="V_p" initial_value="2.6"/> 
+    <variable units="micromolar" name="K_p" initial_value="0.54"/>
+    <variable units="flux" name="k_flux" initial_value="28.0"/>
+    
+    <variable units="micromolar" public_interface="in" name="O"/> 
+    <variable units="second" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>c</ci> 
+        </apply>
+        <apply>
+          <plus/>
+          <apply>
+            <minus/>
+            <ci>J_rel</ci> 
+            <ci>J_pump</ci>
+          </apply>
+          <ci>J_influx</ci>
+        </apply> 
+      </apply>
+      
+      <apply id="J_rel_calculation">
+        <eq/>
+        <ci> J_rel </ci>
+        <apply>
+          <times/>
+          <ci> k_flux </ci>
+          <apply>
+            <power/>
+            <ci> O </ci>
+            <cn cellml:units="dimensionless"> 4.0 </cn>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="J_pump_calculation">
+        <eq/>
+        <ci> J_pump </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <ci> V_p </ci>
+            <apply>
+              <power/>
+              <ci> c </ci>
+              <cn cellml:units="dimensionless"> 2.0 </cn>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <power/>
+              <ci> K_p </ci>
+              <cn cellml:units="dimensionless"> 2.0 </cn>
+            </apply>
+            <apply>
+              <power/>
+              <ci> c </ci>
+              <cn cellml:units="dimensionless"> 2.0 </cn>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math> 
+  </component>
+  
+  <component name="constants">
+    <variable units="first_order_rate_constant" public_interface="out" name="k1"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="k1_" initial_value="0.88"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="k2" initial_value="0.5"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="k3" initial_value="0.5"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="k4"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="k5" initial_value="0.02"/>
+    <variable units="micromolar" public_interface="out" name="p" initial_value="3.0"/>
+    
+    <variable units="flux" name="alpha_1" initial_value="40.0"/>
+    <variable units="micromolar" name="beta_1" initial_value="0.8"/>
+    <variable units="flux" name="alpha_4" initial_value="0.06"/>
+    <variable units="micromolar" name="beta_4" initial_value="0.01"/>
+    
+    <variable units="micromolar" public_interface="in" name="c"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="k1_calculation">
+        <eq/>
+        <ci> k1 </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <ci> alpha_1 </ci>
+            <apply>
+              <power/>
+              <ci> c </ci>
+              <cn cellml:units="dimensionless"> 3.0 </cn>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <power/>
+              <ci> beta_1 </ci>
+              <cn cellml:units="dimensionless"> 3.0 </cn>
+            </apply>
+            <apply>
+              <power/>
+              <ci> c </ci>
+              <cn cellml:units="dimensionless"> 3.0 </cn>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+
+      <apply id="k4_calculation">
+        <eq/>
+        <ci> k4 </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <ci> alpha_4 </ci>
+            <ci> p </ci>
+          </apply>
+          <apply>
+            <plus/>
+            <ci> beta_4 </ci>
+            <ci> p </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  
+  <connection>
+    <map_components component_2="environment" component_1="O"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="I1"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="I2"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="c"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="I1" component_1="O"/>
+    <map_variables variable_2="O" variable_1="O"/>
+    <map_variables variable_2="I1" variable_1="I1"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="I2" component_1="O"/>
+    <map_variables variable_2="I2" variable_1="I2"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="constants" component_1="O"/>
+    <map_variables variable_2="p" variable_1="p"/>
+    <map_variables variable_2="k1" variable_1="k1"/>
+    <map_variables variable_2="k1_" variable_1="k1_"/>
+    <map_variables variable_2="k2" variable_1="k2"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="constants" component_1="I1"/>
+    <map_variables variable_2="k2" variable_1="k2"/>
+    <map_variables variable_2="k3" variable_1="k3"/>
+    <map_variables variable_2="k4" variable_1="k4"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="I1" component_1="I2"/>
+    <map_variables variable_2="I1" variable_1="I1"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="constants" component_1="I2"/>
+    <map_variables variable_2="k5" variable_1="k5"/>
+    <map_variables variable_2="k4" variable_1="k4"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="O" component_1="c"/>
+    <map_variables variable_2="O" variable_1="O"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="constants" component_1="c"/>
+    <map_variables variable_2="c" variable_1="c"/>
+  </connection>
+
+
+<rdf:RDF>
+  <rdf:Bag rdf:about="rdf:#613ed3a1-f7cd-4f08-abd8-b21898408dc9">
+    <rdf:li>calcium dynamics</rdf:li>
+    <rdf:li>ip3r</rdf:li>
+    <rdf:li>Pancreatic Acinar Cell</rdf:li>
+    <rdf:li>signal transduction</rdf:li>
+  </rdf:Bag>
+  <rdf:Seq rdf:about="rdf:#b468d534-4904-49ca-abae-b3b2a85dd285">
+    <rdf:li rdf:resource="rdf:#92894c83-8442-464b-9b35-b752519ee747"/>
+    <rdf:li rdf:resource="rdf:#119744bd-8ec0-48db-abc9-0ed3edfe81a7"/>
+    <rdf:li rdf:resource="rdf:#2be6cb4b-0490-4298-a956-91a0ce74abd2"/>
+    <rdf:li rdf:resource="rdf:#9e7d8475-6b48-4afe-b9d4-8a076b1fb55a"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#5b200c7e-c0b4-473a-9b59-c97b00e003ab">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>The Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e917cada-1740-434f-8ed0-ac115101a061">
+    <vCard:Given>Andrew</vCard:Given>
+    <vCard:Family>LeBeau</vCard:Family>
+    <vCard:Other>P</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#5df1cca1-eeee-4376-8376-fbef6b20e221">
+    <vCard:ORG rdf:resource="rdf:#5b200c7e-c0b4-473a-9b59-c97b00e003ab"/>
+    <vCard:EMAIL rdf:resource="rdf:#b4b521e8-a193-45cb-890b-499f51d2a2cb"/>
+    <vCard:N rdf:resource="rdf:#7b7d81fd-107c-48de-99cf-e2f8cede9b6c"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="/O">
+    <dcterms:alternative>fraction of receptor subunits in the open state</dcterms:alternative>
+    <dc:title>O</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="/I2">
+    <dcterms:alternative>fraction of receptor subunits in the inactivated (2) state</dcterms:alternative>
+    <dc:title>I2</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7b7d81fd-107c-48de-99cf-e2f8cede9b6c">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#92894c83-8442-464b-9b35-b752519ee747">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#e917cada-1740-434f-8ed0-ac115101a061"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#623deb7a-a40a-48b4-8c01-0c643d95dcca">
+    <vCard:Given>Guy</vCard:Given>
+    <vCard:Family>Groblewski</vCard:Family>
+    <vCard:Other>E</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#2be6cb4b-0490-4298-a956-91a0ce74abd2">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#623deb7a-a40a-48b4-8c01-0c643d95dcca"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:publisher>The University of Auckland, Bioengineering Institute</dc:publisher>
+    <cmeta:comment rdf:resource="rdf:#d65ac3b6-4a6b-4142-9792-2c39aabb580f"/>
+    <dcterms:created rdf:resource="rdf:#4d4fa796-39f7-40e6-b5a1-37e7b9fa3633"/>
+    <dc:creator rdf:resource="rdf:#5df1cca1-eeee-4376-8376-fbef6b20e221"/>
+    <cmeta:modification rdf:resource="rdf:#2505d72b-ef19-48db-81be-7a96c3412596"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="/c">
+    <dcterms:alternative>
+          intracellular calcium ion concentration
+        </dcterms:alternative>
+    <dc:title>c</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#119744bd-8ec0-48db-abc9-0ed3edfe81a7">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#b34cf69e-f7a3-46ea-a10c-c4562807e692"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4bef1b0a-6448-45d4-b79b-2fa3212321c9">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value rdf:resource="rdf:#613ed3a1-f7cd-4f08-abd8-b21898408dc9"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d6795f09-006d-4eb2-a3fb-8239b17ad73a">
+    <dc:creator rdf:resource="rdf:#4e73bd73-a39b-4663-ae49-886d97f7f7e9"/>
+    <rdf:value>This is the CellML description of LeBeau et al's 1999 model for &#13;
+          agonist-specific calcium oscillations in pancreatic acinar cells.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e7fca4f3-e5a5-446d-a3a2-bb426f539da8">
+    <bqs:Pubmed_id>10352035</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#005b7d73-9fca-4ec6-b096-2912b082046e"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#89ea6872-88ed-4568-84a3-af15765c00b6">
+    <dcterms:W3CDTF>2007-06-05T09:39:09+12:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4e73bd73-a39b-4663-ae49-886d97f7f7e9">
+    <vCard:FN>Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e9b389e7-d674-4c31-988b-b259e564f4c1">
+    <dc:title>Journal of General Physiology</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b34cf69e-f7a3-46ea-a10c-c4562807e692">
+    <vCard:Given>David</vCard:Given>
+    <vCard:Family>Yule</vCard:Family>
+    <vCard:Other>I</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9e7d8475-6b48-4afe-b9d4-8a076b1fb55a">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#ab34a18e-e35b-4c8d-bd53-c40fe70171b9"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#61470ea0-280d-496f-b847-9e8fb6f8a86f">
+    <dcterms:W3CDTF>1999-06-01</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#005b7d73-9fca-4ec6-b096-2912b082046e">
+    <dc:creator rdf:resource="rdf:#b468d534-4904-49ca-abae-b3b2a85dd285"/>
+    <dc:title>Agonist-dependent Phosphorylation of the Inositol 1,4,5-Triphosphate Receptor</dc:title>
+    <bqs:volume>113</bqs:volume>
+    <bqs:first_page>851</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#e9b389e7-d674-4c31-988b-b259e564f4c1"/>
+    <dcterms:issued rdf:resource="rdf:#61470ea0-280d-496f-b847-9e8fb6f8a86f"/>
+    <bqs:last_page>871</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#2505d72b-ef19-48db-81be-7a96c3412596">
+    <dcterms:modified rdf:resource="rdf:#89ea6872-88ed-4568-84a3-af15765c00b6"/>
+    <rdf:value>The new version of this model has been re-coded to remove the reaction element and replace it with a simple MathML description of the model reaction kinetics.  This is thought to be truer to the original publication, and information regarding the enzyme kinetics etc will later be added to the metadata through use of an ontology.
+
+The model runs in the PCEnv simulator and gives a nice curved output. </rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#97c6bfbf-a990-41d9-b6a3-be8ba0786a4b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b4b521e8-a193-45cb-890b-499f51d2a2cb">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ab34a18e-e35b-4c8d-bd53-c40fe70171b9">
+    <vCard:Given>James</vCard:Given>
+    <vCard:Family>Sneyd</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="#lebeau_model_1999_version02">
+    <dc:title>
+        The LeBeau et al 1999 model for agaonist-specific calcium oscillations 
+        in pancreatic acinar cells.
+      </dc:title>
+    <cmeta:bio_entity>Pancreatic Acinar Cell</cmeta:bio_entity>
+    <cmeta:comment rdf:resource="rdf:#d6795f09-006d-4eb2-a3fb-8239b17ad73a"/>
+    <bqs:reference rdf:resource="rdf:#bf9dc3c5-261d-4a24-8d95-ef81f6cf0d0b"/>
+    <bqs:reference rdf:resource="rdf:#e7fca4f3-e5a5-446d-a3a2-bb426f539da8"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="/I1">
+    <dcterms:alternative>fraction of receptor subunits in the inactivated (1) state</dcterms:alternative>
+    <dc:title>I1</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#97c6bfbf-a990-41d9-b6a3-be8ba0786a4b">
+    <vCard:N rdf:resource="rdf:#cb46bf74-ad5f-4251-b3e5-a7e7fb63a547"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d65ac3b6-4a6b-4142-9792-2c39aabb580f">
+    <dc:creator rdf:resource="rdf:#2da1bf26-f9e9-4550-9af1-e25046b37deb"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#bf9dc3c5-261d-4a24-8d95-ef81f6cf0d0b">
+    <dc:subject rdf:resource="rdf:#4bef1b0a-6448-45d4-b79b-2fa3212321c9"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4d4fa796-39f7-40e6-b5a1-37e7b9fa3633">
+    <dcterms:W3CDTF>2007-05-21</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#cb46bf74-ad5f-4251-b3e5-a7e7fb63a547">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+</rdf:RDF>
+</model>

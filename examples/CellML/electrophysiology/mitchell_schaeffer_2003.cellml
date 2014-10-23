@@ -1,0 +1,411 @@
+<?xml version='1.0' encoding='utf-8'?>
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:ns7="http://www.cellml.org/metadata/simulation/1.0#" cmeta:id="mitchell_2003" name="mitchell_2003">
+  <documentation xmlns="http://cellml.org/tmp-documentation">
+    <article>
+      <articleinfo>
+        <title>A Simplified Ventricular Myocyte Model</title>
+        <author>
+          <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+          <affiliation>
+            <shortaffil>Auckland Bioengineering Institute</shortaffil>
+          </affiliation>
+        </author>
+      </articleinfo>
+      <section id="sec_status">
+        <title>Model Status</title>
+        <para>
+            This version of this model is known to run in both OpenCell and COR.  The units have been checked and they are consistent.  A generic stimulus protocol has been added to allow the model to simulate trains of action potentials.  Although the model does run, the simulation output is still not quite the same as the original published model.  The original model authors have been contacted and we will continue to curate the CellML model.
+          </para>
+      </section>
+      <sect1 id="sec_structure">
+        <title>Model Structure</title>
+
+        <para>
+ABSTRACT: In this paper we introduce and study a model for electrical activity of cardiac membrane which incorporates only an inward and an outward current. This model is useful for three reasons: (1) Its simplicity, comparable to the FitzHugh-Nagumo model, makes it useful in numerical simulations, especially in two or three spatial dimensions where numerical efficiency is so important. (2) It can be understood analytically without recourse to numerical simulations. This allows us to determine rather completely how the parameters in the model affect its behavior which in turn provides insight into the effects of the many parameters in more realistic models. (3) It naturally gives rise to a one-dimensional map which specifies the action potential duration as a function of the previous diastolic interval. For certain parameter values, this map exhibits a new phenomenon--subcritical alternans--that does not occur for the commonly used exponential map.
+</para>
+        
+        <para>
+The original paper reference is cited below:
+</para>
+        <para>
+          A two-current model for the dynamics of cardiac membrane, Colleen C. Mitchell, David G. Schaeffer, 2003, <emphasis>Bulletin of Mathematical Biology</emphasis>, 65, (5), 767-793.  <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/12909250">PubMed ID: 12909250</ulink>
+        </para>
+        
+		<informalfigure float="0" id="fig_cell_diagram">
+          <mediaobject>
+            <imageobject>
+              <objectinfo>
+                <title>cell diagram</title>
+              </objectinfo>
+              <imagedata fileref="mitchell_2003.png"/>
+            </imageobject>
+          </mediaobject>
+          <caption>A schematic diagram of the two ionic currents described by the Mitchell-Schaeffer model of a ventricular myocyte.</caption>
+        </informalfigure>
+        
+      </sect1>
+    </article>
+  </documentation>
+   
+   <units name="ms">
+      <unit units="second" prefix="milli"/>
+   </units>
+   <units name="per_ms">
+      <unit units="second" prefix="milli" exponent="-1"/>
+   </units>
+   
+   <component name="environment">
+      <variable units="ms" public_interface="out" name="time"/>
+   </component>
+
+ <component name="J_stim">
+    <variable units="per_ms" public_interface="out" name="J_stim"/>
+    
+	<variable units="ms" name="IstimStart" initial_value="0"/>
+    <variable units="ms" name="IstimEnd" initial_value="50000"/>
+    <variable units="per_ms" name="IstimAmplitude" initial_value="0.2"/>
+    <variable units="ms" name="IstimPeriod" initial_value="500"/>
+    <variable units="ms" name="IstimPulseDuration" initial_value="1"/>
+    
+	<variable units="ms" public_interface="in" name="time"/>
+    
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/>
+        <ci>J_stim</ci>
+        <piecewise>
+          <piece>
+            <ci>IstimAmplitude</ci>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci>time</ci>
+                <ci>IstimStart</ci>
+              </apply>
+              <apply>
+                <leq/>
+                <ci>time</ci>
+                <ci>IstimEnd</ci>
+              </apply>
+              <apply>
+                <leq/>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <minus/>
+                    <ci>time</ci>
+                    <ci>IstimStart</ci>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <apply>
+                      <floor/>
+                      <apply>
+                        <divide/>
+                        <apply>
+                          <minus/>
+                          <ci>time</ci>
+                          <ci>IstimStart</ci>
+                        </apply>
+                        <ci>IstimPeriod</ci>
+                      </apply>
+                    </apply>
+                    <ci>IstimPeriod</ci>
+                  </apply>
+                </apply>
+                <ci>IstimPulseDuration</ci>
+              </apply>
+            </apply>
+          </piece>
+          <otherwise>
+            <cn cellml:units="per_ms">0</cn>
+          </otherwise>
+        </piecewise>
+      </apply>
+    </math>
+   </component>
+
+   <component name="membrane">
+      <variable units="dimensionless" public_interface="out" name="Vm" initial_value="0.00000820413566106744"/>
+      
+	  <variable units="ms" public_interface="in" name="time"/>
+      <variable units="per_ms" public_interface="in" name="J_in"/>
+      <variable units="per_ms" public_interface="in" name="J_out"/>
+      <variable units="per_ms" public_interface="in" name="J_stim"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Vm</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <ci>J_in</ci>
+               <ci>J_out</ci>
+               <ci>J_stim</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="J_in">
+      <variable units="per_ms" public_interface="out" name="J_in"/>
+      
+	  <variable units="ms" name="tau_in" initial_value="0.3"/>
+     
+  	  <variable units="ms" public_interface="in" private_interface="out" name="time"/>
+      <variable units="dimensionless" public_interface="in" private_interface="out" name="Vm"/>
+      <variable units="dimensionless" private_interface="in" name="h"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>J_in</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+				  <ci>h</ci>
+                  <apply>
+                     <times/>
+					 <apply>
+                        <power/>
+                        <ci>Vm</ci>
+						<cn cellml:units="dimensionless">2</cn>
+					 </apply>
+					 <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>Vm</ci>
+                     </apply>
+                  </apply>
+			   </apply>
+               <ci>tau_in</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="J_in_h_gate">
+      <variable units="dimensionless" public_interface="out" name="h" initial_value="0.8789655121804799"/>
+      
+	  <variable units="ms" name="tau_open" initial_value="120.0"/>
+      <variable units="ms" name="tau_close" initial_value="150.0"/>
+      <variable units="dimensionless" name="V_gate" initial_value="0.13"/>
+      
+	  <variable units="dimensionless" public_interface="in" name="Vm"/>
+      <variable units="ms" public_interface="in" name="time"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>h</ci>
+            </apply>
+            <piecewise>
+               <piece>
+			      <apply>
+                     <divide/>
+                     <apply>
+                        <minus/>
+					    <cn cellml:units="dimensionless">1</cn>
+                        <ci>h</ci>
+                     </apply>
+				     <ci>tau_open</ci>
+                  </apply>
+				  <apply>
+                     <lt/>
+                     <ci>Vm</ci>
+                     <ci>V_gate</ci>
+                  </apply>
+               </piece>
+               <otherwise>
+			      <apply>
+                     <divide/>
+                     <apply>
+                        <minus/>
+					    <ci>h</ci>
+                     </apply>
+				     <ci>tau_close</ci>
+                  </apply>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="J_out">
+      <variable units="per_ms" public_interface="out" name="J_out"/>
+      
+	  <variable units="ms" name="tau_out" initial_value="6.0"/>
+     
+  	  <variable units="dimensionless" public_interface="in" private_interface="out" name="Vm"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>J_out</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+				  <ci>Vm</ci>
+                  <ci>tau_out</ci>
+			   </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <group>
+      <relationship_ref relationship="encapsulation"/>
+      <component_ref component="J_in">
+         <component_ref component="J_in_h_gate"/>
+      </component_ref>
+   </group>
+   
+   <connection>
+      <map_components component_2="environment" component_1="membrane"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="J_stim"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="J_in"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="J_stim" component_1="membrane"/>
+      <map_variables variable_2="J_stim" variable_1="J_stim"/>
+   </connection>
+   <connection>
+      <map_components component_2="J_in" component_1="membrane"/>
+      <map_variables variable_2="Vm" variable_1="Vm"/>
+      <map_variables variable_2="J_in" variable_1="J_in"/>
+   </connection>
+   <connection>
+      <map_components component_2="J_out" component_1="membrane"/>
+      <map_variables variable_2="Vm" variable_1="Vm"/>
+      <map_variables variable_2="J_out" variable_1="J_out"/>
+   </connection>
+   <connection>
+      <map_components component_2="J_in_h_gate" component_1="J_in"/>
+      <map_variables variable_2="Vm" variable_1="Vm"/>
+      <map_variables variable_2="h" variable_1="h"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+  
+<rdf:RDF>
+  <rdf:Seq rdf:about="rdf:#a6d68ad4-f798-4744-893c-c5570c4b7906">
+    <rdf:li rdf:resource="rdf:#648f422e-3f39-42a3-a68b-bd2edba72eef"/>
+    <rdf:li rdf:resource="rdf:#8bae96c4-4154-4e46-b0e8-517d8933a8fb"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="#mitchell_2003">
+    <bqs:reference rdf:resource="rdf:#ffe6e056-ca1e-474b-9607-12f660551233"/>
+<bqs:reference rdf:parseType="Resource">
+  <dc:subject rdf:parseType="Resource">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value>
+      <rdf:Bag>
+        <rdf:li>electrophysiology</rdf:li>
+        <rdf:li>cardiac</rdf:li>
+        <rdf:li>ventricular myocyte</rdf:li>
+      </rdf:Bag>
+    </rdf:value>
+  </dc:subject>
+</bqs:reference>
+    <cmeta:comment rdf:resource="rdf:#8037464e-49b9-458a-87c2-6bea12c1f094"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7f456c83-9f95-49e1-9322-920eef030bae">
+    <dc:creator rdf:resource="rdf:#a6d68ad4-f798-4744-893c-c5570c4b7906"/>
+    <dc:title>A two-current model for the dynamics of cardiac membrane</dc:title>
+    <bqs:volume>65</bqs:volume>
+    <bqs:first_page>767</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#72c9cd1b-c7b1-466f-a2cd-1daca5321746"/>
+    <dcterms:issued rdf:resource="rdf:#d094409d-3045-446b-9d48-3be8df96c261"/>
+    <bqs:last_page>793</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#2c957869-7c14-482f-84a4-18601c4b0081">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e7179c22-ff06-4703-b642-635d85b70dad">
+    <vCard:Given>Colleen</vCard:Given>
+    <vCard:Family>Mitchell</vCard:Family>
+    <vCard:Other>C</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#648f422e-3f39-42a3-a68b-bd2edba72eef">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#e7179c22-ff06-4703-b642-635d85b70dad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b43d1b96-9ae3-4e98-9cf4-6cb76927ae1c">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#302ed53c-f612-4581-a0d8-6e72918ded29">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3b24e51d-0189-4fa1-85cb-f32c7fa3b170">
+    <vCard:ORG rdf:resource="rdf:#2c957869-7c14-482f-84a4-18601c4b0081"/>
+    <vCard:EMAIL rdf:resource="rdf:#b43d1b96-9ae3-4e98-9cf4-6cb76927ae1c"/>
+    <vCard:N rdf:resource="rdf:#302ed53c-f612-4581-a0d8-6e72918ded29"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9329dbbd-8b6f-4384-8393-e8508a3e5001">
+    <vCard:FN>Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d094409d-3045-446b-9d48-3be8df96c261">
+    <dcterms:W3CDTF>2003-09-00 00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#c0839cf6-ecc9-4dd9-ab4b-97f534ac6a6b">
+    <dc:creator rdf:resource="rdf:#9329dbbd-8b6f-4384-8393-e8508a3e5001"/>
+    <rdf:value>This version of this model is known to run in both PCEnv and COR.  The units have been checked and are consistent.  A generic stimulus protocol has been added to allow the model to simulate trains of action potentials.  Although the model does run, the simulation output is still not quite the same as the original published model.  The original model authors have been contacted and we will continue to curate the CellML model.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ffe6e056-ca1e-474b-9607-12f660551233">
+    <bqs:Pubmed_id>12909250</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#7f456c83-9f95-49e1-9322-920eef030bae"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8bae96c4-4154-4e46-b0e8-517d8933a8fb">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#e01f08e9-ed31-4467-b6e8-ae4c3a46a271"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f4a89f0d-0e44-40fc-a060-82c95e26135d">
+    <dcterms:W3CDTF>2009-02-03T00:00:00+00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#00ddefec-7401-4799-b835-fd0aad67a29f">
+    <vCard:FN/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8037464e-49b9-458a-87c2-6bea12c1f094">
+    <dc:creator rdf:resource="rdf:#00ddefec-7401-4799-b835-fd0aad67a29f"/>
+    <rdf:value/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#72c9cd1b-c7b1-466f-a2cd-1daca5321746">
+    <dc:title>Bulletin of Mathematical Biology</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e01f08e9-ed31-4467-b6e8-ae4c3a46a271">
+    <vCard:Given>David</vCard:Given>
+    <vCard:Family>Schaeffer</vCard:Family>
+    <vCard:Other>G</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:publisher/>
+    <cmeta:comment rdf:resource="rdf:#c0839cf6-ecc9-4dd9-ab4b-97f534ac6a6b"/>
+    <dcterms:created rdf:resource="rdf:#f4a89f0d-0e44-40fc-a060-82c95e26135d"/>
+    <dc:creator rdf:resource="rdf:#3b24e51d-0189-4fa1-85cb-f32c7fa3b170"/>
+  </rdf:Description>
+</rdf:RDF>
+</model>

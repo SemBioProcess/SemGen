@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This CellML file was generated on 12/02/2010 at 2:20:38 at p.m. using:
+
+COR (0.9.31.1333)
+Copyright 2002-2010 Dr Alan Garny
+http://cor.physiol.ox.ac.uk/ - cor@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.cellml.org/
+-->
+<model xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" name="nelson_2000" cmeta:id="nelson_2000" xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#">
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>A model of HIV-1 pathogenesis that includes an intracellular delay</title>
+				<author>
+					<firstname>Catherine</firstname>
+					<surname>Lloyd</surname>
+					<affiliation>
+						<shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<section id="sec_status">
+				<title>Model Status</title>
+				<para> 
+            This CellML model represents the general model from the paper, based on equation 1. The CellML model runs in both COR and OpenCell and the units are consistent. The model simulation output looks reasonable but we are unsure as to whether or not it recreates the results of the published model as there are no obvious figures for simple comparison.
+          </para>
+			</section>
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>
+				ABSTRACT: Mathematical modeling combined with experimental measurements have yielded important insights into HIV-1 pathogenesis. For example, data from experiments in which HIV-infected patients are given potent antiretroviral drugs that perturb the infection process have been used to estimate kinetic parameters underlying HIV infection. Many of the models used to analyze data have assumed drug treatments to be completely efficacious and that upon infection a cell instantly begins producing virus. We consider a model that allows for less then perfect drug effects and which includes a delay in the initiation of virus production. We present detailed analysis of this delay differential equation model and compare the results to a model without delay. Our analysis shows that when drug efficacy is less than 100%, as may be the case in vivo, the predicted rate of decline in plasma virus concentration depends on three factors: the death rate of virus producing cells, the efficacy of therapy, and the length of the delay. Thus, previous estimates of infected cell loss rates can be improved upon by considering more realistic models of viral infection..
+				</para>
+				<para>
+The original paper reference is cited below:
+</para>
+				<para>
+A model of HIV-1 pathogenesis that includes an intracellular delay, Patrick W. Nelson, James D. Murray, and Alan S. Perelson, 2000, <emphasis>Mathematical Biosciences</emphasis>, 163, 201-215.  <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/10701304">PubMed ID: 10701304</ulink>
+				</para>
+				<informalfigure float="0" id="fig_reaction_diagram">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>reaction schematic for the model</title>
+							</objectinfo>
+							<imagedata fileref="nelson_2000.png"/>
+						</imageobject>
+					</mediaobject>
+					<caption>A schematic diagram showing the cascade of events triggered by the binding of a HIV-1 virus particle to a receptor on a target T-cell.</caption>
+				</informalfigure>
+			</sect1>
+		</article>
+	</documentation>
+	<rdf:RDF>
+		<rdf:Bag rdf:about="rdf:#749d1119-0fcc-4a2a-8adc-9827b7083403">
+			<rdf:li>viral dynamics</rdf:li>
+			<rdf:li>hiv-1</rdf:li>
+			<rdf:li>immunology</rdf:li>
+		</rdf:Bag>
+		<rdf:Seq rdf:about="rdf:#7a8ec4ac-cc9d-4ecd-84ee-55e4fb2aa8f9">
+			<rdf:li rdf:resource="rdf:#f30f8234-9eff-4782-bc29-66b4ff442f15"/>
+			<rdf:li rdf:resource="rdf:#2e7a36f4-a80f-4484-a183-7425f2f1499c"/>
+			<rdf:li rdf:resource="rdf:#a69705df-52c6-462b-9ceb-8bfc2bd5fa28"/>
+		</rdf:Seq>
+		<rdf:Description rdf:about="">
+			<dc:title>A model of HIV-1 pathogenesis that includes an intracellular delay (General Model)</dc:title>
+			<dc:publisher>
+        The University of Auckland, Bioengineering Institute
+      </dc:publisher>
+			<cmeta:modification xmlns:cmeta="http://www.cellml.org/metadata/1.0#" rdf:resource="rdf:#3978135f-92f8-4c74-96eb-9dcd1f89376e"/>
+			<cmeta:modification xmlns:cmeta="http://www.cellml.org/metadata/1.0#" rdf:resource="rdf:#95b7541c-7fd8-4e18-b69c-6a4735f7f9cc"/>
+			<dcterms:created rdf:resource="rdf:#cac9fbaf-82e3-41b6-8980-f9b08394ef2c"/>
+			<dc:creator rdf:resource="rdf:#3a47a9ff-8d86-4581-8cba-71fda376c533"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#1f1f7b30-757a-41be-b35c-ce6b8845c877">
+			<dc:subject rdf:resource="rdf:#6ccc5777-1271-4a22-9ddb-47c190828b6b"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#4b2ad750-50dc-46d4-a1ff-48c8504c61c8">
+			<dc:creator rdf:resource="rdf:#27decb27-3604-43a1-9806-b21f55e45817"/>
+			<rdf:value>
+          This is the CellML description of Nelson et al's 2000 mathematical 
+          model of HIV-1 pathogenesis.
+        </rdf:value>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#2e7a36f4-a80f-4484-a183-7425f2f1499c">
+			<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+			<vCard:N rdf:resource="rdf:#32879fab-cd44-48bd-bc7a-2a3747b8fe0d"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#672024df-27d6-4e66-a6fc-d1efc2588114">
+			<vCard:Given>Autumn</vCard:Given>
+			<vCard:Family>Cuellar</vCard:Family>
+			<vCard:Other>A</vCard:Other>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#b11da091-0bb0-4fd0-ad1c-8545ef3926fb">
+			<vCard:Given>Peter</vCard:Given>
+			<vCard:Family>Villiger</vCard:Family>
+			<vCard:Other>J</vCard:Other>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#0b8595b9-aa60-46c1-b809-ac351938d98c">
+			<dcterms:W3CDTF>2000-02</dcterms:W3CDTF>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#1718289f-4a02-443a-804d-35c1ed924d4e">
+			<vCard:Given>Catherine</vCard:Given>
+			<vCard:Family>Lloyd</vCard:Family>
+			<vCard:Other>May</vCard:Other>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#6ccc5777-1271-4a22-9ddb-47c190828b6b">
+			<bqs:subject_type>keyword</bqs:subject_type>
+			<rdf:value rdf:resource="rdf:#749d1119-0fcc-4a2a-8adc-9827b7083403"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#32879fab-cd44-48bd-bc7a-2a3747b8fe0d">
+			<vCard:Given>James</vCard:Given>
+			<vCard:Family>Murray</vCard:Family>
+			<vCard:Other>D</vCard:Other>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#64d552c3-b1e2-4259-b7c4-094d3783c255">
+			<bqs:Pubmed_id>10701304</bqs:Pubmed_id>
+			<bqs:JournalArticle rdf:resource="rdf:#3a98986f-83c2-414e-b931-2f71f65dec02"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#3978135f-92f8-4c74-96eb-9dcd1f89376e">
+			<dcterms:modified rdf:resource="rdf:#b9f4b57a-2a32-4cbd-8f9d-4724e72923db"/>
+			<rdf:value>
+          Added publication date information.
+        </rdf:value>
+			<cmeta:modifier xmlns:cmeta="http://www.cellml.org/metadata/1.0#" rdf:resource="rdf:#e050cd59-4eaa-4585-8d49-d786993f42a0"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#23464419-faba-4253-85ab-8dff106712d0">
+			<vCard:Given>Patrick</vCard:Given>
+			<vCard:Family>Nelson</vCard:Family>
+			<vCard:Other>W</vCard:Other>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#83ae3667-b517-47f5-9a98-9c10807851c4">
+			<vCard:Orgname>The University of Auckland</vCard:Orgname>
+			<vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#3a47a9ff-8d86-4581-8cba-71fda376c533">
+			<vCard:ORG rdf:resource="rdf:#83ae3667-b517-47f5-9a98-9c10807851c4"/>
+			<vCard:EMAIL rdf:resource="rdf:#5a476bfe-899a-439d-bf2f-067d0befc3ff"/>
+			<vCard:N rdf:resource="rdf:#1718289f-4a02-443a-804d-35c1ed924d4e"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#b9f4b57a-2a32-4cbd-8f9d-4724e72923db">
+			<dcterms:W3CDTF>2003-04-09</dcterms:W3CDTF>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#5a476bfe-899a-439d-bf2f-067d0befc3ff">
+			<rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+			<rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+		</rdf:Description>
+		<rdf:Description rdf:about="#nelson_2000">
+			<dc:title>
+         Nelson et al's 2000 mathematical model of HIV-1 pathogenesis.
+      </dc:title>
+			<cmeta:bio_entity xmlns:cmeta="http://www.cellml.org/metadata/1.0#">T-cells</cmeta:bio_entity>
+			<cmeta:comment xmlns:cmeta="http://www.cellml.org/metadata/1.0#" rdf:resource="rdf:#4b2ad750-50dc-46d4-a1ff-48c8504c61c8"/>
+			<bqs:reference rdf:resource="rdf:#1f1f7b30-757a-41be-b35c-ce6b8845c877"/>
+			<bqs:reference rdf:resource="rdf:#64d552c3-b1e2-4259-b7c4-094d3783c255"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#e050cd59-4eaa-4585-8d49-d786993f42a0">
+			<vCard:N rdf:resource="rdf:#672024df-27d6-4e66-a6fc-d1efc2588114"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#3a98986f-83c2-414e-b931-2f71f65dec02">
+			<dc:creator rdf:resource="rdf:#7a8ec4ac-cc9d-4ecd-84ee-55e4fb2aa8f9"/>
+			<dc:title>
+            A model of HIV-1 pathogenesis that includes an intracellular delay
+          </dc:title>
+			<bqs:volume>163</bqs:volume>
+			<bqs:first_page>201</bqs:first_page>
+			<bqs:Journal rdf:resource="rdf:#48d11cbb-9218-4869-a5bd-ac549a7c1c0b"/>
+			<dcterms:issued rdf:resource="rdf:#0b8595b9-aa60-46c1-b809-ac351938d98c"/>
+			<bqs:last_page>215</bqs:last_page>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#a69705df-52c6-462b-9ceb-8bfc2bd5fa28">
+			<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+			<vCard:N rdf:resource="rdf:#60e0c060-b4f4-4621-924e-2c14cba0d784"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#cac9fbaf-82e3-41b6-8980-f9b08394ef2c">
+			<dcterms:W3CDTF>2002-12-05</dcterms:W3CDTF>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#f30f4744-c1b1-4397-b619-3af752f22d97">
+			<vCard:N rdf:resource="rdf:#b11da091-0bb0-4fd0-ad1c-8545ef3926fb"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#95b7541c-7fd8-4e18-b69c-6a4735f7f9cc">
+			<dcterms:modified rdf:resource="rdf:#315aca85-981c-45b0-bb40-c9483d37ff1d"/>
+			<rdf:value>
+          Corrected syntax error with base_units
+        </rdf:value>
+			<cmeta:modifier xmlns:cmeta="http://www.cellml.org/metadata/1.0#" rdf:resource="rdf:#f30f4744-c1b1-4397-b619-3af752f22d97"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#48d11cbb-9218-4869-a5bd-ac549a7c1c0b">
+			<dc:title>Mathematical Biosciences</dc:title>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#27decb27-3604-43a1-9806-b21f55e45817">
+			<vCard:FN>Catherine Lloyd</vCard:FN>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#f30f8234-9eff-4782-bc29-66b4ff442f15">
+			<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+			<vCard:N rdf:resource="rdf:#23464419-faba-4253-85ab-8dff106712d0"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#60e0c060-b4f4-4621-924e-2c14cba0d784">
+			<vCard:Given>Alan</vCard:Given>
+			<vCard:Family>Perelson</vCard:Family>
+			<vCard:Other>S</vCard:Other>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#315aca85-981c-45b0-bb40-c9483d37ff1d">
+			<dcterms:W3CDTF>2005-04-20</dcterms:W3CDTF>
+		</rdf:Description>
+	</rdf:RDF>   
+	
+   <units name="day">
+      <unit units="second" multiplier="86400"/>
+   </units>
+   <units name="per_day">
+      <unit units="day" exponent="-1"/>
+   </units>
+   <units name="ml">
+      <unit units="litre" prefix="milli"/>
+   </units>
+   <units name="cell" base_units="yes"/>
+   <units name="viron" base_units="yes"/>
+   <units name="cells_per_day">
+      <unit units="cell"/>
+      <unit units="day" exponent="-1"/>
+   </units>
+   <units name="cells_per_ml">
+      <unit units="cell"/>
+      <unit units="ml" exponent="-1"/>
+   </units>
+   <units name="virons_per_day">
+      <unit units="viron"/>
+      <unit units="day" exponent="-1"/>
+   </units>
+   <units name="virons_per_cell">
+      <unit units="viron"/>
+      <unit units="cell" exponent="-1"/>
+   </units>
+   <units name="virons_per_ml">
+      <unit units="viron"/>
+      <unit units="ml" exponent="-1"/>
+   </units>
+   <units name="ml_per_virons_per_day">
+      <unit units="ml"/>
+      <unit units="viron" exponent="-1"/>
+      <unit units="day" exponent="-1"/>
+   </units>
+   
+   <component name="environment">
+      <variable name="time" units="day" public_interface="out"/>
+   </component>
+   
+   <component name="model_parameters">
+      <variable name="lambda" units="cells_per_ml" initial_value="5.0" public_interface="out"/>
+      <variable name="delta_1" units="cells_per_day" initial_value="0.03" public_interface="out"/>
+      <variable name="delta" units="cells_per_day" initial_value="0.5" public_interface="out"/>
+      <variable name="np" units="dimensionless" initial_value="1.0" public_interface="out"/>
+      <variable name="c" units="virons_per_day" initial_value="3" public_interface="out"/>
+      <variable name="k" units="ml_per_virons_per_day" initial_value="3.43e-5" public_interface="out"/>
+      <variable name="N" units="virons_per_cell" initial_value="480" public_interface="out"/>
+   </component>
+   
+   <component name="uninfected_T_cells">
+      <variable name="T" units="cells_per_ml" initial_value="180.0" public_interface="out"/>
+      <variable name="lambda" units="cells_per_ml" public_interface="in"/>
+      <variable name="delta" units="cells_per_day" public_interface="in"/>
+      <variable name="delta_1" units="cells_per_day" public_interface="in"/>
+      <variable name="time" units="day" public_interface="in"/>
+      <variable name="VI" units="virons_per_ml" public_interface="in"/>
+      <variable name="k" units="ml_per_virons_per_day" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>T</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>lambda</ci>
+                     <cn cellml:units="per_day">1</cn>
+                  </apply>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>delta_1</ci>
+                        <ci>T</ci>
+                     </apply>
+                     <cn cellml:units="cell">1</cn>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k</ci>
+                  <ci>VI</ci>
+                  <ci>T</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="infected_T_cells">
+      <variable name="T_star" units="cells_per_ml" initial_value="3.6" public_interface="out"/>
+      <variable name="delta" units="cells_per_day" public_interface="in"/>
+      <variable name="time" units="day" public_interface="in"/>
+      <variable name="VI" units="virons_per_ml" public_interface="in"/>
+      <variable name="k" units="ml_per_virons_per_day" public_interface="in"/>
+      <variable name="T" units="cells_per_ml" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>T_star</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k</ci>
+                  <ci>VI</ci>
+                  <ci>T</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>delta</ci>
+                     <cn cellml:units="cell">1</cn>
+                  </apply>
+                  <ci>T_star</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="infectious_virus">
+      <variable name="VI" units="virons_per_ml" initial_value="134e3" public_interface="out"/>
+      <variable name="delta" units="cells_per_day" public_interface="in"/>
+      <variable name="time" units="day" public_interface="in"/>
+      <variable name="N" units="virons_per_cell" public_interface="in"/>
+      <variable name="np" units="dimensionless" public_interface="in"/>
+      <variable name="c" units="virons_per_day" public_interface="in"/>
+      <variable name="T_star" units="cells_per_ml" public_interface="in"/>
+      <variable name="log_VI" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>VI</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>np</ci>
+                     </apply>
+                     <ci>N</ci>
+                     <ci>delta</ci>
+                     <ci>T_star</ci>
+                  </apply>
+                  <cn cellml:units="cell">1</cn>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>c</ci>
+                     <ci>VI</ci>
+                  </apply>
+                  <cn cellml:units="viron">1</cn>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>log_VI</ci>
+            <apply>
+               <log/>
+               <apply>
+                  <divide/>
+                  <ci>VI</ci>
+                  <cn cellml:units="virons_per_ml">1</cn>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="non_infectious_virus">
+      <variable name="VNI" units="virons_per_ml" initial_value="0" public_interface="out"/>
+      <variable name="delta" units="cells_per_day" public_interface="in"/>
+      <variable name="time" units="day" public_interface="in"/>
+      <variable name="N" units="virons_per_cell" public_interface="in"/>
+      <variable name="np" units="dimensionless" public_interface="in"/>
+      <variable name="c" units="virons_per_day" public_interface="in"/>
+      <variable name="T_star" units="cells_per_ml" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>VNI</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>np</ci>
+                     <ci>N</ci>
+                     <ci>delta</ci>
+                     <ci>T_star</ci>
+                  </apply>
+                  <cn cellml:units="cell">1</cn>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>c</ci>
+                     <ci>VNI</ci>
+                  </apply>
+                  <cn cellml:units="viron">1</cn>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="total_virus">
+      <variable name="VNI" units="virons_per_ml" public_interface="in"/>
+      <variable name="VI" units="virons_per_ml" public_interface="in"/>
+      <variable name="virus_total" units="virons_per_ml"/>
+      <variable name="log_virus_total" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>virus_total</ci>
+            <apply>
+               <plus/>
+               <ci>VI</ci>
+               <ci>VNI</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>log_virus_total</ci>
+            <apply>
+               <log/>
+               <apply>
+                  <divide/>
+                  <ci>virus_total</ci>
+                  <cn cellml:units="virons_per_ml">1</cn>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+  
+   <connection>
+      <map_components component_1="uninfected_T_cells" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="uninfected_T_cells" component_2="model_parameters"/>
+      <map_variables variable_1="delta" variable_2="delta"/>
+      <map_variables variable_1="delta_1" variable_2="delta_1"/>
+      <map_variables variable_1="lambda" variable_2="lambda"/>
+      <map_variables variable_1="k" variable_2="k"/>
+   </connection>
+   <connection>
+      <map_components component_1="infected_T_cells" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="infected_T_cells" component_2="model_parameters"/>
+      <map_variables variable_1="k" variable_2="k"/>
+      <map_variables variable_1="delta" variable_2="delta"/>
+   </connection>
+   <connection>
+      <map_components component_1="infectious_virus" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="infectious_virus" component_2="model_parameters"/>
+      <map_variables variable_1="np" variable_2="np"/>
+      <map_variables variable_1="N" variable_2="N"/>
+      <map_variables variable_1="c" variable_2="c"/>
+      <map_variables variable_1="delta" variable_2="delta"/>
+   </connection>
+   <connection>
+      <map_components component_1="non_infectious_virus" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="non_infectious_virus" component_2="model_parameters"/>
+      <map_variables variable_1="np" variable_2="np"/>
+      <map_variables variable_1="N" variable_2="N"/>
+      <map_variables variable_1="c" variable_2="c"/>
+      <map_variables variable_1="delta" variable_2="delta"/>
+   </connection>
+   <connection>
+      <map_components component_1="uninfected_T_cells" component_2="infected_T_cells"/>
+      <map_variables variable_1="T" variable_2="T"/>
+   </connection>
+   <connection>
+      <map_components component_1="infected_T_cells" component_2="infectious_virus"/>
+      <map_variables variable_1="T_star" variable_2="T_star"/>
+      <map_variables variable_1="VI" variable_2="VI"/>
+   </connection>
+   <connection>
+      <map_components component_1="infected_T_cells" component_2="non_infectious_virus"/>
+      <map_variables variable_1="T_star" variable_2="T_star"/>
+   </connection>
+   <connection>
+      <map_components component_1="uninfected_T_cells" component_2="infectious_virus"/>
+      <map_variables variable_1="VI" variable_2="VI"/>
+   </connection>
+   <connection>
+      <map_components component_1="total_virus" component_2="non_infectious_virus"/>
+      <map_variables variable_1="VNI" variable_2="VNI"/>
+   </connection>
+   <connection>
+      <map_components component_1="total_virus" component_2="infectious_virus"/>
+      <map_variables variable_1="VI" variable_2="VI"/>
+   </connection>
+</model>

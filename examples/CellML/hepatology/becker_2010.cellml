@@ -1,0 +1,386 @@
+<?xml version="1.0"?>
+<!--
+This CellML file was generated on 17/10/2011 at 3:40:19 at p.m. using:
+
+COR (0.9.31.1409)
+Copyright 2002-2011 Dr Alan Garny
+http://cor.physiol.ox.ac.uk/ - cor@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.cellml.org/
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" cmeta:id="becker_2010" name="becker_2010">
+
+
+
+
+
+
+   <units name="picomole">
+      <unit prefix="pico" units="mole"/>
+   </units>
+   <units name="picomolar">
+      <unit units="picomole"/>
+      <unit exponent="-1" units="litre"/>
+   </units>
+   <units name="minute">
+      <unit multiplier="60" units="second"/>
+   </units>
+   <units name="per_minute">
+      <unit exponent="-1" units="minute"/>
+   </units>
+   <units name="per_picomolar_per_minute">
+      <unit exponent="-1" units="picomolar"/>
+      <unit exponent="-1" units="minute"/>
+   </units>
+   <component name="environment">
+      <variable cmeta:id="environment_time" name="time" public_interface="out" units="minute"/>
+   </component>
+   <component name="x_1">
+      <variable cmeta:id="x_1_x_1" initial_value="516" name="x_1" public_interface="out" units="picomolar"/>
+      <variable name="k_t" public_interface="in" units="per_minute"/>
+      <variable name="B_max" public_interface="in" units="picomolar"/>
+      <variable name="k_on" public_interface="in" units="per_picomolar_per_minute"/>
+      <variable name="x_2" public_interface="in" units="picomolar"/>
+      <variable name="k_off" public_interface="in" units="per_minute"/>
+      <variable name="x_3" public_interface="in" units="picomolar"/>
+      <variable name="k_ex" public_interface="in" units="per_minute"/>
+      <variable name="x_4" public_interface="in" units="picomolar"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>x_1</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <times/>
+                        <ci>k_t</ci>
+                        <ci>B_max</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k_t</ci>
+                        <ci>x_1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_on</ci>
+                     <ci>x_1</ci>
+                     <ci>x_2</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_off</ci>
+                  <ci>x_3</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_ex</ci>
+                  <ci>x_4</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="x_2">
+      <variable cmeta:id="x_2_x_2" initial_value="2030.19" name="x_2" public_interface="out" units="picomolar"/>
+      <variable name="k_on" public_interface="in" units="per_picomolar_per_minute"/>
+      <variable name="x_1" public_interface="in" units="picomolar"/>
+      <variable name="k_off" public_interface="in" units="per_minute"/>
+      <variable name="x_3" public_interface="in" units="picomolar"/>
+      <variable name="k_ex" public_interface="in" units="per_minute"/>
+      <variable name="x_4" public_interface="in" units="picomolar"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>x_2</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <apply>
+                     <minus/>
+                     <ci>k_on</ci>
+                  </apply>
+                  <ci>x_1</ci>
+                  <ci>x_2</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_off</ci>
+                  <ci>x_3</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_ex</ci>
+                  <ci>x_4</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="x_3">
+      <variable cmeta:id="x_3_x_3" initial_value="0" name="x_3" public_interface="out" units="picomolar"/>
+      <variable name="k_on" public_interface="in" units="per_picomolar_per_minute"/>
+      <variable name="x_1" public_interface="in" units="picomolar"/>
+      <variable name="k_off" public_interface="in" units="per_minute"/>
+      <variable name="x_2" public_interface="in" units="picomolar"/>
+      <variable name="k_e" public_interface="in" units="per_minute"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>x_3</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>k_on</ci>
+                     <ci>x_1</ci>
+                     <ci>x_2</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_off</ci>
+                     <ci>x_3</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_e</ci>
+                  <ci>x_3</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="x_4">
+      <variable cmeta:id="x_4_x_4" initial_value="0" name="x_4" public_interface="out" units="picomolar"/>
+      <variable name="k_ex" public_interface="in" units="per_minute"/>
+      <variable name="k_di" public_interface="in" units="per_minute"/>
+      <variable name="k_de" public_interface="in" units="per_minute"/>
+      <variable name="x_3" public_interface="in" units="picomolar"/>
+      <variable name="k_e" public_interface="in" units="per_minute"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>x_4</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <times/>
+                        <ci>k_e</ci>
+                        <ci>x_3</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k_ex</ci>
+                        <ci>x_4</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_di</ci>
+                     <ci>x_4</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_de</ci>
+                  <ci>x_4</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="x_5">
+      <variable cmeta:id="x_5_x_5" initial_value="0" name="x_5" public_interface="out" units="picomolar"/>
+      <variable name="k_di" public_interface="in" units="per_minute"/>
+      <variable name="x_4" public_interface="in" units="picomolar"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>x_5</ci>
+            </apply>
+            <apply>
+               <times/>
+               <ci>k_di</ci>
+               <ci>x_4</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="x_6">
+      <variable cmeta:id="x_6_x_6" initial_value="0" name="x_6" public_interface="out" units="picomolar"/>
+      <variable name="k_de" public_interface="in" units="per_minute"/>
+      <variable name="x_4" public_interface="in" units="picomolar"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>x_6</ci>
+            </apply>
+            <apply>
+               <times/>
+               <ci>k_de</ci>
+               <ci>x_4</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="model_parameters">
+      <variable initial_value="0.03294" name="k_t" public_interface="out" units="per_minute"/>
+      <variable initial_value="0.10496e-3" name="k_on" public_interface="out" units="per_picomolar_per_minute"/>
+      <variable initial_value="0.01721" name="k_off" public_interface="out" units="per_minute"/>
+      <variable initial_value="0.07483" name="k_e" public_interface="out" units="per_minute"/>
+      <variable initial_value="0.00994" name="k_ex" public_interface="out" units="per_minute"/>
+      <variable initial_value="0.003179" name="k_di" public_interface="out" units="per_minute"/>
+      <variable initial_value="0.0164" name="k_de" public_interface="out" units="per_minute"/>
+      <variable initial_value="129" name="B_max" public_interface="out" units="picomolar"/>
+   </component>
+   <connection>
+      <map_components component_1="environment" component_2="x_1"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="x_2"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="x_3"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="x_4"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="x_5"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="x_6"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="model_parameters" component_2="x_1"/>
+      <map_variables variable_1="k_t" variable_2="k_t"/>
+      <map_variables variable_1="k_on" variable_2="k_on"/>
+      <map_variables variable_1="k_off" variable_2="k_off"/>
+      <map_variables variable_1="k_ex" variable_2="k_ex"/>
+      <map_variables variable_1="B_max" variable_2="B_max"/>
+   </connection>
+   <connection>
+      <map_components component_1="model_parameters" component_2="x_2"/>
+      <map_variables variable_1="k_on" variable_2="k_on"/>
+      <map_variables variable_1="k_off" variable_2="k_off"/>
+      <map_variables variable_1="k_ex" variable_2="k_ex"/>
+   </connection>
+   <connection>
+      <map_components component_1="model_parameters" component_2="x_3"/>
+      <map_variables variable_1="k_on" variable_2="k_on"/>
+      <map_variables variable_1="k_off" variable_2="k_off"/>
+      <map_variables variable_1="k_e" variable_2="k_e"/>
+   </connection>
+   <connection>
+      <map_components component_1="model_parameters" component_2="x_4"/>
+      <map_variables variable_1="k_ex" variable_2="k_ex"/>
+      <map_variables variable_1="k_di" variable_2="k_di"/>
+      <map_variables variable_1="k_de" variable_2="k_de"/>
+      <map_variables variable_1="k_e" variable_2="k_e"/>
+   </connection>
+   <connection>
+      <map_components component_1="model_parameters" component_2="x_5"/>
+      <map_variables variable_1="k_di" variable_2="k_di"/>
+   </connection>
+   <connection>
+      <map_components component_1="model_parameters" component_2="x_6"/>
+      <map_variables variable_1="k_de" variable_2="k_de"/>
+   </connection>
+   <connection>
+      <map_components component_1="x_1" component_2="x_2"/>
+      <map_variables variable_1="x_1" variable_2="x_1"/>
+      <map_variables variable_1="x_2" variable_2="x_2"/>
+   </connection>
+   <connection>
+      <map_components component_1="x_1" component_2="x_3"/>
+      <map_variables variable_1="x_1" variable_2="x_1"/>
+      <map_variables variable_1="x_3" variable_2="x_3"/>
+   </connection>
+   <connection>
+      <map_components component_1="x_1" component_2="x_4"/>
+      <map_variables variable_1="x_4" variable_2="x_4"/>
+   </connection>
+   <connection>
+      <map_components component_1="x_2" component_2="x_3"/>
+      <map_variables variable_1="x_2" variable_2="x_2"/>
+      <map_variables variable_1="x_3" variable_2="x_3"/>
+   </connection>
+   <connection>
+      <map_components component_1="x_2" component_2="x_4"/>
+      <map_variables variable_1="x_4" variable_2="x_4"/>
+   </connection>
+   <connection>
+      <map_components component_1="x_3" component_2="x_4"/>
+      <map_variables variable_1="x_3" variable_2="x_3"/>
+   </connection>
+   <connection>
+      <map_components component_1="x_5" component_2="x_4"/>
+      <map_variables variable_1="x_4" variable_2="x_4"/>
+   </connection>
+   <connection>
+      <map_components component_1="x_6" component_2="x_4"/>
+      <map_variables variable_1="x_4" variable_2="x_4"/>
+   </connection>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:about=""><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n1"/></creator><created xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:nodeID="n2"/></created></rdf:Description><rdf:Description rdf:nodeID="n3"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n4"/></Person></rdf:Description><rdf:Description rdf:nodeID="n5"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n6"/></Person></rdf:Description><rdf:Description rdf:nodeID="n7"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Nielsen</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Hanne</Given></rdf:Description><rdf:Description rdf:nodeID="n6"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n8"/></N></rdf:Description><rdf:Description rdf:nodeID="n9"><endingValue xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">300</endingValue></rdf:Description><rdf:Description rdf:nodeID="n10"><subject xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n11"/></subject></rdf:Description><rdf:Description rdf:nodeID="n12"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">Science</title></rdf:Description><rdf:Description rdf:nodeID="n13"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Klingmuller</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">U</Given><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">F</Other></rdf:Description><rdf:Description rdf:nodeID="n14"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n15"/></Person></rdf:Description><rdf:Description rdf:about="#becker_2010"><simulation xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n16"/></simulation></rdf:Description><rdf:Description rdf:nodeID="n17"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n18"/></N></rdf:Description><rdf:Description rdf:nodeID="n19"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n20"/></N></rdf:Description><rdf:Description rdf:nodeID="n21"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n17"/></Person></rdf:Description><rdf:Description rdf:nodeID="n22"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n23"/></N></rdf:Description><rdf:Description rdf:nodeID="n24"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n19"/></Person></rdf:Description><rdf:Description rdf:nodeID="n25"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Raue</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">A</Given><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">F</Other></rdf:Description><rdf:Description rdf:nodeID="n26"><Pubmed_id xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en"> 20488988 </Pubmed_id><JournalArticle xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n27"/></JournalArticle></rdf:Description><rdf:Description rdf:nodeID="n28"><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag"/></rdf:type><rdf:_1 xml:lang="en">hepatology</rdf:_1><rdf:_2 xml:lang="en">liver</rdf:_2><rdf:_4 xml:lang="en">ligand</rdf:_4><rdf:_3 xml:lang="en">hepatocyte</rdf:_3></rdf:Description><rdf:Description rdf:nodeID="n29"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Schilling</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">M</Given><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Z</Other></rdf:Description><rdf:Description rdf:nodeID="n11"><rdf:value><rdf:Description rdf:nodeID="n28"/></rdf:value><subject_type xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">keyword</subject_type></rdf:Description><rdf:Description rdf:nodeID="n8"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Baumann</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">U</Given></rdf:Description><rdf:Description rdf:nodeID="n30"><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq"/></rdf:type><rdf:_1><rdf:Description rdf:nodeID="n24"/></rdf:_1><rdf:_2><rdf:Description rdf:nodeID="n31"/></rdf:_2><rdf:_4><rdf:Description rdf:nodeID="n5"/></rdf:_4><rdf:_3><rdf:Description rdf:nodeID="n21"/></rdf:_3><rdf:_8><rdf:Description rdf:nodeID="n32"/></rdf:_8><rdf:_6><rdf:Description rdf:nodeID="n14"/></rdf:_6><rdf:_5><rdf:Description rdf:nodeID="n3"/></rdf:_5><rdf:_7><rdf:Description rdf:nodeID="n33"/></rdf:_7></rdf:Description><rdf:Description rdf:nodeID="n34"><rdf:type><rdf:Description rdf:about="http://imc.org/vCard/3.0#internet"/></rdf:type><rdf:value xml:lang="en">hnie010@aucklanduni.ac.nz</rdf:value></rdf:Description><rdf:Description rdf:nodeID="n15"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n35"/></N></rdf:Description><rdf:Description rdf:nodeID="n36"><Orgname xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">The University of Auckland</Orgname><Orgunit xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Auckland Bioengineering Institute</Orgunit></rdf:Description><rdf:Description rdf:nodeID="n20"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Becker</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">V</Given></rdf:Description><rdf:Description rdf:nodeID="n35"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Maiwald</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">T</Given><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">F</Other></rdf:Description><rdf:Description rdf:nodeID="n18"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Bachmann</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">J</Given></rdf:Description><rdf:Description rdf:nodeID="n2"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2011-10-18</W3CDTF></rdf:Description><rdf:Description rdf:nodeID="n23"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Timmer</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">J</Given><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">F</Other></rdf:Description><rdf:Description rdf:nodeID="n37"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2011-10-18</W3CDTF></rdf:Description><rdf:Description rdf:nodeID="n38"><rdf:rest><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/></rdf:rest><rdf:first><rdf:Description rdf:nodeID="n9"/></rdf:first></rdf:Description><rdf:Description rdf:nodeID="n1"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n7"/></N><EMAIL xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n34"/></EMAIL><ORG xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n36"/></ORG></rdf:Description><rdf:Description rdf:nodeID="n4"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n25"/></N></rdf:Description><rdf:Description rdf:nodeID="n39"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n13"/></N></rdf:Description><rdf:Description rdf:nodeID="n27"><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n30"/></creator><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">
+          Covering a broad dynamic range: information processing at the erythropoietin receptor
+          </title><issued xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:nodeID="n37"/></issued><Journal xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n12"/></Journal><volume xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">328(5984)</volume><first_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">1404</first_page><last_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">1408</last_page></rdf:Description><rdf:Description rdf:nodeID="n31"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n40"/></Person></rdf:Description><rdf:Description rdf:about="#grubelnik_2001a"><cmeta:species xml:lang="en">Human</cmeta:species><cmeta:bio_entity xml:lang="en">hepatocyte</cmeta:bio_entity><cmeta:bio_entity xml:lang="en">Liver</cmeta:bio_entity><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n26"/></reference><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n10"/></reference></rdf:Description><rdf:Description rdf:nodeID="n40"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n29"/></N></rdf:Description><rdf:Description rdf:nodeID="n16"><boundIntervals xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n38"/></boundIntervals></rdf:Description><rdf:Description rdf:nodeID="n33"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n22"/></Person></rdf:Description><rdf:Description rdf:nodeID="n32"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n39"/></Person></rdf:Description></rdf:RDF></model>

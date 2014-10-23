@@ -1,0 +1,776 @@
+<?xml version="1.0"?>
+<!--
+This CellML file was generated on 21/08/2009 at 9:19:39 at a.m. using:
+
+COR (0.9.31.1309)
+Copyright 2002-2009 Dr Alan Garny
+http://cor.physiol.ox.ac.uk/ - cor@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.cellml.org/
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" cmeta:id="wang_2006" name="wang_2006">
+
+<documentation xmlns="http://cellml.org/tmp-documentation">
+    <article>
+      <section id="sec_status">
+        <title>Model Status</title>
+        <para>
+	This CellML model runs in both OpenCell and COR to reproduce the published results. The units have been checked and they are consistent.
+          </para>
+      </section>
+      <sect1 id="sec_structure">
+        <title>Model Structure</title>
+        
+		<para>ABSTRACT: A quantitative kinetic model is proposed to simulate the ATP-induced intracellular Ca(2+) oscillations. The quantitative effect of ATP concentration upon the oscillations was successfully simulated. Our simulation results support previous experimental explanations that the Ca(2+) oscillations are mainly due to interaction of Ca(2+) release from the endoplasmic reticulum (ER) and the ATP-dependent Ca(2+) pump back into the ER, and the oscillations are prolonged by extracellular Ca(2+) entry that maintains the constant Ca(2+) supplies to its intracellular stores. The model is also able to simulate the sudden disappearance phenomenon of the Ca(2+) oscillations observed in some cell types by taking into account of the biphasic characteristic of the Ca(2+) release from the endoplasmic reticulum (ER). Moreover, the model simulation results for the Ca(2+) oscillations characteristics such as duration, peak [Ca(2+)](cyt), and average interval, etc., lead to prediction of some possible factors responsible for the variations of Ca(2+) oscillations in different types of cells.
+        </para>
+       
+	<para>
+	The original paper is cited below:
+	</para>
+	<para>
+	A quantitative kinetic model for ATP-induced intracellular Ca2+ oscillations. J. Wang, X. Huang and W. Huang, 2006, Journal of Theoretical Biology, 245, 510-519. <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pubmed&amp;cmd=Retrieve&amp;dopt=AbstractPlus&amp;list_uids=17188305&amp;query_hl=1&amp;itool=pubmed_docsum">PubMed ID: 17188305</ulink>
+	</para>
+
+<informalfigure float="0" id="fig_reaction_diagram">
+	<mediaobject>
+		<imageobject>
+			<objectinfo>
+			<title>Diagram of model</title>
+			</objectinfo>
+			<imagedata fileref="wang_2006.png"/>
+		</imageobject>
+	</mediaobject>
+<caption>A schematic diagram of the pathway described by the mathematical model.</caption>
+</informalfigure>
+
+      </sect1>
+    </article>
+  </documentation>  
+  
+  
+   <units name="micromolar">
+      <unit prefix="micro" units="mole"/>
+      <unit exponent="-1" units="litre"/>
+   </units>
+   <units name="per_micromolar">
+      <unit exponent="-1" units="micromolar"/>
+   </units>
+   <units name="per_micromole">
+      <unit exponent="-1" prefix="micro" units="mole"/>
+   </units>
+   <units name="flux">
+      <unit units="micromolar"/>
+      <unit exponent="-1" units="second"/>
+   </units>
+   <units name="per_second">
+      <unit exponent="-1" units="second"/>
+   </units>
+   <units name="per_micromolar_per_second">
+      <unit exponent="-1" units="micromolar"/>
+      <unit units="per_second"/>
+   </units>
+   <units name="micromolar_square_per_second">
+      <unit exponent="2" units="micromolar"/>
+      <unit units="per_second"/>
+   </units>
+   <component name="environment">
+      <variable cmeta:id="environment_time" name="time" public_interface="out" units="second"/>
+   </component>
+   <component name="Constants">
+      <variable initial_value="1e-4" name="k_0" public_interface="out" units="flux"/>
+      <variable initial_value="3.4" name="k_1" public_interface="out" units="per_second"/>
+      <variable initial_value="4" name="k_2" public_interface="out" units="per_second"/>
+      <variable initial_value="4.5" name="k_3" public_interface="out" units="per_second"/>
+      <variable initial_value="1.2" name="k_4" public_interface="out" units="per_second"/>
+      <variable initial_value="0.12" name="k_5" public_interface="out" units="per_second"/>
+      <variable initial_value="14" name="k_6" public_interface="out" units="per_second"/>
+      <variable initial_value="2" name="k_7" public_interface="out" units="per_second"/>
+      <variable initial_value="10.5" name="k_8" public_interface="out" units="flux"/>
+      <variable initial_value="0.6" name="k_9" public_interface="out" units="flux"/>
+      <variable initial_value="3" name="k_10" public_interface="out" units="flux"/>
+      <variable initial_value="0.26" name="k_11" public_interface="out" units="flux"/>
+      <variable initial_value="0.01" name="C_PLC_T" public_interface="out" units="micromolar"/>
+      <variable initial_value="0.01" name="K_D" public_interface="out" units="micromolar"/>
+      <variable initial_value="0.004" name="K_P" public_interface="out" units="micromolar"/>
+      <variable initial_value="0.2" name="K_R" public_interface="out" units="micromolar"/>
+      <variable initial_value="0.025" name="K_G" public_interface="out" units="micromolar"/>
+      <variable initial_value="0.025" name="K_S" public_interface="out" units="micromolar"/>
+      <variable initial_value="0.075" name="K_ER" public_interface="out" units="micromolar"/>
+      <variable initial_value="1" name="K_C1" public_interface="out" units="micromolar"/>
+      <variable initial_value="2" name="K_C2" public_interface="out" units="micromolar"/>
+      <variable initial_value="0.05" name="beta" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.001" name="lambda" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.2" name="rho" public_interface="out" units="dimensionless"/>
+      <variable initial_value="4" name="n" public_interface="out" units="dimensionless"/>
+      <variable initial_value="2" name="m" public_interface="out" units="dimensionless"/>
+      <variable initial_value="3" name="w" public_interface="out" units="dimensionless"/>
+   </component>
+   <component name="R_values">
+      <variable name="R_APLC" public_interface="out" units="dimensionless"/>
+      <variable name="R_PKC" public_interface="out" units="dimensionless"/>
+      <variable name="R_G" public_interface="out" units="dimensionless"/>
+      <variable name="R_DG" public_interface="out" units="dimensionless"/>
+      <variable name="R_IP_3" public_interface="out" units="dimensionless"/>
+      <variable name="R_Cyt1" public_interface="out" units="dimensionless"/>
+      <variable name="R_Cyt2" public_interface="out" units="dimensionless"/>
+      <variable name="R_ER" public_interface="out" units="dimensionless"/>
+      <variable name="APLC" public_interface="in" units="micromolar"/>
+      <variable name="DG" public_interface="in" units="micromolar"/>
+      <variable name="C_cyt" public_interface="in" units="micromolar"/>
+      <variable name="G" public_interface="in" units="micromolar"/>
+      <variable name="IP_3" public_interface="in" units="micromolar"/>
+      <variable name="C_ER" public_interface="in" units="micromolar"/>
+      <variable name="K_P" public_interface="in" units="micromolar"/>
+      <variable name="K_D" public_interface="in" units="micromolar"/>
+      <variable name="K_R" public_interface="in" units="micromolar"/>
+      <variable name="K_G" public_interface="in" units="micromolar"/>
+      <variable name="K_S" public_interface="in" units="micromolar"/>
+      <variable name="K_C1" public_interface="in" units="micromolar"/>
+      <variable name="K_C2" public_interface="in" units="micromolar"/>
+      <variable name="K_ER" public_interface="in" units="micromolar"/>
+      <variable name="n" public_interface="in" units="dimensionless"/>
+      <variable name="m" public_interface="in" units="dimensionless"/>
+      <variable name="w" public_interface="in" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>R_APLC</ci>
+            <apply>
+               <divide/>
+               <ci>APLC</ci>
+               <apply>
+                  <plus/>
+                  <ci>K_P</ci>
+                  <ci>APLC</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>R_PKC</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>DG</ci>
+                     <apply>
+                        <plus/>
+                        <ci>K_D</ci>
+                        <ci>DG</ci>
+                     </apply>
+                  </apply>
+                  <ci>C_cyt</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>K_R</ci>
+                  <ci>C_cyt</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>R_G</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <power/>
+                  <ci>G</ci>
+                  <ci>n</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <power/>
+                     <ci>K_G</ci>
+                     <ci>n</ci>
+                  </apply>
+                  <apply>
+                     <power/>
+                     <ci>G</ci>
+                     <ci>n</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>R_DG</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <power/>
+                  <ci>DG</ci>
+                  <ci>m</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <power/>
+                     <ci>K_D</ci>
+                     <ci>m</ci>
+                  </apply>
+                  <apply>
+                     <power/>
+                     <ci>DG</ci>
+                     <ci>m</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>R_IP_3</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <power/>
+                  <ci>IP_3</ci>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <power/>
+                     <ci>K_S</ci>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+                  </apply>
+                  <apply>
+                     <power/>
+                     <ci>IP_3</ci>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>R_Cyt1</ci>
+            <apply>
+               <divide/>
+               <ci>C_cyt</ci>
+               <apply>
+                  <plus/>
+                  <ci>K_C1</ci>
+                  <ci>C_cyt</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>R_Cyt2</ci>
+            <apply>
+               <divide/>
+               <ci>C_cyt</ci>
+               <apply>
+                  <plus/>
+                  <ci>K_C2</ci>
+                  <ci>C_cyt</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>R_ER</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <power/>
+                  <ci>C_ER</ci>
+                  <ci>w</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <power/>
+                     <ci>K_ER</ci>
+                     <ci>w</ci>
+                  </apply>
+                  <apply>
+                     <power/>
+                     <ci>C_ER</ci>
+                     <ci>w</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="G_GTP">
+      <variable cmeta:id="G_GTP_G" initial_value="0.001" name="G" public_interface="out" units="micromolar"/>
+      <variable name="k_0" public_interface="in" units="flux"/>
+      <variable name="k_1" public_interface="in" units="per_second"/>
+      <variable name="k_2" public_interface="in" units="per_second"/>
+      <variable name="k_3" public_interface="in" units="per_second"/>
+      <variable name="R_APLC" public_interface="in" units="dimensionless"/>
+      <variable name="R_PKC" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>G</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <ci>k_0</ci>
+                     <apply>
+                        <times/>
+                        <ci>k_1</ci>
+                        <ci>G</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_2</ci>
+                     <ci>R_APLC</ci>
+                     <ci>G</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_3</ci>
+                  <ci>R_PKC</ci>
+                  <ci>G</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="APLC">
+      <variable initial_value="0.001" name="APLC" public_interface="out" units="micromolar"/>
+      <variable cmeta:id="APLC_PLC" name="PLC" units="micromolar"/>
+      <variable name="C_PLC_T" public_interface="in" units="micromolar"/>
+      <variable name="k_4" public_interface="in" units="per_second"/>
+      <variable name="k_5" public_interface="in" units="per_second"/>
+      <variable name="R_G" public_interface="in" units="dimensionless"/>
+      <variable name="R_DG" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>PLC</ci>
+            <apply>
+               <minus/>
+               <ci>C_PLC_T</ci>
+               <ci>APLC</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>APLC</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k_4</ci>
+                  <ci>R_G</ci>
+                  <ci>R_DG</ci>
+                  <ci>PLC</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_5</ci>
+                  <ci>APLC</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="IP_3">
+      <variable cmeta:id="IP_3_IP_3" initial_value="0.001" name="IP_3" public_interface="out" units="micromolar"/>
+      <variable name="k_6" public_interface="in" units="per_second"/>
+      <variable name="k_7" public_interface="in" units="per_second"/>
+      <variable name="APLC" public_interface="in" units="micromolar"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>IP_3</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k_6</ci>
+                  <ci>APLC</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_7</ci>
+                  <ci>IP_3</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="DG">
+      <variable cmeta:id="DG_DG" name="DG" public_interface="out" units="micromolar"/>
+      <variable name="IP_3" public_interface="in" units="micromolar"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>DG</ci>
+            <ci>IP_3</ci>
+         </apply>
+      </math>
+   </component>
+   <component name="C_cyt">
+      <variable cmeta:id="C_cyt_C_cyt" initial_value="0.2" name="C_cyt" public_interface="out" units="micromolar"/>
+      <variable name="beta" public_interface="in" units="dimensionless"/>
+      <variable name="rho" public_interface="in" units="dimensionless"/>
+      <variable name="k_8" public_interface="in" units="flux"/>
+      <variable name="k_9" public_interface="in" units="flux"/>
+      <variable name="k_10" public_interface="in" units="flux"/>
+      <variable name="k_11" public_interface="in" units="flux"/>
+      <variable name="R_IP_3" public_interface="in" units="dimensionless"/>
+      <variable name="R_ER" public_interface="in" units="dimensionless"/>
+      <variable name="R_Cyt1" public_interface="in" units="dimensionless"/>
+      <variable name="R_Cyt2" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>C_cyt</ci>
+            </apply>
+            <apply>
+               <times/>
+               <ci>beta</ci>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <times/>
+                        <ci>rho</ci>
+                        <apply>
+                           <minus/>
+                           <apply>
+                              <times/>
+                              <ci>k_8</ci>
+                              <ci>R_IP_3</ci>
+                              <ci>R_ER</ci>
+                           </apply>
+                           <apply>
+                              <times/>
+                              <ci>k_9</ci>
+                              <ci>R_Cyt1</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k_10</ci>
+                        <ci>R_Cyt2</ci>
+                     </apply>
+                  </apply>
+                  <ci>k_11</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="C_ER">
+      <variable cmeta:id="C_ER_C_ER" initial_value="1" name="C_ER" public_interface="out" units="micromolar"/>
+      <variable name="lambda" public_interface="in" units="dimensionless"/>
+      <variable name="k_8" public_interface="in" units="flux"/>
+      <variable name="k_9" public_interface="in" units="flux"/>
+      <variable name="R_IP_3" public_interface="in" units="dimensionless"/>
+      <variable name="R_ER" public_interface="in" units="dimensionless"/>
+      <variable name="R_Cyt1" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>C_ER</ci>
+            </apply>
+            <apply>
+               <times/>
+               <ci>lambda</ci>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <minus/>
+                        <ci>k_8</ci>
+                     </apply>
+                     <ci>R_IP_3</ci>
+                     <ci>R_ER</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_9</ci>
+                     <ci>R_Cyt1</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <connection>
+      <map_components component_1="environment" component_2="G_GTP"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="APLC"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="IP_3"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="C_cyt"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="C_ER"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="R_values" component_2="Constants"/>
+      <map_variables variable_1="K_P" variable_2="K_P"/>
+      <map_variables variable_1="K_D" variable_2="K_D"/>
+      <map_variables variable_1="K_G" variable_2="K_G"/>
+      <map_variables variable_1="K_R" variable_2="K_R"/>
+      <map_variables variable_1="K_S" variable_2="K_S"/>
+      <map_variables variable_1="K_ER" variable_2="K_ER"/>
+      <map_variables variable_1="K_C1" variable_2="K_C1"/>
+      <map_variables variable_1="K_C2" variable_2="K_C2"/>
+      <map_variables variable_1="n" variable_2="n"/>
+      <map_variables variable_1="m" variable_2="m"/>
+      <map_variables variable_1="w" variable_2="w"/>
+   </connection>
+   <connection>
+      <map_components component_1="R_values" component_2="G_GTP"/>
+      <map_variables variable_1="G" variable_2="G"/>
+      <map_variables variable_1="R_APLC" variable_2="R_APLC"/>
+      <map_variables variable_1="R_PKC" variable_2="R_PKC"/>
+   </connection>
+   <connection>
+      <map_components component_1="R_values" component_2="APLC"/>
+      <map_variables variable_1="APLC" variable_2="APLC"/>
+      <map_variables variable_1="R_G" variable_2="R_G"/>
+      <map_variables variable_1="R_DG" variable_2="R_DG"/>
+   </connection>
+   <connection>
+      <map_components component_1="R_values" component_2="IP_3"/>
+      <map_variables variable_1="IP_3" variable_2="IP_3"/>
+   </connection>
+   <connection>
+      <map_components component_1="R_values" component_2="DG"/>
+      <map_variables variable_1="DG" variable_2="DG"/>
+   </connection>
+   <connection>
+      <map_components component_1="R_values" component_2="C_cyt"/>
+      <map_variables variable_1="C_cyt" variable_2="C_cyt"/>
+      <map_variables variable_1="R_IP_3" variable_2="R_IP_3"/>
+      <map_variables variable_1="R_ER" variable_2="R_ER"/>
+      <map_variables variable_1="R_Cyt1" variable_2="R_Cyt1"/>
+      <map_variables variable_1="R_Cyt2" variable_2="R_Cyt2"/>
+   </connection>
+   <connection>
+      <map_components component_1="R_values" component_2="C_ER"/>
+      <map_variables variable_1="C_ER" variable_2="C_ER"/>
+      <map_variables variable_1="R_IP_3" variable_2="R_IP_3"/>
+      <map_variables variable_1="R_ER" variable_2="R_ER"/>
+      <map_variables variable_1="R_Cyt1" variable_2="R_Cyt1"/>
+   </connection>
+   <connection>
+      <map_components component_1="G_GTP" component_2="Constants"/>
+      <map_variables variable_1="k_0" variable_2="k_0"/>
+      <map_variables variable_1="k_1" variable_2="k_1"/>
+      <map_variables variable_1="k_2" variable_2="k_2"/>
+      <map_variables variable_1="k_3" variable_2="k_3"/>
+   </connection>
+   <connection>
+      <map_components component_1="APLC" component_2="Constants"/>
+      <map_variables variable_1="C_PLC_T" variable_2="C_PLC_T"/>
+      <map_variables variable_1="k_4" variable_2="k_4"/>
+      <map_variables variable_1="k_5" variable_2="k_5"/>
+   </connection>
+   <connection>
+      <map_components component_1="APLC" component_2="IP_3"/>
+      <map_variables variable_1="APLC" variable_2="APLC"/>
+   </connection>
+   <connection>
+      <map_components component_1="IP_3" component_2="Constants"/>
+      <map_variables variable_1="k_6" variable_2="k_6"/>
+      <map_variables variable_1="k_7" variable_2="k_7"/>
+   </connection>
+   <connection>
+      <map_components component_1="IP_3" component_2="DG"/>
+      <map_variables variable_1="IP_3" variable_2="IP_3"/>
+   </connection>
+   <connection>
+      <map_components component_1="C_cyt" component_2="Constants"/>
+      <map_variables variable_1="beta" variable_2="beta"/>
+      <map_variables variable_1="rho" variable_2="rho"/>
+      <map_variables variable_1="k_8" variable_2="k_8"/>
+      <map_variables variable_1="k_9" variable_2="k_9"/>
+      <map_variables variable_1="k_10" variable_2="k_10"/>
+      <map_variables variable_1="k_11" variable_2="k_11"/>
+   </connection>
+   <connection>
+      <map_components component_1="C_ER" component_2="Constants"/>
+      <map_variables variable_1="lambda" variable_2="lambda"/>
+      <map_variables variable_1="k_8" variable_2="k_8"/>
+      <map_variables variable_1="k_9" variable_2="k_9"/>
+   </connection>
+   
+   
+   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <!--
+      The following RDF block contains metadata that applies to this document
+      as a whole, as indicated by the empty about attribute on the 
+      <rdf:Description> element.
+    -->
+    <rdf:Description rdf:about="">
+      <!--
+        The Model Builder Metadata.  The Dublin Core "creator" element is used  
+        to indicate the person who translated the model into CellML.
+      -->
+      <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource">
+        <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+          <vCard:Family>Liu</vCard:Family>
+          <vCard:Given>Wei</vCard:Given>
+		</vCard:N>
+        <vCard:EMAIL xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+          <rdf:value>wliu052@aucklanduni.ac.nz</rdf:value>
+          <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+        </vCard:EMAIL>
+        <vCard:ORG xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+          <vCard:Orgname>The University of Auckland</vCard:Orgname>
+        </vCard:ORG>
+      </dc:creator>
+      
+      <!--
+        The Creation Date metadata. This is the date on which the model
+        was translated into CellML.
+      -->
+      <dcterms:created xmlns:dcterms="http://purl.org/dc/terms/" rdf:parseType="Resource">
+        <dcterms:W3CDTF>2009-09-29</dcterms:W3CDTF>
+      </dcterms:created>
+      
+      <!--
+        The Modification History metadata. This lists the changes that have been
+        made to the document, who made the changes, and when they were made.
+      -->
+     
+    </rdf:Description>
+    
+    <!--
+      The following metadata refers to the model itself, as indicated by the
+      reference to the ID "wang_2006", which is    
+      declared on the <model> element.
+    -->
+    <rdf:Description rdf:about="#wang_2006">
+      <!-- A human readable name for the model. -->
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">
+        The Wang et al. 2006 model of ATP-induced intracellular calcium oscillations
+      </dc:title>
+      
+      <!-- A comment regarding the model. -->
+      <cmeta:comment rdf:parseType="Resource">
+        <rdf:value>
+          This is the CellML description of Wang et al.'s mathematical model of ATP-induced intracellular calcium oscillations
+        </rdf:value>
+        <!-- The creator of the comment. -->
+        <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource">
+          <vCard:FN xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Catherine Lloyd</vCard:FN>
+        </dc:creator>
+      </cmeta:comment>
+      
+      <!--  Keyword(s) -->
+      <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource">
+        <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource">
+          <bqs:subject_type>keyword</bqs:subject_type>
+          <rdf:value>
+            <rdf:Bag>
+              <rdf:li>calcium dynamics</rdf:li>
+            </rdf:Bag>
+          </rdf:value>
+        </dc:subject>
+      </bqs:reference>
+
+      <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource">
+        <bqs:Pubmed_id>17188305</bqs:Pubmed_id>
+        <bqs:JournalArticle rdf:parseType="Resource">
+          <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <rdf:Seq>
+              <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+                    <vCard:Family>Wang</vCard:Family>
+                    <vCard:Given>J</vCard:Given>
+                  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+              <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+                    <vCard:Family>Huang</vCard:Family>
+                    <vCard:Given>X</vCard:Given>
+				  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+			  <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+                    <vCard:Family>Huang</vCard:Family>
+                    <vCard:Given>W</vCard:Given>
+				  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+            </rdf:Seq>
+          </dc:creator>
+          <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">
+           A quantitative kinetic model for ATP-induced intracellular Ca2+ oscillations
+          </dc:title>
+          <dcterms:issued xmlns:dcterms="http://purl.org/dc/terms/" rdf:parseType="Resource">
+            <dcterms:W3CDTF>2006-04-07</dcterms:W3CDTF>
+          </dcterms:issued>
+          <bqs:Journal rdf:parseType="Resource">
+            <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Journal of Theoretical Biology</dc:title>
+          </bqs:Journal>
+          <bqs:volume>245</bqs:volume>
+          <bqs:first_page>510</bqs:first_page>
+          <bqs:last_page>519</bqs:last_page>
+        </bqs:JournalArticle>
+      </bqs:reference>
+    </rdf:Description>
+  </rdf:RDF>
+  
+</model>

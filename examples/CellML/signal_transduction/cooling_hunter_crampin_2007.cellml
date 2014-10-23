@@ -1,0 +1,768 @@
+<?xml version="1.0"?>
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" cmeta:id="cooling_2007" name="cooling_2007">
+	
+    
+	
+  
+   <units name="s">
+      <unit units="second"/>
+   </units>
+   <units name="uM_per_s">
+      <unit units="uM"/>
+      <unit exponent="-1" units="s"/>
+   </units>
+   <units name="per_uM_per_um3">
+      <unit exponent="-1" units="uM"/>
+      <unit exponent="-1" units="um3"/>
+   </units>
+   <units name="uM">
+      <unit prefix="micro" units="mole"/>
+      <unit exponent="-1" units="liter"/>
+   </units>
+   <units name="uM_um2">
+      <unit units="um2"/>
+      <unit units="uM"/>
+   </units>
+   <units name="um3_uM">
+      <unit exponent="3" prefix="micro" units="meter"/>
+      <unit units="uM"/>
+   </units>
+   <units name="um2_per_s">
+      <unit units="um2"/>
+      <unit exponent="-1" units="s"/>
+   </units>
+   <units name="um2">
+      <unit exponent="2" prefix="micro" units="meter"/>
+   </units>
+   <units name="um3">
+      <unit exponent="3" prefix="micro" units="meter"/>
+   </units>
+   <units name="per_um">
+      <unit exponent="-1" prefix="micro" units="meter"/>
+   </units>
+   <units name="per_um2">
+      <unit exponent="-1" units="um2"/>
+   </units>
+   <units name="per_um2_per_s">
+      <unit exponent="-1" units="um2"/>
+      <unit exponent="-1" units="s"/>
+   </units>
+   <units name="per_uM_per_s">
+      <unit exponent="-1" units="uM"/>
+      <unit exponent="-1" units="s"/>
+   </units>
+   <units name="per_s">
+      <unit exponent="-1" units="s"/>
+   </units>
+   
+   <component name="all">
+      <variable cmeta:id="all_t" name="t" units="s"/>
+      <variable cmeta:id="all_Ca" initial_value="0.1" name="Ca" units="uM"/>
+      <variable cmeta:id="all_L" name="L" units="uM"/>
+      <variable initial_value="0.1" name="Ls" units="uM"/>
+      <variable initial_value="10" name="ts" units="s"/>
+      <variable cmeta:id="all_Gd" initial_value="10000" name="Gd" units="per_um2"/>
+      <variable cmeta:id="all_Gt" initial_value="0" name="Gt" units="per_um2"/>
+      <variable cmeta:id="all_R" initial_value="13.9" name="R" units="per_um2"/>
+      <variable cmeta:id="all_Rl" initial_value="0" name="Rl" units="per_um2"/>
+      <variable cmeta:id="all_Rg" initial_value="5.06" name="Rg" units="per_um2"/>
+      <variable cmeta:id="all_Rlg" initial_value="0" name="Rlg" units="per_um2"/>
+      <variable cmeta:id="all_Rlgp" initial_value="0" name="Rlgp" units="per_um2"/>
+      <variable cmeta:id="all_IP3" initial_value="0.015" name="IP3" units="uM"/>
+      <variable cmeta:id="all_PIP2" initial_value="4000" name="PIP2" units="per_um2"/>
+      <variable cmeta:id="all_Pc" initial_value="9.09" name="Pc" public_interface="out" units="per_um2"/>
+      <variable cmeta:id="all_Pcg" initial_value="0" name="Pcg" public_interface="out" units="per_um2"/>
+      <variable cmeta:id="all_P" initial_value="90.9" name="P" units="per_um2"/>
+      <variable cmeta:id="all_Pg" initial_value="0" name="Pg" units="per_um2"/>
+      <variable name="J1" units="per_um2_per_s"/>
+      <variable initial_value="0.0003" name="kf1" units="per_uM_per_s"/>
+      <variable name="kr1" units="per_s"/>
+      <variable initial_value="3e-5" name="Kd1" units="uM"/>
+      <variable name="J2" units="per_um2_per_s"/>
+      <variable initial_value="2.75e-4" name="kf2" units="um2_per_s"/>
+      <variable name="kr2" units="per_s"/>
+      <variable initial_value="27500" name="Kd2" units="per_um2"/>
+      <variable name="J3" units="per_um2_per_s"/>
+      <variable initial_value="1" name="kf3" units="um2_per_s"/>
+      <variable initial_value="0.001" name="kr3" units="per_s"/>
+      <variable name="J4" units="per_um2_per_s"/>
+      <variable initial_value="0.3" name="kf4" units="per_uM_per_s"/>
+      <variable name="kr4" units="per_s"/>
+      <variable initial_value="3e-5" name="Kd4" units="uM"/>
+      <variable name="J5" units="per_um2_per_s"/>
+      <variable initial_value="0.0004" name="kf5" units="per_s"/>
+      <variable name="J6" units="per_um2_per_s"/>
+      <variable initial_value="1" name="kf6" units="per_s"/>
+      <variable name="J7" units="per_um2_per_s"/>
+      <variable initial_value="0.15" name="kf7" units="per_s"/>
+      <variable name="J8" units="per_um2_per_s"/>
+      <variable initial_value="0.0167" name="kf8" units="per_uM_per_s"/>
+      <variable initial_value="0.0167" name="kr8" units="per_s"/>
+      <variable name="J9" units="per_um2_per_s"/>
+      <variable initial_value="0.0042" name="kf9" units="um2_per_s"/>
+      <variable initial_value="1" name="kr9" units="per_s"/>
+      <variable name="J10" public_interface="out" units="per_um2_per_s"/>
+      <variable initial_value="0.042" name="kf10" units="um2_per_s"/>
+      <variable initial_value="1" name="kr10" units="per_s"/>
+      <variable name="J11" public_interface="out" units="per_um2_per_s"/>
+      <variable initial_value="0.0334" name="kf11" units="per_uM_per_s"/>
+      <variable name="kr11" units="per_s"/>
+      <variable initial_value="0.1" name="Kd11" units="uM"/>
+      <variable name="J12" units="per_um2_per_s"/>
+      <variable initial_value="6" name="kf12" units="per_s"/>
+      <variable name="J13" units="per_um2_per_s"/>
+      <variable initial_value="6" name="kf13" units="per_s"/>
+      <variable name="J14" units="per_um2_per_s"/>
+      <variable initial_value="0.444" name="kf14" units="per_s"/>
+      <variable initial_value="19.8" name="Km14" units="uM"/>
+      <variable name="J15" units="per_um2_per_s"/>
+      <variable initial_value="3.8" name="kf15" units="per_s"/>
+      <variable initial_value="5" name="Km15" units="uM"/>
+      <variable name="J16" units="uM_per_s"/>
+      <variable initial_value="1.25" name="kf16" units="per_s"/>
+      <variable name="Cpc" units="uM_um2"/>
+      <variable name="Cc" units="uM"/>
+      <variable name="Cp" units="per_um2"/>
+      <variable initial_value="2550" name="Vc" units="um3"/>
+      <variable initial_value="4.61" name="Rpc" units="per_um"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>Cc</ci>
+            <apply>
+               <divide/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               <apply>
+                  <times/>
+                  <ci>Vc</ci>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" type="e-notation" cellml:units="per_uM_per_um3">6.022<sep/>2</cn>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>Cp</ci>
+            <apply>
+               <divide/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               <apply>
+                  <times/>
+                  <ci>Vc</ci>
+                  <ci>Rpc</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>Cpc</ci>
+            <apply>
+               <divide/>
+               <ci>Cc</ci>
+               <ci>Cp</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>t</ci>
+               </bvar>
+               <ci>P</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>J13</ci>
+               <apply>
+                  <plus/>
+                  <ci>J9</ci>
+                  <ci>J8</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>t</ci>
+               </bvar>
+               <ci>Pg</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>J9</ci>
+               <apply>
+                  <plus/>
+                  <ci>J11</ci>
+                  <ci>J13</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>t</ci>
+               </bvar>
+               <ci>Pc</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <ci>J8</ci>
+                  <ci>J12</ci>
+               </apply>
+               <ci>J10</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>t</ci>
+               </bvar>
+               <ci>Pcg</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <ci>J10</ci>
+                  <ci>J11</ci>
+               </apply>
+               <ci>J12</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J13</ci>
+            <apply>
+               <times/>
+               <ci>kf13</ci>
+               <ci>Pg</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J12</ci>
+            <apply>
+               <times/>
+               <ci>kf12</ci>
+               <ci>Pcg</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>kr11</ci>
+            <apply>
+               <times/>
+               <ci>kf11</ci>
+               <ci>Kd11</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J11</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>kf11</ci>
+                  <ci>Pg</ci>
+                  <ci>Ca</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>kr11</ci>
+                  <ci>Pcg</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J10</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>kf10</ci>
+                  <ci>Pc</ci>
+                  <ci>Gt</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>kr10</ci>
+                  <ci>Pcg</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J8</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>kf8</ci>
+                  <ci>P</ci>
+                  <ci>Ca</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>kr8</ci>
+                  <ci>Pc</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J9</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>kf9</ci>
+                  <ci>P</ci>
+                  <ci>Gt</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>kr9</ci>
+                  <ci>Pg</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J16</ci>
+            <apply>
+               <times/>
+               <ci>kf16</ci>
+               <ci>IP3</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J14</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>kf14</ci>
+                  <ci>Pc</ci>
+                  <ci>PIP2</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <divide/>
+                     <ci>Km14</ci>
+                     <ci>Cpc</ci>
+                  </apply>
+                  <ci>PIP2</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J15</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>kf15</ci>
+                  <ci>Pcg</ci>
+                  <ci>PIP2</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <divide/>
+                     <ci>Km15</ci>
+                     <ci>Cpc</ci>
+                  </apply>
+                  <ci>PIP2</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>t</ci>
+               </bvar>
+               <ci>IP3</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>Cpc</ci>
+                  <apply>
+                     <plus/>
+                     <ci>J14</ci>
+                     <ci>J15</ci>
+                  </apply>
+               </apply>
+               <ci>J16</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>t</ci>
+               </bvar>
+               <ci>Gd</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <ci>J7</ci>
+                  <ci>J13</ci>
+                  <ci>J12</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>J2</ci>
+                  <ci>J3</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>t</ci>
+               </bvar>
+               <ci>Gt</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>J6</ci>
+               <apply>
+                  <plus/>
+                  <ci>J7</ci>
+                  <ci>J9</ci>
+                  <ci>J10</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J7</ci>
+            <apply>
+               <times/>
+               <ci>kf7</ci>
+               <ci>Gt</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>t</ci>
+               </bvar>
+               <ci>Ca</ci>
+            </apply>
+            <apply>
+               <times/>
+               <ci>Cpc</ci>
+               <apply>
+                  <minus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>J8</ci>
+                  <ci>J11</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>L</ci>
+            <piecewise>
+               <piece>
+                  <apply>
+                     <divide/>
+                     <ci>Ls</ci>
+                     <apply>
+                        <plus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        <apply>
+                           <exp/>
+                           <apply>
+                              <times/>
+                              <apply>
+                                 <minus/>
+                                 <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="per_s">80</cn>
+                              </apply>
+                              <apply>
+                                 <minus/>
+                                 <apply>
+                                    <minus/>
+                                    <ci>t</ci>
+                                    <ci>ts</ci>
+                                 </apply>
+                                 <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="s">0.05</cn>
+                              </apply>
+                           </apply>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <and/>
+                     <apply>
+                        <lt/>
+                        <ci>t</ci>
+                        <apply>
+                           <plus/>
+                           <ci>ts</ci>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="s">0.15</cn>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <geq/>
+                        <ci>t</ci>
+                        <ci>ts</ci>
+                     </apply>
+                  </apply>
+               </piece>
+               <piece>
+                  <ci>Ls</ci>
+                  <apply>
+                     <geq/>
+                     <ci>t</ci>
+                     <apply>
+                        <plus/>
+                        <ci>ts</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="s">0.15</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="uM">0</cn>
+               </otherwise>
+            </piecewise>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>kr1</ci>
+            <apply>
+               <times/>
+               <ci>kf1</ci>
+               <ci>Kd1</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J1</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>kf1</ci>
+                  <ci>R</ci>
+                  <ci>L</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>kr1</ci>
+                  <ci>Rl</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>kr2</ci>
+            <apply>
+               <times/>
+               <ci>kf2</ci>
+               <ci>Kd2</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J2</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>kf2</ci>
+                  <ci>R</ci>
+                  <ci>Gd</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>kr2</ci>
+                  <ci>Rg</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>t</ci>
+               </bvar>
+               <ci>R</ci>
+            </apply>
+            <apply>
+               <times/>
+               <apply>
+                  <minus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>J1</ci>
+                  <ci>J2</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J3</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>kf3</ci>
+                  <ci>Rl</ci>
+                  <ci>Gd</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>kr3</ci>
+                  <ci>Rlg</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>t</ci>
+               </bvar>
+               <ci>Rl</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <ci>J1</ci>
+                  <ci>J6</ci>
+               </apply>
+               <ci>J3</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>kr4</ci>
+            <apply>
+               <times/>
+               <ci>kf4</ci>
+               <ci>Kd4</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J4</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>kf4</ci>
+                  <ci>L</ci>
+                  <ci>Rg</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>kr4</ci>
+                  <ci>Rlg</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>t</ci>
+               </bvar>
+               <ci>Rg</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>J2</ci>
+               <ci>J4</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J5</ci>
+            <apply>
+               <times/>
+               <ci>kf5</ci>
+               <ci>Rlg</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>t</ci>
+               </bvar>
+               <ci>Rlgp</ci>
+            </apply>
+            <ci>J5</ci>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J6</ci>
+            <apply>
+               <times/>
+               <ci>kf6</ci>
+               <ci>Rlg</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>t</ci>
+               </bvar>
+               <ci>Rlg</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <minus/>
+                     <ci>J3</ci>
+                     <ci>J5</ci>
+                  </apply>
+                  <ci>J4</ci>
+               </apply>
+               <ci>J6</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:nodeID="n1"><JournalArticle xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n2"/></JournalArticle></rdf:Description><rdf:Description rdf:nodeID="n3"><boundIntervals xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n4"/></boundIntervals></rdf:Description><rdf:Description rdf:nodeID="n5"><rdf:type><rdf:Description rdf:about="http://imc.org/vCard/3.0#internet"/></rdf:type><rdf:value xml:lang="en">m.cooling@auckland.ac.nz</rdf:value></rdf:Description><rdf:Description rdf:nodeID="n4"><rdf:first><rdf:Description rdf:nodeID="n6"/></rdf:first><rdf:rest><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/></rdf:rest></rdf:Description><rdf:Description rdf:nodeID="n7"><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq"/></rdf:type><rdf:_1><rdf:Description rdf:nodeID="n8"/></rdf:_1><rdf:_2><rdf:Description rdf:nodeID="n9"/></rdf:_2><rdf:_3><rdf:Description rdf:nodeID="n10"/></rdf:_3></rdf:Description><rdf:Description rdf:nodeID="n11"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n12"/></N><EMAIL xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n13"/></EMAIL><ORG xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n14"/></ORG></rdf:Description><rdf:Description rdf:nodeID="n15"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Crampin</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Edmund</Given></rdf:Description><rdf:Description rdf:nodeID="n16"><rdf:type><rdf:Description rdf:about="http://imc.org/vCard/3.0#internet"/></rdf:type><rdf:value xml:lang="en">e.crampin@auckland.ac.nz</rdf:value></rdf:Description><rdf:Description rdf:nodeID="n17"><rdf:type><rdf:Description rdf:about="http://imc.org/vCard/3.0#internet"/></rdf:type><rdf:value xml:lang="en">p.hunter@auckland.ac.nz</rdf:value></rdf:Description><rdf:Description rdf:nodeID="n10"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n15"/></N><EMAIL xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n16"/></EMAIL><ORG xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n18"/></ORG></rdf:Description><rdf:Description rdf:nodeID="n19"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2007-00-00 00:00</W3CDTF></rdf:Description><rdf:Description rdf:nodeID="n6"><maximumStepSize xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">.1</maximumStepSize><pointDensity xmlns="http://www.cellml.org/metadata/simulation/1.0#nonstandard-" xml:lang="en">10000</pointDensity><endingValue xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">100</endingValue></rdf:Description><rdf:Description rdf:nodeID="n20"><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag"/></rdf:type><rdf:_1 xml:lang="en">Signal Transduction</rdf:_1></rdf:Description><rdf:Description rdf:nodeID="n12"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Cooling</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Mike</Given></rdf:Description><rdf:Description rdf:nodeID="n21"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Hunter</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Peter</Given></rdf:Description><rdf:Description rdf:nodeID="n22"><rdf:value><rdf:Description rdf:nodeID="n20"/></rdf:value><subject_type xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">keyword</subject_type></rdf:Description><rdf:Description rdf:nodeID="n23"><subject xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n22"/></subject></rdf:Description><rdf:Description rdf:about=""><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n11"/></creator></rdf:Description><rdf:Description rdf:nodeID="n9"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n21"/></N><EMAIL xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n17"/></EMAIL><ORG xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n24"/></ORG></rdf:Description><rdf:Description rdf:nodeID="n25"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Cooling</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Mike</Given></rdf:Description><rdf:Description rdf:nodeID="n2"><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n7"/></creator><volume xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">93</volume><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">Modeling hypertrophic IP3 transients in the cardiac myocyte</title><Journal xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n26"/></Journal><issued xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:nodeID="n19"/></issued><first_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">3421</first_page><last_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">3433</last_page></rdf:Description><rdf:Description rdf:nodeID="n8"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n25"/></N><EMAIL xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n5"/></EMAIL><ORG xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n27"/></ORG></rdf:Description><rdf:Description rdf:nodeID="n27"><Orgname xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Auckland Bioengineering Institute</Orgname><Orgunit xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">University of Auckland</Orgunit></rdf:Description><rdf:Description rdf:about="#cooling_2007"><simulation xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n3"/></simulation><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n23"/></reference><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n1"/></reference></rdf:Description><rdf:Description rdf:nodeID="n14"><Orgname xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">The University of Auckland</Orgname><Orgunit xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Auckland Bioengineering Institute</Orgunit></rdf:Description><rdf:Description rdf:nodeID="n18"><Orgname xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Auckland Bioengineering Institute</Orgname><Orgunit xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">University of Auckland</Orgunit></rdf:Description><rdf:Description rdf:nodeID="n26"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">Biophysical Journal</title></rdf:Description><rdf:Description rdf:nodeID="n24"><Orgname xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Auckland Bioengineering Institute</Orgname><Orgunit xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">University of Auckland</Orgunit></rdf:Description><rdf:Description rdf:nodeID="n13"><rdf:type><rdf:Description rdf:about="http://imc.org/vCard/3.0#internet"/></rdf:type><rdf:value xml:lang="en">m.cooling@auckland.ac.nz</rdf:value></rdf:Description></rdf:RDF></model>

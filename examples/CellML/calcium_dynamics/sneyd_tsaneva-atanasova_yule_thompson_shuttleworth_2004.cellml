@@ -1,0 +1,1255 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--  FILE :  sneyd_model_2004.xml
+
+CREATED :  13th June 2004
+
+LAST MODIFIED : 21st April 2005
+
+AUTHOR :  Catherine Lloyd
+          The Bioengineering Institute
+          The University of Auckland
+          
+MODEL STATUS :  This model conforms to the CellML 1.0 Specification released on
+10th August 2001, and the 16/01/2002 CellML Metadata 1.0 Specification.
+
+DESCRIPTION :  This file contains a CellML description of Sneyd et al.'s 2004 mathematical model for Ca2+ oscillations and their control by membrane fluxes.
+
+CHANGES:
+   21/04/2005 - PJV - Changed unit dimensions to correct inconsistancy  
+   
+-->
+
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="sneyd_2004" name="sneyd_2004">
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Control of calcium oscillations by membrane fluxes</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+            This CellML model runs in both OpenCell and COR. The units have been checked and they are consistent. Note that the published paper alone does not contain the full set of equations required to describe the complete model. As stated in the paper, certain equtions were taken from a previously published model (Sneyd and Dufour, 2002, also available as a <ulink url="http://models.cellml.org/exposure/57ac3f2f0dfd908a8c183dc6264ef1ee">CellML model</ulink>). Where initial conditions were not defined in the paper, arbitary values were used to complete the CellML model description (for c, ce, R, O, I_1, I_2, S and A). The CellML model output looks reasonable, with Calcium oscillations generated, however it is likely the output does not perfectly match the published model description. There are no published figures of changing calcium concentration agaisnt time so we cannot confirm the accuracy of the CellML model.
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+ABSTRACT: It is known that Ca(2+) influx plays an important role in the modulation of inositol trisphosphate-generated Ca(2+) oscillations, but controversy over the mechanisms underlying these effects exists. In addition, the effects of blocking membrane transport or reducing Ca(2+) entry vary from one cell type to another; in some cell types oscillations persist in the absence of Ca(2+) entry (although their frequency is affected), whereas in other cell types oscillations depend on Ca(2+) entry. We present theoretical and experimental evidence that membrane transport can control oscillations by controlling the total amount of Ca(2+) in the cell (the Ca(2+) load). Our model predicts that the cell can be balanced at a point where small changes in the Ca(2+) load can move the cell into or out of oscillatory regions, resulting in the appearance or disappearance of oscillations. Our theoretical predictions are verified by experimental results from HEK293 cells. We predict that the role of Ca(2+) influx during an oscillation is to replenish the Ca(2+) load of the cell. Despite this prediction, even during the peak of an oscillation the cell or the endoplasmic reticulum may not be measurably depleted of Ca(2+).       
+</para>
+
+<para>
+The original paper reference is cited below:
+</para>
+
+<para>
+Control of calcium oscillations by membrane fluxes, J. Sneyd, K. Tsaneva-Atanasova,  D. I. Yule, J. L. Thompson, and T. J. Shuttleworth, 2004, <emphasis>PNAS</emphasis>, 101, 1392-1396. <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/14734814">PubMed ID: 14734814</ulink>
+</para>
+
+<informalfigure float="0" id="fig_cell_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>cell diagram</title>
+    </objectinfo>
+    <imagedata fileref="sneyd_2004.png"/>
+  </imageobject>
+</mediaobject>
+<caption>Schematic diagram of the calcium fluxes described by the mathematical model.</caption>
+</informalfigure>
+
+</sect1>
+</article>
+</documentation>
+  
+  
+  
+  <units name="micromolar">
+    <unit units="mole" prefix="micro"/>
+    <unit units="litre" exponent="-1"/>
+  </units>
+  
+  <units name="flux">
+    <unit units="micromolar"/>
+    <unit units="second" exponent="-1"/>
+  </units>
+  
+  <units name="first_order_rate_constant">
+    <unit units="second" exponent="-1"/>
+  </units>
+  
+  <units name="second_order_rate_constant">
+    <unit units="micromolar" exponent="-1"/>
+    <unit units="second" exponent="-1"/>
+  </units>
+  
+  <units name="micromolar2_per_second">
+    <unit units="micromolar" exponent="2"/>
+    <unit units="second" exponent="-1"/>
+  </units>
+  
+ 
+  <component name="environment">
+    <variable units="second" public_interface="out" name="time"/>
+  </component>
+  
+  <component name="c" cmeta:id="c">
+    <variable units="micromolar" public_interface="out" initial_value="0.01" name="c"/>
+    
+    <variable units="dimensionless" name="delta" initial_value="0.1"/>
+    
+    <variable units="flux" public_interface="in" name="J_serca"/>
+    <variable units="flux" public_interface="in" name="J_in"/> 
+    <variable units="flux" public_interface="in" name="J_pm"/> 
+    <variable units="flux" public_interface="in" name="J_IPR"/>
+    <variable units="second" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>c</ci> 
+        </apply>
+        <apply>
+          <plus/>
+          <apply>
+            <minus/>
+            <ci> J_IPR </ci>
+            <ci> J_serca </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> delta </ci>
+            <apply>
+              <minus/>
+              <ci> J_in </ci>
+              <ci> J_pm </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="ce" cmeta:id="ce">
+      
+    <variable units="micromolar" public_interface="out" initial_value="0.01" name="ce"/>
+    
+    <variable units="dimensionless" name="gamma" initial_value="5.4"/>
+    
+    <variable units="flux" public_interface="in" name="J_serca"/>
+    <variable units="flux" public_interface="in" name="J_IPR"/>
+    <variable units="second" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>ce</ci> 
+        </apply>
+        <apply>
+          <times/>
+          <ci> gamma </ci>
+          <apply>
+            <minus/>
+            <ci> J_serca </ci>
+            <ci> J_IPR </ci>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="p" cmeta:id="p">
+      
+    <variable units="micromolar" public_interface="out" name="p" initial_value="10.0"/>
+  </component>
+  
+  <component name="J_IPR" cmeta:id="J_IPR">
+      
+    <variable units="flux" public_interface="out" name="J_IPR"/>
+    
+    <variable units="first_order_rate_constant" name="kf" initial_value="0.96"/>
+    <variable units="first_order_rate_constant" name="g1" initial_value="0.002"/>
+    
+    <variable units="dimensionless" public_interface="in" name="A"/>
+    <variable units="dimensionless" public_interface="in" name="O"/>
+    <variable units="micromolar" public_interface="in" name="c"/>
+    <variable units="micromolar" public_interface="in" name="ce"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci>J_IPR</ci> 
+        <apply>
+          <times/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> kf </ci>
+              <apply>
+                <power/>
+                <apply>
+                  <plus/>
+                  <apply>
+                    <times/>
+                    <cn cellml:units="dimensionless"> 0.1 </cn> 
+                    <ci> O </ci>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <cn cellml:units="dimensionless"> 0.9 </cn> 
+                    <ci> A </ci>
+                  </apply>
+                </apply>
+                <cn cellml:units="dimensionless"> 4.0 </cn>
+              </apply>
+            </apply> 
+            <ci> g1 </ci>
+          </apply>
+          <apply>
+            <minus/>
+            <ci> ce </ci>
+            <ci> c </ci>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="R" cmeta:id="R">
+     
+    <variable units="dimensionless" public_interface="out" initial_value="0.16" name="R"/> 
+    
+    <variable units="dimensionless" public_interface="in" name="O"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="phi_1"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="phi_2"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="phi_2_"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="k_1_"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="l_2_"/>
+    <variable units="dimensionless" public_interface="in" name="I_1"/> 
+    <variable units="micromolar" public_interface="in" name="p"/> 
+    <variable units="second" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>R</ci> 
+        </apply>
+        <apply>
+          <plus/>
+          <apply>
+            <minus/>
+            <apply>
+              <times/>
+              <ci> phi_2_ </ci>
+              <ci> O </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <apply>
+                <times/>
+                <ci> phi_2 </ci>
+                <ci> p </ci>
+                <ci> R </ci>
+              </apply>
+              <apply>
+                <times/>
+                <ci> phi_1 </ci>
+                <ci> R </ci>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <ci> l_2_  </ci>
+              <ci> k_1_  </ci>
+            </apply>
+            <ci> I_1 </ci>
+          </apply>
+        </apply>
+      </apply> 
+    </math> 
+  </component>
+  
+  <component name="O" cmeta:id="O">
+     
+    <variable units="dimensionless" public_interface="out" initial_value="0.01" name="O"/> 
+    
+    <variable units="dimensionless" public_interface="in" name="R"/>
+    <variable units="dimensionless" public_interface="in" name="A"/>
+    <variable units="dimensionless" public_interface="in" name="S"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="phi_2"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="phi_2_"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="phi_3"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="phi_4"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="phi_4_"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="k_3_"/>
+    <variable units="micromolar" public_interface="in" name="p"/> 
+    <variable units="second" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>O</ci> 
+        </apply>
+        <apply>
+          <plus/>
+          <apply>
+            <minus/>
+            <apply>
+              <times/>
+              <ci> phi_2 </ci>
+              <ci> p </ci>
+              <ci> R </ci>
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <plus/>
+                <ci> phi_2_ </ci>
+                <ci> phi_4 </ci>
+				<apply>
+                  <times/>
+				  <cn cellml:units="micromolar"> 1 </cn>
+                  <ci> phi_3 </ci>
+				</apply>
+              </apply>
+              <ci> O </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> phi_4_  </ci>
+            <ci> A  </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> k_3_  </ci>
+            <ci> S  </ci>
+          </apply>
+        </apply>
+      </apply> 
+    </math> 
+  </component>
+  
+  <component name="I_1" cmeta:id="I_1">
+     
+    <variable units="dimensionless" public_interface="out" initial_value="0.16" name="I_1"/> 
+    
+    <variable units="dimensionless" public_interface="in" name="R"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="phi_1"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="k_1_"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="l_2_"/>
+    <variable units="second" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>I_1</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> phi_1 </ci>
+            <ci> R </ci>
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <ci> k_1_  </ci>
+              <ci> l_2_  </ci>
+            </apply>
+            <ci> I_1  </ci>
+          </apply>
+        </apply>
+      </apply> 
+    </math> 
+  </component> 
+  
+  <component name="I_2" cmeta:id="I_2">
+     
+    <variable units="dimensionless" public_interface="out" initial_value="0.16" name="I_2"/> 
+    
+    <variable units="dimensionless" public_interface="in" name="A"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="phi_5"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="k_1_"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="l_2_"/>
+    <variable units="second" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>I_2</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> phi_5 </ci>
+            <ci> A </ci>
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <ci> k_1_  </ci>
+              <ci> l_2_  </ci>
+            </apply>
+            <ci> I_2  </ci>
+          </apply>
+        </apply>
+      </apply> 
+    </math> 
+  </component>
+  
+  <component name="S" cmeta:id="S">
+     
+    <variable units="dimensionless" public_interface="out" initial_value="0.16" name="S"/> 
+    
+    <variable units="dimensionless" public_interface="in" name="O"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="phi_3"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="k_3_"/>
+    <variable units="second" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>S</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <cn cellml:units="micromolar"> 1 </cn>
+			<ci> phi_3 </ci>
+            <ci> O </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> k_3_  </ci>
+            <ci> S  </ci>
+          </apply>
+        </apply>
+      </apply> 
+    </math> 
+  </component>
+  
+  <component name="A" cmeta:id="A">
+     
+    <variable units="dimensionless" public_interface="out" initial_value="0.16" name="A"/> 
+    
+    <variable units="dimensionless" public_interface="in" name="O"/>
+    <variable units="dimensionless" public_interface="in" name="I_2"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="phi_4"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="phi_4_"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="phi_5"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="k_1_"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="l_2_"/>
+    <variable units="second" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>A</ci> 
+        </apply>
+        <apply>
+          <plus/>
+          <apply>
+            <minus/>
+            <apply>
+              <times/>
+              <ci> phi_4 </ci>
+              <ci> O </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <apply>
+                <times/>
+                <ci> phi_4_ </ci>
+                <ci> A </ci>
+              </apply>
+              <apply>
+                <times/>
+                <ci> phi_5 </ci>
+                <ci> A </ci>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <ci> k_1_  </ci>
+              <ci> l_2_  </ci>
+            </apply>
+            <ci> I_2  </ci>
+          </apply>
+        </apply>
+      </apply> 
+    </math> 
+  </component>
+  
+  <component name="IPR_parameters">
+    <variable units="first_order_rate_constant" public_interface="out" name="phi_1"/>
+    <variable units="second_order_rate_constant" public_interface="out" name="phi_2"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="phi_2_"/>
+    <variable units="second_order_rate_constant" public_interface="out" name="phi_3"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="phi_4"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="phi_4_"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="phi_5"/>
+    
+	<variable units="second_order_rate_constant" name="k_1" initial_value="0.64"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="k_1_" initial_value="0.04"/>
+    <variable units="second_order_rate_constant" name="k_2" initial_value="37.4"/>
+    <variable units="first_order_rate_constant" name="k_2_" initial_value="1.4"/>
+    <variable units="second_order_rate_constant" name="k_3" initial_value="0.11"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="k_3_" initial_value="29.8"/>
+    <variable units="second_order_rate_constant" name="k_4" initial_value="4.0"/> 
+    <variable units="first_order_rate_constant" name="k_4_" initial_value="0.54"/>
+    <variable units="first_order_rate_constant" name="l_2" initial_value="1.7"/>
+    <variable units="first_order_rate_constant"  public_interface="out" name="l_2_" initial_value="0.8"/>  
+    <variable units="second_order_rate_constant" name="l_4" initial_value="1.7"/>
+    <variable units="second_order_rate_constant" name="l_4_" initial_value="2.5"/>
+    <variable units="first_order_rate_constant" name="l_6" initial_value="4707.0"/>
+    <variable units="first_order_rate_constant" name="l_6_" initial_value="11.4"/>
+    <variable units="micromolar" name="L_1" initial_value="0.12"/>
+    <variable units="micromolar" name="L_3" initial_value="0.025"/>
+    <variable units="micromolar" name="L_5" initial_value="54.7"/>
+    
+    <variable units="micromolar" public_interface="in" name="p"/> 
+    <variable units="micromolar" public_interface="in" name="c"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="phi_1_calculation">
+        <eq/>
+        <ci> phi_1 </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <apply>
+                <times/>
+                <ci> k_1 </ci>
+                <ci> L_1 </ci>
+              </apply>
+              <ci> l_2 </ci>
+            </apply>
+            <ci> c </ci>
+          </apply>
+          <apply>
+            <plus/>
+            <ci> L_1 </ci>
+            <apply>
+              <times/>
+              <ci> c </ci>
+              <apply>
+                <plus/>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+                <apply>
+                  <divide/>
+                  <ci> L_1 </ci>
+                  <ci> L_3 </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="phi_2_calculation">
+        <eq/>
+        <ci> phi_2 </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> k_2 </ci>
+              <ci> L_3 </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> l_4 </ci>
+              <ci> c </ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <ci> L_3 </ci>
+            <apply>
+              <times/>
+              <ci> c </ci>
+              <apply>
+                <plus/>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+                <apply>
+                  <divide/>
+                  <ci> L_3 </ci>
+                  <ci> L_1 </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="phi_2__calculation">
+        <eq/>
+        <ci> phi_2_ </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <plus/>
+            <ci> k_2_ </ci>
+            <apply>
+              <times/>
+              <ci> l_4_ </ci>
+              <ci> c </ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <divide/>
+              <ci> c </ci>
+              <ci> L_5 </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="phi_3_calculation">
+        <eq/>
+        <ci> phi_3 </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <ci> k_3 </ci>
+            <ci> L_5 </ci>
+          </apply>
+          <apply>
+            <plus/>
+            <ci> c </ci>
+            <ci> L_5 </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="phi_4_calculation">
+        <eq/>
+        <ci> phi_4 </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <apply>
+                <times/>
+                <ci> k_4 </ci>
+                <ci> L_5 </ci>
+              </apply>
+              <ci> l_6 </ci>
+            </apply>
+            <ci> c </ci>
+          </apply>
+          <apply>
+            <plus/>
+            <ci> c </ci>
+            <ci> L_5 </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="phi_4__calculation">
+        <eq/>
+        <ci> phi_4_ </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <ci> L_1 </ci>
+			<apply>
+              <plus/>
+			  <ci> k_4_ </ci>
+              <ci> l_6_ </ci>
+            </apply>
+		  </apply>
+          <apply>
+            <plus/>
+            <ci> c </ci>
+            <ci> L_1 </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="phi_5_calculation">
+        <eq/>
+        <ci> phi_5 </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+			  <apply>
+                <times/>
+				<ci> k_1 </ci>
+				<ci> L_1 </ci>
+              </apply>
+              <ci> l_2 </ci>
+            </apply>
+            <ci> c </ci>
+          </apply>
+          <apply>
+            <plus/>
+            <ci> c </ci>
+            <ci> L_1 </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>     
+  </component>    
+  
+  <component name="J_serca" cmeta:id="J_serca">
+      
+    <variable units="flux" public_interface="out" name="J_serca"/>
+    
+    <variable units="micromolar2_per_second" name="Vs" initial_value="120.0"/>
+    <variable units="micromolar" name="Ks" initial_value="0.18"/>
+    
+    <variable units="micromolar" public_interface="in" name="c"/>
+    <variable units="micromolar" public_interface="in" name="ce"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci>J_serca</ci> 
+        <apply>
+          <times/>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <ci> Vs </ci>
+              <ci> c </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <ci> Ks </ci>
+              <ci> c </ci>
+            </apply>
+          </apply>
+          <apply>
+            <divide/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <ci> ce </ci> 
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="J_pm" cmeta:id="J_pm">
+      
+    <variable units="flux" public_interface="out" name="J_pm"/>
+    
+    <variable units="flux" name="Vp" initial_value="28.0"/>
+    <variable units="micromolar" name="Kp" initial_value="0.42"/>
+    
+    <variable units="micromolar" public_interface="in" name="c"/>
+    <variable units="micromolar" public_interface="in" name="ce"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci>J_pm</ci> 
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <ci> Vp </ci>
+            <apply>
+              <power/>
+              <ci> c </ci>
+              <cn cellml:units="dimensionless"> 2.0 </cn>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <power/>
+              <ci> Kp </ci>
+              <cn cellml:units="dimensionless"> 2.0 </cn>
+            </apply>
+            <apply>
+              <power/>
+              <ci> c </ci>
+              <cn cellml:units="dimensionless"> 2.0 </cn>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="J_in" cmeta:id="J_in">
+      
+    <variable units="flux" public_interface="out" name="J_in"/>
+    
+    <variable units="flux" name="alpha1" initial_value="0.03"/>
+    <variable units="first_order_rate_constant" name="alpha2" initial_value="0.2"/>
+    
+    <variable units="micromolar" public_interface="in" name="p"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci>J_in</ci> 
+        <apply>
+          <plus/>
+          <ci> alpha1 </ci>
+          <apply>
+            <times/>
+            <ci> alpha2 </ci>
+            <ci> p </ci>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <connection>
+    <map_components component_2="environment" component_1="R"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="O"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="S"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="I_1"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="I_2"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="A"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection> 
+  
+  <connection>
+    <map_components component_2="environment" component_1="c"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="ce"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="IPR_parameters" component_1="R"/>
+    <map_variables variable_2="phi_1" variable_1="phi_1"/>
+    <map_variables variable_2="phi_2" variable_1="phi_2"/>
+    <map_variables variable_2="phi_2_" variable_1="phi_2_"/>
+    <map_variables variable_2="k_1_" variable_1="k_1_"/>
+    <map_variables variable_2="l_2_" variable_1="l_2_"/>
+  </connection>  
+  
+  <connection>
+    <map_components component_2="IPR_parameters" component_1="O"/>
+    <map_variables variable_2="phi_4" variable_1="phi_4"/>
+    <map_variables variable_2="phi_4_" variable_1="phi_4_"/>
+    <map_variables variable_2="phi_2" variable_1="phi_2"/>
+    <map_variables variable_2="phi_2_" variable_1="phi_2_"/>
+    <map_variables variable_2="phi_3" variable_1="phi_3"/>
+    <map_variables variable_2="k_3_" variable_1="k_3_"/>
+  </connection> 
+  
+  <connection>
+    <map_components component_2="IPR_parameters" component_1="A"/>
+    <map_variables variable_2="phi_4" variable_1="phi_4"/>
+    <map_variables variable_2="phi_5" variable_1="phi_5"/>
+    <map_variables variable_2="phi_4_" variable_1="phi_4_"/>
+    <map_variables variable_2="k_1_" variable_1="k_1_"/>
+    <map_variables variable_2="l_2_" variable_1="l_2_"/>
+  </connection> 
+  
+  <connection>
+    <map_components component_2="IPR_parameters" component_1="I_1"/>
+    <map_variables variable_2="phi_1" variable_1="phi_1"/>
+    <map_variables variable_2="k_1_" variable_1="k_1_"/>
+    <map_variables variable_2="l_2_" variable_1="l_2_"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="IPR_parameters" component_1="I_2"/>
+    <map_variables variable_2="phi_5" variable_1="phi_5"/>
+    <map_variables variable_2="k_1_" variable_1="k_1_"/>
+    <map_variables variable_2="l_2_" variable_1="l_2_"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="IPR_parameters" component_1="S"/>
+    <map_variables variable_2="phi_3" variable_1="phi_3"/>
+    <map_variables variable_2="k_3_" variable_1="k_3_"/>
+  </connection>  
+  
+  <connection>
+    <map_components component_2="O" component_1="R"/>
+    <map_variables variable_2="R" variable_1="R"/>
+    <map_variables variable_2="O" variable_1="O"/>
+  </connection> 
+  
+  <connection>
+    <map_components component_2="I_1" component_1="R"/>
+    <map_variables variable_2="R" variable_1="R"/>
+    <map_variables variable_2="I_1" variable_1="I_1"/>
+  </connection> 
+  
+  <connection>
+    <map_components component_2="A" component_1="O"/>
+    <map_variables variable_2="A" variable_1="A"/>
+    <map_variables variable_2="O" variable_1="O"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="S" component_1="O"/>
+    <map_variables variable_2="S" variable_1="S"/>
+    <map_variables variable_2="O" variable_1="O"/>
+  </connection> 
+  
+  <connection>
+    <map_components component_2="I_2" component_1="A"/>
+    <map_variables variable_2="A" variable_1="A"/>
+    <map_variables variable_2="I_2" variable_1="I_2"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="J_IPR" component_1="A"/>
+    <map_variables variable_2="A" variable_1="A"/>
+  </connection> 
+  
+  <connection>
+    <map_components component_2="J_IPR" component_1="O"/>
+    <map_variables variable_2="O" variable_1="O"/>
+  </connection> 
+  
+  <connection>
+    <map_components component_2="R" component_1="p"/>
+    <map_variables variable_2="p" variable_1="p"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="O" component_1="p"/>
+    <map_variables variable_2="p" variable_1="p"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="J_in" component_1="p"/>
+    <map_variables variable_2="p" variable_1="p"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="J_pm" component_1="c"/>
+    <map_variables variable_2="c" variable_1="c"/>
+    <map_variables variable_2="J_pm" variable_1="J_pm"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="J_pm" component_1="ce"/>
+    <map_variables variable_2="ce" variable_1="ce"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="J_in" component_1="c"/>
+    <map_variables variable_2="J_in" variable_1="J_in"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="J_serca" component_1="c"/>
+    <map_variables variable_2="c" variable_1="c"/>
+    <map_variables variable_2="J_serca" variable_1="J_serca"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="J_serca" component_1="ce"/>
+    <map_variables variable_2="ce" variable_1="ce"/>
+    <map_variables variable_2="J_serca" variable_1="J_serca"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="IPR_parameters" component_1="c"/>
+    <map_variables variable_2="c" variable_1="c"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="J_IPR" component_1="c"/>
+    <map_variables variable_2="J_IPR" variable_1="J_IPR"/>
+    <map_variables variable_2="c" variable_1="c"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="J_IPR" component_1="ce"/>
+    <map_variables variable_2="J_IPR" variable_1="J_IPR"/>
+    <map_variables variable_2="ce" variable_1="ce"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="IPR_parameters" component_1="p"/>
+    <map_variables variable_2="p" variable_1="p"/>
+  </connection>
+  
+
+
+<rdf:RDF>
+  <rdf:Bag rdf:about="rdf:#dc7eb214-f6a5-4f05-88ec-a559b5e2c657">
+    <rdf:li>calcium dynamics</rdf:li>
+    <rdf:li>oscillator</rdf:li>
+    <rdf:li>IP3 receptor</rdf:li>
+  </rdf:Bag>
+  <rdf:Seq rdf:about="rdf:#0004c0a9-c0ce-4e37-9af3-03cc75cff634">
+    <rdf:li rdf:resource="rdf:#f19751c3-e58e-4982-a3e1-12be67be34da"/>
+    <rdf:li rdf:resource="rdf:#73d44c0b-68e6-492e-b2be-38b266997331"/>
+    <rdf:li rdf:resource="rdf:#66a062d2-7714-4a2f-b111-8255b0add746"/>
+    <rdf:li rdf:resource="rdf:#413cdb9b-e6c5-46d9-a7bd-259ccdea1f8a"/>
+    <rdf:li rdf:resource="rdf:#276ec774-cc69-45bb-8545-617571270077"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="#R">
+    <dcterms:alternative>receptor</dcterms:alternative>
+    <dc:title>R</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="#S">
+    <dcterms:alternative>shut state</dcterms:alternative>
+    <dc:title>S</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="#J_pm">
+    <dcterms:alternative>calcium extrusion across the plasma membrane</dcterms:alternative>
+    <dc:title>J_pm</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#c3b48ff7-e032-4db8-929b-ad3cd9b78da3">
+    <bqs:Pubmed_id>14734814</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#930b2d86-0a69-4b7d-a9a9-d92d51adf5be"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#930b2d86-0a69-4b7d-a9a9-d92d51adf5be">
+    <dc:creator rdf:resource="rdf:#0004c0a9-c0ce-4e37-9af3-03cc75cff634"/>
+    <dc:title>
+            Control of calcium oscillations by membrane fluxes
+          </dc:title>
+    <bqs:volume>101</bqs:volume>
+    <bqs:first_page>1392</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#4be5d538-cb29-4474-8697-7a9abbcf9631"/>
+    <dcterms:issued rdf:resource="rdf:#77c31d30-e8c0-40af-8101-a093493e5130"/>
+    <bqs:last_page>1396</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#676900c7-c211-4e93-8d43-87fa9499322d">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7e286fb6-e5db-4cb3-b5c7-b36c6d5c15ae">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value rdf:resource="rdf:#dc7eb214-f6a5-4f05-88ec-a559b5e2c657"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#A">
+    <dcterms:alternative>active state</dcterms:alternative>
+    <dc:title>A</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="#O">
+    <dcterms:alternative>open state</dcterms:alternative>
+    <dc:title>O</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#97968ceb-fb9a-4be2-814e-624c2e3fdce9">
+    <vCard:FN>Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="#p">
+    <dcterms:alternative>IP3 concentration</dcterms:alternative>
+    <dc:title>p</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#77c31d30-e8c0-40af-8101-a093493e5130">
+    <dcterms:W3CDTF>2004-02-03</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#413cdb9b-e6c5-46d9-a7bd-259ccdea1f8a">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#9a24bfae-fe89-4d28-99ef-4fd17490a46b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f19751c3-e58e-4982-a3e1-12be67be34da">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#14a150f2-45d5-41ba-a601-e387f4c9d689"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#J_IPR">
+    <dcterms:alternative>calcium release through the IPR</dcterms:alternative>
+    <dc:title>J_IPR</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0b7a1e82-57ca-4d4a-a186-13e41b9ed086">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="#c">
+    <dcterms:alternative>cytosolic calcium</dcterms:alternative>
+    <dc:title>c</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="#J_serca">
+    <dcterms:alternative>calcium pumping into the ER</dcterms:alternative>
+    <dc:title>J_serca</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#66a062d2-7714-4a2f-b111-8255b0add746">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#f1c52279-5d28-42a1-ba00-92aef4d8b737"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9a24bfae-fe89-4d28-99ef-4fd17490a46b">
+    <vCard:Given>J</vCard:Given>
+    <vCard:Family>Thompson</vCard:Family>
+    <vCard:Other>L</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="#I_1">
+    <dcterms:alternative>inactive state 1</dcterms:alternative>
+    <dc:title>I_1</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#011c9a46-cfcf-416e-a39d-745217a7b606">
+    <dcterms:W3CDTF>2004-06-13</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="#ce">
+    <dcterms:alternative>ER calcium</dcterms:alternative>
+    <dc:title>ce</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#276ec774-cc69-45bb-8545-617571270077">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#c7990d8c-a057-400d-b99e-5bda25ca57fd"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#I_2">
+    <dcterms:alternative>inactive state 2</dcterms:alternative>
+    <dc:title>I_2</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="#J_in">
+    <dcterms:alternative>calcium entry</dcterms:alternative>
+    <dc:title>J_in</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#32e396fd-2b9f-43f0-8c23-a84985b6281f">
+    <dc:subject rdf:resource="rdf:#7e286fb6-e5db-4cb3-b5c7-b36c6d5c15ae"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e166ba1a-183f-4468-bef8-7a1b588fb6c8">
+    <vCard:ORG rdf:resource="rdf:#676900c7-c211-4e93-8d43-87fa9499322d"/>
+    <vCard:EMAIL rdf:resource="rdf:#0bf46b3b-d786-4ac6-9709-8c02040a4019"/>
+    <vCard:N rdf:resource="rdf:#0b7a1e82-57ca-4d4a-a186-13e41b9ed086"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#68d34082-c84a-4a93-ab33-49b8c65f9009">
+    <vCard:Given>K</vCard:Given>
+    <vCard:Family>Tsaneva-Atanasova</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:publisher>
+        Auckland Bioengineering Institute, The University of Auckland
+      </dc:publisher>
+    <dc:creator rdf:resource="rdf:#e166ba1a-183f-4468-bef8-7a1b588fb6c8"/>
+    <dc:title>
+        Sneyd et al.'s 2004 mathematical model for Ca2+ oscillations and their control by membrane fluxes.
+      </dc:title>
+    <dcterms:created rdf:resource="rdf:#011c9a46-cfcf-416e-a39d-745217a7b606"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#sneyd_2004">
+    <bqs:reference rdf:resource="rdf:#32e396fd-2b9f-43f0-8c23-a84985b6281f"/>
+    <bqs:reference rdf:resource="rdf:#c3b48ff7-e032-4db8-929b-ad3cd9b78da3"/>
+    <cmeta:comment rdf:resource="rdf:#d5b60e26-66f7-4237-88b5-74146491861c"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#c7990d8c-a057-400d-b99e-5bda25ca57fd">
+    <vCard:Given>T</vCard:Given>
+    <vCard:Family>Shuttleworth</vCard:Family>
+    <vCard:Other>J</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f1c52279-5d28-42a1-ba00-92aef4d8b737">
+    <vCard:Given>D</vCard:Given>
+    <vCard:Family>Yule</vCard:Family>
+    <vCard:Other>I</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0bf46b3b-d786-4ac6-9709-8c02040a4019">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#14a150f2-45d5-41ba-a601-e387f4c9d689">
+    <vCard:Given>James</vCard:Given>
+    <vCard:Family>Sneyd</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#73d44c0b-68e6-492e-b2be-38b266997331">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#68d34082-c84a-4a93-ab33-49b8c65f9009"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d5b60e26-66f7-4237-88b5-74146491861c">
+    <dc:creator rdf:resource="rdf:#97968ceb-fb9a-4be2-814e-624c2e3fdce9"/>
+    <rdf:value>
+          This is the CellML description of Sneyd et al.'s 2004 mathematical model for Ca2+ oscillations and their control by membrane fluxes.
+        </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4be5d538-cb29-4474-8697-7a9abbcf9631">
+    <dc:title>PNAS</dc:title>
+  </rdf:Description>
+</rdf:RDF>
+</model>

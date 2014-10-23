@@ -1,0 +1,1118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<model 
+	name="non_muscle_autoregulatory_local_blood_flow_control_CellML1_0_model"
+	cmeta:id="non_muscle_autoregulatory_local_blood_flow_control_CellML1_0_model"
+	
+	xmlns="http://www.cellml.org/cellml/1.0#"
+	xmlns:cellml="http://www.cellml.org/cellml/1.0#"
+	xmlns:cmeta="http://www.cellml.org/metadata/1.0#"
+	xmlns:xlink="http://www.w3.org/1999/xlink">
+
+<!-- ========================================================	DOCUMENTATION		======================================================== -->
+
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Guyton Model: non_muscle_autoregulatory_local_blood_flow_control</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Auckland Bioengineering Institute, University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+        This CellML model has been validated. Due to the differences between procedural code (in this case C-code) and declarative 
+		languages (CellML), some aspects of the original model were not able to be encapsulated by the CellML model (such as the 
+		damping of variables). This may effect the transient behaviour of the model, however the steady-state behaviour would remain
+		the same. The equations in this file and the steady-state output from the model conform to the results from the MODSIM program.
+	</para>
+  </section>
+  <sect1 id="sec_structure">
+  <title>Model Structure</title>
+
+<para>
+Arthur Guyton (1919-2003) was an American physiologist who became famous for his 1950s experiments in which he studied the physiology 
+of cardiac output and its relationship with the peripheral circulation.  The results of these experiments challenged the conventional 
+wisdom that it was the heart itself that controlled cardiac output.  Instead Guyton demonstrated that it was the need of the body 
+tissues for oxygen which was the real regulator of cardiac output.  The "Guyton Curves" describe the relationship between right atrial 
+pressures and cardiac output, and they form a foundation for understanding the physiology of circulation. 
+</para>
+
+<para>
+The Guyton model of fluid, electrolyte, and circulatory regulation is an extensive mathematical model of human circulatory physiology, 
+capable of simulating a variety of experimental conditions, and contains a number of linked subsystems relating to circulation and its 
+neuroendocrine control.
+</para>
+
+<para>
+This is a CellML translation of the Guyton model of the regulation of the circulatory system.  The complete model consists of separate 
+modules each of which characterise a separate physiological subsystems.  The Circulation Dynamics is the primary system, to which other 
+modules/blocks are connected.  The other modules characterise the dynamics of the kidney, electrolytes and cell water, thirst and 
+drinking, hormone regulation, autonomic regulation, cardiovascular system etc, and these feedback on the central circulation model.  
+The CellML code in these modules is based on the C code from the programme C-MODSIM created by Dr Jean-Pierre Montani.
+</para>
+
+<para>
+The circulatory system is divided into three separate parts for blood flow control:(1) the kidneys which are presented in an entirely 
+separate CellML model; (2) non-muscle local blood flow control; and (3) muscle local blood flow control.  This particular CellML model 
+describes non-muscle autoregulatory local blood flow control.  This portion of the circulation has three separate parallel autoregulatory 
+processes, one of which occurs in a matter of minutes, another over a period of tens of minutes, and a third over a period of weeks.  
+All of these are considered to respond to changes in tissue oxygen level.  The first two are rapid metabolic feedback effects, one almost 
+instantaneous and the other occurring over a period of tens of minutes to an hour or so.  The third is considered to be structural changes 
+that result over a period of weeks and may be a consequence of the vasodilation or vasoconstriction that occurs during the two short-term 
+metabolic stages.
+</para>
+
+<informalfigure float="0" id="full_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>model diagram</title>
+    </objectinfo>
+    <imagedata fileref="full_model.png"/>
+  </imageobject>
+</mediaobject>
+<caption>A systems analysis diagram for the full Guyton model describing circulation regulation.</caption>
+</informalfigure>
+
+
+<informalfigure float="0" id="non_muscle_autoregulatory_local_blood_flow_control_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>model diagram</title>
+    </objectinfo>
+    <imagedata fileref="nm_blood_flow.png"/>
+  </imageobject>
+</mediaobject>
+<caption>A schematic diagram of the components and processes described in the current CellML model.</caption>
+</informalfigure>
+
+<para>
+There are several publications referring to the Guyton model. One of these papers is cited below:
+</para>
+
+<para>
+Circulation: Overall Regulation,  A.C. Guyton, T.G. Coleman, and H.J. Granger, 1972, 
+            <emphasis>Annual Review of Physiology</emphasis>
+          , 34, 13-44.  <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pubmed&amp;cmd=Retrieve&amp;dopt=AbstractPlus&amp;list_uids=4334846&amp;query_hl=1&amp;itool=pubmed_docsum">PubMed ID: 4334846</ulink>
+</para>
+
+</sect1>
+</article>
+</documentation> 
+
+<!-- =======================================================    CITATION AND KEYWORD METADATA    ================================================== -->
+
+	<rdf:RDF
+			xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+			xmlns:bqs="http://www.cellml.org/bqs/1.0#"
+			xmlns:dc="http://purl.org/dc/elements/1.1/"
+			xmlns:dcterms="http://purl.org/dc/terms/"
+			xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
+		<rdf:Description rdf:about="#non_muscle_autoregulatory_local_blood_flow_control_CellML1_0_model">
+			<bqs:reference rdf:parseType="Resource">
+				<bqs:JournalArticle rdf:parseType="Resource">
+					<dc:creator>
+						<rdf:Seq>
+							<rdf:li rdf:parseType="Resource">
+								<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person" />
+								<vCard:N rdf:parseType="Resource">
+									<vCard:Family>Guyton</vCard:Family>
+									<vCard:Given></vCard:Given>
+									<vCard:Other></vCard:Other>
+								</vCard:N>
+							</rdf:li>
+							<rdf:li rdf:parseType="Resource">
+								<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person" />
+								<vCard:N rdf:parseType="Resource">
+									<vCard:Family>Non-Muscle Blood Flow</vCard:Family>
+									<vCard:Given></vCard:Given>
+									<vCard:Other></vCard:Other>
+								</vCard:N>
+							</rdf:li>
+
+						</rdf:Seq>
+					</dc:creator>
+					<dc:title>Description of Guyton non-muscle local blood flow control module</dc:title>
+					<bqs:volume />
+					<bqs:first_page />
+					<bqs:last_page />
+					<bqs:Journal rdf:parseType="Resource">
+						<dc:title></dc:title>
+					</bqs:Journal>
+					<dcterms:issued rdf:parseType="Resource">
+						<dcterms:W3CDTF>2008-00-00 00:00</dcterms:W3CDTF>
+					</dcterms:issued>
+				</bqs:JournalArticle>
+			</bqs:reference>
+			<bqs:reference rdf:parseType="Resource">
+				<dc:subject rdf:parseType="Resource">
+					<bqs:subject_type>keyword</bqs:subject_type>
+					<rdf:value>
+					<rdf:Bag>
+						<rdf:li>physiology</rdf:li>
+						<rdf:li>organ systems</rdf:li>
+						<rdf:li>cardiovascular circulation</rdf:li>
+						<rdf:li>non-muscle blood flow</rdf:li>
+						<rdf:li>Guyton</rdf:li>
+					</rdf:Bag>
+					</rdf:value>
+				</dc:subject>
+			</bqs:reference>
+		</rdf:Description>
+	</rdf:RDF>
+
+  
+  
+<!-- ======================================================= 		UNITS		================================================== -->
+
+   <units name="minute">
+      <unit multiplier="60" units="second"/>
+   </units>
+   <units name="per_minute">
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units name="mmHg">
+      <unit multiplier="133.322" units="newton"/>
+      <unit units="metre" exponent="-2"/>
+   </units>
+   <units name="per_mmHg">
+      <unit units="mmHg" exponent="-1"/>
+   </units>
+   <units name="mmHg_per_mL">
+      <unit units="mmHg"/>
+      <unit units="mL" exponent="-1"/>
+   </units>
+   <units name="per_mmHg2">
+      <unit units="mmHg" exponent="-2"/>
+   </units>
+   <units name="mmHg3">
+      <unit units="mmHg" exponent="3"/>
+   </units>
+   <units name="monovalent_mEq">
+      <unit units="mole" prefix="milli"/>
+   </units>
+   <units name="monovalent_mEq_per_minute">
+      <unit units="mole" prefix="milli"/>
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units name="monovalent_mEq_per_litre">
+      <unit units="mole" prefix="milli"/>
+      <unit units="litre" exponent="-1"/>
+   </units>
+   <units name="monovalent_mEq_per_litre_per_minute">
+      <unit units="mole" prefix="milli"/>
+      <unit units="litre" exponent="-1"/>
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units name="litre2_per_monovalent_mEq_per_minute">
+      <unit units="litre" exponent="2"/>
+      <unit units="mole" prefix="milli" exponent="-1"/>
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units name="L_per_minute">
+      <unit units="litre"/>
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units name="mL">
+      <unit units="litre" prefix="milli"/>
+   </units>
+   <units name="mL_per_L">
+      <unit units="litre" prefix="milli"/>
+      <unit units="litre" exponent="-1"/>
+   </units>
+   <units name="mL_per_L_per_mmHg">
+      <unit units="litre" prefix="milli"/>
+      <unit units="litre" exponent="-1"/>
+      <unit units="mmHg" exponent="-1"/>
+   </units>
+   <units name="mL_per_L_per_minute">
+      <unit units="litre" prefix="milli"/>
+      <unit units="litre" exponent="-1"/>
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units name="mL_per_minute_per_mmHg">
+      <unit units="litre" prefix="milli"/>
+      <unit units="minute" exponent="-1"/>
+      <unit units="mmHg" exponent="-1"/>
+   </units>
+   <units name="L_mL_per_minute_per_mmHg">
+      <unit units="litre"/>
+      <unit units="litre" prefix="milli"/>
+      <unit units="minute" exponent="-1"/>
+      <unit units="mmHg" exponent="-1"/>
+   </units>
+   <units name="L_per_mL">
+      <unit units="litre" prefix="milli" exponent="-1"/>
+      <unit units="litre"/>
+   </units>
+   <units name="mL_per_minute">
+      <unit units="mL"/>
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units name="L_per_minute_per_mmHg">
+      <unit units="litre"/>
+      <unit units="minute" exponent="-1"/>
+      <unit units="mmHg" exponent="-1"/>
+   </units>
+
+
+<!-- ======================================================================================================================================================== -->
+
+	
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#non_muscle_autoregulatory_local_blood_flow_control_CellML1_0_model">
+			<rdf:value>
+				The circulatory system is divided into three separate parts for blood flow control:  
+				(1) the kidneys which are presented in an entirely separate section of this model; 
+				(2) non-muscle local blood flow control; and (3) muscle local blood flow control.
+
+				Non-muscle Autoregulatory Local Blood Flow Control
+				This portion of the circulation has three separate parallel autoregulatory processes, 
+				one of which occurs in a matter of minutes, another over a period of tens of minutes, 
+				and a third over a period of weeks.  All of these are considered to respond to changes 
+				in tissue oxygen level.  The first two are rapid metabolic feedback effects, one almost 
+				instantaneous and the other occurring over a period of tens of minutes to an hour or so.  
+				The third is considered to be structural changes that result over a period of weeks and 
+				may be a consequence of the vasodilation or vasoconstriction that occurs during the two 
+				short-term metabolic stages.
+			</rdf:value>
+		</rdf:Description>
+	</rdf:RDF>
+
+<!-- ========================================	ENVIRONMENT COMPONENT	============================================= -->
+   <component name="environment">
+      <variable	cmeta:id="environment_time"
+				name="time" units="minute" private_interface="none" public_interface="out"/>
+   </component>
+
+
+<!-- ========================================	NON-MUSCLE AUTOREGULATORY LOCAL BLOOD FLOW CONTROL TOP-LEVEL COMPONENT	============================================= -->
+	<component 	name="non_muscle_autoregulatory_local_blood_flow_control" 
+				cmeta:id="non_muscle_autoregulatory_local_blood_flow_control">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#non_muscle_autoregulatory_local_blood_flow_control">
+				<rdf:value>
+				Encapsulation grouping component containing all the components in the Non-Muscle Autoregulatory Local Blood 
+				Flow Control Model. The inputs and outputs of the Non-Muscle Autoregulatory Local Blood Flow Control Model 
+				must be passed by this component.
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+
+		<variable name="time"	units="minute"	private_interface="out" public_interface="in"/>
+
+<!-- Inputs from components in other models -->
+		<variable name="POT"	initial_value="35.1148"	units="mmHg" private_interface="out" public_interface="none"/>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="non_muscle_autoregulatory_local_blood_flow_control" component_2="environment"/>
+		<map_variables variable_1="time" variable_2="time"/>
+	</connection>
+
+<!-- ========================================	AUTOREGULATORY DRIVING FORCE	============================================= -->
+	<component 	name="NM_autoregulatory_driving_force" 
+				cmeta:id="NM_autoregulatory_driving_force">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#NM_autoregulatory_driving_force">
+				<rdf:value>
+				ARN1:  
+				The driving force that causes an autoregulatory response in non-muscle 
+				tissues (POD) is equal to the pressure of the oxygen in tissues (POT) minus 
+				the set-point for the autoregulatory response (POR).
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#ARN1">
+				<rdf:value>
+				ARN1:  
+				The driving force that causes an autoregulatory response in non-muscle 
+				tissues (POD) is equal to the pressure of the oxygen in tissues (POT) minus 
+				the set-point for the autoregulatory response (POR).
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="POT"	units="mmHg" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable name="POD" 	units="mmHg" private_interface="none" public_interface="out"/>
+
+<!-- Parameters from parameter_file -->
+		<variable name="POR"	units="mmHg" private_interface="none" public_interface="in"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="ARN1">
+				<eq/>
+				<ci>POD</ci>
+				<apply>
+					<minus/>
+					<ci>POT</ci>
+					<ci>POR</ci>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="NM_autoregulatory_driving_force" component_2="non_muscle_autoregulatory_local_blood_flow_control"/>
+		<map_variables variable_1="POT" variable_2="POT"/>
+	</connection>
+
+<!-- PARAMETER CONNECTIONS -->
+	<connection>
+		<map_components component_1="NM_autoregulatory_driving_force" component_2="parameter_values"/>
+		<map_variables variable_1="POR" variable_2="POR"/>
+	</connection>
+
+<!-- ========================================	NON-MUSCLE SHORT-TERM AUTOREGULATION		============================================= -->
+	<component 	name="NM_short_term_autoregulation" 
+				cmeta:id="NM_short_term_autoregulation">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#NM_short_term_autoregulation">
+				<rdf:value>
+				Containment grouping component for "ST_sensitivity_control" and 
+				"ST_time_delay_and_damping".
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+	</component>
+	
+<!-- ========================================	NON-MUSCLE SHORT_TERM SENSITIVITY CONTROL	============================================= -->
+	<component 	name="NM_ST_sensitivity_control" 
+				cmeta:id="NM_ST_sensitivity_control">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#NM_ST_sensitivity_control">
+				<rdf:value>
+				ARN2 and ARN3:  
+				Sensitivity control for short-term autoregulation, with the sensitivity 
+				controlled by the variable POK and the output of these two blocks equal 
+				to the variable POB.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#ARN2_and_ARN3">
+				<rdf:value>
+				ARN2 and ARN3:  
+				Sensitivity control for short-term autoregulation, with the sensitivity 
+				controlled by the variable POK and the output of these two blocks equal 
+				to the variable POB.
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="POD"	units="mmHg" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable name="POB" 	units="mmHg" private_interface="none" public_interface="out"/>
+
+<!-- Parameters from parameter_file -->
+		<variable name="POK"	units="dimensionless" private_interface="none" public_interface="in"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="ARN2_and_ARN3">
+				<eq/>
+				<ci>POB</ci>
+				<apply>
+					<plus/>
+					<apply>
+						<times/>
+						<ci>POD</ci>
+						<ci>POK</ci>
+					</apply>
+					<cn cellml:units="mmHg">1</cn>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="NM_ST_sensitivity_control" component_2="NM_autoregulatory_driving_force"/>
+		<map_variables variable_1="POD" variable_2="POD"/>
+	</connection>
+
+<!-- PARAMETER CONNECTIONS -->
+	<connection>
+		<map_components component_1="NM_ST_sensitivity_control" component_2="parameter_values"/>
+		<map_variables variable_1="POK" variable_2="POK"/>
+	</connection>
+
+<!-- ========================================	NON-MUSCLE SHORT-TERM TIME-DELAY AND DAMPING	============================================= -->
+	<component 	name="NM_ST_time_delay_and_damping" 
+				cmeta:id="NM_ST_time_delay_and_damping">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#NM_ST_time_delay_and_damping">
+				<rdf:value>
+				ARN5, ARN6, and ARN7:  
+				An integrative time delay system which allows the output from Block ARN7 (AR1) 
+				to approach the value POB with a time constant of (A1K).
+
+				ARN7A:  
+				Damping of output from Block ARN7 to prevent oscillation when the iteration 
+				interval for computer solution of the model is long.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#ARN5_to_ARN7">
+				<rdf:value>
+				ARN5, ARN6, and ARN7:  
+				An integrative time delay system which allows the output from Block ARN7 (AR1) 
+				to approach the value POB with a time constant of (A1K).
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#ARN7A">
+				<rdf:value>
+				ARN7A:  
+				Damping of output from Block ARN7 to prevent oscillation when the iteration 
+				interval for computer solution of the model is long.
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="POB"	units="mmHg" private_interface="none" public_interface="in"/>
+		<variable name="time"	units="minute" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable	cmeta:id="NM_ST_time_delay_and_damping_AR1"
+					name="AR1" 	units="dimensionless" private_interface="none" public_interface="out"/>
+
+<!-- Parameters from parameter_file -->
+		<variable name="A1K"	units="minute" private_interface="none" public_interface="in"/>
+
+<!-- Internal variables -->
+		<variable name="AR1T"	initial_value="1.02127"	units="dimensionless" private_interface="none" public_interface="none"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="ARN5_to_ARN7">
+				<eq/>
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>AR1T</ci>
+				</apply>
+				<apply>
+					<divide/>
+					<apply>
+						<minus/>
+						<apply>
+							<times/>
+							<ci>POB</ci>
+							<cn cellml:units="per_mmHg">1</cn>
+						</apply>	
+						<ci>AR1T</ci>
+					</apply>
+					<ci>A1K</ci>
+				</apply>
+			</apply>
+			<apply id="ARN7A">
+				<eq/>
+				<ci>AR1</ci>
+				<piecewise>
+					<piece>
+						<cn cellml:units="dimensionless">0.5</cn>
+						<apply>
+							<lt/>
+							<ci>AR1T</ci>
+							<cn cellml:units="dimensionless">0.5</cn>
+						</apply>
+					</piece>
+					<otherwise>
+						<ci>AR1T</ci>
+					</otherwise>
+				</piecewise>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="NM_ST_time_delay_and_damping" component_2="NM_ST_sensitivity_control"/>
+		<map_variables variable_1="POB" variable_2="POB"/>
+	</connection>
+	<connection>
+		<map_components component_1="NM_ST_time_delay_and_damping" component_2="non_muscle_autoregulatory_local_blood_flow_control"/>
+		<map_variables variable_1="time" variable_2="time"/>
+	</connection>
+
+<!-- PARAMETER CONNECTIONS -->
+	<connection>
+		<map_components component_1="NM_ST_time_delay_and_damping" component_2="parameter_values"/>
+		<map_variables variable_1="A1K" variable_2="A1K"/>
+	</connection>
+
+<!-- ========================================	NON-MUSCLE INTERMEDIATE AUTOREGULATION		============================================= -->
+	<component 	name="NM_intermediate_autoregulation" 
+				cmeta:id="NM_intermediate_autoregulation">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#NM_intermediate_autoregulation">
+				<rdf:value>
+				Containment grouping component for "NM_I_sensitivity_control" and 
+				"NM_I_time_delay_and_limit".
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+	</component>
+	
+<!-- ========================================	NON-MUSCLE INTERMEDIATE SENSITIVITY CONTROL	============================================= -->
+	<component 	name="NM_I_sensitivity_control" 
+				cmeta:id="NM_I_sensitivity_control">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#NM_I_sensitivity_control">
+				<rdf:value>
+				ARN8 and ARN9:  
+				Sensitivity control for the intermediate time autoregulation controlled by 
+				variable (PON).  The input is POD, and the output is POA.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#ARN8_and_ARN9">
+				<rdf:value>
+				ARN8 and ARN9:  
+				Sensitivity control for the intermediate time autoregulation controlled by 
+				variable (PON).  The input is POD, and the output is POA.
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="POD"	units="mmHg" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable name="POA" 	units="mmHg" private_interface="none" public_interface="out"/>
+
+<!-- Parameters from parameter_file -->
+		<variable name="PON"	units="dimensionless" private_interface="none" public_interface="in"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="ARN8_and_ARN9">
+				<eq/>
+				<ci>POA</ci>
+				<apply>
+					<plus/>
+					<apply>
+						<times/>
+						<ci>PON</ci>
+						<ci>POD</ci>
+					</apply>
+					<cn cellml:units="mmHg">1</cn>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="NM_I_sensitivity_control" component_2="NM_autoregulatory_driving_force"/>
+		<map_variables variable_1="POD" variable_2="POD"/>
+	</connection>
+
+<!-- PARAMETER CONNECTIONS -->
+	<connection>
+		<map_components component_1="NM_I_sensitivity_control" component_2="parameter_values"/>
+		<map_variables variable_1="PON" variable_2="PON"/>
+	</connection>
+
+<!-- ========================================	NON-MUSCLE INTERMEDIATE TIME-DELAY AND LIMIT	============================================= -->
+	<component 	name="NM_I_time_delay_and_limit" 
+				cmeta:id="NM_I_time_delay_and_limit">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#NM_I_time_delay_and_limit">
+				<rdf:value>
+				ARN11, ARN12, and ARN13:  
+				A time delay mechanism for the intermediate autoregulation which allows the 
+				output of Block ARN13 (AR2) to approach (POA) with a time constant of A2K.
+
+				ARN13A:  
+				This sets a lower limit for AR2.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#ARN11_to_ARN13">
+				<rdf:value>
+				ARN11, ARN12, and ARN13:  
+				A time delay mechanism for the intermediate autoregulation which allows the 
+				output of Block ARN13 (AR2) to approach (POA) with a time constant of A2K.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#ARN13A">
+				<rdf:value>
+				ARN13A:  
+				This sets a lower limit for AR2.
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="POA"	units="mmHg" private_interface="none" public_interface="in"/>
+		<variable name="time"	units="minute" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable	cmeta:id="NM_I_time_delay_and_limit_AR2"
+					name="AR2" 	units="dimensionless" private_interface="none" public_interface="out"/>
+
+<!-- Parameters from parameter_file -->
+		<variable name="A2K"	units="minute" private_interface="none" public_interface="in"/>
+
+<!-- Internal variables -->
+		<variable name="AR2T"	initial_value="1.01179"	units="dimensionless" private_interface="none" public_interface="none"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="ARN11_to_ARN13">
+				<eq/>
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>AR2T</ci>
+				</apply>
+				<apply>
+					<divide/>
+					<apply>
+						<minus/>
+						<apply>
+							<times/>
+							<ci>POA</ci>
+							<cn cellml:units="per_mmHg">1</cn>
+						</apply>	
+						<ci>AR2T</ci>
+					</apply>
+					<ci>A2K</ci>
+				</apply>
+			</apply>
+			<apply id="ARN13A">
+				<eq/>
+				<ci>AR2</ci>
+				<piecewise>
+					<piece>
+						<cn cellml:units="dimensionless">0.5</cn>
+						<apply>
+							<lt/>
+							<ci>AR2T</ci>
+							<cn cellml:units="dimensionless">0.5</cn>
+						</apply>
+					</piece>
+					<otherwise>
+						<ci>AR2T</ci>
+					</otherwise>
+				</piecewise>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="NM_I_time_delay_and_limit" component_2="NM_I_sensitivity_control"/>
+		<map_variables variable_1="POA" variable_2="POA"/>
+	</connection>
+	<connection>
+		<map_components component_1="NM_I_time_delay_and_limit" component_2="non_muscle_autoregulatory_local_blood_flow_control"/>
+		<map_variables variable_1="time" variable_2="time"/>
+	</connection>
+
+<!-- PARAMETER CONNECTIONS -->
+	<connection>
+		<map_components component_1="NM_I_time_delay_and_limit" component_2="parameter_values"/>
+		<map_variables variable_1="A2K" variable_2="A2K"/>
+	</connection>
+
+<!-- ========================================	NON-MUSCLE LONG-TERM AUTOREGULATION	============================================= -->
+	<component 	name="NM_long_term_autoregulation" 
+				cmeta:id="NM_long_term_autoregulation">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#NM_long_term_autoregulation">
+				<rdf:value>
+				Containment grouping component for "NM_LT_sensitivity_control" and 
+				"NM_LT_time_delay_and_limit".`	
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+	</component>
+
+<!-- ========================================	NON-MUSCLE LONG-TERM SENSITIVITY CONTROL	============================================= -->
+	<component 	name="NM_LT_sensitivity_control" 
+				cmeta:id="NM_LT_sensitivity_control">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#NM_LT_sensitivity_control">
+				<rdf:value>
+				ARN14:  
+				Calculation of the relationship between the driving force for overall 
+				autoregulatory control (POD) and that for long-term autoregulatory control (POC).  
+				The sensitivity control is variable (POZ).
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#ARN14">
+				<rdf:value>
+				ARN14:  
+				Calculation of the relationship between the driving force for overall 
+				autoregulatory control (POD) and that for long-term autoregulatory control (POC).  
+				The sensitivity control is variable (POZ).
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="POD"	units="mmHg" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable name="POC" 	units="mmHg" private_interface="none" public_interface="out"/>
+
+<!-- Parameters from parameter_file -->
+		<variable name="POZ"	units="dimensionless" private_interface="none" public_interface="in"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="ARN14">
+				<eq/>
+				<ci>POC</ci>
+				<apply>
+					<plus/>
+					<apply>
+						<times/>
+						<ci>POZ</ci>
+						<ci>POD</ci>
+					</apply>
+					<cn cellml:units="mmHg">1</cn>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="NM_LT_sensitivity_control" component_2="NM_autoregulatory_driving_force"/>
+		<map_variables variable_1="POD" variable_2="POD"/>
+	</connection>
+
+<!-- PARAMETER CONNECTIONS -->
+	<connection>
+		<map_components component_1="NM_LT_sensitivity_control" component_2="parameter_values"/>
+		<map_variables variable_1="POZ" variable_2="POZ"/>
+	</connection>
+
+<!-- ========================================	NON-MUSCLE LONG-TERM TIME DELAY AND LOWER LIMIT	============================================= -->
+	<component 	name="NM_LT_time_delay_and_limit" 
+				cmeta:id="NM_LT_time_delay_and_limit">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#NM_LT_time_delay_and_limit">
+				<rdf:value>
+				ARN15, ARN16, and ARN17:  
+				Time delay system that allows the output of Block ARN17 (AR3) to approach POC 
+				with a time constant equal to the variable (A3K).
+
+				ARN17A:  
+				This sets the lower limit for AR3.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#ARN15_to_ARN17">
+				<rdf:value>
+				ARN15, ARN16, and ARN17:  
+				Time delay system that allows the output of Block ARN17 (AR3) to approach POC 
+				with a time constant equal to the variable (A3K).
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#ARN17A">
+				<rdf:value>
+				ARN17A:  
+				This sets the lower limit for AR3.
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="POC"	units="mmHg" private_interface="none" public_interface="in"/>
+		<variable name="time"	units="minute" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable	cmeta:id="NM_LT_time_delay_and_limit_AR3"
+					name="AR3" 	units="dimensionless" private_interface="none" public_interface="out"/>
+
+<!-- Parameters from parameter_file -->
+		<variable name="A3K"	units="minute" private_interface="none" public_interface="in"/>
+
+<!-- Internal variables -->
+		<variable name="AR3T"	initial_value="1.1448"	units="dimensionless" private_interface="none" public_interface="none"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="ARN15_to_ARN17">
+				<eq/>
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>AR3T</ci>
+				</apply>
+				<apply>
+					<divide/>
+					<apply>
+						<minus/>
+						<apply>
+							<times/>
+							<ci>POC</ci>
+							<cn cellml:units="per_mmHg">1</cn>
+						</apply>	
+						<ci>AR3T</ci>
+					</apply>
+					<ci>A3K</ci>
+				</apply>
+			</apply>
+			<apply id="ARN17A">
+				<eq/>
+				<ci>AR3</ci>
+				<piecewise>
+					<piece>
+						<cn cellml:units="dimensionless">0.3</cn>
+						<apply>
+							<lt/>
+							<ci>AR3T</ci>
+							<cn cellml:units="dimensionless">0.3</cn>
+						</apply>
+					</piece>
+					<otherwise>
+						<ci>AR3T</ci>
+					</otherwise>
+				</piecewise>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="NM_LT_time_delay_and_limit" component_2="NM_LT_sensitivity_control"/>
+		<map_variables variable_1="POC" variable_2="POC"/>
+	</connection>
+	<connection>
+		<map_components component_1="NM_LT_time_delay_and_limit" component_2="non_muscle_autoregulatory_local_blood_flow_control"/>
+		<map_variables variable_1="time" variable_2="time"/>
+	</connection>
+
+<!-- PARAMETER CONNECTIONS -->
+	<connection>
+		<map_components component_1="NM_LT_time_delay_and_limit" component_2="parameter_values"/>
+		<map_variables variable_1="A3K" variable_2="A3K"/>
+	</connection>
+
+<!-- ========================================	TOTAL NON-MUSCLE AUTOREGULATION	============================================= -->
+	<component 	name="total_NM_autoregulation" 
+				cmeta:id="total_NM_autoregulation">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#total_NM_autoregulation">
+				<rdf:value>
+				ARN18:  
+				Multiplication of the outputs of the three different autoregulation mechanisms 
+				by multiplying AR3, AR2, and AR1 times each other, giving a total output of the 
+				non-muscle autoregulatory system equal to the variable (ARM1).
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#ARN18">
+				<rdf:value>
+				ARN18:  
+				Multiplication of the outputs of the three different autoregulation mechanisms 
+				by multiplying AR3, AR2, and AR1 times each other, giving a total output of the 
+				non-muscle autoregulatory system equal to the variable (ARM1).
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="AR1"	units="dimensionless" private_interface="none" public_interface="in"/>
+		<variable name="AR2"	units="dimensionless" private_interface="none" public_interface="in"/>
+		<variable name="AR3"	units="dimensionless" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable name="ARM1" 	units="dimensionless" private_interface="none" public_interface="out"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="ARN18">
+				<eq/>
+				<ci>ARM1</ci>
+				<apply>
+					<times/>
+					<ci>AR1</ci>
+					<ci>AR2</ci>
+					<ci>AR3</ci>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="total_NM_autoregulation" component_2="NM_ST_time_delay_and_damping"/>
+		<map_variables variable_1="AR1" variable_2="AR1"/>
+	</connection>
+	<connection>
+		<map_components component_1="total_NM_autoregulation" component_2="NM_I_time_delay_and_limit"/>
+		<map_variables variable_1="AR2" variable_2="AR2"/>
+	</connection>
+	<connection>
+		<map_components component_1="total_NM_autoregulation" component_2="NM_LT_time_delay_and_limit"/>
+		<map_variables variable_1="AR3" variable_2="AR3"/>
+	</connection>
+
+<!-- ========================================	GLOBAL NON-MUSCLE BLOOD FLOW AUTOREGULATION OUTPUT	============================================= -->
+	<component 	name="global_NM_blood_flow_autoregulation_output" 
+				cmeta:id="global_NM_blood_flow_autoregulation_output">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#global_NM_blood_flow_autoregulation_output">
+				<rdf:value>
+				ARN19, ARN20, and ARN21:  
+				Sensitivity control for the total autoregulatory output for non-muscle, non-renal 
+				tissues.  The input is ARM1, the sensitivity control is AUTOSN, and the final output 
+				is a non-muscle autoregulatory multiplier factor (ARM) that controls non-muscle vascular 
+				resistance.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#ARN19_to_ARN21">
+				<rdf:value>
+				ARN19, ARN20, and ARN21:  
+				Sensitivity control for the total autoregulatory output for non-muscle, non-renal 
+				tissues.  The input is ARM1, the sensitivity control is AUTOSN, and the final output 
+				is a non-muscle autoregulatory multiplier factor (ARM) that controls non-muscle vascular 
+				resistance.
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="ARM1"	units="dimensionless" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable	cmeta:id="global_NM_blood_flow_autoregulation_output_ARM"
+					name="ARM" 	units="dimensionless" private_interface="none" public_interface="out"/>
+
+<!-- Parameters from parameter_file -->
+		<variable name="AUTOSN"	units="dimensionless" private_interface="none" public_interface="in"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="ARN19_to_ARN21">
+         		<eq/>
+				<ci>ARM</ci>
+				<apply>
+					<plus/>
+					<apply>
+						<times/>
+						<apply>
+							<minus/>
+							<ci>ARM1</ci>
+							<cn cellml:units="dimensionless">1</cn>
+						</apply>
+						<ci>AUTOSN</ci>
+					</apply>
+					<cn cellml:units="dimensionless">1</cn>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="global_NM_blood_flow_autoregulation_output" component_2="total_NM_autoregulation"/>
+		<map_variables variable_1="ARM1" variable_2="ARM1"/>
+	</connection>
+
+<!-- PARAMETER CONNECTIONS -->
+	<connection>
+		<map_components component_1="global_NM_blood_flow_autoregulation_output" component_2="parameter_values"/>
+		<map_variables variable_1="AUTOSN" variable_2="AUTOSN"/>
+	</connection>
+
+<!-- ==========================================================	PARAMETER VALUES	================================================================ -->
+	<component 	name="parameter_values"
+				cmeta:id="parameter_values">
+		<variable name="POR" 		units="mmHg" 	initial_value="35"				private_interface="none"	public_interface="out"/>	<!-- reference value of capillary PO2 in non-muscle tissue [P] -->
+		<variable name="POK" 		units="dimensionless" 	initial_value="0.1"		private_interface="none"	public_interface="out"/>	<!-- sensitivity control, rapid nonmuscle autoregulation [P] -->
+		<variable name="A1K" 		units="minute" 	initial_value="0.5"				private_interface="none"	public_interface="out"/>	<!-- time constant, rapid nonmuscle autoregulation [P] -->
+		<variable name="PON" 		units="dimensionless" 	initial_value="0.1"		private_interface="none"	public_interface="out"/>	<!-- sensitivity control, intermediate nonmuscle autoregulation [P] -->
+		<variable name="A2K" 		units="minute" 	initial_value="60"				private_interface="none"	public_interface="out"/>	<!-- time constant, intermediate nonmuscle autoregulation [P] -->
+		<variable name="A3K" 		units="minute" 	initial_value="40000"			private_interface="none"	public_interface="out"/>	<!-- time constant, long-term nonmuscle autoregulation [P] -->
+		<variable name="POZ" 		units="dimensionless" 	initial_value="2"		private_interface="none"	public_interface="out"/>	<!-- sensitivity control, long-term nonmuscle autoregulation [P] -->
+		<variable name="AUTOSN" 	units="dimensionless" 	initial_value="0.9"		private_interface="none"	public_interface="out"/>	<!-- overall sensitivity controller, nonmuscle autoreg. [P] -->
+	</component>
+	
+<!-- ============================================================		GROUPING		=============================================================== -->
+	<group>
+		<relationship_ref relationship="containment"/>
+		<component_ref component="non_muscle_autoregulatory_local_blood_flow_control">
+			<component_ref component="NM_autoregulatory_driving_force"/>
+			<component_ref component="NM_short_term_autoregulation">
+				<component_ref component="NM_ST_sensitivity_control"/>
+				<component_ref component="NM_ST_time_delay_and_damping"/>
+			</component_ref>
+			<component_ref component="NM_intermediate_autoregulation">
+				<component_ref component="NM_I_sensitivity_control"/>
+				<component_ref component="NM_I_time_delay_and_limit"/>
+			</component_ref>
+			<component_ref component="NM_long_term_autoregulation">
+				<component_ref component="NM_LT_sensitivity_control"/>
+				<component_ref component="NM_LT_time_delay_and_limit"/>
+			</component_ref>
+			<component_ref component="total_NM_autoregulation"/>
+			<component_ref component="global_NM_blood_flow_autoregulation_output"/>
+		</component_ref>
+	</group>
+
+
+	<group>
+      <relationship_ref relationship="encapsulation"/>
+		<component_ref component="non_muscle_autoregulatory_local_blood_flow_control">
+			<component_ref component="parameter_values"/>
+			<component_ref component="NM_autoregulatory_driving_force"/>
+			<component_ref component="NM_short_term_autoregulation"/>
+			<component_ref component="NM_ST_sensitivity_control"/>
+			<component_ref component="NM_ST_time_delay_and_damping"/>
+			<component_ref component="NM_intermediate_autoregulation"/>
+			<component_ref component="NM_I_sensitivity_control"/>
+			<component_ref component="NM_I_time_delay_and_limit"/>
+			<component_ref component="NM_long_term_autoregulation"/>
+			<component_ref component="NM_LT_sensitivity_control"/>
+			<component_ref component="NM_LT_time_delay_and_limit"/>
+			<component_ref component="total_NM_autoregulation"/>
+			<component_ref component="global_NM_blood_flow_autoregulation_output"/>
+		</component_ref>
+   </group>
+
+
+<!-- SIMULATION METADATA -->
+<RDF:RDF xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <RDF:Description RDF:about="#non_muscle_autoregulatory_local_blood_flow_control_CellML1_0_model">
+    <NS1:simulation xmlns:NS1="http://www.cellml.org/metadata/simulation/1.0#" RDF:resource="rdf:#$QQv43"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$4SdBX3">
+    <RDF:first RDF:resource="rdf:#$5SdBX3"/>
+    <RDF:rest RDF:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$3SdBX3">
+    <NS1:boundIntervals xmlns:NS1="http://www.cellml.org/metadata/simulation/1.0#" RDF:resource="rdf:#$4SdBX3"/>
+  </RDF:Description>
+  <RDF:Description xmlns:NS1="http://www.cellml.org/metadata/simulation/1.0#" RDF:about="rdf:#$SQv43" NS1:endingValue="200000" NS1:nonstandard-pointDensity="100000"/>
+  <RDF:Description RDF:about="#non_muscle_autoregulatory_local_blood_flow_control_CellML1_0_model#LfY7zdZ%60EYs">
+    <NS1:simulation xmlns:NS1="http://www.cellml.org/metadata/simulation/1.0#" RDF:resource="rdf:#$b2Cb93"/>
+    <NS1:simulation xmlns:NS1="http://www.cellml.org/metadata/simulation/1.0#" RDF:resource="rdf:#$3SdBX3"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$QQv43">
+    <NS1:boundIntervals xmlns:NS1="http://www.cellml.org/metadata/simulation/1.0#" RDF:resource="rdf:#$RQv43"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$RQv43">
+    <RDF:first RDF:resource="rdf:#$SQv43"/>
+    <RDF:rest RDF:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$b2Cb93">
+    <NS1:boundIntervals xmlns:NS1="http://www.cellml.org/metadata/simulation/1.0#" RDF:resource="rdf:#$c2Cb93"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$c2Cb93">
+    <RDF:first RDF:resource="rdf:#$d2Cb93"/>
+    <RDF:rest RDF:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </RDF:Description>
+</RDF:RDF>
+   
+</model> 

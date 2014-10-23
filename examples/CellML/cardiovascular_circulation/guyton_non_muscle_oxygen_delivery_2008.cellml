@@ -1,0 +1,902 @@
+<?xml version="1.0" encoding="utf-8"?>
+<model 
+	name="non_muscle_O2_delivery_CellML1_0_model"
+	cmeta:id="non_muscle_O2_delivery_CellML1_0_model"
+	
+	xmlns="http://www.cellml.org/cellml/1.0#"
+	xmlns:cellml="http://www.cellml.org/cellml/1.0#"
+	xmlns:cmeta="http://www.cellml.org/metadata/1.0#"
+	xmlns:xlink="http://www.w3.org/1999/xlink">
+
+	
+<!-- ========================================	DOCUMENTATION	============================================= -->
+
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Guyton Model: non_muscle_O2_delivery</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Auckland Bioengineering Institute, University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+        This CellML model has been validated. Due to the differences between procedural code (in this case C-code) and declarative languages 
+		(CellML), some aspects of the original model were not able to be encapsulated by the CellML model (such as the damping of variables). 
+		This may effect the transient behaviour of the model, however the steady-state behaviour would remain the same. The equations in this 
+		file and the steady-state output from the model conform to the results from the MODSIM program.
+	</para>
+  </section>
+  <sect1 id="sec_structure">
+  <title>Model Structure</title>
+
+
+<para>
+Arthur Guyton (1919-2003) was an American physiologist who became famous for his 1950s experiments in which he studied the physiology of 
+cardiac output and its relationship with the peripheral circulation.  The results of these experiments challenged the conventional wisdom 
+that it was the heart itself that controlled cardiac output.  Instead Guyton demonstrated that it was the need of the body tissues for 
+oxygen which was the real regulator of cardiac output.  The "Guyton Curves" describe the relationship between right atrial pressures and 
+cardiac output, and they form a foundation for understanding the physiology of circulation. 
+</para>
+
+<para>
+The Guyton model of fluid, electrolyte, and circulatory regulation is an extensive mathematical model of human circulatory physiology, 
+capable of simulating a variety of experimental conditions, and contains a number of linked subsystems relating to circulation and its 
+neuroendocrine control.
+</para>
+
+<para>
+This is a CellML translation of the Guyton model of the regulation of the circulatory system.  The complete model consists of separate 
+modules each of which characterise a separate physiological subsystems.  The Circulation Dynamics is the primary system, to which other 
+modules/blocks are connected.  The other modules characterise the dynamics of the kidney, electrolytes and cell water, thirst and drinking,
+ hormone regulation, autonomic regulation, cardiovascular system etc, and these feedback on the central circulation model.  The CellML code 
+ in these modules is based on the C code from the programme C-MODSIM created by Dr Jean-Pierre Montani.
+</para>
+
+<para>
+The tissues of the body are divided into non-muscle tissues and muscle tissues, and the delivery of oxygen to each one of these is calculated 
+separately.  The principal reason for this separation is that during muscle activity, the delivery of oxygen to the muscles increases 
+tremendously and correspondingly affects the blood flow through the muscles.  This particular CellML model describes the delivery of oxygen 
+to the non-muscle tissues, and several aspects of local cellular usage of oxygen are also calculated. 
+</para>
+
+<informalfigure float="0" id="full_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>model diagram</title>
+    </objectinfo>
+    <imagedata fileref="full_model.png"/>
+  </imageobject>
+</mediaobject>
+<caption>A systems analysis diagram for the full Guyton model describing circulation regulation.</caption>
+</informalfigure>
+
+
+<informalfigure float="0" id="non_muscle_O2_delivery_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>model diagram</title>
+    </objectinfo>
+    <imagedata fileref="NM_O2_Delivery.png"/>
+  </imageobject>
+</mediaobject>
+<caption>A schematic diagram of the components and processes described in the current CellML model.</caption>
+</informalfigure>
+
+<para>
+There are several publications referring to the Guyton model. One of these papers is cited below:
+</para>
+
+<para>
+Circulation: Overall Regulation,  A.C. Guyton, T.G. Coleman, and H.J. Granger, 1972, 
+            <emphasis>Annual Review of Physiology</emphasis>
+          , 34, 13-44.  <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pubmed&amp;cmd=Retrieve&amp;dopt=AbstractPlus&amp;list_uids=4334846&amp;query_hl=1&amp;itool=pubmed_docsum">PubMed ID: 4334846</ulink>
+</para>
+
+</sect1>
+</article>
+</documentation> 
+
+<!-- =======================================================    CITATION AND KEYWORD METADATA    ================================================== -->
+
+	<rdf:RDF
+			xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+			xmlns:bqs="http://www.cellml.org/bqs/1.0#"
+			xmlns:dc="http://purl.org/dc/elements/1.1/"
+			xmlns:dcterms="http://purl.org/dc/terms/"
+			xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
+		<rdf:Description rdf:about="#non_muscle_O2_delivery_CellML1_0_model">
+			<bqs:reference rdf:parseType="Resource">
+				<bqs:JournalArticle rdf:parseType="Resource">
+					<dc:creator>
+						<rdf:Seq>
+							<rdf:li rdf:parseType="Resource">
+								<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person" />
+								<vCard:N rdf:parseType="Resource">
+									<vCard:Family>Guyton</vCard:Family>
+									<vCard:Given></vCard:Given>
+									<vCard:Other></vCard:Other>
+								</vCard:N>
+							</rdf:li>
+							<rdf:li rdf:parseType="Resource">
+								<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person" />
+								<vCard:N rdf:parseType="Resource">
+									<vCard:Family>Non-Muscle Oxygen Delivery</vCard:Family>
+									<vCard:Given></vCard:Given>
+									<vCard:Other></vCard:Other>
+								</vCard:N>
+							</rdf:li>
+
+						</rdf:Seq>
+					</dc:creator>
+					<dc:title>Description of Guyton non-muscle oxygen delivery module</dc:title>
+					<bqs:volume />
+					<bqs:first_page />
+					<bqs:last_page />
+					<bqs:Journal rdf:parseType="Resource">
+						<dc:title></dc:title>
+					</bqs:Journal>
+					<dcterms:issued rdf:parseType="Resource">
+						<dcterms:W3CDTF>2008-00-00 00:00</dcterms:W3CDTF>
+					</dcterms:issued>
+				</bqs:JournalArticle>
+			</bqs:reference>
+			<bqs:reference rdf:parseType="Resource">
+				<dc:subject rdf:parseType="Resource">
+					<bqs:subject_type>keyword</bqs:subject_type>
+					<rdf:value>
+					<rdf:Bag>
+						<rdf:li>physiology</rdf:li>
+						<rdf:li>organ systems</rdf:li>
+						<rdf:li>cardiovascular circulation</rdf:li>
+						<rdf:li>non-muscle oxygen delivery</rdf:li>
+						<rdf:li>Guyton</rdf:li>
+					</rdf:Bag>
+					</rdf:value>
+				</dc:subject>
+			</bqs:reference>
+		</rdf:Description>
+	</rdf:RDF>
+
+
+  
+<!-- ======================================================= 		UNITS		================================================== -->
+
+   <units name="minute">
+      <unit multiplier="60" units="second"/>
+   </units>
+   <units name="per_minute">
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units name="mmHg">
+      <unit multiplier="133.322" units="newton"/>
+      <unit units="metre" exponent="-2"/>
+   </units>
+   <units name="per_mmHg">
+      <unit units="mmHg" exponent="-1"/>
+   </units>
+   <units name="mmHg_per_mL">
+      <unit units="mmHg"/>
+      <unit units="mL" exponent="-1"/>
+   </units>
+   <units name="per_mmHg2">
+      <unit units="mmHg" exponent="-2"/>
+   </units>
+   <units name="mmHg3">
+      <unit units="mmHg" exponent="3"/>
+   </units>
+   <units name="monovalent_mEq">
+      <unit units="mole" prefix="milli"/>
+   </units>
+   <units name="monovalent_mEq_per_minute">
+      <unit units="mole" prefix="milli"/>
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units name="monovalent_mEq_per_litre">
+      <unit units="mole" prefix="milli"/>
+      <unit units="litre" exponent="-1"/>
+   </units>
+   <units name="monovalent_mEq_per_litre_per_minute">
+      <unit units="mole" prefix="milli"/>
+      <unit units="litre" exponent="-1"/>
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units name="litre2_per_monovalent_mEq_per_minute">
+      <unit units="litre" exponent="2"/>
+      <unit units="mole" prefix="milli" exponent="-1"/>
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units name="L_per_minute">
+      <unit units="litre"/>
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units name="mL">
+      <unit units="litre" prefix="milli"/>
+   </units>
+   <units name="mL_per_L">
+      <unit units="litre" prefix="milli"/>
+      <unit units="litre" exponent="-1"/>
+   </units>
+   <units name="mL_per_minute">
+      <unit units="mL"/>
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units name="L_per_minute_per_mmHg">
+      <unit units="litre"/>
+      <unit units="minute" exponent="-1"/>
+      <unit units="mmHg" exponent="-1"/>
+   </units>
+
+<!-- ============================================================================================================ -->
+	
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#non_muscle_O2_delivery_CellML1_0_model">
+			<rdf:value>
+			The tissues of the body are divided into non-muscle tissues and muscle tissues, 
+			and the delivery of oxygen to each one of these is calculated separately.  The 
+			principal reason for this separation is that during muscle activity, the delivery 
+			of oxygen to the muscles increases tremendously and correspondingly affects the 
+			blood flow through the muscles.  Several aspects of local cellular usage of oxygen 
+			are also calculated.
+			</rdf:value>
+		</rdf:Description>
+	</rdf:RDF>
+
+<!-- ========================================	ENVIRONMENT COMPONENT	============================================= -->
+   <component name="environment">
+      <variable cmeta:id="environment_time"
+				name="time" units="minute" private_interface="none" public_interface="out"/>
+   </component>
+
+<!-- ========================================	NON-MUSCLE O2 DELIVERY TOP-LEVEL COMPONENT	============================================= -->
+	<component 	name="non_muscle_O2_delivery" 
+				cmeta:id="non_muscle_O2_delivery">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#non_muscle_O2_delivery">
+				<rdf:value>
+				Encapsulation grouping component containing all the components in the Non-Muscle Oxygen Delivery Model. 
+				The inputs and outputs of the Non-Muscle Oxygen Delivery Model must be passed by this component.
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+
+		<variable name="time"	units="minute"	private_interface="out" public_interface="in"/>
+
+<!-- Inputs from components in other models -->
+		<variable name="BFN"	initial_value="2.79521"	units="L_per_minute" private_interface="out" public_interface="none"/>
+		<variable name="OVA"	initial_value="204.497"	units="mL_per_L" private_interface="out" public_interface="none"/>
+		<variable name="HM"	 	initial_value="40.0381"	units="dimensionless" private_interface="out" public_interface="none"/>
+		<variable name="AOM" 	initial_value="1.00002"	units="dimensionless" private_interface="out" public_interface="none"/>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="non_muscle_O2_delivery" component_2="environment"/>
+		<map_variables variable_1="time" variable_2="time"/>
+	</connection>
+
+<!-- ====================================================	NON-MUSCLE O2 BLOOD SUPPLY	========================================================= -->
+	<component 	name="NM_O2_blood_supply" 
+				cmeta:id="NM_O2_blood_supply">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#NM_O2_blood_supply">
+				<rdf:value>
+				ONM1:  
+				The quantity of oxygen in the arterial blood entering the non-muscle 
+				tissues per minute (O2ARTN) is equal to the oxygen volume in each liter of 
+				arterial blood (OVA) times the blood flow to the non-muscle tissues (BFN).
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#ONM1">
+				<rdf:value>
+				ONM1:  
+				The quantity of oxygen in the arterial blood entering the non-muscle 
+				tissues per minute (O2ARTN) is equal to the oxygen volume in each liter of 
+				arterial blood (OVA) times the blood flow to the non-muscle tissues (BFN).
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="OVA"	units="mL_per_L" private_interface="none" public_interface="in"/>
+		<variable name="BFN"	units="L_per_minute" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable name="O2ARTN" 	units="mL_per_minute" private_interface="none" public_interface="out"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="ONM1">
+				<eq/>
+				<ci>O2ARTN</ci>
+				<apply>
+					<times/>
+					<ci>OVA</ci>
+					<ci>BFN</ci>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="NM_O2_blood_supply" component_2="non_muscle_O2_delivery"/>
+		<map_variables variable_1="OVA" variable_2="OVA"/>
+		<map_variables variable_1="BFN" variable_2="BFN"/>
+	</connection>
+
+<!-- ========================================	NON-MUSCLE VENOUS O2 CONTENT	============================================= -->
+	<component 	name="NM_venous_O2_content" 
+				cmeta:id="NM_venous_O2_content">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#NM_venous_O2_content">
+				<rdf:value>
+				ONM2:  
+				The volume of oxygen remaining in the effluent venous blood from the non-muscle 
+				tissues per minute (O2VENN) is equal to the volume of oxygen in the entering 
+				arterial blood (O2ARTN) minus the rate of delivery of oxygen to the non-muscle 
+				tissues per minute (DOB).
+
+				ONM3 and ONM4:  
+				The oxygen saturation of the venous blood leaving the non-muscle tissues (OSV) 
+				is calculated from the volume of oxygen in this venous blood (O2VENN) divided by 
+				three different factors:  the rate of blood flow through the non-muscle tissues (BFN), 
+				the hematocrit (HM), and a constant factor for converting volume of oxygen to saturation.  
+				Block ONM4 provides damping to prevent too rapid changes which could cause computational 
+				oscillation; the degree of damping can be altered by altering the damping factor (Z7).
+
+				ONM5:  
+				The pressure of oxygen in the venous blood (POV) is calculated by multiplying the venous 
+				blood saturation (OSV) times a constant.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#ONM2_to_ONM4">
+				<rdf:value>
+				ONM2:  
+				The volume of oxygen remaining in the effluent venous blood from the non-muscle 
+				tissues per minute (O2VENN) is equal to the volume of oxygen in the entering 
+				arterial blood (O2ARTN) minus the rate of delivery of oxygen to the non-muscle 
+				tissues per minute (DOB).
+
+				ONM3 and ONM4:  
+				The oxygen saturation of the venous blood leaving the non-muscle tissues (OSV) 
+				is calculated from the volume of oxygen in this venous blood (O2VENN) divided by 
+				three different factors:  the rate of blood flow through the non-muscle tissues (BFN), 
+				the hematocrit (HM), and a constant factor for converting volume of oxygen to saturation.  
+				Block ONM4 provides damping to prevent too rapid changes which could cause computational 
+				oscillation; the degree of damping can be altered by altering the damping factor (Z7).
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#ONM5">
+				<rdf:value>
+				ONM5:  
+				The pressure of oxygen in the venous blood (POV) is calculated by multiplying the venous 
+				blood saturation (OSV) times a constant.
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="O2ARTN"	units="mL_per_minute" private_interface="none" public_interface="in"/>
+		<variable name="DOB"	units="mL_per_minute" private_interface="none" public_interface="in"/>
+		<variable name="BFN"	units="L_per_minute" private_interface="none" public_interface="in"/>
+		<variable name="HM"		units="dimensionless" private_interface="none" public_interface="in"/>
+		<variable name="time"	units="minute" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable	cmeta:id="NM_venous_O2_content_POV"
+					name="POV" 	units="mmHg" private_interface="none" public_interface="out"/>
+
+<!-- Internal variables -->
+		<variable name="OSV"	units="dimensionless" private_interface="none" public_interface="none"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="ONM2_to_ONM4">
+				<eq/>
+				<ci>OSV</ci>
+				<apply>
+					<divide/>
+					<apply>
+						<minus/>
+						<ci>O2ARTN</ci>
+						<ci>DOB</ci>
+					</apply>
+					<apply>
+						<times/>
+						<ci>HM</ci>
+						<cn cellml:units="dimensionless">5.25</cn>
+						<ci>BFN</ci>
+					</apply>
+				</apply>
+			</apply>
+			<apply id="ONM5">
+				<eq/>
+				<ci>POV</ci>
+				<apply>
+					<times/>
+					<ci>OSV</ci>
+					<cn cellml:units="mmHg">57.14</cn>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="NM_venous_O2_content" component_2="NM_O2_blood_supply"/>
+		<map_variables variable_1="O2ARTN" variable_2="O2ARTN"/>
+	</connection>
+	<connection>
+		<map_components component_1="NM_venous_O2_content" component_2="delivery_of_O2_to_NM_tissues"/>
+		<map_variables variable_1="DOB" variable_2="DOB"/>
+		<map_variables variable_1="POV" variable_2="POV"/>
+	</connection>
+	<connection>
+		<map_components component_1="NM_venous_O2_content" component_2="non_muscle_O2_delivery"/>
+		<map_variables variable_1="BFN" variable_2="BFN"/>
+		<map_variables variable_1="HM" variable_2="HM"/>
+		<map_variables variable_1="time" variable_2="time"/>
+	</connection>
+
+<!-- ========================================	O2 CONSUMPTION BY NON-MUSCLE TISSUE CELLS	============================================= -->
+	<component 	name="O2_consumption_by_NM_tissue" 
+				cmeta:id="O2_consumption_by_NM_tissue">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#O2_consumption_by_NM_tissue">
+				<rdf:value>
+				ONM14, ONM15, ONM16, ONM17, ONM18, ONM19, and ONM20:  
+				Calculation of the rate of oxygen usage by the non-muscle tissues (M02) based on 
+				three input factors:  the normal rate of oxygen usage by these tissues when all 
+				other factors are normal (02M), a decreasing effect on tissue utilization of oxygen 
+				caused by very low tissue PO2's (POT) resulting mainly from failure of flow of the 
+				oxygen to the places where it is needed within the tissue (Blocks 14, 15, 16, 17, 18, 
+				and 19), and a multiplying effect on oxygen usage caused by autonomic stimulation (AOM).  
+				In addition, there is a limit set by Block ONM15 which causes the tissue oxygen level not 
+				to affect metabolism once its level is above a set value.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#ONM14_and_ONM15">
+				<rdf:value>
+				ONM14, ONM15, ONM16, ONM17, ONM18, ONM19, and ONM20:  
+				Calculation of the rate of oxygen usage by the non-muscle tissues (M02) based on 
+				three input factors:  the normal rate of oxygen usage by these tissues when all 
+				other factors are normal (02M), a decreasing effect on tissue utilization of oxygen 
+				caused by very low tissue PO2's (POT) resulting mainly from failure of flow of the 
+				oxygen to the places where it is needed within the tissue (Blocks 14, 15, 16, 17, 18, 
+				and 19), and a multiplying effect on oxygen usage caused by autonomic stimulation (AOM).  
+				In addition, there is a limit set by Block ONM15 which causes the tissue oxygen level not 
+				to affect metabolism once its level is above a set value.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#ONM16_to_ONM20">
+				<rdf:value>
+				ONM14, ONM15, ONM16, ONM17, ONM18, ONM19, and ONM20:  
+				Calculation of the rate of oxygen usage by the non-muscle tissues (M02) based on 
+				three input factors:  the normal rate of oxygen usage by these tissues when all 
+				other factors are normal (02M), a decreasing effect on tissue utilization of oxygen 
+				caused by very low tissue PO2's (POT) resulting mainly from failure of flow of the 
+				oxygen to the places where it is needed within the tissue (Blocks 14, 15, 16, 17, 18, 
+				and 19), and a multiplying effect on oxygen usage caused by autonomic stimulation (AOM).  
+				In addition, there is a limit set by Block ONM15 which causes the tissue oxygen level not 
+				to affect metabolism once its level is above a set value.
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="POT"	units="mmHg" private_interface="none" public_interface="in"/>
+		<variable name="AOM"	units="dimensionless" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable name="MO2" 	units="mL_per_minute" private_interface="none" public_interface="out"/>
+
+<!-- Parameters from parameter_file -->
+		<variable name="O2M"	units="mL_per_minute" private_interface="none" public_interface="in"/>
+
+<!-- Internal variables -->
+		<variable name="P1O"	units="mmHg" private_interface="none" public_interface="none"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="ONM14_and_ONM15">
+				<eq/>
+				<ci>P1O</ci>
+				<piecewise>
+					<piece>
+						<cn cellml:units="mmHg">35</cn>
+						<apply>
+							<gt/>
+							<ci>POT</ci>
+							<cn cellml:units="mmHg">35</cn>
+						</apply>
+					</piece>
+					<otherwise>
+						<ci>POT</ci>
+					</otherwise>
+				</piecewise>
+			</apply>
+			<apply id="ONM16_to_ONM20">
+				<eq/>
+				<ci>MO2</ci>
+				<apply>
+					<times/>
+					<ci>AOM</ci>
+					<ci>O2M</ci>
+					<apply>
+						<minus/>
+						<cn cellml:units="dimensionless">1</cn>
+						<apply>
+							<divide/>
+							<apply>
+								<power/>
+								<apply>
+									<minus/>
+									<cn cellml:units="mmHg">35.0001</cn>
+									<ci>P1O</ci>
+								</apply>
+								<cn cellml:units="dimensionless">3</cn>
+							</apply>
+							<cn cellml:units="mmHg3">42875</cn>
+						</apply>
+					</apply>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="O2_consumption_by_NM_tissue" component_2="pressure_of_O2_in_NM_tissue_cells"/>
+		<map_variables variable_1="POT" variable_2="POT"/>
+	</connection>
+	<connection>
+		<map_components component_1="O2_consumption_by_NM_tissue" component_2="non_muscle_O2_delivery"/>
+		<map_variables variable_1="AOM" variable_2="AOM"/>
+	</connection>
+
+<!-- PARAMETER CONNECTIONS -->
+	<connection>
+		<map_components component_1="O2_consumption_by_NM_tissue" component_2="parameter_values"/>
+		<map_variables variable_1="O2M" variable_2="O2M"/>
+	</connection>
+
+<!-- ========================================	DELIVERY OF O2 TO NON-MUSCLE TISSUES	============================================= -->
+	<component 	name="delivery_of_O2_to_NM_tissues" 
+				cmeta:id="delivery_of_O2_to_NM_tissues">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#delivery_of_O2_to_NM_tissues">
+				<rdf:value>
+				ONM6:  
+				The pressure gradient of the oxygen between the venous or capillary blood of the 
+				non-muscle tissues and the tissue cells themselves (PGRN) is equal to the pressure 
+				of the oxygen in the venous blood (POV) minus the pressure in the non-muscle 
+				tissue cells (POT).
+
+				ONM7:  
+				The delivery of oxygen to the non-muscle tissues (DOB) is equal to blood flow to 
+				the tissues (BFN) times the oxygen pressure gradient between the venous or capillary 
+				blood and the tissues (PGRN) times a numerical factor for conductance of oxygen from 
+				the capillaries to the tissue cells.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#ONM6_and_ONM7">
+				<rdf:value>
+				ONM6:  
+				The pressure gradient of the oxygen between the venous or capillary blood of the 
+				non-muscle tissues and the tissue cells themselves (PGRN) is equal to the pressure 
+				of the oxygen in the venous blood (POV) minus the pressure in the non-muscle 
+				tissue cells (POT).
+
+				ONM7:  
+				The delivery of oxygen to the non-muscle tissues (DOB) is equal to blood flow to 
+				the tissues (BFN) times the oxygen pressure gradient between the venous or capillary 
+				blood and the tissues (PGRN) times a numerical factor for conductance of oxygen from 
+				the capillaries to the tissue cells.
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="POT"	units="mmHg" private_interface="none" public_interface="in"/>
+		<variable name="POV"	units="mmHg" private_interface="none" public_interface="in"/>
+		<variable name="BFN"	units="L_per_minute" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable	cmeta:id="delivery_of_O2_to_NM_tissues_DOB"
+					name="DOB" 	units="mL_per_minute" private_interface="none" public_interface="out"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="ONM6_and_ONM7">
+				<eq/>
+				<ci>DOB</ci>
+				<apply>
+					<times/>
+					<apply>
+						<minus/>
+						<ci>POV</ci>
+						<ci>POT</ci>
+					</apply>
+					<cn cellml:units="per_mmHg">12.857</cn>
+					<ci>BFN</ci>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="delivery_of_O2_to_NM_tissues" component_2="pressure_of_O2_in_NM_tissue_cells"/>
+		<map_variables variable_1="POT" variable_2="POT"/>
+	</connection>
+	<connection>
+		<map_components component_1="delivery_of_O2_to_NM_tissues" component_2="non_muscle_O2_delivery"/>
+		<map_variables variable_1="BFN" variable_2="BFN"/>
+	</connection>
+
+<!-- ========================================	VOLUME OF O2 IN NON-MUSCLE TISSUE	============================================= -->
+	<component 	name="volume_of_O2_in_NM_tissue" 
+				cmeta:id="volume_of_O2_in_NM_tissue">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#volume_of_O2_in_NM_tissue">
+				<rdf:value>
+				ONM8:  
+				The rate of change of oxygen in the non-muscle tissues (DO2N) is equal to the rate
+				of delivery of oxygen to the non-muscle tissues (DOB) minus the rate of metabolism 
+				of oxygen in the tissues (MO2).
+
+				ONM9:  
+				Limitation in the use of oxygen by the tissues (MO2) when tissue oxygenation (Q02) 
+				falls very low.
+
+				ONM10:  
+				The instantaneous quantity of oxygen in the tissues (Q02) is calculated by integrating 
+				the rate of change of the oxygen in these tissues (D02N).
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#ONM8">
+				<rdf:value>
+				ONM8:  
+				The rate of change of oxygen in the non-muscle tissues (DO2N) is equal to the rate
+				of delivery of oxygen to the non-muscle tissues (DOB) minus the rate of metabolism 
+				of oxygen in the tissues (MO2).
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#ONM9">
+				<rdf:value>
+				ONM9:  
+				Limitation in the use of oxygen by the tissues (MO2) when tissue oxygenation (Q02) 
+				falls very low.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#ONM10">
+				<rdf:value>
+				ONM10:  
+				The instantaneous quantity of oxygen in the tissues (Q02) is calculated by integrating 
+				the rate of change of the oxygen in these tissues (D02N).
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#ONM10_cont">
+				<rdf:value>
+				ONM10:  
+				The instantaneous quantity of oxygen in the tissues (Q02) is calculated by integrating 
+				the rate of change of the oxygen in these tissues (D02N).
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="DOB"	units="mL_per_minute" private_interface="none" public_interface="in"/>
+		<variable name="MO2"	units="mL_per_minute" private_interface="none" public_interface="in"/>
+		<variable name="time"	units="minute" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable name="QO2" 	units="mL" private_interface="none" public_interface="out"/>
+
+<!-- Internal variables -->
+		<variable name="DO2N"	units="mL_per_minute" private_interface="none" public_interface="none"/>
+		<variable name="DO2N1"	units="mL_per_minute" private_interface="none" public_interface="none"/>
+		<variable name="QO2T"	initial_value="72.2362"	units="mL" private_interface="none" public_interface="none"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="ONM8">
+				<eq/>
+				<ci>DO2N1</ci>
+				<apply>
+					<minus/>
+					<ci>DOB</ci>
+					<ci>MO2</ci>
+				</apply>
+			</apply>
+			<apply id="ONM9">
+				<eq/>
+				<ci>DO2N</ci>
+				<piecewise>
+					<piece>
+						<apply>
+							<times/>
+							<ci>DO2N1</ci>
+							<cn cellml:units="dimensionless">0.1</cn>
+						</apply>
+						<apply>
+							<and/>
+							<apply>
+								<lt/>
+								<ci>QO2</ci>
+								<cn cellml:units="mL">6</cn>
+							</apply>
+							<apply>
+								<lt/>
+								<ci>DO2N1</ci>
+								<cn cellml:units="mL_per_minute">0</cn>
+							</apply>
+						</apply>
+					</piece>
+					<otherwise>
+						<ci>DO2N1</ci>
+					</otherwise>
+				</piecewise>
+			</apply>
+			<apply id="ONM10">
+				<eq/>
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>QO2T</ci>
+				</apply>
+				<ci>DO2N</ci>
+			</apply>
+			<apply id="ONM10_cont">
+				<eq/>
+				<ci>QO2</ci>
+				<piecewise>
+					<piece>
+						<cn cellml:units="mL">0</cn>
+						<apply>
+							<lt/>
+							<ci>QO2T</ci>
+							<cn cellml:units="mL">0</cn>
+						</apply>
+					</piece>
+					<otherwise>
+						<ci>QO2T</ci>
+					</otherwise>
+				</piecewise>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="volume_of_O2_in_NM_tissue" component_2="delivery_of_O2_to_NM_tissues"/>
+		<map_variables variable_1="DOB" variable_2="DOB"/>
+	</connection>
+	<connection>
+		<map_components component_1="volume_of_O2_in_NM_tissue" component_2="O2_consumption_by_NM_tissue"/>
+		<map_variables variable_1="MO2" variable_2="MO2"/>
+	</connection>
+	<connection>
+		<map_components component_1="volume_of_O2_in_NM_tissue" component_2="non_muscle_O2_delivery"/>
+		<map_variables variable_1="time" variable_2="time"/>
+	</connection>
+
+<!-- ========================================	PRESSURE OF O2 IN NON-MUSCLE TISSUE CELLS	============================================= -->
+	<component 	name="pressure_of_O2_in_NM_tissue_cells" 
+				cmeta:id="pressure_of_O2_in_NM_tissue_cells">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#pressure_of_O2_in_NM_tissue_cells">
+				<rdf:value>
+				ONM11:  
+				The pressure of the oxygen in the tissue cells of the non-muscle tissues (POT) 
+				is equal to the quantity of oxygen in the tissues (Q02) times a constant.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#ONM11">
+				<rdf:value>
+				ONM11:  
+				The pressure of the oxygen in the tissue cells of the non-muscle tissues (POT) 
+				is equal to the quantity of oxygen in the tissues (Q02) times a constant.
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="QO2"	units="mL" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable name="POT" 	units="mmHg" private_interface="none" public_interface="out"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="ONM11">
+				<eq/>
+				<ci>POT</ci>
+				<apply>
+					<times/>
+					<ci>QO2</ci>
+					<cn cellml:units="mmHg_per_mL">0.48611</cn>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="pressure_of_O2_in_NM_tissue_cells" component_2="volume_of_O2_in_NM_tissue"/>
+		<map_variables variable_1="QO2" variable_2="QO2"/>
+	</connection>
+	
+<!-- ==========================================================	PARAMETER VALUES	================================================================ -->
+	<component 	name="parameter_values"
+				cmeta:id="parameter_values">
+		<variable name="O2M" 		units="mL_per_minute" 	initial_value="164"			private_interface="none"	public_interface="out"/>	<!-- basic O2 utilization in nonmuscle tissues -->
+	</component>
+
+<!-- ============================================================		GROUPING		=============================================================== -->
+	<group>
+		<relationship_ref relationship="containment"/>
+		<component_ref component="non_muscle_O2_delivery">
+			<component_ref component="NM_O2_blood_supply"/>
+			<component_ref component="NM_venous_O2_content"/>
+			<component_ref component="O2_consumption_by_NM_tissue"/>
+			<component_ref component="delivery_of_O2_to_NM_tissues"/>
+			<component_ref component="volume_of_O2_in_NM_tissue"/>
+			<component_ref component="pressure_of_O2_in_NM_tissue_cells"/>
+		</component_ref>
+	</group>
+	  
+
+	  <group>
+		<relationship_ref relationship="encapsulation"/>
+		<component_ref component="non_muscle_O2_delivery">
+			<component_ref component="parameter_values"/>
+			<component_ref component="NM_O2_blood_supply"/>
+			<component_ref component="NM_venous_O2_content"/>
+			<component_ref component="O2_consumption_by_NM_tissue"/>
+			<component_ref component="delivery_of_O2_to_NM_tissues"/>
+			<component_ref component="volume_of_O2_in_NM_tissue"/>
+			<component_ref component="pressure_of_O2_in_NM_tissue_cells"/>
+		</component_ref>
+	</group>
+
+
+<!-- SIMULATION METADATA -->
+<RDF:RDF xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <RDF:Description RDF:about="#non_muscle_O2_delivery_CellML1_0_model">
+    <NS1:simulation xmlns:NS1="http://www.cellml.org/metadata/simulation/1.0#" RDF:resource="rdf:#$QQv43"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$4SdBX3">
+    <RDF:first RDF:resource="rdf:#$5SdBX3"/>
+    <RDF:rest RDF:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$3SdBX3">
+    <NS1:boundIntervals xmlns:NS1="http://www.cellml.org/metadata/simulation/1.0#" RDF:resource="rdf:#$4SdBX3"/>
+  </RDF:Description>
+  <RDF:Description xmlns:NS1="http://www.cellml.org/metadata/simulation/1.0#" RDF:about="rdf:#$SQv43" NS1:endingValue="10" NS1:nonstandard-pointDensity="1000"/>
+  <RDF:Description RDF:about="#non_muscle_O2_delivery_CellML1_0_model#LfY7zdZ%60EYs">
+    <NS1:simulation xmlns:NS1="http://www.cellml.org/metadata/simulation/1.0#" RDF:resource="rdf:#$b2Cb93"/>
+    <NS1:simulation xmlns:NS1="http://www.cellml.org/metadata/simulation/1.0#" RDF:resource="rdf:#$3SdBX3"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$QQv43">
+    <NS1:boundIntervals xmlns:NS1="http://www.cellml.org/metadata/simulation/1.0#" RDF:resource="rdf:#$RQv43"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$RQv43">
+    <RDF:first RDF:resource="rdf:#$SQv43"/>
+    <RDF:rest RDF:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$b2Cb93">
+    <NS1:boundIntervals xmlns:NS1="http://www.cellml.org/metadata/simulation/1.0#" RDF:resource="rdf:#$c2Cb93"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$c2Cb93">
+    <RDF:first RDF:resource="rdf:#$d2Cb93"/>
+    <RDF:rest RDF:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </RDF:Description>
+</RDF:RDF>
+
+	
+</model>   

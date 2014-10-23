@@ -1,0 +1,1458 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--  FILE :starbuck_model_1990.xml
+
+CREATED :  28th November 2003
+
+LAST MODIFIED : 21st April 2005
+
+AUTHOR :  Catherine Lloyd
+          Bioengineering Institute
+          The University of Auckland
+          
+MODEL STATUS :  This model conforms to the CellML 1.0 Specification released on
+10th August 2001, and the 16/01/2002 CellML Metadata 1.0 Specification.
+
+DESCRIPTION :  This file contains a CellML description of Starbuck et al.'s 1990 model of epidermal growth factor binding and trafficking dynamics in fibroblasts: relationship to cell proliferation.
+
+CHANGES:  
+   21/04/2005 - PJV - Changed unit dimension to correct inconsistancy
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="starbuck_wiley_lauffenburger_1990_version01" name="starbuck_wiley_lauffenburger_1990_version01">
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Epidermal Growth Factor Binding and Trafficking Dynamics in Fibroblasts</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Bioengineering Institute, University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+            This is the original unchecked version of the model imported from the previous
+            CellML model repository, 24-Jan-2006.
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+Growth factors are a class of peptide hormones which are secreted locally from one cell and induce cell division or mitogenesis in other cells.  Mitogenesis is initiated when growth factors bind to specific receptor-kinases on the cell surface, triggering a signal transduction pathway involving reversible protein phosphorylation by kinases and phosphatases.     
+</para>
+
+<para>
+In this 1990 study, Starbuck <emphasis>et al.</emphasis> propose that growth factor receptors are responsible for triggering the signal transduction cascade by receiving an extracellular signal (the specific growth factor molecules), and converting this stimulus into the cascade via activation of the receptor kinase and subsequent protein phosphorylation and activation.  In addition, the receptor kinase is also able to phosphorylate other key proteins in the signal pathway.  The authors argue that a quantitative understanding of the receptor dynamics is essential for the understanding of the control of mammalian cell growth.  
+</para> 
+
+<para>
+To this end they develop a mathematical model of epidermal growth factor binding and trafficking dynamics in fibroblasts.  The figure below illustrates the surface and intracellular events which are included in the mathematical model.  The ligand (L<subscript>o</subscript>) binds to its receptor on the cell surface (R<subscript>s</subscript>) to form a ligand-receptor complex (C<subscript>s</subscript>).  One of two possible pathways can then be taken:
+<itemizedlist>
+  <listitem>
+              <para>In the first pathway, the ligand-receptor complex migrates in the plane of the cell surface membrane to cluster in specialised regions of the membrane called clathrin-coated pits.  Here, the complexes bind to the coated-pit proteins (P<subscript>s</subscript>) to form ternary complexes (T<subscript>s</subscript>), which are then internalised (T<subscript>i</subscript>).</para>
+            </listitem>
+  <listitem>
+              <para>In the second pathway, the ligand-receptor complex is internalised as it is, without forming a ternary complex with pit-proteins (C<subscript>ic</subscript>).</para>
+            </listitem>
+</itemizedlist>
+After ternary complexes are internalised, the acidic environment of the endosome enhances receptor-ligand dissociation, firstly to form free complexes (C<subscript>ii</subscript>) and then further degradation to form free receptors (R<subscript>ii</subscript>) and free ligand (L<subscript>ii</subscript>).  If R<subscript>ii</subscript> and/or C<subscript>ii</subscript> migrate into the endosomal tubules, they get recycled back to the cell surface membrane for further binding and trafficking.  The fate of receptors (R<subscript>ic</subscript>) and complexes (C<subscript>ic</subscript>) from the smooth pit pathway is not as well understood, but recycling is also assumed to occur. 
+</para>
+
+<para>
+The mathematical model to describe this process consists of a series of kinetic equations which describe the binding, internalisation and recycling of epidermal growth factor and its receptor, together with a simple expression which relates the dependence of the cell cycle progression on the receptor dynamics.
+</para>
+
+<para>
+The complete original paper reference is cited below:
+</para>
+
+<para>
+<ulink url="http://80-www.sciencedirect.com.ezproxy.auckland.ac.nz/science?_ob=ArticleURL&amp;_udi=B6TFK-445B4R7-FV&amp;_user=140507&amp;_handle=W-WA-A-A-AUD-MsSAYZA-UUW-AUDUWZABEZ-AWCBCDUCC-AUD-U&amp;_fmt=summary&amp;_coverDate=12%2F31%2F1990&amp;_rdoc=49&amp;_orig=browse&amp;_srch=%23toc%235229%231990%23999549991%23267397!&amp;_cdi=5229&amp;view=c&amp;_acct=C000011498&amp;_version=1&amp;_urlVersion=0&amp;_userid=140507&amp;md5=445333becab508555d71f60eace03d96">Epidermal Growth Factor Binding and Trafficking Dynamics in Fibroblasts: Relationship to Cell Proliferation</ulink>, Cindy Starbuck, H. Steven Wiley, and Douglas A. Lauffenburger, 1990, <ulink url="http://80-www.sciencedirect.com.ezproxy.auckland.ac.nz/science?_ob=JournalURL&amp;_cdi=5229&amp;_auth=y&amp;_acct=C000011498&amp;_version=1&amp;_urlVersion=0&amp;_userid=140507&amp;md5=922c7862c26619e3546f1e3fdab4b96f">
+            <emphasis>Chemical Engineering Science</emphasis>
+          </ulink>, 45, 2367-2373.  (A PDF version of the article is available on the <emphasis>Chemical Engineering Science</emphasis> website.)
+</para>
+
+<informalfigure float="0" id="fig_reaction_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>reaction diagram</title>
+    </objectinfo>
+    <imagedata fileref="starbuck_1990.png"/>
+  </imageobject>
+</mediaobject>
+<caption>A schematic diagram of the processes which take place in the response of mammalian cells to epidermal growth factor.</caption>
+</informalfigure>
+
+</sect1>
+</article>
+</documentation>
+  
+    
+  
+   <units name="molar">
+      <unit units="mole"/>
+      <unit units="litre" exponent="-1"/>
+   </units>
+   
+   <units name="per_minute">
+      <unit units="second" exponent="-1" multiplier="60.0"/>
+   </units>
+   
+   <units name="cell_per_number_second">
+      <unit units="cell"/>
+      <unit units="number" exponent="-1"/>
+      <unit units="second" exponent="-1"/>
+   </units>
+   
+   <units name="first_order_rate_constant">
+      <unit units="second" exponent="-1"/>
+   </units>
+  
+   <units name="second_order_rate_constant">
+      <unit units="molar" exponent="-1"/>
+      <unit units="second" exponent="-1"/>
+   </units>
+   
+   <units base_units="yes" name="number"/>
+   
+   <units base_units="yes" name="cell"/>
+   
+   <units base_units="yes" name="plate"/>
+   
+   <units name="number_per_cell_second">
+      <unit units="number"/>
+      <unit units="cell" exponent="-1"/>
+      <unit units="second" exponent="-1"/>
+   </units>
+   
+   <units name="per_number_per_second">
+      <unit units="number" exponent="-1"/>
+      <unit units="second" exponent="-1"/>
+   </units>
+   
+   <units name="cell_per_plate">
+      <unit units="cell"/>
+      <unit units="plate" exponent="-1"/>
+   </units>
+   
+   <units name="per_cell">
+      <unit units="cell" exponent="-1"/>
+   </units>
+   
+   <units name="per_mole">
+      <unit units="mole" exponent="-1"/>
+   </units>
+   
+   <units name="litre_per_cell">
+      <unit units="litre"/>
+      <unit units="cell" exponent="-1"/>
+   </units>
+   
+   
+   <component name="environment">
+    <variable units="second" public_interface="out" name="time"/>
+   </component>
+   
+   <component name="Rs"> 
+    <variable units="per_cell" public_interface="out" name="Rs"/>
+    
+    <variable units="second_order_rate_constant" public_interface="in" name="kfc"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="number_per_cell_second" public_interface="in" name="ks"/>
+    <variable units="per_minute" public_interface="in" name="kt"/>
+    <variable units="per_minute" public_interface="in" name="krec_c"/>
+    <variable units="per_minute" public_interface="in" name="krec_i"/>
+    <variable units="cell_per_plate" public_interface="in" name="numcell"/>
+    <variable units="dimensionless" public_interface="in" name="fr"/>
+    <variable units="per_cell" public_interface="in" name="Ric"/>
+    <variable units="per_cell" public_interface="in" name="Rii"/>
+    <variable units="molar" public_interface="in" name="Lo"/>
+    <variable units="per_cell" public_interface="in" name="Cs"/>
+    <variable units="second" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>Rs</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> kr </ci>
+              <ci> Cs </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> krec_c </ci>
+              <ci> Ric </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> krec_i </ci>
+              <apply>
+                <minus/>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+                <ci> fr </ci>
+              </apply>
+              <ci> Rii </ci>
+            </apply>
+            <ci> ks </ci>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> kfc </ci>
+                <ci> numcell </ci>
+              </apply>
+              <ci> Rs </ci>
+              <ci> Lo </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> kt </ci>
+              <ci> Rs </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="Cs"> 
+    <variable units="per_cell" public_interface="out" name="Cs"/>
+    
+    <variable units="second_order_rate_constant" public_interface="in" name="kfc"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="per_number_per_second" public_interface="in" name="kc"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="ku"/>
+    <variable units="per_minute" public_interface="in" name="kt"/>
+    <variable units="per_minute" public_interface="in" name="krec_c"/>
+    <variable units="per_minute" public_interface="in" name="krec_i"/>
+    <variable units="cell_per_plate" public_interface="in" name="numcell"/>
+    <variable units="dimensionless" public_interface="in" name="fr"/>
+    <variable units="per_cell" public_interface="in" name="Ts"/>
+    <variable units="per_cell" public_interface="in" name="Ps"/>
+    <variable units="molar" public_interface="in" name="Lo"/>
+    <variable units="per_cell" public_interface="in" name="Rs"/>
+    <variable units="per_cell" public_interface="in" name="Cic"/>
+    <variable units="per_cell" public_interface="in" name="Cii"/>
+    <variable units="second" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>Cs</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> ku </ci>
+              <ci> Ts </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> krec_c </ci>
+              <ci> Cic </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> krec_i </ci>
+              <apply>
+                <minus/>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+                <ci> fr </ci>
+              </apply>
+              <ci> Cii </ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> kfc </ci>
+                <ci> numcell </ci>
+              </apply>
+              <ci> Rs </ci>
+              <ci> Lo </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> kr </ci>
+              <ci> Cs </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> kc </ci>
+              <ci> Cs </ci>
+              <ci> Ps </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> kt </ci>
+              <ci> Cs </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="Ts"> 
+    <variable units="per_cell" public_interface="out" name="Ts"/>
+    
+    <variable units="per_number_per_second" public_interface="in" name="kc"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="ku"/>
+    <variable units="per_cell" public_interface="in" name="Cs"/>
+    <variable units="per_cell" public_interface="in" name="Ps"/>
+    <variable units="per_minute" public_interface="in" name="lamda"/>
+    <variable units="second" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>Ts</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> kc </ci>
+            <ci> Cs </ci>
+            <ci> Ps </ci>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> ku </ci>
+              <ci> Ts </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> lamda </ci>
+              <ci> Ts </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="Ps"> 
+    <variable units="per_cell" public_interface="out" name="Ps"/>
+    
+    <variable units="per_number_per_second" public_interface="in" name="kc"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="ku"/>
+    <variable units="per_minute" public_interface="in" name="krec_p"/>
+    <variable units="per_cell" public_interface="in" name="Ts"/>
+    <variable units="per_cell" public_interface="in" name="Cs"/>
+    <variable units="per_cell" public_interface="in" name="Pi"/>
+    <variable units="per_minute" public_interface="in" name="lamda"/>
+    <variable units="second" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>Ps</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> ku </ci>
+              <ci> Ts </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> krec_p </ci>
+              <ci> Pi </ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> kc </ci>
+              <ci> Cs </ci>
+              <ci> Ps </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> lamda </ci>
+              <ci> Ps </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="Lo"> 
+    <variable units="molar" public_interface="out" name="Lo"/>
+    
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kfc"/>
+    <variable units="per_minute" public_interface="in" name="krec_c"/>
+    <variable units="per_cell" public_interface="in" name="Rs"/>
+    <variable units="per_cell" public_interface="in" name="Cs"/>
+    <variable units="molar" public_interface="in" name="Lic"/>
+    <variable units="cell_per_plate" public_interface="in" name="numcell"/>
+    <variable units="second" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>Lo</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> numcell </ci>
+              <ci> kr </ci>
+              <ci> Cs </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> krec_c </ci>
+              <ci> Lic </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> kfc </ci>
+            <ci> Rs </ci>
+            <ci> Lo </ci>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="Rii"> 
+    <variable units="per_cell" public_interface="out" name="Rii"/>
+    
+    <variable units="cell_per_number_second" public_interface="in" name="kfe"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr_"/>
+    <variable units="per_minute" public_interface="in" name="kdeg"/>
+    <variable units="per_minute" public_interface="in" name="krec_i"/>
+    <variable units="cell_per_plate" public_interface="in" name="numcell"/>
+    <variable units="dimensionless" public_interface="in" name="fr"/>
+    <variable units="molar" public_interface="in" name="Lii"/>
+    <variable units="per_cell" public_interface="in" name="Cii"/>
+    <variable units="second" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>Rii</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> kr_ </ci>
+            <ci> Cii </ci>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> kfe </ci>
+                <ci> numcell </ci>
+              </apply>
+              <ci> Rii </ci>
+              <ci> Lii </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> krec_i </ci>
+              <apply>
+                <minus/>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+                <ci> fr </ci>
+              </apply>
+              <ci> Rii </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> fr </ci>
+              <ci> kdeg </ci>
+              <ci> Rii </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="Cii"> 
+    <variable units="per_cell" public_interface="out" name="Cii"/>
+    
+    <variable units="cell_per_number_second" public_interface="in" name="kfe"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr_"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="ku_"/>
+    <variable units="per_minute" public_interface="in" name="kdeg"/>
+    <variable units="per_minute" public_interface="in" name="krec_i"/>
+    <variable units="cell_per_plate" public_interface="in" name="numcell"/>
+    <variable units="dimensionless" public_interface="in" name="fr"/>
+    <variable units="per_cell" public_interface="in" name="Ti"/>
+    <variable units="molar" public_interface="in" name="Lii"/>
+    <variable units="per_cell" public_interface="in" name="Rii"/>
+    <variable units="second" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>Cii</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> kfe </ci>
+                <ci> numcell </ci>
+              </apply>
+              <ci> Rii </ci>
+              <ci> Lii </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> ku_ </ci>
+              <ci> Ti </ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> kr_ </ci>
+              <ci> Cii </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> fr </ci>
+              <ci> kdeg </ci>
+              <ci> Cii </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> krec_i </ci>
+              <apply>
+                <minus/>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+                <ci> fr </ci>
+              </apply>
+              <ci> Cii </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="Ti"> 
+    <variable units="per_cell" public_interface="out" name="Ti"/>
+    
+    <variable units="per_minute" public_interface="in" name="kdeg"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="ku_"/>
+    <variable units="per_cell" public_interface="in" name="Ts"/>
+    <variable units="per_minute" public_interface="in" name="lamda"/>
+    <variable units="second" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>Ti</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> lamda </ci>
+            <ci> Ts </ci>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> ku_ </ci>
+              <ci> Ti </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> kdeg </ci>
+              <ci> Ti </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="Pi"> 
+    <variable units="per_cell" public_interface="out" name="Pi"/>
+    
+    <variable units="first_order_rate_constant" public_interface="in" name="ku_"/>
+    <variable units="per_minute" public_interface="in" name="krec_p"/>
+    <variable units="per_cell" public_interface="in" name="Ti"/>
+    <variable units="per_cell" public_interface="in" name="Ps"/>
+    <variable units="per_minute" public_interface="in" name="lamda"/>
+    <variable units="second" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>Pi</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> ku_ </ci>
+              <ci> Ti </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> lamda </ci>
+              <ci> Pi </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> krec_p </ci>
+            <ci> Pi </ci>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="Lii"> 
+    <variable units="molar" public_interface="out" name="Lii"/>
+    
+    <variable units="first_order_rate_constant" public_interface="in" name="kr_"/>
+    <variable units="cell_per_number_second" public_interface="in" name="kfe"/>
+    <variable units="per_minute" public_interface="in" name="kdeg"/>
+    <variable units="per_cell" public_interface="in" name="Rii"/>
+    <variable units="per_cell" public_interface="in" name="Cii"/>
+    <variable units="cell_per_plate" public_interface="in" name="numcell"/>
+    <variable units="second" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>Lii</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> numcell </ci>
+            <ci> kr_ </ci>
+            <ci> Cii </ci>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> kdeg </ci>
+              <ci> Lii </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> kfe </ci>
+              <ci> Rii </ci>
+              <ci> Lii </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="Ric"> 
+    <variable units="per_cell" public_interface="out" name="Ric"/>
+    
+    <variable units="cell_per_number_second" public_interface="in" name="kfv"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="per_minute" public_interface="in" name="kt"/>
+    <variable units="per_minute" public_interface="in" name="krec_c"/>
+    <variable units="cell_per_plate" public_interface="in" name="numcell"/>
+    <variable units="per_cell" public_interface="in" name="Rs"/>
+    <variable units="molar" public_interface="in" name="Lic"/>
+    <variable units="per_cell" public_interface="in" name="Cic"/>
+    <variable units="second" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>Ric</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> kr </ci>
+              <ci> Cic </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> kt </ci>
+              <ci> Rs </ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> kfv </ci>
+                <ci> numcell </ci>
+              </apply>
+              <ci> Ric </ci>
+              <ci> Lic </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> krec_c </ci>
+              <ci> Ric </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="Cic"> 
+    <variable units="per_cell" public_interface="out" name="Cic"/>
+    
+    <variable units="cell_per_number_second" public_interface="in" name="kfv"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="per_minute" public_interface="in" name="kt"/>
+    <variable units="per_minute" public_interface="in" name="krec_c"/>
+    <variable units="cell_per_plate" public_interface="in" name="numcell"/>
+    <variable units="per_cell" public_interface="in" name="Cs"/>
+    <variable units="molar" public_interface="in" name="Lic"/>
+    <variable units="per_cell" public_interface="in" name="Ric"/>
+    <variable units="second" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>Cic</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> kfv </ci>
+                <ci> numcell </ci>
+              </apply>
+              <ci> Ric </ci>
+              <ci> Lic </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> kt </ci>
+              <ci> Cs </ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> kr </ci>
+              <ci> Cic </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> krec_c </ci>
+              <ci> Cic </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="Lic"> 
+    <variable units="molar" public_interface="out" name="Lic"/>
+    
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="cell_per_number_second" public_interface="in" name="kfv"/>
+    <variable units="per_minute" public_interface="in" name="krec_c"/>
+    <variable units="per_cell" public_interface="in" name="Ric"/>
+    <variable units="per_cell" public_interface="in" name="Cic"/>
+    <variable units="cell_per_plate" public_interface="in" name="numcell"/>
+    <variable units="second" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>Lic</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> numcell </ci>
+            <ci> kr </ci>
+            <ci> Cic </ci>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> krec_c </ci>
+              <ci> Lic </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> kfv </ci>
+              <ci> Ric </ci>
+              <ci> Lic </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="kinetic_constants"> 
+    <variable units="first_order_rate_constant" public_interface="out" name="kr" initial_value="3.6E-2"/>
+    <variable units="per_number_per_second" public_interface="out" name="kc" initial_value="3.8E-7"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kuc" initial_value="1.2E-2"/>
+    <variable units="number_per_cell_second" public_interface="out" name="ks" initial_value="1.0"/>
+    <variable units="per_minute" public_interface="out" name="lamda" initial_value="1.8"/>
+    <variable units="per_minute" public_interface="out" name="kt" initial_value="0.05"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kr_" initial_value="3.6E-1"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="ku_" initial_value="0.1216"/>
+    <variable units="per_minute" public_interface="out" name="krec_c" initial_value="0.05"/>
+    <variable units="per_minute" public_interface="out" name="krec_i" initial_value="0.05"/>
+    <variable units="per_minute" public_interface="out" name="krec_p" initial_value="20.0"/>
+    <variable units="per_minute" public_interface="out" name="kdeg" initial_value="0.02"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="ku" initial_value="0.1216"/> 
+    <variable units="second_order_rate_constant" public_interface="out" name="kfc"/>
+    <variable units="cell_per_number_second" public_interface="out" name="kfe"/>
+    <variable units="cell_per_number_second" public_interface="out" name="kfv"/>
+    <variable units="cell_per_plate" public_interface="out" name="numcell"/>
+    <variable units="dimensionless" public_interface="out" name="fr"/>
+   
+    <variable units="second_order_rate_constant" name="kf" initial_value="1.2E6"/>
+    <variable units="molar" name="K_DC" initial_value="3.0E-8"/>
+    <variable units="dimensionless" name="K_DT" initial_value="3.2E5"/>
+    <variable units="dimensionless" name="Kcp" initial_value="3.125E-6"/>
+    <variable units="per_cell" name="RT" initial_value="1.8E5"/>
+    <variable units="per_cell" name="PT" initial_value="6.6E4"/>
+    <variable units="dimensionless" name="PT_RT" initial_value="0.37"/>
+    <variable units="cell" name="cell"/>
+    <variable units="plate" name="plate"/>
+    <variable units="litre" name="Vplate"/>
+    <variable units="litre" name="L"/>
+    <variable units="litre_per_cell" name="Vendosome" initial_value="5.0E-19"/>
+    <variable units="litre_per_cell" name="Vvesicle" initial_value="5.0E-15"/>
+    <variable units="per_mole" name="Nav" initial_value="6.0221419E23"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci>ku</ci> 
+        <apply>
+          <divide/>
+          <ci> kc </ci>
+          <ci> Kcp </ci>
+        </apply>
+      </apply>
+      
+      <apply>
+        <eq/> 
+        <ci>kfc</ci> 
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <ci> kf </ci>
+            <ci> numcell </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> Nav </ci>
+            <ci> Vplate </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply>
+        <eq/> 
+        <ci>kfe</ci> 
+        <apply>
+          <divide/>
+          <ci> kf </ci>
+          <apply>
+            <times/>
+            <ci> Nav </ci>
+            <ci> Vendosome </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply>
+        <eq/> 
+        <ci>kfv</ci> 
+        <apply>
+          <divide/>
+          <ci> kf </ci>
+          <apply>
+            <times/>
+            <ci> Nav </ci>
+            <ci> Vvesicle </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply>
+        <eq/> 
+        <ci>numcell</ci> 
+        <apply>
+          <divide/>
+          <ci> cell </ci>
+          <ci> plate </ci>
+        </apply>
+      </apply>
+      
+      <apply>
+        <eq/> 
+        <ci>Vplate</ci> 
+        <apply>
+          <divide/>
+          <ci> L </ci>
+          <ci> plate </ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  
+  <connection>
+    <map_components component_2="environment" component_1="Rs"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Cs"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Ts"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Ps"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Lo"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Rii"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Cii"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Ti"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Pi"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Lii"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Ric"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Cic"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Lic"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Cs" component_1="Rs"/>
+    <map_variables variable_2="Rs" variable_1="Rs"/>
+    <map_variables variable_2="Cs" variable_1="Cs"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Lo" component_1="Rs"/>
+    <map_variables variable_2="Rs" variable_1="Rs"/>
+    <map_variables variable_2="Lo" variable_1="Lo"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Ric" component_1="Rs"/>
+    <map_variables variable_2="Rs" variable_1="Rs"/>
+    <map_variables variable_2="Ric" variable_1="Ric"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Rii" component_1="Rs"/>
+    <map_variables variable_2="Rii" variable_1="Rii"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="kinetic_constants" component_1="Rs"/>
+    <map_variables variable_2="kfc" variable_1="kfc"/>
+    <map_variables variable_2="numcell" variable_1="numcell"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="krec_i" variable_1="krec_i"/>
+    <map_variables variable_2="krec_c" variable_1="krec_c"/>
+    <map_variables variable_2="ks" variable_1="ks"/>
+    <map_variables variable_2="kt" variable_1="kt"/>
+    <map_variables variable_2="fr" variable_1="fr"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Lo" component_1="Cs"/>
+    <map_variables variable_2="Cs" variable_1="Cs"/>
+    <map_variables variable_2="Lo" variable_1="Lo"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Ps" component_1="Cs"/>
+    <map_variables variable_2="Cs" variable_1="Cs"/>
+    <map_variables variable_2="Ps" variable_1="Ps"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Ts" component_1="Cs"/>
+    <map_variables variable_2="Cs" variable_1="Cs"/>
+    <map_variables variable_2="Ts" variable_1="Ts"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Cic" component_1="Cs"/>
+    <map_variables variable_2="Cs" variable_1="Cs"/>
+    <map_variables variable_2="Cic" variable_1="Cic"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Cii" component_1="Cs"/>
+    <map_variables variable_2="Cii" variable_1="Cii"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="kinetic_constants" component_1="Cs"/>
+    <map_variables variable_2="kfc" variable_1="kfc"/>
+    <map_variables variable_2="numcell" variable_1="numcell"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="krec_i" variable_1="krec_i"/>
+    <map_variables variable_2="krec_c" variable_1="krec_c"/>
+    <map_variables variable_2="kc" variable_1="kc"/>
+    <map_variables variable_2="ku" variable_1="ku"/>
+    <map_variables variable_2="kt" variable_1="kt"/>
+    <map_variables variable_2="fr" variable_1="fr"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Ps" component_1="Ts"/>
+    <map_variables variable_2="Ps" variable_1="Ps"/>
+    <map_variables variable_2="Ts" variable_1="Ts"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="kinetic_constants" component_1="Ts"/>
+    <map_variables variable_2="lamda" variable_1="lamda"/>
+    <map_variables variable_2="kc" variable_1="kc"/>
+    <map_variables variable_2="ku" variable_1="ku"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Pi" component_1="Ps"/>
+    <map_variables variable_2="Ps" variable_1="Ps"/>
+    <map_variables variable_2="Pi" variable_1="Pi"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="kinetic_constants" component_1="Ps"/>
+    <map_variables variable_2="lamda" variable_1="lamda"/>
+    <map_variables variable_2="krec_p" variable_1="krec_p"/>
+    <map_variables variable_2="kc" variable_1="kc"/>
+    <map_variables variable_2="ku" variable_1="ku"/>
+  </connection> 
+  
+  <connection>
+    <map_components component_2="Lic" component_1="Lo"/>
+    <map_variables variable_2="Lic" variable_1="Lic"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="kinetic_constants" component_1="Lo"/>
+    <map_variables variable_2="kfc" variable_1="kfc"/>
+    <map_variables variable_2="numcell" variable_1="numcell"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="krec_c" variable_1="krec_c"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Lii" component_1="Rii"/>
+    <map_variables variable_2="Rii" variable_1="Rii"/>
+    <map_variables variable_2="Lii" variable_1="Lii"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Cii" component_1="Rii"/>
+    <map_variables variable_2="Rii" variable_1="Rii"/>
+    <map_variables variable_2="Cii" variable_1="Cii"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="kinetic_constants" component_1="Rii"/>
+    <map_variables variable_2="kfe" variable_1="kfe"/>
+    <map_variables variable_2="numcell" variable_1="numcell"/>
+    <map_variables variable_2="kr_" variable_1="kr_"/>
+    <map_variables variable_2="kdeg" variable_1="kdeg"/>
+    <map_variables variable_2="krec_i" variable_1="krec_i"/>
+    <map_variables variable_2="fr" variable_1="fr"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Lii" component_1="Cii"/>
+    <map_variables variable_2="Cii" variable_1="Cii"/>
+    <map_variables variable_2="Lii" variable_1="Lii"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Ti" component_1="Cii"/>
+    <map_variables variable_2="Ti" variable_1="Ti"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="kinetic_constants" component_1="Cii"/>
+    <map_variables variable_2="kfe" variable_1="kfe"/>
+    <map_variables variable_2="numcell" variable_1="numcell"/>
+    <map_variables variable_2="kr_" variable_1="kr_"/>
+    <map_variables variable_2="ku_" variable_1="ku_"/>
+    <map_variables variable_2="kdeg" variable_1="kdeg"/>
+    <map_variables variable_2="krec_i" variable_1="krec_i"/>
+    <map_variables variable_2="fr" variable_1="fr"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Ts" component_1="Ti"/>
+    <map_variables variable_2="Ts" variable_1="Ts"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="kinetic_constants" component_1="Ti"/>
+    <map_variables variable_2="lamda" variable_1="lamda"/>
+    <map_variables variable_2="ku_" variable_1="ku_"/>
+    <map_variables variable_2="kdeg" variable_1="kdeg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Ti" component_1="Pi"/>
+    <map_variables variable_2="Ti" variable_1="Ti"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="kinetic_constants" component_1="Pi"/>
+    <map_variables variable_2="lamda" variable_1="lamda"/>
+    <map_variables variable_2="ku_" variable_1="ku_"/>
+    <map_variables variable_2="krec_p" variable_1="krec_p"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="kinetic_constants" component_1="Lii"/>
+    <map_variables variable_2="kfe" variable_1="kfe"/>
+    <map_variables variable_2="numcell" variable_1="numcell"/>
+    <map_variables variable_2="kr_" variable_1="kr_"/>
+    <map_variables variable_2="kdeg" variable_1="kdeg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Lic" component_1="Ric"/>
+    <map_variables variable_2="Ric" variable_1="Ric"/>
+    <map_variables variable_2="Lic" variable_1="Lic"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Cic" component_1="Ric"/>
+    <map_variables variable_2="Ric" variable_1="Ric"/>
+    <map_variables variable_2="Cic" variable_1="Cic"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="kinetic_constants" component_1="Ric"/>
+    <map_variables variable_2="kfv" variable_1="kfv"/>
+    <map_variables variable_2="numcell" variable_1="numcell"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="kt" variable_1="kt"/>
+    <map_variables variable_2="krec_c" variable_1="krec_c"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Lic" component_1="Cic"/>
+    <map_variables variable_2="Cic" variable_1="Cic"/>
+    <map_variables variable_2="Lic" variable_1="Lic"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="kinetic_constants" component_1="Cic"/>
+    <map_variables variable_2="kfv" variable_1="kfv"/>
+    <map_variables variable_2="numcell" variable_1="numcell"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="kt" variable_1="kt"/>
+    <map_variables variable_2="krec_c" variable_1="krec_c"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="kinetic_constants" component_1="Lic"/>
+    <map_variables variable_2="kfv" variable_1="kfv"/>
+    <map_variables variable_2="numcell" variable_1="numcell"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="krec_c" variable_1="krec_c"/>
+  </connection>
+  
+
+<rdf:RDF>
+  <rdf:Bag rdf:about="rdf:#c1c43079-4c4b-4e21-a3d4-53748dfd2c05">
+    <rdf:li>proliferation</rdf:li>
+    <rdf:li>signal transduction</rdf:li>
+    <rdf:li>egfr</rdf:li>
+    <rdf:li>Fibroblast</rdf:li>
+    <rdf:li>fibroblast</rdf:li>
+    <rdf:li>cell cycle</rdf:li>
+    <rdf:li>trafficking</rdf:li>
+    <rdf:li>egf</rdf:li>
+  </rdf:Bag>
+  <rdf:Seq rdf:about="rdf:#18e8784d-4de2-4b0d-81b1-29bf904c034f">
+    <rdf:li rdf:resource="rdf:#3fd5314f-2578-406d-b073-259c9c886f32"/>
+    <rdf:li rdf:resource="rdf:#a78fcb9c-d96f-45bd-bf4a-aa0b8f68fcd9"/>
+    <rdf:li rdf:resource="rdf:#1fd3c2f2-c485-4b9c-b0ca-07a723cf5c1f"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#5ded2f26-379b-46b4-9777-eb5a83b2e968">
+    <bqs:JournalArticle rdf:resource="rdf:#898d8acf-1a11-4da8-b5fe-4ea653101d52"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1e05b306-ebb6-4e5c-99c5-ab3f04308fab">
+    <vCard:FN>Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4a4388f6-70f7-4064-9de8-1799b78ae5cd">
+    <vCard:ORG rdf:resource="rdf:#8d2edc33-8577-4b97-abb5-e3a93ef179c8"/>
+    <vCard:EMAIL rdf:resource="rdf:#0f6137d2-89cc-48c8-9e7b-6f9bf391b07d"/>
+    <vCard:N rdf:resource="rdf:#9a971a49-b5b7-4b23-9bb3-c80b9a1e65c4"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9b49506d-35c5-4486-b1eb-4c0c37ba8b80">
+    <dc:creator rdf:resource="rdf:#1e05b306-ebb6-4e5c-99c5-ab3f04308fab"/>
+    <rdf:value>
+          This is the CellML description of Starbuck et al.'s 1990 model of 
+          epidermal growth factor binding and trafficking dynamics in 
+          fibroblasts: relationship to cell proliferation.
+        </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0e2d43db-8fae-4321-8249-e0db85e30567">
+    <dcterms:W3CDTF>2003-11-28</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e93dc505-4dd8-47da-98a4-fd98b2176ff3">
+    <dc:subject rdf:resource="rdf:#cafddd5a-af20-450f-a6ca-e37e92b546ed"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9a971a49-b5b7-4b23-9bb3-c80b9a1e65c4">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#50d0d481-c4d6-4baf-84cb-68b16d58a058">
+    <vCard:Given>Cindy</vCard:Given>
+    <vCard:Family>Starbuck</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#bfff93fc-2f71-449d-ab05-a4f1d18dbcf4">
+    <dc:title>Chemical Engineering Science</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1fd3c2f2-c485-4b9c-b0ca-07a723cf5c1f">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#2f664c4f-7800-4eae-a331-d7078f8c7e3a"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#df863443-0ddf-45bc-bb0e-2c12e0531930">
+    <dcterms:W3CDTF>1990</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#2f664c4f-7800-4eae-a331-d7078f8c7e3a">
+    <vCard:Given>Douglas</vCard:Given>
+    <vCard:Family>Lauffenburger</vCard:Family>
+    <vCard:Other>A</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#898d8acf-1a11-4da8-b5fe-4ea653101d52">
+    <dc:creator rdf:resource="rdf:#18e8784d-4de2-4b0d-81b1-29bf904c034f"/>
+    <dc:title>
+            Epidermal Growth Factor Binding and Trafficking Dynamics in 
+            Fibroblasts: Relationship to Cell Proliferation
+          </dc:title>
+    <bqs:volume>45</bqs:volume>
+    <bqs:first_page>2367</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#bfff93fc-2f71-449d-ab05-a4f1d18dbcf4"/>
+    <dcterms:issued rdf:resource="rdf:#df863443-0ddf-45bc-bb0e-2c12e0531930"/>
+    <bqs:last_page>2373</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a78fcb9c-d96f-45bd-bf4a-aa0b8f68fcd9">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#f33c7e1f-f5bb-4161-9d14-8102aa46acdc"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:publisher>
+        The University of Auckland, Bioengineering Institute
+      </dc:publisher>
+    <dcterms:created rdf:resource="rdf:#0e2d43db-8fae-4321-8249-e0db85e30567"/>
+    <dc:creator rdf:resource="rdf:#4a4388f6-70f7-4064-9de8-1799b78ae5cd"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f33c7e1f-f5bb-4161-9d14-8102aa46acdc">
+    <vCard:Given>H</vCard:Given>
+    <vCard:Family>Wiley</vCard:Family>
+    <vCard:Other>Steven</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0f6137d2-89cc-48c8-9e7b-6f9bf391b07d">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="#starbuck_wiley_lauffenburger_1990_version01">
+    <dc:title>
+        Starbuck et al.'s 1990 model of epidermal growth factor binding and 
+        trafficking dynamics in fibroblasts: relationship to cell proliferation.
+      </dc:title>
+    <cmeta:bio_entity>Fibroblast</cmeta:bio_entity>
+    <cmeta:comment rdf:resource="rdf:#9b49506d-35c5-4486-b1eb-4c0c37ba8b80"/>
+    <bqs:reference rdf:resource="rdf:#5ded2f26-379b-46b4-9777-eb5a83b2e968"/>
+    <bqs:reference rdf:resource="rdf:#e93dc505-4dd8-47da-98a4-fd98b2176ff3"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#cafddd5a-af20-450f-a6ca-e37e92b546ed">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value rdf:resource="rdf:#c1c43079-4c4b-4e21-a3d4-53748dfd2c05"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3fd5314f-2578-406d-b073-259c9c886f32">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#50d0d481-c4d6-4baf-84cb-68b16d58a058"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8d2edc33-8577-4b97-abb5-e3a93ef179c8">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>The Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+</rdf:RDF>
+</model>

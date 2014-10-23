@@ -1,0 +1,445 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="moore_2004" name="moore_2004">
+
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>A Mathematical Model for Chronic Myelogenous Leukemia (CML) and T Cell Interaction</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+            This model runs in OpenCell to recreate the published results. This particular version of the model recreates figure 7 from the paper (where CML increases over a 2 year period).  The units have been checked and they are consistent. The CellML model also runs in COR however due to the timescale being in days the model is not ideal for simulation in COR.
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+  ABSTRACT: In this paper, we propose and analyse a mathematical model for chronic myelogenous leukemia (CML), a cancer of the blood. We model the interaction between naive T cells, effector T cells, and CML cancer cells in the body, using a system of ordinary differential equations which gives rates of change of the three cell populations. One of the difficulties in modeling CML is the scarcity of experimental data which can be used to estimate parameters values. To compensate for the resulting uncertainties, we use Latin hypercube sampling (LHS) on large ranges of possible parameter values in our analysis. A major goal of this work is the determination of parameters which play a critical role in remission or clearance of the cancer in the model. Our analysis examines 12 parameters, and identifies two of these, the growth and death rates of CML, as critical to the outcome of the system. Our results indicate that the most promising research avenues for treatments of CML should be those that affect these two significant parameters (CML growth and death rates), while altering the other parameters should have little effect on the outcome.  
+</para>
+
+<para>
+The complete original paper reference is cited below:
+</para>
+
+<para>
+A mathematical model for chronic myelogenous leukemia (CML) and T cell interaction, Helen Moore and Natasha K. Li, 2004, <emphasis>Journal of Theoretical Biology</emphasis>, 11, 369-391. <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/15038986">PubMed ID: 15038986</ulink>
+</para>
+
+<informalfigure float="0" id="fig_reaction_diagram">
+          <mediaobject>
+            <imageobject>
+              <objectinfo>
+                <title>reaction diagram</title>
+              </objectinfo>
+              <imagedata fileref="moore_2004.png"/>
+            </imageobject>
+            <caption>
+Cell population diagram showing the population dynamics of each cell type and how they interact with each other.  These dynamics and interactions are described by the mathematical model equations.
+</caption>
+          </mediaobject>
+        </informalfigure>
+
+</sect1>
+</article>
+</documentation>
+  
+  
+  
+  <units name="day">
+    <unit units="second" multiplier="86400.0"/>
+  </units>
+  
+  <units name="first_order_rate_constant">
+    <unit units="day" exponent="-1"/>
+  </units>
+  
+  <units base_units="yes" name="cells"/>
+  
+  <units name="cells_per_microlitre">
+    <unit units="cells"/>
+    <unit units="litre" prefix="micro" exponent="-1"/>
+  </units>  
+  
+  <units name="flux">
+    <unit units="cells"/>
+    <unit units="litre" prefix="micro" exponent="-1"/>
+    <unit units="day" exponent="-1"/>
+  </units>
+  
+  <units name="microlitre_per_cells_day">
+    <unit units="litre" prefix="micro"/>
+    <unit units="cells" exponent="-1"/>
+    <unit units="day" exponent="-1"/>
+  </units>
+
+  
+  <component name="environment">
+    <variable units="day" public_interface="out" name="time"/>
+  </component>
+  
+  <component cmeta:id="Tn" name="Tn">
+    <rdf:RDF>
+      <rdf:Description rdf:about="Tn">
+        <dc:title>Tn</dc:title>
+        <dcterms:alternative>naive T cells</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable units="cells_per_microlitre" public_interface="out" name="Tn" initial_value="1510.0"/>
+    
+    <variable units="flux" name="sn" initial_value="0.29"/>
+    <variable units="first_order_rate_constant" name="dn" initial_value="0.35"/>
+    
+    <variable units="first_order_rate_constant" public_interface="in" name="kn"/>
+    <variable units="cells_per_microlitre" public_interface="in" name="eta"/>
+    <variable units="cells_per_microlitre" public_interface="in" name="C"/>
+    <variable units="day" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>Tn</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <ci> sn </ci>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> dn </ci>
+              <ci> Tn </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> kn </ci>
+              <ci> Tn </ci>
+              <apply>
+                <divide/>
+                <ci> C </ci>
+                <apply>
+                  <plus/>
+                  <ci> C </ci>
+                  <ci> eta </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="Te" name="Te">
+    <rdf:RDF>
+      <rdf:Description rdf:about="Te">
+        <dc:title>Te</dc:title>
+        <dcterms:alternative>effector T cells specific to CML</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable units="cells_per_microlitre" public_interface="out" name="Te" initial_value="20.0"/>
+    
+    <variable units="dimensionless" name="alpha_n" initial_value="0.39"/>
+    <variable units="first_order_rate_constant" name="alpha_e" initial_value="0.65"/>
+    <variable units="first_order_rate_constant" name="de" initial_value="0.40"/>
+    <variable units="microlitre_per_cells_day" name="gamma_e" initial_value="0.079"/>
+    
+    <variable units="first_order_rate_constant" public_interface="in" name="kn"/>
+    <variable units="cells_per_microlitre" public_interface="in" name="eta"/>
+    <variable units="cells_per_microlitre" public_interface="in" name="C"/>
+    <variable units="cells_per_microlitre" public_interface="in" name="Tn"/>
+    <variable units="day" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>Te</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> alpha_n </ci>
+              <ci> kn </ci>
+              <ci> Tn </ci>
+              <apply>
+                <divide/>
+                <ci> C </ci>
+                <apply>
+                  <plus/>
+                  <ci> C </ci>
+                  <ci> eta </ci>
+                </apply>
+              </apply>
+            </apply>
+            <apply>
+              <times/>
+              <ci> alpha_e </ci>
+              <ci> Te </ci>
+              <apply>
+                <divide/>
+                <ci> C </ci>
+                <apply>
+                  <plus/>
+                  <ci> C </ci>
+                  <ci> eta </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> de </ci>
+              <ci> Te </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> gamma_e </ci>
+              <ci> C </ci>
+              <ci> Te </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="C" name="C">
+    <rdf:RDF>
+      <rdf:Description rdf:about="C">
+        <dc:title>C</dc:title>
+        <dcterms:alternative>chronic myelogenous leukemia (CML) cancer cells</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable units="cells_per_microlitre" public_interface="out" name="C" initial_value="10000.0"/>
+    
+    <variable units="cells_per_microlitre" name="Cmax" initial_value="160000"/>
+    <variable units="first_order_rate_constant" name="rc" initial_value="0.011"/>
+    <variable units="first_order_rate_constant" name="dc" initial_value="0.012"/>
+    <variable units="microlitre_per_cells_day" name="gamma_c" initial_value="0.058"/>
+    
+    <variable units="cells_per_microlitre" public_interface="in" name="Te"/>
+    <variable units="day" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>C</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> rc </ci>
+            <ci> C </ci>
+            <apply>
+              <ln/>
+              <apply>
+                <divide/>
+                <ci> Cmax </ci>
+                <ci> C </ci>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> dc </ci>
+              <ci> C </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> gamma_c </ci>
+              <ci> C </ci>
+              <ci> Te </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="model_parameters"> 
+    <variable units="first_order_rate_constant" public_interface="out" name="kn" initial_value="0.066"/>
+    <variable units="cells_per_microlitre" public_interface="out" name="eta" initial_value="140.0"/>
+  </component>
+  
+  
+  <connection>
+    <map_components component_2="environment" component_1="Tn"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Te"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="C"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Tn" component_1="model_parameters"/>
+    <map_variables variable_2="kn" variable_1="kn"/>
+    <map_variables variable_2="eta" variable_1="eta"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Te" component_1="model_parameters"/>
+    <map_variables variable_2="kn" variable_1="kn"/>
+    <map_variables variable_2="eta" variable_1="eta"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="C" component_1="Tn"/>
+    <map_variables variable_2="C" variable_1="C"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="C" component_1="Te"/>
+    <map_variables variable_2="Te" variable_1="Te"/>
+    <map_variables variable_2="C" variable_1="C"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Tn" component_1="Te"/>
+    <map_variables variable_2="Tn" variable_1="Tn"/>
+  </connection>
+  
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Bag rdf:about="rdf:#2d21808a-1b91-4741-85c7-1f95235a667d">
+    <rdf:li>T cell</rdf:li>
+    <rdf:li>immunology</rdf:li>
+    <rdf:li>t cell</rdf:li>
+    <rdf:li>cancer</rdf:li>
+  </rdf:Bag>
+  <rdf:Seq rdf:about="rdf:#67e7c4c0-4be2-458d-97f0-980f4e27eb19">
+    <rdf:li rdf:resource="rdf:#ee7b2cab-b0ca-407f-8f40-7fbab6824c86"/>
+    <rdf:li rdf:resource="rdf:#8d45c880-8322-4699-a01d-b600eaf81253"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#19a39640-f856-4b14-8202-2059539fc516">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value rdf:resource="rdf:#2d21808a-1b91-4741-85c7-1f95235a667d"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4bd57f3b-d972-415f-b1c5-dcabcc9078a8">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b784e183-a2d7-4b9a-b535-56193bf324a1">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#772c5b02-2381-443d-93f1-dc052b5d5003">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>The Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#07facc3f-7e93-4f47-9b8f-9dc281783370">
+    <vCard:FN>Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4d88ecab-9800-4d91-a070-e022b200c3ae">
+    <dc:subject rdf:resource="rdf:#19a39640-f856-4b14-8202-2059539fc516"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#moore_2004">
+    <dc:title>
+        Moore and Li's 2004 mathematical model for chronic myelogenous leukemia and T cell interaction.
+      </dc:title>
+    <cmeta:bio_entity>T lymphocyte</cmeta:bio_entity>
+    <cmeta:comment rdf:resource="rdf:#8649b4d6-f8a9-4736-94c6-e98872398295"/>
+    <bqs:reference rdf:resource="rdf:#4d88ecab-9800-4d91-a070-e022b200c3ae"/>
+    <bqs:reference rdf:resource="rdf:#c96a07ad-0ffb-4f96-9589-883fc3d997df"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#c96a07ad-0ffb-4f96-9589-883fc3d997df">
+    <bqs:Pubmed_id>15038986</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#7d3ae7e2-66a9-4468-8433-2fd9368938d1"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#36b349de-8251-41b4-9b46-f651b1f32228">
+    <dcterms:W3CDTF>2004-03-27</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#2a0b1381-b6b5-4b08-9644-2c5ff91679de">
+    <vCard:Given>Helen</vCard:Given>
+    <vCard:Family>Moore</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ee7b2cab-b0ca-407f-8f40-7fbab6824c86">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#2a0b1381-b6b5-4b08-9644-2c5ff91679de"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:title>A Mathematical Model for Chronic Myelogenous Leukemia (CML) and T Cell Interaction (Increasing CML Variant)</dc:title>
+	<dc:publisher>
+        The University of Auckland, Bioengineering Institute
+      </dc:publisher>
+    <dcterms:created rdf:resource="rdf:#36b349de-8251-41b4-9b46-f651b1f32228"/>
+    <dc:creator rdf:resource="rdf:#9c4ff941-7a32-4cdd-889a-89e9b2b5f78f"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8d45c880-8322-4699-a01d-b600eaf81253">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#a7e9d350-4382-45b6-bd3b-01256a0b0e18"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9c4ff941-7a32-4cdd-889a-89e9b2b5f78f">
+    <vCard:ORG rdf:resource="rdf:#772c5b02-2381-443d-93f1-dc052b5d5003"/>
+    <vCard:EMAIL rdf:resource="rdf:#4bd57f3b-d972-415f-b1c5-dcabcc9078a8"/>
+    <vCard:N rdf:resource="rdf:#b784e183-a2d7-4b9a-b535-56193bf324a1"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8649b4d6-f8a9-4736-94c6-e98872398295">
+    <dc:creator rdf:resource="rdf:#07facc3f-7e93-4f47-9b8f-9dc281783370"/>
+    <rdf:value>
+          This is the CellML description of Moore and Li's 2004 mathematical model for chronic myelogenous leukemia and T cell interaction.
+        </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7d3ae7e2-66a9-4468-8433-2fd9368938d1">
+    <dc:creator rdf:resource="rdf:#67e7c4c0-4be2-458d-97f0-980f4e27eb19"/>
+    <dc:title>
+            A mathematical model for chronic myelogenous leukemia (CML) and T cell interaction 
+          </dc:title>
+    <bqs:volume>227</bqs:volume>
+    <bqs:first_page>513</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#4a94e2ab-7c70-4fb9-8e1c-f058ba3fa8f8"/>
+    <dcterms:issued rdf:resource="rdf:#273c0ad7-3920-40ec-b95c-d1bc272dfc2b"/>
+    <bqs:last_page>523</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a7e9d350-4382-45b6-bd3b-01256a0b0e18">
+    <vCard:Given>Natasha</vCard:Given>
+    <vCard:Family>Li</vCard:Family>
+    <vCard:Other>K</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#273c0ad7-3920-40ec-b95c-d1bc272dfc2b">
+    <dcterms:W3CDTF>2004-04-21</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4a94e2ab-7c70-4fb9-8e1c-f058ba3fa8f8">
+    <dc:title>Journal of Theoretical Biology</dc:title>
+  </rdf:Description>
+</rdf:RDF>
+</model>

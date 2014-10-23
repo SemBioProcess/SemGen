@@ -1,0 +1,406 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--  FILE :  bonhoeffer_model_I_2000.xml
+
+CREATED :  10th December 2003
+
+LAST MODIFIED : 10th December 2003
+
+AUTHOR :  Catherine Lloyd
+          Bioengineering Institute
+          The University of Auckland
+          
+MODEL STATUS :  This model conforms to the CellML 1.0 Specification released on
+10th August 2001, and the 16/1/02 CellML Metadata 1.0 Specification.
+
+DESCRIPTION :  This file contains a CellML description of Bonhoeffer et al.'s 1st 2000 mathematical model of virus dynamics.
+
+CHANGES:  
+  
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="bonhoeffer_2000" name="bonhoeffer_2000">
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Modelling the Population Dynamics of Virus Infected Cells</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+        This CellML model runs in OpenCell and COR to replicate the published results (figure 2 - up until the introduction of the drug, which is not described in this set of equations). The units have been checked and they are consistent. This particular CellML model represents model 1 from the published paper.
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+ABSTRACT: BACKGROUND: Structured interruptions of antiretroviral therapy of HIV-1 infected individuals are currently being tested in clinical trials to study the effect interruptions have on the immune responses and control of virus replication. OBJECTIVE: To investigate the potential risks and benefits of interrupted therapy using standard population dynamical models of HIV replication kinetics. METHODS: Standard population dynamical models were used to study the effect of structured therapy interruptions on the immune effector cells, the latent cell compartment and the emergence of drug resistance. CONCLUSIONS: The models suggest that structured therapy interruption only leads to transient or sustained virus control if the immune effector cells increase during therapy. This increase must more than counterbalance the increase in susceptible target cells induced by therapy. The risk of inducing drug resistance by therapy interruptions or the risk of repopulating the pool of latent cells during drug-free periods may be small if the virus population remains at levels considerably below baseline. However, if the virus load increases during drug-free periods to levels similar to or higher than baseline before therapy, both these risks increase dramatically.
+</para>
+
+<para>
+The original paper reference is cited below:
+</para>
+
+<para>
+Risks and benefits of structured antiretroviral drug therapy interruptions in HIV-1 infection, Sebastian Bonhoeffer, Michal Rembiszewski, Gabriel M. Ortiz, and Douglas F. Nixon, 2000,
+            <emphasis>AIDS</emphasis>, 14, 2313-2322.  <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/11089619">PubMed ID: 11089619</ulink>
+</para>
+
+<informalfigure float="0" id="fig_cell_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>cell diagram</title>
+    </objectinfo>
+    <imagedata fileref="bonhoeffer_rembiszewski_ortiz_nixon_2000.png"/>
+  </imageobject>
+</mediaobject>
+<caption>Schematic diagram of a mathematical model of the interaction between HIV and the immune system.</caption>
+</informalfigure>
+
+</sect1>
+</article>
+</documentation>
+  
+  
+  
+  <units name="day">
+    <unit units="second" multiplier="86400.0"/>
+  </units>
+  
+  <units name="first_order_rate_constant">
+    <unit units="day" exponent="-1"/>
+  </units>
+  
+  
+  <component name="environment">
+    <variable units="day" public_interface="out" name="time"/>
+  </component>
+  
+  <component cmeta:id="T" name="T">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#T">
+        <dc:title>T</dc:title>
+        <dcterms:alternative>susceptible target cells</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable units="dimensionless" public_interface="out" name="T" initial_value="1.0"/>
+    
+    <variable units="first_order_rate_constant" name="s" initial_value="10.0"/>
+    <variable units="first_order_rate_constant" name="dT" initial_value="0.01"/>
+    
+    <variable units="first_order_rate_constant" public_interface="in" name="b"/>
+    <variable units="dimensionless" public_interface="in" name="I"/>
+    <variable units="day" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>T</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <ci> s </ci>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> dT </ci>
+              <ci> T </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> b </ci> 
+              <ci> T </ci> 
+              <ci> I </ci>
+            </apply> 
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="I" name="I">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#I">
+        <dc:title>I</dc:title>
+        <dcterms:alternative>infected cells</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable units="dimensionless" public_interface="out" name="I"  initial_value="1.0"/>
+    
+    <variable units="first_order_rate_constant" name="p" initial_value="0.05"/>
+    <variable units="first_order_rate_constant" name="dI" initial_value="0.3"/>
+    
+    <variable units="first_order_rate_constant" public_interface="in" name="b"/>
+    <variable units="dimensionless" public_interface="in" name="T"/>
+    <variable units="dimensionless" public_interface="in" name="E"/>
+    <variable units="day" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>I</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> b </ci>
+            <ci> T </ci>
+            <ci> I </ci>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> dI </ci>
+              <ci> I </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> p </ci> 
+              <ci> I </ci> 
+              <ci> E </ci>
+            </apply> 
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="E" name="E">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#E">
+        <dc:title>E</dc:title>
+        <dcterms:alternative>CTL</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable units="dimensionless" public_interface="out" name="E"  initial_value="1.0"/>
+    
+    <variable units="first_order_rate_constant" name="c" initial_value="0.05"/>
+    <variable units="first_order_rate_constant" name="dE" initial_value="0.1"/>
+    <variable units="dimensionless" name="K" initial_value="0.1"/>
+    
+    <variable units="dimensionless" public_interface="in" name="I"/>
+    <variable units="day" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>E</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <ci> c </ci>
+              <ci> I </ci>
+            </apply>
+            <apply>
+              <times/>
+			  <apply>
+                <plus/>
+                <ci> I </ci>
+                <ci> K </ci>
+              </apply>
+			  <ci> E </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> dE </ci>
+            <ci> E </ci>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="kinetic_parameters"> 
+    <variable units="first_order_rate_constant" public_interface="out" name="b" initial_value="0.001"/>
+  </component>
+  
+  
+  <connection>
+    <map_components component_2="environment" component_1="T"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="I"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="E"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="I" component_1="T"/>
+    <map_variables variable_2="I" variable_1="I"/>
+    <map_variables variable_2="T" variable_1="T"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="E" component_1="I"/>
+    <map_variables variable_2="I" variable_1="I"/>
+    <map_variables variable_2="E" variable_1="E"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="kinetic_parameters" component_1="T"/>
+    <map_variables variable_2="b" variable_1="b"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="kinetic_parameters" component_1="I"/>
+    <map_variables variable_2="b" variable_1="b"/>
+  </connection>
+  
+
+
+
+
+
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Seq rdf:about="rdf:#citationAuthorsSeq">
+    <rdf:li rdf:resource="rdf:#author1Vcard"/>
+    <rdf:li rdf:resource="rdf:#author2Vcard"/>
+    <rdf:li rdf:resource="rdf:#author3Vcard"/>
+    <rdf:li rdf:resource="rdf:#author4Vcard"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#ddb20e3b-01ba-423e-8cee-e8f56dd69354">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ec185520-99f9-4eae-9219-3e121adab866">
+    <vCard:FN>Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#fc158adb-410c-4009-98d4-1af02a6c125c">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value>
+            <rdf:Bag>
+              <rdf:li>immunology</rdf:li>
+            </rdf:Bag>
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+   <dc:title>Risks and benefits of structured antiretroviral drug therapy interruptions in HIV-1 infection: Model 1</dc:title>
+    <dc:publisher>
+        The University of Auckland, Auckland Bioengineering Institute
+      </dc:publisher>
+    <dcterms:created rdf:resource="rdf:#7d5171d2-f7a5-4e3a-ad0c-26b46d1e4a67"/>
+    <dc:creator rdf:resource="rdf:#c9314d38-515c-4726-b6f3-4be746aa2238"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a8918273-dc8e-4976-8735-eae917f4322d">
+    <dc:subject rdf:resource="rdf:#fc158adb-410c-4009-98d4-1af02a6c125c"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7d5171d2-f7a5-4e3a-ad0c-26b46d1e4a67">
+    <dcterms:W3CDTF>2003-12-10</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author4Vcard">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#author4VcardN"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#33b7b934-99f8-4598-825b-26748f00090e">
+    <dc:creator rdf:resource="rdf:#citationAuthorsSeq"/>
+    <dc:title>Risks and benefits of structured antiretroviral drug therapy interruptions in HIV-1 infection</dc:title>
+    <bqs:volume>14</bqs:volume>
+    <bqs:first_page>2313</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#930ff3da-1ab0-4af4-a55f-a192dd4d9952"/>
+    <dcterms:issued rdf:resource="rdf:#e67778e6-eb3f-4ad3-89e9-d7b6ad8fce61"/>
+    <bqs:last_page>2322</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9150b280-0f30-4df4-a3eb-68c81c6c88c4">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>The Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author3VcardN">
+    <vCard:Given>Gabriel</vCard:Given>
+    <vCard:Family>Ortiz</vCard:Family>
+    <vCard:Other>M</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e1a95972-cbdf-41e7-b555-91631f7a5b94">
+    <bqs:Pubmed_id>11089619</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#33b7b934-99f8-4598-825b-26748f00090e"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#c9314d38-515c-4726-b6f3-4be746aa2238">
+    <vCard:ORG rdf:resource="rdf:#9150b280-0f30-4df4-a3eb-68c81c6c88c4"/>
+    <vCard:EMAIL rdf:resource="rdf:#ddb20e3b-01ba-423e-8cee-e8f56dd69354"/>
+    <vCard:N rdf:resource="rdf:#808db535-d752-4e4d-a34b-bf9864c06a3e"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e1b3eaa6-b81e-4763-a3f6-ca2017c1ad94">
+    <dc:creator rdf:resource="rdf:#ec185520-99f9-4eae-9219-3e121adab866"/>
+    <rdf:value>This is the CellML description of Bonhoeffer et al.'s 1st 2000 mathematical model of virus dynamics.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author2VcardN">
+    <vCard:Given>Michal</vCard:Given>
+    <vCard:Family>Rembiszewski</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author2Vcard">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#author2VcardN"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#930ff3da-1ab0-4af4-a55f-a192dd4d9952">
+    <dc:title>AIDS</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#808db535-d752-4e4d-a34b-bf9864c06a3e">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="#bonhoeffer_2000">
+    <dc:title>
+        Bonhoeffer et al.'s 1st 2000 mathematical model of virus dynamics.
+      </dc:title>
+    <cmeta:comment rdf:resource="rdf:#e1b3eaa6-b81e-4763-a3f6-ca2017c1ad94"/>
+    <bqs:reference rdf:resource="rdf:#a8918273-dc8e-4976-8735-eae917f4322d"/>
+    <bqs:reference rdf:resource="rdf:#e1a95972-cbdf-41e7-b555-91631f7a5b94"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author4VcardN">
+    <vCard:Given>Douglas</vCard:Given>
+    <vCard:Family>Nixon</vCard:Family>
+    <vCard:Other>F</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author1Vcard">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#author1VcardN"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author1VcardN">
+    <vCard:Given>Sebastian</vCard:Given>
+    <vCard:Family>Bonhoeffer</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author3Vcard">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#author3VcardN"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e67778e6-eb3f-4ad3-89e9-d7b6ad8fce61">
+    <dcterms:W3CDTF>2000-10-20</dcterms:W3CDTF>
+  </rdf:Description>
+</rdf:RDF>
+</model>

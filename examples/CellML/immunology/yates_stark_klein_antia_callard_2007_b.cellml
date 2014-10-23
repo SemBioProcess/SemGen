@@ -1,0 +1,343 @@
+<?xml version="1.0"?>
+<!--  FILE :  yates_model_2007.xml
+
+CREATED :  10th December 2003
+
+LAST MODIFIED : 10th December 2003
+
+AUTHOR :  Catherine Lloyd
+          Bioengineering Institute
+          The University of Auckland
+          
+MODEL STATUS :  This model conforms to the CellML 1.1 Specification.
+
+DESCRIPTION :  This file contains a CellML description of Yates et al.'s 2007 mathematical model of the slow depletion of memory CD4+ T cells in HIV infection.
+
+CHANGES:  
+  
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" cmeta:id="yates_model_2007" name="yates_stark_klein_antia_callard_model_2007_version01">
+
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Understanding the slow depletion of memory CD4+ T cells in HIV infection</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+        This CellML version of the model has been checked in COR and PCEnv.  The units are consistent and the original source code was used to fix the CellML model such that it now runs to recreate the published results. The original paper contains three different mathematical models and this particular CellML model represents the second model of self-renewing memory CD4+ T cell homeostasis in the presence of HIV infection.
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+ABSTRACT: BACKGROUND: The asymptomatic phase of HIV infection is characterised by a slow decline of peripheral blood CD4(+) T cells. Why this decline is slow is not understood. One potential explanation is that the low average rate of homeostatic proliferation or immune activation dictates the pace of a "runaway" decline of memory CD4(+) T cells, in which activation drives infection, higher viral loads, more recruitment of cells into an activated state, and further infection events. We explore this hypothesis using mathematical models. METHODS AND FINDINGS: Using simple mathematical models of the dynamics of T cell homeostasis and proliferation, we find that this mechanism fails to explain the time scale of CD4(+) memory T cell loss. Instead it predicts the rapid attainment of a stable set point, so other mechanisms must be invoked to explain the slow decline in CD4(+) cells. CONCLUSIONS: A runaway cycle in which elevated CD4(+) T cell activation and proliferation drive HIV production and vice versa cannot explain the pace of depletion during chronic HIV infection. We summarize some alternative mechanisms by which the CD4(+) memory T cell homeostatic set point might slowly diminish. While none are mutually exclusive, the phenomenon of viral rebound, in which interruption of antiretroviral therapy causes a rapid return to pretreatment viral load and T cell counts, supports the model of virus adaptation as a major force driving depletion.
+</para>
+
+<informalfigure float="0" id="fig_reaction_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>model diagram</title>
+    </objectinfo>
+    <imagedata fileref="yates_2007b.png"/>
+  </imageobject>
+</mediaobject>
+<caption>A simple model of self-renewing memory CD4+ T cell homeostasis which includes HIV infection.  Activated dividing cells are infected with HIV at a rate proportional to the viral load which, in turn, is proportional to the infected cell count (Z), and an infectivity parameter (p) models the effciency of the infection process.</caption>
+</informalfigure>
+
+<para>
+The original paper reference is cited below:
+</para>
+
+<para>
+Understanding the slow depletion of memory CD4+ T cells in HIV infection, Andrew Yates, Jaroslav Stark, Nigel Klein, Rustom Antia, and Robin Callard, 2007, <emphasis>PLoS Medicine</emphasis>, volume 4, issue 5, 948-955.  <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/17518516">PubMed ID: 17518516</ulink></para>
+
+</sect1>
+</article>
+</documentation> 
+
+
+
+  
+  <units name="day">
+    <unit multiplier="86400.0" units="second"/>
+  </units>
+  
+  <units name="first_order_rate_constant">
+    <unit exponent="-1" units="day"/>
+  </units>
+  
+  
+  <component name="environment">
+    <variable cmeta:id="environment_time" name="time" public_interface="out" units="day"/>
+  </component>
+  
+  <component cmeta:id="x" name="x">
+      
+    <variable cmeta:id="x_x" initial_value="10E-1" name="x" public_interface="out" units="dimensionless"/>
+    
+    <variable name="d1" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="a" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="r" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="y" public_interface="in" units="dimensionless"/>
+    <variable name="kappa" public_interface="in" units="dimensionless"/>
+    <variable name="time" public_interface="in" units="day"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> x </ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 2.0 </cn>
+            <ci> r </ci>
+            <ci> y </ci>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> a </ci>
+              <ci> x </ci>
+              <apply>
+                <minus/>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1.0 </cn>
+                <apply>
+                  <divide/>
+                  <ci> x </ci> 
+                  <ci> kappa </ci>
+                </apply> 
+              </apply>
+            </apply>
+            <apply>
+              <times/>
+              <ci> d1 </ci> 
+              <ci> x </ci>
+              <apply>
+                <divide/>
+                <ci> x </ci> 
+                <ci> kappa </ci>
+              </apply> 
+            </apply> 
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="y" name="y">
+      
+    <variable cmeta:id="y_y" initial_value="0.0" name="y" public_interface="out" units="dimensionless"/>
+
+    <variable name="d2" units="first_order_rate_constant"/>
+    
+    <variable name="d1" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="a" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="r" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="p" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="x" public_interface="in" units="dimensionless"/>
+    <variable name="z" public_interface="in" units="dimensionless"/>
+    <variable name="kappa" public_interface="in" units="dimensionless"/>
+    <variable name="time" public_interface="in" units="day"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>y</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> a </ci> 
+            <ci> x </ci>
+            <apply>
+              <minus/>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <divide/>
+                <ci> x </ci> 
+                <ci> kappa </ci>
+              </apply> 
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <apply>
+                <plus/> 
+                <ci> r </ci>
+                <ci> d2 </ci>
+              </apply> 
+              <ci> y </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> p </ci> 
+              <ci> z </ci>
+              <ci> y </ci> 
+            </apply> 
+          </apply>
+        </apply>
+      </apply>    
+
+      <apply>
+        <eq/> 
+        <ci> d2 </ci>
+        <apply>
+          <divide/> 
+          <apply>
+            <plus/>
+            <apply>
+              <minus/>
+              <apply>
+                <times/> 
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 99.0 </cn>
+                <ci> a </ci>
+                <ci> d1 </ci>
+              </apply>
+            </apply>
+            <apply>
+              <times/> 
+              <ci> a </ci>
+              <ci> r </ci>
+            </apply>
+            <apply>
+              <times/> 
+              <ci> d1 </ci>
+              <ci> r </ci>
+            </apply>
+          </apply>
+          <apply>
+            <minus/>
+            <ci> a </ci>
+            <ci> d1 </ci>
+          </apply> 
+        </apply>
+      </apply>             
+    </math>
+  </component>
+
+  <component cmeta:id="z" name="z">
+      
+    <variable cmeta:id="z_z" initial_value="0.01" name="z" public_interface="out" units="dimensionless"/>
+
+    <variable initial_value="0.5" name="v" units="first_order_rate_constant"/>
+    
+    <variable name="p" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="y" public_interface="in" units="dimensionless"/>
+    <variable name="time" public_interface="in" units="day"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>z</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> p </ci> 
+            <ci> z </ci>
+            <ci> y </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> v </ci>
+            <ci> z </ci>
+          </apply> 
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="model_parameters"> 
+    <variable initial_value="0.03333" name="a" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="0.005" name="d1" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="1.0" name="r" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="200.0" name="p" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="1.0" name="kappa" public_interface="out" units="dimensionless"/>
+  </component>
+  
+  <connection>
+    <map_components component_1="x" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="y" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="z" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+ 
+  <connection>
+    <map_components component_1="y" component_2="x"/>
+    <map_variables variable_1="x" variable_2="x"/>
+    <map_variables variable_1="y" variable_2="y"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="y" component_2="z"/>
+    <map_variables variable_1="z" variable_2="z"/>
+    <map_variables variable_1="y" variable_2="y"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="x" component_2="model_parameters"/>
+    <map_variables variable_1="a" variable_2="a"/>
+    <map_variables variable_1="kappa" variable_2="kappa"/>
+    <map_variables variable_1="r" variable_2="r"/>
+    <map_variables variable_1="d1" variable_2="d1"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="y" component_2="model_parameters"/>
+    <map_variables variable_1="a" variable_2="a"/>
+    <map_variables variable_1="r" variable_2="r"/>
+    <map_variables variable_1="kappa" variable_2="kappa"/>
+    <map_variables variable_1="p" variable_2="p"/>
+    <map_variables variable_1="d1" variable_2="d1"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="z" component_2="model_parameters"/>
+    <map_variables variable_1="p" variable_2="p"/>
+  </connection>
+  
+
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:about="rdf:#de65a34a-c5ea-4f03-9273-22b74e1f0165"><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#ae2159ef-902f-421d-b1e3-753e59dd5cf4"/></creator><rdf:value xml:lang="en">This CellML file has been checked in COR and PCEnv.  The units are consistent and the model runs to give the published results.  However, by using the author's original source code it does mean this model now slightly varies from the published version.</rdf:value></rdf:Description><rdf:Description rdf:about="rdf:#41e6021b-a4e5-425a-816c-278e803b1dfa"><Pubmed_id xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">17518516</Pubmed_id><JournalArticle xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:about="rdf:#dc506008-9eae-4e1d-8ef0-a7f8ecebee83"/></JournalArticle></rdf:Description><rdf:Description rdf:about=""><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#fcb2eaf6-6726-4a24-9926-59d9be5c82e2"/></creator><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">Understanding the slow depletion of memory CD4+ T cells in HIV infection (Model 2)</title><cmeta:comment><rdf:Description rdf:about="rdf:#de65a34a-c5ea-4f03-9273-22b74e1f0165"/></cmeta:comment><created xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:about="rdf:#30affb6e-244f-41a0-9598-4655cac1ce7d"/></created><cmeta:modification><rdf:Description rdf:about="rdf:#2fe7222b-3152-41d5-86b7-deed6e417028"/></cmeta:modification><cmeta:modification><rdf:Description rdf:about="rdf:#e8644e8f-3903-45bb-9e15-1ecc24e5c778"/></cmeta:modification><publisher xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">The University of Auckland, Bioengineering Institute</publisher></rdf:Description><rdf:Description rdf:about="rdf:#2fe7222b-3152-41d5-86b7-deed6e417028"><modified xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:about="rdf:#14aae729-296f-40aa-a8bb-cad0126f49db"/></modified><rdf:value xml:lang="en">Model has been checked in COR and PCEnv.  The units have been corrected and the equations fixed according to the author's original source code.</rdf:value><cmeta:modifier><rdf:Description rdf:about="rdf:#e4621c62-d6db-49b5-a07d-8591435b5ebc"/></cmeta:modifier></rdf:Description><rdf:Description rdf:about="rdf:#dc506008-9eae-4e1d-8ef0-a7f8ecebee83"><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#9ce41661-2f27-4e95-b6d8-e90bffd0b56d"/></creator><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">Understanding the slow depletion of memory CD4+ T cells in HIV infection</title><volume xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">4</volume><first_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">948</first_page><issued xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:about="rdf:#bc70c188-8217-4efb-ab46-8e6b3a7a2c48"/></issued><last_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">955</last_page><Journal xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:about="rdf:#68a870b2-7429-4ec6-8408-b430f1ca623c"/></Journal></rdf:Description><rdf:Description rdf:about="rdf:#bc70c188-8217-4efb-ab46-8e6b3a7a2c48"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2007-05-22</W3CDTF></rdf:Description><rdf:Description rdf:about="rdf:#655c39d2-e36a-4d76-abc5-dbb71aa85024"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">James</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Lawson</Family><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Richard</Other></rdf:Description><rdf:Description rdf:about="rdf:#9e822f99-a322-499b-b937-65c498191d89"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2008-09-02T13:36:14+12:00</W3CDTF></rdf:Description><rdf:Description rdf:about="rdf:#25c9c6e4-24cc-4d76-89a1-2cd148aba708"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Catherine</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Lloyd</Family><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">May</Other></rdf:Description><rdf:Description rdf:about="rdf:#c06cf7ba-3ffb-4377-81b3-d5d2e2c16ecf"><rdf:value xml:lang="en">c.lloyd@auckland.ac.nz</rdf:value><rdf:type><rdf:Description rdf:about="http://imc.org/vCard/3.0#internet"/></rdf:type></rdf:Description><rdf:Description rdf:about="rdf:#f7b6a44b-e195-4982-8f13-eaa8a571d46d"><rdf:_1 xml:lang="en">immunology</rdf:_1><rdf:_5 xml:lang="en">imd2nology</rdf:_5><rdf:_2 xml:lang="en">hiv</rdf:_2><rdf:_3 xml:lang="en">HIV</rdf:_3><rdf:_7 xml:lang="en">cell cycle</rdf:_7><rdf:_4 xml:lang="en">cd4+ t cell</rdf:_4><rdf:_6 xml:lang="en">CD4+ T cell</rdf:_6><rdf:_8 xml:lang="en">viral dynamics</rdf:_8><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag"/></rdf:type></rdf:Description><rdf:Description rdf:about="rdf:#68a870b2-7429-4ec6-8408-b430f1ca623c"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">PLoS Medicine</title></rdf:Description><rdf:Description rdf:about="#y"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">y</title><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">dividing CD4+ T cells</alternative></rdf:Description><rdf:Description rdf:about="rdf:#fcb2eaf6-6726-4a24-9926-59d9be5c82e2"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#89abc5b8-b01b-408a-862c-568124406c03"/></N><ORG xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#f3324b75-437d-43f8-a84c-c95af2261473"/></ORG><EMAIL xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#c06cf7ba-3ffb-4377-81b3-d5d2e2c16ecf"/></EMAIL></rdf:Description><rdf:Description rdf:nodeID="n1"><boundIntervals xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n2"/></boundIntervals></rdf:Description><rdf:Description rdf:about="rdf:#9ce41661-2f27-4e95-b6d8-e90bffd0b56d"><rdf:_1><rdf:Description rdf:about="rdf:#6e6df78b-f2a7-42eb-afa8-f696c3a1ee5f"/></rdf:_1><rdf:_5><rdf:Description rdf:about="rdf:#04d1e522-1193-44d5-8285-4e7a210893ae"/></rdf:_5><rdf:_2><rdf:Description rdf:about="rdf:#c17fd20a-d61e-4de0-8109-eb0b62ab2ff5"/></rdf:_2><rdf:_3><rdf:Description rdf:about="rdf:#1a3e8ba0-fed4-4cf2-b636-02d9344cf1e0"/></rdf:_3><rdf:_4><rdf:Description rdf:about="rdf:#b61deeea-da1d-4f5f-b475-f4e92c9a03d9"/></rdf:_4><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq"/></rdf:type></rdf:Description><rdf:Description rdf:about="#yates_model_2007"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">
+        Yates et al.'s 2007 mathematical model of the slow depletion of memory CD4+ T cells in HIV infection.
+      </title><cmeta:comment><rdf:Description rdf:about="rdf:#4c13c87b-9da3-497f-83f2-13c03e40dba7"/></cmeta:comment><simulation xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n1"/></simulation><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:about="rdf:#41e6021b-a4e5-425a-816c-278e803b1dfa"/></reference><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:about="rdf:#5697caa7-6a96-4616-bf1e-4045e43d2b73"/></reference></rdf:Description><rdf:Description rdf:about="rdf:#6e6df78b-f2a7-42eb-afa8-f696c3a1ee5f"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#8bcb074b-58c4-4dcf-854c-aa1eb2a3936a"/></N><rdf:type><rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/></rdf:type></rdf:Description><rdf:Description rdf:about="rdf:#b3c18c8a-2852-47c2-8fbc-9befd57cca37"><rdf:value><rdf:Description rdf:about="rdf:#f7b6a44b-e195-4982-8f13-eaa8a571d46d"/></rdf:value><subject_type xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">keyword</subject_type></rdf:Description><rdf:Description rdf:about="#x"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">x</title><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">resting memory CD4+ T cells</alternative></rdf:Description><rdf:Description rdf:about="rdf:#04d1e522-1193-44d5-8285-4e7a210893ae"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#87a11999-42d7-499d-b296-3d5f5145276e"/></N><rdf:type><rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/></rdf:type></rdf:Description><rdf:Description rdf:about="rdf:#c17fd20a-d61e-4de0-8109-eb0b62ab2ff5"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#395ca002-669d-4372-9e0e-70a5594cde61"/></N><rdf:type><rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/></rdf:type></rdf:Description><rdf:Description rdf:about="rdf:#b61deeea-da1d-4f5f-b475-f4e92c9a03d9"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#f92b4214-b038-4ffb-8d4e-dcba2b45ce87"/></N><rdf:type><rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/></rdf:type></rdf:Description><rdf:Description rdf:about="rdf:#89abc5b8-b01b-408a-862c-568124406c03"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Catherine</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Lloyd</Family><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">May</Other></rdf:Description><rdf:Description rdf:nodeID="n3"><endingValue xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">500</endingValue><pointDensity xmlns="http://www.cellml.org/metadata/simulation/1.0#nonstandard-" xml:lang="en">10000</pointDensity></rdf:Description><rdf:Description rdf:about="rdf:#14aae729-296f-40aa-a8bb-cad0126f49db"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2007-09-17T17:09:55+12:00</W3CDTF></rdf:Description><rdf:Description rdf:about="rdf:#50537ac3-d89a-40f9-9fe9-0173bacf5f58"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Nigel</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Klein</Family></rdf:Description><rdf:Description rdf:about="#z"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">z</title><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">HIV-infected CD4+ T cells</alternative></rdf:Description><rdf:Description rdf:about="rdf:#c52a680e-c780-4b0b-8ec5-d605098b5487"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#655c39d2-e36a-4d76-abc5-dbb71aa85024"/></N></rdf:Description><rdf:Description rdf:about="rdf:#4c13c87b-9da3-497f-83f2-13c03e40dba7"><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#167f7051-e652-4715-8133-5019b5e1c4c5"/></creator><rdf:value xml:lang="en">This is a CellML description of Yates et al.'s 2007 mathematical model of the slow depletion of memory CD4+ T cells in HIV infection.</rdf:value></rdf:Description><rdf:Description rdf:about="rdf:#f3324b75-437d-43f8-a84c-c95af2261473"><Orgname xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">The University of Auckland</Orgname><Orgunit xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">The Bioengineering Institute</Orgunit></rdf:Description><rdf:Description rdf:about="rdf:#e8644e8f-3903-45bb-9e15-1ecc24e5c778"><modified xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:about="rdf:#9e822f99-a322-499b-b937-65c498191d89"/></modified><rdf:value xml:lang="en">Fixed error where 'd2' had somehow replaced 'mu' in 'multiplier' within the CellML and in the documentation.</rdf:value><cmeta:modifier><rdf:Description rdf:about="rdf:#c52a680e-c780-4b0b-8ec5-d605098b5487"/></cmeta:modifier></rdf:Description><rdf:Description rdf:about="rdf:#f92b4214-b038-4ffb-8d4e-dcba2b45ce87"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Rustom</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Antia</Family></rdf:Description><rdf:Description rdf:about="rdf:#30affb6e-244f-41a0-9598-4655cac1ce7d"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2007-06-26T00:00:00+00:00</W3CDTF></rdf:Description><rdf:Description rdf:about="rdf:#395ca002-669d-4372-9e0e-70a5594cde61"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Jaroslav</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Stark</Family></rdf:Description><rdf:Description rdf:about="rdf:#5697caa7-6a96-4616-bf1e-4045e43d2b73"><subject xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#b3c18c8a-2852-47c2-8fbc-9befd57cca37"/></subject></rdf:Description><rdf:Description rdf:about="rdf:#167f7051-e652-4715-8133-5019b5e1c4c5"><FN xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Catherine Lloyd</FN></rdf:Description><rdf:Description rdf:about="rdf:#87a11999-42d7-499d-b296-3d5f5145276e"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Robin</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Callard</Family></rdf:Description><rdf:Description rdf:about="rdf:#ae2159ef-902f-421d-b1e3-753e59dd5cf4"><FN xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Catherine Lloyd</FN></rdf:Description><rdf:Description rdf:about="rdf:#1a3e8ba0-fed4-4cf2-b636-02d9344cf1e0"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#50537ac3-d89a-40f9-9fe9-0173bacf5f58"/></N><rdf:type><rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/></rdf:type></rdf:Description><rdf:Description rdf:about="rdf:#e4621c62-d6db-49b5-a07d-8591435b5ebc"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#25c9c6e4-24cc-4d76-89a1-2cd148aba708"/></N></rdf:Description><rdf:Description rdf:nodeID="n2"><rdf:first><rdf:Description rdf:nodeID="n3"/></rdf:first><rdf:rest><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/></rdf:rest></rdf:Description><rdf:Description rdf:about="rdf:#8bcb074b-58c4-4dcf-854c-aa1eb2a3936a"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Andrew</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Yates</Family></rdf:Description></rdf:RDF></model>

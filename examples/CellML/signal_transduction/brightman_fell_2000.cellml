@@ -1,0 +1,2309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This CellML file was generated on 10/07/2009 at 10:18:19 at a.m. using:
+
+COR (0.9.31.1207)
+Copyright 2002-2009 Dr Alan Garny
+http://COR.physiol.ox.ac.uk/ - COR@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.CellML.org/
+-->
+<model xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" name="brightman_fell_2000" cmeta:id="brightman_fell_2000" xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#">
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>Differential Feedback Regulation of the MAPK Cascade Underlies the
+Quantitative Differences in EGF and NGF Signalling in PC12 Cells</title>
+				<author>
+					<firstname>Jeelean</firstname>
+					<surname>Lim</surname>
+					<affiliation>
+						<shortaffil>Bioengineering Institute, University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<section id="sec_status">
+				<title>Model Status</title>
+				<para>
+            This is the initial translation of the model into CellML. Concentrations have no dimensions in order to balance units. The percentage activation variables used to produce the graphs in the paper have not yet been added to this model. The model can therefore run in Opencell and COR but does not reproduce the figures in the paper.
+          </para>
+			</section>
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>
+ABSTRACT: Although epidermal growth factor (EGF) induces transient activation of Ras and the mitogen-activated protein kinase (MAPK) cascade in PC12 cells, whereas nerve growth factor (NGF) stimulates sustained activation, the basis for these contrasting responses is not known. We have developed a computer simulation of EGF-induced MAPK cascade activation, which provides quantitative evidence that feedback inhibition of the MAPK cascade is the most important factor in determining the duration of cascade activation. Hence, we propose that the observed quantitative differences in EGF and NGF signalling can be accounted for by differential feedback regulation of the MAPK cascade.
+</para>
+				
+				<para>
+The complete original paper reference is cited below:
+</para>
+				<para>
+					Differential feedback regulation of the MAPK cascade underlies the quantitative differences in EGF and NGF signalling in PC12 cells, Frances A. Brightman, David A. Fell, 2000,<emphasis>Federation of European Biochemical Societies Letters</emphasis>, 482(3), 169-174.  <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/11024454">PubMed ID: 11024454</ulink>
+				</para>
+				
+				<informalfigure float="0" id="fig_reaction_diagram">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>reaction diagram</title>
+							</objectinfo>
+							<imagedata fileref="brightman_2000.png"/>
+						</imageobject>
+					</mediaobject>
+					<caption>Schematic representation of the computer simulation of EGF signal transduction.</caption>
+				</informalfigure>
+			</sect1>
+		</article>
+	</documentation>
+	
+	<units name="minute">
+      <unit units="second" multiplier="60"/>
+   </units>
+   <units name="first_order_rate_constant">
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <component name="environment">
+      <variable name="time" units="minute" public_interface="out"/>
+   </component>
+   <component name="Rs">
+      <variable name="Rs" units="dimensionless" initial_value="11100" public_interface="out"/>
+      <variable name="v1" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v3" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Rs</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>v3</ci>
+               <ci>v1</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="RL">
+      <variable name="RL" units="dimensionless" initial_value="0" public_interface="out"/>
+      <variable name="v1" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v2" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v4" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>RL</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <ci>v1</ci>
+                  <ci>v2</ci>
+               </apply>
+               <ci>v4</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Ri">
+      <variable name="Ri" units="dimensionless" initial_value="3900" public_interface="out"/>
+      <variable name="v2" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v3" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v6" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Ri</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <ci>v2</ci>
+               <ci>v3</ci>
+               <ci>v6</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="L">
+      <variable name="L" units="dimensionless" initial_value="0.0000001" public_interface="out"/>
+      <variable name="v1" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>L</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>v1</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="R2L2">
+      <variable name="R2L2" units="dimensionless" initial_value="0" public_interface="out"/>
+      <variable name="v4" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v5" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v7" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>R2L2</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <ci>v4</ci>
+                  <ci>v5</ci>
+               </apply>
+               <ci>v7</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="R2_CPP">
+      <variable name="R2_CPP" units="dimensionless" initial_value="0" public_interface="out"/>
+      <variable name="v7" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v8" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>R2_CPP</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>v7</ci>
+               <ci>v8</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Li">
+      <variable name="Li" units="dimensionless" initial_value="0" public_interface="out"/>
+      <variable name="v2" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v6" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Li</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <ci>v2</ci>
+               <ci>v6</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="R2i">
+      <variable name="R2i" units="dimensionless" initial_value="0" public_interface="out"/>
+      <variable name="v5" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v6" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v8" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>R2i</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <ci>v5</ci>
+                  <ci>v8</ci>
+               </apply>
+               <ci>v6</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Shc">
+      <variable name="Shc" units="dimensionless" initial_value="30000" public_interface="out"/>
+      <variable name="v9" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v10" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Shc</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>v10</ci>
+               <ci>v9</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="ShcP">
+      <variable name="ShcP" units="dimensionless" initial_value="0" public_interface="out"/>
+      <variable name="v10" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v11" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v27" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>ShcP</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <ci>v27</ci>
+                  <ci>v10</ci>
+               </apply>
+               <ci>v11</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="ShcGS">
+      <variable name="ShcGS" units="dimensionless" initial_value="0" public_interface="out"/>
+      <variable name="v13" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v11" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v27" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v12" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>ShcGS</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <ci>v13</ci>
+                     <ci>v11</ci>
+                  </apply>
+                  <ci>v27</ci>
+               </apply>
+               <ci>v12</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="GS">
+      <variable name="GS" units="dimensionless" initial_value="20000" public_interface="out"/>
+      <variable name="v28" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v11" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>GS</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>v28</ci>
+               <ci>v11</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="GSP">
+      <variable name="GSP" units="dimensionless" initial_value="0" public_interface="out"/>
+      <variable name="v27" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v28" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>GSP</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>v27</ci>
+               <ci>v28</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="RasGDP">
+      <variable name="RasGDP" units="dimensionless" initial_value="19800" public_interface="out"/>
+      <variable name="v15" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v12" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>RasGDP</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>v15</ci>
+               <ci>v12</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Ras_ShcGS">
+      <variable name="Ras_ShcGS" units="dimensionless" initial_value="0" public_interface="out"/>
+      <variable name="v12" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v13" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Ras_ShcGS</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>v12</ci>
+               <ci>v13</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="RasGTP">
+      <variable name="RasGTP" units="dimensionless" initial_value="200" public_interface="out"/>
+      <variable name="RasGDP" units="dimensionless" public_interface="in"/>
+      <variable name="v13" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v17" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v14" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v16" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>RasGTP</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <ci>v13</ci>
+                     <ci>v17</ci>
+                  </apply>
+                  <ci>v14</ci>
+               </apply>
+               <ci>v16</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="GAP">
+      <variable name="GAP" units="dimensionless" initial_value="15000" public_interface="out"/>
+      <variable name="v15" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v14" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>GAP</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>v15</ci>
+               <ci>v14</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Ras_GAP">
+      <variable name="Ras_GAP" units="dimensionless" initial_value="0" public_interface="out"/>
+      <variable name="v14" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v15" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Ras_GAP</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>v14</ci>
+               <ci>v15</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Raf">
+      <variable name="Raf" units="dimensionless" initial_value="10000" public_interface="out"/>
+      <variable name="v18" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v16" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Raf</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>v18</ci>
+               <ci>v16</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Ras_Raf">
+      <variable name="Ras_Raf" units="dimensionless" initial_value="0" public_interface="out"/>
+      <variable name="v16" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v17" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Ras_Raf</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>v16</ci>
+               <ci>v17</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Rafa">
+      <variable name="Rafa" units="dimensionless" initial_value="0" public_interface="out"/>
+      <variable name="v17" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v18" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v19" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v21" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Rafa</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <ci>v17</ci>
+                     <ci>v19</ci>
+                  </apply>
+                  <ci>v21</ci>
+               </apply>
+               <ci>v18</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="MEK">
+      <variable name="MEK" units="dimensionless" initial_value="360000" public_interface="out"/>
+      <variable name="v20" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v19" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>MEK</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>v20</ci>
+               <ci>v19</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="MEKP">
+      <variable name="MEKP" units="dimensionless" initial_value="0" public_interface="out"/>
+      <variable name="v19" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v20" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v21" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v22" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>MEKP</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <ci>v19</ci>
+                     <ci>v22</ci>
+                  </apply>
+                  <ci>v20</ci>
+               </apply>
+               <ci>v21</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="MEKPP">
+      <variable name="MEKPP" units="dimensionless" initial_value="0" public_interface="out"/>
+      <variable name="v21" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v22" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>MEKPP</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>v21</ci>
+               <ci>v22</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="ERK">
+      <variable name="ERK" units="dimensionless" initial_value="750000" public_interface="out"/>
+      <variable name="v24" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v23" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>ERK</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>v24</ci>
+               <ci>v23</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="ERKP">
+      <variable name="ERKP" units="dimensionless" initial_value="0" public_interface="out"/>
+      <variable name="v23" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v26" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v24" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v25" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>ERKP</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <ci>v23</ci>
+                     <ci>v26</ci>
+                  </apply>
+                  <ci>v24</ci>
+               </apply>
+               <ci>v25</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="ERKPP">
+      <variable name="ERKPP" units="dimensionless" initial_value="0" public_interface="out"/>
+      <variable name="v25" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v26" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>ERKPP</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>v25</ci>
+               <ci>v26</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="t">
+      <variable name="t" units="dimensionless" initial_value="0" public_interface="out"/>
+      <variable name="v29" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>t</ci>
+            </apply>
+            <ci>v29</ci>
+         </apply>
+      </math>
+   </component>
+   <component name="X">
+      <variable name="X" units="dimensionless" initial_value="0" public_interface="out"/>
+      <variable name="v30" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>X</ci>
+            </apply>
+            <ci>v30</ci>
+         </apply>
+      </math>
+   </component>
+   <component name="v1">
+      <variable name="v1" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="Rs" units="dimensionless" public_interface="in"/>
+      <variable name="L" units="dimensionless" public_interface="in"/>
+      <variable name="RL" units="dimensionless" public_interface="in"/>
+      <variable name="k1" units="first_order_rate_constant" initial_value="384210000"/>
+      <variable name="kn1" units="first_order_rate_constant" initial_value="0.73"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>v1</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k1</ci>
+                  <ci>Rs</ci>
+                  <ci>L</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>kn1</ci>
+                  <ci>RL</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="v2">
+      <variable name="v2" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="RL" units="dimensionless" public_interface="in"/>
+      <variable name="t" units="dimensionless" public_interface="in"/>
+      <variable name="DT" units="dimensionless" initial_value="6.5"/>
+      <variable name="E" units="dimensionless" initial_value="0.12"/>
+      <variable name="k2" units="first_order_rate_constant" initial_value="0.7"/>
+      <variable name="f" units="dimensionless" initial_value="0.2"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>v2</ci>
+            <apply>
+               <times/>
+               <ci>f</ci>
+               <ci>k2</ci>
+               <apply>
+                  <plus/>
+                  <ci>E</ci>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>E</ci>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <apply>
+                           <exp/>
+                           <apply>
+                              <minus/>
+                              <apply>
+                                 <power/>
+                                 <apply>
+                                    <divide/>
+                                    <ci>t</ci>
+                                    <ci>DT</ci>
+                                 </apply>
+                                 <cn cellml:units="dimensionless">3</cn>
+                              </apply>
+                           </apply>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <ci>RL</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="v3">
+      <variable name="v3" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="Rs" units="dimensionless" public_interface="in"/>
+      <variable name="Ri" units="dimensionless" public_interface="in"/>
+      <variable name="t" units="dimensionless" public_interface="in"/>
+      <variable name="DT" units="dimensionless" initial_value="6.5"/>
+      <variable name="E" units="dimensionless" initial_value="0.12"/>
+      <variable name="kn3" units="first_order_rate_constant" initial_value="0.7"/>
+      <variable name="f" units="dimensionless" initial_value="0.2"/>
+      <variable name="k3" units="first_order_rate_constant" initial_value="0.0484"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>v3</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k3</ci>
+                  <ci>Ri</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>f</ci>
+                  <ci>kn3</ci>
+                  <apply>
+                     <plus/>
+                     <ci>E</ci>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <minus/>
+                           <cn cellml:units="dimensionless">1</cn>
+                           <ci>E</ci>
+                        </apply>
+                        <apply>
+                           <minus/>
+                           <cn cellml:units="dimensionless">1</cn>
+                           <apply>
+                              <exp/>
+                              <apply>
+                                 <minus/>
+                                 <apply>
+                                    <power/>
+                                    <apply>
+                                       <divide/>
+                                       <ci>t</ci>
+                                       <ci>DT</ci>
+                                    </apply>
+                                    <cn cellml:units="dimensionless">3</cn>
+                                 </apply>
+                              </apply>
+                           </apply>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <ci>Rs</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="v4">
+      <variable name="v4" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="RL" units="dimensionless" public_interface="in"/>
+      <variable name="R2L2" units="dimensionless" public_interface="in"/>
+      <variable name="k2_4" units="first_order_rate_constant" initial_value="0.0000001"/>
+      <variable name="k4" units="first_order_rate_constant" initial_value="0.001383"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>v4</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k4</ci>
+                  <ci>RL</ci>
+                  <ci>RL</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k2_4</ci>
+                  <ci>R2L2</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="v5">
+      <variable name="v5" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="R2L2" units="dimensionless" public_interface="in"/>
+      <variable name="t" units="dimensionless" public_interface="in"/>
+      <variable name="DT" units="dimensionless" initial_value="6.5"/>
+      <variable name="E" units="dimensionless" initial_value="0.12"/>
+      <variable name="k5" units="first_order_rate_constant" initial_value="0.35"/>
+      <variable name="f" units="dimensionless" initial_value="0.2"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>v5</ci>
+            <apply>
+               <times/>
+               <ci>f</ci>
+               <ci>k5</ci>
+               <apply>
+                  <plus/>
+                  <ci>E</ci>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>E</ci>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <apply>
+                           <exp/>
+                           <apply>
+                              <minus/>
+                              <apply>
+                                 <power/>
+                                 <apply>
+                                    <divide/>
+                                    <ci>t</ci>
+                                    <ci>DT</ci>
+                                 </apply>
+                                 <cn cellml:units="dimensionless">3</cn>
+                              </apply>
+                           </apply>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <ci>R2L2</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="v6">
+      <variable name="v6" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="R2i" units="dimensionless" public_interface="in"/>
+      <variable name="t" units="dimensionless" public_interface="in"/>
+      <variable name="DT" units="dimensionless" initial_value="6.5"/>
+      <variable name="E" units="dimensionless" initial_value="0.12"/>
+      <variable name="k6" units="first_order_rate_constant" initial_value="0.35"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>v6</ci>
+            <apply>
+               <times/>
+               <ci>k6</ci>
+               <apply>
+                  <plus/>
+                  <ci>E</ci>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>E</ci>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <apply>
+                           <exp/>
+                           <apply>
+                              <minus/>
+                              <apply>
+                                 <power/>
+                                 <apply>
+                                    <divide/>
+                                    <ci>t</ci>
+                                    <ci>DT</ci>
+                                 </apply>
+                                 <cn cellml:units="dimensionless">3</cn>
+                              </apply>
+                           </apply>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <ci>R2i</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="v7">
+      <variable name="v7" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="R2L2" units="dimensionless" public_interface="in"/>
+      <variable name="R2_CPP" units="dimensionless" public_interface="in"/>
+      <variable name="k7" units="first_order_rate_constant" initial_value="1"/>
+      <variable name="f" units="dimensionless" initial_value="0.2"/>
+      <variable name="kn7" units="first_order_rate_constant" initial_value="0.000347"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>v7</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k7</ci>
+                  <ci>f</ci>
+                  <ci>R2L2</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>kn7</ci>
+                  <ci>R2_CPP</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="v8">
+      <variable name="v8" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="R2_CPP" units="dimensionless" public_interface="in"/>
+      <variable name="t" units="dimensionless" public_interface="in"/>
+      <variable name="DT" units="dimensionless" initial_value="6.5"/>
+      <variable name="E" units="dimensionless" initial_value="0.12"/>
+      <variable name="k8" units="first_order_rate_constant" initial_value="0.35"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>v8</ci>
+            <apply>
+               <times/>
+               <ci>k8</ci>
+               <apply>
+                  <plus/>
+                  <ci>E</ci>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>E</ci>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <apply>
+                           <exp/>
+                           <apply>
+                              <minus/>
+                              <apply>
+                                 <power/>
+                                 <apply>
+                                    <divide/>
+                                    <ci>t</ci>
+                                    <ci>DT</ci>
+                                 </apply>
+                                 <cn cellml:units="dimensionless">3</cn>
+                              </apply>
+                           </apply>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <ci>R2_CPP</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="v9">
+      <variable name="v9" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="R2L2" units="dimensionless" public_interface="in"/>
+      <variable name="R2i" units="dimensionless" public_interface="in"/>
+      <variable name="R2_CPP" units="dimensionless" public_interface="in"/>
+      <variable name="Shc" units="dimensionless" public_interface="in"/>
+      <variable name="k9" units="first_order_rate_constant" initial_value="12"/>
+      <variable name="K_9" units="dimensionless" initial_value="6000"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>v9</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>k9</ci>
+                  <cn cellml:units="dimensionless">2</cn>
+                  <apply>
+                     <plus/>
+                     <ci>R2L2</ci>
+                     <ci>R2i</ci>
+                     <ci>R2_CPP</ci>
+                  </apply>
+                  <ci>Shc</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>K_9</ci>
+                  <ci>Shc</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="v10">
+      <variable name="v10" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="ShcP" units="dimensionless" public_interface="in"/>
+      <variable name="V_10" units="first_order_rate_constant" initial_value="300000"/>
+      <variable name="K_10" units="dimensionless" initial_value="6000"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>v10</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>V_10</ci>
+                  <ci>ShcP</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>K_10</ci>
+                  <ci>ShcP</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="v11">
+      <variable name="v11" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="ShcP" units="dimensionless" public_interface="in"/>
+      <variable name="GS" units="dimensionless" public_interface="in"/>
+      <variable name="ShcGS" units="dimensionless" public_interface="in"/>
+      <variable name="k11" units="first_order_rate_constant" initial_value="0.002"/>
+      <variable name="kn11" units="first_order_rate_constant" initial_value="3.81"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>v11</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k11</ci>
+                  <ci>ShcP</ci>
+                  <ci>GS</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>kn11</ci>
+                  <ci>ShcGS</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="v12">
+      <variable name="v12" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="RasGDP" units="dimensionless" public_interface="in"/>
+      <variable name="ShcGS" units="dimensionless" public_interface="in"/>
+      <variable name="Ras_ShcGS" units="dimensionless" public_interface="in"/>
+      <variable name="k12" units="first_order_rate_constant" initial_value="0.0163"/>
+      <variable name="kn12" units="first_order_rate_constant" initial_value="10"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>v12</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k12</ci>
+                  <ci>RasGDP</ci>
+                  <ci>ShcGS</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>kn12</ci>
+                  <ci>Ras_ShcGS</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="v13">
+      <variable name="v13" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="Ras_ShcGS" units="dimensionless" public_interface="in"/>
+      <variable name="k_13" units="first_order_rate_constant" initial_value="15"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>v13</ci>
+            <apply>
+               <times/>
+               <ci>k_13</ci>
+               <ci>Ras_ShcGS</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="v14">
+      <variable name="v14" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="RasGTP" units="dimensionless" public_interface="in"/>
+      <variable name="GAP" units="dimensionless" public_interface="in"/>
+      <variable name="Ras_GAP" units="dimensionless" public_interface="in"/>
+      <variable name="k14" units="first_order_rate_constant" initial_value="0.005"/>
+      <variable name="kn14" units="first_order_rate_constant" initial_value="60"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>v14</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k14</ci>
+                  <ci>RasGTP</ci>
+                  <ci>GAP</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>kn14</ci>
+                  <ci>Ras_GAP</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="v15">
+      <variable name="v15" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="Ras_GAP" units="dimensionless" public_interface="in"/>
+      <variable name="k15" units="first_order_rate_constant" initial_value="720"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>v15</ci>
+            <apply>
+               <times/>
+               <ci>k15</ci>
+               <ci>Ras_GAP</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="v16">
+      <variable name="v16" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="RasGTP" units="dimensionless" public_interface="in"/>
+      <variable name="Raf" units="dimensionless" public_interface="in"/>
+      <variable name="Ras_Raf" units="dimensionless" public_interface="in"/>
+      <variable name="k16" units="first_order_rate_constant" initial_value="0.0012"/>
+      <variable name="kn16" units="first_order_rate_constant" initial_value="3"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>v16</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k16</ci>
+                  <ci>RasGTP</ci>
+                  <ci>Raf</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>kn16</ci>
+                  <ci>Ras_Raf</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="v17">
+      <variable name="v17" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="Ras_Raf" units="dimensionless" public_interface="in"/>
+      <variable name="k17" units="first_order_rate_constant" initial_value="27"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>v17</ci>
+            <apply>
+               <times/>
+               <ci>k17</ci>
+               <ci>Ras_Raf</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="v18">
+      <variable name="v18" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="Rafa" units="dimensionless" public_interface="in"/>
+      <variable name="V_18" units="first_order_rate_constant" initial_value="97000"/>
+      <variable name="K_18" units="dimensionless" initial_value="6000"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>v18</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>V_18</ci>
+                  <ci>Rafa</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>K_18</ci>
+                  <ci>Rafa</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="v19">
+      <variable name="v19" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="Rafa" units="dimensionless" public_interface="in"/>
+      <variable name="MEK" units="dimensionless" public_interface="in"/>
+      <variable name="k19" units="first_order_rate_constant" initial_value="50"/>
+      <variable name="K_19" units="dimensionless" initial_value="9000"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>v19</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>Rafa</ci>
+                  <ci>MEK</ci>
+                  <ci>k19</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>K_19</ci>
+                  <ci>MEK</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="v20">
+      <variable name="v20" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="MEKP" units="dimensionless" public_interface="in"/>
+      <variable name="V_20" units="first_order_rate_constant" initial_value="920000"/>
+      <variable name="K_20" units="dimensionless" initial_value="600000"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>v20</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>V_20</ci>
+                  <ci>MEKP</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>K_20</ci>
+                  <ci>MEKP</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="v21">
+      <variable name="v21" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="Rafa" units="dimensionless" public_interface="in"/>
+      <variable name="MEKP" units="dimensionless" public_interface="in"/>
+      <variable name="k21" units="first_order_rate_constant" initial_value="50"/>
+      <variable name="K_21" units="dimensionless" initial_value="9000"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>v21</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>Rafa</ci>
+                  <ci>MEKP</ci>
+                  <ci>k21</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>K_21</ci>
+                  <ci>MEKP</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="v22">
+      <variable name="v22" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="MEKPP" units="dimensionless" public_interface="in"/>
+      <variable name="V_22" units="first_order_rate_constant" initial_value="920000"/>
+      <variable name="K_22" units="dimensionless" initial_value="600000"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>v22</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>V_22</ci>
+                  <ci>MEKPP</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>K_22</ci>
+                  <ci>MEKPP</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="v23">
+      <variable name="v23" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="ERK" units="dimensionless" public_interface="in"/>
+      <variable name="MEKP" units="dimensionless" public_interface="in"/>
+      <variable name="MEKPP" units="dimensionless" public_interface="in"/>
+      <variable name="k23" units="first_order_rate_constant" initial_value="8.3"/>
+      <variable name="K_23" units="dimensionless" initial_value="90000"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>v23</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>k23</ci>
+                  <ci>ERK</ci>
+                  <apply>
+                     <plus/>
+                     <ci>MEKP</ci>
+                     <ci>MEKPP</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>K_23</ci>
+                  <ci>ERK</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="v24">
+      <variable name="v24" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="ERKP" units="dimensionless" public_interface="in"/>
+      <variable name="V_24" units="first_order_rate_constant" initial_value="200000"/>
+      <variable name="K_24" units="dimensionless" initial_value="600000"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>v24</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>V_24</ci>
+                  <ci>ERKP</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>K_24</ci>
+                  <ci>ERKP</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="v25">
+      <variable name="v25" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="ERKP" units="dimensionless" public_interface="in"/>
+      <variable name="MEKP" units="dimensionless" public_interface="in"/>
+      <variable name="MEKPP" units="dimensionless" public_interface="in"/>
+      <variable name="k25" units="first_order_rate_constant" initial_value="8.3"/>
+      <variable name="K_25" units="dimensionless" initial_value="90000"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>v25</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>k25</ci>
+                  <ci>ERKP</ci>
+                  <apply>
+                     <plus/>
+                     <ci>MEKP</ci>
+                     <ci>MEKPP</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>K_25</ci>
+                  <ci>ERKP</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="v26">
+      <variable name="v26" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="ERKPP" units="dimensionless" public_interface="in"/>
+      <variable name="V_26" units="first_order_rate_constant" initial_value="400000"/>
+      <variable name="K_26" units="dimensionless" initial_value="600000"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>v26</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>V_26</ci>
+                  <ci>ERKPP</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>K_26</ci>
+                  <ci>ERKPP</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="v27">
+      <variable name="v27" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="ERKPP" units="dimensionless" public_interface="in"/>
+      <variable name="ShcGS" units="dimensionless" public_interface="in"/>
+      <variable name="k27" units="first_order_rate_constant" initial_value="1.6"/>
+      <variable name="K_27" units="dimensionless" initial_value="600000"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>v27</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>ERKPP</ci>
+                  <ci>ShcGS</ci>
+                  <ci>k27</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>K_27</ci>
+                  <ci>ShcGS</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="v28">
+      <variable name="v28" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="GSP" units="dimensionless" public_interface="in"/>
+      <variable name="V_28" units="first_order_rate_constant" initial_value="75"/>
+      <variable name="K_28" units="dimensionless" initial_value="20000"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>v28</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>V_28</ci>
+                  <ci>GSP</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>K_28</ci>
+                  <ci>GSP</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="v29">
+      <variable name="v29" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="v_1" units="first_order_rate_constant" initial_value="1"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>v29</ci>
+            <ci>v_1</ci>
+         </apply>
+      </math>
+   </component>
+   <component name="v30">
+      <variable name="v30" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="t" units="dimensionless" public_interface="in"/>
+      <variable name="k_11" units="first_order_rate_constant" initial_value="0"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>v30</ci>
+            <apply>
+               <times/>
+               <ci>k_11</ci>
+               <ci>t</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <connection>
+      <map_components component_1="Rs" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="RL" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ri" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="L" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="R2L2" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="R2_CPP" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="Li" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="R2i" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="Shc" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="ShcP" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="ShcGS" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="GS" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="GSP" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="RasGDP" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ras_ShcGS" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="RasGTP" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="GAP" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ras_GAP" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="Raf" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ras_Raf" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="Rafa" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="MEK" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="MEKP" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="MEKPP" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="ERK" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="ERKP" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="ERKPP" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="t" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="X" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="Rs" component_2="v1"/>
+      <map_variables variable_1="Rs" variable_2="Rs"/>
+      <map_variables variable_1="v1" variable_2="v1"/>
+   </connection>
+   <connection>
+      <map_components component_1="Rs" component_2="v3"/>
+      <map_variables variable_1="Rs" variable_2="Rs"/>
+      <map_variables variable_1="v3" variable_2="v3"/>
+   </connection>
+   <connection>
+      <map_components component_1="RL" component_2="v1"/>
+      <map_variables variable_1="RL" variable_2="RL"/>
+      <map_variables variable_1="v1" variable_2="v1"/>
+   </connection>
+   <connection>
+      <map_components component_1="RL" component_2="v2"/>
+      <map_variables variable_1="RL" variable_2="RL"/>
+      <map_variables variable_1="v2" variable_2="v2"/>
+   </connection>
+   <connection>
+      <map_components component_1="RL" component_2="v4"/>
+      <map_variables variable_1="RL" variable_2="RL"/>
+      <map_variables variable_1="v4" variable_2="v4"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ri" component_2="v2"/>
+      <map_variables variable_1="v2" variable_2="v2"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ri" component_2="v3"/>
+      <map_variables variable_1="v3" variable_2="v3"/>
+      <map_variables variable_1="Ri" variable_2="Ri"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ri" component_2="v6"/>
+      <map_variables variable_1="v6" variable_2="v6"/>
+   </connection>
+   <connection>
+      <map_components component_1="L" component_2="v1"/>
+      <map_variables variable_1="L" variable_2="L"/>
+      <map_variables variable_1="v1" variable_2="v1"/>
+   </connection>
+   <connection>
+      <map_components component_1="R2L2" component_2="v4"/>
+      <map_variables variable_1="R2L2" variable_2="R2L2"/>
+      <map_variables variable_1="v4" variable_2="v4"/>
+   </connection>
+   <connection>
+      <map_components component_1="R2L2" component_2="v5"/>
+      <map_variables variable_1="R2L2" variable_2="R2L2"/>
+      <map_variables variable_1="v5" variable_2="v5"/>
+   </connection>
+   <connection>
+      <map_components component_1="R2L2" component_2="v7"/>
+      <map_variables variable_1="R2L2" variable_2="R2L2"/>
+      <map_variables variable_1="v7" variable_2="v7"/>
+   </connection>
+   <connection>
+      <map_components component_1="R2L2" component_2="v9"/>
+      <map_variables variable_1="R2L2" variable_2="R2L2"/>
+   </connection>
+   <connection>
+      <map_components component_1="R2_CPP" component_2="v7"/>
+      <map_variables variable_1="R2_CPP" variable_2="R2_CPP"/>
+      <map_variables variable_1="v7" variable_2="v7"/>
+   </connection>
+   <connection>
+      <map_components component_1="R2_CPP" component_2="v8"/>
+      <map_variables variable_1="R2_CPP" variable_2="R2_CPP"/>
+      <map_variables variable_1="v8" variable_2="v8"/>
+   </connection>
+   <connection>
+      <map_components component_1="R2_CPP" component_2="v9"/>
+      <map_variables variable_1="R2_CPP" variable_2="R2_CPP"/>
+   </connection>
+   <connection>
+      <map_components component_1="Li" component_2="v2"/>
+      <map_variables variable_1="v2" variable_2="v2"/>
+   </connection>
+   <connection>
+      <map_components component_1="Li" component_2="v6"/>
+      <map_variables variable_1="v6" variable_2="v6"/>
+   </connection>
+   <connection>
+      <map_components component_1="R2i" component_2="v5"/>
+      <map_variables variable_1="v5" variable_2="v5"/>
+   </connection>
+   <connection>
+      <map_components component_1="R2i" component_2="v6"/>
+      <map_variables variable_1="R2i" variable_2="R2i"/>
+      <map_variables variable_1="v6" variable_2="v6"/>
+   </connection>
+   <connection>
+      <map_components component_1="R2i" component_2="v8"/>
+      <map_variables variable_1="v8" variable_2="v8"/>
+   </connection>
+   <connection>
+      <map_components component_1="R2i" component_2="v9"/>
+      <map_variables variable_1="R2i" variable_2="R2i"/>
+   </connection>
+   <connection>
+      <map_components component_1="Shc" component_2="v9"/>
+      <map_variables variable_1="Shc" variable_2="Shc"/>
+      <map_variables variable_1="v9" variable_2="v9"/>
+   </connection>
+   <connection>
+      <map_components component_1="Shc" component_2="v10"/>
+      <map_variables variable_1="v10" variable_2="v10"/>
+   </connection>
+   <connection>
+      <map_components component_1="ShcP" component_2="v10"/>
+      <map_variables variable_1="ShcP" variable_2="ShcP"/>
+      <map_variables variable_1="v10" variable_2="v10"/>
+   </connection>
+   <connection>
+      <map_components component_1="ShcP" component_2="v11"/>
+      <map_variables variable_1="ShcP" variable_2="ShcP"/>
+      <map_variables variable_1="v11" variable_2="v11"/>
+   </connection>
+   <connection>
+      <map_components component_1="ShcP" component_2="v27"/>
+      <map_variables variable_1="v27" variable_2="v27"/>
+   </connection>
+   <connection>
+      <map_components component_1="ShcGS" component_2="v11"/>
+      <map_variables variable_1="ShcGS" variable_2="ShcGS"/>
+      <map_variables variable_1="v11" variable_2="v11"/>
+   </connection>
+   <connection>
+      <map_components component_1="ShcGS" component_2="v13"/>
+      <map_variables variable_1="v13" variable_2="v13"/>
+   </connection>
+   <connection>
+      <map_components component_1="ShcGS" component_2="v27"/>
+      <map_variables variable_1="ShcGS" variable_2="ShcGS"/>
+      <map_variables variable_1="v27" variable_2="v27"/>
+   </connection>
+   <connection>
+      <map_components component_1="ShcGS" component_2="v12"/>
+      <map_variables variable_1="ShcGS" variable_2="ShcGS"/>
+      <map_variables variable_1="v12" variable_2="v12"/>
+   </connection>
+   <connection>
+      <map_components component_1="GS" component_2="v28"/>
+      <map_variables variable_1="v28" variable_2="v28"/>
+   </connection>
+   <connection>
+      <map_components component_1="GS" component_2="v11"/>
+      <map_variables variable_1="GS" variable_2="GS"/>
+      <map_variables variable_1="v11" variable_2="v11"/>
+   </connection>
+   <connection>
+      <map_components component_1="GSP" component_2="v27"/>
+      <map_variables variable_1="v27" variable_2="v27"/>
+   </connection>
+   <connection>
+      <map_components component_1="GSP" component_2="v28"/>
+      <map_variables variable_1="GSP" variable_2="GSP"/>
+      <map_variables variable_1="v28" variable_2="v28"/>
+   </connection>
+   <connection>
+      <map_components component_1="RasGDP" component_2="v15"/>
+      <map_variables variable_1="v15" variable_2="v15"/>
+   </connection>
+   <connection>
+      <map_components component_1="RasGDP" component_2="v12"/>
+      <map_variables variable_1="RasGDP" variable_2="RasGDP"/>
+      <map_variables variable_1="v12" variable_2="v12"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ras_ShcGS" component_2="v12"/>
+      <map_variables variable_1="Ras_ShcGS" variable_2="Ras_ShcGS"/>
+      <map_variables variable_1="v12" variable_2="v12"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ras_ShcGS" component_2="v13"/>
+      <map_variables variable_1="Ras_ShcGS" variable_2="Ras_ShcGS"/>
+      <map_variables variable_1="v13" variable_2="v13"/>
+   </connection>
+   <connection>
+      <map_components component_1="RasGTP" component_2="RasGDP"/>
+      <map_variables variable_1="RasGDP" variable_2="RasGDP"/>
+   </connection>
+   <connection>
+      <map_components component_1="RasGTP" component_2="v13"/>
+      <map_variables variable_1="v13" variable_2="v13"/>
+   </connection>
+   <connection>
+      <map_components component_1="RasGTP" component_2="v17"/>
+      <map_variables variable_1="v17" variable_2="v17"/>
+   </connection>
+   <connection>
+      <map_components component_1="RasGTP" component_2="v14"/>
+      <map_variables variable_1="RasGTP" variable_2="RasGTP"/>
+      <map_variables variable_1="v14" variable_2="v14"/>
+   </connection>
+   <connection>
+      <map_components component_1="RasGTP" component_2="v16"/>
+      <map_variables variable_1="RasGTP" variable_2="RasGTP"/>
+      <map_variables variable_1="v16" variable_2="v16"/>
+   </connection>
+   <connection>
+      <map_components component_1="GAP" component_2="v15"/>
+      <map_variables variable_1="v15" variable_2="v15"/>
+   </connection>
+   <connection>
+      <map_components component_1="GAP" component_2="v14"/>
+      <map_variables variable_1="GAP" variable_2="GAP"/>
+      <map_variables variable_1="v14" variable_2="v14"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ras_GAP" component_2="v14"/>
+      <map_variables variable_1="Ras_GAP" variable_2="Ras_GAP"/>
+      <map_variables variable_1="v14" variable_2="v14"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ras_GAP" component_2="v15"/>
+      <map_variables variable_1="Ras_GAP" variable_2="Ras_GAP"/>
+      <map_variables variable_1="v15" variable_2="v15"/>
+   </connection>
+   <connection>
+      <map_components component_1="Raf" component_2="v18"/>
+      <map_variables variable_1="v18" variable_2="v18"/>
+   </connection>
+   <connection>
+      <map_components component_1="Raf" component_2="v16"/>
+      <map_variables variable_1="Raf" variable_2="Raf"/>
+      <map_variables variable_1="v16" variable_2="v16"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ras_Raf" component_2="v16"/>
+      <map_variables variable_1="Ras_Raf" variable_2="Ras_Raf"/>
+      <map_variables variable_1="v16" variable_2="v16"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ras_Raf" component_2="v17"/>
+      <map_variables variable_1="Ras_Raf" variable_2="Ras_Raf"/>
+      <map_variables variable_1="v17" variable_2="v17"/>
+   </connection>
+   <connection>
+      <map_components component_1="Rafa" component_2="v18"/>
+      <map_variables variable_1="Rafa" variable_2="Rafa"/>
+      <map_variables variable_1="v18" variable_2="v18"/>
+   </connection>
+   <connection>
+      <map_components component_1="Rafa" component_2="v19"/>
+      <map_variables variable_1="Rafa" variable_2="Rafa"/>
+      <map_variables variable_1="v19" variable_2="v19"/>
+   </connection>
+   <connection>
+      <map_components component_1="Rafa" component_2="v21"/>
+      <map_variables variable_1="Rafa" variable_2="Rafa"/>
+      <map_variables variable_1="v21" variable_2="v21"/>
+   </connection>
+   <connection>
+      <map_components component_1="Rafa" component_2="v17"/>
+      <map_variables variable_1="v17" variable_2="v17"/>
+   </connection>
+   <connection>
+      <map_components component_1="MEK" component_2="v20"/>
+      <map_variables variable_1="v20" variable_2="v20"/>
+   </connection>
+   <connection>
+      <map_components component_1="MEK" component_2="v19"/>
+      <map_variables variable_1="v19" variable_2="v19"/>
+      <map_variables variable_1="MEK" variable_2="MEK"/>
+   </connection>
+   <connection>
+      <map_components component_1="MEKP" component_2="v19"/>
+      <map_variables variable_1="v19" variable_2="v19"/>
+   </connection>
+   <connection>
+      <map_components component_1="MEKP" component_2="v20"/>
+      <map_variables variable_1="v20" variable_2="v20"/>
+      <map_variables variable_1="MEKP" variable_2="MEKP"/>
+   </connection>
+   <connection>
+      <map_components component_1="MEKP" component_2="v21"/>
+      <map_variables variable_1="MEKP" variable_2="MEKP"/>
+      <map_variables variable_1="v21" variable_2="v21"/>
+   </connection>
+   <connection>
+      <map_components component_1="MEKP" component_2="v22"/>
+      <map_variables variable_1="v22" variable_2="v22"/>
+   </connection>
+   <connection>
+      <map_components component_1="MEKP" component_2="v23"/>
+      <map_variables variable_1="MEKP" variable_2="MEKP"/>
+   </connection>
+   <connection>
+      <map_components component_1="MEKP" component_2="v25"/>
+      <map_variables variable_1="MEKP" variable_2="MEKP"/>
+   </connection>
+   <connection>
+      <map_components component_1="MEKPP" component_2="v21"/>
+      <map_variables variable_1="v21" variable_2="v21"/>
+   </connection>
+   <connection>
+      <map_components component_1="MEKPP" component_2="v22"/>
+      <map_variables variable_1="MEKPP" variable_2="MEKPP"/>
+      <map_variables variable_1="v22" variable_2="v22"/>
+   </connection>
+   <connection>
+      <map_components component_1="MEKPP" component_2="v23"/>
+      <map_variables variable_1="MEKPP" variable_2="MEKPP"/>
+   </connection>
+   <connection>
+      <map_components component_1="MEKPP" component_2="v25"/>
+      <map_variables variable_1="MEKPP" variable_2="MEKPP"/>
+   </connection>
+   <connection>
+      <map_components component_1="ERK" component_2="v24"/>
+      <map_variables variable_1="v24" variable_2="v24"/>
+   </connection>
+   <connection>
+      <map_components component_1="ERK" component_2="v23"/>
+      <map_variables variable_1="ERK" variable_2="ERK"/>
+      <map_variables variable_1="v23" variable_2="v23"/>
+   </connection>
+   <connection>
+      <map_components component_1="ERKP" component_2="v23"/>
+      <map_variables variable_1="v23" variable_2="v23"/>
+   </connection>
+   <connection>
+      <map_components component_1="ERKP" component_2="v26"/>
+      <map_variables variable_1="v26" variable_2="v26"/>
+   </connection>
+   <connection>
+      <map_components component_1="ERKP" component_2="v24"/>
+      <map_variables variable_1="ERKP" variable_2="ERKP"/>
+      <map_variables variable_1="v24" variable_2="v24"/>
+   </connection>
+   <connection>
+      <map_components component_1="ERKP" component_2="v25"/>
+      <map_variables variable_1="ERKP" variable_2="ERKP"/>
+      <map_variables variable_1="v25" variable_2="v25"/>
+   </connection>
+   <connection>
+      <map_components component_1="ERKPP" component_2="v25"/>
+      <map_variables variable_1="v25" variable_2="v25"/>
+   </connection>
+   <connection>
+      <map_components component_1="ERKPP" component_2="v26"/>
+      <map_variables variable_1="ERKPP" variable_2="ERKPP"/>
+      <map_variables variable_1="v26" variable_2="v26"/>
+   </connection>
+   <connection>
+      <map_components component_1="ERKPP" component_2="v27"/>
+      <map_variables variable_1="ERKPP" variable_2="ERKPP"/>
+   </connection>
+   <connection>
+      <map_components component_1="t" component_2="v29"/>
+      <map_variables variable_1="v29" variable_2="v29"/>
+   </connection>
+   <connection>
+      <map_components component_1="t" component_2="v2"/>
+      <map_variables variable_1="t" variable_2="t"/>
+   </connection>
+   <connection>
+      <map_components component_1="t" component_2="v3"/>
+      <map_variables variable_1="t" variable_2="t"/>
+   </connection>
+   <connection>
+      <map_components component_1="t" component_2="v5"/>
+      <map_variables variable_1="t" variable_2="t"/>
+   </connection>
+   <connection>
+      <map_components component_1="t" component_2="v6"/>
+      <map_variables variable_1="t" variable_2="t"/>
+   </connection>
+   <connection>
+      <map_components component_1="t" component_2="v8"/>
+      <map_variables variable_1="t" variable_2="t"/>
+   </connection>
+   <connection>
+      <map_components component_1="t" component_2="v30"/>
+      <map_variables variable_1="t" variable_2="t"/>
+   </connection>
+   <connection>
+      <map_components component_1="X" component_2="v30"/>
+      <map_variables variable_1="v30" variable_2="v30"/>
+   </connection>
+   
+   
+     <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
+    <foo xmlns="http://www.example.org/foo/bar/baz" />
+    <!--
+      The following RDF block contains metadata that applies to this document
+      as a whole, as indicated by the empty about attribute on the 
+      <rdf:Description> element.
+    -->
+    <rdf:Description rdf:about="">
+      <!--
+        The Model Builder Metadata.  The Dublin Core "creator" element is used  
+        to indicate the person who translated the model into CellML.
+      -->
+      <dc:creator rdf:parseType="Resource">
+        <vCard:N rdf:parseType="Resource">
+          <vCard:Family>Lim</vCard:Family>
+          <vCard:Given>Jeelean</vCard:Given>
+        </vCard:N>
+        <vCard:EMAIL rdf:parseType="Resource">
+          <rdf:value>jlim063@aucklanduni.ac.nz</rdf:value>
+          <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+        </vCard:EMAIL>
+        <vCard:ORG rdf:parseType="Resource">
+          <vCard:Orgname>The University of Auckland</vCard:Orgname>
+          <vCard:Orgunit>The Auckland Bioengineering Institute</vCard:Orgunit>
+        </vCard:ORG>
+      </dc:creator>
+      
+      <!--
+        The Creation Date metadata. This is the date on which the model
+        was translated into CellML.
+      -->
+      <dcterms:created rdf:parseType="Resource">
+        <dcterms:W3CDTF>2001-09-10</dcterms:W3CDTF>
+      </dcterms:created>     
+    </rdf:Description>
+    
+    <!--
+      The following metadata refers to the model itself, as indicated by the
+      reference to the ID "brightman_fell_2000", which is    
+      declared on the <model> element.
+    -->
+    <rdf:Description rdf:about="#brightman_fell_2000">
+      <!-- A human readable name for the model. -->
+      <dc:title>
+        The Brightman, Fell Model of Differential Feedback Regulation of the MAPK Cascade Underlying the Quantitative Differences in EGF and NGF Signalling in PC12 Cells
+      </dc:title>
+      
+      <!-- A comment regarding the model. -->
+      <cmeta:comment rdf:parseType="Resource">
+        <rdf:value>
+          This is the CellML description of Brightman and Fell's model of differential feedback regulation of the MAPK cascade underlying the quantitative differences in EGF and NGF signalling in PC12 cells  
+        </rdf:value>
+        <!-- The creator of the comment. -->
+        <dc:creator rdf:parseType="Resource">
+          <vCard:FN>Jeelean Lim</vCard:FN>
+        </dc:creator>
+      </cmeta:comment>
+     
+      <!--  Keyword(s) -->
+      <bqs:reference rdf:parseType="Resource">
+        <dc:subject rdf:parseType="Resource">
+          <bqs:subject_type>keyword</bqs:subject_type>
+          <rdf:value>
+            <rdf:Bag>
+              <rdf:li>Epidermal Growth Factor</rdf:li>
+              <rdf:li>Mitogen-activated protein kinase</rdf:li>
+			  <rdf:li>Signal Transduction</rdf:li>
+            </rdf:Bag>
+          </rdf:value>
+        </dc:subject>
+      </bqs:reference>
+
+      <!-- 
+        The CellML Metadata Specification recommends that bibliographic metadata
+        is used to provide information about the original model reference.  The 
+        "identifier" attribute on the "BibliographicReference" class provides an
+        elegant way to identify a cited reference using a database identifier            such as Pubmed.  All associated data such as author, journal title,     
+        date, etc can be looked up on the database.
+      -->
+      <bqs:reference rdf:parseType="Resource">
+        <bqs:Pubmed_id>11024454</bqs:Pubmed_id>
+        <bqs:JournalArticle rdf:parseType="Resource">
+          <dc:creator>
+            <rdf:Seq>
+              <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Brightman</vCard:Family>
+                    <vCard:Given>F</vCard:Given>
+                    <vCard:Other>A</vCard:Other>
+                  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+              <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Fell</vCard:Family>
+                    <vCard:Given>D</vCard:Given>
+					<vCard:Other>A</vCard:Other>
+                  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+            </rdf:Seq>
+          </dc:creator>
+          <dc:title>
+            Differential feedback regulation of the MAPK cascade underlies the quantitative differences in EGF and NGF signalling in PC12 cells.
+          </dc:title>
+          <dcterms:issued rdf:parseType="Resource">
+            <dcterms:W3CDTF>2000-10</dcterms:W3CDTF>
+          </dcterms:issued>
+          <bqs:Journal rdf:parseType="Resource">
+            <dc:title>Federation of European Biochemical Societies Letters</dc:title>
+          </bqs:Journal>
+          <bqs:volume>482</bqs:volume>
+          <bqs:first_page>169</bqs:first_page>
+          <bqs:last_page>174</bqs:last_page>
+        </bqs:JournalArticle>
+      </bqs:reference>
+    </rdf:Description>
+  </rdf:RDF>
+</model>

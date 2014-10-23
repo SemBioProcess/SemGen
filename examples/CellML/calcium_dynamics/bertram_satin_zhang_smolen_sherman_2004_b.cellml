@@ -1,0 +1,1829 @@
+<?xml version='1.0' encoding='utf-8'?>
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:ns7="http://www.cellml.org/metadata/simulation/1.0#" name="bertram_satin_zhang_smolen_sherman_2004_version01" cmeta:id="bertram_satin_zhang_smolen_sherman_2004_version01">
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Calcium and Glycolysis Mediate Multiple Bursting Modes in Pancreatic Islets</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Auckland Bioengineering Institute, University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+This model has been rebuilt and coded by translating the authors original XPPAUT.ode file, which can be found at http://www.math.fsu.edu/~bertram/software/islet/BJ_04a.ode. This file runs in PCEnv and COR and is able to produce the expected output. This model has been parameterised for the 'compound bursting' model.  Some equations have inconsistent magnitudes due to the fact that time is defined in milliseconds, yet flux is defined in micromolar per second.
+</para>
+
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+ABSTRACT: Pancreatic islets of Langerhans produce bursts of electrical activity when exposed to stimulatory glucose levels. These bursts often have a regular repeating pattern, with a period of 10-60 s. In some cases, however, the bursts are episodic, clustered into bursts of bursts, which we call compound bursting. Consistent with this are recordings of free Ca2+ concentration, oxygen consumption, mitochondrial membrane potential, and intraislet glucose levels that exhibit very slow oscillations, with faster oscillations superimposed. We describe a new mathematical model of the pancreatic beta-cell that can account for these multimodal patterns. The model includes the feedback of cytosolic Ca2+ onto ion channels that can account for bursting, and a metabolic subsystem that is capable of producing slow oscillations driven by oscillations in glycolysis. This slow rhythm is responsible for the slow mode of compound bursting in the model. We also show that it is possible for glycolytic oscillations alone to drive a very slow form of bursting, which we call "glycolytic bursting." Finally, the model predicts that there is bistability between stationary and oscillatory glycolysis for a range of parameter values. We provide experimental support for this model prediction. Overall, the model can account for a diversity of islet behaviors described in the literature over the past 20 years.
+</para>
+
+<para>
+Calcium and Glycolysis Mediate Multiple Bursting Modes in Pancreatic Islets, Richard Bertram, Leslie Satin, Min Zhang, Paul Smolen, and Arthur Sherman, 2004,
+            <emphasis>Biophysical Journal</emphasis>, 87, 3074-3087. <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;list_uids=15347584&amp;dopt=Abstract">PubMed ID: 15347584</ulink>
+</para>
+
+<informalfigure float="0" id="fig_cell_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>cell diagram</title>
+    </objectinfo>
+    <imagedata fileref="bertram_2004.png"/>
+  </imageobject>
+</mediaobject>
+<caption>A schematic diagram of the ionic currents and fluxes across the ER and the cell surface membranes which are described by the mathematical model.</caption>
+</informalfigure>
+</sect1>
+</article>
+</documentation>
+      <units name="millisecond">
+            <unit units="second" prefix="milli"/>
+      </units>
+      <units name="millivolt">
+            <unit units="volt" prefix="milli"/>
+      </units>
+      <units name="micromolar">
+            <unit units="mole" prefix="micro"/>
+            <unit units="litre" exponent="-1"/>
+      </units>
+      <units name="nanoS">
+            <unit units="siemens" prefix="nano"/>
+      </units>
+      <units name="picoS">
+            <unit units="siemens" prefix="pico"/>
+      </units>
+      <units name="femtoF">
+            <unit units="farad" prefix="femto"/>
+      </units>
+      <units name="femtoA">
+            <unit units="ampere" prefix="femto"/>
+      </units>
+      <units name="per_second">
+            <unit units="second" exponent="-1"/>
+      </units>
+      <units name="first_order_rate_constant">
+            <unit units="millisecond" exponent="-1"/>
+      </units>
+      <units name="micromolar_per_femtoA_millisecond">
+            <unit units="micromolar"/>
+            <unit units="femtoA" exponent="-1"/>
+            <unit units="millisecond" exponent="-1"/>
+      </units>
+      <units name="flux">
+            <unit units="micromolar"/>
+            <unit units="second" exponent="-1"/>
+      </units>
+      <component name="environment">
+            <variable units="millisecond" public_interface="out" name="time"/>
+      </component>
+      <component name="membrane">
+            <variable units="millivolt" public_interface="out" name="V" initial_value="-60"/>
+            <variable units="femtoA" name="IK"/>
+            <variable units="femtoA" public_interface="out" name="ICa"/>
+            <variable units="femtoA" name="IKCa"/>
+            <variable units="femtoA" public_interface="in" name="IKATP"/>
+            <variable units="femtoF" name="Cm" initial_value="5300"/>
+            <variable units="picoS" name="gK" initial_value="2700"/>
+            <variable units="millivolt" public_interface="in" name="VK"/>
+            <variable units="dimensionless" name="n" initial_value="0"/>
+            <variable units="picoS" name="gKCa" initial_value="600"/>
+            <variable units="micromolar" name="kd" initial_value="0.5"/>
+            <variable units="micromolar" public_interface="in" name="c"/>
+            <variable units="picoS" name="gCa" initial_value="1000"/>
+            <variable units="dimensionless" name="minf"/>
+            <variable units="millivolt" name="VCa" initial_value="25"/>
+            <variable units="millisecond" name="taun" initial_value="20"/>
+            <variable units="millisecond" public_interface="in" name="time"/>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="d(V)/d(time)">
+                  <apply>
+                        <eq/>
+                        <apply>
+                              <diff/>
+                              <bvar>
+                                    <ci>time</ci>
+                              </bvar>
+                              <ci>V</ci>
+                        </apply>
+                        <apply>
+                              <divide/>
+                              <apply>
+                                    <minus/>
+                                    <apply>
+                                          <plus/>
+                                          <ci>IK</ci>
+                                          <ci>ICa</ci>
+                                          <ci>IKCa</ci>
+                                          <ci>IKATP</ci>
+                                    </apply>
+                              </apply>
+                              <ci>Cm</ci>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="IK">
+                  <apply>
+                        <eq/>
+                        <ci>IK</ci>
+                        <apply>
+                              <times/>
+                              <ci>gK</ci>
+                              <ci>n</ci>
+                              <apply>
+                                    <minus/>
+                                    <ci>V</ci>
+                                    <ci>VK</ci>
+                              </apply>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="IKCa">
+                  <apply>
+                        <eq/>
+                        <ci>IKCa</ci>
+                        <apply>
+                              <times/>
+                              <apply>
+                                    <divide/>
+                                    <ci>gKCa</ci>
+                                    <apply>
+                                          <plus/>
+                                          <cn cellml:units="dimensionless">1</cn>
+                                          <apply>
+                                                <power/>
+                                                <apply>
+                                                      <divide/>
+                                                      <ci>kd</ci>
+                                                      <ci>c</ci>
+                                                </apply>
+                                                <cn cellml:units="dimensionless">2</cn>
+                                          </apply>
+                                    </apply>
+                              </apply>
+                              <apply>
+                                    <minus/>
+                                    <ci>V</ci>
+                                    <ci>VK</ci>
+                              </apply>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="ICa">
+                  <apply>
+                        <eq/>
+                        <ci>ICa</ci>
+                        <apply>
+                              <times/>
+                              <ci>gCa</ci>
+                              <ci>minf</ci>
+                              <apply>
+                                    <minus/>
+                                    <ci>V</ci>
+                                    <ci>VCa</ci>
+                              </apply>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="minf">
+                  <apply>
+                        <eq/>
+                        <ci>minf</ci>
+                        <apply>
+                              <divide/>
+                              <cn cellml:units="dimensionless">1</cn>
+                              <apply>
+                                    <plus/>
+                                    <cn cellml:units="dimensionless">1</cn>
+                                    <apply>
+                                          <exp/>
+                                          <apply>
+                                                <divide/>
+                                                <apply>
+                                                      <minus/>
+                                                      <apply>
+                                                            <plus/>
+                                                            <cn cellml:units="dimensionless">20</cn>
+                                                            <apply>
+                                                                  <divide/>
+                                                                  <ci>V</ci>
+                                                                  <cn cellml:units="millivolt">1</cn>
+                                                            </apply>
+                                                      </apply>
+                                                </apply>
+                                                <cn cellml:units="dimensionless">12</cn>
+                                          </apply>
+                                    </apply>
+                              </apply>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="ninf">
+                  <apply>
+                        <eq/>
+                        <ci>ninf</ci>
+                        <apply>
+                              <divide/>
+                              <cn cellml:units="dimensionless">1</cn>
+                              <apply>
+                                    <plus/>
+                                    <cn cellml:units="dimensionless">1</cn>
+                                    <apply>
+                                          <exp/>
+                                          <apply>
+                                                <divide/>
+                                                <apply>
+                                                      <minus/>
+                                                      <apply>
+                                                            <plus/>
+                                                            <cn cellml:units="dimensionless">16</cn>
+                                                            <apply>
+                                                                  <divide/>
+                                                                  <ci>V</ci>
+                                                                  <cn cellml:units="millivolt">1</cn>
+                                                            </apply>
+                                                      </apply>
+                                                </apply>
+                                                <cn cellml:units="dimensionless">5</cn>
+                                          </apply>
+                                    </apply>
+                              </apply>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="d(n)/d(time)">
+                  <apply>
+                        <eq/>
+                        <apply>
+                              <diff/>
+                              <bvar>
+                                    <ci>time</ci>
+                              </bvar>
+                              <ci>n</ci>
+                        </apply>
+                        <apply>
+                              <divide/>
+                              <apply>
+                                    <minus/>
+                                    <ci>ninf</ci>
+                                    <ci>n</ci>
+                              </apply>
+                              <ci>taun</ci>
+                        </apply>
+                  </apply>
+            </math>
+            <variable units="dimensionless" name="ninf"/>
+      </component>
+      <component name="calcium_handling">
+            <variable units="millisecond" public_interface="in" name="time"/>
+            <variable units="micromolar" public_interface="out" name="c" initial_value="0.25"/>
+            <variable units="micromolar" public_interface="out" name="cer" initial_value="185"/>
+            <variable units="dimensionless" name="fcyt" initial_value="0.01"/>
+            <variable units="flux" name="Jmem"/>
+            <variable units="flux" name="Jer"/>
+            <variable units="dimensionless" name="fer" initial_value="0.01"/>
+            <variable units="dimensionless" name="sigmaV" initial_value="31"/>
+            <variable units="first_order_rate_constant" name="pleak" initial_value="0.0002"/>
+            <variable units="first_order_rate_constant" name="Kserca" initial_value="0.4"/>
+            <variable units="dimensionless" name="lambdaer" initial_value="1"/>
+            <variable units="dimensionless" name="epser" initial_value="1"/>
+            <variable units="micromolar_per_femtoA_millisecond" name="alpha" initial_value="0.00000450"/>
+            <variable units="femtoA" public_interface="in" name="ICa"/>
+            <variable units="first_order_rate_constant" name="kpmca" initial_value="0.2"/>
+            <variable units="flux" name="Jserca"/>
+            <variable units="flux" name="Jleak"/>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="d(c)/d(time)">
+                  <apply>
+                        <eq/>
+                        <apply>
+                              <diff/>
+                              <bvar>
+                                    <ci>time</ci>
+                              </bvar>
+                              <ci>c</ci>
+                        </apply>
+                        <apply>
+                              <times/>
+                              <ci>fcyt</ci>
+                              <apply>
+                                    <plus/>
+                                    <ci>Jmem</ci>
+                                    <ci>Jer</ci>
+                              </apply>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="d(cer)/d(time)">
+                  <apply>
+                        <eq/>
+                        <apply>
+                              <diff/>
+                              <bvar>
+                                    <ci>time</ci>
+                              </bvar>
+                              <ci>cer</ci>
+                        </apply>
+                        <apply>
+                              <times/>
+                              <apply>
+                                    <minus/>
+                                    <ci>fer</ci>
+                              </apply>
+                              <ci>sigmaV</ci>
+                              <ci>Jer</ci>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="Jserca">
+                  <apply>
+                        <eq/>
+                        <ci>Jserca</ci>
+                        <apply>
+                              <times/>
+                              <ci>Kserca</ci>
+                              <ci>c</ci>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="Jleak">
+                  <apply>
+                        <eq/>
+                        <ci>Jleak</ci>
+                        <apply>
+                              <times/>
+                              <ci>pleak</ci>
+                              <apply>
+                                    <minus/>
+                                    <ci>cer</ci>
+                                    <ci>c</ci>
+                              </apply>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="Jer">
+                  <apply>
+                        <eq/>
+                        <ci>Jer</ci>
+                        <apply>
+                              <divide/>
+                              <apply>
+                                    <times/>
+                                    <ci>epser</ci>
+                                    <apply>
+                                          <minus/>
+                                          <ci>Jleak</ci>
+                                          <ci>Jserca</ci>
+                                    </apply>
+                              </apply>
+                              <ci>lambdaer</ci>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="Jmem">
+                  <apply>
+                        <eq/>
+                        <ci>Jmem</ci>
+                        <apply>
+                              <minus/>
+                              <apply>
+                                    <plus/>
+                                    <apply>
+                                          <times/>
+                                          <ci>alpha</ci>
+                                          <ci>ICa</ci>
+                                    </apply>
+                                    <apply>
+                                          <times/>
+                                          <ci>kpmca</ci>
+                                          <ci>c</ci>
+                                    </apply>
+                              </apply>
+                        </apply>
+                  </apply>
+            </math>
+      </component>
+      <component name="glycolysis">
+            <variable units="millisecond" public_interface="in" name="time"/>
+            <variable units="flux" public_interface="out" name="rgpdh"/>
+            <variable units="per_second" name="Rgk" initial_value="0.2"/>
+            <variable units="micromolar" public_interface="out" name="atot" initial_value="3000"/>
+            <variable units="dimensionless" public_interface="out" name="pfkbas" initial_value="0.06"/>
+            <variable units="micromolar" public_interface="out" name="f6p"/>
+            <variable units="dimensionless" name="lambda" initial_value="0.005"/>
+            <variable units="micromolar" public_interface="in" name="pfk"/>
+            <variable units="micromolar" name="g6p" initial_value="200"/>
+            <variable units="micromolar" public_interface="out" name="fbp" initial_value="40"/>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="f6p">
+                  <apply>
+                        <eq/>
+                        <ci>f6p</ci>
+                        <apply>
+                              <times/>
+                              <cn cellml:units="dimensionless">0.3</cn>
+                              <ci>g6p</ci>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="rgpdh">
+                  <apply>
+                        <eq/>
+                        <ci>rgpdh</ci>
+                        <apply>
+                              <times/>
+                              <cn cellml:units="dimensionless">0.2</cn>
+                              <apply>
+                                    <root/>
+                                    <apply>
+                                          <abs/>
+                                          <apply>
+                                                <divide/>
+                                                <apply>
+                                                      <times/>
+                                                      <ci>fbp</ci>
+                                                      <cn cellml:units="micromolar">1</cn>
+                                                </apply>
+                                                <apply>
+                                                      <power/>
+                                                      <cn cellml:units="second">1</cn>
+                                                      <cn cellml:units="dimensionless">2</cn>
+                                                </apply>
+                                          </apply>
+                                    </apply>
+                              </apply>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="d(fbp)/d(time)">
+                  <apply>
+                        <eq/>
+                        <apply>
+                              <diff/>
+                              <bvar>
+                                    <ci>time</ci>
+                              </bvar>
+                              <ci>fbp</ci>
+                        </apply>
+                        <apply>
+                              <times/>
+                              <ci>lambda</ci>
+                              <apply>
+                                    <minus/>
+                                    <apply>
+                                          <divide/>
+                                          <ci>pfk</ci>
+                                          <cn cellml:units="second">1</cn>
+                                    </apply>
+                                    <apply>
+                                          <times/>
+                                          <cn cellml:units="dimensionless">0.5</cn>
+                                          <ci>rgpdh</ci>
+                                    </apply>
+                              </apply>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="d(g6p)/d(time)">
+                  <apply>
+                        <eq/>
+                        <apply>
+                              <diff/>
+                              <bvar>
+                                    <ci>time</ci>
+                              </bvar>
+                              <ci>g6p</ci>
+                        </apply>
+                        <apply>
+                              <times/>
+                              <ci>lambda</ci>
+                              <apply>
+                                    <minus/>
+                                    <apply>
+                                          <times/>
+                                          <ci>Rgk</ci>
+                                          <cn cellml:units="micromolar">1</cn>
+                                    </apply>
+                                    <apply>
+                                          <divide/>
+                                          <ci>pfk</ci>
+                                          <cn cellml:units="second">1</cn>
+                                    </apply>
+                              </apply>
+                        </apply>
+                  </apply>
+            </math>
+      </component>
+      <component name="pfk">
+            <variable units="millisecond" public_interface="in" name="time"/>
+            <variable units="micromolar" public_interface="out" name="pfk"/>
+            <variable units="dimensionless" name="bottom1" initial_value="1"/>
+            <variable units="dimensionless" public_interface="in" name="pfkbas"/>
+            <variable units="dimensionless" name="topa1" initial_value="0"/>
+            <variable units="micromolar" name="k1" initial_value="30"/>
+            <variable units="micromolar" name="k2" initial_value="1"/>
+            <variable units="micromolar" name="k3" initial_value="50000"/>
+            <variable units="micromolar" name="k4" initial_value="1000"/>
+            <variable units="dimensionless" name="cat" initial_value="2"/>
+            <variable units="micromolar" public_interface="in" name="atp"/>
+            <variable units="dimensionless" name="weight2"/>
+            <variable units="dimensionless" name="topa2"/>
+            <variable units="dimensionless" name="bottom2"/>
+            <variable units="micromolar" public_interface="in" name="f6p"/>
+            <variable units="dimensionless" name="topa3"/>
+            <variable units="dimensionless" name="weight3"/>
+            <variable units="dimensionless" name="bottom3"/>
+            <variable units="dimensionless" name="famp" initial_value="0.02"/>
+            <variable units="dimensionless" name="fatp" initial_value="20"/>
+            <variable units="dimensionless" name="ffbp" initial_value="0.2"/>
+            <variable units="dimensionless" name="fbt" initial_value="20"/>
+            <variable units="dimensionless" name="fmt" initial_value="20"/>
+            <variable units="dimensionless" name="weight4"/>
+            <variable units="dimensionless" name="topa4"/>
+            <variable units="dimensionless" name="bottom4"/>
+            <variable units="dimensionless" name="weight5"/>
+            <variable units="dimensionless" name="topa5"/>
+            <variable units="dimensionless" name="bottom5"/>
+            <variable units="dimensionless" name="weight6"/>
+            <variable units="dimensionless" name="topa6"/>
+            <variable units="dimensionless" name="bottom6"/>
+            <variable units="dimensionless" name="weight7"/>
+            <variable units="dimensionless" name="topa7"/>
+            <variable units="dimensionless" name="bottom7"/>
+            <variable units="dimensionless" name="weight8"/>
+            <variable units="dimensionless" name="topa8"/>
+            <variable units="dimensionless" name="bottom8"/>
+            <variable units="dimensionless" name="weight9"/>
+            <variable units="dimensionless" name="topa9"/>
+            <variable units="dimensionless" name="bottom9"/>
+            <variable units="dimensionless" name="weight10"/>
+            <variable units="dimensionless" name="topa10"/>
+            <variable units="dimensionless" name="bottom10"/>
+            <variable units="dimensionless" name="weight11"/>
+            <variable units="dimensionless" name="topa11"/>
+            <variable units="dimensionless" name="bottom11"/>
+            <variable units="dimensionless" name="weight12"/>
+            <variable units="dimensionless" name="topa12"/>
+            <variable units="dimensionless" name="bottom12"/>
+            <variable units="dimensionless" name="weight13"/>
+            <variable units="dimensionless" name="topa13"/>
+            <variable units="dimensionless" name="bottom13"/>
+            <variable units="dimensionless" name="weight14"/>
+            <variable units="dimensionless" name="topa14"/>
+            <variable units="dimensionless" name="bottom14"/>
+            <variable units="dimensionless" name="weight15"/>
+            <variable units="dimensionless" name="topa15"/>
+            <variable units="dimensionless" name="bottom15"/>
+            <variable units="dimensionless" name="weight16"/>
+            <variable units="dimensionless" name="topa16"/>
+            <variable units="dimensionless" name="bottom16"/>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="pfk">
+                  <apply>
+                        <eq/>
+                        <ci>pfk</ci>
+                        <apply>
+                              <times/>
+                              <cn cellml:units="micromolar">1</cn>
+                              <apply>
+                                    <divide/>
+                                    <apply>
+                                          <plus/>
+                                          <apply>
+                                                <times/>
+                                                <ci>pfkbas</ci>
+                                                <ci>cat</ci>
+                                                <ci>topa16</ci>
+                                          </apply>
+                                          <apply>
+                                                <times/>
+                                                <ci>cat</ci>
+                                                <ci>topb</ci>
+                                          </apply>
+                                    </apply>
+                                    <ci>bottom16</ci>
+                              </apply>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="0001">
+                  <apply>
+                        <eq/>
+                        <ci>weight2</ci>
+                        <apply>
+                              <divide/>
+                              <apply>
+                                    <power/>
+                                    <ci>atp</ci>
+                                    <cn cellml:units="dimensionless">2</cn>
+                              </apply>
+                              <apply>
+                                    <times/>
+                                    <ci>k4</ci>
+                                    <cn cellml:units="micromolar">1</cn>
+                              </apply>
+                        </apply>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>topa2</ci>
+                        <ci>topa1</ci>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>bottom2</ci>
+                        <apply>
+                              <plus/>
+                              <ci>bottom1</ci>
+                              <ci>weight2</ci>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="0010">
+                  <apply>
+                        <eq/>
+                        <ci>weight3</ci>
+                        <apply>
+                              <divide/>
+                              <apply>
+                                    <power/>
+                                    <ci>f6p</ci>
+                                    <cn cellml:units="dimensionless">2</cn>
+                              </apply>
+                              <apply>
+                                    <times/>
+                                    <ci>k3</ci>
+                                    <cn cellml:units="micromolar">1</cn>
+                              </apply>
+                        </apply>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>topa3</ci>
+                        <apply>
+                              <plus/>
+                              <ci>topa2</ci>
+                              <ci>weight3</ci>
+                        </apply>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>bottom3</ci>
+                        <apply>
+                              <plus/>
+                              <ci>bottom2</ci>
+                              <ci>weight3</ci>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="0011">
+                  <apply>
+                        <eq/>
+                        <ci>weight4</ci>
+                        <apply>
+                              <divide/>
+                              <apply>
+                                    <power/>
+                                    <apply>
+                                          <times/>
+                                          <ci>f6p</ci>
+                                          <ci>atp</ci>
+                                    </apply>
+                                    <cn cellml:units="dimensionless">2</cn>
+                              </apply>
+                              <apply>
+                                    <times/>
+                                    <ci>fatp</ci>
+                                    <ci>k3</ci>
+                                    <ci>k4</ci>
+                                    <apply>
+                                          <power/>
+                                          <cn cellml:units="micromolar">1</cn>
+                                          <cn cellml:units="dimensionless">2</cn>
+                                    </apply>
+                              </apply>
+                        </apply>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>topa4</ci>
+                        <apply>
+                              <plus/>
+                              <ci>topa3</ci>
+                              <ci>weight4</ci>
+                        </apply>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>bottom4</ci>
+                        <apply>
+                              <plus/>
+                              <ci>bottom3</ci>
+                              <ci>weight4</ci>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="0100">
+                  <apply>
+                        <eq/>
+                        <ci>weight5</ci>
+                        <apply>
+                              <divide/>
+                              <ci>fbp</ci>
+                              <ci>k2</ci>
+                        </apply>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>topa5</ci>
+                        <ci>topa4</ci>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>bottom5</ci>
+                        <apply>
+                              <plus/>
+                              <ci>bottom4</ci>
+                              <ci>weight5</ci>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="0101">
+                  <apply>
+                        <eq/>
+                        <ci>weight6</ci>
+                        <apply>
+                              <divide/>
+                              <apply>
+                                    <times/>
+                                    <ci>fbp</ci>
+                                    <apply>
+                                          <power/>
+                                          <ci>atp</ci>
+                                          <cn cellml:units="dimensionless">2</cn>
+                                    </apply>
+                              </apply>
+                              <apply>
+                                    <times/>
+                                    <ci>k2</ci>
+                                    <ci>k4</ci>
+                                    <ci>fbt</ci>
+                                    <cn cellml:units="micromolar">1</cn>
+                              </apply>
+                        </apply>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>topa6</ci>
+                        <ci>topa5</ci>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>bottom6</ci>
+                        <apply>
+                              <plus/>
+                              <ci>bottom5</ci>
+                              <ci>weight6</ci>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="0110">
+                  <apply>
+                        <eq/>
+                        <ci>weight7</ci>
+                        <apply>
+                              <divide/>
+                              <apply>
+                                    <times/>
+                                    <ci>fbp</ci>
+                                    <apply>
+                                          <power/>
+                                          <ci>f6p</ci>
+                                          <cn cellml:units="dimensionless">2</cn>
+                                    </apply>
+                              </apply>
+                              <apply>
+                                    <times/>
+                                    <ci>k2</ci>
+                                    <ci>k3</ci>
+                                    <ci>ffbp</ci>
+                                    <cn cellml:units="micromolar">1</cn>
+                              </apply>
+                        </apply>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>topa7</ci>
+                        <apply>
+                              <plus/>
+                              <ci>topa6</ci>
+                              <ci>weight7</ci>
+                        </apply>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>bottom7</ci>
+                        <apply>
+                              <plus/>
+                              <ci>bottom6</ci>
+                              <ci>weight7</ci>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="0111">
+                  <apply>
+                        <eq/>
+                        <ci>weight8</ci>
+                        <apply>
+                              <divide/>
+                              <apply>
+                                    <times/>
+                                    <ci>fbp</ci>
+                                    <apply>
+                                          <power/>
+                                          <ci>f6p</ci>
+                                          <cn cellml:units="dimensionless">2</cn>
+                                    </apply>
+                                    <apply>
+                                          <power/>
+                                          <ci>atp</ci>
+                                          <cn cellml:units="dimensionless">2</cn>
+                                    </apply>
+                              </apply>
+                              <apply>
+                                    <times/>
+                                    <ci>k2</ci>
+                                    <ci>k3</ci>
+                                    <ci>k4</ci>
+                                    <ci>ffbp</ci>
+                                    <ci>fbt</ci>
+                                    <ci>fatp</ci>
+                                    <apply>
+                                          <power/>
+                                          <cn cellml:units="micromolar">1</cn>
+                                          <cn cellml:units="dimensionless">2</cn>
+                                    </apply>
+                              </apply>
+                        </apply>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>topa8</ci>
+                        <apply>
+                              <plus/>
+                              <ci>topa7</ci>
+                              <ci>weight8</ci>
+                        </apply>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>bottom8</ci>
+                        <apply>
+                              <plus/>
+                              <ci>bottom7</ci>
+                              <ci>weight8</ci>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="1000">
+                  <apply>
+                        <eq/>
+                        <ci>weight9</ci>
+                        <apply>
+                              <divide/>
+                              <ci>amp</ci>
+                              <ci>k1</ci>
+                        </apply>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>topa9</ci>
+                        <ci>topa8</ci>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>bottom9</ci>
+                        <apply>
+                              <plus/>
+                              <ci>bottom8</ci>
+                              <ci>weight9</ci>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="1001">
+                  <apply>
+                        <eq/>
+                        <ci>weight10</ci>
+                        <apply>
+                              <divide/>
+                              <apply>
+                                    <times/>
+                                    <ci>amp</ci>
+                                    <apply>
+                                          <power/>
+                                          <ci>atp</ci>
+                                          <cn cellml:units="dimensionless">2</cn>
+                                    </apply>
+                              </apply>
+                              <apply>
+                                    <times/>
+                                    <ci>k1</ci>
+                                    <ci>k4</ci>
+                                    <ci>fmt</ci>
+                                    <cn cellml:units="micromolar">1</cn>
+                              </apply>
+                        </apply>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>topa10</ci>
+                        <ci>topa9</ci>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>bottom10</ci>
+                        <apply>
+                              <plus/>
+                              <ci>bottom9</ci>
+                              <ci>weight10</ci>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="1010">
+                  <apply>
+                        <eq/>
+                        <ci>weight11</ci>
+                        <apply>
+                              <divide/>
+                              <apply>
+                                    <times/>
+                                    <ci>amp</ci>
+                                    <apply>
+                                          <power/>
+                                          <ci>f6p</ci>
+                                          <cn cellml:units="dimensionless">2</cn>
+                                    </apply>
+                              </apply>
+                              <apply>
+                                    <times/>
+                                    <ci>k1</ci>
+                                    <ci>k3</ci>
+                                    <ci>famp</ci>
+                                    <cn cellml:units="micromolar">1</cn>
+                              </apply>
+                        </apply>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>topa11</ci>
+                        <apply>
+                              <plus/>
+                              <ci>topa10</ci>
+                              <ci>weight11</ci>
+                        </apply>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>bottom11</ci>
+                        <apply>
+                              <plus/>
+                              <ci>bottom10</ci>
+                              <ci>weight11</ci>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="1011">
+                  <apply>
+                        <eq/>
+                        <ci>weight12</ci>
+                        <apply>
+                              <divide/>
+                              <apply>
+                                    <times/>
+                                    <ci>amp</ci>
+                                    <apply>
+                                          <power/>
+                                          <ci>f6p</ci>
+                                          <cn cellml:units="dimensionless">2</cn>
+                                    </apply>
+                                    <apply>
+                                          <power/>
+                                          <ci>atp</ci>
+                                          <cn cellml:units="dimensionless">2</cn>
+                                    </apply>
+                              </apply>
+                              <apply>
+                                    <times/>
+                                    <ci>k1</ci>
+                                    <ci>k3</ci>
+                                    <ci>k4</ci>
+                                    <ci>famp</ci>
+                                    <ci>fmt</ci>
+                                    <ci>fatp</ci>
+                                    <apply>
+                                          <power/>
+                                          <cn cellml:units="micromolar">1</cn>
+                                          <cn cellml:units="dimensionless">2</cn>
+                                    </apply>
+                              </apply>
+                        </apply>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>topa12</ci>
+                        <apply>
+                              <plus/>
+                              <ci>topa11</ci>
+                              <ci>weight12</ci>
+                        </apply>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>bottom12</ci>
+                        <apply>
+                              <plus/>
+                              <ci>bottom11</ci>
+                              <ci>weight12</ci>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="1100">
+                  <apply>
+                        <eq/>
+                        <ci>weight13</ci>
+                        <apply>
+                              <divide/>
+                              <apply>
+                                    <times/>
+                                    <ci>amp</ci>
+                                    <ci>fbp</ci>
+                              </apply>
+                              <apply>
+                                    <times/>
+                                    <ci>k1</ci>
+                                    <ci>k2</ci>
+                              </apply>
+                        </apply>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>topa13</ci>
+                        <ci>topa12</ci>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>bottom13</ci>
+                        <apply>
+                              <plus/>
+                              <ci>bottom12</ci>
+                              <ci>weight13</ci>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="1101">
+                  <apply>
+                        <eq/>
+                        <ci>weight14</ci>
+                        <apply>
+                              <divide/>
+                              <apply>
+                                    <times/>
+                                    <ci>amp</ci>
+                                    <ci>fbp</ci>
+                                    <apply>
+                                          <power/>
+                                          <ci>atp</ci>
+                                          <cn cellml:units="dimensionless">2</cn>
+                                    </apply>
+                              </apply>
+                              <apply>
+                                    <times/>
+                                    <ci>k1</ci>
+                                    <ci>k2</ci>
+                                    <ci>k4</ci>
+                                    <ci>fbt</ci>
+                                    <ci>fmt</ci>
+                                    <cn cellml:units="micromolar">1</cn>
+                              </apply>
+                        </apply>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>topa14</ci>
+                        <ci>topa13</ci>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>bottom14</ci>
+                        <apply>
+                              <plus/>
+                              <ci>bottom13</ci>
+                              <ci>weight14</ci>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="1110">
+                  <apply>
+                        <eq/>
+                        <ci>weight15</ci>
+                        <apply>
+                              <divide/>
+                              <apply>
+                                    <times/>
+                                    <ci>amp</ci>
+                                    <ci>fbp</ci>
+                                    <apply>
+                                          <power/>
+                                          <ci>f6p</ci>
+                                          <cn cellml:units="dimensionless">2</cn>
+                                    </apply>
+                              </apply>
+                              <apply>
+                                    <times/>
+                                    <ci>k1</ci>
+                                    <ci>k2</ci>
+                                    <ci>k3</ci>
+                                    <ci>ffbp</ci>
+                                    <ci>famp</ci>
+                                    <cn cellml:units="micromolar">1</cn>
+                              </apply>
+                        </apply>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>topa15</ci>
+                        <ci>topa14</ci>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>bottom15</ci>
+                        <apply>
+                              <plus/>
+                              <ci>bottom14</ci>
+                              <ci>weight15</ci>
+                        </apply>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>topb</ci>
+                        <ci>weight15</ci>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="1111">
+                  <apply>
+                        <eq/>
+                        <ci>weight16</ci>
+                        <apply>
+                              <divide/>
+                              <apply>
+                                    <times/>
+                                    <ci>amp</ci>
+                                    <ci>fbp</ci>
+                                    <apply>
+                                          <power/>
+                                          <ci>f6p</ci>
+                                          <cn cellml:units="dimensionless">2</cn>
+                                    </apply>
+                                    <apply>
+                                          <power/>
+                                          <ci>atp</ci>
+                                          <cn cellml:units="dimensionless">2</cn>
+                                    </apply>
+                              </apply>
+                              <apply>
+                                    <times/>
+                                    <ci>k1</ci>
+                                    <ci>k2</ci>
+                                    <ci>k3</ci>
+                                    <ci>k4</ci>
+                                    <ci>ffbp</ci>
+                                    <ci>famp</ci>
+                                    <ci>fbt</ci>
+                                    <ci>fmt</ci>
+                                    <ci>fatp</ci>
+									<apply>
+                                          <power/>
+                                          <cn cellml:units="micromolar">1</cn>
+                                          <cn cellml:units="dimensionless">2</cn>
+                                    </apply>
+                              </apply>
+                        </apply>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>topa16</ci>
+                        <apply>
+                              <plus/>
+                              <ci>topa15</ci>
+                              <ci>weight16</ci>
+                        </apply>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>bottom16</ci>
+                        <apply>
+                              <plus/>
+                              <ci>bottom15</ci>
+                              <ci>weight16</ci>
+                        </apply>
+                  </apply>
+            </math>
+            <variable units="dimensionless" name="topb"/>
+            <variable units="micromolar" public_interface="in" name="fbp"/>
+            <variable units="micromolar" public_interface="in" name="amp"/>
+      </component>
+      <component name="KATP">
+            <variable units="millisecond" public_interface="in" name="time"/>
+            <variable units="micromolar" name="mgadp"/>
+            <variable units="micromolar" name="adp3m"/>
+            <variable units="micromolar" name="atp4m"/>
+            <variable units="dimensionless" name="topo"/>
+            <variable units="dimensionless" name="bottomo"/>
+            <variable units="dimensionless" name="katpo"/>
+            <variable units="femtoA" public_interface="out" name="IKATP"/>
+            <variable units="millivolt" public_interface="out" name="VK" initial_value="-75"/>
+            <variable units="picoS" name="gkatpbar" initial_value="25000"/>
+            <variable units="micromolar" public_interface="in" name="atp"/>
+            <variable units="micromolar" public_interface="in" name="adp"/>
+            <variable units="dimensionless" name="kdd" initial_value="17"/>
+            <variable units="dimensionless" name="ktd" initial_value="26"/>
+            <variable units="dimensionless" name="ktt" initial_value="1"/>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="mgadp">
+                  <apply>
+                        <eq/>
+                        <ci>mgadp</ci>
+                        <apply>
+                              <times/>
+                              <cn cellml:units="dimensionless">0.165</cn>
+                              <ci>adp</ci>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="adp3m">
+                  <apply>
+                        <eq/>
+                        <ci>adp3m</ci>
+                        <apply>
+                              <times/>
+                              <cn cellml:units="dimensionless">0.135</cn>
+                              <ci>adp</ci>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="atp4m">
+                  <apply>
+                        <eq/>
+                        <ci>atp4m</ci>
+                        <apply>
+                              <times/>
+                              <cn cellml:units="dimensionless">0.05</cn>
+                              <ci>atp</ci>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="topo">
+                  <apply>
+                        <eq/>
+                        <ci>topo</ci>
+                        <apply>
+                              <plus/>
+                              <apply>
+                                    <times/>
+                                    <cn cellml:units="dimensionless">0.08</cn>
+                                    <apply>
+                                          <plus/>
+                                          <cn cellml:units="dimensionless">1</cn>
+                                          <apply>
+                                                <divide/>
+                                                <apply>
+                                                      <times/>
+                                                      <cn cellml:units="dimensionless">2</cn>
+                                                      <ci>mgadp</ci>
+                                                </apply>
+                                                <apply>
+                                                      <times/>
+                                                      <ci>kdd</ci>
+                                                      <cn cellml:units="micromolar">1</cn>
+                                                </apply>
+                                          </apply>
+                                    </apply>
+                              </apply>
+                              <apply>
+                                    <times/>
+                                    <cn cellml:units="dimensionless">0.89</cn>
+                                    <apply>
+                                          <power/>
+                                          <apply>
+                                                <divide/>
+                                                <ci>mgadp</ci>
+                                                <apply>
+                                                      <times/>
+                                                      <ci>kdd</ci>
+                                                      <cn cellml:units="micromolar">1</cn>
+                                                </apply>
+                                          </apply>
+                                          <cn cellml:units="dimensionless">2</cn>
+                                    </apply>
+                              </apply>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="bottomo">
+                  <apply>
+                        <eq/>
+                        <ci>bottomo</ci>
+                        <apply>
+                              <times/>
+                              <apply>
+                                    <power/>
+                                    <apply>
+                                          <plus/>
+                                          <cn cellml:units="dimensionless">1</cn>
+                                          <apply>
+                                                <divide/>
+                                                <ci>mgadp</ci>
+                                                <apply>
+                                                      <times/>
+                                                      <ci>kdd</ci>
+                                                      <cn cellml:units="micromolar">1</cn>
+                                                </apply>
+                                          </apply>
+                                    </apply>
+                                    <cn cellml:units="dimensionless">2</cn>
+                              </apply>
+                              <apply>
+                                    <plus/>
+                                    <cn cellml:units="dimensionless">1</cn>
+                                    <apply>
+                                          <divide/>
+                                          <ci>adp3m</ci>
+                                          <apply>
+                                                <times/>
+                                                <ci>ktd</ci>
+                                                <cn cellml:units="micromolar">1</cn>
+                                          </apply>
+                                    </apply>
+                                    <apply>
+                                          <divide/>
+                                          <ci>atp4m</ci>
+                                          <apply>
+                                                <times/>
+                                                <ci>ktt</ci>
+                                                <cn cellml:units="micromolar">1</cn>
+                                          </apply>
+                                    </apply>
+                              </apply>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="katpo">
+                  <apply>
+                        <eq/>
+                        <ci>katpo</ci>
+                        <apply>
+                              <divide/>
+                              <ci>topo</ci>
+                              <ci>bottomo</ci>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="ikatp">
+                  <apply>
+                        <eq/>
+                        <ci>IKATP</ci>
+                        <apply>
+                              <times/>
+                              <ci>gkatpbar</ci>
+                              <ci>katpo</ci>
+                              <apply>
+                                    <minus/>
+                                    <ci>V</ci>
+                                    <ci>VK</ci>
+                              </apply>
+                        </apply>
+                  </apply>
+            </math>
+            <variable units="millivolt" public_interface="in" name="V"/>
+      </component>
+      <component name="nucleotides">
+            <variable units="millisecond" public_interface="in" name="time"/>
+            <variable units="micromolar" public_interface="out" name="atp"/>
+            <variable units="micromolar" public_interface="out" name="adp" initial_value="780"/>
+            <variable units="dimensionless" name="fback"/>
+            <variable units="dimensionless" name="taua" initial_value="300000"/>
+            <variable units="micromolar" name="r1" initial_value="0.35"/>
+            <variable units="micromolar" public_interface="in" name="c"/>
+            <variable units="dimensionless" name="r" initial_value="1"/>
+            <variable units="dimensionless" name="y"/>
+            <variable units="dimensionless" name="vg" initial_value="2.2"/>
+            <variable units="flux" public_interface="in" name="rgpdh"/>
+            <variable units="flux" name="kg" initial_value="10"/>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="d(adp)/d(time)">
+                  <apply>
+                        <eq/>
+                        <apply>
+                              <diff/>
+                              <bvar>
+                                    <ci>time</ci>
+                              </bvar>
+                              <ci>adp</ci>
+                        </apply>
+                        <apply>
+                              <divide/>
+                              <apply>
+                                    <minus/>
+                                    <ci>atp</ci>
+                                    <apply>
+                                          <times/>
+                                          <ci>adp</ci>
+                                          <apply>
+                                                <exp/>
+                                                <apply>
+                                                      <times/>
+                                                      <ci>fback</ci>
+                                                      <apply>
+                                                            <minus/>
+                                                            <cn cellml:units="dimensionless">1</cn>
+                                                            <apply>
+                                                                  <divide/>
+                                                                  <ci>c</ci>
+                                                                  <ci>r1</ci>
+                                                            </apply>
+                                                      </apply>
+                                                </apply>
+                                          </apply>
+                                    </apply>
+                              </apply>
+                              <apply>
+                                    <times/>
+                                    <ci>taua</ci>
+                                    <cn cellml:units="millisecond">1</cn>
+                              </apply>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="fback">
+                  <apply>
+                        <eq/>
+                        <ci>fback</ci>
+                        <apply>
+                              <plus/>
+                              <ci>r</ci>
+                              <ci>y</ci>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="y">
+                  <apply>
+                        <eq/>
+                        <ci>y</ci>
+                        <apply>
+                              <times/>
+                              <ci>vg</ci>
+                              <apply>
+                                    <divide/>
+                                    <ci>rgpdh</ci>
+                                    <apply>
+                                          <plus/>
+                                          <ci>kg</ci>
+                                          <ci>rgpdh</ci>
+                                    </apply>
+                              </apply>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="atp">
+                  <apply>
+                        <eq/>
+                        <ci>atp</ci>
+                        <apply>
+                              <times/>
+                              <cn cellml:units="dimensionless">0.5</cn>
+                              <apply>
+                                    <plus/>
+                                    <apply>
+                                          <minus/>
+                                          <ci>atot</ci>
+                                          <ci>adp</ci>
+                                    </apply>
+                                    <apply>
+                                          <times/>
+                                          <ci>rad</ci>
+                                          <cn cellml:units="micromolar">1</cn>
+                                    </apply>
+                              </apply>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="amp">
+                  <apply>
+                        <eq/>
+                        <ci>amp</ci>
+                        <apply>
+                              <divide/>
+                              <apply>
+                                    <times/>
+                                    <ci>adp</ci>
+                                    <ci>adp</ci>
+                              </apply>
+                              <ci>atp</ci>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="ratio">
+                  <apply>
+                        <eq/>
+                        <ci>ratio</ci>
+                        <apply>
+                              <divide/>
+                              <ci>atp</ci>
+                              <ci>adp</ci>
+                        </apply>
+                  </apply>
+            </math>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" id="rad">
+                  <apply>
+                        <eq/>
+                        <ci>rad</ci>
+                        <apply>
+                              <divide/>
+                              <apply>
+                                    <root/>
+                                    <apply>
+                                          <abs/>
+                                          <apply>
+                                                <minus/>
+                                                <apply>
+                                                      <power/>
+                                                      <apply>
+                                                            <minus/>
+                                                            <ci>adp</ci>
+                                                            <ci>atot</ci>
+                                                      </apply>
+                                                      <cn cellml:units="dimensionless">2</cn>
+                                                </apply>
+                                                <apply>
+                                                      <times/>
+                                                      <cn cellml:units="dimensionless">4</cn>
+                                                      <apply>
+                                                            <power/>
+                                                            <ci>adp</ci>
+                                                            <cn cellml:units="dimensionless">2</cn>
+                                                      </apply>
+                                                </apply>
+                                          </apply>
+                                    </apply>
+                              </apply>
+                              <cn cellml:units="micromolar">1</cn>
+                        </apply>
+                  </apply>
+            </math>
+            <variable units="micromolar" public_interface="out" name="amp"/>
+            <variable units="dimensionless" name="rad"/>
+            <variable units="dimensionless" name="ratio"/>
+            <variable units="micromolar" public_interface="in" name="atot"/>
+      </component>
+      <connection>
+            <map_components component_2="membrane" component_1="environment"/>
+            <map_variables variable_2="time" variable_1="time"/>
+      </connection>
+      <connection>
+            <map_components component_2="membrane" component_1="KATP"/>
+            <map_variables variable_2="IKATP" variable_1="IKATP"/>
+            <map_variables variable_2="VK" variable_1="VK"/>
+            <map_variables variable_2="V" variable_1="V"/>
+      </connection>
+      <connection>
+            <map_components component_2="calcium_handling" component_1="environment"/>
+            <map_variables variable_2="time" variable_1="time"/>
+      </connection>
+      <connection>
+            <map_components component_2="calcium_handling" component_1="membrane"/>
+            <map_variables variable_2="ICa" variable_1="ICa"/>
+            <map_variables variable_2="c" variable_1="c"/>
+      </connection>
+      <connection>
+            <map_components component_2="glycolysis" component_1="environment"/>
+            <map_variables variable_2="time" variable_1="time"/>
+      </connection>
+      <connection>
+            <map_components component_2="pfk" component_1="environment"/>
+            <map_variables variable_2="time" variable_1="time"/>
+      </connection>
+      <connection>
+            <map_components component_2="pfk" component_1="glycolysis"/>
+            <map_variables variable_2="pfkbas" variable_1="pfkbas"/>
+            <map_variables variable_2="f6p" variable_1="f6p"/>
+            <map_variables variable_2="fbp" variable_1="fbp"/>
+            <map_variables variable_2="pfk" variable_1="pfk"/>
+      </connection>
+      <connection>
+            <map_components component_2="pfk" component_1="nucleotides"/>
+            <map_variables variable_2="atp" variable_1="atp"/>
+            <map_variables variable_2="amp" variable_1="amp"/>
+      </connection>
+      <connection>
+            <map_components component_2="KATP" component_1="environment"/>
+            <map_variables variable_2="time" variable_1="time"/>
+      </connection>
+      <connection>
+            <map_components component_2="KATP" component_1="nucleotides"/>
+            <map_variables variable_2="atp" variable_1="atp"/>
+            <map_variables variable_2="adp" variable_1="adp"/>
+      </connection>
+      <connection>
+            <map_components component_2="nucleotides" component_1="environment"/>
+            <map_variables variable_2="time" variable_1="time"/>
+      </connection>
+      <connection>
+            <map_components component_2="nucleotides" component_1="calcium_handling"/>
+            <map_variables variable_2="c" variable_1="c"/>
+      </connection>
+      <connection>
+            <map_components component_2="nucleotides" component_1="glycolysis"/>
+            <map_variables variable_2="rgpdh" variable_1="rgpdh"/>
+            <map_variables variable_2="atot" variable_1="atot"/>
+      </connection>
+      <rdf:RDF>
+            <rdf:Bag rdf:about="rdf:#2a3e1a2b-3efe-41f2-8c13-bcdbf6801dac">
+                  <rdf:li>calcium dynamics</rdf:li>
+                  <rdf:li>insulin</rdf:li>
+                  <rdf:li>glucose homeostasis</rdf:li>
+                  <rdf:li>metabolism</rdf:li>
+            </rdf:Bag>
+            <rdf:Seq rdf:about="rdf:#bb66099f-37f1-415c-8500-ed7d50b7885a">
+                  <rdf:li rdf:resource="rdf:#5fdcb85b-bea0-4d22-ab0d-40ef8ee4792c"/>
+                  <rdf:li rdf:resource="rdf:#0dfc2f19-fa87-4a03-9cdd-c9aabd92683d"/>
+                  <rdf:li rdf:resource="rdf:#088acd26-5c41-4627-b997-64b7ba320604"/>
+                  <rdf:li rdf:resource="rdf:#69d0193d-97ae-4283-aa65-d8464160246b"/>
+                  <rdf:li rdf:resource="rdf:#d2fc1144-e700-444c-8406-3b3c3f948e13"/>
+            </rdf:Seq>
+            <rdf:Description rdf:about="rdf:#af4bf49e-19c9-41db-b07c-20a677dbb5e8">
+                  <vCard:FN>James Lawson</vCard:FN>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#701021a0-c094-452e-8726-aad658793881">
+                  <vCard:Given>James</vCard:Given>
+                  <vCard:Family>Lawson</vCard:Family>
+                  <vCard:Other>Richard</vCard:Other>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#c6f75f28-1e84-43c3-878f-efbcabd34bc4">
+                  <dcterms:W3CDTF>2004-11-01 00:00</dcterms:W3CDTF>
+            </rdf:Description>
+            <rdf:Description rdf:about="">
+			      <dc:title>Calcium and Glycolysis Mediate Multiple Bursting Modes in Pancreatic Islets (compound bursting model)</dc:title>
+                  <dc:publisher>The University of Auckland, Auckland Bioengineering Institute</dc:publisher>
+                  <cmeta:comment rdf:resource="rdf:#c126f445-88c1-4d7e-a576-547cc0810af2"/>
+                  <dcterms:created rdf:resource="rdf:#f63d657a-c1dc-4431-a3fb-db0514467fea"/>
+                  <dc:creator rdf:resource="rdf:#a80288f9-d324-4abd-8286-2393d5028748"/>
+                  <cmeta:modification rdf:resource="rdf:#4a326fca-519b-4c57-992d-8fc3d04bcdd6"/>
+                  <cmeta:modification rdf:resource="rdf:#3d33d366-1119-4479-9d8c-1d47125dce65"/>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#f4229a70-f5c3-4577-a9c2-d22e5a6071d5">
+                  <dc:subject rdf:resource="rdf:#a38ddb22-28e6-4f64-8c75-532a81f52290"/>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#96ae93b5-521f-45c5-8bac-29f1dc18de2b">
+                  <dcterms:W3CDTF>2007-08-06T12:07:27+12:00</dcterms:W3CDTF>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#da88ae08-f466-4235-ab42-f349a223e31f">
+                  <vCard:N rdf:resource="rdf:#ff766bfc-843f-4ddb-b4bf-4e10fc39bc2e"/>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#$PXk6c">
+                  <ns7:endingValue>1000</ns7:endingValue>
+                  <ns7:nonstandard-pointDensity>100000</ns7:nonstandard-pointDensity>
+                  <ns7:maximumStepSize>0.01</ns7:maximumStepSize>
+                  <ns7:nonstandard-algorithm>bdf15</ns7:nonstandard-algorithm>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#f63d657a-c1dc-4431-a3fb-db0514467fea">
+                  <dcterms:W3CDTF>2007-08-03T00:00:00+00:00</dcterms:W3CDTF>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#45f55c08-b2f7-4a01-b843-7ddfa75b6f04">
+                  <vCard:N rdf:resource="rdf:#701021a0-c094-452e-8726-aad658793881"/>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#c80bef9f-dcc0-4faa-b307-7f540393ae25">
+                  <vCard:Given>Arthur</vCard:Given>
+                  <vCard:Family>Sherman</vCard:Family>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#d2fc1144-e700-444c-8406-3b3c3f948e13">
+                  <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+                  <vCard:N rdf:resource="rdf:#c80bef9f-dcc0-4faa-b307-7f540393ae25"/>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#b9733706-d90c-46a2-b5af-0b434803e658">
+                  <vCard:Given>James</vCard:Given>
+                  <vCard:Family>Lawson</vCard:Family>
+                  <vCard:Other>Richard</vCard:Other>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#054cda44-e70b-4b71-86be-db058391c283">
+                  <bqs:Pubmed_id>15347584</bqs:Pubmed_id>
+                  <bqs:JournalArticle rdf:resource="rdf:#ba7f2c42-6207-424c-a3bd-74d04323a417"/>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#0b727304-e5c6-4019-89b4-35e2d6c5f507">
+                  <dc:creator rdf:resource="rdf:#cb130cca-66cc-48eb-b5c0-23f14a09370a"/>
+                  <rdf:value>This is the CellML description of Bertram et al.'s 2004 mathematical model of calcium and glycolysis mediated bursting modes in pancreatic islets.</rdf:value>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#cb130cca-66cc-48eb-b5c0-23f14a09370a">
+                  <vCard:FN>Catherine Lloyd</vCard:FN>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#ff766bfc-843f-4ddb-b4bf-4e10fc39bc2e">
+                  <vCard:Given>James</vCard:Given>
+                  <vCard:Family>Lawson</vCard:Family>
+                  <vCard:Other>Richard</vCard:Other>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#a80288f9-d324-4abd-8286-2393d5028748">
+                  <vCard:ORG rdf:resource="rdf:#8c20b761-be34-4745-a396-d73ceb88bbf1"/>
+                  <vCard:EMAIL rdf:resource="rdf:#e9b23082-62f1-4b49-87a8-4ce5a1a64723"/>
+                  <vCard:N rdf:resource="rdf:#b9733706-d90c-46a2-b5af-0b434803e658"/>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#54c38421-b12f-4a9b-b59e-b7b30fccc5c3">
+                  <dcterms:W3CDTF>2009-05-25T16:03:37+12:00</dcterms:W3CDTF>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#0dfc2f19-fa87-4a03-9cdd-c9aabd92683d">
+                  <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+                  <vCard:N rdf:resource="rdf:#874dff13-d862-4051-9e0f-1e60388eca0a"/>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#088acd26-5c41-4627-b997-64b7ba320604">
+                  <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+                  <vCard:N rdf:resource="rdf:#3bf5156e-c322-4d54-8aae-b5dc6f715048"/>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#ba7f2c42-6207-424c-a3bd-74d04323a417">
+                  <dc:creator rdf:resource="rdf:#bb66099f-37f1-415c-8500-ed7d50b7885a"/>
+                  <dc:title>Calcium and Glycolysis Mediate Multiple Bursting Modes in Pancreatic Islets</dc:title>
+                  <bqs:volume>87(5)</bqs:volume>
+                  <bqs:first_page>3074</bqs:first_page>
+                  <bqs:Journal rdf:resource="rdf:#8a7d4c96-20d2-4822-b282-8d9a028ee56a"/>
+                  <dcterms:issued rdf:resource="rdf:#c6f75f28-1e84-43c3-878f-efbcabd34bc4"/>
+                  <bqs:last_page>3087</bqs:last_page>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#8c20b761-be34-4745-a396-d73ceb88bbf1">
+                  <vCard:Orgname>The University of Auckland</vCard:Orgname>
+                  <vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#874dff13-d862-4051-9e0f-1e60388eca0a">
+                  <vCard:Given>Leslie</vCard:Given>
+                  <vCard:Family>Satin</vCard:Family>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#c126f445-88c1-4d7e-a576-547cc0810af2">
+                  <dc:creator rdf:resource="rdf:#af4bf49e-19c9-41db-b07c-20a677dbb5e8"/>
+                  <rdf:value>This model has been rebuilt and coded by translating the authors original XPPAUT .ode file, which can be found at http://www.math.fsu.edu/~bertram/software/islet/BJ_04a.ode . This file runs in PCEnv and is able to produce the expected output for a few cycles, after which the output degenerates. This model has been parameterised for the 'compound bursting' model.</rdf:value>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#69d0193d-97ae-4283-aa65-d8464160246b">
+                  <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+                  <vCard:N rdf:resource="rdf:#b98498bf-95bb-4956-8bb2-1f18337fbe47"/>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#4a326fca-519b-4c57-992d-8fc3d04bcdd6">
+                  <dcterms:modified rdf:resource="rdf:#54c38421-b12f-4a9b-b59e-b7b30fccc5c3"/>
+                  <rdf:value>updated curation status</rdf:value>
+                  <cmeta:modifier rdf:resource="rdf:#da88ae08-f466-4235-ab42-f349a223e31f"/>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#$OXk6c">
+                  <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                  <rdf:first rdf:resource="rdf:#$PXk6c"/>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#8a7d4c96-20d2-4822-b282-8d9a028ee56a">
+                  <dc:title>Biophysical Journal</dc:title>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#3bf5156e-c322-4d54-8aae-b5dc6f715048">
+                  <vCard:Given>Min</vCard:Given>
+                  <vCard:Family>Zhang</vCard:Family>
+            </rdf:Description>
+            <rdf:Description rdf:about="#bertram_satin_zhang_smolen_sherman_2004_version01">
+                  <ns7:simulation rdf:resource="rdf:#$NXk6c"/>
+                  <dc:title>Bertram et al.'s 2004 mathematical model of calcium and glycolysis mediated bursting modes in pancreatic islets.</dc:title>
+                  <cmeta:bio_entity>Pancreatic Islets</cmeta:bio_entity>
+                  <cmeta:comment rdf:resource="rdf:#0b727304-e5c6-4019-89b4-35e2d6c5f507"/>
+                  <bqs:reference rdf:resource="rdf:#054cda44-e70b-4b71-86be-db058391c283"/>
+                  <bqs:reference rdf:resource="rdf:#f4229a70-f5c3-4577-a9c2-d22e5a6071d5"/>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#8b78f6bb-6897-41e0-baa1-5344a89080f1">
+                  <vCard:Given>Richard</vCard:Given>
+                  <vCard:Family>Bertram</vCard:Family>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#e9b23082-62f1-4b49-87a8-4ce5a1a64723">
+                  <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+                  <rdf:value>j.lawson@auckland.ac.nz</rdf:value>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#$NXk6c">
+                  <ns7:boundIntervals rdf:resource="rdf:#$OXk6c"/>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#a38ddb22-28e6-4f64-8c75-532a81f52290">
+                  <bqs:subject_type>keyword</bqs:subject_type>
+                  <rdf:value rdf:resource="rdf:#2a3e1a2b-3efe-41f2-8c13-bcdbf6801dac"/>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#b98498bf-95bb-4956-8bb2-1f18337fbe47">
+                  <vCard:Given>Paul</vCard:Given>
+                  <vCard:Family>Smolen</vCard:Family>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#5fdcb85b-bea0-4d22-ab0d-40ef8ee4792c">
+                  <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+                  <vCard:N rdf:resource="rdf:#8b78f6bb-6897-41e0-baa1-5344a89080f1"/>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#3d33d366-1119-4479-9d8c-1d47125dce65">
+                  <dcterms:modified rdf:resource="rdf:#96ae93b5-521f-45c5-8bac-29f1dc18de2b"/>
+                  <rdf:value>The equation defining rgpdh has been changed from rgpdh = 0.2{units="dimensionless"} * root(fbp) to: rgpdh = 0.2{units="dimensionless"} * root(abs(fbp).  Since rgpdh was starting to approach zero near where the offending NaN was being produced in version 01 variant 01. This partially fixes the problem but the output is still not totally satisfactory.  The sqrt function in the equation defining rad also had an 'abs' function added: rad = root(abs(power(adp - atot, 2{units="dimensionless"}) - 4{units="dimensionless"} * power(adp, 2{units="dimensionless"}))</rdf:value>
+                  <cmeta:modifier rdf:resource="rdf:#45f55c08-b2f7-4a01-b843-7ddfa75b6f04"/>
+            </rdf:Description>
+      </rdf:RDF>
+</model>

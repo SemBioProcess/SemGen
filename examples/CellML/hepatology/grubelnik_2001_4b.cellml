@@ -1,0 +1,595 @@
+<?xml version="1.0"?>
+<!--
+This CellML file was generated on 9/26/2011 at 10:02:50 at AM using:
+
+COR (0.9.31.1409)
+Copyright 2002-2011 Dr Alan Garny
+http://cor.physiol.ox.ac.uk/ - cor@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.cellml.org/
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" cmeta:id="grubelnik_2001_4b" name="grubelnik_2001_4b">
+
+
+
+
+
+   <units name="micromole">
+      <unit prefix="micro" units="mole"/>
+   </units>
+   <units name="micromolar">
+      <unit units="micromole"/>
+      <unit exponent="-1" units="litre"/>
+   </units>
+   <units name="micromolar_per_minute">
+      <unit units="micromolar"/>
+      <unit exponent="-1" units="second"/>
+   </units>
+   <units name="per_micromolar_per_second">
+      <unit exponent="-1" units="micromolar"/>
+      <unit exponent="-1" units="second"/>
+   </units>
+   <units name="minute">
+      <unit multiplier="60" units="second"/>
+   </units>
+   <units name="per_minute">
+      <unit exponent="-1" units="minute"/>
+   </units>
+   <units name="per_second">
+      <unit exponent="-1" units="second"/>
+   </units>
+   <component name="environment">
+      <variable cmeta:id="environment_time" name="time" public_interface="out" units="second"/>
+   </component>
+   <component name="Ca_m">
+      <variable cmeta:id="Ca_m_Ca_m" initial_value="0.1" name="Ca_m" public_interface="out" units="micromolar"/>
+      <variable name="J_min" public_interface="in" units="micromolar"/>
+      <variable name="J_mout" public_interface="in" units="micromolar"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Ca_m</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>J_min</ci>
+               <ci>J_mout</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="J_min">
+      <variable cmeta:id="J_min_J_min" name="J_min" public_interface="out" units="micromolar"/>
+      <variable initial_value="330" name="k_min" units="micromolar"/>
+      <variable name="Ca_cyt" public_interface="in" units="micromolar"/>
+      <variable initial_value="1.6" name="K_m" units="micromolar"/>
+      <variable initial_value="8" name="n" units="micromolar"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>J_min</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>k_min</ci>
+                  <apply>
+                     <power/>
+                     <ci>Ca_cyt</ci>
+                     <ci>n</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <power/>
+                     <ci>K_m</ci>
+                     <ci>n</ci>
+                  </apply>
+                  <apply>
+                     <power/>
+                     <ci>Ca_cyt</ci>
+                     <ci>n</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="J_mout">
+      <variable cmeta:id="J_mout_J_mout" name="J_mout" public_interface="out" units="micromolar"/>
+      <variable initial_value="0.5" name="k_mout" units="micromolar"/>
+      <variable name="Ca_m" public_interface="in" units="micromolar"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>J_mout</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>k_mout</ci>
+                  <ci>Ca_m</ci>
+               </apply>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="micromolar">1</cn>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Ca_cyt">
+      <variable cmeta:id="Ca_cyt_Ca_cyt" initial_value="0.01" name="Ca_cyt" public_interface="out" units="micromolar"/>
+      <variable name="J_ERch" public_interface="in" units="micromolar"/>
+      <variable name="J_ERpump" public_interface="in" units="micromolar"/>
+      <variable name="J_ERleak" public_interface="in" units="micromolar"/>
+      <variable name="J_CaPr" public_interface="in" units="micromolar"/>
+      <variable name="J_Pr" public_interface="in" units="micromolar"/>
+      <variable initial_value="0.01" name="rho_m" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.025" name="beta_m" public_interface="out" units="dimensionless"/>
+      <variable name="J_mout" public_interface="in" units="micromolar"/>
+      <variable name="J_min" public_interface="in" units="micromolar"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Ca_cyt</ci>
+            </apply>
+            <apply>
+               <times/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <minus/>
+                           <ci>J_ERch</ci>
+                           <ci>J_ERpump</ci>
+                        </apply>
+                        <ci>J_ERleak</ci>
+                        <ci>J_CaPr</ci>
+                     </apply>
+                     <ci>J_Pr</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>rho_m</ci>
+                        <ci>beta_m</ci>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <ci>J_mout</ci>
+                        <ci>J_min</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="per_minute">1</cn>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Ca_tot">
+      <variable cmeta:id="Ca_tot_Ca_tot" initial_value="0.01" name="Ca_tot" public_interface="out" units="micromolar"/>
+      <variable name="Ca_cyt" public_interface="in" units="micromolar"/>
+      <variable name="Ca_ER" public_interface="in" units="micromolar"/>
+      <variable name="rho_m" public_interface="in" units="dimensionless"/>
+      <variable name="beta_m" public_interface="in" units="dimensionless"/>
+      <variable name="rho_ER" public_interface="in" units="dimensionless"/>
+      <variable name="beta_ER" public_interface="in" units="dimensionless"/>
+      <variable name="Ca_m" public_interface="in" units="micromolar"/>
+      <variable name="CaPr" public_interface="in" units="micromolar"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Ca_tot</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <ci>Ca_cyt</ci>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>rho_ER</ci>
+                     <ci>beta_ER</ci>
+                  </apply>
+                  <ci>Ca_ER</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>rho_m</ci>
+                     <ci>beta_m</ci>
+                  </apply>
+                  <ci>Ca_m</ci>
+               </apply>
+               <ci>CaPr</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Ca_ER">
+      <variable cmeta:id="Ca_ER_Ca_ER" initial_value="20" name="Ca_ER" public_interface="out" units="micromolar"/>
+      <variable initial_value="0.0025" name="beta_ER" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.01" name="rho_ER" public_interface="out" units="dimensionless"/>
+      <variable name="J_ERpump" public_interface="in" units="micromolar"/>
+      <variable name="J_ERleak" public_interface="in" units="micromolar"/>
+      <variable name="J_ERch" public_interface="in" units="micromolar"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Ca_ER</ci>
+            </apply>
+            <apply>
+               <times/>
+               <apply>
+                  <divide/>
+                  <ci>beta_ER</ci>
+                  <ci>rho_ER</ci>
+               </apply>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <ci>J_ERpump</ci>
+                     <ci>J_ERleak</ci>
+                  </apply>
+                  <ci>J_ERch</ci>
+               </apply>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="per_minute">1</cn>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="J_ERch">
+      <variable cmeta:id="J_ERch_J_ERch" name="J_ERch" public_interface="out" units="micromolar"/>
+      <variable initial_value="0.001" name="k_ERch" units="micromolar"/>
+      <variable initial_value="5" name="K_ch" units="micromolar"/>
+      <variable name="Ca_cyt" public_interface="in" units="micromolar"/>
+      <variable name="Ca_ER" public_interface="in" units="micromolar"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>J_ERch</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>k_ERch</ci>
+                     <apply>
+                        <power/>
+                        <ci>Ca_cyt</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <power/>
+                        <ci>K_ch</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                     </apply>
+                     <apply>
+                        <power/>
+                        <ci>Ca_cyt</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <minus/>
+                  <ci>Ca_ER</ci>
+                  <ci>Ca_cyt</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="J_ERpump">
+      <variable cmeta:id="J_ERpump_J_ERpump" name="J_ERpump" public_interface="out" units="micromolar"/>
+      <variable name="Ca_cyt" public_interface="in" units="micromolar"/>
+      <variable initial_value="20" name="k_ERpump" units="per_second"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>J_ERpump</ci>
+            <apply>
+               <times/>
+               <ci>k_ERpump</ci>
+               <ci>Ca_cyt</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="J_ERleak">
+      <variable cmeta:id="J_ERleak_J_ERleak" name="J_ERleak" public_interface="out" units="micromolar"/>
+      <variable initial_value="0.05" name="k_ERleak" units="per_second"/>
+      <variable name="Ca_ER" public_interface="in" units="micromolar"/>
+      <variable name="Ca_cyt" public_interface="in" units="micromolar"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>J_ERleak</ci>
+            <apply>
+               <times/>
+               <ci>k_ERleak</ci>
+               <apply>
+                  <minus/>
+                  <ci>Ca_ER</ci>
+                  <ci>Ca_cyt</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="J_CaPr">
+      <variable cmeta:id="J_CaPr_J_CaPr" name="J_CaPr" public_interface="out" units="micromolar"/>
+      <variable initial_value="0.01" name="k_min" units="per_second"/>
+      <variable name="CaPr" public_interface="in" units="micromolar"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>J_CaPr</ci>
+            <apply>
+               <times/>
+               <ci>k_min</ci>
+               <ci>CaPr</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="J_Pr">
+      <variable cmeta:id="J_Pr_J_Pr" name="J_Pr" public_interface="out" units="micromolar"/>
+      <variable initial_value="0.1" name="k_plus" units="per_micromolar_per_second"/>
+      <variable name="Ca_cyt" public_interface="in" units="micromolar"/>
+      <variable name="Pr" public_interface="in" units="micromolar"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>J_Pr</ci>
+            <apply>
+               <times/>
+               <ci>k_plus</ci>
+               <ci>Ca_cyt</ci>
+               <ci>Pr</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="CaPr">
+      <variable cmeta:id="CaPr_CaPr" name="CaPr" public_interface="out" units="micromolar"/>
+      <variable name="Ca_cyt" public_interface="in" units="micromolar"/>
+      <variable name="rho_ER" public_interface="in" units="dimensionless"/>
+      <variable name="beta_ER" public_interface="in" units="dimensionless"/>
+      <variable name="Ca_ER" public_interface="in" units="micromolar"/>
+      <variable initial_value="90" name="Ca_tot" units="micromolar"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>CaPr</ci>
+            <apply>
+               <minus/>
+               <ci>Ca_tot</ci>
+               <apply>
+                  <plus/>
+                  <ci>Ca_cyt</ci>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>rho_ER</ci>
+                        <ci>beta_ER</ci>
+                     </apply>
+                     <ci>Ca_ER</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Pr">
+      <variable cmeta:id="Pr_Pr" name="Pr" public_interface="out" units="micromolar"/>
+      <variable initial_value="120" name="Pr_tot" units="micromolar"/>
+      <variable name="CaPr" public_interface="in" units="micromolar"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>Pr</ci>
+            <apply>
+               <minus/>
+               <ci>Pr_tot</ci>
+               <ci>CaPr</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <connection>
+      <map_components component_1="environment" component_2="Ca_tot"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="Ca_m"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="J_min"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="J_mout"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="Ca_cyt"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="Ca_ER"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="J_ERch"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="J_ERpump"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="J_ERleak"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="J_CaPr"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="J_Pr"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="CaPr"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="Pr"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ca_cyt" component_2="J_ERch"/>
+      <map_variables variable_1="J_ERch" variable_2="J_ERch"/>
+      <map_variables variable_1="Ca_cyt" variable_2="Ca_cyt"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ca_cyt" component_2="J_ERpump"/>
+      <map_variables variable_1="J_ERpump" variable_2="J_ERpump"/>
+      <map_variables variable_1="Ca_cyt" variable_2="Ca_cyt"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ca_cyt" component_2="J_ERleak"/>
+      <map_variables variable_1="J_ERleak" variable_2="J_ERleak"/>
+      <map_variables variable_1="Ca_cyt" variable_2="Ca_cyt"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ca_cyt" component_2="J_CaPr"/>
+      <map_variables variable_1="J_CaPr" variable_2="J_CaPr"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ca_cyt" component_2="J_Pr"/>
+      <map_variables variable_1="Ca_cyt" variable_2="Ca_cyt"/>
+      <map_variables variable_1="J_Pr" variable_2="J_Pr"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ca_cyt" component_2="CaPr"/>
+      <map_variables variable_1="Ca_cyt" variable_2="Ca_cyt"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ca_cyt" component_2="Ca_tot"/>
+      <map_variables variable_1="rho_m" variable_2="rho_m"/>
+      <map_variables variable_1="beta_m" variable_2="beta_m"/>
+      <map_variables variable_1="Ca_cyt" variable_2="Ca_cyt"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ca_cyt" component_2="J_min"/>
+      <map_variables variable_1="J_min" variable_2="J_min"/>
+      <map_variables variable_1="Ca_cyt" variable_2="Ca_cyt"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ca_cyt" component_2="J_mout"/>
+      <map_variables variable_1="J_mout" variable_2="J_mout"/>
+   </connection>
+   <connection>
+      <map_components component_1="CaPr" component_2="Pr"/>
+      <map_variables variable_1="CaPr" variable_2="CaPr"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ca_ER" component_2="J_ERpump"/>
+      <map_variables variable_1="J_ERpump" variable_2="J_ERpump"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ca_ER" component_2="CaPr"/>
+      <map_variables variable_1="Ca_ER" variable_2="Ca_ER"/>
+      <map_variables variable_1="rho_ER" variable_2="rho_ER"/>
+      <map_variables variable_1="beta_ER" variable_2="beta_ER"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ca_ER" component_2="J_ERch"/>
+      <map_variables variable_1="J_ERch" variable_2="J_ERch"/>
+      <map_variables variable_1="Ca_ER" variable_2="Ca_ER"/>
+   </connection>
+   <connection>
+      <map_components component_1="Pr" component_2="J_Pr"/>
+      <map_variables variable_1="Pr" variable_2="Pr"/>
+   </connection>
+   <connection>
+      <map_components component_1="CaPr" component_2="J_CaPr"/>
+      <map_variables variable_1="CaPr" variable_2="CaPr"/>
+   </connection>
+   <connection>
+      <map_components component_1="CaPr" component_2="Ca_tot"/>
+      <map_variables variable_1="CaPr" variable_2="CaPr"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ca_m" component_2="Ca_tot"/>
+      <map_variables variable_1="Ca_m" variable_2="Ca_m"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ca_m" component_2="J_mout"/>
+      <map_variables variable_1="Ca_m" variable_2="Ca_m"/>
+      <map_variables variable_1="J_mout" variable_2="J_mout"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ca_m" component_2="J_min"/>
+      <map_variables variable_1="J_min" variable_2="J_min"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ca_ER" component_2="Ca_tot"/>
+      <map_variables variable_1="rho_ER" variable_2="rho_ER"/>
+      <map_variables variable_1="beta_ER" variable_2="beta_ER"/>
+      <map_variables variable_1="Ca_ER" variable_2="Ca_ER"/>
+   </connection>
+   <connection>
+      <map_components component_1="J_ERleak" component_2="Ca_ER"/>
+      <map_variables variable_1="Ca_ER" variable_2="Ca_ER"/>
+      <map_variables variable_1="J_ERleak" variable_2="J_ERleak"/>
+   </connection>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:nodeID="n1"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n2"/></Person></rdf:Description><rdf:Description rdf:nodeID="n3"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n4"/></Person></rdf:Description><rdf:Description rdf:nodeID="n5"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n6"/></N></rdf:Description><rdf:Description rdf:nodeID="n7"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Nielsen</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Hanne</Given></rdf:Description><rdf:Description rdf:nodeID="n8"><rdf:type><rdf:Description rdf:about="http://imc.org/vCard/3.0#internet"/></rdf:type><rdf:value xml:lang="en">hnie010@aucklanduni.ac.nz</rdf:value></rdf:Description><rdf:Description rdf:nodeID="n9"><rdf:value><rdf:Description rdf:nodeID="n10"/></rdf:value><subject_type xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">keyword</subject_type></rdf:Description><rdf:Description rdf:nodeID="n11"><endingValue xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">250</endingValue></rdf:Description><rdf:Description rdf:about=""><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n12"/></creator><created xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:nodeID="n13"/></created></rdf:Description><rdf:Description rdf:nodeID="n10"><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag"/></rdf:type><rdf:_1 xml:lang="en">hepatology</rdf:_1><rdf:_2 xml:lang="en">liver</rdf:_2><rdf:_3 xml:lang="en">hepatocyte</rdf:_3></rdf:Description><rdf:Description rdf:nodeID="n14"><subject xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n9"/></subject></rdf:Description><rdf:Description rdf:about="#grubelnik_2001_4b"><cmeta:species xml:lang="en">Human</cmeta:species><cmeta:bio_entity xml:lang="en">Liver</cmeta:bio_entity><cmeta:bio_entity xml:lang="en">hepatocyte</cmeta:bio_entity><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n14"/></reference><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n15"/></reference><simulation xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n16"/></simulation></rdf:Description><rdf:Description rdf:nodeID="n17"><rdf:rest><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/></rdf:rest><rdf:first><rdf:Description rdf:nodeID="n11"/></rdf:first></rdf:Description><rdf:Description rdf:nodeID="n18"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">Biophysical Chemistry</title></rdf:Description><rdf:Description rdf:nodeID="n19"><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n20"/></creator><issued xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:nodeID="n21"/></issued><Journal xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n18"/></Journal><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">
+           Mitochondria regulate the amplitude of simple and complex calcium oscillations
+          </title><volume xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">94</volume><last_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">74</last_page><first_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">59</first_page></rdf:Description><rdf:Description rdf:nodeID="n12"><EMAIL xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n8"/></EMAIL><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n7"/></N><ORG xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n22"/></ORG></rdf:Description><rdf:Description rdf:nodeID="n23"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n24"/></Person></rdf:Description><rdf:Description rdf:nodeID="n13"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2011-09-26</W3CDTF></rdf:Description><rdf:Description rdf:nodeID="n15"><Pubmed_id xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">11744191</Pubmed_id><JournalArticle xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n19"/></JournalArticle></rdf:Description><rdf:Description rdf:nodeID="n4"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n25"/></N></rdf:Description><rdf:Description rdf:nodeID="n20"><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq"/></rdf:type><rdf:_1><rdf:Description rdf:nodeID="n1"/></rdf:_1><rdf:_2><rdf:Description rdf:nodeID="n3"/></rdf:_2><rdf:_3><rdf:Description rdf:nodeID="n26"/></rdf:_3><rdf:_5><rdf:Description rdf:nodeID="n27"/></rdf:_5><rdf:_4><rdf:Description rdf:nodeID="n23"/></rdf:_4></rdf:Description><rdf:Description rdf:nodeID="n26"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n28"/></Person></rdf:Description><rdf:Description rdf:nodeID="n29"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Kummer</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">U</Given></rdf:Description><rdf:Description rdf:nodeID="n30"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Grubelnik</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">V</Given></rdf:Description><rdf:Description rdf:nodeID="n2"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n30"/></N></rdf:Description><rdf:Description rdf:nodeID="n28"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n29"/></N></rdf:Description><rdf:Description rdf:nodeID="n31"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Olsen</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">L</Given><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">F</Other></rdf:Description><rdf:Description rdf:nodeID="n21"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2011-09-26</W3CDTF></rdf:Description><rdf:Description rdf:nodeID="n24"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n31"/></N></rdf:Description><rdf:Description rdf:nodeID="n25"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Larsen</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">A</Given><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Z</Other></rdf:Description><rdf:Description rdf:nodeID="n6"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Marhl</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">M</Given></rdf:Description><rdf:Description rdf:nodeID="n27"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n5"/></Person></rdf:Description><rdf:Description rdf:nodeID="n16"><boundIntervals xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n17"/></boundIntervals></rdf:Description><rdf:Description rdf:nodeID="n22"><Orgname xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">The University of Auckland</Orgname><Orgunit xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Auckland Bioengineering Institute</Orgunit></rdf:Description></rdf:RDF></model>

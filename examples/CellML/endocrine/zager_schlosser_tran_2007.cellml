@@ -1,0 +1,1406 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--  FILE :  zager_model_2007.xml
+
+CREATED :  2nd July 2007
+
+LAST MODIFIED : 2nd July 2007
+
+AUTHOR :  Catherine Lloyd
+          Bioengineering Institute
+          The University of Auckland
+          
+MODEL STATUS :  This model conforms to the CellML 1.1 Specification.
+
+DESCRIPTION :  This file contains a CellML description of Zager, Schlosser and Tran's 2007 delayed nonlinear PBPK model for genistein dosimetry.
+
+CHANGES:  
+  
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="zager_model_2007" name="zager_model_2007">
+
+<documentation xmlns="http://cellml.org/tmp-documentation">
+
+<article>
+  <articleinfo>
+  <title>A delayed nonlinear PBPK model for genistein dosimetry in rats</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+        This CellML version of the model has been checked in COR and OpenCell and the model runs to 'almost' recreate the published results.  The only difference is the CellML model is missing the time delays.  Although it is possible to express time delays in the CellML language, the software tools PCEnv and COR are currently unable to handle time delays.  The units have been checked and are consistent.  The author of the original model was involved in the process of translating the model into CellML and his help has been invaluable.
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+  <title>Model Structure</title>
+
+<para>
+Abstract: Genistein is an endocrine-active compound (EAC) found in soy products. It has been linked to beneficial effects such as mammary tumor growth suppression and adverse endocrine-related effects such as reduced birth weight in rats and humans. In its conjugated form, genistein is excreted in the bile, which is a significant factor in its pharmacokinetics. Experimental data suggest that genistein induces a concentration-dependent suppression of biliary excretion. In this article, we describe a physiologically based pharmacokinetic (PBPK) model that focuses on biliary excretion with the goal of accurately simulating the observed suppression. The mathematical model is a system of nonlinear differential equations with state-dependent delay to describe biliary excretion. The model was analyzed to examine local existence and uniqueness of a solution to the equations. Furthermore, unknown parameters were estimated, and the mathematical model was compared against published experimental data.
+</para>
+
+<informalfigure float="0" id="fig_reaction_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>model diagram</title>
+    </objectinfo>
+    <imagedata fileref="zager_2007.png"/>
+  </imageobject>
+</mediaobject>
+<caption>Schematic diagram of the genistein PBPK model.  The upper components represent compartments containing the pure genistein (gen) while the lower components contain genistein that has undergone conjugation in the liver (con).  B - plasma, rp - richly perfused tissues, pp - poorly perfused tissues, l - liver, GI - gastrointestinal tract, ROB - rest of body, Ab - bile-delayed compartment.  The arrows represent genistein transfer as blood flows between the organs and the systemic circulation, and also genistein elimination in the urine (out of Ccon_ROB); these are all linear with the exception of the conversion of pure to conjugated genistein in the liver which follows Michaelis-Menton kinetics.</caption>
+</informalfigure>
+
+<para>
+A delayed nonlinear PBPK model for genistein dosimetry in rats, Michael G. Zager, Paul M. Schlosser and Hien T. Tran, 2007, <emphasis>Bulletin of Mathematical Biology</emphasis>, 69, 93-117.  <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/17024552">PubMed ID: 17024552</ulink>
+</para>
+
+</sect1>
+</article>
+</documentation> 
+
+
+
+  
+  
+  <units name="hour">
+    <unit units="second" multiplier="3600.0"/>
+  </units>
+
+  <units name="micromole">
+    <unit units="mole" prefix="micro"/>
+  </units>
+
+  <units name="micromolar">
+    <unit units="mole" prefix="micro"/>
+    <unit units="litre" exponent="-1"/>
+  </units>
+
+  <units name="micromole_hour">
+    <unit units="mole" prefix="micro"/>
+    <unit units="hour" exponent="-1"/>
+  </units>
+
+  <units name="micromolar_hour">
+    <unit units="micromolar"/>
+    <unit units="hour" exponent="-1"/>
+  </units>
+
+  <units name="litre_hour">
+    <unit units="litre"/>
+    <unit units="hour" exponent="-1"/>
+  </units>
+  
+  <units name="litre_hour_micromole">
+    <unit units="litre"/>
+    <unit units="hour"/>
+    <unit units="mole" prefix="micro" exponent="-1"/>
+  </units>
+  
+  <units name="first_order_rate_constant">
+    <unit units="hour" exponent="-1"/>
+  </units>
+  
+  
+  <component name="environment">
+    <variable units="hour" public_interface="out" name="time"/>
+  </component>
+ 
+  
+  <component cmeta:id="Cgen_pp" name="Cgen_pp">
+     
+    <variable units="micromolar" public_interface="out" name="Cgen_pp" initial_value="0"/>
+    <variable units="litre_hour" public_interface="out" name="Qpp"/>
+    <variable units="dimensionless" public_interface="out" name="Ppp" initial_value="0.59"/>
+    <variable units="dimensionless" public_interface="out" name="H_Cgen_pp"/>
+    
+    <variable units="litre" name="Vpp" initial_value="0.188"/>
+    
+    <variable units="dimensionless" public_interface="in" name="H_Cgen_B"/>
+    <variable units="litre_hour" public_interface="in" name="Qt"/>
+    <variable units="micromolar" public_interface="in" name="Cgen_B"/>
+    <variable units="hour" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="1"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> Cgen_pp </ci> 
+        </apply>
+        <apply>
+          <divide/>
+          <apply>
+            <minus/>
+            <apply>
+              <times/>
+              <ci> Qpp </ci>
+              <ci> H_Cgen_B </ci>
+              <ci> Cgen_B </ci>
+            </apply>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> Qpp </ci>
+                <ci> H_Cgen_pp </ci>
+                <ci> Cgen_pp </ci>
+              </apply>
+              <ci> Ppp </ci>
+            </apply>
+          </apply>
+          <ci> Vpp </ci>
+        </apply>
+      </apply>
+
+      <apply>
+        <eq/>
+        <ci> H_Cgen_pp </ci>
+        <piecewise>
+          <piece>
+            <cn cellml:units="dimensionless"> 0.0 </cn>
+            <apply>
+              <lt/>
+              <ci> Cgen_pp </ci>
+              <cn cellml:units="micromolar"> 0.0 </cn>
+            </apply>
+          </piece>
+          <otherwise>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+          </otherwise>
+        </piecewise>
+      </apply>
+
+      <apply>
+        <eq/>
+        <ci> Qpp </ci>
+        <apply>
+          <times/>
+          <cn cellml:units="dimensionless"> 0.528 </cn>
+          <ci> Qt </ci>
+        </apply>
+      </apply>
+    </math> 
+  </component>
+
+  <component cmeta:id="Cgen_rp" name="Cgen_rp">
+     
+    <variable units="micromolar" public_interface="out" name="Cgen_rp" initial_value="0"/>
+    <variable units="dimensionless" public_interface="out" name="Prp" initial_value="1.94"/>
+    <variable units="litre_hour" public_interface="out" name="Qrp"/>
+    <variable units="dimensionless" public_interface="out" name="H_Cgen_rp"/>
+    
+    <variable units="litre" name="Vrp" initial_value="0.012"/>
+    <variable units="first_order_rate_constant" name="kgen_urine" initial_value="9.5"/>
+    
+    <variable units="dimensionless" public_interface="in" name="H_Cgen_B"/>
+    <variable units="litre_hour" public_interface="in" name="Qt"/>
+    <variable units="micromolar" public_interface="in" name="Cgen_B"/>
+    <variable units="hour" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="1b"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> Cgen_rp </ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <apply>
+                <times/>
+                <ci> Qrp </ci>
+                <ci> H_Cgen_B </ci>
+                <ci> Cgen_B </ci>
+              </apply>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> Qrp </ci>
+                  <ci> H_Cgen_rp </ci>
+                  <ci> Cgen_rp </ci>
+                </apply>
+                <ci> Prp </ci>
+              </apply>
+            </apply>
+            <ci> Vrp </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> kgen_urine </ci>
+            <ci> H_Cgen_rp </ci>
+            <ci> Cgen_rp </ci>
+          </apply>
+        </apply>
+      </apply>
+
+      <apply>
+        <eq/>
+        <ci> H_Cgen_rp </ci>
+        <piecewise>
+          <piece>
+            <cn cellml:units="dimensionless"> 0.0 </cn>
+            <apply>
+              <lt/>
+              <ci> Cgen_rp </ci>
+              <cn cellml:units="micromolar"> 0.0 </cn>
+            </apply>
+          </piece>
+          <otherwise>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+          </otherwise>
+        </piecewise>
+      </apply>
+
+      <apply>
+        <eq/>
+        <ci> Qrp </ci>
+        <apply>
+          <times/>
+          <cn cellml:units="dimensionless"> 0.289 </cn>
+          <ci> Qt </ci>
+        </apply>
+      </apply>
+    </math> 
+  </component>
+  
+  <component cmeta:id="Cgen_l" name="Cgen_l">
+     
+    <variable units="micromolar" public_interface="out" name="Cgen_l" initial_value="0"/>
+    <variable units="litre_hour" public_interface="out" name="Ql"/>
+    <variable units="dimensionless" public_interface="out" name="H_Cgen_l"/>
+    <variable units="litre" public_interface="out" name="Vl" initial_value="0.0092"/>
+    <variable units="dimensionless" public_interface="out" name="Pl" initial_value="3.61"/>
+    
+    <variable units="micromolar_hour" public_interface="in" name="Vmax"/>
+    <variable units="micromolar" public_interface="in" name="Km"/>
+    <variable units="micromole_hour" public_interface="in" name="vinf"/>
+    <variable units="dimensionless" public_interface="in" name="Prp"/>
+    <variable units="dimensionless" public_interface="in" name="H_Cgen_GI"/>
+    <variable units="dimensionless" public_interface="in" name="H_Cgen_B"/>
+    <variable units="litre_hour" public_interface="in" name="Qt"/>
+    <variable units="litre_hour" public_interface="in" name="QGI"/>
+    <variable units="micromolar" public_interface="in" name="Cgen_B"/>
+    <variable units="micromolar" public_interface="in" name="Cgen_GI"/>
+    <variable units="hour" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="1c"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> Cgen_l </ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <divide/>
+            <apply>
+              <plus/>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> Ql </ci>
+                  <ci> H_Cgen_B </ci>
+                  <ci> Cgen_B </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <times/>
+                    <apply>
+                      <plus/>
+                      <ci> Ql </ci>
+                      <ci> QGI </ci>
+                    </apply>
+                    <ci> H_Cgen_l </ci>
+                    <ci> Cgen_l </ci>
+                  </apply>
+                  <ci> Pl </ci>
+                </apply>
+              </apply>
+              <ci> vinf </ci>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> QGI </ci>
+                  <ci> H_Cgen_GI </ci>
+                  <ci> Cgen_GI </ci>
+                </apply>
+                <ci> Prp </ci>
+              </apply>
+            </apply>
+            <ci> Vl </ci>
+          </apply>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <ci> Vmax </ci>
+              <ci> H_Cgen_l </ci>
+              <ci> Cgen_l </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <ci> Km </ci>
+              <apply>
+                <times/>
+                <ci> H_Cgen_l </ci>
+                <ci> Cgen_l </ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+
+      <apply>
+        <eq/>
+        <ci> H_Cgen_l </ci>
+        <piecewise>
+          <piece>
+            <cn cellml:units="dimensionless"> 0.0 </cn>
+            <apply>
+              <lt/>
+              <ci> Cgen_l </ci>
+              <cn cellml:units="micromolar"> 0.0 </cn>
+            </apply>
+          </piece>
+          <otherwise>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+          </otherwise>
+        </piecewise>
+      </apply>
+
+      <apply>
+        <eq/>
+        <ci> Ql </ci>
+        <apply>
+          <times/>
+          <cn cellml:units="dimensionless"> 0.03 </cn>
+          <ci> Qt </ci>
+        </apply>
+      </apply>
+    </math> 
+  </component>
+
+  <component cmeta:id="Cgen_GI" name="Cgen_GI">
+     
+    <variable units="micromolar" public_interface="out" name="Cgen_GI" initial_value="0"/>
+    <variable units="dimensionless" public_interface="out" name="H_Cgen_GI"/>
+    <variable units="litre_hour" public_interface="out" name="QGI"/>
+    
+    <variable units="litre" name="VGI" initial_value="0.011"/>
+    
+    <variable units="dimensionless" public_interface="in" name="Prp"/>
+    <variable units="dimensionless" public_interface="in" name="H_Cgen_B"/>
+    <variable units="litre_hour" public_interface="in" name="Qt"/>
+    <variable units="micromolar" public_interface="in" name="Cgen_B"/>
+    <variable units="hour" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="1d"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> Cgen_GI </ci> 
+        </apply>
+        <apply>
+          <divide/>
+          <apply>
+            <minus/>
+            <apply>
+              <times/>
+              <ci> QGI </ci>
+              <ci> H_Cgen_B </ci>
+              <ci> Cgen_B </ci>
+            </apply>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> QGI </ci>
+                <ci> H_Cgen_GI </ci>
+                <ci> Cgen_GI </ci>
+              </apply>
+              <ci> Prp </ci>
+            </apply>
+          </apply>
+          <ci> VGI </ci>
+        </apply>
+      </apply>
+
+      <apply>
+        <eq/>
+        <ci> H_Cgen_GI </ci>
+        <piecewise>
+          <piece>
+            <cn cellml:units="dimensionless"> 0.0 </cn>
+            <apply>
+              <lt/>
+              <ci> Cgen_GI </ci>
+              <cn cellml:units="micromolar"> 0.0 </cn>
+            </apply>
+          </piece>
+          <otherwise>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+          </otherwise>
+        </piecewise>
+      </apply>
+
+      <apply>
+        <eq/>
+        <ci> QGI </ci>
+        <apply>
+          <times/>
+          <cn cellml:units="dimensionless"> 0.153 </cn>
+          <ci> Qt </ci>
+        </apply>
+      </apply>
+    </math> 
+  </component>
+
+  <component cmeta:id="Ccon_l" name="Ccon_l">
+     
+    <variable units="micromolar" public_interface="out" name="Ccon_l" initial_value="0"/>
+    <variable units="dimensionless" public_interface="out" name="H_Ccon_l"/>
+    
+    <variable units="litre" public_interface="in" name="Vl"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kbile"/>
+    <variable units="litre_hour" public_interface="in" name="Ql"/>
+    <variable units="dimensionless" public_interface="in" name="H_Cgen_l"/>
+    <variable units="micromolar_hour" public_interface="in" name="Vmax"/>
+    <variable units="micromolar" public_interface="in" name="Km"/>
+    <variable units="dimensionless" public_interface="in" name="H_Ccon_ROB"/>
+    <variable units="litre_hour" public_interface="in" name="Qt"/>
+    <variable units="litre_hour" public_interface="in" name="QGI"/>
+    <variable units="micromolar" public_interface="in" name="Cgen_l"/>
+    <variable units="micromolar" public_interface="in" name="Ccon_ROB"/>
+    <variable units="hour" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="1e"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> Ccon_l </ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <ci> Vmax </ci>
+              <ci> H_Cgen_l </ci>
+              <ci> Cgen_l </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <ci> Km </ci>
+              <apply>
+                <times/>
+                <ci> H_Cgen_l </ci>
+                <ci> Cgen_l </ci>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> kbile </ci>
+              <ci> H_Ccon_l </ci>
+              <ci> Ccon_l </ci>
+            </apply>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <apply>
+                  <plus/>
+                  <ci> Ql </ci>
+                  <ci> QGI </ci>
+                </apply>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <ci> H_Ccon_l </ci>
+                    <ci> Ccon_l </ci>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <ci> H_Ccon_ROB </ci>
+                    <ci> Ccon_ROB </ci>
+                  </apply>
+                </apply>
+              </apply>
+              <ci> Vl </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+
+      <apply>
+        <eq/>
+        <ci> H_Ccon_l </ci>
+        <piecewise>
+          <piece>
+            <cn cellml:units="dimensionless"> 0.0 </cn>
+            <apply>
+              <lt/>
+              <ci> Ccon_l </ci>
+              <cn cellml:units="micromolar"> 0.0 </cn>
+            </apply>
+          </piece>
+          <otherwise>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+          </otherwise>
+        </piecewise>
+      </apply>
+    </math> 
+  </component>
+
+  <component cmeta:id="Ccon_ROB" name="Ccon_ROB">
+     
+    <variable units="micromolar" public_interface="out" name="Ccon_ROB" initial_value="0"/>
+    <variable units="dimensionless" public_interface="out" name="H_Ccon_ROB"/>
+    
+	<variable units="litre" name="VROB" initial_value="0.2408"/>
+    <variable units="first_order_rate_constant" name="kcon_urine" initial_value="0.0"/>
+    
+    <variable units="dimensionless" public_interface="in" name="H_Ccon_l"/>
+    <variable units="litre_hour" public_interface="in" name="Ql"/>
+    <variable units="litre_hour" public_interface="in" name="QGI"/>
+    <variable units="micromolar" public_interface="in" name="Ccon_l"/>
+    <variable units="hour" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="1f"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> Ccon_ROB </ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <apply>
+                <plus/>
+                <ci> Ql </ci>
+                <ci> QGI </ci>
+              </apply>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> H_Ccon_l </ci>
+                  <ci> Ccon_l </ci>
+                </apply>
+                <apply>
+                  <times/>
+                  <ci> H_Ccon_ROB </ci>
+                  <ci> Ccon_ROB </ci>
+                </apply>
+              </apply>
+            </apply>
+            <ci> VROB </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> kcon_urine </ci>
+            <ci> H_Ccon_ROB </ci>
+            <ci> Ccon_ROB </ci>
+          </apply>
+        </apply>
+      </apply>
+
+      <apply>
+        <eq/>
+        <ci> H_Ccon_ROB </ci>
+        <piecewise>
+          <piece>
+            <cn cellml:units="dimensionless"> 0.0 </cn>
+            <apply>
+              <lt/>
+              <ci> Ccon_ROB </ci>
+              <cn cellml:units="micromolar"> 0.0 </cn>
+            </apply>
+          </piece>
+          <otherwise>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+          </otherwise>
+        </piecewise>
+      </apply>
+    </math> 
+  </component>
+
+  <component cmeta:id="Acon_b" name="Acon_b">
+     
+    <variable units="micromole" public_interface="out" name="Acon_b" initial_value="0"/>
+    
+    <variable units="hour" name="d_t_Cgen_l"/>
+    <variable units="hour" name="tbasal" initial_value="0.0865"/>
+    <variable units="hour" name="ct" initial_value="1.0107"/>
+    <variable units="litre_hour_micromole" name="cgen" initial_value="0.06561"/>
+    
+    <variable units="litre" public_interface="in" name="Vl"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kbile"/>
+    <variable units="dimensionless" public_interface="in" name="H_Ccon_l"/>
+    <variable units="dimensionless" public_interface="in" name="H_Cgen_l"/>
+    <variable units="micromolar" public_interface="in" name="Ccon_l"/>
+    <variable units="micromolar" public_interface="in" name="Cgen_l"/>
+    <variable units="hour" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="1g"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> Acon_b </ci> 
+        </apply>
+        <apply>
+          <times/>
+          <ci> kbile </ci>
+          <ci> H_Ccon_l </ci>
+          <ci> Ccon_l </ci>
+          <ci> Vl </ci>
+        </apply>
+      </apply>
+
+      <apply>
+        <eq/>
+        <ci> d_t_Cgen_l </ci>
+        <apply>
+          <plus/>
+          <ci> tbasal </ci>
+          <apply>
+            <times/>
+            <ci> cgen </ci>
+            <ci> H_Cgen_l </ci>
+            <ci> Cgen_l </ci>
+            <apply>
+              <exp/>
+              <apply>
+                <minus/>
+                <apply>
+                  <divide/>
+                  <ci> time </ci>
+                  <ci> ct </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math> 
+  </component>
+  
+  <component cmeta:id="Cgen_B" name="Cgen_B">
+     
+    <variable units="micromolar" public_interface="out" name="Cgen_B"/>
+    <variable units="dimensionless" public_interface="out" name="H_Cgen_B"/>
+    
+    <variable units="dimensionless" public_interface="in" name="Prp"/>
+    <variable units="dimensionless" public_interface="in" name="Ppp"/>
+    <variable units="dimensionless" public_interface="in" name="Pl"/>
+    <variable units="litre_hour" public_interface="in" name="Qrp"/>
+    <variable units="litre_hour" public_interface="in" name="Qpp"/>
+    <variable units="litre_hour" public_interface="in" name="QGI"/>
+    <variable units="litre_hour" public_interface="in" name="Ql"/>
+    <variable units="litre_hour" public_interface="in" name="Qt"/>
+    <variable units="dimensionless" public_interface="in" name="H_Cgen_rp"/>
+    <variable units="dimensionless" public_interface="in" name="H_Cgen_pp"/>
+    <variable units="dimensionless" public_interface="in" name="H_Cgen_l"/>
+    <variable units="micromolar" public_interface="in" name="Cgen_rp"/>
+    <variable units="micromolar" public_interface="in" name="Cgen_pp"/>
+    <variable units="micromolar" public_interface="in" name="Cgen_l"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="1h"> 
+      <apply>
+        <eq/> 
+        <ci> Cgen_B </ci> 
+        <apply>
+          <divide/>
+          <apply>
+            <plus/>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> Qrp </ci>
+                <ci> H_Cgen_rp </ci>
+                <ci> Cgen_rp </ci>
+              </apply>
+              <ci> Prp </ci>
+            </apply>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> Qpp </ci>
+                <ci> H_Cgen_pp </ci>
+                <ci> Cgen_pp </ci>
+              </apply>
+              <ci> Ppp </ci>
+            </apply>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <apply>
+                  <plus/>
+                  <ci> Ql </ci>
+                  <ci> QGI </ci>
+                </apply>
+                <ci> H_Cgen_l </ci>
+                <ci> Cgen_l </ci>
+              </apply>
+              <ci> Pl </ci>
+            </apply>
+          </apply>
+          <ci> Qt </ci>
+        </apply>
+      </apply>
+
+      <apply>
+        <eq/>
+        <ci> H_Cgen_B </ci>
+        <piecewise>
+          <piece>
+            <cn cellml:units="dimensionless"> 0.0 </cn>
+            <apply>
+              <lt/>
+              <ci> Cgen_B </ci>
+              <cn cellml:units="micromolar"> 0.0 </cn>
+            </apply>
+          </piece>
+          <otherwise>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+          </otherwise>
+        </piecewise>
+      </apply>
+    </math> 
+  </component>
+  
+  <component name="model_parameters">
+    <variable units="micromole_hour" public_interface="out" name="vinf"/>
+    <variable units="litre_hour" public_interface="out" name="Qt"/>
+    <variable units="micromolar_hour" public_interface="out" name="Vmax" initial_value="25.25"/>
+    <variable units="micromolar" public_interface="out" name="Km" initial_value="0.6231"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kbile" initial_value="111.72"/>
+    
+    <variable units="micromole_hour" name="cv" initial_value="1.0"/>
+    <variable units="dimensionless" name="F"/>
+    <variable units="dimensionless" name="G"/>
+    <variable units="dimensionless" name="H"/>
+    <variable units="dimensionless" name="I"/>
+    <variable units="hour" name="epsilon" initial_value="0.1"/>
+    <variable units="dimensionless" name="m_rat" initial_value="0.25"/>
+
+    <variable units="hour" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="1i"> 
+      <apply>
+        <eq/>
+        <ci> vinf </ci>
+        <piecewise>
+          <piece>
+            <apply>
+              <times/>
+              <ci> cv </ci>
+              <ci> F </ci>
+            </apply>
+            <apply>
+              <and/>
+              <apply>
+                <lt/>
+                <ci> time </ci>
+                <ci> epsilon </ci>
+              </apply>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn cellml:units="hour"> 0.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <apply>
+              <times/>
+              <ci> cv </ci>
+              <ci> G </ci>
+            </apply>
+            <apply>
+              <and/>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <apply>
+                  <minus/>
+                  <cn cellml:units="hour"> 1.0 </cn>
+                  <ci> epsilon </ci>
+                </apply>
+              </apply>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <ci> epsilon </ci>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <apply>
+              <times/>
+              <ci> cv </ci>
+              <ci> H </ci>
+            </apply>
+            <apply>
+              <and/>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn cellml:units="hour"> 1.0 </cn>
+              </apply>
+              <apply>
+                <gt/>
+                <ci> time </ci>
+                <apply>
+                  <minus/>
+                  <cn cellml:units="hour"> 1.0 </cn>
+                  <ci> epsilon </ci>
+                </apply>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <apply>
+              <times/>
+              <ci> cv </ci>
+              <ci> I </ci>
+            </apply>
+            <apply>
+              <and/>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <apply>
+                  <plus/>
+                  <cn cellml:units="hour"> 1.0 </cn>
+                  <apply>
+                    <divide/>
+                    <cn cellml:units="hour"> 5.0 </cn>
+                    <cn cellml:units="dimensionless"> 60.0 </cn>
+                  </apply>
+                </apply>
+              </apply>
+              <apply>
+                <gt/>
+                <ci> time </ci>
+                <cn cellml:units="hour"> 1.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+        </piecewise>
+      </apply>
+
+      <apply>
+        <eq/> 
+        <ci> F </ci> 
+        <apply>
+          <plus/>
+          <apply>
+            <times/>
+            <apply>
+              <divide/>
+              <cn cellml:units="dimensionless"> -2.0 </cn>
+              <apply>
+                <power/>
+                <ci> epsilon </ci>
+                <cn cellml:units="dimensionless"> 3.0 </cn>
+              </apply>
+            </apply>
+            <apply>
+              <power/>
+              <ci> time </ci>
+              <cn cellml:units="dimensionless"> 3.0 </cn>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <divide/>
+              <cn cellml:units="dimensionless"> 3.0 </cn>
+              <apply>
+                <power/>
+                <ci> epsilon </ci>
+                <cn cellml:units="dimensionless"> 2.0 </cn>
+              </apply>
+            </apply>
+            <apply>
+              <power/>
+              <ci> time </ci>
+              <cn cellml:units="dimensionless"> 2.0 </cn>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+
+      <apply>
+        <eq/> 
+        <ci> G </ci> 
+        <cn cellml:units="dimensionless"> 1.0 </cn>
+      </apply>
+
+      <apply>
+        <eq/> 
+        <ci> H </ci> 
+        <apply>
+          <minus/>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <cn cellml:units="dimensionless"> 3.0 </cn>
+              <apply>
+                <power/>
+                <apply>
+                  <minus/>
+                  <cn cellml:units="hour"> 1.0 </cn>
+                  <ci> time </ci>
+                </apply>
+                <cn cellml:units="dimensionless"> 2.0 </cn>
+              </apply>
+            </apply>
+            <apply>
+              <power/>
+              <ci> epsilon </ci>
+              <cn cellml:units="dimensionless"> 2.0 </cn>
+            </apply>
+          </apply>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <cn cellml:units="dimensionless"> 2.0 </cn>
+              <apply>
+                <power/>
+                <apply>
+                  <minus/>
+                  <cn cellml:units="hour"> 1.0 </cn>
+                  <ci> time </ci>
+                </apply>
+                <cn cellml:units="dimensionless"> 3.0 </cn>
+              </apply>
+            </apply>
+            <apply>
+              <power/>
+              <ci> epsilon </ci>
+              <cn cellml:units="dimensionless"> 3.0 </cn>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+
+      <apply>
+        <eq/> 
+        <ci> I </ci> 
+        <cn cellml:units="dimensionless"> 0.0 </cn>
+      </apply>
+
+      <apply>
+        <eq/> 
+        <ci> Qt </ci> 
+        <apply>
+          <times/>
+          <cn cellml:units="litre_hour"> 14.1 </cn>
+          <apply>
+            <power/>
+            <ci> m_rat </ci>
+            <cn cellml:units="dimensionless"> 0.75 </cn>
+          </apply>
+        </apply>
+      </apply>    
+    </math> 
+  </component>
+
+
+  <connection>
+    <map_components component_2="environment" component_1="Cgen_pp"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Cgen_rp"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="environment" component_1="Cgen_l"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Cgen_GI"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="environment" component_1="Ccon_l"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="environment" component_1="Ccon_ROB"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Acon_b"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="environment" component_1="model_parameters"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Cgen_B" component_1="Cgen_pp"/>
+    <map_variables variable_2="Cgen_B" variable_1="Cgen_B"/>
+    <map_variables variable_2="H_Cgen_B" variable_1="H_Cgen_B"/>
+    <map_variables variable_2="Cgen_pp" variable_1="Cgen_pp"/>
+    <map_variables variable_2="H_Cgen_pp" variable_1="H_Cgen_pp"/>
+    <map_variables variable_2="Qpp" variable_1="Qpp"/>
+    <map_variables variable_2="Ppp" variable_1="Ppp"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="Cgen_pp"/>
+    <map_variables variable_2="Qt" variable_1="Qt"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="Cgen_B" component_1="Cgen_rp"/>
+    <map_variables variable_2="Cgen_B" variable_1="Cgen_B"/>
+    <map_variables variable_2="H_Cgen_B" variable_1="H_Cgen_B"/>
+    <map_variables variable_2="Cgen_rp" variable_1="Cgen_rp"/>
+    <map_variables variable_2="H_Cgen_rp" variable_1="H_Cgen_rp"/>
+    <map_variables variable_2="Qrp" variable_1="Qrp"/>
+    <map_variables variable_2="Prp" variable_1="Prp"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="Cgen_rp"/>
+    <map_variables variable_2="Qt" variable_1="Qt"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="Cgen_B" component_1="Cgen_l"/>
+    <map_variables variable_2="Cgen_B" variable_1="Cgen_B"/>
+    <map_variables variable_2="H_Cgen_B" variable_1="H_Cgen_B"/>
+    <map_variables variable_2="Cgen_l" variable_1="Cgen_l"/>
+    <map_variables variable_2="H_Cgen_l" variable_1="H_Cgen_l"/>
+    <map_variables variable_2="Ql" variable_1="Ql"/>
+    <map_variables variable_2="Pl" variable_1="Pl"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="Cgen_rp" component_1="Cgen_l"/>
+    <map_variables variable_2="Prp" variable_1="Prp"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="Cgen_GI" component_1="Cgen_l"/>
+    <map_variables variable_2="Cgen_GI" variable_1="Cgen_GI"/>
+    <map_variables variable_2="H_Cgen_GI" variable_1="H_Cgen_GI"/>
+    <map_variables variable_2="QGI" variable_1="QGI"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="Cgen_l"/>
+    <map_variables variable_2="Qt" variable_1="Qt"/>
+    <map_variables variable_2="Vmax" variable_1="Vmax"/>
+    <map_variables variable_2="Km" variable_1="Km"/>
+    <map_variables variable_2="vinf" variable_1="vinf"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="Cgen_B" component_1="Cgen_GI"/>
+    <map_variables variable_2="Cgen_B" variable_1="Cgen_B"/>
+    <map_variables variable_2="H_Cgen_B" variable_1="H_Cgen_B"/>
+    <map_variables variable_2="QGI" variable_1="QGI"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="Cgen_rp" component_1="Cgen_GI"/>
+    <map_variables variable_2="Prp" variable_1="Prp"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="Cgen_GI"/>
+    <map_variables variable_2="Qt" variable_1="Qt"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="Cgen_l" component_1="Ccon_l"/>
+    <map_variables variable_2="Cgen_l" variable_1="Cgen_l"/>
+    <map_variables variable_2="H_Cgen_l" variable_1="H_Cgen_l"/>
+    <map_variables variable_2="Ql" variable_1="Ql"/>
+    <map_variables variable_2="Vl" variable_1="Vl"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="Cgen_GI" component_1="Ccon_l"/>
+    <map_variables variable_2="QGI" variable_1="QGI"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="Ccon_l"/>
+    <map_variables variable_2="Qt" variable_1="Qt"/>
+    <map_variables variable_2="Vmax" variable_1="Vmax"/>
+    <map_variables variable_2="Km" variable_1="Km"/>
+    <map_variables variable_2="kbile" variable_1="kbile"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="Ccon_ROB" component_1="Ccon_l"/>
+    <map_variables variable_2="Ccon_ROB" variable_1="Ccon_ROB"/>
+    <map_variables variable_2="H_Ccon_ROB" variable_1="H_Ccon_ROB"/>
+    <map_variables variable_2="Ccon_l" variable_1="Ccon_l"/>
+    <map_variables variable_2="H_Ccon_l" variable_1="H_Ccon_l"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="Cgen_l" component_1="Ccon_ROB"/>
+    <map_variables variable_2="Ql" variable_1="Ql"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="Cgen_GI" component_1="Ccon_ROB"/>
+    <map_variables variable_2="QGI" variable_1="QGI"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="Acon_b" component_1="Ccon_l"/>
+    <map_variables variable_2="Ccon_l" variable_1="Ccon_l"/>
+    <map_variables variable_2="H_Ccon_l" variable_1="H_Ccon_l"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="Cgen_l" component_1="Acon_b"/>
+    <map_variables variable_2="Cgen_l" variable_1="Cgen_l"/>
+    <map_variables variable_2="H_Cgen_l" variable_1="H_Cgen_l"/>
+    <map_variables variable_2="Vl" variable_1="Vl"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="Acon_b"/>
+    <map_variables variable_2="kbile" variable_1="kbile"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="Cgen_B"/>
+    <map_variables variable_2="Qt" variable_1="Qt"/>
+  </connection>
+
+<rdf:RDF>
+  <rdf:Bag rdf:about="rdf:#534bf4be-85a2-406a-a43c-6eaedff90b4a">
+    <rdf:li>endocrine</rdf:li>
+    <rdf:li>genistein</rdf:li>
+    <rdf:li>pharmacokinetics</rdf:li>
+    <rdf:li>biliary excretion</rdf:li>
+  </rdf:Bag>
+  <rdf:Seq rdf:about="rdf:#d0844ee5-1d36-47fe-a8da-cda60a0ab5e5">
+    <rdf:li rdf:resource="rdf:#be67f8a9-91a4-43b6-942b-3ce5ab5929a4"/>
+    <rdf:li rdf:resource="rdf:#737d6301-2936-4336-acf8-4a529166d187"/>
+    <rdf:li rdf:resource="rdf:#a681f8fc-89c0-45eb-a4f2-66a60678ad4b"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#beb0c910-d86c-404b-88ad-4b2702f6e17b">
+    <dcterms:modified rdf:resource="rdf:#056bce3e-c7dd-4585-bbaa-91f85ed61247"/>
+    <rdf:value>The original model author contacted me and gave me an updated equation to calculate "H" (used in the equation to calculate Vinf).  This fixed the units issue (inconsistency) and also fixed the model such that it now recreates the published results.</rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#dc5b669e-9bfa-4c47-871a-6f5f6467f61a"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:publisher>The University of Auckland, Auckland Bioengineering Institute</dc:publisher>
+    <cmeta:comment rdf:resource="rdf:#ba88c7b2-a764-430c-881a-c27b763d6c91"/>
+    <dcterms:created rdf:resource="rdf:#68409981-0b15-481f-909e-a39301c602b1"/>
+    <dc:creator rdf:resource="rdf:#6c6defbf-af67-4ae7-8068-0b2d8de69343"/>
+    <cmeta:modification rdf:resource="rdf:#beb0c910-d86c-404b-88ad-4b2702f6e17b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b53a2127-862e-44db-9b54-cfa15e513ffa">
+    <dcterms:W3CDTF>2007-01</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="#Ccon_ROB">
+    <dcterms:alternative>concentration of genistein conjugates in rest-of-body</dcterms:alternative>
+    <dc:title>Ccon_ROB</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#79eafc7e-f74a-4b2b-b69e-a74f83c721d8">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value rdf:resource="rdf:#534bf4be-85a2-406a-a43c-6eaedff90b4a"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#dffd8e0d-c7d1-484b-bd8c-600fa8fbb5df">
+    <vCard:Given>Paul</vCard:Given>
+    <vCard:Family>Schlosser</vCard:Family>
+    <vCard:Other>M</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#631e9d2e-1867-497d-a186-c6b5b179682b">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#74cbce47-4dd7-4bf9-a212-43a8674f9e4b">
+    <vCard:Given>Hien</vCard:Given>
+    <vCard:Family>Tran</vCard:Family>
+    <vCard:Other>T</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1e5cac47-7842-42e5-8cd3-eae8a5ded492">
+    <dc:creator rdf:resource="rdf:#d0844ee5-1d36-47fe-a8da-cda60a0ab5e5"/>
+    <dc:title>A delayed nonlinear PBPK model for genistein dosimetry in rats</dc:title>
+    <bqs:volume>69</bqs:volume>
+    <bqs:first_page>93</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#e99737a5-4053-4931-b718-a7a5d8ad461f"/>
+    <dcterms:issued rdf:resource="rdf:#b53a2127-862e-44db-9b54-cfa15e513ffa"/>
+    <bqs:last_page>117</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a681f8fc-89c0-45eb-a4f2-66a60678ad4b">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#74cbce47-4dd7-4bf9-a212-43a8674f9e4b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3a9b6bc4-d4d0-4969-90c8-8f25057c55d8">
+    <vCard:FN>Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e2c681e0-ab84-4b52-b7e5-04a6db02cb10">
+    <vCard:FN>Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f7b991c6-f4dc-4064-933f-c037a219d513">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#dc5b669e-9bfa-4c47-871a-6f5f6467f61a">
+    <vCard:N rdf:resource="rdf:#559e0019-cb47-4c69-bc59-914c5674cf08"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#be67f8a9-91a4-43b6-942b-3ce5ab5929a4">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#c743caa7-182a-4e53-b508-7f17550be65e"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#Acon_b">
+    <dcterms:alternative>amount of genistein conjugates in bile-delayed compartment</dcterms:alternative>
+    <dc:title>Acon_b</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ba88c7b2-a764-430c-881a-c27b763d6c91">
+    <dc:creator rdf:resource="rdf:#e2c681e0-ab84-4b52-b7e5-04a6db02cb10"/>
+    <rdf:value>The original model author has worked with us to get the CellML version of his model running in PCEnv to replicate the published results.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="#zager_model_2007">
+    <dc:title>
+        Zager, Schlosser and Tran's 2007 delayed nonlinear PBPK model for genistein dosimetry.
+      </dc:title>
+    <cmeta:comment rdf:resource="rdf:#b0e35253-b608-4089-94bb-4c05714b0984"/>
+    <bqs:reference rdf:resource="rdf:#38772a96-6246-4237-8abd-03b6cf2da71d"/>
+    <bqs:reference rdf:resource="rdf:#650bf107-c41b-4c1d-9bf4-600d9aed0e69"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#6c6defbf-af67-4ae7-8068-0b2d8de69343">
+    <vCard:ORG rdf:resource="rdf:#eadf1609-cc71-4466-b1d5-5fd558d0b9ca"/>
+    <vCard:EMAIL rdf:resource="rdf:#631e9d2e-1867-497d-a186-c6b5b179682b"/>
+    <vCard:N rdf:resource="rdf:#f7b991c6-f4dc-4064-933f-c037a219d513"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#Cgen_B">
+    <dcterms:alternative>concentration of pure genistein in plasma</dcterms:alternative>
+    <dc:title>Cgen_B</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#737d6301-2936-4336-acf8-4a529166d187">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#dffd8e0d-c7d1-484b-bd8c-600fa8fbb5df"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e99737a5-4053-4931-b718-a7a5d8ad461f">
+    <dc:title>Bulletin of Mathematical Biology</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="#Cgen_GI">
+    <dcterms:alternative>concentration of pure genistein in gastrointestinal tract lumen</dcterms:alternative>
+    <dc:title>Cgen_GI</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#38772a96-6246-4237-8abd-03b6cf2da71d">
+    <dc:subject rdf:resource="rdf:#79eafc7e-f74a-4b2b-b69e-a74f83c721d8"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#68409981-0b15-481f-909e-a39301c602b1">
+    <dcterms:W3CDTF>2007-07-02T00:00:00+00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="#Cgen_l">
+    <dcterms:alternative>concentration of pure genistein in liver</dcterms:alternative>
+    <dc:title>Cgen_l</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="#Cgen_rp">
+    <dcterms:alternative>concentration of pure genistein in richly perfused tissues</dcterms:alternative>
+    <dc:title>Cgen_rp</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#eadf1609-cc71-4466-b1d5-5fd558d0b9ca">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#650bf107-c41b-4c1d-9bf4-600d9aed0e69">
+    <bqs:Pubmed_id>17024552</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#1e5cac47-7842-42e5-8cd3-eae8a5ded492"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#Cgen_pp">
+    <dcterms:alternative>concentration of pure genistein in poorly perfused tissues</dcterms:alternative>
+    <dc:title>Cgen_pp</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="#Ccon_l">
+    <dcterms:alternative>concentration of genistein conjugates in liver</dcterms:alternative>
+    <dc:title>Ccon_l</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#056bce3e-c7dd-4585-bbaa-91f85ed61247">
+    <dcterms:W3CDTF>2007-10-03T13:25:05+13:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#559e0019-cb47-4c69-bc59-914c5674cf08">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b0e35253-b608-4089-94bb-4c05714b0984">
+    <dc:creator rdf:resource="rdf:#3a9b6bc4-d4d0-4969-90c8-8f25057c55d8"/>
+    <rdf:value>This is the CellML description of Zager, Schlosser and Tran's 2007 delayed nonlinear PBPK model for genistein dosimetry.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#c743caa7-182a-4e53-b508-7f17550be65e">
+    <vCard:Given>Michael</vCard:Given>
+    <vCard:Family>Zager</vCard:Family>
+    <vCard:Other>G</vCard:Other>
+  </rdf:Description>
+</rdf:RDF>
+</model>

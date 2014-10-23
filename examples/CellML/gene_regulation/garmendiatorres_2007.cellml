@@ -1,0 +1,1492 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This CellML file was generated on 11/18/2010 at 10:20:23 at AM using:
+
+COR (0.9.31.1409)
+Copyright 2002-2010 Dr Alan Garny
+http://cor.physiol.ox.ac.uk/ - cor@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.cellml.org/
+-->
+<model name="garmendiatorres_2007" cmeta:id="garmendiatorres_2007" xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#">
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>Nucleocytoplasmic oscillations of the yeast transcription factor Msn2: evidence for periodic PKA activation</title>
+				<author>
+					<firstname>Mona</firstname>
+					<surname>Zhu</surname>
+					<affiliation>
+						<shortaffil>Auckland Bioengineering Institute, University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<section id="sec_status">
+				<title>Model Status</title>
+				<para>This model has been built using the expressions found in the supplemental data of Garmendia-Torres's 2007 paper on oscillations of Msn2 due to PKA activation. This model reproduces the curves on Figure 3, page 1047, using the corresponding initial values and the parameters found in Table S2. The variable Str has been given a value of 1 in order to show oscillatory behavior but may be changed to 0 or 2.5 for low and high values. This file is known to run on COR 0.9 and OpenCell.</para>
+			</section>
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>At intermediate intensities, stress induces oscillations in the nucleocytoplasmic shuttling of the transcription factor Msn2 in budding yeast. Activation by stress results in a reversible translocation of Msn2 from the cytoplasm to the nucleus. This translocation is negatively controlled by the cAMP-PKA pathway through Msn2 phosphorylation. Here we show that the nuclear localization signal (NLS) of Msn2 is necessary and sufficient to promote the nucleocytoplasmic oscillations of the transcription factor. Because the NLS is controlled by protein kinase A (PKA) phosphorylation, we use a computational model to investigate the possibility that the cAMP-PKA pathway could function as an oscillator driving the periodic shuttling of Msn2. The model indicates that sustained oscillations of cAMP can indeed occur in a range bounded by two critical values of stress intensity, owing to the negative feedback exerted by PKA on cAMP accumulation. We verify the predictions of the model in mutants by showing that suppressing this negative-feedback loop prevents the oscillatory shuttling but still promotes the stress-induced nuclear localization of Msn2. The physiological significance of Msn2 oscillations is discussed in the light of the frequency encoding of cellular rhythms.</para>
+				<para>Nucleocytoplasmic oscillations of the yeast transcription factor Msn2: evidence for periodic PKA activation, Garmendia-Torres C, Goldbeter A, Jacquet M <emphasis>Current Biology</emphasis>, 17, 1044-1049<ulink url="http://www.ncbi.nlm.nih.gov/pubmed/17570669">PubMed ID: 17570669</ulink>
+				</para>
+				<informalfigure float="0" id="______">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>Model Diagram</title>
+							</objectinfo>
+							<imagedata fileref="garmendiatorres_2007.png"/>
+						</imageobject>
+					</mediaobject>
+					<caption>(A) Time evolution of RGTP, cAMP, active PKA, and nuclear Msn2 predicted by the model for three different values of Str, the dimensionless parameter measuring stress intensity. At low value, Str = 0 (dotted blue curves), and at high value, Str = 2.5 (dotted red curves), a steady-state level is observed for the different components, whereas at intermediate value, Str = 1 (green curves), sustained oscillations occur. The curves show the oscillatory behavior after the elimination of transients. (B) Envelope of cAMP oscillations as a function of stress intensity showing the maximum (red curve) and the minimum (blue curve) values during sustained oscillations. The variation of periodicity (green dots) is also shown. (C) Envelope of oscillations in Msn2 subcellular localization. The curves show the maximumvalues (Max) and minimum values (Min) for cytoplasmic Msn2 (in blue) and nuclear Msn2 (in red). Outside of the oscillatory range, the system reaches a stable steady state. The curves have been obtained with the Berkeley Madonna program, by numerical integration of Equations S1-S4. Parameter values are given in Table S2. Initial conditions were as follows: GEFa 0.36, GAPa 0.5, RGTP 0.1, CYCLa 0.1, cAMP 1, R2C2 0.5,MC 0.25, MN 0.25, MCP 0.25, MNP 0.25, and PDEa 0.5.</caption>
+				</informalfigure>
+			</sect1>
+		</article>
+	</documentation>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
+		<rdf:Description rdf:about="">
+			<dc:creator rdf:parseType="Resource">
+				<vCard:N rdf:parseType="Resource">
+					<vCard:Family>Zhu</vCard:Family>
+					<vCard:Given>Xin Yue</vCard:Given>
+					<vCard:Other>Mona</vCard:Other>
+				</vCard:N>
+				<vCard:EMAIL rdf:parseType="Resource">
+					<rdf:value>xzhu055@aucklanduni.ac.nz</rdf:value>
+					<rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+				</vCard:EMAIL>
+				<vCard:ORG rdf:parseType="Resource">
+					<vCard:Orgname>The University of Auckland</vCard:Orgname>
+					<vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+				</vCard:ORG>
+			</dc:creator>
+			<dcterms:created rdf:parseType="Resource">
+				<dcterms:W3CDTF>17-11-2010</dcterms:W3CDTF>
+			</dcterms:created>
+		</rdf:Description>
+		<rdf:Description rdf:about="#garmendiatorres_2007">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Nucleocytoplasmic oscillations of the yeast transcription factor Msn2: evidence for periodic PKA activation</dc:title>
+			<cmeta:comment xmlns:cmeta="http://www.cellml.org/metadata/1.0#" rdf:parseType="Resource">
+				<rdf:value>This is the CellML description of the 2007 mathematical model of cAMP-PKA coupled to MSN2 Sub-cellular localisation developed by Cecilia Garmendia Torres, Albert Goldbeter and Michel Jacquet.
+				</rdf:value>
+				<dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource">
+					<vCard:FN xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Mona Zhu</vCard:FN>
+				</dc:creator>
+			</cmeta:comment>
+			<cmeta:species xmlns:cmeta="http://www.cellml.org/metadata/1.0#">Msn2</cmeta:species>
+			<bqs:reference rdf:parseType="Resource">
+				<dc:subject rdf:parseType="Resource">
+					<bqs:subject_type>keyword</bqs:subject_type>
+					<rdf:value>
+						<rdf:Bag>
+							<rdf:li>Nucleocytoplasmic Oscillations</rdf:li>
+							<rdf:li>Yeast Transcription Factor</rdf:li>
+							<rdf:li>Msn2</rdf:li>
+							<rdf:li>PKA activation</rdf:li>
+							<rdf:li>cAMP-PKA pathway</rdf:li>
+							<rdf:li>Gene Regulation</rdf:li>
+						</rdf:Bag>
+					</rdf:value>
+				</dc:subject>
+			</bqs:reference>
+			<bqs:reference rdf:parseType="Resource">
+				<bqs:Pubmed_id>17570669</bqs:Pubmed_id>
+				<bqs:JournalArticle rdf:parseType="Resource">
+					<dc:creator>
+						<rdf:Seq>
+							<rdf:li rdf:parseType="Resource">
+								<bqs:Person rdf:parseType="Resource">
+									<vCard:N rdf:parseType="Resource">
+										<vCard:Family>Garmendia_Torres</vCard:Family>
+										<vCard:Given>Cecilia</vCard:Given>
+									</vCard:N>
+								</bqs:Person>
+							</rdf:li>
+							<rdf:li rdf:parseType="Resource">
+								<bqs:Person rdf:parseType="Resource">
+									<vCard:N rdf:parseType="Resource">
+										<vCard:Family>Goldbeter</vCard:Family>
+										<vCard:Given>Albert</vCard:Given>
+									</vCard:N>
+								</bqs:Person>
+							</rdf:li>
+							<rdf:li rdf:parseType="Resource">
+								<bqs:Person rdf:parseType="Resource">
+									<vCard:N rdf:parseType="Resource">
+										<vCard:Family>Jacquet</vCard:Family>
+										<vCard:Given>Michel</vCard:Given>
+									</vCard:N>
+								</bqs:Person>
+							</rdf:li>
+						</rdf:Seq>
+					</dc:creator>
+					<dc:title>Nucleocytoplasmic oscillations of the yeast transcription factor Msn2: evidence for periodic PKA activation</dc:title>
+					<dcterms:issued rdf:parseType="Resource">
+						<dcterms:W3CDTF>June 19, 2007</dcterms:W3CDTF>
+					</dcterms:issued>
+					<bqs:Journal rdf:parseType="Resource">
+						<dc:title>Current Biology</dc:title>
+					</bqs:Journal>
+					<bqs:volume>17</bqs:volume>
+					<bqs:first_page>1044</bqs:first_page>
+					<bqs:last_page>1049</bqs:last_page>
+				</bqs:JournalArticle>
+			</bqs:reference>
+		</rdf:Description>
+	</rdf:RDF>   <units xmlns="http://www.cellml.org/cellml/1.0#" name="minute">
+      <unit units="second" multiplier="60"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="per_minute">
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="per_litre">
+      <unit units="litre" exponent="-1"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="micromolar">
+      <unit units="mole" prefix="micro"/>
+      <unit units="per_litre"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="micromolar_per_minute">
+      <unit units="micromolar"/>
+      <unit units="per_minute"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="per_micromolar_minute">
+      <unit units="micromolar" exponent="-1"/>
+      <unit units="per_minute"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="per_micromolar_squared_minute">
+      <unit units="micromolar" exponent="-2"/>
+      <unit units="per_minute"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="per_micromolar_squared">
+      <unit units="micromolar" exponent="-2"/>
+   </units>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="environment">
+      <variable name="time" units="minute" public_interface="out"/>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="V1">
+      <variable name="V_max1" units="micromolar_per_minute" initial_value="1"/>
+      <variable name="GEFt" units="micromolar" initial_value="4" public_interface="out"/>
+      <variable name="V_1" units="per_minute" public_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_1</ci>
+            <apply>
+               <divide/>
+               <ci>V_max1</ci>
+               <ci>GEFt</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="V2">
+      <variable name="Str" units="dimensionless" initial_value="1" public_interface="out"/>
+      <variable name="V_max2" units="micromolar_per_minute" initial_value="1"/>
+      <variable name="GEFt" units="micromolar" public_interface="in" private_interface="out"/>
+      <variable name="V_2" units="per_minute" public_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_2</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>Str</ci>
+                  <ci>V_max2</ci>
+               </apply>
+               <ci>GEFt</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="V3">
+      <variable name="k_c3" units="per_minute" initial_value="3.5"/>
+      <variable name="PKAt" units="micromolar" initial_value="0.3" public_interface="out"/>
+      <variable name="GAPt" units="micromolar" initial_value="1.5" public_interface="out"/>
+      <variable name="V_3" units="per_minute" public_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_3</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>k_c3</ci>
+                  <ci>PKAt</ci>
+               </apply>
+               <ci>GAPt</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="V4">
+      <variable name="V_max4" units="micromolar_per_minute" initial_value="1.3"/>
+      <variable name="GAPt" units="micromolar" public_interface="in" private_interface="out"/>
+      <variable name="V_4" units="per_minute" public_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_4</ci>
+            <apply>
+               <divide/>
+               <ci>V_max4</ci>
+               <ci>GAPt</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="V5">
+      <variable name="k_gef" units="per_minute" initial_value="240"/>
+      <variable name="GEFt" units="micromolar" public_interface="in" private_interface="out"/>
+      <variable name="RASt" units="micromolar" initial_value="250" public_interface="out"/>
+      <variable name="V_5" units="per_minute" public_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_5</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>k_gef</ci>
+                  <ci>GEFt</ci>
+               </apply>
+               <ci>RASt</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="V6">
+      <variable name="k_gap" units="per_minute" initial_value="600"/>
+      <variable name="GAPt" units="micromolar" public_interface="in" private_interface="out"/>
+      <variable name="RASt" units="micromolar" public_interface="in" private_interface="out"/>
+      <variable name="V_6" units="per_minute" public_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_6</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>k_gap</ci>
+                  <ci>GAPt</ci>
+               </apply>
+               <ci>RASt</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="V7">
+      <variable name="k_c7" units="per_minute" initial_value="3.333"/>
+      <variable name="PKAt" units="micromolar" public_interface="in" private_interface="out"/>
+      <variable name="PDEt" units="micromolar" initial_value="0.5" public_interface="out"/>
+      <variable name="V_7" units="per_minute" public_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_7</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>k_c7</ci>
+                  <ci>PKAt</ci>
+               </apply>
+               <ci>PDEt</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="V8">
+      <variable name="V_max8" units="micromolar_per_minute" initial_value="1.5"/>
+      <variable name="PDEt" units="micromolar" public_interface="in" private_interface="out"/>
+      <variable name="V_8" units="per_minute" public_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_8</ci>
+            <apply>
+               <divide/>
+               <ci>V_max8</ci>
+               <ci>PDEt</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="VPKAact">
+      <variable name="a" units="per_micromolar_squared_minute" initial_value="1" public_interface="out"/>
+      <variable name="r" units="per_minute" initial_value="1" public_interface="out"/>
+      <variable name="R2C2" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="cAMP" units="micromolar" public_interface="in" private_interface="out"/>
+      <variable name="C" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="R2cAMP2" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="PKAt" units="micromolar" public_interface="in" private_interface="out"/>
+      <variable name="V_PKAact" units="per_minute" public_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_PKAact</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>a</ci>
+                  <ci>R2C2</ci>
+                  <apply>
+                     <power/>
+                     <ci>cAMP</ci>
+                     <cn cellml:units="dimensionless">2</cn>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>r</ci>
+                  <ci>C</ci>
+                  <ci>R2cAMP2</ci>
+                  <apply>
+                     <power/>
+                     <ci>PKAt</ci>
+                     <cn cellml:units="dimensionless">2</cn>
+                  </apply>
+                  <cn cellml:units="per_micromolar_squared">1</cn>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="holoenzyme_R_cAMP">
+      <variable name="R2C2" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="R2cAMP2" units="dimensionless" public_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>R2cAMP2</ci>
+            <apply>
+               <minus/>
+               <cn cellml:units="dimensionless">1</cn>
+               <ci>R2C2</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="C_subunit">
+      <variable name="R2C2" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="C" units="dimensionless" public_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>C</ci>
+            <apply>
+               <times/>
+               <cn cellml:units="dimensionless">2</cn>
+               <apply>
+                  <minus/>
+                  <cn cellml:units="dimensionless">1</cn>
+                  <ci>R2C2</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="active_GEF">
+      <variable name="V_1" units="per_minute" public_interface="in" private_interface="out"/>
+      <variable name="V_2" units="per_minute" public_interface="in" private_interface="out"/>
+      <variable name="K_1" units="dimensionless" initial_value="0.05"/>
+      <variable name="K_2" units="dimensionless" initial_value="0.05"/>
+      <variable name="GEFa" units="dimensionless" initial_value="0.36" public_interface="out"/>
+      <variable name="time" units="minute" public_interface="in" private_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>GEFa</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>V_1</ci>
+                     <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>GEFa</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>K_1</ci>
+                     <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>GEFa</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>V_2</ci>
+                     <ci>GEFa</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>K_2</ci>
+                     <ci>GEFa</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="active_GAP">
+      <variable name="V_3" units="per_minute" public_interface="in" private_interface="out"/>
+      <variable name="V_4" units="per_minute" public_interface="in" private_interface="out"/>
+      <variable name="C" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="K_3" units="dimensionless" initial_value="0.01"/>
+      <variable name="K_4" units="dimensionless" initial_value="0.01"/>
+      <variable name="GAPa" units="dimensionless" initial_value="0.5" public_interface="out"/>
+      <variable name="time" units="minute" public_interface="in" private_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>GAPa</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>V_3</ci>
+                     <ci>C</ci>
+                     <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>GAPa</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>K_3</ci>
+                     <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>GAPa</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>V_4</ci>
+                     <ci>GAPa</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>K_4</ci>
+                     <ci>GAPa</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="RAS_to_GTP">
+      <variable name="K_5" units="dimensionless" initial_value="0.001"/>
+      <variable name="K_6" units="dimensionless" initial_value="0.001"/>
+      <variable name="V_5" units="per_minute" public_interface="in" private_interface="out"/>
+      <variable name="V_6" units="per_minute" public_interface="in" private_interface="out"/>
+      <variable name="GEFa" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="GAPa" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="RGTP" units="dimensionless" initial_value="0.1" public_interface="out"/>
+      <variable name="time" units="minute" public_interface="in" private_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>RGTP</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>V_5</ci>
+                     <ci>GEFa</ci>
+                     <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>RGTP</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>K_5</ci>
+                     <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>RGTP</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>V_6</ci>
+                     <ci>GAPa</ci>
+                     <ci>RGTP</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>K_6</ci>
+                     <ci>RGTP</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="adenylate_cyclase">
+      <variable name="k_a" units="per_micromolar_minute" initial_value="0.01"/>
+      <variable name="k_i" units="per_minute" initial_value="1"/>
+      <variable name="RGTP" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="RASt" units="micromolar" public_interface="in" private_interface="out"/>
+      <variable name="CYCLa" units="dimensionless" initial_value="0.1" public_interface="out"/>
+      <variable name="time" units="minute" public_interface="in" private_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>CYCLa</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k_a</ci>
+                  <ci>RGTP</ci>
+                  <ci>RASt</ci>
+                  <apply>
+                     <minus/>
+                     <cn cellml:units="dimensionless">1</cn>
+                     <ci>CYCLa</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_i</ci>
+                  <ci>CYCLa</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="active_PDE">
+      <variable name="V_7" units="per_minute" public_interface="in" private_interface="out"/>
+      <variable name="V_8" units="per_minute" public_interface="in" private_interface="out"/>
+      <variable name="C" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="K_7" units="dimensionless" initial_value="0.01"/>
+      <variable name="K_8" units="dimensionless" initial_value="0.01"/>
+      <variable name="PDEa" units="dimensionless" initial_value="0.5" public_interface="out"/>
+      <variable name="time" units="minute" public_interface="in" private_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>PDEa</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>V_7</ci>
+                     <ci>C</ci>
+                     <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>PDEa</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>K_7</ci>
+                     <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>PDEa</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>V_8</ci>
+                     <ci>PDEa</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>K_8</ci>
+                     <ci>PDEa</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="cyclic_AMP">
+      <variable name="k_s" units="per_minute" initial_value="4"/>
+      <variable name="k_d" units="per_minute" initial_value="100"/>
+      <variable name="CYCLa" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="CYCLt" units="micromolar" initial_value="0.7"/>
+      <variable name="PDEt" units="micromolar" public_interface="in" private_interface="out"/>
+      <variable name="PDEa" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="PKAt" units="micromolar" public_interface="in" private_interface="out"/>
+      <variable name="K_md" units="micromolar" initial_value="20"/>
+      <variable name="V_PKAact" units="per_minute" public_interface="in" private_interface="out"/>
+      <variable name="cAMP" units="micromolar" initial_value="1" public_interface="out"/>
+      <variable name="time" units="minute" public_interface="in" private_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>cAMP</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>k_s</ci>
+                     <ci>CYCLa</ci>
+                     <ci>CYCLt</ci>
+                  </apply>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>k_d</ci>
+                        <ci>PDEt</ci>
+                        <ci>PDEa</ci>
+                        <ci>cAMP</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci>K_md</ci>
+                        <ci>cAMP</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <cn cellml:units="dimensionless">2</cn>
+                  <ci>V_PKAact</ci>
+                  <ci>PKAt</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="holoenzyme_R_C">
+      <variable name="a" units="per_micromolar_squared_minute" public_interface="in" private_interface="out"/>
+      <variable name="r" units="per_minute" public_interface="in" private_interface="out"/>
+      <variable name="C" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="PKAt" units="micromolar" public_interface="in" private_interface="out"/>
+      <variable name="cAMP" units="micromolar" public_interface="in" private_interface="out"/>
+      <variable name="R2cAMP2" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="R2C2" units="dimensionless" initial_value="0.5" public_interface="out"/>
+      <variable name="time" units="minute" public_interface="in" private_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>R2C2</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <apply>
+                     <minus/>
+                     <ci>a</ci>
+                  </apply>
+                  <ci>R2C2</ci>
+                  <apply>
+                     <power/>
+                     <ci>cAMP</ci>
+                     <cn cellml:units="dimensionless">2</cn>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>r</ci>
+                  <apply>
+                     <power/>
+                     <ci>C</ci>
+                     <cn cellml:units="dimensionless">2</cn>
+                  </apply>
+                  <ci>R2cAMP2</ci>
+                  <apply>
+                     <power/>
+                     <ci>PKAt</ci>
+                     <cn cellml:units="dimensionless">2</cn>
+                  </apply>
+                  <cn cellml:units="per_micromolar_squared">1</cn>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="V9">
+      <variable name="k_c9" units="per_minute" initial_value="3.333"/>
+      <variable name="PKAt" units="micromolar" public_interface="in" private_interface="out"/>
+      <variable name="MSNt" units="micromolar" initial_value="1" public_interface="out"/>
+      <variable name="V_9" units="per_minute" public_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_9</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>k_c9</ci>
+                  <ci>PKAt</ci>
+               </apply>
+               <ci>MSNt</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="V10">
+      <variable name="Str" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="V_max10" units="micromolar_per_minute" initial_value="0.6"/>
+      <variable name="MSNt" units="micromolar" public_interface="in" private_interface="out"/>
+      <variable name="V_10" units="per_minute" public_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_10</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>Str</ci>
+                  <ci>V_max10</ci>
+               </apply>
+               <ci>MSNt</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="V11">
+      <variable name="k_c11" units="per_minute" initial_value="3.333"/>
+      <variable name="PKAt" units="micromolar" public_interface="in" private_interface="out"/>
+      <variable name="MSNt" units="micromolar" public_interface="in" private_interface="out"/>
+      <variable name="V_11" units="per_minute" public_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_11</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>k_c11</ci>
+                  <ci>PKAt</ci>
+               </apply>
+               <ci>MSNt</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="V12">
+      <variable name="Str" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="V_max12" units="micromolar_per_minute" initial_value="2"/>
+      <variable name="MSNt" units="micromolar" public_interface="in" private_interface="out"/>
+      <variable name="V_12" units="per_minute" public_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_12</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>Str</ci>
+                  <ci>V_max12</ci>
+               </apply>
+               <ci>MSNt</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="cytosol">
+      <variable name="k_t1" units="per_minute" initial_value="10" public_interface="out"/>
+      <variable name="k_t2" units="per_minute" initial_value="0.001" public_interface="out"/>
+      <variable name="K_11" units="dimensionless" initial_value="0.05" public_interface="out"/>
+      <variable name="K_12" units="dimensionless" initial_value="0.05" public_interface="out"/>
+      <variable name="V_11" units="per_minute" public_interface="in" private_interface="out"/>
+      <variable name="V_12" units="per_minute" public_interface="in" private_interface="out"/>
+      <variable name="C" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="MN" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="MCP" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="MC" units="dimensionless" initial_value="0.25" public_interface="out"/>
+      <variable name="time" units="minute" public_interface="in" private_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>MC</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <minus/>
+                           <ci>k_t1</ci>
+                        </apply>
+                        <ci>MC</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k_t2</ci>
+                        <ci>MN</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>V_11</ci>
+                        <ci>C</ci>
+                        <ci>MC</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci>K_11</ci>
+                        <ci>MC</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>V_12</ci>
+                     <ci>MCP</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>K_12</ci>
+                     <ci>MCP</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="nucleus">
+      <variable name="k_t1" units="per_minute" public_interface="in" private_interface="out"/>
+      <variable name="k_t2" units="per_minute" public_interface="in" private_interface="out"/>
+      <variable name="K_9" units="dimensionless" initial_value="0.05" public_interface="out"/>
+      <variable name="K_10" units="dimensionless" initial_value="0.05" public_interface="out"/>
+      <variable name="V_9" units="per_minute" public_interface="in" private_interface="out"/>
+      <variable name="V_10" units="per_minute" public_interface="in" private_interface="out"/>
+      <variable name="C" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="MC" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="MNP" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="MN" units="dimensionless" initial_value="0.25" public_interface="out"/>
+      <variable name="time" units="minute" public_interface="in" private_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>MN</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <times/>
+                        <ci>k_t1</ci>
+                        <ci>MC</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k_t2</ci>
+                        <ci>MN</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>V_9</ci>
+                        <ci>C</ci>
+                        <ci>MN</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci>K_9</ci>
+                        <ci>MN</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>V_10</ci>
+                     <ci>MNP</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>K_10</ci>
+                     <ci>MNP</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="nucleus_phos">
+      <variable name="k_t3" units="per_minute" initial_value="0.001" public_interface="out"/>
+      <variable name="k_t4" units="per_minute" initial_value="10" public_interface="out"/>
+      <variable name="K_9" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="K_10" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="V_9" units="per_minute" public_interface="in" private_interface="out"/>
+      <variable name="V_10" units="per_minute" public_interface="in" private_interface="out"/>
+      <variable name="C" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="MCP" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="MN" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="MNP" units="dimensionless" initial_value="0.25" public_interface="out"/>
+      <variable name="time" units="minute" public_interface="in" private_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>MNP</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <ci>V_9</ci>
+                           <ci>C</ci>
+                           <ci>MN</ci>
+                        </apply>
+                        <apply>
+                           <plus/>
+                           <ci>K_9</ci>
+                           <ci>MN</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <ci>V_10</ci>
+                           <ci>MNP</ci>
+                        </apply>
+                        <apply>
+                           <plus/>
+                           <ci>K_10</ci>
+                           <ci>MNP</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_t3</ci>
+                     <ci>MCP</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_t4</ci>
+                  <ci>MNP</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="cytosol_phos">
+      <variable name="k_t3" units="per_minute" public_interface="in" private_interface="out"/>
+      <variable name="k_t4" units="per_minute" public_interface="in" private_interface="out"/>
+      <variable name="K_11" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="K_12" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="V_11" units="per_minute" public_interface="in" private_interface="out"/>
+      <variable name="V_12" units="per_minute" public_interface="in" private_interface="out"/>
+      <variable name="C" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="MNP" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="MC" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="MCP" units="dimensionless" initial_value="0.25" public_interface="out"/>
+      <variable name="time" units="minute" public_interface="in" private_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>MCP</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <minus/>
+                        <ci>k_t3</ci>
+                     </apply>
+                     <ci>MCP</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_t4</ci>
+                     <ci>MNP</ci>
+                  </apply>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>V_11</ci>
+                        <ci>C</ci>
+                        <ci>MC</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci>K_11</ci>
+                        <ci>MC</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>V_12</ci>
+                     <ci>MCP</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>K_12</ci>
+                     <ci>MCP</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="Mcyto">
+      <variable name="MC" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="MCP" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="M_cyto" units="dimensionless" public_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>M_cyto</ci>
+            <apply>
+               <plus/>
+               <ci>MC</ci>
+               <ci>MCP</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="Mnucl">
+      <variable name="MN" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="MNP" units="dimensionless" public_interface="in" private_interface="out"/>
+      <variable name="M_nucl" units="dimensionless" public_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>M_nucl</ci>
+            <apply>
+               <plus/>
+               <ci>MN</ci>
+               <ci>MNP</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V1" component_2="V2"/>
+      <map_variables variable_1="GEFt" variable_2="GEFt"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V1" component_2="V5"/>
+      <map_variables variable_1="GEFt" variable_2="GEFt"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V1" component_2="active_GEF"/>
+      <map_variables variable_1="V_1" variable_2="V_1"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V2" component_2="V10"/>
+      <map_variables variable_1="Str" variable_2="Str"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V2" component_2="V12"/>
+      <map_variables variable_1="Str" variable_2="Str"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V2" component_2="active_GEF"/>
+      <map_variables variable_1="V_2" variable_2="V_2"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V3" component_2="V4"/>
+      <map_variables variable_1="GAPt" variable_2="GAPt"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V3" component_2="V6"/>
+      <map_variables variable_1="GAPt" variable_2="GAPt"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V3" component_2="V7"/>
+      <map_variables variable_1="PKAt" variable_2="PKAt"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V3" component_2="VPKAact"/>
+      <map_variables variable_1="PKAt" variable_2="PKAt"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V3" component_2="cyclic_AMP"/>
+      <map_variables variable_1="PKAt" variable_2="PKAt"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V3" component_2="holoenzyme_R_C"/>
+      <map_variables variable_1="PKAt" variable_2="PKAt"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V3" component_2="V9"/>
+      <map_variables variable_1="PKAt" variable_2="PKAt"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V3" component_2="V11"/>
+      <map_variables variable_1="PKAt" variable_2="PKAt"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V3" component_2="active_GAP"/>
+      <map_variables variable_1="V_3" variable_2="V_3"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V4" component_2="active_GAP"/>
+      <map_variables variable_1="V_4" variable_2="V_4"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V5" component_2="V6"/>
+      <map_variables variable_1="RASt" variable_2="RASt"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V5" component_2="adenylate_cyclase"/>
+      <map_variables variable_1="RASt" variable_2="RASt"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V5" component_2="RAS_to_GTP"/>
+      <map_variables variable_1="V_5" variable_2="V_5"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V6" component_2="RAS_to_GTP"/>
+      <map_variables variable_1="V_6" variable_2="V_6"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V7" component_2="V8"/>
+      <map_variables variable_1="PDEt" variable_2="PDEt"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V7" component_2="cyclic_AMP"/>
+      <map_variables variable_1="PDEt" variable_2="PDEt"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V7" component_2="active_PDE"/>
+      <map_variables variable_1="V_7" variable_2="V_7"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V8" component_2="active_PDE"/>
+      <map_variables variable_1="V_8" variable_2="V_8"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="VPKAact" component_2="holoenzyme_R_C"/>
+      <map_variables variable_1="a" variable_2="a"/>
+      <map_variables variable_1="r" variable_2="r"/>
+      <map_variables variable_1="R2C2" variable_2="R2C2"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="VPKAact" component_2="cyclic_AMP"/>
+      <map_variables variable_1="V_PKAact" variable_2="V_PKAact"/>
+      <map_variables variable_1="cAMP" variable_2="cAMP"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="holoenzyme_R_cAMP" component_2="holoenzyme_R_C"/>
+      <map_variables variable_1="R2cAMP2" variable_2="R2cAMP2"/>
+      <map_variables variable_1="R2C2" variable_2="R2C2"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="holoenzyme_R_cAMP" component_2="VPKAact"/>
+      <map_variables variable_1="R2cAMP2" variable_2="R2cAMP2"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="C_subunit" component_2="active_GAP"/>
+      <map_variables variable_1="C" variable_2="C"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="C_subunit" component_2="active_PDE"/>
+      <map_variables variable_1="C" variable_2="C"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="C_subunit" component_2="holoenzyme_R_C"/>
+      <map_variables variable_1="C" variable_2="C"/>
+      <map_variables variable_1="R2C2" variable_2="R2C2"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="C_subunit" component_2="VPKAact"/>
+      <map_variables variable_1="C" variable_2="C"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="C_subunit" component_2="cytosol"/>
+      <map_variables variable_1="C" variable_2="C"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="C_subunit" component_2="nucleus"/>
+      <map_variables variable_1="C" variable_2="C"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="C_subunit" component_2="nucleus_phos"/>
+      <map_variables variable_1="C" variable_2="C"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="C_subunit" component_2="cytosol_phos"/>
+      <map_variables variable_1="C" variable_2="C"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="active_GEF" component_2="RAS_to_GTP"/>
+      <map_variables variable_1="GEFa" variable_2="GEFa"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="active_GAP" component_2="RAS_to_GTP"/>
+      <map_variables variable_1="GAPa" variable_2="GAPa"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="RAS_to_GTP" component_2="adenylate_cyclase"/>
+      <map_variables variable_1="RGTP" variable_2="RGTP"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="adenylate_cyclase" component_2="cyclic_AMP"/>
+      <map_variables variable_1="CYCLa" variable_2="CYCLa"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="active_PDE" component_2="cyclic_AMP"/>
+      <map_variables variable_1="PDEa" variable_2="PDEa"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="cyclic_AMP" component_2="holoenzyme_R_C"/>
+      <map_variables variable_1="cAMP" variable_2="cAMP"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V9" component_2="V10"/>
+      <map_variables variable_1="MSNt" variable_2="MSNt"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V9" component_2="V11"/>
+      <map_variables variable_1="MSNt" variable_2="MSNt"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V9" component_2="V12"/>
+      <map_variables variable_1="MSNt" variable_2="MSNt"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V9" component_2="nucleus"/>
+      <map_variables variable_1="V_9" variable_2="V_9"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V9" component_2="nucleus_phos"/>
+      <map_variables variable_1="V_9" variable_2="V_9"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V10" component_2="nucleus"/>
+      <map_variables variable_1="V_10" variable_2="V_10"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V10" component_2="nucleus_phos"/>
+      <map_variables variable_1="V_10" variable_2="V_10"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V11" component_2="cytosol"/>
+      <map_variables variable_1="V_11" variable_2="V_11"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V11" component_2="cytosol_phos"/>
+      <map_variables variable_1="V_11" variable_2="V_11"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V12" component_2="cytosol"/>
+      <map_variables variable_1="V_12" variable_2="V_12"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="V12" component_2="cytosol_phos"/>
+      <map_variables variable_1="V_12" variable_2="V_12"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="cytosol" component_2="nucleus"/>
+      <map_variables variable_1="MC" variable_2="MC"/>
+      <map_variables variable_1="MN" variable_2="MN"/>
+      <map_variables variable_1="k_t1" variable_2="k_t1"/>
+      <map_variables variable_1="k_t2" variable_2="k_t2"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="cytosol" component_2="cytosol_phos"/>
+      <map_variables variable_1="MC" variable_2="MC"/>
+      <map_variables variable_1="MCP" variable_2="MCP"/>
+      <map_variables variable_1="K_11" variable_2="K_11"/>
+      <map_variables variable_1="K_12" variable_2="K_12"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="nucleus" component_2="nucleus_phos"/>
+      <map_variables variable_1="MN" variable_2="MN"/>
+      <map_variables variable_1="MNP" variable_2="MNP"/>
+      <map_variables variable_1="K_9" variable_2="K_9"/>
+      <map_variables variable_1="K_10" variable_2="K_10"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="nucleus_phos" component_2="cytosol_phos"/>
+      <map_variables variable_1="k_t3" variable_2="k_t3"/>
+      <map_variables variable_1="k_t4" variable_2="k_t4"/>
+      <map_variables variable_1="MCP" variable_2="MCP"/>
+      <map_variables variable_1="MNP" variable_2="MNP"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="cytosol" component_2="Mcyto"/>
+      <map_variables variable_1="MC" variable_2="MC"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="cytosol_phos" component_2="Mcyto"/>
+      <map_variables variable_1="MCP" variable_2="MCP"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="nucleus" component_2="Mnucl"/>
+      <map_variables variable_1="MN" variable_2="MN"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="nucleus_phos" component_2="Mnucl"/>
+      <map_variables variable_1="MNP" variable_2="MNP"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="environment" component_2="active_GEF"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="environment" component_2="active_GAP"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="environment" component_2="RAS_to_GTP"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="environment" component_2="adenylate_cyclase"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="environment" component_2="active_PDE"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="environment" component_2="cyclic_AMP"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="environment" component_2="holoenzyme_R_C"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="environment" component_2="cytosol"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="environment" component_2="nucleus"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="environment" component_2="nucleus_phos"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="environment" component_2="cytosol_phos"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+</model>

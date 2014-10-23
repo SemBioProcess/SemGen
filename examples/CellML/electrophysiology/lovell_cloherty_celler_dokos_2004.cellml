@@ -1,0 +1,4613 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- FILE : Lovell_model_2004.xml
+
+CREATED : 24th April 2004
+
+LAST MODIFIED : 27th April 2005
+
+AUTHOR : Catherine Lloyd
+         Bioengineering Instute
+         The University of Auckland
+         
+MODEL STATUS : This model conforms to the CellML 1.0 Specification released on
+10th August 2001, and the 16/01/2002 CellML Metadata 1.0 Specification.
+
+DESCRIPTION : This file contains a CellML description of Lovell et al.'s 2004 mathematical model of cardiac pacemaker myocytes.
+
+CHANGES: 
+   27/04/2005 - PJV - Made MathML id's unique. Removed undefined
+                      initial values.
+  
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="lovell_cloherty_celler_dokos_2004_version01" name="lovell_cloherty_celler_dokos_2004_version01">
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>A Gradient Model Of Cardiac Pacemaker Myocytes</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Bioengineering Institute, University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+            This model is currently non-functional.
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+Electrical activity of the healthy mammalian heart is initiated by an area of specialised pacemaker cells in the wall of the heart, known as the sinoatrial node (SAN).  These cells are spontaneously active, demonstrating a slow depolarisation to threshold (pacemaker potential) rather than a stable resting potential.  Despite heterogeneity amongst the cells of the SAN, the cells are able to synchronise their firing rate and this in turn stimulates the contraction of the atrial myocardium.  Synchronisation is achieved by electronic coupling between cells via gap junctions.
+</para>
+
+<para>
+To date, two potential theories have been put forward to explain the observed spatial heterogeneity in the action potential characteristics within the SAN:
+</para>
+<itemizedlist>
+  <listitem>
+            <para>1) The gradient model suggests that the heterogeneity arises intrinsically from a spatial gradient in underlying cellular electrophysiological properties; and </para>
+          </listitem>
+  <listitem>
+            <para>2) The mosaic model, which suggests that atrial myocytes are peppered throughout the SAN region, increasing in density towards the periphery.  Action potential heterogeneity then arises due to the electronic coupling between atrial and pacemaker myocytes, and the differences between the relative density of the two cell types with the SAN.</para>
+          </listitem>
+</itemizedlist>
+
+<para>
+In order to further investigate the source of the action potential heterogeneity in the SAN, a mathematical model has been devloped by Lovell <emphasis>et al</emphasis>. (see the figure below).  Several mathematical models of the SAN activity have been previously published, including:
+</para>
+<itemizedlist>
+  <listitem>
+            <para>
+              Demir <emphasis>et al.</emphasis> Sinoatrial Node Model, 1994;
+            </para>
+          </listitem>
+  <listitem>
+            <para>
+              Modelling the Ion Currents Underlying Sinoatrial Node Pacemaker Activity, Dokos <emphasis>et al.</emphasis>, 1996;
+            </para>
+          </listitem>
+  <listitem>
+            <para>
+              A Model of Sinoatrial Node Vagal Control, Dokos <emphasis>et al.</emphasis>, 1996;
+            </para>
+          </listitem>
+  <listitem>
+            <para>
+              Demir <emphasis>et al.</emphasis> Sinoatrial Node Model, 1999;
+            </para>
+          </listitem>
+  <listitem>
+            <para>
+              Zhang <emphasis>et al.</emphasis> Sinoatrial Node Model, 2000;
+            </para>
+          </listitem>
+  <listitem>
+            <para>
+              Boyett <emphasis>et al.</emphasis> Sinoatrial Node Model, 2001;
+            </para>
+          </listitem> and 
+  <listitem>
+            <para>
+              Kurata <emphasis>et al.</emphasis> Improved Mathematical Model for the Primary Pacemaker Cell, 2002.
+            </para>
+          </listitem>
+</itemizedlist>
+<para>
+Although these models were able to recreate the generic action potential waveforms from the SAN, none were able to represent action potential waveforms from any specific SAN cell.  This limits the application of such models to analyse the factors underlying action potential heterogeneity in coupled systems of pacemaker cells, as well as elucidating specific ionic mechanisms underlying action potential heterogeneity in the SAN.
+</para>
+
+<para>
+To meet these needs, Lovell <emphasis>et al.</emphasis> have devloped a generic single cell ionic model of rabbit SAN cells, which is based on Markovian state kinetics (all previously published SAN models are based on a Hodgkin-Huxley mechanism).  Parameters are fitted to this model using a custom least squares optimisation approach.  They then propose a gradient model of the SAN by employing the same optimisation approach to fit a smooth transition in ionic model parameters to achieve a desired variation in AP characteristics.
+</para>
+
+<para>
+The model has been described here in CellML.  It should be noted that the initial parameters entered into this model are those for the central SAN value.  Peripheral SAN values and the interpolation parameters are also provided in the original publication.    
+</para>
+
+<para>
+The complete original paper reference is cited below:
+</para>
+
+<para>
+<ulink url="http://linkinghub.elsevier.com/retrieve/pii/S0079610703001123">
+            <emphasis>Progress in Biophysics and Molecular Biology</emphasis>
+          </ulink>, 85, 301-323.  (<ulink url="http://www.sciencedirect.com/science/journal/00796107">Full text (HTML)</ulink> and PDF versions of the article are available to subscribers on the <emphasis>Progress in Biophysics and Molecular Biology</emphasis> website.)  <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/15142749">PubMed ID: 15142749</ulink> 
+</para>
+
+<informalfigure float="0" id="fig_cell_diagram">
+          <mediaobject>
+            <imageobject>
+              <objectinfo>
+                <title>cell diagram</title>
+              </objectinfo>
+              <imagedata fileref="lovell_2004.png"/>
+            </imageobject>
+            <caption>
+A schematic diagram describing the ionic components of the SA node mathematical model.    
+</caption>
+          </mediaobject>
+        </informalfigure>
+
+</sect1>
+</article>
+</documentation>
+  
+  
+  
+  <units name="first_order_rate_constant">
+    <unit units="second" exponent="-1"/>
+  </units>
+  
+  <units name="third_order_rate_constant">
+    <unit units="millimolar" exponent="-2"/>
+    <unit units="second" exponent="-1"/>
+  </units>
+  
+  <units name="millisecond">
+    <unit units="second" prefix="milli"/>
+  </units>
+
+  <units name="millivolt">
+    <unit units="volt" prefix="milli"/>
+  </units>
+
+  <units name="nanoS">
+    <unit units="siemens" prefix="nano"/>
+  </units>
+  
+  <units name="nanoF">
+    <unit units="farad" prefix="nano"/>
+  </units>
+  
+  <units name="picoA">
+    <unit units="ampere" prefix="pico"/>
+  </units>
+  
+  <units name="picoA_per_millimolar">
+    <unit units="picoA"/>
+    <unit units="millimolar" exponent="-1"/>
+  </units>
+  
+  <units name="millimolar">
+    <unit units="mole" prefix="milli"/>
+    <unit units="litre" exponent="-1"/>
+  </units>
+  
+  <units name="joule_per_mole_kelvin">
+    <unit units="joule"/>
+    <unit units="mole" exponent="-1"/>
+    <unit units="kelvin" exponent="-1"/>
+  </units>
+  
+  <units name="coulomb_per_mole">
+    <unit units="coulomb" exponent="-1"/>
+    <unit units="mole" prefix="milli"/>
+  </units>
+  
+  <units name="picol">
+    <unit units="litre" prefix="pico"/>
+  </units>
+    
+  
+  <component name="environment">
+    <variable units="second" public_interface="out" name="time"/>
+  </component>
+  
+  <component name="membrane">
+    <variable units="millivolt" public_interface="out" name="Em" initial_value="-6.395E1"/>
+              
+    <variable units="nanoF" name="Cm" initial_value="3.2E-2"/>
+    
+    <variable units="second" public_interface="in" name="time"/>
+    <variable units="picoA" public_interface="in" name="i_f"/>
+    <variable units="picoA" public_interface="in" name="i_Kr"/>
+    <variable units="picoA" public_interface="in" name="i_Ks"/>
+    <variable units="picoA" public_interface="in" name="i_bNa"/>
+    <variable units="picoA" public_interface="in" name="i_Na"/>
+    <variable units="picoA" public_interface="in" name="i_NaK"/>
+    <variable units="picoA" public_interface="in" name="i_NaCa"/>
+    <variable units="picoA" public_interface="in" name="i_to"/>
+    <variable units="picoA" public_interface="in" name="i_CaL"/>
+    <variable units="picoA" public_interface="in" name="i_CaT"/>
+    <variable units="picoA" public_interface="in" name="i_bK"/>
+    <variable units="picoA" public_interface="in" name="i_bCl"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="membrane_voltage_diff_eq">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> Em </ci>
+        </apply>
+        <apply>
+          <divide/>
+          <apply>
+            <minus/>
+            <apply>
+              <plus/>
+              <ci> i_f  </ci>
+              <ci> i_Kr </ci>
+              <ci> i_Ks </ci>
+              <ci> i_bNa </ci>
+              <ci> i_Na </ci>
+              <ci> i_NaK </ci>
+              <ci> i_NaCa </ci>
+              <ci> i_to </ci>
+              <ci> i_CaL </ci>
+              <ci> i_CaT </ci>
+              <ci> i_bK </ci>
+              <ci> i_bCl </ci>
+            </apply>
+          </apply>
+          <ci> Cm </ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="reversal_potentials">
+    <variable units="millivolt" public_interface="out" name="E_Na"/>
+    <variable units="millivolt" public_interface="out" name="E_Cl"/>
+    <variable units="millivolt" public_interface="out" name="E_Ca_rev" initial_value="4.972E1"/>
+    <variable units="millivolt" public_interface="out" name="E_K"/>
+    <variable units="joule_per_mole_kelvin" public_interface="out" name="R" initial_value="8.3144"/>
+    <variable units="kelvin" public_interface="out" name="T" initial_value="310.15"/>
+    <variable units="coulomb_per_mole" public_interface="out" name="F" initial_value="96485"/>
+    
+    <variable units="millimolar" public_interface="in" name="Nai"/>
+    <variable units="millimolar" public_interface="in" name="Nao"/>
+    <variable units="millimolar" public_interface="in" name="Cai"/>
+    <variable units="millimolar" public_interface="in" name="Cao"/>
+    <variable units="millimolar" public_interface="in" name="Ki"/>
+    <variable units="millimolar" public_interface="in" name="Ko"/>
+    <variable units="millimolar" public_interface="in" name="Cli"/>
+    <variable units="millimolar" public_interface="in" name="Clo"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="E_Na_calculation">
+        <eq/>
+        <ci> E_Na </ci>
+        <apply>
+          <times/>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <ci> R </ci>
+              <ci> T </ci>
+            </apply>
+            <ci> F </ci>
+          </apply>
+          <apply>
+            <ln/>
+            <apply>
+              <divide/>
+              <ci> Nao </ci>
+              <ci> Nai </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="E_Ca_rev_calculation">
+        <eq/>
+        <ci> E_Ca_rev </ci>
+        <apply>
+          <times/>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <ci> R </ci>
+              <ci> T </ci>
+            </apply>
+            <apply>
+              <times/> 
+              <cn cellml:units="dimensionless"> 2.0 </cn>
+              <ci> F </ci>
+            </apply>
+          </apply>
+          <apply>
+            <ln/>
+            <apply>
+              <divide/>
+              <ci> Cao </ci>
+              <ci> Cai </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="E_Cl_calculation">
+        <eq/>
+        <ci> E_Cl </ci>
+        <apply>
+          <times/>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <ci> R </ci>
+              <ci> T </ci>
+            </apply>
+            <apply>
+              <times/> 
+              <cn cellml:units="dimensionless"> -1.0 </cn>
+              <ci> F </ci>
+            </apply>
+          </apply>
+          <apply>
+            <ln/>
+            <apply>
+              <divide/>
+              <ci> Clo </ci>
+              <ci> Cli </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="E_K_calculation">
+        <eq/>
+        <ci> E_K </ci>
+        <apply>
+          <times/>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <ci> R </ci>
+              <ci> T </ci>
+            </apply>
+            <ci> F </ci>
+          </apply>
+          <apply>
+            <ln/>
+            <apply>
+              <divide/>
+              <ci> Ko </ci>
+              <ci> Ki </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="L_type_calcium_current">
+    <variable units="picoA" public_interface="out" name="i_CaL"/>
+
+    <variable units="nanoS" name="g_CaL" initial_value="1.604E2"/>
+    <variable units="dimensionless" name="A_CaL" initial_value="4.564E-4"/>
+    <variable units="dimensionless" name="I1" initial_value="9.601E-1"/>
+    <variable units="dimensionless" name="I2" initial_value="5.261E-3"/>
+    <variable units="dimensionless" name="I3"/>
+    <variable units="first_order_rate_constant" name="alpha1"/>
+    <variable units="first_order_rate_constant" name="alpha2"/>
+    <variable units="third_order_rate_constant" name="alpha3" initial_value="1.395E5"/>
+    <variable units="first_order_rate_constant" name="alpha4" initial_value="4.945"/>
+    <variable units="first_order_rate_constant" name="beta1"/>
+    <variable units="first_order_rate_constant" name="beta2"/>
+    <variable units="first_order_rate_constant" name="beta3" initial_value="7.648"/>
+    <variable units="third_order_rate_constant" name="beta4" initial_value="4.051E6"/>
+    <variable units="first_order_rate_constant" name="alpha1_0" initial_value="1.115E2"/>
+    <variable units="first_order_rate_constant" name="alpha1_infinity" initial_value="2.451E3"/>
+    <variable units="millivolt" name="alpha1_E50" initial_value="-3.116E1"/>
+    <variable units="millivolt" name="alpha1_Eslope" initial_value="8.815"/>
+    <variable units="first_order_rate_constant" name="alpha2_0" initial_value="9.622E1"/>
+    <variable units="first_order_rate_constant" name="alpha2_infinity" initial_value="1.409E1"/>
+    <variable units="millivolt" name="alpha2_E50" initial_value="3.116"/>
+    <variable units="millivolt" name="alpha2_Eslope" initial_value="5.936"/>
+    <variable units="first_order_rate_constant" name="beta1_0" initial_value="1.283E4"/>
+    <variable units="first_order_rate_constant" name="beta1_infinity" initial_value="4.701E3"/>
+    <variable units="millivolt" name="beta1_E50" initial_value="-2.448E1"/>
+    <variable units="millivolt" name="beta1_Eslope" initial_value="7.300"/>
+    <variable units="first_order_rate_constant" name="beta2_0" initial_value="1.950E-1"/>
+    <variable units="first_order_rate_constant" name="beta2_infinity" initial_value="5.984E-2"/>
+    <variable units="millivolt" name="beta2_E50" initial_value="5.934"/>
+    <variable units="millivolt" name="beta2_Eslope" initial_value="1.395E5"/>
+    
+    <variable units="millivolt" public_interface="in" name="E_Ca_rev"/>
+    <variable units="second" public_interface="in" name="time"/>
+    <variable units="millivolt" public_interface="in" name="Em"/>
+    <variable units="millimolar" public_interface="in" name="Cai"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="i_CaL_calculation">
+        <eq/>
+        <ci> i_CaL </ci>
+        <apply>
+          <times/>
+          <ci> g_CaL </ci>
+          <ci> A_CaL </ci>
+          <apply>
+            <minus/>
+            <ci> Em </ci>
+            <ci> E_Ca_rev </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="dA_CaL_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A_CaL </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> alpha1 </ci>
+              <ci> I3 </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> beta1 </ci>
+              <ci> I1 </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <ci> beta1 </ci>
+              <ci> alpha2 </ci>
+            </apply>
+            <ci> A_CaL </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="L_type_calcium_current_dI1_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> I1 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> alpha2 </ci>
+              <ci> A_CaL </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> beta3 </ci>
+              <ci> I2 </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <ci> beta2 </ci>
+              <ci> alpha3 </ci>
+              <apply>
+                <power/>
+                <ci> Cai </ci>
+                <cn cellml:units="dimensionless"> 2.0 </cn>
+              </apply>
+            </apply>
+            <ci> I1 </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="L_type_calcium_current_dI2_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> I2 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> alpha3 </ci>
+              <apply>
+                <power/>
+                <ci> Cai </ci>
+                <cn cellml:units="dimensionless"> 2.0 </cn>
+              </apply>
+              <ci> I1 </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> beta4 </ci>
+              <apply>
+                <power/>
+                <ci> Cai </ci>
+                <cn cellml:units="dimensionless"> 2.0 </cn>
+              </apply>
+              <ci> I3 </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <ci> beta3 </ci>
+              <ci> alpha4 </ci>
+            </apply>
+            <ci> I2 </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="L_type_calcium_current_dI3_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> I3 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> beta1 </ci>
+              <ci> A_CaL </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> alpha4 </ci>
+              <ci> I2 </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <ci> alpha1 </ci>
+              <apply>
+                <times/>
+                <ci> beta4 </ci>
+                <apply>
+                  <power/>
+                  <ci> Cai </ci>
+                  <cn cellml:units="dimensionless"> 2.0 </cn>
+                </apply>
+              </apply>
+            </apply>
+            <ci> I3 </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="L_type_calcium_current_alpha1_calculation">
+        <eq/>
+        <ci> alpha1 </ci>
+        <apply>
+          <plus/>
+          <ci> alpha1_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> alpha1_0 </ci>
+              <ci> alpha1_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> alpha1_E50 </ci>
+                  </apply> 
+                  <ci> alpha1_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="L_type_calcium_current_beta1_calculation">
+        <eq/>
+        <ci> beta1 </ci>
+        <apply>
+          <plus/>
+          <ci> beta1_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> beta1_0 </ci>
+              <ci> beta1_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> beta1_E50 </ci>
+                  </apply> 
+                  <ci> beta1_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="L_type_calcium_current_alpha2_calculation">
+        <eq/>
+        <ci> alpha2 </ci>
+        <apply>
+          <plus/>
+          <ci> alpha2_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> alpha2_0 </ci>
+              <ci> alpha2_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> alpha2_E50 </ci>
+                  </apply> 
+                  <ci> alpha2_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="beta2_calculation">
+        <eq/>
+        <ci> beta2 </ci>
+        <apply>
+          <plus/>
+          <ci> beta2_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> beta2_0 </ci>
+              <ci> beta2_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> beta2_E50 </ci>
+                  </apply> 
+                  <ci> beta2_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="T_type_calcium_current">
+    <variable units="picoA" public_interface="out" name="i_CaT"/>
+
+    <variable units="nanoS" name="g_CaT" initial_value="6.816E2"/>
+    <variable units="dimensionless" name="A_CaT" initial_value="1.562E-5"/>
+    <variable units="dimensionless" name="I1" initial_value="9.985E-1"/>
+    <variable units="dimensionless" name="I2"/>
+    <variable units="first_order_rate_constant" name="alpha1"/>
+    <variable units="first_order_rate_constant" name="alpha2"/>
+    <variable units="first_order_rate_constant" name="alpha3"/>
+    <variable units="first_order_rate_constant" name="beta1"/>
+    <variable units="first_order_rate_constant" name="beta3"/>
+    <variable units="first_order_rate_constant" name="alpha1_0" initial_value="0.0"/>
+    <variable units="first_order_rate_constant" name="alpha1_infinity" initial_value="1.203E3"/>
+    <variable units="millivolt" name="alpha1_E50" initial_value="-3.442E1"/>
+    <variable units="millivolt" name="alpha1_Eslope" initial_value="6.143"/>
+    <variable units="first_order_rate_constant" name="alpha2_0" initial_value="2.458E2"/>
+    <variable units="first_order_rate_constant" name="alpha2_infinity" initial_value="1.304E3"/>
+    <variable units="millivolt" name="alpha2_E50" initial_value="-1.978E1"/>
+    <variable units="millivolt" name="alpha2_Eslope" initial_value="1.260E1"/>
+    <variable units="first_order_rate_constant" name="alpha3_0" initial_value="1.003E-1"/>
+    <variable units="first_order_rate_constant" name="alpha3_infinity" initial_value="1.157E-2"/>
+    <variable units="millivolt" name="alpha3_E50" initial_value="6.079"/>
+    <variable units="millivolt" name="alpha3_Eslope" initial_value="4.938E-1"/>
+    <variable units="first_order_rate_constant" name="beta1_0" initial_value="8.075E2"/>
+    <variable units="first_order_rate_constant" name="beta1_infinity" initial_value="9.663"/>
+    <variable units="millivolt" name="beta1_E50" initial_value="-3.025E1"/>
+    <variable units="millivolt" name="beta1_Eslope" initial_value="2.580E1"/>
+    <variable units="first_order_rate_constant" name="beta3_0" initial_value="1.914"/>
+    <variable units="first_order_rate_constant" name="beta3_infinity" initial_value="4.490E2"/>
+    <variable units="millivolt" name="beta3_E50" initial_value="-3.948E1"/>
+    <variable units="millivolt" name="beta3_Eslope" initial_value="1.295E1"/>
+    
+    <variable units="millivolt" public_interface="in" name="E_Ca_rev"/>
+    <variable units="second" public_interface="in" name="time"/>
+    <variable units="millivolt" public_interface="in" name="Em"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="i_CaT_calculation">
+        <eq/>
+        <ci> i_CaT </ci>
+        <apply>
+          <times/>
+          <ci> g_CaT </ci>
+          <ci> A_CaT </ci>
+          <apply>
+            <minus/>
+            <ci> Em </ci>
+            <ci> E_Ca_rev </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="dA_CaT_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A_CaT </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> alpha1 </ci>
+            <ci> I2 </ci>
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <ci> beta1 </ci>
+              <ci> alpha2 </ci>
+            </apply>
+            <ci> A_CaT </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="T_type_calcium_current_dI1_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> I1 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> alpha2 </ci>
+              <ci> A_CaT </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> beta3 </ci>
+              <ci> I2 </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> alpha3 </ci>
+            <ci> I1 </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="T_type_calcium_current_dI2_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> I2 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> alpha3 </ci>
+              <ci> I1 </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> beta1 </ci>
+              <ci> A_CaT </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <ci> beta3 </ci>
+              <ci> alpha1 </ci>
+            </apply>
+            <ci> I2 </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="T_type_calcium_current_alpha1_calculation">
+        <eq/>
+        <ci> alpha1 </ci>
+        <apply>
+          <plus/>
+          <ci> alpha1_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> alpha1_0 </ci>
+              <ci> alpha1_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> alpha1_E50 </ci>
+                  </apply> 
+                  <ci> alpha1_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="T_type_calcium_current_beta1_calculation">
+        <eq/>
+        <ci> beta1 </ci>
+        <apply>
+          <plus/>
+          <ci> beta1_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> beta1_0 </ci>
+              <ci> beta1_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> beta1_E50 </ci>
+                  </apply> 
+                  <ci> beta1_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="T_type_calcium_current_alpha2_calculation">
+        <eq/>
+        <ci> alpha2 </ci>
+        <apply>
+          <plus/>
+          <ci> alpha2_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> alpha2_0 </ci>
+              <ci> alpha2_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> alpha2_E50 </ci>
+                  </apply> 
+                  <ci> alpha2_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="T_type_calcium_current_alpha3_calculation">
+        <eq/>
+        <ci> alpha3 </ci>
+        <apply>
+          <plus/>
+          <ci> alpha3_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> alpha3_0 </ci>
+              <ci> alpha3_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> alpha3_E50 </ci>
+                  </apply> 
+                  <ci> alpha3_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="T_type_calcium_current_beta3_calculation">
+        <eq/>
+        <ci> beta3 </ci>
+        <apply>
+          <plus/>
+          <ci> beta3_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> beta3_0 </ci>
+              <ci> beta3_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> beta3_E50 </ci>
+                  </apply> 
+                  <ci> beta3_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="rapid_delayed_rectifying_potassium_current">
+    <variable units="picoA" public_interface="out" name="i_Kr"/>
+    <variable units="picoA" public_interface="out" name="i_Kr_Na"/>
+    <variable units="picoA" public_interface="out" name="i_Kr_K"/>
+    
+    <variable units="nanoS" name="g_Kr" initial_value="4.714"/>
+    <variable units="picoA_per_millimolar" name="PKNa_r" initial_value="3.042E-2"/>
+    <variable units="dimensionless" name="A_Kr" initial_value="1.209E-1"/>
+    <variable units="dimensionless" name="I1" initial_value="1.991E-3"/>
+    <variable units="dimensionless" name="I2" initial_value="5.617E-2"/>
+    <variable units="dimensionless" name="I3"/>
+    <variable units="first_order_rate_constant" name="alpha1"/>
+    <variable units="first_order_rate_constant" name="alpha2"/>
+    <variable units="first_order_rate_constant" name="alpha3"/>
+    <variable units="first_order_rate_constant" name="alpha4"/>
+    <variable units="first_order_rate_constant" name="beta1"/>
+    <variable units="first_order_rate_constant" name="beta4"/>
+    <variable units="first_order_rate_constant" name="alpha1_0" initial_value="2.924E-1"/>
+    <variable units="first_order_rate_constant" name="alpha1_infinity" initial_value="1.796"/>
+    <variable units="millivolt" name="alpha1_E50" initial_value="-2.821"/>
+    <variable units="millivolt" name="alpha1_Eslope" initial_value="1.591E1"/>
+    <variable units="first_order_rate_constant" name="alpha2_0" initial_value="8.011E-4"/>
+    <variable units="first_order_rate_constant" name="alpha2_infinity" initial_value="2.815E1"/>
+    <variable units="millivolt" name="alpha2_E50" initial_value="2.607E1"/>
+    <variable units="millivolt" name="alpha2_Eslope" initial_value="4.849"/>
+    <variable units="first_order_rate_constant" name="alpha3_0" initial_value="0.0"/>
+    <variable units="first_order_rate_constant" name="alpha3_infinity" initial_value="1.382E1"/>
+    <variable units="millivolt" name="alpha3_E50" initial_value="-1.706"/>
+    <variable units="millivolt" name="alpha3_Eslope" initial_value="8.661"/>
+    <variable units="first_order_rate_constant" name="alpha4_0" initial_value="8.526E1"/>
+    <variable units="first_order_rate_constant" name="alpha4_infinity" initial_value="5.840"/>
+    <variable units="millivolt" name="alpha4_E50" initial_value="1.663E1"/>
+    <variable units="millivolt" name="alpha4_Eslope" initial_value="1.906E1"/>
+    <variable units="first_order_rate_constant" name="beta1_0" initial_value="1.161E-1"/>
+    <variable units="first_order_rate_constant" name="beta1_infinity" initial_value="5.201E1"/>
+    <variable units="millivolt" name="beta1_E50" initial_value="-6.477"/>
+    <variable units="millivolt" name="beta1_Eslope" initial_value="1.149E1"/>
+    <variable units="first_order_rate_constant" name="beta4_0" initial_value="5.728"/>
+    <variable units="first_order_rate_constant" name="beta4_infinity" initial_value="5.372E2"/>
+    <variable units="millivolt" name="beta4_E50" initial_value="4.594E1"/>
+    <variable units="millivolt" name="beta4_Eslope" initial_value="4.646"/>
+    
+    <variable units="millivolt" public_interface="in" name="E_Na"/>
+    <variable units="millivolt" public_interface="in" name="E_K"/>
+    <variable units="second" public_interface="in" name="time"/>
+    <variable units="millivolt" public_interface="in" name="Em"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="i_Kr_calculation">
+        <eq/>
+        <ci> i_Kr </ci>
+        <apply>
+          <plus/>
+          <ci> i_Kr_Na </ci>
+          <ci> i_Kr_K </ci>
+        </apply>
+      </apply>
+      
+      <apply id="i_Kr_Na_calculation">
+        <eq/>
+        <ci> i_Kr_Na </ci>
+        <apply>
+          <times/>
+          <ci> g_Kr </ci>
+          <ci> A_Kr </ci>
+          <ci> PKNa_r </ci>
+          <apply>
+            <minus/>
+            <ci> Em </ci>
+            <ci> E_Na </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="i_Kr_K_calculation">
+        <eq/>
+        <ci> i_Kr_K </ci>
+        <apply>
+          <times/>
+          <ci> g_Kr </ci>
+          <ci> A_Kr </ci>
+          <apply>
+            <minus/>
+            <ci> Em </ci>
+            <ci> E_K </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="dA_Kr_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A_Kr </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> alpha1 </ci>
+            <ci> I3 </ci>
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <ci> beta1 </ci>
+              <ci> alpha2 </ci>
+            </apply>
+            <ci> A_Kr </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="rapid_delayed_rectifying_potassium_current_dI1_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> I1 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> alpha2 </ci>
+            <ci> A_Kr </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> alpha3 </ci>
+            <ci> I1 </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="rapid_delayed_rectifying_potassium_current_dI2_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> I2 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> alpha3 </ci>
+              <ci> I1 </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> beta4 </ci>
+              <ci> I3 </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> alpha4 </ci>
+            <ci> I2 </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="rapid_delayed_rectifying_potassium_current_dI3_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> I3 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> beta1 </ci>
+              <ci> A_Kr </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> alpha4 </ci>
+              <ci> I2 </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <ci> alpha1 </ci>
+              <ci> beta4 </ci>
+            </apply>
+            <ci> I3 </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="rapid_delayed_rectifying_potassium_current_alpha1_calculation">
+        <eq/>
+        <ci> alpha1 </ci>
+        <apply>
+          <plus/>
+          <ci> alpha1_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> alpha1_0 </ci>
+              <ci> alpha1_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> alpha1_E50 </ci>
+                  </apply> 
+                  <ci> alpha1_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="rapid_delayed_rectifying_potassium_current_beta1_calculation">
+        <eq/>
+        <ci> beta1 </ci>
+        <apply>
+          <plus/>
+          <ci> beta1_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> beta1_0 </ci>
+              <ci> beta1_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> beta1_E50 </ci>
+                  </apply> 
+                  <ci> beta1_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="rapid_delayed_rectifying_potassium_current_alpha2_calculation">
+        <eq/>
+        <ci> alpha2 </ci>
+        <apply>
+          <plus/>
+          <ci> alpha2_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> alpha2_0 </ci>
+              <ci> alpha2_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> alpha2_E50 </ci>
+                  </apply> 
+                  <ci> alpha2_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="rapid_delayed_rectifying_potassium_current_alpha3_calculation">
+        <eq/>
+        <ci> alpha3 </ci>
+        <apply>
+          <plus/>
+          <ci> alpha3_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> alpha3_0 </ci>
+              <ci> alpha3_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> alpha3_E50 </ci>
+                  </apply> 
+                  <ci> alpha3_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="rapid_delayed_rectifying_potassium_current_alpha4_calculation">
+        <eq/>
+        <ci> alpha4 </ci>
+        <apply>
+          <plus/>
+          <ci> alpha4_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> alpha4_0 </ci>
+              <ci> alpha4_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> alpha4_E50 </ci>
+                  </apply> 
+                  <ci> alpha4_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="rapid_delayed_rectifying_potassium_current_beta4_calculation">
+        <eq/>
+        <ci> beta4 </ci>
+        <apply>
+          <plus/>
+          <ci> beta4_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> beta4_0 </ci>
+              <ci> beta4_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> beta4_E50 </ci>
+                  </apply> 
+                  <ci> beta4_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="slow_delayed_rectifying_potassium_current">
+    <variable units="picoA" public_interface="out" name="i_Ks"/>
+    <variable units="picoA" public_interface="out" name="i_Ks_Na"/>
+    <variable units="picoA" public_interface="out" name="i_Ks_K"/>
+    
+    <variable units="nanoS" name="g_Ks" initial_value="1.328E1"/>
+    <variable units="picoA_per_millimolar" name="PKNa_s" initial_value="3.053E-2"/>
+    <variable units="dimensionless" name="A_Ks" initial_value="5.049E-3"/>
+    <variable units="dimensionless" name="I1" initial_value="9.921E-1"/>
+    <variable units="dimensionless" name="I2"/>
+    <variable units="first_order_rate_constant" name="alpha1"/>
+    <variable units="first_order_rate_constant" name="alpha2"/>
+    <variable units="first_order_rate_constant" name="alpha3"/>
+    <variable units="first_order_rate_constant" name="beta1"/>
+    <variable units="first_order_rate_constant" name="beta3"/>
+    <variable units="first_order_rate_constant" name="alpha1_0" initial_value="1.455"/>
+    <variable units="first_order_rate_constant" name="alpha1_infinity" initial_value="1.590E1"/>
+    <variable units="millivolt" name="alpha1_E50" initial_value="3.403E1"/>
+    <variable units="millivolt" name="alpha1_Eslope" initial_value="9.464"/>
+    <variable units="first_order_rate_constant" name="alpha2_0" initial_value="7.619E-1"/>
+    <variable units="first_order_rate_constant" name="alpha2_infinity" initial_value="7.207E-2"/>
+    <variable units="millivolt" name="alpha2_E50" initial_value="1.021E1"/>
+    <variable units="millivolt" name="alpha2_Eslope" initial_value="2.584"/>
+    <variable units="first_order_rate_constant" name="alpha3_0" initial_value="0.0"/>
+    <variable units="first_order_rate_constant" name="alpha3_infinity" initial_value="1.690E1"/>
+    <variable units="millivolt" name="alpha3_E50" initial_value="4.216E1"/>
+    <variable units="millivolt" name="alpha3_Eslope" initial_value="8.481"/>
+    <variable units="first_order_rate_constant" name="beta1_0" initial_value="3.628E-3"/>
+    <variable units="first_order_rate_constant" name="beta1_infinity" initial_value="4.191"/>
+    <variable units="millivolt" name="beta1_E50" initial_value="2.231E1"/>
+    <variable units="millivolt" name="beta1_Eslope" initial_value="1.063E1"/>
+    <variable units="first_order_rate_constant" name="beta3_0" initial_value="1.772"/>
+    <variable units="first_order_rate_constant" name="beta3_infinity" initial_value="4.141E-1"/>
+    <variable units="millivolt" name="beta3_E50" initial_value="9.822"/>
+    <variable units="millivolt" name="beta3_Eslope" initial_value="1.280E1"/>
+    
+    <variable units="millivolt" public_interface="in" name="E_Na"/>
+    <variable units="millivolt" public_interface="in" name="E_K"/>
+    <variable units="second" public_interface="in" name="time"/>
+    <variable units="millivolt" public_interface="in" name="Em"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="i_Ks_calculation">
+        <eq/>
+        <ci> i_Ks </ci>
+        <apply>
+          <plus/>
+          <ci> i_Ks_Na </ci>
+          <ci> i_Ks_K </ci>
+        </apply>
+      </apply>
+      
+      <apply id="i_Ks_Na_calculation">
+        <eq/>
+        <ci> i_Ks_Na </ci>
+        <apply>
+          <times/>
+          <ci> g_Ks </ci>
+          <ci> A_Ks </ci>
+          <ci> PKNa_s </ci>
+          <apply>
+            <minus/>
+            <ci> Em </ci>
+            <ci> E_Na </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="i_Ks_K_calculation">
+        <eq/>
+        <ci> i_Ks_K </ci>
+        <apply>
+          <times/>
+          <ci> g_Ks </ci>
+          <ci> A_Ks </ci>
+          <apply>
+            <minus/>
+            <ci> Em </ci>
+            <ci> E_K </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="dA_Ks_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A_Ks </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> alpha1 </ci>
+            <ci> I2 </ci>
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <ci> beta1 </ci>
+              <ci> alpha2 </ci>
+            </apply>
+            <ci> A_Ks </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="slow_delayed_rectifying_potassium_current_dI1_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> I1 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> alpha2 </ci>
+              <ci> A_Ks </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> beta3 </ci>
+              <ci> I2 </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> alpha3 </ci>
+            <ci> I1 </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="slow_delayed_rectifying_potassium_current_dI2_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> I2 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> alpha3 </ci>
+              <ci> I1 </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> beta1 </ci>
+              <ci> A_Ks </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <ci> alpha1 </ci>
+              <ci> beta3 </ci>
+            </apply>
+            <ci> I2 </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="slow_delayed_rectifying_potassium_current_alpha1_calculation">
+        <eq/>
+        <ci> alpha1 </ci>
+        <apply>
+          <plus/>
+          <ci> alpha1_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> alpha1_0 </ci>
+              <ci> alpha1_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> alpha1_E50 </ci>
+                  </apply> 
+                  <ci> alpha1_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="slow_delayed_rectifying_potassium_current_beta1_calculation">
+        <eq/>
+        <ci> beta1 </ci>
+        <apply>
+          <plus/>
+          <ci> beta1_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> beta1_0 </ci>
+              <ci> beta1_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> beta1_E50 </ci>
+                  </apply> 
+                  <ci> beta1_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="slow_delayed_rectifying_potassium_current_alpha2_calculation">
+        <eq/>
+        <ci> alpha2 </ci>
+        <apply>
+          <plus/>
+          <ci> alpha2_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> alpha2_0 </ci>
+              <ci> alpha2_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> alpha2_E50 </ci>
+                  </apply> 
+                  <ci> alpha2_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="slow_delayed_rectifying_potassium_current_alpha3_calculation">
+        <eq/>
+        <ci> alpha3 </ci>
+        <apply>
+          <plus/>
+          <ci> alpha3_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> alpha3_0 </ci>
+              <ci> alpha3_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> alpha3_E50 </ci>
+                  </apply> 
+                  <ci> alpha3_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="slow_delayed_rectifying_potassium_current_beta3_calculation">
+        <eq/>
+        <ci> beta3 </ci>
+        <apply>
+          <plus/>
+          <ci> beta3_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> beta3_0 </ci>
+              <ci> beta3_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> beta3_E50 </ci>
+                  </apply> 
+                  <ci> beta3_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="TTX_sensitive_sodium_current">
+    <variable units="picoA" public_interface="out" name="i_Na"/>
+    <variable units="nanoS" public_interface="out" name="g_Na" initial_value="2.889"/>
+    
+    <variable units="dimensionless" name="A_Na" initial_value="5.586E-4"/>
+    <variable units="dimensionless" name="I1" initial_value="3.750E-1"/>
+    <variable units="dimensionless" name="I2" initial_value="1.039E-1"/>
+    <variable units="dimensionless" name="I3"/>
+    <variable units="first_order_rate_constant" name="alpha1"/>
+    <variable units="first_order_rate_constant" name="alpha2"/>
+    <variable units="first_order_rate_constant" name="alpha3"/>
+    <variable units="first_order_rate_constant" name="alpha4"/>
+    <variable units="first_order_rate_constant" name="beta1"/>
+    <variable units="first_order_rate_constant" name="beta4"/>
+    <variable units="first_order_rate_constant" name="alpha1_0" initial_value="1.022E-31"/>
+    <variable units="first_order_rate_constant" name="alpha1_infinity" initial_value="4.355E5"/>
+    <variable units="millivolt" name="alpha1_E50" initial_value="-3.808E1"/>
+    <variable units="millivolt" name="alpha1_Eslope" initial_value="4.402"/>
+    <variable units="first_order_rate_constant" name="alpha2_0" initial_value="2.950E1"/>
+    <variable units="first_order_rate_constant" name="alpha2_infinity" initial_value="1.710E2"/>
+    <variable units="millivolt" name="alpha2_E50" initial_value="-1.841E1"/>
+    <variable units="millivolt" name="alpha2_Eslope" initial_value="1.661E1"/>
+    <variable units="first_order_rate_constant" name="alpha3_0" initial_value="0.0"/>
+    <variable units="first_order_rate_constant" name="alpha3_infinity" initial_value="2.031"/>
+    <variable units="millivolt" name="alpha3_E50" initial_value="-3.004E1"/>
+    <variable units="millivolt" name="alpha3_Eslope" initial_value="1.275E-1"/>
+    <variable units="first_order_rate_constant" name="alpha4_0" initial_value="6.000E1"/>
+    <variable units="first_order_rate_constant" name="alpha4_infinity" initial_value="0.0"/>
+    <variable units="millivolt" name="alpha4_E50" initial_value="-5.556E1"/>
+    <variable units="millivolt" name="alpha4_Eslope" initial_value="4.849"/>
+    <variable units="first_order_rate_constant" name="beta1_0" initial_value="1.133E6"/>
+    <variable units="first_order_rate_constant" name="beta1_infinity" initial_value="4.104E5"/>
+    <variable units="millivolt" name="beta1_E50" initial_value="-2.239"/>
+    <variable units="millivolt" name="beta1_Eslope" initial_value="1.651"/>
+    <variable units="first_order_rate_constant" name="beta4_0" initial_value="1.831E-4"/>
+    <variable units="first_order_rate_constant" name="beta4_infinity" initial_value="1.904E3"/>
+    <variable units="millivolt" name="beta4_E50" initial_value="1.821E1"/>
+    <variable units="millivolt" name="beta4_Eslope" initial_value="1.466E1"/>
+    
+    <variable units="millivolt" public_interface="in" name="E_Na"/>
+    <variable units="second" public_interface="in" name="time"/>
+    <variable units="millivolt" public_interface="in" name="Em"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="i_Na_calculation">
+        <eq/>
+        <ci> i_Na </ci>
+        <apply>
+          <times/>
+          <ci> g_Na </ci>
+          <ci> A_Na </ci>
+          <apply>
+            <minus/>
+            <ci> Em </ci>
+            <ci> E_Na </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="dA_Na_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A_Na </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> alpha1 </ci>
+            <ci> I3 </ci>
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <ci> beta1 </ci>
+              <ci> alpha2 </ci>
+            </apply>
+            <ci> A_Na </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="TTX_sensitive_sodium_current_dI1_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> I1 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> alpha2 </ci>
+            <ci> A_Na </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> alpha3 </ci>
+            <ci> I1 </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="TTX_sensitive_sodium_current_dI2_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> I2 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> alpha3 </ci>
+              <ci> I1 </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> beta4 </ci>
+              <ci> I3 </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> alpha4 </ci>
+            <ci> I2 </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="TTX_sensitive_sodium_current_dI3_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> I3 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> beta1 </ci>
+              <ci> A_Na </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> alpha4 </ci>
+              <ci> I2 </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <ci> alpha1 </ci>
+              <ci> beta4 </ci>
+            </apply>
+            <ci> I3 </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="TTX_sensitive_sodium_current_alpha1_calculation">
+        <eq/>
+        <ci> alpha1 </ci>
+        <apply>
+          <plus/>
+          <ci> alpha1_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> alpha1_0 </ci>
+              <ci> alpha1_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> alpha1_E50 </ci>
+                  </apply> 
+                  <ci> alpha1_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="TTX_sensitive_sodium_current_beta1_calculation">
+        <eq/>
+        <ci> beta1 </ci>
+        <apply>
+          <plus/>
+          <ci> beta1_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> beta1_0 </ci>
+              <ci> beta1_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> beta1_E50 </ci>
+                  </apply> 
+                  <ci> beta1_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="TTX_sensitive_sodium_current_alpha2_calculation">
+        <eq/>
+        <ci> alpha2 </ci>
+        <apply>
+          <plus/>
+          <ci> alpha2_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> alpha2_0 </ci>
+              <ci> alpha2_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> alpha2_E50 </ci>
+                  </apply> 
+                  <ci> alpha2_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="TTX_sensitive_sodium_current_alpha3_calculation">
+        <eq/>
+        <ci> alpha3 </ci>
+        <apply>
+          <plus/>
+          <ci> alpha3_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> alpha3_0 </ci>
+              <ci> alpha3_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> alpha3_E50 </ci>
+                  </apply> 
+                  <ci> alpha3_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="TTX_sensitive_sodium_current_alpha4_calculation">
+        <eq/>
+        <ci> alpha4 </ci>
+        <apply>
+          <plus/>
+          <ci> alpha4_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> alpha4_0 </ci>
+              <ci> alpha4_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> alpha4_E50 </ci>
+                  </apply> 
+                  <ci> alpha4_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="TTX_sensitive_sodium_current_beta4_calculation">
+        <eq/>
+        <ci> beta4 </ci>
+        <apply>
+          <plus/>
+          <ci> beta4_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> beta4_0 </ci>
+              <ci> beta4_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> beta4_E50 </ci>
+                  </apply> 
+                  <ci> beta4_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="sodium_calcium_exchange_current">
+    <variable units="picoA" public_interface="out" name="i_NaCa"/>
+    
+    <variable units="picoA" name="kNaCa" initial_value="2.249E3"/>
+    <variable units="dimensionless" name="x1"/>
+    <variable units="dimensionless" name="x2"/>
+    <variable units="dimensionless" name="x3"/>
+    <variable units="dimensionless" name="x4"/>
+    <variable units="dimensionless" name="k41"/>
+    <variable units="dimensionless" name="k34"/>
+    <variable units="dimensionless" name="k23"/>
+    <variable units="dimensionless" name="k21"/>
+    <variable units="dimensionless" name="k32"/>
+    <variable units="dimensionless" name="k43"/>
+    <variable units="dimensionless" name="k12"/>
+    <variable units="dimensionless" name="k14"/>
+    <variable units="dimensionless" name="Qci" initial_value="1.421E-1"/>
+    <variable units="dimensionless" name="Qn" initial_value="2.650E-1"/>
+    <variable units="dimensionless" name="Qco" initial_value="0.0"/>
+    <variable units="millimolar" name="K3ni" initial_value="2.490E1"/>
+    <variable units="millimolar" name="Kci" initial_value="6.510E-3"/>
+    <variable units="millimolar" name="K1ni" initial_value="3.938E2"/>
+    <variable units="millimolar" name="K2ni" initial_value="2.286"/>
+    <variable units="millimolar" name="Kcni" initial_value="2.568E1"/>
+    <variable units="millimolar" name="K3no" initial_value="6.325"/>
+    <variable units="millimolar" name="K1no" initial_value="2.200E3"/>
+    <variable units="millimolar" name="K2no" initial_value="7.639E2"/>
+    <variable units="millimolar" name="Kco" initial_value="3.299"/>
+    <variable units="dimensionless" name="D1"/>
+    <variable units="dimensionless" name="D2"/>
+    
+    <variable units="millimolar" public_interface="in" name="Cai"/>
+    <variable units="millimolar" public_interface="in" name="Cao"/>
+    <variable units="millimolar" public_interface="in" name="Nao"/>
+    <variable units="millimolar" public_interface="in" name="Nai"/>
+    <variable units="joule_per_mole_kelvin" public_interface="in" name="R"/>
+    <variable units="kelvin" public_interface="in" name="T"/>
+    <variable units="coulomb_per_mole" public_interface="in" name="F"/>
+    <variable units="millivolt" public_interface="in" name="Em"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="i_NaCa_calculation">
+        <eq/>
+        <ci> i_NaCa </ci>
+        <apply>
+          <times/>
+          <ci> kNaCa </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <apply>
+                <times/>
+                <ci> x2 </ci>
+                <ci> k21 </ci>
+              </apply>
+              <apply>
+                <times/>
+                <ci> x1 </ci>
+                <ci> k12 </ci>
+              </apply>
+            </apply>
+            <apply>
+              <plus/>
+              <ci> x1 </ci>
+              <ci> x2 </ci>
+              <ci> x3 </ci>
+              <ci> x4 </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+     
+      <apply id="x1_calculation">
+        <eq/>
+        <ci> x1 </ci>
+        <apply>
+          <plus/>
+          <apply>
+            <times/>
+            <ci> k41 </ci>
+            <ci> k34 </ci>
+            <apply>
+              <plus/>
+              <ci> k23 </ci>
+              <ci> k21 </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> k21 </ci>
+            <ci> k32 </ci>
+            <apply>
+              <plus/>
+              <ci> k43 </ci>
+              <ci> k41 </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="x2_calculation">
+        <eq/>
+        <ci> x2 </ci>
+        <apply>
+          <plus/>
+          <apply>
+            <times/>
+            <ci> k32 </ci>
+            <ci> k43 </ci>
+            <apply>
+              <plus/>
+              <ci> k14 </ci>
+              <ci> k12 </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> k41 </ci>
+            <ci> k12 </ci>
+            <apply>
+              <plus/>
+              <ci> k34 </ci>
+              <ci> k32 </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="x3_calculation">
+        <eq/>
+        <ci> x3 </ci>
+        <apply>
+          <plus/>
+          <apply>
+            <times/>
+            <ci> k14 </ci>
+            <ci> k43 </ci>
+            <apply>
+              <plus/>
+              <ci> k23 </ci>
+              <ci> k21 </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> k12 </ci>
+            <ci> k23 </ci>
+            <apply>
+              <plus/>
+              <ci> k43 </ci>
+              <ci> k41 </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="x4_calculation">
+        <eq/>
+        <ci> x4 </ci>
+        <apply>
+          <plus/>
+          <apply>
+            <times/>
+            <ci> k23 </ci>
+            <ci> k34 </ci>
+            <apply>
+              <plus/>
+              <ci> k14 </ci>
+              <ci> k12 </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> k14 </ci>
+            <ci> k21 </ci>
+            <apply>
+              <plus/>
+              <ci> k34 </ci>
+              <ci> k32 </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="k43_calculation">
+        <eq/>
+        <ci> k43 </ci>
+        <apply>
+          <divide/>
+          <ci> Nai </ci>
+          <apply>
+            <plus/>
+            <ci> K3ni </ci>
+            <ci> Nai </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="k12_calculation">
+        <eq/>
+        <ci> k12 </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <ci> Cai </ci>
+            <apply>
+              <exp/>
+              <apply>
+                <minus/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <times/>
+                    <ci> Em </ci>
+                    <ci> Qci </ci>
+                    <ci> F </ci>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <ci> R </ci>
+                    <ci> T </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </apply> 
+          <apply>
+            <times/>
+            <ci> Kci </ci>
+            <ci> D1 </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="k14_calculation">
+        <eq/>
+        <ci> k14 </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <apply>
+              <power/>
+              <ci> Nai </ci>
+              <cn cellml:units="dimensionless"> 2.0 </cn>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <divide/>
+                <ci> Nai </ci>
+                <ci> K3ni </ci>
+              </apply>
+            </apply>
+            <apply>
+              <exp/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> Qn </ci>
+                  <ci> Em </ci>
+                  <ci> F </ci>
+                </apply>
+                <apply>
+                  <times/>
+                  <cn cellml:units="dimensionless"> 2.0 </cn>
+                  <ci> R </ci>
+                  <ci> T </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> K1ni </ci>
+            <ci> K2ni </ci>
+            <ci> D1 </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="k41_calculation">
+        <eq/>
+        <ci> k41 </ci>
+        <apply>
+          <exp/>
+          <apply>
+            <minus/>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> Em </ci>
+                <ci> Qn </ci>
+                <ci> F </ci>
+              </apply>
+              <apply>
+                <times/>
+                <cn cellml:units="dimensionless"> 2.0 </cn>
+                <ci> R </ci>
+                <ci> T </ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="D1_calculation">
+        <eq/>
+        <ci> D1 </ci>
+        <apply>
+          <plus/>
+          <cn cellml:units="dimensionless"> 1.0 </cn>
+          <apply>
+            <times/>
+            <apply>
+              <divide/>
+              <ci> Cai </ci>
+              <ci> Kci </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <divide/>
+                    <apply>
+                      <times/>
+                      <ci> Em </ci>
+                      <ci> Qci </ci>
+                      <ci> F </ci>
+                    </apply>
+                    <apply>
+                      <times/>
+                      <ci> R </ci>
+                      <ci> T </ci>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> Cai </ci>
+                <ci> Nai </ci>
+              </apply>
+              <apply>
+                <times/>
+                <ci> Kci </ci>
+                <ci> Kcni </ci>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <divide/>
+              <ci> Nai </ci>
+              <ci> K1ni </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <times/>
+                <apply>
+                  <divide/>
+                  <ci> Nai </ci>
+                  <ci> K2ni </ci>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn cellml:units="dimensionless"> 1.0 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> Nai </ci>
+                    <ci> K3ni </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="k34_calculation">
+        <eq/>
+        <ci> k34 </ci>
+        <apply>
+          <divide/>
+          <ci> Nao </ci>
+          <apply>
+            <plus/>
+            <ci> K3no </ci>
+            <ci> Nao </ci>
+          </apply>
+        </apply>
+      </apply> 
+      
+      <apply id="k21_calculation">
+        <eq/>
+        <ci> k21 </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <apply>
+              <divide/>
+              <ci> Cao </ci>
+              <ci> Kco </ci>
+            </apply>
+            <apply>
+              <exp/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> Qco </ci>
+                  <ci> Em </ci>
+                  <ci> F </ci>
+                </apply>
+                <apply>
+                  <times/>
+                  <ci> R </ci>
+                  <ci> T </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+          <ci> D2 </ci>
+        </apply>
+      </apply>   
+      
+      <apply id="k23_calculation">
+        <eq/>
+        <ci> k23 </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <apply>
+              <power/>
+              <ci> Nao </ci>
+              <cn cellml:units="dimensionless"> 2.0 </cn>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <divide/>
+                <ci> Nao </ci>
+                <ci> K3no </ci>
+              </apply>
+            </apply>
+            <apply>
+              <exp/>
+              <apply>
+                <minus/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <times/>
+                    <ci> Qn </ci>
+                    <ci> Em </ci>
+                    <ci> F </ci>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <cn cellml:units="dimensionless"> 2.0 </cn>
+                    <ci> R </ci>
+                    <ci> T </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> K1no </ci>
+            <ci> K2no </ci>
+            <ci> D2 </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="k32_calculation">
+        <eq/>
+        <ci> k32 </ci>
+        <apply>
+          <exp/>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <ci> Qn </ci>
+              <ci> Em </ci>
+              <ci> F </ci>
+            </apply>
+            <apply>
+              <times/>
+              <cn cellml:units="dimensionless"> 2.0 </cn>
+              <ci> R </ci>
+              <ci> T </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="D2_calculation">
+        <eq/>
+        <ci> D2 </ci>
+        <apply>
+          <plus/>
+          <cn cellml:units="dimensionless"> 1.0 </cn>
+          <apply>
+            <times/>
+            <apply>
+              <divide/>
+              <ci> Cao </ci>
+              <ci> Kco </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <times/>
+                    <ci> Qco </ci>
+                    <ci> Em </ci>
+                    <ci> F </ci>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <ci> R </ci>
+                    <ci> T </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <divide/>
+              <ci> Nao </ci>
+              <ci> K1no </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <divide/>
+                <ci> Nao </ci>
+                <ci> K2no </ci>
+              </apply>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <divide/>
+                <ci> Nao </ci>
+                <ci> K3no </ci>
+              </apply>
+            </apply>
+          </apply> 
+        </apply>
+      </apply>     
+    </math>
+  </component>
+  
+  <component name="hyperpolarisation_activated_current">
+    <variable units="picoA" public_interface="out" name="i_f"/>
+    <variable units="picoA" public_interface="out" name="i_fNa"/>
+    <variable units="picoA" public_interface="out" name="i_fK"/>
+    
+    <variable units="dimensionless" name="P_f_K" initial_value="1.162"/>
+    <variable units="nanoS" name="g_f_Na" initial_value="5.031E2"/>
+    <variable units="nanoS" name="g_f_K"/>
+    <variable units="dimensionless" name="A_f" initial_value="3.716E-4"/>
+    <variable units="millimolar" name="Km_f" initial_value="1.030E1"/>
+    <variable units="dimensionless" name="I1" initial_value="9.972E-1"/>
+    <variable units="dimensionless" name="I2"/>
+    <variable units="first_order_rate_constant" name="alpha1"/>
+    <variable units="first_order_rate_constant" name="alpha2"/>
+    <variable units="first_order_rate_constant" name="alpha3"/>
+    <variable units="first_order_rate_constant" name="beta1"/>
+    <variable units="first_order_rate_constant" name="beta3"/>
+    <variable units="first_order_rate_constant" name="alpha1_0" initial_value="1.244"/>
+    <variable units="first_order_rate_constant" name="alpha1_infinity" initial_value="2.157"/>
+    <variable units="millivolt" name="alpha1_E50" initial_value="-4.973E1"/>
+    <variable units="millivolt" name="alpha1_Eslope" initial_value="9.458"/>
+    <variable units="first_order_rate_constant" name="alpha2_0" initial_value="0.0"/>
+    <variable units="first_order_rate_constant" name="alpha2_infinity" initial_value="6.951"/>
+    <variable units="millivolt" name="alpha2_E50" initial_value="-6.658E1"/>
+    <variable units="millivolt" name="alpha2_Eslope" initial_value="1.013E1"/>
+    <variable units="first_order_rate_constant" name="alpha3_0" initial_value="5.826"/>
+    <variable units="first_order_rate_constant" name="alpha3_infinity" initial_value="0.0"/>
+    <variable units="millivolt" name="alpha3_E50" initial_value="-1.235E2"/>
+    <variable units="millivolt" name="alpha3_Eslope" initial_value="1.036E1"/>
+    <variable units="first_order_rate_constant" name="beta1_0" initial_value="9.584E-3"/>
+    <variable units="first_order_rate_constant" name="beta1_infinity" initial_value="2.619E1"/>
+    <variable units="millivolt" name="beta1_E50" initial_value="-2.529E1"/>
+    <variable units="millivolt" name="beta1_Eslope" initial_value="6.206"/>
+    <variable units="first_order_rate_constant" name="beta3_0" initial_value="0.0"/>
+    <variable units="first_order_rate_constant" name="beta3_infinity" initial_value="1.507E1"/>
+    <variable units="millivolt" name="beta3_E50" initial_value="-7.443"/>
+    <variable units="millivolt" name="beta3_Eslope" initial_value="1.323E1"/>
+    
+    <variable units="millimolar" public_interface="in" name="Ko"/>
+    <variable units="millivolt" public_interface="in" name="E_Na"/>
+    <variable units="millivolt" public_interface="in" name="E_K"/>
+    <variable units="second" public_interface="in" name="time"/>
+    <variable units="millivolt" public_interface="in" name="Em"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="i_f_calculation">
+        <eq/>
+        <ci> i_f </ci>
+        <apply>
+          <plus/>
+          <ci> i_fNa </ci>
+          <ci> i_fK </ci>
+        </apply>
+      </apply>
+      
+      <apply id="i_fNa_calculation">
+        <eq/>
+        <ci> i_fNa </ci>
+        <apply>
+          <times/>
+          <ci> A_f </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <power/>
+              <ci> Ko </ci>
+              <cn cellml:units="dimensionless"> 1.83 </cn>
+            </apply>
+            <apply>
+              <plus/>
+              <apply>
+                <power/>
+                <ci> Ko </ci>
+                <cn cellml:units="dimensionless"> 1.83 </cn>
+              </apply>
+              <apply>
+                <power/>
+                <ci> Km_f </ci>
+                <cn cellml:units="dimensionless"> 1.83 </cn>
+              </apply>
+            </apply>
+          </apply>
+          <ci> g_f_Na </ci>
+          <apply>
+            <minus/>
+            <ci> Em </ci>
+            <ci> E_Na </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="i_fK_calculation">
+        <eq/>
+        <ci> i_fK </ci>
+        <apply>
+          <times/>
+          <ci> A_f </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <power/>
+              <ci> Ko </ci>
+              <cn cellml:units="dimensionless"> 1.83 </cn>
+            </apply>
+            <apply>
+              <plus/>
+              <apply>
+                <power/>
+                <ci> Ko </ci>
+                <cn cellml:units="dimensionless"> 1.83 </cn>
+              </apply>
+              <apply>
+                <power/>
+                <ci> Km_f </ci>
+                <cn cellml:units="dimensionless"> 1.83 </cn>
+              </apply>
+            </apply>
+          </apply>
+          <ci> P_f_K </ci>
+          <ci> g_f_K </ci>
+          <apply>
+            <minus/>
+            <ci> Em </ci>
+            <ci> E_K </ci>
+          </apply>
+        </apply>
+      </apply>
+     
+      <apply id="dA_f_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A_f </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> alpha1 </ci>
+            <ci> I2 </ci>
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <ci> beta1 </ci>
+              <ci> alpha2 </ci>
+            </apply>
+            <ci> A_f </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="hyperpolarisation_activated_current_dI1_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> I1 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> alpha2 </ci>
+              <ci> A_f </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> beta3 </ci>
+              <ci> I2 </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> alpha3 </ci>
+            <ci> I1 </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="hyperpolarisation_activated_current_dI2_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> I2 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> alpha3 </ci>
+              <ci> I1 </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> beta1 </ci>
+              <ci> A_f </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <ci> beta3 </ci>
+              <ci> alpha1 </ci>
+            </apply>
+            <ci> I2 </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="hyperpolarisation_activated_current_alpha1_calculation">
+        <eq/>
+        <ci> alpha1 </ci>
+        <apply>
+          <plus/>
+          <ci> alpha1_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> alpha1_0 </ci>
+              <ci> alpha1_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> alpha1_E50 </ci>
+                  </apply> 
+                  <ci> alpha1_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="hyperpolarisation_activated_current_beta1_calculation">
+        <eq/>
+        <ci> beta1 </ci>
+        <apply>
+          <plus/>
+          <ci> beta1_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> beta1_0 </ci>
+              <ci> beta1_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> beta1_E50 </ci>
+                  </apply> 
+                  <ci> beta1_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="hyperpolarisation_activated_current_alpha2_calculation">
+        <eq/>
+        <ci> alpha2 </ci>
+        <apply>
+          <plus/>
+          <ci> alpha2_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> alpha2_0 </ci>
+              <ci> alpha2_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> alpha2_E50 </ci>
+                  </apply> 
+                  <ci> alpha2_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="hyperpolarisation_activated_current_alpha3_calculation">
+        <eq/>
+        <ci> alpha3 </ci>
+        <apply>
+          <plus/>
+          <ci> alpha3_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> alpha3_0 </ci>
+              <ci> alpha3_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> alpha3_E50 </ci>
+                  </apply> 
+                  <ci> alpha3_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="hyperpolarisation_activated_current_beta3_calculation">
+        <eq/>
+        <ci> beta3 </ci>
+        <apply>
+          <plus/>
+          <ci> beta3_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> beta3_0 </ci>
+              <ci> beta3_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> beta3_E50 </ci>
+                  </apply> 
+                  <ci> beta3_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="sodium_potassium_pump_current">
+    <variable units="picoA" public_interface="out" name="i_NaK"/>
+    
+    <variable units="millimolar" name="Km_K" initial_value="4.0E1"/>
+    <variable units="millimolar" name="Km_Na" initial_value="1.0"/>
+    <variable units="picoA" name="Ip_max" initial_value="2.463E2"/>
+    
+    <variable units="millimolar" public_interface="in" name="Nai"/>
+    <variable units="millimolar" public_interface="in" name="Ko"/>
+    <variable units="millivolt" public_interface="in" name="Em"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="i_NaK_calculation">
+        <eq/>
+        <ci> i_NaK </ci>
+        <apply>
+          <times/> 
+          <ci> Ip_max </ci>
+          <apply>
+            <divide/>
+            <ci> Nai </ci>
+            <apply>
+              <plus/>
+              <ci> Nai </ci>
+              <ci> Km_Na </ci>
+            </apply>
+          </apply>
+          <apply>
+            <divide/>
+            <ci> Ko </ci>
+            <apply>
+              <plus/>
+              <ci> Ko </ci>
+              <ci> Km_K </ci>
+            </apply>
+          </apply>
+          <apply>
+            <minus/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <power/>
+              <apply>
+                <divide/>
+                <apply>
+                  <minus/>
+                  <ci> Em </ci>
+                  <cn cellml:units="millivolt"> 40.0 </cn>
+                </apply>
+                <cn cellml:units="millivolt"> 211.0 </cn>
+              </apply>
+              <cn cellml:units="dimensionless"> 2.0 </cn>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="transient_outward_current">
+    <variable units="picoA" public_interface="out" name="i_to"/>
+    
+    <variable units="nanoS" name="g_to" initial_value="2.818E-1"/>
+    <variable units="dimensionless" name="A_to" initial_value="1.220E-2"/>
+    <variable units="dimensionless" name="I1" initial_value="6.310E-1"/>
+    <variable units="dimensionless" name="I2" initial_value="2.697E-2"/>
+    <variable units="dimensionless" name="I3"/>
+    <variable units="first_order_rate_constant" name="alpha1"/>
+    <variable units="first_order_rate_constant" name="alpha2"/>
+    <variable units="first_order_rate_constant" name="alpha3"/>
+    <variable units="first_order_rate_constant" name="alpha4"/>
+    <variable units="first_order_rate_constant" name="beta1"/>
+    <variable units="first_order_rate_constant" name="beta4"/>
+    <variable units="first_order_rate_constant" name="alpha1_0" initial_value="3.723"/>
+    <variable units="first_order_rate_constant" name="alpha1_infinity" initial_value="3.244E2"/>
+    <variable units="millivolt" name="alpha1_E50" initial_value="2.695E1"/>
+    <variable units="millivolt" name="alpha1_Eslope" initial_value="1.808E1"/>
+    <variable units="first_order_rate_constant" name="alpha2_0" initial_value="3.713E2"/>
+    <variable units="first_order_rate_constant" name="alpha2_infinity" initial_value="1.288E2"/>
+    <variable units="millivolt" name="alpha2_E50" initial_value="-9.952E1"/>
+    <variable units="millivolt" name="alpha2_Eslope" initial_value="1.706E1"/>
+    <variable units="first_order_rate_constant" name="alpha3_0" initial_value="4.309"/>
+    <variable units="first_order_rate_constant" name="alpha3_infinity" initial_value="3.371E1"/>
+    <variable units="millivolt" name="alpha3_E50" initial_value="1.886E1"/>
+    <variable units="millivolt" name="alpha3_Eslope" initial_value="1.485E1"/>
+    <variable units="first_order_rate_constant" name="alpha4_0" initial_value="1.167E2"/>
+    <variable units="first_order_rate_constant" name="alpha4_infinity" initial_value="1.997E2"/>
+    <variable units="millivolt" name="alpha4_E50" initial_value="-8.894E1"/>
+    <variable units="millivolt" name="alpha4_Eslope" initial_value="8.432E1"/>
+    <variable units="first_order_rate_constant" name="beta1_0" initial_value="2.729E-2"/>
+    <variable units="first_order_rate_constant" name="beta1_infinity" initial_value="1.451E2"/>
+    <variable units="millivolt" name="beta1_E50" initial_value="-1.075E1"/>
+    <variable units="millivolt" name="beta1_Eslope" initial_value="5.012"/>
+    <variable units="first_order_rate_constant" name="beta4_0" initial_value="2.805E-1"/>
+    <variable units="first_order_rate_constant" name="beta4_infinity" initial_value="7.776"/>
+    <variable units="millivolt" name="beta4_E50" initial_value="-1.176E2"/>
+    <variable units="millivolt" name="beta4_Eslope" initial_value="1.032E2"/>
+    
+    <variable units="millivolt" public_interface="in" name="E_K"/>
+    <variable units="second" public_interface="in" name="time"/>
+    <variable units="millivolt" public_interface="in" name="Em"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="i_to_calculation">
+        <eq/>
+        <ci> i_to </ci>
+        <apply>
+          <times/>
+          <ci> g_to </ci>
+          <ci> A_to </ci>
+          <apply>
+            <minus/>
+            <ci> Em </ci>
+            <ci> E_K </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="dA_to_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> A_to </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> alpha1 </ci>
+            <ci> I3 </ci>
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <ci> beta1 </ci>
+              <ci> alpha2 </ci>
+            </apply>
+            <ci> A_to </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="transient_outward_current_dI1_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> I1 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> alpha2 </ci>
+            <ci> A_to </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> alpha3 </ci>
+            <ci> I1 </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="transient_outward_current_dI2_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> I2 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> alpha3 </ci>
+              <ci> I1 </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> beta4 </ci>
+              <ci> I3 </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> alpha4 </ci>
+            <ci> I2 </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="transient_outward_current_dI3_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> I3 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> beta1 </ci>
+              <ci> A_to </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> alpha4 </ci>
+              <ci> I2 </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <ci> alpha1 </ci>
+              <ci> beta4 </ci>
+            </apply>
+            <ci> I3 </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="transient_outward_current_alpha1_calculation">
+        <eq/>
+        <ci> alpha1 </ci>
+        <apply>
+          <plus/>
+          <ci> alpha1_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> alpha1_0 </ci>
+              <ci> alpha1_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> alpha1_E50 </ci>
+                  </apply> 
+                  <ci> alpha1_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="transient_outward_current_beta1_calculation">
+        <eq/>
+        <ci> beta1 </ci>
+        <apply>
+          <plus/>
+          <ci> beta1_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> beta1_0 </ci>
+              <ci> beta1_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> beta1_E50 </ci>
+                  </apply> 
+                  <ci> beta1_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="transient_outward_current_alpha2_calculation">
+        <eq/>
+        <ci> alpha2 </ci>
+        <apply>
+          <plus/>
+          <ci> alpha2_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> alpha2_0 </ci>
+              <ci> alpha2_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> alpha2_E50 </ci>
+                  </apply> 
+                  <ci> alpha2_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="transient_outward_current_alpha3_calculation">
+        <eq/>
+        <ci> alpha3 </ci>
+        <apply>
+          <plus/>
+          <ci> alpha3_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> alpha3_0 </ci>
+              <ci> alpha3_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> alpha3_E50 </ci>
+                  </apply> 
+                  <ci> alpha3_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="transient_outward_current_alpha4_calculation">
+        <eq/>
+        <ci> alpha4 </ci>
+        <apply>
+          <plus/>
+          <ci> alpha4_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> alpha4_0 </ci>
+              <ci> alpha4_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> alpha4_E50 </ci>
+                  </apply> 
+                  <ci> alpha4_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="transient_outward_current_beta4_calculation">
+        <eq/>
+        <ci> beta4 </ci>
+        <apply>
+          <plus/>
+          <ci> beta4_infinity </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> beta4_0 </ci>
+              <ci> beta4_infinity </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> Em </ci>
+                    <ci> beta4_E50 </ci>
+                  </apply> 
+                  <ci> beta4_Eslope </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="background_currents">
+    <variable units="picoA" public_interface="out" name="i_bNa"/>
+    <variable units="picoA" public_interface="out" name="i_bCl"/>
+    <variable units="picoA" public_interface="out" name="i_bK"/>
+
+    <variable units="nanoS" name="g_bCl" initial_value="8.691E-2"/>
+    <variable units="dimensionless" name="Kb_K"/>
+    
+    <variable units="millivolt" public_interface="in" name="E_Cl"/>
+    <variable units="nanoS" public_interface="in" name="g_Na"/>
+    <variable units="millivolt" public_interface="in" name="E_Na"/>
+    <variable units="millivolt" public_interface="in" name="Em"/>
+    <variable units="joule_per_mole_kelvin" public_interface="in" name="R"/>
+    <variable units="kelvin" public_interface="in" name="T"/>
+    <variable units="coulomb_per_mole" public_interface="in" name="F"/>
+    <variable units="millimolar" public_interface="in" name="Ki"/>
+    <variable units="millimolar" public_interface="in" name="Ko"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="i_bNa_calculation">
+        <eq/>
+        <ci> i_bNa </ci>
+        <apply>
+          <times/>
+          <ci> g_Na </ci>
+          <apply>
+            <minus/>
+            <ci> Em </ci>
+            <ci> E_Na </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="i_bK_calculation">
+        <eq/>
+        <ci> i_bK </ci>
+        <apply>
+          <times/>
+          <ci> Kb_K </ci>
+          <apply>
+            <power/>
+            <ci> Ko </ci>
+            <cn cellml:units="dimensionless"> 0.41 </cn>
+          </apply>
+          <apply>
+            <minus/>
+            <ci> Ki </ci>
+            <apply>
+              <times/>
+              <ci> Ko </ci>
+              <apply>
+                <exp/>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <divide/>
+                    <apply>
+                      <times/>
+                      <ci> Em </ci>
+                      <ci> F </ci>
+                    </apply>
+                    <apply>
+                      <times/>
+                      <ci> R </ci>
+                      <ci> T </ci>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="i_bCl_calculation">
+        <eq/>
+        <ci> i_bCl </ci>
+        <apply>
+          <times/>
+          <ci> g_bCl </ci>
+          <apply>
+            <minus/>
+            <ci> Em </ci>
+            <ci> E_Cl </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="calcium_dynamics">
+    <variable units="picoA" public_interface="out" name="i_Ca_up"/>
+    <variable units="picoA" public_interface="out" name="i_Ca_rel"/>
+    <variable units="picoA" public_interface="out" name="i_Ca_tr"/>
+      
+    <variable units="picoA" name="Iup_max" initial_value="2.120E1"/>
+    <variable units="millimolar" name="Km_Caup" initial_value="5.000E-4"/>
+    <variable units="millimolar" name="Km_Carel" initial_value="1.000E-3"/>
+    <variable units="second" name="tau_rel" initial_value="5.000E-3"/>
+    <variable units="second" name="tau_tr" initial_value="4.000E-1"/>
+    
+    <variable units="picol" public_interface="in" name="Vrel"/>
+    <variable units="second" public_interface="in" name="time"/>
+    <variable units="coulomb_per_mole" public_interface="in" name="F"/>
+    <variable units="millimolar" public_interface="in" name="Cai"/>
+    <variable units="millimolar" public_interface="in" name="Carel"/>
+    <variable units="millimolar" public_interface="in" name="Caup"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="i_Ca_up_calculation">
+        <eq/>
+        <ci> i_Ca_up </ci>
+        <apply>
+          <times/>
+          <ci> Iup_max </ci>
+          <apply>
+            <divide/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <power/>
+                <apply>
+                  <divide/>
+                  <ci> Km_Caup </ci>
+                  <ci> Cai </ci>
+                </apply>
+                <cn cellml:units="dimensionless"> 2.0 </cn>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="i_Ca_rel_calculation">
+        <eq/>
+        <ci> i_Ca_rel </ci>
+        <apply>
+          <times/>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <cn cellml:units="dimensionless"> 2.0 </cn>
+              <ci> F </ci>
+              <ci> Vrel </ci>
+            </apply>
+            <ci> tau_rel </ci>
+          </apply>
+          <ci> Carel </ci>
+          <apply>
+            <divide/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <power/>
+                <apply>
+                  <divide/>
+                  <ci> Km_Carel </ci>
+                  <ci> Cai </ci>
+                </apply>
+                <cn cellml:units="dimensionless"> 2.0 </cn>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="i_Ca_tr_calculation">
+        <eq/>
+        <ci> i_Ca_tr </ci>
+        <apply>
+          <times/>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <cn cellml:units="dimensionless"> 2.0 </cn>
+              <ci> F </ci>
+              <ci> Vrel </ci>
+            </apply>
+            <ci> tau_tr </ci>
+          </apply>
+          <ci> Caup </ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="ion_concentrations">
+    <variable units="millimolar" public_interface="out" name="Cai" initial_value="1.275E-4"/>
+    <variable units="millimolar" public_interface="out" name="Cao" initial_value="2.0"/>
+    <variable units="millimolar" public_interface="out" name="Caup" initial_value="1.035"/>
+    <variable units="millimolar" public_interface="out" name="Carel" initial_value="2.448E-1"/>
+    <variable units="millimolar" public_interface="out" name="Nai" initial_value="8.004"/>
+    <variable units="millimolar" public_interface="out" name="Nao" initial_value="1.400E2"/>
+    <variable units="millimolar" public_interface="out" name="Ki" initial_value="1.499E2"/>
+    <variable units="millimolar" public_interface="out" name="Ko" initial_value="5.389"/>
+    <variable units="millimolar" public_interface="out" name="Cli" initial_value="2.607E1"/>
+    <variable units="millimolar" public_interface="out" name="Clo" initial_value="1.400E2"/>
+    <variable units="picol" public_interface="out" name="Vrel" initial_value="1.5E-2"/>
+    
+    <variable units="second" name="tau_b" initial_value="1.0E-1"/>
+    <variable units="millimolar" name="Cab" initial_value="2.0"/>
+    <variable units="millimolar" name="Clb" initial_value="1.4E2"/>
+    <variable units="millimolar" name="Kb" initial_value="5.4"/>
+    <variable units="millimolar" name="Nab" initial_value="1.4E2"/>
+    <variable units="picol" name="Vi" initial_value="2.5"/>
+    <variable units="picol" name="Vup" initial_value="3.5E-2"/>
+    <variable units="picol" name="Ve" initial_value="5.0E-1"/>
+     
+    <variable units="second" public_interface="in" name="time"/>
+    <variable units="coulomb_per_mole" public_interface="in" name="F"/>
+    <variable units="picoA" public_interface="in" name="i_bNa"/>
+    <variable units="picoA" public_interface="in" name="i_bK"/>
+    <variable units="picoA" public_interface="in" name="i_fNa"/>
+    <variable units="picoA" public_interface="in" name="i_fK"/>
+    <variable units="picoA" public_interface="in" name="i_bCl"/>
+    <variable units="picoA" public_interface="in" name="i_CaL"/>
+    <variable units="picoA" public_interface="in" name="i_CaT"/>
+    <variable units="picoA" public_interface="in" name="i_NaCa"/>
+    <variable units="picoA" public_interface="in" name="i_Ca_rel"/>
+    <variable units="picoA" public_interface="in" name="i_Ca_tr"/>
+    <variable units="picoA" public_interface="in" name="i_Ca_up"/>
+    <variable units="picoA" public_interface="in" name="i_NaK"/>
+    <variable units="picoA" public_interface="in" name="i_Na"/>
+    <variable units="picoA" public_interface="in" name="i_Kr_Na"/>
+    <variable units="picoA" public_interface="in" name="i_Ks_Na"/>
+    <variable units="picoA" public_interface="in" name="i_Kr_K"/>
+    <variable units="picoA" public_interface="in" name="i_Ks_K"/>
+    <variable units="picoA" public_interface="in" name="i_to"/>
+     
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="dCai_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> Cai </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <apply>
+                <plus/>
+                <ci> i_CaL </ci>
+                <ci> i_CaT </ci>
+                <ci> i_Ca_up </ci>
+              </apply>
+              <apply>
+                <plus/>
+                <apply>
+                  <times/>
+                  <cn cellml:units="dimensionless"> 2.0 </cn>
+                  <ci> i_NaCa </ci>
+                </apply>
+                <ci> i_Ca_rel </ci>
+              </apply>
+            </apply>
+            <apply>
+              <times/>
+              <cn cellml:units="dimensionless"> 2.0 </cn>
+              <ci> F </ci>
+              <ci> Vi </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="dCaup_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> Caup </ci>
+        </apply>
+        <apply>
+          <divide/>
+          <apply>
+            <minus/>
+            <ci> i_Ca_up </ci>
+            <ci> i_Ca_tr </ci>
+          </apply>
+          <apply>
+            <times/>
+            <cn cellml:units="dimensionless"> 2.0 </cn>
+            <ci> F </ci>
+            <ci> Vup </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="dCarel_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> Carel </ci>
+        </apply>
+        <apply>
+          <divide/>
+          <apply>
+            <minus/>
+            <ci> i_Ca_tr </ci>
+            <ci> i_Ca_rel </ci>
+          </apply>
+          <apply>
+            <times/>
+            <cn cellml:units="dimensionless"> 2.0 </cn>
+            <ci> F </ci>
+            <ci> Vrel </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="dCao_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> Cao </ci>
+        </apply>
+        <apply>
+          <plus/>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <apply>
+                <plus/>
+                <ci> i_CaL </ci>
+                <ci> i_CaT </ci>
+              </apply>
+              <apply>
+                <times/>
+                <cn cellml:units="dimensionless"> 2.0 </cn>
+                <ci> i_NaCa </ci>
+              </apply>
+            </apply>
+            <apply>
+              <times/>
+              <cn cellml:units="dimensionless"> 2.0 </cn>
+              <ci> F </ci>
+              <ci> Ve </ci>
+            </apply>
+          </apply>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> Cab </ci>
+              <ci> Cao </ci>
+            </apply>
+            <ci> tau_b </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="dNai_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> Nai </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <divide/>
+            <apply>
+              <plus/>
+              <ci> i_Kr_Na </ci>
+              <ci> i_Ks_Na </ci>
+              <ci> i_Na </ci>
+              <apply>
+                <times/>
+                <cn cellml:units="dimensionless"> 3.0 </cn>
+                <ci> i_NaCa </ci>
+              </apply>
+              <ci> i_bNa </ci>
+              <ci> i_fNa </ci>
+              <apply>
+                <times/>
+                <cn cellml:units="dimensionless"> 3.0 </cn>
+                <ci> i_NaK </ci>
+              </apply>
+            </apply>
+            <apply>
+              <times/>
+              <ci> F </ci>
+              <ci> Vi </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="dNao_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> Nao </ci>
+        </apply>
+        <apply>
+          <plus/>
+          <apply>
+            <divide/>
+            <apply>
+              <plus/>
+              <ci> i_Kr_Na </ci>
+              <ci> i_Ks_Na </ci>
+              <ci> i_Na </ci>
+              <apply>
+                <times/>
+                <cn cellml:units="dimensionless"> 3.0 </cn>
+                <ci> i_NaCa </ci>
+              </apply>
+              <ci> i_bNa </ci>
+              <ci> i_fNa </ci>
+              <apply>
+                <times/>
+                <cn cellml:units="dimensionless"> 3.0 </cn>
+                <ci> i_NaK </ci>
+              </apply>
+            </apply>
+            <apply>
+              <times/>
+              <ci> F </ci>
+              <ci> Ve </ci>
+            </apply>
+          </apply>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> Nab </ci>
+              <ci> Nao </ci>
+            </apply>
+            <ci> tau_b </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="dKi_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> Ki </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <apply>
+                <plus/>
+                <ci> i_Kr_K </ci>
+                <ci> i_Ks_K </ci>
+                <ci> i_bK </ci>
+                <ci> i_fK </ci>
+                <ci> i_to </ci>
+              </apply>
+              <apply>
+                <times/>
+                <cn cellml:units="dimensionless"> 2.0 </cn>
+                <ci> i_NaK </ci>
+              </apply>
+            </apply>
+            <apply>
+              <times/>
+              <ci> F </ci>
+              <ci> Vi </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="dKo_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> Ko </ci>
+        </apply>
+        <apply>
+          <plus/>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <apply>
+                <plus/>
+                <ci> i_Kr_K </ci>
+                <ci> i_Ks_K </ci>
+                <ci> i_bK </ci>
+                <ci> i_fK </ci>
+                <ci> i_to </ci>
+              </apply>
+              <apply>
+                <times/>
+                <cn cellml:units="dimensionless"> 2.0 </cn>
+                <ci> i_NaK </ci>
+              </apply>
+            </apply>
+            <apply>
+              <times/>
+              <ci> F </ci>
+              <ci> Ve </ci>
+            </apply>
+          </apply>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> Kb </ci>
+              <ci> Ko </ci>
+            </apply>
+            <ci> tau_b </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="dCli_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> Cli </ci>
+        </apply>
+        <apply>
+          <divide/>
+          <ci> i_bCl </ci>
+          <apply>
+            <times/>
+            <ci> F </ci>
+            <ci> Vi </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="dClo_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> Clo </ci>
+        </apply>
+        <apply>
+          <plus/>
+          <apply>
+            <divide/>
+            <ci> i_bCl </ci>
+            <apply>
+              <times/>
+              <ci> F </ci>
+              <ci> Ve </ci>
+            </apply>
+          </apply>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> Clb </ci>
+              <ci> Clo </ci>
+            </apply>
+            <ci> tau_b </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <group>
+    <relationship_ref relationship="containment"/>
+    <component_ref component="membrane">
+      <component_ref component="L_type_calcium_current"/>
+      <component_ref component="T_type_calcium_current"/>
+      <component_ref component="hyperpolarisation_activated_current"/>
+      <component_ref component="rapid_delayed_rectifying_potassium_current"/>
+      <component_ref component="slow_delayed_rectifying_potassium_current"/>
+      <component_ref component="TTX_sensitive_sodium_current"/>
+      <component_ref component="transient_outward_current"/>
+      <component_ref component="background_currents"/>
+      <component_ref component="sodium_potassium_pump_current"/>
+      <component_ref component="sodium_calcium_exchange_current"/>
+      <component_ref component="calcium_dynamics"/>
+      <component_ref component="ion_concentrations"/>
+    </component_ref>
+  </group>
+  
+  <connection>
+    <map_components component_2="environment" component_1="membrane"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="L_type_calcium_current"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="T_type_calcium_current"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="hyperpolarisation_activated_current"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="rapid_delayed_rectifying_potassium_current"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="slow_delayed_rectifying_potassium_current"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="TTX_sensitive_sodium_current"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="transient_outward_current"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="calcium_dynamics"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="ion_concentrations"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="L_type_calcium_current" component_1="membrane"/>
+    <map_variables variable_2="Em" variable_1="Em"/>
+    <map_variables variable_2="i_CaL" variable_1="i_CaL"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="T_type_calcium_current" component_1="membrane"/>
+    <map_variables variable_2="Em" variable_1="Em"/>
+    <map_variables variable_2="i_CaT" variable_1="i_CaT"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="hyperpolarisation_activated_current" component_1="membrane"/>
+    <map_variables variable_2="Em" variable_1="Em"/>
+    <map_variables variable_2="i_f" variable_1="i_f"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="rapid_delayed_rectifying_potassium_current" component_1="membrane"/>
+    <map_variables variable_2="Em" variable_1="Em"/>
+    <map_variables variable_2="i_Kr" variable_1="i_Kr"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="slow_delayed_rectifying_potassium_current" component_1="membrane"/>
+    <map_variables variable_2="Em" variable_1="Em"/>
+    <map_variables variable_2="i_Ks" variable_1="i_Ks"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="TTX_sensitive_sodium_current" component_1="membrane"/>
+    <map_variables variable_2="Em" variable_1="Em"/>
+    <map_variables variable_2="i_Na" variable_1="i_Na"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="transient_outward_current" component_1="membrane"/>
+    <map_variables variable_2="Em" variable_1="Em"/>
+    <map_variables variable_2="i_to" variable_1="i_to"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="background_currents" component_1="membrane"/>
+    <map_variables variable_2="Em" variable_1="Em"/>
+    <map_variables variable_2="i_bNa" variable_1="i_bNa"/>
+    <map_variables variable_2="i_bK" variable_1="i_bK"/>
+    <map_variables variable_2="i_bCl" variable_1="i_bCl"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="sodium_calcium_exchange_current" component_1="membrane"/>
+    <map_variables variable_2="Em" variable_1="Em"/>
+    <map_variables variable_2="i_NaCa" variable_1="i_NaCa"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="sodium_potassium_pump_current" component_1="membrane"/>
+    <map_variables variable_2="Em" variable_1="Em"/>
+    <map_variables variable_2="i_NaK" variable_1="i_NaK"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="L_type_calcium_current" component_1="reversal_potentials"/>
+    <map_variables variable_2="E_Ca_rev" variable_1="E_Ca_rev"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="T_type_calcium_current" component_1="reversal_potentials"/>
+    <map_variables variable_2="E_Ca_rev" variable_1="E_Ca_rev"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="TTX_sensitive_sodium_current" component_1="reversal_potentials"/>
+    <map_variables variable_2="E_Na" variable_1="E_Na"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="rapid_delayed_rectifying_potassium_current" component_1="reversal_potentials"/>
+    <map_variables variable_2="E_Na" variable_1="E_Na"/>
+    <map_variables variable_2="E_K" variable_1="E_K"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="slow_delayed_rectifying_potassium_current" component_1="reversal_potentials"/>
+    <map_variables variable_2="E_Na" variable_1="E_Na"/>
+    <map_variables variable_2="E_K" variable_1="E_K"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="sodium_calcium_exchange_current" component_1="reversal_potentials"/>
+    <map_variables variable_2="R" variable_1="R"/>
+    <map_variables variable_2="F" variable_1="F"/>
+    <map_variables variable_2="T" variable_1="T"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="hyperpolarisation_activated_current" component_1="reversal_potentials"/>
+    <map_variables variable_2="E_Na" variable_1="E_Na"/>
+    <map_variables variable_2="E_K" variable_1="E_K"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="transient_outward_current" component_1="reversal_potentials"/>
+    <map_variables variable_2="E_K" variable_1="E_K"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="background_currents" component_1="reversal_potentials"/>
+    <map_variables variable_2="R" variable_1="R"/>
+    <map_variables variable_2="F" variable_1="F"/>
+    <map_variables variable_2="T" variable_1="T"/>
+    <map_variables variable_2="E_Na" variable_1="E_Na"/>
+    <map_variables variable_2="E_Cl" variable_1="E_Cl"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="calcium_dynamics" component_1="reversal_potentials"/>
+    <map_variables variable_2="F" variable_1="F"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="ion_concentrations" component_1="reversal_potentials"/>
+    <map_variables variable_2="F" variable_1="F"/>
+    <map_variables variable_2="Nai" variable_1="Nai"/>
+    <map_variables variable_2="Nao" variable_1="Nao"/>
+    <map_variables variable_2="Ki" variable_1="Ki"/>
+    <map_variables variable_2="Ko" variable_1="Ko"/>
+    <map_variables variable_2="Cli" variable_1="Cli"/>
+    <map_variables variable_2="Clo" variable_1="Clo"/>
+    <map_variables variable_2="Cai" variable_1="Cai"/>
+    <map_variables variable_2="Cao" variable_1="Cao"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="L_type_calcium_current" component_1="ion_concentrations"/>
+    <map_variables variable_2="Cai" variable_1="Cai"/>
+    <map_variables variable_2="i_CaL" variable_1="i_CaL"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="T_type_calcium_current" component_1="ion_concentrations"/>
+    <map_variables variable_2="i_CaT" variable_1="i_CaT"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="rapid_delayed_rectifying_potassium_current" component_1="ion_concentrations"/>
+    <map_variables variable_2="i_Kr_Na" variable_1="i_Kr_Na"/>
+    <map_variables variable_2="i_Kr_K" variable_1="i_Kr_K"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="slow_delayed_rectifying_potassium_current" component_1="ion_concentrations"/>
+    <map_variables variable_2="i_Ks_Na" variable_1="i_Ks_Na"/>
+    <map_variables variable_2="i_Ks_K" variable_1="i_Ks_K"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="TTX_sensitive_sodium_current" component_1="ion_concentrations"/>
+    <map_variables variable_2="i_Na" variable_1="i_Na"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="sodium_calcium_exchange_current" component_1="ion_concentrations"/>
+    <map_variables variable_2="i_NaCa" variable_1="i_NaCa"/>
+    <map_variables variable_2="Cai" variable_1="Cai"/>
+    <map_variables variable_2="Nai" variable_1="Nai"/>
+    <map_variables variable_2="Cao" variable_1="Cao"/>
+    <map_variables variable_2="Nao" variable_1="Nao"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="hyperpolarisation_activated_current" component_1="ion_concentrations"/>
+    <map_variables variable_2="i_fNa" variable_1="i_fNa"/>
+    <map_variables variable_2="i_fK" variable_1="i_fK"/>
+    <map_variables variable_2="Ko" variable_1="Ko"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="sodium_potassium_pump_current" component_1="ion_concentrations"/>
+    <map_variables variable_2="i_NaK" variable_1="i_NaK"/>
+    <map_variables variable_2="Ko" variable_1="Ko"/>
+    <map_variables variable_2="Nai" variable_1="Nai"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="transient_outward_current" component_1="ion_concentrations"/>
+    <map_variables variable_2="i_to" variable_1="i_to"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="background_currents" component_1="ion_concentrations"/>
+    <map_variables variable_2="i_bNa" variable_1="i_bNa"/>
+    <map_variables variable_2="i_bK" variable_1="i_bK"/>
+    <map_variables variable_2="i_bCl" variable_1="i_bCl"/>
+    <map_variables variable_2="Ko" variable_1="Ko"/>
+    <map_variables variable_2="Ki" variable_1="Ki"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="calcium_dynamics" component_1="ion_concentrations"/>
+    <map_variables variable_2="Caup" variable_1="Caup"/>
+    <map_variables variable_2="Carel" variable_1="Carel"/>
+    <map_variables variable_2="Cai" variable_1="Cai"/>
+    <map_variables variable_2="i_Ca_up" variable_1="i_Ca_up"/>
+    <map_variables variable_2="i_Ca_rel" variable_1="i_Ca_rel"/>
+    <map_variables variable_2="i_Ca_tr" variable_1="i_Ca_tr"/>
+    <map_variables variable_2="Vrel" variable_1="Vrel"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="background_currents" component_1="TTX_sensitive_sodium_current"/>
+    <map_variables variable_2="g_Na" variable_1="g_Na"/>
+  </connection>
+  
+
+
+<rdf:RDF>
+  <rdf:Bag rdf:about="rdf:#b7889bf4-97b3-4904-8498-e1e28c151771">
+    <rdf:li>pacemaker</rdf:li>
+    <rdf:li>Sinoatrial Node</rdf:li>
+    <rdf:li>cardiac myocyte</rdf:li>
+    <rdf:li>electrophysiology</rdf:li>
+    <rdf:li>Pacemaker</rdf:li>
+    <rdf:li>cardiac</rdf:li>
+    <rdf:li>sinoatrial node</rdf:li>
+  </rdf:Bag>
+  <rdf:Seq rdf:about="rdf:#33e38b6d-63ab-4bf9-9cee-90fa89f0c66c">
+    <rdf:li rdf:resource="rdf:#1f119d5a-91ee-43ec-8caf-0e652e23a9a8"/>
+    <rdf:li rdf:resource="rdf:#b48450ac-26cf-40c1-b921-34d02e723856"/>
+    <rdf:li rdf:resource="rdf:#cee5dbb4-f5f8-4cae-94df-ee0e1942f919"/>
+    <rdf:li rdf:resource="rdf:#e5b51555-ca1a-48c1-89c4-758fdc774bca"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#302d3c03-443b-4113-88a2-55f31b764fe7">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:publisher>The University of Auckland, Bioengineering Institute</dc:publisher>
+    <cmeta:comment rdf:resource="rdf:#247e994d-543f-4739-9313-e2d9ad7fb967"/>
+    <dcterms:created rdf:resource="rdf:#6027f66c-b223-4820-b2fb-3879a6e12d32"/>
+    <dc:creator rdf:resource="rdf:#138dcb67-e4ef-447d-9156-5406cd9df631"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3562d020-aa8f-41bc-a500-24379bf30b37">
+    <vCard:Given>Branko</vCard:Given>
+    <vCard:Family>Celler</vCard:Family>
+    <vCard:Other>G</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1f119d5a-91ee-43ec-8caf-0e652e23a9a8">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#868a13d8-0931-4d9a-bbc4-b37220ef55c3"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#138dcb67-e4ef-447d-9156-5406cd9df631">
+    <vCard:ORG rdf:resource="rdf:#7bee96b9-edbe-4e11-a72b-5cdbfdd09290"/>
+    <vCard:EMAIL rdf:resource="rdf:#302d3c03-443b-4113-88a2-55f31b764fe7"/>
+    <vCard:N rdf:resource="rdf:#bb22753c-e51e-48f4-9e96-0a05e10157a3"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7bcd8247-b052-484c-a586-369791c98be9">
+    <vCard:Given>Socrates</vCard:Given>
+    <vCard:Family>Dokos</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e5b51555-ca1a-48c1-89c4-758fdc774bca">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#7bcd8247-b052-484c-a586-369791c98be9"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7bee96b9-edbe-4e11-a72b-5cdbfdd09290">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>The Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7d636fc7-bfe4-4e3a-b0e5-11085b74ad0b">
+    <dcterms:W3CDTF>2004</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#bb22753c-e51e-48f4-9e96-0a05e10157a3">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ea0ee425-5717-4f3f-83f3-1d29508c913a">
+    <vCard:Given>Shaun</vCard:Given>
+    <vCard:Family>Cloherty</vCard:Family>
+    <vCard:Other>L</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#cee5dbb4-f5f8-4cae-94df-ee0e1942f919">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#3562d020-aa8f-41bc-a500-24379bf30b37"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#6027f66c-b223-4820-b2fb-3879a6e12d32">
+    <dcterms:W3CDTF>2003-10-07T00:00:00+00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0efd35b6-01ce-4276-a974-2f526cd8b8d7">
+    <dc:title>Progress in Biophysics and Molecular Biology</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#247e994d-543f-4739-9313-e2d9ad7fb967">
+    <dc:creator rdf:resource="rdf:#250528b4-635b-458e-b190-7b3f58376db4"/>
+    <rdf:value/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#868a13d8-0931-4d9a-bbc4-b37220ef55c3">
+    <vCard:Given>Nigel</vCard:Given>
+    <vCard:Family>Lovell</vCard:Family>
+    <vCard:Other>H</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3a10b8d5-a38f-4d5e-ba17-d10c5adc2d21">
+    <dc:creator rdf:resource="rdf:#a108a169-6b84-42b9-b65f-62d0fa869600"/>
+    <rdf:value>This is the CellML description of Lovell et al.'s 2004 mathematical model of cardiac pacemaker myocytes.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#72a1addc-feb1-4679-a0a0-efebd471403a">
+    <dc:creator rdf:resource="rdf:#33e38b6d-63ab-4bf9-9cee-90fa89f0c66c"/>
+    <dc:title>A gradient model of cardiac pacemaker myocytes</dc:title>
+    <bqs:volume>85</bqs:volume>
+    <bqs:first_page/>
+    <bqs:Journal rdf:resource="rdf:#0efd35b6-01ce-4276-a974-2f526cd8b8d7"/>
+    <dcterms:issued rdf:resource="rdf:#7d636fc7-bfe4-4e3a-b0e5-11085b74ad0b"/>
+    <bqs:last_page/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b48450ac-26cf-40c1-b921-34d02e723856">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#ea0ee425-5717-4f3f-83f3-1d29508c913a"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#01a57123-01e6-4de8-9896-800405557f27">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value rdf:resource="rdf:#b7889bf4-97b3-4904-8498-e1e28c151771"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a108a169-6b84-42b9-b65f-62d0fa869600">
+    <vCard:FN>Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="#lovell_cloherty_celler_dokos_2004_version01">
+    <dc:title>
+        Lovell et al.'s 2004 mathematical model of cardiac pacemaker myocytes.
+      </dc:title>
+    <cmeta:bio_entity>Sinoatrial Node</cmeta:bio_entity>
+    <cmeta:comment rdf:resource="rdf:#3a10b8d5-a38f-4d5e-ba17-d10c5adc2d21"/>
+    <bqs:reference rdf:resource="rdf:#bb04e4d6-8157-49f2-8d01-003571c50d67"/>
+    <bqs:reference rdf:resource="rdf:#c84b8477-e8de-48b8-a054-8cfa2dba63b9"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#c84b8477-e8de-48b8-a054-8cfa2dba63b9">
+    <bqs:Pubmed_id/>
+    <bqs:JournalArticle rdf:resource="rdf:#72a1addc-feb1-4679-a0a0-efebd471403a"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#250528b4-635b-458e-b190-7b3f58376db4">
+    <vCard:FN/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#bb04e4d6-8157-49f2-8d01-003571c50d67">
+    <dc:subject rdf:resource="rdf:#01a57123-01e6-4de8-9896-800405557f27"/>
+  </rdf:Description>
+</rdf:RDF>
+</model>

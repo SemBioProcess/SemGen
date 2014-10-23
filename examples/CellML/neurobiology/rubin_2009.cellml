@@ -1,0 +1,1821 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="rubin_2009" name="rubin_2009">
+
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>Multiple rhythmic states in a model of the respiratory central pattern generator</title>
+				<author>
+					<firstname>Catherine</firstname>
+					<surname>Lloyd</surname>
+					<affiliation>
+						<shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<section id="sec_status">
+				<title>Model Status</title>
+				<para>
+            This CellML model runs in both OpenCell and COR however it is not yet recreating the published results. The units have been checked and they are consistent.
+          </para>
+			</section>
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>
+Abstract: The three-phase respiratory pattern observed during normal breathing changes with alterations in metabolic or physiological conditions. A recent study using in situ perfused rat brain preparations demonstrated a reorganization of the respiratory pattern with sequential reduction of the brain stem respiratory network. Specifically, with removal of the pons, the normal three-phase pattern transformed to a two-phase inspiratory-expiratory pattern and, with more caudal transections, to one-phase, intrinsically generated inspiratory oscillations. A minimal neural network proposed to reproduce these transformations includes 1) a ringlike mutually inhibitory network composed of the postinspiratory, augmenting expiratory, and early-inspiratory neurons and 2) an excitatory preinspiratory neuron, with persistent sodium current (I(NaP))-dependent intrinsic bursting properties, that dynamically participates in the expiratory-inspiratory phase transition and inspiratory phase generation. We used activity-based single-neuron models and applied numerical simulations, bifurcation methods, and fast-slow decomposition to describe the behavior of this network in the functional states corresponding to the three-, two-, and one-phase oscillatory regimes, as well as to analyze the transitions between states and between respiratory phases within each state. We demonstrate that, although I(NaP) is not necessary for the generation of three- and two-phase oscillations, it contributes to control of the oscillation period in each state. We also show that the transitions between states can be produced by progressive changes of drives to particular neurons and proceed through intermediate regimes, featuring high-amplitude late-expiratory and biphasic-expiratory activities or ectopic burst generation. Our results provide important insights for understanding the state-dependent mechanisms for respiratory rhythm generation and control.</para>
+
+<informalfigure float="0" id="fig_reaction_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>model diagram</title>
+    </objectinfo>
+    <imagedata fileref="rubin_2009.png"/>
+  </imageobject>
+</mediaobject>
+<caption>Schematic diagram of the 4-neuron core model of the brain stem respiratory network.</caption>
+</informalfigure>
+
+				<para>
+The original paper reference is cited below:
+</para>
+				<para>
+Multiple rhythmic states in a model of the respiratory central pattern generator, Rubin JE, Shevtsova NA, Ermentrout GB, Smith JC, Rybak IA, 2009, <emphasis>Journal of Neurophysiology</emphasis>, 101, 2146-1265. <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/19193773">PubMed ID: 19193773.</ulink>
+				</para>
+			
+			</sect1>
+		</article>
+	</documentation>   
+	
+	
+   <units name="millisecond">
+      <unit units="second" prefix="milli"/>
+   </units>
+   <units name="millivolt">
+      <unit units="volt" prefix="milli"/>
+   </units>
+   <units name="nanoA">
+      <unit units="ampere" prefix="nano"/>
+   </units>
+   <units name="nanoS">
+      <unit units="siemens" prefix="nano"/>
+   </units>
+   <units name="nanoF">
+      <unit units="farad" prefix="nano"/>
+   </units>
+   
+   <component name="environment">
+      <variable units="millisecond" public_interface="out" name="time"/>
+   </component>
+   
+   <component name="V1">
+      <variable units="millivolt" public_interface="out" name="V1" initial_value="-50.0"/>
+      
+	  <variable units="nanoF" public_interface="in" name="C"/>
+	  <variable units="nanoA" public_interface="in" name="i_NaP"/>
+      <variable units="nanoA" public_interface="in" name="i_K"/>
+      <variable units="nanoA" public_interface="in" name="i_L1"/>
+      <variable units="nanoA" public_interface="in" name="i_synE1"/>
+      <variable units="nanoA" public_interface="in" name="i_synI1"/>
+      <variable units="millisecond" public_interface="in" name="time"/>
+	  
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>V1</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <ci>i_NaP</ci>
+                     <ci>i_K</ci>
+                     <ci>i_L1</ci>
+                     <ci>i_synE1</ci>
+				 	 <ci>i_synI1</ci>
+                  </apply>
+               </apply>
+               <ci>C</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="V2">
+      <variable units="millivolt" public_interface="out" name="V2" initial_value="-50.0"/>
+      
+	  <variable units="nanoF" public_interface="in" name="C"/>
+	  <variable units="nanoA" public_interface="in" name="i_AD2"/>
+      <variable units="nanoA" public_interface="in" name="i_L2"/>
+      <variable units="nanoA" public_interface="in" name="i_synE2"/>
+      <variable units="nanoA" public_interface="in" name="i_synI2"/>
+      <variable units="millisecond" public_interface="in" name="time"/>
+	  
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>V2</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <ci>i_AD2</ci>
+                     <ci>i_L2</ci>
+                     <ci>i_synE2</ci>
+				 	 <ci>i_synI2</ci>
+                  </apply>
+               </apply>
+               <ci>C</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="V3">
+      <variable units="millivolt" public_interface="out" name="V3" initial_value="-50.0"/>
+      
+	  <variable units="nanoF" public_interface="in" name="C"/>
+	  <variable units="nanoA" public_interface="in" name="i_AD3"/>
+      <variable units="nanoA" public_interface="in" name="i_L3"/>
+      <variable units="nanoA" public_interface="in" name="i_synE3"/>
+      <variable units="nanoA" public_interface="in" name="i_synI3"/>
+      <variable units="millisecond" public_interface="in" name="time"/>
+	  
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>V3</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <ci>i_AD3</ci>
+                     <ci>i_L3</ci>
+                     <ci>i_synE3</ci>
+				 	 <ci>i_synI3</ci>
+                  </apply>
+               </apply>
+               <ci>C</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="V4">
+      <variable units="millivolt" public_interface="out" name="V4" initial_value="-50.0"/>
+      
+	  <variable units="nanoF" public_interface="in" name="C"/>
+	  <variable units="nanoA" public_interface="in" name="i_AD4"/>
+      <variable units="nanoA" public_interface="in" name="i_L4"/>
+      <variable units="nanoA" public_interface="in" name="i_synE4"/>
+      <variable units="nanoA" public_interface="in" name="i_synI4"/>
+      <variable units="millisecond" public_interface="in" name="time"/>
+	  
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>V4</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <ci>i_AD4</ci>
+                     <ci>i_L4</ci>
+                     <ci>i_synE4</ci>
+				 	 <ci>i_synI4</ci>
+                  </apply>
+               </apply>
+               <ci>C</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="i_NaP">
+      <variable units="nanoA" public_interface="out" name="i_NaP"/>
+      
+	  <variable units="nanoS"  public_interface="in" name="g_NaP"/>
+      <variable units="millivolt" public_interface="in" name="E_Na"/>
+      
+	  <variable units="millisecond" public_interface="in" private_interface="out" name="time"/>
+      <variable units="millivolt" public_interface="in" private_interface="out" name="V1"/>
+      
+	  <variable units="dimensionless" private_interface="in" name="m"/>
+      <variable units="dimensionless" private_interface="in" name="h"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>i_NaP</ci>
+            <apply>
+               <times/>
+               <ci>g_NaP</ci>
+               <ci>m</ci>
+               <ci>h</ci>
+               <apply>
+                  <divide/>
+                  <cn cellml:units="volt">1</cn>
+                  <cn cellml:units="millivolt">1000</cn>
+               </apply>
+               <apply>
+                  <minus/>
+                  <ci>V1</ci>
+                  <ci>E_Na</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="i_NaP_m_gate">
+      <variable units="dimensionless" public_interface="out" name="m"/>
+     
+	  <variable units="millivolt" public_interface="in" name="V1"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>m</ci>
+            <apply>
+               <divide/>
+               <cn cellml:units="dimensionless">1</cn>
+               <apply>
+                  <plus/>
+                  <cn cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <minus/>
+						   <apply>
+                              <plus/>
+                              <ci>V1</ci>
+                              <cn cellml:units="millivolt">40</cn>
+                           </apply>
+                        </apply>
+						<cn cellml:units="millivolt">6</cn>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="i_NaP_h_gate">
+      <variable units="dimensionless" public_interface="out" name="h" initial_value="0.92"/>
+      
+	  <variable units="dimensionless" name="h_infinity"/>
+      <variable units="millisecond" name="tau_h"/>
+      <variable units="millisecond" name="tau_h_max" initial_value="6000"/>
+      
+	  <variable units="millivolt" public_interface="in" name="V1"/>
+      <variable units="millisecond" public_interface="in" name="time"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>h</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <ci>h_infinity</ci>
+                  <ci>h</ci>
+               </apply>
+               <ci>tau_h</ci>
+            </apply>
+         </apply>
+         
+		 <apply>
+            <eq/>
+            <ci>h_infinity</ci>
+            <apply>
+               <divide/>
+               <cn cellml:units="dimensionless">1</cn>
+               <apply>
+                  <plus/>
+                  <cn cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <plus/>
+                           <ci>V1</ci>
+                           <cn cellml:units="millivolt">48</cn>
+                        </apply>
+                        <cn cellml:units="millivolt">6</cn>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         
+		 <apply>
+            <eq/>
+            <ci>tau_h</ci>
+            <apply>
+               <divide/>
+               <ci>tau_h_max</ci>
+               <apply>
+                  <cosh/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <plus/>
+                        <ci>V1</ci>
+                        <cn cellml:units="millivolt">48</cn>
+                     </apply>
+                    <cn cellml:units="millivolt">12</cn>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="i_K">
+      <variable units="nanoA" public_interface="out" name="i_K"/>
+      
+	  <variable units="nanoS" public_interface="in" name="g_K"/>
+      <variable units="millivolt" public_interface="in" name="E_K"/>
+	  <variable units="millisecond" public_interface="in" name="time"/>
+      <variable units="millivolt" public_interface="in" private_interface="out" name="V1"/>
+      
+	  <variable units="dimensionless" private_interface="in" name="m"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>i_K</ci>
+            <apply>
+               <times/>
+               <ci>g_K</ci>
+               <apply>
+                  <power/>
+                  <ci>m</ci>
+                  <cn cellml:units="dimensionless">4</cn>
+               </apply>
+               <apply>
+                  <divide/>
+                  <cn cellml:units="volt">1</cn>
+                  <cn cellml:units="millivolt">1000</cn>
+               </apply>
+               <apply>
+                  <minus/>
+                  <ci>V1</ci>
+                  <ci>E_K</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="i_K_m_gate">
+      <variable units="dimensionless" public_interface="out" name="m"/>
+      
+	  <variable units="millivolt" public_interface="in" name="V1"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>m</ci>
+            <apply>
+               <divide/>
+               <cn cellml:units="dimensionless">1</cn>
+               <apply>
+                  <plus/>
+                  <cn cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <minus/>
+						   <apply>
+                              <plus/>
+                              <ci>V1</ci>
+							  <cn cellml:units="millivolt">29</cn>
+                           </apply>
+						</apply>
+                        <cn cellml:units="millivolt">4</cn>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="i_AD2">
+      <variable units="nanoA" public_interface="out" name="i_AD2"/>
+      
+	  <variable units="nanoS"  public_interface="in" name="g_AD"/>
+      <variable units="millivolt" public_interface="in" name="E_K"/>
+      
+	  <variable units="millisecond" public_interface="in" private_interface="out" name="time"/>
+      <variable units="millivolt" public_interface="in" private_interface="out" name="V2"/>
+	  <variable units="dimensionless" public_interface="in" private_interface="out" name="f2_V2"/>
+	  
+	  <variable units="dimensionless" private_interface="in" name="m"/>
+       
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>i_AD2</ci>
+            <apply>
+               <times/>
+               <ci>g_AD</ci>
+               <ci>m</ci>
+               <apply>
+                  <divide/>
+                  <cn cellml:units="volt">1</cn>
+                  <cn cellml:units="millivolt">1000</cn>
+               </apply>
+               <apply>
+                  <minus/>
+                  <ci>V2</ci>
+                  <ci>E_K</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="i_AD2_m_gate">
+      <variable units="dimensionless" public_interface="out" name="m" initial_value="0.92"/>
+      
+	  <variable units="dimensionless" name="k_AD2" initial_value="0.9"/>
+      <variable units="millisecond" name="tau_AD2" initial_value="2000"/>
+      
+	  <variable units="dimensionless" public_interface="in" name="f2_V2"/>
+	  <variable units="millivolt" public_interface="in" name="V2"/>
+	  <variable units="millisecond" public_interface="in" name="time"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>m</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>k_AD2</ci>
+                     <ci>f2_V2</ci>
+                  </apply>
+                  <ci>m</ci>
+               </apply>
+               <ci>tau_AD2</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="i_AD3">
+      <variable units="nanoA" public_interface="out" name="i_AD3"/>
+      
+	  <variable units="nanoS"  public_interface="in" name="g_AD"/>
+      <variable units="millivolt" public_interface="in" name="E_K"/>
+     
+	  <variable units="dimensionless" public_interface="in" private_interface="out" name="f3_V3"/>
+	  <variable units="millisecond" public_interface="in" private_interface="out" name="time"/>
+      <variable units="millivolt" public_interface="in" private_interface="out" name="V3"/>
+	  
+	  <variable units="dimensionless" private_interface="in" name="m"/>
+       
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>i_AD3</ci>
+            <apply>
+               <times/>
+               <ci>g_AD</ci>
+               <ci>m</ci>
+               <apply>
+                  <divide/>
+                  <cn cellml:units="volt">1</cn>
+                  <cn cellml:units="millivolt">1000</cn>
+               </apply>
+               <apply>
+                  <minus/>
+                  <ci>V3</ci>
+                  <ci>E_K</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="i_AD3_m_gate">
+      <variable units="dimensionless" public_interface="out" name="m" initial_value="0.92"/>
+      
+	  <variable units="dimensionless" name="k_AD3" initial_value="1.3"/>
+	  <variable units="millisecond" name="tau_AD3" initial_value="2000"/>
+      
+	  <variable units="dimensionless" public_interface="in" name="f3_V3"/>
+      <variable units="millivolt" public_interface="in" name="V3"/>
+	  <variable units="millisecond" public_interface="in" name="time"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>m</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>k_AD3</ci>
+                     <ci>f3_V3</ci>
+                  </apply>
+                  <ci>m</ci>
+               </apply>
+               <ci>tau_AD3</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="i_AD4">
+      <variable units="nanoA" public_interface="out" name="i_AD4"/>
+      
+	  <variable units="nanoS"  public_interface="in" name="g_AD"/>
+      <variable units="millivolt" public_interface="in" name="E_K"/>
+      
+	  <variable units="dimensionless" public_interface="in" private_interface="out" name="f4_V4"/>
+	  <variable units="millisecond" public_interface="in" private_interface="out" name="time"/>
+      <variable units="millivolt" public_interface="in" private_interface="out" name="V4"/>
+	  
+	  <variable units="dimensionless" private_interface="in" name="m"/>
+       
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>i_AD4</ci>
+            <apply>
+               <times/>
+               <ci>g_AD</ci>
+               <ci>m</ci>
+               <apply>
+                  <divide/>
+                  <cn cellml:units="volt">1</cn>
+                  <cn cellml:units="millivolt">1000</cn>
+               </apply>
+               <apply>
+                  <minus/>
+                  <ci>V4</ci>
+                  <ci>E_K</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="i_AD4_m_gate">
+      <variable units="dimensionless" public_interface="out" name="m" initial_value="0.92"/>
+      
+	  <variable units="dimensionless" name="k_AD4" initial_value="0.9"/>
+	  <variable units="millisecond" name="tau_AD4" initial_value="1000"/>
+      
+	  <variable units="dimensionless" public_interface="in" name="f4_V4"/>
+      <variable units="millivolt" public_interface="in" name="V4"/>
+	  <variable units="millisecond" public_interface="in" name="time"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>m</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>k_AD4</ci>
+                     <ci>f4_V4</ci>
+                  </apply>
+                  <ci>m</ci>
+               </apply>
+               <ci>tau_AD4</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="i_L1">
+      <variable units="nanoA" public_interface="out" name="i_L1"/>
+      
+	  <variable units="nanoS" public_interface="in" name="g_L"/>
+      <variable units="millivolt" public_interface="in" name="E_L"/>
+      <variable units="millivolt" public_interface="in" name="V1"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>i_L1</ci>
+            <apply>
+               <times/>
+               <ci>g_L</ci>
+               <apply>
+                  <divide/>
+                  <cn cellml:units="volt">1</cn>
+                  <cn cellml:units="millivolt">1000</cn>
+               </apply>
+               <apply>
+                  <minus/>
+                  <ci>V1</ci>
+                  <ci>E_L</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="i_L2">
+      <variable units="nanoA" public_interface="out" name="i_L2"/>
+      
+	  <variable units="nanoS" public_interface="in" name="g_L"/>
+      <variable units="millivolt" public_interface="in" name="E_L"/>
+      <variable units="millivolt" public_interface="in" name="V2"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>i_L2</ci>
+            <apply>
+               <times/>
+               <ci>g_L</ci>
+               <apply>
+                  <divide/>
+                  <cn cellml:units="volt">1</cn>
+                  <cn cellml:units="millivolt">1000</cn>
+               </apply>
+               <apply>
+                  <minus/>
+                  <ci>V2</ci>
+                  <ci>E_L</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="i_L3">
+      <variable units="nanoA" public_interface="out" name="i_L3"/>
+      
+	  <variable units="nanoS" public_interface="in" name="g_L"/>
+      <variable units="millivolt" public_interface="in" name="E_L"/>
+      <variable units="millivolt" public_interface="in" name="V3"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>i_L3</ci>
+            <apply>
+               <times/>
+               <ci>g_L</ci>
+               <apply>
+                  <divide/>
+                  <cn cellml:units="volt">1</cn>
+                  <cn cellml:units="millivolt">1000</cn>
+               </apply>
+               <apply>
+                  <minus/>
+                  <ci>V3</ci>
+                  <ci>E_L</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="i_L4">
+      <variable units="nanoA" public_interface="out" name="i_L4"/>
+      
+	  <variable units="nanoS" public_interface="in" name="g_L"/>
+      <variable units="millivolt" public_interface="in" name="E_L"/>
+      <variable units="millivolt" public_interface="in" name="V4"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>i_L4</ci>
+            <apply>
+               <times/>
+               <ci>g_L</ci>
+               <apply>
+                  <divide/>
+                  <cn cellml:units="volt">1</cn>
+                  <cn cellml:units="millivolt">1000</cn>
+               </apply>
+               <apply>
+                  <minus/>
+                  <ci>V4</ci>
+                  <ci>E_L</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="i_synE1">
+      <variable units="nanoA" public_interface="out" name="i_synE1"/>
+      
+	  <variable units="dimensionless" name="c11" initial_value="0.115"/>
+	  <variable units="dimensionless" name="c21" initial_value="0.07"/>
+	  <variable units="dimensionless" name="c31" initial_value="0.025"/>
+	  
+	  <variable units="dimensionless" public_interface="in" name="d1"/>
+	  <variable units="dimensionless" public_interface="in" name="d2"/>
+	  <variable units="dimensionless" public_interface="in" name="d3"/>
+	  <variable units="nanoS" public_interface="in" name="g_synE"/>
+      <variable units="millivolt" public_interface="in" name="E_synE"/>
+      <variable units="millivolt" public_interface="in" name="V1"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>i_synE1</ci>
+            <apply>
+               <times/>
+               <ci>g_synE</ci>
+               <apply>
+                  <divide/>
+                  <cn cellml:units="volt">1</cn>
+                  <cn cellml:units="millivolt">1000</cn>
+               </apply>
+               <apply>
+                  <minus/>
+                  <ci>V1</ci>
+                  <ci>E_synE</ci>
+               </apply>
+			   <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+					 <ci>c11</ci>
+                     <ci>d1</ci>
+				  </apply>
+				  <apply>
+                     <times/>
+					 <ci>c21</ci>
+                     <ci>d2</ci>
+				  </apply>
+				  <apply>
+                     <times/>
+					 <ci>c31</ci>
+                     <ci>d3</ci>
+				  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="i_synE2">
+      <variable units="nanoA" public_interface="out" name="i_synE2"/>
+      
+	  <variable units="dimensionless" name="c12" initial_value="0.3"/>
+	  <variable units="dimensionless" name="c22" initial_value="0.3"/>
+	  <variable units="dimensionless" name="c32" initial_value="0.0"/>
+	  <variable units="dimensionless" name="a12" initial_value="0.4"/>
+	  
+	  <variable units="dimensionless" public_interface="in" name="f1_V1" />
+	  <variable units="dimensionless" public_interface="in" name="d1"/>
+	  <variable units="dimensionless" public_interface="in" name="d2"/>
+	  <variable units="dimensionless" public_interface="in" name="d3"/>
+	  <variable units="nanoS" public_interface="in" name="g_synE"/>
+      <variable units="millivolt" public_interface="in" name="E_synE"/>
+      <variable units="millivolt" public_interface="in" name="V1"/>
+	  <variable units="millivolt" public_interface="in" name="V2"/>
+	  
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>i_synE2</ci>
+            <apply>
+               <times/>
+               <ci>g_synE</ci>
+               <apply>
+                  <divide/>
+                  <cn cellml:units="volt">1</cn>
+                  <cn cellml:units="millivolt">1000</cn>
+               </apply>
+               <apply>
+                  <minus/>
+                  <ci>V2</ci>
+                  <ci>E_synE</ci>
+               </apply>
+			   <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+					 <ci>a12</ci>
+					 <ci>f1_V1</ci>
+				  </apply>
+				  <apply>
+                     <times/>
+					 <ci>c12</ci>
+                     <ci>d1</ci>
+				  </apply>
+				  <apply>
+                     <times/>
+					 <ci>c22</ci>
+                     <ci>d2</ci>
+				  </apply>
+				  <apply>
+                     <times/>
+					 <ci>c32</ci>
+                     <ci>d3</ci>
+				  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="i_synE3">
+      <variable units="nanoA" public_interface="out" name="i_synE3"/>
+      
+	  <variable units="dimensionless" name="c13" initial_value="0.63"/>
+	  <variable units="dimensionless" name="c23" initial_value="0.00"/>
+	  <variable units="dimensionless" name="c33" initial_value="0.00"/>
+	  
+	  <variable units="dimensionless" public_interface="in" name="d1"/>
+	  <variable units="dimensionless" public_interface="in" name="d2"/>
+	  <variable units="dimensionless" public_interface="in" name="d3"/>
+	  <variable units="nanoS" public_interface="in" name="g_synE"/>
+      <variable units="millivolt" public_interface="in" name="E_synE"/>
+      <variable units="millivolt" public_interface="in" name="V3"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>i_synE3</ci>
+            <apply>
+               <times/>
+               <ci>g_synE</ci>
+               <apply>
+                  <divide/>
+                  <cn cellml:units="volt">1</cn>
+                  <cn cellml:units="millivolt">1000</cn>
+               </apply>
+               <apply>
+                  <minus/>
+                  <ci>V3</ci>
+                  <ci>E_synE</ci>
+               </apply>
+			   <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+					 <ci>c13</ci>
+                     <ci>d1</ci>
+				  </apply>
+				  <apply>
+                     <times/>
+					 <ci>c23</ci>
+                     <ci>d2</ci>
+				  </apply>
+				  <apply>
+                     <times/>
+					 <ci>c33</ci>
+                     <ci>d3</ci>
+				  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="i_synE4">
+      <variable units="nanoA" public_interface="out" name="i_synE4"/>
+      
+	  <variable units="dimensionless" name="c14" initial_value="0.33"/>
+	  <variable units="dimensionless" name="c24" initial_value="0.40"/>
+	  <variable units="dimensionless" name="c34" initial_value="0.00"/>
+	  
+	  <variable units="dimensionless" public_interface="in" name="d1"/>
+	  <variable units="dimensionless" public_interface="in" name="d2"/>
+	  <variable units="dimensionless" public_interface="in" name="d3"/>
+	  <variable units="nanoS" public_interface="in" name="g_synE"/>
+      <variable units="millivolt" public_interface="in" name="E_synE"/>
+      <variable units="millivolt" public_interface="in" name="V4"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>i_synE4</ci>
+            <apply>
+               <times/>
+               <ci>g_synE</ci>
+               <apply>
+                  <divide/>
+                  <cn cellml:units="volt">1</cn>
+                  <cn cellml:units="millivolt">1000</cn>
+               </apply>
+               <apply>
+                  <minus/>
+                  <ci>V4</ci>
+                  <ci>E_synE</ci>
+               </apply>
+			   <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+					 <ci>c14</ci>
+                     <ci>d1</ci>
+				  </apply>
+				  <apply>
+                     <times/>
+					 <ci>c24</ci>
+                     <ci>d2</ci>
+				  </apply>
+				  <apply>
+                     <times/>
+					 <ci>c34</ci>
+                     <ci>d3</ci>
+				  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="i_synI1">
+      <variable units="nanoA" public_interface="out" name="i_synI1"/>
+      
+	  <variable units="dimensionless" name="b21" initial_value="0.00"/>
+	  <variable units="dimensionless" name="b31" initial_value="0.30"/>
+	  <variable units="dimensionless" name="b41" initial_value="0.20"/>
+	  
+	  <variable units="dimensionless" public_interface="in" name="f2_V2"/>
+	  <variable units="dimensionless" public_interface="in" name="f3_V3"/>
+	  <variable units="dimensionless" public_interface="in" name="f4_V4"/>
+	  <variable units="nanoS" public_interface="in" name="g_synI"/>
+      <variable units="millivolt" public_interface="in" name="E_synI"/>
+      <variable units="millivolt" public_interface="in" name="V1"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>i_synI1</ci>
+            <apply>
+               <times/>
+               <ci>g_synI</ci>
+               <apply>
+                  <divide/>
+                  <cn cellml:units="volt">1</cn>
+                  <cn cellml:units="millivolt">1000</cn>
+               </apply>
+               <apply>
+                  <minus/>
+                  <ci>V1</ci>
+                  <ci>E_synI</ci>
+               </apply>
+			   <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+					 <ci>b21</ci>
+                     <ci>f2_V2</ci>
+				  </apply>
+				  <apply>
+                     <times/>
+					 <ci>b31</ci>
+                     <ci>f3_V3</ci>
+				  </apply>
+				  <apply>
+                     <times/>
+					 <ci>b41</ci>
+                     <ci>f4_V4</ci>
+				  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="i_synI2">
+      <variable units="nanoA" public_interface="out" name="i_synI2"/>
+      
+	  <variable units="dimensionless" name="b32" initial_value="0.05"/>
+	  <variable units="dimensionless" name="b42" initial_value="0.35"/>
+	  
+	  <variable units="dimensionless" public_interface="in" name="f3_V3"/>
+	  <variable units="dimensionless" public_interface="in" name="f4_V4"/>
+	  <variable units="nanoS" public_interface="in" name="g_synI"/>
+      <variable units="millivolt" public_interface="in" name="E_synI"/>
+      <variable units="millivolt" public_interface="in" name="V2"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>i_synI2</ci>
+            <apply>
+               <times/>
+               <ci>g_synI</ci>
+               <apply>
+                  <divide/>
+                  <cn cellml:units="volt">1</cn>
+                  <cn cellml:units="millivolt">1000</cn>
+               </apply>
+               <apply>
+                  <minus/>
+                  <ci>V2</ci>
+                  <ci>E_synI</ci>
+               </apply>
+			   <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+					 <ci>b32</ci>
+                     <ci>f3_V3</ci>
+				  </apply>
+				  <apply>
+                     <times/>
+					 <ci>b42</ci>
+                     <ci>f4_V4</ci>
+				  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="i_synI3">
+      <variable units="nanoA" public_interface="out" name="i_synI3"/>
+      
+	  <variable units="dimensionless" name="b23" initial_value="0.25"/>
+	  <variable units="dimensionless" name="b43" initial_value="0.10"/>
+	  
+	  <variable units="dimensionless" public_interface="in" name="f2_V2"/>
+	  <variable units="dimensionless" public_interface="in" name="f4_V4"/>
+	  <variable units="nanoS" public_interface="in" name="g_synI"/>
+      <variable units="millivolt" public_interface="in" name="E_synI"/>
+      <variable units="millivolt" public_interface="in" name="V3"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>i_synI3</ci>
+            <apply>
+               <times/>
+               <ci>g_synI</ci>
+               <apply>
+                  <divide/>
+                  <cn cellml:units="volt">1</cn>
+                  <cn cellml:units="millivolt">1000</cn>
+               </apply>
+               <apply>
+                  <minus/>
+                  <ci>V3</ci>
+                  <ci>E_synI</ci>
+               </apply>
+			   <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+					 <ci>b23</ci>
+                     <ci>f2_V2</ci>
+				  </apply>
+				  <apply>
+                     <times/>
+					 <ci>b43</ci>
+                     <ci>f4_V4</ci>
+				  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="i_synI4">
+      <variable units="nanoA" public_interface="out" name="i_synI4"/>
+      
+	  <variable units="dimensionless" name="b24" initial_value="0.35"/>
+	  <variable units="dimensionless" name="b34" initial_value="0.35"/>
+	  
+	  <variable units="dimensionless" public_interface="in" name="f2_V2"/>
+	  <variable units="dimensionless" public_interface="in" name="f3_V3"/>
+	  <variable units="nanoS" public_interface="in" name="g_synI"/>
+      <variable units="millivolt" public_interface="in" name="E_synI"/>
+      <variable units="millivolt" public_interface="in" name="V4"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>i_synI4</ci>
+            <apply>
+               <times/>
+               <ci>g_synI</ci>
+               <apply>
+                  <divide/>
+                  <cn cellml:units="volt">1</cn>
+                  <cn cellml:units="millivolt">1000</cn>
+               </apply>
+               <apply>
+                  <minus/>
+                  <ci>V4</ci>
+                  <ci>E_synI</ci>
+               </apply>
+			   <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+					 <ci>b24</ci>
+                     <ci>f2_V2</ci>
+				  </apply>
+				  <apply>
+                     <times/>
+					 <ci>b34</ci>
+                     <ci>f3_V3</ci>
+				  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="model_parameters">
+      <variable units="nanoF" public_interface="out" name="C" initial_value="0.020"/>
+	  <variable units="millivolt" public_interface="out" name="E_Na" initial_value="50.0"/>
+	  <variable units="millivolt" public_interface="out" name="E_K" initial_value="-85.0"/>
+	  <variable units="millivolt" public_interface="out" name="E_L" initial_value="-60.0"/>
+	  <variable units="millivolt" public_interface="out" name="E_synE" initial_value="0.0"/>
+	  <variable units="millivolt" public_interface="out" name="E_synI" initial_value="-75.0"/>
+	  <variable units="nanoS" public_interface="out" name="g_NaP" initial_value="5.0"/>
+	  <variable units="nanoS" public_interface="out" name="g_K" initial_value="5.0"/>
+	  <variable units="nanoS" public_interface="out" name="g_AD" initial_value="10.0"/>
+	  <variable units="nanoS" public_interface="out" name="g_L" initial_value="2.8"/>
+	  <variable units="nanoS" public_interface="out" name="g_synE" initial_value="10.0"/>
+	  <variable units="nanoS" public_interface="out" name="g_synI" initial_value="60.0"/>
+	  <variable units="dimensionless" public_interface="out" name="d1" initial_value="1.0"/>
+	  <variable units="dimensionless" public_interface="out" name="d2" initial_value="1.0"/>
+	  <variable units="dimensionless" public_interface="out" name="d3" initial_value="1.0"/>
+	  <variable units="dimensionless" public_interface="out" name="f1_V1"/>
+	  <variable units="dimensionless" public_interface="out" name="f2_V2"/>
+	  <variable units="dimensionless" public_interface="out" name="f3_V3"/>
+	  <variable units="dimensionless" public_interface="out" name="f4_V4"/>
+	  
+	  <variable units="millivolt" name="V_half" initial_value="30.0"/>
+	  <variable units="millivolt" name="k_V1" initial_value="8.0"/>
+	  <variable units="millivolt" name="k_V2" initial_value="4.0"/>
+	  <variable units="millivolt" name="k_V3" initial_value="4.0"/>
+	  <variable units="millivolt" name="k_V4" initial_value="4.0"/>
+	  
+	  <variable units="millivolt" public_interface="in" name="V1"/>
+	  <variable units="millivolt" public_interface="in" name="V2"/>
+	  <variable units="millivolt" public_interface="in" name="V3"/>
+	  <variable units="millivolt" public_interface="in" name="V4"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+	     <apply>
+            <eq/>
+            <ci>f1_V1</ci>
+            <apply>
+               <divide/>
+               <cn cellml:units="dimensionless">1</cn>
+               <apply>
+                  <plus/>
+                  <cn cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <minus/>
+						   <apply>
+                              <minus/>
+                              <ci>V1</ci>
+                              <ci>V_half</ci>
+						   </apply>
+                        </apply>
+                        <ci>k_V1</ci>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+		 
+		 <apply>
+            <eq/>
+            <ci>f2_V2</ci>
+            <apply>
+               <divide/>
+               <cn cellml:units="dimensionless">1</cn>
+               <apply>
+                  <plus/>
+                  <cn cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <minus/>
+						   <apply>
+                              <minus/>
+                              <ci>V2</ci>
+                              <ci>V_half</ci>
+						   </apply>
+                        </apply>
+                        <ci>k_V2</ci>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+		 
+		 <apply>
+            <eq/>
+            <ci>f3_V3</ci>
+            <apply>
+               <divide/>
+               <cn cellml:units="dimensionless">1</cn>
+               <apply>
+                  <plus/>
+                  <cn cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <minus/>
+						   <apply>
+                              <minus/>
+                              <ci>V3</ci>
+                              <ci>V_half</ci>
+						   </apply>
+                        </apply>
+                        <ci>k_V3</ci>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+		 
+		 <apply>
+            <eq/>
+            <ci>f4_V4</ci>
+            <apply>
+               <divide/>
+               <cn cellml:units="dimensionless">1</cn>
+               <apply>
+                  <plus/>
+                  <cn cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <minus/>
+						   <apply>
+                              <minus/>
+                              <ci>V4</ci>
+                              <ci>V_half</ci>
+						   </apply>
+                        </apply>
+                        <ci>k_V4</ci>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+	 
+   <group>
+      <relationship_ref relationship="encapsulation"/>
+      <component_ref component="i_NaP">
+         <component_ref component="i_NaP_m_gate"/>
+		 <component_ref component="i_NaP_h_gate"/>
+      </component_ref>
+      <component_ref component="i_K">
+         <component_ref component="i_K_m_gate"/>
+      </component_ref>
+      <component_ref component="i_AD2">
+         <component_ref component="i_AD2_m_gate"/>
+      </component_ref>
+	  <component_ref component="i_AD3">
+         <component_ref component="i_AD3_m_gate"/>
+      </component_ref>
+	  <component_ref component="i_AD4">
+         <component_ref component="i_AD4_m_gate"/>
+      </component_ref>
+   </group>
+   
+   <connection>
+      <map_components component_2="environment" component_1="V1"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="environment" component_1="V2"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="environment" component_1="V3"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="environment" component_1="V4"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="environment" component_1="i_NaP"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="environment" component_1="i_K"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="environment" component_1="i_AD2"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="environment" component_1="i_AD3"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="environment" component_1="i_AD4"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="V1" component_1="i_NaP"/>
+      <map_variables variable_2="V1" variable_1="V1"/>
+      <map_variables variable_2="i_NaP" variable_1="i_NaP"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="V1" component_1="i_K"/>
+      <map_variables variable_2="V1" variable_1="V1"/>
+      <map_variables variable_2="i_K" variable_1="i_K"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="V1" component_1="i_L1"/>
+      <map_variables variable_2="V1" variable_1="V1"/>
+      <map_variables variable_2="i_L1" variable_1="i_L1"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="V1" component_1="i_synE1"/>
+      <map_variables variable_2="V1" variable_1="V1"/>
+      <map_variables variable_2="i_synE1" variable_1="i_synE1"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="V1" component_1="i_synI1"/>
+      <map_variables variable_2="V1" variable_1="V1"/>
+      <map_variables variable_2="i_synI1" variable_1="i_synI1"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="V2" component_1="i_AD2"/>
+      <map_variables variable_2="V2" variable_1="V2"/>
+      <map_variables variable_2="i_AD2" variable_1="i_AD2"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="V2" component_1="i_L2"/>
+      <map_variables variable_2="V2" variable_1="V2"/>
+      <map_variables variable_2="i_L2" variable_1="i_L2"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="V2" component_1="i_synE2"/>
+      <map_variables variable_2="V2" variable_1="V2"/>
+      <map_variables variable_2="i_synE2" variable_1="i_synE2"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="V1" component_1="i_synE2"/>
+      <map_variables variable_2="V1" variable_1="V1"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="V2" component_1="i_synI2"/>
+      <map_variables variable_2="V2" variable_1="V2"/>
+      <map_variables variable_2="i_synI2" variable_1="i_synI2"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="V3" component_1="i_AD3"/>
+      <map_variables variable_2="V3" variable_1="V3"/>
+      <map_variables variable_2="i_AD3" variable_1="i_AD3"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="V3" component_1="i_L3"/>
+      <map_variables variable_2="V3" variable_1="V3"/>
+      <map_variables variable_2="i_L3" variable_1="i_L3"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="V3" component_1="i_synE3"/>
+      <map_variables variable_2="V3" variable_1="V3"/>
+      <map_variables variable_2="i_synE3" variable_1="i_synE3"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="V3" component_1="i_synI3"/>
+      <map_variables variable_2="V3" variable_1="V3"/>
+      <map_variables variable_2="i_synI3" variable_1="i_synI3"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="V4" component_1="i_AD4"/>
+      <map_variables variable_2="V4" variable_1="V4"/>
+      <map_variables variable_2="i_AD4" variable_1="i_AD4"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="V4" component_1="i_L4"/>
+      <map_variables variable_2="V4" variable_1="V4"/>
+      <map_variables variable_2="i_L4" variable_1="i_L4"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="V4" component_1="i_synE4"/>
+      <map_variables variable_2="V4" variable_1="V4"/>
+      <map_variables variable_2="i_synE4" variable_1="i_synE4"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="V4" component_1="i_synI4"/>
+      <map_variables variable_2="V4" variable_1="V4"/>
+      <map_variables variable_2="i_synI4" variable_1="i_synI4"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="V1" component_1="model_parameters"/>
+      <map_variables variable_2="C" variable_1="C"/>
+	  <map_variables variable_2="V1" variable_1="V1"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="V2" component_1="model_parameters"/>
+      <map_variables variable_2="C" variable_1="C"/>
+	  <map_variables variable_2="V2" variable_1="V2"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="V3" component_1="model_parameters"/>
+      <map_variables variable_2="C" variable_1="C"/>
+	  <map_variables variable_2="V3" variable_1="V3"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="V4" component_1="model_parameters"/>
+      <map_variables variable_2="C" variable_1="C"/>
+	  <map_variables variable_2="V4" variable_1="V4"/>
+   </connection>
+  
+   <connection>
+      <map_components component_2="i_NaP" component_1="model_parameters"/>
+      <map_variables variable_2="E_Na" variable_1="E_Na"/>
+      <map_variables variable_2="g_NaP" variable_1="g_NaP"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="i_K" component_1="model_parameters"/>
+      <map_variables variable_2="E_K" variable_1="E_K"/>
+      <map_variables variable_2="g_K" variable_1="g_K"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="i_AD2" component_1="model_parameters"/>
+      <map_variables variable_2="E_K" variable_1="E_K"/>
+      <map_variables variable_2="g_AD" variable_1="g_AD"/>
+	  <map_variables variable_2="f2_V2" variable_1="f2_V2"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="i_AD3" component_1="model_parameters"/>
+      <map_variables variable_2="E_K" variable_1="E_K"/>
+      <map_variables variable_2="g_AD" variable_1="g_AD"/>
+	  <map_variables variable_2="f3_V3" variable_1="f3_V3"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="i_AD4" component_1="model_parameters"/>
+      <map_variables variable_2="E_K" variable_1="E_K"/>
+      <map_variables variable_2="g_AD" variable_1="g_AD"/>
+	  <map_variables variable_2="f4_V4" variable_1="f4_V4"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="i_L1" component_1="model_parameters"/>
+      <map_variables variable_2="E_L" variable_1="E_L"/>
+      <map_variables variable_2="g_L" variable_1="g_L"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="i_L2" component_1="model_parameters"/>
+      <map_variables variable_2="E_L" variable_1="E_L"/>
+      <map_variables variable_2="g_L" variable_1="g_L"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="i_L3" component_1="model_parameters"/>
+      <map_variables variable_2="E_L" variable_1="E_L"/>
+      <map_variables variable_2="g_L" variable_1="g_L"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="i_L4" component_1="model_parameters"/>
+      <map_variables variable_2="E_L" variable_1="E_L"/>
+      <map_variables variable_2="g_L" variable_1="g_L"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="i_synE1" component_1="model_parameters"/>
+      <map_variables variable_2="E_synE" variable_1="E_synE"/>
+      <map_variables variable_2="g_synE" variable_1="g_synE"/>
+	  <map_variables variable_2="d1" variable_1="d1"/>
+	  <map_variables variable_2="d2" variable_1="d2"/>
+	  <map_variables variable_2="d3" variable_1="d3"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="i_synE2" component_1="model_parameters"/>
+      <map_variables variable_2="E_synE" variable_1="E_synE"/>
+      <map_variables variable_2="g_synE" variable_1="g_synE"/>
+	  <map_variables variable_2="d1" variable_1="d1"/>
+	  <map_variables variable_2="d2" variable_1="d2"/>
+	  <map_variables variable_2="d3" variable_1="d3"/>
+	  <map_variables variable_2="f1_V1" variable_1="f1_V1"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="i_synE3" component_1="model_parameters"/>
+      <map_variables variable_2="E_synE" variable_1="E_synE"/>
+      <map_variables variable_2="g_synE" variable_1="g_synE"/>
+	  <map_variables variable_2="d1" variable_1="d1"/>
+	  <map_variables variable_2="d2" variable_1="d2"/>
+	  <map_variables variable_2="d3" variable_1="d3"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="i_synE4" component_1="model_parameters"/>
+      <map_variables variable_2="E_synE" variable_1="E_synE"/>
+      <map_variables variable_2="g_synE" variable_1="g_synE"/>
+	  <map_variables variable_2="d1" variable_1="d1"/>
+	  <map_variables variable_2="d2" variable_1="d2"/>
+	  <map_variables variable_2="d3" variable_1="d3"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="i_synI1" component_1="model_parameters"/>
+      <map_variables variable_2="E_synI" variable_1="E_synI"/>
+      <map_variables variable_2="g_synI" variable_1="g_synI"/>
+	  <map_variables variable_2="f2_V2" variable_1="f2_V2"/>
+	  <map_variables variable_2="f3_V3" variable_1="f3_V3"/>
+	  <map_variables variable_2="f4_V4" variable_1="f4_V4"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="i_synI2" component_1="model_parameters"/>
+      <map_variables variable_2="E_synI" variable_1="E_synI"/>
+      <map_variables variable_2="g_synI" variable_1="g_synI"/>
+	  <map_variables variable_2="f3_V3" variable_1="f3_V3"/>
+	  <map_variables variable_2="f4_V4" variable_1="f4_V4"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="i_synI3" component_1="model_parameters"/>
+      <map_variables variable_2="E_synI" variable_1="E_synI"/>
+      <map_variables variable_2="g_synI" variable_1="g_synI"/>
+	  <map_variables variable_2="f2_V2" variable_1="f2_V2"/>
+	  <map_variables variable_2="f4_V4" variable_1="f4_V4"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="i_synI4" component_1="model_parameters"/>
+      <map_variables variable_2="E_synI" variable_1="E_synI"/>
+      <map_variables variable_2="g_synI" variable_1="g_synI"/>
+	  <map_variables variable_2="f2_V2" variable_1="f2_V2"/>
+	  <map_variables variable_2="f3_V3" variable_1="f3_V3"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="i_NaP_m_gate" component_1="i_NaP"/>
+      <map_variables variable_2="m" variable_1="m"/>
+      <map_variables variable_2="V1" variable_1="V1"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="i_NaP_h_gate" component_1="i_NaP"/>
+      <map_variables variable_2="h" variable_1="h"/>
+      <map_variables variable_2="V1" variable_1="V1"/>
+	  <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="i_K_m_gate" component_1="i_K"/>
+      <map_variables variable_2="m" variable_1="m"/>
+      <map_variables variable_2="V1" variable_1="V1"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="i_AD2_m_gate" component_1="i_AD2"/>
+      <map_variables variable_2="m" variable_1="m"/>
+      <map_variables variable_2="V2" variable_1="V2"/>
+	  <map_variables variable_2="f2_V2" variable_1="f2_V2"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="i_AD3_m_gate" component_1="i_AD3"/>
+      <map_variables variable_2="m" variable_1="m"/>
+      <map_variables variable_2="V3" variable_1="V3"/>
+	  <map_variables variable_2="f3_V3" variable_1="f3_V3"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="i_AD4_m_gate" component_1="i_AD4"/>
+      <map_variables variable_2="m" variable_1="m"/>
+      <map_variables variable_2="V4" variable_1="V4"/>
+	  <map_variables variable_2="f4_V4" variable_1="f4_V4"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   
+   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
+    
+	<rdf:Description rdf:about="">
+      <dc:creator rdf:parseType="Resource">
+        <vCard:N rdf:parseType="Resource">
+          <vCard:Family>Lloyd</vCard:Family>
+          <vCard:Given>Catherine</vCard:Given>
+		  <vCard:Other>May</vCard:Other>
+        </vCard:N>
+        <vCard:EMAIL rdf:parseType="Resource">
+          <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+          <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+        </vCard:EMAIL>
+        <vCard:ORG rdf:parseType="Resource">
+          <vCard:Orgname>The University of Auckland</vCard:Orgname>
+          <vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+        </vCard:ORG>
+      </dc:creator>
+  
+      <dcterms:created rdf:parseType="Resource">
+        <dcterms:W3CDTF>2010-07-12</dcterms:W3CDTF>
+      </dcterms:created>
+    </rdf:Description>
+    
+    <rdf:Description rdf:about="#rubin_2009">
+      
+	  <bqs:reference rdf:parseType="Resource">
+        <dc:subject rdf:parseType="Resource">
+          <bqs:subject_type>keyword</bqs:subject_type>
+          <rdf:value>
+            <rdf:Bag>
+              <rdf:li>neuron</rdf:li>
+		      <rdf:li>neurobiology</rdf:li>
+              <rdf:li>network</rdf:li>
+            </rdf:Bag>
+          </rdf:value>
+        </dc:subject>
+      </bqs:reference>
+
+      <bqs:reference rdf:parseType="Resource">
+        <bqs:Pubmed_id>19193773</bqs:Pubmed_id>
+        <bqs:JournalArticle rdf:parseType="Resource">
+          <dc:creator>
+            <rdf:Seq>
+              <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Rubin</vCard:Family>
+                    <vCard:Given>J</vCard:Given>
+					<vCard:Other>E</vCard:Other>
+                  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+			  <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Shevtsova</vCard:Family>
+                    <vCard:Given>N</vCard:Given>
+					<vCard:Other>A</vCard:Other>
+				  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+              <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Ermentrout</vCard:Family>
+                    <vCard:Given>G</vCard:Given>
+					<vCard:Other>B</vCard:Other>
+                  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+			  <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Smith</vCard:Family>
+                    <vCard:Given>J</vCard:Given>
+					<vCard:Other>C</vCard:Other>
+				  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+			  <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Rybak</vCard:Family>
+                    <vCard:Given>I</vCard:Given>
+					<vCard:Other>A</vCard:Other>
+				  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+            </rdf:Seq>
+          </dc:creator>
+          <dc:title>
+            Multiple rhythmic states in a model of the respiratory central pattern generator
+          </dc:title>
+          <dcterms:issued rdf:parseType="Resource">
+            <dcterms:W3CDTF>2009-04</dcterms:W3CDTF>
+          </dcterms:issued>
+          <bqs:Journal rdf:parseType="Resource">
+            <dc:title>Journal of Neurophysiology</dc:title>
+          </bqs:Journal>
+		  <bqs:volume>101</bqs:volume>
+          <bqs:first_page>2146</bqs:first_page>
+          <bqs:last_page>2165</bqs:last_page>
+        </bqs:JournalArticle>
+      </bqs:reference>
+    </rdf:Description>
+  </rdf:RDF>
+</model>

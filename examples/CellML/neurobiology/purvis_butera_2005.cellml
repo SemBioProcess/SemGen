@@ -1,0 +1,1929 @@
+<?xml version="1.0"?>
+<!--
+This CellML file was generated on 21/07/2008 at 9:20:03 at a.m. using:
+
+COR (0.9.31.979)
+Copyright 2002-2008 Dr Alan Garny
+http://COR.physiol.ox.ac.uk/ - COR@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.CellML.org/
+-->
+
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="butera_purvis_2004" name="butera_purvis_2004">
+
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>Ionic current model of a hypoglossal motoneuron</title>
+				<author>
+					<firstname>Geoffrey</firstname>
+					<surname>Nunns</surname>
+					<affiliation>
+						<shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<section id="sec_status">
+				<title>Model Status</title>
+				<para>
+            This CellML model is known to run in both OpenCell and COR and the units have been checked and are consistent. The model recreates the published results. 
+          </para>
+			</section>
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>
+ABSTRACT: We have developed a single-compartment, electrophysiological, hypoglossal motoneuron (HM) model based primarily on experimental data from neonatal rat HMs. The model is able to reproduce the fine features of the HM action potential: the fast afterhyperpolarization, the afterdepolarization, and the medium-duration afterhyperpolarization (mAHP). The model also reproduces the repetitive firing properties seen in neonatal HMs and replicates the neuron's response to pharmacological experiments. The model was used to study the role of specific ionic currents in HM firing and how variations in the densities of these currents may account for age-dependent changes in excitability seen in HMs. By varying the density of a fast inactivating calcium current, the model alternates between accelerating and adapting firing patterns. Modeling the age-dependent increase in H current density accounts for the decrease in mAHP duration observed experimentally, but does not fully account for the decrease in input resistance. An increase in the density of the voltage-dependent potassium currents and the H current is required to account for the decrease in input resistance. These changes also account for the age-dependent decrease in action potential duration.
+</para>
+			
+<informalfigure float="0" id="fig_reaction_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>model diagram</title>
+    </objectinfo>
+    <imagedata fileref="purvis_2005.png"/>
+  </imageobject>
+</mediaobject>
+<caption>A schematic diagram of the cell model.  It is composed of ten ionic currents across the plasma membrane: a fast sodium current, INa; a delayed rectifier potassium current, IK; a persistent sodium current,  INaP; a passive leakage current, IL; a LVA calcium current, IT; an N-type HVA calcium current, IN; a P-type HVA calcium current, IP; a calcium-dependent potassium current, ISK; a fast-transient potassium current, IA; and finally, a hyperpolarisation-activated current, IH.</caption>
+</informalfigure>
+
+<para>				
+The original paper reference is cited below:
+</para>
+				<para>
+Ionic current model of a hypoglossal motoneuron, Robert J. Butera, Jr., Liston K. Purvis, 2005, <emphasis>Journal of Neurophysiology</emphasis>, 93, 723-733.   <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;list_uids=15653786&amp;dopt=Abstract">PubMed ID: 15653786</ulink>
+				</para>
+				
+			</sect1>
+		</article>
+	</documentation>   
+	
+	
+	<units name="millisecond">
+      <unit prefix="milli" units="second"/>
+   </units>
+   <units name="millivolt">
+      <unit prefix="milli" units="volt"/>
+   </units>
+   <units name="nanoA">
+      <unit prefix="nano" units="ampere"/>
+   </units>
+   <units name="uS">
+      <unit prefix="micro" units="siemens"/>
+   </units>
+   <units name="uF">
+      <unit prefix="nano" units="farad"/>
+   </units>
+   <units name="uM">
+      <unit prefix="micro" units="mole"/>
+      <unit exponent="-1" units="liter"/>
+   </units>
+   <units name="per_ms">
+      <unit exponent="-1" units="millisecond"/>
+   </units>
+   <units name="uM_per_nanocoulomb">
+      <unit units="uM"/>
+      <unit exponent="-1" prefix="nano" units="coulomb"/>
+   </units>
+   
+   <component name="environment">
+      <variable cmeta:id="environment_time" name="time" public_interface="out" units="millisecond"/>
+   </component>
+   
+   <component name="membrane">
+      <variable cmeta:id="membrane_V" initial_value="-71.847" name="V" public_interface="out" units="millivolt"/>
+      <variable initial_value="0.04" name="C" units="uF"/>
+      <variable name="time" public_interface="in" units="millisecond"/>
+      <variable name="i_Na" public_interface="in" units="nanoA"/>
+      <variable name="i_NaP" public_interface="in" units="nanoA"/>
+      <variable name="i_K" public_interface="in" units="nanoA"/>
+      <variable name="i_leak" public_interface="in" units="nanoA"/>
+      <variable name="i_T" public_interface="in" units="nanoA"/>
+      <variable name="i_N" public_interface="in" units="nanoA"/>
+      <variable name="i_P" public_interface="in" units="nanoA"/>
+      <variable name="i_SK" public_interface="in" units="nanoA"/>
+      <variable name="i_A" public_interface="in" units="nanoA"/>
+      <variable name="i_H" public_interface="in" units="nanoA"/>
+      <variable name="i_app" public_interface="in" units="nanoA"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>V</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <plus/>
+                        <ci>i_Na</ci>
+                        <ci>i_NaP</ci>
+                        <ci>i_K</ci>
+                        <ci>i_leak</ci>
+                        <ci>i_T</ci>
+                        <ci>i_N</ci>
+                        <ci>i_P</ci>
+                        <ci>i_SK</ci>
+                        <ci>i_A</ci>
+                        <ci>i_H</ci>
+                     </apply>
+                  </apply>
+                  <ci>i_app</ci>
+               </apply>
+               <ci>C</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="sodium_current">
+      <variable cmeta:id="sodium_current_i_Na" name="i_Na" public_interface="out" units="nanoA"/>
+      <variable initial_value="0.7" name="g_Na" units="uS"/>
+      <variable initial_value="60" name="E_Na" public_interface="out" units="millivolt"/>
+      <variable name="V" private_interface="out" public_interface="in" units="millivolt"/>
+      <variable name="time" private_interface="out" public_interface="in" units="millisecond"/>
+      <variable name="m" private_interface="in" units="dimensionless"/>
+      <variable name="h" private_interface="in" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>i_Na</ci>
+            <apply>
+               <times/>
+               <ci>g_Na</ci>
+               <apply>
+                  <power/>
+                  <ci>m</ci>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+               </apply>
+               <ci>h</ci>
+               <apply>
+                  <minus/>
+                  <ci>V</ci>
+                  <ci>E_Na</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="sodium_current_h_gate">
+      <variable name="V" public_interface="in" units="millivolt"/>
+      <variable name="time" public_interface="in" units="millisecond"/>
+      <variable initial_value="0.981" name="h" public_interface="out" units="dimensionless"/>
+      <variable initial_value="44.1" name="theta_h" units="millivolt"/>
+      <variable initial_value="7" name="sigma_h" units="millivolt"/>
+      <variable initial_value="35" name="theta_1" units="millivolt"/>
+      <variable initial_value="4" name="sigma_1" units="millivolt"/>
+      <variable initial_value="25" name="sigma_2" units="millivolt"/>
+      <variable name="tau_h" units="millisecond"/>
+      <variable name="h_infinity" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>tau_h</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <divide/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millisecond">3.5</cn>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <exp/>
+                        <apply>
+                           <divide/>
+                           <apply>
+                              <plus/>
+                              <ci>V</ci>
+                              <ci>theta_1</ci>
+                           </apply>
+                           <ci>sigma_1</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <exp/>
+                        <apply>
+                           <divide/>
+                           <apply>
+                              <minus/>
+                              <apply>
+                                 <plus/>
+                                 <ci>V</ci>
+                                 <ci>theta_1</ci>
+                              </apply>
+                           </apply>
+                           <ci>sigma_2</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millisecond">1</cn>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>h_infinity</ci>
+            <apply>
+               <divide/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <plus/>
+                           <ci>V</ci>
+                           <ci>theta_h</ci>
+                        </apply>
+                        <ci>sigma_h</ci>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>h</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <ci>h_infinity</ci>
+                  <ci>h</ci>
+               </apply>
+               <ci>tau_h</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="sodium_current_m_gate">
+      <variable name="V" public_interface="in" units="millivolt"/>
+      <variable name="time" public_interface="in" units="millisecond"/>
+      <variable initial_value="0.015" name="m" public_interface="out" units="dimensionless"/>
+      <variable initial_value="36" name="theta_m" units="millivolt"/>
+      <variable initial_value="8.5" name="sigma_m" units="millivolt"/>
+      <variable initial_value="0.1" name="tau_m" units="millisecond"/>
+      <variable name="m_infinity" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>m_infinity</ci>
+            <apply>
+               <divide/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <plus/>
+                           <ci>V</ci>
+                           <ci>theta_m</ci>
+                        </apply>
+                        <apply>
+                           <minus/>
+                           <ci>sigma_m</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>m</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <ci>m_infinity</ci>
+                  <ci>m</ci>
+               </apply>
+               <ci>tau_m</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="persistent_sodium_current">
+      <variable cmeta:id="persistent_sodium_current_i_NaP" name="i_NaP" public_interface="out" units="nanoA"/>
+      <variable initial_value="0.05" name="g_NaP" units="uS"/>
+      <variable name="E_Na" public_interface="in" units="millivolt"/>
+      <variable name="V" private_interface="out" public_interface="in" units="millivolt"/>
+      <variable name="time" private_interface="out" public_interface="in" units="millisecond"/>
+      <variable name="m" private_interface="in" units="dimensionless"/>
+      <variable name="h" private_interface="in" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>i_NaP</ci>
+            <apply>
+               <times/>
+               <ci>g_NaP</ci>
+               <ci>m</ci>
+               <ci>h</ci>
+               <apply>
+                  <minus/>
+                  <ci>V</ci>
+                  <ci>E_Na</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="persistent_sodium_current_h_gate">
+      <variable name="V" public_interface="in" units="millivolt"/>
+      <variable name="time" public_interface="in" units="millisecond"/>
+      <variable initial_value="0.797" name="h" public_interface="out" units="dimensionless"/>
+      <variable initial_value="65" name="theta_h" units="millivolt"/>
+      <variable initial_value="5" name="sigma_h" units="millivolt"/>
+      <variable initial_value="150" name="tau_h" units="millisecond"/>
+      <variable name="h_infinity" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>h_infinity</ci>
+            <apply>
+               <divide/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <plus/>
+                           <ci>V</ci>
+                           <ci>theta_h</ci>
+                        </apply>
+                        <ci>sigma_h</ci>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>h</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <ci>h_infinity</ci>
+                  <ci>h</ci>
+               </apply>
+               <ci>tau_h</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="persistent_sodium_current_m_gate">
+      <variable name="V" public_interface="in" units="millivolt"/>
+      <variable name="time" public_interface="in" units="millisecond"/>
+      <variable initial_value="0.002" name="m" public_interface="out" units="dimensionless"/>
+      <variable initial_value="47.1" name="theta_m" units="millivolt"/>
+      <variable initial_value="4.1" name="sigma_m" units="millivolt"/>
+      <variable initial_value="0.1" name="tau_m" units="millisecond"/>
+      <variable name="m_infinity" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>m_infinity</ci>
+            <apply>
+               <divide/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <minus/>
+                           <apply>
+                              <plus/>
+                              <ci>V</ci>
+                              <ci>theta_m</ci>
+                           </apply>
+                        </apply>
+                        <ci>sigma_m</ci>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>m</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <ci>m_infinity</ci>
+                  <ci>m</ci>
+               </apply>
+               <ci>tau_m</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="delayed_rectifier_current">
+      <variable cmeta:id="delayed_rectifier_current_i_K" name="i_K" public_interface="out" units="nanoA"/>
+      <variable initial_value="1.3" name="g_K" units="uS"/>
+      <variable initial_value="-80" name="E_K" public_interface="out" units="millivolt"/>
+      <variable name="V" private_interface="out" public_interface="in" units="millivolt"/>
+      <variable name="time" private_interface="out" public_interface="in" units="millisecond"/>
+      <variable name="n" private_interface="in" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>i_K</ci>
+            <apply>
+               <times/>
+               <ci>g_K</ci>
+               <apply>
+                  <power/>
+                  <ci>n</ci>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4</cn>
+               </apply>
+               <apply>
+                  <minus/>
+                  <ci>V</ci>
+                  <ci>E_K</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="delayed_rectifier_current_n_gate">
+      <variable name="V" public_interface="in" units="millivolt"/>
+      <variable name="time" public_interface="in" units="millisecond"/>
+      <variable initial_value="0.158" name="n" public_interface="out" units="dimensionless"/>
+      <variable initial_value="30" name="theta_n" units="millivolt"/>
+      <variable initial_value="25" name="sigma_n" units="millivolt"/>
+      <variable initial_value="30" name="theta_1" units="millivolt"/>
+      <variable initial_value="40" name="sigma_1" units="millivolt"/>
+      <variable initial_value="50" name="sigma_2" units="millivolt"/>
+      <variable name="tau_n" units="millisecond"/>
+      <variable name="n_infinity" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>tau_n</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <divide/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millisecond">2.5</cn>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <exp/>
+                        <apply>
+                           <divide/>
+                           <apply>
+                              <plus/>
+                              <ci>V</ci>
+                              <ci>theta_1</ci>
+                           </apply>
+                           <ci>sigma_1</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <exp/>
+                        <apply>
+                           <divide/>
+                           <apply>
+                              <minus/>
+                              <apply>
+                                 <plus/>
+                                 <ci>V</ci>
+                                 <ci>theta_1</ci>
+                              </apply>
+                           </apply>
+                           <ci>sigma_2</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millisecond">0.01</cn>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>n_infinity</ci>
+            <apply>
+               <divide/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <minus/>
+                           <apply>
+                              <plus/>
+                              <ci>V</ci>
+                              <ci>theta_n</ci>
+                           </apply>
+                        </apply>
+                        <ci>sigma_n</ci>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>n</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <ci>n_infinity</ci>
+                  <ci>n</ci>
+               </apply>
+               <ci>tau_n</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="leak_current">
+      <variable cmeta:id="leak_current_i_leak" name="i_leak" public_interface="out" units="nanoA"/>
+      <variable initial_value="0.005" name="g_leak" units="uS"/>
+      <variable initial_value="-50" name="E_leak" units="millivolt"/>
+      <variable name="V" private_interface="out" public_interface="in" units="millivolt"/>
+      <variable name="time" private_interface="out" public_interface="in" units="millisecond"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>i_leak</ci>
+            <apply>
+               <times/>
+               <ci>g_leak</ci>
+               <apply>
+                  <minus/>
+                  <ci>V</ci>
+                  <ci>E_leak</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="LVA_calcium_current">
+      <variable cmeta:id="LVA_calcium_current_i_T" name="i_T" public_interface="out" units="nanoA"/>
+      <variable initial_value="0.1" name="g_T" units="uS"/>
+      <variable initial_value="40" name="E_Ca" public_interface="out" units="millivolt"/>
+      <variable name="V" private_interface="out" public_interface="in" units="millivolt"/>
+      <variable name="time" private_interface="out" public_interface="in" units="millisecond"/>
+      <variable name="m" private_interface="in" units="dimensionless"/>
+      <variable name="h" private_interface="in" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>i_T</ci>
+            <apply>
+               <times/>
+               <ci>g_T</ci>
+               <ci>m</ci>
+               <ci>h</ci>
+               <apply>
+                  <minus/>
+                  <ci>V</ci>
+                  <ci>E_Ca</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="LVA_calcium_current_m_gate">
+      <variable name="V" public_interface="in" units="millivolt"/>
+      <variable name="time" public_interface="in" units="millisecond"/>
+      <variable initial_value="0.001" name="m" public_interface="out" units="dimensionless"/>
+      <variable initial_value="38" name="theta_m" units="millivolt"/>
+      <variable initial_value="5" name="sigma_m" units="millivolt"/>
+      <variable initial_value="28" name="theta_1" units="millivolt"/>
+      <variable initial_value="25" name="sigma_1" units="millivolt"/>
+      <variable initial_value="70" name="sigma_2" units="millivolt"/>
+      <variable name="tau_m" units="millisecond"/>
+      <variable name="m_infinity" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>tau_m</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <divide/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millisecond">5</cn>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <exp/>
+                        <apply>
+                           <divide/>
+                           <apply>
+                              <plus/>
+                              <ci>V</ci>
+                              <ci>theta_1</ci>
+                           </apply>
+                           <ci>sigma_1</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <exp/>
+                        <apply>
+                           <divide/>
+                           <apply>
+                              <minus/>
+                              <apply>
+                                 <plus/>
+                                 <ci>V</ci>
+                                 <ci>theta_1</ci>
+                              </apply>
+                           </apply>
+                           <ci>sigma_2</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millisecond">2</cn>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>m_infinity</ci>
+            <apply>
+               <divide/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <minus/>
+                           <apply>
+                              <plus/>
+                              <ci>V</ci>
+                              <ci>theta_m</ci>
+                           </apply>
+                        </apply>
+                        <ci>sigma_m</ci>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>m</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <ci>m_infinity</ci>
+                  <ci>m</ci>
+               </apply>
+               <ci>tau_m</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="LVA_calcium_current_h_gate">
+      <variable name="V" public_interface="in" units="millivolt"/>
+      <variable name="time" public_interface="in" units="millisecond"/>
+      <variable initial_value="0.562" name="h" public_interface="out" units="dimensionless"/>
+      <variable initial_value="70.1" name="theta_h" units="millivolt"/>
+      <variable initial_value="7" name="sigma_h" units="millivolt"/>
+      <variable initial_value="70" name="theta_1" units="millivolt"/>
+      <variable initial_value="65" name="sigma_1" units="millivolt"/>
+      <variable name="tau_h" units="millisecond"/>
+      <variable name="h_infinity" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>tau_h</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <divide/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millisecond">20</cn>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <exp/>
+                        <apply>
+                           <divide/>
+                           <apply>
+                              <plus/>
+                              <ci>V</ci>
+                              <ci>theta_1</ci>
+                           </apply>
+                           <ci>sigma_1</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <exp/>
+                        <apply>
+                           <divide/>
+                           <apply>
+                              <minus/>
+                              <apply>
+                                 <plus/>
+                                 <ci>V</ci>
+                                 <ci>theta_1</ci>
+                              </apply>
+                           </apply>
+                           <ci>sigma_1</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millisecond">1</cn>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>h_infinity</ci>
+            <apply>
+               <divide/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <plus/>
+                           <ci>V</ci>
+                           <ci>theta_h</ci>
+                        </apply>
+                        <ci>sigma_h</ci>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>h</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <ci>h_infinity</ci>
+                  <ci>h</ci>
+               </apply>
+               <ci>tau_h</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="N_HVA_calcium_current">
+      <variable cmeta:id="N_HVA_calcium_current_i_N" name="i_N" public_interface="out" units="nanoA"/>
+      <variable initial_value="0.05" name="g_N" units="uS"/>
+      <variable name="E_Ca" public_interface="in" units="millivolt"/>
+      <variable name="V" private_interface="out" public_interface="in" units="millivolt"/>
+      <variable name="time" private_interface="out" public_interface="in" units="millisecond"/>
+      <variable name="m" private_interface="in" units="dimensionless"/>
+      <variable name="h" private_interface="in" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>i_N</ci>
+            <apply>
+               <times/>
+               <ci>g_N</ci>
+               <ci>m</ci>
+               <ci>h</ci>
+               <apply>
+                  <minus/>
+                  <ci>V</ci>
+                  <ci>E_Ca</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="N_HVA_calcium_current_m_gate">
+      <variable name="V" public_interface="in" units="millivolt"/>
+      <variable name="time" public_interface="in" units="millisecond"/>
+      <variable initial_value="0.001" name="m" public_interface="out" units="dimensionless"/>
+      <variable initial_value="30" name="theta_m" units="millivolt"/>
+      <variable initial_value="6" name="sigma_m" units="millivolt"/>
+      <variable initial_value="5" name="tau_m" units="millisecond"/>
+      <variable name="m_infinity" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>m_infinity</ci>
+            <apply>
+               <divide/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <minus/>
+                           <apply>
+                              <plus/>
+                              <ci>V</ci>
+                              <ci>theta_m</ci>
+                           </apply>
+                        </apply>
+                        <ci>sigma_m</ci>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>m</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <ci>m_infinity</ci>
+                  <ci>m</ci>
+               </apply>
+               <ci>tau_m</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="N_HVA_calcium_current_h_gate">
+      <variable name="V" public_interface="in" units="millivolt"/>
+      <variable name="time" public_interface="in" units="millisecond"/>
+      <variable initial_value="0.649" name="h" public_interface="out" units="dimensionless"/>
+      <variable initial_value="70" name="theta_h" units="millivolt"/>
+      <variable initial_value="3" name="sigma_h" units="millivolt"/>
+      <variable initial_value="25" name="tau_h" units="millisecond"/>
+      <variable name="h_infinity" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>h_infinity</ci>
+            <apply>
+               <divide/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <plus/>
+                           <ci>V</ci>
+                           <ci>theta_h</ci>
+                        </apply>
+                        <ci>sigma_h</ci>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>h</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <ci>h_infinity</ci>
+                  <ci>h</ci>
+               </apply>
+               <ci>tau_h</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="P_HVA_calcium_current">
+      <variable cmeta:id="P_HVA_calcium_current_i_P" name="i_P" public_interface="out" units="nanoA"/>
+      <variable initial_value="0.05" name="g_P" units="uS"/>
+      <variable name="E_Ca" public_interface="in" units="millivolt"/>
+      <variable name="V" private_interface="out" public_interface="in" units="millivolt"/>
+      <variable name="time" private_interface="out" public_interface="in" units="millisecond"/>
+      <variable name="m" private_interface="in" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>i_P</ci>
+            <apply>
+               <times/>
+               <ci>g_P</ci>
+               <ci>m</ci>
+               <apply>
+                  <minus/>
+                  <ci>V</ci>
+                  <ci>E_Ca</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="P_HVA_calcium_current_m_gate">
+      <variable name="V" public_interface="in" units="millivolt"/>
+      <variable name="time" public_interface="in" units="millisecond"/>
+      <variable initial_value="0" name="m" public_interface="out" units="dimensionless"/>
+      <variable initial_value="17" name="theta_m" units="millivolt"/>
+      <variable initial_value="3" name="sigma_m" units="millivolt"/>
+      <variable initial_value="10" name="tau_m" units="millisecond"/>
+      <variable name="m_infinity" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>m_infinity</ci>
+            <apply>
+               <divide/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <minus/>
+                           <apply>
+                              <plus/>
+                              <ci>V</ci>
+                              <ci>theta_m</ci>
+                           </apply>
+                        </apply>
+                        <ci>sigma_m</ci>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>m</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <ci>m_infinity</ci>
+                  <ci>m</ci>
+               </apply>
+               <ci>tau_m</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="calcium_dependent_potassium_current">
+      <variable cmeta:id="calcium_dependent_potassium_current_i_SK" name="i_SK" public_interface="out" units="nanoA"/>
+      <variable initial_value="0.3" name="g_SK" units="uS"/>
+      <variable name="E_K" public_interface="in" units="millivolt"/>
+      <variable name="V" private_interface="out" public_interface="in" units="millivolt"/>
+      <variable name="time" private_interface="out" public_interface="in" units="millisecond"/>
+      <variable name="i_T" private_interface="out" public_interface="in" units="nanoA"/>
+      <variable name="i_N" private_interface="out" public_interface="in" units="nanoA"/>
+      <variable name="i_P" private_interface="out" public_interface="in" units="nanoA"/>
+      <variable name="z" private_interface="in" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>i_SK</ci>
+            <apply>
+               <times/>
+               <ci>g_SK</ci>
+               <apply>
+                  <power/>
+                  <ci>z</ci>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+               </apply>
+               <apply>
+                  <minus/>
+                  <ci>V</ci>
+                  <ci>E_K</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="calcium_dependent_potassium_current_z_gate">
+      <variable name="V" public_interface="in" units="millivolt"/>
+      <variable name="time" public_interface="in" units="millisecond"/>
+      <variable name="i_T" public_interface="in" units="nanoA"/>
+      <variable name="i_N" public_interface="in" units="nanoA"/>
+      <variable name="i_P" public_interface="in" units="nanoA"/>
+      <variable initial_value="0" name="z" public_interface="out" units="dimensionless"/>
+      <variable initial_value="-500" name="K1" units="uM_per_nanocoulomb"/>
+      <variable initial_value="0.04" name="K2" units="per_ms"/>
+      <variable initial_value="0.0604" name="Ca_conc" units="uM"/>
+      <variable initial_value="1" name="tau_z" units="millisecond"/>
+      <variable name="z_infinity" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Ca_conc</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="second">1</cn>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millisecond">1000</cn>
+                  </apply>
+                  <ci>K1</ci>
+                  <apply>
+                     <plus/>
+                     <ci>i_T</ci>
+                     <ci>i_N</ci>
+                     <ci>i_P</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>K2</ci>
+                  <ci>Ca_conc</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>z_infinity</ci>
+            <apply>
+               <divide/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <power/>
+                     <apply>
+                        <divide/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="uM">0.003</cn>
+                        <ci>Ca_conc</ci>
+                     </apply>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>z</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <ci>z_infinity</ci>
+                  <ci>z</ci>
+               </apply>
+               <ci>tau_z</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="fast_transient_potassium_current">
+      <variable cmeta:id="fast_transient_potassium_current_i_A" name="i_A" public_interface="out" units="nanoA"/>
+      <variable initial_value="1" name="g_A" units="uS"/>
+      <variable name="E_K" public_interface="in" units="millivolt"/>
+      <variable name="V" private_interface="out" public_interface="in" units="millivolt"/>
+      <variable name="time" private_interface="out" public_interface="in" units="millisecond"/>
+      <variable name="m" private_interface="in" units="dimensionless"/>
+      <variable name="h" private_interface="in" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>i_A</ci>
+            <apply>
+               <times/>
+               <ci>g_A</ci>
+               <ci>m</ci>
+               <ci>h</ci>
+               <apply>
+                  <minus/>
+                  <ci>V</ci>
+                  <ci>E_K</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="fast_transient_potassium_current_m_gate">
+      <variable name="V" public_interface="in" units="millivolt"/>
+      <variable name="time" public_interface="in" units="millisecond"/>
+      <variable initial_value="0.057" name="m" public_interface="out" units="dimensionless"/>
+      <variable initial_value="27" name="theta_m" units="millivolt"/>
+      <variable initial_value="16" name="sigma_m" units="millivolt"/>
+      <variable initial_value="40" name="theta_1" units="millivolt"/>
+      <variable initial_value="74" name="theta_2" units="millivolt"/>
+      <variable initial_value="5" name="sigma_1" units="millivolt"/>
+      <variable initial_value="7.5" name="sigma_2" units="millivolt"/>
+      <variable name="tau_m" units="millisecond"/>
+      <variable name="m_infinity" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>tau_m</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <divide/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millisecond">1</cn>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <exp/>
+                        <apply>
+                           <divide/>
+                           <apply>
+                              <plus/>
+                              <ci>V</ci>
+                              <ci>theta_1</ci>
+                           </apply>
+                           <ci>sigma_1</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <exp/>
+                        <apply>
+                           <divide/>
+                           <apply>
+                              <minus/>
+                              <apply>
+                                 <plus/>
+                                 <ci>V</ci>
+                                 <ci>theta_2</ci>
+                              </apply>
+                           </apply>
+                           <ci>sigma_2</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millisecond">0.37</cn>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>m_infinity</ci>
+            <apply>
+               <divide/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <minus/>
+                           <apply>
+                              <plus/>
+                              <ci>V</ci>
+                              <ci>theta_m</ci>
+                           </apply>
+                        </apply>
+                        <ci>sigma_m</ci>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>m</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <ci>m_infinity</ci>
+                  <ci>m</ci>
+               </apply>
+               <ci>tau_m</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="fast_transient_potassium_current_h_gate">
+      <variable name="V" public_interface="in" units="millivolt"/>
+      <variable name="time" public_interface="in" units="millisecond"/>
+      <variable initial_value="0.287" name="h" public_interface="out" units="dimensionless"/>
+      <variable initial_value="80" name="theta_h" units="millivolt"/>
+      <variable initial_value="11" name="sigma_h" units="millivolt"/>
+      <variable initial_value="20" name="tau_h" units="millisecond"/>
+      <variable name="h_infinity" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>h_infinity</ci>
+            <apply>
+               <divide/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <plus/>
+                           <ci>V</ci>
+                           <ci>theta_h</ci>
+                        </apply>
+                        <ci>sigma_h</ci>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>h</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <ci>h_infinity</ci>
+                  <ci>h</ci>
+               </apply>
+               <ci>tau_h</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="hyperpolarization_activated_current">
+      <variable cmeta:id="hyperpolarization_activated_current_i_H" name="i_H" public_interface="out" units="nanoA"/>
+      <variable initial_value="0.005" name="g_H" units="uS"/>
+      <variable initial_value="-38.8" name="E_H" units="millivolt"/>
+      <variable name="V" private_interface="out" public_interface="in" units="millivolt"/>
+      <variable name="time" private_interface="out" public_interface="in" units="millisecond"/>
+      <variable name="m" private_interface="in" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>i_H</ci>
+            <apply>
+               <times/>
+               <ci>g_H</ci>
+               <ci>m</ci>
+               <apply>
+                  <minus/>
+                  <ci>V</ci>
+                  <ci>E_H</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="hyperpolarization_activated_current_m_gate">
+      <variable name="V" public_interface="in" units="millivolt"/>
+      <variable name="time" public_interface="in" units="millisecond"/>
+      <variable initial_value="0.182" name="m" public_interface="out" units="dimensionless"/>
+      <variable initial_value="79.8" name="theta_m" units="millivolt"/>
+      <variable initial_value="5.3" name="sigma_m" units="millivolt"/>
+      <variable initial_value="70" name="theta_1" units="millivolt"/>
+      <variable initial_value="11" name="sigma_1" units="millivolt"/>
+      <variable name="tau_m" units="millisecond"/>
+      <variable name="m_infinity" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>tau_m</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <divide/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millisecond">1</cn>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <exp/>
+                        <apply>
+                           <divide/>
+                           <apply>
+                              <plus/>
+                              <ci>V</ci>
+                              <ci>theta_1</ci>
+                           </apply>
+                           <ci>sigma_1</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <exp/>
+                        <apply>
+                           <divide/>
+                           <apply>
+                              <minus/>
+                              <apply>
+                                 <plus/>
+                                 <ci>V</ci>
+                                 <ci>theta_1</ci>
+                              </apply>
+                           </apply>
+                           <ci>sigma_1</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millisecond">50</cn>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>m_infinity</ci>
+            <apply>
+               <divide/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <plus/>
+                           <ci>V</ci>
+                           <ci>theta_m</ci>
+                        </apply>
+                        <ci>sigma_m</ci>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>m</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <ci>m_infinity</ci>
+                  <ci>m</ci>
+               </apply>
+               <ci>tau_m</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="stimulus_protocol">
+      <variable name="i_app" public_interface="out" units="nanoA"/>
+      <variable initial_value="10" name="i_stimStart" units="millisecond"/>
+      <variable initial_value="11" name="i_stimEnd" units="millisecond"/>
+      <variable initial_value="10" name="i_stimAmplitude" units="nanoA"/>
+      <variable name="time" public_interface="in" units="millisecond"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>i_app</ci>
+            <piecewise>
+               <piece>
+                  <ci>i_stimAmplitude</ci>
+                  <apply>
+                     <and/>
+                     <apply>
+                        <geq/>
+                        <ci>time</ci>
+                        <ci>i_stimStart</ci>
+                     </apply>
+                     <apply>
+                        <leq/>
+                        <ci>time</ci>
+                        <ci>i_stimEnd</ci>
+                     </apply>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="nanoA">0</cn>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   <group>
+      <relationship_ref relationship="encapsulation"/>
+      <component_ref component="sodium_current">
+         <component_ref component="sodium_current_h_gate"/>
+         <component_ref component="sodium_current_m_gate"/>
+      </component_ref>
+      <component_ref component="persistent_sodium_current">
+         <component_ref component="persistent_sodium_current_h_gate"/>
+         <component_ref component="persistent_sodium_current_m_gate"/>
+      </component_ref>
+      <component_ref component="delayed_rectifier_current">
+         <component_ref component="delayed_rectifier_current_n_gate"/>
+      </component_ref>
+      <component_ref component="LVA_calcium_current">
+         <component_ref component="LVA_calcium_current_h_gate"/>
+         <component_ref component="LVA_calcium_current_m_gate"/>
+      </component_ref>
+      <component_ref component="N_HVA_calcium_current">
+         <component_ref component="N_HVA_calcium_current_h_gate"/>
+         <component_ref component="N_HVA_calcium_current_m_gate"/>
+      </component_ref>
+      <component_ref component="P_HVA_calcium_current">
+         <component_ref component="P_HVA_calcium_current_m_gate"/>
+      </component_ref>
+      <component_ref component="calcium_dependent_potassium_current">
+         <component_ref component="calcium_dependent_potassium_current_z_gate"/>
+      </component_ref>
+      <component_ref component="fast_transient_potassium_current">
+         <component_ref component="fast_transient_potassium_current_h_gate"/>
+         <component_ref component="fast_transient_potassium_current_m_gate"/>
+      </component_ref>
+      <component_ref component="hyperpolarization_activated_current">
+         <component_ref component="hyperpolarization_activated_current_m_gate"/>
+      </component_ref>
+   </group>
+   <connection>
+      <map_components component_1="environment" component_2="membrane"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="sodium_current"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="persistent_sodium_current"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="delayed_rectifier_current"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="leak_current"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="LVA_calcium_current"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="N_HVA_calcium_current"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="P_HVA_calcium_current"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="calcium_dependent_potassium_current"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="fast_transient_potassium_current"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="hyperpolarization_activated_current"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="stimulus_protocol"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="membrane" component_2="stimulus_protocol"/>
+      <map_variables variable_1="i_app" variable_2="i_app"/>
+   </connection>
+   <connection>
+      <map_components component_1="membrane" component_2="sodium_current"/>
+      <map_variables variable_1="V" variable_2="V"/>
+      <map_variables variable_1="i_Na" variable_2="i_Na"/>
+   </connection>
+   <connection>
+      <map_components component_1="sodium_current" component_2="sodium_current_h_gate"/>
+      <map_variables variable_1="V" variable_2="V"/>
+      <map_variables variable_1="time" variable_2="time"/>
+      <map_variables variable_1="h" variable_2="h"/>
+   </connection>
+   <connection>
+      <map_components component_1="sodium_current" component_2="sodium_current_m_gate"/>
+      <map_variables variable_1="V" variable_2="V"/>
+      <map_variables variable_1="time" variable_2="time"/>
+      <map_variables variable_1="m" variable_2="m"/>
+   </connection>
+   <connection>
+      <map_components component_1="sodium_current" component_2="persistent_sodium_current"/>
+      <map_variables variable_1="E_Na" variable_2="E_Na"/>
+   </connection>
+   <connection>
+      <map_components component_1="membrane" component_2="persistent_sodium_current"/>
+      <map_variables variable_1="V" variable_2="V"/>
+      <map_variables variable_1="i_NaP" variable_2="i_NaP"/>
+   </connection>
+   <connection>
+      <map_components component_1="persistent_sodium_current" component_2="persistent_sodium_current_h_gate"/>
+      <map_variables variable_1="V" variable_2="V"/>
+      <map_variables variable_1="time" variable_2="time"/>
+      <map_variables variable_1="h" variable_2="h"/>
+   </connection>
+   <connection>
+      <map_components component_1="persistent_sodium_current" component_2="persistent_sodium_current_m_gate"/>
+      <map_variables variable_1="V" variable_2="V"/>
+      <map_variables variable_1="time" variable_2="time"/>
+      <map_variables variable_1="m" variable_2="m"/>
+   </connection>
+   <connection>
+      <map_components component_1="membrane" component_2="delayed_rectifier_current"/>
+      <map_variables variable_1="V" variable_2="V"/>
+      <map_variables variable_1="i_K" variable_2="i_K"/>
+   </connection>
+   <connection>
+      <map_components component_1="delayed_rectifier_current" component_2="delayed_rectifier_current_n_gate"/>
+      <map_variables variable_1="V" variable_2="V"/>
+      <map_variables variable_1="time" variable_2="time"/>
+      <map_variables variable_1="n" variable_2="n"/>
+   </connection>
+   <connection>
+      <map_components component_1="membrane" component_2="leak_current"/>
+      <map_variables variable_1="V" variable_2="V"/>
+      <map_variables variable_1="i_leak" variable_2="i_leak"/>
+   </connection>
+   <connection>
+      <map_components component_1="membrane" component_2="LVA_calcium_current"/>
+      <map_variables variable_1="V" variable_2="V"/>
+      <map_variables variable_1="i_T" variable_2="i_T"/>
+   </connection>
+   <connection>
+      <map_components component_1="LVA_calcium_current" component_2="LVA_calcium_current_m_gate"/>
+      <map_variables variable_1="V" variable_2="V"/>
+      <map_variables variable_1="time" variable_2="time"/>
+      <map_variables variable_1="m" variable_2="m"/>
+   </connection>
+   <connection>
+      <map_components component_1="LVA_calcium_current" component_2="LVA_calcium_current_h_gate"/>
+      <map_variables variable_1="V" variable_2="V"/>
+      <map_variables variable_1="time" variable_2="time"/>
+      <map_variables variable_1="h" variable_2="h"/>
+   </connection>
+   <connection>
+      <map_components component_1="membrane" component_2="N_HVA_calcium_current"/>
+      <map_variables variable_1="V" variable_2="V"/>
+      <map_variables variable_1="i_N" variable_2="i_N"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_HVA_calcium_current" component_2="N_HVA_calcium_current_m_gate"/>
+      <map_variables variable_1="V" variable_2="V"/>
+      <map_variables variable_1="time" variable_2="time"/>
+      <map_variables variable_1="m" variable_2="m"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_HVA_calcium_current" component_2="N_HVA_calcium_current_h_gate"/>
+      <map_variables variable_1="V" variable_2="V"/>
+      <map_variables variable_1="time" variable_2="time"/>
+      <map_variables variable_1="h" variable_2="h"/>
+   </connection>
+   <connection>
+      <map_components component_1="membrane" component_2="P_HVA_calcium_current"/>
+      <map_variables variable_1="V" variable_2="V"/>
+      <map_variables variable_1="i_P" variable_2="i_P"/>
+   </connection>
+   <connection>
+      <map_components component_1="P_HVA_calcium_current" component_2="P_HVA_calcium_current_m_gate"/>
+      <map_variables variable_1="V" variable_2="V"/>
+      <map_variables variable_1="time" variable_2="time"/>
+      <map_variables variable_1="m" variable_2="m"/>
+   </connection>
+   <connection>
+      <map_components component_1="membrane" component_2="calcium_dependent_potassium_current"/>
+      <map_variables variable_1="V" variable_2="V"/>
+      <map_variables variable_1="i_SK" variable_2="i_SK"/>
+   </connection>
+   <connection>
+      <map_components component_1="calcium_dependent_potassium_current" component_2="calcium_dependent_potassium_current_z_gate"/>
+      <map_variables variable_1="V" variable_2="V"/>
+      <map_variables variable_1="time" variable_2="time"/>
+      <map_variables variable_1="z" variable_2="z"/>
+      <map_variables variable_1="i_T" variable_2="i_T"/>
+      <map_variables variable_1="i_N" variable_2="i_N"/>
+      <map_variables variable_1="i_P" variable_2="i_P"/>
+   </connection>
+   <connection>
+      <map_components component_1="calcium_dependent_potassium_current" component_2="LVA_calcium_current"/>
+      <map_variables variable_1="i_T" variable_2="i_T"/>
+   </connection>
+   <connection>
+      <map_components component_1="calcium_dependent_potassium_current" component_2="N_HVA_calcium_current"/>
+      <map_variables variable_1="i_N" variable_2="i_N"/>
+   </connection>
+   <connection>
+      <map_components component_1="calcium_dependent_potassium_current" component_2="P_HVA_calcium_current"/>
+      <map_variables variable_1="i_P" variable_2="i_P"/>
+   </connection>
+   <connection>
+      <map_components component_1="membrane" component_2="fast_transient_potassium_current"/>
+      <map_variables variable_1="V" variable_2="V"/>
+      <map_variables variable_1="i_A" variable_2="i_A"/>
+   </connection>
+   <connection>
+      <map_components component_1="fast_transient_potassium_current" component_2="fast_transient_potassium_current_m_gate"/>
+      <map_variables variable_1="V" variable_2="V"/>
+      <map_variables variable_1="time" variable_2="time"/>
+      <map_variables variable_1="m" variable_2="m"/>
+   </connection>
+   <connection>
+      <map_components component_1="fast_transient_potassium_current" component_2="fast_transient_potassium_current_h_gate"/>
+      <map_variables variable_1="V" variable_2="V"/>
+      <map_variables variable_1="time" variable_2="time"/>
+      <map_variables variable_1="h" variable_2="h"/>
+   </connection>
+   <connection>
+      <map_components component_1="membrane" component_2="hyperpolarization_activated_current"/>
+      <map_variables variable_1="V" variable_2="V"/>
+      <map_variables variable_1="i_H" variable_2="i_H"/>
+   </connection>
+   <connection>
+      <map_components component_1="hyperpolarization_activated_current" component_2="hyperpolarization_activated_current_m_gate"/>
+      <map_variables variable_1="V" variable_2="V"/>
+      <map_variables variable_1="time" variable_2="time"/>
+      <map_variables variable_1="m" variable_2="m"/>
+   </connection>
+   <connection>
+      <map_components component_1="LVA_calcium_current" component_2="N_HVA_calcium_current"/>
+      <map_variables variable_1="E_Ca" variable_2="E_Ca"/>
+   </connection>
+   <connection>
+      <map_components component_1="LVA_calcium_current" component_2="P_HVA_calcium_current"/>
+      <map_variables variable_1="E_Ca" variable_2="E_Ca"/>
+   </connection>
+   <connection>
+      <map_components component_1="delayed_rectifier_current" component_2="calcium_dependent_potassium_current"/>
+      <map_variables variable_1="E_K" variable_2="E_K"/>
+   </connection>
+   <connection>
+      <map_components component_1="delayed_rectifier_current" component_2="fast_transient_potassium_current"/>
+      <map_variables variable_1="E_K" variable_2="E_K"/>
+   </connection>
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Seq rdf:about="rdf:#8e14cbcc-bc57-4317-9e24-ebd4347a4e46">
+    <rdf:li rdf:resource="rdf:#8064ac21-2949-4e87-9fa8-f729a740f420"/>
+    <rdf:li rdf:resource="rdf:#08f6a2e0-d600-4562-8f94-5e66935d181b"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#206126f2-1c75-4de3-8dcf-ae7ed109c156">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2008-07-17T14:14:40+12:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:publisher xmlns:dc="http://purl.org/dc/elements/1.1/"/>
+    <cmeta:comment rdf:resource="rdf:#344e8fbc-c9aa-417e-a9da-38da079e2269"/>
+    <dcterms:created xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#28b59582-3c30-4e59-aae7-64b88b8c5434"/>
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#6d21b65c-94f4-49e4-a6a7-78c3a424dd9f"/>
+    <cmeta:modification rdf:resource="rdf:#09a8aff2-3770-4dbb-bcf0-bb58a25e032f"/>
+    <cmeta:modification rdf:resource="rdf:#87b021c8-0019-4b85-990d-0a7f8316944d"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#33d7f05b-fcb2-4f04-a3dc-edf35ccd26ae">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Geoffrey</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Nunns</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Rogan</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#fa8c1db3-e7cd-4814-b062-2c3732b4ce5e">
+    <vCard:Orgname xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Auckland Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#c0088db1-41dc-4390-825a-e26b99d7866a">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2005-00-00 00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8064ac21-2949-4e87-9fa8-f729a740f420">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#20e3d890-971f-4ebb-897d-f976ff672ad5"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#butera_purvis_2004">
+    <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#7e841777-6b49-4615-a4ca-99b21ed06167"/>
+<bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource">
+  <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value>
+      <rdf:Bag>
+        <rdf:li>calcium dynamics</rdf:li>
+        <rdf:li>electrophysiology</rdf:li>
+		<rdf:li>neurobiology</rdf:li>
+      </rdf:Bag>
+    </rdf:value>
+  </dc:subject>
+</bqs:reference>
+    <cmeta:comment rdf:resource="rdf:#1cdf0fd5-4def-4837-8e9b-c9151a7dbcd8"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#caedb363-aa2a-4436-973d-9b52337c6496">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Robert</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Butera</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">J</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a6ce75b8-d758-49c6-9a0c-8829d3907745">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Geoffrey</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Nunns</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Rogan</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#6d21b65c-94f4-49e4-a6a7-78c3a424dd9f">
+    <vCard:ORG xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#fa8c1db3-e7cd-4814-b062-2c3732b4ce5e"/>
+    <vCard:EMAIL xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#a48b0ff0-369a-484b-91ca-59154966af2e"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#33d7f05b-fcb2-4f04-a3dc-edf35ccd26ae"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#593d0aac-2849-4182-80cc-41ed4138b925">
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Journal of Neurophysiology</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#33e024e1-01fe-4630-834d-c4d672c9da78">
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#a6ce75b8-d758-49c6-9a0c-8829d3907745"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#$LLJmU3">
+    <ns7:endingValue xmlns:ns7="http://www.cellml.org/metadata/simulation/1.0#">60</ns7:endingValue>
+    <ns7:nonstandard-pointDensity xmlns:ns7="http://www.cellml.org/metadata/simulation/1.0#">10000</ns7:nonstandard-pointDensity>
+    <ns7:maximumStepSize xmlns:ns7="http://www.cellml.org/metadata/simulation/1.0#">0.01</ns7:maximumStepSize>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#87b021c8-0019-4b85-990d-0a7f8316944d">
+    <dcterms:modified xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#206126f2-1c75-4de3-8dcf-ae7ed109c156"/>
+    <rdf:value>Fixed "not exactly equivalent but dimensionally equivalent" errors.</rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#33e024e1-01fe-4630-834d-c4d672c9da78"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1cdf0fd5-4def-4837-8e9b-c9151a7dbcd8">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#0577c35b-ff0b-43c0-967f-770bc039908e"/>
+    <rdf:value>This CellML model is known to run in both PCEnv and COR and the units have been checked and are consistent. The model recreates the published results.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#$JLJmU3">
+    <ns7:boundIntervals xmlns:ns7="http://www.cellml.org/metadata/simulation/1.0#" rdf:resource="rdf:#$KLJmU3"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#09a8aff2-3770-4dbb-bcf0-bb58a25e032f">
+    <dcterms:modified xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#11f3d4d6-a286-4cd8-b8c3-0ba0a1ba9b13"/>
+    <rdf:value>Unit inconsistencies were corrected, which brought the model in line with the paper results. The cmeta id's were updated for use with session files.</rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#88ec4458-016a-4e04-b173-0baee933917f"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0577c35b-ff0b-43c0-967f-770bc039908e">
+    <vCard:FN xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Geoff Nunns</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#344e8fbc-c9aa-417e-a9da-38da079e2269">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#a49ac0f9-f1d8-4f75-b71b-974b93a3adec"/>
+    <rdf:value>This CellML model is known to run in both PCEnv and COR and the units have been checked and are consistent. The model recreates the published results.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#08f6a2e0-d600-4562-8f94-5e66935d181b">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#caedb363-aa2a-4436-973d-9b52337c6496"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#butera_purvis_2004">
+    <ns7:simulation xmlns:ns7="http://www.cellml.org/metadata/simulation/1.0#" rdf:resource="rdf:#$JLJmU3"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a49ac0f9-f1d8-4f75-b71b-974b93a3adec">
+    <vCard:FN xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Geoff Nunns</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#11f3d4d6-a286-4cd8-b8c3-0ba0a1ba9b13">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2008-07-24T11:24:37+12:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#be6cbcd5-e8a6-47b2-9f42-5019d87ea2f8">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Geoffrey</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Nunns</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Rogan</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#20e3d890-971f-4ebb-897d-f976ff672ad5">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Liston</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Purvis</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">K</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#674118a8-ef6f-4f7d-a45a-9fbd12836428">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#8e14cbcc-bc57-4317-9e24-ebd4347a4e46"/>
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Ionic Current Model of a Hypoglossal Motoneuron</dc:title>
+    <bqs:volume xmlns:bqs="http://www.cellml.org/bqs/1.0#">93</bqs:volume>
+    <bqs:first_page xmlns:bqs="http://www.cellml.org/bqs/1.0#">723</bqs:first_page>
+    <bqs:Journal xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#593d0aac-2849-4182-80cc-41ed4138b925"/>
+    <dcterms:issued xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#c0088db1-41dc-4390-825a-e26b99d7866a"/>
+    <bqs:last_page xmlns:bqs="http://www.cellml.org/bqs/1.0#">733</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#28b59582-3c30-4e59-aae7-64b88b8c5434">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2008-07-17T00:00:00+00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a48b0ff0-369a-484b-91ca-59154966af2e">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>gnunns1@jhem.jhu.edu</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#88ec4458-016a-4e04-b173-0baee933917f">
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#be6cbcd5-e8a6-47b2-9f42-5019d87ea2f8"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#$KLJmU3">
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+    <rdf:first rdf:resource="rdf:#$LLJmU3"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7e841777-6b49-4615-a4ca-99b21ed06167">
+    <bqs:Pubmed_id xmlns:bqs="http://www.cellml.org/bqs/1.0#">15653786</bqs:Pubmed_id>
+    <bqs:JournalArticle xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#674118a8-ef6f-4f7d-a45a-9fbd12836428"/>
+  </rdf:Description>
+</rdf:RDF>
+</model>

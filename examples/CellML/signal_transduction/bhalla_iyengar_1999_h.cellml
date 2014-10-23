@@ -1,0 +1,585 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--
+This CellML file was generated on 20/06/2007 at 12:39:18 at a.m. using:
+
+COR (0.9.31.649)
+Copyright 2002-2007 Dr Alan Garny
+http://COR.physiol.ox.ac.uk/ - COR@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this cellular model
+http://www.CellML.org/
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="bhalla_model_1999" name="bi_model_1999_version01">
+
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Emergent properties of networks of biological signaling pathways</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+            This particular version of the CellML model describes the PLC-gamma pathway component of the Bhalla-Iyengar model.  This model is able to be solved but does not give the correct results as it is not connected to the other modules of the pathway. ValidateCellML verifies this model as valid CellML but detects unit inconsistencies.</para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+ABSTRACT: Many distinct signaling pathways allow the cell to receive, process, and respond to information. Often, components of different pathways interact, resulting in signaling networks. Biochemical signaling networks were constructed with experimentally obtained constants and analyzed by computational methods to understand their role in complex biological processes. These networks exhibit emergent properties such as integration of signals across multiple time scales, generation of distinct outputs depending on input strength and duration, and self-sustaining feedback loops. Feedback can result in bistable behavior with discrete steady-state activities, well-defined input thresholds for transition between states and prolonged signal output, and signal modulation in response to transient stimuli. These properties of signaling networks raise the possibility that information for "learned behavior" of biological systems may be stored within intracellular biochemical reactions that comprise signaling pathways.
+</para>
+
+<para>
+The original paper reference is cited below:
+</para>
+
+<para>
+Emergent properties of networks of biological signaling pathways. Bhalla US, Iyengar R.
+            <emphasis>Science</emphasis> 1999 Jan 15; 283(5400); 381-7.  <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;list_uids=9888852&amp;dopt=Abstract">PubMed ID: 9888852</ulink>
+</para>
+
+
+
+
+<informalfigure float="0" id="fig_pathway_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>model diagram</title>
+    </objectinfo>
+    <imagedata fileref="bhalla_iyengar_plc_gamma.png"/>
+  </imageobject>
+</mediaobject>
+<caption>A rendering of the PLC gamma pathway component of the Bhalla-Iyengar model.</caption>
+</informalfigure>
+
+</sect1>
+</article>
+</documentation>
+
+
+
+   <units name="s">
+      <unit units="second"/>
+   </units>
+   <units name="per_um_s">
+      <unit units="mole" prefix="micro" exponent="-1"/>
+      <unit units="litre" exponent="-1"/>
+   </units>
+   <units name="um">
+      <unit units="litre" exponent="-1"/>
+      <unit units="mole" prefix="micro"/>
+   </units>
+   <units name="um_per_s">
+      <unit units="mole" prefix="micro"/>
+      <unit units="litre" exponent="-1"/>
+   </units>
+   <units name="per_s">
+      <unit units="s" exponent="-1"/>
+   </units>
+   <component name="environment">
+      <variable units="s" public_interface="out" name="t"/>
+   </component>
+   <component name="PIPtoDAG">
+      <variable units="s" public_interface="in" name="t"/>
+      <variable units="um" name="km2" initial_value="97"/>
+      <variable units="um" name="km6" initial_value="19.79166667"/>
+      <variable units="per_s" name="Vmax2" initial_value="14"/>
+      <variable units="per_s" name="Vmax6" initial_value="57"/>
+      <variable units="um" name="PIP2" initial_value="10"/>
+      <variable units="um" name="DAG" initial_value="0"/>
+      <variable units="um" name="IP3" initial_value="0"/>
+      <variable units="um" public_interface="in" name="CaPLCg"/>
+      <variable units="um" public_interface="in" name="CaPLCg_star"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>t</ci>
+               </bvar>
+               <ci>PIP2</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <minus/>
+                        <ci>CaPLCg</ci>
+                     </apply>
+                     <ci>Vmax2</ci>
+                     <ci>PIP2</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>km2</ci>
+                     <ci>PIP2</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>CaPLCg_star</ci>
+                     <ci>Vmax6</ci>
+                     <ci>PIP2</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>km6</ci>
+                     <ci>PIP2</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>t</ci>
+               </bvar>
+               <ci>DAG</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>CaPLCg</ci>
+                     <ci>Vmax2</ci>
+                     <ci>PIP2</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>km2</ci>
+                     <ci>PIP2</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>CaPLCg_star</ci>
+                     <ci>Vmax6</ci>
+                     <ci>PIP2</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>km6</ci>
+                     <ci>PIP2</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>t</ci>
+               </bvar>
+               <ci>IP3</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>CaPLCg</ci>
+                     <ci>Vmax2</ci>
+                     <ci>PIP2</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>km2</ci>
+                     <ci>PIP2</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>CaPLCg_star</ci>
+                     <ci>Vmax6</ci>
+                     <ci>PIP2</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>km6</ci>
+                     <ci>PIP2</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="PLC">
+      <variable units="s" public_interface="in" name="t"/>
+      <variable units="per_um_s" name="kf1" initial_value="0.0003"/>
+      <variable units="per_s" name="kb1" initial_value="10"/>
+      <variable units="per_s" name="kf3" initial_value="0.05"/>
+      <variable units="per_um_s" name="kf5" initial_value="0.00002"/>
+      <variable units="per_s" name="kb5" initial_value="10"/>
+      <variable units="um" name="km4" initial_value="0.33333333333"/>
+      <variable units="per_s" name="Vmax4" initial_value="0.2"/>
+      <variable units="um" name="PLCg" initial_value="0.82"/>
+      <variable units="um" name="PLCg_star" initial_value="0"/>
+      <variable units="um" public_interface="out" name="CaPLCg" initial_value="0"/>
+      <variable units="um" public_interface="out" name="CaPLCg_star" initial_value="0"/>
+      <variable units="um" public_interface="in" name="EGF_EGFR"/>
+      <variable units="um" name="Ca" initial_value="0.1"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>t</ci>
+               </bvar>
+               <ci>PLCg</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <apply>
+                     <minus/>
+                     <ci>Ca</ci>
+                  </apply>
+                  <ci>PLCg</ci>
+                  <ci>kf1</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>CaPLCg</ci>
+                  <ci>kb1</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>t</ci>
+               </bvar>
+               <ci>CaPLCg</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <times/>
+                           <apply>
+                              <minus/>
+                              <ci>Ca</ci>
+                           </apply>
+                           <ci>PLCg</ci>
+                           <ci>kf1</ci>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>CaPLCg</ci>
+                           <ci>kb1</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>kf3</ci>
+                     <ci>CaPLCg_star</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>Vmax4</ci>
+                     <ci>EGF_EGFR</ci>
+                     <ci>CaPLCg</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>km4</ci>
+                     <ci>CaPLCg</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>t</ci>
+               </bvar>
+               <ci>CaPLCg_star</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <times/>
+                           <ci>kf3</ci>
+                           <ci>CaPLCg_star</ci>
+                        </apply>
+                        <apply>
+                           <divide/>
+                           <apply>
+                              <times/>
+                              <ci>Vmax4</ci>
+                              <ci>EGF_EGFR</ci>
+                              <ci>CaPLCg</ci>
+                           </apply>
+                           <apply>
+                              <plus/>
+                              <ci>km4</ci>
+                              <ci>CaPLCg</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>Ca</ci>
+                     <ci>PLCg_star</ci>
+                     <ci>kf5</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>kb5</ci>
+                  <ci>CaPLCg_star</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>t</ci>
+               </bvar>
+               <ci>PLCg_star</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <apply>
+                     <minus/>
+                     <ci>Ca</ci>
+                  </apply>
+                  <ci>PLCg_star</ci>
+                  <ci>kf5</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>kb5</ci>
+                  <ci>CaPLCg_star</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>t</ci>
+               </bvar>
+               <ci>Ca</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <minus/>
+                        <ci>Ca</ci>
+                     </apply>
+                     <ci>PLCg</ci>
+                     <ci>kf1</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>CaPLCg</ci>
+                     <ci>kb1</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>kb5</ci>
+                     <ci>CaPLCg_star</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>Ca</ci>
+                  <ci>PLCg_star</ci>
+                  <ci>kf5</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="UndefinedVariables">
+      <variable units="um" public_interface="out" name="EGF_EGFR" initial_value="0.1"/>
+   </component>
+   <connection>
+      <map_components component_2="environment" component_1="PIPtoDAG"/>
+      <map_variables variable_2="t" variable_1="t"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="PLC"/>
+      <map_variables variable_2="t" variable_1="t"/>
+   </connection>
+   <connection>
+      <map_components component_2="PIPtoDAG" component_1="PLC"/>
+      <map_variables variable_2="CaPLCg" variable_1="CaPLCg"/>
+      <map_variables variable_2="CaPLCg_star" variable_1="CaPLCg_star"/>
+   </connection>
+   <connection>
+      <map_components component_2="PLC" component_1="UndefinedVariables"/>
+      <map_variables variable_2="EGF_EGFR" variable_1="EGF_EGFR"/>
+   </connection>
+
+
+<rdf:RDF>
+  <rdf:Seq rdf:about="rdf:#802d0cb3-9af9-4942-9573-06f7f666fab9">
+    <rdf:li rdf:resource="rdf:#f3cea298-8bde-4413-8c76-ac0440518856"/>
+    <rdf:li rdf:resource="rdf:#ae70b038-6c71-4c78-bdf1-3e677be0e1e0"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#6c636b4c-eab7-4aac-8997-13918cddc350">
+    <dc:creator rdf:resource="rdf:#0165f037-7cda-4195-9fb4-d6906b08b6cd"/>
+    <rdf:value/>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+  <dc:title>PLC-gamma pathway component of the Bhalla-Iyengar model</dc:title>
+    <dc:publisher/>
+    <cmeta:comment rdf:resource="rdf:#6c636b4c-eab7-4aac-8997-13918cddc350"/>
+    <dcterms:created rdf:resource="rdf:#bfaac7e2-0af9-4462-bd38-46cb81e3265d"/>
+    <dc:creator rdf:resource="rdf:#0691129d-8635-4a7f-852b-c9dcb286ba5a"/>
+    <cmeta:modification rdf:resource="rdf:#c1e35d1b-f33f-4e13-9a1c-0a8cb4e9d8d0"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0165f037-7cda-4195-9fb4-d6906b08b6cd">
+    <vCard:FN/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#cdd9f667-6fc0-4756-9545-cd49b21996b1">
+    <dc:creator rdf:resource="rdf:#802d0cb3-9af9-4942-9573-06f7f666fab9"/>
+    <dc:title>Emergent Properties of Networks of Biological Signaling Pathways</dc:title>
+    <bqs:volume>283</bqs:volume>
+    <bqs:first_page>381</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#d90fbba3-4291-4d29-8399-52608d6ab7b8"/>
+    <dcterms:issued rdf:resource="rdf:#6d515e00-596f-4d39-8a29-9eb23ad27c20"/>
+    <bqs:last_page>387</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0239da25-e41a-4650-8f75-9856f516d3ef">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#6d515e00-596f-4d39-8a29-9eb23ad27c20">
+    <dcterms:W3CDTF>1999-01-15</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#c1e35d1b-f33f-4e13-9a1c-0a8cb4e9d8d0">
+    <dcterms:modified rdf:resource="rdf:#22053052-9149-41ba-a89e-bd1455befdcf"/>
+    <rdf:value>updated curation status</rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#2a2c5be3-147a-4aef-8bbb-f80bfa60614b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d11fa5b9-5572-46e1-8655-0241f452d657">
+    <vCard:Given>Ravi</vCard:Given>
+    <vCard:Family>Iyengar</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#bf2786b4-6146-4807-b85c-1112a88b3b3e">
+    <vCard:Given>James</vCard:Given>
+    <vCard:Family>Lawson</vCard:Family>
+    <vCard:Other>Richard</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f3cea298-8bde-4413-8c76-ac0440518856">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#9cfcc09e-7e9d-4000-b263-9b39023cd820"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#bfaac7e2-0af9-4462-bd38-46cb81e3265d">
+    <dcterms:W3CDTF>2007-08-28T00:00:00+00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8e8f02a8-24d6-4810-96b7-a7df27b3270a">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>m.mccormick@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="#bhalla_model_1999">
+  <bqs:reference rdf:parseType="Resource">
+        <dc:subject rdf:parseType="Resource">
+          <bqs:subject_type>keyword</bqs:subject_type>
+          <rdf:value>
+            <rdf:Bag>
+              <rdf:li>signal_transduction</rdf:li>
+            </rdf:Bag>
+          </rdf:value>
+        </dc:subject>
+      </bqs:reference>
+    <bqs:reference rdf:resource="rdf:#6e86285b-ecd6-4ec2-a5a7-e3891af66393"/>
+    <cmeta:comment rdf:resource="rdf:#3d13be09-8041-4da1-af0f-905f1cf2fe61"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#22053052-9149-41ba-a89e-bd1455befdcf">
+    <dcterms:W3CDTF>2009-05-27T15:31:37+12:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ae70b038-6c71-4c78-bdf1-3e677be0e1e0">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#d11fa5b9-5572-46e1-8655-0241f452d657"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9cfcc09e-7e9d-4000-b263-9b39023cd820">
+    <vCard:Given>Upinder</vCard:Given>
+    <vCard:Family>Bhalla</vCard:Family>
+    <vCard:Other>S</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d90fbba3-4291-4d29-8399-52608d6ab7b8">
+    <dc:title>Science</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#2a2c5be3-147a-4aef-8bbb-f80bfa60614b">
+    <vCard:N rdf:resource="rdf:#bf2786b4-6146-4807-b85c-1112a88b3b3e"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#fcff55f6-48e3-49dc-81cb-7fbdbf2bc23b">
+    <vCard:Given>Matthew</vCard:Given>
+    <vCard:Family>McCormick</vCard:Family>
+    <vCard:Other/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3d13be09-8041-4da1-af0f-905f1cf2fe61">
+    <dc:creator rdf:resource="rdf:#ee599be9-b0f3-47d9-a096-e5f6b6ca07eb"/>
+    <rdf:value/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ee599be9-b0f3-47d9-a096-e5f6b6ca07eb">
+    <vCard:FN/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#6e86285b-ecd6-4ec2-a5a7-e3891af66393">
+    <bqs:Pubmed_id>99105994</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#cdd9f667-6fc0-4756-9545-cd49b21996b1"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0691129d-8635-4a7f-852b-c9dcb286ba5a">
+    <vCard:ORG rdf:resource="rdf:#0239da25-e41a-4650-8f75-9856f516d3ef"/>
+    <vCard:EMAIL rdf:resource="rdf:#8e8f02a8-24d6-4810-96b7-a7df27b3270a"/>
+    <vCard:N rdf:resource="rdf:#fcff55f6-48e3-49dc-81cb-7fbdbf2bc23b"/>
+  </rdf:Description>
+</rdf:RDF>
+</model>

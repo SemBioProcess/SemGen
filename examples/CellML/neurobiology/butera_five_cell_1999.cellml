@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model
+    name="butera_five_cell_1999"
+    cmeta:id="butera_five_cell_1999"
+    xmlns="http://www.cellml.org/cellml/1.1#"
+    xmlns:cellml="http://www.cellml.org/cellml/1.1#"
+    xmlns:cmeta="http://www.cellml.org/metadata/1.0#"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+    xmlns:bqs="http://www.cellml.org/bqs/1.0#" 
+    xmlns:dcterms="http://purl.org/dc/terms/"
+    xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#"  >
+
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Models of respiratory rhythm generation in the Pre-Botzinger complex. II. Populations of coupled pacemaker neurons</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+        This CellML model represents a neuronal network with 5 cells.  The model runs in OpenCell (but not in COR as it is a CellML 1.1 model). The units have been checked and they are consistent.  It's unlikely that the CellML model perfectly replicates the results of the published model as in the paper, the values of g_syn_e were randomly selected from a normal distribution.  Because random sampling can't yet be described in CellML the values of g_syn_e have all been set to 0.1nS in the current model.
+</para>
+  </section>
+  <sect1 id="sec_structure">
+  <title>Model Structure</title>
+
+<para>
+ABSTRACT: We have proposed models for the ionic basis of oscillatory bursting of respiratory pacemaker neurons in the Pre-Botzinger complex. In this paper, we investigate the frequency control and synchronization of these model neurons when coupled by excitatory amino-acid-mediated synapses and controlled by convergent synaptic inputs modeled as tonic excitation. Simulations of pairs of identical cells reveal that increasing tonic excitation increases the frequency of synchronous bursting, while increasing the strength of excitatory coupling between the neurons decreases the frequency of synchronous bursting. Low levels of coupling extend the range of values of tonic excitation where synchronous bursting is found. Simulations of a heterogeneous population of 50-500 bursting neurons reveal coupling effects similar to those found experimentally in vitro: coupling increases the mean burst duration and decreases the mean burst frequency. Burst synchronization occurred over a wide range of intrinsic frequencies (0.1-1 Hz) and even in populations where as few as 10% of the cells were intrinsically bursting. Weak coupling, extreme parameter heterogeneity, and low levels of depolarizing input could contribute to the desynchronization of the population and give rise to quasiperiodic states. The introduction of sparse coupling did not affect the burst synchrony, although it did make the interburst intervals more irregular from cycle to cycle. At a population level, both parameter heterogeneity and excitatory coupling synergistically combine to increase the dynamic input range: robust synchronous bursting persisted across a much greater range of parameter space (in terms of mean depolarizing input) than that of a single model cell. This extended dynamic range for the bursting cell population indicates that cellular heterogeneity is functionally advantageous. Our modeled system accounts for the range of intrinsic frequencies and spiking patterns of inspiratory (I) bursting cells found in the Pre-Botzinger complex in neonatal rat brain stem slices in vitro. There is a temporal dispersion in the spiking onset times of neurons in the population, predicted to be due to heterogeneity in intrinsic neuronal properties, with neurons starting to spike before (pre-I), with (I), or after (late-I) the onset of the population burst. Experimental tests for a number of the model's predictions are proposed.
+</para>
+
+<informalfigure float="0" id="fig_reaction_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>model diagram</title>
+    </objectinfo>
+    <imagedata fileref="butera_1999.png"/>
+  </imageobject>
+</mediaobject>
+<caption>The single cell neuron model is based on a single-compartment Hodgkin-Huxley type formalism.  It is composed of five ionic currents across the plasma membrane: a fast sodium current, I<subscript>Na</subscript>; a delayed rectifier potassium current, I<subscript>K</subscript>; a persistent sodium current,  I<subscript>NaP</subscript>; a passive leakage current, I<subscript>L</subscript>; and a tonic current, I<subscript>tonic_e</subscript> In addition for the multicellular model a synaptic current (I<subscript>syn_e</subscript>) has been added to connect the cells in the network.</caption>
+</informalfigure>
+
+<para>
+The original paper reference is cited below:
+</para>
+
+<para>
+Models of respiratory rhythm generation in the Pre-Botzinger complex. II. Populations Of coupled pacemaker neurons, Butera RJ Jr, Rinzel J, Smith JC, 1999, <emphasis>Journal of Neurophysiology</emphasis>, 82, 398-415. <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/10400967">PubMed ID: 10400967</ulink>
+</para>
+
+</sect1>
+</article>
+</documentation>
+
+
+
+  <import xlink:href="butera_single_cell_1999.cellml">
+    <component name="single_neuron_model1" component_ref="single_neuron_model" />
+  </import>
+
+  <connection>
+    <map_components component_1="single_neuron_model1" component_2="synaptic_coupling" />
+    <map_variables variable_1="s" variable_2="s1" />
+    <map_variables variable_1="sum_g_syn_e_s" variable_2="sum_g_syn_e_s" />
+  </connection>
+  
+  <import xlink:href="butera_single_cell_1999.cellml">
+    <component name="single_neuron_model2" component_ref="single_neuron_model" />
+  </import>
+  
+  <connection>
+    <map_components component_1="single_neuron_model2" component_2="synaptic_coupling" />
+    <map_variables variable_1="s" variable_2="s2" />
+    <map_variables variable_1="sum_g_syn_e_s" variable_2="sum_g_syn_e_s" />
+  </connection>
+  
+  <import xlink:href="butera_single_cell_1999.cellml">
+    <component name="single_neuron_model3" component_ref="single_neuron_model" />
+  </import>
+  
+  <connection>
+    <map_components component_1="single_neuron_model3" component_2="synaptic_coupling" />
+    <map_variables variable_1="s" variable_2="s3" />
+    <map_variables variable_1="sum_g_syn_e_s" variable_2="sum_g_syn_e_s" />
+  </connection>
+  
+  <import xlink:href="butera_single_cell_1999.cellml">
+    <component name="single_neuron_model4" component_ref="single_neuron_model" />
+  </import>
+
+  <connection>
+    <map_components component_1="single_neuron_model4" component_2="synaptic_coupling" />
+    <map_variables variable_1="s" variable_2="s4" />
+    <map_variables variable_1="sum_g_syn_e_s" variable_2="sum_g_syn_e_s" />
+  </connection>
+  
+  <import xlink:href="butera_single_cell_1999.cellml">
+    <component name="single_neuron_model5" component_ref="single_neuron_model" />
+  </import>
+
+  <connection>
+    <map_components component_1="single_neuron_model5" component_2="synaptic_coupling" />
+    <map_variables variable_1="s" variable_2="s5" />
+    <map_variables variable_1="sum_g_syn_e_s" variable_2="sum_g_syn_e_s" />
+  </connection>
+
+  
+  <units name="nanoS">
+    <unit units="siemens" prefix="nano"/>
+  </units>
+
+  <component name="synaptic_coupling" cmeta:id="synaptic_coupling">
+    <variable name="sum_g_syn_e_s" public_interface="out" units="nanoS"/>
+    
+    <variable name="g_syn_e_1_2" initial_value="0.10" units="nanoS"/>
+	<variable name="g_syn_e_1_3" initial_value="0.10" units="nanoS"/>
+	<variable name="g_syn_e_1_4" initial_value="0.10" units="nanoS"/>
+	<variable name="g_syn_e_1_5" initial_value="0.10" units="nanoS"/>
+	<variable name="g_syn_e_2_1" initial_value="0.10" units="nanoS"/>
+	<variable name="g_syn_e_2_3" initial_value="0.10" units="nanoS"/>
+	<variable name="g_syn_e_2_4" initial_value="0.10" units="nanoS"/>
+	<variable name="g_syn_e_2_5" initial_value="0.10" units="nanoS"/>
+	<variable name="g_syn_e_3_1" initial_value="0.10" units="nanoS"/>
+	<variable name="g_syn_e_3_2" initial_value="0.10" units="nanoS"/>
+	<variable name="g_syn_e_3_4" initial_value="0.10" units="nanoS"/>
+	<variable name="g_syn_e_3_5" initial_value="0.10" units="nanoS"/>
+	<variable name="g_syn_e_4_1" initial_value="0.10" units="nanoS"/>
+	<variable name="g_syn_e_4_2" initial_value="0.10" units="nanoS"/>
+	<variable name="g_syn_e_4_3" initial_value="0.10" units="nanoS"/>
+	<variable name="g_syn_e_4_5" initial_value="0.10" units="nanoS"/>
+	<variable name="g_syn_e_5_1" initial_value="0.10" units="nanoS"/>
+	<variable name="g_syn_e_5_2" initial_value="0.10" units="nanoS"/>
+	<variable name="g_syn_e_5_3" initial_value="0.10" units="nanoS"/>
+	<variable name="g_syn_e_5_4" initial_value="0.10" units="nanoS"/>
+	
+	<variable name="s1" public_interface="in" units="dimensionless"/>
+	<variable name="s2" public_interface="in" units="dimensionless"/>
+	<variable name="s3" public_interface="in" units="dimensionless"/>
+	<variable name="s4" public_interface="in" units="dimensionless"/>
+	<variable name="s5" public_interface="in" units="dimensionless"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply><eq />
+        <ci> sum_g_syn_e_s </ci>
+        <apply><plus />
+		  <apply><times />
+            <ci> g_syn_e_1_2 </ci>
+            <ci> s1 </ci>
+          </apply>
+		  <apply><times />
+            <ci> g_syn_e_1_3 </ci>
+            <ci> s1 </ci>
+          </apply>
+		  <apply><times />
+            <ci> g_syn_e_1_4 </ci>
+            <ci> s1 </ci>
+          </apply>
+		  <apply><times />
+            <ci> g_syn_e_1_5 </ci>
+            <ci> s1 </ci>
+          </apply>
+		  <apply><times />
+            <ci> g_syn_e_2_1 </ci>
+            <ci> s2 </ci>
+          </apply>
+		  <apply><times />
+            <ci> g_syn_e_2_3 </ci>
+            <ci> s2 </ci>
+          </apply>
+		  <apply><times />
+            <ci> g_syn_e_2_4 </ci>
+            <ci> s2 </ci>
+          </apply>
+		  <apply><times />
+            <ci> g_syn_e_2_5 </ci>
+            <ci> s2 </ci>
+          </apply>
+		  <apply><times />
+            <ci> g_syn_e_3_1 </ci>
+            <ci> s3 </ci>
+          </apply>
+		  <apply><times />
+            <ci> g_syn_e_3_2 </ci>
+            <ci> s3 </ci>
+          </apply>
+		  <apply><times />
+            <ci> g_syn_e_3_4 </ci>
+            <ci> s3 </ci>
+          </apply>
+		  <apply><times />
+            <ci> g_syn_e_3_5 </ci>
+            <ci> s3 </ci>
+          </apply>
+		  <apply><times />
+            <ci> g_syn_e_4_1 </ci>
+            <ci> s4 </ci>
+          </apply>
+		  <apply><times />
+            <ci> g_syn_e_4_2 </ci>
+            <ci> s4 </ci>
+          </apply>
+		  <apply><times />
+            <ci> g_syn_e_4_3 </ci>
+            <ci> s4 </ci>
+          </apply>
+		  <apply><times />
+            <ci> g_syn_e_4_5 </ci>
+            <ci> s4 </ci>
+          </apply>
+		  <apply><times />
+            <ci> g_syn_e_5_1 </ci>
+            <ci> s5 </ci>
+          </apply>
+		  <apply><times />
+            <ci> g_syn_e_5_2 </ci>
+            <ci> s5 </ci>
+          </apply>
+		  <apply><times />
+            <ci> g_syn_e_5_3 </ci>
+            <ci> s5 </ci>
+          </apply>
+		  <apply><times />
+            <ci> g_syn_e_5_4 </ci>
+            <ci> s5 </ci>
+          </apply>
+        </apply>
+      </apply>
+	</math>
+  </component>
+  
+  <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
+    
+	<rdf:Description rdf:about="">
+      <dc:title>Models of Respiratory Rhythm Generation in the Pre-Botzinger Complex. II. Populations of Coupled Pacemaker Neurons: 5 Cell Model</dc:title>
+	  <dc:creator rdf:parseType="Resource">
+        <vCard:N rdf:parseType="Resource">
+          <vCard:Family>Lloyd</vCard:Family>
+          <vCard:Given>Catherine</vCard:Given>
+		  <vCard:Other>May</vCard:Other>
+        </vCard:N>
+        <vCard:EMAIL rdf:parseType="Resource">
+          <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+          <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+        </vCard:EMAIL>
+        <vCard:ORG rdf:parseType="Resource">
+          <vCard:Orgname>The University of Auckland</vCard:Orgname>
+          <vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+        </vCard:ORG>
+      </dc:creator>
+    </rdf:Description>
+    
+    <rdf:Description rdf:about="#butera_five_cell_1999">
+      <bqs:reference rdf:parseType="Resource">
+        <dc:subject rdf:parseType="Resource">
+          <bqs:subject_type>keyword</bqs:subject_type>
+          <rdf:value>
+            <rdf:Bag>
+              <rdf:li>pacemaker</rdf:li>
+              <rdf:li>network</rdf:li>
+              <rdf:li>neuron</rdf:li>
+              <rdf:li>neurobiology</rdf:li>
+            </rdf:Bag>
+          </rdf:value>
+        </dc:subject>
+      </bqs:reference>
+
+      <bqs:reference rdf:parseType="Resource">
+        <bqs:Pubmed_id>10400967</bqs:Pubmed_id>
+        <bqs:JournalArticle rdf:parseType="Resource">
+          <dc:creator>
+            <rdf:Seq>
+              <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Butera</vCard:Family>
+                    <vCard:Given>Robert</vCard:Given>
+					<vCard:Other>J</vCard:Other>
+                  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+              <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Rinzel</vCard:Family>
+                    <vCard:Given>John</vCard:Given>
+				  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+			  <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Given>Jeffrey</vCard:Given>
+                    <vCard:Family>Smith</vCard:Family>
+                    <vCard:Other>C</vCard:Other>
+				  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+            </rdf:Seq>
+          </dc:creator>
+          <dc:title>
+            Models of Respiratory Rhythm Generation in the Pre-Botzinger Complex. II. Populations of Coupled Pacemaker Neurons
+          </dc:title>
+          <dcterms:issued rdf:parseType="Resource">
+            <dcterms:W3CDTF>1999-07</dcterms:W3CDTF>
+          </dcterms:issued>
+          <bqs:Journal rdf:parseType="Resource">
+            <dc:title>Journal of Neurophysiology</dc:title>
+          </bqs:Journal>
+		  <bqs:volume>82</bqs:volume>
+          <bqs:first_page>398</bqs:first_page>
+          <bqs:last_page>415</bqs:last_page>
+        </bqs:JournalArticle>
+      </bqs:reference>
+    </rdf:Description>
+  </rdf:RDF>
+</model>

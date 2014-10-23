@@ -1,0 +1,2482 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--  FILE :  yi_model_2003.xml
+
+CREATED :  27th December 2002
+
+LAST MODIFIED : 2nd May 2005
+
+AUTHOR :  Catherine Lloyd
+          The Bioengineering Institute
+          The University of Auckland
+          
+MODEL STATUS :  This model conforms to the CellML 1.0 Specification released on
+10th August 2001, and the 16/01/2002 CellML Metadata 1.0 Specification.
+
+DESCRIPTION :  This file contains a CellML description of Yi et al's 2003 mathematical model of volume shifts and ionic concentration changes during ischemia and hypoxia. 
+
+CHANGES:  
+  09/04/2003 - AAC - Added publication date information.  
+  02/05/2005 - PJV - Changed unit dimensions to make them consistent.
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="yi_fogelson_keener_peskin_2003_version01" name="yi_fogelson_keener_peskin_2003_version01">
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Modelling Volume Shifts and Ionic Concentration Changes during Ischemia and Hypoxia</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Bioengineering Institute, University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+            This is the original unchecked version of the model imported from the previous
+            CellML model repository, 24-Jan-2006.
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+Ischemia arises when both blood flow and oxygen transport to a tissue stop, while hypoxia describes a condition where normal blood flow continues but there is a reduction in the supply of oxygen to the tissue.  For both hypoxia and ischemia, depriving the tissue of oxygen causes cells to switch from aerobic to anaerobic respiration.  This results in reduced ATP synthesis, which in turn decreases the effectiveness of the cell membrane ion pumps, especially the Na-K-ATPase pump.  Additionally, in the case of ischemia, reduced blood flow has the effect of reducing the tissue's supply of metabolic substrates, and it also reduces the efficiency of waste product removal.     
+</para>
+
+<para>
+Ischemia and hypoxia have been experimentally studied in a wide variety of species and different tissue types.  Tissue responses to ischemia include swelling of the intracellular space, shrinkage of the extracellular space, and an increase in the extracellular potassium concentration ([K<superscript>+</superscript>]<subscript>e</subscript>).  In neural tissue, this increase in extracellular potassium concentration occurs in two stages; an initial rapid increase from about 5 mM to 55 mM, followed by a slower increase up to 80 mM.  In cardiac myocytes, there are generally three phases observed: a rapid increase, a relative plateau, and a second, slower increase.  These increases in extracellular potassium concentration may have important pathological consequences.  For example, in cardiac ischemia, the increased [K<superscript>+</superscript>]<subscript>e</subscript> may cause arrhythmias.
+</para>
+
+<para>
+In 2003, Chung-Seon Yi, Aaron L. Fogelson, James P. Keener, and Charles S. Peskin studied the possible mechanisms underlying extracellular potassium accumulation during ischemia.  They developed a simple Hodgkin-Huxley type ionic model, which unlike other previously published models of cardiac myocytes, includes extracellular volume, capillary flow and the influence of nearby healthy tissue as variables (see figure 1 and figure 2 below).  The model describes events in a tissue consisting of a collection of homogeneous cells subject to ischemia or hypoxia, a homogeneous extracellular space surrounding three cells, a capillary compartment representing the vasculature for this piece of tissue, and another compartment corresponding to the healthy tissue surrounding the ischemic or hypoxic tissue.  The first three compartments combine to form the damaged tissue.  
+</para>
+
+<para>
+Model simulations produce a response to ischemia similar to that seen in neural tissue, and the mechanisms underlying this process in the model is elucidated.  However, Yi <emphasis>et al.</emphasis> found that the same underlying mechanism is not present in the cardiac ion model, and they suggest that this difference may explain the qualitative difference in response observed in cardiac tissue.
+</para>
+
+<para>
+The complete original paper reference is cited below:
+</para>
+
+<para>
+<ulink url="http://www.sciencedirect.com/science?_ob=ArticleURL&amp;_udi=B6WMD-4789XHH-8&amp;_user=140507&amp;_coverDate=01%2F07%2F2003&amp;_rdoc=8&amp;_fmt=summary&amp;_orig=browse&amp;_srch=%23toc%236932%232003%23997799998%23365817!&amp;_cdi=6932&amp;_sort=d&amp;_docanchor=&amp;wchp=dGLbVzz-lSztz&amp;_acct=C000011498&amp;_version=1&amp;_urlVersion=0&amp;_userid=140507&amp;md5=d49670d50ea95b76f07fd616d782751a">A Mathematical Study of Volume Shifts and Ionic Concentration Changes during Ischemia and Hypoxia</ulink>, Chung-Seon Yi, Aaron L. Fogelson, James P. Keener, and Charles S. Peskin, 2003, <ulink url="http://www.sciencedirect.com/science?_ob=JournalURL&amp;_cdi=6932&amp;_auth=y&amp;_acct=C000011498&amp;_version=1&amp;_urlVersion=0&amp;_userid=140507&amp;md5=c8e64d20ff203cda2255f4b6b7affe4f">
+            <emphasis>Theoretical Journal of Biology</emphasis>
+          </ulink>, 220, 83-106. (A PDF version of the article is available to subscribers of the Theoretical Journal of Biology.)  <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;list_uids=12453453&amp;dopt=Abstract">PubMed ID: 12453453</ulink> 
+</para>
+
+<informalfigure float="0" id="fig_schematic_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>schematic diagram</title>
+    </objectinfo>
+    <imagedata fileref="yi_2003a.png"/>
+  </imageobject>
+</mediaobject>
+<caption>A schematic diagram of the Yi <emphasis>et al.</emphasis> 2003 mathematical model.  In the tissue damaged by ischemia or hypoxia there are three compartments: an intracellular space within a collection of homogeneous cells; the extracellular space surrounding these cells; and the capillary space serving the cells.  In addition there is a fourth compartment which represents the extracellular space of the undamaged tissue.  The cell membrane separates the intracellular and extracellular compartments, and the capillary wall separates the extracellular space from the capillary space.</caption>
+</informalfigure>
+
+<informalfigure float="0" id="fig_cell_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>cell diagram</title>
+    </objectinfo>
+    <imagedata fileref="yi_2003b.png"/>
+  </imageobject>
+</mediaobject>
+<caption>A schematic diagram describing the ionic components of the Yi <emphasis>et al.</emphasis> 2003 mathematical model.  Sodium, chloride and potassium ions are exchanged between the intracellular and extracellular environments through channels and via the sodium-potassium pump.  Water is also passed between the various components.</caption>
+</informalfigure>
+
+</sect1>
+</article>
+</documentation>
+  
+  
+  <!--
+    Below, we define some additional units for association with variables and
+    constants within the model.
+  -->
+  
+  <units name="millivolt">
+    <unit units="volt" prefix="milli"/>
+  </units>
+  
+  <units name="per_millivolt">
+    <unit units="volt" prefix="milli" exponent="-1"/>
+  </units>
+  
+  <units name="millimolar">
+    <unit units="mole" prefix="milli"/>
+    <unit units="litre" exponent="-1"/>
+  </units>
+  
+  <units name="micromole">
+    <unit units="mole" prefix="micro"/>
+  </units>
+  
+  <units name="micromole_per_minute">
+    <unit units="mole" prefix="micro"/>
+    <unit units="minute" exponent="-1"/>
+  </units>
+  
+  <units name="minute">
+    <unit units="second" multiplier="60.0"/>
+  </units>
+  
+  <units name="flux">
+    <unit units="millimolar"/>
+    <unit units="minute" exponent="-1"/>
+  </units>
+  
+  <units name="first_order_rate_constant">
+    <unit units="minute" exponent="-1"/>
+  </units>
+  
+  <units name="cm2">
+    <unit units="metre" prefix="centi" exponent="2"/>
+  </units>
+  
+  <units name="cm3">
+    <unit units="metre" prefix="centi" exponent="3"/>
+  </units>
+  
+  <units name="cm3_per_minute">
+    <unit units="metre" prefix="centi" exponent="3"/>
+    <unit units="minute" exponent="-1"/>
+  </units>
+  
+  <units name="cm3_millimolar_per_minute">
+    <unit units="metre" prefix="centi" exponent="3"/>
+    <unit units="millimolar"/>
+    <unit units="minute" exponent="-1"/>
+  </units>
+  
+  <units name="Pa">
+    <unit units="pascal"/>
+  </units>
+  
+  <units name="cm3_per_Pa_per_minute">
+    <unit units="metre" prefix="centi" exponent="3"/>
+    <unit units="pascal" exponent="-1"/>
+    <unit units="minute" exponent="-1"/>
+  </units>
+  
+  <units name="milliC_per_volt_per_minute">
+    <unit units="coulomb" prefix="milli"/>
+    <unit units="volt" exponent="-1"/>
+    <unit units="minute" exponent="-1"/>
+  </units>
+  
+  <units name="microF_per_cm2">
+    <unit units="farad" prefix="micro"/>
+    <unit units="metre" prefix="centi" exponent="-2"/>
+  </units>
+  
+  <units name="joule_per_mole_kelvin">
+    <unit units="joule"/>
+    <unit units="mole" exponent="-1"/>
+    <unit units="kelvin" exponent="-1"/>
+  </units>
+  
+  <units name="coulomb_per_millimole">
+    <unit units="coulomb"/>
+    <unit units="mole" prefix="milli" exponent="-1"/>
+  </units>
+  
+  <component name="environment">
+    <variable units="minute" public_interface="out" name="time"/>
+  </component>
+  
+  <component name="intracellular_space">
+    <variable units="millivolt" public_interface="out" name="delta" initial_value="-80.0"/>
+    <variable units="millivolt" public_interface="out" name="delta_eq" initial_value="-70.0"/>
+    <variable units="cm3" public_interface="out" name="V_i" initial_value="3.80E-8"/>
+    <variable units="joule_per_mole_kelvin" public_interface="out" name="R" initial_value="8.314"/>
+    <variable units="kelvin" public_interface="out" name="T" initial_value="310.0"/>
+    <variable units="coulomb_per_millimole" public_interface="out" name="F" initial_value="96.5"/>
+    <variable units="microF_per_cm2" public_interface="out" name="C_m" initial_value="1.0"/>
+    <variable units="cm3_per_Pa_per_minute" public_interface="out" name="Lie_p" initial_value="1.21E12"/> 
+    <variable units="Pa" public_interface="out" name="pi_i"/>    
+    <variable units="Pa" public_interface="out" name="pi_e"/>
+    <variable units="cm3_per_minute" public_interface="out" name="P_h" initial_value="6.0E-10"/>
+    <variable units="millivolt" public_interface="out" name="delta_eh"/>
+    
+    <variable units="millivolt" name="delta_init"/>
+    <variable units="millivolt" name="delta_i"/>
+    <variable units="micromole" name="X_i" initial_value="3.83E-6"/>    
+    <variable units="dimensionless" name="z_i" initial_value="1.44"/>
+    <variable units="cm2" name="A_s" initial_value="7.67E-5"/>
+    
+    <variable units="micromole" public_interface="in" name="X_e"/>    
+    <variable units="minute" public_interface="in" name="time"/>
+    <variable units="millimolar" public_interface="in" name="Na_e"/>
+    <variable units="millimolar" public_interface="in" name="Na_i"/>
+    <variable units="millimolar" public_interface="in" name="K_e"/>
+    <variable units="millimolar" public_interface="in" name="K_i"/>
+    <variable units="millimolar" public_interface="in" name="Cl_e"/>
+    <variable units="millimolar" public_interface="in" name="Cl_i"/>
+    <variable units="cm3" public_interface="in" name="V_e"/>
+    <variable units="millivolt" public_interface="in" name="delta_e"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="V_i_diff_eq">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> V_i </ci>
+        </apply>
+        <apply>
+          <times/>
+          <ci> Lie_p </ci>
+          <apply>
+            <minus/>
+            <ci> pi_i </ci>
+            <ci> pi_e </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="pi_i_calculation">
+        <eq/>
+        <ci> pi_i </ci>
+        <apply>
+          <times/>
+          <ci> R </ci>
+          <ci> T </ci>
+          <apply>
+            <plus/>
+            <ci> Na_i </ci>
+            <ci> K_i </ci>
+            <ci> Cl_i </ci>
+            <apply>
+              <divide/>
+              <ci> X_i </ci>
+              <ci> V_i </ci>
+            </apply> 
+          </apply>
+        </apply>
+      </apply> 
+      
+      <apply id="pi_e_calculation">
+        <eq/>
+        <ci> pi_e </ci>
+        <apply>
+          <times/>
+          <ci> R </ci>
+          <ci> T </ci>
+          <apply>
+            <plus/>
+            <ci> Na_e </ci>
+            <ci> K_e </ci>
+            <ci> Cl_e </ci>
+            <apply>
+              <divide/>
+              <ci> X_e </ci>
+              <ci> V_e </ci>
+            </apply> 
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="delta_init_calculation">
+        <eq/>
+        <ci> delta_init </ci>
+        <apply>
+          <minus/>
+          <ci> delta_i </ci>
+          <ci> delta_e </ci>
+        </apply>
+      </apply>
+      
+      <apply id="membrane_voltage_diff_eq">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> delta </ci>
+        </apply>
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <ci> V_i </ci>
+            <ci> F </ci>
+            <ci> R </ci>
+            <ci> T </ci>
+            <apply>
+              <minus/>
+              <apply>
+                <plus/>
+                <ci> Na_i </ci>
+                <ci> K_i </ci>
+              </apply>
+              <apply>
+                <plus/>
+                <ci> Cl_i </ci>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <times/>
+                    <ci> z_i </ci>
+                    <ci> X_i </ci>
+                  </apply>
+                  <ci> V_i </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>  
+          <apply>
+            <times/>
+            <ci> C_m </ci>
+            <ci> A_s </ci>
+          </apply>
+        </apply>
+      </apply>  
+      
+      <apply id="X_i_calculation">
+        <eq/>
+        <ci> X_i </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <ci> V_i </ci>
+            <apply>
+              <minus/>
+              <apply>
+                <plus/>
+                <ci> Na_i </ci>
+                <ci> K_i </ci>
+              </apply>
+              <ci> Cl_i </ci>
+            </apply>
+          </apply>
+          <ci> z_i </ci>
+        </apply>
+      </apply>  
+    </math>
+  </component>
+  
+  <component name="intracellular_sodium">
+    <variable units="millimolar" public_interface="out" name="Na_i" initial_value="11.2"/>
+    <variable units="milliC_per_volt_per_minute" public_interface="out" name="g_Na"/>
+    <variable units="millivolt" public_interface="out" name="delta_Na"/>
+    
+    <variable units="milliC_per_volt_per_minute" name="g_b_Na" initial_value="3.31E-5"/>
+    <variable units="milliC_per_volt_per_minute" name="g_Na_max" initial_value="3.69E-2"/>
+    
+    <variable units="minute" public_interface="in" name="time"/>
+    <variable units="millimolar" public_interface="in" name="Na_e"/>
+    <variable units="micromole_per_minute" public_interface="in" name="P"/>
+    <variable units="joule_per_mole_kelvin" public_interface="in" name="R"/>
+    <variable units="coulomb_per_millimole" public_interface="in" name="F"/>
+    <variable units="kelvin" public_interface="in" name="T"/>
+    <variable units="millivolt" public_interface="in" private_interface="out" name="delta"/>
+    <variable units="millivolt" public_interface="in" private_interface="out" name="delta_eq"/>
+    
+    <variable units="dimensionless" private_interface="in" name="m_infinity"/>
+    <variable units="dimensionless" private_interface="in" name="h_infinity"/>
+  
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="Na_i_diff_eq">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> Na_i </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> g_Na </ci>
+                <ci> F </ci>
+              </apply>
+              <apply>
+                <minus/>
+                <ci> delta </ci>
+                <ci> delta_Na </ci>
+              </apply>
+            </apply>
+            <apply>
+              <times/>
+              <cn cellml:units="dimensionless"> 3.0 </cn>
+              <ci> P </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="g_Na_calculation">
+        <eq/>
+        <ci> g_Na </ci>
+        <apply>
+          <plus/>
+          <ci> g_b_Na </ci>
+          <apply>
+            <times/>
+            <ci> g_Na_max </ci>
+            <apply>
+              <power/>
+              <ci> m_infinity </ci>
+              <cn cellml:units="dimensionless"> 3.0 </cn>
+            </apply>
+            <ci> h_infinity </ci>
+          </apply>
+        </apply>
+      </apply> 
+      
+      <apply id="delta_Na_calculation">
+        <eq/>
+        <ci> delta_Na </ci>
+        <apply>
+          <times/>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <ci> R </ci>
+              <ci> T </ci>
+            </apply>
+            <ci> F </ci>
+          </apply>
+          <apply>
+            <ln/>
+            <apply>
+              <divide/>
+              <ci> Na_e </ci>
+              <ci> Na_i </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply> 
+    </math>
+  </component>
+  
+  <component name="intracellular_sodium_m_gate">
+    <variable units="dimensionless" public_interface="out" name="m_infinity"/>
+        
+    <variable units="first_order_rate_constant" name="A_m"/>
+    <variable units="first_order_rate_constant" name="B_m"/>
+
+    <variable units="millivolt" public_interface="in" name="delta"/>
+    <variable units="millivolt" public_interface="in" name="delta_eq"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="A_m_calculation">
+        <eq/>
+        <ci> A_m </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <cn cellml:units="dimensionless"> 0.1 </cn>
+            <apply>
+              <plus/>
+              <apply>
+                <minus/>
+                <cn cellml:units="millivolt"> 25.0 </cn>
+                <ci> delta </ci>
+              </apply>
+              <ci> delta_eq </ci>
+            </apply>
+          </apply>
+          <apply>
+            <minus/>
+            <apply>
+              <exp/>
+              <apply>
+                <times/>
+                <cn cellml:units="per_millivolt"> 0.1 </cn>
+                <apply>
+                  <plus/>
+                  <apply>
+                    <minus/>
+                    <cn cellml:units="millivolt"> 25.0 </cn>
+                    <ci> delta </ci>
+                  </apply>
+                  <ci> delta_eq </ci>
+                </apply>
+              </apply>
+            </apply>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="B_m_calculation">
+        <eq/>
+        <ci> B_m </ci>
+        <apply>
+          <times/>
+          <cn cellml:units="first_order_rate_constant"> 4.0 </cn>
+          <apply>
+            <exp/>
+            <apply>
+              <divide/>
+              <apply>
+                <plus/>
+                <apply>
+                  <minus/>
+                  <ci> delta </ci>
+                </apply>
+                <ci> delta_eq </ci>
+              </apply>
+              <cn cellml:units="millivolt"> 18.0 </cn>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="m_infinity_calculation">
+        <eq/>
+        <ci> m_infinity </ci>
+        <apply>
+          <divide/>
+          <ci> A_m </ci>
+          <apply>
+            <plus/>
+            <ci> A_m </ci>
+            <ci> B_m </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="intracellular_sodium_h_gate">
+    <variable units="dimensionless" public_interface="out" name="h_infinity"/>
+        
+    <variable units="first_order_rate_constant" name="A_h"/>
+    <variable units="first_order_rate_constant" name="B_h"/>
+
+    <variable units="millivolt" public_interface="in" name="delta"/>
+    <variable units="millivolt" public_interface="in" name="delta_eq"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="A_h_calculation">
+        <eq/>
+        <ci> A_h </ci>
+        <apply>
+          <times/>
+          <cn cellml:units="first_order_rate_constant"> 0.07 </cn>
+          <apply>
+            <exp/>
+            <apply>
+              <times/>
+              <cn cellml:units="per_millivolt"> 0.05 </cn>
+              <apply>
+                <plus/>
+                <apply>
+                  <minus/>
+                  <ci> delta </ci>
+                </apply>
+                <ci> delta_eq </ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+     
+      <apply id="B_h_calculation">
+        <eq/>
+        <ci> B_h </ci>
+        <apply>
+          <divide/>
+          <cn cellml:units="first_order_rate_constant"> 1.0 </cn>
+          <apply>
+            <plus/>
+            <apply>
+              <exp/>
+              <apply>
+                <times/>
+                <cn cellml:units="dimensionless"> 0.1 </cn>
+                <apply>
+                  <plus/>
+                  <apply>
+                    <minus/>
+                    <cn cellml:units="millivolt"> 30.0 </cn>
+                    <ci> delta </ci>
+                  </apply>
+                  <ci> delta_eq </ci>
+                </apply>
+              </apply>
+            </apply>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="h_infinity_calculation">
+        <eq/>
+        <ci> h_infinity </ci>
+        <apply>
+          <divide/>
+          <ci> A_h </ci>
+          <apply>
+            <plus/>
+            <ci> A_h </ci>
+            <ci> B_h </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="intracellular_potassium">
+    <variable units="millimolar" public_interface="out" name="K_i" initial_value="139.0"/>
+    <variable units="milliC_per_volt_per_minute" public_interface="out" name="g_K"/>
+    <variable units="millivolt" public_interface="out" name="delta_K"/>
+    
+    <variable units="milliC_per_volt_per_minute" name="g_b_K" initial_value="8.33E-4"/>
+    <variable units="milliC_per_volt_per_minute" name="g_K_max" initial_value="1.28E-2"/>
+    
+    <variable units="minute" public_interface="in" name="time"/>
+    <variable units="millimolar" public_interface="in" name="K_e"/>
+    <variable units="micromole_per_minute" public_interface="in" name="P"/>
+    <variable units="joule_per_mole_kelvin" public_interface="in" name="R"/>
+    <variable units="coulomb_per_millimole" public_interface="in" name="F"/>
+    <variable units="kelvin" public_interface="in" name="T"/>
+    <variable units="millivolt" public_interface="in" private_interface="out" name="delta"/>
+    <variable units="millivolt" public_interface="in" private_interface="out" name="delta_eq"/>
+              
+    <variable units="dimensionless" private_interface="in" name="n_infinity"/>
+  
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="K_i_diff_eq">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> K_i </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <minus/>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> g_K </ci>
+                <ci> F </ci>
+              </apply>
+              <apply>
+                <minus/>
+                <ci> delta </ci>
+                <ci> delta_K </ci>
+              </apply>
+            </apply>
+            <apply>
+              <times/>
+              <cn cellml:units="dimensionless"> 2.0 </cn>
+              <ci> P </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="g_K_calculation">
+        <eq/>
+        <ci> g_K </ci>
+        <apply>
+          <plus/>
+          <ci> g_b_K </ci>
+          <apply>
+            <times/>
+            <ci> g_K_max </ci>
+            <apply>
+              <power/>
+              <ci> n_infinity </ci>
+              <cn cellml:units="dimensionless"> 4.0 </cn>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="delta_K_calculation">
+        <eq/>
+        <ci> delta_K </ci>
+        <apply>
+          <times/>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <ci> R </ci>
+              <ci> T </ci>
+            </apply>
+            <ci> F </ci>
+          </apply>
+          <apply>
+            <ln/>
+            <apply>
+              <divide/>
+              <ci> K_e </ci>
+              <ci> K_i </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>  
+    </math>
+  </component>
+  
+  <component name="intracellular_potassium_n_gate">
+    <variable units="dimensionless" public_interface="out" name="n_infinity"/>
+        
+    <variable units="first_order_rate_constant" name="A_n"/>
+    <variable units="first_order_rate_constant" name="B_n"/>
+
+    <variable units="millivolt" public_interface="in" name="delta"/>
+    <variable units="millivolt" public_interface="in" name="delta_eq"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="A_n_calculation">
+        <eq/>
+        <ci> A_n </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <cn cellml:units="dimensionless"> 0.01 </cn>
+            <apply>
+              <plus/>
+              <apply>
+                <minus/>
+                <cn cellml:units="millivolt"> 10.0 </cn>
+                <ci> delta </ci>
+              </apply>
+              <ci> delta_eq </ci>
+            </apply>
+          </apply>
+          <apply>
+            <minus/>
+            <apply>
+              <exp/>
+              <apply>
+                <times/>
+                <cn cellml:units="per_millivolt"> 0.1 </cn>
+                <apply>
+                  <plus/>
+                  <apply>
+                    <minus/>
+                    <cn cellml:units="millivolt"> 10.0 </cn>
+                    <ci> delta </ci>
+                  </apply>
+                  <ci> delta_eq </ci>
+                </apply>
+              </apply>
+            </apply>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="B_n_calculation">
+        <eq/>
+        <ci> B_n </ci>
+        <apply>
+          <times/>
+          <cn cellml:units="first_order_rate_constant"> 0.125 </cn>
+          <apply>
+            <exp/>
+            <apply>
+              <divide/>
+              <apply>
+                <plus/>
+                <apply>
+                  <minus/>
+                  <ci> delta </ci>
+                </apply>
+                <ci> delta_eq </ci>
+              </apply>
+              <cn cellml:units="millivolt"> 80.0 </cn>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="n_infinity_calculation">
+        <eq/>
+        <ci> n_infinity </ci>
+        <apply>
+          <divide/>
+          <ci> A_n </ci>
+          <apply>
+            <plus/>
+            <ci> A_n </ci>
+            <ci> B_n </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="intracellular_chloride">
+    <variable units="millimolar" public_interface="out" name="Cl_i" initial_value="4.95"/>
+    <variable units="milliC_per_volt_per_minute" public_interface="out" name="g_Cl" initial_value="2.81E-4"/>
+    <variable units="millivolt" public_interface="out" name="delta_Cl"/>
+    
+    <variable units="minute" public_interface="in" name="time"/>
+    <variable units="millimolar" public_interface="in" name="Cl_e"/>
+    <variable units="joule_per_mole_kelvin" public_interface="in" name="R"/>
+    <variable units="coulomb_per_millimole" public_interface="in" name="F"/>
+    <variable units="kelvin" public_interface="in" name="T"/>
+    <variable units="millivolt" public_interface="in" name="delta"/>
+  
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="Cl_i_diff_eq">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> Cl_i </ci>
+        </apply>
+        <apply>
+          <times/>
+          <apply>
+            <divide/>
+            <ci> g_Cl </ci>
+            <ci> F </ci>
+          </apply>
+          <apply>
+            <plus/>
+            <ci> delta </ci>
+            <ci> delta_Cl </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="delta_Cl_calculation">
+        <eq/>
+        <ci> delta_Cl </ci>
+        <apply>
+          <times/>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <ci> R </ci>
+              <ci> T </ci>
+            </apply>
+            <apply>
+              <times/>
+              <cn cellml:units="dimensionless"> -1.0 </cn>
+              <ci> F </ci>
+            </apply>
+          </apply>
+          <apply>
+            <ln/>
+            <apply>
+              <divide/>
+              <ci> Cl_e </ci>
+              <ci> Cl_i </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>   
+    </math>
+  </component>
+  
+  <component name="extracellular_sodium">
+    <variable units="millimolar" public_interface="out" name="Na_e" initial_value="140.0"/>
+    
+    <variable units="millivolt" public_interface="in" name="delta_Na"/>
+    <variable units="minute" public_interface="in" name="time"/>
+    <variable units="milliC_per_volt_per_minute" public_interface="in" name="g_Na"/>
+    <variable units="micromole_per_minute" public_interface="in" name="P"/>
+    <variable units="joule_per_mole_kelvin" public_interface="in" name="R"/>
+    <variable units="coulomb_per_millimole" public_interface="in" name="F"/>
+    <variable units="kelvin" public_interface="in" name="T"/>
+    <variable units="millivolt" public_interface="in" name="delta"/>
+    <variable units="cm3_millimolar_per_minute" public_interface="in" name="Jv_Na"/>
+    <variable units="cm3_millimolar_per_minute" public_interface="in" name="Jh_Na"/>
+  
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="Na_e_diff_eq">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> Na_e </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> g_Na </ci>
+                <ci> F </ci>
+              </apply>
+              <apply>
+                <minus/>
+                <ci> delta </ci>
+                <ci> delta_Na </ci>
+              </apply>
+            </apply>
+            <apply>
+              <times/>
+              <cn cellml:units="dimensionless"> 3.0 </cn>
+              <ci> P </ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <ci> Jv_Na </ci>
+            <ci> Jh_Na </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="extracellular_potassium">
+    <variable units="millimolar" public_interface="out" name="K_e" initial_value="5.4"/>
+    
+    <variable units="milliC_per_volt_per_minute" public_interface="in" name="g_K"/>
+    <variable units="millivolt" public_interface="in" name="delta_K"/>
+    <variable units="minute" public_interface="in" name="time"/>
+    <variable units="micromole_per_minute" public_interface="in" name="P"/>
+    <variable units="joule_per_mole_kelvin" public_interface="in" name="R"/>
+    <variable units="coulomb_per_millimole" public_interface="in" name="F"/>
+    <variable units="kelvin" public_interface="in" name="T"/>
+    <variable units="millivolt" public_interface="in" name="delta"/>
+    <variable units="cm3_millimolar_per_minute" public_interface="in" name="Jv_K"/>
+    <variable units="cm3_millimolar_per_minute" public_interface="in" name="Jh_K"/>
+  
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="K_e_diff_eq">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> K_e </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <minus/>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> g_K </ci>
+                <ci> F </ci>
+              </apply>
+              <apply>
+                <minus/>
+                <ci> delta </ci>
+                <ci> delta_K </ci>
+              </apply>
+            </apply>
+            <apply>
+              <times/>
+              <cn cellml:units="dimensionless"> 2.0 </cn>
+              <ci> P </ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <ci> Jv_K </ci>
+            <ci> Jh_K </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="extracellular_chloride">
+    <variable units="millimolar" public_interface="out" name="Cl_e" initial_value="110.0"/>
+    
+    <variable units="milliC_per_volt_per_minute" public_interface="in" name="g_Cl"/>
+    <variable units="millivolt" public_interface="in" name="delta_Cl"/>
+    <variable units="minute" public_interface="in" name="time"/>
+    <variable units="joule_per_mole_kelvin" public_interface="in" name="R"/>
+    <variable units="coulomb_per_millimole" public_interface="in" name="F"/>
+    <variable units="kelvin" public_interface="in" name="T"/>
+    <variable units="millivolt" public_interface="in" name="delta"/>
+    <variable units="cm3_millimolar_per_minute" public_interface="in" name="Jv_Cl"/>
+    <variable units="cm3_millimolar_per_minute" public_interface="in" name="Jh_Cl"/>
+  
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="Cl_e_diff_eq">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> Cl_e </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <minus/>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> g_Cl </ci>
+                <ci> F </ci>
+              </apply>
+              <apply>
+                <plus/>
+                <ci> delta </ci>
+                <ci> delta_Cl </ci>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <ci> Jv_Cl </ci>
+            <ci> Jh_Cl </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="extracellular_space">
+    <variable units="cm3" public_interface="out" name="V_e" initial_value="9.50E-9"/>
+    <variable units="millivolt" public_interface="out" name="delta_e"/>
+    <variable units="micromole" public_interface="out" name="X_e" initial_value="3.94E-9"/>
+        
+    <variable units="dimensionless" name="z_e" initial_value="85.4"/>
+     
+    <variable units="cm3_per_Pa_per_minute" public_interface="in" name="Lie_p"/> 
+    <variable units="Pa" public_interface="in" name="pi_i"/>    
+    <variable units="Pa" public_interface="in" name="pi_e"/>
+    <variable units="minute" public_interface="in" name="time"/>
+    <variable units="cm3_per_minute" public_interface="in" name="Jv_H2O"/>
+    <variable units="cm3_per_minute" public_interface="in" name="Jh_H2O"/>
+    <variable units="millimolar" public_interface="in" name="Cl_e"/>
+    <variable units="millimolar" public_interface="in" name="Na_e"/>
+    <variable units="millimolar" public_interface="in" name="K_e"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="V_e_diff_eq">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> V_e </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> Lie_p </ci>
+            <apply>
+              <minus/>
+              <ci> pi_e </ci>
+              <ci> pi_i </ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <ci> Jv_H2O </ci>
+            <ci> Jh_H2O </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="X_e_calculation">
+        <eq/>
+        <ci> X_e </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <ci> V_e </ci>
+            <apply>
+              <minus/>
+              <apply>
+                <plus/>
+                <ci> Na_e </ci>
+                <ci> K_e </ci>
+              </apply>
+              <ci> Cl_e </ci>
+            </apply>
+          </apply>
+          <ci> z_e </ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="water_flux">
+    <variable units="cm3_per_minute" public_interface="out" name="Jh_H2O" initial_value="0.0"/>
+     
+    <variable units="cm3" name="V_infinity_e"/>
+    <variable units="cm3" name="V_infinity_T"/>
+    <variable units="minute" name="tau_1" initial_value="3.3"/>
+    <variable units="minute" name="tau_2" initial_value="33.0"/>
+    
+    <variable units="cm3" public_interface="in" name="V_i"/>    
+    <variable units="cm3" public_interface="in" name="V_e"/>
+    <variable units="minute" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="Jh_H2O_calculation">
+        <eq/>
+        <ci> Jh_H2O </ci>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+                <ci> tau_1 </ci>
+              </apply>
+              <apply>
+                <minus/>
+                <ci> V_infinity_e </ci>
+                <ci> V_e </ci>
+              </apply>
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+                <ci> tau_2 </ci>
+              </apply>
+              <apply>
+                <minus/>
+                <ci> V_infinity_T </ci>
+                <apply>
+                  <plus/>
+                  <ci> V_i </ci>
+                  <ci> V_e </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="sodium_flux">
+    <variable units="cm3_millimolar_per_minute" public_interface="out" name="Jh_Na" initial_value="0.0"/>
+     
+    <variable units="millimolar" name="Na_infinity_e"/>
+    <variable units="dimensionless" name="alpha_Na"/>
+    
+    <variable units="millimolar" public_interface="in" name="Na_e"/> 
+    <variable units="millivolt" public_interface="in" name="delta_eh"/>
+    <variable units="minute" public_interface="in" name="time"/>
+    <variable units="joule_per_mole_kelvin" public_interface="in" name="R"/>
+    <variable units="kelvin" public_interface="in" name="T"/>
+    <variable units="coulomb_per_millimole" public_interface="in" name="F"/>
+    <variable units="cm3_per_minute" public_interface="in" name="P_h"/>
+    <variable units="cm3_per_minute" public_interface="in" name="Jh_H2O"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="Jh_Na_calculation">
+        <eq/>
+        <ci> Jh_Na </ci>
+        <apply>
+          <times/>
+          <ci> P_h </ci>
+          <ci> alpha_Na </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> Na_infinity_e </ci>
+              <apply>
+                <times/>
+                <ci> Na_e </ci>
+                <apply>
+                  <exp/>
+                  <ci> alpha_Na </ci>
+                </apply>
+              </apply>
+            </apply>
+            <apply>
+              <minus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <ci> alpha_Na </ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="alpha_Na_calculation">
+        <eq/>
+        <ci> alpha_Na </ci>
+        <apply>
+          <minus/>
+          <apply>
+            <divide/>
+            <ci> Jh_H2O </ci>
+            <ci> P_h </ci>
+          </apply>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <ci> F </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> R </ci>
+              <ci> T </ci>
+              <ci> delta_eh </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>   
+    </math>
+  </component>
+  
+  <component name="potassium_flux">
+    <variable units="cm3_millimolar_per_minute" public_interface="out" name="Jh_K" initial_value="0.0"/>
+     
+    <variable units="millimolar" name="K_infinity_e"/>
+    <variable units="dimensionless" name="alpha_K"/>    
+    
+    <variable units="millimolar" public_interface="in" name="K_e"/> 
+    <variable units="millivolt" public_interface="in" name="delta_eh"/>
+    <variable units="minute" public_interface="in" name="time"/>
+    <variable units="joule_per_mole_kelvin" public_interface="in" name="R"/>
+    <variable units="kelvin" public_interface="in" name="T"/>
+    <variable units="coulomb_per_millimole" public_interface="in" name="F"/>
+    <variable units="cm3_per_minute" public_interface="in" name="P_h"/>
+    <variable units="cm3_per_minute" public_interface="in" name="Jh_H2O"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="Jh_K_calculation">
+        <eq/>
+        <ci> Jh_K </ci>
+        <apply>
+          <times/>
+          <ci> P_h </ci>
+          <ci> alpha_K </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> K_infinity_e </ci>
+              <apply>
+                <times/>
+                <ci> K_e </ci>
+                <apply>
+                  <exp/>
+                  <ci> alpha_K </ci>
+                </apply>
+              </apply>
+            </apply>
+            <apply>
+              <minus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <ci> alpha_K </ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="alpha_K_calculation">
+        <eq/>
+        <ci> alpha_K </ci>
+        <apply>
+          <minus/>
+          <apply>
+            <divide/>
+            <ci> Jh_H2O </ci>
+            <ci> P_h </ci>
+          </apply>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <ci> F </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> R </ci>
+              <ci> T </ci>
+              <ci> delta_eh </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>   
+    </math>
+  </component>
+  
+  <component name="chloride_flux">
+    <variable units="cm3_millimolar_per_minute" public_interface="out" name="Jh_Cl" initial_value="0.0"/>
+     
+    <variable units="millimolar" name="Cl_infinity_e"/>
+    <variable units="dimensionless" name="alpha_Cl"/>    
+    
+    <variable units="millimolar" public_interface="in" name="Cl_e"/> 
+    <variable units="millivolt" public_interface="in" name="delta_eh"/>
+    <variable units="minute" public_interface="in" name="time"/>
+    <variable units="joule_per_mole_kelvin" public_interface="in" name="R"/>
+    <variable units="kelvin" public_interface="in" name="T"/>
+    <variable units="coulomb_per_millimole" public_interface="in" name="F"/>
+    <variable units="cm3_per_minute" public_interface="in" name="P_h"/>
+    <variable units="cm3_per_minute" public_interface="in" name="Jh_H2O"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="Jh_Cl_calculation">
+        <eq/>
+        <ci> Jh_Cl </ci>
+        <apply>
+          <times/>
+          <ci> P_h </ci>
+          <ci> alpha_Cl </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> Cl_infinity_e </ci>
+              <apply>
+                <times/>
+                <ci> Cl_e </ci>
+                <apply>
+                  <exp/>
+                  <ci> alpha_Cl </ci>
+                </apply>
+              </apply>
+            </apply>
+            <apply>
+              <minus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <ci> alpha_Cl </ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="alpha_Cl_calculation">
+        <eq/>
+        <ci> alpha_Cl </ci>
+        <apply>
+          <minus/>
+          <apply>
+            <divide/>
+            <ci> Jh_H2O </ci>
+            <ci> P_h </ci>
+          </apply>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <cn cellml:units="dimensionless"> -1.0 </cn>
+              <ci> F </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> R </ci>
+              <ci> T </ci>
+              <ci> delta_eh </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>   
+    </math>
+  </component>
+  
+  <component name="capillary_compartment_sodium">
+    <variable units="millimolar" public_interface="out" name="Na_v" initial_value="136.7"/>
+    <variable units="millivolt" public_interface="out" name="delta_ev_Na"/>
+    <variable units="cm3_millimolar_per_minute" public_interface="out" name="Jv_Na" initial_value="0.0"/>
+    
+    <variable units="minute" public_interface="in" name="time"/>
+    <variable units="millimolar" public_interface="in" name="Na_a"/>
+    <variable units="millimolar" public_interface="in" name="Na_e"/>
+    <variable units="cm3_per_minute" public_interface="in" name="Qv"/>
+    <variable units="cm3_per_minute" public_interface="in" name="Qa"/>
+    <variable units="joule_per_mole_kelvin" public_interface="in" name="R"/>
+    <variable units="kelvin" public_interface="in" name="T"/>
+    <variable units="coulomb_per_millimole" public_interface="in" name="F"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="Na_v_calculation">
+        <eq/>
+        <ci> Na_v </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> Qa </ci>
+              <ci> Na_a </ci>
+            </apply>
+            <ci> Jv_Na </ci>
+          </apply>
+          <ci> Qv </ci>
+        </apply>
+      </apply>
+      
+      <apply id="delta_ev_Na_calculation">
+        <eq/>
+        <ci> delta_ev_Na </ci>
+        <apply>
+          <times/>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <ci> R </ci>
+              <ci> T </ci>
+            </apply>
+            <ci> F </ci>
+          </apply>
+          <apply>
+            <ln/>
+            <apply>
+              <divide/>
+              <ci> Na_v </ci>
+              <ci> Na_e </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="Jv_Na_calculation">
+        <eq/>
+        <ci> Jv_Na </ci>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> Qv </ci>
+            <ci> Na_v </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> Qa </ci>
+            <ci> Na_a </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="capillary_compartment_potassium">
+    <variable units="millimolar" public_interface="out" name="K_v" initial_value="5.27"/>
+    <variable units="millivolt" public_interface="out" name="delta_ev_K"/>
+    <variable units="cm3_millimolar_per_minute" public_interface="out" name="Jv_K" initial_value="0.0"/>
+    
+    <variable units="minute" public_interface="in" name="time"/>
+    <variable units="millimolar" public_interface="in" name="K_a"/>
+    <variable units="millimolar" public_interface="in" name="K_e"/>
+    <variable units="cm3_per_minute" public_interface="in" name="Qv"/>
+    <variable units="cm3_per_minute" public_interface="in" name="Qa"/>
+    <variable units="joule_per_mole_kelvin" public_interface="in" name="R"/>
+    <variable units="kelvin" public_interface="in" name="T"/>
+    <variable units="coulomb_per_millimole" public_interface="in" name="F"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="K_v_calculation">
+        <eq/>
+        <ci> K_v </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> Qa </ci>
+              <ci> K_a </ci>
+            </apply>
+            <ci> Jv_K </ci>
+          </apply>
+          <ci> Qv </ci>
+        </apply>
+      </apply>
+      
+      <apply id="delta_ev_K_calculation">
+        <eq/>
+        <ci> delta_ev_K </ci>
+        <apply>
+          <times/>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <ci> R </ci>
+              <ci> T </ci>
+            </apply>
+            <ci> F </ci>
+          </apply>
+          <apply>
+            <ln/>
+            <apply>
+              <divide/>
+              <ci> K_v </ci>
+              <ci> K_e </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="Jv_K_calculation">
+        <eq/>
+        <ci> Jv_K </ci>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> Qv </ci>
+            <ci> K_v </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> Qa </ci>
+            <ci> K_a </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="capillary_compartment_chloride">
+    <variable units="millimolar" public_interface="out" name="Cl_v" initial_value="112.7"/>
+    <variable units="millivolt" public_interface="out" name="delta_ev_Cl"/>
+    <variable units="cm3_millimolar_per_minute" public_interface="out" name="Jv_Cl" initial_value="0.0"/>
+    
+    <variable units="minute" public_interface="in" name="time"/>
+    <variable units="millimolar" public_interface="in" name="Cl_a"/>
+    <variable units="millimolar" public_interface="in" name="Cl_e"/>
+    <variable units="cm3_per_minute" public_interface="in" name="Qv"/>
+    <variable units="cm3_per_minute" public_interface="in" name="Qa"/>
+    <variable units="joule_per_mole_kelvin" public_interface="in" name="R"/>
+    <variable units="kelvin" public_interface="in" name="T"/>
+    <variable units="coulomb_per_millimole" public_interface="in" name="F"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="Cl_v_calculation">
+        <eq/>
+        <ci> Cl_v </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> Qa </ci>
+              <ci> Cl_a </ci>
+            </apply>
+            <ci> Jv_Cl </ci>
+          </apply>
+          <ci> Qv </ci>
+        </apply>
+      </apply>
+      
+      <apply id="delta_ev_Cl_calculation">
+        <eq/>
+        <ci> delta_ev_Cl </ci>
+        <apply>
+          <times/>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <ci> R </ci>
+              <ci> T </ci>
+            </apply>
+            <ci> F </ci>
+          </apply>
+          <apply>
+            <ln/>
+            <apply>
+              <divide/>
+              <ci> Cl_v </ci>
+              <ci> Cl_e </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="Jv_Cl_calculation">
+        <eq/>
+        <ci> Jv_Cl </ci>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> Qv </ci>
+            <ci> Cl_v </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> Qa </ci>
+            <ci> Cl_a </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="capillary_space">
+    <variable units="Pa" public_interface="out" name="pi_v"/>
+    <variable units="cm3_per_minute" public_interface="out" name="Qv" initial_value="3.6E-8"/>
+    <variable units="millimolar" public_interface="out" name="Pr_v" initial_value="1.45"/>
+    <variable units="cm3_per_minute" public_interface="out" name="Jv_H2O"/>
+        
+    <variable units="dimensionless" name="z_v" initial_value="24.4"/>
+    
+    <variable units="cm3_per_minute" public_interface="in" name="Qa"/>
+    <variable units="millimolar" public_interface="in" name="Na_v"/>
+    <variable units="millimolar" public_interface="in" name="K_v"/>
+    <variable units="millimolar" public_interface="in" name="Cl_v"/>
+    <variable units="Pa" public_interface="in" name="pi_e"/>
+    <variable units="minute" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="Qv_calculation">
+        <eq/>
+        <ci> Qv </ci>
+        <apply>
+          <plus/>
+          <ci> Qa </ci>
+          <ci> Jv_H2O </ci>
+        </apply>
+      </apply> 
+      
+      <apply id="Jv_H2O_calculation">
+        <eq/>
+        <ci> Jv_H2O </ci>
+        <apply>
+          <minus/>
+          <ci> Qv </ci>
+          <ci> Qa </ci>
+        </apply>
+      </apply>  
+      
+      <apply id="pi_v_calculation">
+        <eq/>
+        <ci> pi_v </ci>
+        <apply>
+          <plus/>
+          <ci> Na_v </ci>
+          <ci> K_v </ci>
+          <ci> Cl_v </ci>
+          <ci> Pr_v </ci>
+        </apply>
+      </apply>
+      
+      <apply id="Pr_v_calculation">
+        <eq/>
+        <ci> Pr_v </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <plus/>
+            <ci> Na_v </ci>
+            <ci> K_v </ci>
+            <apply>
+              <minus/>
+              <ci> Cl_v </ci>
+            </apply>
+          </apply>
+          <ci> z_v </ci>
+        </apply>
+      </apply>
+     
+    </math>
+  </component>
+  
+  <component name="arterial_space">
+    <variable units="cm3_per_minute" public_interface="out" name="Qa" initial_value="3.6E-8"/>
+    <variable units="millimolar" public_interface="out" name="Na_a" initial_value="140.0"/>
+    <variable units="millimolar" public_interface="out" name="K_a" initial_value="5.4"/>
+    <variable units="millimolar" public_interface="out" name="Cl_a" initial_value="110.0"/>
+    
+    <variable units="millimolar" name="Pr_a" initial_value="1.45"/>
+    
+    <variable units="minute" public_interface="in" name="time"/>
+    <variable units="millimolar" public_interface="in" name="Pr_v"/>
+    <variable units="cm3_per_minute" public_interface="in" name="Qv"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="Qa_calculation">
+        <eq/>
+        <ci> Qa </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <ci> Qv </ci>
+            <ci> Pr_v </ci>
+          </apply>
+          <ci> Pr_a </ci>
+        </apply>
+      </apply>  
+    </math>
+  </component>
+  
+  <component name="pump_rate">
+    <variable units="micromole_per_minute" public_interface="out" name="P"/>
+    
+    <variable units="micromole_per_minute" name="P_max" initial_value="4.6E-8"/>
+    <variable units="millimolar" name="Km_Na_i" initial_value="10.0"/>
+    <variable units="millimolar" name="Km_K_e" initial_value="1.5"/>
+    <variable units="dimensionless" name="f_NaK"/>
+    <variable units="dimensionless" name="a_t"/>
+    
+    <variable units="minute" public_interface="in" name="time"/>
+    <variable units="millimolar" public_interface="in" name="K_e"/>
+    <variable units="millimolar" public_interface="in" name="Na_i"/>
+    <variable units="millimolar" public_interface="in" name="Na_e"/>
+    <variable units="joule_per_mole_kelvin" public_interface="in" name="R"/>
+    <variable units="coulomb_per_millimole" public_interface="in" name="F"/>
+    <variable units="kelvin" public_interface="in" name="T"/>
+    <variable units="millivolt" public_interface="in" name="delta"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="P_calculation">
+        <eq/>
+        <ci> P </ci>
+        <apply>
+          <times/>
+          <ci> a_t </ci>
+          <ci> P_max </ci>
+          <ci> f_NaK </ci>
+          <apply>
+            <divide/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <power/>
+                <apply>
+                  <divide/>
+                  <ci> Km_Na_i </ci>
+                  <ci> Na_i </ci>
+                </apply>
+                <cn cellml:units="dimensionless"> 1.5 </cn>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <divide/>
+            <ci> K_e </ci>
+            <apply>
+              <plus/>
+              <ci> Km_K_e </ci>
+              <ci> K_e </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="f_NaK_calculation">
+        <eq/>
+        <ci> f_NaK </ci>
+        <apply>
+          <divide/>
+          <cn cellml:units="dimensionless"> 1.0 </cn>
+          <apply>
+            <plus/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <times/>
+              <cn cellml:units="dimensionless"> 0.1245 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <times/>
+                    <cn cellml:units="dimensionless"> -0.1 </cn>
+                    <ci> delta </ci>
+                    <ci> F </ci>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <ci> R </ci>
+                    <ci> T </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+            <apply>
+              <minus/>
+              <apply>
+                <times/>
+                <cn cellml:units="dimensionless"> 0.0365 </cn>
+                <cn cellml:units="dimensionless"> 7.0 </cn>
+                <apply>
+                  <exp/>
+                  <apply>
+                    <divide/>
+                    <apply>
+                      <times/>
+                      <cn cellml:units="dimensionless"> -0.1 </cn>
+                      <ci> delta </ci>
+                      <ci> F </ci>
+                    </apply>
+                    <apply>
+                      <times/>
+                      <ci> R </ci>
+                      <ci> T </ci>
+                    </apply>
+                  </apply>
+                </apply>
+                <apply>
+                  <exp/>
+                  <apply>
+                    <divide/>
+                    <ci> Na_e </ci>
+                    <cn cellml:units="millimolar"> 67.3 </cn>
+                  </apply>
+                </apply>
+              </apply>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="a_t_calculation">
+        <eq/>
+        <ci> a_t </ci>
+        <apply>
+          <power/>
+          <cn cellml:units="dimensionless"> 0.35 </cn>
+          <apply>
+            <divide/>
+            <ci> time </ci>
+            <cn cellml:units="minute"> 15.0 </cn>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <group>
+    <relationship_ref relationship="encapsulation"/>
+    <component_ref component="intracellular_sodium">
+      <component_ref component="intracellular_sodium_m_gate"/>
+      <component_ref component="intracellular_sodium_h_gate"/>
+    </component_ref>
+    <component_ref component="intracellular_potassium">
+      <component_ref component="intracellular_potassium_n_gate"/>
+    </component_ref>
+  </group>
+  
+  <connection>
+    <map_components component_2="environment" component_1="intracellular_space"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="intracellular_sodium"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="intracellular_potassium"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="intracellular_chloride"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="extracellular_sodium"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="extracellular_potassium"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="extracellular_chloride"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="extracellular_space"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="water_flux"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="sodium_flux"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="potassium_flux"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="chloride_flux"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="capillary_compartment_sodium"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="capillary_compartment_potassium"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+ 
+  <connection>
+    <map_components component_2="environment" component_1="capillary_compartment_chloride"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="capillary_space"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+ 
+  <connection>
+    <map_components component_2="environment" component_1="arterial_space"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="pump_rate"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="intracellular_sodium" component_1="intracellular_space"/>
+    <map_variables variable_2="Na_i" variable_1="Na_i"/>
+    <map_variables variable_2="R" variable_1="R"/>
+    <map_variables variable_2="T" variable_1="T"/>
+    <map_variables variable_2="F" variable_1="F"/>
+    <map_variables variable_2="delta" variable_1="delta"/>
+    <map_variables variable_2="delta_eq" variable_1="delta_eq"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="intracellular_potassium" component_1="intracellular_space"/>
+    <map_variables variable_2="K_i" variable_1="K_i"/>
+    <map_variables variable_2="R" variable_1="R"/>
+    <map_variables variable_2="T" variable_1="T"/>
+    <map_variables variable_2="F" variable_1="F"/>
+    <map_variables variable_2="delta" variable_1="delta"/>
+    <map_variables variable_2="delta_eq" variable_1="delta_eq"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="intracellular_chloride" component_1="intracellular_space"/>
+    <map_variables variable_2="Cl_i" variable_1="Cl_i"/>
+    <map_variables variable_2="R" variable_1="R"/>
+    <map_variables variable_2="T" variable_1="T"/>
+    <map_variables variable_2="F" variable_1="F"/>
+    <map_variables variable_2="delta" variable_1="delta"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="extracellular_sodium" component_1="intracellular_space"/>
+    <map_variables variable_2="Na_e" variable_1="Na_e"/>
+    <map_variables variable_2="R" variable_1="R"/>
+    <map_variables variable_2="T" variable_1="T"/>
+    <map_variables variable_2="F" variable_1="F"/>
+    <map_variables variable_2="delta" variable_1="delta"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="extracellular_potassium" component_1="intracellular_space"/>
+    <map_variables variable_2="K_e" variable_1="K_e"/>
+    <map_variables variable_2="R" variable_1="R"/>
+    <map_variables variable_2="T" variable_1="T"/>
+    <map_variables variable_2="F" variable_1="F"/>
+    <map_variables variable_2="delta" variable_1="delta"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="extracellular_chloride" component_1="intracellular_space"/>
+    <map_variables variable_2="Cl_e" variable_1="Cl_e"/>
+    <map_variables variable_2="R" variable_1="R"/>
+    <map_variables variable_2="T" variable_1="T"/>
+    <map_variables variable_2="F" variable_1="F"/>
+    <map_variables variable_2="delta" variable_1="delta"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="extracellular_space" component_1="intracellular_space"/>
+    <map_variables variable_2="X_e" variable_1="X_e"/>
+    <map_variables variable_2="V_e" variable_1="V_e"/>
+    <map_variables variable_2="pi_e" variable_1="pi_e"/>
+    <map_variables variable_2="pi_i" variable_1="pi_i"/>
+    <map_variables variable_2="Lie_p" variable_1="Lie_p"/>
+    <map_variables variable_2="delta_e" variable_1="delta_e"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="water_flux" component_1="intracellular_space"/>
+    <map_variables variable_2="V_i" variable_1="V_i"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="sodium_flux" component_1="intracellular_space"/>
+    <map_variables variable_2="R" variable_1="R"/>
+    <map_variables variable_2="T" variable_1="T"/>
+    <map_variables variable_2="F" variable_1="F"/>
+    <map_variables variable_2="P_h" variable_1="P_h"/>
+    <map_variables variable_2="delta_eh" variable_1="delta_eh"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="potassium_flux" component_1="intracellular_space"/>
+    <map_variables variable_2="R" variable_1="R"/>
+    <map_variables variable_2="T" variable_1="T"/>
+    <map_variables variable_2="F" variable_1="F"/>
+    <map_variables variable_2="P_h" variable_1="P_h"/>
+    <map_variables variable_2="delta_eh" variable_1="delta_eh"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="chloride_flux" component_1="intracellular_space"/>
+    <map_variables variable_2="R" variable_1="R"/>
+    <map_variables variable_2="T" variable_1="T"/>
+    <map_variables variable_2="F" variable_1="F"/>
+    <map_variables variable_2="P_h" variable_1="P_h"/>
+    <map_variables variable_2="delta_eh" variable_1="delta_eh"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="capillary_compartment_sodium" component_1="intracellular_space"/>
+    <map_variables variable_2="R" variable_1="R"/>
+    <map_variables variable_2="T" variable_1="T"/>
+    <map_variables variable_2="F" variable_1="F"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="capillary_compartment_potassium" component_1="intracellular_space"/>
+    <map_variables variable_2="R" variable_1="R"/>
+    <map_variables variable_2="T" variable_1="T"/>
+    <map_variables variable_2="F" variable_1="F"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="capillary_compartment_chloride" component_1="intracellular_space"/>
+    <map_variables variable_2="R" variable_1="R"/>
+    <map_variables variable_2="T" variable_1="T"/>
+    <map_variables variable_2="F" variable_1="F"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="capillary_space" component_1="intracellular_space"/>
+    <map_variables variable_2="pi_e" variable_1="pi_e"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="pump_rate" component_1="intracellular_space"/>
+    <map_variables variable_2="R" variable_1="R"/>
+    <map_variables variable_2="T" variable_1="T"/>
+    <map_variables variable_2="F" variable_1="F"/>
+    <map_variables variable_2="delta" variable_1="delta"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="extracellular_sodium" component_1="intracellular_sodium"/>
+    <map_variables variable_2="Na_e" variable_1="Na_e"/>
+    <map_variables variable_2="g_Na" variable_1="g_Na"/>
+    <map_variables variable_2="delta_Na" variable_1="delta_Na"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="pump_rate" component_1="intracellular_sodium"/>
+    <map_variables variable_2="Na_i" variable_1="Na_i"/>
+    <map_variables variable_2="P" variable_1="P"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="pump_rate" component_1="intracellular_potassium"/>
+    <map_variables variable_2="P" variable_1="P"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="extracellular_potassium" component_1="intracellular_potassium"/>
+    <map_variables variable_2="K_e" variable_1="K_e"/>
+    <map_variables variable_2="g_K" variable_1="g_K"/>
+    <map_variables variable_2="delta_K" variable_1="delta_K"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="extracellular_chloride" component_1="intracellular_chloride"/>
+    <map_variables variable_2="Cl_e" variable_1="Cl_e"/>
+    <map_variables variable_2="g_Cl" variable_1="g_Cl"/>
+    <map_variables variable_2="delta_Cl" variable_1="delta_Cl"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="sodium_flux" component_1="extracellular_sodium"/>
+    <map_variables variable_2="Na_e" variable_1="Na_e"/>
+    <map_variables variable_2="Jh_Na" variable_1="Jh_Na"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="capillary_compartment_sodium" component_1="extracellular_sodium"/>
+    <map_variables variable_2="Na_e" variable_1="Na_e"/>
+    <map_variables variable_2="Jv_Na" variable_1="Jv_Na"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="pump_rate" component_1="extracellular_sodium"/>
+    <map_variables variable_2="Na_e" variable_1="Na_e"/>
+    <map_variables variable_2="P" variable_1="P"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="potassium_flux" component_1="extracellular_potassium"/>
+    <map_variables variable_2="K_e" variable_1="K_e"/>
+    <map_variables variable_2="Jh_K" variable_1="Jh_K"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="capillary_compartment_potassium" component_1="extracellular_potassium"/>
+    <map_variables variable_2="K_e" variable_1="K_e"/>
+    <map_variables variable_2="Jv_K" variable_1="Jv_K"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="pump_rate" component_1="extracellular_potassium"/>
+    <map_variables variable_2="K_e" variable_1="K_e"/>
+    <map_variables variable_2="P" variable_1="P"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="chloride_flux" component_1="extracellular_chloride"/>
+    <map_variables variable_2="Cl_e" variable_1="Cl_e"/>
+    <map_variables variable_2="Jh_Cl" variable_1="Jh_Cl"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="extracellular_space" component_1="extracellular_chloride"/>
+    <map_variables variable_2="Cl_e" variable_1="Cl_e"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="extracellular_space" component_1="extracellular_potassium"/>
+    <map_variables variable_2="K_e" variable_1="K_e"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="extracellular_space" component_1="extracellular_sodium"/>
+    <map_variables variable_2="Na_e" variable_1="Na_e"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="capillary_compartment_chloride" component_1="extracellular_chloride"/>
+    <map_variables variable_2="Cl_e" variable_1="Cl_e"/>
+    <map_variables variable_2="Jv_Cl" variable_1="Jv_Cl"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="water_flux" component_1="extracellular_space"/>
+    <map_variables variable_2="V_e" variable_1="V_e"/>
+    <map_variables variable_2="Jh_H2O" variable_1="Jh_H2O"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="capillary_space" component_1="extracellular_space"/>
+    <map_variables variable_2="Jv_H2O" variable_1="Jv_H2O"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="sodium_flux" component_1="water_flux"/>
+    <map_variables variable_2="Jh_H2O" variable_1="Jh_H2O"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="potassium_flux" component_1="water_flux"/>
+    <map_variables variable_2="Jh_H2O" variable_1="Jh_H2O"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="chloride_flux" component_1="water_flux"/>
+    <map_variables variable_2="Jh_H2O" variable_1="Jh_H2O"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="arterial_space" component_1="capillary_compartment_sodium"/>
+    <map_variables variable_2="Na_a" variable_1="Na_a"/>
+    <map_variables variable_2="Qa" variable_1="Qa"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="capillary_space" component_1="capillary_compartment_sodium"/>
+    <map_variables variable_2="Na_v" variable_1="Na_v"/>
+    <map_variables variable_2="Qv" variable_1="Qv"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="arterial_space" component_1="capillary_compartment_potassium"/>
+    <map_variables variable_2="K_a" variable_1="K_a"/>
+    <map_variables variable_2="Qa" variable_1="Qa"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="capillary_space" component_1="capillary_compartment_potassium"/>
+    <map_variables variable_2="K_v" variable_1="K_v"/>
+    <map_variables variable_2="Qv" variable_1="Qv"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="arterial_space" component_1="capillary_compartment_chloride"/>
+    <map_variables variable_2="Cl_a" variable_1="Cl_a"/>
+    <map_variables variable_2="Qa" variable_1="Qa"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="capillary_space" component_1="capillary_compartment_chloride"/>
+    <map_variables variable_2="Cl_v" variable_1="Cl_v"/>
+    <map_variables variable_2="Qv" variable_1="Qv"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="arterial_space" component_1="capillary_space"/>
+    <map_variables variable_2="Qv" variable_1="Qv"/>
+    <map_variables variable_2="Qa" variable_1="Qa"/>
+    <map_variables variable_2="Pr_v" variable_1="Pr_v"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="intracellular_sodium_m_gate" component_1="intracellular_sodium"/>
+    <map_variables variable_2="m_infinity" variable_1="m_infinity"/>
+    <map_variables variable_2="delta" variable_1="delta"/>
+    <map_variables variable_2="delta_eq" variable_1="delta_eq"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="intracellular_sodium_h_gate" component_1="intracellular_sodium"/>
+    <map_variables variable_2="h_infinity" variable_1="h_infinity"/>
+    <map_variables variable_2="delta" variable_1="delta"/>
+    <map_variables variable_2="delta_eq" variable_1="delta_eq"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="intracellular_potassium_n_gate" component_1="intracellular_potassium"/>
+    <map_variables variable_2="n_infinity" variable_1="n_infinity"/>
+    <map_variables variable_2="delta" variable_1="delta"/>
+    <map_variables variable_2="delta_eq" variable_1="delta_eq"/>
+  </connection>
+  
+
+<rdf:RDF>
+  <rdf:Bag rdf:about="rdf:#08bb621a-e405-4bdf-9e7b-7ac4a855d8fa">
+    <rdf:li>Cardiac Myocyte</rdf:li>
+    <rdf:li>calcium dynamics</rdf:li>
+    <rdf:li>electrophysiology</rdf:li>
+    <rdf:li>ischemia</rdf:li>
+    <rdf:li>hypoxia</rdf:li>
+  </rdf:Bag>
+  <rdf:Seq rdf:about="rdf:#16325396-015a-44ea-a549-08edd2985cb2">
+    <rdf:li rdf:resource="rdf:#4a077e80-9899-4b66-854c-eb553bb1a8e9"/>
+    <rdf:li rdf:resource="rdf:#3f5975f8-d42a-43a9-8019-519ce17e525b"/>
+    <rdf:li rdf:resource="rdf:#df2f9b52-d291-4d37-92da-5800d0ee505b"/>
+    <rdf:li rdf:resource="rdf:#6a6b60fb-4680-4e5c-a118-933d10645121"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#ccb6b55e-7bf3-4d89-83f9-fa02a5bf7267">
+    <vCard:Given>Autumn</vCard:Given>
+    <vCard:Family>Cuellar</vCard:Family>
+    <vCard:Other>A</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#df2f9b52-d291-4d37-92da-5800d0ee505b">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#c99b3ea4-c51e-481d-9fb7-99c73907fab2"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#51aeae1c-eb6e-407a-890a-0629b0489470">
+    <dcterms:modified rdf:resource="rdf:#539be03f-f99d-4250-a195-655a15849aed"/>
+    <rdf:value>
+          Changed unit dimensions to make them consistent.
+        </rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#6cacaee9-22d5-40c0-89d9-01be64cc81f5"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#c99b3ea4-c51e-481d-9fb7-99c73907fab2">
+    <vCard:Given>James</vCard:Given>
+    <vCard:Family>Keener</vCard:Family>
+    <vCard:Other>P</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="#yi_fogelson_keener_peskin_2003_version01">
+    <dc:title>
+        Yi et al's 2003 mathematical model of volume shifts and ionic 
+        concentration changes during ischemia and hypoxia. 
+      </dc:title>
+    <cmeta:bio_entity>Cardiac Myocyte</cmeta:bio_entity>
+    <cmeta:bio_entity>Neurons</cmeta:bio_entity>
+    <cmeta:comment rdf:resource="rdf:#d009c6ef-a45f-429f-8d52-16453676fdc9"/>
+    <bqs:reference rdf:resource="rdf:#839e31a5-9ff3-4e9f-8a36-678a6f8117d7"/>
+    <bqs:reference rdf:resource="rdf:#9460ad87-31f3-451c-a16f-e4128934060a"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#370c0e61-69f9-43d6-97e4-9d116f183552">
+    <dcterms:W3CDTF>2002-12-27</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#677251fe-f144-4584-8366-a3c71eefe588">
+    <dc:title>Journal of Theoretical Biology</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3f5975f8-d42a-43a9-8019-519ce17e525b">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#3d71a142-0e87-4c20-8626-5aeaa45ed812"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#839e31a5-9ff3-4e9f-8a36-678a6f8117d7">
+    <bqs:Pubmed_id>12453453</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#d22b7552-00b3-46cf-8074-3b8459e8eb4a"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ab100697-c437-4fe6-b5bc-2dee1809ce94">
+    <vCard:N rdf:resource="rdf:#ccb6b55e-7bf3-4d89-83f9-fa02a5bf7267"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#6fa48dd0-9621-49c8-aa95-95b551df88eb">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value rdf:resource="rdf:#08bb621a-e405-4bdf-9e7b-7ac4a855d8fa"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#539be03f-f99d-4250-a195-655a15849aed">
+    <dcterms:W3CDTF>2005-05-02</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:publisher>
+        The University of Auckland, Bioengineering Institute
+      </dc:publisher>
+    <cmeta:modification rdf:resource="rdf:#51aeae1c-eb6e-407a-890a-0629b0489470"/>
+    <cmeta:modification rdf:resource="rdf:#bf4355c2-1eca-4125-a8c2-ad92520094e6"/>
+    <dcterms:created rdf:resource="rdf:#370c0e61-69f9-43d6-97e4-9d116f183552"/>
+    <dc:creator rdf:resource="rdf:#7a6c577b-534a-45ac-a6d6-698af3bd6d9b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8af41ca4-f332-411d-8fe8-333ff14e53a8">
+    <vCard:Given>Peter</vCard:Given>
+    <vCard:Family>Villiger</vCard:Family>
+    <vCard:Other>J</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#27376788-f183-4863-a811-aea3e180b026">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>The Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#44da8d12-db16-4543-a9d9-d56f9d298758">
+    <dcterms:W3CDTF>2003-04-09</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d22b7552-00b3-46cf-8074-3b8459e8eb4a">
+    <dc:creator rdf:resource="rdf:#16325396-015a-44ea-a549-08edd2985cb2"/>
+    <dc:title>
+            A Mathematical Study of Volume Shifts and Ionic Concentration 
+            Changes during Ischemia and Hypoxia
+          </dc:title>
+    <bqs:volume>220</bqs:volume>
+    <bqs:first_page>83</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#677251fe-f144-4584-8366-a3c71eefe588"/>
+    <dcterms:issued rdf:resource="rdf:#5fb9e016-b6e7-4903-a2ba-f3ce0222dd9b"/>
+    <bqs:last_page>106</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#6a6b60fb-4680-4e5c-a118-933d10645121">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#b5eaee64-e4be-4bbc-845d-8079400738b5"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#5fb9e016-b6e7-4903-a2ba-f3ce0222dd9b">
+    <dcterms:W3CDTF>2003-01-07</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#6cacaee9-22d5-40c0-89d9-01be64cc81f5">
+    <vCard:N rdf:resource="rdf:#8af41ca4-f332-411d-8fe8-333ff14e53a8"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a93dbcfd-70d1-4e2a-ad96-7b27f1d48192">
+    <vCard:Given>Chung-Seon</vCard:Given>
+    <vCard:Family>Yi</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#450878c9-bc63-4996-88de-3c7e547dc078">
+    <vCard:FN>Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#863ffed4-3bab-4553-81c2-e8b820e9026f">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3d71a142-0e87-4c20-8626-5aeaa45ed812">
+    <vCard:Given>Aaron</vCard:Given>
+    <vCard:Family>Fogelson</vCard:Family>
+    <vCard:Other>L</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d009c6ef-a45f-429f-8d52-16453676fdc9">
+    <dc:creator rdf:resource="rdf:#450878c9-bc63-4996-88de-3c7e547dc078"/>
+    <rdf:value>
+          This is the CellML description of Yi et al's 2003 mathematical model 
+          of volume shifts and ionic concentration changes during ischemia and 
+          hypoxia.
+        </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9460ad87-31f3-451c-a16f-e4128934060a">
+    <dc:subject rdf:resource="rdf:#6fa48dd0-9621-49c8-aa95-95b551df88eb"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b5eaee64-e4be-4bbc-845d-8079400738b5">
+    <vCard:Given>Charles</vCard:Given>
+    <vCard:Family>Peskin</vCard:Family>
+    <vCard:Other>S</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4a077e80-9899-4b66-854c-eb553bb1a8e9">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#a93dbcfd-70d1-4e2a-ad96-7b27f1d48192"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#defbd41d-5de1-454a-804d-f5ea978ac978">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#bf4355c2-1eca-4125-a8c2-ad92520094e6">
+    <dcterms:modified rdf:resource="rdf:#44da8d12-db16-4543-a9d9-d56f9d298758"/>
+    <rdf:value>
+          Added publication date information.
+        </rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#ab100697-c437-4fe6-b5bc-2dee1809ce94"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7a6c577b-534a-45ac-a6d6-698af3bd6d9b">
+    <vCard:ORG rdf:resource="rdf:#27376788-f183-4863-a811-aea3e180b026"/>
+    <vCard:EMAIL rdf:resource="rdf:#863ffed4-3bab-4553-81c2-e8b820e9026f"/>
+    <vCard:N rdf:resource="rdf:#defbd41d-5de1-454a-804d-f5ea978ac978"/>
+  </rdf:Description>
+</rdf:RDF>
+</model>

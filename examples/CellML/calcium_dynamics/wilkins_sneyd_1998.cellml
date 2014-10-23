@@ -1,0 +1,446 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- FILE : wilkins_model_1998.xml
+
+CREATED : 27th March 2004
+
+LAST MODIFIED : 27th March 2004
+
+AUTHOR : Catherine Lloyd
+         Bioengineering Instute
+         The University of Auckland
+         
+MODEL STATUS : This model conforms to the CellML 1.0 Specification released on
+10th August 2001, and the 16/01/2002 CellML Metadata 1.0 Specification.
+
+DESCRIPTION : This file contains a CellML description of Wilkins and Sneyd's 1998 mathematical model of intercellular spiral waves of calcium. 
+-->
+
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="wilkins_1998" name="wilkins_1998">
+
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Intercellular spiral waves of calcium</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+            This model contains partial differentials and as such can not currently be solved by existing CellML tools.
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+ABSTRACT: Intercellular calcium waves have been observed in a large number of cell types, and are known to result from a variety of stimuli, including mechanical or hormonal stimulation. Recently, spiral intercellular waves of calcium have been observed in slices of hippocampal tissue. We use an existing model to study the properties of spiral intercellular calcium waves. Although intercellular spiral waves are well known in the context of cardiac muscle, due to the small value of the calcium diffusion coefficient intercellular calcium waves have fundamentally different properties. We show that homogenisation techniques give a good estimate for the plane wave speed, but do not describe spiral behaviour well. Using an expression for the effective diffusion coefficient we estimate the intercellular calcium permeability in liver. For the bistable equation, we derive an analytic estimate for the value of the intercellular permeability at which wave propagation fails. In the calcium wave model, we show numerically that the spiral period is first a decreasing, then an increasing, function of the intercellular permeability. We hypothesise that this is because the curvature of the spiral core is unimportant at low permeability, the period being approximately set instead by the speed of a plane wave along a line of coupled cells in one dimension.
+</para>
+
+<para>
+The original paper reference is cited below:
+</para>
+
+<para>
+Intercellular Spiral Waves of Calcium, Matthew Wilkins and James Sneyd, 1998,<emphasis>Journal of Theoretical Biology</emphasis>, 191, 299-308. <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/9631570">PubMed ID: 9631570</ulink>
+</para>
+
+        <informalfigure float="0" id="fig_cell_diagram">
+          <mediaobject>
+            <imageobject>
+              <objectinfo>
+                <title>reaction diagram</title>
+              </objectinfo>
+              <imagedata fileref="wilkins_1998.png"/>
+            </imageobject>
+            <caption>Schematic diagram showing the transmembrane calcium fluxes which are described by the mathematical model.</caption>
+          </mediaobject>
+        </informalfigure>
+</sect1>
+</article>
+</documentation>
+  
+  
+  
+  <units name="micromolar">
+    <unit units="mole" prefix="micro"/>
+    <unit units="litre" exponent="-1"/>
+  </units>
+  
+  <units name="flux">
+    <unit units="micromolar"/>
+    <unit units="second" exponent="-1"/>
+  </units>
+  
+  <units name="micromolar_micrometre2_per_second">
+    <unit units="metre" prefix="micro" exponent="2"/>
+    <unit units="second" exponent="-1"/>
+  </units>
+  
+  
+  <component name="environment">
+    <variable units="second" public_interface="out" name="time"/>
+  </component>
+  
+  <component name="calcium_concentration">
+    <variable units="micromolar" public_interface="out" name="c"/>
+    
+    <variable units="micromolar_micrometre2_per_second" name="Dc" initial_value="20.0"/>
+    <variable units="dimensionless" name="dc_dx2"/>
+    <variable units="dimensionless" name="dc_dy2"/>
+    
+    <variable units="second" public_interface="in" name="time"/>
+    <variable units="flux" public_interface="in" name="j_flux"/>
+    <variable units="flux" public_interface="in" name="j_pump"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathMT">
+      <apply id="c_calculation">
+        <eq/>
+        <apply>
+          <partialdiff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> c </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> Dc </ci>
+              <apply>
+                <plus/>
+                <ci> dc_dx2 </ci>
+                <ci> dc_dy2 </ci>
+              </apply>
+            </apply>
+            <ci> j_flux </ci>
+          </apply>
+          <ci> j_pump </ci>
+        </apply>
+      </apply>
+      
+      <apply id="dc_dx2_calculation">
+        <eq/>
+        <apply>
+          <partialdiff/>
+          <bvar>
+            <ci> x </ci>
+            <degree>
+              <cn cellml:unit="dimensionless"> 2.0 </cn>
+            </degree>
+          </bvar>
+          <ci> c </ci>
+        </apply>
+        <ci> dc_dx2 </ci>
+      </apply>
+      
+      <apply id="dc_dy2_calculation">
+        <eq/>
+        <apply>
+          <partialdiff/>
+          <bvar>
+            <ci> y </ci>
+            <degree>
+              <cn cellml:unit="dimensionless"> 2.0 </cn>
+            </degree>
+          </bvar>
+          <ci> c </ci>
+        </apply>
+        <ci> dc_dy2 </ci>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="calcium_pump">
+    <variable units="flux" public_interface="out" name="j_pump"/>
+    
+    <variable units="flux" name="gamma" initial_value="2.0"/>
+    <variable units="micromolar" name="k_gamma" initial_value="0.1"/>
+    
+    <variable units="micromolar" public_interface="in" name="c"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="j_pump_calculation">
+        <eq/>
+        <ci> j_pump </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <ci> gamma </ci>
+            <ci> c </ci>
+          </apply>
+          <apply>
+            <plus/>
+            <ci> k_gamma </ci>
+            <ci> c </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="calcium_flux">
+    <variable units="flux" public_interface="out" name="j_flux"/>
+    
+    <variable units="dimensionless" name="h"/>
+    <variable units="dimensionless" name="b" initial_value="0.111"/>
+    <variable units="micromolar" name="k1" initial_value="0.7"/>
+    <variable units="micromolar" name="k2" initial_value="0.7"/>
+    <variable units="micromolar" name="k_mu" initial_value="0.7"/>
+    <variable units="second" name="tau_h" initial_value="2.0"/>
+    <variable units="flux" name="kf" initial_value="16.2"/>
+    <variable units="dimensionless" name="mu_p"/>
+    <variable units="micromolar" name="p"/>
+    
+    <variable units="micromolar" public_interface="in" name="c"/>
+    <variable units="second" public_interface="in" name="time"/> 
+   
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="j_flux_calculation">
+        <eq/>
+        <ci> j_flux </ci>
+        <apply>
+          <times/>
+          <ci> kf </ci>
+          <ci> mu_p </ci>
+          <apply>
+            <plus/>
+            <ci> b </ci>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <apply>
+                  <minus/>
+                  <cn cellml:units="dimensionless"> 1.0 </cn>
+                  <ci> b </ci>
+                </apply>
+                <ci> c </ci>
+              </apply>
+              <apply>
+                <plus/>
+                <ci> k1 </ci>
+                <ci> c </ci>
+              </apply>
+            </apply>
+          </apply>
+          <ci> h </ci>
+        </apply>
+      </apply>
+      
+      <apply id="h_calculation">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> h </ci>
+        </apply>
+        <apply>
+          <divide/>
+          <apply>
+            <minus/>
+            <apply>
+              <divide/>
+              <apply>
+                <power/>
+                <ci> k2 </ci>
+                <cn cellml:units="dimensionless"> 2.0 </cn>
+              </apply>
+              <apply>
+                <plus/>
+                <apply>
+                  <power/>
+                  <ci> k2 </ci>
+                  <cn cellml:units="dimensionless"> 2.0 </cn>
+                </apply>
+                <apply>
+                  <power/>
+                  <ci> c </ci>
+                  <cn cellml:units="dimensionless"> 2.0 </cn>
+                </apply>
+              </apply>
+            </apply>
+            <ci> h </ci>
+          </apply>
+          <ci> tau_h </ci>
+        </apply>
+      </apply>
+      
+      <apply id="mu_p_calculation">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> mu_p </ci>
+        </apply>
+        <apply>
+          <divide/>
+          <ci> p </ci>
+          <apply>
+            <plus/>
+            <ci> k_mu </ci>
+            <ci> p </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  
+  <connection>
+    <map_components component_2="environment" component_1="calcium_concentration"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="calcium_flux"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="calcium_pump" component_1="calcium_concentration"/>
+    <map_variables variable_2="c" variable_1="c"/>
+    <map_variables variable_2="j_pump" variable_1="j_pump"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="calcium_flux" component_1="calcium_concentration"/>
+    <map_variables variable_2="c" variable_1="c"/>
+    <map_variables variable_2="j_flux" variable_1="j_flux"/>
+  </connection>
+  
+
+
+<rdf:RDF>
+  <rdf:Bag rdf:about="rdf:#e42c15b0-da35-4e4a-960f-a7a38b2902a2">
+    <rdf:li>calcium dynamics</rdf:li>
+    <rdf:li>calcium waves</rdf:li>
+    <rdf:li>ca spiral waves</rdf:li>
+  </rdf:Bag>
+  <rdf:Seq rdf:about="rdf:#6cf4ca00-0433-49e0-aa67-318ad8ceb369">
+    <rdf:li rdf:resource="rdf:#0fc8d05a-0b9c-4f14-87ad-1108deffdd75"/>
+    <rdf:li rdf:resource="rdf:#8f034aff-5c66-4590-9666-ab16ee89ee8f"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="">
+    <dc:publisher>Auckland Bioengineering Institute, The University of Auckland</dc:publisher>
+    <cmeta:comment rdf:resource="rdf:#7574d7fb-f675-4666-923c-98cb7254f6ea"/>
+    <dcterms:created rdf:resource="rdf:#b6bb92b3-eb95-4a80-9bd1-2965594898c7"/>
+    <dc:creator rdf:resource="rdf:#57fb8b5f-7eac-437e-bae1-2790533a056b"/>
+    <cmeta:modification rdf:resource="rdf:#83aac93d-8a4e-46d2-a522-cef240a2ca46"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#172d94cc-1679-4ad5-b1cb-b4309f9a0d88">
+    <dc:subject rdf:resource="rdf:#c9bd1775-a399-4502-8f38-a61422b6f5f0"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#79ce78fc-fb90-4999-a2bd-618f305e627a">
+    <vCard:Given>James</vCard:Given>
+    <vCard:Family>Sneyd</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#58bf9b4a-18e8-4a24-8d9f-07014de828d5">
+    <bqs:Pubmed_id>9631570</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#4e39af7e-7585-439a-b576-5298f56d86c6"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7574d7fb-f675-4666-923c-98cb7254f6ea">
+    <dc:creator rdf:resource="rdf:#a88190db-9c47-4d59-b113-8450c5d35689"/>
+    <rdf:value>This CellML model has been checked, but since the published model involves partial differential equations it requires FieldML [or other applicaiton] in order to operate.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e5eef8c3-239c-46d4-8b28-532c4d31236c">
+    <dcterms:W3CDTF>2008-06-03T12:02:38+12:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#350786a3-5462-4a06-840f-2f85c7c72092">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#57fb8b5f-7eac-437e-bae1-2790533a056b">
+    <vCard:ORG rdf:resource="rdf:#350786a3-5462-4a06-840f-2f85c7c72092"/>
+    <vCard:EMAIL rdf:resource="rdf:#35fa1390-aa58-4a04-80d2-027cc6752bd0"/>
+    <vCard:N rdf:resource="rdf:#30e74734-0f31-4196-a140-73cd3b9362a7"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8f034aff-5c66-4590-9666-ab16ee89ee8f">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#79ce78fc-fb90-4999-a2bd-618f305e627a"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a88190db-9c47-4d59-b113-8450c5d35689">
+    <vCard:FN>Geoff Nunns</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3465b7f3-c68a-4f04-bbc6-b5928830d3fa">
+    <vCard:FN>Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#35fa1390-aa58-4a04-80d2-027cc6752bd0">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="#wilkins_1998">
+    <dc:title>
+        Wilkins and Sneyd's 1998 mathematical model of intercellular spiral waves of calcium.
+      </dc:title>
+    <cmeta:comment rdf:resource="rdf:#1917cff0-db7d-426d-b4b9-39f61738b8cd"/>
+    <bqs:reference rdf:resource="rdf:#172d94cc-1679-4ad5-b1cb-b4309f9a0d88"/>
+    <bqs:reference rdf:resource="rdf:#58bf9b4a-18e8-4a24-8d9f-07014de828d5"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ccffcbb5-a50f-427e-98f6-8ff45fb6520a">
+    <dcterms:W3CDTF>1998-04-07</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#83aac93d-8a4e-46d2-a522-cef240a2ca46">
+    <dcterms:modified rdf:resource="rdf:#e5eef8c3-239c-46d4-8b28-532c4d31236c"/>
+    <rdf:value>I attempted to curate this model, which had been imported from the previous database, but it contained partial differential equations and could not be solved in CellML. </rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#d09eac53-e501-414d-8f2f-6af43238afda"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b6bb92b3-eb95-4a80-9bd1-2965594898c7">
+    <dcterms:W3CDTF>2004-03-20T00:00:00+00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d09eac53-e501-414d-8f2f-6af43238afda">
+    <vCard:N rdf:resource="rdf:#131539c3-fc96-4c07-bdef-478a2b353872"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#30e74734-0f31-4196-a140-73cd3b9362a7">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#c9bd1775-a399-4502-8f38-a61422b6f5f0">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value rdf:resource="rdf:#e42c15b0-da35-4e4a-960f-a7a38b2902a2"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0fc8d05a-0b9c-4f14-87ad-1108deffdd75">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#bd08c1bb-fe22-4eaa-b37b-a2ee8331dbe9"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1917cff0-db7d-426d-b4b9-39f61738b8cd">
+    <dc:creator rdf:resource="rdf:#3465b7f3-c68a-4f04-bbc6-b5928830d3fa"/>
+    <rdf:value>This is the CellML description of Wilkins and Sneyd's 1998 mathematical model of intercellular spiral waves of calcium.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#bd08c1bb-fe22-4eaa-b37b-a2ee8331dbe9">
+    <vCard:Given>Matthew</vCard:Given>
+    <vCard:Family>Wilkins</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4e39af7e-7585-439a-b576-5298f56d86c6">
+    <dc:creator rdf:resource="rdf:#6cf4ca00-0433-49e0-aa67-318ad8ceb369"/>
+    <dc:title>Intercellular Spiral Waves of Calcium</dc:title>
+    <bqs:volume>191</bqs:volume>
+    <bqs:first_page>299</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#b488e511-a7fe-4119-b6d3-02f2b548f216"/>
+    <dcterms:issued rdf:resource="rdf:#ccffcbb5-a50f-427e-98f6-8ff45fb6520a"/>
+    <bqs:last_page>308</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b488e511-a7fe-4119-b6d3-02f2b548f216">
+    <dc:title>Journal of Theoretical Biology</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#131539c3-fc96-4c07-bdef-478a2b353872">
+    <vCard:Given>Geoffrey</vCard:Given>
+    <vCard:Family>Nunns</vCard:Family>
+    <vCard:Other/>
+  </rdf:Description>
+</rdf:RDF>
+</model>

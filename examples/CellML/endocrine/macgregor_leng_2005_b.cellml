@@ -1,0 +1,1564 @@
+<?xml version="1.0"?>
+<!--  FILE :  macgregor_model_2005.xml
+
+CREATED :  19th June 2007
+
+LAST MODIFIED : 19th June 2007
+
+AUTHOR :  Catherine Lloyd
+          Bioengineering Institute
+          The University of Auckland
+          
+MODEL STATUS :  This model conforms to the CellML 1.1 Specification.
+
+DESCRIPTION :  This file contains a CellML description of MacGregor and Leng's 2005 mathematical model of hypothalamic control of growth hormone secretion.
+
+CHANGES:  
+  
+-->
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="macgregor_model_2005" name="macgregor_model_2005">
+
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Modelling the Hypothalamic Control of Growth Hormone Secretion</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+ <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+        This particular CellML model describes the full (pituitary + hypothalamic) model of the published article.  The units have been checked and are consistent, and the model runs in OpenCell and COR to replicate the published results (as shown in figure 12 of the paper).
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+Abstract: Here, we construct a mathematical model of the hypothalamic systems that control the secretion of growth hormone (GH). The work extends a recent model of the pituitary GH system, adding representations of the hypothalamic GH-releasing hormone (GHRH) and somatostatin neurones, each modelled as a single synchronised unit. An unpatterned stochastic input drives the GHRH neurones generating pulses of GHRH release that trigger GH pulses. Delayed feedback from GH results in increased somatostatin release, which inhibits both GH secretion and GHRH release, producing an overall pattern of 3-h pulses of GH secretion that is very similar to the secretory profile observed in male rats. Rather than directly stimulating somatostatin release, GH feedback triggers a priming effect, increasing releasable stores of somatostatin. Varying this priming effect to reduce the effect of GH can reproduce the less pulsatile form of GH release observed in the female rat. The model behaviour is tested by comparison with experimental observations with a range of different experimental protocols involving GHRH injections and somatostatin and GH infusion.
+</para>
+
+<para>
+The complete original paper reference is cited below:
+</para>
+
+<para>
+Modelling the hypothalamic control of growth hormone secretion, D. J. MacGregor and G. Leng, 2005, <emphasis>Journal of Neuroendocrinology</emphasis>, volume 17, 788-803.  <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pubmed&amp;cmd=Retrieve&amp;dopt=AbstractPlus&amp;list_uids=16280026&amp;query_hl=1&amp;itool=pubmed_docsum">PubMed ID: 16280026</ulink>
+</para>
+
+<informalfigure float="0" id="fig_reaction_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>model diagram</title>
+    </objectinfo>
+    <imagedata fileref="macgregor_2005.png"/>
+  </imageobject>
+</mediaobject>
+<caption>A schematic diagram of the different components and connections in the growth hormone secretory system.  Somatostatin (SOM) inhibits the secretion of both growth hormone-releasing hormone (GHRH) and growth hormone (GH).  After a delay, GH feeds back to prime the pool of releasable somatostatin, resulting in the bulk release of somatostatin, which in turn allows further GHRH release and and another burst of GH.</caption>
+</informalfigure>
+</sect1>
+</article>
+</documentation> 
+
+
+
+  
+  
+  <units name="nanomolar">
+    <unit prefix="nano" units="mole"/>
+    <unit exponent="-1" units="litre"/>
+  </units>
+  
+  <units name="minute">
+    <unit multiplier="60.0" units="second"/>
+  </units>
+  
+  <units name="first_order_rate_constant">
+    <unit exponent="-1" units="minute"/>
+  </units>
+  
+  <units name="second_order_rate_constant">
+    <unit exponent="-1" units="nanomolar"/>
+    <unit exponent="-1" units="minute"/>
+  </units>
+  
+  <units name="flux">
+    <unit units="nanomolar"/>
+    <unit exponent="-1" units="minute"/>
+  </units>
+  
+  <units name="per_nanomolar">
+    <unit exponent="-1" units="nanomolar"/>
+  </units>
+  
+  
+  <component name="environment">
+    <variable cmeta:id="environment_time" name="time" public_interface="out" units="minute"/>
+  </component>
+  
+ 
+  <component cmeta:id="r" name="r">
+     
+    <variable cmeta:id="r_r" initial_value="0.0" name="r" public_interface="out" units="nanomolar"/> 
+    
+    <variable name="ract" units="dimensionless"/>
+    <variable name="hr" units="dimensionless"/>
+    <variable name="Ir" units="flux"/>
+    <variable name="Ir2" units="flux"/>
+    <variable initial_value="5.0" name="k6" units="first_order_rate_constant"/>
+    <variable initial_value="4.0" name="n1" units="dimensionless"/>
+    <variable initial_value="1.0" name="theta_1" units="nanomolar"/>
+    <variable initial_value="5.0" name="n3" units="dimensionless"/>
+    <variable initial_value="30.0" name="theta_3" units="dimensionless"/>
+    
+    <variable name="s" public_interface="in" units="nanomolar"/>
+    <variable name="h_delta1" public_interface="in" units="dimensionless"/>
+    <variable name="j1" public_interface="in" units="dimensionless"/>
+    <variable name="time" public_interface="in" units="minute"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> r </ci> 
+        </apply>
+        <apply>
+          <plus/> 
+          <apply>
+            <minus/>
+            <apply>
+              <times/>
+              <ci> ract </ci>
+              <ci> hr </ci>
+              <ci> Ir </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> k6 </ci>
+              <ci> r </ci>
+            </apply>
+          </apply>
+          <ci> Ir2 </ci>
+        </apply>  
+      </apply>
+ 
+      <apply id="ract_calculation">
+        <eq/>
+        <ci> ract </ci>
+        <apply>
+          <minus/>
+          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1.0 </cn> 
+          <apply>
+            <divide/>
+            <apply>
+              <power/>
+              <ci> s </ci>
+              <ci> n1 </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <apply>
+                <power/>
+                <ci> s </ci>
+                <ci> n1 </ci>
+              </apply>
+              <apply>
+                <power/>
+                <ci> theta_1 </ci>
+                <ci> n1 </ci>
+              </apply>
+            </apply>
+          </apply>  
+        </apply>
+      </apply>
+ 
+      <apply id="hr_calculation">
+        <eq/>
+        <ci> hr </ci>
+        <apply>
+          <minus/>
+          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1.0 </cn> 
+          <apply>
+            <divide/>
+            <apply>
+              <power/>
+              <ci> h_delta1 </ci>
+              <ci> n3 </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <apply>
+                <power/>
+                <ci> h_delta1 </ci>
+                <ci> n3 </ci>
+              </apply>
+              <apply>
+                <power/>
+                <apply>
+                  <times/>
+                  <ci> j1 </ci>
+                  <ci> theta_3 </ci>
+                </apply>
+                <ci> n3 </ci>
+              </apply>
+            </apply>
+          </apply>  
+        </apply>
+      </apply>
+
+      <apply>
+        <eq/>
+        <ci> Ir </ci>
+        <piecewise>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 0.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 0.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 90.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 10.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 91.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 92.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 0.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 93.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 113.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 10.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 114.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 115.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 0.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 116.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 136.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 10.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 137.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 138.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 0.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 139.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 159.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 10.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 160.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 161.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 0.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 162.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 252.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 10.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 253.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 254.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 0.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 255.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 275.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 10.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 276.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 277.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 0.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 278.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 298.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 10.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 299.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 300.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 0.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 301.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 321.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 10.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 322.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 323.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <otherwise>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 0.0 </cn>
+          </otherwise>
+        </piecewise>
+      </apply>
+
+      <apply>
+        <eq/>
+        <ci> Ir2 </ci>
+        <piecewise>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 0.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 0.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 5.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 1000.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 6.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 7.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 0.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 8.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 12.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 1000.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 13.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 14.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 0.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 15.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 21.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 1000.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 22.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 23.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 0.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 24.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 204.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 1000.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 205.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 206.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 0.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 207.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 217.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 1000.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 218.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 219.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 0.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 220.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 227.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 1000.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 228.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 229.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 0.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 230.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 310.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 1000.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 311.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 312.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 0.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 313.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 321.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 1000.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 322.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 323.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <otherwise>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 0.0 </cn>
+          </otherwise>
+        </piecewise>
+      </apply>  
+    </math> 
+  </component>
+  
+  <component cmeta:id="s" name="s">
+     
+    <variable cmeta:id="s_s" initial_value="0.0" name="s" public_interface="out" units="nanomolar"/> 
+    
+    <variable initial_value="50.0" name="Is2" units="flux"/>
+    
+    <variable name="Is" public_interface="in" units="flux"/>
+    <variable name="k7" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="g" public_interface="in" units="dimensionless"/>
+    <variable name="time" public_interface="in" units="minute"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> s </ci> 
+        </apply>
+        <apply>
+          <plus/> 
+          <apply>
+            <minus/>
+            <apply>
+              <times/>
+              <ci> Is </ci>
+              <ci> g </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> k7 </ci>
+              <ci> s </ci>
+            </apply>
+          </apply>
+          <ci> Is2 </ci>
+        </apply>  
+      </apply> 
+    </math> 
+  </component>
+
+  <component cmeta:id="se" name="se">
+     
+    <variable initial_value="0.0" name="se" public_interface="out" units="nanomolar"/> 
+    
+    <variable initial_value="10.0" name="Ise" units="flux"/>
+    
+    <variable name="k7" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="time" public_interface="in" units="minute"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> se </ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <ci> Ise </ci>
+          <apply>
+            <times/>
+            <ci> k7 </ci>
+            <ci> se </ci>
+          </apply>
+        </apply>  
+      </apply> 
+    </math> 
+  </component>
+
+  <component cmeta:id="f" name="f">
+     
+    <variable initial_value="0.3" name="f" public_interface="out" units="dimensionless"/> 
+    
+    <variable initial_value="0.1" name="k1" units="second_order_rate_constant"/>
+    <variable initial_value="0.002" name="k2" units="first_order_rate_constant"/>
+    <variable initial_value="0.018" name="k3" units="first_order_rate_constant"/>
+    <variable name="phi_b_s" units="dimensionless"/>
+    <variable initial_value="0.029" name="sb" units="dimensionless"/>
+    <variable initial_value="0.3" name="delta_b" units="dimensionless"/>
+    
+    <variable name="r" public_interface="in" units="nanomolar"/>
+    <variable name="c" public_interface="in" units="nanomolar"/>
+    <variable name="s" public_interface="in" units="nanomolar"/>
+    <variable name="se" public_interface="in" units="nanomolar"/>
+    <variable name="time" public_interface="in" units="minute"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> f </ci> 
+        </apply>
+        <apply>
+          <plus/> 
+          <apply>
+            <minus/>
+            <apply>
+              <times/>
+              <ci> k1 </ci>
+              <apply>
+                <plus/>
+                <ci> r </ci>
+                <ci> c </ci>
+              </apply>
+              <ci> f </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <ci> k2 </ci>
+              <apply>
+                <times/>
+                <ci> k3 </ci>
+                <ci> phi_b_s </ci>
+              </apply>
+            </apply>
+            <apply>
+              <minus/>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1.0 </cn> 
+              <ci> f </ci>
+            </apply>
+          </apply>
+        </apply>  
+      </apply> 
+    
+      <apply id="phi_b_s_calculation">
+        <eq/>
+        <ci> phi_b_s </ci>
+        <apply>
+          <divide/>
+          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1.0 </cn> 
+          <apply>
+            <plus/>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <exp/>
+              <apply>
+                <divide/>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <minus/>
+                    <apply>
+                      <log/>
+	              <apply>
+                        <times/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="per_nanomolar"> 1.0 </cn>
+                        <apply>
+                          <plus/>
+                          <ci> s </ci>
+                          <ci> se </ci>
+		        </apply>
+                      </apply>
+                    </apply>
+                    <ci> sb </ci>
+                  </apply>
+                </apply>
+                <ci> delta_b </ci>
+              </apply>
+            </apply>
+          </apply>  
+        </apply>
+      </apply>
+    </math> 
+  </component>
+
+  <component cmeta:id="h" name="h">
+     
+    <variable cmeta:id="h_h" initial_value="0.0" name="h" public_interface="out" units="nanomolar"/> 
+    
+    <variable initial_value="0.5" name="k4" units="first_order_rate_constant"/>
+    <variable initial_value="71.0" name="k5" units="first_order_rate_constant"/>
+    <variable name="phi_r_s" units="dimensionless"/>
+    <variable initial_value="-0.56" name="sr" units="dimensionless"/>
+    <variable initial_value="0.2" name="delta_r" units="dimensionless"/>
+    
+    <variable name="f" public_interface="in" units="dimensionless"/>
+    <variable name="k8" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="j1" public_interface="in" units="dimensionless"/>
+    <variable name="r" public_interface="in" units="nanomolar"/>
+    <variable name="c" public_interface="in" units="nanomolar"/>
+    <variable name="s" public_interface="in" units="nanomolar"/>
+    <variable name="se" public_interface="in" units="nanomolar"/>
+    <variable name="time" public_interface="in" units="minute"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> h </ci> 
+        </apply>
+        <apply>
+          <times/>
+          <ci> j1 </ci> 
+          <apply>
+            <minus/>
+            <apply>
+              <times/>
+              <apply>
+                <plus/>
+                <ci> k4 </ci>
+                <apply>
+                  <times/>
+                  <ci> k5 </ci>
+                  <apply>
+                    <minus/>
+                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1.0 </cn> 
+                    <ci> phi_r_s </ci>
+                  </apply>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <apply>
+                  <plus/>
+                  <ci> r </ci>
+                  <ci> c </ci>
+                </apply>
+                <ci> f </ci>
+              </apply>
+            </apply>
+            <apply>
+              <times/>
+              <ci> k8 </ci> 
+              <ci> h </ci>
+            </apply>
+          </apply>
+        </apply>  
+      </apply> 
+    
+      <apply id="phi_r_s_calculation">
+        <eq/>
+        <ci> phi_r_s </ci>
+        <apply>
+          <divide/>
+          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1.0 </cn> 
+          <apply>
+            <plus/>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <exp/>
+              <apply>
+                <divide/>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <minus/>
+                    <apply>
+                      <log/>
+		      <apply>
+                        <times/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="per_nanomolar"> 1.0 </cn>
+                        <apply>
+                          <plus/>
+                          <ci> s </ci>
+                          <ci> se </ci>
+		        </apply>
+		      </apply>
+                    </apply>
+                    <ci> sr </ci>
+                  </apply>
+                </apply>
+                <ci> delta_r </ci>
+              </apply>
+            </apply>
+          </apply>  
+        </apply>
+      </apply>
+    </math> 
+  </component>
+
+  <component cmeta:id="g" name="g">
+     
+    <variable cmeta:id="g_g" initial_value="2.0" name="g" public_interface="out" units="dimensionless"/> 
+    
+    <variable initial_value="1.0" name="g1" units="first_order_rate_constant"/>
+    <variable initial_value="5.0" name="gmax" units="dimensionless"/>
+    <variable initial_value="0.008" name="g2" units="per_nanomolar"/>
+    <variable name="hact" units="dimensionless"/>
+    <variable initial_value="2.0" name="n2" units="dimensionless"/>
+    <variable initial_value="30.0" name="theta_2" units="dimensionless"/>
+    
+    <variable name="h_delta" public_interface="in" units="dimensionless"/>
+    <variable name="Is" public_interface="in" units="flux"/>
+    <variable name="j1" public_interface="in" units="dimensionless"/>
+    <variable name="time" public_interface="in" units="minute"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> g </ci> 
+        </apply>
+        <apply>
+          <minus/> 
+          <apply>
+            <times/>
+            <ci> g1 </ci>
+            <ci> hact </ci>
+            <apply>
+              <divide/>
+              <apply>
+                <minus/> 
+                <ci> gmax </ci>
+                <ci> g </ci>
+              </apply>
+              <ci> gmax </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> g2 </ci>
+            <ci> Is </ci>
+            <ci> g </ci> 
+          </apply>
+        </apply>  
+      </apply>
+ 
+      <apply id="hact_calculation">
+        <eq/>
+        <ci> hact </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <power/>
+            <ci> h_delta </ci>
+            <ci> n2 </ci>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <power/>
+              <ci> h_delta </ci>
+              <ci> n2 </ci>
+            </apply>
+            <apply>
+              <power/>
+              <apply>
+                <times/>
+                <ci> j1 </ci>
+                <ci> theta_2 </ci>
+              </apply>
+              <ci> n2 </ci>
+            </apply>
+          </apply>  
+        </apply>
+      </apply>
+    </math> 
+  </component>
+
+  <component cmeta:id="hh" name="hh">
+     
+    <variable initial_value="0.0" name="hh" public_interface="out" units="nanomolar"/> 
+    
+    <variable initial_value="50.0" name="Ih" units="flux"/>
+    
+    <variable name="j1" public_interface="in" units="dimensionless"/>
+    <variable name="k8" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="time" public_interface="in" units="minute"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> hh </ci> 
+        </apply>
+        <apply>
+          <times/>
+          <ci> j1 </ci> 
+          <apply>
+            <minus/>
+            <ci> Ih </ci>
+            <apply>
+              <times/>
+              <ci> k8 </ci>
+              <ci> hh </ci>
+            </apply>
+          </apply>
+        </apply>  
+      </apply> 
+    </math> 
+  </component>
+  
+  <component name="model_parameters">
+    <variable name="h_delta" public_interface="out" units="dimensionless"/>
+    <variable name="h_delta1" public_interface="out" units="dimensionless"/>
+    <variable initial_value="10" name="j1" public_interface="out" units="dimensionless"/>
+    <variable initial_value="5.0" name="k7" public_interface="out" units="first_order_rate_constant"/>
+    <variable name="Is" public_interface="out" units="flux"/>
+    <variable initial_value="0.07" name="k8" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="0.01" name="c" public_interface="out" units="nanomolar"/>
+
+    <variable initial_value="60.0" name="delta" units="per_nanomolar"/>
+    <variable initial_value="15.0" name="delta1" units="per_nanomolar"/>
+    
+    <variable name="h" public_interface="in" units="nanomolar"/>
+    <variable name="hh" public_interface="in" units="nanomolar"/>
+    <variable name="time" public_interface="in" units="minute"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci> h_delta </ci> 
+        <apply>
+          <times/>
+          <apply>
+            <plus/> 
+            <ci> h </ci>
+            <ci> hh </ci>
+          </apply>
+          <ci> delta </ci>
+        </apply>
+      </apply> 
+
+      <apply>
+        <eq/> 
+        <ci> h_delta1 </ci> 
+        <apply>
+          <times/>
+          <apply>
+            <plus/> 
+            <ci> h </ci>
+            <ci> hh </ci>
+          </apply>
+          <ci> delta1 </ci>
+        </apply>
+      </apply>
+
+      <apply>
+        <eq/>
+        <ci> Is </ci>
+        <piecewise>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 10.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <gt/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 0.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 90.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 0.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <gt/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 90.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 180.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 10.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <gt/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 180.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 270.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 0.0 </cn>
+            <apply>
+              <and/>
+              <apply>
+                <gt/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 270.0 </cn>
+              </apply>
+              <apply>
+                <leq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute"> 360.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <otherwise>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="flux"> 0.0 </cn>
+          </otherwise>
+        </piecewise>
+      </apply> 
+    </math> 
+  </component>
+  
+  
+  <connection>
+    <map_components component_1="r" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="s" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="se" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="f" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="h" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="g" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="hh" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="model_parameters" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="r" component_2="s"/>
+    <map_variables variable_1="s" variable_2="s"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="r" component_2="model_parameters"/>
+    <map_variables variable_1="h_delta1" variable_2="h_delta1"/>
+    <map_variables variable_1="j1" variable_2="j1"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="s" component_2="g"/>
+    <map_variables variable_1="g" variable_2="g"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="s" component_2="model_parameters"/>
+    <map_variables variable_1="Is" variable_2="Is"/>
+    <map_variables variable_1="k7" variable_2="k7"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="se" component_2="model_parameters"/>
+    <map_variables variable_1="k7" variable_2="k7"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="f" component_2="model_parameters"/>
+    <map_variables variable_1="c" variable_2="c"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="f" component_2="r"/>
+    <map_variables variable_1="r" variable_2="r"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="f" component_2="s"/>
+    <map_variables variable_1="s" variable_2="s"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="h" component_2="model_parameters"/>
+    <map_variables variable_1="c" variable_2="c"/>
+    <map_variables variable_1="j1" variable_2="j1"/>
+    <map_variables variable_1="k8" variable_2="k8"/>
+    <map_variables variable_1="h" variable_2="h"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="h" component_2="r"/>
+    <map_variables variable_1="r" variable_2="r"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="h" component_2="s"/>
+    <map_variables variable_1="s" variable_2="s"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="h" component_2="se"/>
+    <map_variables variable_1="se" variable_2="se"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="f" component_2="se"/>
+    <map_variables variable_1="se" variable_2="se"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="h" component_2="f"/>
+    <map_variables variable_1="f" variable_2="f"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="g" component_2="model_parameters"/>
+    <map_variables variable_1="Is" variable_2="Is"/>
+    <map_variables variable_1="j1" variable_2="j1"/>
+    <map_variables variable_1="h_delta" variable_2="h_delta"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="hh" component_2="model_parameters"/>
+    <map_variables variable_1="j1" variable_2="j1"/>
+    <map_variables variable_1="k8" variable_2="k8"/>
+    <map_variables variable_1="hh" variable_2="hh"/>
+  </connection>
+  
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Bag rdf:about="rdf:#21108480-0177-4661-aa67-a32d8cc46324">
+    <rdf:li>endocrine</rdf:li>
+    <rdf:li>somatostatin</rdf:li>
+    <rdf:li>hypothalamus</rdf:li>
+    <rdf:li>growth hormone releasing hormone</rdf:li>
+    <rdf:li>growth hormone</rdf:li>
+  </rdf:Bag>
+  <rdf:Seq rdf:about="rdf:#c9b84d74-3bc4-4c84-aa34-bf92fb3d6e2a">
+    <rdf:li rdf:resource="rdf:#defe8854-2305-4768-abe1-366b4c1c1e41"/>
+    <rdf:li rdf:resource="rdf:#5d83f7df-7c6e-43e0-84df-2cb20acf993b"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#a1307b00-a49b-4b59-bd31-ff8cff4c7e15">
+    <vCard:ORG xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#4dc2f283-a7b9-413c-9822-c96c644a2874"/>
+    <vCard:EMAIL xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#0074e35a-7320-417c-8ffd-da04aa3f74ca"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#7973be78-1364-49f9-8098-5a9724200a00"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Modelling the hypothalamic control of growth hormone secretion: the full pituitary + hypothalamic model</dc:title>
+	<dc:publisher xmlns:dc="http://purl.org/dc/elements/1.1/">The University of Auckland, Auckland Bioengineering Institute</dc:publisher>
+    <cmeta:comment rdf:resource="rdf:#790fdbd3-9a41-4af0-bea7-89f7be75237c"/>
+    <dcterms:created xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#53397ee2-b1f5-417f-8d93-961225d7d1ad"/>
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#a1307b00-a49b-4b59-bd31-ff8cff4c7e15"/>
+    <cmeta:modification rdf:resource="rdf:#fb240565-8ff6-43f8-8a7a-1e56437f76fd"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#defe8854-2305-4768-abe1-366b4c1c1e41">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#39694593-b277-45a7-b193-2a5668a1a2cb"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#hh">
+    <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">human growth hormone</dcterms:alternative>
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">hh</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4dc2f283-a7b9-413c-9822-c96c644a2874">
+    <vCard:Orgname xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Auckland Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#be2f82ba-dcbc-4733-94ee-0ecd2fddbdd5">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Catherine</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Lloyd</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="#se">
+    <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">exogenous somatostatin</dcterms:alternative>
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">se</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#5d83f7df-7c6e-43e0-84df-2cb20acf993b">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#f52889a3-8e66-4864-aef2-88c1f43b54e7"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#fb240565-8ff6-43f8-8a7a-1e56437f76fd">
+    <dcterms:modified xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#97a1988a-9346-4cb6-8b05-c569e944e8fc"/>
+    <rdf:value>I've checked the model in COR and have corrected all the units.  I've also added some piecewise equations to stimulate the model (as set out in the figure legends of the paper).</rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#738722ff-ed9d-472c-a085-f3433a6fb047"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#5cfc0d4a-77e7-4e58-ac08-ca282aab57db">
+    <bqs:Pubmed_id xmlns:bqs="http://www.cellml.org/bqs/1.0#">16280026</bqs:Pubmed_id>
+    <bqs:JournalArticle xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#9ae82fcb-97af-4380-a8a3-0d71d815b744"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#73ab6072-f902-4e94-8cc9-ae0e3dd3f257">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2005-00-00 00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#53397ee2-b1f5-417f-8d93-961225d7d1ad">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2007-05-28T00:00:00+00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#97a1988a-9346-4cb6-8b05-c569e944e8fc">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2007-09-04T15:52:40+12:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="#f">
+    <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">density of free GHRH receptors</dcterms:alternative>
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">f</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="#g">
+    <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">releasable store of somatostatin</dcterms:alternative>
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">g</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="#macgregor_model_2005">
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">
+        MacGregor and Leng's 2005 mathematical model of hypothalamic control of growth hormone secretion.
+      </dc:title>
+    <cmeta:bio_entity>hypothalamus</cmeta:bio_entity>
+    <cmeta:comment rdf:resource="rdf:#a8dfbb63-684f-4412-8aad-4afa2b5b47f7"/>
+    <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#5cfc0d4a-77e7-4e58-ac08-ca282aab57db"/>
+    <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#7b422dfe-2fa6-4552-81e9-1b7af3b5a536"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#h">
+    <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">GH</dcterms:alternative>
+    <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">growth hormone</dcterms:alternative>
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">h</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="#r">
+    <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">GHRH</dcterms:alternative>
+    <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">growth hormone releasing hormone</dcterms:alternative>
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">r</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="#s">
+    <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">endogenous somatostatin</dcterms:alternative>
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">s</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7973be78-1364-49f9-8098-5a9724200a00">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Catherine</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Lloyd</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#26b2d58c-fe42-4106-9f62-9caec4ebd5de">
+    <vCard:FN xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#abd20f21-286b-40ad-9ab6-f9ac642238b6">
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Journal of Neuroendocrinology</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#790fdbd3-9a41-4af0-bea7-89f7be75237c">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#26b2d58c-fe42-4106-9f62-9caec4ebd5de"/>
+    <rdf:value>The model now runs in PCEnv to replicate the published results (as shown in figure 12).  The only difference is my stimulus was hand written by a piecewise equation where as the model authors used some sort of a random pulse generator...  I probably need to make the piecewise equation carry on for longer to get this result.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9ae82fcb-97af-4380-a8a3-0d71d815b744">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#c9b84d74-3bc4-4c84-aa34-bf92fb3d6e2a"/>
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Modelling the hypothalamic control of growth hormone secretion.</dc:title>
+    <bqs:volume xmlns:bqs="http://www.cellml.org/bqs/1.0#">17</bqs:volume>
+    <bqs:first_page xmlns:bqs="http://www.cellml.org/bqs/1.0#">788</bqs:first_page>
+    <bqs:Journal xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#abd20f21-286b-40ad-9ab6-f9ac642238b6"/>
+    <dcterms:issued xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#73ab6072-f902-4e94-8cc9-ae0e3dd3f257"/>
+    <bqs:last_page xmlns:bqs="http://www.cellml.org/bqs/1.0#">803</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0074e35a-7320-417c-8ffd-da04aa3f74ca">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#39694593-b277-45a7-b193-2a5668a1a2cb">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">D</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">MacGregor</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">J</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7b422dfe-2fa6-4552-81e9-1b7af3b5a536">
+    <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#5151e189-41bc-42ea-bcce-66b4ba368648"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#738722ff-ed9d-472c-a085-f3433a6fb047">
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#be2f82ba-dcbc-4733-94ee-0ecd2fddbdd5"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f0d77927-6fdc-4fb1-8d74-1a4fd5df0de0">
+    <vCard:FN xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#5151e189-41bc-42ea-bcce-66b4ba368648">
+    <bqs:subject_type xmlns:bqs="http://www.cellml.org/bqs/1.0#">keyword</bqs:subject_type>
+    <rdf:value rdf:resource="rdf:#21108480-0177-4661-aa67-a32d8cc46324"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a8dfbb63-684f-4412-8aad-4afa2b5b47f7">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#f0d77927-6fdc-4fb1-8d74-1a4fd5df0de0"/>
+    <rdf:value>This is the CellML description of MacGregor and Leng's 2005 mathematical model of hypothalamic control of growth hormone secretion.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f52889a3-8e66-4864-aef2-88c1f43b54e7">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">G</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Leng</vCard:Family>
+  </rdf:Description>
+</rdf:RDF>
+</model>

@@ -1,0 +1,1112 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--
+This CellML file was generated on 6/08/2008 at 1:32:21 at p.m. using:
+
+COR (0.9.31.1007)
+Copyright 2002-2008 Dr Alan Garny
+http://COR.physiol.ox.ac.uk/ - COR@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.CellML.org/
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="cheng_model_2000" name="cheng_model_2000">
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>Virtual muscle: a computational approach to understanding the effects of muscle properties on motor control</title>
+				<author>
+					<firstname>Catherine</firstname>
+					<surname>Lloyd</surname>
+					<affiliation>
+						<shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<section id="sec_status">
+				<title>Model Status</title>
+				<para>
+        This CellML model has been checked in both COR and OpenCell.  Currently it can be opened in COR but due to the presence of 'circular arguments' the model does not run.  However the model will run in OpenCell but although it does run, it does so very, very slowly, and so far we have only been able to get it to solve for 3 iterations.  The units have been checked and they are consistent.
+</para>
+			</section>
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>
+Abstract:  This paper describes a computational approach to modeling the complex mechanical properties of muscles and tendons under physiological conditions of recruitment and kinematics. It is embodied as a software package for use with Matlab™ and Simulink that allows the creation of realistic musculotendon elements for use in motor control simulations. The software employs graphic user interfaces (GUI) and dynamic data exchange (DDE) to facilitate building custom muscle model blocks and linking them to kinetic analyses of complete musculoskeletal systems. It is scalable in complexity and accuracy. The model is based on recently published data on muscle and tendon properties measured in feline slow- and fast-twitch muscle, and incorporates a novel approach to simulating recruitment and frequency modulation of different fiber-types in mixed muscles. This software is distributed freely over the Internet at <ulink url="http://ami.usc.edu/mddf/virtualmuscle">http://ami.usc.edu/mddf/virtualmuscle</ulink>.
+</para>
+				<para>
+The original paper reference is cited below:
+</para>
+				<para>
+Virtual muscle: a computational approach to understanding the effects of muscle properties on motor control, Ernest J. Cheng, Ian E. Brown and Gerald E. Loeb, 2000, 
+						<emphasis>Journal of Neuroscience Methods</emphasis>
+					, 101, 117-130. <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/10996372">PubMed ID: 10996372</ulink>
+				</para>
+				
+				<informalfigure float="0" id="fig_reaction_diagram">
+					<mediaobject>
+					<imageobject>
+						<objectinfo>
+						<title>reaction diagram</title>
+						</objectinfo>
+						<imagedata fileref="cheng_2000.png"/>
+					</imageobject>
+					</mediaobject>
+					<caption>Schematic representation of the model equations and terms. These elements were designed to have a one-to-one correspondence with the physiological substrates of muscle contraction. The behavior of each element is governed by an equation driven by one to four input variables, with one to seven user-modifiable coefficients. The coefficients can be modified in the BuildFiberTypes function. Complete descriptions of these elements can be found in Brown and Loeb, 2000 and Brown. FPE1 represents the passive visco-elastic properties of stretching a muscle. FPE2 represents the passive resistance to compression of the thick filaments at short muscle lengths. FL represents the tetanic, isometric force–length relationship. FV represents the tetanic force–velocity (FV) relationship. Af represents the isometric, activation–frequency (Af) relationship. feff represents the time lag between changes in firing frequency and internal activation (i.e. rise and fall times). Leff represents the time lag between changes in length and the effect of length on the Af relationship. S represents the effects of ‘sag’ on the activation during a constant stimulus frequency. Y represents the effects of yielding (on activation) following movement during sub-maximal activation. </caption>
+					</informalfigure>
+
+			</sect1>
+		</article>
+	</documentation>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#F_SE">
+			<dc:title>F_SE</dc:title>
+			<dcterms:alternative>tendon elasticity</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#F_PE1">
+			<dc:title>F_PE1</dc:title>
+			<dcterms:alternative>parallel elastic element</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#F_PE2">
+			<dc:title>F_PE2</dc:title>
+			<dcterms:alternative>thick filament compression</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#FL">
+			<dc:title>FL</dc:title>
+			<dcterms:alternative>force-length</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#FV">
+			<dc:title>FV</dc:title>
+			<dcterms:alternative>force-velocity</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#Af">
+			<dc:title>Af</dc:title>
+			<dcterms:alternative>effective activation</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#L_eff">
+			<dc:title>L_eff</dc:title>
+			<dcterms:alternative>activation delay</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#S">
+			<dc:title>S</dc:title>
+			<dcterms:alternative>Sag</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#Y">
+			<dc:title>Y</dc:title>
+			<dcterms:alternative>yield</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#rise_and_fall_time">
+			<dc:title>rise_and_fall_time</dc:title>
+			<dcterms:alternative>rise and fall time</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	   <units name="millisecond">
+      <unit units="second" prefix="milli"/>
+   </units>
+   <units name="first_order_rate_constant">
+      <unit units="millisecond" exponent="-1"/>
+   </units>
+   <component name="environment">
+      <variable units="millisecond" public_interface="out" name="time"/>
+   </component>
+   <component name="F_SE">
+      <variable units="newton" public_interface="out" name="F_SE"/>
+      <variable units="dimensionless" name="cT" initial_value="27.8"/>
+      <variable units="dimensionless" name="kT" initial_value="0.0047"/>
+      <variable units="dimensionless" name="LT_r" initial_value="0.964"/>
+      <variable units="dimensionless" public_interface="in" name="LT"/>
+      <variable units="newton" public_interface="in" name="F_max"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>F_SE</ci>
+            <apply>
+               <times/>
+               <ci>cT</ci>
+               <ci>F_max</ci>
+               <ci>kT</ci>
+               <apply>
+                  <ln/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <exp/>
+                        <apply>
+                           <divide/>
+                           <apply>
+                              <minus/>
+                              <ci>LT</ci>
+                              <ci>LT_r</ci>
+                           </apply>
+                           <ci>kT</ci>
+                        </apply>
+                     </apply>
+                     <cn cellml:units="dimensionless">1</cn>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="F_PE1">
+      <variable units="dimensionless" public_interface="out" name="F_PE1"/>
+      <variable units="dimensionless" name="c1" initial_value="23"/>
+      <variable units="dimensionless" name="k1" initial_value="0.046"/>
+      <variable units="dimensionless" name="L_r1" initial_value="1.17"/>
+      <variable units="millisecond" name="eta" initial_value="0.001"/>
+      <variable units="dimensionless" public_interface="in" name="L"/>
+      <variable units="dimensionless" public_interface="in" name="L_max"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="V"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>F_PE1</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <ci>c1</ci>
+                  <ci>k1</ci>
+                  <apply>
+                     <ln/>
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <exp/>
+                           <apply>
+                              <divide/>
+                              <apply>
+                                 <minus/>
+                                 <apply>
+                                    <divide/>
+                                    <ci>L</ci>
+                                    <ci>L_max</ci>
+                                 </apply>
+                                 <ci>L_r1</ci>
+                              </apply>
+                              <ci>k1</ci>
+                           </apply>
+                        </apply>
+                        <cn cellml:units="dimensionless">1</cn>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>eta</ci>
+                  <ci>V</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="F_PE2">
+      <variable units="dimensionless" public_interface="out" name="F_PE2"/>
+      <variable units="dimensionless" name="c2" initial_value="23"/>
+      <variable units="dimensionless" name="k2" initial_value="0.046"/>
+      <variable units="dimensionless" name="L_r2" initial_value="1.17"/>
+      <variable units="dimensionless" public_interface="in" name="L"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>F_PE2</ci>
+            <apply>
+               <times/>
+               <ci>c2</ci>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <times/>
+                        <ci>k2</ci>
+                        <apply>
+                           <minus/>
+                           <ci>L</ci>
+                           <ci>L_r2</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <cn cellml:units="dimensionless">1</cn>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="FL">
+      <variable units="dimensionless" public_interface="out" name="FL"/>
+      <variable units="dimensionless" name="beta" initial_value="1.55"/>
+      <variable units="dimensionless" name="omega" initial_value="0.75"/>
+      <variable units="dimensionless" name="rho" initial_value="2.12"/>
+      <variable units="dimensionless" public_interface="in" name="L"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>FL</ci>
+            <apply>
+               <exp/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <power/>
+                     <apply>
+                        <abs/>
+                        <apply>
+                           <divide/>
+                           <apply>
+                              <minus/>
+                              <apply>
+                                 <power/>
+                                 <ci>L</ci>
+                                 <ci>beta</ci>
+                              </apply>
+                              <cn cellml:units="dimensionless">1</cn>
+                           </apply>
+                           <ci>omega</ci>
+                        </apply>
+                     </apply>
+                     <ci>rho</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="FV">
+      <variable units="dimensionless" public_interface="out" name="FV"/>
+      <variable units="dimensionless" name="av0" initial_value="-1.53"/>
+      <variable units="dimensionless" name="av1" initial_value="0"/>
+      <variable units="dimensionless" name="av2" initial_value="0"/>
+      <variable units="dimensionless" name="cv0" initial_value="-5.7"/>
+      <variable units="dimensionless" name="cv1" initial_value="9.18"/>
+      <variable units="first_order_rate_constant" name="bv" initial_value="0.69"/>
+      <variable units="first_order_rate_constant" name="V_max" initial_value="-9.15"/>
+      <variable units="dimensionless" public_interface="in" name="L"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="V"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>FV</ci>
+            <piecewise>
+               <piece>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <minus/>
+                        <ci>V_max</ci>
+                        <ci>V</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci>V_max</ci>
+                        <apply>
+                           <times/>
+                           <apply>
+                              <plus/>
+                              <ci>cv0</ci>
+                              <apply>
+                                 <times/>
+                                 <ci>cv1</ci>
+                                 <ci>L</ci>
+                              </apply>
+                           </apply>
+                           <ci>V</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <leq/>
+                     <ci>V</ci>
+                     <cn cellml:units="first_order_rate_constant">0</cn>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <minus/>
+                        <ci>bv</ci>
+                        <apply>
+                           <times/>
+                           <apply>
+                              <plus/>
+                              <ci>av0</ci>
+                              <apply>
+                                 <times/>
+                                 <ci>av1</ci>
+                                 <ci>L</ci>
+                              </apply>
+                              <apply>
+                                 <times/>
+                                 <ci>av2</ci>
+                                 <apply>
+                                    <power/>
+                                    <ci>L</ci>
+                                    <cn cellml:units="dimensionless">2</cn>
+                                 </apply>
+                              </apply>
+                           </apply>
+                           <ci>V</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci>bv</ci>
+                        <ci>V</ci>
+                     </apply>
+                  </apply>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   <component name="Af">
+      <variable units="dimensionless" public_interface="out" name="Af"/>
+      <variable units="dimensionless" name="af" initial_value="0.56"/>
+      <variable units="dimensionless" name="nf0" initial_value="2.1"/>
+      <variable units="dimensionless" name="nf1" initial_value="3.3"/>
+      <variable units="dimensionless" name="nf" initial_value="1"/>
+      <variable units="dimensionless" public_interface="in" name="Y"/>
+      <variable units="dimensionless" public_interface="in" name="S"/>
+      <variable units="dimensionless" public_interface="in" name="f_eff"/>
+      <variable units="dimensionless" public_interface="in" name="L_eff"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>Af</ci>
+            <apply>
+               <minus/>
+               <cn cellml:units="dimensionless">1</cn>
+               <apply>
+                  <exp/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <power/>
+                        <apply>
+                           <divide/>
+                           <apply>
+                              <times/>
+                              <ci>Y</ci>
+                              <ci>S</ci>
+                              <ci>f_eff</ci>
+                           </apply>
+                           <apply>
+                              <times/>
+                              <ci>af</ci>
+                              <ci>nf</ci>
+                           </apply>
+                        </apply>
+                        <ci>nf</ci>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="F0">
+      <variable units="dimensionless" public_interface="out" name="F0"/>
+      <variable units="dimensionless" public_interface="in" name="Af"/>
+      <variable units="dimensionless" public_interface="in" name="FL"/>
+      <variable units="dimensionless" public_interface="in" name="FV"/>
+      <variable units="dimensionless" public_interface="in" name="F_PE1"/>
+      <variable units="dimensionless" public_interface="in" name="F_PE2"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>F0</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <ci>Af</ci>
+                  <apply>
+                     <plus/>
+                     <ci>FL</ci>
+                     <ci>FV</ci>
+                     <ci>F_PE2</ci>
+                  </apply>
+               </apply>
+               <ci>F_PE1</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="F_CE">
+      <variable units="newton" public_interface="out" name="F_CE"/>
+      <variable units="dimensionless" public_interface="in" name="F0"/>
+      <variable units="newton" public_interface="in" name="F_max"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>F_CE</ci>
+            <apply>
+               <times/>
+               <ci>F0</ci>
+               <ci>F_max</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="F_total">
+      <variable units="newton" public_interface="out" name="F_total"/>
+      <variable units="newton" public_interface="in" name="F_SE"/>
+      <variable units="newton" public_interface="in" name="F_CE"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>F_total</ci>
+            <apply>
+               <minus/>
+               <ci>F_SE</ci>
+               <ci>F_CE</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="L_eff">
+      <variable units="dimensionless" public_interface="out" name="L_eff" initial_value="0.1497"/>
+      <variable units="millisecond" name="T_L" initial_value="0.088"/>
+      <variable units="dimensionless" public_interface="in" name="Af"/>
+      <variable units="dimensionless" public_interface="in" name="L"/>
+      <variable units="millisecond" public_interface="in" name="time"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>L_eff</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <power/>
+                  <apply>
+                     <minus/>
+                     <ci>L</ci>
+                     <ci>L_eff</ci>
+                  </apply>
+                  <cn cellml:units="dimensionless">3</cn>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>T_L</ci>
+                  <apply>
+                     <minus/>
+                     <cn cellml:units="dimensionless">1</cn>
+                     <ci>Af</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="S">
+      <variable units="dimensionless" public_interface="out" name="S" initial_value="1"/>
+      <variable units="millisecond" name="T_s" initial_value="43"/>
+      <variable units="dimensionless" name="as1" initial_value="1.76"/>
+      <variable units="dimensionless" name="as2" initial_value="0.96"/>
+      <variable units="dimensionless" name="as_"/>
+      <variable units="dimensionless" public_interface="in" name="f_eff"/>
+      <variable units="millisecond" public_interface="in" name="time"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>S</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <ci>as_</ci>
+                  <ci>S</ci>
+               </apply>
+               <ci>T_s</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>as_</ci>
+            <piecewise>
+               <piece>
+                  <ci>as1</ci>
+                  <apply>
+                     <lt/>
+                     <ci>f_eff</ci>
+                     <cn cellml:units="dimensionless">0.1</cn>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <ci>as2</ci>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   <component name="Y">
+      <variable units="dimensionless" public_interface="out" name="Y" initial_value="1"/>
+      <variable units="dimensionless" name="c_Y" initial_value="0.35"/>
+      <variable units="first_order_rate_constant" name="V_Y" initial_value="0.1"/>
+      <variable units="millisecond" name="T_Y" initial_value="200"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="V"/>
+      <variable units="millisecond" public_interface="in" name="time"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Y</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <cn cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>c_Y</ci>
+                        <apply>
+                           <minus/>
+                           <cn cellml:units="dimensionless">1</cn>
+                           <apply>
+                              <exp/>
+                              <apply>
+                                 <divide/>
+                                 <apply>
+                                    <minus/>
+                                    <apply>
+                                       <abs/>
+                                       <ci>V</ci>
+                                    </apply>
+                                 </apply>
+                                 <ci>V_Y</ci>
+                              </apply>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <ci>Y</ci>
+                  </apply>
+               </apply>
+               <ci>T_Y</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="rise_and_fall_time">
+      <variable units="dimensionless" public_interface="out" name="f_eff" initial_value="0"/>
+      <variable units="dimensionless" public_interface="out" name="f_int" initial_value="0"/>
+      <variable units="first_order_rate_constant" name="df_eff_dt"/>
+      <variable units="millisecond" name="T_f"/>
+      <variable units="millisecond" name="T_f1" initial_value="0.35"/>
+      <variable units="millisecond" name="T_f2" initial_value="0.1"/>
+      <variable units="millisecond" name="T_f3" initial_value="200"/>
+      <variable units="millisecond" name="T_f4" initial_value="200"/>
+      <variable units="dimensionless" public_interface="in" name="f_env"/>
+      <variable units="dimensionless" public_interface="in" name="Af"/>
+      <variable units="dimensionless" public_interface="in" name="L"/>
+      <variable units="millisecond" public_interface="in" name="time"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>f_int</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <ci>f_env</ci>
+                  <ci>f_int</ci>
+               </apply>
+               <ci>T_f</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>f_eff</ci>
+            </apply>
+            <ci>df_eff_dt</ci>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>df_eff_dt</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <ci>f_int</ci>
+                  <ci>f_eff</ci>
+               </apply>
+               <ci>T_f</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>T_f</ci>
+            <piecewise>
+               <piece>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>T_f1</ci>
+                        <apply>
+                           <power/>
+                           <ci>L</ci>
+                           <cn cellml:units="dimensionless">2</cn>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>T_f2</ci>
+                        <ci>f_env</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <geq/>
+                     <ci>df_eff_dt</ci>
+                     <cn cellml:units="first_order_rate_constant">0</cn>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <plus/>
+                        <ci>T_f3</ci>
+                        <apply>
+                           <times/>
+                           <ci>T_f4</ci>
+                           <ci>Af</ci>
+                        </apply>
+                     </apply>
+                     <ci>L</ci>
+                  </apply>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   <component name="V">
+      <variable units="first_order_rate_constant" public_interface="out" name="V" initial_value="0.09314"/>
+      <variable units="kilogram" name="mass" initial_value="0.005"/>
+      <variable units="newton" public_interface="in" name="F_total"/>
+      <variable units="millisecond" public_interface="in" name="time"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>V</ci>
+            </apply>
+            <apply>
+              <divide/>
+              <ci>F_total</ci>
+              <apply>
+                <times/>
+                <cn cellml:units="metre">1</cn>
+				<ci>mass</ci>
+              </apply>
+			</apply>
+         </apply>
+      </math>
+   </component>
+   <component name="V0">
+      <variable units="first_order_rate_constant" public_interface="out" name="V0"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="V"/>
+      <variable units="dimensionless" public_interface="in" name="L_max"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V0</ci>
+            <apply>
+               <divide/>
+               <ci>V</ci>
+               <ci>L_max</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="L0">
+      <variable units="dimensionless" public_interface="out" name="L0"/>
+      <variable units="dimensionless" public_interface="in" name="L"/>
+      <variable units="dimensionless" public_interface="in" name="L_max"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>L0</ci>
+            <apply>
+               <divide/>
+               <ci>L</ci>
+               <ci>L_max</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="L">
+      <variable units="dimensionless" public_interface="out" name="L" initial_value="0.15"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="V"/>
+      <variable units="millisecond" public_interface="in" name="time"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>L</ci>
+            </apply>
+            <ci>V</ci>
+         </apply>
+      </math>
+   </component>
+   <component name="user_defined_constants">
+      <variable units="dimensionless" public_interface="out" name="LT" initial_value="0.02"/>
+      <variable units="dimensionless" public_interface="out" name="L_max" initial_value="0.13"/>
+      <variable units="newton" public_interface="out" name="F_max" initial_value="23"/>
+      <variable units="dimensionless" public_interface="out" name="f_env" initial_value="1"/>
+   </component>
+   <connection>
+      <map_components component_2="environment" component_1="L_eff"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="S"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="Y"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="rise_and_fall_time"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="V"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="L"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="user_defined_constants" component_1="F_SE"/>
+      <map_variables variable_2="LT" variable_1="LT"/>
+      <map_variables variable_2="F_max" variable_1="F_max"/>
+   </connection>
+   <connection>
+      <map_components component_2="L" component_1="F_PE1"/>
+      <map_variables variable_2="L" variable_1="L"/>
+   </connection>
+   <connection>
+      <map_components component_2="V" component_1="F_PE1"/>
+      <map_variables variable_2="V" variable_1="V"/>
+   </connection>
+   <connection>
+      <map_components component_2="user_defined_constants" component_1="F_PE1"/>
+      <map_variables variable_2="L_max" variable_1="L_max"/>
+   </connection>
+   <connection>
+      <map_components component_2="L" component_1="F_PE2"/>
+      <map_variables variable_2="L" variable_1="L"/>
+   </connection>
+   <connection>
+      <map_components component_2="L" component_1="FL"/>
+      <map_variables variable_2="L" variable_1="L"/>
+   </connection>
+   <connection>
+      <map_components component_2="L" component_1="FV"/>
+      <map_variables variable_2="L" variable_1="L"/>
+   </connection>
+   <connection>
+      <map_components component_2="V" component_1="FV"/>
+      <map_variables variable_2="V" variable_1="V"/>
+   </connection>
+   <connection>
+      <map_components component_2="Y" component_1="Af"/>
+      <map_variables variable_2="Y" variable_1="Y"/>
+   </connection>
+   <connection>
+      <map_components component_2="S" component_1="Af"/>
+      <map_variables variable_2="S" variable_1="S"/>
+   </connection>
+   <connection>
+      <map_components component_2="rise_and_fall_time" component_1="Af"/>
+      <map_variables variable_2="f_eff" variable_1="f_eff"/>
+      <map_variables variable_2="Af" variable_1="Af"/>
+   </connection>
+   <connection>
+      <map_components component_2="L_eff" component_1="Af"/>
+      <map_variables variable_2="L_eff" variable_1="L_eff"/>
+      <map_variables variable_2="Af" variable_1="Af"/>
+   </connection>
+   <connection>
+      <map_components component_2="Af" component_1="F0"/>
+      <map_variables variable_2="Af" variable_1="Af"/>
+   </connection>
+   <connection>
+      <map_components component_2="FL" component_1="F0"/>
+      <map_variables variable_2="FL" variable_1="FL"/>
+   </connection>
+   <connection>
+      <map_components component_2="FV" component_1="F0"/>
+      <map_variables variable_2="FV" variable_1="FV"/>
+   </connection>
+   <connection>
+      <map_components component_2="F_PE1" component_1="F0"/>
+      <map_variables variable_2="F_PE1" variable_1="F_PE1"/>
+   </connection>
+   <connection>
+      <map_components component_2="F_PE2" component_1="F0"/>
+      <map_variables variable_2="F_PE2" variable_1="F_PE2"/>
+   </connection>
+   <connection>
+      <map_components component_2="F0" component_1="F_CE"/>
+      <map_variables variable_2="F0" variable_1="F0"/>
+   </connection>
+   <connection>
+      <map_components component_2="user_defined_constants" component_1="F_CE"/>
+      <map_variables variable_2="F_max" variable_1="F_max"/>
+   </connection>
+   <connection>
+      <map_components component_2="F_SE" component_1="F_total"/>
+      <map_variables variable_2="F_SE" variable_1="F_SE"/>
+   </connection>
+   <connection>
+      <map_components component_2="F_CE" component_1="F_total"/>
+      <map_variables variable_2="F_CE" variable_1="F_CE"/>
+   </connection>
+   <connection>
+      <map_components component_2="F_total" component_1="V"/>
+      <map_variables variable_2="F_total" variable_1="F_total"/>
+   </connection>
+   <connection>
+      <map_components component_2="L" component_1="L_eff"/>
+      <map_variables variable_2="L" variable_1="L"/>
+   </connection>
+   <connection>
+      <map_components component_2="rise_and_fall_time" component_1="S"/>
+      <map_variables variable_2="f_eff" variable_1="f_eff"/>
+   </connection>
+   <connection>
+      <map_components component_2="V" component_1="Y"/>
+      <map_variables variable_2="V" variable_1="V"/>
+   </connection>
+   <connection>
+      <map_components component_2="L" component_1="rise_and_fall_time"/>
+      <map_variables variable_2="L" variable_1="L"/>
+   </connection>
+   <connection>
+      <map_components component_2="user_defined_constants" component_1="rise_and_fall_time"/>
+      <map_variables variable_2="f_env" variable_1="f_env"/>
+   </connection>
+   <connection>
+      <map_components component_2="V" component_1="V0"/>
+      <map_variables variable_2="V" variable_1="V"/>
+   </connection>
+   <connection>
+      <map_components component_2="user_defined_constants" component_1="V0"/>
+      <map_variables variable_2="L_max" variable_1="L_max"/>
+   </connection>
+   <connection>
+      <map_components component_2="L" component_1="L0"/>
+      <map_variables variable_2="L" variable_1="L"/>
+   </connection>
+   <connection>
+      <map_components component_2="user_defined_constants" component_1="L0"/>
+      <map_variables variable_2="L_max" variable_1="L_max"/>
+   </connection>
+   <connection>
+      <map_components component_2="V" component_1="L"/>
+      <map_variables variable_2="V" variable_1="V"/>
+   </connection>
+
+<rdf:RDF>
+  <rdf:Seq rdf:about="rdf:#41445d41-0c58-444b-9d37-c8457536aa96">
+    <rdf:li rdf:resource="rdf:#8be31e62-a845-4087-9e0a-ca3009b9974c"/>
+    <rdf:li rdf:resource="rdf:#74b42cb4-bb1b-4bbb-b93c-97d0058f6ef4"/>
+    <rdf:li rdf:resource="rdf:#36a1e337-e47d-42a7-bf61-611c5950397f"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#6f86114e-b772-441b-8947-0e8a344fd92e">
+    <vCard:N rdf:resource="rdf:#619eb617-59a0-4bd8-b167-ccb48849bb7d"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:publisher>The University of Auckland, Auckland Bioengineering Institute</dc:publisher>
+    <cmeta:comment rdf:resource="rdf:#f4a55979-78c1-463b-8905-ab7754dd2abd"/>
+    <dcterms:created rdf:resource="rdf:#a38fbdee-d41d-443f-84a0-b146bd9aed95"/>
+    <dc:creator rdf:resource="rdf:#c207e80f-810a-44a7-9698-a191df5b3d21"/>
+    <cmeta:modification rdf:resource="rdf:#a9fea358-3dfe-416c-aca2-551d21c99ffe"/>
+    <cmeta:modification rdf:resource="rdf:#0dcaaf3c-d89e-4c39-80e2-7d12a48930c0"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a71ce532-2286-4e67-8632-ce08fb903ab8">
+    <dc:title>Journal of Neuroscience Methods</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#fd9c9324-09aa-46d4-80a5-31d65de5fe02">
+    <dcterms:W3CDTF>2000-09-15 00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#36a1e337-e47d-42a7-bf61-611c5950397f">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#0bbaf774-eb9b-40f5-9f3b-0df2f73f5b52"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#502d6532-f760-4599-83d3-2311e93bc50e">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#31a15560-6f78-4861-bc3d-afcd99d36975">
+    <vCard:Given>Ernest</vCard:Given>
+    <vCard:Family>Cheng</vCard:Family>
+    <vCard:Other>J</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1e2eaa49-9883-4e06-89ca-ff2e075a9eaf">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0bbaf774-eb9b-40f5-9f3b-0df2f73f5b52">
+    <vCard:Given>Gerald</vCard:Given>
+    <vCard:Family>Loeb</vCard:Family>
+    <vCard:Other>E</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#51d35cd1-0f95-4aed-98be-c11f9e4db4d8">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0924fb77-8ab7-48c2-8293-dda044b2176c">
+    <vCard:N rdf:resource="rdf:#7fd4a138-d112-4b2a-8a02-726090fe063a"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0dcaaf3c-d89e-4c39-80e2-7d12a48930c0">
+    <dcterms:modified rdf:resource="rdf:#fe532b5a-1be9-4ab7-8daa-5591158e5431"/>
+    <rdf:value>Fixed one of the equations such that the model no longer produces NaNs.</rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#6f86114e-b772-441b-8947-0e8a344fd92e"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#cheng_model_2000">
+    <bqs:reference rdf:resource="rdf:#0b4e815a-d2d0-48e6-a80e-dd82057d2dd6"/>
+<bqs:reference rdf:parseType="Resource">
+  <dc:subject rdf:parseType="Resource">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value>
+      <rdf:Bag>
+        <rdf:li>myofilament mechanics</rdf:li>
+        <rdf:li>muscles</rdf:li>
+        <rdf:li>tendons</rdf:li>
+  	<rdf:li>biomechanics</rdf:li>
+      </rdf:Bag>
+    </rdf:value>
+  </dc:subject>
+</bqs:reference>
+    <cmeta:comment rdf:resource="rdf:#41ad1373-3e18-4975-8717-b3ca370c9d23"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f4a55979-78c1-463b-8905-ab7754dd2abd">
+    <dc:creator rdf:resource="rdf:#eab8f2f3-f17e-4f6b-97d8-633a4458783d"/>
+    <rdf:value>This CellML model has been checked in both COR and PCEnv.  Currently it can be opened in COR but due to the presence of 'circular arguments' the model does not run.  However, the model can be opened in the latest snapshot of PCEnv (which contains a DAE solver), but although it does run, it does so very slowly.  We are still working on the model to try to get it to reproduce the Matlab results.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#41ad1373-3e18-4975-8717-b3ca370c9d23">
+    <dc:creator rdf:resource="rdf:#0255a2cb-cb00-4f5a-9e86-2fd63fe34556"/>
+    <rdf:value/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#c207e80f-810a-44a7-9698-a191df5b3d21">
+    <vCard:ORG rdf:resource="rdf:#1e2eaa49-9883-4e06-89ca-ff2e075a9eaf"/>
+    <vCard:EMAIL rdf:resource="rdf:#51d35cd1-0f95-4aed-98be-c11f9e4db4d8"/>
+    <vCard:N rdf:resource="rdf:#502d6532-f760-4599-83d3-2311e93bc50e"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0255a2cb-cb00-4f5a-9e86-2fd63fe34556">
+    <vCard:FN/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#74b42cb4-bb1b-4bbb-b93c-97d0058f6ef4">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#f797baec-52d3-4075-aef5-6f8d5f1044ad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f0df05e9-96fa-41ce-b97f-455aae1aee9b">
+    <dcterms:W3CDTF>2009-05-29T16:44:19+12:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#619eb617-59a0-4bd8-b167-ccb48849bb7d">
+    <vCard:Given>Geoff</vCard:Given>
+    <vCard:Family>Nunns</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7fd4a138-d112-4b2a-8a02-726090fe063a">
+    <vCard:Given>James</vCard:Given>
+    <vCard:Family>Lawson</vCard:Family>
+    <vCard:Other>Richard</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#eab8f2f3-f17e-4f6b-97d8-633a4458783d">
+    <vCard:FN>Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a38fbdee-d41d-443f-84a0-b146bd9aed95">
+    <dcterms:W3CDTF>2008-07-25T00:00:00+00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0b4e815a-d2d0-48e6-a80e-dd82057d2dd6">
+    <bqs:Pubmed_id>10996372</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#14b6cf5f-b36b-4e7c-9232-061f1dc2e6f4"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8be31e62-a845-4087-9e0a-ca3009b9974c">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#31a15560-6f78-4861-bc3d-afcd99d36975"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#fe532b5a-1be9-4ab7-8daa-5591158e5431">
+    <dcterms:W3CDTF>2008-08-14T10:09:07+12:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#14b6cf5f-b36b-4e7c-9232-061f1dc2e6f4">
+    <dc:creator rdf:resource="rdf:#41445d41-0c58-444b-9d37-c8457536aa96"/>
+    <dc:title>Virtual muscle: a computational approach to understanding the effects of muscle properties on motor control</dc:title>
+    <bqs:volume>101</bqs:volume>
+    <bqs:first_page>117</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#a71ce532-2286-4e67-8632-ce08fb903ab8"/>
+    <dcterms:issued rdf:resource="rdf:#fd9c9324-09aa-46d4-80a5-31d65de5fe02"/>
+    <bqs:last_page>130</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f797baec-52d3-4075-aef5-6f8d5f1044ad">
+    <vCard:Given>Ian</vCard:Given>
+    <vCard:Family>Brown</vCard:Family>
+    <vCard:Other>E</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a9fea358-3dfe-416c-aca2-551d21c99ffe">
+    <dcterms:modified rdf:resource="rdf:#f0df05e9-96fa-41ce-b97f-455aae1aee9b"/>
+    <rdf:value>updated curation status, removed reference link from documentation</rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#0924fb77-8ab7-48c2-8293-dda044b2176c"/>
+  </rdf:Description>
+</rdf:RDF>
+</model>

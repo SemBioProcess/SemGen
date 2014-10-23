@@ -1,0 +1,1281 @@
+<?xml version="1.0"?>
+<!--
+This CellML file was generated on 9/12/2008 at 1:55:44 at p.m. using:
+
+COR (0.9.31.1125)
+Copyright 2002-2008 Dr Alan Garny
+http://COR.physiol.ox.ac.uk/ - COR@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.CellML.org/
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" cmeta:id="novak_pataki_ciliberto_tyson_2001_version01" name="novak_pataki_ciliberto_tyson_2001_version01">
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>Mathematical Model of the Cell Division Cycle of Fission Yeast</title>
+				<author>
+					<firstname>Catherine</firstname>
+					<surname>Lloyd</surname>
+					<affiliation>
+						<shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<section id="sec_status">
+				<title>Model Status</title>
+				<para>
+            This CellML version of the model has been checked in COR and PCEnv and the model runs to replicate the results in the original published paper.  The units have been checked and are consistent.
+          </para>
+			</section>
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>
+ABSTRACT: Much is known about the genes and proteins controlling the cell cycle of fission yeast. Can these molecular components be spun together into a consistent mechanism that accounts for the observed behavior of growth and division in fission yeast cells? To answer this question, we propose a mechanism for the control system, convert it into a set of 14 differential and algebraic equations, study these equations by numerical simulation and bifurcation theory, and compare our results to the physiology of wild-type and mutant cells. In wild-type cells, progress through the cell cycle (G1--&gt;S--&gt;G2--&gt;M) is related to cyclic progression around a hysteresis loop, driven by cell growth and chromosome alignment on the metaphase plate. However, the control system operates much differently in double-mutant cells, wee1(-) cdc25Delta, which are defective in progress through the latter half of the cell cycle (G2 and M phases). These cells exhibit "quantized" cycles (interdivision times clustering around 90, 160, and 230 min). We show that these quantized cycles are associated with a supercritical Hopf bifurcation in the mechanism, when the wee1 and cdc25 genes are disabled. (c) 2001 American Institute of Physics.
+</para>
+				
+				<para>
+The original paper reference is cited below:
+</para>
+				
+				<para>
+Mathematical model of the cell division cycle of fission yeast, Bela Novak, and Zsuzsa Pataki, 2001, <emphasis>CHAOS</emphasis>, 11, 277-286.  <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/12779461">PubMed ID: 12779461</ulink>
+				</para>
+				<informalfigure float="0" id="fig_reaction_diagram">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>reaction diagram</title>
+							</objectinfo>
+							<imagedata fileref="novak_2001.png"/>
+						</imageobject>
+					</mediaobject>
+					<caption>
+Diagram of the fission-yeast cell cycle.  In the middle of the diagram is Cdc2/Cdc13 (MPF), which is regulated by proteolysis of the Cdc13 component, phosphorylation of the Cdc2 component, and stoichiometric inhibition of the complex.
+					</caption>
+				</informalfigure>
+				
+			</sect1>
+		</article>
+	</documentation>
+
+   <units name="minute">
+      <unit multiplier="60" units="second"/>
+   </units>
+   <units name="first_order_rate_constant">
+      <unit exponent="-1" units="minute"/>
+   </units>
+   <component name="environment">
+      <variable cmeta:id="environment_time" name="time" public_interface="out" units="minute"/>
+   </component>
+   <component name="Cdc13T">
+      <variable initial_value="0.2" name="Cdc13T" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.03" name="k1" units="first_order_rate_constant"/>
+      <variable name="k2_" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k2__" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k2___" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="M" public_interface="in" units="dimensionless"/>
+      <variable name="Ste9" public_interface="in" units="dimensionless"/>
+      <variable name="Slp1" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Cdc13T</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k1</ci>
+                  <ci>M</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <plus/>
+                     <ci>k2_</ci>
+                     <apply>
+                        <times/>
+                        <ci>k2__</ci>
+                        <ci>Ste9</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k2___</ci>
+                        <ci>Slp1</ci>
+                     </apply>
+                  </apply>
+                  <ci>Cdc13T</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="preMPF">
+      <variable cmeta:id="preMPF_preMPF" initial_value="0" name="preMPF" public_interface="out" units="dimensionless"/>
+      <variable name="kwee" units="first_order_rate_constant"/>
+      <variable initial_value="0.15" name="kwee_" units="first_order_rate_constant"/>
+      <variable initial_value="1.3" name="kwee__" units="first_order_rate_constant"/>
+      <variable initial_value="0.25" name="Vawee" units="first_order_rate_constant"/>
+      <variable initial_value="1" name="Viwee" units="first_order_rate_constant"/>
+      <variable initial_value="0.01" name="Jawee" units="dimensionless"/>
+      <variable initial_value="0.01" name="Jiwee" units="dimensionless"/>
+      <variable name="k25" units="first_order_rate_constant"/>
+      <variable initial_value="0.05" name="k25_" units="first_order_rate_constant"/>
+      <variable initial_value="5" name="k25__" units="first_order_rate_constant"/>
+      <variable initial_value="1" name="Va25" units="first_order_rate_constant"/>
+      <variable initial_value="0.25" name="Vi25" units="first_order_rate_constant"/>
+      <variable initial_value="0.01" name="Ja25" units="dimensionless"/>
+      <variable initial_value="0.01" name="Ji25" units="dimensionless"/>
+      <variable name="k2_" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k2__" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k2___" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="Cdc13T" public_interface="in" units="dimensionless"/>
+      <variable name="Ste9" public_interface="in" units="dimensionless"/>
+      <variable name="MPF" public_interface="in" units="dimensionless"/>
+      <variable name="Slp1" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>preMPF</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>kwee</ci>
+                     <apply>
+                        <minus/>
+                        <ci>Cdc13T</ci>
+                        <ci>preMPF</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k25</ci>
+                     <ci>preMPF</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <plus/>
+                     <ci>k2_</ci>
+                     <apply>
+                        <times/>
+                        <ci>k2__</ci>
+                        <ci>Ste9</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k2___</ci>
+                        <ci>Slp1</ci>
+                     </apply>
+                  </apply>
+                  <ci>preMPF</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>kwee</ci>
+            <apply>
+               <plus/>
+               <ci>kwee_</ci>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <minus/>
+                        <ci>kwee__</ci>
+                        <ci>kwee_</ci>
+                     </apply>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                     <ci>Vawee</ci>
+                     <ci>Jiwee</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <times/>
+                           <ci>Viwee</ci>
+                           <ci>MPF</ci>
+                        </apply>
+                        <ci>Vawee</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>Viwee</ci>
+                        <ci>MPF</ci>
+                        <ci>Jawee</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>Vawee</ci>
+                        <ci>Jiwee</ci>
+                     </apply>
+                     <apply>
+                        <root/>
+                        <apply>
+                           <minus/>
+                           <apply>
+                              <power/>
+                              <apply>
+                                 <plus/>
+                                 <apply>
+                                    <minus/>
+                                    <apply>
+                                       <times/>
+                                       <ci>Viwee</ci>
+                                       <ci>MPF</ci>
+                                    </apply>
+                                    <ci>Vawee</ci>
+                                 </apply>
+                                 <apply>
+                                    <times/>
+                                    <ci>Viwee</ci>
+                                    <ci>MPF</ci>
+                                    <ci>Jawee</ci>
+                                 </apply>
+                                 <apply>
+                                    <times/>
+                                    <ci>Vawee</ci>
+                                    <ci>Jiwee</ci>
+                                 </apply>
+                              </apply>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                           </apply>
+                           <apply>
+                              <times/>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4</cn>
+                              <ci>Vawee</ci>
+                              <ci>Jiwee</ci>
+                              <apply>
+                                 <minus/>
+                                 <apply>
+                                    <times/>
+                                    <ci>Viwee</ci>
+                                    <ci>MPF</ci>
+                                 </apply>
+                                 <ci>Vawee</ci>
+                              </apply>
+                           </apply>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>k25</ci>
+            <apply>
+               <plus/>
+               <ci>k25_</ci>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <minus/>
+                        <ci>k25__</ci>
+                        <ci>k25_</ci>
+                     </apply>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                     <ci>Va25</ci>
+                     <ci>MPF</ci>
+                     <ci>Ji25</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <minus/>
+                        <ci>Vi25</ci>
+                        <apply>
+                           <times/>
+                           <ci>Va25</ci>
+                           <ci>MPF</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>Vi25</ci>
+                        <ci>Ja25</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>Va25</ci>
+                        <ci>MPF</ci>
+                        <ci>Ji25</ci>
+                     </apply>
+                     <apply>
+                        <root/>
+                        <apply>
+                           <minus/>
+                           <apply>
+                              <power/>
+                              <apply>
+                                 <plus/>
+                                 <apply>
+                                    <minus/>
+                                    <ci>Vi25</ci>
+                                    <apply>
+                                       <times/>
+                                       <ci>Va25</ci>
+                                       <ci>MPF</ci>
+                                    </apply>
+                                 </apply>
+                                 <apply>
+                                    <times/>
+                                    <ci>Vi25</ci>
+                                    <ci>Ja25</ci>
+                                 </apply>
+                                 <apply>
+                                    <times/>
+                                    <ci>Va25</ci>
+                                    <ci>MPF</ci>
+                                    <ci>Ji25</ci>
+                                 </apply>
+                              </apply>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                           </apply>
+                           <apply>
+                              <times/>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4</cn>
+                              <ci>Va25</ci>
+                              <ci>MPF</ci>
+                              <ci>Ji25</ci>
+                              <apply>
+                                 <minus/>
+                                 <ci>Vi25</ci>
+                                 <apply>
+                                    <times/>
+                                    <ci>Va25</ci>
+                                    <ci>MPF</ci>
+                                 </apply>
+                              </apply>
+                           </apply>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Ste9">
+      <variable cmeta:id="Ste9_Ste9" initial_value="1" name="Ste9" public_interface="out" units="dimensionless"/>
+      <variable initial_value="1" name="k3_" units="first_order_rate_constant"/>
+      <variable initial_value="10" name="k3__" units="first_order_rate_constant"/>
+      <variable initial_value="35" name="k4" units="first_order_rate_constant"/>
+      <variable initial_value="2" name="k4_" units="first_order_rate_constant"/>
+      <variable initial_value="0.01" name="J3" units="dimensionless"/>
+      <variable initial_value="0.01" name="J4" units="dimensionless"/>
+      <variable name="MPF" public_interface="in" units="dimensionless"/>
+      <variable name="SK" public_interface="in" units="dimensionless"/>
+      <variable name="Slp1" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Ste9</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <plus/>
+                        <ci>k3_</ci>
+                        <apply>
+                           <times/>
+                           <ci>k3__</ci>
+                           <ci>Slp1</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        <ci>Ste9</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <plus/>
+                        <ci>J3</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                     </apply>
+                     <ci>Ste9</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <times/>
+                           <ci>k4_</ci>
+                           <ci>SK</ci>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>k4</ci>
+                           <ci>MPF</ci>
+                        </apply>
+                     </apply>
+                     <ci>Ste9</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>J4</ci>
+                     <ci>Ste9</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Slp1T">
+      <variable initial_value="0" name="Slp1T" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.005" name="k5_" units="first_order_rate_constant"/>
+      <variable initial_value="0.3" name="k5__" units="first_order_rate_constant"/>
+      <variable initial_value="0.3" name="J5" units="dimensionless"/>
+      <variable name="k6" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="MPF" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Slp1T</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <ci>k5_</ci>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>k5__</ci>
+                        <apply>
+                           <power/>
+                           <ci>MPF</ci>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4</cn>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <power/>
+                           <ci>J5</ci>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4</cn>
+                        </apply>
+                        <apply>
+                           <power/>
+                           <ci>MPF</ci>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4</cn>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k6</ci>
+                  <ci>Slp1T</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Slp1">
+      <variable cmeta:id="Slp1_Slp1" initial_value="2.2" name="Slp1" public_interface="out" units="dimensionless"/>
+      <variable initial_value="1" name="k7" units="first_order_rate_constant"/>
+      <variable initial_value="0.25" name="k8" units="first_order_rate_constant"/>
+      <variable initial_value="0.001" name="J7" units="dimensionless"/>
+      <variable initial_value="0.001" name="J8" units="dimensionless"/>
+      <variable name="k6" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="IEP" public_interface="in" units="dimensionless"/>
+      <variable name="Slp1T" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Slp1</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>k7</ci>
+                     <ci>IEP</ci>
+                     <apply>
+                        <minus/>
+                        <ci>Slp1T</ci>
+                        <ci>Slp1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <plus/>
+                        <ci>J7</ci>
+                        <ci>Slp1T</ci>
+                     </apply>
+                     <ci>Slp1</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>k8</ci>
+                        <ci>Slp1</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci>J8</ci>
+                        <ci>Slp1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k6</ci>
+                     <ci>Slp1</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="IEP">
+      <variable cmeta:id="IEP_IEP" initial_value="0" name="IEP" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.1" name="k9" units="first_order_rate_constant"/>
+      <variable initial_value="0.04" name="k10" units="first_order_rate_constant"/>
+      <variable initial_value="0.01" name="J9" units="dimensionless"/>
+      <variable initial_value="0.01" name="J10" units="dimensionless"/>
+      <variable name="MPF" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>IEP</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>k9</ci>
+                     <ci>MPF</ci>
+                     <apply>
+                        <minus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        <ci>IEP</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <plus/>
+                        <ci>J9</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                     </apply>
+                     <ci>IEP</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>k10</ci>
+                     <ci>IEP</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>J10</ci>
+                     <ci>IEP</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Rum1T">
+      <variable cmeta:id="Rum1T_Rum1T" initial_value="0" name="Rum1T" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.1" name="k11" units="first_order_rate_constant"/>
+      <variable initial_value="0.01" name="k12" units="first_order_rate_constant"/>
+      <variable initial_value="1" name="k12_" units="first_order_rate_constant"/>
+      <variable initial_value="3" name="k12__" units="first_order_rate_constant"/>
+      <variable name="SK" public_interface="in" units="dimensionless"/>
+      <variable name="MPF" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Rum1T</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>k11</ci>
+               <apply>
+                  <times/>
+                  <apply>
+                     <plus/>
+                     <ci>k12</ci>
+                     <apply>
+                        <times/>
+                        <ci>k12_</ci>
+                        <ci>SK</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k12__</ci>
+                        <ci>MPF</ci>
+                     </apply>
+                  </apply>
+                  <ci>Rum1T</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="SK">
+      <variable cmeta:id="SK_SK" initial_value="0" name="SK" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.1" name="k13" units="first_order_rate_constant"/>
+      <variable initial_value="0.1" name="k14" units="first_order_rate_constant"/>
+      <variable name="TF" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>SK</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k13</ci>
+                  <ci>TF</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k14</ci>
+                  <ci>SK</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="M">
+      <variable initial_value="1" name="M" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.005" name="mu" units="first_order_rate_constant"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>M</ci>
+            </apply>
+            <apply>
+               <times/>
+               <ci>mu</ci>
+               <ci>M</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Trimer">
+      <variable name="Trimer" public_interface="out" units="dimensionless"/>
+      <variable name="sum" units="dimensionless"/>
+      <variable initial_value="0.001" name="Kdiss" units="dimensionless"/>
+      <variable name="Cdc13T" public_interface="in" units="dimensionless"/>
+      <variable name="Rum1T" public_interface="in" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>Trimer</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                  <ci>Cdc13T</ci>
+                  <ci>Rum1T</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>sum</ci>
+                  <apply>
+                     <root/>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <power/>
+                           <ci>sum</ci>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4</cn>
+                           <ci>Cdc13T</ci>
+                           <ci>Rum1T</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>sum</ci>
+            <apply>
+               <plus/>
+               <ci>Cdc13T</ci>
+               <ci>Rum1T</ci>
+               <ci>Kdiss</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="MPF">
+      <variable cmeta:id="MPF_MPF" name="MPF" public_interface="out" units="dimensionless"/>
+      <variable name="Cdc13T" public_interface="in" units="dimensionless"/>
+      <variable name="preMPF" public_interface="in" units="dimensionless"/>
+      <variable name="Trimer" public_interface="in" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>MPF</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <apply>
+                     <minus/>
+                     <ci>Cdc13T</ci>
+                     <ci>preMPF</ci>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <ci>Cdc13T</ci>
+                     <ci>Trimer</ci>
+                  </apply>
+               </apply>
+               <ci>Cdc13T</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="TF">
+      <variable cmeta:id="TF_TF" name="TF" public_interface="out" units="dimensionless"/>
+      <variable initial_value="1.5" name="k15" units="first_order_rate_constant"/>
+      <variable initial_value="1" name="k16_" units="first_order_rate_constant"/>
+      <variable initial_value="2" name="k16__" units="first_order_rate_constant"/>
+      <variable initial_value="0.01" name="J15" units="dimensionless"/>
+      <variable initial_value="0.01" name="J16" units="dimensionless"/>
+      <variable name="M" public_interface="in" units="dimensionless"/>
+      <variable name="MPF" public_interface="in" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>TF</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                  <ci>k15</ci>
+                  <ci>M</ci>
+                  <ci>J16</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <plus/>
+                        <ci>k16_</ci>
+                        <apply>
+                           <times/>
+                           <ci>k16__</ci>
+                           <ci>MPF</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k15</ci>
+                        <ci>M</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <plus/>
+                        <ci>k16_</ci>
+                        <apply>
+                           <times/>
+                           <ci>k16__</ci>
+                           <ci>MPF</ci>
+                        </apply>
+                     </apply>
+                     <ci>J15</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k15</ci>
+                     <ci>M</ci>
+                     <ci>J16</ci>
+                  </apply>
+                  <apply>
+                     <root/>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <power/>
+                           <apply>
+                              <plus/>
+                              <apply>
+                                 <minus/>
+                                 <apply>
+                                    <plus/>
+                                    <ci>k16_</ci>
+                                    <apply>
+                                       <times/>
+                                       <ci>k16__</ci>
+                                       <ci>MPF</ci>
+                                    </apply>
+                                 </apply>
+                                 <apply>
+                                    <times/>
+                                    <ci>k15</ci>
+                                    <ci>M</ci>
+                                 </apply>
+                              </apply>
+                              <apply>
+                                 <times/>
+                                 <apply>
+                                    <plus/>
+                                    <ci>k16_</ci>
+                                    <apply>
+                                       <times/>
+                                       <ci>k16__</ci>
+                                       <ci>MPF</ci>
+                                    </apply>
+                                 </apply>
+                                 <ci>J15</ci>
+                              </apply>
+                              <apply>
+                                 <times/>
+                                 <ci>k15</ci>
+                                 <ci>M</ci>
+                                 <ci>J16</ci>
+                              </apply>
+                           </apply>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4</cn>
+                           <ci>k15</ci>
+                           <ci>M</ci>
+                           <ci>J16</ci>
+                           <apply>
+                              <minus/>
+                              <apply>
+                                 <plus/>
+                                 <ci>k16_</ci>
+                                 <apply>
+                                    <times/>
+                                    <ci>k16__</ci>
+                                    <ci>MPF</ci>
+                                 </apply>
+                              </apply>
+                              <apply>
+                                 <times/>
+                                 <ci>k15</ci>
+                                 <ci>M</ci>
+                              </apply>
+                           </apply>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="kinetic_parameters">
+      <variable initial_value="0.03" name="k2_" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="1" name="k2__" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="0.1" name="k2___" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="0.1" name="k6" public_interface="out" units="first_order_rate_constant"/>
+   </component>
+   <connection>
+      <map_components component_1="Cdc13T" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="preMPF" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ste9" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="Slp1T" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="Slp1" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="IEP" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="Rum1T" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="SK" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="M" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="Cdc13T" component_2="Ste9"/>
+      <map_variables variable_1="Ste9" variable_2="Ste9"/>
+   </connection>
+   <connection>
+      <map_components component_1="Cdc13T" component_2="Slp1"/>
+      <map_variables variable_1="Slp1" variable_2="Slp1"/>
+   </connection>
+   <connection>
+      <map_components component_1="Cdc13T" component_2="M"/>
+      <map_variables variable_1="M" variable_2="M"/>
+   </connection>
+   <connection>
+      <map_components component_1="Cdc13T" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k2_" variable_2="k2_"/>
+      <map_variables variable_1="k2__" variable_2="k2__"/>
+      <map_variables variable_1="k2___" variable_2="k2___"/>
+   </connection>
+   <connection>
+      <map_components component_1="preMPF" component_2="Cdc13T"/>
+      <map_variables variable_1="Cdc13T" variable_2="Cdc13T"/>
+   </connection>
+   <connection>
+      <map_components component_1="preMPF" component_2="Ste9"/>
+      <map_variables variable_1="Ste9" variable_2="Ste9"/>
+   </connection>
+   <connection>
+      <map_components component_1="preMPF" component_2="Slp1"/>
+      <map_variables variable_1="Slp1" variable_2="Slp1"/>
+   </connection>
+   <connection>
+      <map_components component_1="preMPF" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k2_" variable_2="k2_"/>
+      <map_variables variable_1="k2__" variable_2="k2__"/>
+      <map_variables variable_1="k2___" variable_2="k2___"/>
+   </connection>
+   <connection>
+      <map_components component_1="preMPF" component_2="MPF"/>
+      <map_variables variable_1="MPF" variable_2="MPF"/>
+      <map_variables variable_1="preMPF" variable_2="preMPF"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ste9" component_2="Slp1"/>
+      <map_variables variable_1="Slp1" variable_2="Slp1"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ste9" component_2="SK"/>
+      <map_variables variable_1="SK" variable_2="SK"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ste9" component_2="MPF"/>
+      <map_variables variable_1="MPF" variable_2="MPF"/>
+   </connection>
+   <connection>
+      <map_components component_1="Slp1T" component_2="MPF"/>
+      <map_variables variable_1="MPF" variable_2="MPF"/>
+   </connection>
+   <connection>
+      <map_components component_1="Slp1T" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k6" variable_2="k6"/>
+   </connection>
+   <connection>
+      <map_components component_1="Slp1" component_2="Slp1T"/>
+      <map_variables variable_1="Slp1T" variable_2="Slp1T"/>
+   </connection>
+   <connection>
+      <map_components component_1="Slp1" component_2="IEP"/>
+      <map_variables variable_1="IEP" variable_2="IEP"/>
+   </connection>
+   <connection>
+      <map_components component_1="Slp1" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k6" variable_2="k6"/>
+   </connection>
+   <connection>
+      <map_components component_1="IEP" component_2="MPF"/>
+      <map_variables variable_1="MPF" variable_2="MPF"/>
+   </connection>
+   <connection>
+      <map_components component_1="Rum1T" component_2="MPF"/>
+      <map_variables variable_1="MPF" variable_2="MPF"/>
+   </connection>
+   <connection>
+      <map_components component_1="Rum1T" component_2="SK"/>
+      <map_variables variable_1="SK" variable_2="SK"/>
+   </connection>
+   <connection>
+      <map_components component_1="SK" component_2="TF"/>
+      <map_variables variable_1="TF" variable_2="TF"/>
+   </connection>
+   <connection>
+      <map_components component_1="Trimer" component_2="Cdc13T"/>
+      <map_variables variable_1="Cdc13T" variable_2="Cdc13T"/>
+   </connection>
+   <connection>
+      <map_components component_1="Trimer" component_2="Rum1T"/>
+      <map_variables variable_1="Rum1T" variable_2="Rum1T"/>
+   </connection>
+   <connection>
+      <map_components component_1="MPF" component_2="Trimer"/>
+      <map_variables variable_1="Trimer" variable_2="Trimer"/>
+   </connection>
+   <connection>
+      <map_components component_1="MPF" component_2="Cdc13T"/>
+      <map_variables variable_1="Cdc13T" variable_2="Cdc13T"/>
+   </connection>
+   <connection>
+      <map_components component_1="TF" component_2="MPF"/>
+      <map_variables variable_1="MPF" variable_2="MPF"/>
+   </connection>
+   <connection>
+      <map_components component_1="TF" component_2="M"/>
+      <map_variables variable_1="M" variable_2="M"/>
+   </connection>
+
+ <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Seq rdf:about="rdf:#f0529f30-6819-4674-960d-585adcf69d2f">
+    <rdf:li rdf:resource="rdf:#312eab53-40cf-407b-9467-740999b01e1b"/>
+    <rdf:li rdf:resource="rdf:#9ec37aed-9e05-47ae-8b49-dc159190a6dc"/>
+    <rdf:li rdf:resource="rdf:#83fccc33-c220-4751-8314-e2ac7afa8ba0"/>
+    <rdf:li rdf:resource="rdf:#290217ed-9101-4ada-8361-fa49b8ae984a"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#71716127-5bef-4566-bfe1-6fe0f905e3a7">
+    <vCard:Orgname xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Auckland Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#17cfa72e-8f17-4f3c-ba44-32f1ea288571">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0d724dc5-065f-4208-bf14-0e31c0d0a1b0">
+    <bqs:Pubmed_id xmlns:bqs="http://www.cellml.org/bqs/1.0#">12779461</bqs:Pubmed_id>
+    <bqs:JournalArticle xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#cc451be8-4d02-4fff-88b0-90980bbcbd55"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#83fccc33-c220-4751-8314-e2ac7afa8ba0">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#85f67c49-d6f8-4495-8bf7-eaa9fdbdf750"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#cc451be8-4d02-4fff-88b0-90980bbcbd55">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#f0529f30-6819-4674-960d-585adcf69d2f"/>
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Mathematical model of the cell division cycle of fission yeast</dc:title>
+    <bqs:volume xmlns:bqs="http://www.cellml.org/bqs/1.0#">11</bqs:volume>
+    <bqs:first_page xmlns:bqs="http://www.cellml.org/bqs/1.0#">277</bqs:first_page>
+    <bqs:Journal xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#ea9b3551-3bec-41e3-8fab-33cc8c3bdad2"/>
+    <dcterms:issued xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#a3ba6210-6f86-4c17-9228-79fc740b3b10"/>
+    <bqs:last_page xmlns:bqs="http://www.cellml.org/bqs/1.0#">286</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9ec37aed-9e05-47ae-8b49-dc159190a6dc">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#4da72d11-14e5-4b1a-8669-52c59d77d1b9"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a3ba6210-6f86-4c17-9228-79fc740b3b10">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2001-03</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ba1337a6-3496-447b-9919-9bcb03bab5d9">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Jeelean</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Lim</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#$t+rrF2">
+    <ns7:boundIntervals xmlns:ns7="http://www.cellml.org/metadata/simulation/1.0#" rdf:resource="rdf:#$u+rrF2"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ac15aa8b-8c4d-4f0c-8450-68a51fe6dd66">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">John</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Tyson</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">J</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f6941488-a263-437f-b641-54b39eb9f0d6">
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#ba1337a6-3496-447b-9919-9bcb03bab5d9"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#6d2a145a-0f54-491f-b933-682594d31515">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#li"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#46617119-be0c-4173-bd6b-3cd8aed5d6d2">
+    <vCard:ORG xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#71716127-5bef-4566-bfe1-6fe0f905e3a7"/>
+    <vCard:EMAIL xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#17cfa72e-8f17-4f3c-ba44-32f1ea288571"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#1b3ab254-d8b7-42be-b042-0cd8b3e95ec0"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#19748a89-02f1-482a-b8aa-3a730e2f5e36">
+    <vCard:FN xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:publisher xmlns:dc="http://purl.org/dc/elements/1.1/">The University of Auckland, Auckland Bioengineering Institute</dc:publisher>
+    <cmeta:comment rdf:resource="rdf:#aede255a-0750-488d-99e0-4cd5076642e4"/>
+    <dcterms:created xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#6902ef1c-8751-4138-9e71-05f0e0310aad"/>
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#46617119-be0c-4173-bd6b-3cd8aed5d6d2"/>
+    <cmeta:modification rdf:resource="rdf:#dea33e74-d6a5-4446-bb75-ad6142ef49c2"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#dea33e74-d6a5-4446-bb75-ad6142ef49c2">
+    <dcterms:modified xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#6d880e61-f1b4-4255-9f68-6c81d8572401"/>
+    <rdf:value>Added cmeta id's to several variables</rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#f6941488-a263-437f-b641-54b39eb9f0d6"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ba4d5ff2-a7b4-41e9-877c-d03a0919b580">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#b203e69a-603c-4200-8425-fa04195fd39b"/>
+    <rdf:value>This is the CellML description of Novak et al.'s 2001 mathematical model of the cell division cycle of fission yeast.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4da72d11-14e5-4b1a-8669-52c59d77d1b9">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Zsuzsa</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Pataki</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#85f67c49-d6f8-4495-8bf7-eaa9fdbdf750">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Andrea</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Ciliberto</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ea9b3551-3bec-41e3-8fab-33cc8c3bdad2">
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Chaos</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#$v+rrF2">
+    <ns7:endingValue xmlns:ns7="http://www.cellml.org/metadata/simulation/1.0#">230</ns7:endingValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#aede255a-0750-488d-99e0-4cd5076642e4">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#19748a89-02f1-482a-b8aa-3a730e2f5e36"/>
+    <rdf:value/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#novak_pataki_ciliberto_tyson_2001_version01">
+    <ns7:simulation xmlns:ns7="http://www.cellml.org/metadata/simulation/1.0#" rdf:resource="rdf:#$t+rrF2"/>
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Novak et al.'s 2001 mathematical model of the cell division cycle of fission yeast.</dc:title>
+    <cmeta:comment rdf:resource="rdf:#ba4d5ff2-a7b4-41e9-877c-d03a0919b580"/>
+    <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#0d724dc5-065f-4208-bf14-0e31c0d0a1b0"/>
+    <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#21894e46-aad1-4315-a139-c7345f98af86"/>
+<bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource">
+  <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value>
+      <rdf:Bag>
+        <rdf:li>cell cycle</rdf:li>
+        <rdf:li>yeast</rdf:li>
+      </rdf:Bag>
+    </rdf:value>
+  </dc:subject>
+</bqs:reference>
+    <cmeta:species>yeast</cmeta:species>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4cf1c873-cf3a-46da-a7b7-e6fbab6011aa">
+    <bqs:subject_type xmlns:bqs="http://www.cellml.org/bqs/1.0#">keyword</bqs:subject_type>
+    <rdf:value rdf:resource="rdf:#6d2a145a-0f54-491f-b933-682594d31515"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#21894e46-aad1-4315-a139-c7345f98af86">
+    <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#4cf1c873-cf3a-46da-a7b7-e6fbab6011aa"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ec2cdf5f-3281-45b1-9830-1af1b632b879">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Bela</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Novak</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b203e69a-603c-4200-8425-fa04195fd39b">
+    <vCard:FN xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#290217ed-9101-4ada-8361-fa49b8ae984a">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#ac15aa8b-8c4d-4f0c-8450-68a51fe6dd66"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1b3ab254-d8b7-42be-b042-0cd8b3e95ec0">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Catherine</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Lloyd</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#6902ef1c-8751-4138-9e71-05f0e0310aad">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2004-03-07T00:00:00+00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#6d880e61-f1b4-4255-9f68-6c81d8572401">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2009-02-13T16:09:16+13:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#312eab53-40cf-407b-9467-740999b01e1b">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#ec2cdf5f-3281-45b1-9830-1af1b632b879"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#$u+rrF2">
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+    <rdf:first rdf:resource="rdf:#$v+rrF2"/>
+  </rdf:Description>
+</rdf:RDF>
+</model>

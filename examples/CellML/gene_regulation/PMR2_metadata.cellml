@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='utf-8'?>
+<model xmlns="http://www.cellml.org/cellml/1.0#"
+	xmlns:cmeta="http://www.cellml.org/metadata/1.0#"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:bqs="http://www.cellml.org/bqs/1.0#" 
+	xmlns:cellml="http://www.cellml.org/cellml/1.0#"
+	xmlns:dcterms="http://purl.org/dc/terms/"
+	xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#"
+	cmeta:id="cooling_2010"
+	name="cooling_2010">
+	
+    <rdf:RDF>
+        <rdf:Description rdf:about="">
+          <!--
+            The Model Builder Metadata.  The Dublin Core "creator" element is used  
+            to indicate the person who translated the model into CellML.
+            The rdf:about of the Description has to remain blank for PMR2 to pick this up properly....
+          -->
+          <dc:creator rdf:parseType="Resource">
+            <vCard:N rdf:parseType="Resource">
+              <vCard:Family>Cooling</vCard:Family>
+              <vCard:Given>Mike</vCard:Given>
+            </vCard:N>
+            <vCard:EMAIL rdf:parseType="Resource">
+              <rdf:value>m.cooling@auckland.ac.nz</rdf:value>
+              <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet" />
+            </vCard:EMAIL>
+            <vCard:ORG rdf:parseType="Resource">
+              <vCard:Orgname>The University of Auckland</vCard:Orgname>
+              <vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+            </vCard:ORG>
+          </dc:creator>
+    </rdf:Description>
+    
+        <rdf:Description rdf:about="#cooling_2010">
+            <bqs:reference rdf:parseType="Resource">
+                <bqs:JournalArticle rdf:parseType="Resource">
+                    <dc:creator>
+                        <rdf:Seq>
+                        <rdf:li rdf:parseType="Resource">
+                            <vCard:N rdf:parseType="Resource">
+                            <vCard:Family>Cooling</vCard:Family>
+                            <vCard:Given>Mike</vCard:Given>
+                            </vCard:N>
+                            <vCard:EMAIL rdf:parseType="Resource">
+                            <rdf:value>m.cooling@auckland.ac.nz</rdf:value>
+                            <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+                            </vCard:EMAIL>
+                            <vCard:ORG rdf:parseType="Resource">
+                            <vCard:Orgname>Auckland Bioengineering Institute</vCard:Orgname>
+                            <vCard:Orgunit>University of Auckland</vCard:Orgunit>
+                            </vCard:ORG>
+                        </rdf:li>
+			<rdf:li rdf:parseType="Resource">
+			    <vCard:N rdf:parseType="Resource">
+			    <vCard:Family>Rouilly</vCard:Family>
+			    <vCard:Given>Vincent</vCard:Given>
+			    </vCard:N>
+                        </rdf:li>
+			<rdf:li rdf:parseType="Resource">
+			    <vCard:N rdf:parseType="Resource">
+			    <vCard:Family>Misirli</vCard:Family>
+			    <vCard:Given>Goksel</vCard:Given>
+			    </vCard:N>
+			</rdf:li>
+			<rdf:li rdf:parseType="Resource">
+			    <vCard:N rdf:parseType="Resource">
+			    <vCard:Family>Lawson</vCard:Family>
+			    <vCard:Given>James</vCard:Given>
+			    </vCard:N>
+			</rdf:li>			
+			<rdf:li rdf:parseType="Resource">
+			    <vCard:N rdf:parseType="Resource">
+			    <vCard:Family>Yu</vCard:Family>
+			    <vCard:Given>Tommy</vCard:Given>
+			    </vCard:N>
+			</rdf:li>
+			<rdf:li rdf:parseType="Resource">
+			    <vCard:N rdf:parseType="Resource">
+			    <vCard:Family>Hallinan</vCard:Family>
+			    <vCard:Given>Jennifer</vCard:Given>
+			    </vCard:N>
+			</rdf:li>
+			<rdf:li rdf:parseType="Resource">
+			    <vCard:N rdf:parseType="Resource">
+			    <vCard:Family>Wipat</vCard:Family>
+			    <vCard:Given>Anil</vCard:Given>
+			    </vCard:N>
+			</rdf:li>
+                        </rdf:Seq>
+                    </dc:creator>
+                    <dc:title>Standard Virtual Biological Parts: A Repository of Modular Modeling Components for Synthetic Biology</dc:title>
+                    <bqs:volume>26</bqs:volume>
+                    <bqs:first_page>925</bqs:first_page>
+                    <bqs:last_page>931</bqs:last_page>
+                    <bqs:Journal rdf:parseType="Resource">
+                            <dc:title>Bioinformatics</dc:title>
+                    </bqs:Journal>
+                    <dcterms:issued rdf:parseType="Resource">
+                            <dcterms:W3CDTF>2010-00-00 00:00</dcterms:W3CDTF>
+                    </dcterms:issued>
+                </bqs:JournalArticle>
+            </bqs:reference>
+
+            <bqs:reference rdf:parseType="Resource">
+                    <dc:subject rdf:parseType="Resource">
+                            <bqs:subject_type>keyword</bqs:subject_type>
+                            <rdf:value>
+                                    <rdf:Bag>
+                                            <rdf:li>Synthetic Biology</rdf:li>
+                                            <rdf:li>Gene Regulation</rdf:li>
+                                    </rdf:Bag>
+                            </rdf:value>
+                    </dc:subject>
+            </bqs:reference>
+        </rdf:Description>
+    </rdf:RDF>
+
+</model>

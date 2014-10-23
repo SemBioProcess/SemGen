@@ -1,0 +1,1667 @@
+<?xml version="1.0"?>
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" cmeta:id="wang_2009" name="wang_2009">
+
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>PI3K-dependent cross-talk interactions converge with Ras as quantifiable inputs integrated by Erk</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+        This CellML model runs in both COR and OpenCell to replicate the published results (figure 7) with L=1.0nM and the model's parameter values taken as the median of the estimated parameters given on pages 8 and 9 of the supplementary material.  The units have been checked and they are consistent.
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+ABSTRACT: Although it is appreciated that canonical signal-transduction pathways represent dominant modes of regulation embedded in larger interaction networks, relatively little has been done to quantify pathway cross-talk in such networks. Through quantitative measurements that systematically canvas an array of stimulation and molecular perturbation conditions, together with computational modeling and analysis, we have elucidated cross-talk mechanisms in the platelet-derived growth factor (PDGF) receptor signaling network, in which phosphoinositide 3-kinase (PI3K) and Ras/extracellular signal-regulated kinase (Erk) pathways are prominently activated. We show that, while PI3K signaling is insulated from cross-talk, PI3K enhances Erk activation at points both upstream and downstream of Ras. The magnitudes of these effects depend strongly on the stimulation conditions, subject to saturation effects in the respective pathways and negative feedback loops. Motivated by those dynamics, a kinetic model of the network was formulated and used to precisely quantify the relative contributions of PI3K-dependent and -independent modes of Ras/Erk activation.
+</para>
+
+<informalfigure float="0" id="fig_reaction_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>model diagram</title>
+    </objectinfo>
+    <imagedata fileref="wang_2009.png"/>
+  </imageobject>
+</mediaobject>
+<caption>Conceptual model of the PDGF receptor signaling network. Cross-talk interactions from PI3K lipid products (3' PIs) affect Ras-specific GEF (e.g. Grb2-Sos complex) recruitment and activation of MEK kinases, which might or might not be the same as those activated by Ras. It is recognized that those cross-talk effects might entail multiple steps, and that a more refined model would account for the effect of JNK activation on the MKP negative feedback loop.</caption>
+</informalfigure>
+
+<para>
+The original paper reference is cited below:
+</para>
+
+<para>
+PI3K-dependent cross-talk interactions converge with Ras as quantifiable inputs integrated by Erk, Wang CC, Cirit M, and Haugh JM, 2009, <emphasis>Molecular Systems Biology</emphasis>, 5, article 246.  <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/19225459">PubMed ID: 19225459</ulink></para>
+
+</sect1>
+</article>
+</documentation> 
+
+
+
+  
+  <units name="minute">
+    <unit multiplier="60" units="second"/>
+  </units>
+  
+  <units name="first_order_rate_constant">
+    <unit exponent="-1" units="minute"/>
+  </units>
+
+  <units name="nanomolar">
+    <unit prefix="nano" units="mole"/>
+    <unit exponent="-1" units="litre"/>
+  </units>
+  
+  
+  <component name="environment">
+    <variable cmeta:id="environment_time" name="time" public_interface="out" units="minute"/>
+  </component>
+  
+  <component cmeta:id="r" name="r">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#r">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">r</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">free receptor</dcterms:alternative> 
+	  </rdf:Description>
+    </rdf:RDF>  
+    <variable initial_value="0.5" name="r" public_interface="out" units="dimensionless"/>
+    
+	<variable name="c1" public_interface="in" units="dimensionless"/>
+	<variable name="c2" public_interface="in" units="dimensionless"/>
+	<variable name="L" public_interface="in" units="nanomolar"/>
+	<variable name="kt" public_interface="in" units="first_order_rate_constant"/>
+	<variable name="kxR0" public_interface="in" units="first_order_rate_constant"/>
+	<variable name="k_minusx" public_interface="in" units="first_order_rate_constant"/>
+	<variable name="KDL" public_interface="in" units="nanomolar"/>
+    <variable name="time" public_interface="in" units="minute"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> r </ci> 
+        </apply>
+        <apply>
+          <times/>
+          <apply>
+            <power/>
+			<apply>
+              <plus/>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+              <apply>
+                <divide/>
+                <ci> L </ci>
+                <ci> KDL </ci>
+			  </apply>
+			</apply>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">-1</cn>
+          </apply>
+		  <apply>
+            <plus/>
+            <apply>
+              <times/>
+			  <ci> kt </ci> 
+			  <apply>
+                <minus/>
+			    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+				<apply>
+                  <plus/>
+                  <ci> r</ci>
+				  <ci> c1</ci>
+                </apply>
+              </apply>
+            </apply>
+			<apply>
+              <times/>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+			  <apply>
+                <minus/>
+				<apply>
+                  <times/>
+				  <ci> k_minusx </ci> 
+				  <ci> c2 </ci> 
+				</apply>
+				<apply>
+                  <times/>
+				  <ci> kxR0 </ci> 
+				  <apply>
+                    <power/>
+					<ci> c1 </ci>
+                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>					
+				  </apply>
+				</apply>
+			  </apply>
+			</apply>
+		  </apply>
+		</apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="c1" name="c1">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#c1">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">c1</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">1:1 receptor-ligand complex</dcterms:alternative> 
+	  </rdf:Description>
+    </rdf:RDF>  
+    <variable name="c1" public_interface="out" units="dimensionless"/>
+    
+	<variable name="L" public_interface="in" units="nanomolar"/>
+    <variable name="r" public_interface="in" units="dimensionless"/>
+	<variable name="KDL" public_interface="in" units="nanomolar"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci> c1 </ci> 
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <ci> L </ci> 
+            <ci> r </ci>
+          </apply> 
+	      <ci> KDL </ci>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="c2" name="c2">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#c2">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">c2</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">functional receptor dimers in the membrane</dcterms:alternative> 
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable initial_value="0.0" name="c2" public_interface="out" units="dimensionless"/>
+    
+    <variable name="c1" public_interface="in" units="dimensionless"/>
+	<variable name="ke" public_interface="in" units="first_order_rate_constant"/>
+	<variable name="kxR0" public_interface="in" units="first_order_rate_constant"/>
+	<variable name="k_minusx" public_interface="in" units="first_order_rate_constant"/>
+	<variable name="time" public_interface="in" units="minute"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> c2 </ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+			<ci> kxR0 </ci>
+			<apply>
+              <power/>
+			  <ci> c1 </ci>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+			</apply>
+          </apply>
+		  <apply>
+            <times/>
+			<apply>
+              <plus/>
+			  <ci> k_minusx </ci>
+              <ci> ke </ci>
+			</apply>
+			<ci> c2 </ci>
+		  </apply>
+	    </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="e_PI3K" name="e_PI3K">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#e_PI3K">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">e_PI3K</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">fraction of PI3K enzyme recruited</dcterms:alternative> 
+	  </rdf:Description>
+    </rdf:RDF>  
+    <variable cmeta:id="e_PI3K_e_PI3K" name="e_PI3K" public_interface="out" units="dimensionless"/>
+    
+    <variable initial_value="0.3" name="kappa_PI3K" units="dimensionless"/>
+    <variable initial_value="80.0" name="alpha_PI3K" units="dimensionless"/>
+    
+	<variable name="c2" public_interface="in" units="dimensionless"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci>e_PI3K</ci> 
+        <apply>
+          <divide/>
+          <apply>
+            <minus/>
+            <apply>
+              <plus/>	
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>	
+			  <ci> kappa_PI3K </ci>		  
+			  <apply>
+                <times/>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+				<ci> alpha_PI3K </ci>
+		        <ci> c2 </ci>
+			  </apply>
+			</apply>
+            <apply>
+              <root/>
+              <apply>
+                <power/>
+				<apply>
+                  <plus/>
+				  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+				  <ci> kappa_PI3K </ci>		  
+			      <apply>
+                    <times/>
+                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+				    <ci> alpha_PI3K </ci>
+		            <ci> c2 </ci>
+			      </apply>
+			    </apply>
+				<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+              </apply>
+            </apply> 
+		  </apply>
+		  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+
+  <component cmeta:id="m_3PI" name="m_3PI">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#m_3PI">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">m_3PI</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">functional receptor dimers in the membrane</dcterms:alternative> 
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable cmeta:id="m_3PI_m_3PI" initial_value="0.0" name="m_3PI" public_interface="out" units="dimensionless"/>
+    
+    <variable initial_value="1.0" name="k_3PI" units="first_order_rate_constant"/>
+    
+	<variable name="e_PI3K" public_interface="in" units="dimensionless"/>
+	<variable name="time" public_interface="in" units="minute"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> m_3PI </ci> 
+        </apply>
+        <apply>
+          <times/>
+          <ci> k_3PI </ci>
+		  <apply>
+            <minus/>
+			<ci> e_PI3K </ci>
+			<ci> m_3PI </ci> 
+		  </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="e_GEF" name="e_GEF">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#e_GEF">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">e_GEF</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">fractional GEF recruitment</dcterms:alternative> 
+	  </rdf:Description>
+    </rdf:RDF>  
+    <variable cmeta:id="e_GEF_e_GEF" name="e_GEF" public_interface="out" units="dimensionless"/>
+    
+    <variable initial_value="495.0" name="K_GR" units="dimensionless"/>
+    <variable initial_value="5.09" name="K_GP" units="dimensionless"/>
+    
+	<variable name="c2" public_interface="in" units="dimensionless"/>
+	<variable name="m_3PI" public_interface="in" units="dimensionless"/>
+	<variable name="f_GEF" public_interface="in" units="dimensionless"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci>e_GEF</ci> 
+        <apply>
+          <times/>
+		  <apply>
+            <divide/>
+            <apply>
+              <plus/>	
+              <apply>
+                <times/>
+                <ci> K_GR </ci>
+		        <ci> c2 </ci>
+			  </apply>
+			  <apply>
+                <times/>
+                <ci> K_GP </ci>
+		        <ci> m_3PI </ci>
+			  </apply>
+			</apply>
+            <apply>
+              <plus/>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			  <apply>
+                <times/>
+				<ci> K_GR </ci>
+		        <ci> c2 </ci>
+			  </apply>
+			  <apply>
+                <times/>
+                <ci> K_GP </ci>
+		        <ci> m_3PI </ci>
+			  </apply>
+            </apply> 
+		  </apply>
+		  <ci> f_GEF </ci>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="m_Ras" name="m_Ras">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#m_Ras">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">m_Ras</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">functional receptor dimers in the membrane</dcterms:alternative> 
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable cmeta:id="m_Ras_m_Ras" initial_value="0.0" name="m_Ras" public_interface="out" units="dimensionless"/>
+    
+    <variable initial_value="1.0" name="k_Ras" units="first_order_rate_constant"/>
+	<variable initial_value="0.1" name="gamma" units="dimensionless"/>
+    
+	<variable name="e_GEF" public_interface="in" units="dimensionless"/>
+	<variable name="time" public_interface="in" units="minute"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> m_Ras </ci> 
+        </apply>
+        <apply>
+          <times/>
+          <ci> k_Ras </ci>
+		  <apply>
+            <minus/>
+			<apply>
+              <times/>
+		      <apply>
+                <plus/>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+				<ci> gamma </ci>
+			  </apply>
+			  <ci> e_GEF </ci> 
+		    </apply>
+			<apply>
+              <times/>
+		      <apply>
+                <plus/>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+				<apply>
+                  <times/>
+				  <ci> gamma </ci>
+			      <ci> e_GEF </ci> 
+				</apply>
+			  </apply>
+			  <ci> m_Ras </ci> 
+		    </apply>
+	      </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="x1" name="x1">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#x1">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">x1</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">Ras-dependent, PI3K-independent activation of the Erk cascade</dcterms:alternative> 
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable initial_value="0.0" name="x1" public_interface="out" units="dimensionless"/>
+    
+    <variable initial_value="0.745" name="kd_x1" units="first_order_rate_constant"/>
+	
+	<variable name="KM_x11" public_interface="in" units="dimensionless"/>
+	<variable name="KM_x12" public_interface="in" units="dimensionless"/>
+    <variable name="m_Ras" public_interface="in" units="dimensionless"/>
+	<variable name="y" public_interface="in" units="dimensionless"/>
+	<variable name="yp" public_interface="in" units="dimensionless"/>
+	<variable name="time" public_interface="in" units="minute"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> x1 </ci> 
+        </apply>
+        <apply>
+          <times/>
+          <ci> kd_x1 </ci>
+		  <apply>
+            <minus/>
+			<ci> m_Ras </ci>
+			<apply>
+              <divide/>
+		      <ci> x1 </ci> 
+			  <apply>
+                <plus/>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+				<apply>
+                  <divide/>
+		          <ci> y </ci>
+				  <ci> KM_x11 </ci>
+			    </apply>
+				<apply>
+                  <divide/>
+		          <ci> yp </ci>
+				  <ci> KM_x12 </ci>
+			    </apply>
+			  </apply>
+			</apply>
+	      </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="x2" name="x2">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#x2">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">x2</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">Ras-independent, PI3K-dependent activation of the Erk cascade</dcterms:alternative> 
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable initial_value="0.0" name="x2" public_interface="out" units="dimensionless"/>
+    
+    <variable initial_value="2.85" name="kd_x2" units="first_order_rate_constant"/>
+	<variable initial_value="6.77" name="K_x2" units="dimensionless"/>
+	
+	<variable name="KM_x21" public_interface="in" units="dimensionless"/>
+	<variable name="KM_x22" public_interface="in" units="dimensionless"/>
+	<variable name="m_3PI" public_interface="in" units="dimensionless"/>
+	<variable name="y" public_interface="in" units="dimensionless"/>
+	<variable name="yp" public_interface="in" units="dimensionless"/>
+	<variable name="time" public_interface="in" units="minute"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> x2 </ci> 
+        </apply>
+        <apply>
+          <times/>
+          <ci> kd_x2 </ci>
+		  <apply>
+            <minus/>
+			<apply>
+              <divide/>
+			  <apply>
+                <times/>
+				<apply>
+                  <plus/>
+				  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+				  <ci> K_x2 </ci>
+			    </apply>
+				<ci> m_3PI </ci>
+			  </apply>
+			  <apply>
+                <plus/>
+				<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+				<apply>
+                  <times/>
+				  <ci> K_x2 </ci>
+				  <ci> m_3PI </ci>
+			    </apply>
+			  </apply>
+			</apply>
+			<apply>
+              <divide/>
+		      <ci> x2 </ci> 
+			  <apply>
+                <plus/>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+				<apply>
+                  <divide/>
+		          <ci> y </ci>
+				  <ci> KM_x21 </ci>
+			    </apply>
+				<apply>
+                  <divide/>
+		          <ci> yp </ci>
+				  <ci> KM_x22 </ci>
+			    </apply>
+			  </apply>
+			</apply>
+	      </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="y" name="y">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#y">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">y</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">fraction of unphosphorylated MEK</dcterms:alternative> 
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable initial_value="1.0" name="y" public_interface="out" units="dimensionless"/>
+    
+    <variable initial_value="4.40" name="Vmax_yph1_KM_yph1" units="first_order_rate_constant"/>
+	
+	<variable name="KM_x11" public_interface="in" units="dimensionless"/>
+	<variable name="KM_x12" public_interface="in" units="dimensionless"/>
+	<variable name="KM_x21" public_interface="in" units="dimensionless"/>
+	<variable name="KM_x22" public_interface="in" units="dimensionless"/>
+	<variable name="KM_yph1" public_interface="in" units="dimensionless"/>
+	<variable name="KM_yph2" public_interface="in" units="dimensionless"/>
+	<variable name="Vmax_x11_KM_x11" public_interface="in" units="first_order_rate_constant"/>
+	<variable name="Vmax_x21_KM_x21" public_interface="in" units="first_order_rate_constant"/>
+	<variable name="x1" public_interface="in" units="dimensionless"/>
+	<variable name="x2" public_interface="in" units="dimensionless"/>
+	<variable name="yp" public_interface="in" units="dimensionless"/>
+	<variable name="ypp" public_interface="in" units="dimensionless"/>
+	<variable name="time" public_interface="in" units="minute"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> y </ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <divide/>
+			<apply>
+              <times/>
+		      <ci> Vmax_yph1_KM_yph1 </ci>
+			  <ci> yp </ci>
+		    </apply>
+			<apply>
+              <plus/>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			  <apply>
+                <divide/>
+		        <ci> yp </ci>
+				<ci> KM_yph1 </ci>
+			  </apply>
+			  <apply>
+                <divide/>
+		        <ci> ypp </ci>
+				<ci> KM_yph2 </ci>
+			  </apply>
+			</apply>
+		  </apply>
+		  <apply>
+            <plus/>
+			<apply>
+              <divide/>
+			  <apply>
+                <times/>
+		        <ci> Vmax_x11_KM_x11 </ci>
+				<ci> x1 </ci>
+			    <ci> y </ci>
+			  </apply>
+			  <apply>
+                <plus/>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			    <apply>
+                  <divide/>
+		          <ci> y </ci>
+				  <ci> KM_x11 </ci>
+			    </apply>
+			    <apply>
+                  <divide/>
+		          <ci> yp </ci>
+				  <ci> KM_x12 </ci>
+			    </apply>
+			  </apply>
+		    </apply>
+			<apply>
+              <divide/>
+			  <apply>
+                <times/>
+		        <ci> Vmax_x21_KM_x21 </ci>
+				<ci> x2 </ci>
+			    <ci> y </ci>
+			  </apply>
+			  <apply>
+                <plus/>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			    <apply>
+                  <divide/>
+		          <ci> y </ci>
+				  <ci> KM_x21 </ci>
+			    </apply>
+			    <apply>
+                  <divide/>
+		          <ci> yp </ci>
+				  <ci> KM_x22 </ci>
+			    </apply>
+			  </apply>
+		    </apply>
+	      </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="yp" name="yp">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#yp">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">yp</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">fraction of monophosphorylated MEK</dcterms:alternative> 
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable name="yp" public_interface="out" units="dimensionless"/>
+    
+    <variable name="y" public_interface="in" units="dimensionless"/>
+	<variable name="ypp" public_interface="in" units="dimensionless"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci> yp </ci> 
+        <apply>
+          <minus/>
+          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+		  <apply>
+            <plus/>
+			<ci> y </ci>
+		    <ci> ypp </ci>
+	      </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="ypp" name="ypp">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#ypp">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">ypp</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">fraction of biphosphorylated MEK</dcterms:alternative> 
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable initial_value="0.0" name="ypp" public_interface="out" units="dimensionless"/>
+    
+    <variable initial_value="6.77" name="Vmax_yph2_KM_yph2" units="first_order_rate_constant"/>
+	
+	<variable name="KM_x11" public_interface="in" units="dimensionless"/>
+	<variable name="KM_x12" public_interface="in" units="dimensionless"/>
+	<variable name="KM_x21" public_interface="in" units="dimensionless"/>
+	<variable name="KM_x22" public_interface="in" units="dimensionless"/>
+	<variable name="KM_yph1" public_interface="in" units="dimensionless"/>
+	<variable name="KM_yph2" public_interface="in" units="dimensionless"/>
+	<variable name="KM_y1" public_interface="in" units="dimensionless"/>
+	<variable name="KM_y2" public_interface="in" units="dimensionless"/>
+	<variable name="Vmax_x12_KM_x12" public_interface="in" units="first_order_rate_constant"/>
+	<variable name="Vmax_x22_KM_x22" public_interface="in" units="first_order_rate_constant"/>
+	<variable name="x1" public_interface="in" units="dimensionless"/>
+	<variable name="x2" public_interface="in" units="dimensionless"/>
+	<variable name="yp" public_interface="in" units="dimensionless"/>
+	<variable name="z" public_interface="in" units="dimensionless"/>
+	<variable name="zp" public_interface="in" units="dimensionless"/>
+	<variable name="y" public_interface="in" units="dimensionless"/>
+	<variable name="time" public_interface="in" units="minute"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> ypp </ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+			<apply>
+              <divide/>
+			  <apply>
+                <times/>
+		        <ci> Vmax_x12_KM_x12 </ci>
+			    <ci> x1 </ci>
+				<ci> yp </ci>
+		      </apply>
+		      <apply>
+                <plus/>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			    <apply>
+                  <divide/>
+		          <ci> y </ci>
+				  <ci> KM_x11 </ci>
+			    </apply>
+			    <apply>
+                  <divide/>
+		          <ci> yp </ci>
+				  <ci> KM_x12 </ci>
+				</apply>
+			  </apply>
+			</apply>
+			<apply>
+              <divide/>
+			  <apply>
+                <times/>
+		        <ci> Vmax_x22_KM_x22 </ci>
+			    <ci> x2 </ci>
+				<ci> yp </ci>
+		      </apply>
+		      <apply>
+                <plus/>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			    <apply>
+                  <divide/>
+		          <ci> y </ci>
+				  <ci> KM_x21 </ci>
+			    </apply>
+			    <apply>
+                  <divide/>
+		          <ci> yp </ci>
+				  <ci> KM_x22 </ci>
+				</apply>
+			  </apply>
+			</apply>
+		  </apply>
+		  <apply>
+            <plus/>
+			<apply>
+              <divide/>
+			  <apply>
+                <times/>
+		        <ci> Vmax_yph2_KM_yph2 </ci>
+				<ci> ypp </ci>
+			  </apply>
+			  <apply>
+                <plus/>
+                <apply>
+                  <times/>
+				  <apply>
+                    <plus/>
+					<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			        <apply>
+                      <divide/>
+		              <ci> z </ci>
+				      <ci> KM_y1 </ci>
+			        </apply>
+			        <apply>
+                      <divide/>
+		              <ci> zp </ci>
+				      <ci> KM_x12 </ci>
+			        </apply>
+			      </apply>
+				  <apply>
+                    <plus/>
+					<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			        <apply>
+                      <divide/>
+		              <ci> yp </ci>
+				      <ci> KM_yph1 </ci>
+			        </apply>
+				  </apply>
+				</apply>
+				<apply>
+                  <divide/>
+		          <ci> ypp </ci>
+				  <ci> KM_yph2 </ci>
+			    </apply>
+		      </apply>
+			</apply>
+	      </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="z" name="z">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#y">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">y</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">fraction of unphosphorylated Erk</dcterms:alternative> 
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable initial_value="1.0" name="z" public_interface="out" units="dimensionless"/>
+    
+    <variable initial_value="0.451" name="Vmax_zph1_KM_zph1" units="first_order_rate_constant"/>
+	<variable initial_value="11.8" name="Vmax_y1_KM_y1" units="first_order_rate_constant"/>
+	
+	<variable name="KM_y1" public_interface="in" units="dimensionless"/>
+	<variable name="KM_y2" public_interface="in" units="dimensionless"/>
+	<variable name="KM_zph1" public_interface="in" units="dimensionless"/>
+	<variable name="KM_zph2" public_interface="in" units="dimensionless"/>
+	<variable name="zp" public_interface="in" units="dimensionless"/>
+	<variable name="zpp" public_interface="in" units="dimensionless"/>
+	<variable name="ypp" public_interface="in" units="dimensionless"/>
+	<variable name="e_ph" public_interface="in" units="dimensionless"/>
+	<variable name="time" public_interface="in" units="minute"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> z </ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <divide/>
+			<apply>
+              <times/>
+		      <ci> Vmax_zph1_KM_zph1 </ci>
+			  <ci> e_ph </ci>
+			  <ci> zp </ci>
+		    </apply>
+			<apply>
+              <plus/>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			  <apply>
+                <divide/>
+		        <ci> zp </ci>
+				<ci> KM_zph1 </ci>
+			  </apply>
+			  <apply>
+                <divide/>
+		        <ci> zpp </ci>
+				<ci> KM_zph2 </ci>
+			  </apply>
+			</apply>
+		  </apply>
+		  <apply>
+            <divide/>
+			<apply>
+              <times/>
+		      <ci> Vmax_y1_KM_y1 </ci>
+		      <ci> ypp </ci>
+			</apply>
+			<apply>
+              <plus/>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			  <apply>
+                <divide/>
+		        <ci> z </ci>
+				<ci> KM_y1 </ci>
+			  </apply>
+			  <apply>
+                <divide/>
+		        <ci> zp </ci>
+				<ci> KM_y2 </ci>
+			  </apply>
+			</apply>
+		  </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="zp" name="zp">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#zp">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">zp</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">fraction of monophosphorylated Erk</dcterms:alternative> 
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable name="zp" public_interface="out" units="dimensionless"/>
+    
+    <variable name="z" public_interface="in" units="dimensionless"/>
+	<variable name="zpp" public_interface="in" units="dimensionless"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci> zp </ci> 
+        <apply>
+          <minus/>
+          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+		  <apply>
+            <plus/>
+			<ci> z </ci>
+		    <ci> zpp </ci>
+	      </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="zpp" name="zpp">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#zpp">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">zpp</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">fraction of biphosphorylated Erk</dcterms:alternative> 
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable initial_value="0.0" name="zpp" public_interface="out" units="dimensionless"/>
+    
+    <variable initial_value="0.228" name="Vmax_zph2_KM_zph2" units="first_order_rate_constant"/>
+	<variable initial_value="31.9" name="Vmax_y2_KM_y2" units="first_order_rate_constant"/>
+	
+	<variable name="KM_y1" public_interface="in" units="dimensionless"/>
+	<variable name="KM_y2" public_interface="in" units="dimensionless"/>
+	<variable name="KM_zph1" public_interface="in" units="dimensionless"/>
+	<variable name="KM_zph2" public_interface="in" units="dimensionless"/>
+	<variable name="zp" public_interface="in" units="dimensionless"/>
+	<variable name="z" public_interface="in" units="dimensionless"/>
+	<variable name="ypp" public_interface="in" units="dimensionless"/>
+	<variable name="e_ph" public_interface="in" units="dimensionless"/>
+	<variable name="time" public_interface="in" units="minute"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> zpp </ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <divide/>
+			<apply>
+              <times/>
+		      <ci> Vmax_y2_KM_y2 </ci>
+		      <ci> zp </ci>
+			</apply>
+			<apply>
+              <plus/>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			  <apply>
+                <divide/>
+		        <ci> z </ci>
+				<ci> KM_y1 </ci>
+			  </apply>
+			  <apply>
+                <divide/>
+		        <ci> zp </ci>
+				<ci> KM_y2 </ci>
+			  </apply>
+			</apply>
+		  </apply>
+		  <apply>
+            <divide/>
+			<apply>
+              <times/>
+		      <ci> Vmax_zph2_KM_zph2 </ci>
+			  <ci> e_ph </ci>
+			  <ci> zpp </ci>
+		    </apply>
+			<apply>
+              <plus/>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			  <apply>
+                <divide/>
+		        <ci> zp </ci>
+				<ci> KM_zph1 </ci>
+			  </apply>
+			  <apply>
+                <divide/>
+		        <ci> zpp </ci>
+				<ci> KM_zph2 </ci>
+			  </apply>
+			</apply>
+		  </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="f_GEF" name="f_GEF">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#f_GEF">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">f_GEF</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">fraction of intracellular GEF available for recruitment</dcterms:alternative> 
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable initial_value="1.0" name="f_GEF" public_interface="out" units="dimensionless"/>
+    
+    <variable initial_value="1.03" name="n" units="dimensionless"/>
+	<variable initial_value="3.76" name="Kf" units="dimensionless"/>
+	<variable initial_value="0.272" name="Zf" units="dimensionless"/>
+	<variable initial_value="0.976" name="k_FB_f" units="first_order_rate_constant"/>
+	
+	<variable name="zpp" public_interface="in" units="dimensionless"/>
+	<variable name="time" public_interface="in" units="minute"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> f_GEF </ci> 
+        </apply>
+        <apply>
+          <times/>
+          <apply>
+            <minus/>
+			<ci> k_FB_f </ci>
+		  </apply>
+		  <apply>
+            <minus/>
+			<apply>
+              <times/>
+		      <apply>
+                <divide/>
+		        <apply>
+                  <power/>
+				  <ci> zpp </ci>
+		          <ci> n </ci>
+			    </apply>
+			    <apply>
+                  <plus/>
+		          <apply>
+                    <power/>
+				    <ci> Zf </ci>
+		            <ci> n </ci>
+			      </apply>
+				  <apply>
+                    <power/>
+				    <ci> zpp </ci>
+		            <ci> n </ci>
+			      </apply>
+				</apply>
+			  </apply>
+			  <ci> f_GEF </ci>
+			</apply>
+			<apply>
+              <times/>
+		      <apply>
+                <divide/>
+				<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			    <ci> Kf </ci>
+			  </apply>
+			  <apply>
+                <minus/>
+				<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			    <ci> f_GEF </ci>
+			  </apply>
+			</apply>
+		  </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="w" name="w">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#w">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">w</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">transcription activity responsible for switiching on MKP-1 expression</dcterms:alternative> 
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable initial_value="0.0" name="w" public_interface="out" units="dimensionless"/>
+    
+    <variable initial_value="0.0333" name="kd_w" units="first_order_rate_constant"/>
+	
+	<variable name="zpp" public_interface="in" units="dimensionless"/>
+	<variable name="time" public_interface="in" units="minute"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> w </ci> 
+        </apply>
+        <apply>
+          <times/>
+          <ci> kd_w </ci>
+		  <apply>
+            <minus/>
+			<ci> zpp </ci>
+		    <ci> w </ci>
+		  </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="e_ph" name="e_ph">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#w">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">e_ph</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">abundance of the dual-specificity phosphatase that dephosphorylates Erk</dcterms:alternative> 
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable initial_value="1.0" name="e_ph" public_interface="out" units="dimensionless"/>
+    
+    <variable initial_value="2.34" name="k_FB_ph" units="first_order_rate_constant"/>
+	<variable initial_value="1.98" name="p" units="dimensionless"/>
+	<variable initial_value="0.385" name="Wph" units="dimensionless"/>
+	<variable initial_value="4.64" name="Kph" units="dimensionless"/>
+	
+	<variable name="w" public_interface="in" units="dimensionless"/>
+	<variable name="time" public_interface="in" units="minute"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> e_ph </ci> 
+        </apply>
+        <apply>
+          <times/>
+          <ci> k_FB_ph </ci>
+		  <apply>
+            <minus/>
+			<apply>
+              <divide/>
+		      <apply>
+                <power/>
+				<ci> w </ci>
+		        <ci> p </ci>
+			  </apply>
+			  <apply>
+                <plus/>
+		        <apply>
+                  <power/>
+				  <ci> Wph </ci>
+		          <ci> p </ci>
+			    </apply>
+				<apply>
+                  <power/>
+				  <ci> w </ci>
+		          <ci> p </ci>
+			    </apply>
+			  </apply>
+			</apply>
+			<apply>
+              <times/>
+		      <apply>
+                <divide/>
+				<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			    <ci> Kph </ci>
+			  </apply>
+			  <apply>
+                <minus/>
+				<ci> e_ph </ci>
+				<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			  </apply>
+			</apply>
+		  </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="model_parameters">
+    <variable initial_value="1.0" name="L" public_interface="out" units="nanomolar"/>
+	<variable initial_value="0.005" name="kt" public_interface="out" units="first_order_rate_constant"/>
+	<variable initial_value="0.2" name="ke" public_interface="out" units="first_order_rate_constant"/>
+	<variable initial_value="0.3" name="kxR0" public_interface="out" units="first_order_rate_constant"/>
+	<variable initial_value="0.07" name="k_minusx" public_interface="out" units="first_order_rate_constant"/>
+	<variable initial_value="1.5" name="KDL" public_interface="out" units="nanomolar"/>
+	<variable initial_value="30.3" name="KM_x11" public_interface="out" units="dimensionless"/>
+	<variable initial_value="45.5" name="KM_x12" public_interface="out" units="dimensionless"/>
+	<variable initial_value="21.6" name="KM_x21" public_interface="out" units="dimensionless"/>
+	<variable initial_value="15.7" name="KM_x22" public_interface="out" units="dimensionless"/>
+	<variable initial_value="31.9" name="KM_y1" public_interface="out" units="dimensionless"/>
+	<variable initial_value="8.81" name="KM_y2" public_interface="out" units="dimensionless"/>
+	<variable initial_value="14.0" name="KM_zph1" public_interface="out" units="dimensionless"/>
+	<variable initial_value="31.5" name="KM_zph2" public_interface="out" units="dimensionless"/>
+    <variable initial_value="44.0" name="KM_yph1" public_interface="out" units="dimensionless"/>
+	<variable initial_value="12.7" name="KM_yph2" public_interface="out" units="dimensionless"/>
+	<variable initial_value="1.18" name="Vmax_x11_KM_x11" public_interface="out" units="first_order_rate_constant"/>
+	<variable initial_value="0.405" name="Vmax_x21_KM_x21" public_interface="out" units="first_order_rate_constant"/>
+	<variable initial_value="4.71" name="Vmax_x12_KM_x12" public_interface="out" units="first_order_rate_constant"/>
+	<variable initial_value="2.41" name="Vmax_x22_KM_x22" public_interface="out" units="first_order_rate_constant"/>
+  </component>
+  
+  
+  <connection>
+    <map_components component_1="r" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="c2" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="m_3PI" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="m_Ras" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="x1" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="x2" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="y" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="ypp" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="z" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="zpp" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="f_GEF" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="w" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="e_ph" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+ 
+  <connection>
+    <map_components component_1="r" component_2="c1"/>
+    <map_variables variable_1="c1" variable_2="c1"/>
+	<map_variables variable_1="r" variable_2="r"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="r" component_2="c2"/>
+    <map_variables variable_1="c2" variable_2="c2"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="r" component_2="model_parameters"/>
+    <map_variables variable_1="L" variable_2="L"/>
+    <map_variables variable_1="kt" variable_2="kt"/>
+	<map_variables variable_1="kxR0" variable_2="kxR0"/>
+    <map_variables variable_1="k_minusx" variable_2="k_minusx"/>
+	<map_variables variable_1="KDL" variable_2="KDL"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="c1" component_2="model_parameters"/>
+    <map_variables variable_1="L" variable_2="L"/>
+    <map_variables variable_1="KDL" variable_2="KDL"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="c2" component_2="c1"/>
+    <map_variables variable_1="c1" variable_2="c1"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="c2" component_2="model_parameters"/>
+    <map_variables variable_1="ke" variable_2="ke"/>
+	<map_variables variable_1="kxR0" variable_2="kxR0"/>
+    <map_variables variable_1="k_minusx" variable_2="k_minusx"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="e_PI3K" component_2="c2"/>
+    <map_variables variable_1="c2" variable_2="c2"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="m_3PI" component_2="e_PI3K"/>
+    <map_variables variable_1="e_PI3K" variable_2="e_PI3K"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="e_GEF" component_2="c2"/>
+    <map_variables variable_1="c2" variable_2="c2"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="e_GEF" component_2="m_3PI"/>
+    <map_variables variable_1="m_3PI" variable_2="m_3PI"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="e_GEF" component_2="f_GEF"/>
+    <map_variables variable_1="f_GEF" variable_2="f_GEF"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="m_Ras" component_2="e_GEF"/>
+    <map_variables variable_1="e_GEF" variable_2="e_GEF"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="x1" component_2="m_Ras"/>
+    <map_variables variable_1="m_Ras" variable_2="m_Ras"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="x1" component_2="y"/>
+    <map_variables variable_1="x1" variable_2="x1"/>
+	<map_variables variable_1="y" variable_2="y"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="x1" component_2="yp"/>
+    <map_variables variable_1="yp" variable_2="yp"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="x1" component_2="model_parameters"/>
+    <map_variables variable_1="KM_x11" variable_2="KM_x11"/>
+	<map_variables variable_1="KM_x12" variable_2="KM_x12"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="x2" component_2="m_3PI"/>
+    <map_variables variable_1="m_3PI" variable_2="m_3PI"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="x2" component_2="y"/>
+    <map_variables variable_1="x2" variable_2="x2"/>
+	<map_variables variable_1="y" variable_2="y"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="x2" component_2="yp"/>
+    <map_variables variable_1="yp" variable_2="yp"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="x2" component_2="model_parameters"/>
+    <map_variables variable_1="KM_x21" variable_2="KM_x21"/>
+	<map_variables variable_1="KM_x22" variable_2="KM_x22"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="y" component_2="yp"/>
+    <map_variables variable_1="yp" variable_2="yp"/>
+	<map_variables variable_1="y" variable_2="y"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="y" component_2="ypp"/>
+    <map_variables variable_1="ypp" variable_2="ypp"/>
+	<map_variables variable_1="y" variable_2="y"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="y" component_2="model_parameters"/>
+    <map_variables variable_1="KM_x11" variable_2="KM_x11"/>
+	<map_variables variable_1="KM_x12" variable_2="KM_x12"/>
+	<map_variables variable_1="KM_x21" variable_2="KM_x21"/>
+	<map_variables variable_1="KM_x22" variable_2="KM_x22"/>
+	<map_variables variable_1="KM_yph1" variable_2="KM_yph1"/>
+	<map_variables variable_1="KM_yph2" variable_2="KM_yph2"/>
+	<map_variables variable_1="Vmax_x11_KM_x11" variable_2="Vmax_x11_KM_x11"/>
+	<map_variables variable_1="Vmax_x21_KM_x21" variable_2="Vmax_x21_KM_x21"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="yp" component_2="ypp"/>
+    <map_variables variable_1="yp" variable_2="yp"/>
+	<map_variables variable_1="ypp" variable_2="ypp"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="ypp" component_2="x1"/>
+    <map_variables variable_1="x1" variable_2="x1"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="ypp" component_2="x2"/>
+    <map_variables variable_1="x2" variable_2="x2"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="ypp" component_2="z"/>
+    <map_variables variable_1="z" variable_2="z"/>
+	<map_variables variable_1="ypp" variable_2="ypp"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="ypp" component_2="zp"/>
+    <map_variables variable_1="zp" variable_2="zp"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="ypp" component_2="model_parameters"/>
+    <map_variables variable_1="KM_x11" variable_2="KM_x11"/>
+	<map_variables variable_1="KM_x12" variable_2="KM_x12"/>
+	<map_variables variable_1="KM_x21" variable_2="KM_x21"/>
+	<map_variables variable_1="KM_x22" variable_2="KM_x22"/>
+	<map_variables variable_1="KM_yph1" variable_2="KM_yph1"/>
+	<map_variables variable_1="KM_yph2" variable_2="KM_yph2"/>
+	<map_variables variable_1="KM_y1" variable_2="KM_y1"/>
+	<map_variables variable_1="KM_y2" variable_2="KM_y2"/>
+	<map_variables variable_1="Vmax_x12_KM_x12" variable_2="Vmax_x12_KM_x12"/>
+	<map_variables variable_1="Vmax_x22_KM_x22" variable_2="Vmax_x22_KM_x22"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="z" component_2="zp"/>
+    <map_variables variable_1="z" variable_2="z"/>
+	<map_variables variable_1="zp" variable_2="zp"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="z" component_2="zpp"/>
+    <map_variables variable_1="z" variable_2="z"/>
+	<map_variables variable_1="zpp" variable_2="zpp"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="z" component_2="e_ph"/>
+    <map_variables variable_1="e_ph" variable_2="e_ph"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="z" component_2="model_parameters"/>
+    <map_variables variable_1="KM_zph1" variable_2="KM_zph1"/>
+	<map_variables variable_1="KM_zph2" variable_2="KM_zph2"/>
+	<map_variables variable_1="KM_y1" variable_2="KM_y1"/>
+	<map_variables variable_1="KM_y2" variable_2="KM_y2"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="zp" component_2="zpp"/>
+    <map_variables variable_1="zp" variable_2="zp"/>
+	<map_variables variable_1="zpp" variable_2="zpp"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="zpp" component_2="ypp"/>
+    <map_variables variable_1="ypp" variable_2="ypp"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="zpp" component_2="e_ph"/>
+    <map_variables variable_1="e_ph" variable_2="e_ph"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="zpp" component_2="model_parameters"/>
+    <map_variables variable_1="KM_zph1" variable_2="KM_zph1"/>
+	<map_variables variable_1="KM_zph2" variable_2="KM_zph2"/>
+	<map_variables variable_1="KM_y1" variable_2="KM_y1"/>
+	<map_variables variable_1="KM_y2" variable_2="KM_y2"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="f_GEF" component_2="zpp"/>
+    <map_variables variable_1="zpp" variable_2="zpp"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="w" component_2="zpp"/>
+    <map_variables variable_1="zpp" variable_2="zpp"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="e_ph" component_2="w"/>
+    <map_variables variable_1="w" variable_2="w"/>
+  </connection>
+  
+  
+  <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    
+	<rdf:Description rdf:about="">
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">
+        PI3K-dependent cross-talk interactions converge with Ras as quantifiable inputs integrated by Erk
+      </dc:title>
+	  <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource">
+        <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+          <vCard:Family>Lloyd</vCard:Family>
+          <vCard:Given>Catherine</vCard:Given>
+		  <vCard:Other>May</vCard:Other>
+        </vCard:N>
+        <vCard:EMAIL xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+          <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+          <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+        </vCard:EMAIL>
+        <vCard:ORG xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+          <vCard:Orgname>The University of Auckland</vCard:Orgname>
+          <vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+        </vCard:ORG>
+      </dc:creator>
+    </rdf:Description>
+    
+    <rdf:Description rdf:about="#wang_2009">
+      <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource">
+        <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource">
+          <bqs:subject_type>keyword</bqs:subject_type>
+          <rdf:value>
+            <rdf:Bag>
+              <rdf:li>signal transduction</rdf:li>
+			  <rdf:li>MAPK</rdf:li>
+			</rdf:Bag>
+          </rdf:value>
+        </dc:subject>
+      </bqs:reference>
+
+      <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource">
+        <bqs:Pubmed_id>19225459</bqs:Pubmed_id>
+        <bqs:JournalArticle rdf:parseType="Resource">
+          <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <rdf:Seq>
+              <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+                    <vCard:Family>Wang</vCard:Family>
+                    <vCard:Given>C</vCard:Given>
+					<vCard:Other>C</vCard:Other>
+                  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+			  <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+                    <vCard:Family>Cirit</vCard:Family>
+                    <vCard:Given>M</vCard:Given>
+				  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+			  <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+                    <vCard:Family>Haugh</vCard:Family>
+                    <vCard:Given>J</vCard:Given>
+					<vCard:Other>M</vCard:Other>
+                  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+            </rdf:Seq>
+          </dc:creator>
+          <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">
+            PI3K-dependent cross-talk interactions converge with Ras as quantifiable inputs integrated by Erk
+          </dc:title>
+          <dcterms:issued xmlns:dcterms="http://purl.org/dc/terms/" rdf:parseType="Resource">
+            <dcterms:W3CDTF>2009-02-17</dcterms:W3CDTF>
+          </dcterms:issued>
+          <bqs:Journal rdf:parseType="Resource">
+            <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Molecular Systems Biology</dc:title>
+          </bqs:Journal>
+		  <bqs:volume>5</bqs:volume>
+		</bqs:JournalArticle>
+      </bqs:reference>
+    </rdf:Description>
+  </rdf:RDF>
+</model>

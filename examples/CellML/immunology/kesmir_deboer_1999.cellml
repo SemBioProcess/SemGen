@@ -1,0 +1,1503 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<model name="kesmir_1999" cmeta:id="kesmir_1999" xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#">
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>A Mathematical Model on Germinal Center Kinetics and Termination</title>
+				<author>
+					<firstname>Catherine</firstname>
+					<surname>Lloyd</surname>
+					<affiliation>
+						<shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<section id="sec_status">
+				<title>Model Status</title>
+				<para>
+            This model runs in COR and OpenCell with no errors. The units have been checked and they are consistent. The CellML model can replicate the shapes of the graphs of all of the figures in the paper but the scale does not always match those in the paper.
+          </para>
+			</section>
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para> ABSTRACT: We devise a mathematical model to study germinal center (GC) kinetics. Earlier models for GC kinetics are extended by explicitly modeling 1) the cell division history of centroblasts, 2) the Ag uptake by centrocytes, and 3) T cell dynamics. Allowing for T cell kinetics and T-B cell interactions, we study the role of GC T cells in GC kinetics, GC termination, and B cell selection. We find that GC T cells play a major role in GC formation, but that the maintenance of established GC reactions requires very few T cells only. The results therefore suggest that the termination of a GC reaction is largely caused by lack of Ag on the follicular dendritic cells and is hardly influenced by Th cells. Ag consumption by centrocytes is the major factor determining the decay rate of the antigenic stimulus during a GC reaction. Investigating the effect of the Ag dose on GC kinetics, we find that both the total size of the GC and its duration are hardly influenced by the initial amount of Ag. In the model this is due to a buffering effect by competition for limited T cell help and/or competition between proliferating centroblasts.   
+		</para>
+<para>
+The original paper reference is cited below:
+</para>
+				<para>
+A Mathematical Model on Germinal Center Kinetics and Termination, Can Kesmir and Rob J. De Boer, 1999, <emphasis>The Journal of Immunology</emphasis>, 163, 2463-2469. <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/10452981">PubMed ID: 10452981</ulink>
+				</para>
+				<informalfigure float="0" id="fig_cell_diagram">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>cell diagram</title>
+							</objectinfo>
+							<imagedata fileref="kesmir_1999.png"/>
+						</imageobject>
+					</mediaobject>
+					<caption>The model GC reaction.</caption>
+				</informalfigure>
+			</sect1>
+		</article>
+	</documentation>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#B0">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">B0</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">centroblast 0 divisions</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#B1">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">B1</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">centroblast 1 division</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#B2">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">B2</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">centroblast 2 divisions</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#B3">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">B3</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">centroblast 3 divisions</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#B4">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">B4</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">centroblast 4 divisions</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#B5">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">B5</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">centroblast 5 divisions</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#B6">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">B6</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">centroblast 6 divisions</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#B7">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">B7</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">centroblast 7 divisions</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#B8">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">B8</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">centroblast 8 divisions</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#B9">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">B9</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">centroblast 9 divisions</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#B10">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">B10</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">centroblast 10 divisions</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#C">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">C</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">centrocyte</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#C_star">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">C_star</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">Ag-bound centrocyte</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#M">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">M</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">memory or Ab forming cell compartment</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#A">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">A</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">FDC</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#T">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">T</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">T cells</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#CA">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">CA</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">centrocyte-FDC complex</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#CT_star">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">CT_star</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">rescued centrocyte-T cell complex</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#alpha_B">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">alpha_B</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">density dependent expansion term</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#alpha_T">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">alpha_T</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">density dependent expansion term</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Bag rdf:about="rdf:#8652d078-cc38-4459-b0ed-0dd710f95596">
+			<rdf:li>germinal centre kinetics</rdf:li>
+			<rdf:li>immunology</rdf:li>
+		</rdf:Bag>
+		<rdf:Seq rdf:about="rdf:#611aa38e-f8ff-4e99-8a5d-af9651048492">
+			<rdf:li rdf:resource="rdf:#c37988c1-211c-4240-a4e4-19666af0f947"/>
+			<rdf:li rdf:resource="rdf:#d0d0480a-e40c-4567-9071-66ccca5fdd20"/>
+		</rdf:Seq>
+		<rdf:Description rdf:about="rdf:#e6da05f4-1ea2-4c8b-90bb-d297bd0eee4c">
+			<dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2003-12-04</dcterms:W3CDTF>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#ff0d6dfd-8bac-4bcc-a629-4dabcccb78a7">
+			<vCard:Orgname xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">The University of Auckland</vCard:Orgname>
+			<vCard:Orgunit xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Auckland Bioengineering Institute</vCard:Orgunit>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#48cd2653-3547-4cb6-b656-26e7a84c1f0d">
+			<dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#611aa38e-f8ff-4e99-8a5d-af9651048492"/>
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">
+            A Mathematical Model on Germinal Center Kinetics and Termination
+          </dc:title>
+			<bqs:volume xmlns:bqs="http://www.cellml.org/bqs/1.0#">163</bqs:volume>
+			<bqs:first_page xmlns:bqs="http://www.cellml.org/bqs/1.0#">2463</bqs:first_page>
+			<bqs:Journal xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#b5804f6b-1dfe-4b1d-8065-309044e908c5"/>
+			<dcterms:issued xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#97165aa4-335f-4fd0-9eee-8017f9f30222"/>
+			<bqs:last_page xmlns:bqs="http://www.cellml.org/bqs/1.0#">2469</bqs:last_page>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#1cf187e2-e5c2-4666-893c-47857d1fbf68">
+			<vCard:FN xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Catherine Lloyd</vCard:FN>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#67c7e761-baaf-4c18-9d1d-1649bb2630ab">
+			<dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#d596fe66-e0ea-4c65-91f6-6e647ed87ed8"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#d0d0480a-e40c-4567-9071-66ccca5fdd20">
+			<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+			<vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#eeb0a70a-b209-4563-add6-fcbab201e480"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#eeb0a70a-b209-4563-add6-fcbab201e480">
+			<vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Rob</vCard:Given>
+			<vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">De Boer</vCard:Family>
+			<vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">J</vCard:Other>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#ec5e29db-8266-4606-a210-756845598a5c">
+			<rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+			<rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+		</rdf:Description>
+		<rdf:Description rdf:about="">
+			<dc:publisher xmlns:dc="http://purl.org/dc/elements/1.1/">
+        The University of Auckland, Auckland Bioengineering Institute
+      </dc:publisher>
+			<dcterms:created xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#e6da05f4-1ea2-4c8b-90bb-d297bd0eee4c"/>
+			<dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#508153de-b5bc-4746-baa7-f388ef43281b"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#97165aa4-335f-4fd0-9eee-8017f9f30222">
+			<dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">1999-09-01</dcterms:W3CDTF>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#95ceafdc-2c3f-4d06-b9b9-4c44233e6c59">
+			<dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#1cf187e2-e5c2-4666-893c-47857d1fbf68"/>
+			<rdf:value>
+          This is the CellML description of Kesmir and De Boer's 1999 mathematical model on germinal centre kinetics and termination.
+        </rdf:value>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#619a76c1-c759-4e7d-bca3-eef51705bb21">
+			<vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Can</vCard:Given>
+			<vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Kesmir</vCard:Family>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#b5804f6b-1dfe-4b1d-8065-309044e908c5">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">The Journal of Immunology</dc:title>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#c37988c1-211c-4240-a4e4-19666af0f947">
+			<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+			<vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#619a76c1-c759-4e7d-bca3-eef51705bb21"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#0888c0ce-7b6a-4635-b52d-55e7e8dc2f4c">
+			<vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Catherine</vCard:Given>
+			<vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Lloyd</vCard:Family>
+			<vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">May</vCard:Other>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#f61650bc-dbba-4744-9b4e-749a1aa14bbf">
+			<bqs:Pubmed_id xmlns:bqs="http://www.cellml.org/bqs/1.0#">10452981</bqs:Pubmed_id>
+			<bqs:JournalArticle xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#48cd2653-3547-4cb6-b656-26e7a84c1f0d"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#d596fe66-e0ea-4c65-91f6-6e647ed87ed8">
+			<bqs:subject_type xmlns:bqs="http://www.cellml.org/bqs/1.0#">keyword</bqs:subject_type>
+			<rdf:value rdf:resource="rdf:#8652d078-cc38-4459-b0ed-0dd710f95596"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="#kesmir_1999">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">
+        Kesmir and De Boer's 1999 mathematical model on germinal centre kinetics and termination.
+      </dc:title>
+			<cmeta:comment xmlns:cmeta="http://www.cellml.org/metadata/1.0#" rdf:resource="rdf:#95ceafdc-2c3f-4d06-b9b9-4c44233e6c59"/>
+			<bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#67c7e761-baaf-4c18-9d1d-1649bb2630ab"/>
+			<bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#f61650bc-dbba-4744-9b4e-749a1aa14bbf"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#508153de-b5bc-4746-baa7-f388ef43281b">
+			<vCard:ORG xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#ff0d6dfd-8bac-4bcc-a629-4dabcccb78a7"/>
+			<vCard:EMAIL xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#ec5e29db-8266-4606-a210-756845598a5c"/>
+			<vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#0888c0ce-7b6a-4635-b52d-55e7e8dc2f4c"/>
+		</rdf:Description>
+	</rdf:RDF>   
+	
+	
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="cells_per_GC" base_units="yes"/>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="day">
+      <unit units="second" multiplier="86400"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="first_order_rate_constant">
+      <unit units="day" exponent="-1"/>
+   </units>
+   
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="environment">
+      <variable name="time" units="day" public_interface="out"/>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="B0">
+      <variable name="B0" units="cells_per_GC" initial_value="3" public_interface="out"/>
+      <variable name="pr" units="dimensionless" public_interface="in"/>
+      <variable name="mu" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="rho" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="delta_B" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="CT_star" units="cells_per_GC" public_interface="in"/>
+      <variable name="time" units="day" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>B0</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>pr</ci>
+                  <ci>mu</ci>
+                  <ci>CT_star</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>rho</ci>
+                     <ci>B0</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>delta_B</ci>
+                     <ci>B0</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="B1">
+      <variable name="B1" units="cells_per_GC" initial_value="0" public_interface="out"/>
+      <variable name="alpha_B" units="dimensionless" public_interface="in"/>
+      <variable name="rho" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="delta_B" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="B0" units="cells_per_GC" public_interface="in"/>
+      <variable name="time" units="day" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>B1</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>rho</ci>
+                  <apply>
+                     <plus/>
+                     <cn cellml:units="dimensionless">1</cn>
+                     <ci>alpha_B</ci>
+                  </apply>
+                  <ci>B0</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>rho</ci>
+                     <ci>B1</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>delta_B</ci>
+                     <ci>B1</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="B2">
+      <variable name="B2" units="cells_per_GC" initial_value="0" public_interface="out"/>
+      <variable name="alpha_B" units="dimensionless" public_interface="in"/>
+      <variable name="rho" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="delta_B" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="B1" units="cells_per_GC" public_interface="in"/>
+      <variable name="time" units="day" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>B2</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>rho</ci>
+                  <apply>
+                     <plus/>
+                     <cn cellml:units="dimensionless">1</cn>
+                     <ci>alpha_B</ci>
+                  </apply>
+                  <ci>B1</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>rho</ci>
+                     <ci>B2</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>delta_B</ci>
+                     <ci>B2</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="B3">
+      <variable name="B3" units="cells_per_GC" initial_value="0" public_interface="out"/>
+      <variable name="alpha_B" units="dimensionless" public_interface="in"/>
+      <variable name="rho" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="delta_B" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="B2" units="cells_per_GC" public_interface="in"/>
+      <variable name="time" units="day" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>B3</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>rho</ci>
+                  <apply>
+                     <plus/>
+                     <cn cellml:units="dimensionless">1</cn>
+                     <ci>alpha_B</ci>
+                  </apply>
+                  <ci>B2</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>rho</ci>
+                     <ci>B3</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>delta_B</ci>
+                     <ci>B3</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="B4">
+      <variable name="B4" units="cells_per_GC" initial_value="0" public_interface="out"/>
+      <variable name="alpha_B" units="dimensionless" public_interface="in"/>
+      <variable name="rho" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="delta_B" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="B3" units="cells_per_GC" public_interface="in"/>
+      <variable name="time" units="day" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>B4</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>rho</ci>
+                  <apply>
+                     <plus/>
+                     <cn cellml:units="dimensionless">1</cn>
+                     <ci>alpha_B</ci>
+                  </apply>
+                  <ci>B3</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>rho</ci>
+                     <ci>B4</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>delta_B</ci>
+                     <ci>B4</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="B5">
+      <variable name="B5" units="cells_per_GC" initial_value="0" public_interface="out"/>
+      <variable name="alpha_B" units="dimensionless" public_interface="in"/>
+      <variable name="rho" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="delta_B" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="B4" units="cells_per_GC" public_interface="in"/>
+      <variable name="time" units="day" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>B5</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>rho</ci>
+                  <apply>
+                     <plus/>
+                     <cn cellml:units="dimensionless">1</cn>
+                     <ci>alpha_B</ci>
+                  </apply>
+                  <ci>B4</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>rho</ci>
+                     <ci>B5</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>delta_B</ci>
+                     <ci>B5</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="B6">
+      <variable name="B6" units="cells_per_GC" initial_value="0" public_interface="out"/>
+      <variable name="alpha_B" units="dimensionless" public_interface="in"/>
+      <variable name="rho" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="delta_B" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="B5" units="cells_per_GC" public_interface="in"/>
+      <variable name="time" units="day" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>B6</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>rho</ci>
+                  <apply>
+                     <plus/>
+                     <cn cellml:units="dimensionless">1</cn>
+                     <ci>alpha_B</ci>
+                  </apply>
+                  <ci>B5</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>rho</ci>
+                     <ci>B6</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>delta_B</ci>
+                     <ci>B6</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="B7">
+      <variable name="B7" units="cells_per_GC" initial_value="0" public_interface="out"/>
+      <variable name="alpha_B" units="dimensionless" public_interface="in"/>
+      <variable name="rho" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="delta_B" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="B6" units="cells_per_GC" public_interface="in"/>
+      <variable name="time" units="day" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>B7</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>rho</ci>
+                  <apply>
+                     <plus/>
+                     <cn cellml:units="dimensionless">1</cn>
+                     <ci>alpha_B</ci>
+                  </apply>
+                  <ci>B6</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>rho</ci>
+                     <ci>B7</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>delta_B</ci>
+                     <ci>B7</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="B8">
+      <variable name="B8" units="cells_per_GC" initial_value="0" public_interface="out"/>
+      <variable name="alpha_B" units="dimensionless" public_interface="in"/>
+      <variable name="rho" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="delta_B" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="B7" units="cells_per_GC" public_interface="in"/>
+      <variable name="time" units="day" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>B8</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>rho</ci>
+                  <apply>
+                     <plus/>
+                     <cn cellml:units="dimensionless">1</cn>
+                     <ci>alpha_B</ci>
+                  </apply>
+                  <ci>B7</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>rho</ci>
+                     <ci>B8</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>delta_B</ci>
+                     <ci>B8</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="B9">
+      <variable name="B9" units="cells_per_GC" initial_value="0" public_interface="out"/>
+      <variable name="alpha_B" units="dimensionless" public_interface="in"/>
+      <variable name="rho" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="delta_B" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="B8" units="cells_per_GC" public_interface="in"/>
+      <variable name="time" units="day" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>B9</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>rho</ci>
+                  <apply>
+                     <plus/>
+                     <cn cellml:units="dimensionless">1</cn>
+                     <ci>alpha_B</ci>
+                  </apply>
+                  <ci>B8</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>rho</ci>
+                     <ci>B9</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>delta_B</ci>
+                     <ci>B9</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="B10">
+      <variable name="B10" units="cells_per_GC" initial_value="0" public_interface="out"/>
+      <variable name="alpha_B" units="dimensionless" public_interface="in"/>
+      <variable name="rho" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="delta_B" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="B9" units="cells_per_GC" public_interface="in"/>
+      <variable name="time" units="day" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>B10</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>rho</ci>
+                  <apply>
+                     <plus/>
+                     <cn cellml:units="dimensionless">1</cn>
+                     <ci>alpha_B</ci>
+                  </apply>
+                  <ci>B9</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>rho</ci>
+                     <ci>B10</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>delta_B</ci>
+                     <ci>B10</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="centroblasts_sum">
+      <variable name="B_sum" units="cells_per_GC" public_interface="out"/>
+      <variable name="B10" units="cells_per_GC" public_interface="in"/>
+      <variable name="B9" units="cells_per_GC" public_interface="in"/>
+      <variable name="B8" units="cells_per_GC" public_interface="in"/>
+      <variable name="B7" units="cells_per_GC" public_interface="in"/>
+      <variable name="B6" units="cells_per_GC" public_interface="in"/>
+      <variable name="B5" units="cells_per_GC" public_interface="in"/>
+      <variable name="B4" units="cells_per_GC" public_interface="in"/>
+      <variable name="B3" units="cells_per_GC" public_interface="in"/>
+      <variable name="B2" units="cells_per_GC" public_interface="in"/>
+      <variable name="B1" units="cells_per_GC" public_interface="in"/>
+      <variable name="B0" units="cells_per_GC" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>B_sum</ci>
+            <apply>
+               <plus/>
+               <ci>B1</ci>
+               <ci>B1</ci>
+               <ci>B3</ci>
+               <ci>B4</ci>
+               <ci>B5</ci>
+               <ci>B6</ci>
+               <ci>B6</ci>
+               <ci>B7</ci>
+               <ci>B8</ci>
+               <ci>B9</ci>
+               <ci>B10</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="C">
+      <variable name="C" units="cells_per_GC" initial_value="0" public_interface="out"/>
+      <variable name="d" units="first_order_rate_constant" initial_value="2"/>
+      <variable name="rho" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="mu" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="B10" units="cells_per_GC" public_interface="in"/>
+      <variable name="time" units="day" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>C</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>d</ci>
+                  <ci>rho</ci>
+                  <ci>B10</ci>
+                  <cn cellml:units="day">1</cn>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>mu</ci>
+                  <ci>C</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="C_star">
+      <variable name="C_star" units="cells_per_GC" initial_value="0" public_interface="out"/>
+      <variable name="mu" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="CA" units="cells_per_GC" public_interface="in"/>
+      <variable name="time" units="day" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>C_star</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>mu</ci>
+                  <ci>CA</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>mu</ci>
+                  <ci>C_star</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="centrocytes_sum">
+      <variable name="C_starsum" units="cells_per_GC" public_interface="out"/>
+      <variable name="C" units="cells_per_GC" public_interface="in"/>
+      <variable name="C_star" units="cells_per_GC" public_interface="in"/>
+      <variable name="CT_star" units="cells_per_GC" public_interface="in"/>
+      <variable name="CA" units="cells_per_GC" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>C_starsum</ci>
+            <apply>
+               <plus/>
+               <ci>C</ci>
+               <ci>C_star</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="M">
+      <variable name="M" units="cells_per_GC" initial_value="0" public_interface="out"/>
+      <variable name="pr" units="dimensionless" public_interface="in"/>
+      <variable name="mu" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="CT_star" units="cells_per_GC" public_interface="in"/>
+      <variable name="time" units="day" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>M</ci>
+            </apply>
+            <apply>
+               <times/>
+               <apply>
+                  <minus/>
+                  <cn cellml:units="dimensionless">1</cn>
+                  <ci>pr</ci>
+               </apply>
+               <ci>mu</ci>
+               <ci>CT_star</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="A">
+      <variable name="A" units="cells_per_GC" initial_value="500" public_interface="out"/>
+      <variable name="z" units="first_order_rate_constant" initial_value="0.02"/>
+      <variable name="u" units="dimensionless" initial_value="0.15"/>
+      <variable name="CA" units="cells_per_GC" public_interface="in"/>
+      <variable name="time" units="day" public_interface="in"/>
+      <variable name="log_A" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>A</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <apply>
+                     <minus/>
+                     <ci>z</ci>
+                  </apply>
+                  <ci>A</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>u</ci>
+                  <ci>CA</ci>
+                  <cn cellml:units="first_order_rate_constant">1</cn>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>log_A</ci>
+            <apply>
+               <log/>
+               <apply>
+                  <divide/>
+                  <ci>A</ci>
+                  <cn cellml:units="cells_per_GC">1</cn>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="T">
+      <variable name="T" units="cells_per_GC" initial_value="0" public_interface="out"/>
+      <variable name="p" units="first_order_rate_constant" initial_value="2"/>
+      <variable name="sigma" units="first_order_rate_constant" initial_value="5"/>
+      <variable name="delta_T" units="first_order_rate_constant" initial_value="0.8"/>
+      <variable name="alpha_T" units="dimensionless" public_interface="in"/>
+      <variable name="CT_star" units="cells_per_GC" public_interface="in"/>
+      <variable name="time" units="day" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>T</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>sigma</ci>
+                     <cn cellml:units="cells_per_GC">1</cn>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p</ci>
+                     <ci>alpha_T</ci>
+                     <ci>CT_star</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>delta_T</ci>
+                  <ci>T</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="CA">
+      <variable name="CA" units="cells_per_GC" public_interface="out"/>
+      <variable name="SA" units="dimensionless" initial_value="500"/>
+      <variable name="A" units="cells_per_GC" public_interface="in"/>
+      <variable name="C" units="cells_per_GC" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>CA</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>C</ci>
+                  <ci>A</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>SA</ci>
+                     <cn cellml:units="cells_per_GC">1</cn>
+                  </apply>
+                  <ci>A</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="CT_star">
+      <variable name="CT_star" units="cells_per_GC" public_interface="out"/>
+      <variable name="ST" units="dimensionless" initial_value="50"/>
+      <variable name="T" units="cells_per_GC" public_interface="in"/>
+      <variable name="C_star" units="cells_per_GC" public_interface="in"/>
+      <variable name="time" units="day" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>CT_star</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>C_star</ci>
+                  <ci>T</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>ST</ci>
+                     <cn cellml:units="cells_per_GC">1</cn>
+                  </apply>
+                  <ci>C_star</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="alpha_B">
+      <variable name="alpha_B" units="dimensionless" public_interface="out"/>
+      <variable name="KB" units="dimensionless" initial_value="1e4"/>
+      <variable name="B_sum" units="cells_per_GC" public_interface="in"/>
+      <variable name="B0" units="cells_per_GC" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>alpha_B</ci>
+            <apply>
+               <divide/>
+               <ci>KB</ci>
+               <apply>
+                  <plus/>
+                  <ci>KB</ci>
+                  <apply>
+                     <divide/>
+                     <ci>B_sum</ci>
+                     <cn cellml:units="cells_per_GC">1</cn>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="alpha_T">
+      <variable name="alpha_T" units="dimensionless" public_interface="out"/>
+      <variable name="KT" units="dimensionless" initial_value="100"/>
+      <variable name="T" units="cells_per_GC" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>alpha_T</ci>
+            <apply>
+               <divide/>
+               <ci>KT</ci>
+               <apply>
+                  <plus/>
+                  <ci>KT</ci>
+                  <apply>
+                     <divide/>
+                     <ci>T</ci>
+                     <cn cellml:units="cells_per_GC">1</cn>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="total">
+      <variable name="total" units="cells_per_GC"/>
+      <variable name="B_sum" units="cells_per_GC" public_interface="in"/>
+      <variable name="C_starsum" units="cells_per_GC" public_interface="in"/>
+      <variable name="log_total" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>total</ci>
+            <apply>
+               <plus/>
+               <ci>B_sum</ci>
+               <ci>C_starsum</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>log_total</ci>
+            <apply>
+               <log/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <divide/>
+                     <ci>total</ci>
+                     <cn cellml:units="cells_per_GC">1</cn>
+                  </apply>
+                  <cn type="e-notation" cellml:units="dimensionless">1   <sep/>
+                  -12</cn>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="kinetic_parameters">
+      <variable name="rho" units="first_order_rate_constant" initial_value="4" public_interface="out"/>
+      <variable name="mu" units="first_order_rate_constant" initial_value="3" public_interface="out"/>
+      <variable name="delta_B" units="first_order_rate_constant" initial_value="0.8" public_interface="out"/>
+      <variable name="pr" units="dimensionless" initial_value="0.15" public_interface="out"/>
+   </component>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B0" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B1" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B2" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B3" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B4" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B5" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B6" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B7" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B8" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B9" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B10" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="C" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="C_star" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="M" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="A" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="T" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="CT_star" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B0" component_2="CT_star"/>
+      <map_variables variable_1="CT_star" variable_2="CT_star"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B1" component_2="B0"/>
+      <map_variables variable_1="B0" variable_2="B0"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B2" component_2="B1"/>
+      <map_variables variable_1="B1" variable_2="B1"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B3" component_2="B2"/>
+      <map_variables variable_1="B2" variable_2="B2"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B4" component_2="B3"/>
+      <map_variables variable_1="B3" variable_2="B3"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B5" component_2="B4"/>
+      <map_variables variable_1="B4" variable_2="B4"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B6" component_2="B5"/>
+      <map_variables variable_1="B5" variable_2="B5"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B7" component_2="B6"/>
+      <map_variables variable_1="B6" variable_2="B6"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B8" component_2="B7"/>
+      <map_variables variable_1="B7" variable_2="B7"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B9" component_2="B8"/>
+      <map_variables variable_1="B8" variable_2="B8"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B10" component_2="B9"/>
+      <map_variables variable_1="B9" variable_2="B9"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="C" component_2="B10"/>
+      <map_variables variable_1="B10" variable_2="B10"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="C_star" component_2="CA"/>
+      <map_variables variable_1="CA" variable_2="CA"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="M" component_2="CT_star"/>
+      <map_variables variable_1="CT_star" variable_2="CT_star"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="A" component_2="CA"/>
+      <map_variables variable_1="CA" variable_2="CA"/>
+      <map_variables variable_1="A" variable_2="A"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="T" component_2="CT_star"/>
+      <map_variables variable_1="CT_star" variable_2="CT_star"/>
+      <map_variables variable_1="T" variable_2="T"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="CA" component_2="C"/>
+      <map_variables variable_1="C" variable_2="C"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="CT_star" component_2="C_star"/>
+      <map_variables variable_1="C_star" variable_2="C_star"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="alpha_B" component_2="B0"/>
+      <map_variables variable_1="B0" variable_2="B0"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="alpha_B" component_2="B1"/>
+      <map_variables variable_1="alpha_B" variable_2="alpha_B"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="alpha_B" component_2="B2"/>
+      <map_variables variable_1="alpha_B" variable_2="alpha_B"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="alpha_B" component_2="B3"/>
+      <map_variables variable_1="alpha_B" variable_2="alpha_B"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="alpha_B" component_2="B4"/>
+      <map_variables variable_1="alpha_B" variable_2="alpha_B"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="alpha_B" component_2="B5"/>
+      <map_variables variable_1="alpha_B" variable_2="alpha_B"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="alpha_B" component_2="B6"/>
+      <map_variables variable_1="alpha_B" variable_2="alpha_B"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="alpha_B" component_2="B7"/>
+      <map_variables variable_1="alpha_B" variable_2="alpha_B"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="alpha_B" component_2="B8"/>
+      <map_variables variable_1="alpha_B" variable_2="alpha_B"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="alpha_B" component_2="B9"/>
+      <map_variables variable_1="alpha_B" variable_2="alpha_B"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="alpha_B" component_2="B10"/>
+      <map_variables variable_1="alpha_B" variable_2="alpha_B"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="alpha_B" component_2="centroblasts_sum"/>
+      <map_variables variable_1="B_sum" variable_2="B_sum"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="alpha_T" component_2="T"/>
+      <map_variables variable_1="T" variable_2="T"/>
+      <map_variables variable_1="alpha_T" variable_2="alpha_T"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B0" component_2="kinetic_parameters"/>
+      <map_variables variable_1="pr" variable_2="pr"/>
+      <map_variables variable_1="rho" variable_2="rho"/>
+      <map_variables variable_1="mu" variable_2="mu"/>
+      <map_variables variable_1="delta_B" variable_2="delta_B"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B1" component_2="kinetic_parameters"/>
+      <map_variables variable_1="rho" variable_2="rho"/>
+      <map_variables variable_1="delta_B" variable_2="delta_B"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B2" component_2="kinetic_parameters"/>
+      <map_variables variable_1="rho" variable_2="rho"/>
+      <map_variables variable_1="delta_B" variable_2="delta_B"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B3" component_2="kinetic_parameters"/>
+      <map_variables variable_1="rho" variable_2="rho"/>
+      <map_variables variable_1="delta_B" variable_2="delta_B"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B4" component_2="kinetic_parameters"/>
+      <map_variables variable_1="rho" variable_2="rho"/>
+      <map_variables variable_1="delta_B" variable_2="delta_B"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B5" component_2="kinetic_parameters"/>
+      <map_variables variable_1="rho" variable_2="rho"/>
+      <map_variables variable_1="delta_B" variable_2="delta_B"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B6" component_2="kinetic_parameters"/>
+      <map_variables variable_1="rho" variable_2="rho"/>
+      <map_variables variable_1="delta_B" variable_2="delta_B"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B7" component_2="kinetic_parameters"/>
+      <map_variables variable_1="rho" variable_2="rho"/>
+      <map_variables variable_1="delta_B" variable_2="delta_B"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B8" component_2="kinetic_parameters"/>
+      <map_variables variable_1="rho" variable_2="rho"/>
+      <map_variables variable_1="delta_B" variable_2="delta_B"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B9" component_2="kinetic_parameters"/>
+      <map_variables variable_1="rho" variable_2="rho"/>
+      <map_variables variable_1="delta_B" variable_2="delta_B"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B10" component_2="kinetic_parameters"/>
+      <map_variables variable_1="rho" variable_2="rho"/>
+      <map_variables variable_1="delta_B" variable_2="delta_B"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="C" component_2="kinetic_parameters"/>
+      <map_variables variable_1="rho" variable_2="rho"/>
+      <map_variables variable_1="mu" variable_2="mu"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="C_star" component_2="kinetic_parameters"/>
+      <map_variables variable_1="mu" variable_2="mu"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="M" component_2="kinetic_parameters"/>
+      <map_variables variable_1="pr" variable_2="pr"/>
+      <map_variables variable_1="mu" variable_2="mu"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B0" component_2="centroblasts_sum"/>
+      <map_variables variable_1="B0" variable_2="B0"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B1" component_2="centroblasts_sum"/>
+      <map_variables variable_1="B1" variable_2="B1"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B2" component_2="centroblasts_sum"/>
+      <map_variables variable_1="B2" variable_2="B2"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B3" component_2="centroblasts_sum"/>
+      <map_variables variable_1="B3" variable_2="B3"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B4" component_2="centroblasts_sum"/>
+      <map_variables variable_1="B4" variable_2="B4"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B5" component_2="centroblasts_sum"/>
+      <map_variables variable_1="B5" variable_2="B5"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B6" component_2="centroblasts_sum"/>
+      <map_variables variable_1="B6" variable_2="B6"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B7" component_2="centroblasts_sum"/>
+      <map_variables variable_1="B7" variable_2="B7"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B8" component_2="centroblasts_sum"/>
+      <map_variables variable_1="B8" variable_2="B8"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B9" component_2="centroblasts_sum"/>
+      <map_variables variable_1="B9" variable_2="B9"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B10" component_2="centroblasts_sum"/>
+      <map_variables variable_1="B10" variable_2="B10"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="C" component_2="centrocytes_sum"/>
+      <map_variables variable_1="C" variable_2="C"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="C_star" component_2="centrocytes_sum"/>
+      <map_variables variable_1="C_star" variable_2="C_star"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="CT_star" component_2="centrocytes_sum"/>
+      <map_variables variable_1="CT_star" variable_2="CT_star"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="CA" component_2="centrocytes_sum"/>
+      <map_variables variable_1="CA" variable_2="CA"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="total" component_2="centroblasts_sum"/>
+      <map_variables variable_1="B_sum" variable_2="B_sum"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="total" component_2="centrocytes_sum"/>
+      <map_variables variable_1="C_starsum" variable_2="C_starsum"/>
+   </connection>
+</model>

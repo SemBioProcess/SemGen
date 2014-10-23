@@ -1,0 +1,937 @@
+<?xml version="1.0" encoding="utf-8"?>
+<model 
+	name="antidiuretic_hormone_CellML1_0_model"
+	cmeta:id="antidiuretic_hormone_CellML1_0_model"
+	
+	xmlns="http://www.cellml.org/cellml/1.0#"
+	xmlns:cellml="http://www.cellml.org/cellml/1.0#"
+	xmlns:cmeta="http://www.cellml.org/metadata/1.0#"
+	xmlns:xlink="http://www.w3.org/1999/xlink">
+
+<!-- =====================================	DOCUMENTATION	============================================== -->
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Guyton Model: Antidiuretic Hormone</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Auckland Bioengineering Institute, University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+        This CellML model has been validated. Due to the differences between procedural code (in this case C-code) and 
+		declarative languages (CellML), some aspects of the original model were not able to be encapsulated by the CellML 
+		model (such as the damping of variables). This may effect the transient behaviour of the model, however the 
+		steady-state behaviour would remain	the same. The equations in this file and the steady-state output from the 
+		model conform to the results from the MODSIM program.
+	</para>
+  </section>
+  <sect1 id="sec_structure">
+  <title>Model Structure</title>
+
+<para>
+Arthur Guyton (1919-2003) was an American physiologist who became famous for his 1950s experiments in which he studied the 
+physiology of cardiac output and its relationship with the peripheral circulation.  The results of these experiments 
+challenged the conventional wisdom that it was the heart itself that controlled cardiac output.  Instead Guyton 
+demonstrated that it was the need of the body tissues for oxygen which was the real regulator of cardiac output.  
+The "Guyton Curves" describe the relationship between right atrial pressures and cardiac output, and they form a 
+foundation for understanding the physiology of circulation. 
+</para>
+
+<para>
+The Guyton model of fluid, electrolyte, and circulatory regulation is an extensive mathematical model of human circulatory 
+physiology, capable of simulating a variety of experimental conditions, and contains a number of linked subsystems relating 
+to circulation and its neuroendocrine control.
+</para>
+
+<para>
+This is a CellML translation of the Guyton model of the regulation of the circulatory system.  The complete model consists of 
+separate modules each of which characterise a separate physiological subsystems.  The Circulation Dynamics is the primary 
+system, to which other modules/blocks are connected.  The other modules characterise the dynamics of the kidney, electrolytes 
+and cell water, thirst and drinking, hormone regulation, autonomic regulation, cardiovascular system etc, and these feedback 
+on the central circulation model.  The CellML code in these modules is based on the C code from the programme C-MODSIM 
+created by Dr Jean-Pierre Montani.
+</para>
+
+<para>
+This particular CellML model describes antidiuretic hormone and its control functions.  This section calculates the control 
+of antidiuretic hormone secretion and also calculates multiplier factors for control of other aspects of circulatory 
+function by antidiuretic hormone.  The major factors that are considered to affect the rate of antidiuretic hormone 
+secretion are (1) a feedback effect of osmotic concentration in the extracellular fluids as determined from the concentration 
+of sodium (CNA), and (2) a feedback effect of arterial pressure (PA).
+</para>
+
+<informalfigure float="0" id="full_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>model diagram</title>
+    </objectinfo>
+    <imagedata fileref="full_model.png"/>
+  </imageobject>
+</mediaobject>
+<caption>A systems analysis diagram for the full Guyton model describing circulation regulation.</caption>
+</informalfigure>
+
+
+<informalfigure float="0" id="antidiuretic_hormone_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>model diagram</title>
+    </objectinfo>
+    <imagedata fileref="antidiuretic_hormone.png"/>
+  </imageobject>
+</mediaobject>
+<caption>A schematic diagram of the components and processes described in the current CellML model.</caption>
+</informalfigure> 
+
+<para>
+There are several publications referring to the Guyton model. One of these papers is cited below:
+</para>
+
+<para>
+Circulation: Overall Regulation,  A.C. Guyton, T.G. Coleman, and H.J. Granger, 1972, 
+            <emphasis>Annual Review of Physiology</emphasis>
+          , 34, 13-44.  <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pubmed&amp;cmd=Retrieve&amp;dopt=AbstractPlus&amp;list_uids=4334846&amp;query_hl=1&amp;itool=pubmed_docsum">PubMed ID: 4334846</ulink>
+</para>
+
+</sect1>
+</article>
+</documentation> 
+
+<!-- =======================================================    CITATION AND KEYWORD METADATA    ================================================== -->
+
+	<rdf:RDF
+			xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+			xmlns:bqs="http://www.cellml.org/bqs/1.0#"
+			xmlns:dc="http://purl.org/dc/elements/1.1/"
+			xmlns:dcterms="http://purl.org/dc/terms/"
+			xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
+		<rdf:Description rdf:about="#antidiuretic_hormone_CellML1_0_model">
+			<bqs:reference rdf:parseType="Resource">
+				<bqs:JournalArticle rdf:parseType="Resource">
+					<dc:creator>
+						<rdf:Seq>
+							<rdf:li rdf:parseType="Resource">
+								<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person" />
+								<vCard:N rdf:parseType="Resource">
+									<vCard:Family>Guyton</vCard:Family>
+									<vCard:Given></vCard:Given>
+									<vCard:Other></vCard:Other>
+								</vCard:N>
+							</rdf:li>
+							<rdf:li rdf:parseType="Resource">
+								<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person" />
+								<vCard:N rdf:parseType="Resource">
+									<vCard:Family>Antidiuretic Hormone</vCard:Family>
+									<vCard:Given></vCard:Given>
+									<vCard:Other></vCard:Other>
+								</vCard:N>
+							</rdf:li>
+
+						</rdf:Seq>
+					</dc:creator>
+					<dc:title>Description of Guyton antidiuretic hormone module</dc:title>
+					<bqs:volume />
+					<bqs:first_page />
+					<bqs:last_page />
+					<bqs:Journal rdf:parseType="Resource">
+						<dc:title></dc:title>
+					</bqs:Journal>
+					<dcterms:issued rdf:parseType="Resource">
+						<dcterms:W3CDTF>2008-00-00 00:00</dcterms:W3CDTF>
+					</dcterms:issued>
+				</bqs:JournalArticle>
+			</bqs:reference>
+			<bqs:reference rdf:parseType="Resource">
+				<dc:subject rdf:parseType="Resource">
+					<bqs:subject_type>keyword</bqs:subject_type>
+					<rdf:value>
+					<rdf:Bag>
+						<rdf:li>physiology</rdf:li>
+						<rdf:li>organ systems</rdf:li>
+						<rdf:li>cardiovascular circulation</rdf:li>
+						<rdf:li>antidiuretic hormone</rdf:li>
+						<rdf:li>Guyton</rdf:li>
+					</rdf:Bag>
+					</rdf:value>
+				</dc:subject>
+			</bqs:reference>
+		</rdf:Description>
+	</rdf:RDF>
+
+  
+  
+<!-- ======================================================= 		UNITS		================================================== -->
+
+   <units name="minute">
+      <unit multiplier="60" units="second"/>
+   </units>
+   <units name="per_minute">
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units name="mmHg">
+      <unit multiplier="133.322" units="newton"/>
+      <unit units="metre" exponent="-2"/>
+   </units>
+   <units name="per_mmHg2">
+      <unit units="mmHg" exponent="-2"/>
+   </units>
+   <units name="monovalent_mEq">
+      <unit units="mole" prefix="milli"/>
+   </units>
+   <units name="monovalent_mEq_per_minute">
+      <unit units="mole" prefix="milli"/>
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units name="monovalent_mEq_per_litre">
+      <unit units="mole" prefix="milli"/>
+      <unit units="litre" exponent="-1"/>
+   </units>
+   <units name="monovalent_mEq_per_litre_per_minute">
+      <unit units="mole" prefix="milli"/>
+      <unit units="litre" exponent="-1"/>
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units name="litre2_per_monovalent_mEq_per_minute">
+      <unit units="litre" exponent="2"/>
+      <unit units="mole" prefix="milli" exponent="-1"/>
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units name="L_per_minute">
+      <unit units="litre"/>
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units name="L_per_minute_per_mmHg">
+      <unit units="litre"/>
+      <unit units="minute" exponent="-1"/>
+      <unit units="mmHg" exponent="-1"/>
+   </units>
+
+<!-- ====================================================================================================================== -->
+
+
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#antidiuretic_hormone_CellML1_0_model">
+			<rdf:value>
+			Antidiuretic Hormone and its control functions.
+			This section calculates the control of antidiuretic hormone secretion and also 
+			calculates multiplier factors for control of other aspects of circulatory function 
+			by antidiuretic hormone.  The major factors that are considered to affect the rate 
+			of antidiuretic hormone secretion are (1) a feedback effect of osmotic concentration 
+			in the extracellular fluids as determined from the concentration of sodium (CNA), 
+			and (2) a feedback effect of arterial pressure (PA).
+			</rdf:value>
+		</rdf:Description>
+	</rdf:RDF>
+
+
+<!-- =====================================	ENVIRONMENT COMPONENT	============================================== -->
+   <component name="environment">
+      <variable cmeta:id="environment_time"
+				name="time" units="minute" private_interface="none" public_interface="out"/>
+   </component>
+
+
+<!-- ========================================	ANTI-DIURETIC HORMONE TOP-LEVEL COMPONENT	============================================= -->
+	<component 	name="antidiuretic_hormone" 
+				cmeta:id="antidiuretic_hormone">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#antidiuretic_hormone">
+				<rdf:value>
+				Encapsulation grouping component containing all the components in the Anti-Diuretic Hormone Model. 
+				The inputs and outputs of the Anti-Diuretic Hormone Model must be passed by this component.
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+
+		<variable name="time"	units="minute"	private_interface="out" public_interface="in"/>
+
+<!-- Inputs from components in other models -->
+		<variable name="CNA" 	initial_value="142.035"	units="monovalent_mEq_per_litre" private_interface="out" public_interface="none"/>
+		<variable name="PA1" 	initial_value="103.525"	units="mmHg" private_interface="out" public_interface="none"/>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="antidiuretic_hormone" component_2="environment"/>
+		<map_variables variable_1="time" variable_2="time"/>
+	</connection>
+
+<!-- ========================================	OSMOTIC CONTROL OF ANTIDIURETIC HORMONE SECRETION	============================================= -->
+	<component 	name="osmotic_control_of_ADH_secretion" 
+				cmeta:id="osmotic_control_of_ADH_secretion">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#osmotic_control_of_ADH_secretion">
+				<rdf:value>
+				AD1, AD2, and AD3:  
+				Calculation of a multiplier factor (ADHNA) that determines the effect of the 
+				concentration of sodium in the extracellular fluid (CNA) on the secretion of ADH.  
+				The lower limit of CNA at which the normal stimulating effect of changes in CNA 
+				will affect antidiuretic hormone secretion is equal to CNR.  The mathematical 
+				steps in Blocks AD1, AD2, and AD3 provide curve shaping effects for the relationship 
+				between CNA and ADHNA.
+
+				AD8:  
+				The effect of sodium concentration on ADH secretion (ADHNA) is not allowed 
+				to go below zero.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#AD1_to_AD3">
+				<rdf:value>
+				AD1, AD2, and AD3:  
+				Calculation of a multiplier factor (ADHNA) that determines the effect of the 
+				concentration of sodium in the extracellular fluid (CNA) on the secretion of ADH.  
+				The lower limit of CNA at which the normal stimulating effect of changes in CNA 
+				will affect antidiuretic hormone secretion is equal to CNR.  The mathematical 
+				steps in Blocks AD1, AD2, and AD3 provide curve shaping effects for the relationship 
+				between CNA and ADHNA.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#AD8">
+				<rdf:value>
+				AD8:  
+				The effect of sodium concentration on ADH secretion (ADHNA) is not allowed 
+				to go below zero.
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="CNA"	units="monovalent_mEq_per_litre" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable name="ADHNA" 	units="dimensionless" private_interface="none" public_interface="out"/>
+
+<!-- Parameters from parameter_file -->
+		<variable name="CNR"	units="monovalent_mEq_per_litre" private_interface="none" public_interface="in"/>
+
+<!-- Internal variables -->
+		<variable name="ADHNA1"	units="dimensionless" private_interface="none" public_interface="none"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="AD1_to_AD3">
+				<eq/>
+				<ci>ADHNA1</ci>
+				<apply>
+					<divide/>
+					<apply>
+						<minus/>
+						<ci>CNA</ci>
+						<ci>CNR</ci>
+					</apply>
+					<apply>
+						<minus/>
+						<cn cellml:units="monovalent_mEq_per_litre">142</cn>
+						<ci>CNR</ci>
+					</apply>
+				</apply>
+			</apply>
+			<apply id="AD8">
+				<eq/>
+				<ci>ADHNA</ci>
+				<piecewise>
+					<piece>
+						<cn cellml:units="dimensionless">0</cn>
+						<apply>
+							<lt/>
+							<ci>ADHNA1</ci>
+							<cn cellml:units="dimensionless">0</cn>
+						</apply>
+					</piece>
+					<otherwise>
+						<ci>ADHNA1</ci>
+					</otherwise>
+				</piecewise>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="osmotic_control_of_ADH_secretion" component_2="antidiuretic_hormone"/>
+		<map_variables variable_1="CNA" variable_2="CNA"/>
+	</connection>
+
+<!-- PARAMETER CONNECTIONS -->
+	<connection>
+		<map_components component_1="osmotic_control_of_ADH_secretion" component_2="parameter_values"/>
+		<map_variables variable_1="CNR" variable_2="CNR"/>
+	</connection>
+
+<!-- ========================================	PRESSURE CONTROL OF ANTIDIURETIC HORMONE SECRETION	============================================= -->
+	<component 	name="pressure_control_of_ADH_secretion" 
+				cmeta:id="pressure_control_of_ADH_secretion">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#pressure_control_of_ADH_secretion">
+				<rdf:value>
+				AD4, AD5, AD6, and AD7:  
+				Calculation of the effect of low levels of arterial pressure to cause secretion 
+				of antidiuretic hormone.  The mathematical steps in these blocks provide appropriate 
+				curve shaping.  Zero effect of pressure on ADH secretion occurs whenever the arterial 
+				pressure is greater than 85 mm Hg.  The factor ADHPAM is the sensitivity control for 
+				the overall effect.  The output of this set of blocks is ADHPR.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#AD4">
+				<rdf:value>
+				AD4, AD5, AD6, and AD7:  
+				Calculation of the effect of low levels of arterial pressure to cause secretion 
+				of antidiuretic hormone.  The mathematical steps in these blocks provide appropriate 
+				curve shaping.  Zero effect of pressure on ADH secretion occurs whenever the arterial 
+				pressure is greater than 85 mm Hg.  The factor ADHPAM is the sensitivity control for 
+				the overall effect.  The output of this set of blocks is ADHPR.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#AD5_to_AD7">
+				<rdf:value>
+				AD4, AD5, AD6, and AD7:  
+				Calculation of the effect of low levels of arterial pressure to cause secretion 
+				of antidiuretic hormone.  The mathematical steps in these blocks provide appropriate 
+				curve shaping.  Zero effect of pressure on ADH secretion occurs whenever the arterial 
+				pressure is greater than 85 mm Hg.  The factor ADHPAM is the sensitivity control for 
+				the overall effect.  The output of this set of blocks is ADHPR.
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="PA1"	units="mmHg" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable name="ADHPR" 	units="dimensionless" private_interface="none" public_interface="out"/>
+
+<!-- Parameters from parameter_file -->
+		<variable name="ADHPUL"	units="mmHg" private_interface="none" public_interface="in"/>
+		<variable name="ADHPAM"	units="per_mmHg2" private_interface="none" public_interface="in"/>
+
+<!-- Internal variables -->
+		<variable name="ADHPA"	units="mmHg" private_interface="none" public_interface="none"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="AD4">
+				<eq/>
+				<ci>ADHPA</ci>
+				<piecewise>
+					<piece>
+						<ci>ADHPUL</ci>
+						<apply>
+							<gt/>
+							<ci>PA1</ci>
+							<ci>ADHPUL</ci>
+						</apply>
+					</piece>
+					<otherwise>
+						<ci>PA1</ci>
+					</otherwise>
+				</piecewise>
+			</apply>
+			<apply id="AD5_to_AD7">
+				<eq/>
+				<ci>ADHPR</ci>
+				<apply>
+					<times/>
+					<apply>
+						<power/>
+						<apply>
+							<minus/>
+							<ci>ADHPUL</ci>
+							<ci>ADHPA</ci>
+						</apply>
+						<cn cellml:units="dimensionless">2</cn>
+					</apply>
+					<ci>ADHPAM</ci>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="pressure_control_of_ADH_secretion" component_2="antidiuretic_hormone"/>
+		<map_variables variable_1="PA1" variable_2="PA1"/>
+	</connection>
+
+<!-- PARAMETER CONNECTIONS -->
+	<connection>
+		<map_components component_1="pressure_control_of_ADH_secretion" component_2="parameter_values"/>
+		<map_variables variable_1="ADHPUL" variable_2="ADHPUL"/>
+		<map_variables variable_1="ADHPAM" variable_2="ADHPAM"/>
+	</connection>
+
+<!-- ========================================	TOTAL ANTIDIURETIC HORMONE SECRETION	============================================= -->
+	<component 	name="total_ADH_secretion" 
+				cmeta:id="total_ADH_secretion">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#total_ADH_secretion">
+				<rdf:value>
+				AD9:  
+				Calculation of the net rate of ADH entry into the body fluids (ADH) by adding 
+				the partial effect of ADHNA for osmotic control of ADH secretion plus the partial 
+				effect ADHPR for pressure control of secretion, plus ADHINF for any rate of 
+				infusion of ADH.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#AD9">
+				<rdf:value>
+				AD9:  
+				Calculation of the net rate of ADH entry into the body fluids (ADH) by adding 
+				the partial effect of ADHNA for osmotic control of ADH secretion plus the partial 
+				effect ADHPR for pressure control of secretion, plus ADHINF for any rate of 
+				infusion of ADH.
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="ADHNA"	units="dimensionless" private_interface="none" public_interface="in"/>
+		<variable name="ADHPR"	units="dimensionless" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable name="ADH" 	units="dimensionless" private_interface="none" public_interface="out"/>
+
+<!-- Parameters from parameter_file -->
+		<variable name="ADHINF"	units="dimensionless" private_interface="none" public_interface="in"/>
+
+<!-- Internal variables -->
+		<variable name="ADH1"	units="dimensionless" private_interface="none" public_interface="none"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="AD9">
+				<eq/>
+				<ci>ADH1</ci>
+				<apply>
+					<plus/>
+					<ci>ADHNA</ci>
+					<ci>ADHPR</ci>
+					<ci>ADHINF</ci>
+				</apply>
+			</apply>
+			<apply id="AD9_extended">
+				<eq/>
+				<ci>ADH</ci>
+				<piecewise>
+					<piece>
+						<cn cellml:units="dimensionless">0</cn>
+						<apply>
+							<lt/>
+							<ci>ADH1</ci>
+							<cn cellml:units="dimensionless">0</cn>
+						</apply>
+					</piece>
+					<otherwise>
+						<ci>ADH1</ci>
+					</otherwise>
+				</piecewise>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="total_ADH_secretion" component_2="osmotic_control_of_ADH_secretion"/>
+		<map_variables variable_1="ADHNA" variable_2="ADHNA"/>
+	</connection>
+	<connection>
+		<map_components component_1="total_ADH_secretion" component_2="pressure_control_of_ADH_secretion"/>
+		<map_variables variable_1="ADHPR" variable_2="ADHPR"/>
+	</connection>
+
+<!-- PARAMETER CONNECTIONS -->
+	<connection>
+		<map_components component_1="total_ADH_secretion" component_2="parameter_values"/>
+		<map_variables variable_1="ADHINF" variable_2="ADHINF"/>
+	</connection>
+
+<!-- ========================================	ANTIDIURETIC HORMONE IN BLOOD	============================================= -->
+	<component 	name="ADH_in_blood" 
+				cmeta:id="ADH_in_blood">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#ADH_in_blood">
+				<rdf:value>
+				AD10, AD11, AD12, and AD13:  
+				Calculation of instantaneous antidiuretic hormone concentration in the blood (ADHC) 
+				by integrating in Block 12 the rate of hormone entry into the fluids (ADH) with 
+				respect to time.  A time constant for the integration (Block 11) is equal to ADHTC.  
+				Block 13 damps the response of this integration to prevent oscillation when very 
+				long iteration intervals are used in providing long-term solutions for the model.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#AD10_to_AD13">
+				<rdf:value>
+				AD10, AD11, AD12, and AD13:  
+				Calculation of instantaneous antidiuretic hormone concentration in the blood (ADHC) 
+				by integrating in Block 12 the rate of hormone entry into the fluids (ADH) with 
+				respect to time.  A time constant for the integration (Block 11) is equal to ADHTC.  
+				Block 13 damps the response of this integration to prevent oscillation when very 
+				long iteration intervals are used in providing long-term solutions for the model.
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="ADH"	units="dimensionless" private_interface="none" public_interface="in"/>
+		<variable name="time"	units="minute" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable 	cmeta:id="ADH_in_blood_ADHC"
+					name="ADHC"	initial_value="1.0"	units="dimensionless" private_interface="none" public_interface="out"/>
+
+<!-- Parameters from parameter_file -->
+		<variable name="ADHTC"	units="minute" private_interface="none" public_interface="in"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="AD10_to_AD13">
+				<eq/>
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>ADHC</ci>
+				</apply>
+				<apply>
+					<divide/>
+					<apply>
+						<minus/>
+						<ci>ADH</ci>
+						<ci>ADHC</ci>
+					</apply>
+					<ci>ADHTC</ci>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="ADH_in_blood" component_2="total_ADH_secretion"/>
+		<map_variables variable_1="ADH" variable_2="ADH"/>
+	</connection>
+	<connection>
+		<map_components component_1="ADH_in_blood" component_2="antidiuretic_hormone"/>
+		<map_variables variable_1="time" variable_2="time"/>
+	</connection>
+
+<!-- PARAMETER CONNECTIONS -->
+	<connection>
+		<map_components component_1="ADH_in_blood" component_2="parameter_values"/>
+		<map_variables variable_1="ADHTC" variable_2="ADHTC"/>
+	</connection>
+
+<!-- ====================================	ANTIDIURETIC HORMONE EFFECT ON NONRENAL VASCULAR RESISTANCE	======================================== -->
+	<component 	name="ADH_effect_on_nonrenal_vascular_resistance" 
+				cmeta:id="ADH_effect_on_nonrenal_vascular_resistance">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#ADH_effect_on_nonrenal_vascular_resistance">
+				<rdf:value>
+				AD14 and AD15:  
+				Calculation from the instantaneous concentration of ADH in the plasma (ADHC) 
+				of a multiplier factor (ADHMV) to describe the effect of antidiuretic hormone 
+				in causing contraction of many of the blood vessels of the body.  Block 15 sets 
+				a lower limit for ADHMV equal to ADHVLL, and the upper limit is ADHVUL.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#AD14">
+				<rdf:value>
+				AD14:  
+				Calculation from the instantaneous concentration of ADH in the plasma (ADHC) 
+				of a multiplier factor (ADHMV) to describe the effect of antidiuretic hormone 
+				in causing contraction of many of the blood vessels of the body.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#AD15">
+				<rdf:value>
+				AD15:  
+				Block 15 sets a lower limit for ADHMV equal to ADHVLL, and the upper limit is ADHVUL.
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="ADHC"	units="dimensionless" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable 	cmeta:id="ADH_effect_on_nonrenal_vascular_resistance_ADHMV"
+					name="ADHMV" 	units="dimensionless" private_interface="none" public_interface="out"/>
+
+<!-- Parameters from parameter_file -->
+		<variable name="ADHVUL"	units="dimensionless" private_interface="none" public_interface="in"/>
+		<variable name="ADHVLL"	units="dimensionless" private_interface="none" public_interface="in"/>
+
+<!-- Internal variables -->
+		<variable name="ADHMV1"	units="dimensionless" private_interface="none" public_interface="none"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="AD14">
+				<eq/>
+				<ci>ADHMV1</ci>
+				<apply>
+					<minus/>
+					<ci>ADHVUL</ci>
+					<apply>
+						<divide/>
+						<apply>
+							<minus/>
+							<ci>ADHVUL</ci>
+							<cn cellml:units="dimensionless">1</cn>
+						</apply>
+						<apply>
+							<plus/>
+							<apply>
+								<times/>
+								<apply>
+									<divide/>
+									<apply>
+										<minus/>
+										<ci>ADHVLL</ci>
+										<cn cellml:units="dimensionless">1</cn>
+									</apply>
+									<apply>
+										<minus/>
+										<ci>ADHVLL</ci>
+										<ci>ADHVUL</ci>
+									</apply>
+								</apply>
+								<apply>
+									<minus/>
+									<ci>ADHC</ci>
+									<cn cellml:units="dimensionless">1</cn>
+								</apply>
+							</apply>
+							<cn cellml:units="dimensionless">1</cn>
+						</apply>
+					</apply>
+				</apply>
+			</apply>
+			<apply id="AD15">
+				<eq/>
+				<ci>ADHMV</ci>
+				<piecewise>
+					<piece>
+						<ci>ADHVLL</ci>
+						<apply>
+							<lt/>
+							<ci>ADHMV1</ci>
+							<ci>ADHVLL</ci>
+						</apply>
+					</piece>
+					<otherwise>
+						<ci>ADHMV1</ci>
+					</otherwise>
+				</piecewise>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="ADH_effect_on_nonrenal_vascular_resistance" component_2="ADH_in_blood"/>
+		<map_variables variable_1="ADHC" variable_2="ADHC"/>
+	</connection>
+
+<!-- PARAMETER CONNECTIONS -->
+	<connection>
+		<map_components component_1="ADH_effect_on_nonrenal_vascular_resistance" component_2="parameter_values"/>
+		<map_variables variable_1="ADHVUL" variable_2="ADHVUL"/>
+		<map_variables variable_1="ADHVLL" variable_2="ADHVLL"/>
+	</connection>
+
+<!-- ========================================	ANTIDIURETIC HORMONE EFFECT ON KIDNEY	============================================= -->
+	<component 	name="ADH_effect_on_kidney" 
+				cmeta:id="ADH_effect_on_kidney">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#ADH_effect_on_kidney">
+				<rdf:value>
+				AD16 and AD17:  
+				Calculation from the plasma concentration of ADH (ADHC) of a multiplier factor (ADHMK) 
+				to describe the effect of the ADH in affecting the kidney.  Block 17 gives a lower limit
+				to ADHMK equal to ADHKLL, and Block 16 gives an upper limit equal to AMKUL.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#AD16">
+				<rdf:value>
+				AD16:  
+				Calculation from the plasma concentration of ADH (ADHC) of a multiplier factor (ADHMK) 
+				to describe the effect of the ADH in affecting the kidney.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#AD17">
+				<rdf:value>
+				AD17:  
+				Block 17 gives a lower limit to ADHMK equal to ADHKLL, and Block 16 gives an upper limit equal to AMKUL.
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="ADHC"	units="dimensionless" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable 	cmeta:id="ADH_effect_on_kidney_ADHMK"
+					name="ADHMK" 	units="dimensionless" private_interface="none" public_interface="out"/>
+
+<!-- Parameters from parameter_file -->
+		<variable name="ADHKLL"	units="dimensionless" private_interface="none" public_interface="in"/>
+		<variable name="ADHKUL"	units="dimensionless" private_interface="none" public_interface="in"/>
+
+<!-- Internal variables -->
+		<variable name="ADHMK1"	units="dimensionless" private_interface="none" public_interface="none"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="AD16">
+				<eq/>
+				<ci>ADHMK1</ci>
+				<apply>
+					<minus/>
+					<ci>ADHKUL</ci>
+					<apply>
+						<divide/>
+						<apply>
+							<minus/>
+							<ci>ADHKUL</ci>
+							<cn cellml:units="dimensionless">1</cn>
+						</apply>
+						<apply>
+							<plus/>
+							<apply>
+								<times/>
+								<apply>
+									<divide/>
+									<apply>
+										<minus/>
+										<ci>ADHKLL</ci>
+										<cn cellml:units="dimensionless">1</cn>
+									</apply>
+									<apply>
+										<minus/>
+										<ci>ADHKLL</ci>
+										<ci>ADHKUL</ci>
+									</apply>
+								</apply>
+								<apply>
+									<minus/>
+									<ci>ADHC</ci>
+									<cn cellml:units="dimensionless">1</cn>
+								</apply>
+							</apply>
+							<cn cellml:units="dimensionless">1</cn>
+						</apply>
+					</apply>
+				</apply>
+			</apply>
+			<apply id="AD17">
+				<eq/>
+				<ci>ADHMK</ci>
+				<piecewise>
+					<piece>
+						<ci>ADHKLL</ci>
+						<apply>
+							<lt/>
+							<ci>ADHMK1</ci>
+							<ci>ADHKLL</ci>
+						</apply>
+					</piece>
+					<otherwise>
+						<ci>ADHMK1</ci>
+					</otherwise>
+				</piecewise>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="ADH_effect_on_kidney" component_2="ADH_in_blood"/>
+		<map_variables variable_1="ADHC" variable_2="ADHC"/>
+	</connection>
+
+<!-- PARAMETER CONNECTIONS -->
+	<connection>
+		<map_components component_1="ADH_effect_on_kidney" component_2="parameter_values"/>
+		<map_variables variable_1="ADHKLL" variable_2="ADHKLL"/>
+		<map_variables variable_1="ADHKUL" variable_2="ADHKUL"/>
+	</connection>
+
+	<component 	name="parameter_values"
+				cmeta:id="parameter_values">
+	  <variable name="CNR" 		units="monovalent_mEq_per_litre" 	initial_value="139"			private_interface="none"	public_interface="out"/>	<!-- reference sodium conc to determine ADH secretion rate [P] -->
+      <variable name="ADHPUL"	units="mmHg" 	initial_value="85"			private_interface="none"	public_interface="out"/>	<!-- ADHPA upper limit [P] -->
+      <variable name="ADHPAM"	units="per_mmHg2" 	initial_value="0.3"			private_interface="none"	public_interface="out"/>	<!-- sensitivity control of arterial pressure on ADH [P] -->
+      <variable name="ADHINF" 	units="dimensionless" 	initial_value="0"			private_interface="none"	public_interface="out"/>	<!-- rate of exogenous ADH infusion [P] -->
+      <variable name="ADHTC" 	units="minute" 	initial_value="15"			private_interface="none"	public_interface="out"/>	<!-- time constant, ADH secretion [P] -->
+      <variable name="ADHVUL" 	units="dimensionless" 	initial_value="2.5"			private_interface="none"	public_interface="out"/>	<!-- ADHMV upper limit [P] -->
+      <variable name="ADHVLL"	units="dimensionless" 	initial_value="0.93617"		private_interface="none"	public_interface="out"/> 	<!-- ADHMV lower limit [P] -->
+      <variable name="ADHKLL" 	units="dimensionless" 	initial_value="0.2"			private_interface="none"	public_interface="out"/>	<!-- ADHMK lower limit [P] -->
+      <variable name="ADHKUL" 	units="dimensionless" 	initial_value="5"			private_interface="none"	public_interface="out"/>	<!-- ADHMK upper limit [P] -->
+	</component>
+
+<!-- ============================================================		GROUPING		=============================================================== -->
+   <group>
+      <relationship_ref relationship="containment"/>
+      <component_ref component="antidiuretic_hormone">
+			<component_ref component="osmotic_control_of_ADH_secretion"/>
+			<component_ref component="pressure_control_of_ADH_secretion"/>
+			<component_ref component="total_ADH_secretion"/>
+			<component_ref component="ADH_in_blood"/>
+			<component_ref component="ADH_effect_on_nonrenal_vascular_resistance"/>
+			<component_ref component="ADH_effect_on_kidney"/>
+      </component_ref>
+   </group>
+
+
+   <group>
+      <relationship_ref relationship="encapsulation"/>
+      <component_ref component="antidiuretic_hormone">
+			<component_ref component="parameter_values"/>
+			<component_ref component="osmotic_control_of_ADH_secretion"/>
+			<component_ref component="pressure_control_of_ADH_secretion"/>
+			<component_ref component="total_ADH_secretion"/>
+			<component_ref component="ADH_in_blood"/>
+			<component_ref component="ADH_effect_on_nonrenal_vascular_resistance"/>
+			<component_ref component="ADH_effect_on_kidney"/>
+      </component_ref>
+   </group>
+
+   
+
+<!-- SIMULATION METADATA -->
+<RDF:RDF xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <RDF:Description RDF:about="#antidiuretic_hormone_CellML1_0_model">
+    <NS1:simulation xmlns:NS1="http://www.cellml.org/metadata/simulation/1.0#" RDF:resource="rdf:#$QQv43"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$4SdBX3">
+    <RDF:first RDF:resource="rdf:#$5SdBX3"/>
+    <RDF:rest RDF:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$3SdBX3">
+    <NS1:boundIntervals xmlns:NS1="http://www.cellml.org/metadata/simulation/1.0#" RDF:resource="rdf:#$4SdBX3"/>
+  </RDF:Description>
+  <RDF:Description xmlns:NS1="http://www.cellml.org/metadata/simulation/1.0#" RDF:about="rdf:#$SQv43" NS1:endingValue="100" NS1:nonstandard-pointDensity="1000"/>
+  <RDF:Description RDF:about="#antidiuretic_hormone_CellML1_0_model#LfY7zdZ%60EYs">
+    <NS1:simulation xmlns:NS1="http://www.cellml.org/metadata/simulation/1.0#" RDF:resource="rdf:#$b2Cb93"/>
+    <NS1:simulation xmlns:NS1="http://www.cellml.org/metadata/simulation/1.0#" RDF:resource="rdf:#$3SdBX3"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$QQv43">
+    <NS1:boundIntervals xmlns:NS1="http://www.cellml.org/metadata/simulation/1.0#" RDF:resource="rdf:#$RQv43"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$RQv43">
+    <RDF:first RDF:resource="rdf:#$SQv43"/>
+    <RDF:rest RDF:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$b2Cb93">
+    <NS1:boundIntervals xmlns:NS1="http://www.cellml.org/metadata/simulation/1.0#" RDF:resource="rdf:#$c2Cb93"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$c2Cb93">
+    <RDF:first RDF:resource="rdf:#$d2Cb93"/>
+    <RDF:rest RDF:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </RDF:Description>
+</RDF:RDF>
+   	
+</model>   

@@ -1,0 +1,4704 @@
+<?xml version="1.0"?>
+<!--
+This CellML file was generated on 9/03/2011 at 2:14:10 at p.m. using:
+
+COR (0.9.31.1409)
+Copyright 2002-2011 Dr Alan Garny
+http://cor.physiol.ox.ac.uk/ - cor@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.cellml.org/
+
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" cmeta:id="guthke_curvy_amended_2006" name="guthke_curvy_amended_2006">
+
+
+   <units name="hour">
+      <unit multiplier="3600" units="second"/>
+   </units>
+   <units name="day">
+      <unit multiplier="24" units="hour"/>
+   </units>
+   <units name="per_day">
+      <unit exponent="-1" units="day"/>
+   </units>
+   <units name="per_litre">
+      <unit exponent="-1" units="litre"/>
+   </units>
+   <units name="litre_per_day">
+      <unit units="litre"/>
+      <unit exponent="-1" units="day"/>
+   </units>
+   <units name="micromole">
+      <unit prefix="micro" units="mole"/>
+   </units>
+   <units name="micromole_per_litre">
+      <unit prefix="micro" units="micromole"/>
+      <unit exponent="-1" units="litre"/>
+   </units>
+   <units name="per_day_per_micromole_litre">
+      <unit exponent="-1" units="day"/>
+      <unit exponent="-1" units="micromole"/>
+      <unit units="litre"/>
+   </units>
+   <units name="micromole_per_litre_per_day">
+      <unit units="micromole"/>
+      <unit exponent="-1" units="litre"/>
+      <unit exponent="-1" units="day"/>
+   </units>
+   <component name="environment">
+      <variable cmeta:id="environment_time" name="time" public_interface="out" units="day"/>
+   </component>
+   <component name="FAt">
+      <variable name="FAt" public_interface="out" units="litre_per_day"/>
+      <variable initial_value="3.6" name="FA1" units="litre_per_day"/>
+      <variable initial_value="1" name="tA" units="day"/>
+      <variable initial_value="1.2" name="FA2" units="litre_per_day"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>FAt</ci>
+            <piecewise>
+               <piece>
+                  <ci>FA2</ci>
+                  <apply>
+                     <geq/>
+                     <ci>time</ci>
+                     <ci>tA</ci>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <ci>FA1</ci>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   <component name="FBt">
+      <variable name="FBt" public_interface="out" units="litre_per_day"/>
+      <variable initial_value="0" name="FB1" units="litre_per_day"/>
+      <variable initial_value="3" name="tB" units="day"/>
+      <variable initial_value="0.024" name="FB2" units="litre_per_day"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>FBt</ci>
+            <piecewise>
+               <piece>
+                  <ci>FB2</ci>
+                  <apply>
+                     <geq/>
+                     <ci>time</ci>
+                     <ci>tB</ci>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <ci>FB1</ci>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   <component name="F0t">
+      <variable name="F0t" public_interface="out" units="litre_per_day"/>
+      <variable name="FAt" public_interface="in" units="litre_per_day"/>
+      <variable name="FBt" public_interface="in" units="litre_per_day"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>F0t</ci>
+            <apply>
+               <plus/>
+               <ci>FAt</ci>
+               <ci>FBt</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c15">
+      <variable cmeta:id="c15_c15" initial_value="284" name="c15" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V2" public_interface="in" units="litre"/>
+      <variable name="c015" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p16" public_interface="in" units="per_day"/>
+      <variable name="c16" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p18" public_interface="in" units="per_day"/>
+      <variable name="c17" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p15" public_interface="in" units="per_day_per_micromole_litre"/>
+      <variable name="c19" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p17" public_interface="in" units="per_day"/>
+      <variable name="p19" public_interface="in" units="per_day_per_micromole_litre"/>
+      <variable name="p20" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p29" public_interface="in" units="per_day"/>
+      <variable name="pAA15" public_interface="in" units="dimensionless"/>
+      <variable name="pp" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c15</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>p0</ci>
+                        <ci>V2</ci>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <ci>c015</ci>
+                        <ci>c15</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p16</ci>
+                     <ci>c16</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p17</ci>
+                     <ci>c17</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>pAA15</ci>
+                     <ci>pp</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>p15</ci>
+                        <ci>c19</ci>
+                     </apply>
+                     <ci>p18</ci>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <ci>p19</ci>
+                           <ci>c19</ci>
+                        </apply>
+                        <apply>
+                           <plus/>
+                           <ci>p20</ci>
+                           <ci>c15</ci>
+                        </apply>
+                     </apply>
+                     <ci>p29</ci>
+                  </apply>
+                  <ci>c15</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c16">
+      <variable cmeta:id="c16_c16" initial_value="168" name="c16" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V2" public_interface="in" units="litre"/>
+      <variable name="c016" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p15" public_interface="in" units="per_day_per_micromole_litre"/>
+      <variable name="c15" public_interface="in" units="micromole_per_litre"/>
+      <variable name="c19" public_interface="in" units="micromole_per_litre"/>
+      <variable name="pAA16" public_interface="in" units="dimensionless"/>
+      <variable name="pp" public_interface="in" units="dimensionless"/>
+      <variable name="p16" public_interface="in" units="per_day"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c16</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>p0</ci>
+                           <ci>V2</ci>
+                        </apply>
+                        <apply>
+                           <minus/>
+                           <ci>c016</ci>
+                           <ci>c16</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>p15</ci>
+                        <ci>c15</ci>
+                        <ci>c19</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p16</ci>
+                     <ci>c16</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>pAA16</ci>
+                  <ci>pp</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c17">
+      <variable cmeta:id="c17_c17" initial_value="265" name="c17" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V2" public_interface="in" units="litre"/>
+      <variable name="c017" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p17" public_interface="in" units="per_day"/>
+      <variable name="c15" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p22" public_interface="in" units="per_day"/>
+      <variable name="c18" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p18" public_interface="in" units="per_day"/>
+      <variable name="p21" public_interface="in" units="per_day"/>
+      <variable name="c19" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p23" public_interface="in" units="per_day"/>
+      <variable name="p1" public_interface="in" units="per_day"/>
+      <variable initial_value="1" name="s1" units="dimensionless"/>
+      <variable name="c1" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p2" public_interface="in" units="per_day"/>
+      <variable initial_value="3" name="s2" units="dimensionless"/>
+      <variable name="c2" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p3" public_interface="in" units="per_day"/>
+      <variable initial_value="4" name="s3" units="dimensionless"/>
+      <variable name="c3" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p4" public_interface="in" units="per_day"/>
+      <variable initial_value="1" name="s4" units="dimensionless"/>
+      <variable name="c4" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p5" public_interface="in" units="per_day"/>
+      <variable initial_value="2" name="s5" units="dimensionless"/>
+      <variable name="c5" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p6" public_interface="in" units="per_day"/>
+      <variable initial_value="1" name="s6" units="dimensionless"/>
+      <variable name="c6" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p7" public_interface="in" units="per_day"/>
+      <variable initial_value="1" name="s7" units="dimensionless"/>
+      <variable name="c7" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p8" public_interface="in" units="per_day"/>
+      <variable initial_value="1" name="s8" units="dimensionless"/>
+      <variable name="c8" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p9" public_interface="in" units="per_day"/>
+      <variable initial_value="1" name="s9" units="dimensionless"/>
+      <variable name="c9" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p14" public_interface="in" units="per_day"/>
+      <variable initial_value="1" name="s14" units="dimensionless"/>
+      <variable name="c14" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p25" public_interface="in" units="per_day_per_micromole_litre"/>
+      <variable name="p26" public_interface="in" units="per_day"/>
+      <variable name="p28" public_interface="in" units="per_day"/>
+      <variable name="pAA17" public_interface="in" units="dimensionless"/>
+      <variable name="pp" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c17</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>p0</ci>
+                           <ci>V2</ci>
+                        </apply>
+                        <apply>
+                           <minus/>
+                           <ci>c017</ci>
+                           <ci>c17</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>p1</ci>
+                        <ci>s1</ci>
+                        <ci>c1</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>p2</ci>
+                        <ci>s2</ci>
+                        <ci>c2</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>p3</ci>
+                        <ci>s3</ci>
+                        <ci>c3</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>p4</ci>
+                        <ci>s4</ci>
+                        <ci>c4</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>p5</ci>
+                        <ci>s5</ci>
+                        <ci>c5</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>p6</ci>
+                        <ci>s6</ci>
+                        <ci>c6</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>p7</ci>
+                        <ci>s7</ci>
+                        <ci>c7</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>p8</ci>
+                        <ci>s8</ci>
+                        <ci>c8</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>p9</ci>
+                        <ci>s9</ci>
+                        <ci>c9</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>p14</ci>
+                        <ci>s14</ci>
+                        <ci>c14</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>p18</ci>
+                        <ci>c15</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>p26</ci>
+                        <ci>c18</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <plus/>
+                        <ci>p17</ci>
+                        <apply>
+                           <times/>
+                           <ci>p25</ci>
+                           <ci>c19</ci>
+                        </apply>
+                        <ci>p28</ci>
+                     </apply>
+                     <ci>c17</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>pAA17</ci>
+                  <ci>pp</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c18">
+      <variable cmeta:id="c18_c18" initial_value="687" name="c18" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V2" public_interface="in" units="litre"/>
+      <variable name="c018" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p25" public_interface="in" units="per_day_per_micromole_litre"/>
+      <variable name="c17" public_interface="in" units="micromole_per_litre"/>
+      <variable name="c19" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p26" public_interface="in" units="per_day"/>
+      <variable name="pAA18" public_interface="in" units="dimensionless"/>
+      <variable name="pp" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c18</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>p0</ci>
+                           <ci>V2</ci>
+                        </apply>
+                        <apply>
+                           <minus/>
+                           <ci>c018</ci>
+                           <ci>c18</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>p25</ci>
+                        <ci>c17</ci>
+                        <ci>c19</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p26</ci>
+                     <ci>c18</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>pAA18</ci>
+                  <ci>pp</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c19">
+      <variable cmeta:id="c19_c19" initial_value="41" name="c19" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V2" public_interface="in" units="litre"/>
+      <variable name="c019" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p23" public_interface="in" units="per_day"/>
+      <variable name="gt" public_interface="in" units="dimensionless"/>
+      <variable name="c17" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p16" public_interface="in" units="per_day"/>
+      <variable name="c16" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p26" public_interface="in" units="per_day"/>
+      <variable name="c18" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p19" public_interface="in" units="per_day_per_micromole_litre"/>
+      <variable name="c15" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p20" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p25" public_interface="in" units="per_day_per_micromole_litre"/>
+      <variable name="p15" public_interface="in" units="per_day_per_micromole_litre"/>
+      <variable name="p11" public_interface="in" units="per_day"/>
+      <variable initial_value="1" name="s11" units="dimensionless"/>
+      <variable name="c11" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p12" public_interface="in" units="per_day"/>
+      <variable initial_value="1" name="s12" units="dimensionless"/>
+      <variable name="c12" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p13" public_interface="in" units="per_day"/>
+      <variable initial_value="1" name="s13" units="dimensionless"/>
+      <variable name="c13" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p10" public_interface="in" units="per_day"/>
+      <variable initial_value="1" name="s10" units="dimensionless"/>
+      <variable name="c10" public_interface="in" units="micromole_per_litre"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c19</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>p0</ci>
+                        <ci>V2</ci>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <ci>c019</ci>
+                        <ci>c19</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p11</ci>
+                     <ci>s11</ci>
+                     <ci>c11</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p12</ci>
+                     <ci>s12</ci>
+                     <ci>c12</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p13</ci>
+                     <ci>c13</ci>
+                     <ci>s13</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p10</ci>
+                     <ci>c10</ci>
+                     <ci>s10</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p23</ci>
+                     <apply>
+                        <minus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        <ci>gt</ci>
+                     </apply>
+                     <ci>c17</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p16</ci>
+                     <ci>c16</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p26</ci>
+                     <ci>c18</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <ci>p19</ci>
+                           <ci>c15</ci>
+                        </apply>
+                        <apply>
+                           <plus/>
+                           <ci>p20</ci>
+                           <ci>c15</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>p15</ci>
+                        <ci>c15</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>p25</ci>
+                        <ci>c17</ci>
+                     </apply>
+                  </apply>
+                  <ci>c19</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c20">
+      <variable cmeta:id="c20_c20" initial_value="0" name="c20" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V2" public_interface="in" units="litre"/>
+      <variable name="c020" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p19" public_interface="in" units="per_day_per_micromole_litre"/>
+      <variable name="c15" public_interface="in" units="micromole_per_litre"/>
+      <variable name="c19" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p20" public_interface="in" units="micromole_per_litre"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c20</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>p0</ci>
+                     <ci>V2</ci>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <ci>c020</ci>
+                     <ci>c20</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>p19</ci>
+                        <ci>c15</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci>p20</ci>
+                        <ci>c15</ci>
+                     </apply>
+                  </apply>
+                  <ci>c19</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c21">
+      <variable cmeta:id="c21_c21" initial_value="0" name="c21" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V2" public_interface="in" units="litre"/>
+      <variable name="c021" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p21" public_interface="in" units="per_day"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c21</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>p0</ci>
+                     <ci>V2</ci>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <ci>c021</ci>
+                     <ci>c21</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>p21</ci>
+                  <ci>c21</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c22">
+      <variable initial_value="0" name="c22" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V2" public_interface="in" units="litre"/>
+      <variable name="c022" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p22" public_interface="in" units="per_day"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c22</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>p0</ci>
+                     <ci>V2</ci>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <ci>c022</ci>
+                     <ci>c22</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>p22</ci>
+                  <ci>c22</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c23">
+      <variable initial_value="8159" name="c23" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V2" public_interface="in" units="litre"/>
+      <variable name="c023" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p21" public_interface="in" units="per_day"/>
+      <variable name="c21" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p22" public_interface="in" units="per_day"/>
+      <variable name="c22" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p23" public_interface="in" units="per_day"/>
+      <variable name="p31" public_interface="in" units="per_day"/>
+      <variable name="c15" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p20" public_interface="in" units="micromole_per_litre"/>
+      <variable name="c19" public_interface="in" units="micromole_per_litre"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c23</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>p0</ci>
+                           <ci>V2</ci>
+                        </apply>
+                        <apply>
+                           <minus/>
+                           <ci>c023</ci>
+                           <ci>c23</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>p21</ci>
+                        <ci>c21</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>p22</ci>
+                        <ci>c22</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p23</ci>
+                     <ci>c23</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>p31</ci>
+                        <ci>c15</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci>p20</ci>
+                        <ci>c15</ci>
+                     </apply>
+                  </apply>
+                  <ci>c19</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c24">
+      <variable initial_value="8159" name="c24" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V2" public_interface="in" units="litre"/>
+      <variable name="c024" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p30" public_interface="in" units="dimensionless"/>
+      <variable name="p23" public_interface="in" units="per_day"/>
+      <variable name="c23" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p32" public_interface="in" units="per_day"/>
+      <variable name="c15" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p20" public_interface="in" units="micromole_per_litre"/>
+      <variable name="c19" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p24" public_interface="in" units="per_day"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c24</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>p0</ci>
+                        <ci>V2</ci>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <ci>c024</ci>
+                        <ci>c24</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                     <ci>p30</ci>
+                     <ci>p23</ci>
+                     <ci>c23</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <ci>p32</ci>
+                           <ci>c15</ci>
+                        </apply>
+                        <apply>
+                           <plus/>
+                           <ci>p20</ci>
+                           <ci>c15</ci>
+                        </apply>
+                     </apply>
+                     <ci>c19</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>p24</ci>
+                  <ci>c24</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="pp">
+      <variable name="pp" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0" name="p33" units="micromole_per_litre_per_day"/>
+      <variable initial_value="1" name="t1" units="day"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>pp</ci>
+            <piecewise>
+               <piece>
+                  <ci>p33</ci>
+                  <apply>
+                     <lt/>
+                     <ci>time</ci>
+                     <ci>t1</ci>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0</cn>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   <component name="gt">
+      <variable name="gt" public_interface="out" units="dimensionless"/>
+      <variable name="p27" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>gt</ci>
+            <piecewise>
+               <piece>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0</cn>
+                  <apply>
+                     <lt/>
+                     <ci>time</ci>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="day">3</cn>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <ci>p27</ci>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   <component name="c1">
+      <variable initial_value="2258" name="c1" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V2" public_interface="in" units="litre"/>
+      <variable name="c01" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p1" public_interface="in" units="per_day"/>
+      <variable name="pp" public_interface="in" units="dimensionless"/>
+      <variable name="pAA1" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c1</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>p0</ci>
+                        <ci>V2</ci>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <ci>c01</ci>
+                        <ci>c1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p1</ci>
+                     <ci>c1</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>pAA1</ci>
+                  <ci>pp</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c2">
+      <variable initial_value="940" name="c2" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V2" public_interface="in" units="litre"/>
+      <variable name="c02" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p2" public_interface="in" units="per_day"/>
+      <variable name="pp" public_interface="in" units="dimensionless"/>
+      <variable name="pAA2" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c2</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>p0</ci>
+                        <ci>V2</ci>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <ci>c02</ci>
+                        <ci>c2</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p2</ci>
+                     <ci>c2</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>pAA2</ci>
+                  <ci>pp</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c3">
+      <variable initial_value="2604" name="c3" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V2" public_interface="in" units="litre"/>
+      <variable name="c03" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p3" public_interface="in" units="per_day"/>
+      <variable name="pp" public_interface="in" units="dimensionless"/>
+      <variable name="pAA3" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c3</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>p0</ci>
+                        <ci>V2</ci>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <ci>c03</ci>
+                        <ci>c3</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p3</ci>
+                     <ci>c3</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>pAA3</ci>
+                  <ci>pp</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c4">
+      <variable initial_value="987" name="c4" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V2" public_interface="in" units="litre"/>
+      <variable name="c04" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p4" public_interface="in" units="per_day"/>
+      <variable name="pp" public_interface="in" units="dimensionless"/>
+      <variable name="pAA4" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c4</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>p0</ci>
+                        <ci>V2</ci>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <ci>c04</ci>
+                        <ci>c4</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p4</ci>
+                     <ci>c4</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>pAA4</ci>
+                  <ci>pp</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c5">
+      <variable initial_value="464" name="c5" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V2" public_interface="in" units="litre"/>
+      <variable name="c05" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p5" public_interface="in" units="per_day"/>
+      <variable name="pp" public_interface="in" units="dimensionless"/>
+      <variable name="pAA5" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c5</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>p0</ci>
+                        <ci>V2</ci>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <ci>c05</ci>
+                        <ci>c5</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p5</ci>
+                     <ci>c5</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>pAA5</ci>
+                  <ci>pp</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c6">
+      <variable initial_value="1300" name="c6" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V2" public_interface="in" units="litre"/>
+      <variable name="c06" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p6" public_interface="in" units="per_day"/>
+      <variable name="pp" public_interface="in" units="dimensionless"/>
+      <variable name="pAA6" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c6</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>p0</ci>
+                        <ci>V2</ci>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <ci>c06</ci>
+                        <ci>c6</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p6</ci>
+                     <ci>c6</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>pAA6</ci>
+                  <ci>pp</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c7">
+      <variable initial_value="500" name="c7" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V2" public_interface="in" units="litre"/>
+      <variable name="c07" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p7" public_interface="in" units="per_day"/>
+      <variable name="pp" public_interface="in" units="dimensionless"/>
+      <variable name="pAA7" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c7</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>p0</ci>
+                        <ci>V2</ci>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <ci>c07</ci>
+                        <ci>c7</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p7</ci>
+                     <ci>c7</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>pAA7</ci>
+                  <ci>pp</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c8">
+      <variable initial_value="1825" name="c8" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V2" public_interface="in" units="litre"/>
+      <variable name="c08" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p8" public_interface="in" units="per_day"/>
+      <variable name="pp" public_interface="in" units="dimensionless"/>
+      <variable name="pAA8" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c8</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>p0</ci>
+                        <ci>V2</ci>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <ci>c08</ci>
+                        <ci>c8</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p8</ci>
+                     <ci>c8</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>pAA8</ci>
+                  <ci>pp</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c9">
+      <variable initial_value="2215" name="c9" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V2" public_interface="in" units="litre"/>
+      <variable name="c09" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p9" public_interface="in" units="per_day"/>
+      <variable name="pp" public_interface="in" units="dimensionless"/>
+      <variable name="pAA9" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c9</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>p0</ci>
+                        <ci>V2</ci>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <ci>c09</ci>
+                        <ci>c9</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p9</ci>
+                     <ci>c9</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>pAA9</ci>
+                  <ci>pp</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c10">
+      <variable initial_value="327" name="c10" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V2" public_interface="in" units="litre"/>
+      <variable name="c010" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p10" public_interface="in" units="per_day"/>
+      <variable name="pp" public_interface="in" units="dimensionless"/>
+      <variable name="pAA10" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c10</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>p0</ci>
+                        <ci>V2</ci>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <ci>c010</ci>
+                        <ci>c10</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p10</ci>
+                     <ci>c10</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>pAA10</ci>
+                  <ci>pp</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c11">
+      <variable initial_value="259" name="c11" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V2" public_interface="in" units="litre"/>
+      <variable name="c011" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p11" public_interface="in" units="per_day"/>
+      <variable name="pp" public_interface="in" units="dimensionless"/>
+      <variable name="pAA11" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c11</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>p0</ci>
+                        <ci>V2</ci>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <ci>c011</ci>
+                        <ci>c11</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p11</ci>
+                     <ci>c11</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>pAA11</ci>
+                  <ci>pp</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c12">
+      <variable initial_value="861" name="c12" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V2" public_interface="in" units="litre"/>
+      <variable name="c012" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p12" public_interface="in" units="per_day"/>
+      <variable name="pp" public_interface="in" units="dimensionless"/>
+      <variable name="pAA12" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c12</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>p0</ci>
+                        <ci>V2</ci>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <ci>c012</ci>
+                        <ci>c12</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p12</ci>
+                     <ci>c12</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>pAA12</ci>
+                  <ci>pp</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c13">
+      <variable initial_value="1957" name="c13" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V2" public_interface="in" units="litre"/>
+      <variable name="c013" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p13" public_interface="in" units="per_day"/>
+      <variable name="pp" public_interface="in" units="dimensionless"/>
+      <variable name="pAA13" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c13</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>p0</ci>
+                        <ci>V2</ci>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <ci>c013</ci>
+                        <ci>c13</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p13</ci>
+                     <ci>c13</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>pAA13</ci>
+                  <ci>pp</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c14">
+      <variable initial_value="859" name="c14" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V2" public_interface="in" units="litre"/>
+      <variable name="c014" public_interface="in" units="micromole_per_litre"/>
+      <variable name="p14" public_interface="in" units="per_day"/>
+      <variable name="pp" public_interface="in" units="dimensionless"/>
+      <variable name="pAA14" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c14</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>p0</ci>
+                        <ci>V2</ci>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <ci>c014</ci>
+                        <ci>c14</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p14</ci>
+                     <ci>c14</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>pAA14</ci>
+                  <ci>pp</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c01">
+      <variable initial_value="2258" name="c01" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V1" public_interface="in" units="litre"/>
+      <variable name="FAt" public_interface="in" units="litre_per_day"/>
+      <variable initial_value="2258" name="CA1" units="micromole_per_litre"/>
+      <variable name="FBt" public_interface="in" units="litre_per_day"/>
+      <variable name="CB1" public_interface="in" units="micromole_per_litre"/>
+      <variable name="F0t" public_interface="in" units="litre_per_day"/>
+      <variable name="c1" public_interface="in" units="micromole_per_litre"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c01</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FAt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CA1</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FBt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CB1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>F0t</ci>
+                        <ci>V1</ci>
+                     </apply>
+                     <ci>c01</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>p0</ci>
+                     <ci>V1</ci>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <ci>c01</ci>
+                     <ci>c1</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c02">
+      <variable initial_value="940" name="c02" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V1" public_interface="in" units="litre"/>
+      <variable name="FAt" public_interface="in" units="litre_per_day"/>
+      <variable initial_value="940" name="CA2" units="micromole_per_litre"/>
+      <variable name="FBt" public_interface="in" units="litre_per_day"/>
+      <variable name="CB1" public_interface="in" units="micromole_per_litre"/>
+      <variable name="F0t" public_interface="in" units="litre_per_day"/>
+      <variable name="c2" public_interface="in" units="micromole_per_litre"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c02</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FAt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CA2</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FBt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CB1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>F0t</ci>
+                        <ci>V1</ci>
+                     </apply>
+                     <ci>c02</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>p0</ci>
+                     <ci>V1</ci>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <ci>c02</ci>
+                     <ci>c2</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c03">
+      <variable initial_value="2604" name="c03" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V1" public_interface="in" units="litre"/>
+      <variable name="FAt" public_interface="in" units="litre_per_day"/>
+      <variable initial_value="2604" name="CA3" units="micromole_per_litre"/>
+      <variable name="FBt" public_interface="in" units="litre_per_day"/>
+      <variable name="CB1" public_interface="in" units="micromole_per_litre"/>
+      <variable name="F0t" public_interface="in" units="litre_per_day"/>
+      <variable name="c3" public_interface="in" units="micromole_per_litre"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c03</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FAt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CA3</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FBt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CB1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>F0t</ci>
+                        <ci>V1</ci>
+                     </apply>
+                     <ci>c03</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>p0</ci>
+                     <ci>V1</ci>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <ci>c03</ci>
+                     <ci>c3</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c04">
+      <variable initial_value="987" name="c04" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V1" public_interface="in" units="litre"/>
+      <variable name="FAt" public_interface="in" units="litre_per_day"/>
+      <variable initial_value="987" name="CA4" units="micromole_per_litre"/>
+      <variable name="FBt" public_interface="in" units="litre_per_day"/>
+      <variable name="CB1" public_interface="in" units="micromole_per_litre"/>
+      <variable name="F0t" public_interface="in" units="litre_per_day"/>
+      <variable name="c4" public_interface="in" units="micromole_per_litre"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c04</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FAt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CA4</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FBt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CB1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>F0t</ci>
+                        <ci>V1</ci>
+                     </apply>
+                     <ci>c04</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>p0</ci>
+                     <ci>V1</ci>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <ci>c04</ci>
+                     <ci>c4</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c05">
+      <variable initial_value="464" name="c05" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V1" public_interface="in" units="litre"/>
+      <variable name="FAt" public_interface="in" units="litre_per_day"/>
+      <variable initial_value="464" name="CA5" units="micromole_per_litre"/>
+      <variable name="FBt" public_interface="in" units="litre_per_day"/>
+      <variable name="CB1" public_interface="in" units="micromole_per_litre"/>
+      <variable name="F0t" public_interface="in" units="litre_per_day"/>
+      <variable name="c5" public_interface="in" units="micromole_per_litre"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c05</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FAt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CA5</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FBt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CB1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>F0t</ci>
+                        <ci>V1</ci>
+                     </apply>
+                     <ci>c05</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>p0</ci>
+                     <ci>V1</ci>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <ci>c05</ci>
+                     <ci>c5</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c06">
+      <variable initial_value="1300" name="c06" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V1" public_interface="in" units="litre"/>
+      <variable name="FAt" public_interface="in" units="litre_per_day"/>
+      <variable initial_value="1300" name="CA6" units="micromole_per_litre"/>
+      <variable name="FBt" public_interface="in" units="litre_per_day"/>
+      <variable name="CB1" public_interface="in" units="micromole_per_litre"/>
+      <variable name="F0t" public_interface="in" units="litre_per_day"/>
+      <variable name="c6" public_interface="in" units="micromole_per_litre"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c06</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FAt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CA6</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FBt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CB1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>F0t</ci>
+                        <ci>V1</ci>
+                     </apply>
+                     <ci>c06</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>p0</ci>
+                     <ci>V1</ci>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <ci>c06</ci>
+                     <ci>c6</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c07">
+      <variable initial_value="500" name="c07" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V1" public_interface="in" units="litre"/>
+      <variable name="FAt" public_interface="in" units="litre_per_day"/>
+      <variable initial_value="500" name="CA7" units="micromole_per_litre"/>
+      <variable name="FBt" public_interface="in" units="litre_per_day"/>
+      <variable name="CB1" public_interface="in" units="micromole_per_litre"/>
+      <variable name="F0t" public_interface="in" units="litre_per_day"/>
+      <variable name="c7" public_interface="in" units="micromole_per_litre"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c07</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FAt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CA7</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FBt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CB1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>F0t</ci>
+                        <ci>V1</ci>
+                     </apply>
+                     <ci>c07</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>p0</ci>
+                     <ci>V1</ci>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <ci>c07</ci>
+                     <ci>c7</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c08">
+      <variable initial_value="1825" name="c08" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V1" public_interface="in" units="litre"/>
+      <variable name="FAt" public_interface="in" units="litre_per_day"/>
+      <variable initial_value="1825" name="CA8" units="micromole_per_litre"/>
+      <variable name="FBt" public_interface="in" units="litre_per_day"/>
+      <variable name="CB1" public_interface="in" units="micromole_per_litre"/>
+      <variable name="F0t" public_interface="in" units="litre_per_day"/>
+      <variable name="c8" public_interface="in" units="micromole_per_litre"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c08</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FAt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CA8</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FBt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CB1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>F0t</ci>
+                        <ci>V1</ci>
+                     </apply>
+                     <ci>c08</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>p0</ci>
+                     <ci>V1</ci>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <ci>c08</ci>
+                     <ci>c8</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c09">
+      <variable initial_value="2215" name="c09" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V1" public_interface="in" units="litre"/>
+      <variable name="FAt" public_interface="in" units="litre_per_day"/>
+      <variable initial_value="2215" name="CA9" units="micromole_per_litre"/>
+      <variable name="FBt" public_interface="in" units="litre_per_day"/>
+      <variable name="CB1" public_interface="in" units="micromole_per_litre"/>
+      <variable name="F0t" public_interface="in" units="litre_per_day"/>
+      <variable name="c9" public_interface="in" units="micromole_per_litre"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c09</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FAt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CA9</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FBt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CB1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>F0t</ci>
+                        <ci>V1</ci>
+                     </apply>
+                     <ci>c09</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>p0</ci>
+                     <ci>V1</ci>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <ci>c09</ci>
+                     <ci>c9</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c010">
+      <variable initial_value="327" name="c010" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V1" public_interface="in" units="litre"/>
+      <variable name="FAt" public_interface="in" units="litre_per_day"/>
+      <variable initial_value="327" name="CA10" units="micromole_per_litre"/>
+      <variable name="FBt" public_interface="in" units="litre_per_day"/>
+      <variable name="CB1" public_interface="in" units="micromole_per_litre"/>
+      <variable name="F0t" public_interface="in" units="litre_per_day"/>
+      <variable name="c10" public_interface="in" units="micromole_per_litre"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c010</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FAt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CA10</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FBt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CB1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>F0t</ci>
+                        <ci>V1</ci>
+                     </apply>
+                     <ci>c010</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>p0</ci>
+                     <ci>V1</ci>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <ci>c010</ci>
+                     <ci>c10</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c011">
+      <variable initial_value="259" name="c011" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V1" public_interface="in" units="litre"/>
+      <variable name="FAt" public_interface="in" units="litre_per_day"/>
+      <variable initial_value="259" name="CA11" units="micromole_per_litre"/>
+      <variable name="FBt" public_interface="in" units="litre_per_day"/>
+      <variable name="CB1" public_interface="in" units="micromole_per_litre"/>
+      <variable name="F0t" public_interface="in" units="litre_per_day"/>
+      <variable name="c11" public_interface="in" units="micromole_per_litre"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c011</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FAt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CA11</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FBt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CB1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>F0t</ci>
+                        <ci>V1</ci>
+                     </apply>
+                     <ci>c011</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>p0</ci>
+                     <ci>V1</ci>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <ci>c011</ci>
+                     <ci>c11</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c012">
+      <variable initial_value="861" name="c012" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V1" public_interface="in" units="litre"/>
+      <variable name="FAt" public_interface="in" units="litre_per_day"/>
+      <variable initial_value="861" name="CA12" units="micromole_per_litre"/>
+      <variable name="FBt" public_interface="in" units="litre_per_day"/>
+      <variable name="CB1" public_interface="in" units="micromole_per_litre"/>
+      <variable name="F0t" public_interface="in" units="litre_per_day"/>
+      <variable name="c12" public_interface="in" units="micromole_per_litre"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c012</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FAt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CA12</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FBt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CB1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>F0t</ci>
+                        <ci>V1</ci>
+                     </apply>
+                     <ci>c012</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>p0</ci>
+                     <ci>V1</ci>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <ci>c012</ci>
+                     <ci>c12</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c013">
+      <variable initial_value="1957" name="c013" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V1" public_interface="in" units="litre"/>
+      <variable name="FAt" public_interface="in" units="litre_per_day"/>
+      <variable initial_value="1957" name="CA13" units="micromole_per_litre"/>
+      <variable name="FBt" public_interface="in" units="litre_per_day"/>
+      <variable name="CB1" public_interface="in" units="micromole_per_litre"/>
+      <variable name="F0t" public_interface="in" units="litre_per_day"/>
+      <variable name="c13" public_interface="in" units="micromole_per_litre"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c013</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FAt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CA13</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FBt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CB1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>F0t</ci>
+                        <ci>V1</ci>
+                     </apply>
+                     <ci>c013</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>p0</ci>
+                     <ci>V1</ci>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <ci>c013</ci>
+                     <ci>c13</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c014">
+      <variable initial_value="859" name="c014" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V1" public_interface="in" units="litre"/>
+      <variable name="FAt" public_interface="in" units="litre_per_day"/>
+      <variable initial_value="859" name="CA14" units="micromole_per_litre"/>
+      <variable name="FBt" public_interface="in" units="litre_per_day"/>
+      <variable name="CB1" public_interface="in" units="micromole_per_litre"/>
+      <variable name="F0t" public_interface="in" units="litre_per_day"/>
+      <variable name="c14" public_interface="in" units="micromole_per_litre"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c014</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FAt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CA14</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FBt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CB1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>F0t</ci>
+                        <ci>V1</ci>
+                     </apply>
+                     <ci>c014</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>p0</ci>
+                     <ci>V1</ci>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <ci>c014</ci>
+                     <ci>c14</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c015">
+      <variable initial_value="284" name="c015" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V1" public_interface="in" units="litre"/>
+      <variable name="FAt" public_interface="in" units="litre_per_day"/>
+      <variable initial_value="284" name="CA15" units="micromole_per_litre"/>
+      <variable name="FBt" public_interface="in" units="litre_per_day"/>
+      <variable name="CB15" public_interface="in" units="micromole_per_litre"/>
+      <variable name="F0t" public_interface="in" units="litre_per_day"/>
+      <variable name="c15" public_interface="in" units="micromole_per_litre"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c015</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FAt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CA15</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FBt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CB15</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>F0t</ci>
+                        <ci>V1</ci>
+                     </apply>
+                     <ci>c015</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>p0</ci>
+                     <ci>V1</ci>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <ci>c015</ci>
+                     <ci>c15</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c016">
+      <variable initial_value="168" name="c016" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V1" public_interface="in" units="litre"/>
+      <variable name="FAt" public_interface="in" units="litre_per_day"/>
+      <variable initial_value="168" name="CA16" units="micromole_per_litre"/>
+      <variable name="FBt" public_interface="in" units="litre_per_day"/>
+      <variable name="CB1" public_interface="in" units="micromole_per_litre"/>
+      <variable name="F0t" public_interface="in" units="litre_per_day"/>
+      <variable name="c16" public_interface="in" units="micromole_per_litre"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c016</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FAt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CA16</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FBt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CB1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>F0t</ci>
+                        <ci>V1</ci>
+                     </apply>
+                     <ci>c016</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>p0</ci>
+                     <ci>V1</ci>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <ci>c016</ci>
+                     <ci>c16</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c017">
+      <variable initial_value="265" name="c017" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V1" public_interface="in" units="litre"/>
+      <variable name="FAt" public_interface="in" units="litre_per_day"/>
+      <variable initial_value="265" name="CA17" units="micromole_per_litre"/>
+      <variable name="FBt" public_interface="in" units="litre_per_day"/>
+      <variable name="CB1" public_interface="in" units="micromole_per_litre"/>
+      <variable name="F0t" public_interface="in" units="litre_per_day"/>
+      <variable name="c17" public_interface="in" units="micromole_per_litre"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c017</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FAt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CA17</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FBt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CB1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>F0t</ci>
+                        <ci>V1</ci>
+                     </apply>
+                     <ci>c017</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>p0</ci>
+                     <ci>V1</ci>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <ci>c017</ci>
+                     <ci>c17</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c018">
+      <variable initial_value="687" name="c018" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V1" public_interface="in" units="litre"/>
+      <variable name="FAt" public_interface="in" units="litre_per_day"/>
+      <variable initial_value="687" name="CA18" units="micromole_per_litre"/>
+      <variable name="FBt" public_interface="in" units="litre_per_day"/>
+      <variable name="CB1" public_interface="in" units="micromole_per_litre"/>
+      <variable name="F0t" public_interface="in" units="litre_per_day"/>
+      <variable name="c18" public_interface="in" units="micromole_per_litre"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c018</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FAt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CA18</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FBt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CB1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>F0t</ci>
+                        <ci>V1</ci>
+                     </apply>
+                     <ci>c018</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>p0</ci>
+                     <ci>V1</ci>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <ci>c018</ci>
+                     <ci>c18</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c019">
+      <variable initial_value="41" name="c019" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V1" public_interface="in" units="litre"/>
+      <variable name="FAt" public_interface="in" units="litre_per_day"/>
+      <variable initial_value="41" name="CA19" units="micromole_per_litre"/>
+      <variable name="FBt" public_interface="in" units="litre_per_day"/>
+      <variable name="CB1" public_interface="in" units="micromole_per_litre"/>
+      <variable name="F0t" public_interface="in" units="litre_per_day"/>
+      <variable name="c19" public_interface="in" units="micromole_per_litre"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c019</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FAt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CA19</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FBt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CB1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>F0t</ci>
+                        <ci>V1</ci>
+                     </apply>
+                     <ci>c019</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>p0</ci>
+                     <ci>V1</ci>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <ci>c019</ci>
+                     <ci>c19</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c020">
+      <variable initial_value="0" name="c020" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V1" public_interface="in" units="litre"/>
+      <variable name="FAt" public_interface="in" units="litre_per_day"/>
+      <variable name="FBt" public_interface="in" units="litre_per_day"/>
+      <variable initial_value="0" name="CA20" units="micromole_per_litre"/>
+      <variable name="CB1" public_interface="in" units="micromole_per_litre"/>
+      <variable name="F0t" public_interface="in" units="litre_per_day"/>
+      <variable name="c20" public_interface="in" units="micromole_per_litre"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c020</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FAt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CA20</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FBt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CB1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>F0t</ci>
+                        <ci>V1</ci>
+                     </apply>
+                     <ci>c020</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>p0</ci>
+                     <ci>V1</ci>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <ci>c020</ci>
+                     <ci>c20</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c021">
+      <variable initial_value="0" name="c021" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V1" public_interface="in" units="litre"/>
+      <variable name="FAt" public_interface="in" units="litre_per_day"/>
+      <variable initial_value="0" name="CA21" units="micromole_per_litre"/>
+      <variable name="FBt" public_interface="in" units="litre_per_day"/>
+      <variable name="CB1" public_interface="in" units="micromole_per_litre"/>
+      <variable name="F0t" public_interface="in" units="litre_per_day"/>
+      <variable name="c21" public_interface="in" units="micromole_per_litre"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c021</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FAt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CA21</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FBt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CB1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>F0t</ci>
+                        <ci>V1</ci>
+                     </apply>
+                     <ci>c021</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>p0</ci>
+                     <ci>V1</ci>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <ci>c021</ci>
+                     <ci>c21</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c022">
+      <variable initial_value="0" name="c022" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V1" public_interface="in" units="litre"/>
+      <variable name="FAt" public_interface="in" units="litre_per_day"/>
+      <variable initial_value="0" name="CA22" units="micromole_per_litre"/>
+      <variable name="FBt" public_interface="in" units="litre_per_day"/>
+      <variable name="CB1" public_interface="in" units="micromole_per_litre"/>
+      <variable name="F0t" public_interface="in" units="litre_per_day"/>
+      <variable name="c22" public_interface="in" units="micromole_per_litre"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c022</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FAt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CA22</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FBt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CB1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>F0t</ci>
+                        <ci>V1</ci>
+                     </apply>
+                     <ci>c022</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>p0</ci>
+                     <ci>V1</ci>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <ci>c022</ci>
+                     <ci>c22</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c023">
+      <variable initial_value="0" name="c023" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V1" public_interface="in" units="litre"/>
+      <variable name="FAt" public_interface="in" units="litre_per_day"/>
+      <variable initial_value="0" name="CA23" units="micromole_per_litre"/>
+      <variable name="FBt" public_interface="in" units="litre_per_day"/>
+      <variable name="CB1" public_interface="in" units="micromole_per_litre"/>
+      <variable name="F0t" public_interface="in" units="litre_per_day"/>
+      <variable name="c23" public_interface="in" units="micromole_per_litre"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c023</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FAt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CA23</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FBt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CB1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>F0t</ci>
+                        <ci>V1</ci>
+                     </apply>
+                     <ci>c023</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>p0</ci>
+                     <ci>V1</ci>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <ci>c023</ci>
+                     <ci>c23</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c024">
+      <variable initial_value="0" name="c024" public_interface="out" units="micromole_per_litre"/>
+      <variable name="p0" public_interface="in" units="litre_per_day"/>
+      <variable name="V1" public_interface="in" units="litre"/>
+      <variable name="FAt" public_interface="in" units="litre_per_day"/>
+      <variable initial_value="0" name="CA24" units="micromole_per_litre"/>
+      <variable name="FBt" public_interface="in" units="litre_per_day"/>
+      <variable name="CB1" public_interface="in" units="micromole_per_litre"/>
+      <variable name="F0t" public_interface="in" units="litre_per_day"/>
+      <variable name="c24" public_interface="in" units="micromole_per_litre"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c024</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FAt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CA24</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>FBt</ci>
+                           <ci>V1</ci>
+                        </apply>
+                        <ci>CB1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>F0t</ci>
+                        <ci>V1</ci>
+                     </apply>
+                     <ci>c024</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>p0</ci>
+                     <ci>V1</ci>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <ci>c024</ci>
+                     <ci>c24</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="model_parameters">
+      <variable initial_value="0.6" name="V1" public_interface="out" units="litre"/>
+      <variable initial_value="0.9" name="V2" public_interface="out" units="litre"/>
+      <variable initial_value="0" name="CB1" public_interface="out" units="micromole_per_litre"/>
+      <variable initial_value="1500" name="CB15" public_interface="out" units="micromole_per_litre"/>
+      <variable initial_value="1191.072" name="p0" public_interface="out" units="litre_per_day"/>
+      <variable initial_value="1.816" name="p1" public_interface="out" units="per_day"/>
+      <variable initial_value="16.29" name="p2" public_interface="out" units="per_day"/>
+      <variable initial_value="100" name="p3" public_interface="out" units="per_day"/>
+      <variable initial_value="1.147" name="p4" public_interface="out" units="per_day"/>
+      <variable initial_value="15.99" name="p5" public_interface="out" units="per_day"/>
+      <variable initial_value="4.148" name="p6" public_interface="out" units="per_day"/>
+      <variable initial_value="3.723" name="p7" public_interface="out" units="per_day"/>
+      <variable initial_value="1.573" name="p8" public_interface="out" units="per_day"/>
+      <variable initial_value="1.135" name="p9" public_interface="out" units="per_day"/>
+      <variable initial_value="0.192" name="p10" public_interface="out" units="per_day"/>
+      <variable initial_value="34.53" name="p11" public_interface="out" units="per_day"/>
+      <variable initial_value="10.8" name="p12" public_interface="out" units="per_day"/>
+      <variable initial_value="10.76" name="p13" public_interface="out" units="per_day"/>
+      <variable initial_value="9.326" name="p14" public_interface="out" units="per_day"/>
+      <variable initial_value="0.0009" name="p15" public_interface="out" units="per_day_per_micromole_litre"/>
+      <variable initial_value="3.593" name="p16" public_interface="out" units="per_day"/>
+      <variable initial_value="50.08" name="p17" public_interface="out" units="per_day"/>
+      <variable initial_value="56.73" name="p18" public_interface="out" units="per_day"/>
+      <variable initial_value="225.76" name="p19" public_interface="out" units="per_day_per_micromole_litre"/>
+      <variable initial_value="5" name="p20" public_interface="out" units="micromole_per_litre"/>
+      <variable initial_value="0.0033" name="p21" public_interface="out" units="per_day"/>
+      <variable initial_value="0.0205" name="p22" public_interface="out" units="per_day"/>
+      <variable initial_value="40.68" name="p23" public_interface="out" units="per_day"/>
+      <variable initial_value="0.5474" name="p24" public_interface="out" units="per_day"/>
+      <variable initial_value="0" name="p25" public_interface="out" units="per_day_per_micromole_litre"/>
+      <variable initial_value="0" name="p26" public_interface="out" units="per_day"/>
+      <variable initial_value="0.6804" name="p27" public_interface="out" units="dimensionless"/>
+      <variable initial_value="38.05" name="p28" public_interface="out" units="per_day"/>
+      <variable initial_value="2.8119" name="p29" public_interface="out" units="per_day"/>
+      <variable initial_value="0" name="p30" public_interface="out" units="dimensionless"/>
+      <variable initial_value="1.31" name="p31" public_interface="out" units="per_day"/>
+      <variable initial_value="478.7" name="p32" public_interface="out" units="per_day"/>
+      <variable initial_value="1.4" name="pAA1" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.18" name="pAA2" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0" name="pAA3" public_interface="out" units="dimensionless"/>
+      <variable initial_value="1.19" name="pAA4" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.45" name="pAA5" public_interface="out" units="dimensionless"/>
+      <variable initial_value="1.05" name="pAA6" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.62" name="pAA7" public_interface="out" units="dimensionless"/>
+      <variable initial_value="1.15" name="pAA8" public_interface="out" units="dimensionless"/>
+      <variable initial_value="1" name="pAA9" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.15" name="pAA10" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.77" name="pAA11" public_interface="out" units="dimensionless"/>
+      <variable initial_value="1.55" name="pAA12" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.78" name="pAA13" public_interface="out" units="dimensionless"/>
+      <variable initial_value="1.81" name="pAA14" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.31" name="pAA15" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.25" name="pAA16" public_interface="out" units="dimensionless"/>
+      <variable initial_value="1.27" name="pAA17" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.06" name="pAA18" public_interface="out" units="dimensionless"/>
+   </component>
+   <connection>
+      <map_components component_1="F0t" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="FAt" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="FBt" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c1" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c2" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c3" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c4" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c5" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c6" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c7" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c8" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c9" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c10" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c11" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c12" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c13" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c14" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c15" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c16" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c17" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c18" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c19" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c20" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c21" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c22" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c23" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c24" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="pp" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c01" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c02" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c03" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c04" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c05" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c06" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c07" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c08" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c09" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c010" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c011" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c012" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c013" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c014" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c015" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c016" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c017" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c018" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c019" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c020" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c021" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c022" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c023" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c024" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="gt" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="F0t" component_2="FAt"/>
+      <map_variables variable_1="FAt" variable_2="FAt"/>
+   </connection>
+   <connection>
+      <map_components component_1="F0t" component_2="FBt"/>
+      <map_variables variable_1="FBt" variable_2="FBt"/>
+   </connection>
+   <connection>
+      <map_components component_1="gt" component_2="model_parameters"/>
+      <map_variables variable_1="p27" variable_2="p27"/>
+   </connection>
+   <connection>
+      <map_components component_1="c1" component_2="model_parameters"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="p1" variable_2="p1"/>
+      <map_variables variable_1="V2" variable_2="V2"/>
+      <map_variables variable_1="pAA1" variable_2="pAA1"/>
+   </connection>
+   <connection>
+      <map_components component_1="c1" component_2="c01"/>
+      <map_variables variable_1="c01" variable_2="c01"/>
+      <map_variables variable_1="c1" variable_2="c1"/>
+   </connection>
+   <connection>
+      <map_components component_1="c2" component_2="model_parameters"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="p2" variable_2="p2"/>
+      <map_variables variable_1="V2" variable_2="V2"/>
+      <map_variables variable_1="pAA2" variable_2="pAA2"/>
+   </connection>
+   <connection>
+      <map_components component_1="c2" component_2="c02"/>
+      <map_variables variable_1="c02" variable_2="c02"/>
+      <map_variables variable_1="c2" variable_2="c2"/>
+   </connection>
+   <connection>
+      <map_components component_1="c3" component_2="model_parameters"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="p3" variable_2="p3"/>
+      <map_variables variable_1="V2" variable_2="V2"/>
+      <map_variables variable_1="pAA3" variable_2="pAA3"/>
+   </connection>
+   <connection>
+      <map_components component_1="c3" component_2="c03"/>
+      <map_variables variable_1="c03" variable_2="c03"/>
+      <map_variables variable_1="c3" variable_2="c3"/>
+   </connection>
+   <connection>
+      <map_components component_1="c4" component_2="model_parameters"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="p4" variable_2="p4"/>
+      <map_variables variable_1="V2" variable_2="V2"/>
+      <map_variables variable_1="pAA4" variable_2="pAA4"/>
+   </connection>
+   <connection>
+      <map_components component_1="c4" component_2="c04"/>
+      <map_variables variable_1="c04" variable_2="c04"/>
+      <map_variables variable_1="c4" variable_2="c4"/>
+   </connection>
+   <connection>
+      <map_components component_1="c5" component_2="model_parameters"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="p5" variable_2="p5"/>
+      <map_variables variable_1="V2" variable_2="V2"/>
+      <map_variables variable_1="pAA5" variable_2="pAA5"/>
+   </connection>
+   <connection>
+      <map_components component_1="c5" component_2="c05"/>
+      <map_variables variable_1="c05" variable_2="c05"/>
+      <map_variables variable_1="c5" variable_2="c5"/>
+   </connection>
+   <connection>
+      <map_components component_1="c6" component_2="model_parameters"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="p6" variable_2="p6"/>
+      <map_variables variable_1="V2" variable_2="V2"/>
+      <map_variables variable_1="pAA6" variable_2="pAA6"/>
+   </connection>
+   <connection>
+      <map_components component_1="c6" component_2="c06"/>
+      <map_variables variable_1="c06" variable_2="c06"/>
+      <map_variables variable_1="c6" variable_2="c6"/>
+   </connection>
+   <connection>
+      <map_components component_1="c7" component_2="model_parameters"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="p7" variable_2="p7"/>
+      <map_variables variable_1="V2" variable_2="V2"/>
+      <map_variables variable_1="pAA7" variable_2="pAA7"/>
+   </connection>
+   <connection>
+      <map_components component_1="c7" component_2="c07"/>
+      <map_variables variable_1="c07" variable_2="c07"/>
+      <map_variables variable_1="c7" variable_2="c7"/>
+   </connection>
+   <connection>
+      <map_components component_1="c8" component_2="model_parameters"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="p8" variable_2="p8"/>
+      <map_variables variable_1="V2" variable_2="V2"/>
+      <map_variables variable_1="pAA8" variable_2="pAA8"/>
+   </connection>
+   <connection>
+      <map_components component_1="c8" component_2="c08"/>
+      <map_variables variable_1="c08" variable_2="c08"/>
+      <map_variables variable_1="c8" variable_2="c8"/>
+   </connection>
+   <connection>
+      <map_components component_1="c9" component_2="model_parameters"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="p9" variable_2="p9"/>
+      <map_variables variable_1="V2" variable_2="V2"/>
+      <map_variables variable_1="pAA9" variable_2="pAA9"/>
+   </connection>
+   <connection>
+      <map_components component_1="c9" component_2="c09"/>
+      <map_variables variable_1="c09" variable_2="c09"/>
+      <map_variables variable_1="c9" variable_2="c9"/>
+   </connection>
+   <connection>
+      <map_components component_1="c10" component_2="model_parameters"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="p10" variable_2="p10"/>
+      <map_variables variable_1="V2" variable_2="V2"/>
+      <map_variables variable_1="pAA10" variable_2="pAA10"/>
+   </connection>
+   <connection>
+      <map_components component_1="c10" component_2="c010"/>
+      <map_variables variable_1="c010" variable_2="c010"/>
+      <map_variables variable_1="c10" variable_2="c10"/>
+   </connection>
+   <connection>
+      <map_components component_1="c11" component_2="model_parameters"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="p11" variable_2="p11"/>
+      <map_variables variable_1="V2" variable_2="V2"/>
+      <map_variables variable_1="pAA11" variable_2="pAA11"/>
+   </connection>
+   <connection>
+      <map_components component_1="c11" component_2="c011"/>
+      <map_variables variable_1="c011" variable_2="c011"/>
+      <map_variables variable_1="c11" variable_2="c11"/>
+   </connection>
+   <connection>
+      <map_components component_1="c12" component_2="model_parameters"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="p12" variable_2="p12"/>
+      <map_variables variable_1="V2" variable_2="V2"/>
+      <map_variables variable_1="pAA12" variable_2="pAA12"/>
+   </connection>
+   <connection>
+      <map_components component_1="c12" component_2="c012"/>
+      <map_variables variable_1="c012" variable_2="c012"/>
+      <map_variables variable_1="c12" variable_2="c12"/>
+   </connection>
+   <connection>
+      <map_components component_1="c13" component_2="model_parameters"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="p13" variable_2="p13"/>
+      <map_variables variable_1="V2" variable_2="V2"/>
+      <map_variables variable_1="pAA13" variable_2="pAA13"/>
+   </connection>
+   <connection>
+      <map_components component_1="c13" component_2="c013"/>
+      <map_variables variable_1="c013" variable_2="c013"/>
+      <map_variables variable_1="c13" variable_2="c13"/>
+   </connection>
+   <connection>
+      <map_components component_1="c14" component_2="model_parameters"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="p14" variable_2="p14"/>
+      <map_variables variable_1="V2" variable_2="V2"/>
+      <map_variables variable_1="pAA14" variable_2="pAA14"/>
+   </connection>
+   <connection>
+      <map_components component_1="c14" component_2="c014"/>
+      <map_variables variable_1="c014" variable_2="c014"/>
+      <map_variables variable_1="c14" variable_2="c14"/>
+   </connection>
+   <connection>
+      <map_components component_1="c14" component_2="c17"/>
+      <map_variables variable_1="c14" variable_2="c14"/>
+   </connection>
+   <connection>
+      <map_components component_1="c15" component_2="model_parameters"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="p15" variable_2="p15"/>
+      <map_variables variable_1="p16" variable_2="p16"/>
+      <map_variables variable_1="p17" variable_2="p17"/>
+      <map_variables variable_1="p18" variable_2="p18"/>
+      <map_variables variable_1="p19" variable_2="p19"/>
+      <map_variables variable_1="p20" variable_2="p20"/>
+      <map_variables variable_1="V2" variable_2="V2"/>
+      <map_variables variable_1="p29" variable_2="p29"/>
+      <map_variables variable_1="pAA15" variable_2="pAA15"/>
+   </connection>
+   <connection>
+      <map_components component_1="c15" component_2="c015"/>
+      <map_variables variable_1="c015" variable_2="c015"/>
+      <map_variables variable_1="c15" variable_2="c15"/>
+   </connection>
+   <connection>
+      <map_components component_1="c16" component_2="model_parameters"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="p15" variable_2="p15"/>
+      <map_variables variable_1="p16" variable_2="p16"/>
+      <map_variables variable_1="V2" variable_2="V2"/>
+      <map_variables variable_1="pAA16" variable_2="pAA16"/>
+   </connection>
+   <connection>
+      <map_components component_1="c16" component_2="c016"/>
+      <map_variables variable_1="c016" variable_2="c016"/>
+      <map_variables variable_1="c16" variable_2="c16"/>
+   </connection>
+   <connection>
+      <map_components component_1="c17" component_2="model_parameters"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="p14" variable_2="p14"/>
+      <map_variables variable_1="p17" variable_2="p17"/>
+      <map_variables variable_1="p18" variable_2="p18"/>
+      <map_variables variable_1="p21" variable_2="p21"/>
+      <map_variables variable_1="p22" variable_2="p22"/>
+      <map_variables variable_1="p23" variable_2="p23"/>
+      <map_variables variable_1="p25" variable_2="p25"/>
+      <map_variables variable_1="p26" variable_2="p26"/>
+      <map_variables variable_1="p28" variable_2="p28"/>
+      <map_variables variable_1="p1" variable_2="p1"/>
+      <map_variables variable_1="p2" variable_2="p2"/>
+      <map_variables variable_1="p3" variable_2="p3"/>
+      <map_variables variable_1="p4" variable_2="p4"/>
+      <map_variables variable_1="p5" variable_2="p5"/>
+      <map_variables variable_1="p6" variable_2="p6"/>
+      <map_variables variable_1="p7" variable_2="p7"/>
+      <map_variables variable_1="p8" variable_2="p8"/>
+      <map_variables variable_1="p9" variable_2="p9"/>
+      <map_variables variable_1="V2" variable_2="V2"/>
+      <map_variables variable_1="pAA17" variable_2="pAA17"/>
+   </connection>
+   <connection>
+      <map_components component_1="c17" component_2="c017"/>
+      <map_variables variable_1="c017" variable_2="c017"/>
+      <map_variables variable_1="c17" variable_2="c17"/>
+   </connection>
+   <connection>
+      <map_components component_1="c18" component_2="model_parameters"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="p25" variable_2="p25"/>
+      <map_variables variable_1="p26" variable_2="p26"/>
+      <map_variables variable_1="pAA18" variable_2="pAA18"/>
+      <map_variables variable_1="V2" variable_2="V2"/>
+   </connection>
+   <connection>
+      <map_components component_1="c18" component_2="c018"/>
+      <map_variables variable_1="c018" variable_2="c018"/>
+      <map_variables variable_1="c18" variable_2="c18"/>
+   </connection>
+   <connection>
+      <map_components component_1="c19" component_2="model_parameters"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="p10" variable_2="p10"/>
+      <map_variables variable_1="p23" variable_2="p23"/>
+      <map_variables variable_1="p25" variable_2="p25"/>
+      <map_variables variable_1="p26" variable_2="p26"/>
+      <map_variables variable_1="p16" variable_2="p16"/>
+      <map_variables variable_1="p19" variable_2="p19"/>
+      <map_variables variable_1="p20" variable_2="p20"/>
+      <map_variables variable_1="p15" variable_2="p15"/>
+      <map_variables variable_1="p11" variable_2="p11"/>
+      <map_variables variable_1="p12" variable_2="p12"/>
+      <map_variables variable_1="p13" variable_2="p13"/>
+      <map_variables variable_1="V2" variable_2="V2"/>
+   </connection>
+   <connection>
+      <map_components component_1="c19" component_2="c10"/>
+      <map_variables variable_1="c10" variable_2="c10"/>
+   </connection>
+   <connection>
+      <map_components component_1="c19" component_2="c019"/>
+      <map_variables variable_1="c019" variable_2="c019"/>
+      <map_variables variable_1="c19" variable_2="c19"/>
+   </connection>
+   <connection>
+      <map_components component_1="c20" component_2="model_parameters"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="p19" variable_2="p19"/>
+      <map_variables variable_1="p20" variable_2="p20"/>
+      <map_variables variable_1="V2" variable_2="V2"/>
+   </connection>
+   <connection>
+      <map_components component_1="c20" component_2="c020"/>
+      <map_variables variable_1="c020" variable_2="c020"/>
+      <map_variables variable_1="c20" variable_2="c20"/>
+   </connection>
+   <connection>
+      <map_components component_1="c21" component_2="model_parameters"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="p21" variable_2="p21"/>
+      <map_variables variable_1="V2" variable_2="V2"/>
+   </connection>
+   <connection>
+      <map_components component_1="c21" component_2="c021"/>
+      <map_variables variable_1="c021" variable_2="c021"/>
+      <map_variables variable_1="c21" variable_2="c21"/>
+   </connection>
+   <connection>
+      <map_components component_1="c22" component_2="model_parameters"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="p22" variable_2="p22"/>
+      <map_variables variable_1="V2" variable_2="V2"/>
+   </connection>
+   <connection>
+      <map_components component_1="c22" component_2="c022"/>
+      <map_variables variable_1="c022" variable_2="c022"/>
+      <map_variables variable_1="c22" variable_2="c22"/>
+   </connection>
+   <connection>
+      <map_components component_1="c23" component_2="model_parameters"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="p20" variable_2="p20"/>
+      <map_variables variable_1="p21" variable_2="p21"/>
+      <map_variables variable_1="p22" variable_2="p22"/>
+      <map_variables variable_1="p23" variable_2="p23"/>
+      <map_variables variable_1="p31" variable_2="p31"/>
+      <map_variables variable_1="V2" variable_2="V2"/>
+   </connection>
+   <connection>
+      <map_components component_1="c23" component_2="c22"/>
+      <map_variables variable_1="c22" variable_2="c22"/>
+   </connection>
+   <connection>
+      <map_components component_1="c23" component_2="c21"/>
+      <map_variables variable_1="c21" variable_2="c21"/>
+   </connection>
+   <connection>
+      <map_components component_1="c23" component_2="c19"/>
+      <map_variables variable_1="c19" variable_2="c19"/>
+   </connection>
+   <connection>
+      <map_components component_1="c23" component_2="c15"/>
+      <map_variables variable_1="c15" variable_2="c15"/>
+   </connection>
+   <connection>
+      <map_components component_1="c23" component_2="c023"/>
+      <map_variables variable_1="c023" variable_2="c023"/>
+      <map_variables variable_1="c23" variable_2="c23"/>
+   </connection>
+   <connection>
+      <map_components component_1="c24" component_2="model_parameters"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="p30" variable_2="p30"/>
+      <map_variables variable_1="p23" variable_2="p23"/>
+      <map_variables variable_1="p32" variable_2="p32"/>
+      <map_variables variable_1="p20" variable_2="p20"/>
+      <map_variables variable_1="p24" variable_2="p24"/>
+      <map_variables variable_1="V2" variable_2="V2"/>
+   </connection>
+   <connection>
+      <map_components component_1="c24" component_2="c23"/>
+      <map_variables variable_1="c23" variable_2="c23"/>
+   </connection>
+   <connection>
+      <map_components component_1="c24" component_2="c19"/>
+      <map_variables variable_1="c19" variable_2="c19"/>
+   </connection>
+   <connection>
+      <map_components component_1="c24" component_2="c15"/>
+      <map_variables variable_1="c15" variable_2="c15"/>
+   </connection>
+   <connection>
+      <map_components component_1="c24" component_2="c024"/>
+      <map_variables variable_1="c024" variable_2="c024"/>
+      <map_variables variable_1="c24" variable_2="c24"/>
+   </connection>
+   <connection>
+      <map_components component_1="c19" component_2="gt"/>
+      <map_variables variable_1="gt" variable_2="gt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c20" component_2="c15"/>
+      <map_variables variable_1="c15" variable_2="c15"/>
+   </connection>
+   <connection>
+      <map_components component_1="c20" component_2="c19"/>
+      <map_variables variable_1="c19" variable_2="c19"/>
+   </connection>
+   <connection>
+      <map_components component_1="c19" component_2="c11"/>
+      <map_variables variable_1="c11" variable_2="c11"/>
+   </connection>
+   <connection>
+      <map_components component_1="c19" component_2="c12"/>
+      <map_variables variable_1="c12" variable_2="c12"/>
+   </connection>
+   <connection>
+      <map_components component_1="c19" component_2="c13"/>
+      <map_variables variable_1="c13" variable_2="c13"/>
+   </connection>
+   <connection>
+      <map_components component_1="c19" component_2="c15"/>
+      <map_variables variable_1="c15" variable_2="c15"/>
+      <map_variables variable_1="c19" variable_2="c19"/>
+   </connection>
+   <connection>
+      <map_components component_1="c19" component_2="c16"/>
+      <map_variables variable_1="c16" variable_2="c16"/>
+      <map_variables variable_1="c19" variable_2="c19"/>
+   </connection>
+   <connection>
+      <map_components component_1="c19" component_2="c18"/>
+      <map_variables variable_1="c18" variable_2="c18"/>
+      <map_variables variable_1="c19" variable_2="c19"/>
+   </connection>
+   <connection>
+      <map_components component_1="c15" component_2="c17"/>
+      <map_variables variable_1="c17" variable_2="c17"/>
+      <map_variables variable_1="c15" variable_2="c15"/>
+   </connection>
+   <connection>
+      <map_components component_1="c16" component_2="c15"/>
+      <map_variables variable_1="c16" variable_2="c16"/>
+      <map_variables variable_1="c15" variable_2="c15"/>
+   </connection>
+   <connection>
+      <map_components component_1="c01" component_2="FAt"/>
+      <map_variables variable_1="FAt" variable_2="FAt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c01" component_2="FBt"/>
+      <map_variables variable_1="FBt" variable_2="FBt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c01" component_2="F0t"/>
+      <map_variables variable_1="F0t" variable_2="F0t"/>
+   </connection>
+   <connection>
+      <map_components component_1="c01" component_2="model_parameters"/>
+      <map_variables variable_1="V1" variable_2="V1"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="CB1" variable_2="CB1"/>
+   </connection>
+   <connection>
+      <map_components component_1="c02" component_2="FAt"/>
+      <map_variables variable_1="FAt" variable_2="FAt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c02" component_2="FBt"/>
+      <map_variables variable_1="FBt" variable_2="FBt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c02" component_2="F0t"/>
+      <map_variables variable_1="F0t" variable_2="F0t"/>
+   </connection>
+   <connection>
+      <map_components component_1="c02" component_2="model_parameters"/>
+      <map_variables variable_1="V1" variable_2="V1"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="CB1" variable_2="CB1"/>
+   </connection>
+   <connection>
+      <map_components component_1="c03" component_2="FAt"/>
+      <map_variables variable_1="FAt" variable_2="FAt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c03" component_2="FBt"/>
+      <map_variables variable_1="FBt" variable_2="FBt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c03" component_2="F0t"/>
+      <map_variables variable_1="F0t" variable_2="F0t"/>
+   </connection>
+   <connection>
+      <map_components component_1="c03" component_2="model_parameters"/>
+      <map_variables variable_1="V1" variable_2="V1"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="CB1" variable_2="CB1"/>
+   </connection>
+   <connection>
+      <map_components component_1="c04" component_2="FAt"/>
+      <map_variables variable_1="FAt" variable_2="FAt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c04" component_2="FBt"/>
+      <map_variables variable_1="FBt" variable_2="FBt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c04" component_2="F0t"/>
+      <map_variables variable_1="F0t" variable_2="F0t"/>
+   </connection>
+   <connection>
+      <map_components component_1="c04" component_2="model_parameters"/>
+      <map_variables variable_1="V1" variable_2="V1"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="CB1" variable_2="CB1"/>
+   </connection>
+   <connection>
+      <map_components component_1="c05" component_2="FAt"/>
+      <map_variables variable_1="FAt" variable_2="FAt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c05" component_2="FBt"/>
+      <map_variables variable_1="FBt" variable_2="FBt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c05" component_2="F0t"/>
+      <map_variables variable_1="F0t" variable_2="F0t"/>
+   </connection>
+   <connection>
+      <map_components component_1="c05" component_2="model_parameters"/>
+      <map_variables variable_1="V1" variable_2="V1"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="CB1" variable_2="CB1"/>
+   </connection>
+   <connection>
+      <map_components component_1="c06" component_2="FAt"/>
+      <map_variables variable_1="FAt" variable_2="FAt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c06" component_2="FBt"/>
+      <map_variables variable_1="FBt" variable_2="FBt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c06" component_2="F0t"/>
+      <map_variables variable_1="F0t" variable_2="F0t"/>
+   </connection>
+   <connection>
+      <map_components component_1="c06" component_2="model_parameters"/>
+      <map_variables variable_1="V1" variable_2="V1"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="CB1" variable_2="CB1"/>
+   </connection>
+   <connection>
+      <map_components component_1="c07" component_2="FAt"/>
+      <map_variables variable_1="FAt" variable_2="FAt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c07" component_2="FBt"/>
+      <map_variables variable_1="FBt" variable_2="FBt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c07" component_2="F0t"/>
+      <map_variables variable_1="F0t" variable_2="F0t"/>
+   </connection>
+   <connection>
+      <map_components component_1="c07" component_2="model_parameters"/>
+      <map_variables variable_1="V1" variable_2="V1"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="CB1" variable_2="CB1"/>
+   </connection>
+   <connection>
+      <map_components component_1="c08" component_2="FAt"/>
+      <map_variables variable_1="FAt" variable_2="FAt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c08" component_2="FBt"/>
+      <map_variables variable_1="FBt" variable_2="FBt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c08" component_2="F0t"/>
+      <map_variables variable_1="F0t" variable_2="F0t"/>
+   </connection>
+   <connection>
+      <map_components component_1="c08" component_2="model_parameters"/>
+      <map_variables variable_1="V1" variable_2="V1"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="CB1" variable_2="CB1"/>
+   </connection>
+   <connection>
+      <map_components component_1="c09" component_2="FAt"/>
+      <map_variables variable_1="FAt" variable_2="FAt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c09" component_2="FBt"/>
+      <map_variables variable_1="FBt" variable_2="FBt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c09" component_2="F0t"/>
+      <map_variables variable_1="F0t" variable_2="F0t"/>
+   </connection>
+   <connection>
+      <map_components component_1="c09" component_2="model_parameters"/>
+      <map_variables variable_1="V1" variable_2="V1"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="CB1" variable_2="CB1"/>
+   </connection>
+   <connection>
+      <map_components component_1="c010" component_2="FAt"/>
+      <map_variables variable_1="FAt" variable_2="FAt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c010" component_2="FBt"/>
+      <map_variables variable_1="FBt" variable_2="FBt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c010" component_2="F0t"/>
+      <map_variables variable_1="F0t" variable_2="F0t"/>
+   </connection>
+   <connection>
+      <map_components component_1="c010" component_2="model_parameters"/>
+      <map_variables variable_1="V1" variable_2="V1"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="CB1" variable_2="CB1"/>
+   </connection>
+   <connection>
+      <map_components component_1="c011" component_2="FAt"/>
+      <map_variables variable_1="FAt" variable_2="FAt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c011" component_2="FBt"/>
+      <map_variables variable_1="FBt" variable_2="FBt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c011" component_2="F0t"/>
+      <map_variables variable_1="F0t" variable_2="F0t"/>
+   </connection>
+   <connection>
+      <map_components component_1="c011" component_2="model_parameters"/>
+      <map_variables variable_1="V1" variable_2="V1"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="CB1" variable_2="CB1"/>
+   </connection>
+   <connection>
+      <map_components component_1="c012" component_2="FAt"/>
+      <map_variables variable_1="FAt" variable_2="FAt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c012" component_2="FBt"/>
+      <map_variables variable_1="FBt" variable_2="FBt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c012" component_2="F0t"/>
+      <map_variables variable_1="F0t" variable_2="F0t"/>
+   </connection>
+   <connection>
+      <map_components component_1="c012" component_2="model_parameters"/>
+      <map_variables variable_1="V1" variable_2="V1"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="CB1" variable_2="CB1"/>
+   </connection>
+   <connection>
+      <map_components component_1="c013" component_2="FAt"/>
+      <map_variables variable_1="FAt" variable_2="FAt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c013" component_2="FBt"/>
+      <map_variables variable_1="FBt" variable_2="FBt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c013" component_2="F0t"/>
+      <map_variables variable_1="F0t" variable_2="F0t"/>
+   </connection>
+   <connection>
+      <map_components component_1="c013" component_2="model_parameters"/>
+      <map_variables variable_1="V1" variable_2="V1"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="CB1" variable_2="CB1"/>
+   </connection>
+   <connection>
+      <map_components component_1="c014" component_2="FAt"/>
+      <map_variables variable_1="FAt" variable_2="FAt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c014" component_2="FBt"/>
+      <map_variables variable_1="FBt" variable_2="FBt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c014" component_2="F0t"/>
+      <map_variables variable_1="F0t" variable_2="F0t"/>
+   </connection>
+   <connection>
+      <map_components component_1="c014" component_2="model_parameters"/>
+      <map_variables variable_1="V1" variable_2="V1"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="CB1" variable_2="CB1"/>
+   </connection>
+   <connection>
+      <map_components component_1="c015" component_2="FAt"/>
+      <map_variables variable_1="FAt" variable_2="FAt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c015" component_2="FBt"/>
+      <map_variables variable_1="FBt" variable_2="FBt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c015" component_2="F0t"/>
+      <map_variables variable_1="F0t" variable_2="F0t"/>
+   </connection>
+   <connection>
+      <map_components component_1="c015" component_2="model_parameters"/>
+      <map_variables variable_1="V1" variable_2="V1"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="CB15" variable_2="CB15"/>
+   </connection>
+   <connection>
+      <map_components component_1="c016" component_2="FAt"/>
+      <map_variables variable_1="FAt" variable_2="FAt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c016" component_2="FBt"/>
+      <map_variables variable_1="FBt" variable_2="FBt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c016" component_2="F0t"/>
+      <map_variables variable_1="F0t" variable_2="F0t"/>
+   </connection>
+   <connection>
+      <map_components component_1="c016" component_2="model_parameters"/>
+      <map_variables variable_1="V1" variable_2="V1"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="CB1" variable_2="CB1"/>
+   </connection>
+   <connection>
+      <map_components component_1="c017" component_2="FAt"/>
+      <map_variables variable_1="FAt" variable_2="FAt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c017" component_2="FBt"/>
+      <map_variables variable_1="FBt" variable_2="FBt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c017" component_2="F0t"/>
+      <map_variables variable_1="F0t" variable_2="F0t"/>
+   </connection>
+   <connection>
+      <map_components component_1="c017" component_2="model_parameters"/>
+      <map_variables variable_1="V1" variable_2="V1"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="CB1" variable_2="CB1"/>
+   </connection>
+   <connection>
+      <map_components component_1="c018" component_2="FAt"/>
+      <map_variables variable_1="FAt" variable_2="FAt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c018" component_2="FBt"/>
+      <map_variables variable_1="FBt" variable_2="FBt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c018" component_2="F0t"/>
+      <map_variables variable_1="F0t" variable_2="F0t"/>
+   </connection>
+   <connection>
+      <map_components component_1="c018" component_2="model_parameters"/>
+      <map_variables variable_1="V1" variable_2="V1"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="CB1" variable_2="CB1"/>
+   </connection>
+   <connection>
+      <map_components component_1="c019" component_2="FAt"/>
+      <map_variables variable_1="FAt" variable_2="FAt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c019" component_2="FBt"/>
+      <map_variables variable_1="FBt" variable_2="FBt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c019" component_2="F0t"/>
+      <map_variables variable_1="F0t" variable_2="F0t"/>
+   </connection>
+   <connection>
+      <map_components component_1="c019" component_2="model_parameters"/>
+      <map_variables variable_1="V1" variable_2="V1"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="CB1" variable_2="CB1"/>
+   </connection>
+   <connection>
+      <map_components component_1="c020" component_2="FAt"/>
+      <map_variables variable_1="FAt" variable_2="FAt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c020" component_2="FBt"/>
+      <map_variables variable_1="FBt" variable_2="FBt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c020" component_2="F0t"/>
+      <map_variables variable_1="F0t" variable_2="F0t"/>
+   </connection>
+   <connection>
+      <map_components component_1="c020" component_2="model_parameters"/>
+      <map_variables variable_1="V1" variable_2="V1"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="CB1" variable_2="CB1"/>
+   </connection>
+   <connection>
+      <map_components component_1="c021" component_2="FAt"/>
+      <map_variables variable_1="FAt" variable_2="FAt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c021" component_2="FBt"/>
+      <map_variables variable_1="FBt" variable_2="FBt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c021" component_2="F0t"/>
+      <map_variables variable_1="F0t" variable_2="F0t"/>
+   </connection>
+   <connection>
+      <map_components component_1="c021" component_2="model_parameters"/>
+      <map_variables variable_1="V1" variable_2="V1"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="CB1" variable_2="CB1"/>
+   </connection>
+   <connection>
+      <map_components component_1="c022" component_2="FAt"/>
+      <map_variables variable_1="FAt" variable_2="FAt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c022" component_2="FBt"/>
+      <map_variables variable_1="FBt" variable_2="FBt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c022" component_2="F0t"/>
+      <map_variables variable_1="F0t" variable_2="F0t"/>
+   </connection>
+   <connection>
+      <map_components component_1="c022" component_2="model_parameters"/>
+      <map_variables variable_1="V1" variable_2="V1"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="CB1" variable_2="CB1"/>
+   </connection>
+   <connection>
+      <map_components component_1="c023" component_2="FAt"/>
+      <map_variables variable_1="FAt" variable_2="FAt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c023" component_2="FBt"/>
+      <map_variables variable_1="FBt" variable_2="FBt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c023" component_2="F0t"/>
+      <map_variables variable_1="F0t" variable_2="F0t"/>
+   </connection>
+   <connection>
+      <map_components component_1="c023" component_2="model_parameters"/>
+      <map_variables variable_1="V1" variable_2="V1"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="CB1" variable_2="CB1"/>
+   </connection>
+   <connection>
+      <map_components component_1="c024" component_2="FAt"/>
+      <map_variables variable_1="FAt" variable_2="FAt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c024" component_2="FBt"/>
+      <map_variables variable_1="FBt" variable_2="FBt"/>
+   </connection>
+   <connection>
+      <map_components component_1="c024" component_2="F0t"/>
+      <map_variables variable_1="F0t" variable_2="F0t"/>
+   </connection>
+   <connection>
+      <map_components component_1="c024" component_2="model_parameters"/>
+      <map_variables variable_1="V1" variable_2="V1"/>
+      <map_variables variable_1="p0" variable_2="p0"/>
+      <map_variables variable_1="CB1" variable_2="CB1"/>
+   </connection>
+   <connection>
+      <map_components component_1="c17" component_2="c1"/>
+      <map_variables variable_1="c1" variable_2="c1"/>
+   </connection>
+   <connection>
+      <map_components component_1="c17" component_2="c2"/>
+      <map_variables variable_1="c2" variable_2="c2"/>
+   </connection>
+   <connection>
+      <map_components component_1="c17" component_2="c3"/>
+      <map_variables variable_1="c3" variable_2="c3"/>
+   </connection>
+   <connection>
+      <map_components component_1="c17" component_2="c4"/>
+      <map_variables variable_1="c4" variable_2="c4"/>
+   </connection>
+   <connection>
+      <map_components component_1="c17" component_2="c5"/>
+      <map_variables variable_1="c5" variable_2="c5"/>
+   </connection>
+   <connection>
+      <map_components component_1="c17" component_2="c6"/>
+      <map_variables variable_1="c6" variable_2="c6"/>
+   </connection>
+   <connection>
+      <map_components component_1="c17" component_2="c7"/>
+      <map_variables variable_1="c7" variable_2="c7"/>
+   </connection>
+   <connection>
+      <map_components component_1="c17" component_2="c8"/>
+      <map_variables variable_1="c8" variable_2="c8"/>
+   </connection>
+   <connection>
+      <map_components component_1="c17" component_2="c9"/>
+      <map_variables variable_1="c9" variable_2="c9"/>
+   </connection>
+   <connection>
+      <map_components component_1="c17" component_2="c18"/>
+      <map_variables variable_1="c17" variable_2="c17"/>
+      <map_variables variable_1="c18" variable_2="c18"/>
+   </connection>
+   <connection>
+      <map_components component_1="c17" component_2="c19"/>
+      <map_variables variable_1="c17" variable_2="c17"/>
+      <map_variables variable_1="c19" variable_2="c19"/>
+   </connection>
+   <connection>
+      <map_components component_1="pp" component_2="c1"/>
+      <map_variables variable_1="pp" variable_2="pp"/>
+   </connection>
+   <connection>
+      <map_components component_1="pp" component_2="c2"/>
+      <map_variables variable_1="pp" variable_2="pp"/>
+   </connection>
+   <connection>
+      <map_components component_1="pp" component_2="c3"/>
+      <map_variables variable_1="pp" variable_2="pp"/>
+   </connection>
+   <connection>
+      <map_components component_1="pp" component_2="c4"/>
+      <map_variables variable_1="pp" variable_2="pp"/>
+   </connection>
+   <connection>
+      <map_components component_1="pp" component_2="c5"/>
+      <map_variables variable_1="pp" variable_2="pp"/>
+   </connection>
+   <connection>
+      <map_components component_1="pp" component_2="c6"/>
+      <map_variables variable_1="pp" variable_2="pp"/>
+   </connection>
+   <connection>
+      <map_components component_1="pp" component_2="c7"/>
+      <map_variables variable_1="pp" variable_2="pp"/>
+   </connection>
+   <connection>
+      <map_components component_1="pp" component_2="c8"/>
+      <map_variables variable_1="pp" variable_2="pp"/>
+   </connection>
+   <connection>
+      <map_components component_1="pp" component_2="c9"/>
+      <map_variables variable_1="pp" variable_2="pp"/>
+   </connection>
+   <connection>
+      <map_components component_1="pp" component_2="c10"/>
+      <map_variables variable_1="pp" variable_2="pp"/>
+   </connection>
+   <connection>
+      <map_components component_1="pp" component_2="c11"/>
+      <map_variables variable_1="pp" variable_2="pp"/>
+   </connection>
+   <connection>
+      <map_components component_1="pp" component_2="c12"/>
+      <map_variables variable_1="pp" variable_2="pp"/>
+   </connection>
+   <connection>
+      <map_components component_1="pp" component_2="c13"/>
+      <map_variables variable_1="pp" variable_2="pp"/>
+   </connection>
+   <connection>
+      <map_components component_1="pp" component_2="c14"/>
+      <map_variables variable_1="pp" variable_2="pp"/>
+   </connection>
+   <connection>
+      <map_components component_1="pp" component_2="c15"/>
+      <map_variables variable_1="pp" variable_2="pp"/>
+   </connection>
+   <connection>
+      <map_components component_1="pp" component_2="c16"/>
+      <map_variables variable_1="pp" variable_2="pp"/>
+   </connection>
+   <connection>
+      <map_components component_1="pp" component_2="c17"/>
+      <map_variables variable_1="pp" variable_2="pp"/>
+   </connection>
+   <connection>
+      <map_components component_1="pp" component_2="c18"/>
+      <map_variables variable_1="pp" variable_2="pp"/>
+   </connection>
+
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:nodeID="n1"><Orgname xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">The University of Auckland</Orgname><Orgunit xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Auckland Bioengineering Institute</Orgunit></rdf:Description><rdf:Description rdf:nodeID="n2"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n3"/></N></rdf:Description><rdf:Description rdf:nodeID="n4"><rdf:rest><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/></rdf:rest><rdf:first><rdf:Description rdf:nodeID="n5"/></rdf:first></rdf:Description><rdf:Description rdf:nodeID="n6"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n7"/></N></rdf:Description><rdf:Description rdf:nodeID="n8"><boundIntervals xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n4"/></boundIntervals></rdf:Description><rdf:Description rdf:nodeID="n9"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Zeilinger</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">KP</Given></rdf:Description><rdf:Description rdf:nodeID="n10"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Pless</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">G</Given><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">R</Other></rdf:Description><rdf:Description rdf:nodeID="n11"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n12"/></N></rdf:Description><rdf:Description rdf:nodeID="n13"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n14"/></N></rdf:Description><rdf:Description rdf:nodeID="n15"><rdf:_4><rdf:Description rdf:nodeID="n16"/></rdf:_4><rdf:_5><rdf:Description rdf:nodeID="n17"/></rdf:_5><rdf:_6><rdf:Description rdf:nodeID="n18"/></rdf:_6><rdf:_7><rdf:Description rdf:nodeID="n19"/></rdf:_7><rdf:_3><rdf:Description rdf:nodeID="n20"/></rdf:_3><rdf:_1><rdf:Description rdf:nodeID="n21"/></rdf:_1><rdf:_2><rdf:Description rdf:nodeID="n22"/></rdf:_2><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq"/></rdf:type></rdf:Description><rdf:Description rdf:nodeID="n22"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n6"/></Person></rdf:Description><rdf:Description rdf:nodeID="n20"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n23"/></Person></rdf:Description><rdf:Description rdf:nodeID="n19"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n24"/></Person></rdf:Description><rdf:Description rdf:nodeID="n25"><issued xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:nodeID="n26"/></issued><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">
+       Dynamic Model of Amino Acid and Carbohydrate 
+Metabolism in Primary Human Liver Cells 
+          </title><Journal xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n27"/></Journal><volume xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">LNBI 4345</volume><first_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">137</first_page><last_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">149</last_page><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n15"/></creator></rdf:Description><rdf:Description rdf:nodeID="n14"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Guthke</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">R</Given></rdf:Description><rdf:Description rdf:nodeID="n28"><rdf:_1 xml:lang="en">Hepatology</rdf:_1><rdf:_2 xml:lang="en">Liver</rdf:_2><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag"/></rdf:type></rdf:Description><rdf:Description rdf:nodeID="n3"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Gerlach</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">J C</Given></rdf:Description><rdf:Description rdf:nodeID="n5"><endingValue xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">6</endingValue></rdf:Description><rdf:Description rdf:nodeID="n26"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2006-03-21</W3CDTF></rdf:Description><rdf:Description rdf:nodeID="n12"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Gebhardt</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">R</Given></rdf:Description><rdf:Description rdf:nodeID="n23"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n10"/></N></rdf:Description><rdf:Description rdf:nodeID="n18"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n2"/></Person></rdf:Description><rdf:Description rdf:nodeID="n29"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2009-10-08</W3CDTF></rdf:Description><rdf:Description rdf:about="#guthke_curvy_amended_2006"><simulation xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n8"/></simulation></rdf:Description><rdf:Description rdf:nodeID="n21"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n13"/></Person></rdf:Description><rdf:Description rdf:about=""><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n30"/></creator><created xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:nodeID="n29"/></created></rdf:Description><rdf:Description rdf:nodeID="n31"><rdf:type><rdf:Description rdf:about="http://imc.org/vCard/3.0#internet"/></rdf:type><rdf:value xml:lang="en">hnie010@aucklanduni.ac.nz</rdf:value></rdf:Description><rdf:Description rdf:nodeID="n27"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">ISBMDA 2006</title></rdf:Description><rdf:Description rdf:nodeID="n32"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Nielsen</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Hanne</Given><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en"></Other></rdf:Description><rdf:Description rdf:nodeID="n17"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n33"/></Person></rdf:Description><rdf:Description rdf:nodeID="n34"><subject xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n35"/></subject></rdf:Description><rdf:Description rdf:nodeID="n24"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n9"/></N></rdf:Description><rdf:Description rdf:nodeID="n7"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Schmidt-Heck</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">W</Given></rdf:Description><rdf:Description rdf:nodeID="n36"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Pfaff</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">M</Given></rdf:Description><rdf:Description rdf:nodeID="n33"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n36"/></N></rdf:Description><rdf:Description rdf:about="#guthke_2006"><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n34"/></reference><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n37"/></reference><cmeta:species xml:lang="en">Human</cmeta:species><cmeta:bio_entity xml:lang="en">Liver</cmeta:bio_entity><cmeta:bio_entity xml:lang="en">Hepatocyte</cmeta:bio_entity></rdf:Description><rdf:Description rdf:nodeID="n16"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n11"/></Person></rdf:Description><rdf:Description rdf:nodeID="n37"><JournalArticle xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n25"/></JournalArticle><Pubmed_id xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">19580741</Pubmed_id></rdf:Description><rdf:Description rdf:nodeID="n30"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n32"/></N><EMAIL xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n31"/></EMAIL><ORG xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n1"/></ORG></rdf:Description><rdf:Description rdf:nodeID="n35"><subject_type xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">keyword</subject_type><rdf:value><rdf:Description rdf:nodeID="n28"/></rdf:value></rdf:Description></rdf:RDF></model>

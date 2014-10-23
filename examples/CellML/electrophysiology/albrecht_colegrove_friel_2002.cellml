@@ -1,0 +1,738 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--  FILE :  albrecht_model_2002.xml
+
+CREATED :  21st March 2002
+
+LAST MODIFIED : 9th April 2003
+
+AUTHOR :  Catherine Lloyd
+          Bioengineering Institute
+          The University of Auckland
+          
+MODEL STATUS :  This model conforms to the CellML 1.0 Specification released on
+10th August 2001, and the 16/1/02 CellML Metadata 1.0 Specification.
+
+DESCRIPTION :  This file contains a CellML description of Albrecht et al's
+2002 model of differential regulation of ER Ca2+ uptake and release rates.
+
+CHANGES:  
+  18/07/2002 - CML - Added more metadata.
+  09/04/2003 - AAC - Added publication date information.  
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="albrecht_colegrove_friel_2002_version01" name="albrecht_colegrove_friel_2002_version01">
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Differential Regulation of ER Ca2+ Uptake and Release Rates Accounts for Multiple Modes of Ca2+-induced Ca2+ Release</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Bioengineering Institute, University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+            This model is consistently represented within the CellML but contains sets of algebraic equations that prevent the model from being solved in currently available software - 03/08.
+
+</para>
+<para>
+ValidateCellML found unit inconsistencies in this model
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+Calcium is an important signalling ion, and changes in Ca<superscript>2+</superscript> concentration ([Ca<superscript>2+</superscript>]) regulate diverse processes in many cellular compartments.  In excitable cells, depolarisation-induced Ca<superscript>2+</superscript> entry increases [Ca<superscript>2+</superscript>]<subscript>i</subscript>, leading to secondary changes in [Ca<superscript>2+</superscript>] within organelles such as mitochondria and ER that regulate specific Ca<superscript>2+</superscript>-sensitive targets within these organelles.  Although mitochondria accumulate Ca<superscript>2+</superscript> in response to depolarisation-evoked [Ca<superscript>2+</superscript>]<subscript>i</subscript> elevations (see <ulink url="${HTML_EXMPL_COLEGROVE_MODEL}">The Colegrove <emphasis>et al</emphasis> Model Of Mitochondrial Ca<superscript>2+</superscript> Uptake And Release, 2000</ulink>), the ER is also an important component in Ca<superscript>2+</superscript> signalling in virtually all non-muscle cells, and it has been described as either a Ca<superscript>2+</superscript> source or sink.  Different modes of net ER Ca<superscript>2+</superscript> transport are expected to have very different effects on cytoplasmic and intraluminal Ca<superscript>2+</superscript> signals and on the processes they regulate (see <ulink url="${HTML_EXMPL_ALBRECHT_MODEL1}">The Albrecht <emphasis>et al</emphasis> Model Of Multiple Modes of Ca<superscript>2+</superscript>-induced Ca<superscript>2+</superscript> Release in Sympathetic Neurons, 2001</ulink>).   
+</para>
+
+<para>
+In a follow up study to their 2001 paper, Meredith A. Albrecht, Stephen L. Colegrove and David D. Friel have examined how differential regulation of ER Ca<superscript>2+</superscript> uptake and release rates accounts for multiple modes of Ca<superscript>2+</superscript>-induced Ca<superscript>2+</superscript> release.  Three different macroscopic Ca<superscript>2+</superscript> fluxes were modelled: J<subscript>SERCA</subscript>, the rate of Ca<superscript>2+</superscript> uptake via SR Ca-ATPases; J<subscript>ICa</subscript>, the total cytoplasmic Ca<superscript>2+</superscript> flux when SR Ca-ATPases are inhibited; and J<subscript>pm</subscript>, the rate of Ca<superscript>2+</superscript> extrusion across the plasma membrane.  One additional flux J<subscript>release</subscript> was calculated from the difference between J<subscript>ICa</subscript> and J<subscript>pm</subscript> (see <xref linkend="fig_cell_diagram"/> below).  This mathematical model has been translated into a CellML description which can be downloaded in various formats as described in <xref linkend="sec_download_this_model"/>.
+</para>
+
+<para>
+The complete original paper reference is cited below:
+</para>
+
+<para>
+<ulink url="http://www.jgp.org/cgi/content/abstract/119/3/211">Differential Regulation of ER Ca<superscript>2+</superscript> Uptake and Release Rates Accounts for Multiple Modes of Ca<superscript>2+</superscript>-induced Ca<superscript>2+</superscript> Release</ulink>, Meredith A. Albrecht, Stephen L. Colegrove and David D. Friel, 2002, <ulink url="http://www.jgp.org/">
+            <emphasis>The Journal Of General Physiology</emphasis>
+          </ulink>, 119, 211-233.  (<ulink url="http://www.jgp.org/cgi/content/full/119/3/211">Full text</ulink> and <ulink url="http://www.jgp.org/cgi/reprint/119/3/211.pdf">PDF</ulink> versions of the article are available for Journal Members on the JGP website.)  <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;list_uids=11865019&amp;dopt=Abstract">PubMed ID: 11865019</ulink>  
+</para>
+
+
+<informalfigure float="0" id="fig_cell_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>cell schematic for the model</title>
+    </objectinfo>
+    <imagedata fileref="albrecht_2002.png"/>
+  </imageobject>
+</mediaobject>
+<caption>Schematic of the model indicating Ca<superscript>2+</superscript> compartmentation in the extracellular matrix, cytosol and the ER and pathways for Ca<superscript>2+</superscript> ion movement between the compartments.</caption>
+</informalfigure>
+
+</sect1>
+</article>
+</documentation>
+  
+  
+  <!--
+    Below, we define some additional units for association with variables and
+    constants within the model. The identifiers are fairly self-explanatory.
+  -->
+  
+  <units name="per_second">
+    <unit units="second" exponent="-1"/>
+  </units>
+  
+  <units name="millivolt">
+    <unit units="volt" prefix="milli"/>
+  </units>
+  
+  <units name="millimolar">
+    <unit units="mole" prefix="micro"/>
+    <unit units="litre" exponent="-1"/>
+  </units>
+  
+  <units name="micromolar">
+    <unit units="mole" prefix="micro"/>
+    <unit units="litre" exponent="-1"/>
+  </units>
+  
+  <units name="nanomolar">
+    <unit units="mole" prefix="nano"/>
+    <unit units="litre" exponent="-1"/>
+  </units>
+  
+  <units name="nanomolar_per_second">
+    <unit units="nanomolar"/>
+    <unit units="second" exponent="-1"/>
+  </units>
+  
+  <units name="micromolar_per_second">
+    <unit units="micromolar"/>
+    <unit units="second" exponent="-1"/>
+  </units>
+  
+  <units name="micro_litre">
+    <unit units="litre" prefix="micro"/>
+  </units>
+  
+  <units name="coulomb_per_millimole">
+    <unit units="coulomb"/>
+    <unit units="mole" prefix="milli" exponent="-1"/>
+  </units>
+  
+  <units name="picoA">
+    <unit units="ampere" prefix="pico"/>
+  </units>
+  
+  <!--
+    The "environment" component is used to declare variables that are used by
+    all or most of the other components, in this case just "time".
+  -->
+  <component name="environment">
+    <variable units="second" public_interface="out" name="time"/>
+  </component>
+  
+  <component name="cytoplasmic_calcium">
+    <variable units="nanomolar" public_interface="out" name="Ca_i"/>
+    
+    <variable units="nanomolar_per_second" name="J_i"/>
+    
+    <variable units="nanomolar_per_second" public_interface="in" name="J_ER"/>
+    <variable units="nanomolar_per_second" public_interface="in" name="J_pm"/>
+    <variable units="second" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="Ca_i_diff_eq">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> Ca_i </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <ci> J_i </ci>
+        </apply>
+      </apply>
+      
+      <apply id="J_i_calculation">
+        <eq/>
+        <ci> J_i </ci>
+        <apply>
+          <plus/>
+          <ci> J_pm </ci>
+          <ci> J_ER </ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="intraluminal_calcium">
+    <variable units="nanomolar" public_interface="out" name="Ca_ER"/>
+    
+    <variable units="micro_litre" name="v_ER"/>
+    <variable units="dimensionless" name="k_ER"/>
+    <variable units="nanomolar" name="Ca_ER_init"/>
+   
+    <variable units="nanomolar" public_interface="in" name="Ca_i"/>
+    <variable units="micro_litre" public_interface="in" name="v_i"/>
+    <variable units="dimensionless" public_interface="in" name="k_i"/>
+    <variable units="nanomolar_per_second" public_interface="in" name="J_ER"/>
+    <variable units="per_second" public_interface="in" name="P_ER"/>
+    <variable units="nanomolar_per_second" public_interface="in" name="J_SERCA"/>
+    <variable units="second" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="Ca_ER_diff_eq">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> Ca_ER </ci>
+        </apply>
+        <apply>
+          <times/>
+          <ci> J_ER </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <ci> v_i </ci>
+              <ci> k_i </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> v_ER </ci>
+              <ci> k_ER </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="Ca_ER_init_calculation">
+        <eq/>
+        <ci> Ca_ER_init </ci>
+        <apply>
+          <plus/>
+          <ci> Ca_i </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <ci> J_SERCA </ci>
+              <ci> Ca_i </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> P_ER </ci>
+              <apply>
+                <divide/>
+                <ci> Ca_i </ci>
+                <ci> v_i </ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="total_cytoplasmic_Ca_flux">
+    <variable units="nanomolar_per_second" public_interface="out" name="J_ICa"/>
+    <variable units="micro_litre" public_interface="out" name="v_i"/>
+    <variable units="dimensionless" public_interface="out" name="k_i"/>
+   
+    <variable units="coulomb_per_millimole" name="F" initial_value="96.5"/>
+    <variable units="picoA" name="I_Ca"/>
+   
+    <variable units="second" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="J_ICa_calculation">
+        <eq/>
+        <ci> J_ICa </ci>
+        <apply>
+          <divide/>
+          <ci> I_Ca </ci>
+          <apply>
+            <times/>
+            <cn cellml:units="dimensionless"> 2.0 </cn>
+            <ci> F </ci>
+            <ci> v_i </ci>
+            <ci> k_i </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="Ca_extrusion_across_the_plasma_membrane">
+    <variable units="nanomolar_per_second" public_interface="out" name="J_pm"/>
+  
+    <variable units="nanomolar_per_second" name="J_extru"/>
+    <variable units="per_second" name="k_leak_pm" initial_value="0.00000015"/>
+    <variable units="nanomolar_per_second" name="Vmax_extru" initial_value="25.0"/>
+    <variable units="nanomolar" name="EC50_extru" initial_value="386.0"/>
+    <variable units="dimensionless" name="n_extru" initial_value="2.4"/>
+    <variable units="millimolar" name="Ca_o" initial_value="2.0"/>
+    
+    <variable units="nanomolar_per_second" public_interface="in" name="J_ICa"/>
+    <variable units="dimensionless" public_interface="in" name="k_i"/> 
+    <variable units="nanomolar" public_interface="in" name="Ca_i"/>
+    <variable units="second" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="J_pm_calculation">
+        <eq/>
+        <ci> J_pm </ci>
+        <apply>
+          <plus/>
+          <ci> J_extru </ci>
+          <ci> J_ICa </ci>
+        </apply>
+      </apply>
+      
+      <apply id="J_extru_calculation">
+        <eq/>
+        <ci> J_extru </ci>
+        <apply>
+          <times/>
+          <apply>
+            <power/>
+            <ci> k_i </ci>
+            <cn cellml:units="dimensionless"> -1.0 </cn>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> k_leak_pm </ci>
+              <apply>
+                <minus/>
+                <ci> Ca_i </ci>
+                <ci> Ca_o </ci>
+              </apply>
+            </apply>
+            <apply>
+              <divide/>
+              <ci> Vmax_extru </ci>
+              <apply>
+                <plus/>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+                <apply>
+                  <power/>
+                  <apply>
+                    <divide/>
+                    <ci> EC50_extru </ci>
+                    <ci> Ca_i </ci>
+                  </apply>
+                  <ci> n_extru </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+      
+  <component name="Ca_uptake_by_SR_Ca_ATPase">        
+    <variable units="nanomolar_per_second" public_interface="out" name="J_SERCA"/>
+    
+    <variable units="nanomolar_per_second" name="Vmax_SERCA" initial_value="2146.0"/>
+    <variable units="micromolar" name="EC50_SERCA" initial_value="30.3"/>
+    <variable units="dimensionless" name="n_SERCA" initial_value="2.5"/>
+   
+    <variable units="dimensionless" public_interface="in" name="k_i"/>
+    <variable units="nanomolar" public_interface="in" name="Ca_i"/>
+    <variable units="second" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="J_SERCA_calculation">
+        <eq/>
+        <ci> J_SERCA </ci>
+        <apply>
+          <divide/>
+          <ci> Vmax_SERCA </ci>
+          <apply>
+            <times/>
+            <ci> k_i </ci>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <power/>
+                <apply>
+                  <divide/>
+                  <ci> EC50_SERCA </ci>
+                  <ci> Ca_i </ci>
+                </apply>
+                <ci> n_SERCA </ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component> 
+  
+  <component name="ER_Ca_release">     
+    <variable units="nanomolar_per_second" public_interface="out" name="J_ER"/>       
+    <variable units="per_second" public_interface="out" name="P_ER"/>
+    
+    <variable units="per_second" name="P_basal" initial_value="0.009"/>
+    <variable units="per_second" name="Pmax_RyR" initial_value="0.05"/>
+    <variable units="nanomolar" name="EC50_RyR" initial_value="2641.0"/>
+    <variable units="dimensionless" name="n_RyR" initial_value="0.96"/>
+    <variable units="nanomolar_per_second" name="J_release"/>
+    
+    <variable units="nanomolar_per_second" public_interface="in" name="J_SERCA"/>
+    <variable units="micro_litre" public_interface="in" name="v_i"/>
+    <variable units="dimensionless" public_interface="in" name="k_i"/>        
+    <variable units="nanomolar" public_interface="in" name="Ca_i"/>
+    <variable units="nanomolar" public_interface="in" name="Ca_ER"/>         
+    <variable units="second" public_interface="in" name="time"/>        
+            
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="J_release_calculation">
+        <eq/>
+        <ci> J_release </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <ci> P_ER </ci>
+            <apply>
+              <minus/>
+              <ci> Ca_i </ci>
+              <ci> Ca_ER </ci> 
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> v_i </ci>
+            <ci> k_i </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="J_ER_calculation">
+        <eq/>
+        <ci> J_ER </ci>
+        <apply>
+          <plus/>
+          <ci> J_SERCA </ci>
+          <ci> J_release </ci>
+        </apply>
+      </apply>
+      
+      <apply id="P_ER_v_i_calculation">
+        <eq/>
+        <ci> P_ER </ci>
+          <apply>
+          <times/>
+          <ci> v_i </ci>
+          <apply>
+            <plus/>
+            <ci> P_basal </ci>
+            <apply>
+              <divide/>
+              <ci> Pmax_RyR </ci>
+              <apply>
+                <plus/>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+                <apply>
+                  <power/>
+                  <apply>
+                    <divide/>
+                    <ci> EC50_RyR </ci>
+                    <ci> Ca_i </ci>
+                  </apply>
+                  <ci> n_RyR </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <connection>
+    <map_components component_2="environment" component_1="cytoplasmic_calcium"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="intraluminal_calcium"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="total_cytoplasmic_Ca_flux"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Ca_extrusion_across_the_plasma_membrane"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Ca_uptake_by_SR_Ca_ATPase"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="ER_Ca_release"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Ca_extrusion_across_the_plasma_membrane" component_1="cytoplasmic_calcium"/>
+    <map_variables variable_2="Ca_i" variable_1="Ca_i"/>
+    <map_variables variable_2="J_pm" variable_1="J_pm"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Ca_uptake_by_SR_Ca_ATPase" component_1="cytoplasmic_calcium"/>
+    <map_variables variable_2="Ca_i" variable_1="Ca_i"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="ER_Ca_release" component_1="cytoplasmic_calcium"/>
+    <map_variables variable_2="Ca_i" variable_1="Ca_i"/>
+    <map_variables variable_2="J_ER" variable_1="J_ER"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="intraluminal_calcium" component_1="cytoplasmic_calcium"/>
+    <map_variables variable_2="Ca_i" variable_1="Ca_i"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="ER_Ca_release" component_1="intraluminal_calcium"/>
+    <map_variables variable_2="Ca_ER" variable_1="Ca_ER"/>
+    <map_variables variable_2="J_ER" variable_1="J_ER"/>
+    <map_variables variable_2="P_ER" variable_1="P_ER"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Ca_uptake_by_SR_Ca_ATPase" component_1="intraluminal_calcium"/>
+    <map_variables variable_2="J_SERCA" variable_1="J_SERCA"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="ER_Ca_release" component_1="Ca_uptake_by_SR_Ca_ATPase"/>
+    <map_variables variable_2="J_SERCA" variable_1="J_SERCA"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Ca_extrusion_across_the_plasma_membrane" component_1="total_cytoplasmic_Ca_flux"/>
+    <map_variables variable_2="J_ICa" variable_1="J_ICa"/>
+    <map_variables variable_2="k_i" variable_1="k_i"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="intraluminal_calcium" component_1="total_cytoplasmic_Ca_flux"/>
+    <map_variables variable_2="v_i" variable_1="v_i"/>
+    <map_variables variable_2="k_i" variable_1="k_i"/>
+  </connection> 
+  
+  <connection>
+    <map_components component_2="ER_Ca_release" component_1="total_cytoplasmic_Ca_flux"/>
+    <map_variables variable_2="v_i" variable_1="v_i"/>
+    <map_variables variable_2="k_i" variable_1="k_i"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Ca_uptake_by_SR_Ca_ATPase" component_1="total_cytoplasmic_Ca_flux"/>
+    <map_variables variable_2="k_i" variable_1="k_i"/>
+  </connection>
+
+
+
+<rdf:RDF>
+  <rdf:Bag rdf:about="rdf:#8d6d8ff2-88c9-4e05-851b-737fcc458f9d">
+    <rdf:li>neuron</rdf:li>
+    <rdf:li>electrophysiology</rdf:li>
+    <rdf:li>calcium dynamics</rdf:li>
+    <rdf:li>er</rdf:li>
+  </rdf:Bag>
+  <rdf:Seq rdf:about="rdf:#10a6f2e1-447d-4bf2-ae2b-f4417adc8871">
+    <rdf:li rdf:resource="rdf:#e3ea6eca-928f-451b-9cd1-ca013e677550"/>
+    <rdf:li rdf:resource="rdf:#2c9fddfb-d78f-424c-a603-c5be16f70ce8"/>
+    <rdf:li rdf:resource="rdf:#90813684-7a7b-468e-a041-3ff09dbba116"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#ac2a32d9-fbca-4912-aee9-ad8260bbcd91">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:publisher>The University of Auckland, Bioengineering Institute</dc:publisher>
+    <cmeta:comment rdf:resource="rdf:#b9e90e28-b72c-45e4-9849-9331052e90ae"/>
+    <dcterms:created rdf:resource="rdf:#42e0b75e-f35f-46b5-baf5-73f3456cb750"/>
+    <dc:creator rdf:resource="rdf:#c067077b-f7ad-4aba-808e-9dc70835e0d4"/>
+    <cmeta:modification rdf:resource="rdf:#6e35936f-2c34-4b29-9d02-a49e7f850df3"/>
+    <cmeta:modification rdf:resource="rdf:#24b0e4e2-b175-4156-8d6e-f70c3806c172"/>
+    <cmeta:modification rdf:resource="rdf:#4d873d62-ff2e-436d-ba16-9c4d05218d24"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#albrecht_colegrove_friel_2002_version01">
+    <dc:title>
+        Differential regulation of ER Ca2+ uptake and release.
+      </dc:title>
+    <cmeta:bio_entity>sympathetic neuron</cmeta:bio_entity>
+    <cmeta:comment rdf:resource="rdf:#8c76b646-2c23-42de-a543-f65e73c9c8db"/>
+    <bqs:reference rdf:resource="rdf:#16c21c1f-b111-4f11-a1ce-97429d7f213b"/>
+    <bqs:reference rdf:resource="rdf:#3685de9e-447a-404b-b4a7-fcfc718d872d"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8905d384-47da-4f96-bcf1-715e354d64fd">
+    <vCard:Given>Stephen</vCard:Given>
+    <vCard:Family>Colegrove</vCard:Family>
+    <vCard:Other>L</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#90813684-7a7b-468e-a041-3ff09dbba116">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#d5e9e357-b7fb-460f-9c9a-6b96524d37d9"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0e7be0e6-81f5-48a6-aadb-60e516a4e655">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a72eecbd-8b6e-4c2d-8769-359866ae4502">
+    <dcterms:W3CDTF>2002-07-18</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0590c7c2-1c63-4565-8bcb-f111bb4b34a0">
+    <vCard:FN/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#02c48610-5c40-4907-8955-b8768b779384">
+    <dc:title>Journal of General Physiology</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#c041b9d1-61ed-4e2f-a325-5f2f06ad94a4">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d5e9e357-b7fb-460f-9c9a-6b96524d37d9">
+    <vCard:Given>David</vCard:Given>
+    <vCard:Family>Friel</vCard:Family>
+    <vCard:Other>D</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3685de9e-447a-404b-b4a7-fcfc718d872d">
+    <dc:subject rdf:resource="rdf:#272080ca-109d-4a01-8c26-a2f10c8fc20a"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8c76b646-2c23-42de-a543-f65e73c9c8db">
+    <dc:creator rdf:resource="rdf:#cf692c47-3391-4ee6-a672-a5c586e88a5c"/>
+    <rdf:value>This is the CellML description of Albrecht et al's 2002 model of &#13;
+          differential regulation of ER Ca2+ uptake and rates.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#cf692c47-3391-4ee6-a672-a5c586e88a5c">
+    <vCard:FN>Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#6e35936f-2c34-4b29-9d02-a49e7f850df3">
+    <dcterms:modified rdf:resource="rdf:#2971f739-eac9-4821-baf4-a3cce68fd58b"/>
+    <rdf:value>updated curation status</rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#985752d7-2dbb-4922-8a55-17afa8ed38a6"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#69a82cd0-0866-4717-a6d7-97af7a176c00">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>The Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7b701f7c-dac1-460b-828f-c3c3a3e834e2">
+    <vCard:N rdf:resource="rdf:#c041b9d1-61ed-4e2f-a325-5f2f06ad94a4"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#985752d7-2dbb-4922-8a55-17afa8ed38a6">
+    <vCard:N rdf:resource="rdf:#2c045f90-0bd3-45cb-9212-616e81cd06c7"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#2c9fddfb-d78f-424c-a603-c5be16f70ce8">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#8905d384-47da-4f96-bcf1-715e354d64fd"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4d873d62-ff2e-436d-ba16-9c4d05218d24">
+    <dcterms:modified rdf:resource="rdf:#a72eecbd-8b6e-4c2d-8769-359866ae4502"/>
+    <rdf:value>
+          Added more metadata.
+        </rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#7b701f7c-dac1-460b-828f-c3c3a3e834e2"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e3ea6eca-928f-451b-9cd1-ca013e677550">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#1c5d231a-412e-45e5-a848-29fbe05790df"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3a97e47c-7a5d-4da1-892e-587514e8c357">
+    <dcterms:W3CDTF>2002-03</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d7845bf3-bfea-4206-86f6-6ddc9992c52e">
+    <vCard:N rdf:resource="rdf:#cfaa4748-ab60-4a61-b6e6-c81ed81710d3"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#24b0e4e2-b175-4156-8d6e-f70c3806c172">
+    <dcterms:modified rdf:resource="rdf:#95293d60-7bb5-44d6-964d-890032037c27"/>
+    <rdf:value>
+          Added publication date information.
+        </rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#d7845bf3-bfea-4206-86f6-6ddc9992c52e"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#95293d60-7bb5-44d6-964d-890032037c27">
+    <dcterms:W3CDTF>2003-04-09</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#cfaa4748-ab60-4a61-b6e6-c81ed81710d3">
+    <vCard:Given>Autumn</vCard:Given>
+    <vCard:Family>Cuellar</vCard:Family>
+    <vCard:Other>A</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#42e0b75e-f35f-46b5-baf5-73f3456cb750">
+    <dcterms:W3CDTF>2002-03-21T00:00:00+00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#272080ca-109d-4a01-8c26-a2f10c8fc20a">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value rdf:resource="rdf:#8d6d8ff2-88c9-4e05-851b-737fcc458f9d"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3612e477-8065-48d4-871f-305bfb0c83d6">
+    <dc:creator rdf:resource="rdf:#10a6f2e1-447d-4bf2-ae2b-f4417adc8871"/>
+    <dc:title>Differential Regulation of ER Ca2+ Uptake and Release Rates Accounts             for Multiple Modes of Ca2+-induced Ca2+ Release</dc:title>
+    <bqs:volume>119</bqs:volume>
+    <bqs:first_page>211</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#02c48610-5c40-4907-8955-b8768b779384"/>
+    <dcterms:issued rdf:resource="rdf:#3a97e47c-7a5d-4da1-892e-587514e8c357"/>
+    <bqs:last_page>233</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#16c21c1f-b111-4f11-a1ce-97429d7f213b">
+    <bqs:Pubmed_id>11865019</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#3612e477-8065-48d4-871f-305bfb0c83d6"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#c067077b-f7ad-4aba-808e-9dc70835e0d4">
+    <vCard:ORG rdf:resource="rdf:#69a82cd0-0866-4717-a6d7-97af7a176c00"/>
+    <vCard:EMAIL rdf:resource="rdf:#0e7be0e6-81f5-48a6-aadb-60e516a4e655"/>
+    <vCard:N rdf:resource="rdf:#ac2a32d9-fbca-4912-aee9-ad8260bbcd91"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#2971f739-eac9-4821-baf4-a3cce68fd58b">
+    <dcterms:W3CDTF>2009-04-30T16:04:07+12:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b9e90e28-b72c-45e4-9849-9331052e90ae">
+    <dc:creator rdf:resource="rdf:#0590c7c2-1c63-4565-8bcb-f111bb4b34a0"/>
+    <rdf:value/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1c5d231a-412e-45e5-a848-29fbe05790df">
+    <vCard:Given>Meredith</vCard:Given>
+    <vCard:Family>Albrecht</vCard:Family>
+    <vCard:Other>A</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#2c045f90-0bd3-45cb-9212-616e81cd06c7">
+    <vCard:Given>James</vCard:Given>
+    <vCard:Family>Lawson</vCard:Family>
+    <vCard:Other>Richard</vCard:Other>
+  </rdf:Description>
+</rdf:RDF>
+</model>

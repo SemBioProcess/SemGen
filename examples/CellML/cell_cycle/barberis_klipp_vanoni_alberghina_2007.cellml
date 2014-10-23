@@ -1,0 +1,2599 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--
+This CellML file was generated on 17/02/2009 at 11:44:00 at a.m. using:
+
+COR (0.9.31.1175)
+Copyright 2002-2009 Dr Alan Garny
+http://COR.physiol.ox.ac.uk/ - COR@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.CellML.org/
+--><model xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" name="barberis_klipp_vanoni_alberghina_version01" cmeta:id="barberis_klipp_vanoni_alberghina_version01">
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>Cell Size at S Phase Initiation: An Emergent Property of the G1/S Network</title>
+				<author>
+					<firstname>Jeelean</firstname>
+					<surname>Lim</surname>
+					<affiliation>
+						<shortaffil>Bioengineering Institute, University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<section id="sec_status">
+				<title>Model Status</title>
+				<para>
+            This CellML version of the model runs in PCEnv and COR to produce graphs that are similar in shape but not in magnitude to the graphs in figure 3 of the published paper. This could possibly be due to a missing variable k55 in the equation for cdk1_c. The units have been checked and are consistent.
+          </para>
+			</section>
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>
+ABSTRACT: The eukaryotic cell cycle is the repeated sequence of events that enable the division of a cell into two daughter cells. It
+is divided into four phases: G1, S, G2, and M. Passage through the cell cycle is strictly regulated by a molecular
+interaction network, which involves the periodic synthesis and destruction of cyclins that bind and activate cyclindependent
+kinases that are present in nonlimiting amounts. Cyclin-dependent kinase inhibitors contribute to cell cycle
+control. 
+</para>
+				<para>
+Budding yeast is an established model organism for cell cycle studies, and several mathematical models have
+been proposed for its cell cycle. An area of major relevance in cell cycle control is the G1 to S transition. In any given
+growth condition, it is characterized by the requirement of a specific, critical cell size, PS, to enter S phase. The
+molecular basis of this control is still under discussion.
+</para>
+				<para>
+The authors report a mathematical model of the G1 to S network
+that newly takes into account nucleo/cytoplasmic localization, the role of the cyclin-dependent kinase Sic1 in
+facilitating nuclear import of its cognate Cdk1-Clb5, Whi5 control, and carbon source regulation of Sic1 and Sic1-
+containing complexes. The model was implemented by a set of ordinary differential equations that describe the
+temporal change of the concentration of the involved proteins and protein complexes. The model was tested by
+simulation in several genetic and nutritional setups and was found to be neatly consistent with experimental data. To
+estimate PS, the authors developed a hybrid model including a probabilistic component for firing of DNA replication
+origins. Sensitivity analysis of PS provides a novel relevant conclusion: PS is an emergent property of the G1 to S
+network that strongly depends on growth rate.   
+</para>
+				<para>
+The complete original paper reference is cited below:
+</para>
+				<para>
+					<ulink url="http://www.ploscompbiol.org/article/info:doi/10.1371/journal.pcbi.0030064">Cell Size at S Phase Initiation: An Emergent Property of the G1/S Network</ulink>, Matteo Barberis, Edda Klipp, Marco Vanoni, Lilia Alberghina, 2007, <ulink url="http://www.ploscompbiol.org/home.action;jsessionid=645EF1CFEC82DFB57D328F551865F7A6">
+						<emphasis>PLOS Computational Biology</emphasis>
+					</ulink>.  (A PDF version of the article is available to subscribers on the journal website.)  <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/17432928">PubMed ID: 17432928 </ulink>
+				</para>
+				<informalfigure float="0" id="fig_reaction_diagram">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>figure1</title>
+							</objectinfo>
+							<imagedata fileref="barberis_2007.png"/>
+						</imageobject>
+					</mediaobject>
+					<caption>Main Events That Occur during the Yeast Cell Cycle</caption>
+				</informalfigure>
+			</sect1>
+		</article>
+	</documentation>   <units name="nanomolar">
+      <unit units="mole" prefix="nano"/>
+      <unit units="litre" exponent="-1"/>
+   </units>
+   <units name="minute">
+      <unit units="second" multiplier="60"/>
+   </units>
+   <units name="first_order_rate_constant">
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units name="flux">
+      <unit units="nanomolar"/>
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units name="second_order_rate_constant">
+      <unit units="nanomolar" exponent="-1"/>
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <component name="environment">
+      <variable name="time" units="minute" public_interface="out"/>
+   </component>
+   <component name="v_c">
+      <variable name="v_c" units="nanomolar" initial_value="0.5" public_interface="out"/>
+      <variable name="dv_c_dt" units="flux" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>v_c</ci>
+            </apply>
+            <ci>dv_c_dt</ci>
+         </apply>
+      </math>
+   </component>
+   <component name="dv_c_dt">
+      <variable name="dv_c_dt" units="flux" public_interface="out"/>
+      <variable name="v_c" units="nanomolar" public_interface="in"/>
+      <variable name="k_growth" units="first_order_rate_constant" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>dv_c_dt</ci>
+            <apply>
+               <times/>
+               <ci>k_growth</ci>
+               <ci>v_c</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="v_n">
+      <variable name="v_n" units="nanomolar" initial_value="0.5" public_interface="out"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>v_n</ci>
+            </apply>
+            <cn cellml:units="flux">0</cn>
+         </apply>
+      </math>
+   </component>
+   <component name="k_volume">
+      <variable name="k_volume" units="dimensionless" public_interface="out"/>
+      <variable name="v_n" units="nanomolar" public_interface="in"/>
+      <variable name="v_c" units="nanomolar" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>k_volume</ci>
+            <apply>
+               <divide/>
+               <ci>v_n</ci>
+               <ci>v_c</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="mcln2_c">
+      <variable name="mcln2_c" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="k_50" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_10" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="mcln2_n" units="nanomolar" public_interface="in"/>
+      <variable name="k_volume" units="dimensionless" public_interface="in"/>
+      <variable name="v_c" units="nanomolar" public_interface="in"/>
+      <variable name="dv_c_dt" units="flux" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>mcln2_c</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>k_50</ci>
+                     <ci>mcln2_n</ci>
+                     <ci>k_volume</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_10</ci>
+                     <ci>mcln2_c</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>dv_c_dt</ci>
+                     <ci>v_c</ci>
+                  </apply>
+                  <ci>mcln2_c</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="mclb5_c">
+      <variable name="mclb5_c" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="k_51" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_11" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="mclb5_n" units="nanomolar" public_interface="in"/>
+      <variable name="k_volume" units="dimensionless" public_interface="in"/>
+      <variable name="v_c" units="nanomolar" public_interface="in"/>
+      <variable name="dv_c_dt" units="flux" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>mclb5_c</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>k_51</ci>
+                     <ci>mclb5_n</ci>
+                     <ci>k_volume</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_11</ci>
+                     <ci>mclb5_c</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>dv_c_dt</ci>
+                     <ci>v_c</ci>
+                  </apply>
+                  <ci>mclb5_c</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="mcln2_n">
+      <variable name="mcln2_n" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="k_1" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_50" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="sbf_n" units="nanomolar" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>mcln2_n</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k_1</ci>
+                  <ci>sbf_n</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_50</ci>
+                  <ci>mcln2_n</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="mclb5_n">
+      <variable name="mclb5_n" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="k_2" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_51" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="sbf_n" units="nanomolar" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>mclb5_n</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k_2</ci>
+                  <ci>sbf_n</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_51</ci>
+                  <ci>mclb5_n</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="sbf_n">
+      <variable name="sbf_n" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="k_39" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_34" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k_35" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="sbfwhi5p_n" units="nanomolar" public_interface="in"/>
+      <variable name="whi5_n" units="nanomolar" public_interface="in"/>
+      <variable name="sbfwhi5_n" units="nanomolar" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>sbf_n</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>k_39</ci>
+                     <ci>sbfwhi5p_n</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_34</ci>
+                     <ci>sbf_n</ci>
+                     <ci>whi5_n</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_35</ci>
+                  <ci>sbfwhi5_n</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="cln3_c">
+      <variable name="cln3_c" units="nanomolar" initial_value="0.000485" public_interface="out"/>
+      <variable name="k_6" units="flux" public_interface="in"/>
+      <variable name="k_43" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_15" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v_c" units="nanomolar" public_interface="in"/>
+      <variable name="dv_c_dt" units="flux" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>cln3_c</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <ci>k_6</ci>
+                     <apply>
+                        <times/>
+                        <ci>k_43</ci>
+                        <ci>cln3_c</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_15</ci>
+                     <ci>cln3_c</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>dv_c_dt</ci>
+                     <ci>v_c</ci>
+                  </apply>
+                  <ci>cln3_c</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="cln2_c">
+      <variable name="cln2_c" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="k_3" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_26" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k_27" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_12" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="mcln2_c" units="nanomolar" public_interface="in"/>
+      <variable name="cdk1_c" units="nanomolar" public_interface="in"/>
+      <variable name="cdk1cln2_c" units="nanomolar" public_interface="in"/>
+      <variable name="v_c" units="nanomolar" public_interface="in"/>
+      <variable name="dv_c_dt" units="flux" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>cln2_c</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <times/>
+                           <ci>k_3</ci>
+                           <ci>mcln2_c</ci>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>k_26</ci>
+                           <ci>cdk1_c</ci>
+                           <ci>cln2_c</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k_27</ci>
+                        <ci>cdk1cln2_c</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_12</ci>
+                     <ci>cln2_c</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>dv_c_dt</ci>
+                     <ci>v_c</ci>
+                  </apply>
+                  <ci>cln2_c</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="clb5_c">
+      <variable name="clb5_c" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="k_4" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_28" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k_29" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_13" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="mclb5_c" units="nanomolar" public_interface="in"/>
+      <variable name="cdk1_c" units="nanomolar" public_interface="in"/>
+      <variable name="cdk1clb5_c" units="nanomolar" public_interface="in"/>
+      <variable name="v_c" units="nanomolar" public_interface="in"/>
+      <variable name="dv_c_dt" units="flux" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>clb5_c</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <times/>
+                           <ci>k_4</ci>
+                           <ci>mclb5_c</ci>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>k_28</ci>
+                           <ci>clb5_c</ci>
+                           <ci>cdk1_c</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k_29</ci>
+                        <ci>cdk1clb5_c</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_13</ci>
+                     <ci>clb5_c</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>dv_c_dt</ci>
+                     <ci>v_c</ci>
+                  </apply>
+                  <ci>clb5_c</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="cdk1_c">
+      <variable name="cdk1_c" units="nanomolar" initial_value="0.333333" public_interface="out"/>
+      <variable name="k_7" units="flux" public_interface="in"/>
+      <variable name="k_44" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_49" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_27" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_26" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k_28" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k_29" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_16" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="cdk1_n" units="nanomolar" public_interface="in"/>
+      <variable name="cdk1cln2_c" units="nanomolar" public_interface="in"/>
+      <variable name="cln2_c" units="nanomolar" public_interface="in"/>
+      <variable name="clb5_c" units="nanomolar" public_interface="in"/>
+      <variable name="cdk1clb5_c" units="nanomolar" public_interface="in"/>
+      <variable name="v_c" units="nanomolar" public_interface="in"/>
+      <variable name="dv_c_dt" units="flux" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>cdk1_c</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <minus/>
+                           <apply>
+                              <plus/>
+                              <apply>
+                                 <minus/>
+                                 <ci>k_7</ci>
+                                 <apply>
+                                    <times/>
+                                    <ci>k_44</ci>
+                                    <ci>cdk1_c</ci>
+                                 </apply>
+                              </apply>
+                              <apply>
+                                 <times/>
+                                 <ci>k_49</ci>
+                                 <ci>cdk1_n</ci>
+                              </apply>
+                              <apply>
+                                 <times/>
+                                 <ci>k_27</ci>
+                                 <ci>cdk1cln2_c</ci>
+                              </apply>
+                           </apply>
+                           <apply>
+                              <times/>
+                              <ci>k_26</ci>
+                              <ci>cdk1_c</ci>
+                              <ci>cln2_c</ci>
+                           </apply>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>k_28</ci>
+                           <ci>cdk1_c</ci>
+                           <ci>clb5_c</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k_29</ci>
+                        <ci>cdk1clb5_c</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_16</ci>
+                     <ci>cdk1_c</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>dv_c_dt</ci>
+                     <ci>v_c</ci>
+                  </apply>
+                  <ci>cdk1_c</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="cln3_n">
+      <variable name="cln3_n" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="k_24" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k_43" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_25" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_20" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="cln3_c" units="nanomolar" public_interface="in"/>
+      <variable name="k_volume" units="dimensionless" public_interface="in"/>
+      <variable name="cdk1_n" units="nanomolar" public_interface="in"/>
+      <variable name="cdk1cln3_n" units="nanomolar" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>cln3_n</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <ci>k_43</ci>
+                           <ci>cln3_c</ci>
+                        </apply>
+                        <ci>k_volume</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k_24</ci>
+                        <ci>cln3_n</ci>
+                        <ci>cdk1_n</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_25</ci>
+                     <ci>cdk1cln3_n</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_20</ci>
+                  <ci>cln3_n</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="cdk1_n">
+      <variable name="cdk1_n" units="nanomolar" initial_value="0.0074127" public_interface="out"/>
+      <variable name="k_44" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_49" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_24" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k_25" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_21" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_volume" units="dimensionless" public_interface="in"/>
+      <variable name="cdk1_c" units="nanomolar" public_interface="in"/>
+      <variable name="cln3_n" units="nanomolar" public_interface="in"/>
+      <variable name="cdk1cln3_n" units="nanomolar" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>cdk1_n</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <divide/>
+                           <apply>
+                              <times/>
+                              <ci>k_44</ci>
+                              <ci>cdk1_c</ci>
+                           </apply>
+                           <ci>k_volume</ci>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>k_49</ci>
+                           <ci>cdk1_n</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k_24</ci>
+                        <ci>cln3_n</ci>
+                        <ci>cdk1_n</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_25</ci>
+                     <ci>cdk1cln3_n</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_21</ci>
+                  <ci>cdk1_n</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="cdk1cln2_c">
+      <variable name="cdk1cln2_c" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="k_26" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k_27" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_46" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_53" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="cdk1_c" units="nanomolar" public_interface="in"/>
+      <variable name="cln2_c" units="nanomolar" public_interface="in"/>
+      <variable name="cdk1cln2_n" units="nanomolar" public_interface="in"/>
+      <variable name="k_volume" units="dimensionless" public_interface="in"/>
+      <variable name="v_c" units="nanomolar" public_interface="in"/>
+      <variable name="dv_c_dt" units="flux" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>cdk1cln2_c</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <times/>
+                           <ci>k_26</ci>
+                           <ci>cdk1_c</ci>
+                           <ci>cln2_c</ci>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>k_27</ci>
+                           <ci>cdk1cln2_c</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k_46</ci>
+                        <ci>cdk1cln2_c</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_53</ci>
+                     <ci>cdk1cln2_n</ci>
+                     <ci>k_volume</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>dv_c_dt</ci>
+                     <ci>v_c</ci>
+                  </apply>
+                  <ci>cdk1cln2_c</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="cdk1clb5_c">
+      <variable name="cdk1clb5_c" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="k_28" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k_29" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_33" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_32" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k_48" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="cdk1_c" units="nanomolar" public_interface="in"/>
+      <variable name="clb5_c" units="nanomolar" public_interface="in"/>
+      <variable name="cdk1cln2_n" units="nanomolar" public_interface="in"/>
+      <variable name="cdk1clb5sic1_c" units="nanomolar" public_interface="in"/>
+      <variable name="sic1_c" units="nanomolar" public_interface="in"/>
+      <variable name="v_c" units="nanomolar" public_interface="in"/>
+      <variable name="dv_c_dt" units="flux" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>cdk1clb5_c</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <minus/>
+                           <apply>
+                              <times/>
+                              <ci>k_28</ci>
+                              <ci>cdk1_c</ci>
+                              <ci>clb5_c</ci>
+                           </apply>
+                           <apply>
+                              <times/>
+                              <ci>k_29</ci>
+                              <ci>cdk1clb5_c</ci>
+                           </apply>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>k_33</ci>
+                           <ci>cdk1clb5sic1_c</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k_32</ci>
+                        <ci>sic1_c</ci>
+                        <ci>cdk1clb5_c</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_48</ci>
+                     <ci>cdk1clb5_c</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>dv_c_dt</ci>
+                     <ci>v_c</ci>
+                  </apply>
+                  <ci>cdk1clb5_c</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="cdk1cln2_n">
+      <variable name="cdk1cln2_n" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="k_46" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_53" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="cdk1cln2_c" units="nanomolar" public_interface="in"/>
+      <variable name="k_volume" units="dimensionless" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>cdk1cln2_n</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>k_46</ci>
+                     <ci>cdk1cln2_c</ci>
+                  </apply>
+                  <ci>k_volume</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_53</ci>
+                  <ci>cdk1cln2_n</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="cdk1clb5_n">
+      <variable name="cdk1clb5_n" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="k_41" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_48" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="cdk1clb5sic1p_n" units="nanomolar" public_interface="in"/>
+      <variable name="cdk1clb5_c" units="nanomolar" public_interface="in"/>
+      <variable name="k_volume" units="dimensionless" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>cdk1clb5_n</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <ci>k_41</ci>
+                  <ci>cdk1clb5sic1p_n</ci>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>k_48</ci>
+                     <ci>cdk1clb5_c</ci>
+                  </apply>
+                  <ci>k_volume</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="cdk1cln3_n">
+      <variable name="cdk1cln3_n" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="k_24" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k_25" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_31" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_30" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k_40" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="cln3_n" units="nanomolar" public_interface="in"/>
+      <variable name="cdk1_n" units="nanomolar" public_interface="in"/>
+      <variable name="cdk1cln3far1_n" units="nanomolar" public_interface="in"/>
+      <variable name="far1_n" units="nanomolar" public_interface="in"/>
+      <variable name="cdk1cln3far1p_n" units="nanomolar" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>cdk1cln3_n</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <times/>
+                           <ci>k_24</ci>
+                           <ci>cln3_n</ci>
+                           <ci>cdk1_n</ci>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>k_25</ci>
+                           <ci>cdk1cln3_n</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k_31</ci>
+                        <ci>cdk1cln3far1_n</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_30</ci>
+                     <ci>far1_n</ci>
+                     <ci>cdk1cln3_n</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_40</ci>
+                  <ci>cdk1cln3far1p_n</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="sbfwhi5_n">
+      <variable name="sbfwhi5_n" units="nanomolar" initial_value="0.025544" public_interface="out"/>
+      <variable name="k_34" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k_35" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_36" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="sbf_n" units="nanomolar" public_interface="in"/>
+      <variable name="whi5_n" units="nanomolar" public_interface="in"/>
+      <variable name="cdk1cln3_n" units="nanomolar" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>sbfwhi5_n</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>k_34</ci>
+                     <ci>sbf_n</ci>
+                     <ci>whi5_n</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_35</ci>
+                     <ci>sbfwhi5_n</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_36</ci>
+                  <ci>sbfwhi5_n</ci>
+                  <ci>cdk1cln3_n</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="sbfwhi5p_n">
+      <variable name="sbfwhi5p_n" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="k_36" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k_39" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="sbfwhi5_n" units="nanomolar" public_interface="in"/>
+      <variable name="cdk1cln3_n" units="nanomolar" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>sbfwhi5p_n</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k_36</ci>
+                  <ci>sbfwhi5_n</ci>
+                  <ci>cdk1cln3_n</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_39</ci>
+                  <ci>sbfwhi5p_n</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="cdk1cln3far1_n">
+      <variable name="cdk1cln3far1_n" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="k_30" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k_31" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_37" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="far1_n" units="nanomolar" public_interface="in"/>
+      <variable name="cdk1cln3_n" units="nanomolar" public_interface="in"/>
+      <variable name="cdk1cln2_n" units="nanomolar" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>cdk1cln3far1_n</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>k_30</ci>
+                     <ci>far1_n</ci>
+                     <ci>cdk1cln3_n</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_31</ci>
+                     <ci>cdk1cln3far1_n</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_37</ci>
+                  <ci>cdk1cln3far1_n</ci>
+                  <ci>cdk1cln2_n</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="cdk1clb5sic1_n">
+      <variable name="cdk1clb5sic1_n" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="k_47" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_38" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="cdk1clb5sic1_c" units="nanomolar" public_interface="in"/>
+      <variable name="k_volume" units="dimensionless" public_interface="in"/>
+      <variable name="cdk1cln2_n" units="nanomolar" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>cdk1clb5sic1_n</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>k_47</ci>
+                     <ci>cdk1clb5sic1_c</ci>
+                  </apply>
+                  <ci>k_volume</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_38</ci>
+                  <ci>cdk1clb5sic1_n</ci>
+                  <ci>cdk1cln2_n</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="cdk1clb5sic1p_n">
+      <variable name="cdk1clb5sic1p_n" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="k_41" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_38" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="cdk1clb5sic1_n" units="nanomolar" public_interface="in"/>
+      <variable name="cdk1cln2_n" units="nanomolar" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>cdk1clb5sic1p_n</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k_38</ci>
+                  <ci>cdk1clb5sic1_n</ci>
+                  <ci>cdk1cln2_n</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_41</ci>
+                  <ci>cdk1clb5sic1p_n</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="cdk1cln3far1p_n">
+      <variable name="cdk1cln3far1p_n" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="k_37" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k_40" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="cdk1cln3far1_n" units="nanomolar" public_interface="in"/>
+      <variable name="cdk1cln2_n" units="nanomolar" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>cdk1cln3far1p_n</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k_37</ci>
+                  <ci>cdk1cln3far1_n</ci>
+                  <ci>cdk1cln2_n</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_40</ci>
+                  <ci>cdk1cln3far1p_n</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="cdk1clb5sic1_c">
+      <variable name="cdk1clb5sic1_c" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="k_32" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k_33" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_47" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="sic1_c" units="nanomolar" public_interface="in"/>
+      <variable name="cdk1clb5_c" units="nanomolar" public_interface="in"/>
+      <variable name="v_c" units="nanomolar" public_interface="in"/>
+      <variable name="dv_c_dt" units="flux" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>cdk1clb5sic1_c</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <times/>
+                        <ci>k_32</ci>
+                        <ci>sic1_c</ci>
+                        <ci>cdk1clb5_c</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k_33</ci>
+                        <ci>cdk1clb5sic1_c</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_47</ci>
+                     <ci>cdk1clb5sic1_c</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>dv_c_dt</ci>
+                     <ci>v_c</ci>
+                  </apply>
+                  <ci>cdk1clb5sic1_c</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="sic1_c">
+      <variable name="sic1_c" units="nanomolar" initial_value="0.039234" public_interface="out"/>
+      <variable name="k_9" units="flux" public_interface="in"/>
+      <variable name="k_32" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k_33" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_18" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="cdk1clb5_c" units="nanomolar" public_interface="in"/>
+      <variable name="cdk1clb5sic1_c" units="nanomolar" public_interface="in"/>
+      <variable name="v_c" units="nanomolar" public_interface="in"/>
+      <variable name="dv_c_dt" units="flux" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>sic1_c</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <minus/>
+                        <ci>k_9</ci>
+                        <apply>
+                           <times/>
+                           <ci>k_32</ci>
+                           <ci>sic1_c</ci>
+                           <ci>cdk1clb5_c</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k_33</ci>
+                        <ci>cdk1clb5sic1_c</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_18</ci>
+                     <ci>sic1_c</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>dv_c_dt</ci>
+                     <ci>v_c</ci>
+                  </apply>
+                  <ci>sic1_c</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="whi5_c">
+      <variable name="whi5_c" units="nanomolar" initial_value="0.073564" public_interface="out"/>
+      <variable name="k_8" units="flux" public_interface="in"/>
+      <variable name="k_45" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_17" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v_c" units="nanomolar" public_interface="in"/>
+      <variable name="dv_c_dt" units="flux" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>whi5_c</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <ci>k_8</ci>
+                     <apply>
+                        <times/>
+                        <ci>k_45</ci>
+                        <ci>whi5_c</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_17</ci>
+                     <ci>whi5_c</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>dv_c_dt</ci>
+                     <ci>v_c</ci>
+                  </apply>
+                  <ci>whi5_c</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="far1_c">
+      <variable name="far1_c" units="nanomolar" initial_value="0.0037926" public_interface="out"/>
+      <variable name="k_5" units="flux" public_interface="in"/>
+      <variable name="k_42" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_14" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="v_c" units="nanomolar" public_interface="in"/>
+      <variable name="dv_c_dt" units="flux" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>far1_c</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <ci>k_5</ci>
+                     <apply>
+                        <times/>
+                        <ci>k_42</ci>
+                        <ci>far1_c</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_14</ci>
+                     <ci>far1_c</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>dv_c_dt</ci>
+                     <ci>v_c</ci>
+                  </apply>
+                  <ci>far1_c</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="whi5p_c">
+      <variable name="whi5p_c" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="k_52" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="whi5p_n" units="nanomolar" public_interface="in"/>
+      <variable name="k_volume" units="dimensionless" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>whi5p_c</ci>
+            </apply>
+            <apply>
+               <times/>
+               <ci>k_52</ci>
+               <ci>whi5p_n</ci>
+               <ci>k_volume</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="sic1P_n">
+      <variable name="sic1P_n" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="k_41" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="cdk1clb5sic1p_n" units="nanomolar" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>sic1P_n</ci>
+            </apply>
+            <apply>
+               <times/>
+               <ci>k_41</ci>
+               <ci>cdk1clb5sic1p_n</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="far1P_n">
+      <variable name="far1P_n" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="k_40" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="cdk1cln3far1p_n" units="nanomolar" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>far1P_n</ci>
+            </apply>
+            <apply>
+               <times/>
+               <ci>k_40</ci>
+               <ci>cdk1cln3far1p_n</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="whi5_n">
+      <variable name="whi5_n" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="k_45" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_34" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k_22" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="whi5_c" units="nanomolar" public_interface="in"/>
+      <variable name="k_volume" units="dimensionless" public_interface="in"/>
+      <variable name="sbf_n" units="nanomolar" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>whi5_n</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>k_45</ci>
+                        <ci>whi5_c</ci>
+                     </apply>
+                     <ci>k_volume</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_34</ci>
+                     <ci>whi5_n</ci>
+                     <ci>sbf_n</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_22</ci>
+                  <ci>whi5_n</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="far1_n">
+      <variable name="far1_n" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="k_42" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_30" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k_31" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_19" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="far1_c" units="nanomolar" public_interface="in"/>
+      <variable name="k_volume" units="dimensionless" public_interface="in"/>
+      <variable name="cdk1cln3_n" units="nanomolar" public_interface="in"/>
+      <variable name="cdk1cln3far1_n" units="nanomolar" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>far1_n</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <ci>k_42</ci>
+                           <ci>far1_c</ci>
+                        </apply>
+                        <ci>k_volume</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k_30</ci>
+                        <ci>far1_n</ci>
+                        <ci>cdk1cln3_n</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_31</ci>
+                     <ci>cdk1cln3far1_n</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_19</ci>
+                  <ci>far1_n</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="whi5p_n">
+      <variable name="whi5p_n" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="k_39" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_52" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_23" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="sbfwhi5p_n" units="nanomolar" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>whi5p_n</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>k_39</ci>
+                     <ci>sbfwhi5p_n</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_52</ci>
+                     <ci>whi5p_n</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_23</ci>
+                  <ci>whi5p_n</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="rate_constants">
+      <variable name="k_1" units="first_order_rate_constant" initial_value="0.03523" public_interface="out"/>
+      <variable name="k_2" units="first_order_rate_constant" initial_value="0.03523" public_interface="out"/>
+      <variable name="k_3" units="first_order_rate_constant" initial_value="0.32" public_interface="out"/>
+      <variable name="k_4" units="first_order_rate_constant" initial_value="0.32" public_interface="out"/>
+      <variable name="k_5" units="flux" initial_value="0.000042" public_interface="out"/>
+      <variable name="k_6" units="flux" initial_value="0.00001" public_interface="out"/>
+      <variable name="k_7" units="flux" initial_value="0.01" public_interface="out"/>
+      <variable name="k_8" units="flux" initial_value="0.00004" public_interface="out"/>
+      <variable name="k_9" units="flux" initial_value="0.00005" public_interface="out"/>
+      <variable name="k_10" units="first_order_rate_constant" initial_value="0.12" public_interface="out"/>
+      <variable name="k_11" units="first_order_rate_constant" initial_value="0.12" public_interface="out"/>
+      <variable name="k_12" units="first_order_rate_constant" initial_value="0.1" public_interface="out"/>
+      <variable name="k_13" units="first_order_rate_constant" initial_value="0.35" public_interface="out"/>
+      <variable name="k_14" units="first_order_rate_constant" initial_value="0.01" public_interface="out"/>
+      <variable name="k_15" units="first_order_rate_constant" initial_value="0.01" public_interface="out"/>
+      <variable name="k_16" units="first_order_rate_constant" initial_value="0.03" public_interface="out"/>
+      <variable name="k_17" units="first_order_rate_constant" initial_value="0.01" public_interface="out"/>
+      <variable name="k_18" units="first_order_rate_constant" initial_value="0.0008" public_interface="out"/>
+      <variable name="k_19" units="first_order_rate_constant" initial_value="0.01" public_interface="out"/>
+      <variable name="k_20" units="first_order_rate_constant" initial_value="0.01" public_interface="out"/>
+      <variable name="k_21" units="first_order_rate_constant" initial_value="0" public_interface="out"/>
+      <variable name="k_22" units="first_order_rate_constant" initial_value="0.01" public_interface="out"/>
+      <variable name="k_23" units="first_order_rate_constant" initial_value="0.01" public_interface="out"/>
+      <variable name="k_24" units="second_order_rate_constant" initial_value="2.82" public_interface="out"/>
+      <variable name="k_25" units="first_order_rate_constant" initial_value="0.55" public_interface="out"/>
+      <variable name="k_26" units="second_order_rate_constant" initial_value="2.82" public_interface="out"/>
+      <variable name="k_27" units="first_order_rate_constant" initial_value="0.55" public_interface="out"/>
+      <variable name="k_28" units="second_order_rate_constant" initial_value="2.82" public_interface="out"/>
+      <variable name="k_29" units="first_order_rate_constant" initial_value="0.55" public_interface="out"/>
+      <variable name="k_30" units="second_order_rate_constant" initial_value="42300" public_interface="out"/>
+      <variable name="k_31" units="first_order_rate_constant" initial_value="0.55" public_interface="out"/>
+      <variable name="k_32" units="second_order_rate_constant" initial_value="84.6" public_interface="out"/>
+      <variable name="k_33" units="first_order_rate_constant" initial_value="0.55" public_interface="out"/>
+      <variable name="k_34" units="second_order_rate_constant" initial_value="8.46" public_interface="out"/>
+      <variable name="k_35" units="first_order_rate_constant" initial_value="0.0005" public_interface="out"/>
+      <variable name="k_36" units="second_order_rate_constant" initial_value="4363.6" public_interface="out"/>
+      <variable name="k_37" units="second_order_rate_constant" initial_value="4363.6" public_interface="out"/>
+      <variable name="k_38" units="second_order_rate_constant" initial_value="4363.6" public_interface="out"/>
+      <variable name="k_39" units="first_order_rate_constant" initial_value="1" public_interface="out"/>
+      <variable name="k_40" units="first_order_rate_constant" initial_value="1" public_interface="out"/>
+      <variable name="k_41" units="first_order_rate_constant" initial_value="1" public_interface="out"/>
+      <variable name="k_42" units="first_order_rate_constant" initial_value="0.005" public_interface="out"/>
+      <variable name="k_43" units="first_order_rate_constant" initial_value="0.005" public_interface="out"/>
+      <variable name="k_44" units="first_order_rate_constant" initial_value="0.005" public_interface="out"/>
+      <variable name="k_45" units="first_order_rate_constant" initial_value="0.005" public_interface="out"/>
+      <variable name="k_46" units="first_order_rate_constant" initial_value="0.1" public_interface="out"/>
+      <variable name="k_47" units="first_order_rate_constant" initial_value="1" public_interface="out"/>
+      <variable name="k_48" units="first_order_rate_constant" initial_value="0.012" public_interface="out"/>
+      <variable name="k_49" units="first_order_rate_constant" initial_value="0.001" public_interface="out"/>
+      <variable name="k_50" units="first_order_rate_constant" initial_value="0.6" public_interface="out"/>
+      <variable name="k_51" units="first_order_rate_constant" initial_value="0.6" public_interface="out"/>
+      <variable name="k_52" units="first_order_rate_constant" initial_value="0.005" public_interface="out"/>
+      <variable name="k_53" units="first_order_rate_constant" initial_value="0.001" public_interface="out"/>
+      <variable name="k_growth" units="first_order_rate_constant" initial_value="0.0051" public_interface="out"/>
+   </component>
+   <connection>
+      <map_components component_1="v_c" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="v_n" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="mcln2_c" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="mclb5_c" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="mcln2_n" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="mclb5_n" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="cln3_c" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="cln2_c" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="clb5_c" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1_c" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="cln3_n" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1_n" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1cln2_c" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1clb5_c" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1cln2_n" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1clb5_n" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1cln3_n" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="sbfwhi5_n" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="sbfwhi5p_n" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1cln3far1_n" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1clb5sic1_n" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1clb5sic1p_n" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1cln3far1p_n" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1clb5sic1_c" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="sic1_c" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="whi5_c" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="far1_c" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="whi5p_c" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="sic1P_n" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="far1P_n" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="whi5_n" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="far1_n" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="whi5p_n" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="sbf_n" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="dv_c_dt" component_2="rate_constants"/>
+      <map_variables variable_1="k_growth" variable_2="k_growth"/>
+   </connection>
+   <connection>
+      <map_components component_1="k_volume" component_2="v_n"/>
+      <map_variables variable_1="v_n" variable_2="v_n"/>
+   </connection>
+   <connection>
+      <map_components component_1="k_volume" component_2="v_c"/>
+      <map_variables variable_1="v_c" variable_2="v_c"/>
+   </connection>
+   <connection>
+      <map_components component_1="dv_c_dt" component_2="v_c"/>
+      <map_variables variable_1="v_c" variable_2="v_c"/>
+      <map_variables variable_1="dv_c_dt" variable_2="dv_c_dt"/>
+   </connection>
+   <connection>
+      <map_components component_1="mcln2_c" component_2="rate_constants"/>
+      <map_variables variable_1="k_50" variable_2="k_50"/>
+      <map_variables variable_1="k_10" variable_2="k_10"/>
+   </connection>
+   <connection>
+      <map_components component_1="mcln2_c" component_2="mcln2_n"/>
+      <map_variables variable_1="mcln2_n" variable_2="mcln2_n"/>
+   </connection>
+   <connection>
+      <map_components component_1="mcln2_c" component_2="k_volume"/>
+      <map_variables variable_1="k_volume" variable_2="k_volume"/>
+   </connection>
+   <connection>
+      <map_components component_1="mcln2_c" component_2="v_c"/>
+      <map_variables variable_1="v_c" variable_2="v_c"/>
+   </connection>
+   <connection>
+      <map_components component_1="mcln2_c" component_2="dv_c_dt"/>
+      <map_variables variable_1="dv_c_dt" variable_2="dv_c_dt"/>
+   </connection>
+   <connection>
+      <map_components component_1="mclb5_c" component_2="rate_constants"/>
+      <map_variables variable_1="k_51" variable_2="k_51"/>
+      <map_variables variable_1="k_11" variable_2="k_11"/>
+   </connection>
+   <connection>
+      <map_components component_1="mclb5_c" component_2="mclb5_n"/>
+      <map_variables variable_1="mclb5_n" variable_2="mclb5_n"/>
+   </connection>
+   <connection>
+      <map_components component_1="mclb5_c" component_2="k_volume"/>
+      <map_variables variable_1="k_volume" variable_2="k_volume"/>
+   </connection>
+   <connection>
+      <map_components component_1="mclb5_c" component_2="v_c"/>
+      <map_variables variable_1="v_c" variable_2="v_c"/>
+   </connection>
+   <connection>
+      <map_components component_1="mclb5_c" component_2="dv_c_dt"/>
+      <map_variables variable_1="dv_c_dt" variable_2="dv_c_dt"/>
+   </connection>
+   <connection>
+      <map_components component_1="mcln2_n" component_2="rate_constants"/>
+      <map_variables variable_1="k_1" variable_2="k_1"/>
+      <map_variables variable_1="k_50" variable_2="k_50"/>
+   </connection>
+   <connection>
+      <map_components component_1="mcln2_n" component_2="sbf_n"/>
+      <map_variables variable_1="sbf_n" variable_2="sbf_n"/>
+   </connection>
+   <connection>
+      <map_components component_1="mclb5_n" component_2="rate_constants"/>
+      <map_variables variable_1="k_2" variable_2="k_2"/>
+      <map_variables variable_1="k_51" variable_2="k_51"/>
+   </connection>
+   <connection>
+      <map_components component_1="mclb5_n" component_2="sbf_n"/>
+      <map_variables variable_1="sbf_n" variable_2="sbf_n"/>
+   </connection>
+   <connection>
+      <map_components component_1="sbf_n" component_2="rate_constants"/>
+      <map_variables variable_1="k_39" variable_2="k_39"/>
+      <map_variables variable_1="k_34" variable_2="k_34"/>
+      <map_variables variable_1="k_35" variable_2="k_35"/>
+   </connection>
+   <connection>
+      <map_components component_1="sbf_n" component_2="sbfwhi5p_n"/>
+      <map_variables variable_1="sbfwhi5p_n" variable_2="sbfwhi5p_n"/>
+   </connection>
+   <connection>
+      <map_components component_1="sbf_n" component_2="whi5_n"/>
+      <map_variables variable_1="whi5_n" variable_2="whi5_n"/>
+      <map_variables variable_1="sbf_n" variable_2="sbf_n"/>
+   </connection>
+   <connection>
+      <map_components component_1="sbf_n" component_2="sbfwhi5_n"/>
+      <map_variables variable_1="sbfwhi5_n" variable_2="sbfwhi5_n"/>
+      <map_variables variable_1="sbf_n" variable_2="sbf_n"/>
+   </connection>
+   <connection>
+      <map_components component_1="cln3_c" component_2="rate_constants"/>
+      <map_variables variable_1="k_6" variable_2="k_6"/>
+      <map_variables variable_1="k_43" variable_2="k_43"/>
+      <map_variables variable_1="k_15" variable_2="k_15"/>
+   </connection>
+   <connection>
+      <map_components component_1="cln3_c" component_2="v_c"/>
+      <map_variables variable_1="v_c" variable_2="v_c"/>
+   </connection>
+   <connection>
+      <map_components component_1="cln3_c" component_2="dv_c_dt"/>
+      <map_variables variable_1="dv_c_dt" variable_2="dv_c_dt"/>
+   </connection>
+   <connection>
+      <map_components component_1="cln2_c" component_2="rate_constants"/>
+      <map_variables variable_1="k_3" variable_2="k_3"/>
+      <map_variables variable_1="k_26" variable_2="k_26"/>
+      <map_variables variable_1="k_27" variable_2="k_27"/>
+      <map_variables variable_1="k_12" variable_2="k_12"/>
+   </connection>
+   <connection>
+      <map_components component_1="cln2_c" component_2="mcln2_c"/>
+      <map_variables variable_1="mcln2_c" variable_2="mcln2_c"/>
+   </connection>
+   <connection>
+      <map_components component_1="cln2_c" component_2="cdk1_c"/>
+      <map_variables variable_1="cdk1_c" variable_2="cdk1_c"/>
+      <map_variables variable_1="cln2_c" variable_2="cln2_c"/>
+   </connection>
+   <connection>
+      <map_components component_1="cln2_c" component_2="cdk1cln2_c"/>
+      <map_variables variable_1="cdk1cln2_c" variable_2="cdk1cln2_c"/>
+      <map_variables variable_1="cln2_c" variable_2="cln2_c"/>
+   </connection>
+   <connection>
+      <map_components component_1="cln2_c" component_2="v_c"/>
+      <map_variables variable_1="v_c" variable_2="v_c"/>
+   </connection>
+   <connection>
+      <map_components component_1="cln2_c" component_2="dv_c_dt"/>
+      <map_variables variable_1="dv_c_dt" variable_2="dv_c_dt"/>
+   </connection>
+   <connection>
+      <map_components component_1="clb5_c" component_2="rate_constants"/>
+      <map_variables variable_1="k_4" variable_2="k_4"/>
+      <map_variables variable_1="k_28" variable_2="k_28"/>
+      <map_variables variable_1="k_29" variable_2="k_29"/>
+      <map_variables variable_1="k_13" variable_2="k_13"/>
+   </connection>
+   <connection>
+      <map_components component_1="clb5_c" component_2="mclb5_c"/>
+      <map_variables variable_1="mclb5_c" variable_2="mclb5_c"/>
+   </connection>
+   <connection>
+      <map_components component_1="clb5_c" component_2="cdk1_c"/>
+      <map_variables variable_1="cdk1_c" variable_2="cdk1_c"/>
+      <map_variables variable_1="clb5_c" variable_2="clb5_c"/>
+   </connection>
+   <connection>
+      <map_components component_1="clb5_c" component_2="cdk1clb5_c"/>
+      <map_variables variable_1="cdk1clb5_c" variable_2="cdk1clb5_c"/>
+      <map_variables variable_1="clb5_c" variable_2="clb5_c"/>
+   </connection>
+   <connection>
+      <map_components component_1="clb5_c" component_2="v_c"/>
+      <map_variables variable_1="v_c" variable_2="v_c"/>
+   </connection>
+   <connection>
+      <map_components component_1="clb5_c" component_2="dv_c_dt"/>
+      <map_variables variable_1="dv_c_dt" variable_2="dv_c_dt"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1_c" component_2="rate_constants"/>
+      <map_variables variable_1="k_7" variable_2="k_7"/>
+      <map_variables variable_1="k_44" variable_2="k_44"/>
+      <map_variables variable_1="k_49" variable_2="k_49"/>
+      <map_variables variable_1="k_27" variable_2="k_27"/>
+      <map_variables variable_1="k_26" variable_2="k_26"/>
+      <map_variables variable_1="k_28" variable_2="k_28"/>
+      <map_variables variable_1="k_29" variable_2="k_29"/>
+      <map_variables variable_1="k_16" variable_2="k_16"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1_c" component_2="cdk1_n"/>
+      <map_variables variable_1="cdk1_n" variable_2="cdk1_n"/>
+      <map_variables variable_1="cdk1_c" variable_2="cdk1_c"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1_c" component_2="cdk1cln2_c"/>
+      <map_variables variable_1="cdk1cln2_c" variable_2="cdk1cln2_c"/>
+      <map_variables variable_1="cdk1_c" variable_2="cdk1_c"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1_c" component_2="cdk1clb5_c"/>
+      <map_variables variable_1="cdk1clb5_c" variable_2="cdk1clb5_c"/>
+      <map_variables variable_1="cdk1_c" variable_2="cdk1_c"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1_c" component_2="dv_c_dt"/>
+      <map_variables variable_1="dv_c_dt" variable_2="dv_c_dt"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1_c" component_2="v_c"/>
+      <map_variables variable_1="v_c" variable_2="v_c"/>
+   </connection>
+   <connection>
+      <map_components component_1="cln3_n" component_2="rate_constants"/>
+      <map_variables variable_1="k_24" variable_2="k_24"/>
+      <map_variables variable_1="k_43" variable_2="k_43"/>
+      <map_variables variable_1="k_25" variable_2="k_25"/>
+      <map_variables variable_1="k_20" variable_2="k_20"/>
+   </connection>
+   <connection>
+      <map_components component_1="cln3_n" component_2="cln3_c"/>
+      <map_variables variable_1="cln3_c" variable_2="cln3_c"/>
+   </connection>
+   <connection>
+      <map_components component_1="cln3_n" component_2="k_volume"/>
+      <map_variables variable_1="k_volume" variable_2="k_volume"/>
+   </connection>
+   <connection>
+      <map_components component_1="cln3_n" component_2="cdk1_n"/>
+      <map_variables variable_1="cdk1_n" variable_2="cdk1_n"/>
+      <map_variables variable_1="cln3_n" variable_2="cln3_n"/>
+   </connection>
+   <connection>
+      <map_components component_1="cln3_n" component_2="cdk1cln3_n"/>
+      <map_variables variable_1="cdk1cln3_n" variable_2="cdk1cln3_n"/>
+      <map_variables variable_1="cln3_n" variable_2="cln3_n"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1_n" component_2="rate_constants"/>
+      <map_variables variable_1="k_44" variable_2="k_44"/>
+      <map_variables variable_1="k_49" variable_2="k_49"/>
+      <map_variables variable_1="k_24" variable_2="k_24"/>
+      <map_variables variable_1="k_25" variable_2="k_25"/>
+      <map_variables variable_1="k_21" variable_2="k_21"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1_n" component_2="k_volume"/>
+      <map_variables variable_1="k_volume" variable_2="k_volume"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1_n" component_2="cdk1cln3_n"/>
+      <map_variables variable_1="cdk1cln3_n" variable_2="cdk1cln3_n"/>
+      <map_variables variable_1="cdk1_n" variable_2="cdk1_n"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1cln2_c" component_2="rate_constants"/>
+      <map_variables variable_1="k_26" variable_2="k_26"/>
+      <map_variables variable_1="k_27" variable_2="k_27"/>
+      <map_variables variable_1="k_46" variable_2="k_46"/>
+      <map_variables variable_1="k_53" variable_2="k_53"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1cln2_c" component_2="cdk1cln2_n"/>
+      <map_variables variable_1="cdk1cln2_n" variable_2="cdk1cln2_n"/>
+      <map_variables variable_1="cdk1cln2_c" variable_2="cdk1cln2_c"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1cln2_c" component_2="k_volume"/>
+      <map_variables variable_1="k_volume" variable_2="k_volume"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1cln2_c" component_2="dv_c_dt"/>
+      <map_variables variable_1="dv_c_dt" variable_2="dv_c_dt"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1cln2_c" component_2="v_c"/>
+      <map_variables variable_1="v_c" variable_2="v_c"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1clb5_c" component_2="rate_constants"/>
+      <map_variables variable_1="k_28" variable_2="k_28"/>
+      <map_variables variable_1="k_29" variable_2="k_29"/>
+      <map_variables variable_1="k_33" variable_2="k_33"/>
+      <map_variables variable_1="k_32" variable_2="k_32"/>
+      <map_variables variable_1="k_48" variable_2="k_48"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1clb5_c" component_2="cdk1cln2_n"/>
+      <map_variables variable_1="cdk1cln2_n" variable_2="cdk1cln2_n"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1clb5_c" component_2="cdk1clb5sic1_c"/>
+      <map_variables variable_1="cdk1clb5sic1_c" variable_2="cdk1clb5sic1_c"/>
+      <map_variables variable_1="cdk1clb5_c" variable_2="cdk1clb5_c"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1clb5_c" component_2="sic1_c"/>
+      <map_variables variable_1="sic1_c" variable_2="sic1_c"/>
+      <map_variables variable_1="cdk1clb5_c" variable_2="cdk1clb5_c"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1clb5_c" component_2="dv_c_dt"/>
+      <map_variables variable_1="dv_c_dt" variable_2="dv_c_dt"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1clb5_c" component_2="v_c"/>
+      <map_variables variable_1="v_c" variable_2="v_c"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1cln2_n" component_2="rate_constants"/>
+      <map_variables variable_1="k_46" variable_2="k_46"/>
+      <map_variables variable_1="k_53" variable_2="k_53"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1cln2_n" component_2="k_volume"/>
+      <map_variables variable_1="k_volume" variable_2="k_volume"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1clb5_n" component_2="rate_constants"/>
+      <map_variables variable_1="k_41" variable_2="k_41"/>
+      <map_variables variable_1="k_48" variable_2="k_48"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1clb5_n" component_2="cdk1clb5sic1p_n"/>
+      <map_variables variable_1="cdk1clb5sic1p_n" variable_2="cdk1clb5sic1p_n"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1clb5_n" component_2="cdk1clb5_c"/>
+      <map_variables variable_1="cdk1clb5_c" variable_2="cdk1clb5_c"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1clb5_n" component_2="k_volume"/>
+      <map_variables variable_1="k_volume" variable_2="k_volume"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1cln3_n" component_2="rate_constants"/>
+      <map_variables variable_1="k_24" variable_2="k_24"/>
+      <map_variables variable_1="k_25" variable_2="k_25"/>
+      <map_variables variable_1="k_31" variable_2="k_31"/>
+      <map_variables variable_1="k_30" variable_2="k_30"/>
+      <map_variables variable_1="k_40" variable_2="k_40"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1cln3_n" component_2="cdk1cln3far1_n"/>
+      <map_variables variable_1="cdk1cln3far1_n" variable_2="cdk1cln3far1_n"/>
+      <map_variables variable_1="cdk1cln3_n" variable_2="cdk1cln3_n"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1cln3_n" component_2="far1_n"/>
+      <map_variables variable_1="far1_n" variable_2="far1_n"/>
+      <map_variables variable_1="cdk1cln3_n" variable_2="cdk1cln3_n"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1cln3_n" component_2="cdk1cln3far1p_n"/>
+      <map_variables variable_1="cdk1cln3far1p_n" variable_2="cdk1cln3far1p_n"/>
+   </connection>
+   <connection>
+      <map_components component_1="sbfwhi5_n" component_2="rate_constants"/>
+      <map_variables variable_1="k_34" variable_2="k_34"/>
+      <map_variables variable_1="k_35" variable_2="k_35"/>
+      <map_variables variable_1="k_36" variable_2="k_36"/>
+   </connection>
+   <connection>
+      <map_components component_1="sbfwhi5_n" component_2="whi5_n"/>
+      <map_variables variable_1="whi5_n" variable_2="whi5_n"/>
+   </connection>
+   <connection>
+      <map_components component_1="sbfwhi5_n" component_2="cdk1cln3_n"/>
+      <map_variables variable_1="cdk1cln3_n" variable_2="cdk1cln3_n"/>
+   </connection>
+   <connection>
+      <map_components component_1="sbfwhi5p_n" component_2="rate_constants"/>
+      <map_variables variable_1="k_36" variable_2="k_36"/>
+      <map_variables variable_1="k_39" variable_2="k_39"/>
+   </connection>
+   <connection>
+      <map_components component_1="sbfwhi5p_n" component_2="sbfwhi5_n"/>
+      <map_variables variable_1="sbfwhi5_n" variable_2="sbfwhi5_n"/>
+   </connection>
+   <connection>
+      <map_components component_1="sbfwhi5p_n" component_2="cdk1cln3_n"/>
+      <map_variables variable_1="cdk1cln3_n" variable_2="cdk1cln3_n"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1cln3far1_n" component_2="rate_constants"/>
+      <map_variables variable_1="k_30" variable_2="k_30"/>
+      <map_variables variable_1="k_31" variable_2="k_31"/>
+      <map_variables variable_1="k_37" variable_2="k_37"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1cln3far1_n" component_2="far1_n"/>
+      <map_variables variable_1="far1_n" variable_2="far1_n"/>
+      <map_variables variable_1="cdk1cln3far1_n" variable_2="cdk1cln3far1_n"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1cln3far1_n" component_2="cdk1cln2_n"/>
+      <map_variables variable_1="cdk1cln2_n" variable_2="cdk1cln2_n"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1clb5sic1_n" component_2="rate_constants"/>
+      <map_variables variable_1="k_47" variable_2="k_47"/>
+      <map_variables variable_1="k_38" variable_2="k_38"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1clb5sic1_n" component_2="cdk1clb5sic1_c"/>
+      <map_variables variable_1="cdk1clb5sic1_c" variable_2="cdk1clb5sic1_c"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1clb5sic1_n" component_2="k_volume"/>
+      <map_variables variable_1="k_volume" variable_2="k_volume"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1clb5sic1_n" component_2="cdk1cln2_n"/>
+      <map_variables variable_1="cdk1cln2_n" variable_2="cdk1cln2_n"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1clb5sic1p_n" component_2="rate_constants"/>
+      <map_variables variable_1="k_41" variable_2="k_41"/>
+      <map_variables variable_1="k_38" variable_2="k_38"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1clb5sic1p_n" component_2="cdk1clb5sic1_n"/>
+      <map_variables variable_1="cdk1clb5sic1_n" variable_2="cdk1clb5sic1_n"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1clb5sic1p_n" component_2="cdk1cln2_n"/>
+      <map_variables variable_1="cdk1cln2_n" variable_2="cdk1cln2_n"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1cln3far1p_n" component_2="rate_constants"/>
+      <map_variables variable_1="k_37" variable_2="k_37"/>
+      <map_variables variable_1="k_40" variable_2="k_40"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1cln3far1p_n" component_2="cdk1cln3far1_n"/>
+      <map_variables variable_1="cdk1cln3far1_n" variable_2="cdk1cln3far1_n"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1cln3far1p_n" component_2="cdk1cln2_n"/>
+      <map_variables variable_1="cdk1cln2_n" variable_2="cdk1cln2_n"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1clb5sic1_c" component_2="rate_constants"/>
+      <map_variables variable_1="k_32" variable_2="k_32"/>
+      <map_variables variable_1="k_33" variable_2="k_33"/>
+      <map_variables variable_1="k_47" variable_2="k_47"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1clb5sic1_c" component_2="sic1_c"/>
+      <map_variables variable_1="sic1_c" variable_2="sic1_c"/>
+      <map_variables variable_1="cdk1clb5sic1_c" variable_2="cdk1clb5sic1_c"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1clb5sic1_c" component_2="v_c"/>
+      <map_variables variable_1="v_c" variable_2="v_c"/>
+   </connection>
+   <connection>
+      <map_components component_1="cdk1clb5sic1_c" component_2="dv_c_dt"/>
+      <map_variables variable_1="dv_c_dt" variable_2="dv_c_dt"/>
+   </connection>
+   <connection>
+      <map_components component_1="sic1_c" component_2="rate_constants"/>
+      <map_variables variable_1="k_9" variable_2="k_9"/>
+      <map_variables variable_1="k_32" variable_2="k_32"/>
+      <map_variables variable_1="k_33" variable_2="k_33"/>
+      <map_variables variable_1="k_18" variable_2="k_18"/>
+   </connection>
+   <connection>
+      <map_components component_1="sic1_c" component_2="v_c"/>
+      <map_variables variable_1="v_c" variable_2="v_c"/>
+   </connection>
+   <connection>
+      <map_components component_1="sic1_c" component_2="dv_c_dt"/>
+      <map_variables variable_1="dv_c_dt" variable_2="dv_c_dt"/>
+   </connection>
+   <connection>
+      <map_components component_1="whi5_c" component_2="rate_constants"/>
+      <map_variables variable_1="k_8" variable_2="k_8"/>
+      <map_variables variable_1="k_45" variable_2="k_45"/>
+      <map_variables variable_1="k_17" variable_2="k_17"/>
+   </connection>
+   <connection>
+      <map_components component_1="whi5_c" component_2="v_c"/>
+      <map_variables variable_1="v_c" variable_2="v_c"/>
+   </connection>
+   <connection>
+      <map_components component_1="whi5_c" component_2="dv_c_dt"/>
+      <map_variables variable_1="dv_c_dt" variable_2="dv_c_dt"/>
+   </connection>
+   <connection>
+      <map_components component_1="far1_c" component_2="rate_constants"/>
+      <map_variables variable_1="k_5" variable_2="k_5"/>
+      <map_variables variable_1="k_42" variable_2="k_42"/>
+      <map_variables variable_1="k_14" variable_2="k_14"/>
+   </connection>
+   <connection>
+      <map_components component_1="far1_c" component_2="v_c"/>
+      <map_variables variable_1="v_c" variable_2="v_c"/>
+   </connection>
+   <connection>
+      <map_components component_1="far1_c" component_2="dv_c_dt"/>
+      <map_variables variable_1="dv_c_dt" variable_2="dv_c_dt"/>
+   </connection>
+   <connection>
+      <map_components component_1="whi5p_c" component_2="rate_constants"/>
+      <map_variables variable_1="k_52" variable_2="k_52"/>
+   </connection>
+   <connection>
+      <map_components component_1="whi5p_c" component_2="whi5p_n"/>
+      <map_variables variable_1="whi5p_n" variable_2="whi5p_n"/>
+   </connection>
+   <connection>
+      <map_components component_1="whi5p_c" component_2="k_volume"/>
+      <map_variables variable_1="k_volume" variable_2="k_volume"/>
+   </connection>
+   <connection>
+      <map_components component_1="sic1P_n" component_2="rate_constants"/>
+      <map_variables variable_1="k_41" variable_2="k_41"/>
+   </connection>
+   <connection>
+      <map_components component_1="sic1P_n" component_2="cdk1clb5sic1p_n"/>
+      <map_variables variable_1="cdk1clb5sic1p_n" variable_2="cdk1clb5sic1p_n"/>
+   </connection>
+   <connection>
+      <map_components component_1="far1P_n" component_2="rate_constants"/>
+      <map_variables variable_1="k_40" variable_2="k_40"/>
+   </connection>
+   <connection>
+      <map_components component_1="far1P_n" component_2="cdk1cln3far1p_n"/>
+      <map_variables variable_1="cdk1cln3far1p_n" variable_2="cdk1cln3far1p_n"/>
+   </connection>
+   <connection>
+      <map_components component_1="whi5_n" component_2="rate_constants"/>
+      <map_variables variable_1="k_45" variable_2="k_45"/>
+      <map_variables variable_1="k_34" variable_2="k_34"/>
+      <map_variables variable_1="k_22" variable_2="k_22"/>
+   </connection>
+   <connection>
+      <map_components component_1="whi5_n" component_2="whi5_c"/>
+      <map_variables variable_1="whi5_c" variable_2="whi5_c"/>
+   </connection>
+   <connection>
+      <map_components component_1="whi5_n" component_2="k_volume"/>
+      <map_variables variable_1="k_volume" variable_2="k_volume"/>
+   </connection>
+   <connection>
+      <map_components component_1="far1_n" component_2="rate_constants"/>
+      <map_variables variable_1="k_42" variable_2="k_42"/>
+      <map_variables variable_1="k_30" variable_2="k_30"/>
+      <map_variables variable_1="k_31" variable_2="k_31"/>
+      <map_variables variable_1="k_19" variable_2="k_19"/>
+   </connection>
+   <connection>
+      <map_components component_1="far1_n" component_2="far1_c"/>
+      <map_variables variable_1="far1_c" variable_2="far1_c"/>
+   </connection>
+   <connection>
+      <map_components component_1="far1_n" component_2="k_volume"/>
+      <map_variables variable_1="k_volume" variable_2="k_volume"/>
+   </connection>
+   <connection>
+      <map_components component_1="whi5p_n" component_2="rate_constants"/>
+      <map_variables variable_1="k_39" variable_2="k_39"/>
+      <map_variables variable_1="k_52" variable_2="k_52"/>
+      <map_variables variable_1="k_23" variable_2="k_23"/>
+   </connection>
+   <connection>
+      <map_components component_1="whi5p_n" component_2="sbfwhi5p_n"/>
+      <map_variables variable_1="sbfwhi5p_n" variable_2="sbfwhi5p_n"/>
+   </connection>
+
+<rdf:RDF xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
+  <rdf:Seq rdf:about="rdf:#a67e62a5-ca59-4222-bacf-81c612d596c5">
+    <rdf:li rdf:resource="rdf:#b19cc5f7-268d-4a8e-a557-af53f157a29c"/>
+    <rdf:li rdf:resource="rdf:#9f71a11f-34ca-42b4-8d9d-596d255c92b9"/>
+    <rdf:li rdf:resource="rdf:#d5df9ca1-f5b1-447f-b462-8867c5573855"/>
+    <rdf:li rdf:resource="rdf:#5ef8e106-3aa9-4838-b55f-101d1c73fe01"/>
+  </rdf:Seq>
+  <rdf:Bag rdf:about="rdf:#691b1e3b-8568-4a4c-826d-93b4af7474ea">
+    <rdf:li/>
+    <rdf:li>cell cycle</rdf:li>
+  </rdf:Bag>
+  <rdf:Description rdf:about="rdf:#dff579b5-cf26-4b6e-92dc-bd1dc6a8550f">
+    <vCard:Given>Edda </vCard:Given>
+    <vCard:Family>Klipp</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b19cc5f7-268d-4a8e-a557-af53f157a29c">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#24426f97-611b-46e7-a377-91621b5c778d"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <cmeta:comment rdf:resource="rdf:#933f6db5-c6a7-477e-a249-be92b03b9162"/>
+    <dcterms:created rdf:resource="rdf:#eaab4c0e-80b7-4e0b-8fe1-f6fc5834c11d"/>
+    <dc:creator rdf:resource="rdf:#04886f59-8f14-444a-a763-34cae20e950b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#04886f59-8f14-444a-a763-34cae20e950b">
+    <vCard:ORG rdf:resource="rdf:#21c7dc3a-7be3-457a-9069-aa93e2113fd6"/>
+    <vCard:EMAIL rdf:resource="rdf:#6ba5c670-bd19-4c9a-a930-0a19fb1c6a6c"/>
+    <vCard:N rdf:resource="rdf:#1c746998-bd89-41b1-b2c5-b850d664cbfa"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#barberis_klipp_vanoni_alberghina_version01">
+    <bqs:reference rdf:resource="rdf:#4df0f1ef-9a73-42de-976c-1b90d97f23c8"/>
+    <bqs:reference rdf:resource="rdf:#75e74b10-c9b6-41a2-9c22-66d6daa006c5"/>
+    <cmeta:comment rdf:resource="rdf:#e5f78444-a90f-4a51-80d0-d5c5305e5c36"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#6ba5c670-bd19-4c9a-a930-0a19fb1c6a6c">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>jlim063@aucklanduni.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9e9aa2de-4c38-4735-91b5-ee88200034bb">
+    <bqs:volume>3</bqs:volume>
+    <dc:title>Cell Size at S Phase Initiation: An Emergent Property of the G1/S Network</dc:title>
+    <dcterms:issued rdf:resource="rdf:#1893828a-9b93-44b5-94ca-9f428bc2c573"/>
+    <bqs:Journal rdf:resource="rdf:#3349de84-4ce1-4fd6-ac04-1c5a0c08b76e"/>
+    <dc:creator rdf:resource="rdf:#a67e62a5-ca59-4222-bacf-81c612d596c5"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#31f3ebde-0365-44c1-8ead-b6d3e06e539b">
+    <vCard:Given>Marco </vCard:Given>
+    <vCard:Family>Vanoni</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#24426f97-611b-46e7-a377-91621b5c778d">
+    <vCard:Given>Matteo </vCard:Given>
+    <vCard:Family>Barberis</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#933f6db5-c6a7-477e-a249-be92b03b9162">
+    <dc:creator rdf:resource="rdf:#fa7ea4ec-4b27-4c8c-901c-8837c7815e79"/>
+    <rdf:value>This CellML version of the model runs in PCEnv and COR to produce graphs that are similar in shape but not in magnitude to the graphs in figure 3 of the published paper. This could possibly be due to a missing variable k55 in the equation for cdk1_c. The units have been checked and are consistent.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4df0f1ef-9a73-42de-976c-1b90d97f23c8">
+    <dc:subject rdf:resource="rdf:#446fc9d6-df06-4851-8ed9-105e3af0313a"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e5f78444-a90f-4a51-80d0-d5c5305e5c36">
+    <dc:creator rdf:resource="rdf:#2035c9fd-d571-412e-bd18-99fc3059206c"/>
+    <rdf:value>This is the CellML version of Barberis et al's 2007 model describing cell size at S Phase initiation: an emergent property of the G1/S network</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1c746998-bd89-41b1-b2c5-b850d664cbfa">
+    <vCard:Given>Jeelean</vCard:Given>
+    <vCard:Family>Lim</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d5df9ca1-f5b1-447f-b462-8867c5573855">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#31f3ebde-0365-44c1-8ead-b6d3e06e539b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#eaab4c0e-80b7-4e0b-8fe1-f6fc5834c11d">
+    <dcterms:W3CDTF>2009-02-17T00:00:00+00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#2035c9fd-d571-412e-bd18-99fc3059206c">
+    <vCard:FN>Jeelean Lim</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#75e74b10-c9b6-41a2-9c22-66d6daa006c5">
+    <bqs:Pubmed_id>17432928</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#9e9aa2de-4c38-4735-91b5-ee88200034bb"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#21c7dc3a-7be3-457a-9069-aa93e2113fd6">
+    <vCard:Orgname>University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#fa7ea4ec-4b27-4c8c-901c-8837c7815e79">
+    <vCard:FN>Jeelean Lim</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9f71a11f-34ca-42b4-8d9d-596d255c92b9">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#dff579b5-cf26-4b6e-92dc-bd1dc6a8550f"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#5ef8e106-3aa9-4838-b55f-101d1c73fe01">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#384a67f5-19a2-4940-8a46-c539ad053f6d"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3349de84-4ce1-4fd6-ac04-1c5a0c08b76e">
+    <dc:title>PLoS Computational Biology</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#384a67f5-19a2-4940-8a46-c539ad053f6d">
+    <vCard:Given>Lilia </vCard:Given>
+    <vCard:Family>Alberghina</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1893828a-9b93-44b5-94ca-9f428bc2c573">
+    <dcterms:W3CDTF>2007-02-00 00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#446fc9d6-df06-4851-8ed9-105e3af0313a">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value rdf:resource="rdf:#691b1e3b-8568-4a4c-826d-93b4af7474ea"/>
+  </rdf:Description>
+</rdf:RDF>
+</model>

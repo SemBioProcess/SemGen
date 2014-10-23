@@ -1,0 +1,1499 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--
+This CellML file was generated on 4/07/2008 at 3:10:05 at p.m. using:
+
+COR (0.9.31.979)
+Copyright 2002-2008 Dr Alan Garny
+http://COR.physiol.ox.ac.uk/ - COR@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.CellML.org/
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="shaw_chase_starfinger_smith_hann_desaive_ghuysen_2007" name="shaw_chase_starfinger_smith_hann_desaive_ghuysen_2007">
+<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>Modeling the Cardiovascular System</title>
+				<author>
+					<firstname>Geoffrey</firstname>
+					<surname>Nunns</surname>
+					<affiliation>
+						<shortaffil>Bioengineering Institute, The University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<section id="sec_status">
+				<title>Model Status</title>
+				<para>
+        This model will not run in COR, because it requires DAE solving techniques found in PCEnv. However, at present it will not run in PCEnv due to the addition of the modulus operator in the driver function, but this is a problem with PCEnv and not the model itself. The units are consistent throughout.    
+          </para>
+			</section>
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>
+Abstract: Cardiovascular disease claims more lives than any other disease in westernised countries, affecting millions. Pinpointing cardiovascular system dysfunction is often difficult because the clinical signs, or the availability and interpretation of physiological measurements, are unreliable. Often patient-specific information is incomplete or confusing, as it comes from a diverse range of sources, such as invasive and non-invasive pressure measurements, flow rates and electrocardiogram signals. Health professionals therefore rely on intuition and experience to make a "clinical" diagnosis and decide treatment. Sometimes this approach results in multiple therapies being applied until a suitable treatment is found. Poor outcomes result from failure to quickly and correctly diagnose and treat the underlying condition. We introduce the concept of using full circulatory and cardiovascular models to aggregate the large number of diverse signals facing clinicians into a clear physiological picture of haemodynamic status. We briefly review the field, still in its infancy, of such models, focusing primarily on the basic approaches taken in the literature. Finally, we present one of the more advanced and best validated models, including initial results of animal validation studies. The overall approach is shown to have significant potential to provide clear, measured insight to replace often misled intuition in the monitoring, diagnosis and treatment of circulatory dysfunction in critical care. In the future, models and modern sensors will increasingly "invade" the critical care environment, and will provide the opportunity for better, more consistent care at the bedside in real time.   
+</para>
+				<para>
+The complete original paper reference is cited below:
+</para>
+				<para>
+Modeling the Cardiovascular System, Geoffrey M Shaw, J Geoffrey Chase, Christina Starfinger, Bram W Smith, Christopher E Hann, Thomas Desaive, Alexandre Ghuysen, 2007, <emphasis>Critical Care and Resuscitation</emphasis>, 9, 264-269. <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;list_uids=17767454&amp;dopt=Abstract">PubMed ID: 17767454   </ulink>
+				</para>
+				
+				<informalfigure float="0" id="fig_reaction_diagram">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>model diagram</title>
+							</objectinfo>
+							<imagedata fileref="shaw_2007.png"/>
+						</imageobject>
+					</mediaobject>
+					<caption>Schematic diagram of the minimal closed loop model of the cardiovascular system.</caption>
+				</informalfigure>
+			</sect1>
+		</article>
+	</documentation>
+   
+   
+   <units name="kPa">
+      <unit units="pascal" prefix="kilo"/>
+   </units>
+   <units name="per_liter">
+      <unit units="liter" exponent="-1"/>
+   </units>
+   <units name="kPa_per_liter">
+      <unit units="kPa"/>
+      <unit units="per_liter"/>
+   </units>
+   <units name="kPa_second_per_liter">
+      <unit units="pascal" prefix="kilo"/>
+      <unit units="second"/>
+      <unit units="liter" exponent="-1"/>
+   </units>
+   <units name="liter_per_second">
+      <unit units="liter"/>
+      <unit units="second" exponent="-1"/>
+   </units>
+   <component name="environment">
+      <variable units="second" public_interface="out" name="time"/>
+   </component>
+   <component name="heart_parameters">
+      <variable units="kPa_second_per_liter" public_interface="out" name="R_mt" initial_value="0.06"/>
+      <variable units="kPa_second_per_liter" public_interface="out" name="R_av" initial_value="1.4"/>
+      <variable units="kPa_second_per_liter" public_interface="out" name="R_tc" initial_value="0.18"/>
+      <variable units="kPa_second_per_liter" public_interface="out" name="R_pv" initial_value="0.48"/>
+      <variable units="kPa_second_per_liter" public_interface="out" name="R_pul" initial_value="19"/>
+      <variable units="kPa_second_per_liter" public_interface="out" name="R_sys" initial_value="140"/>
+      <variable units="dimensionless" public_interface="out" name="HR" initial_value="80"/>
+      <variable units="liter" public_interface="out" name="V_tot" initial_value="5.5"/>
+      <variable units="kPa" public_interface="out" name="P_pl" initial_value="-0.533289474"/>
+   </component>
+   <component name="driver_function">
+      <variable units="dimensionless" public_interface="out" name="e_t"/>
+      <variable units="second" public_interface="in" name="time"/>
+      <variable units="dimensionless" name="A" initial_value="1"/>
+      <variable units="dimensionless" name="B" initial_value="80"/>
+      <variable units="dimensionless" name="C" initial_value="0.27"/>
+      <variable units="dimensionless" public_interface="in" name="HR"/>
+      <variable units="second" name="tau"/>
+      <variable units="dimensionless" name="period" initial_value="0.405"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>tau</ci>
+            <apply>
+               <rem/>
+               <ci>time</ci>
+               <ci>period</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>e_t</ci>
+            <apply>
+               <times/>
+               <ci>A</ci>
+               <apply>
+                  <exp/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <minus/>
+                        <ci>B</ci>
+                     </apply>
+                     <apply>
+                        <power/>
+                        <apply>
+                           <minus/>
+                           <apply>
+                              <divide/>
+                              <apply>
+                                 <times/>
+                                 <ci>tau</ci>
+                                 <ci>HR</ci>
+                              </apply>
+                              <cn cellml:units="second">60</cn>
+                           </apply>
+                           <ci>C</ci>
+                        </apply>
+                        <cn cellml:units="dimensionless">2</cn>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="pericardium">
+      <variable units="liter" public_interface="out" name="V_pcd"/>
+      <variable units="kPa" public_interface="out" name="P_pcd"/>
+      <variable units="kPa" public_interface="out" name="P_peri"/>
+      <variable units="liter" public_interface="in" name="V_lv"/>
+      <variable units="liter" public_interface="in" name="V_rv"/>
+      <variable units="kPa" public_interface="in" name="P_pl"/>
+      <variable units="kPa" name="P_0_pcd" initial_value="0.067"/>
+      <variable units="liter" name="V_0_pcd" initial_value="0.2"/>
+      <variable units="per_liter" name="lambda_pcd" initial_value="30"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_pcd</ci>
+            <apply>
+               <plus/>
+               <ci>V_lv</ci>
+               <ci>V_rv</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>P_pcd</ci>
+            <apply>
+               <times/>
+               <ci>P_0_pcd</ci>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <times/>
+                        <ci>lambda_pcd</ci>
+                        <apply>
+                           <minus/>
+                           <ci>V_pcd</ci>
+                           <ci>V_0_pcd</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <cn cellml:units="dimensionless">1</cn>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>P_peri</ci>
+            <apply>
+               <plus/>
+               <ci>P_pcd</ci>
+               <ci>P_pl</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="left_ventricle">
+      <variable units="liter" public_interface="out" private_interface="out" name="V_lvf"/>
+      <variable units="kPa" public_interface="out" name="P_lvf"/>
+      <variable units="kPa" public_interface="out" name="P_lv"/>
+      <variable units="liter" public_interface="out" name="V_lv" initial_value="0.005"/>
+      <variable units="second" public_interface="in" name="time"/>
+      <variable units="liter" public_interface="in" name="V_spt"/>
+      <variable units="dimensionless" public_interface="in" name="e_t"/>
+      <variable units="kPa" public_interface="in" name="P_peri"/>
+      <variable units="kPa" private_interface="in" name="P_es_lvf"/>
+      <variable units="kPa" private_interface="in" name="P_ed_lvf"/>
+      <variable units="kPa_second_per_liter" public_interface="in" name="R_mt"/>
+      <variable units="kPa_second_per_liter" public_interface="in" name="R_av"/>
+      <variable units="kPa" public_interface="in" name="P_pu"/>
+      <variable units="kPa" public_interface="in" name="P_ao"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_lvf</ci>
+            <apply>
+               <minus/>
+               <ci>V_lv</ci>
+               <ci>V_spt</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>P_lvf</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <ci>e_t</ci>
+                  <ci>P_es_lvf</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <minus/>
+                     <cn cellml:units="dimensionless">1</cn>
+                     <ci>e_t</ci>
+                  </apply>
+                  <ci>P_ed_lvf</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>P_lv</ci>
+            <apply>
+               <plus/>
+               <ci>P_lvf</ci>
+               <ci>P_peri</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>V_lv</ci>
+            </apply>
+            <piecewise>
+               <piece>
+                  <cn cellml:units="liter_per_second">0</cn>
+                  <apply>
+                     <and/>
+                     <apply>
+                        <lt/>
+                        <apply>
+                           <minus/>
+                           <ci>P_pu</ci>
+                           <ci>P_lv</ci>
+                        </apply>
+                        <cn cellml:units="kPa">0</cn>
+                     </apply>
+                     <apply>
+                        <lt/>
+                        <apply>
+                           <minus/>
+                           <ci>P_lv</ci>
+                           <ci>P_ao</ci>
+                        </apply>
+                        <cn cellml:units="kPa">0</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <piece>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <minus/>
+                           <ci>P_lv</ci>
+                           <ci>P_ao</ci>
+                        </apply>
+                     </apply>
+                     <ci>R_av</ci>
+                  </apply>
+                  <apply>
+                     <lt/>
+                     <apply>
+                        <minus/>
+                        <ci>P_pu</ci>
+                        <ci>P_lv</ci>
+                     </apply>
+                     <cn cellml:units="kPa">0</cn>
+                  </apply>
+               </piece>
+               <piece>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <minus/>
+                        <ci>P_pu</ci>
+                        <ci>P_lv</ci>
+                     </apply>
+                     <ci>R_mt</ci>
+                  </apply>
+                  <apply>
+                     <lt/>
+                     <apply>
+                        <minus/>
+                        <ci>P_lv</ci>
+                        <ci>P_ao</ci>
+                     </apply>
+                     <cn cellml:units="kPa">0</cn>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <minus/>
+                           <ci>P_pu</ci>
+                           <ci>P_lv</ci>
+                        </apply>
+                        <ci>R_mt</ci>
+                     </apply>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <minus/>
+                           <ci>P_lv</ci>
+                           <ci>P_ao</ci>
+                        </apply>
+                        <ci>R_av</ci>
+                     </apply>
+                  </apply>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   <component name="lvf_calculator">
+      <variable units="kPa" public_interface="out" name="P_es_lvf"/>
+      <variable units="kPa" public_interface="out" name="P_ed_lvf"/>
+      <variable units="kPa_per_liter" name="E_es_lvf" initial_value="454"/>
+      <variable units="liter" public_interface="in" name="V_lvf"/>
+      <variable units="liter" name="V_d_lvf" initial_value="0.005"/>
+      <variable units="kPa" name="P_0_lvf" initial_value="0.17"/>
+      <variable units="per_liter" name="lambda_lvf" initial_value="15"/>
+      <variable units="liter" name="V_0_lvf" initial_value="0.005"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>P_es_lvf</ci>
+            <apply>
+               <times/>
+               <ci>E_es_lvf</ci>
+               <apply>
+                  <minus/>
+                  <ci>V_lvf</ci>
+                  <ci>V_d_lvf</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>P_ed_lvf</ci>
+            <apply>
+               <times/>
+               <ci>P_0_lvf</ci>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <times/>
+                        <ci>lambda_lvf</ci>
+                        <apply>
+                           <minus/>
+                           <ci>V_lvf</ci>
+                           <ci>V_0_lvf</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <cn cellml:units="dimensionless">1</cn>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="right_ventricle">
+      <variable units="liter" public_interface="out" private_interface="out" name="V_rvf"/>
+      <variable units="kPa" public_interface="out" name="P_rvf"/>
+      <variable units="kPa" public_interface="out" name="P_rv"/>
+      <variable units="liter" public_interface="out" name="V_rv" initial_value="0.005"/>
+      <variable units="second" public_interface="in" name="time"/>
+      <variable units="liter" public_interface="in" name="V_spt"/>
+      <variable units="dimensionless" public_interface="in" name="e_t"/>
+      <variable units="kPa" public_interface="in" name="P_peri"/>
+      <variable units="kPa" private_interface="in" name="P_es_rvf"/>
+      <variable units="kPa" private_interface="in" name="P_ed_rvf"/>
+      <variable units="kPa_second_per_liter" public_interface="in" name="R_tc"/>
+      <variable units="kPa_second_per_liter" public_interface="in" name="R_pv"/>
+      <variable units="kPa" public_interface="in" name="P_pa"/>
+      <variable units="kPa" public_interface="in" name="P_vc"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_rvf</ci>
+            <apply>
+               <plus/>
+               <ci>V_rv</ci>
+               <ci>V_spt</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>P_rvf</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <ci>e_t</ci>
+                  <ci>P_es_rvf</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <minus/>
+                     <cn cellml:units="dimensionless">1</cn>
+                     <ci>e_t</ci>
+                  </apply>
+                  <ci>P_ed_rvf</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>P_rv</ci>
+            <apply>
+               <plus/>
+               <ci>P_rvf</ci>
+               <ci>P_peri</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>V_rv</ci>
+            </apply>
+            <piecewise>
+               <piece>
+                  <cn cellml:units="liter_per_second">0</cn>
+                  <apply>
+                     <and/>
+                     <apply>
+                        <lt/>
+                        <apply>
+                           <minus/>
+                           <ci>P_vc</ci>
+                           <ci>P_rv</ci>
+                        </apply>
+                        <cn cellml:units="kPa">0</cn>
+                     </apply>
+                     <apply>
+                        <lt/>
+                        <apply>
+                           <minus/>
+                           <ci>P_rv</ci>
+                           <ci>P_pa</ci>
+                        </apply>
+                        <cn cellml:units="kPa">0</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <piece>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <minus/>
+                           <ci>P_rv</ci>
+                           <ci>P_pa</ci>
+                        </apply>
+                     </apply>
+                     <ci>R_pv</ci>
+                  </apply>
+                  <apply>
+                     <lt/>
+                     <apply>
+                        <minus/>
+                        <ci>P_vc</ci>
+                        <ci>P_rv</ci>
+                     </apply>
+                     <cn cellml:units="kPa">0</cn>
+                  </apply>
+               </piece>
+               <piece>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <minus/>
+                        <ci>P_vc</ci>
+                        <ci>P_rv</ci>
+                     </apply>
+                     <ci>R_tc</ci>
+                  </apply>
+                  <apply>
+                     <lt/>
+                     <apply>
+                        <minus/>
+                        <ci>P_rv</ci>
+                        <ci>P_pa</ci>
+                     </apply>
+                     <cn cellml:units="kPa">0</cn>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <minus/>
+                           <ci>P_vc</ci>
+                           <ci>P_rv</ci>
+                        </apply>
+                        <ci>R_tc</ci>
+                     </apply>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <minus/>
+                           <ci>P_rv</ci>
+                           <ci>P_pa</ci>
+                        </apply>
+                        <ci>R_pv</ci>
+                     </apply>
+                  </apply>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   <component name="rvf_calculator">
+      <variable units="kPa" public_interface="out" name="P_es_rvf"/>
+      <variable units="kPa" public_interface="out" name="P_ed_rvf"/>
+      <variable units="kPa_per_liter" name="E_es_rvf" initial_value="87"/>
+      <variable units="liter" public_interface="in" name="V_rvf"/>
+      <variable units="liter" name="V_d_rvf" initial_value="0.005"/>
+      <variable units="kPa" name="P_0_rvf" initial_value="0.16"/>
+      <variable units="per_liter" name="lambda_rvf" initial_value="15"/>
+      <variable units="liter" name="V_0_rvf" initial_value="0.005"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>P_es_rvf</ci>
+            <apply>
+               <times/>
+               <ci>E_es_rvf</ci>
+               <apply>
+                  <minus/>
+                  <ci>V_rvf</ci>
+                  <ci>V_d_rvf</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>P_ed_rvf</ci>
+            <apply>
+               <times/>
+               <ci>P_0_rvf</ci>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <times/>
+                        <ci>lambda_rvf</ci>
+                        <apply>
+                           <minus/>
+                           <ci>V_rvf</ci>
+                           <ci>V_0_rvf</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <cn cellml:units="dimensionless">1</cn>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="septum">
+      <variable units="liter" public_interface="out" name="V_spt"/>
+      <variable units="kPa" public_interface="out" name="P_sept"/>
+      <variable units="kPa" public_interface="in" name="P_lv"/>
+      <variable units="kPa" public_interface="in" name="P_rv"/>
+      <variable units="kPa" public_interface="in" name="P_lvf"/>
+      <variable units="kPa" public_interface="in" name="P_rvf"/>
+      <variable units="dimensionless" public_interface="in" name="e_t"/>
+      <variable units="kPa_per_liter" name="E_es_spt" initial_value="6500"/>
+      <variable units="liter" name="V_d_spt" initial_value="0.002"/>
+      <variable units="kPa" name="P_0_spt" initial_value="0.148"/>
+      <variable units="per_liter" name="lambda_spt" initial_value="435"/>
+      <variable units="liter" name="V_0_spt" initial_value="0.002"/>
+      <variable units="dimensionless" name="one" initial_value="1"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>P_sept</ci>
+            <apply>
+               <minus/>
+               <ci>P_lv</ci>
+               <ci>P_rv</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>P_lvf</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>e_t</ci>
+                     <ci>E_es_spt</ci>
+                     <apply>
+                        <minus/>
+                        <ci>V_spt</ci>
+                        <ci>V_d_spt</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <minus/>
+                        <ci>one</ci>
+                        <ci>e_t</ci>
+                     </apply>
+                     <ci>P_0_spt</ci>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <exp/>
+                           <apply>
+                              <times/>
+                              <ci>lambda_spt</ci>
+                              <apply>
+                                 <minus/>
+                                 <ci>V_spt</ci>
+                                 <ci>V_0_spt</ci>
+                              </apply>
+                           </apply>
+                        </apply>
+                        <ci>one</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <ci>P_rvf</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="pulmonary_artery">
+      <variable units="kPa" public_interface="out" name="P_pa"/>
+      <variable units="second" public_interface="in" name="time"/>
+      <variable units="kPa_per_liter" name="E_es_pa" initial_value="45"/>
+      <variable units="liter" name="V_pa" initial_value="0.16"/>
+      <variable units="liter" name="V_d_pa" initial_value="0.16"/>
+      <variable units="kPa_second_per_liter" public_interface="in" name="R_pv"/>
+      <variable units="kPa_second_per_liter" public_interface="in" name="R_pul"/>
+      <variable units="kPa" public_interface="in" name="P_rv"/>
+      <variable units="kPa" public_interface="in" name="P_pu"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>P_pa</ci>
+            <apply>
+               <times/>
+               <ci>E_es_pa</ci>
+               <apply>
+                  <minus/>
+                  <ci>V_pa</ci>
+                  <ci>V_d_pa</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>V_pa</ci>
+            </apply>
+            <piecewise>
+               <piece>
+                  <cn cellml:units="liter_per_second">0</cn>
+                  <apply>
+                     <and/>
+                     <apply>
+                        <lt/>
+                        <apply>
+                           <minus/>
+                           <ci>P_rv</ci>
+                           <ci>P_pa</ci>
+                        </apply>
+                        <cn cellml:units="kPa">0</cn>
+                     </apply>
+                     <apply>
+                        <lt/>
+                        <apply>
+                           <minus/>
+                           <ci>P_pa</ci>
+                           <ci>P_pu</ci>
+                        </apply>
+                        <cn cellml:units="kPa">0</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <piece>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <minus/>
+                           <ci>P_pa</ci>
+                           <ci>P_pu</ci>
+                        </apply>
+                     </apply>
+                     <ci>R_pul</ci>
+                  </apply>
+                  <apply>
+                     <lt/>
+                     <apply>
+                        <minus/>
+                        <ci>P_rv</ci>
+                        <ci>P_pa</ci>
+                     </apply>
+                     <cn cellml:units="kPa">0</cn>
+                  </apply>
+               </piece>
+               <piece>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <minus/>
+                        <ci>P_rv</ci>
+                        <ci>P_pa</ci>
+                     </apply>
+                     <ci>R_pv</ci>
+                  </apply>
+                  <apply>
+                     <lt/>
+                     <apply>
+                        <minus/>
+                        <ci>P_pa</ci>
+                        <ci>P_pu</ci>
+                     </apply>
+                     <cn cellml:units="kPa">0</cn>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <minus/>
+                           <ci>P_rv</ci>
+                           <ci>P_pa</ci>
+                        </apply>
+                        <ci>R_pv</ci>
+                     </apply>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <minus/>
+                           <ci>P_pa</ci>
+                           <ci>P_pu</ci>
+                        </apply>
+                        <ci>R_pul</ci>
+                     </apply>
+                  </apply>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   <component name="pulmonary_vein">
+      <variable units="kPa" public_interface="out" name="P_pu"/>
+      <variable units="second" public_interface="in" name="time"/>
+      <variable units="kPa_per_liter" name="E_es_pu" initial_value="0.8"/>
+      <variable units="liter" name="V_pu" initial_value="0.2"/>
+      <variable units="liter" name="V_d_pu" initial_value="0.2"/>
+      <variable units="kPa_second_per_liter" public_interface="in" name="R_pul"/>
+      <variable units="kPa_second_per_liter" public_interface="in" name="R_mt"/>
+      <variable units="kPa" public_interface="in" name="P_pa"/>
+      <variable units="kPa" public_interface="in" name="P_lv"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>P_pu</ci>
+            <apply>
+               <times/>
+               <ci>E_es_pu</ci>
+               <apply>
+                  <minus/>
+                  <ci>V_pu</ci>
+                  <ci>V_d_pu</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>V_pu</ci>
+            </apply>
+            <piecewise>
+               <piece>
+                  <cn cellml:units="liter_per_second">0</cn>
+                  <apply>
+                     <and/>
+                     <apply>
+                        <lt/>
+                        <apply>
+                           <minus/>
+                           <ci>P_pa</ci>
+                           <ci>P_pu</ci>
+                        </apply>
+                        <cn cellml:units="kPa">0</cn>
+                     </apply>
+                     <apply>
+                        <lt/>
+                        <apply>
+                           <minus/>
+                           <ci>P_pu</ci>
+                           <ci>P_lv</ci>
+                        </apply>
+                        <cn cellml:units="kPa">0</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <piece>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <minus/>
+                           <ci>P_pu</ci>
+                           <ci>P_lv</ci>
+                        </apply>
+                     </apply>
+                     <ci>R_mt</ci>
+                  </apply>
+                  <apply>
+                     <lt/>
+                     <apply>
+                        <minus/>
+                        <ci>P_pa</ci>
+                        <ci>P_pu</ci>
+                     </apply>
+                     <cn cellml:units="kPa">0</cn>
+                  </apply>
+               </piece>
+               <piece>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <minus/>
+                        <ci>P_pa</ci>
+                        <ci>P_pu</ci>
+                     </apply>
+                     <ci>R_pul</ci>
+                  </apply>
+                  <apply>
+                     <lt/>
+                     <apply>
+                        <minus/>
+                        <ci>P_pu</ci>
+                        <ci>P_lv</ci>
+                     </apply>
+                     <cn cellml:units="kPa">0</cn>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <minus/>
+                           <ci>P_pa</ci>
+                           <ci>P_pu</ci>
+                        </apply>
+                        <ci>R_pul</ci>
+                     </apply>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <minus/>
+                           <ci>P_pu</ci>
+                           <ci>P_lv</ci>
+                        </apply>
+                        <ci>R_mt</ci>
+                     </apply>
+                  </apply>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   <component name="aorta">
+      <variable units="kPa" public_interface="out" name="P_ao"/>
+      <variable units="second" public_interface="in" name="time"/>
+      <variable units="kPa_per_liter" name="E_es_ao" initial_value="94"/>
+      <variable units="liter" name="V_ao" initial_value="0.8"/>
+      <variable units="liter" name="V_d_ao" initial_value="0.8"/>
+      <variable units="kPa_second_per_liter" public_interface="in" name="R_av"/>
+      <variable units="kPa_second_per_liter" public_interface="in" name="R_sys"/>
+      <variable units="kPa" public_interface="in" name="P_lv"/>
+      <variable units="kPa" public_interface="in" name="P_vc"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>P_ao</ci>
+            <apply>
+               <times/>
+               <ci>E_es_ao</ci>
+               <apply>
+                  <minus/>
+                  <ci>V_ao</ci>
+                  <ci>V_d_ao</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>V_ao</ci>
+            </apply>
+            <piecewise>
+               <piece>
+                  <cn cellml:units="liter_per_second">0</cn>
+                  <apply>
+                     <and/>
+                     <apply>
+                        <lt/>
+                        <apply>
+                           <minus/>
+                           <ci>P_lv</ci>
+                           <ci>P_ao</ci>
+                        </apply>
+                        <cn cellml:units="kPa">0</cn>
+                     </apply>
+                     <apply>
+                        <lt/>
+                        <apply>
+                           <minus/>
+                           <ci>P_ao</ci>
+                           <ci>P_vc</ci>
+                        </apply>
+                        <cn cellml:units="kPa">0</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <piece>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <minus/>
+                           <ci>P_ao</ci>
+                           <ci>P_vc</ci>
+                        </apply>
+                     </apply>
+                     <ci>R_sys</ci>
+                  </apply>
+                  <apply>
+                     <lt/>
+                     <apply>
+                        <minus/>
+                        <ci>P_lv</ci>
+                        <ci>P_ao</ci>
+                     </apply>
+                     <cn cellml:units="kPa">0</cn>
+                  </apply>
+               </piece>
+               <piece>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <minus/>
+                        <ci>P_lv</ci>
+                        <ci>P_ao</ci>
+                     </apply>
+                     <ci>R_av</ci>
+                  </apply>
+                  <apply>
+                     <lt/>
+                     <apply>
+                        <minus/>
+                        <ci>P_ao</ci>
+                        <ci>P_vc</ci>
+                     </apply>
+                     <cn cellml:units="kPa">0</cn>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <minus/>
+                           <ci>P_lv</ci>
+                           <ci>P_ao</ci>
+                        </apply>
+                        <ci>R_av</ci>
+                     </apply>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <minus/>
+                           <ci>P_ao</ci>
+                           <ci>P_vc</ci>
+                        </apply>
+                        <ci>R_sys</ci>
+                     </apply>
+                  </apply>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   <component name="vena_cava">
+      <variable units="kPa" public_interface="out" name="P_vc"/>
+      <variable units="second" public_interface="in" name="time"/>
+      <variable units="kPa_per_liter" name="E_es_vc" initial_value="1.5"/>
+      <variable units="liter" name="V_vc" initial_value="2.83"/>
+      <variable units="liter" name="V_d_vc" initial_value="2.83"/>
+      <variable units="kPa_second_per_liter" public_interface="in" name="R_sys"/>
+      <variable units="kPa_second_per_liter" public_interface="in" name="R_tc"/>
+      <variable units="kPa" public_interface="in" name="P_ao"/>
+      <variable units="kPa" public_interface="in" name="P_rv"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>P_vc</ci>
+            <apply>
+               <times/>
+               <ci>E_es_vc</ci>
+               <apply>
+                  <minus/>
+                  <ci>V_vc</ci>
+                  <ci>V_d_vc</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>V_vc</ci>
+            </apply>
+            <piecewise>
+               <piece>
+                  <cn cellml:units="liter_per_second">0</cn>
+                  <apply>
+                     <and/>
+                     <apply>
+                        <lt/>
+                        <apply>
+                           <minus/>
+                           <ci>P_ao</ci>
+                           <ci>P_vc</ci>
+                        </apply>
+                        <cn cellml:units="kPa">0</cn>
+                     </apply>
+                     <apply>
+                        <lt/>
+                        <apply>
+                           <minus/>
+                           <ci>P_vc</ci>
+                           <ci>P_rv</ci>
+                        </apply>
+                        <cn cellml:units="kPa">0</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <piece>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <minus/>
+                           <ci>P_vc</ci>
+                           <ci>P_rv</ci>
+                        </apply>
+                     </apply>
+                     <ci>R_tc</ci>
+                  </apply>
+                  <apply>
+                     <lt/>
+                     <apply>
+                        <minus/>
+                        <ci>P_ao</ci>
+                        <ci>P_vc</ci>
+                     </apply>
+                     <cn cellml:units="kPa">0</cn>
+                  </apply>
+               </piece>
+               <piece>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <minus/>
+                        <ci>P_ao</ci>
+                        <ci>P_vc</ci>
+                     </apply>
+                     <ci>R_sys</ci>
+                  </apply>
+                  <apply>
+                     <lt/>
+                     <apply>
+                        <minus/>
+                        <ci>P_vc</ci>
+                        <ci>P_rv</ci>
+                     </apply>
+                     <cn cellml:units="kPa">0</cn>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <minus/>
+                           <ci>P_ao</ci>
+                           <ci>P_vc</ci>
+                        </apply>
+                        <ci>R_sys</ci>
+                     </apply>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <minus/>
+                           <ci>P_vc</ci>
+                           <ci>P_rv</ci>
+                        </apply>
+                        <ci>R_tc</ci>
+                     </apply>
+                  </apply>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   <group>
+      <relationship_ref relationship="encapsulation"/>
+      <component_ref component="left_ventricle">
+         <component_ref component="lvf_calculator"/>
+      </component_ref>
+      <component_ref component="right_ventricle">
+         <component_ref component="rvf_calculator"/>
+      </component_ref>
+   </group>
+   <connection>
+      <map_components component_2="driver_function" component_1="environment"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="left_ventricle" component_1="environment"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="right_ventricle" component_1="environment"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="pulmonary_artery" component_1="environment"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="pulmonary_vein" component_1="environment"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="aorta" component_1="environment"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="vena_cava" component_1="environment"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="left_ventricle" component_1="driver_function"/>
+      <map_variables variable_2="e_t" variable_1="e_t"/>
+   </connection>
+   <connection>
+      <map_components component_2="right_ventricle" component_1="driver_function"/>
+      <map_variables variable_2="e_t" variable_1="e_t"/>
+   </connection>
+   <connection>
+      <map_components component_2="septum" component_1="driver_function"/>
+      <map_variables variable_2="e_t" variable_1="e_t"/>
+   </connection>
+   <connection>
+      <map_components component_2="left_ventricle" component_1="septum"/>
+      <map_variables variable_2="P_lv" variable_1="P_lv"/>
+      <map_variables variable_2="P_lvf" variable_1="P_lvf"/>
+      <map_variables variable_2="V_spt" variable_1="V_spt"/>
+   </connection>
+   <connection>
+      <map_components component_2="right_ventricle" component_1="septum"/>
+      <map_variables variable_2="P_rv" variable_1="P_rv"/>
+      <map_variables variable_2="P_rvf" variable_1="P_rvf"/>
+      <map_variables variable_2="V_spt" variable_1="V_spt"/>
+   </connection>
+   <connection>
+      <map_components component_2="left_ventricle" component_1="pericardium"/>
+      <map_variables variable_2="V_lv" variable_1="V_lv"/>
+      <map_variables variable_2="P_peri" variable_1="P_peri"/>
+   </connection>
+   <connection>
+      <map_components component_2="right_ventricle" component_1="pericardium"/>
+      <map_variables variable_2="V_rv" variable_1="V_rv"/>
+      <map_variables variable_2="P_peri" variable_1="P_peri"/>
+   </connection>
+   <connection>
+      <map_components component_2="lvf_calculator" component_1="left_ventricle"/>
+      <map_variables variable_2="P_ed_lvf" variable_1="P_ed_lvf"/>
+      <map_variables variable_2="P_es_lvf" variable_1="P_es_lvf"/>
+      <map_variables variable_2="V_lvf" variable_1="V_lvf"/>
+   </connection>
+   <connection>
+      <map_components component_2="rvf_calculator" component_1="right_ventricle"/>
+      <map_variables variable_2="P_ed_rvf" variable_1="P_ed_rvf"/>
+      <map_variables variable_2="P_es_rvf" variable_1="P_es_rvf"/>
+      <map_variables variable_2="V_rvf" variable_1="V_rvf"/>
+   </connection>
+   <connection>
+      <map_components component_2="left_ventricle" component_1="heart_parameters"/>
+      <map_variables variable_2="R_mt" variable_1="R_mt"/>
+      <map_variables variable_2="R_av" variable_1="R_av"/>
+   </connection>
+   <connection>
+      <map_components component_2="right_ventricle" component_1="heart_parameters"/>
+      <map_variables variable_2="R_tc" variable_1="R_tc"/>
+      <map_variables variable_2="R_pv" variable_1="R_pv"/>
+   </connection>
+   <connection>
+      <map_components component_2="pulmonary_artery" component_1="heart_parameters"/>
+      <map_variables variable_2="R_pv" variable_1="R_pv"/>
+      <map_variables variable_2="R_pul" variable_1="R_pul"/>
+   </connection>
+   <connection>
+      <map_components component_2="pulmonary_vein" component_1="heart_parameters"/>
+      <map_variables variable_2="R_mt" variable_1="R_mt"/>
+      <map_variables variable_2="R_pul" variable_1="R_pul"/>
+   </connection>
+   <connection>
+      <map_components component_2="aorta" component_1="heart_parameters"/>
+      <map_variables variable_2="R_av" variable_1="R_av"/>
+      <map_variables variable_2="R_sys" variable_1="R_sys"/>
+   </connection>
+   <connection>
+      <map_components component_2="vena_cava" component_1="heart_parameters"/>
+      <map_variables variable_2="R_sys" variable_1="R_sys"/>
+      <map_variables variable_2="R_tc" variable_1="R_tc"/>
+   </connection>
+   <connection>
+      <map_components component_2="pericardium" component_1="heart_parameters"/>
+      <map_variables variable_2="P_pl" variable_1="P_pl"/>
+   </connection>
+   <connection>
+      <map_components component_2="pulmonary_vein" component_1="left_ventricle"/>
+      <map_variables variable_2="P_lv" variable_1="P_lv"/>
+      <map_variables variable_2="P_pu" variable_1="P_pu"/>
+   </connection>
+   <connection>
+      <map_components component_2="aorta" component_1="left_ventricle"/>
+      <map_variables variable_2="P_lv" variable_1="P_lv"/>
+      <map_variables variable_2="P_ao" variable_1="P_ao"/>
+   </connection>
+   <connection>
+      <map_components component_2="pulmonary_artery" component_1="right_ventricle"/>
+      <map_variables variable_2="P_rv" variable_1="P_rv"/>
+      <map_variables variable_2="P_pa" variable_1="P_pa"/>
+   </connection>
+   <connection>
+      <map_components component_2="vena_cava" component_1="right_ventricle"/>
+      <map_variables variable_2="P_rv" variable_1="P_rv"/>
+      <map_variables variable_2="P_vc" variable_1="P_vc"/>
+   </connection>
+   <connection>
+      <map_components component_2="pulmonary_artery" component_1="pulmonary_vein"/>
+      <map_variables variable_2="P_pu" variable_1="P_pu"/>
+      <map_variables variable_2="P_pa" variable_1="P_pa"/>
+   </connection>
+   <connection>
+      <map_components component_2="vena_cava" component_1="aorta"/>
+      <map_variables variable_2="P_ao" variable_1="P_ao"/>
+      <map_variables variable_2="P_vc" variable_1="P_vc"/>
+   </connection>
+   <connection>
+      <map_components component_2="heart_parameters" component_1="driver_function"/>
+      <map_variables variable_2="HR" variable_1="HR"/>
+   </connection>
+
+<rdf:RDF>
+  <rdf:Seq rdf:about="rdf:#4720e81a-9b90-464e-9cc1-9a0f4a5ec10f">
+    <rdf:li rdf:resource="rdf:#9ce0cbff-bf02-4174-bb4b-ba24de5abad3"/>
+    <rdf:li rdf:resource="rdf:#f59a9b45-a2e0-4460-88a0-a723ad47a7ec"/>
+    <rdf:li rdf:resource="rdf:#457be9a5-a7b4-4807-9d7e-7e0036ed10bf"/>
+    <rdf:li rdf:resource="rdf:#74c79dc4-c5d5-41c3-abd3-63b30e85a86b"/>
+    <rdf:li rdf:resource="rdf:#8ec78899-952c-4b70-9d33-a4faeebd303b"/>
+    <rdf:li rdf:resource="rdf:#e0d77951-98e4-449e-94a6-8853302f0593"/>
+    <rdf:li rdf:resource="rdf:#eaa04175-33af-4e97-a2e7-ed75eda8d3ff"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#6a7730a2-971a-4973-9f04-6aa866088955">
+    <vCard:FN>Geoff Nunns</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#96406c40-1c1d-44b4-a72f-28cc85216ea8">
+    <vCard:Given>Geoffrey</vCard:Given>
+    <vCard:Family>Shaw</vCard:Family>
+    <vCard:Other>M</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e7a2baf6-eaf4-4330-a294-e89ba9130e89">
+    <vCard:Given>Christina</vCard:Given>
+    <vCard:Family>Starfinger</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4322b474-025a-4bc0-a1fe-f41e78c48bb4">
+    <dc:creator rdf:resource="rdf:#9598dec3-dacd-443d-a55b-03b506740ad0"/>
+    <rdf:value>This model will not run in COR, because it requires DAE solving techniques found in PCEnv. However, at present it will not run in PCEnv due to the addition of the modulus operator in the driver function, but this is a problem with PCEnv and not the model itself. The units are consistent throughout.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ebd28dda-65d1-4e5b-9165-bd8f365e907b">
+    <vCard:Given>Bram</vCard:Given>
+    <vCard:Family>Smith</vCard:Family>
+    <vCard:Other>W</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#eaa04175-33af-4e97-a2e7-ed75eda8d3ff">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#df783148-3b99-4126-ae62-a0b72a352df7"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#995fb5f7-6284-43ab-9100-eb7b370accfa">
+    <dcterms:W3CDTF>2007-09-00 00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8ec78899-952c-4b70-9d33-a4faeebd303b">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#966d2aa3-84a7-4e4b-b8d7-31994a0b5303"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f59a9b45-a2e0-4460-88a0-a723ad47a7ec">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#6925f728-41c1-480f-a8eb-8e2dc07b728a"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1d60fee9-4aea-422b-bacb-1aca643b880f">
+    <bqs:Pubmed_id>17767454</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#e605eac5-8889-4945-8d04-56895343eedc"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#966d2aa3-84a7-4e4b-b8d7-31994a0b5303">
+    <vCard:Given>Christopher</vCard:Given>
+    <vCard:Family>Hann</vCard:Family>
+    <vCard:Other>E</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#fd6f3e97-f8f4-4ad1-befb-b0adfd0a666f">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>gnunns1@jhem.jhu.edu</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f7ca3aba-ac79-4b7a-8861-b389762c49b1">
+    <vCard:ORG rdf:resource="rdf:#24db02da-3449-4c35-bebf-8c0551efb4bb"/>
+    <vCard:EMAIL rdf:resource="rdf:#fd6f3e97-f8f4-4ad1-befb-b0adfd0a666f"/>
+    <vCard:N rdf:resource="rdf:#878fc60f-b503-4b43-926b-b4857d267d81"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#5f24cf5c-89e3-4519-9ae8-43de9a0d0727">
+    <vCard:Given>Thomas</vCard:Given>
+    <vCard:Family>Desaive</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#24db02da-3449-4c35-bebf-8c0551efb4bb">
+    <vCard:Orgname>Auckland Bioengineering Institute</vCard:Orgname>
+    <vCard:Orgunit>CellML Team</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#74c79dc4-c5d5-41c3-abd3-63b30e85a86b">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#ebd28dda-65d1-4e5b-9165-bd8f365e907b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#df783148-3b99-4126-ae62-a0b72a352df7">
+    <vCard:Given>Alexandre</vCard:Given>
+    <vCard:Family>Ghuysen</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ee1ce24e-ff66-4217-a768-498815d07352">
+    <dcterms:W3CDTF>2008-07-03T00:00:00+00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e605eac5-8889-4945-8d04-56895343eedc">
+    <dc:creator rdf:resource="rdf:#4720e81a-9b90-464e-9cc1-9a0f4a5ec10f"/>
+    <dc:title>Modeling the Cardiovascular System</dc:title>
+    <bqs:volume>9</bqs:volume>
+    <bqs:first_page>264</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#9e27c3ed-1dd2-4829-8ab1-35a946a32ef3"/>
+    <dcterms:issued rdf:resource="rdf:#995fb5f7-6284-43ab-9100-eb7b370accfa"/>
+    <bqs:last_page>269</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#878fc60f-b503-4b43-926b-b4857d267d81">
+    <vCard:Given>Geoffrey</vCard:Given>
+    <vCard:Family>Nunns</vCard:Family>
+    <vCard:Other>Rogan</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#6925f728-41c1-480f-a8eb-8e2dc07b728a">
+    <vCard:Given>J</vCard:Given>
+    <vCard:Family>Chase</vCard:Family>
+    <vCard:Other>Geoffrey</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e0d77951-98e4-449e-94a6-8853302f0593">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#5f24cf5c-89e3-4519-9ae8-43de9a0d0727"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#shaw_chase_starfinger_smith_hann_desaive_ghuysen_2007">
+    <bqs:reference rdf:resource="rdf:#1d60fee9-4aea-422b-bacb-1aca643b880f"/>
+<bqs:reference rdf:parseType="Resource">
+  <dc:subject rdf:parseType="Resource">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value>
+      <rdf:Bag>
+        <rdf:li>cardiovascular circulation</rdf:li>
+      </rdf:Bag>
+    </rdf:value>
+  </dc:subject>
+</bqs:reference>
+    <cmeta:comment rdf:resource="rdf:#11cddb30-ef4d-4aa4-9467-7ccc426b4aa8"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9ce0cbff-bf02-4174-bb4b-ba24de5abad3">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#96406c40-1c1d-44b4-a72f-28cc85216ea8"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9e27c3ed-1dd2-4829-8ab1-35a946a32ef3">
+    <dc:title>Critical Care and Resuscitation</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:publisher/>
+    <cmeta:comment rdf:resource="rdf:#4322b474-025a-4bc0-a1fe-f41e78c48bb4"/>
+    <dcterms:created rdf:resource="rdf:#ee1ce24e-ff66-4217-a768-498815d07352"/>
+    <dc:creator rdf:resource="rdf:#f7ca3aba-ac79-4b7a-8861-b389762c49b1"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#11cddb30-ef4d-4aa4-9467-7ccc426b4aa8">
+    <dc:creator rdf:resource="rdf:#6a7730a2-971a-4973-9f04-6aa866088955"/>
+    <rdf:value>This model will not run in COR, because it requires DAE solving techniques found in PCEnv. However, at present it will not run in PCEnv due to the addition of the modulus operator in the driver function, but this is a problem with PCEnv and not the model itself. The units are consistent throughout.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9598dec3-dacd-443d-a55b-03b506740ad0">
+    <vCard:FN>Geoff Nunns</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#457be9a5-a7b4-4807-9d7e-7e0036ed10bf">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#e7a2baf6-eaf4-4330-a294-e89ba9130e89"/>
+  </rdf:Description>
+</rdf:RDF>
+</model>

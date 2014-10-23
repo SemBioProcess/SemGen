@@ -1,0 +1,896 @@
+<?xml version="1.0"?>
+
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="kroll_model_2000" name="kroll_model_2000">
+
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Parathyroid hormone temporal effects on bone formation and resorption</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+<section id="sec_status">
+    <title>Model Status</title>
+    <para>
+        This CellML model runs in OpenCell to recreate the published results. The units have been checked and they are consistent. PTH is pulsed every 6 hours and the model needs to be run for some time before the oscillations stabilise. The CellML model will also run in COR but due to the time unit being hours it is not really suitable for full length simulations.
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+  <title>Model Structure</title>
+
+<para>
+ABSTRACT: Parathyroid hormone (PTH) paradoxically causes net bone loss (resorption) when administered in a continuous fashion, and net bone formation (deposition) when administered intermittently. Currently no pharmacological formulations are available to promote bone formation, as needed for the treatment of osteoporosis. The paradoxical behavior of PTH confuses endocrinologists, thus, a model bone resorption or deposition dependent on the timing of PTH administration would de-mystify this behavior and provide the basis for logical drug formulation. We developed a mathematical model that accounts for net bone loss with continuous PTH administration and net bone formation with intermittent PTH administration, based on the differential effects of PTH on the osteoblastic and osteoclastic populations of cells. Bone, being a major reservoir of body calcium, is under the hormonal control of PTH. The overall effect of PTH is to raise plasma levels of calcium, partly through bone resorption. Osteoclasts resorb bone and liberate calcium, but they lack receptors for PTH. The preosteoblastic precursors and preosteoblasts possess receptors for PTH, upon which the hormone induces differentiation from the precursor to preosteoblast and from the preosteoblast to the osteoblast. The osteoblasts generate IL-6; IL-6 stimulates preosteoclasts to differentiate into osteoclasts. We developed a mathematical model for the differentiation of osteoblastic and osteoclastic populations in bone, using a delay time of 1 hour for differentiation of preosteoblastic precursors into preosteoblasts and 2 hours for the differentiation of preosteoblasts into osteoblasts. The ratio of the number of osteoblasts to osteoclasts indicates the net effect of PTH on bone resorption and deposition; the timing of events producing the maximum ratio would induce net bone deposition. When PTH is pulsed with a frequency of every hour, the preosteoblastic population rises and decreases in nearly a symmetric pattern, with 3.9 peaks every 24 hours, and 4.0 peaks every 24 hours when PTH is administered every 6 hours. Thus, the preosteoblast and osteoblast frequency depends more on the nearly constant value of the PTH, rather than on the frequency of the PTH pulsations. Increasing the time delay gradually increases the mean value for the number of osteoblasts. The osteoblastic population oscillates for all intermittent administrations of PTH and even when the PTH infusion is constant. The maximum ratio of osteoblasts to osteoclasts occurs when PTH is administered in pulses of every 6 hours. The delay features in the model bear most of the responsibility for the occurrence of these oscillations, because without the delay and in the presence of constant PTH infusions, no oscillations occur. However, with a delay, under constant PTH infusions, the model generates oscillations. The osteoblast oscillations express limit cycle behavior. Phase plane analysis show simple and complex attractors. Subsequent to a disturbance in the number of osteoblasts, the osteoblasts quickly regain their oscillatory behavior and cycle back to the original attractor, typical of limit cycle behavior. Further, because the model was constructed with dissipative and nonlinear features, one would expect ensuing oscillations to show limit cycle behavior. The results from our model, increased bone deposition with intermittent PTH administration and increased bone resorption with constant PTH administration, conforms with experimental observations and with an accepted explanation for osteoporosis.
+</para>
+
+<informalfigure float="0" id="fig_reaction_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>model diagram</title>
+    </objectinfo>
+    <imagedata fileref="kroll_2000.png"/>
+  </imageobject>
+</mediaobject>
+<caption>Schematic diagram of the effect of PTH on the development of osteoblasts.  PTH binds to receptors on the preosteoblast precursors and stimulates their transition to preosteoblasts.  However, PTH binding to these preosteoblasts inhibits their differentiation into osteoblasts, and IL-6 (which is secreted by the osteoblasts) is believed to enhance this inhibitory effect.  The osteoblasts then differentiate into osteocytes at a rate which is dependent on their number.  The IL-6 produced by the osteoblasts also stimulates the differentiation of preosteoclasts to osteoclasts.  Osteoclasts become senescent at a rate dependent on their number.</caption>
+</informalfigure>
+
+<para>
+The original paper reference is cited below:
+</para>
+
+<para>
+Parathyroid hormone temporal effects on bone formation and resorption, Martin H. Kroll, 2000, <emphasis>Bulletin of Mathematical Biology</emphasis>, 62, 163-187. <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/10824426">PubMed ID: 10824426</ulink>
+</para>
+
+</sect1>
+</article>
+</documentation> 
+
+
+
+
+  <units name="hour">
+    <unit multiplier="3600.0" units="second"/>
+  </units>
+  
+  <units name="first_order_rate_constant">
+    <unit exponent="-1" units="hour"/>
+  </units>
+  
+  
+  <component name="environment">
+    <variable cmeta:id="environment_time" name="time" public_interface="out" units="hour"/>
+  </component>
+
+  <component cmeta:id="Y" name="Y">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#Y">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Y</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">number of preosteoblasts</dcterms:alternative>
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable cmeta:id="Y_Y" initial_value="10.0" name="Y" public_interface="out" units="dimensionless"/>
+    
+    <variable name="C1" public_interface="in" units="dimensionless"/>
+    <variable name="k1" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="P" public_interface="in" units="dimensionless"/>
+    <variable name="K" public_interface="in" units="dimensionless"/>
+    <variable name="C" public_interface="in" units="dimensionless"/>
+    <variable name="C2" public_interface="in" units="dimensionless"/>
+    <variable name="k2" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="ky" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="time" public_interface="in" units="hour"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> Y </ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> k1 </ci>
+            <ci> C1 </ci>
+            <apply>
+              <divide/>
+              <ci> P </ci>
+              <apply>
+                <plus/>
+                <ci> K </ci>
+                <ci> P </ci>
+              </apply>
+            </apply>
+            <ci> C </ci>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> k2 </ci>
+              <ci> C2 </ci>
+              <apply>
+                <minus/>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1.0 </cn>
+                <apply>
+                  <divide/>
+                  <ci> P </ci>
+                  <apply>
+                    <plus/>
+                    <ci> K </ci>
+                    <ci> P </ci>
+                  </apply>
+                </apply>
+              </apply>
+              <ci> Y </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> ky </ci>
+              <ci> Y </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component cmeta:id="X" name="X">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#X">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">X</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">number of osteoblasts</dcterms:alternative>
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable cmeta:id="X_X" initial_value="500.0" name="X" public_interface="out" units="dimensionless"/>
+    
+    <variable name="C2" public_interface="in" units="dimensionless"/>
+    <variable name="k2" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="k3" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="P" public_interface="in" units="dimensionless"/>
+    <variable name="Y" public_interface="in" units="dimensionless"/>
+    <variable name="K" public_interface="in" units="dimensionless"/>
+    <variable name="time" public_interface="in" units="hour"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> X </ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> k2 </ci>
+            <ci> C2 </ci>
+            <apply>
+              <minus/>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <divide/>
+                <ci> P </ci>
+                <apply>
+                  <plus/>
+                  <ci> K </ci>
+                  <ci> P </ci>
+                </apply>
+              </apply>
+            </apply>
+            <ci> Y </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> k3 </ci>
+            <ci> X </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component cmeta:id="P" name="P">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#P">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">P</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">PTH</dcterms:alternative>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">parathyroid hormone concentration</dcterms:alternative>
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable cmeta:id="P_P" initial_value="10.0" name="P" public_interface="out" units="dimensionless"/>
+    
+    <variable name="k4" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="time" public_interface="in" units="hour"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> P </ci> 
+        </apply>
+        <piecewise>
+          <piece>
+            <apply>
+              <minus/>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="first_order_rate_constant"> 10.0 </cn>
+              <apply>
+                <times/>
+                <ci> k4 </ci>
+                <ci> P </ci>
+              </apply>
+            </apply>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 0.0 </cn>
+              </apply>
+              <apply>
+                <lt/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 6.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <apply>
+              <minus/>
+              <apply>
+                <times/>
+                <ci> k4 </ci>
+                <ci> P </ci>
+              </apply>
+            </apply>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 6.0 </cn>
+              </apply>
+              <apply>
+                <lt/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 12.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <apply>
+              <minus/>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="first_order_rate_constant"> 10.0 </cn>
+              <apply>
+                <times/>
+                <ci> k4 </ci>
+                <ci> P </ci>
+              </apply>
+            </apply>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 12.0 </cn>
+              </apply>
+              <apply>
+                <lt/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 18.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <apply>
+              <minus/>
+              <apply>
+                <times/>
+                <ci> k4 </ci>
+                <ci> P </ci>
+              </apply>
+            </apply>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 18.0 </cn>
+              </apply>
+              <apply>
+                <lt/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 24.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <apply>
+              <minus/>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="first_order_rate_constant"> 10.0 </cn>
+              <apply>
+                <times/>
+                <ci> k4 </ci>
+                <ci> P </ci>
+              </apply>
+            </apply>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 24.0 </cn>
+              </apply>
+              <apply>
+                <lt/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 30.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <apply>
+              <minus/>
+              <apply>
+                <times/>
+                <ci> k4 </ci>
+                <ci> P </ci>
+              </apply>
+            </apply>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 30.0 </cn>
+              </apply>
+              <apply>
+                <lt/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 36.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <apply>
+              <minus/>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="first_order_rate_constant"> 10.0 </cn>
+              <apply>
+                <times/>
+                <ci> k4 </ci>
+                <ci> P </ci>
+              </apply>
+            </apply>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 36.0 </cn>
+              </apply>
+              <apply>
+                <lt/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 42.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <apply>
+              <minus/>
+              <apply>
+                <times/>
+                <ci> k4 </ci>
+                <ci> P </ci>
+              </apply>
+            </apply>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 42.0 </cn>
+              </apply>
+              <apply>
+                <lt/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 48.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <apply>
+              <minus/>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="first_order_rate_constant"> 10.0 </cn>
+              <apply>
+                <times/>
+                <ci> k4 </ci>
+                <ci> P </ci>
+              </apply>
+            </apply>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 48.0 </cn>
+              </apply>
+              <apply>
+                <lt/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 54.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <apply>
+              <minus/>
+              <apply>
+                <times/>
+                <ci> k4 </ci>
+                <ci> P </ci>
+              </apply>
+            </apply>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 54.0 </cn>
+              </apply>
+              <apply>
+                <lt/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 60.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <apply>
+              <minus/>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="first_order_rate_constant"> 10.0 </cn>
+              <apply>
+                <times/>
+                <ci> k4 </ci>
+                <ci> P </ci>
+              </apply>
+            </apply>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 60.0 </cn>
+              </apply>
+              <apply>
+                <lt/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 66.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <apply>
+              <minus/>
+              <apply>
+                <times/>
+                <ci> k4 </ci>
+                <ci> P </ci>
+              </apply>
+            </apply>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 66.0 </cn>
+              </apply>
+              <apply>
+                <lt/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 72.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <apply>
+              <minus/>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="first_order_rate_constant"> 10.0 </cn>
+              <apply>
+                <times/>
+                <ci> k4 </ci>
+                <ci> P </ci>
+              </apply>
+            </apply>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 72.0 </cn>
+              </apply>
+              <apply>
+                <lt/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 78.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <apply>
+              <minus/>
+              <apply>
+                <times/>
+                <ci> k4 </ci>
+                <ci> P </ci>
+              </apply>
+            </apply>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 78.0 </cn>
+              </apply>
+              <apply>
+                <lt/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 84.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <apply>
+              <minus/>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="first_order_rate_constant"> 10.0 </cn>
+              <apply>
+                <times/>
+                <ci> k4 </ci>
+                <ci> P </ci>
+              </apply>
+            </apply>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 84.0 </cn>
+              </apply>
+              <apply>
+                <lt/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 90.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <apply>
+              <minus/>
+              <apply>
+                <times/>
+                <ci> k4 </ci>
+                <ci> P </ci>
+              </apply>
+            </apply>
+            <apply>
+              <and/>
+              <apply>
+                <geq/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 90.0 </cn>
+              </apply>
+              <apply>
+                <lt/>
+                <ci> time </ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="hour"> 96.0 </cn>
+              </apply>
+            </apply>
+          </piece>
+        </piecewise>
+      </apply>
+    </math>
+  </component>
+
+  <component cmeta:id="Z" name="Z">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#Z">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Z</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">number of osteoclasts</dcterms:alternative>
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable cmeta:id="Z_Z" initial_value="200.0" name="Z" public_interface="out" units="dimensionless"/>
+    
+    <variable name="C3" public_interface="in" units="dimensionless"/>
+    <variable name="k5" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="K2" public_interface="in" units="dimensionless"/>
+    <variable name="IL6" public_interface="in" units="dimensionless"/>
+    <variable name="k6" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="time" public_interface="in" units="hour"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> Z </ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> k5 </ci>
+            <ci> C3 </ci>
+            <apply>
+              <divide/>
+              <ci> IL6 </ci>
+              <apply>
+                <plus/>
+                <ci> K2 </ci>
+                <ci> IL6 </ci>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> k6 </ci>
+            <ci> Z </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component cmeta:id="IL6" name="IL6">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#IL6">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">IL6</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">interleukin-6 concentration</dcterms:alternative>
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable cmeta:id="IL6_IL6" initial_value="1.9" name="IL6" public_interface="out" units="dimensionless"/>
+    
+    <variable name="X" public_interface="in" units="dimensionless"/>
+    <variable name="time" public_interface="in" units="hour"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> IL6 </ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="first_order_rate_constant"> 0.1 </cn>
+            <ci> X </ci>
+          </apply>
+          <apply>
+            <times/>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="first_order_rate_constant"> 10.0 </cn>
+            <ci> IL6 </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component name="model_parameters"> 
+    <variable initial_value="50.0" name="C" public_interface="out" units="dimensionless"/>
+    <variable initial_value="1.0" name="k1" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="1.3" name="k2" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="0.05" name="k3" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="0.9" name="k4" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="5.0" name="k5" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="0.02" name="k6" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="0.01" name="ky" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="5.0" name="K" public_interface="out" units="dimensionless"/>
+    <variable initial_value="2.0" name="K2" public_interface="out" units="dimensionless"/>
+    <variable initial_value="1.0" name="C1" public_interface="out" units="dimensionless"/>
+    <variable initial_value="1.0" name="C2" public_interface="out" units="dimensionless"/>
+    <variable initial_value="1.0" name="C3" public_interface="out" units="dimensionless"/>
+  </component>
+
+  <connection>
+    <map_components component_1="X" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Y" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="P" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Z" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="IL6" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Y" component_2="P"/>
+    <map_variables variable_1="P" variable_2="P"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Y" component_2="model_parameters"/>
+    <map_variables variable_1="C1" variable_2="C1"/>
+    <map_variables variable_1="k1" variable_2="k1"/>
+    <map_variables variable_1="K" variable_2="K"/>
+    <map_variables variable_1="C2" variable_2="C2"/>
+    <map_variables variable_1="C" variable_2="C"/>
+    <map_variables variable_1="k2" variable_2="k2"/>
+    <map_variables variable_1="ky" variable_2="ky"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="X" component_2="Y"/>
+    <map_variables variable_1="Y" variable_2="Y"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="X" component_2="P"/>
+    <map_variables variable_1="P" variable_2="P"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="X" component_2="model_parameters"/>
+    <map_variables variable_1="K" variable_2="K"/>
+    <map_variables variable_1="C2" variable_2="C2"/>
+    <map_variables variable_1="k3" variable_2="k3"/>
+    <map_variables variable_1="k2" variable_2="k2"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="P" component_2="model_parameters"/>
+    <map_variables variable_1="k4" variable_2="k4"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Z" component_2="IL6"/>
+    <map_variables variable_1="IL6" variable_2="IL6"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Z" component_2="model_parameters"/>
+    <map_variables variable_1="C3" variable_2="C3"/>
+    <map_variables variable_1="k5" variable_2="k5"/>
+    <map_variables variable_1="k6" variable_2="k6"/>
+    <map_variables variable_1="K2" variable_2="K2"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="IL6" component_2="X"/>
+    <map_variables variable_1="X" variable_2="X"/>
+  </connection>
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Bag rdf:about="rdf:#bebf8984-5ba8-4b59-a751-cee83cafe821">
+    <rdf:li>parathyroid hormone</rdf:li>
+    <rdf:li>osteoporosis</rdf:li>
+    <rdf:li>osteoclast</rdf:li>
+    <rdf:li>osteoblast</rdf:li>
+    <rdf:li>endocrine</rdf:li>
+  </rdf:Bag>
+  <rdf:Seq rdf:about="rdf:#7d89b8d7-8c3f-4b66-8900-d002b870347a">
+    <rdf:li rdf:resource="rdf:#ed035d3d-e6be-4c1b-9bfd-9b42c560ca4a"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#89612f1e-97a3-4ede-a40d-a1b7eacd4939">
+    <vCard:ORG xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#a47931e7-9652-4089-8a2b-49cabd1844fa"/>
+    <vCard:EMAIL xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#871c5090-3f8e-47e2-8a04-4e9d94e7b8e2"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#69bc82a4-76f7-451c-bf17-36475332997e"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#c4cca948-e34d-4af5-9590-992460e69da6">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2007-07-24T00:00:00+00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#871c5090-3f8e-47e2-8a04-4e9d94e7b8e2">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#75a62356-1b4e-465e-9aef-8687e40d5ab1">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#7d89b8d7-8c3f-4b66-8900-d002b870347a"/>
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Parathyroid hormone temporal effects on bone formation and resorption</dc:title>
+    <bqs:volume xmlns:bqs="http://www.cellml.org/bqs/1.0#">62</bqs:volume>
+    <bqs:first_page xmlns:bqs="http://www.cellml.org/bqs/1.0#">163</bqs:first_page>
+    <bqs:Journal xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#d8924470-e205-4242-a47a-6a8bb7a13e52"/>
+    <dcterms:issued xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#d9dfe3ca-b479-4c6f-9b40-b3893608491b"/>
+    <bqs:last_page xmlns:bqs="http://www.cellml.org/bqs/1.0#">187</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#69bc82a4-76f7-451c-bf17-36475332997e">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Catherine</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Lloyd</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a47931e7-9652-4089-8a2b-49cabd1844fa">
+    <vCard:Orgname xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">The Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1dc46f76-c447-44e5-b4bd-499edde5f643">
+    <vCard:FN xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d8924470-e205-4242-a47a-6a8bb7a13e52">
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Bulletin of Mathematical Biology</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1e8db945-e897-4046-b346-ea16350f2cd1">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#cafc5bfe-d035-46d6-9f31-5c11e8a1fa7f"/>
+    <rdf:value>This is a CellML description of Martin Kroll's 2000 mathematical model of the temporal effects of parathyroid hormone on bone formation and resorption.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#82bb2498-4420-44b8-b30f-c19539af4a3d">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#1dc46f76-c447-44e5-b4bd-499edde5f643"/>
+    <rdf:value/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#kroll_model_2000">
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">
+        Martin Kroll's 2000 mathematical model of the temporal effects of parathyroid hormone on bone formation and resorption.
+      </dc:title>
+    <cmeta:comment rdf:resource="rdf:#1e8db945-e897-4046-b346-ea16350f2cd1"/>
+    <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#1e5037dc-f4c5-46ec-a137-bbb0edb25628"/>
+    <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#812fe8f2-e255-473a-b899-abe35290a6c5"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f4a2901d-d111-4bd5-aea1-85ab5d3b6302">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Martin</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Kroll</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">H</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#cafc5bfe-d035-46d6-9f31-5c11e8a1fa7f">
+    <vCard:FN xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ed035d3d-e6be-4c1b-9bfd-9b42c560ca4a">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#f4a2901d-d111-4bd5-aea1-85ab5d3b6302"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1e5037dc-f4c5-46ec-a137-bbb0edb25628">
+    <bqs:Pubmed_id xmlns:bqs="http://www.cellml.org/bqs/1.0#">10824426</bqs:Pubmed_id>
+    <bqs:JournalArticle xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#75a62356-1b4e-465e-9aef-8687e40d5ab1"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#765920b5-d614-4f70-bca6-02ce515c4a3d">
+    <bqs:subject_type xmlns:bqs="http://www.cellml.org/bqs/1.0#">keyword</bqs:subject_type>
+    <rdf:value rdf:resource="rdf:#bebf8984-5ba8-4b59-a751-cee83cafe821"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#812fe8f2-e255-473a-b899-abe35290a6c5">
+    <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#765920b5-d614-4f70-bca6-02ce515c4a3d"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d9dfe3ca-b479-4c6f-9b40-b3893608491b">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2000-01-00 00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="#">
+    <dc:publisher xmlns:dc="http://purl.org/dc/elements/1.1/">The University of Auckland, Auckland Bioengineering Institute</dc:publisher>
+    <cmeta:comment rdf:resource="rdf:#82bb2498-4420-44b8-b30f-c19539af4a3d"/>
+    <dcterms:created xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#c4cca948-e34d-4af5-9590-992460e69da6"/>
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#89612f1e-97a3-4ede-a40d-a1b7eacd4939"/>
+  </rdf:Description>
+</rdf:RDF>
+</model>

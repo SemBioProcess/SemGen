@@ -1,0 +1,2524 @@
+<?xml version="1.0" encoding="utf-8"?>
+<model 
+	name="capillary_dynamics_CellML1_0_model"
+	cmeta:id="capillary_dynamics_CellML1_0_model"
+	
+	xmlns="http://www.cellml.org/cellml/1.0#"
+	xmlns:cellml="http://www.cellml.org/cellml/1.0#"
+	xmlns:cmeta="http://www.cellml.org/metadata/1.0#"
+	xmlns:xlink="http://www.w3.org/1999/xlink">
+
+<!-- =============================================	DOCUMENTATION		================================================= -->
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Guyton Model: Capillary Dynamics</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Auckland Bioengineering Institute, University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+        This CellML model has been validated. Due to the differences between procedural code (in this case C-code) and 
+		declarative languages (CellML), some aspects of the original model were not able to be encapsulated by the CellML 
+		model (such as the damping of variables). This may effect the transient behaviour of the model, however the 
+		steady-state behaviour would remain	the same. The equations in this file and the steady-state output from the 
+		model conform to the results from the MODSIM program.
+    </para>
+  </section>
+  <sect1 id="sec_structure">
+  <title>Model Structure</title>
+
+<para>
+Arthur Guyton (1919-2003) was an American physiologist who became famous for his 1950s experiments in which he studied the 
+physiology of cardiac output and its relationship with the peripheral circulation.  The results of these experiments 
+challenged the conventional wisdom that it was the heart itself that controlled cardiac output.  Instead Guyton demonstrated 
+that it was the need of the body tissues for oxygen which was the real regulator of cardiac output.  The "Guyton Curves" 
+describe the relationship between right atrial pressures and cardiac output, and they form a foundation for understanding the 
+physiology of circulation. 
+</para>
+
+<para>
+The Guyton model of fluid, electrolyte, and circulatory regulation is an extensive mathematical model of human circulatory physiology, 
+capable of simulating a variety of experimental conditions, and contains a number of linked subsystems relating to circulation and 
+its neuroendocrine control.
+</para>
+
+<para>
+This is a CellML translation of the Guyton model of the regulation of the circulatory system.  The complete model consists of separate 
+modules each of which characterise a separate physiological subsystems.  The Circulation Dynamics is the primary system, to which other 
+modules/blocks are connected.  The other modules characterise the dynamics of the kidney, electrolytes and cell water, thirst and drinking, 
+hormone regulation, autonomic regulation, cardiovascular system etc, and these feedback on the central circulation model.  The CellML code 
+in these modules is based on the C code from the programme C-MODSIM created by Dr Jean-Pierre Montani.
+</para>
+
+<para>
+This particular CellML model describes the the movement of fluid and protein through the capillary membrane.  It also calculates the volumes of 
+fluid in the free fluid space of the interstitium and in the gel fluid space.  It calculates the pressures in both of these fluids as well as 
+the so-called solid tissue pressure caused by the compression of solid elements against other portions of the interstitium.  In addition, the 
+quantities of proteins and their concentrations in both the free fluid and the gel fluid are calculated. And, finally, the flow of both fluid 
+and proteins in the lymph system are computed, as well as the overall body protein balance.
+</para>
+
+<informalfigure float="0" id="full_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>model diagram</title>
+    </objectinfo>
+    <imagedata fileref="full_model.png"/>
+  </imageobject>
+</mediaobject>
+<caption>A systems analysis diagram for the full Guyton model describing circulation regulation.</caption>
+</informalfigure>
+
+
+<informalfigure float="0" id="capillary_dynamics_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>model diagram</title>
+    </objectinfo>
+    <imagedata fileref="capillary_dynamics.png"/>
+  </imageobject>
+</mediaobject>
+<caption>A schematic diagram of the components and processes described in the current CellML model.</caption>
+</informalfigure> 
+
+<para>
+There are several publications referring to the Guyton model. One of these papers is cited below:
+</para>
+
+<para>
+Circulation: Overall Regulation,  A.C. Guyton, T.G. Coleman, and H.J. Granger, 1972, 
+            <emphasis>Annual Review of Physiology</emphasis>
+          , 34, 13-44.  <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pubmed&amp;cmd=Retrieve&amp;dopt=AbstractPlus&amp;list_uids=4334846&amp;query_hl=1&amp;itool=pubmed_docsum">PubMed ID: 4334846</ulink>
+</para>
+
+</sect1>
+</article>
+</documentation> 
+
+<!-- =======================================================    CITATION AND KEYWORD METADATA    ================================================== -->
+
+	<rdf:RDF
+			xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+			xmlns:bqs="http://www.cellml.org/bqs/1.0#"
+			xmlns:dc="http://purl.org/dc/elements/1.1/"
+			xmlns:dcterms="http://purl.org/dc/terms/"
+			xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
+		<rdf:Description rdf:about="#capillary_dynamics_CellML1_0_model">
+			<bqs:reference rdf:parseType="Resource">
+				<bqs:JournalArticle rdf:parseType="Resource">
+					<dc:creator>
+						<rdf:Seq>
+							<rdf:li rdf:parseType="Resource">
+								<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person" />
+								<vCard:N rdf:parseType="Resource">
+									<vCard:Family>Guyton</vCard:Family>
+									<vCard:Given></vCard:Given>
+									<vCard:Other></vCard:Other>
+								</vCard:N>
+							</rdf:li>
+							<rdf:li rdf:parseType="Resource">
+								<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person" />
+								<vCard:N rdf:parseType="Resource">
+									<vCard:Family>Capillary Dynamics</vCard:Family>
+									<vCard:Given></vCard:Given>
+									<vCard:Other></vCard:Other>
+								</vCard:N>
+							</rdf:li>
+
+						</rdf:Seq>
+					</dc:creator>
+					<dc:title>Description of Guyton capillary dynamics module</dc:title>
+					<bqs:volume />
+					<bqs:first_page />
+					<bqs:last_page />
+					<bqs:Journal rdf:parseType="Resource">
+						<dc:title></dc:title>
+					</bqs:Journal>
+					<dcterms:issued rdf:parseType="Resource">
+						<dcterms:W3CDTF>2008-00-00 00:00</dcterms:W3CDTF>
+					</dcterms:issued>
+				</bqs:JournalArticle>
+			</bqs:reference>
+			<bqs:reference rdf:parseType="Resource">
+				<dc:subject rdf:parseType="Resource">
+					<bqs:subject_type>keyword</bqs:subject_type>
+					<rdf:value>
+					<rdf:Bag>
+						<rdf:li>physiology</rdf:li>
+						<rdf:li>organ systems</rdf:li>
+						<rdf:li>cardiovascular circulation</rdf:li>
+						<rdf:li>capillary dynamics</rdf:li>
+						<rdf:li>Guyton</rdf:li>
+					</rdf:Bag>
+					</rdf:value>
+				</dc:subject>
+			</bqs:reference>
+		</rdf:Description>
+	</rdf:RDF>
+
+    
+<!-- ======================================================= 		UNITS		================================================== -->
+
+   <units name="minute">
+      <unit multiplier="60" units="second"/>
+   </units>
+   <units name="per_minute">
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units name="mmHg">
+      <unit multiplier="133.322" units="newton"/>
+      <unit units="metre" exponent="-2"/>
+   </units>
+   <units name="per_mmHg">
+      <unit units="mmHg" exponent="-1"/>
+   </units>
+   <units name="mmHg_per_mL">
+      <unit units="mmHg"/>
+      <unit units="mL" exponent="-1"/>
+   </units>
+   <units name="mmHg_L">
+      <unit units="mmHg"/>
+      <unit units="litre"/>
+   </units>
+   <units name="per_mmHg2">
+      <unit units="mmHg" exponent="-2"/>
+   </units>
+   <units name="mmHg3">
+      <unit units="mmHg" exponent="3"/>
+   </units>
+   <units name="monovalent_mEq">
+      <unit units="mole" prefix="milli"/>
+   </units>
+   <units name="monovalent_mEq_per_minute">
+      <unit units="mole" prefix="milli"/>
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units name="monovalent_mEq_per_litre">
+      <unit units="mole" prefix="milli"/>
+      <unit units="litre" exponent="-1"/>
+   </units>
+   <units name="monovalent_mEq_per_litre_per_minute">
+      <unit units="mole" prefix="milli"/>
+      <unit units="litre" exponent="-1"/>
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units name="litre2_per_monovalent_mEq_per_minute">
+      <unit units="litre" exponent="2"/>
+      <unit units="mole" prefix="milli" exponent="-1"/>
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units name="L_per_minute">
+      <unit units="litre"/>
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units name="mL">
+      <unit units="litre" prefix="milli"/>
+   </units>
+   <units name="gram_per_L">
+      <unit units="gram"/>
+      <unit units="litre" exponent="-1"/>
+   </units>
+   <units name="L_mmHg_per_gram">
+      <unit units="litre"/>
+      <unit units="mmHg"/>
+      <unit units="gram" exponent="-1"/>
+   </units>
+   <units name="L2_mmHg_per_gram2">
+      <unit units="litre" exponent="2"/>
+      <unit units="mmHg"/>
+      <unit units="gram" exponent="-2"/>
+   </units>
+   <units name="mmHg_minute_per_L">
+      <unit units="minute"/>
+      <unit units="mmHg"/>
+      <unit units="litre" exponent="-1"/>
+   </units>
+   <units name="gram_per_minute">
+      <unit units="gram"/>
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units name="mL_per_L">
+      <unit units="litre" prefix="milli"/>
+      <unit units="litre" exponent="-1"/>
+   </units>
+   <units name="mL_per_L_per_mmHg">
+      <unit units="litre" prefix="milli"/>
+      <unit units="litre" exponent="-1"/>
+      <unit units="mmHg" exponent="-1"/>
+   </units>
+   <units name="mL_per_L_per_minute">
+      <unit units="litre" prefix="milli"/>
+      <unit units="litre" exponent="-1"/>
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units name="mL_per_minute_per_mmHg">
+      <unit units="litre" prefix="milli"/>
+      <unit units="minute" exponent="-1"/>
+      <unit units="mmHg" exponent="-1"/>
+   </units>
+   <units name="L_mL_per_minute_per_mmHg">
+      <unit units="litre"/>
+      <unit units="litre" prefix="milli"/>
+      <unit units="minute" exponent="-1"/>
+      <unit units="mmHg" exponent="-1"/>
+   </units>
+   <units name="L_per_mL">
+      <unit units="litre" prefix="milli" exponent="-1"/>
+      <unit units="litre"/>
+   </units>
+   <units name="mL_per_minute">
+      <unit units="mL"/>
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units name="L_per_minute_per_mmHg">
+      <unit units="litre"/>
+      <unit units="minute" exponent="-1"/>
+      <unit units="mmHg" exponent="-1"/>
+   </units>
+
+<!-- ===================================================================================================================== -->
+
+
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#capillary_dynamics_CellML1_0_model">
+			<rdf:value>
+			CAPILLARY DYNAMICS, TISSUE FLUID, AND TISSUE PROTEIN
+
+			This portion of the model calculates the movement of fluid and protein through the
+			capillary membrane.  It also calculates the volumes of fluid in the free fluid space 
+			of the interstitium and in the gel fluid space.  It calculates the pressures in both 
+			of these fluids as well as the so-called solid tissue pressure caused by the compression 
+			of solid elements against other portions of the interstitium.  In addition, the quantities 
+			of proteins and their concentrations in both the free fluid and the gel fluid are calculated. 
+			And, finally, the flow of both fluid and proteins in the lymph system are computed, as well 
+			as the overall body protein balance.
+			</rdf:value>
+		</rdf:Description>
+	</rdf:RDF>
+
+<!-- ========================================	ENVIRONMENT COMPONENT	============================================= -->
+   <component name="environment">
+      <variable name="time" units="minute" private_interface="none" public_interface="out"/>
+   </component>
+
+
+<!-- ========================================	CAPILLARY DYNAMICS TOP-LEVEL COMPONENT	============================================= -->
+	<component 	name="capillary_dynamics" 
+				cmeta:id="capillary_dynamics">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#capillary_dynamics">
+				<rdf:value>
+				Encapsulation grouping component containing all the components in the Capillary Dynamics Model. The inputs and 
+				outputs of the Capillary Dynamics Model must be passed by this component.
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+
+		<variable 	cmeta:id="environment_time"
+					name="time"	units="minute"	private_interface="out" public_interface="in"/>
+
+<!-- Inputs from components in other models -->
+		<variable name="VEC"	initial_value="14.8548"		units="litre" private_interface="out" public_interface="none"/>
+		<variable name="PPD"	initial_value="4.4805e-06"	units="gram_per_minute" private_interface="out" public_interface="none"/>
+		<variable name="RVS"	initial_value="2.77751"		units="mmHg_minute_per_L" private_interface="out" public_interface="none"/>
+		<variable name="DFP"	initial_value="-4.078e-07"	units="L_per_minute" private_interface="out" public_interface="none"/>
+		<variable name="VPF"	initial_value="0.0123238"	units="litre" private_interface="out" public_interface="none"/>
+		<variable name="BFN"	initial_value="2.79521"		units="L_per_minute" private_interface="out" public_interface="none"/>
+		<variable name="PVS"	initial_value="3.71612"		units="mmHg" private_interface="out" public_interface="none"/>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="capillary_dynamics" component_2="environment"/>
+		<map_variables variable_1="time" variable_2="time"/>
+	</connection>
+
+<!-- ========================================	CAPILLARY MEMBRANE DYNAMICS	============================================= -->
+	<component 	name="capillary_membrane_dynamics" 
+				cmeta:id="capillary_membrane_dynamics">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#capillary_membrane_dynamics">
+				<rdf:value>
+				Containment grouping component for "capillary_pressure" and 
+				"rate_of_fluid_out_of_capillaries".
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+	</component>
+
+<!-- ========================================	CAPILLARY PRESSURE		============================================= -->
+	<component 	name="capillary_pressure" 
+				cmeta:id="capillary_pressure">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#capillary_pressure">
+				<rdf:value>
+				CP1 and CP2:  
+				The capillary pressure (PC) is equal to the resistance to blood flow in the
+				small veins (RVS) times the blood flow in the small veins (BFN), times a constant 
+				to represent the additional normal flow through the muscles and kidneys, plus
+				the pressure in the large vein circulation.  The value of the capillary pressure (PC)
+				is assumed to be the same in all tissues of the body.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP1_and_CP2">
+				<rdf:value>
+				CP1 and CP2:  
+				The capillary pressure (PC) is equal to the resistance to blood flow in the
+				small veins (RVS) times the blood flow in the small veins (BFN), times a constant 
+				to represent the additional normal flow through the muscles and kidneys, plus
+				the pressure in the large vein circulation.  The value of the capillary pressure (PC)
+				is assumed to be the same in all tissues of the body.
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="RVS"	units="mmHg_minute_per_L" private_interface="none" public_interface="in"/>
+		<variable name="BFN"	units="L_per_minute" private_interface="none" public_interface="in"/>
+		<variable name="PVS"	units="mmHg" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable 	cmeta:id="capillary_pressure_PC"
+					name="PC"		units="mmHg" private_interface="none" public_interface="out"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="CP1_and_CP2">
+                <eq/>
+                <ci>PC</ci>
+				<apply>
+					<plus/>
+					<apply>
+						<times/>
+						<ci>RVS</ci>
+						<cn cellml:units="dimensionless">1.7</cn>
+						<ci>BFN</ci>
+					</apply>
+					<ci>PVS</ci>
+				</apply>
+            </apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="capillary_pressure" component_2="capillary_dynamics"/>
+		<map_variables variable_1="RVS" variable_2="RVS"/>
+		<map_variables variable_1="BFN" variable_2="BFN"/>
+		<map_variables variable_1="PVS" variable_2="PVS"/>
+	</connection>
+
+<!-- ========================================	RATE OF FLUID OUT OF CAPILLARIES	============================================= -->
+	<component 	name="rate_of_fluid_out_of_capillaries" 
+				cmeta:id="rate_of_fluid_out_of_capillaries">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#rate_of_fluid_out_of_capillaries">
+				<rdf:value>
+				CP3:  
+				The pressure gradient for filtration of fluid across the capillary membranes (PCGR) 
+				is equal to the capillary pressure (PC), plus the colloid osmotic pressure of the 
+				tissue gel (PTC), minus the plasma colloid osmotic pressure (PPC), minus the hydrostatic
+				pressure of the gel (PGH).
+
+				CP4:  
+				The rate of filtration of fluid out of the capillaries of the systemic circulation (CFILTR)
+				is equal to the pressure gradient across the capillary membranes (PCGR) times the capillary
+				filtration coefficient (CFC).
+
+				CP5:  
+				The total rate of movement of fluid out of all the systemic capillaries of the body (VTC) is
+				equal to the rate of filtration from the systemic capillaries (CFILTR) plus the rate of 
+				leakage of whole plasma though leaky capillaries (VTCPL).
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP3_to_CP5">
+				<rdf:value>
+				CP3:  
+				The pressure gradient for filtration of fluid across the capillary membranes (PCGR) 
+				is equal to the capillary pressure (PC), plus the colloid osmotic pressure of the 
+				tissue gel (PTC), minus the plasma colloid osmotic pressure (PPC), minus the hydrostatic
+				pressure of the gel (PGH).
+
+				CP4:  
+				The rate of filtration of fluid out of the capillaries of the systemic circulation (CFILTR)
+				is equal to the pressure gradient across the capillary membranes (PCGR) times the capillary
+				filtration coefficient (CFC).
+
+				CP5:  
+				The total rate of movement of fluid out of all the systemic capillaries of the body (VTC) is
+				equal to the rate of filtration from the systemic capillaries (CFILTR) plus the rate of 
+				leakage of whole plasma though leaky capillaries (VTCPL).
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="PC"	units="mmHg" private_interface="none" public_interface="in"/>
+		<variable name="PGH"	units="mmHg" private_interface="none" public_interface="in"/>
+		<variable name="PTC"	units="mmHg" private_interface="none" public_interface="in"/>
+		<variable name="PPC"	units="mmHg" private_interface="none" public_interface="in"/>
+		<variable name="VTCPL"	units="L_per_minute" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable name="VTC" 	units="L_per_minute" private_interface="none" public_interface="out"/>
+
+<!-- Parameters from parameter_file -->
+		<variable name="CFC"	units="L_per_minute_per_mmHg" private_interface="none" public_interface="in"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="CP3_to_CP5">
+				<eq/>
+				<ci>VTC</ci>
+				<apply>
+					<plus/>
+					<apply>
+						<times/>
+						<apply>
+							<plus/>
+							<apply>
+								<minus/>
+								<apply>
+									<minus/>
+									<ci>PC</ci>
+									<ci>PPC</ci>
+								</apply>
+								<ci>PGH</ci>
+							</apply>
+							<ci>PTC</ci>
+						</apply>
+						<ci>CFC</ci>
+					</apply>
+					<ci>VTCPL</ci>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="rate_of_fluid_out_of_capillaries" component_2="capillary_pressure"/>
+		<map_variables variable_1="PC" variable_2="PC"/>
+	</connection>
+	<connection>
+		<map_components component_1="rate_of_fluid_out_of_capillaries" component_2="hydrostatic_pressure_of_tissue_gel"/>
+		<map_variables variable_1="PGH" variable_2="PGH"/>
+	</connection>
+	<connection>
+		<map_components component_1="rate_of_fluid_out_of_capillaries" component_2="total_osmotic_pressure_of_tissue_gel"/>
+		<map_variables variable_1="PTC" variable_2="PTC"/>
+	</connection>
+	<connection>
+		<map_components component_1="rate_of_fluid_out_of_capillaries" component_2="plasma_colloid_osmotic_pressure"/>
+		<map_variables variable_1="PPC" variable_2="PPC"/>
+	</connection>
+	<connection>
+		<map_components component_1="rate_of_fluid_out_of_capillaries" component_2="plasma_leakage"/>
+		<map_variables variable_1="VTCPL" variable_2="VTCPL"/>
+	</connection>
+
+<!-- PARAMETER CONNECTIONS -->
+	<connection>
+		<map_components component_1="rate_of_fluid_out_of_capillaries" component_2="parameter_values"/>
+		<map_variables variable_1="CFC" variable_2="CFC"/>
+	</connection>
+
+<!-- ========================================	PLASMA VOLUME AND PROTEIN	============================================= -->
+	<component 	name="plasma_volume_and_protein" 
+				cmeta:id="plasma_volume_and_protein">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#plasma_volume_and_protein">
+				<rdf:value>
+				Containment grouping component for "plasma_volume", "plasma_protein_concentration",
+				"protein_destruction_and_formation", "plasma_leakage", "protein_influx_into_interstitium",
+				"total_plasma_protein" and "plasma_colloid_osmotic_pressure".
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+	</component>
+
+<!-- ========================================	PLASMA VOLUME	============================================= -->
+	<component 	name="plasma_volume" 
+				cmeta:id="plasma_volume">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#plasma_volume">
+				<rdf:value>
+				CP10:  
+				The rate of change of plasma volume (VPD) is equal to the rate of inflow of 
+				fluid into the plasma by way of the lymph (VTL) minus the rate of loss of 
+				fluid from the systemic tissue capillaries (VTC), minus the rate of loss of 
+				fluid from the pulmonary capillaries (DFP), and plus any rate of transfusion 
+				of plasma into the circulation.
+
+				CP11:  
+				The plasma volume (VP) is determined by integrating the rate of change of the 
+				plasma volume (VPD) with respect to time.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP10">
+				<rdf:value>
+				CP10:  
+				The rate of change of plasma volume (VPD) is equal to the rate of inflow of 
+				fluid into the plasma by way of the lymph (VTL) minus the rate of loss of 
+				fluid from the systemic tissue capillaries (VTC), minus the rate of loss of 
+				fluid from the pulmonary capillaries (DFP), and plus any rate of transfusion 
+				of plasma into the circulation.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP11">
+				<rdf:value>
+				CP11:  
+				The plasma volume (VP) is determined by integrating the rate of change of the 
+				plasma volume (VPD) with respect to time.
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="DFP"	units="L_per_minute" private_interface="none" public_interface="in"/>
+		<variable name="VTC"	units="L_per_minute" private_interface="none" public_interface="in"/>
+		<variable name="VTL"	units="L_per_minute" private_interface="none" public_interface="in"/>
+		<variable name="time"	units="minute" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable 	cmeta:id="plasma_volume_VP"
+					name="VP" 	initial_value="3.00449"	units="litre" private_interface="none" public_interface="out"/>
+
+<!-- Parameters from parameter_file -->
+		<variable name="TRPL"	units="L_per_minute" private_interface="none" public_interface="in"/>
+
+<!-- Internal variables -->
+		<variable name="VPD"	units="L_per_minute" private_interface="none" public_interface="none"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="CP10">
+				<eq/>
+				<ci>VPD</ci>
+				<apply>
+					<plus/>
+					<apply>
+						<minus/>
+						<apply>
+							<minus/>
+							<ci>VTL</ci>
+							<ci>VTC</ci>
+						</apply>
+						<ci>DFP</ci>
+					</apply>
+					<ci>TRPL</ci>
+				</apply>
+			</apply>
+			<apply id="CP11">
+				<eq/>
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>VP</ci>
+				</apply>
+				<ci>VPD</ci>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="plasma_volume" component_2="capillary_dynamics"/>
+		<map_variables variable_1="DFP" variable_2="DFP"/>
+		<map_variables variable_1="time" variable_2="time"/>
+	</connection>
+	<connection>
+		<map_components component_1="plasma_volume" component_2="rate_of_fluid_out_of_capillaries"/>
+		<map_variables variable_1="VTC" variable_2="VTC"/>
+	</connection>
+	<connection>
+		<map_components component_1="plasma_volume" component_2="lymph_flow"/>
+		<map_variables variable_1="VTL" variable_2="VTL"/>
+	</connection>
+
+<!-- PARAMETER CONNECTIONS -->
+	<connection>
+		<map_components component_1="plasma_volume" component_2="parameter_values"/>
+		<map_variables variable_1="TRPL" variable_2="TRPL"/>
+	</connection>
+
+<!-- ========================================	PLASMA PROTEIN CONCENTRATION	============================================= -->
+	<component 	name="plasma_protein_concentration" 
+				cmeta:id="plasma_protein_concentration">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#plasma_protein_concentration">
+				<rdf:value>
+				CP35:  
+				The concentration of protein in the plasma (CPP) is equal to the total quantity 
+				of protein in the plasma (RPR) divided by the plasma volume (VP).
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP35">
+				<rdf:value>
+				CP35:  
+				The concentration of protein in the plasma (CPP) is equal to the total quantity 
+				of protein in the plasma (RPR) divided by the plasma volume (VP).
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="PRP"	units="gram" private_interface="none" public_interface="in"/>
+		<variable name="VP"	units="litre" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable 	cmeta:id="plasma_protein_concentration_CPP"
+					name="CPP" 	units="gram_per_L" private_interface="none" public_interface="out"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="CP35">
+				<eq/>
+				<ci>CPP</ci>
+				<apply>
+					<divide/>
+					<ci>PRP</ci>
+					<ci>VP</ci>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="plasma_protein_concentration" component_2="total_plasma_protein"/>
+		<map_variables variable_1="PRP" variable_2="PRP"/>
+	</connection>
+	<connection>
+		<map_components component_1="plasma_protein_concentration" component_2="plasma_volume"/>
+		<map_variables variable_1="VP" variable_2="VP"/>
+	</connection>
+
+<!-- ========================================	PROTEIN DESTRUCTION AND FORMATION	============================================= -->
+	<component 	name="protein_destruction_and_formation" 
+				cmeta:id="protein_destruction_and_formation">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#protein_destruction_and_formation">
+				<rdf:value>
+				CP37 and CP38:  
+				A factor related to the rate of destruction of protein by the liver (CPPD) is 
+				equal to plasma protein concentration CPP) minus a critical protein limiting value (CPR). 
+				Block CP38 limits the rate of destruction of protein by the liver to a lower limit of zero.
+
+				CP39 and CP40:  
+				Curve-fitting blocks to calculate the rate of destruction of protein by the 
+				liver (LPPRDS) from the factor (CPPD) calculated in Block 37.  The curve-fitting 
+				constants are LPDE and LPK.
+
+				CP41:  
+				Net rate of protein exchange between the liver and the plasma (DLP) is equal to the 
+				rate of production of protein by the liver (LPPR) minus the rate of destruction of 
+				protein by the liver (LPPRDS).
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP37_and_CP38">
+				<rdf:value>
+				CP37 and CP38:  
+				A factor related to the rate of destruction of protein by the liver (CPPD) is 
+				equal to plasma protein concentration CPP) minus a critical protein limiting value (CPR). 
+				Block CP38 limits the rate of destruction of protein by the liver to a lower limit of zero.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP39_to_CP41">
+				<rdf:value>
+				CP39 and CP40:  
+				Curve-fitting blocks to calculate the rate of destruction of protein by the 
+				liver (LPPRDS) from the factor (CPPD) calculated in Block 37.  The curve-fitting 
+				constants are LPDE and LPK.
+
+				CP41:  
+				Net rate of protein exchange between the liver and the plasma (DLP) is equal to the 
+				rate of production of protein by the liver (LPPR) minus the rate of destruction of 
+				protein by the liver (LPPRDS).
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="CPP"	units="gram_per_L" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable name="DLP" 	units="gram_per_minute" private_interface="none" public_interface="out"/>
+
+<!-- Parameters from parameter_file -->
+		<variable name="CPR"	units="gram_per_L" private_interface="none" public_interface="in"/>
+		<variable name="LPPR"	units="gram_per_minute" private_interface="none" public_interface="in"/>
+		<variable name="LPDE"	units="dimensionless" private_interface="none" public_interface="in"/>
+		<variable name="LPK"	units="L_per_minute" private_interface="none" public_interface="in"/>
+
+<!-- Internal variables -->
+		<variable name="CPPD"	units="gram_per_L" private_interface="none" public_interface="none"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="CP37_and_CP38">
+				<eq/>
+				<ci>CPPD</ci>
+				<piecewise>
+					<piece>
+						<cn cellml:units="gram_per_L">0</cn>
+						<apply>
+							<lt/>
+							<apply>
+								<minus/>
+								<ci>CPP</ci>
+								<ci>CPR</ci>
+							</apply>
+							<cn cellml:units="gram_per_L">0</cn>
+						</apply>
+					</piece>
+					<otherwise>
+						<apply>
+							<minus/>
+							<ci>CPP</ci>
+							<ci>CPR</ci>
+						</apply>
+					</otherwise>
+				</piecewise>
+			</apply>
+			<apply id="CP39_to_CP41">
+				<eq/>
+				<ci>DLP</ci>
+				<apply>
+					<minus/>
+					<ci>LPPR</ci>
+					<apply>
+						<times/>
+						<apply>
+							<power/>
+							<ci>CPPD</ci>
+							<ci>LPDE</ci>
+						</apply>
+						<ci>LPK</ci>
+					</apply>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="protein_destruction_and_formation" component_2="plasma_protein_concentration"/>
+		<map_variables variable_1="CPP" variable_2="CPP"/>
+	</connection>
+
+<!-- PARAMETER CONNECTIONS -->
+	<connection>
+		<map_components component_1="protein_destruction_and_formation" component_2="parameter_values"/>
+		<map_variables variable_1="CPR" variable_2="CPR"/>
+		<map_variables variable_1="LPPR" variable_2="LPPR"/>
+		<map_variables variable_1="LPDE" variable_2="LPDE"/>
+		<map_variables variable_1="LPK" variable_2="LPK"/>
+	</connection>
+
+<!-- ========================================	PLASMA LEAKAGE	============================================= -->
+	<component 	name="plasma_leakage" 
+				cmeta:id="plasma_leakage">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#plasma_leakage">
+				<rdf:value>
+				CP25 and CP26:  
+				Calculation of a pressure gradient to cause whole plasma leakage through the 
+				capillary membranes (PRCD), calculated by adding the capillary pressure (PC) and
+				subtracting a critical capillary pressure (PCR) below which no whole plasma will leak.
+				Block CP26 limits the rate of plasma leakage (PRCD) to a lower level of zero.
+
+				CP27 and CP28:  
+				The rate of leakage of whole plasma through the capillary membrane (VTCPL) is equal 
+				to the pressure gradient for leakage of plasma (PRCD) times a constant (CPK) and this 
+				product raised to a power (PCE).
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP25_and_CP26">
+				<rdf:value>
+				CP25 and CP26:  
+				Calculation of a pressure gradient to cause whole plasma leakage through the 
+				capillary membranes (PRCD), calculated by adding the capillary pressure (PC) and
+				subtracting a critical capillary pressure (PCR) below which no whole plasma will leak.
+				Block CP26 limits the rate of plasma leakage (PRCD) to a lower level of zero.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP27_and_CP28">
+				<rdf:value>
+				CP27 and CP28:  
+				The rate of leakage of whole plasma through the capillary membrane (VTCPL) is equal 
+				to the pressure gradient for leakage of plasma (PRCD) times a constant (CPK) and this 
+				product raised to a power (PCE).
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="PC"	units="mmHg" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable name="VTCPL" 	units="L_per_minute" private_interface="none" public_interface="out"/>
+
+<!-- Parameters from parameter_file -->
+		<variable name="PCR"	units="mmHg" private_interface="none" public_interface="in"/>
+		<variable name="CPK"	units="L_per_minute_per_mmHg" private_interface="none" public_interface="in"/>
+		<variable name="PCE"	units="dimensionless" private_interface="none" public_interface="in"/>
+
+<!-- Internal variables -->
+		<variable name="PRCD"	units="mmHg" private_interface="none" public_interface="none"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="CP25_and_CP26">
+				<eq/>
+				<ci>PRCD</ci>
+				<piecewise>
+					<piece>
+						<cn cellml:units="mmHg">0</cn>
+						<apply>
+							<lt/>
+							<apply>
+								<minus/>
+								<ci>PC</ci>
+								<ci>PCR</ci>
+							</apply>
+							<cn cellml:units="mmHg">0</cn>
+						</apply>
+					</piece>
+					<otherwise>
+						<apply>
+							<minus/>
+							<ci>PC</ci>
+							<ci>PCR</ci>
+						</apply>
+					</otherwise>
+				</piecewise>
+			</apply>
+			<apply id="CP27_and_CP28">
+				<eq/>
+				<ci>VTCPL</ci>
+				<apply>
+					<power/>
+					<apply>
+						<times/>
+						<ci>PRCD</ci>
+						<ci>CPK</ci>
+					</apply>
+					<ci>PCE</ci>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="plasma_leakage" component_2="capillary_pressure"/>
+		<map_variables variable_1="PC" variable_2="PC"/>
+	</connection>
+
+<!-- PARAMETER CONNECTIONS -->
+	<connection>
+		<map_components component_1="plasma_leakage" component_2="parameter_values"/>
+		<map_variables variable_1="PCR" variable_2="PCR"/>
+		<map_variables variable_1="CPK" variable_2="CPK"/>
+		<map_variables variable_1="PCE" variable_2="PCE"/>
+	</connection>
+
+<!-- ========================================	PROTEIN INFLUX INTO INTERSTITIUM	============================================= -->
+	<component 	name="protein_influx_into_interstitium" 
+				cmeta:id="protein_influx_into_interstitium">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#protein_influx_into_interstitium">
+				<rdf:value>
+				CP29:  
+				Rate of leakage of plasma protein in the leaking whole plasma into the interstitium 
+				from the circulating plasma (TVCPL) equals the volume of plasma leaking (VTCPL) 
+				times the concentration of protein in the plasma (CPP).
+
+				CP30 and CP31:  
+				The rate of diffusion of protein through the capillary pores (PLPRDF) is equal 
+				to the difference between plasma concentration of protein (CPP) minus the concentration 
+				of protein in the interstitial free fluid (CPI) times a constant in Block CP31.
+
+				CP32:  
+				Rate of influx of protein into the interstitium from the plasma in the capillaries (DPC)
+				is equal to the rate of protein leaking in the whole plasma (VTCPL) plus the rate of 
+				diffusion of protein through the capillary pores (PLPRDF).
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP29_to_CP32">
+				<rdf:value>
+				CP29:  
+				Rate of leakage of plasma protein in the leaking whole plasma into the interstitium 
+				from the circulating plasma (TVCPL) equals the volume of plasma leaking (VTCPL) 
+				times the concentration of protein in the plasma (CPP).
+
+				CP30 and CP31:  
+				The rate of diffusion of protein through the capillary pores (PLPRDF) is equal 
+				to the difference between plasma concentration of protein (CPP) minus the concentration 
+				of protein in the interstitial free fluid (CPI) times a constant in Block CP31.
+
+				CP32:  
+				Rate of influx of protein into the interstitium from the plasma in the capillaries (DPC)
+				is equal to the rate of protein leaking in the whole plasma (VTCPL) plus the rate of 
+				diffusion of protein through the capillary pores (PLPRDF).
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="VTCPL"	units="L_per_minute" private_interface="none" public_interface="in"/>
+		<variable name="CPP"	units="gram_per_L" private_interface="none" public_interface="in"/>
+		<variable name="CPI"	units="gram_per_L" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable name="DPC" 	units="gram_per_minute" private_interface="none" public_interface="out"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="CP29_to_CP32">
+				<eq/>
+				<ci>DPC</ci>
+				<apply>
+					<plus/>
+					<apply>
+						<times/>
+						<ci>VTCPL</ci>
+						<ci>CPP</ci>
+					</apply>
+					<apply>
+						<times/>
+						<apply>
+							<minus/>
+							<ci>CPP</ci>
+							<ci>CPI</ci>
+						</apply>
+						<cn cellml:units="L_per_minute">0.00104</cn>
+					</apply>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="protein_influx_into_interstitium" component_2="plasma_leakage"/>
+		<map_variables variable_1="VTCPL" variable_2="VTCPL"/>
+	</connection>
+	<connection>
+		<map_components component_1="protein_influx_into_interstitium" component_2="plasma_protein_concentration"/>
+		<map_variables variable_1="CPP" variable_2="CPP"/>
+	</connection>
+	<connection>
+		<map_components component_1="protein_influx_into_interstitium" component_2="interstitial_protein_concentration"/>
+		<map_variables variable_1="CPI" variable_2="CPI"/>
+	</connection>
+
+<!-- ========================================	TOTAL PLASMA PROTEIN	============================================= -->
+	<component 	name="total_plasma_protein" 
+				cmeta:id="total_plasma_protein">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#total_plasma_protein">
+				<rdf:value>
+				CP33:  The rate of change of the quantity of protein in the plasma (DPP) 
+				is equal to the net rate of formation of protein by the liver (DLP), plus 
+				the rate of return of protein to the circulation in the lymph (DPL), minus 
+				the loss of protein from the circulation into the systemic interstitium (DPC), 
+				minus the rate of loss of protein through the pulmonary capillary membranes (PPD).
+
+				CP34:  
+				The total quantity of protein in the plasma (PRP) is determined by integrating 
+				the rate of change of the protein in the plasma (DPP) with respect to time.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP33">
+				<rdf:value>
+				CP33:  The rate of change of the quantity of protein in the plasma (DPP) 
+				is equal to the net rate of formation of protein by the liver (DLP), plus 
+				the rate of return of protein to the circulation in the lymph (DPL), minus 
+				the loss of protein from the circulation into the systemic interstitium (DPC), 
+				minus the rate of loss of protein through the pulmonary capillary membranes (PPD).
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP34">
+				<rdf:value>
+				CP34:  
+				The total quantity of protein in the plasma (PRP) is determined by integrating 
+				the rate of change of the protein in the plasma (DPP) with respect to time.
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="DPC"	units="gram_per_minute" private_interface="none" public_interface="in"/>
+		<variable name="PPD"	units="gram_per_minute" private_interface="none" public_interface="in"/>
+		<variable name="DPL"	units="gram_per_minute" private_interface="none" public_interface="in"/>
+		<variable name="DLP"	units="gram_per_minute" private_interface="none" public_interface="in"/>
+		<variable name="time"	units="minute" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable name="PRP" 	initial_value="216.243"	units="gram" private_interface="none" public_interface="out"/>
+
+<!-- Parameters from parameter_file -->
+		<variable name="TRPL"	units="L_per_minute" private_interface="none" public_interface="in"/>
+
+<!-- Internal variables -->
+		<variable name="DPP"	units="gram_per_minute" private_interface="none" public_interface="none"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="CP33">
+				<eq/>
+				<ci>DPP</ci>
+				<apply>
+					<plus/>
+					<apply>
+						<minus/>
+						<apply>
+							<minus/>
+							<apply>
+								<plus/>
+								<ci>DLP</ci>
+								<ci>DPL</ci>
+							</apply>
+							<ci>DPC</ci>
+						</apply>
+						<ci>PPD</ci>
+					</apply>
+					<apply>
+						<times/>
+						<ci>TRPL</ci>
+						<cn cellml:units="gram_per_L">72</cn>
+					</apply>
+				</apply>
+			</apply>
+			<apply id="CP34">
+				<eq/>
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>PRP</ci>
+				</apply>
+				<ci>DPP</ci>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="total_plasma_protein" component_2="protein_influx_into_interstitium"/>
+		<map_variables variable_1="DPC" variable_2="DPC"/>
+	</connection>
+	<connection>
+		<map_components component_1="total_plasma_protein" component_2="lymph_protein_flow"/>
+		<map_variables variable_1="DPL" variable_2="DPL"/>
+	</connection>
+	<connection>
+		<map_components component_1="total_plasma_protein" component_2="protein_destruction_and_formation"/>
+		<map_variables variable_1="DLP" variable_2="DLP"/>
+	</connection>
+	<connection>
+		<map_components component_1="total_plasma_protein" component_2="capillary_dynamics"/>
+		<map_variables variable_1="PPD" variable_2="PPD"/>
+		<map_variables variable_1="time" variable_2="time"/>
+	</connection>
+
+<!-- PARAMETER CONNECTIONS -->
+	<connection>
+		<map_components component_1="total_plasma_protein" component_2="parameter_values"/>
+		<map_variables variable_1="TRPL" variable_2="TRPL"/>
+	</connection>
+
+<!-- ========================================	PLASMA COLLOID OSMOTIC PRESSURE		============================================= -->
+	<component 	name="plasma_colloid_osmotic_pressure" 
+				cmeta:id="plasma_colloid_osmotic_pressure">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#plasma_colloid_osmotic_pressure">
+				<rdf:value>
+				CP36:  
+				The plasma colloid osmotic pressure (PPC) is calculated in this block from 
+				the concentration of protein in the plasma (CPP).
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP36">
+				<rdf:value>
+				CP36:  
+				The plasma colloid osmotic pressure (PPC) is calculated in this block from 
+				the concentration of protein in the plasma (CPP).
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="CPP"	units="gram_per_L" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable 	cmeta:id="plasma_colloid_osmotic_pressure_PPC"
+					name="PPC" 	units="mmHg" private_interface="none" public_interface="out"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="CP36">
+				<eq/>
+				<ci>PPC</ci>
+				<apply>
+					<plus/>
+					<apply>
+						<times/>
+						<cn cellml:units="L_mmHg_per_gram">0.28</cn>
+						<ci>CPP</ci>
+					</apply>
+					<apply>
+						<times/>
+						<cn cellml:units="L2_mmHg_per_gram2">0.0019</cn>
+						<apply>
+							<power/>
+							<ci>CPP</ci>
+							<cn cellml:units="dimensionless">2</cn>
+						</apply>
+					</apply>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="plasma_colloid_osmotic_pressure" component_2="plasma_protein_concentration"/>
+		<map_variables variable_1="CPP" variable_2="CPP"/>
+	</connection>
+
+<!-- ========================================	SYSTEMIC TISSUE FLUID VOLUME AND PROTEIN	============================================= -->
+	<component 	name="systemic_tissue_fluid_volume_and_protein" 
+				cmeta:id="systemic_tissue_fluid_volume_and_protein">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#systemic_tissue_fluid_volume_and_protein">
+				<rdf:value>
+				Containment grouping component for "total_systemic_fluid_volume",
+				"interstitial_fluid_volume", "total_interstitial_protein",
+				"interstitial_protein_concentration", "interstitial_colloid_osmotic_pressure"
+				and "lymph_protein_flow".
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+	</component>
+
+<!-- ========================================	TOTAL SYSTEMIC FLUID VOLUME		============================================= -->
+	<component 	name="total_systemic_fluid_volume" 
+				cmeta:id="total_systemic_fluid_volume">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#total_systemic_fluid_volume">
+				<rdf:value>
+				CP6:  
+				The total fluid volume in the systemic circulation portion of the body (VTS) 
+				is equal to the total extracellular fluid volume (VEC) minus plasma volume (VP) 
+				and minus pulmonary extracellular fluid volume (VPF).
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP6">
+				<rdf:value>
+				CP6:  
+				The total fluid volume in the systemic circulation portion of the body (VTS) 
+				is equal to the total extracellular fluid volume (VEC) minus plasma volume (VP) 
+				and minus pulmonary extracellular fluid volume (VPF).
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="VEC"	units="litre" private_interface="none" public_interface="in"/>
+		<variable name="VP"	units="litre" private_interface="none" public_interface="in"/>
+		<variable name="VPF"	units="litre" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable name="VTS" 	units="litre" private_interface="none" public_interface="out"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="CP6">
+				<eq/>
+				<ci>VTS</ci>
+				<apply>
+					<minus/>
+					<apply>
+						<minus/>
+						<ci>VEC</ci>
+						<ci>VP</ci>
+					</apply>
+					<ci>VPF</ci>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="total_systemic_fluid_volume" component_2="capillary_dynamics"/>
+		<map_variables variable_1="VEC" variable_2="VEC"/>
+		<map_variables variable_1="VPF" variable_2="VPF"/>
+	</connection>
+	<connection>
+		<map_components component_1="total_systemic_fluid_volume" component_2="plasma_volume"/>
+		<map_variables variable_1="VP" variable_2="VP"/>
+	</connection>
+
+<!-- ========================================	INTERSTITIAL FLUID VOLUME	============================================= -->
+	<component 	name="interstitial_fluid_volume" 
+				cmeta:id="interstitial_fluid_volume">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#interstitial_fluid_volume">
+				<rdf:value>
+				CP7, CP7A, CP7B, CP7C, CP7D, and CP7E:  
+				Calculation of the effect of tissue space stress relaxation on volume of fluid 
+				in the interstitial space (VTS1) after higher or lower than normal volumes
+				(VTS greater or lower than 12) have existed in the tissue spaces for prolonged 
+				periods of time.  The sensitivity control for the extent of tissue space stress
+				relaxation is TSSLML, and the reciprocal of the time constant of the effect 
+				is TSSLTC.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP7_to_CP7D">
+				<rdf:value>
+				CP7, CP7A, CP7B, CP7C, CP7D, and CP7E:  
+				Calculation of the effect of tissue space stress relaxation on volume of fluid 
+				in the interstitial space (VTS1) after higher or lower than normal volumes
+				(VTS greater or lower than 12) have existed in the tissue spaces for prolonged 
+				periods of time.  The sensitivity control for the extent of tissue space stress
+				relaxation is TSSLML, and the reciprocal of the time constant of the effect 
+				is TSSLTC.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP7E">
+				<rdf:value>
+				CP7, CP7A, CP7B, CP7C, CP7D, and CP7E:  
+				Calculation of the effect of tissue space stress relaxation on volume of fluid 
+				in the interstitial space (VTS1) after higher or lower than normal volumes
+				(VTS greater or lower than 12) have existed in the tissue spaces for prolonged 
+				periods of time.  The sensitivity control for the extent of tissue space stress
+				relaxation is TSSLML, and the reciprocal of the time constant of the effect 
+				is TSSLTC.
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="VTS"	units="litre" private_interface="none" public_interface="in"/>
+		<variable name="time"	units="minute" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable name="VTS1" 	units="litre" private_interface="none" public_interface="out"/>
+
+<!-- Parameters from parameter_file -->
+		<variable name="TSSLML"	units="dimensionless" private_interface="none" public_interface="in"/>
+		<variable name="TSSLTC"	units="per_minute" private_interface="none" public_interface="in"/>
+
+<!-- Internal variables -->
+		<variable name="VTS2"	initial_value="0.0"	units="litre" private_interface="none" public_interface="none"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="CP7_to_CP7D">
+				<eq/>
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>VTS2</ci>
+				</apply>
+				<apply>
+					<times/>
+					<apply>
+						<minus/>
+						<apply>
+							<times/>
+							<apply>
+								<minus/>
+								<ci>VTS</ci>
+								<cn cellml:units="litre">12</cn>
+							</apply>
+							<ci>TSSLML</ci>
+						</apply>
+						<ci>VTS2</ci>
+					</apply>
+					<ci>TSSLTC</ci>
+				</apply>
+			</apply>
+			<apply id="CP7E">
+				<eq/>
+				<ci>VTS1</ci>
+				<apply>
+					<minus/>
+					<ci>VTS</ci>
+					<ci>VTS2</ci>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="interstitial_fluid_volume" component_2="total_systemic_fluid_volume"/>
+		<map_variables variable_1="VTS" variable_2="VTS"/>
+	</connection>
+	<connection>
+		<map_components component_1="interstitial_fluid_volume" component_2="capillary_dynamics"/>
+		<map_variables variable_1="time" variable_2="time"/>
+	</connection>
+
+<!-- PARAMETER CONNECTIONS -->
+	<connection>
+		<map_components component_1="interstitial_fluid_volume" component_2="parameter_values"/>
+		<map_variables variable_1="TSSLML" variable_2="TSSLML"/>
+		<map_variables variable_1="TSSLTC" variable_2="TSSLTC"/>
+	</connection>
+
+<!-- ========================================	TOTAL INTERSTITIAL PROTEIN	============================================= -->
+	<component 	name="total_interstitial_protein" 
+				cmeta:id="total_interstitial_protein">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#total_interstitial_protein">
+				<rdf:value>
+				CP42:  
+				The rate of change of protein in the systemic interstitium (DPI) is equal to 
+				the rate of leakage from the plasma of protein through the systemic capillary
+				membranes (DPC) minus the rate of return of the protein from the systemic 
+				interstitium by way of the lymphatics (DPL).
+
+				CP43:  
+				The total tissue protein (TSP) is calculated by integrating the rate of 
+				change of protein in the interstitium (DPI) with respect to time.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP42">
+				<rdf:value>
+				CP42:  
+				The rate of change of protein in the systemic interstitium (DPI) is equal to 
+				the rate of leakage from the plasma of protein through the systemic capillary
+				membranes (DPC) minus the rate of return of the protein from the systemic 
+				interstitium by way of the lymphatics (DPL).
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP43">
+				<rdf:value>
+				CP43:  
+				The total tissue protein (TSP) is calculated by integrating the rate of 
+				change of protein in the interstitium (DPI) with respect to time.
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="DPC"	units="gram_per_minute" private_interface="none" public_interface="in"/>
+		<variable name="DPL"	units="gram_per_minute" private_interface="none" public_interface="in"/>
+		<variable name="time"	units="minute" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable name="TSP" 	initial_value="279.945"	units="gram" private_interface="none" public_interface="out"/>
+
+<!-- Internal variables -->
+		<variable name="DPI"	units="gram_per_minute" private_interface="none" public_interface="none"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="CP42">
+				<eq/>
+				<ci>DPI</ci>
+				<apply>
+					<minus/>
+					<ci>DPC</ci>
+					<ci>DPL</ci>
+				</apply>
+			</apply>
+			<apply id="CP43">
+				<eq/>
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>TSP</ci>
+				</apply>
+				<ci>DPI</ci>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="total_interstitial_protein" component_2="lymph_protein_flow"/>
+		<map_variables variable_1="DPL" variable_2="DPL"/>
+	</connection>
+	<connection>
+		<map_components component_1="total_interstitial_protein" component_2="protein_influx_into_interstitium"/>
+		<map_variables variable_1="DPC" variable_2="DPC"/>
+	</connection>
+	<connection>
+		<map_components component_1="total_interstitial_protein" component_2="capillary_dynamics"/>
+		<map_variables variable_1="time" variable_2="time"/>
+	</connection>
+
+<!-- ========================================	INTERSTITIAL PROTEIN CONCENTRATION		============================================= -->
+	<component 	name="interstitial_protein_concentration" 
+				cmeta:id="interstitial_protein_concentration">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#interstitial_protein_concentration">
+				<rdf:value>
+				CP44:  
+				The concentration of protein in the interstitium (CPI) is equal to the total 
+				quantity of protein in the interstitium (TSP) divided by the total volume of 
+				fluid in the systemic interstitium (VTS).
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP44">
+				<rdf:value>
+				CP44:  
+				The concentration of protein in the interstitium (CPI) is equal to the total 
+				quantity of protein in the interstitium (TSP) divided by the total volume of 
+				fluid in the systemic interstitium (VTS).
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="TSP"	units="gram" private_interface="none" public_interface="in"/>
+		<variable name="VTS"	units="litre" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable name="CPI" 	units="gram_per_L" private_interface="none" public_interface="out"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="CP44">
+				<eq/>
+				<ci>CPI</ci>
+				<apply>
+					<divide/>
+					<ci>TSP</ci>
+					<ci>VTS</ci>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="interstitial_protein_concentration" component_2="total_interstitial_protein"/>
+		<map_variables variable_1="TSP" variable_2="TSP"/>
+	</connection>
+	<connection>
+		<map_components component_1="interstitial_protein_concentration" component_2="total_systemic_fluid_volume"/>
+		<map_variables variable_1="VTS" variable_2="VTS"/>
+	</connection>
+
+<!-- ========================================	INTERSTITIAL COLLOID OSMOTIC PRESSURE	============================================= -->
+	<component 	name="interstitial_colloid_osmotic_pressure" 
+				cmeta:id="interstitial_colloid_osmotic_pressure">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#interstitial_colloid_osmotic_pressure">
+				<rdf:value>
+				CP45:  
+				The colloid osmotic pressure of the free fluid in the interstitium (PTCPR) is 
+				calculated in this block from the concentration of protein in the interstitium (CPI).
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP45">
+				<rdf:value>
+				CP45:  
+				The colloid osmotic pressure of the free fluid in the interstitium (PTCPR) is 
+				calculated in this block from the concentration of protein in the interstitium (CPI).
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="CPI"	units="gram_per_L" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable name="PTCPR" 	units="mmHg" private_interface="none" public_interface="out"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="CP45">
+				<eq/>
+				<ci>PTCPR</ci>
+				<apply>
+					<plus/>
+					<apply>
+						<times/>
+						<cn cellml:units="L_mmHg_per_gram">0.28</cn>
+						<ci>CPI</ci>
+					</apply>
+					<apply>
+						<times/>
+						<cn cellml:units="L2_mmHg_per_gram2">0.0019</cn>
+						<apply>
+							<power/>
+							<ci>CPI</ci>
+							<cn cellml:units="dimensionless">2</cn>
+						</apply>
+					</apply>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="interstitial_colloid_osmotic_pressure" component_2="interstitial_protein_concentration"/>
+		<map_variables variable_1="CPI" variable_2="CPI"/>
+	</connection>
+
+<!-- ========================================	LYMPH PROTEIN FLOW	============================================= -->
+	<component 	name="lymph_protein_flow" 
+				cmeta:id="lymph_protein_flow">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#lymph_protein_flow">
+				<rdf:value>
+				CP46:  
+				The rate of return of protein to the circulation by way of the lymph (DPL) is 
+				equal to the concentration of protein in the systemic interstitium (CPI) times 
+				the rate of lymph flow from the interstitium (VTL).
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP46">
+				<rdf:value>
+				CP46:  
+				The rate of return of protein to the circulation by way of the lymph (DPL) is 
+				equal to the concentration of protein in the systemic interstitium (CPI) times 
+				the rate of lymph flow from the interstitium (VTL).
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="CPI"	units="gram_per_L" private_interface="none" public_interface="in"/>
+		<variable name="VTL"	units="L_per_minute" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable name="DPL" 	units="gram_per_minute" private_interface="none" public_interface="out"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="CP46">
+				<eq/>
+				<ci>DPL</ci>
+				<apply>
+					<times/>
+					<ci>CPI</ci>
+					<ci>VTL</ci>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="lymph_protein_flow" component_2="interstitial_protein_concentration"/>
+		<map_variables variable_1="CPI" variable_2="CPI"/>
+	</connection>
+	<connection>
+		<map_components component_1="lymph_protein_flow" component_2="lymph_flow"/>
+		<map_variables variable_1="VTL" variable_2="VTL"/>
+	</connection>
+
+<!-- ========================================	TISSUE GEL AND FLUID, AND LYMPH FLOW	============================================= -->
+	<component 	name="tissue_gel_and_fluid_and_lymph_flow" 
+				cmeta:id="tissue_gel_and_fluid_and_lymph_flow">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#tissue_gel_and_fluid_and_lymph_flow">
+				<rdf:value>
+				Containment grouping component for "hydrostatic_pressure_of_tissue_gel",
+				"total_osmotic_pressure_of_tissue_gel", "total_tissue_pressure",
+				"interstial_free_fluid_pressure", "interstitial_solid_tissue_pressure",
+				"lymph_flow", "interstitial_gel_volume" and "interstitial_free_fluid_volume".
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+	</component>
+
+<!-- ========================================	HYDROSTATIC PRESSURE OF TISSUE GEL	============================================= -->
+	<component 	name="hydrostatic_pressure_of_tissue_gel" 
+				cmeta:id="hydrostatic_pressure_of_tissue_gel">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#hydrostatic_pressure_of_tissue_gel">
+				<rdf:value>
+				CP13 and CP14:  
+				Calculation of the concentration of hyaluronic acid in the interstitium (CHY) 
+				from the total quantity of hyaluronic acid in the interstitium (HYL) and the 
+				total volume of fluid in the interstitium (VTS).  The exponent CMPTSS describes 
+				the non-linearity of this effect.
+
+				CP15 and CP16:  
+				Calculation of the hydrostatic pressure in the tissue gel (PGH) from the 
+				concentration of hyaluronic acid in the interstitium (CHY) and the total 
+				tissue pressure (PTT).  (The hyaluronic acid acts as an elastic body that
+				expands, and, therefore, creates a negative pressure.)
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP13_and_CP14">
+				<rdf:value>
+				CP13 and CP14:  
+				Calculation of the concentration of hyaluronic acid in the interstitium (CHY) 
+				from the total quantity of hyaluronic acid in the interstitium (HYL) and the 
+				total volume of fluid in the interstitium (VTS).  The exponent CMPTSS describes 
+				the non-linearity of this effect.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP15_and_CP16">
+				<rdf:value>
+				CP15 and CP16:  
+				Calculation of the hydrostatic pressure in the tissue gel (PGH) from the 
+				concentration of hyaluronic acid in the interstitium (CHY) and the total 
+				tissue pressure (PTT).  (The hyaluronic acid acts as an elastic body that
+				expands, and, therefore, creates a negative pressure.)
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="VTS"	units="litre" private_interface="none" public_interface="in"/>
+		<variable name="PTT"	units="mmHg" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable name="CHY" 	units="gram_per_L" private_interface="none" public_interface="out"/>
+		<variable name="PGH" 	units="mmHg" private_interface="none" public_interface="out"/>
+
+<!-- Parameters from parameter_file -->
+		<variable name="HYL"	units="gram" private_interface="none" public_interface="in"/>
+		<variable name="CMPTSS"	units="dimensionless" private_interface="none" public_interface="in"/>
+		<variable name="PGHF"	units="L_mmHg_per_gram" private_interface="none" public_interface="in"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="CP13_and_CP14">
+				<eq/>
+				<ci>CHY</ci>
+				<apply>
+					<power/>
+					<apply>
+						<divide/>
+						<apply>
+							<divide/>
+							<ci>HYL</ci>
+							<ci>VTS</ci>
+						</apply>
+						<cn cellml:units="dimensionless">5</cn>
+					</apply>
+					<ci>CMPTSS</ci>
+				</apply>
+			</apply>
+			<apply id="CP15_and_CP16">
+				<eq/>
+				<ci>PGH</ci>
+				<apply>
+					<plus/>
+					<apply>
+						<times/>
+						<ci>CHY</ci>
+						<ci>PGHF</ci>
+					</apply>
+					<ci>PTT</ci>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="hydrostatic_pressure_of_tissue_gel" component_2="total_tissue_pressure"/>
+		<map_variables variable_1="PTT" variable_2="PTT"/>
+	</connection>
+	<connection>
+		<map_components component_1="hydrostatic_pressure_of_tissue_gel" component_2="total_systemic_fluid_volume"/>
+		<map_variables variable_1="VTS" variable_2="VTS"/>
+	</connection>
+
+<!-- PARAMETER CONNECTIONS -->
+	<connection>
+		<map_components component_1="hydrostatic_pressure_of_tissue_gel" component_2="parameter_values"/>
+		<map_variables variable_1="HYL" variable_2="HYL"/>
+		<map_variables variable_1="CMPTSS" variable_2="CMPTSS"/>
+		<map_variables variable_1="PGHF" variable_2="PGHF"/>
+	</connection>
+
+<!-- ========================================	TOTAL OSMOTIC PRESSURE OF TISSUE GEL	============================================= -->
+	<component 	name="total_osmotic_pressure_of_tissue_gel" 
+				cmeta:id="total_osmotic_pressure_of_tissue_gel">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#total_osmotic_pressure_of_tissue_gel">
+				<rdf:value>
+				CP17:  
+				The osmotic pressure caused by the hyaluronic acid in the gel (POSHYL) 
+				is equal to the concentration of hyaluronic acid in the gel (CHY) times 
+				a constant.
+
+				CP18:  
+				The total osmotic pressure of the tissue gel (PTC) is equal to the osmotic 
+				pressure caused by the hyaluronic acid in the gel (POSHYL) times the colloid 
+				osmotic pressure caused by the plasma protein in the free fluid of the 
+				interstitium (PTCPR) times a constant (GCOPF).
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP17">
+				<rdf:value>
+				CP17:  
+				The osmotic pressure caused by the hyaluronic acid in the gel (POSHYL) 
+				is equal to the concentration of hyaluronic acid in the gel (CHY) times 
+				a constant.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP18">
+				<rdf:value>
+				CP18:  
+				The total osmotic pressure of the tissue gel (PTC) is equal to the osmotic 
+				pressure caused by the hyaluronic acid in the gel (POSHYL) times the colloid 
+				osmotic pressure caused by the plasma protein in the free fluid of the 
+				interstitium (PTCPR) times a constant (GCOPF).
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="CHY"	units="gram_per_L" private_interface="none" public_interface="in"/>
+		<variable name="PTCPR"	units="mmHg" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable name="POSHYL" 	units="mmHg" private_interface="none" public_interface="out"/>
+		<variable name="PTC" 	units="mmHg" private_interface="none" public_interface="out"/>
+
+<!-- Parameters from parameter_file -->
+		<variable name="GCOPF"	units="per_mmHg" private_interface="none" public_interface="in"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="CP17">
+				<eq/>
+				<ci>POSHYL</ci>
+				<apply>
+					<times/>
+					<ci>CHY</ci>
+					<cn cellml:units="L_mmHg_per_gram">2</cn>
+				</apply>
+			</apply>
+			<apply id="CP18">
+				<eq/>
+				<ci>PTC</ci>
+				<apply>
+					<times/>
+					<ci>POSHYL</ci>
+					<ci>PTCPR</ci>
+					<ci>GCOPF</ci>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="total_osmotic_pressure_of_tissue_gel" component_2="hydrostatic_pressure_of_tissue_gel"/>
+		<map_variables variable_1="CHY" variable_2="CHY"/>
+	</connection>
+	<connection>
+		<map_components component_1="total_osmotic_pressure_of_tissue_gel" component_2="interstitial_colloid_osmotic_pressure"/>
+		<map_variables variable_1="PTCPR" variable_2="PTCPR"/>
+	</connection>
+
+<!-- PARAMETER CONNECTIONS -->
+	<connection>
+		<map_components component_1="total_osmotic_pressure_of_tissue_gel" component_2="parameter_values"/>
+		<map_variables variable_1="GCOPF" variable_2="GCOPF"/>
+	</connection>
+
+<!-- ========================================	TOTAL TISSUE PRESSURE	============================================= -->
+	<component 	name="total_tissue_pressure" 
+				cmeta:id="total_tissue_pressure">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#total_tissue_pressure">
+				<rdf:value>
+				CP12:  
+				Calculation of the total tissue pressure (PTT) as a function of the total 
+				interstitial fluid volume (VTS1).
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP12">
+				<rdf:value>
+				CP12:  
+				Calculation of the total tissue pressure (PTT) as a function of the total 
+				interstitial fluid volume (VTS1).
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="VTS1"	units="litre" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable name="PTT" 	units="mmHg" private_interface="none" public_interface="out"/>
+
+<!-- Parameters from parameter_file -->
+		<variable name="VTSF"	units="litre" private_interface="none" public_interface="in"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="CP12">
+				<eq/>
+				<ci>PTT</ci>
+				<apply>
+					<times/>
+					<apply>
+						<power/>
+						<apply>
+							<divide/>
+							<apply>
+								<minus/>
+								<ci>VTS1</ci>
+								<ci>VTSF</ci>
+							</apply>
+							<ci>VTSF</ci>
+						</apply>
+						<cn cellml:units="dimensionless">2</cn>
+					</apply>
+					<cn cellml:units="mmHg">1</cn>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="total_tissue_pressure" component_2="interstitial_fluid_volume"/>
+		<map_variables variable_1="VTS1" variable_2="VTS1"/>
+	</connection>
+
+<!-- PARAMETER CONNECTIONS -->
+	<connection>
+		<map_components component_1="total_tissue_pressure" component_2="parameter_values"/>
+		<map_variables variable_1="VTSF" variable_2="VTSF"/>
+	</connection>
+
+<!-- ========================================	INTERSTITIAL FREE FLUID PRESSURE	============================================= -->
+	<component 	name="interstial_free_fluid_pressure" 
+				cmeta:id="interstial_free_fluid_pressure">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#interstial_free_fluid_pressure">
+				<rdf:value>
+				CP19:  
+				The pressure in the free interstitial fluid (PIF) is equal to the hydrostatic 
+				pressure in the tissue gel (PGH) minus the colloid osmotic pressure of the 
+				hyaluronic acid in the tissue gel (POSHYL).
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP19">
+				<rdf:value>
+				CP19:  
+				The pressure in the free interstitial fluid (PIF) is equal to the hydrostatic 
+				pressure in the tissue gel (PGH) minus the colloid osmotic pressure of the 
+				hyaluronic acid in the tissue gel (POSHYL).
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="PGH"	units="mmHg" private_interface="none" public_interface="in"/>
+		<variable name="POSHYL"	units="mmHg" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable name="PIF" 	units="mmHg" private_interface="none" public_interface="out"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="CP19">
+				<eq/>
+				<ci>PIF</ci>
+				<apply>
+					<minus/>
+					<ci>PGH</ci>
+					<ci>POSHYL</ci>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="interstial_free_fluid_pressure" component_2="total_osmotic_pressure_of_tissue_gel"/>
+		<map_variables variable_1="POSHYL" variable_2="POSHYL"/>
+	</connection>
+	<connection>
+		<map_components component_1="interstial_free_fluid_pressure" component_2="hydrostatic_pressure_of_tissue_gel"/>
+		<map_variables variable_1="PGH" variable_2="PGH"/>
+	</connection>
+
+<!-- ========================================	INTERSTITIAL SOLID TISSUE PRESSURE	============================================= -->
+	<component 	name="interstitial_solid_tissue_pressure" 
+				cmeta:id="interstitial_solid_tissue_pressure">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#interstitial_solid_tissue_pressure">
+				<rdf:value>
+				CP20:  
+				The solid tissue pressure of the interstitium (PTS) is equal to the total 
+				tissue pressure (PTT) minus the pressure in the free fluid of the interstitium (PIF).
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP20">
+				<rdf:value>
+				CP20:  
+				The solid tissue pressure of the interstitium (PTS) is equal to the total 
+				tissue pressure (PTT) minus the pressure in the free fluid of the interstitium (PIF).
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="PIF"	units="mmHg" private_interface="none" public_interface="in"/>
+		<variable name="PTT"	units="mmHg" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable name="PTS" 	units="mmHg" private_interface="none" public_interface="out"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="CP20">
+				<eq/>
+				<ci>PTS</ci>
+				<apply>
+					<minus/>
+					<ci>PTT</ci>
+					<ci>PIF</ci>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="interstitial_solid_tissue_pressure" component_2="interstial_free_fluid_pressure"/>
+		<map_variables variable_1="PIF" variable_2="PIF"/>
+	</connection>
+	<connection>
+		<map_components component_1="interstitial_solid_tissue_pressure" component_2="total_tissue_pressure"/>
+		<map_variables variable_1="PTT" variable_2="PTT"/>
+	</connection>
+
+<!-- ========================================	LYMPH FLOW	============================================= -->
+	<component 	name="lymph_flow" 
+				cmeta:id="lymph_flow">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#lymph_flow">
+				<rdf:value>
+				CP21 and CP22:  
+				The pressure gradient that promotes lymph flow (PLD) is equal to a constant (PLDF)
+				that is determined by the pumping action of the lymphatics plus the interstitial 
+				free fluid pressure (PIF), minus the total tissue pressure (PTT).  Block CP22 
+				limits the upper level of this pressure gradient.
+
+				CP23 and CP24:  
+				The rate of lymph flow (VTL) is equal to the pressure gradient that causes 
+				lymph flow (PLD) times a constant representing lymphatic conductance.  
+				Block CP24 limits the lower level of lymph flow to zero.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP21">
+				<rdf:value>
+				CP21:  
+				The pressure gradient that promotes lymph flow (PLD) is equal to a constant (PLDF)
+				that is determined by the pumping action of the lymphatics plus the interstitial 
+				free fluid pressure (PIF), minus the total tissue pressure (PTT).
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP22">
+				<rdf:value>
+				CP22:  
+				Block CP22 limits the upper level of this pressure gradient.
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP23_and_CP24">
+				<rdf:value>
+]				CP23 and CP24:  
+				The rate of lymph flow (VTL) is equal to the pressure gradient that causes 
+				lymph flow (PLD) times a constant representing lymphatic conductance.  
+				Block CP24 limits the lower level of lymph flow to zero.
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="PIF"	units="mmHg" private_interface="none" public_interface="in"/>
+		<variable name="PTT"	units="mmHg" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable name="VTL" 	units="L_per_minute" private_interface="none" public_interface="out"/>
+
+<!-- Parameters from parameter_file -->
+		<variable name="PLDF"	units="mmHg" private_interface="none" public_interface="in"/>
+
+<!-- Internal variables -->
+		<variable name="PLD1"	units="mmHg" private_interface="none" public_interface="none"/>
+		<variable name="PLD"	units="mmHg" private_interface="none" public_interface="none"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="CP21">
+				<eq/>
+				<ci>PLD1</ci>
+				<apply>
+					<minus/>
+					<apply>
+						<plus/>
+						<ci>PIF</ci>
+						<ci>PLDF</ci>
+					</apply>
+					<ci>PTT</ci>
+				</apply>
+			</apply>
+			<apply id="CP22">
+				<eq/>
+				<ci>PLD</ci>
+				<piecewise>
+					<piece>
+						<cn cellml:units="mmHg">7</cn>
+						<apply>
+							<gt/>
+							<ci>PLD1</ci>
+							<cn cellml:units="mmHg">7</cn>
+						</apply>
+					</piece>
+					<otherwise>
+						<ci>PLD1</ci>
+					</otherwise>
+				</piecewise>
+			</apply>
+			<apply id="CP23_and_CP24">
+				<eq/>
+				<ci>VTL</ci>
+				<piecewise>
+					<piece>
+						<cn cellml:units="L_per_minute">0</cn>
+						<apply>
+							<lt/>
+							<ci>PLD</ci>
+							<cn cellml:units="mmHg">0</cn>
+						</apply>
+					</piece>
+					<otherwise>
+						<apply>
+							<times/>
+							<ci>PLD</ci>
+							<cn cellml:units="L_per_minute_per_mmHg">0.02</cn>
+						</apply>
+					</otherwise>
+				</piecewise>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="lymph_flow" component_2="interstial_free_fluid_pressure"/>
+		<map_variables variable_1="PIF" variable_2="PIF"/>
+	</connection>
+	<connection>
+		<map_components component_1="lymph_flow" component_2="total_tissue_pressure"/>
+		<map_variables variable_1="PTT" variable_2="PTT"/>
+	</connection>
+
+<!-- PARAMETER CONNECTIONS -->
+	<connection>
+		<map_components component_1="lymph_flow" component_2="parameter_values"/>
+		<map_variables variable_1="PLDF" variable_2="PLDF"/>
+	</connection>
+
+<!-- ========================================	INTERSTITIAL GEL VOLUME	============================================= -->
+	<component 	name="interstitial_gel_volume" 
+				cmeta:id="interstitial_gel_volume">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#interstitial_gel_volume">
+				<rdf:value>
+				CP8:  
+				This block gives a function curve that relates the volume of the tissue gel (VG) 
+				to the total interstitial fluid volume (VTS).
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP8">
+				<rdf:value>
+				CP8:  
+				This block gives a function curve that relates the volume of the tissue gel (VG) 
+				to the total interstitial fluid volume (VTS).
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="VTS"	units="litre" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable name="VG" 	units="litre" private_interface="none" public_interface="out"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="CP8">
+                <eq/>
+                <ci>VG</ci>
+                <piecewise>
+                    <piece>
+                        <cn cellml:units="litre">0</cn>
+                        <apply>
+                            <leq/>
+                            <ci>VTS</ci>
+                            <cn cellml:units="litre">0</cn>
+                        </apply>
+                    </piece>
+                    <piece>
+                        <apply>
+                            <plus/>
+                            <cn cellml:units="litre">0</cn>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <times/>
+                                    <apply>
+                                        <minus/>
+                                        <cn cellml:units="dimensionless">11.4</cn>
+                                        <cn cellml:units="dimensionless">0</cn>
+                                    </apply>
+                                    <apply>
+                                        <minus/>
+                                        <ci>VTS</ci>
+                                        <cn cellml:units="litre">0</cn>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <minus/>
+                                    <cn cellml:units="dimensionless">12</cn>
+                                    <cn cellml:units="dimensionless">0</cn>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <and/>
+                            <apply>
+                                <gt/>
+                                <ci>VTS</ci>
+                                <cn cellml:units="litre">0</cn>
+                            </apply>
+                            <apply>
+                                <leq/>
+                                <ci>VTS</ci>
+                                <cn cellml:units="litre">12</cn>
+                            </apply>
+                        </apply>
+                    </piece>
+                    <piece>
+                        <apply>
+                            <plus/>
+                            <cn cellml:units="litre">11.4</cn>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <times/>
+                                    <apply>
+                                        <minus/>
+                                        <cn cellml:units="dimensionless">14</cn>
+                                        <cn cellml:units="dimensionless">11.4</cn>
+                                    </apply>
+                                    <apply>
+                                        <minus/>
+                                        <ci>VTS</ci>
+                                        <cn cellml:units="litre">12</cn>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <minus/>
+                                    <cn cellml:units="dimensionless">15</cn>
+                                    <cn cellml:units="dimensionless">12</cn>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <and/>
+                            <apply>
+                                <gt/>
+                                <ci>VTS</ci>
+                                <cn cellml:units="litre">12</cn>
+                            </apply>
+                            <apply>
+                                <leq/>
+                                <ci>VTS</ci>
+                                <cn cellml:units="litre">15</cn>
+                            </apply>
+                        </apply>
+                    </piece>
+                    <piece>
+                        <apply>
+                            <plus/>
+                            <cn cellml:units="litre">14</cn>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <times/>
+                                    <apply>
+                                        <minus/>
+                                        <cn cellml:units="dimensionless">16</cn>
+                                        <cn cellml:units="dimensionless">14</cn>
+                                    </apply>
+                                    <apply>
+                                        <minus/>
+                                        <ci>VTS</ci>
+                                        <cn cellml:units="litre">15</cn>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <minus/>
+                                    <cn cellml:units="dimensionless">18</cn>
+                                    <cn cellml:units="dimensionless">15</cn>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <and/>
+                            <apply>
+                                <gt/>
+                                <ci>VTS</ci>
+                                <cn cellml:units="litre">15</cn>
+                            </apply>
+                            <apply>
+                                <leq/>
+                                <ci>VTS</ci>
+                                <cn cellml:units="litre">18</cn>
+                            </apply>
+                        </apply>
+                    </piece>
+                    <piece>
+                        <apply>
+                            <plus/>
+                            <cn cellml:units="litre">16</cn>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <times/>
+                                    <apply>
+                                        <minus/>
+                                        <cn cellml:units="dimensionless">17.3</cn>
+                                        <cn cellml:units="dimensionless">16</cn>
+                                    </apply>
+                                    <apply>
+                                        <minus/>
+                                        <ci>VTS</ci>
+                                        <cn cellml:units="litre">18</cn>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <minus/>
+                                    <cn cellml:units="dimensionless">21</cn>
+                                    <cn cellml:units="dimensionless">18</cn>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <and/>
+                            <apply>
+                                <gt/>
+                                <ci>VTS</ci>
+                                <cn cellml:units="litre">18</cn>
+                            </apply>
+                            <apply>
+                                <leq/>
+                                <ci>VTS</ci>
+                                <cn cellml:units="litre">21</cn>
+                            </apply>
+                        </apply>
+                    </piece>
+                    <piece>
+                        <apply>
+                            <plus/>
+                            <cn cellml:units="litre">17.3</cn>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <times/>
+                                    <apply>
+                                        <minus/>
+                                        <cn cellml:units="dimensionless">18</cn>
+                                        <cn cellml:units="dimensionless">17.3</cn>
+                                    </apply>
+                                    <apply>
+                                        <minus/>
+                                        <ci>VTS</ci>
+                                        <cn cellml:units="litre">21</cn>
+                                    </apply>
+                                </apply>
+                                <apply>
+                                    <minus/>
+                                    <cn cellml:units="dimensionless">24</cn>
+                                    <cn cellml:units="dimensionless">21</cn>
+                                </apply>
+                            </apply>
+                        </apply>
+                        <apply>
+                            <and/>
+                            <apply>
+                                <gt/>
+                                <ci>VTS</ci>
+                                <cn cellml:units="litre">21</cn>
+                            </apply>
+                            <apply>
+                                <leq/>
+                                <ci>VTS</ci>
+                                <cn cellml:units="litre">24</cn>
+                            </apply>
+                        </apply>
+                    </piece>
+                    <otherwise>
+                        <cn cellml:units="litre">18</cn>
+                    </otherwise>
+                </piecewise>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="interstitial_gel_volume" component_2="total_systemic_fluid_volume"/>
+		<map_variables variable_1="VTS" variable_2="VTS"/>
+	</connection>
+
+<!-- ========================================	INTERSTITIAL FREE FLUID VOLUME	============================================= -->
+	<component 	name="interstitial_free_fluid_volume" 
+				cmeta:id="interstitial_free_fluid_volume">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="#interstitial_free_fluid_volume">
+				<rdf:value>
+				CP9:  
+				The volume of free fluid in the interstitium (VIF) is equal to the total 
+				interstitial fluid volume (VTS) minus the volume of fluid in the tissue gel (VG).
+				</rdf:value>
+			</rdf:Description>
+			<rdf:Description rdf:about="#CP9">
+				<rdf:value>
+				CP9:  
+				The volume of free fluid in the interstitium (VIF) is equal to the total 
+				interstitial fluid volume (VTS) minus the volume of fluid in the tissue gel (VG).
+				</rdf:value>
+			</rdf:Description>
+		</rdf:RDF>
+		
+<!-- Inputs from other components -->
+		<variable name="VTS"	units="litre" private_interface="none" public_interface="in"/>
+		<variable name="VG"	units="litre" private_interface="none" public_interface="in"/>
+
+<!-- Outputs to other components -->
+		<variable name="VIF" 	units="litre" private_interface="none" public_interface="out"/>
+
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="CP9">
+				<eq/>
+				<ci>VIF</ci>
+				<apply>
+					<minus/>
+					<ci>VTS</ci>
+					<ci>VG</ci>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+<!-- INPUT CONNECTIONS -->
+	<connection>
+		<map_components component_1="interstitial_free_fluid_volume" component_2="total_systemic_fluid_volume"/>
+		<map_variables variable_1="VTS" variable_2="VTS"/>
+	</connection>
+	<connection>
+		<map_components component_1="interstitial_free_fluid_volume" component_2="interstitial_gel_volume"/>
+		<map_variables variable_1="VG" variable_2="VG"/>
+	</connection>
+	
+<!-- ============================================================		PARAMETER VALUES		=============================================================== -->
+	<component 	name="parameter_values"
+				cmeta:id="parameter_values">
+		<variable name="CFC" 		units="L_per_minute_per_mmHg" 	initial_value="0.01167"		private_interface="none"	public_interface="out"/>	<!-- capillary filtration coefficient [P] -->
+		<variable name="TRPL"	 	units="L_per_minute" 	initial_value="0"			private_interface="none"	public_interface="out"/>	<!-- transfusion coefficient [P] -->
+		<variable name="CPR" 		units="gram_per_L" 	initial_value="40"			private_interface="none"	public_interface="out"/>	<!-- critical plasma protein conc for protein destruction [P] -->
+		<variable name="LPDE"	 	units="dimensionless" 	initial_value="8"			private_interface="none"	public_interface="out"/>	<!-- curve fitting coefficient, liver protein destruction [P] -->
+		<variable name="PCE" 		units="dimensionless" 	initial_value="1"			private_interface="none"	public_interface="out"/>	<!-- curve fitting exponent, capillary leakage [P] -->
+		<variable name="PCR" 		units="mmHg" 	initial_value="15"			private_interface="none"	public_interface="out"/>	<!-- critical capillary pressure for protein leakage [P] -->
+		<variable name="LPK" 		units="L_per_minute" 	initial_value="2.728e-14"	private_interface="none"	public_interface="out"/>	<!-- curve fitting coefficient, liver protein destruction [P] -->
+		<variable name="LPPR" 		units="gram_per_minute" 	initial_value="0.03"		private_interface="none"	public_interface="out"/>	<!-- rate of liver protein production [P] -->
+		<variable name="CPK" 		units="L_per_minute_per_mmHg" 	initial_value="0.000253"	private_interface="none"	public_interface="out"/>	<!-- curve fitting exponent, , capillary leakage [P] -->
+		<variable name="TSSLML" 	units="dimensionless" 	initial_value="0.15"		private_interface="none"	public_interface="out"/>	<!-- sensitivity controller of VTS [P] -->
+		<variable name="TSSLTC" 	units="per_minute" 	initial_value="0.005"		private_interface="none"	public_interface="out"/>	<!-- VTS1 time constant [P] -->
+		<variable name="HYL" 		units="gram" 	initial_value="60"			private_interface="none"	public_interface="out"/>	<!-- quantity of hyaluronic acid in tissues -->
+		<variable name="CMPTSS" 	units="dimensionless" 	initial_value="2"			private_interface="none"	public_interface="out"/>	<!-- curve fitting exponent, calculation of CHY [P] -->
+		<variable name="PGHF" 		units="L_mmHg_per_gram" 	initial_value="-2"			private_interface="none"	public_interface="out"/>	<!-- proportionality coefficent, CHY to PGH [P] -->
+		<variable name="GCOPF" 		units="per_mmHg" 	initial_value="0.8092"		private_interface="none"	public_interface="out"/>	<!-- coefficient, calculation of PTC [P] -->
+		<variable name="VTSF" 		units="litre" 	initial_value="6"			private_interface="none"	public_interface="out"/>	<!-- curve fitting coefficient, PTT [P] -->
+		<variable name="PLDF" 		units="mmHg" 	initial_value="4.2"			private_interface="none"	public_interface="out"/>	<!-- constant pressure, computation of PLD [P] -->
+	</component>
+
+<!-- ============================================================		GROUPING		=============================================================== -->
+   <group>
+		<relationship_ref relationship="containment"/>
+		<component_ref component="capillary_dynamics">
+			<component_ref component="capillary_membrane_dynamics">
+				<component_ref component="capillary_pressure"/>
+				<component_ref component="rate_of_fluid_out_of_capillaries"/>
+			</component_ref>
+			<component_ref component="plasma_volume_and_protein">
+				<component_ref component="plasma_volume"/>
+				<component_ref component="plasma_protein_concentration"/>
+				<component_ref component="protein_destruction_and_formation"/>
+				<component_ref component="plasma_leakage"/>
+				<component_ref component="protein_influx_into_interstitium"/>
+				<component_ref component="total_plasma_protein"/>
+				<component_ref component="plasma_colloid_osmotic_pressure"/>
+			</component_ref>
+			<component_ref component="systemic_tissue_fluid_volume_and_protein">
+				<component_ref component="total_systemic_fluid_volume"/>
+				<component_ref component="interstitial_fluid_volume"/>
+				<component_ref component="total_interstitial_protein"/>
+				<component_ref component="interstitial_protein_concentration"/>
+				<component_ref component="interstitial_colloid_osmotic_pressure"/>
+				<component_ref component="lymph_protein_flow"/>
+			</component_ref>
+			<component_ref component="tissue_gel_and_fluid_and_lymph_flow">
+				<component_ref component="hydrostatic_pressure_of_tissue_gel"/>
+				<component_ref component="total_osmotic_pressure_of_tissue_gel"/>
+				<component_ref component="total_tissue_pressure"/>
+				<component_ref component="interstial_free_fluid_pressure"/>
+				<component_ref component="interstitial_solid_tissue_pressure"/>
+				<component_ref component="lymph_flow"/>
+				<component_ref component="interstitial_gel_volume"/>
+				<component_ref component="interstitial_free_fluid_volume"/>
+			</component_ref>
+		</component_ref>
+   </group>
+
+
+   <group>
+      <relationship_ref relationship="encapsulation"/>
+		<component_ref component="capillary_dynamics">
+			<component_ref component="parameter_values"/>
+			<component_ref component="capillary_membrane_dynamics"/>
+			<component_ref component="capillary_pressure"/>
+			<component_ref component="rate_of_fluid_out_of_capillaries"/>
+			<component_ref component="plasma_volume_and_protein"/>
+			<component_ref component="plasma_volume"/>
+			<component_ref component="plasma_protein_concentration"/>
+			<component_ref component="protein_destruction_and_formation"/>
+			<component_ref component="plasma_leakage"/>
+			<component_ref component="protein_influx_into_interstitium"/>
+			<component_ref component="total_plasma_protein"/>
+			<component_ref component="plasma_colloid_osmotic_pressure"/>
+			<component_ref component="systemic_tissue_fluid_volume_and_protein"/>
+			<component_ref component="total_systemic_fluid_volume"/>
+			<component_ref component="interstitial_fluid_volume"/>
+			<component_ref component="total_interstitial_protein"/>
+			<component_ref component="interstitial_protein_concentration"/>
+			<component_ref component="interstitial_colloid_osmotic_pressure"/>
+			<component_ref component="lymph_protein_flow"/>
+			<component_ref component="tissue_gel_and_fluid_and_lymph_flow"/>
+			<component_ref component="hydrostatic_pressure_of_tissue_gel"/>
+			<component_ref component="total_osmotic_pressure_of_tissue_gel"/>
+			<component_ref component="total_tissue_pressure"/>
+			<component_ref component="interstial_free_fluid_pressure"/>
+			<component_ref component="interstitial_solid_tissue_pressure"/>
+			<component_ref component="lymph_flow"/>
+			<component_ref component="interstitial_gel_volume"/>
+			<component_ref component="interstitial_free_fluid_volume"/>
+		</component_ref>
+   </group>
+
+
+</model>   

@@ -1,0 +1,614 @@
+<?xml version="1.0"?>
+<!--
+This CellML file was generated on 4/06/2008 at 9:26:28 at a.m. using:
+
+COR (0.9.31.955)
+Copyright 2002-2008 Dr Alan Garny
+http://COR.physiol.ox.ac.uk/ - COR@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.CellML.org/
+-->
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="yang_tong_mccarver_hines_beard_2006_version01" name="yang_tong_mccarver_hines_beard_2006_version01">
+
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>An Age-Dependent Physiologically Based Pharmokinetic Model of Methadone Distribution and Metabolism</title>
+				<author>
+					<firstname>Catherine</firstname>
+					<surname>Lloyd</surname>
+					<affiliation>
+						<shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<section id="sec_status">
+				<title>Model Status</title>
+				<para>
+        This CellML version of the model has been checked in COR and PCEnv.  It will recreate published results, although it only models a single organ (the liver) as well as the veins and arteries, and is based on a 5 year old boy. The model cannot replicate the population analysis described in the paper, which needs stochastic tools that are unavailable to CellML at present. 
+          </para>
+			</section>
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>
+Abstract: Limited pharmacokinetic (PK) and pharmacodynamic (PD) data are available to use in methadone dosing recommendations in pediatric patients for either opioid abstinence or analgesia. Considering the extreme inter-individual variability of absorption and metabolism of methadone, population-based PK would be useful to provide insight into the relationship between dose, blood concentrations, and clinical effects of methadone. To address this need, an age-dependent physiologically based pharmacokinetic (PBPK) model has been constructed to systematically study methadone metabolism and PK. The model will facilitate the design of cost-effective studies that will evaluate methadone PK and PD relationships, and may be useful to guide methadone dosing in children. The PBPK model, which includes whole-body multi-organ distribution, plasma protein binding, metabolism, and clearance, is parameterized based on a database of pediatric PK parameters and data collected from clinical experiments. The model is further tailored and verified based on PK data from individual adults, then scaled appropriately to apply to children aged 0-24 months. Based on measured variability in CYP3A enzyme expression levels and plasma orosomucoid (ORM2) concentrations, a Monte-Carlo-based simulation of methadone kinetics in a pediatric population was performed. The simulation predicts extreme variability in plasma concentrations and clearance kinetics for methadone in the pediatric population, based on standard dosing protocols. In addition, it is shown that when doses are designed for individuals based on prior protein expression information, inter-individual variability in methadone kinetics may be greatly reduced.    
+</para>
+				<para>
+The complete original paper reference is cited below:
+</para>
+				<para>
+Population-based analysis of methadone distribution and metabolism using an age-dependent physiologically based pharmacokinetic model, Feng Yang, Xianping Tong, D. Gail. McCarver, Ronald N. Hines and Daniel A. Beard, 2006, <emphasis>Journal of Pharmacokinetics and Pharmacodynamics</emphasis>
+, volume 33, issue 4.   <ulink url="http://www.ncbi.nlm.nih.gov/sites/entrez?Db=PubMed&amp;Cmd=ShowDetailView&amp;TermToSearch=16758333&amp;ordinalpos=1&amp;itool=EntrezSystem2.PEntrez.Pubmed.Pubmed_ResultsPanel.Pubmed_RVDocSum">PubMed ID: 16758333</ulink>
+				</para>
+				<informalfigure float="0" id="fig_reaction_diagram">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>model diagram</title>
+							</objectinfo>
+							<imagedata fileref="yang_2006.png"/>
+						</imageobject>
+					</mediaobject>
+					<caption>Schematic diagram of a PBPK model consisting of 17 compartments.  The lines represent blood flow while the boxes represent organs or systems.  Methadone is primarily metabolised in the liver and gastro-intestinal (GI) system, while its elimination mainly occurs through the kidneys.  Organs in which methadone are not distributed include skin, adipose, thyroid, pancreas, and bone marrow are grouped together as <emphasis>others</emphasis>.</caption>
+				</informalfigure>
+			</sect1>
+		</article>
+	</documentation>
+	   <units name="minute">
+      <unit multiplier="60" units="second"/>
+   </units>
+   <units name="year">
+      <unit multiplier="31536000" units="second"/>
+   </units>
+   <units name="flow">
+      <unit prefix="milli" units="litre"/>
+      <unit exponent="-1" units="minute"/>
+   </units>
+   <units name="flux">
+      <unit units="micromolar"/>
+      <unit exponent="-1" units="minute"/>
+   </units>
+   <units name="ml">
+      <unit prefix="milli" units="litre"/>
+   </units>
+   <units name="micromolar">
+      <unit prefix="micro" units="mole"/>
+      <unit exponent="-1" units="litre"/>
+   </units>
+   <units name="per_micromolar">
+      <unit exponent="-1" units="micromolar"/>
+   </units>
+   <units base_units="yes" name="pH"/>
+   <units base_units="yes" name="percent"/>
+   <units name="first_order_rate_constant">
+      <unit exponent="-1" units="minute"/>
+   </units>
+   <component name="environment">
+      <variable cmeta:id="environment_time" name="time" public_interface="out" units="minute"/>
+   </component>
+   <component name="B">
+      <variable cmeta:id="B_B" name="B" public_interface="out" units="micromolar"/>
+      <variable cmeta:id="B_F" initial_value="0.48" name="F" public_interface="out" units="micromolar"/>
+      <variable cmeta:id="B_n2" initial_value="1" name="n2" units="dimensionless"/>
+      <variable cmeta:id="B_K2" initial_value="0.8532" name="K2" units="per_micromolar"/>
+      <variable name="Cp" public_interface="in" units="micromolar"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>B</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>F</ci>
+                  <ci>n2</ci>
+                  <ci>K2</ci>
+                  <ci>Cp</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <times/>
+                     <ci>K2</ci>
+                     <ci>F</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="R">
+      <variable cmeta:id="R_R" name="R" public_interface="out" units="flux"/>
+      <variable cmeta:id="R_Vmax" initial_value="9.433e-3" name="Vmax" units="flux"/>
+      <variable cmeta:id="R_Km" initial_value="198" name="Km" units="micromolar"/>
+      <variable cmeta:id="R_fu" name="fu" units="dimensionless"/>
+      <variable cmeta:id="R_ISF" name="ISF" units="dimensionless"/>
+      <variable cmeta:id="R_age" initial_value="5" name="age" units="dimensionless"/>
+      <variable name="C" public_interface="in" units="micromolar"/>
+      <variable name="B" public_interface="in" units="micromolar"/>
+      <variable name="F" public_interface="in" units="micromolar"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>R</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>ISF</ci>
+                  <ci>Vmax</ci>
+                  <ci>fu</ci>
+                  <ci>C</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>Km</ci>
+                  <apply>
+                     <times/>
+                     <ci>fu</ci>
+                     <ci>C</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>fu</ci>
+            <apply>
+               <divide/>
+               <ci>F</ci>
+               <apply>
+                  <plus/>
+                  <ci>F</ci>
+                  <ci>B</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>ISF</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">8.3212</cn>
+               </apply>
+               <apply>
+                  <times/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2.0401</cn>
+                  <ci>age</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4.1962</cn>
+                  <apply>
+                     <log/>
+                     <apply>
+                        <times/>
+                        <ci>age</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">365</cn>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Ca">
+      <variable cmeta:id="Ca_Ca" initial_value="6.6685" name="Ca" public_interface="out" units="micromolar"/>
+      <variable cmeta:id="Ca_Va" initial_value="2148" name="Va" units="ml"/>
+      <variable cmeta:id="Ca_Vv" initial_value="3431" name="Vv" units="ml"/>
+      <variable name="Qc" public_interface="in" units="flow"/>
+      <variable name="Cv" public_interface="in" units="micromolar"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Ca</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>Qc</ci>
+                  <apply>
+                     <minus/>
+                     <ci>Cv</ci>
+                     <ci>Ca</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>Va</ci>
+                  <ci>Vv</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Cv">
+      <variable cmeta:id="Cv_Cv" name="Cv" public_interface="out" units="micromolar"/>
+      <variable name="Q" public_interface="in" units="flow"/>
+      <variable name="P" public_interface="in" units="dimensionless"/>
+      <variable name="C" public_interface="in" units="micromolar"/>
+      <variable name="Qc" public_interface="in" units="flow"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>Cv</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>Q</ci>
+                     <ci>C</ci>
+                  </apply>
+                  <ci>P</ci>
+               </apply>
+               <ci>Qc</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="C">
+      <variable cmeta:id="C_C" initial_value="0" name="C" public_interface="out" units="micromolar"/>
+      <variable cmeta:id="C_V" initial_value="1454" name="V" units="ml"/>
+      <variable name="Q" public_interface="in" units="flow"/>
+      <variable name="P" public_interface="in" units="dimensionless"/>
+      <variable name="Ca" public_interface="in" units="micromolar"/>
+      <variable name="R" public_interface="in" units="flux"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>C</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>Q</ci>
+                     <apply>
+                        <minus/>
+                        <ci>Ca</ci>
+                        <apply>
+                           <divide/>
+                           <ci>C</ci>
+                           <ci>P</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>R</ci>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="ml">1</cn>
+                  </apply>
+               </apply>
+               <ci>V</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="model_constants">
+      <variable cmeta:id="model_constants_Q" initial_value="1221.34" name="Q" public_interface="out" units="flow"/>
+      <variable cmeta:id="model_constants_P" initial_value="15.61" name="P" public_interface="out" units="dimensionless"/>
+      <variable cmeta:id="model_constants_Qc" initial_value="6445.65" name="Qc" public_interface="out" units="flow"/>
+   </component>
+   <connection>
+      <map_components component_1="Ca" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="C" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="Cv" component_2="Ca"/>
+      <map_variables variable_1="Cv" variable_2="Cv"/>
+   </connection>
+   <connection>
+      <map_components component_1="B" component_2="R"/>
+      <map_variables variable_1="B" variable_2="B"/>
+      <map_variables variable_1="F" variable_2="F"/>
+   </connection>
+   <connection>
+      <map_components component_1="R" component_2="C"/>
+      <map_variables variable_1="R" variable_2="R"/>
+      <map_variables variable_1="C" variable_2="C"/>
+   </connection>
+   <connection>
+      <map_components component_1="Cv" component_2="C"/>
+      <map_variables variable_1="C" variable_2="C"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ca" component_2="C"/>
+      <map_variables variable_1="Ca" variable_2="Ca"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ca" component_2="model_constants"/>
+      <map_variables variable_1="Qc" variable_2="Qc"/>
+   </connection>
+   <connection>
+      <map_components component_1="Cv" component_2="model_constants"/>
+      <map_variables variable_1="Q" variable_2="Q"/>
+      <map_variables variable_1="Qc" variable_2="Qc"/>
+      <map_variables variable_1="P" variable_2="P"/>
+   </connection>
+   <connection>
+      <map_components component_1="C" component_2="model_constants"/>
+      <map_variables variable_1="Q" variable_2="Q"/>
+      <map_variables variable_1="P" variable_2="P"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ca" component_2="B"/>
+      <map_variables variable_1="Ca" variable_2="Cp"/>
+   </connection>
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Bag rdf:about="rdf:#dfcd23e8-e8fa-4ffc-a1ce-315321b1dadc">
+    <rdf:li>methadone</rdf:li>
+    <rdf:li>metabolism</rdf:li>
+	<rdf:li>PKPD</rdf:li>
+    <rdf:li>pharmacokinetics</rdf:li>
+    <rdf:li>endocrine</rdf:li>
+  </rdf:Bag>
+  <rdf:Seq rdf:about="rdf:#8abbd7e2-3d0f-4fbf-bc5c-0076ddff1f5d">
+    <rdf:li rdf:resource="rdf:#52440265-04c4-4cc0-822d-242671fd2f15"/>
+    <rdf:li rdf:resource="rdf:#ed721c0a-a560-4a58-be5b-c2b9a1ad6547"/>
+    <rdf:li rdf:resource="rdf:#bac6c04a-a66f-4128-b66f-610a9a07eb50"/>
+    <rdf:li rdf:resource="rdf:#d2c2e2d5-c01e-458c-92d5-733a8fd7aa3d"/>
+    <rdf:li rdf:resource="rdf:#36332cc7-cfce-4d01-a66e-fa44063bcac2"/>
+  </rdf:Seq>
+  <rdf:Seq rdf:about="rdf:#c5157993-bb2f-4b70-9a39-c2313fc3842e">
+    <rdf:li rdf:resource="rdf:#e5087e58-3db9-4abf-9cb5-f31944820adf"/>
+    <rdf:li rdf:resource="rdf:#2b1d2231-fdf9-4c98-b19b-cde1ea48f971"/>
+    <rdf:li rdf:resource="rdf:#5b2d749c-4793-4410-9645-737393207807"/>
+    <rdf:li rdf:resource="rdf:#549469aa-ee2f-48dd-aaa8-9e505124da09"/>
+    <rdf:li rdf:resource="rdf:#e36e6f7d-801d-4935-b9ae-8cb90cf4d547"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="#B">
+    <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">bound concentration of methadone</dcterms:alternative>
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">B</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7f84e252-bf6e-4f54-adf0-1921848f87f8">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">D</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">McCarver</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Gail</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#681df4bd-365c-4e5b-b2ec-27b78c95eccc">
+    <vCard:FN xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ed721c0a-a560-4a58-be5b-c2b9a1ad6547">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#d6511b09-ee78-489f-895d-260dc5c11524"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:publisher xmlns:dc="http://purl.org/dc/elements/1.1/">The University of Auckland, Bioengineering Institute</dc:publisher>
+    <cmeta:comment rdf:resource="rdf:#f9faecd2-d711-4d18-badb-65149148a664"/>
+    <dcterms:created xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#fc69c153-cd7d-43d3-ba0f-0bece9fad4eb"/>
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#7c18fe8f-03b6-4853-9abb-553209df1377"/>
+    <cmeta:modification rdf:resource="rdf:#2b8a6e1d-014d-4564-a3f2-25536c50bc63"/>
+    <cmeta:modification rdf:resource="rdf:#a05351ef-cabb-4a19-9059-f86709913fa0"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#81c0be3d-efc6-4cd9-bf9b-d08dfbeda132">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Feng</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Yang</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#10bce5bb-07f2-463b-babc-40ef42b6affa">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#2b1d2231-fdf9-4c98-b19b-cde1ea48f971">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#cb3a9756-3221-4ac0-8b10-e8c2a66bf10f"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#79bbc0d1-909d-4350-8459-47d57d417e74">
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#f8684c5a-b134-4bc1-82b7-23ec9c63fcf4"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d6511b09-ee78-489f-895d-260dc5c11524">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Xianping</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Tong</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#cb3a9756-3221-4ac0-8b10-e8c2a66bf10f">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Xianping</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Tong</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f5c50305-8fa5-4552-8446-6fc19d55218d">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#1638bff3-6a34-4162-9c39-2ff708dd4ff5"/>
+    <rdf:value>This is the CellML description of Yang et al.'s age-dependent, physiologically based pharmokinetic model of methadone distribution and metabolism.  In this particular example of the model, the liver has been chosen to represent the organ k, and therefore all the parameter values are specific for this organ.  Further, the model has been focused on a 5 year old child.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#36332cc7-cfce-4d01-a66e-fa44063bcac2">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#b0e77500-27e6-46ca-896d-c4bf2100c559"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0ca364ea-e030-419e-8d3f-18a8b24e6ac0">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#681df4bd-365c-4e5b-b2ec-27b78c95eccc"/>
+    <rdf:value/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#246d32f6-0af4-4fe1-acb8-3576162ef36c">
+    <bqs:subject_type xmlns:bqs="http://www.cellml.org/bqs/1.0#">keyword</bqs:subject_type>
+    <rdf:value rdf:resource="rdf:#dfcd23e8-e8fa-4ffc-a1ce-315321b1dadc"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#bac6c04a-a66f-4128-b66f-610a9a07eb50">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#7f84e252-bf6e-4f54-adf0-1921848f87f8"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ec62f86a-22c5-4ade-ba5d-592578170df9">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2007-09-06T14:38:34+12:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#14c83d28-4f9c-4f4f-bb04-c99f13262210">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Catherine</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Lloyd</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#07f84318-b5ec-43e9-86c4-663997d6a736">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2006-00-00 00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#32ccad66-7490-4d45-86b7-37ca2ec544d5">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2008-06-04T14:58:39+12:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b0e77500-27e6-46ca-896d-c4bf2100c559">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Daniel</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Beard</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">A</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#bb0954d8-67f3-4634-a969-238f7b14b3fa">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Ronald</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Hines</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">N</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#765b588c-4238-4cb7-a2d7-45404e95a0bd">
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Journal of pharmacokinetics and pharmacodynamics</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b8db79f8-a7ca-4438-bbff-387967173de8">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#8abbd7e2-3d0f-4fbf-bc5c-0076ddff1f5d"/>
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Population-based analysis of methadone distribution and metabolism using an age-dependent physiologically based pharmacokinetic model</dc:title>
+    <bqs:volume xmlns:bqs="http://www.cellml.org/bqs/1.0#">33</bqs:volume>
+    <bqs:first_page xmlns:bqs="http://www.cellml.org/bqs/1.0#">485</bqs:first_page>
+    <bqs:Journal xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#765b588c-4238-4cb7-a2d7-45404e95a0bd"/>
+    <dcterms:issued xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#85eadc43-fcd5-414e-bd59-338a322a8227"/>
+    <bqs:last_page xmlns:bqs="http://www.cellml.org/bqs/1.0#">518</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#fc69c153-cd7d-43d3-ba0f-0bece9fad4eb">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2007-06-05T00:00:00+00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#33b6b92e-a812-4cad-a850-5b961d6b3829">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Daniel</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Beard</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">A</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f9faecd2-d711-4d18-badb-65149148a664">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#6462c6fd-9c4e-4064-80d9-8f4cf9816f42"/>
+    <rdf:value>This CellML version of the model has been checked in COR and PCEnv.  It will recreate published results, although it only models a single organ (the liver) as well as the veins and arteries, and is based on a 5 year old boy. The model cannot replicate the population analysis described in the paper, which needs stochastic tools that are unavailable to CellML at present.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#91a28ee1-24c6-4d00-adf1-c815338729ba">
+    <vCard:Orgname xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">The Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#c8d32ff2-093b-45ae-9191-5f76fb6a4a81">
+    <bqs:Pubmed_id xmlns:bqs="http://www.cellml.org/bqs/1.0#">16758333</bqs:Pubmed_id>
+    <bqs:JournalArticle xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#51586a38-9158-4a7b-a02b-aa8d7ee9feaf"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#11b5b759-691c-4927-90cf-092f8618bb15">
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Journal of Pharmacokinetics and Pharmacodynamics</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a05351ef-cabb-4a19-9059-f86709913fa0">
+    <dcterms:modified xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#ec62f86a-22c5-4ade-ba5d-592578170df9"/>
+    <rdf:value>Fixed the units and one of the equations</rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#77025e1f-f75b-4f8f-a634-8729cfd40944"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7810654d-341a-4236-9125-e40be7bb457b">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Feng</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Yang</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e36e6f7d-801d-4935-b9ae-8cb90cf4d547">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#33b6b92e-a812-4cad-a850-5b961d6b3829"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#77025e1f-f75b-4f8f-a634-8729cfd40944">
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#23c26476-20ca-4720-a98b-acc3a33f679e"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#5b2d749c-4793-4410-9645-737393207807">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#75174696-a076-42f9-a20c-6fa6c941de4d"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#51586a38-9158-4a7b-a02b-aa8d7ee9feaf">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#c5157993-bb2f-4b70-9a39-c2313fc3842e"/>
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Population-Based Analysis of Methadone Distribution and Metabolism Using an Age-Dependent Physiologically Based Pharmacokinetic Model</dc:title>
+    <bqs:volume xmlns:bqs="http://www.cellml.org/bqs/1.0#">33</bqs:volume>
+    <bqs:first_page xmlns:bqs="http://www.cellml.org/bqs/1.0#">485</bqs:first_page>
+    <bqs:Journal xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#11b5b759-691c-4927-90cf-092f8618bb15"/>
+    <dcterms:issued xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#07f84318-b5ec-43e9-86c4-663997d6a736"/>
+    <bqs:last_page xmlns:bqs="http://www.cellml.org/bqs/1.0#">518</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#92d41c17-00a4-442c-a246-e972a8b7048c">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Ronald</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Hines</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">N</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e496f1eb-b285-437d-9a4e-4e518470ca8e">
+    <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#246d32f6-0af4-4fe1-acb8-3576162ef36c"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#yang_model_2006">
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">
+        Yang et al.'s age-dependent, physiologically based pharmokinetic model of methadone distribution and metabolism.
+      </dc:title>
+    <cmeta:comment rdf:resource="rdf:#f5c50305-8fa5-4552-8446-6fc19d55218d"/>
+    <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#605abe69-7ac7-42ab-9a98-c404c391487e"/>
+    <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#e496f1eb-b285-437d-9a4e-4e518470ca8e"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e5087e58-3db9-4abf-9cb5-f31944820adf">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#7810654d-341a-4236-9125-e40be7bb457b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#2b8a6e1d-014d-4564-a3f2-25536c50bc63">
+    <dcterms:modified xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#32ccad66-7490-4d45-86b7-37ca2ec544d5"/>
+    <rdf:value>Redirected some variable mapping to recreate published results, also had to input new values for volume of blood. </rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#79bbc0d1-909d-4350-8459-47d57d417e74"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#75174696-a076-42f9-a20c-6fa6c941de4d">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">D</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">McCarver</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Gail</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="#yang_tong_mccarver_hines_beard_2006_version01">
+    <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#c8d32ff2-093b-45ae-9191-5f76fb6a4a81"/>
+    <cmeta:comment rdf:resource="rdf:#0ca364ea-e030-419e-8d3f-18a8b24e6ac0"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7c18fe8f-03b6-4853-9abb-553209df1377">
+    <vCard:ORG xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#91a28ee1-24c6-4d00-adf1-c815338729ba"/>
+    <vCard:EMAIL xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#10bce5bb-07f2-463b-babc-40ef42b6affa"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#14c83d28-4f9c-4f4f-bb04-c99f13262210"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d2c2e2d5-c01e-458c-92d5-733a8fd7aa3d">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#92d41c17-00a4-442c-a246-e972a8b7048c"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1638bff3-6a34-4162-9c39-2ff708dd4ff5">
+    <vCard:FN xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#85eadc43-fcd5-414e-bd59-338a322a8227">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2006-08-00 00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#549469aa-ee2f-48dd-aaa8-9e505124da09">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#bb0954d8-67f3-4634-a969-238f7b14b3fa"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#52440265-04c4-4cc0-822d-242671fd2f15">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#81c0be3d-efc6-4cd9-bf9b-d08dfbeda132"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#605abe69-7ac7-42ab-9a98-c404c391487e">
+    <bqs:Pubmed_id xmlns:bqs="http://www.cellml.org/bqs/1.0#">16758333</bqs:Pubmed_id>
+    <bqs:JournalArticle xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#b8db79f8-a7ca-4438-bbff-387967173de8"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#6462c6fd-9c4e-4064-80d9-8f4cf9816f42">
+    <vCard:FN xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Geoff Nunns</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#23c26476-20ca-4720-a98b-acc3a33f679e">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Catherine</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Lloyd</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f8684c5a-b134-4bc1-82b7-23ec9c63fcf4">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Geoffrey</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Nunns</vCard:Family>
+  </rdf:Description>
+</rdf:RDF>
+</model>

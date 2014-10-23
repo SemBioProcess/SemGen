@@ -1,0 +1,474 @@
+<?xml version="1.0"?>
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" cmeta:id="wodarz_2003" name="wodarz_2003">
+	
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>A dynamical perspective of CTL cross-priming and regulation: implications for cancer immunology</title>
+				<author>
+					<firstname>Catherine</firstname>
+					<surname>Lloyd</surname>
+					<affiliation>
+						<shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<section id="sec_status">
+				<title>Model Status</title>
+				<para>
+            This model runs in OpenCell and COR with no errors or warnings. The units have been checked and are consistent. This model is very sensitive to initial conditions (not all of which are listed in the paper.) The model can produce similar graphs to figure 1 in the paper using the parameter values listed in the caption and the following initial conditions: 
+			1(a) T = 0.1, C = 0.015, A = 1, A* = 2, alpha = 0.05. 
+			1(b) T = 0.1, C = 0.1, A = 1, A* = 2, alpha = 0.1, r = 10, eta = 10.
+			1(c) T = 0.1, C = 0.1, A = 1, A* = 1, alpha = 0.2.</para>
+			
+			<para>
+			The model can also be used to reproduce the 3 parts of figure 4 using the parameters listed and the following initial conditions:
+			1(a) T = 0.1, C = 0.001.
+			1(b) T = 0.1, C = 0.8.
+			1(c) T = 0.1, C = 0.1.
+          </para>
+			</section>
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>
+ABSTRACT:
+Cytotoxic T lymphocytes (CTL) responses are required to fight many diseases such as viral infections and tumors. At the same time, they can cause disease when induced inappropriately. Which factors regulate CTL and decide whether they should remain silent or react is open to debate. The phenomenon called cross-priming has received attention in this respect. That is, CTL expansion occurs if antigen is recognized on the surface of professional antigen presenting cells (APCs). This is in contrast to direct presentation where antigen is seen on the surface of the target cells (e.g. infected cells or tumor cells). Here we introduce a mathematical model, which takes the phenomenon of cross-priming into account. We propose a new mechanism of regulation which is implicit in the dynamics of the CTL: According to the model, the ability of a CTL response to become established depends on the ratio of cross-presentation to direct presentation of the antigen. If this ratio is relatively high, CTL responses are likely to become established. If this ratio is relatively low, tolerance is the likely outcome. The behavior of the model includes a parameter region where the outcome depends on the initial conditions. We discuss our results with respect to the idea of self/non-self discrimination and the danger signal hypothesis. We apply the model to study the role of CTL in cancer initiation, cancer evolution/progression, and therapeutic vaccination against cancers.
+</para>
+				<para>
+The original paper reference is cited below:
+</para>
+				<para>
+A dynamical perspective of CTL cross-priming and regulation: implications for cancer immunology, Dominik Wodarz and Vincent A. A. Jansen, 2003, 
+						<emphasis>Immunology Letters</emphasis> <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/12706524">PubMed ID: 12706524</ulink>
+				</para>
+				
+				<informalfigure float="0" id="fig_cell_diagram">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>cell diagram</title>
+							</objectinfo>
+							<imagedata fileref="wodarz_jansen_2003.png"/>
+						</imageobject>
+					</mediaobject>
+					<caption>A schematic diagram of the processes described by the mathematical model.  The model contains four variables: T, which represents the target cells which are directly displaying antigen, such as infected cells or tumour cells; A, which denotes non-activated antigen presenting cells (APCs); A*, which represents the loaded and activated APCs which have taken up the antigen and display it; and CTL, which represent cytotoxic T lymphocytes.</caption>
+				</informalfigure>
+			</sect1>
+		</article>
+	</documentation>
+	
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#T">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">T</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">target cells</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#A">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">A</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">antigen presenting cells</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#A_">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">A_</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">oaded and activated antigen presenting cells</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#C">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">C</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">cytotoxic T lymphocytes</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Bag rdf:about="rdf:#244d88ec-a701-4115-a918-5484c5a75eed">
+			<rdf:li>ctl</rdf:li>
+			<rdf:li>t lymphocyte</rdf:li>
+			<rdf:li>T lymphocyte dynamics</rdf:li>
+			<rdf:li>immunology</rdf:li>
+			<rdf:li>cancer</rdf:li>
+		</rdf:Bag>
+		<rdf:Seq rdf:about="rdf:#8a5d5daf-0ea2-4402-8219-3586f9b28cc5">
+			<rdf:li rdf:resource="rdf:#d8bc9900-49e9-40eb-8569-16976e98a3fd"/>
+			<rdf:li rdf:resource="rdf:#cedbfd87-d8a7-4f2d-b395-fee1d70cf447"/>
+		</rdf:Seq>
+		<rdf:Description rdf:about="rdf:#8a581e74-8541-413e-aadc-394fe6e6fe31">
+			<rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+			<rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#af4b4be2-74f6-4a45-9918-730557275069">
+			<dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2003-05-01</dcterms:W3CDTF>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#cedbfd87-d8a7-4f2d-b395-fee1d70cf447">
+			<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+			<vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#4c5003a2-14d7-473b-a5b5-8e7dda1cf9e6"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#387fc698-c410-4227-99bf-0c7adb8a69a2">
+			<vCard:Orgname xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">The University of Auckland</vCard:Orgname>
+			<vCard:Orgunit xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Auckland Bioengineering Institute</vCard:Orgunit>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#9e6df784-8184-4fa3-9aa5-49825850300b">
+			<bqs:subject_type xmlns:bqs="http://www.cellml.org/bqs/1.0#">keyword</bqs:subject_type>
+			<rdf:value rdf:resource="rdf:#244d88ec-a701-4115-a918-5484c5a75eed"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#b78f0212-d6e2-4644-89c5-1e2e0ee9983a">
+			<dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#8a5d5daf-0ea2-4402-8219-3586f9b28cc5"/>
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">
+            A dynamical perspective of CTL cross-priming and regulation: 
+            implications for cancer immunology
+          </dc:title>
+			<bqs:volume xmlns:bqs="http://www.cellml.org/bqs/1.0#">86</bqs:volume>
+			<bqs:first_page xmlns:bqs="http://www.cellml.org/bqs/1.0#">213</bqs:first_page>
+			<bqs:Journal xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#11ea7813-b249-4d3d-9990-7019b4474aa1"/>
+			<dcterms:issued xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#af4b4be2-74f6-4a45-9918-730557275069"/>
+			<bqs:last_page xmlns:bqs="http://www.cellml.org/bqs/1.0#">227</bqs:last_page>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#d8bc9900-49e9-40eb-8569-16976e98a3fd">
+			<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+			<vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#0b7bc6ff-b150-4409-9397-ddd023c77c13"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#0b7bc6ff-b150-4409-9397-ddd023c77c13">
+			<vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Dominik</vCard:Given>
+			<vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Wodarz</vCard:Family>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#ffa86289-3570-4dae-a5b3-b72ac6aed262">
+			<dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#9e6df784-8184-4fa3-9aa5-49825850300b"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#f97565be-6eb6-43e8-bdf2-4dbe5b9a1f28">
+			<vCard:ORG xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#387fc698-c410-4227-99bf-0c7adb8a69a2"/>
+			<vCard:EMAIL xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#8a581e74-8541-413e-aadc-394fe6e6fe31"/>
+			<vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#5178ac27-08f0-41c5-b632-febfd9a1ddff"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#4c5003a2-14d7-473b-a5b5-8e7dda1cf9e6">
+			<vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Vincent</vCard:Given>
+			<vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Jansen</vCard:Family>
+			<vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">A</vCard:Other>
+			<vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">A</vCard:Other>
+		</rdf:Description>
+		<rdf:Description rdf:about="">
+			<dc:publisher xmlns:dc="http://purl.org/dc/elements/1.1/">
+        The University of Auckland, Auckland Bioengineering Institute
+      </dc:publisher>
+			<dcterms:created xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#a823c39c-2046-498a-91a7-3ea825858573"/>
+			<dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#f97565be-6eb6-43e8-bdf2-4dbe5b9a1f28"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#a823c39c-2046-498a-91a7-3ea825858573">
+			<dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2003-12-15</dcterms:W3CDTF>
+		</rdf:Description>
+		<rdf:Description rdf:about="#wodarz_2003">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">
+        Wodarz and Jansen's 2003 mathematical model of CTL dynamics.
+      </dc:title>
+			<cmeta:comment rdf:resource="rdf:#c398f30b-fa6a-493e-a036-3870338ea1f7"/>
+			<bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#9ad86934-72ef-4f8f-abec-53f767195d1d"/>
+			<bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#ffa86289-3570-4dae-a5b3-b72ac6aed262"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#c398f30b-fa6a-493e-a036-3870338ea1f7">
+			<dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#3e15516b-258d-43c5-8212-4b5036251cfa"/>
+			<rdf:value>
+          This is the CellML description of Wodarz and Jansen's 2003 
+          mathematical model of CTL dynamics.
+        </rdf:value>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#11ea7813-b249-4d3d-9990-7019b4474aa1">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Immunology Letters</dc:title>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#9ad86934-72ef-4f8f-abec-53f767195d1d">
+			<bqs:Pubmed_id xmlns:bqs="http://www.cellml.org/bqs/1.0#">12706524</bqs:Pubmed_id>
+			<bqs:JournalArticle xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#b78f0212-d6e2-4644-89c5-1e2e0ee9983a"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#5178ac27-08f0-41c5-b632-febfd9a1ddff">
+			<vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Catherine</vCard:Given>
+			<vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Lloyd</vCard:Family>
+			<vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">May</vCard:Other>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#3e15516b-258d-43c5-8212-4b5036251cfa">
+			<vCard:FN xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Catherine Lloyd</vCard:FN>
+		</rdf:Description>
+	</rdf:RDF>   
+	
+	
+   <units name="day">
+      <unit multiplier="86400" units="second"/>
+   </units>
+   <units name="first_order_rate_constant">
+      <unit exponent="-1" units="day"/>
+   </units>
+   <component name="environment">
+      <variable cmeta:id="environment_time" name="time" public_interface="out" units="day"/>
+   </component>
+   <component name="T">
+      <variable cmeta:id="T_T" initial_value="0.1" name="T" public_interface="out" units="dimensionless"/>
+      <variable initial_value="10" name="k" units="first_order_rate_constant"/>
+      <variable initial_value="0.5" name="r" units="first_order_rate_constant"/>
+      <variable initial_value="0.1" name="d" units="first_order_rate_constant"/>
+      <variable initial_value="1" name="gamma" units="first_order_rate_constant"/>
+      <variable name="C" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>T</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>r</ci>
+                     <ci>T</ci>
+                     <apply>
+                        <minus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        <apply>
+                           <divide/>
+                           <apply>
+                              <times/>
+                              <ci>T</ci>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="first_order_rate_constant">1</cn>
+                           </apply>
+                           <ci>k</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>d</ci>
+                     <ci>T</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>gamma</ci>
+                  <ci>T</ci>
+                  <ci>C</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="A">
+      <variable cmeta:id="A_A" initial_value="1" name="A" public_interface="out" units="dimensionless"/>
+      <variable initial_value="1" name="lambda" units="first_order_rate_constant"/>
+      <variable initial_value="0.1" name="delta_1" units="first_order_rate_constant"/>
+      <variable name="alpha" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="T" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>A</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <ci>lambda</ci>
+                  <apply>
+                     <times/>
+                     <ci>delta_1</ci>
+                     <ci>A</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>alpha</ci>
+                  <ci>A</ci>
+                  <ci>T</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="A_star">
+      <variable cmeta:id="A_star_A_star" initial_value="2" name="A_star" public_interface="out" units="dimensionless"/>
+      <variable initial_value="1.5" name="delta_2" units="first_order_rate_constant"/>
+      <variable name="alpha" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="A" public_interface="in" units="dimensionless"/>
+      <variable name="T" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>A_star</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>alpha</ci>
+                  <ci>A</ci>
+                  <ci>T</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>delta_2</ci>
+                  <ci>A_star</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="C">
+      <variable cmeta:id="C_C" initial_value="0.015" name="C" public_interface="out" units="dimensionless"/>
+      <variable initial_value="2" name="eta" units="first_order_rate_constant"/>
+      <variable initial_value="1" name="epsilon" units="dimensionless"/>
+      <variable initial_value="0.5" name="q" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="0.1" name="mu" units="first_order_rate_constant"/>
+      <variable name="T" public_interface="in" units="dimensionless"/>
+      <variable name="A_star" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="day"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>C</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>eta</ci>
+                        <ci>A_star</ci>
+                        <ci>C</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <times/>
+                           <ci>epsilon</ci>
+                           <ci>C</ci>
+                        </apply>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>q</ci>
+                     <ci>T</ci>
+                     <ci>C</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>mu</ci>
+                  <ci>C</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="ratio">
+      <variable name="C" public_interface="in" units="dimensionless"/>
+      <variable name="q" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="T" public_interface="in" units="dimensionless"/>
+      <variable name="A_star" public_interface="in" units="dimensionless"/>
+      <variable name="R" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>R</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>C</ci>
+                  <ci>A_star</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>q</ci>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="day">1</cn>
+                  <ci>T</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="kinetic_parameters">
+      <variable initial_value="0.05" name="alpha" public_interface="out" units="first_order_rate_constant"/>
+   </component>
+   <connection>
+      <map_components component_1="T" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="A" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="A_star" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="C" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="T" component_2="C"/>
+      <map_variables variable_1="C" variable_2="C"/>
+      <map_variables variable_1="T" variable_2="T"/>
+   </connection>
+   <connection>
+      <map_components component_1="A" component_2="T"/>
+      <map_variables variable_1="T" variable_2="T"/>
+   </connection>
+   <connection>
+      <map_components component_1="A" component_2="kinetic_parameters"/>
+      <map_variables variable_1="alpha" variable_2="alpha"/>
+   </connection>
+   <connection>
+      <map_components component_1="A_star" component_2="T"/>
+      <map_variables variable_1="T" variable_2="T"/>
+   </connection>
+   <connection>
+      <map_components component_1="A_star" component_2="A"/>
+      <map_variables variable_1="A" variable_2="A"/>
+   </connection>
+   <connection>
+      <map_components component_1="A_star" component_2="kinetic_parameters"/>
+      <map_variables variable_1="alpha" variable_2="alpha"/>
+   </connection>
+   <connection>
+      <map_components component_1="C" component_2="A_star"/>
+      <map_variables variable_1="A_star" variable_2="A_star"/>
+   </connection>
+   <connection>
+      <map_components component_1="ratio" component_2="A_star"/>
+      <map_variables variable_1="A_star" variable_2="A_star"/>
+   </connection>
+   <connection>
+      <map_components component_1="ratio" component_2="C"/>
+      <map_variables variable_1="C" variable_2="C"/>
+      <map_variables variable_1="q" variable_2="q"/>
+   </connection>
+   <connection>
+      <map_components component_1="ratio" component_2="T"/>
+      <map_variables variable_1="T" variable_2="T"/>
+   </connection>
+</model>

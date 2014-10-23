@@ -1,0 +1,1100 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--  FILE :  palecek_model_II_1999_raw.xml
+
+CREATED :  27th February 2004
+
+LAST MODIFIED : 27th February 2004
+
+AUTHOR :  Catherine Lloyd
+          The Bioengineering Institute
+          The University of Auckland
+          
+MODEL STATUS :  This model conforms to the CellML 1.0 Specification released on
+                10th August 2001, and the 16/01/2002 CellML Metadata 1.0
+                Specification.
+
+DESCRIPTION :  This file contains a CellML description of Palecek et al's 1999 kinetic model for integrin-mediated adhesion release during cell migration: detachment phase.
+
+CHANGES:  
+  
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:pathway_editor="http://www.physiome.com/pathway_editor/1.0#" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" pathway_editor:rendering_config_file="palecek_model_II_1999_CellMLrender.xml" cmeta:id="palecek_horwitz_lauffenburger_1999_version02" name="palecek_horwitz_lauffenburger_1999_version02">
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>A Kinetic Model for Integrin-mediated Adhesion Release During Cell Migration</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Bioengineering Institute, University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+            This model contains partial differentials, which do not fit within the CellML 1.0 or 1.1 specifications.
+</para>
+<para> Please note, because the parameters for the attachment and detachment phases of the model are given the same identifiers, the model in the CellML format has been divided into two separate models, one for attachment and the other for the detachment phase.  This particular version of the model is for the detachment phase.
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+The process of cell migration is a spatially and temporally coordinated process of events.  Under many different conditions, the rate limiting event of cell migration is the rate at which the cell and the substratum detach at the cell rear.  
+</para>
+
+<para>
+In order to invetigate this cellular process further, Palecek <emphasis>et al</emphasis>. have devloped a mathematical model to integrate how the biophysical and biochemical interactions between integrins, the cytoskelton, and the extracellular matrix (ECM) affect rear retraction and linkage dissociation mechanisms (see the figure below).  The model also examines how applied forces and integrin clustering affect retracion kinetics, and it predicts two distinct phenotypes.  In the first, detachment is rapid, dominated by integrin-ECM dissociation, and it occurs at high forces or low adhesiveness.  In the second phenotype, detachment is slower, and it occurs at low forces or high adhesiveness.  The model also helps to explain why some cell types, such as leukocytes or keratocytes, are able to detach easily and move quickly while other cell types, such as fibroblasts, migrate more slowly and release more integrins during detachment.      
+</para>
+
+<para>
+Because the parameters for the attachment and detachment phases of the model are given the same identifiers, the model in the CellML format has been divided into two separate models, one for attachment and the other for the detachment phase.     
+</para>
+
+<para>
+The complete original paper reference is cited below:
+</para>
+
+<para>
+<ulink url="http://www.springerlink.com/index/X47HG104J6057004.pdf">Kinetic Model for Integrin-mediated Adhesion Release During Cell Migration</ulink>, Sean P. Palecek, Alan F. Horwitz, and Douglas A. Lauffenburger, 1999, <ulink url="http://www.springerlink.com/content/111241/?p=9d35c72bfc46413388a42772978916c2&amp;pi=0">
+            <emphasis>Annals of Biomedical Engineering</emphasis>
+          </ulink>, 27, 219-235.  (A PDF version of the article is available to subscribers on the <emphasis>Annals of Biomedical Engineering</emphasis> website.)  <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/10199699">PubMed ID: 10199699</ulink>
+</para>
+
+<informalfigure float="0" id="fig_reaction_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>reaction diagram</title>
+    </objectinfo>
+    <imagedata fileref="palecek_1999.png"/>
+  </imageobject>
+</mediaobject>
+<caption>Schematic representation of linkages between the cell and the substratum during rear reaction.  Integrins can exist in four states: unbound (R); bound to the ECM ligand (S); bound to the cytoskeleton (Q); or bound to both the ECM and the cytoskelton (U).  Ligands can either be free (L) or bound to integrins (S).  Cytoskeletal elements can also be free (C) or bound to integrins (Q).  Upon activation, protease (P) can cleave integrin-cytoskeletal linkages.</caption>
+</informalfigure>
+
+</sect1>
+</article>
+</documentation>
+  
+  
+
+  <units name="molar">
+    <unit units="mole"/>
+    <unit units="litre" exponent="-1"/>
+  </units>
+  
+  <units name="per_molar">
+    <unit units="molar" exponent="-1"/>
+  </units>
+  
+  <units name="flux">
+     <unit units="molar"/>
+     <unit units="second" exponent="-1"/>
+  </units>
+
+  <units name="first_order_rate_constant">
+    <unit units="second" exponent="-1"/>
+  </units>
+
+  <units name="second_order_rate_constant">
+    <unit units="molar" exponent="-1"/>
+    <unit units="second" exponent="-1"/>
+  </units>
+
+  <units name="microm2">
+    <unit units="metre" prefix="micro" exponent="2"/>
+  </units>
+  
+  <units name="per_cm2">
+    <unit units="metre" prefix="centi" exponent="-2"/>
+  </units>
+  
+  <units name="nanoN_per_microm2">
+    <unit units="newton" prefix="nano"/>
+    <unit units="microm2" exponent="-1"/>
+  </units>
+  
+  <units name="dyne">
+    <unit units="metre" prefix="centi"/>
+    <unit units="gram"/>
+    <unit units="second"/>
+  </units>
+  
+  <units name="erg">
+    <unit units="metre" prefix="centi" exponent="2"/>
+    <unit units="gram"/>
+    <unit units="second" exponent="-1"/>
+  </units>
+   
+  
+  <component name="environment">
+    <variable units="second" public_interface="out" name="time"/>
+  </component>
+  
+  <component cmeta:id="q" name="q">
+    <rdf:RDF>
+      <rdf:Description rdf:about="q">
+        <dc:title>q</dc:title>
+        <dcterms:alternative>cytoskeleton-bound receptor</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="dimensionless" public_interface="out" name="q"/>
+    
+    <variable units="second_order_rate_constant" name="kf1"/>
+    <variable units="first_order_rate_constant" name="kr1"/>
+    
+    <variable units="second_order_rate_constant" public_interface="in" name="kc"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kf3"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr3"/>
+    <variable units="erg" public_interface="in" name="kb_theta"/>
+    <variable units="metre" public_interface="in" name="gamma"/>
+    <variable units="nanoN_per_microm2" public_interface="in" name="Fb"/>
+    <variable units="dimensionless" public_interface="in" name="r"/>
+    <variable units="dimensionless" public_interface="in" name="p"/>
+    <variable units="dimensionless" public_interface="in" name="c"/>
+    <variable units="dimensionless" public_interface="in" name="l"/>
+    <variable units="dimensionless" public_interface="in" name="u"/>
+    <variable units="second" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <partialdiff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>q</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> kf1 </ci>
+              <ci> r </ci>
+              <ci> c </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> kr3 </ci>
+              <ci> u </ci>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <times/>
+                    <ci> gamma </ci>
+                    <ci> Fb </ci>
+                  </apply>
+                  <ci> kb_theta </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> kf3 </ci>
+              <ci> q </ci>
+              <ci> l </ci>
+            </apply>
+            <ci> kr1 </ci>
+            <apply>
+              <times/>
+              <ci> kc </ci>
+              <ci> p </ci>
+              <ci> q </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="s" name="s">
+    <rdf:RDF>
+      <rdf:Description rdf:about="s">
+        <dc:title>s</dc:title>
+        <dcterms:alternative>ligand-bound receptor</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="dimensionless" public_interface="out" name="s"/>
+    
+    <variable units="second_order_rate_constant" public_interface="in" name="kf2"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr2"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kc"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kf4"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr4"/>
+    <variable units="erg" public_interface="in" name="kb_theta"/>
+    <variable units="metre" public_interface="in" name="gamma"/>
+    <variable units="nanoN_per_microm2" public_interface="in" name="Fb"/>
+    <variable units="dimensionless" public_interface="in" name="r"/>
+    <variable units="dimensionless" public_interface="in" name="p"/>
+    <variable units="dimensionless" public_interface="in" name="c"/>
+    <variable units="dimensionless" public_interface="in" name="l"/>
+    <variable units="dimensionless" public_interface="in" name="u"/>
+    <variable units="second" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <partialdiff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>s</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> kf2 </ci>
+              <ci> r </ci>
+              <ci> l </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> kr4 </ci>
+              <ci> u </ci>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <times/>
+                    <ci> gamma </ci>
+                    <ci> Fb </ci>
+                  </apply>
+                  <ci> kb_theta </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> kf4 </ci>
+              <ci> s </ci>
+              <ci> c </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> kr2 </ci>
+              <ci> s </ci>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <times/>
+                    <ci> gamma </ci>
+                    <ci> Fb </ci>
+                  </apply>
+                  <ci> kb_theta </ci>
+                </apply>
+              </apply>
+            </apply>
+            <apply>
+              <times/>
+              <ci> kc </ci>
+              <ci> p </ci>
+              <ci> s </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="u" name="u">
+    <rdf:RDF>
+      <rdf:Description rdf:about="s">
+        <dc:title>u</dc:title>
+        <dcterms:alternative>receptor bound to the ligand and cytoskeleton</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="dimensionless" public_interface="out" name="u"/>
+    
+    <variable units="second_order_rate_constant" public_interface="in" name="kc"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kf4"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr4"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kf3"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr3"/>
+    <variable units="erg" public_interface="in" name="kb_theta"/>
+    <variable units="metre" public_interface="in" name="gamma"/>
+    <variable units="nanoN_per_microm2" public_interface="in" name="Fb"/>
+    <variable units="dimensionless" public_interface="in" name="q"/>
+    <variable units="dimensionless" public_interface="in" name="l"/>
+    <variable units="dimensionless" public_interface="in" name="s"/>
+    <variable units="dimensionless" public_interface="in" name="p"/>
+    <variable units="dimensionless" public_interface="in" name="c"/>
+    <variable units="second" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <partialdiff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>u</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> kf3 </ci>
+              <ci> q </ci>
+              <ci> l </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> kf4 </ci>
+              <ci> s </ci>
+              <ci> c </ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> kr3 </ci>
+              <ci> u </ci>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <times/>
+                    <ci> gamma </ci>
+                    <ci> Fb </ci>
+                  </apply>
+                  <ci> kb_theta </ci>
+                </apply>
+              </apply>
+            </apply>
+            <apply>
+              <times/>
+              <ci> kr4 </ci>
+              <ci> u </ci>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <times/>
+                    <ci> gamma </ci>
+                    <ci> Fb </ci>
+                  </apply>
+                  <ci> kb_theta </ci>
+                </apply>
+              </apply>
+            </apply>
+            <apply>
+              <times/>
+              <ci> kc </ci>
+              <ci> p </ci>
+              <ci> s </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="s_" name="s_">
+    <rdf:RDF>
+      <rdf:Description rdf:about="s_">
+        <dc:title>s_</dc:title>
+        <dcterms:alternative>cleaved receptors bound to ligands</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="dimensionless" public_interface="out" name="s_"/>
+    
+    <variable units="second_order_rate_constant" public_interface="in" name="kc"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kf2"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr2"/>
+    <variable units="erg" public_interface="in" name="kb_theta"/>
+    <variable units="metre" public_interface="in" name="gamma"/>
+    <variable units="nanoN_per_microm2" public_interface="in" name="Fb"/>
+    <variable units="dimensionless" public_interface="in" name="r_"/>
+    <variable units="dimensionless" public_interface="in" name="p"/>
+    <variable units="dimensionless" public_interface="in" name="s"/>
+    <variable units="dimensionless" public_interface="in" name="l"/>
+    <variable units="dimensionless" public_interface="in" name="u"/>
+    <variable units="second" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <partialdiff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>s_</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> kc </ci>
+              <ci> p </ci>
+              <ci> u </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> kc </ci>
+              <ci> p </ci>
+              <ci> s </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> kf2 </ci>
+              <ci> r_ </ci>
+              <ci> l </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> kr2 </ci>
+            <ci> s_ </ci>
+            <apply>
+              <exp/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> gamma </ci>
+                  <ci> Fb </ci>
+                </apply>
+                <ci> kb_theta </ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="r_" name="r_">
+    <rdf:RDF>
+      <rdf:Description rdf:about="r_">
+        <dc:title>r_</dc:title>
+        <dcterms:alternative>cleaved receptors</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="dimensionless" public_interface="out" name="r_"/>
+    
+    <variable units="second_order_rate_constant" public_interface="in" name="kc"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kf2"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr2"/>
+    <variable units="erg" public_interface="in" name="kb_theta"/>
+    <variable units="metre" public_interface="in" name="gamma"/>
+    <variable units="nanoN_per_microm2" public_interface="in" name="Fb"/>
+    <variable units="dimensionless" public_interface="in" name="s_"/>
+    <variable units="dimensionless" public_interface="in" name="p"/>
+    <variable units="dimensionless" public_interface="in" name="r"/>
+    <variable units="dimensionless" public_interface="in" name="l"/>
+    <variable units="dimensionless" public_interface="in" name="q"/>
+    <variable units="second" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <partialdiff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>r_</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> kc </ci>
+              <ci> p </ci>
+              <ci> r </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> kc </ci>
+              <ci> p </ci>
+              <ci> q </ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> kr2 </ci>
+              <ci> s_ </ci>
+              <apply>
+                <exp/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <times/>
+                    <ci> gamma </ci>
+                    <ci> Fb </ci>
+                  </apply>
+                  <ci> kb_theta </ci>
+                </apply>
+              </apply>
+            </apply>
+            <apply>
+              <times/>
+              <ci> kf2 </ci>
+              <ci> r_ </ci>
+              <ci> l </ci>
+            </apply>
+          </apply>
+        </apply> 
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="c_" name="c_">
+    <rdf:RDF>
+      <rdf:Description rdf:about="c_">
+        <dc:title>c_</dc:title>
+        <dcterms:alternative>inactivated cytoskeltal elements</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="dimensionless" public_interface="out" name="c_"/>
+    
+    <variable units="second_order_rate_constant" public_interface="in" name="kc"/>
+    <variable units="dimensionless" public_interface="in" name="p"/>
+    <variable units="dimensionless" public_interface="in" name="q"/>
+    <variable units="dimensionless" public_interface="in" name="u"/>
+    <variable units="dimensionless" public_interface="in" name="c"/>
+    <variable units="second" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <partialdiff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>c_</ci> 
+        </apply>
+        <apply>
+          <plus/>
+          <apply>
+            <times/>
+            <ci> kc </ci>
+            <ci> p </ci>
+            <ci> c </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> kc </ci>
+            <ci> p </ci>
+            <ci> q </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> kc </ci>
+            <ci> p </ci>
+            <ci> u </ci>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="RT" name="RT">
+    <rdf:RDF>
+      <rdf:Description rdf:about="RT">
+        <dc:title>RT</dc:title>
+        <dcterms:alternative>receptor density</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="per_cm2" public_interface="out" name="RT" initial_value="1.0E10"/>
+    
+    <variable units="dimensionless" public_interface="in" name="r"/>
+    <variable units="dimensionless" public_interface="in" name="q"/>
+    <variable units="dimensionless" public_interface="in" name="s"/>
+    <variable units="dimensionless" public_interface="in" name="u"/>
+    <variable units="dimensionless" public_interface="in" name="r_"/>
+    <variable units="dimensionless" public_interface="in" name="s_"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci>RT</ci> 
+        <apply>
+          <plus/>
+          <ci> r </ci>
+          <ci> q </ci>
+          <ci> s </ci>
+          <ci> u </ci>
+          <ci> r_ </ci>
+          <ci> s_ </ci>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="LT" name="LT">
+    <rdf:RDF>
+      <rdf:Description rdf:about="LT">
+        <dc:title>LT</dc:title>
+        <dcterms:alternative>ligand density</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="per_cm2" public_interface="out" name="LT" initial_value="1.0E10"/>
+    
+    <variable units="dimensionless" public_interface="in" name="s"/>
+    <variable units="dimensionless" public_interface="in" name="s_"/>
+    <variable units="dimensionless" public_interface="in" name="u"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci>LT</ci> 
+        <apply>
+          <plus/>
+          <cn cellml:units="dimensionless"> 1.0 </cn>
+          <ci> s </ci>
+          <ci> u </ci>
+          <ci> s_ </ci>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="CT" name="CT">
+    <rdf:RDF>
+      <rdf:Description rdf:about="CT">
+        <dc:title>CT</dc:title>
+        <dcterms:alternative>cytoskeletal element density</dcterms:alternative>        </rdf:Description>
+    </rdf:RDF> 
+    <variable units="per_cm2" public_interface="out" name="CT" initial_value="1.0E10"/>
+    
+    <variable units="dimensionless" public_interface="in" name="c"/>
+    <variable units="dimensionless" public_interface="in" name="c_"/>
+    <variable units="dimensionless" public_interface="in" name="q"/>
+    <variable units="dimensionless" public_interface="in" name="u"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci>CT</ci> 
+        <apply>
+          <plus/>
+          <ci> c </ci>
+          <ci> q </ci>
+          <ci> u </ci>
+          <ci> c_ </ci>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="parameters">
+    <variable units="second_order_rate_constant" public_interface="out" name="kf2"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kr2"/>
+    <variable units="second_order_rate_constant" public_interface="out" name="kf3"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kr3"/>
+    <variable units="second_order_rate_constant" public_interface="out" name="kf4"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kr4"/>
+    <variable units="second_order_rate_constant" public_interface="out" name="kc"/>
+    <variable units="dimensionless" public_interface="out" name="r"/>
+    <variable units="dimensionless" public_interface="out" name="p"/>
+    <variable units="dimensionless" public_interface="out" name="c"/>
+    <variable units="dimensionless" public_interface="out" name="l"/>
+    <variable units="erg" public_interface="out" name="kb_theta" initial_value="4.1E-14"/>
+    <variable units="metre" public_interface="out" name="gamma" initial_value="1.0E-10"/>
+    <variable units="nanoN_per_microm2" public_interface="out" name="Fb"/>
+    
+    <variable units="nanoN_per_microm2" name="FT" initial_value="1.0"/>
+    <variable units="nanoN_per_microm2" name="Ae"/>
+    
+    <variable units="dimensionless" public_interface="in" name="u"/>
+    <variable units="dimensionless" public_interface="in" name="s"/>
+    <variable units="dimensionless" public_interface="in" name="s_"/>
+    
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci>Fb</ci> 
+        <apply>
+          <divide/>
+          <ci> FT </ci>
+          <apply>
+            <times/>
+            <ci> Ae </ci>
+            <apply>
+              <plus/>
+              <ci> u </ci>
+              <ci> s </ci>
+              <ci> s_ </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  
+  <connection>
+    <map_components component_2="environment" component_1="q"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="s"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="u"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="s_"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="r_"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="c_"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="parameters" component_1="q"/>
+    <map_variables variable_2="kf3" variable_1="kf3"/>
+    <map_variables variable_2="kr3" variable_1="kr3"/>
+    <map_variables variable_2="kc" variable_1="kc"/>
+    <map_variables variable_2="r" variable_1="r"/>
+    <map_variables variable_2="c" variable_1="c"/>
+    <map_variables variable_2="l" variable_1="l"/>
+    <map_variables variable_2="p" variable_1="p"/>
+    <map_variables variable_2="gamma" variable_1="gamma"/>
+    <map_variables variable_2="Fb" variable_1="Fb"/>
+    <map_variables variable_2="kb_theta" variable_1="kb_theta"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="u" component_1="q"/>
+    <map_variables variable_2="u" variable_1="u"/>
+    <map_variables variable_2="q" variable_1="q"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="u" component_1="s"/>
+    <map_variables variable_2="u" variable_1="u"/>
+    <map_variables variable_2="s" variable_1="s"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="parameters" component_1="s"/>
+    <map_variables variable_2="kf2" variable_1="kf2"/>
+    <map_variables variable_2="kr2" variable_1="kr2"/>
+    <map_variables variable_2="kc" variable_1="kc"/>
+    <map_variables variable_2="r" variable_1="r"/>
+    <map_variables variable_2="s" variable_1="s"/>
+    <map_variables variable_2="c" variable_1="c"/>
+    <map_variables variable_2="l" variable_1="l"/>
+    <map_variables variable_2="p" variable_1="p"/>
+    <map_variables variable_2="gamma" variable_1="gamma"/>
+    <map_variables variable_2="Fb" variable_1="Fb"/>
+    <map_variables variable_2="kb_theta" variable_1="kb_theta"/>
+    <map_variables variable_2="kf4" variable_1="kf4"/>
+    <map_variables variable_2="kr4" variable_1="kr4"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="parameters" component_1="u"/>
+    <map_variables variable_2="kf3" variable_1="kf3"/>
+    <map_variables variable_2="kr3" variable_1="kr3"/>
+    <map_variables variable_2="kf4" variable_1="kf4"/>
+    <map_variables variable_2="kr4" variable_1="kr4"/>
+    <map_variables variable_2="kc" variable_1="kc"/>
+    <map_variables variable_2="u" variable_1="u"/>
+    <map_variables variable_2="c" variable_1="c"/>
+    <map_variables variable_2="l" variable_1="l"/>
+    <map_variables variable_2="p" variable_1="p"/>
+    <map_variables variable_2="gamma" variable_1="gamma"/>
+    <map_variables variable_2="Fb" variable_1="Fb"/>
+    <map_variables variable_2="kb_theta" variable_1="kb_theta"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="parameters" component_1="s_"/>
+    <map_variables variable_2="kf2" variable_1="kf2"/>
+    <map_variables variable_2="kr2" variable_1="kr2"/>
+    <map_variables variable_2="kc" variable_1="kc"/>
+    <map_variables variable_2="s_" variable_1="s_"/>
+    <map_variables variable_2="l" variable_1="l"/>
+    <map_variables variable_2="p" variable_1="p"/>
+    <map_variables variable_2="gamma" variable_1="gamma"/>
+    <map_variables variable_2="Fb" variable_1="Fb"/>
+    <map_variables variable_2="kb_theta" variable_1="kb_theta"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="s" component_1="s_"/>
+    <map_variables variable_2="s" variable_1="s"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="u" component_1="s_"/>
+    <map_variables variable_2="u" variable_1="u"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="r_" component_1="s_"/>
+    <map_variables variable_2="r_" variable_1="r_"/>
+    <map_variables variable_2="s_" variable_1="s_"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="parameters" component_1="r_"/>
+    <map_variables variable_2="kf2" variable_1="kf2"/>
+    <map_variables variable_2="kr2" variable_1="kr2"/>
+    <map_variables variable_2="kc" variable_1="kc"/>
+    <map_variables variable_2="l" variable_1="l"/>
+    <map_variables variable_2="r" variable_1="r"/>
+    <map_variables variable_2="p" variable_1="p"/>
+    <map_variables variable_2="gamma" variable_1="gamma"/>
+    <map_variables variable_2="Fb" variable_1="Fb"/>
+    <map_variables variable_2="kb_theta" variable_1="kb_theta"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="q" component_1="r_"/>
+    <map_variables variable_2="q" variable_1="q"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="parameters" component_1="c_"/>
+    <map_variables variable_2="kc" variable_1="kc"/>
+    <map_variables variable_2="c" variable_1="c"/>
+    <map_variables variable_2="p" variable_1="p"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="q" component_1="c_"/>
+    <map_variables variable_2="q" variable_1="q"/>
+  </connection> 
+  
+  <connection>
+    <map_components component_2="u" component_1="c_"/>
+    <map_variables variable_2="u" variable_1="u"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="parameters" component_1="RT"/>
+    <map_variables variable_2="r" variable_1="r"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="q" component_1="RT"/>
+    <map_variables variable_2="q" variable_1="q"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="s" component_1="RT"/>
+    <map_variables variable_2="s" variable_1="s"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="s_" component_1="RT"/>
+    <map_variables variable_2="s_" variable_1="s_"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="r_" component_1="RT"/>
+    <map_variables variable_2="r_" variable_1="r_"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="u" component_1="RT"/>
+    <map_variables variable_2="u" variable_1="u"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="s" component_1="LT"/>
+    <map_variables variable_2="s" variable_1="s"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="s_" component_1="LT"/>
+    <map_variables variable_2="s_" variable_1="s_"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="u" component_1="LT"/>
+    <map_variables variable_2="u" variable_1="u"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="parameters" component_1="CT"/>
+    <map_variables variable_2="c" variable_1="c"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="q" component_1="CT"/>
+    <map_variables variable_2="q" variable_1="q"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="u" component_1="CT"/>
+    <map_variables variable_2="u" variable_1="u"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="c_" component_1="CT"/>
+    <map_variables variable_2="c_" variable_1="c_"/>
+  </connection>
+  
+
+
+
+
+
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Bag rdf:about="rdf:#c8b46ccc-fa8e-4a25-9000-0843661196c0">
+    <rdf:li>integrins</rdf:li>
+    <rdf:li>cell adhesion</rdf:li>
+    <rdf:li>cell mechanics</rdf:li>
+    <rdf:li>integrin</rdf:li>
+    <rdf:li>cell migration</rdf:li>
+  </rdf:Bag>
+  <rdf:Seq rdf:about="rdf:#citationAuthorsSeq">
+    <rdf:li rdf:resource="rdf:#author1Vcard"/>
+    <rdf:li rdf:resource="rdf:#author2Vcard"/>
+    <rdf:li rdf:resource="rdf:#author3Vcard"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#0cd5767d-91f4-422d-944f-ac1a6393838f">
+    <bqs:Pubmed_id>10199699</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#ce5f6330-caec-447a-b541-a4008a999c55"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ffbf3fe1-6600-46f4-91cf-a39a337b478e">
+    <dc:title>Annals of Biomedical Engineering</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1e64f523-5c94-4f50-86c0-c4f558a44c59">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author3VcardN">
+    <vCard:Given>Douglas</vCard:Given>
+    <vCard:Family>Lauffenburger</vCard:Family>
+    <vCard:Other>A</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#30052f83-c631-4c04-90d6-94146fc4c427">
+    <dc:subject rdf:resource="rdf:#28481dce-ebb5-49e2-99a2-8662d0e00d3a"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#78db9256-0ed2-41d3-bafa-c9ebc6307087">
+    <dcterms:W3CDTF>2004-02-27</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#79a6cd06-7603-402a-9c00-7ea8a5a72b24">
+    <rdf:type rdf:resource="http://www.w3.org/2001/vcard-rdf/3.0#FN"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#palecek_horwitz_lauffenburger_1999_version02">
+    <dc:title>
+        Palecek et al's 1999 kinetic model for integrin-mediated adhesion release during cell migration: detachment phase.
+      </dc:title>
+    <cmeta:bio_entity>fibroblast</cmeta:bio_entity>
+    <cmeta:bio_entity>keratocyte</cmeta:bio_entity>
+    <cmeta:bio_entity>leukocyte</cmeta:bio_entity>
+    <cmeta:comment rdf:resource="rdf:#f82a106b-b511-4e41-953a-a38793c0637c"/>
+    <bqs:reference rdf:resource="rdf:#0cd5767d-91f4-422d-944f-ac1a6393838f"/>
+    <bqs:reference rdf:resource="rdf:#30052f83-c631-4c04-90d6-94146fc4c427"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:publisher>
+        The University of Auckland, Bioengineering Institute
+      </dc:publisher>
+    <dcterms:created rdf:resource="rdf:#78db9256-0ed2-41d3-bafa-c9ebc6307087"/>
+    <dc:creator rdf:resource="rdf:#6d683bb5-b79a-42e5-856c-93b9719fbb65"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author1VcardN">
+    <vCard:Given>Sean</vCard:Given>
+    <vCard:Family>Palecek</vCard:Family>
+    <vCard:Other>P</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b1672677-abde-4d58-8f4d-e474a628396c">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>The Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#28481dce-ebb5-49e2-99a2-8662d0e00d3a">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value rdf:resource="rdf:#c8b46ccc-fa8e-4a25-9000-0843661196c0"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author2Vcard">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#author2VcardN"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ce5f6330-caec-447a-b541-a4008a999c55">
+    <dc:creator rdf:resource="rdf:#citationAuthorsSeq"/>
+    <dc:title>Kinetic Model for Integrin-mediated Adhesion Release During Cell Migration</dc:title>
+    <bqs:volume>27</bqs:volume>
+    <bqs:first_page>219</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#ffbf3fe1-6600-46f4-91cf-a39a337b478e"/>
+    <dcterms:issued rdf:resource="rdf:#db0941da-3578-4282-95d4-daaa257c389f"/>
+    <bqs:last_page>235</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#db0941da-3578-4282-95d4-daaa257c389f">
+    <dcterms:W3CDTF>1999-03-01</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author3Vcard">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#author3VcardN"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author2VcardN">
+    <vCard:Given>Alan</vCard:Given>
+    <vCard:Family>Horwitz</vCard:Family>
+    <vCard:Other>F</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f82a106b-b511-4e41-953a-a38793c0637c">
+    <dc:creator rdf:resource="rdf:#79a6cd06-7603-402a-9c00-7ea8a5a72b24"/>
+    <rdf:value>Below is a CellML description of Palecek et al's 1999 kinetic model for integrin-mediated adhesion release during cell migration: detachment phase.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#6d683bb5-b79a-42e5-856c-93b9719fbb65">
+    <vCard:ORG rdf:resource="rdf:#b1672677-abde-4d58-8f4d-e474a628396c"/>
+    <vCard:EMAIL rdf:resource="rdf:#1e64f523-5c94-4f50-86c0-c4f558a44c59"/>
+    <vCard:N rdf:resource="rdf:#d509af2b-f68e-4f8f-be4d-5382daf49cbb"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author1Vcard">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#author1VcardN"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d509af2b-f68e-4f8f-be4d-5382daf49cbb">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+</rdf:RDF>
+</model>

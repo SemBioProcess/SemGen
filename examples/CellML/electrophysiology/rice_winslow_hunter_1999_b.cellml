@@ -1,0 +1,602 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--  FILE :  rice_model2_1999_version02.xml
+
+CREATED :  24th May 2007
+
+LAST MODIFIED : 24th May 2007
+
+AUTHOR :  Catherine Lloyd
+          The Bioengineering Institute
+          The University of Auckland
+          
+MODEL STATUS :  This model conforms to the CellML 1.1 Specification.
+
+DESCRIPTION :  This file contains a CellML description of Rice et al's 1999 1st
+               model of isometric force generation in cardiac myofilaments.
+
+CHANGES:  
+  
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:pathway_editor="http://www.physiome.com/pathway_editor/1.0#" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" pathway_editor:rendering_config_file="rice_model5_1999_CellMLrender.xml" cmeta:id="rice_model2_1999_version02" name="rice_winslow_hunter_1999_version05">
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Cooperative Mechanisms in Cardiac Muscle (model 2)</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Bioengineering Institute, University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+In cardiac muscle, steady-state force-Ca<superscript>2+</superscript> (F-Ca) relations exhibit more cooperativity than that predicted by the single Ca<superscript>2+</superscript> binding site on troponin.  The exact mechanisms underlying this high cooperativity are unknown.  In their 1999 paper, J. Jeremy Rice, Raimond L. Winslow and William C. Hunter present five potential models for force generation in cardiac muscle (see the figure below).  These models were constructed by assuming different subsets of three possible cooperative mechanisms: 
+<itemizedlist>
+  <listitem>
+              <para>
+                <emphasis role="bold">Cooperative mechanism 1</emphasis> 
+ is based on the theory that cross bridge formation between actin and myosin increases the affinity of troponin for Ca<superscript>2+</superscript>.</para>
+            </listitem>
+  <listitem>
+              <para>
+                <emphasis role="bold">Cooperative mechanism 2</emphasis> 
+ assumes that the binding of a cross bridge increases the rate of formation of neighbouring cross bridges and that multiple cross bridges can actin activation even in the absence of Ca<superscript>2+</superscript>.</para>
+            </listitem>
+  <listitem>
+              <para>
+                <emphasis role="bold">Cooperative mechanism 2</emphasis> 
+ simulates end-to-end interactions between adjacent troponin and tropomyosin.</para>
+            </listitem>
+</itemizedlist>   
+</para>
+
+<para>
+Comparison of putative cooperative mechanisms in cardiac muscle: length dependence and dynamic responses, J. Jeremy Rice, Raimond L. Winslow and William C. Hunter, 1999, <emphasis>American Journal of Physiology</emphasis>, 276, H1734-H1754.  <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;list_uids=10330260&amp;dopt=Abstract">PubMed ID: 10330260</ulink> 
+</para>
+
+<informalfigure float="0" id="fig_reaction_diagrams">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>reaction_diagrams</title>
+    </objectinfo>
+    <imagedata fileref="rice_hunter_1999.png"/>
+  </imageobject>
+</mediaobject>
+<caption>State diagrams for the five models of isometric force generation in cardiac muscle. T represents tropomyosin, TCa is Ca<superscript>2+</superscript> bound tropomyosin, N0, N1, P0 and P1 are the non-permissive and permissive tropomyosin states.</caption>
+</informalfigure>
+
+<para>
+All the models are similar in that they are structured around a functional unit of troponin, tropomyosin and actin.  Tropomyosin can exist in four states, two permissive or two non-permissive (referring to whether or not the actin sites are available for binding to myosin and hence cross bridge formation).  Depending on the model, one or more cross bridges exist, and these are either weakly-bound (non-force generating) or strongly bound (force generating).
+</para>
+
+<para>
+The paper (cited below) tests the behaviours of the five models of force generation in cardiac myocytes.  The first two models provide a baseline of performance for comparison.  Models 3 to 5 are developed to incorporate more cooperative mechanisms.  From the results of these simulations, which were compared to and consistent with experimental data, it is hypothesised that multiple mechanisms of cooperativity may coexist and contribute to the responses of cardiac muscle.
+</para>
+
+</sect1>
+</article>
+</documentation>
+  
+  
+  
+  <units name="micromolar">
+    <unit units="mole" prefix="micro"/>
+    <unit units="litre" exponent="-1"/>
+  </units>
+  
+  <units name="first_order_rate_constant">
+    <unit units="second" exponent="-1"/>
+  </units>
+  
+  <units name="second_order_rate_constant">
+    <unit units="micromolar" exponent="-1"/>
+    <unit units="second" exponent="-1"/>
+  </units>
+  
+ 
+  <component name="environment">
+    <variable units="second" public_interface="out" name="time"/>
+  </component>
+  
+   
+  <component cmeta:id="N0" name="N0">
+    <variable units="dimensionless" public_interface="out" name="N0"/>
+     
+    <variable units="dimensionless" public_interface="in" name="P0"/>
+    <variable units="dimensionless" public_interface="in" name="N1"/>
+    <variable units="dimensionless" public_interface="in" name="P1"/>  
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci> N0 </ci> 
+        <apply>
+          <minus/>
+          <cn cellml:units="dimensionless"> 1.0 </cn> 
+          <apply>
+            <plus/>
+            <ci> P0 </ci>
+            <ci> N1 </ci>
+            <ci> P1 </ci>
+          </apply>
+        </apply>  
+      </apply> 
+    </math> 
+  </component>
+  
+  <component cmeta:id="N1" name="N1">
+    <variable units="dimensionless" public_interface="out" name="N1"/>
+    
+    <variable units="second_order_rate_constant" public_interface="in" name="kon"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="koff"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="g"/>
+    <variable units="dimensionless" public_interface="in" name="N0"/>
+    <variable units="dimensionless" public_interface="in" name="P1"/>
+    <variable units="micromolar" public_interface="in" name="Ca"/>  
+    <variable units="second" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> N1 </ci> 
+        </apply>
+        <apply>
+          <minus/> 
+          <apply>
+            <times/>
+            <ci> koff </ci>
+            <ci> P1 </ci>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>  
+              <ci> g </ci>
+              <ci> N1 </ci> 
+            </apply>
+            <apply>
+              <times/>  
+              <ci> kon </ci>
+              <ci> Ca </ci> 
+              <ci> N1 </ci>
+            </apply>
+          </apply>
+        </apply>  
+      </apply> 
+    </math> 
+  </component>
+   
+  <component cmeta:id="P0" name="P0">
+    <variable units="dimensionless" public_interface="out" name="P0"/>
+    
+    <variable units="second_order_rate_constant" public_interface="in" name="kon"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="koff"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="f"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="g"/>
+    <variable units="dimensionless" public_interface="in" name="N0"/>
+    <variable units="dimensionless" public_interface="in" name="P1"/>
+    <variable units="micromolar" public_interface="in" name="Ca"/>  
+    <variable units="second" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> P0 </ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/> 
+            <apply>
+              <times/>
+              <ci> kon </ci>
+              <ci> Ca </ci> 
+              <ci> N0 </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> g </ci>
+              <ci> P1 </ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>  
+              <ci> koff </ci>
+              <ci> P0 </ci> 
+            </apply>
+            <apply>
+              <times/>  
+              <ci> f </ci>
+              <ci> P0 </ci>
+            </apply>
+          </apply>
+        </apply>  
+      </apply> 
+    </math> 
+  </component>
+  
+  <component cmeta:id="P1" name="P1">
+    <variable units="dimensionless" public_interface="out" name="P1"/>
+    
+    <variable units="second_order_rate_constant" public_interface="in" name="kon"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="koff"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="f"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="g"/>
+    <variable units="dimensionless" public_interface="in" name="N1"/>
+    <variable units="dimensionless" public_interface="in" name="P0"/>
+    <variable units="micromolar" public_interface="in" name="Ca"/>  
+    <variable units="second" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> P1 </ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/> 
+            <apply>
+              <times/>
+              <ci> kon </ci>
+              <ci> Ca </ci> 
+              <ci> N1 </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> f </ci>
+              <ci> P0 </ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>  
+              <ci> koff </ci>
+              <ci> P1 </ci> 
+            </apply>
+            <apply>
+              <times/>  
+              <ci> g </ci>
+              <ci> P1 </ci>
+            </apply>
+          </apply>
+        </apply>  
+      </apply> 
+    </math> 
+  </component>
+   
+  <component name="constants">
+      <variable units="micromolar" public_interface="out" name="Ca" initial_value="1.0"/>
+      <variable units="second_order_rate_constant" public_interface="out" name="kon" initial_value="39.0"/>
+      <variable units="first_order_rate_constant" public_interface="out" name="koff"/>
+      <variable units="first_order_rate_constant" public_interface="out" name="f" initial_value="40.0"/>
+      <variable units="first_order_rate_constant" public_interface="out" name="g" initial_value="12.0"/>
+      
+      <variable units="dimensionless" name="Kapp"/>
+     
+      <variable units="dimensionless" public_interface="in" name="F"/>
+
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <apply id="koff_calculation">
+        <eq/>
+          <ci> koff </ci>
+          <apply>
+          <divide/>
+            <ci> kon </ci>
+            <ci> Kapp </ci>
+          </apply>
+        </apply>
+
+        <apply id="Kapp_calculation">
+        <eq/>
+          <ci> Kapp </ci>
+          <apply>
+          <plus/>
+            <cn cellml:units="dimensionless"> 0.0174 </cn>
+            <apply>
+            <times/>  
+              <cn cellml:units="dimensionless"> 0.173 </cn>
+              <ci> F </ci>
+            </apply>
+            <apply>
+            <times/>  
+              <cn cellml:units="dimensionless"> 1.54 </cn>
+              <apply>
+              <power/>  
+                <ci> F </ci>
+                <cn cellml:units="dimensionless"> 2.0 </cn>
+              </apply>
+            </apply>
+            <apply>
+            <times/>  
+              <cn cellml:units="dimensionless"> 0.282 </cn>
+              <apply>
+              <power/>  
+                <ci> F </ci>
+                <cn cellml:units="dimensionless"> 3.0 </cn>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </math>
+   </component>
+   
+   <component name="force">
+    <variable units="dimensionless" public_interface="out" name="F"/>
+    
+    <variable units="dimensionless" name="alpha" initial_value="1.0"/>
+    <variable units="dimensionless" name="Fmax"/>
+    
+    <variable units="dimensionless" public_interface="in" name="P1"/>
+    <variable units="dimensionless" public_interface="in" name="N1"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="f"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="g"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="F_calculation">
+        <eq/>
+          <ci> F </ci>
+          <apply>
+          <divide/>
+            <apply>
+            <times/>
+              <ci> alpha </ci>
+              <apply>
+              <plus/>
+                <ci> P1 </ci>
+                <ci> N1 </ci>
+              </apply>
+            </apply>
+            <ci> Fmax </ci>
+          </apply>
+        </apply>
+        
+        <apply id="Fmax_calculation">
+        <eq/>
+          <ci> Fmax </ci>
+          <apply>
+          <divide/>
+            <ci> f </ci>
+            <apply>
+            <plus/>
+              <ci> f </ci>
+              <ci> g </ci>
+            </apply>
+          </apply>
+        </apply>  
+      </math>
+   </component>
+  
+   
+   <connection>
+      <map_components component_2="environment" component_1="N1"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+  
+   <connection>
+      <map_components component_2="environment" component_1="P0"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+  
+   <connection>
+      <map_components component_2="environment" component_1="P1"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+  
+   <connection>
+      <map_components component_2="P0" component_1="N0"/>
+      <map_variables variable_2="N0" variable_1="N0"/>
+      <map_variables variable_2="P0" variable_1="P0"/>
+   </connection>
+  
+   <connection>
+      <map_components component_2="N1" component_1="N0"/>
+      <map_variables variable_2="N0" variable_1="N0"/>
+      <map_variables variable_2="N1" variable_1="N1"/>
+   </connection>
+
+   <connection>
+      <map_components component_2="P1" component_1="N0"/>
+      <map_variables variable_2="P1" variable_1="P1"/>
+   </connection>
+  
+   <connection>
+      <map_components component_2="P1" component_1="N1"/>
+      <map_variables variable_2="N1" variable_1="N1"/>
+      <map_variables variable_2="P1" variable_1="P1"/>
+   </connection>
+
+   <connection>
+      <map_components component_2="P0" component_1="P1"/>
+      <map_variables variable_2="P1" variable_1="P1"/>
+      <map_variables variable_2="P0" variable_1="P0"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="constants" component_1="N1"/>
+      <map_variables variable_2="kon" variable_1="kon"/>
+      <map_variables variable_2="koff" variable_1="koff"/>
+      <map_variables variable_2="g" variable_1="g"/>
+      <map_variables variable_2="Ca" variable_1="Ca"/>
+   </connection>
+
+   <connection>
+      <map_components component_2="constants" component_1="P0"/>
+      <map_variables variable_2="kon" variable_1="kon"/>
+      <map_variables variable_2="koff" variable_1="koff"/>
+      <map_variables variable_2="f" variable_1="f"/>
+      <map_variables variable_2="g" variable_1="g"/>
+      <map_variables variable_2="Ca" variable_1="Ca"/>
+   </connection>
+
+   <connection>
+      <map_components component_2="constants" component_1="P1"/>
+      <map_variables variable_2="kon" variable_1="kon"/>
+      <map_variables variable_2="koff" variable_1="koff"/>
+      <map_variables variable_2="f" variable_1="f"/>
+      <map_variables variable_2="g" variable_1="g"/>
+      <map_variables variable_2="Ca" variable_1="Ca"/>
+   </connection>
+
+   <connection>
+      <map_components component_2="P1" component_1="force"/>
+      <map_variables variable_2="P1" variable_1="P1"/>
+   </connection>
+
+   <connection>
+      <map_components component_2="N1" component_1="force"/>
+      <map_variables variable_2="N1" variable_1="N1"/>
+   </connection>
+
+   <connection>
+      <map_components component_2="constants" component_1="force"/>
+      <map_variables variable_2="f" variable_1="f"/>
+      <map_variables variable_2="g" variable_1="g"/>
+      <map_variables variable_2="F" variable_1="F"/>
+   </connection>
+
+<rdf:RDF>
+  <rdf:Bag rdf:about="rdf:#73d4c0c4-4f84-4bae-ad81-e452fc8ab33c">
+    <rdf:li>Cardiac Myocyte</rdf:li>
+    <rdf:li>cooperative mechanisms</rdf:li>
+    <rdf:li>electrophysiology</rdf:li>
+    <rdf:li>myofilament mechanics</rdf:li>
+    <rdf:li>cardiac</rdf:li>
+  </rdf:Bag>
+  <rdf:Seq rdf:about="rdf:#85f90254-76c3-414c-ae03-33f423e3442a">
+    <rdf:li rdf:resource="rdf:#896ba5f3-e484-499b-924b-1e0c95fff09e"/>
+    <rdf:li rdf:resource="rdf:#6728f102-835c-4332-b07b-4261f7370180"/>
+    <rdf:li rdf:resource="rdf:#12b3130f-8b19-4d94-b516-89f1d6b822dd"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="">
+    <dc:publisher>The University of Auckland, Bioengineering Institute</dc:publisher>
+    <cmeta:comment rdf:resource="rdf:#9330d5be-74dd-4dd0-835e-0296f84bd562"/>
+    <dcterms:created rdf:resource="rdf:#cd8938ae-da97-4942-b5a1-637f903d672b"/>
+    <dc:creator rdf:resource="rdf:#065f9f14-e102-48ce-a47d-b64766cdcec2"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3c0204ac-d35f-4321-98d4-717827578f65">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>The Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e32bec8d-83f9-4256-80a0-8fe4472fe03e">
+    <dc:creator rdf:resource="rdf:#0e035c25-400f-4344-9e8d-18525c122939"/>
+    <rdf:value>This is the CellML description of Rice et al's 2nd model of isometric &#13;
+          force generation in cardiac myofilaments taken from their 1999 paper.&#13;
+          All five mathematical models published in this paper were constructed &#13;
+          by assuming different subsets of three putative cooperative &#13;
+          mechanisms.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8bc12930-f354-4a9a-8381-8840a81db424">
+    <dc:creator rdf:resource="rdf:#85f90254-76c3-414c-ae03-33f423e3442a"/>
+    <dc:title>Comparison of putative cooperative mechanisms in cardiac muscle: length dependence and dynamic responses (model 2)</dc:title>
+    <bqs:volume>276</bqs:volume>
+    <bqs:first_page>H1734</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#52282a83-33f1-4a64-92eb-88fae15e3af5"/>
+    <dcterms:issued rdf:resource="rdf:#418f7b46-3f1a-4ee8-a787-32c4b3819aed"/>
+    <bqs:last_page>H1754</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9847f4d5-4f30-4fe5-b6b8-793f7b018eca">
+    <dc:subject rdf:resource="rdf:#786b61e0-a8a4-45ad-842c-246700966261"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#5852911f-6e0c-44c7-a8a9-50457fa19ed3">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#12b3130f-8b19-4d94-b516-89f1d6b822dd">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#f28fe582-3b2f-4bb5-bf52-8775614eb1a7"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#727cbed1-9cab-4db7-97e6-26dceaedec80">
+    <vCard:FN/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#52282a83-33f1-4a64-92eb-88fae15e3af5">
+    <dc:title>American Journal of Physiology</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#fae6b95a-8318-4228-841e-cab8e1bac075">
+    <vCard:Given>John</vCard:Given>
+    <vCard:Family>Rice</vCard:Family>
+    <vCard:Other>Jeremy</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#896ba5f3-e484-499b-924b-1e0c95fff09e">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#fae6b95a-8318-4228-841e-cab8e1bac075"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f28fe582-3b2f-4bb5-bf52-8775614eb1a7">
+    <vCard:Given>William</vCard:Given>
+    <vCard:Family>Hunter</vCard:Family>
+    <vCard:Other>C</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0e035c25-400f-4344-9e8d-18525c122939">
+    <vCard:FN>Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#dc4a42da-e439-45ef-8bec-de1f0b256d89">
+    <bqs:Pubmed_id>10330260</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#8bc12930-f354-4a9a-8381-8840a81db424"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#786b61e0-a8a4-45ad-842c-246700966261">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value rdf:resource="rdf:#73d4c0c4-4f84-4bae-ad81-e452fc8ab33c"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#418f7b46-3f1a-4ee8-a787-32c4b3819aed">
+    <dcterms:W3CDTF>1999-05</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#6728f102-835c-4332-b07b-4261f7370180">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#e49c6195-efc8-4af2-9113-a30464a93b04"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#cd8938ae-da97-4942-b5a1-637f903d672b">
+    <dcterms:W3CDTF>2007-05-24T00:00:00+00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="#rice_model2_1999_version02">
+    <dc:title>
+        The Rice et al. 1999 2nd model of isometric force generation in cardiac 
+        myofilaments
+      </dc:title>
+    <cmeta:bio_entity>Cardiac Myocyte</cmeta:bio_entity>
+    <cmeta:comment rdf:resource="rdf:#e32bec8d-83f9-4256-80a0-8fe4472fe03e"/>
+    <bqs:reference rdf:resource="rdf:#9847f4d5-4f30-4fe5-b6b8-793f7b018eca"/>
+    <bqs:reference rdf:resource="rdf:#dc4a42da-e439-45ef-8bec-de1f0b256d89"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e49c6195-efc8-4af2-9113-a30464a93b04">
+    <vCard:Given>Raimond</vCard:Given>
+    <vCard:Family>Winslow</vCard:Family>
+    <vCard:Other>L</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9330d5be-74dd-4dd0-835e-0296f84bd562">
+    <dc:creator rdf:resource="rdf:#727cbed1-9cab-4db7-97e6-26dceaedec80"/>
+    <rdf:value/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#065f9f14-e102-48ce-a47d-b64766cdcec2">
+    <vCard:ORG rdf:resource="rdf:#3c0204ac-d35f-4321-98d4-717827578f65"/>
+    <vCard:EMAIL rdf:resource="rdf:#5852911f-6e0c-44c7-a8a9-50457fa19ed3"/>
+    <vCard:N rdf:resource="rdf:#2f5629b2-e7b8-46e1-a2ee-8aeb2c1d1cad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#2f5629b2-e7b8-46e1-a2ee-8aeb2c1d1cad">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+</rdf:RDF>
+</model>

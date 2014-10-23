@@ -1,0 +1,4022 @@
+<?xml version="1.0"?>
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:ns8="http://www.cellml.org/metadata/graphs/1.0#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:ns7="http://www.cellml.org/metadata/simulation/1.0#" name="ICC_model" cmeta:id="ICC_model">
+
+
+<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>Quantitative cellular description of gastric slow wave activity</title>
+				<author>
+					<firstname>Alberto</firstname>
+					<surname>Corrias</surname>
+					<affiliation>
+						<shortaffil>National University of Singapore</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<section id="sec_status">
+				<title>Model Status</title>
+				<para>
+            This model is known to run in JSIM, COR and OpenCell to recreate the published results. The units have been checked and they are consistent.  The CellML model was created by Alberto Corrias and taken from the NUS Computational Bioengineering Laboratory website. 
+          </para>
+			</section>
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>
+Abstract: Interstitial cells of Cajal (ICC) are responsible for the spontaneous and omnipresent electrical activity in the stomach. A quantitative description of the intracellular processes whose coordinated activity is believed to generate electrical slow waves has been developed and is presented here. In line with recent experimental evidence, the model describes how the interplay between the mitochondria and the endoplasmic reticulum in cycling intracellular Ca2+ provides the primary regulatory signal for the initiation of the slow wave. The major ion channels that have been identified as influencing slow wave activity have been modeled according to data obtained from isolated ICC. The model has been validated by comparing the simulated profile of the slow waves with experimental recordings and shows good correspondence in terms of frequency, amplitude, and shape in both control and pharmacologically altered conditions.</para>
+				<para>
+The complete original paper reference is cited below:
+</para>
+				<para>
+					Quantitative cellular description of gastric slow wave activity, Alberto Corrias, Martin L. Buist 2008, 
+						<emphasis>Am J Physiol Gastrointest Liver Physiol</emphasis>
+					, 294, G989-G995.  <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;list_uids=18276830 &amp;dopt=Abstract">PubMed ID: 18276830 </ulink>
+				</para>
+				<para>
+				The documented original is available at the National University of Singapore's <ulink url="http://www.bioeng.nus.edu.sg/compbiolab/projects/gi-project.html#icc-cell-ephys">Computational Bioengineering Laboratory website</ulink>. 
+				</para>
+<informalfigure float="0" id="fig_cell_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>Corrias 2008 diagram</title>
+    </objectinfo>
+    <imagedata fileref="corrias_2008.png"/>
+  </imageobject>
+</mediaobject>
+<caption>Schematic view of the model. The intracellular space is divided in four compartments: cytoplasm, mitochondria, endoplasmic reticulum (ER), and submembrane space (SS). All membrane ion channels and transport mechanisms included in the model are depicted.</caption>
+</informalfigure>
+
+			</sect1>
+
+
+
+		</article>
+	</documentation>
+  
+  
+  
+  
+ 
+  <units name="conductance_units">
+      <unit prefix="nano" units="siemens"/>
+
+   </units>
+   <units name="millifarads">
+      <unit prefix="milli" units="farad"/>
+   </units>
+   <units name="voltage_units">
+      <unit prefix="milli" units="volt"/>
+   </units>
+   <units name="volume_units">
+      <unit units="litre"/>
+
+   </units>
+   <units name="Inverse_Voltage_units">
+      <unit exponent="-1" units="voltage_units"/>
+   </units>
+   <units name="Inverse_Voltage_Units_per_time_units">
+      <unit units="Inverse_Voltage_units"/>
+      <unit exponent="-1" units="time_units"/>
+   </units>
+   <units name="time_units">
+
+      <unit units="second"/>
+   </units>
+   <units name="current_units">
+      <unit units="voltage_units"/>
+      <unit units="conductance_units"/>
+   </units>
+   <units name="rate_constants_units">
+      <unit exponent="-1" units="time_units"/>
+   </units>
+
+   <units name="capacitance_units">
+      <unit prefix="nano" units="farad"/>
+   </units>
+   <units name="Temperature_units">
+      <unit units="kelvin"/>
+   </units>
+   <units name="Inverse_Temperature_units_times_conductance">
+      <unit exponent="-1" units="Temperature_units"/>
+      <unit units="conductance_units"/>
+
+   </units>
+   <units name="F_units">
+      <unit exponent="-1" prefix="nano" units="mole"/>
+      <unit prefix="micro" units="coulomb"/>
+   </units>
+   <units name="R_units">
+      <unit prefix="nano" units="joule"/>
+      <unit exponent="-1" prefix="nano" units="mole"/>
+      <unit exponent="-1" units="kelvin"/>
+
+   </units>
+   <units name="millimolar">
+      <unit prefix="milli" units="mole"/>
+      <unit exponent="-1" units="litre"/>
+   </units>
+   <units name="per_millimolar">
+      <unit units="litre"/>
+      <unit exponent="-1" prefix="milli" units="mole"/>
+   </units>
+
+   <units name="millimolar_per_second">
+      <unit prefix="milli" units="mole"/>
+      <unit exponent="-1" units="litre"/>
+      <unit exponent="-1" units="second"/>
+   </units>
+   <units name="millimolar_per_second_per_millivolt">
+      <unit prefix="milli" units="mole"/>
+      <unit exponent="-1" units="litre"/>
+      <unit exponent="-1" units="second"/>
+
+      <unit exponent="-1" prefix="milli" units="volt"/>
+   </units>
+   <units name="millimole_to_nanomole">
+      <unit prefix="nano" units="mole"/>
+      <unit exponent="-1" prefix="milli" units="mole"/>
+   </units>
+   <units name="microcoulomb_to_picocoulomb">
+      <unit prefix="pico" units="coulomb"/>
+      <unit exponent="-1" prefix="micro" units="coulomb"/>
+
+   </units>
+   <component name="Time">
+      <variable cmeta:id="time" name="time" private_interface="out" public_interface="out" units="time_units"/>
+   </component>
+   <component name="Environment">
+      <variable initial_value="310" name="T" private_interface="out" units="Temperature_units"/>
+      <variable initial_value="297" name="T_exp" private_interface="out" units="Temperature_units"/>
+      <variable initial_value="96.4846" name="F" private_interface="out" public_interface="out" units="F_units"/>
+      <variable initial_value="8.3144" name="R" private_interface="out" units="R_units"/>
+
+      <variable initial_value="2.1" name="Q10Ca" private_interface="out" units="dimensionless"/>
+      <variable initial_value="1.5" name="Q10K" private_interface="out" units="dimensionless"/>
+      <variable initial_value="2.45" name="Q10Na" private_interface="out" units="dimensionless"/>
+      <variable initial_value="2.5" name="Ca_o" private_interface="out" public_interface="out" units="millimolar"/>
+      <variable initial_value="137" name="Na_o" private_interface="out" public_interface="out" units="millimolar"/>
+      <variable initial_value="7" name="K_o" private_interface="out" public_interface="out" units="millimolar"/>
+      <variable initial_value="134" name="Cl_o" private_interface="out" public_interface="out" units="millimolar"/>
+      <variable name="T_correction_Na" private_interface="out" public_interface="out" units="dimensionless"/>
+      <variable name="T_correction_K" private_interface="out" public_interface="out" units="dimensionless"/>
+
+      <variable name="T_correction_Ca" private_interface="out" public_interface="out" units="dimensionless"/>
+      <variable name="T_correction_BK" private_interface="out" public_interface="out" units="conductance_units"/>
+      <variable name="FoRT" private_interface="out" public_interface="out" units="Inverse_Voltage_units"/>
+      <variable name="RToF" private_interface="out" public_interface="out" units="voltage_units"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>FoRT</ci>
+
+            <apply>
+               <divide/>
+               <ci>F</ci>
+               <apply>
+                  <times/>
+                  <ci>R</ci>
+                  <ci>T</ci>
+
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>RToF</ci>
+            <apply>
+               <divide/>
+
+               <apply>
+                  <times/>
+                  <ci>R</ci>
+                  <ci>T</ci>
+               </apply>
+               <ci>F</ci>
+            </apply>
+
+         </apply>
+         <apply>
+            <eq/>
+            <ci>T_correction_Ca</ci>
+            <apply>
+               <power/>
+               <ci>Q10Ca</ci>
+               <apply>
+
+                  <divide/>
+                  <apply>
+                     <minus/>
+                     <ci>T</ci>
+                     <ci>T_exp</ci>
+                  </apply>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="Temperature_units">10</cn>
+
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>T_correction_K</ci>
+            <apply>
+               <power/>
+
+               <ci>Q10K</ci>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <minus/>
+                     <ci>T</ci>
+                     <ci>T_exp</ci>
+
+                  </apply>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="Temperature_units">10</cn>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>T_correction_Na</ci>
+
+            <apply>
+               <power/>
+               <ci>Q10Na</ci>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <minus/>
+                     <ci>T</ci>
+
+                     <ci>T_exp</ci>
+                  </apply>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="Temperature_units">10</cn>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+
+            <ci>T_correction_BK</ci>
+            <apply>
+               <times/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="Inverse_Temperature_units_times_conductance">1.1</cn>
+               <apply>
+                  <minus/>
+                  <ci>T</ci>
+
+                  <ci>T_exp</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="ICC_Membrane">
+      <variable initial_value="0.025" name="Cm" units="capacitance_units"/>
+
+      <variable initial_value="1e-12" name="Vol" private_interface="out" public_interface="out" units="volume_units"/>
+      <variable initial_value="0.7" name="P_cyto" private_interface="out" public_interface="out" units="dimensionless"/>
+      <variable name="V_cyto" private_interface="out" units="volume_units"/>
+      <variable initial_value="0.01" name="fc" private_interface="out" units="dimensionless"/>
+      <variable cmeta:id="Vm" initial_value="-67" name="Vm" private_interface="out" units="voltage_units"/>
+      <variable name="time" private_interface="out" public_interface="in" units="time_units"/>
+      <variable initial_value="0.00000993087" name="Ca_i" private_interface="out" public_interface="out" units="millimolar"/>
+      <variable initial_value="30" name="Na_i" private_interface="out" public_interface="out" units="millimolar"/>
+      <variable initial_value="120" name="K_i" private_interface="out" units="millimolar"/>
+
+      <variable initial_value="88" name="Cl_i" private_interface="out" units="millimolar"/>
+      <variable name="Ca_o" private_interface="out" public_interface="in" units="millimolar"/>
+      <variable name="Na_o" private_interface="out" public_interface="in" units="millimolar"/>
+      <variable name="K_o" private_interface="out" public_interface="in" units="millimolar"/>
+      <variable name="Cl_o" private_interface="out" public_interface="in" units="millimolar"/>
+      <variable name="T_correction_Ca" private_interface="out" public_interface="in" units="dimensionless"/>
+      <variable name="T_correction_Na" private_interface="out" public_interface="in" units="dimensionless"/>
+      <variable name="T_correction_K" private_interface="out" public_interface="in" units="dimensionless"/>
+      <variable name="T_correction_BK" private_interface="out" public_interface="in" units="conductance_units"/>
+
+      <variable name="RToF" private_interface="out" public_interface="in" units="voltage_units"/>
+      <variable name="FoRT" private_interface="out" public_interface="in" units="Inverse_Voltage_units"/>
+      <variable name="F" private_interface="out" public_interface="in" units="F_units"/>
+      <variable name="J_leak" private_interface="in" units="millimolar_per_second"/>
+      <variable name="I_Na" private_interface="in" units="current_units"/>
+      <variable name="I_Ltype" private_interface="in" units="current_units"/>
+      <variable name="I_VDDR" private_interface="in" units="current_units"/>
+      <variable name="I_kv11" private_interface="in" units="current_units"/>
+      <variable name="I_BK" private_interface="in" units="current_units"/>
+
+      <variable name="I_ERG" private_interface="in" units="current_units"/>
+      <variable name="I_CaCl" private_interface="in" units="current_units"/>
+      <variable name="I_NSCC" private_interface="in" units="current_units"/>
+      <variable name="I_bk" private_interface="in" units="current_units"/>
+      <variable name="J_PMCA" private_interface="in" units="millimolar_per_second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_cyto</ci>
+
+            <apply>
+               <times/>
+               <ci>Vol</ci>
+               <ci>P_cyto</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Vm</ci>
+            </apply>
+            <apply>
+
+               <times/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <minus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+
+                     </apply>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  </apply>
+                  <ci>Cm</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>I_Na</ci>
+
+                  <ci>I_Ltype</ci>
+                  <ci>I_VDDR</ci>
+                  <ci>I_kv11</ci>
+                  <ci>I_ERG</ci>
+                  <ci>I_BK</ci>
+                  <ci>I_CaCl</ci>
+
+                  <ci>I_NSCC</ci>
+                  <ci>I_bk</ci>
+                  <apply>
+                     <times/>
+                     <ci>J_PMCA</ci>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millimole_to_nanomole">1000000</cn>
+
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="microcoulomb_to_picocoulomb">1000000</cn>
+                     <ci>F</ci>
+                     <ci>V_cyto</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Ca_i</ci>
+
+            </apply>
+            <apply>
+               <times/>
+               <ci>fc</ci>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <divide/>
+
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <times/>
+                           <apply>
+                              <minus/>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                           </apply>
+
+                           <ci>I_Ltype</ci>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <apply>
+                              <minus/>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                           </apply>
+
+                           <ci>I_VDDR</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millimole_to_nanomole">1000000</cn>
+
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="microcoulomb_to_picocoulomb">1000000</cn>
+                        <ci>F</ci>
+                        <ci>V_cyto</ci>
+                     </apply>
+                  </apply>
+                  <ci>J_leak</ci>
+                  <apply>
+
+                     <times/>
+                     <apply>
+                        <minus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                     </apply>
+                     <ci>J_PMCA</ci>
+                  </apply>
+               </apply>
+
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="d_Ltype">
+      <variable name="Vm" public_interface="in" units="voltage_units"/>
+      <variable name="d_inf_Ltype" units="dimensionless"/>
+      <variable name="tau_d_Ltype" units="time_units"/>
+      <variable initial_value="0" name="d_Ltype" public_interface="out" units="dimensionless"/>
+
+      <variable name="time" public_interface="in" units="time_units"/>
+      <variable name="T_correction_Ca" public_interface="in" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>d_inf_Ltype</ci>
+            <apply>
+               <divide/>
+
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <divide/>
+
+                        <apply>
+                           <plus/>
+                           <ci>Vm</ci>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="voltage_units">17</cn>
+                        </apply>
+                        <apply>
+                           <minus/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="voltage_units">4.3</cn>
+
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>tau_d_Ltype</ci>
+
+            <apply>
+               <times/>
+               <ci>T_correction_Ca</ci>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="time_units">0.001</cn>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>d_Ltype</ci>
+            </apply>
+            <apply>
+
+               <divide/>
+               <apply>
+                  <minus/>
+                  <ci>d_inf_Ltype</ci>
+                  <ci>d_Ltype</ci>
+               </apply>
+               <ci>tau_d_Ltype</ci>
+
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="f_Ltype">
+      <variable name="Vm" public_interface="in" units="voltage_units"/>
+      <variable name="f_inf_Ltype" units="dimensionless"/>
+      <variable name="tau_f_Ltype" units="time_units"/>
+      <variable initial_value="1" name="f_Ltype" public_interface="out" units="dimensionless"/>
+
+      <variable name="time" public_interface="in" units="time_units"/>
+      <variable name="T_correction_Ca" public_interface="in" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>f_inf_Ltype</ci>
+            <apply>
+               <divide/>
+
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <divide/>
+
+                        <apply>
+                           <plus/>
+                           <ci>Vm</ci>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="voltage_units">43</cn>
+                        </apply>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="voltage_units">8.9</cn>
+                     </apply>
+
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>tau_f_Ltype</ci>
+            <apply>
+
+               <times/>
+               <ci>T_correction_Ca</ci>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="time_units">0.086</cn>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>f_Ltype</ci>
+            </apply>
+            <apply>
+               <divide/>
+
+               <apply>
+                  <minus/>
+                  <ci>f_inf_Ltype</ci>
+                  <ci>f_Ltype</ci>
+               </apply>
+               <ci>tau_f_Ltype</ci>
+            </apply>
+
+         </apply>
+      </math>
+   </component>
+   <component name="f_ca_Ltype">
+      <variable name="Ca_i" public_interface="in" units="millimolar"/>
+      <variable name="f_ca_inf_Ltype" units="dimensionless"/>
+      <variable name="tau_f_ca_Ltype" units="time_units"/>
+      <variable initial_value="1" name="f_ca_Ltype" public_interface="out" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="time_units"/>
+
+      <variable name="T_correction_Ca" public_interface="in" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>f_ca_inf_Ltype</ci>
+            <apply>
+               <minus/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+
+               <apply>
+                  <divide/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <plus/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                     <apply>
+                        <exp/>
+
+                        <apply>
+                           <divide/>
+                           <apply>
+                              <minus/>
+                              <apply>
+                                 <minus/>
+                                 <ci>Ca_i</ci>
+                                 <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millimolar">0.0001</cn>
+
+                              </apply>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millimolar">0.000214</cn>
+                           </apply>
+                           <apply>
+                              <minus/>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millimolar">0.0000131</cn>
+                           </apply>
+                        </apply>
+
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>tau_f_ca_Ltype</ci>
+
+            <apply>
+               <times/>
+               <ci>T_correction_Ca</ci>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="time_units">0.002</cn>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>f_ca_Ltype</ci>
+            </apply>
+            <apply>
+
+               <divide/>
+               <apply>
+                  <minus/>
+                  <ci>f_ca_inf_Ltype</ci>
+                  <ci>f_ca_Ltype</ci>
+               </apply>
+               <ci>tau_f_ca_Ltype</ci>
+
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="I_Ltype">
+      <variable cmeta:id="I_Ltype_I_Ltype" name="I_Ltype" public_interface="out" units="current_units"/>
+      <variable name="E_Ca" units="voltage_units"/>
+      <variable initial_value="2" name="G_max_Ltype" units="conductance_units"/>
+      <variable name="Vm" private_interface="out" public_interface="in" units="voltage_units"/>
+
+      <variable name="f_Ltype" private_interface="in" units="dimensionless"/>
+      <variable name="d_Ltype" private_interface="in" units="dimensionless"/>
+      <variable name="f_ca_Ltype" private_interface="in" units="dimensionless"/>
+      <variable name="RToF" public_interface="in" units="voltage_units"/>
+      <variable name="Ca_o" public_interface="in" units="millimolar"/>
+      <variable name="Ca_i" private_interface="out" public_interface="in" units="millimolar"/>
+      <variable name="T_correction_Ca" private_interface="out" public_interface="in" units="dimensionless"/>
+      <variable name="time" private_interface="out" public_interface="in" units="time_units"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+
+         <apply>
+            <eq/>
+            <ci>E_Ca</ci>
+            <apply>
+               <times/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.5</cn>
+               <ci>RToF</ci>
+
+               <apply>
+                  <ln/>
+                  <apply>
+                     <divide/>
+                     <ci>Ca_o</ci>
+                     <ci>Ca_i</ci>
+                  </apply>
+               </apply>
+
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>I_Ltype</ci>
+            <apply>
+               <times/>
+               <ci>G_max_Ltype</ci>
+
+               <ci>f_Ltype</ci>
+               <ci>d_Ltype</ci>
+               <ci>f_ca_Ltype</ci>
+               <apply>
+                  <minus/>
+                  <ci>Vm</ci>
+                  <ci>E_Ca</ci>
+
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="J_PMCA">
+      <variable name="J_PMCA" public_interface="out" units="millimolar_per_second"/>
+      <variable initial_value="0.088464" name="J_max_PMCA" units="millimolar_per_second"/>
+      <variable name="Ca_i" public_interface="in" units="millimolar"/>
+
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>J_PMCA</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+
+                  <ci>J_max_PMCA</ci>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               </apply>
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+
+                     <divide/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millimolar">0.000298</cn>
+                     <ci>Ca_i</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+
+   </component>
+   <component name="d_VDDR">
+      <variable name="Vm" public_interface="in" units="voltage_units"/>
+      <variable name="d_inf_VDDR" units="dimensionless"/>
+      <variable name="tau_d_VDDR" units="time_units"/>
+      <variable initial_value="0" name="d_VDDR" public_interface="out" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="time_units"/>
+      <variable name="T_correction_Ca" public_interface="in" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+
+         <apply>
+            <eq/>
+            <ci>d_inf_VDDR</ci>
+            <apply>
+               <divide/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               <apply>
+                  <plus/>
+
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <plus/>
+                           <ci>Vm</ci>
+
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="voltage_units">26</cn>
+                        </apply>
+                        <apply>
+                           <minus/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="voltage_units">6</cn>
+                        </apply>
+                     </apply>
+                  </apply>
+
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>tau_d_VDDR</ci>
+            <apply>
+               <times/>
+
+               <ci>T_correction_Ca</ci>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="time_units">0.006</cn>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>d_VDDR</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+
+                  <minus/>
+                  <ci>d_inf_VDDR</ci>
+                  <ci>d_VDDR</ci>
+               </apply>
+               <ci>tau_d_VDDR</ci>
+            </apply>
+         </apply>
+
+      </math>
+   </component>
+   <component name="f_VDDR">
+      <variable name="Vm" public_interface="in" units="voltage_units"/>
+      <variable name="f_inf_VDDR" units="dimensionless"/>
+      <variable name="tau_f_VDDR" units="time_units"/>
+      <variable initial_value="1" name="f_VDDR" public_interface="out" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="time_units"/>
+      <variable name="T_correction_Ca" public_interface="in" units="dimensionless"/>
+
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>f_inf_VDDR</ci>
+            <apply>
+               <divide/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               <apply>
+
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <plus/>
+
+                           <ci>Vm</ci>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="voltage_units">66</cn>
+                        </apply>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="voltage_units">6</cn>
+                     </apply>
+                  </apply>
+               </apply>
+
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>tau_f_VDDR</ci>
+            <apply>
+               <times/>
+               <ci>T_correction_Ca</ci>
+
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="time_units">0.04</cn>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+
+                  <ci>time</ci>
+               </bvar>
+               <ci>f_VDDR</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+
+                  <ci>f_inf_VDDR</ci>
+                  <ci>f_VDDR</ci>
+               </apply>
+               <ci>tau_f_VDDR</ci>
+            </apply>
+         </apply>
+      </math>
+
+   </component>
+   <component name="I_VDDR">
+      <variable cmeta:id="I_VDDR_I_VDDR" name="I_VDDR" public_interface="out" units="current_units"/>
+      <variable name="E_Ca" units="voltage_units"/>
+      <variable initial_value="3" name="G_max_VDDR" units="conductance_units"/>
+      <variable name="Vm" private_interface="out" public_interface="in" units="voltage_units"/>
+      <variable name="f_VDDR" private_interface="in" units="dimensionless"/>
+      <variable name="d_VDDR" private_interface="in" units="dimensionless"/>
+      <variable name="RToF" public_interface="in" units="voltage_units"/>
+
+      <variable name="Ca_o" public_interface="in" units="millimolar"/>
+      <variable name="Ca_i" public_interface="in" units="millimolar"/>
+      <variable name="T_correction_Ca" private_interface="out" public_interface="in" units="dimensionless"/>
+      <variable name="time" private_interface="out" public_interface="in" units="time_units"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>E_Ca</ci>
+
+            <apply>
+               <times/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.5</cn>
+               <ci>RToF</ci>
+               <apply>
+                  <ln/>
+                  <apply>
+                     <divide/>
+
+                     <ci>Ca_o</ci>
+                     <ci>Ca_i</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+
+            <ci>I_VDDR</ci>
+            <apply>
+               <times/>
+               <ci>G_max_VDDR</ci>
+               <ci>f_VDDR</ci>
+               <ci>d_VDDR</ci>
+               <apply>
+
+                  <minus/>
+                  <ci>Vm</ci>
+                  <ci>E_Ca</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+
+   <component name="d_CaCl">
+      <variable name="Ca_i" public_interface="in" units="millimolar"/>
+      <variable name="d_inf_CaCl" units="dimensionless"/>
+      <variable initial_value="0.03" name="tau_d_CaCl" units="time_units"/>
+      <variable initial_value="0" name="d_CaCl" public_interface="out" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="time_units"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+
+            <ci>d_inf_CaCl</ci>
+            <apply>
+               <divide/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+
+                  <apply>
+                     <power/>
+                     <apply>
+                        <divide/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millimolar">0.00014</cn>
+                        <ci>Ca_i</ci>
+                     </apply>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+
+                  <ci>time</ci>
+               </bvar>
+               <ci>d_CaCl</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+
+                  <ci>d_inf_CaCl</ci>
+                  <ci>d_CaCl</ci>
+               </apply>
+               <ci>tau_d_CaCl</ci>
+            </apply>
+         </apply>
+      </math>
+
+   </component>
+   <component name="I_CaCl">
+      <variable cmeta:id="I_CaCl_I_CaCl" name="I_CaCl" public_interface="out" units="current_units"/>
+      <variable name="Ca_i" private_interface="out" public_interface="in" units="millimolar"/>
+      <variable name="E_Cl" units="voltage_units"/>
+      <variable initial_value="10.1" name="G_max_CaCl" units="conductance_units"/>
+      <variable name="Vm" public_interface="in" units="voltage_units"/>
+      <variable name="d_CaCl" private_interface="in" units="dimensionless"/>
+      <variable name="RToF" public_interface="in" units="voltage_units"/>
+
+      <variable name="Cl_o" public_interface="in" units="millimolar"/>
+      <variable name="Cl_i" public_interface="in" units="millimolar"/>
+      <variable name="time" private_interface="out" public_interface="in" units="time_units"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>E_Cl</ci>
+            <apply>
+
+               <times/>
+               <ci>RToF</ci>
+               <apply>
+                  <ln/>
+                  <apply>
+                     <divide/>
+                     <ci>Cl_i</ci>
+                     <ci>Cl_o</ci>
+
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>I_CaCl</ci>
+            <apply>
+
+               <times/>
+               <ci>G_max_CaCl</ci>
+               <ci>d_CaCl</ci>
+               <apply>
+                  <minus/>
+                  <ci>Vm</ci>
+                  <ci>E_Cl</ci>
+
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="d_BK">
+      <variable name="Vm" public_interface="in" units="voltage_units"/>
+      <variable name="Ca_i" public_interface="in" units="millimolar"/>
+      <variable name="d_BK" public_interface="out" units="dimensionless"/>
+
+      <variable name="time" public_interface="in" units="time_units"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>d_BK</ci>
+            <apply>
+               <divide/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <minus/>
+                        <apply>
+
+                           <divide/>
+                           <ci>Vm</ci>
+                           <apply>
+                              <minus/>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="voltage_units">17</cn>
+                           </apply>
+                        </apply>
+                        <apply>
+
+                           <times/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                           <apply>
+                              <ln/>
+                              <apply>
+                                 <divide/>
+                                 <ci>Ca_i</ci>
+                                 <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millimolar">0.001</cn>
+
+                              </apply>
+                           </apply>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+
+   </component>
+   <component name="I_BK">
+      <variable cmeta:id="I_BK_I_BK" name="I_BK" public_interface="out" units="current_units"/>
+      <variable name="Ca_i" private_interface="out" public_interface="in" units="millimolar"/>
+      <variable name="E_K" units="voltage_units"/>
+      <variable initial_value="23" name="G_max_BK" units="conductance_units"/>
+      <variable name="Vm" private_interface="out" public_interface="in" units="voltage_units"/>
+      <variable name="d_BK" private_interface="in" units="dimensionless"/>
+      <variable name="RToF" public_interface="in" units="voltage_units"/>
+
+      <variable name="K_o" public_interface="in" units="millimolar"/>
+      <variable name="K_i" public_interface="in" units="millimolar"/>
+      <variable name="T_correction_BK" public_interface="in" units="conductance_units"/>
+      <variable name="time" private_interface="out" public_interface="in" units="time_units"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>E_K</ci>
+
+            <apply>
+               <times/>
+               <ci>RToF</ci>
+               <apply>
+                  <ln/>
+                  <apply>
+                     <divide/>
+                     <ci>K_o</ci>
+
+                     <ci>K_i</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>I_BK</ci>
+
+            <apply>
+               <times/>
+               <apply>
+                  <plus/>
+                  <ci>G_max_BK</ci>
+                  <ci>T_correction_BK</ci>
+               </apply>
+               <ci>d_BK</ci>
+
+               <apply>
+                  <minus/>
+                  <ci>Vm</ci>
+                  <ci>E_K</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+
+   </component>
+   <component name="I_bk">
+      <variable name="I_bk" public_interface="out" units="current_units"/>
+      <variable name="E_K" units="voltage_units"/>
+      <variable initial_value="0.15" name="G_max_bk" units="conductance_units"/>
+      <variable name="Vm" public_interface="in" units="voltage_units"/>
+      <variable name="RToF" public_interface="in" units="voltage_units"/>
+      <variable name="K_o" public_interface="in" units="millimolar"/>
+      <variable name="K_i" public_interface="in" units="millimolar"/>
+
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>E_K</ci>
+            <apply>
+               <times/>
+               <ci>RToF</ci>
+               <apply>
+
+                  <ln/>
+                  <apply>
+                     <divide/>
+                     <ci>K_o</ci>
+                     <ci>K_i</ci>
+                  </apply>
+               </apply>
+            </apply>
+
+         </apply>
+         <apply>
+            <eq/>
+            <ci>I_bk</ci>
+            <apply>
+               <times/>
+               <ci>G_max_bk</ci>
+               <apply>
+
+                  <minus/>
+                  <ci>Vm</ci>
+                  <ci>E_K</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+
+   <component name="d_ERG">
+      <variable name="Vm" public_interface="in" units="voltage_units"/>
+      <variable name="d_inf_ERG" units="dimensionless"/>
+      <variable name="tau_d_ERG" units="time_units"/>
+      <variable initial_value="0" name="d_ERG" public_interface="out" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="time_units"/>
+      <variable name="T_correction_K" public_interface="in" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+
+            <eq/>
+            <ci>d_inf_ERG</ci>
+            <apply>
+               <plus/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.2</cn>
+               <apply>
+                  <divide/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.8</cn>
+
+                  <apply>
+                     <plus/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                     <apply>
+                        <exp/>
+                        <apply>
+                           <divide/>
+                           <apply>
+
+                              <plus/>
+                              <ci>Vm</ci>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="voltage_units">20</cn>
+                           </apply>
+                           <apply>
+                              <minus/>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="voltage_units">1.8</cn>
+
+                           </apply>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+
+            <ci>tau_d_ERG</ci>
+            <apply>
+               <times/>
+               <ci>T_correction_K</ci>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="time_units">0.003</cn>
+            </apply>
+         </apply>
+
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>d_ERG</ci>
+
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <ci>d_inf_ERG</ci>
+                  <ci>d_ERG</ci>
+               </apply>
+
+               <ci>tau_d_ERG</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="I_ERG">
+      <variable cmeta:id="I_ERG_I_ERG" name="I_ERG" public_interface="out" units="current_units"/>
+      <variable name="E_K" units="voltage_units"/>
+
+      <variable initial_value="2.5" name="G_max_ERG" units="conductance_units"/>
+      <variable name="Vm" private_interface="out" public_interface="in" units="voltage_units"/>
+      <variable name="d_ERG" private_interface="in" units="dimensionless"/>
+      <variable name="RToF" public_interface="in" units="voltage_units"/>
+      <variable name="K_o" public_interface="in" units="millimolar"/>
+      <variable name="K_i" public_interface="in" units="millimolar"/>
+      <variable name="T_correction_K" private_interface="out" public_interface="in" units="dimensionless"/>
+      <variable name="time" private_interface="out" public_interface="in" units="time_units"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+
+         <apply>
+            <eq/>
+            <ci>E_K</ci>
+            <apply>
+               <times/>
+               <ci>RToF</ci>
+               <apply>
+                  <ln/>
+
+                  <apply>
+                     <divide/>
+                     <ci>K_o</ci>
+                     <ci>K_i</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+
+         <apply>
+            <eq/>
+            <ci>I_ERG</ci>
+            <apply>
+               <times/>
+               <ci>G_max_ERG</ci>
+               <ci>d_ERG</ci>
+
+               <apply>
+                  <minus/>
+                  <ci>Vm</ci>
+                  <ci>E_K</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+
+   </component>
+   <component name="d_kv11">
+      <variable name="Vm" public_interface="in" units="voltage_units"/>
+      <variable name="d_inf_kv11" units="dimensionless"/>
+      <variable name="tau_d_kv11" units="time_units"/>
+      <variable initial_value="0" name="d_kv11" public_interface="out" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="time_units"/>
+      <variable name="T_correction_K" public_interface="in" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+
+         <apply>
+            <eq/>
+            <ci>d_inf_kv11</ci>
+            <apply>
+               <divide/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               <apply>
+                  <plus/>
+
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <plus/>
+                           <ci>Vm</ci>
+
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="voltage_units">25</cn>
+                        </apply>
+                        <apply>
+                           <minus/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="voltage_units">7.7</cn>
+                        </apply>
+                     </apply>
+                  </apply>
+
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>tau_d_kv11</ci>
+            <apply>
+               <times/>
+
+               <ci>T_correction_K</ci>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="time_units">0.005</cn>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>d_kv11</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+
+                  <minus/>
+                  <ci>d_inf_kv11</ci>
+                  <ci>d_kv11</ci>
+               </apply>
+               <ci>tau_d_kv11</ci>
+            </apply>
+         </apply>
+
+      </math>
+   </component>
+   <component name="f_kv11">
+      <variable name="Vm" public_interface="in" units="voltage_units"/>
+      <variable name="f_inf_kv11" units="dimensionless"/>
+      <variable name="tau_f_kv11" units="time_units"/>
+      <variable initial_value="1" name="f_kv11" public_interface="out" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="time_units"/>
+      <variable name="T_correction_K" public_interface="in" units="dimensionless"/>
+
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>f_inf_kv11</ci>
+            <apply>
+               <plus/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.5</cn>
+               <apply>
+
+                  <divide/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.5</cn>
+                  <apply>
+                     <plus/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                     <apply>
+                        <exp/>
+                        <apply>
+
+                           <divide/>
+                           <apply>
+                              <plus/>
+                              <ci>Vm</ci>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="voltage_units">44.8</cn>
+                           </apply>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="voltage_units">4.4</cn>
+
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>tau_f_kv11</ci>
+
+            <apply>
+               <times/>
+               <ci>T_correction_K</ci>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="time_units">0.005</cn>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>f_kv11</ci>
+            </apply>
+            <apply>
+
+               <divide/>
+               <apply>
+                  <minus/>
+                  <ci>f_inf_kv11</ci>
+                  <ci>f_kv11</ci>
+               </apply>
+               <ci>tau_f_kv11</ci>
+
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="I_kv11">
+      <variable cmeta:id="I_kv11_I_kv11" name="I_kv11" public_interface="out" units="current_units"/>
+      <variable name="E_K" units="voltage_units"/>
+      <variable initial_value="6.3" name="G_max_kv11" units="conductance_units"/>
+      <variable name="Vm" private_interface="out" public_interface="in" units="voltage_units"/>
+
+      <variable name="f_kv11" private_interface="in" units="dimensionless"/>
+      <variable name="d_kv11" private_interface="in" units="dimensionless"/>
+      <variable name="RToF" public_interface="in" units="voltage_units"/>
+      <variable name="K_o" public_interface="in" units="millimolar"/>
+      <variable name="K_i" public_interface="in" units="millimolar"/>
+      <variable name="T_correction_K" private_interface="out" public_interface="in" units="dimensionless"/>
+      <variable name="time" private_interface="out" public_interface="in" units="time_units"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+
+            <eq/>
+            <ci>E_K</ci>
+            <apply>
+               <times/>
+               <ci>RToF</ci>
+               <apply>
+                  <ln/>
+                  <apply>
+
+                     <divide/>
+                     <ci>K_o</ci>
+                     <ci>K_i</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+
+            <eq/>
+            <ci>I_kv11</ci>
+            <apply>
+               <times/>
+               <ci>G_max_kv11</ci>
+               <ci>f_kv11</ci>
+               <ci>d_kv11</ci>
+
+               <apply>
+                  <minus/>
+                  <ci>Vm</ci>
+                  <ci>E_K</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+
+   </component>
+   <component name="d_Na">
+      <variable name="Vm" public_interface="in" units="voltage_units"/>
+      <variable name="d_inf_Na" units="dimensionless"/>
+      <variable name="tau_d_Na" units="time_units"/>
+      <variable initial_value="0" name="d_Na" public_interface="out" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="time_units"/>
+      <variable name="T_correction_Na" public_interface="in" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+
+         <apply>
+            <eq/>
+            <ci>d_inf_Na</ci>
+            <apply>
+               <divide/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               <apply>
+                  <plus/>
+
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <plus/>
+                           <ci>Vm</ci>
+
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="voltage_units">47</cn>
+                        </apply>
+                        <apply>
+                           <minus/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="voltage_units">4.8</cn>
+                        </apply>
+                     </apply>
+                  </apply>
+
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>tau_d_Na</ci>
+            <apply>
+               <times/>
+
+               <ci>T_correction_Na</ci>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="time_units">0.003</cn>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>d_Na</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+
+                  <minus/>
+                  <ci>d_inf_Na</ci>
+                  <ci>d_Na</ci>
+               </apply>
+               <ci>tau_d_Na</ci>
+            </apply>
+         </apply>
+
+      </math>
+   </component>
+   <component name="f_Na">
+      <variable name="Vm" public_interface="in" units="voltage_units"/>
+      <variable name="f_inf_Na" units="dimensionless"/>
+      <variable name="tau_f_Na" units="time_units"/>
+      <variable initial_value="1" name="f_Na" public_interface="out" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="time_units"/>
+      <variable name="T_correction_Na" public_interface="in" units="dimensionless"/>
+
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>f_inf_Na</ci>
+            <apply>
+               <divide/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               <apply>
+
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <plus/>
+
+                           <ci>Vm</ci>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="voltage_units">78</cn>
+                        </apply>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="voltage_units">7</cn>
+                     </apply>
+                  </apply>
+               </apply>
+
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>tau_f_Na</ci>
+            <apply>
+               <times/>
+               <ci>T_correction_Na</ci>
+
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="time_units">0.0016</cn>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+
+                  <ci>time</ci>
+               </bvar>
+               <ci>f_Na</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+
+                  <ci>f_inf_Na</ci>
+                  <ci>f_Na</ci>
+               </apply>
+               <ci>tau_f_Na</ci>
+            </apply>
+         </apply>
+      </math>
+
+   </component>
+   <component name="I_Na">
+      <variable cmeta:id="I_Na_I_Na" name="I_Na" public_interface="out" units="current_units"/>
+      <variable name="E_Na" units="voltage_units"/>
+      <variable initial_value="20" name="G_max_Na" units="conductance_units"/>
+      <variable name="Vm" private_interface="out" public_interface="in" units="voltage_units"/>
+      <variable name="f_Na" private_interface="in" units="dimensionless"/>
+      <variable name="d_Na" private_interface="in" units="dimensionless"/>
+      <variable name="RToF" public_interface="in" units="voltage_units"/>
+
+      <variable name="Na_o" public_interface="in" units="millimolar"/>
+      <variable name="Na_i" public_interface="in" units="millimolar"/>
+      <variable name="T_correction_Na" private_interface="out" public_interface="in" units="dimensionless"/>
+      <variable name="time" private_interface="out" public_interface="in" units="time_units"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>E_Na</ci>
+
+            <apply>
+               <times/>
+               <ci>RToF</ci>
+               <apply>
+                  <ln/>
+                  <apply>
+                     <divide/>
+                     <ci>Na_o</ci>
+
+                     <ci>Na_i</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>I_Na</ci>
+
+            <apply>
+               <times/>
+               <ci>G_max_Na</ci>
+               <ci>f_Na</ci>
+               <ci>d_Na</ci>
+               <apply>
+                  <minus/>
+
+                  <ci>Vm</ci>
+                  <ci>E_Na</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="d_NSCC">
+
+      <variable name="Ca_PU" public_interface="in" units="millimolar"/>
+      <variable name="d_inf_NSCC" units="dimensionless"/>
+      <variable initial_value="0.35" name="tau_d_NSCC" units="time_units"/>
+      <variable initial_value="0" name="d_NSCC" public_interface="out" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="time_units"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>d_inf_NSCC</ci>
+
+            <apply>
+               <divide/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <power/>
+
+                     <apply>
+                        <divide/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millimolar">0.0000745</cn>
+                        <ci>Ca_PU</ci>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">85</cn>
+
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>d_NSCC</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+
+                  <minus/>
+                  <ci>d_inf_NSCC</ci>
+                  <ci>d_NSCC</ci>
+               </apply>
+               <ci>tau_d_NSCC</ci>
+            </apply>
+         </apply>
+
+      </math>
+   </component>
+   <component name="I_NSCC">
+      <variable cmeta:id="I_NSCC_I_NSCC" name="I_NSCC" public_interface="out" units="current_units"/>
+      <variable name="E_NSCC" units="voltage_units"/>
+      <variable initial_value="12.15" name="G_max_NSCC" units="conductance_units"/>
+      <variable name="Vm" public_interface="in" units="voltage_units"/>
+      <variable name="d_NSCC" private_interface="in" units="dimensionless"/>
+      <variable name="RToF" public_interface="in" units="voltage_units"/>
+
+      <variable name="Na_o" public_interface="in" units="millimolar"/>
+      <variable name="Na_i" public_interface="in" units="millimolar"/>
+      <variable name="K_o" public_interface="in" units="millimolar"/>
+      <variable name="K_i" public_interface="in" units="millimolar"/>
+      <variable initial_value="1.056075" name="NaPerm_o_Kperm" units="dimensionless"/>
+      <variable name="Ca_PU" private_interface="out" public_interface="in" units="millimolar"/>
+      <variable name="time" private_interface="out" public_interface="in" units="time_units"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+
+            <eq/>
+            <ci>E_NSCC</ci>
+            <apply>
+               <times/>
+               <ci>RToF</ci>
+               <apply>
+                  <ln/>
+                  <apply>
+
+                     <divide/>
+                     <apply>
+                        <plus/>
+                        <ci>K_o</ci>
+                        <apply>
+                           <times/>
+                           <ci>Na_o</ci>
+                           <ci>NaPerm_o_Kperm</ci>
+
+                        </apply>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci>K_i</ci>
+                        <apply>
+                           <times/>
+                           <ci>Na_i</ci>
+
+                           <ci>NaPerm_o_Kperm</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+
+            <eq/>
+            <ci>I_NSCC</ci>
+            <apply>
+               <times/>
+               <ci>G_max_NSCC</ci>
+               <ci>d_NSCC</ci>
+               <apply>
+
+                  <minus/>
+                  <ci>Vm</ci>
+                  <ci>E_NSCC</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+
+   <component name="PU_unit">
+      <variable name="Vol" public_interface="in" units="volume_units"/>
+      <variable initial_value="0.001" name="P_PU" units="dimensionless"/>
+      <variable initial_value="0.12871" name="P_mito" units="dimensionless"/>
+      <variable initial_value="0.1" name="P_ER" units="dimensionless"/>
+      <variable name="V_MITO" units="volume_units"/>
+      <variable name="V_ER" units="volume_units"/>
+      <variable name="V_PU" units="volume_units"/>
+      <variable initial_value="0.01" name="fe" units="dimensionless"/>
+
+      <variable initial_value="0.0003" name="fm" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="time_units"/>
+      <variable name="fc" public_interface="in" units="dimensionless"/>
+      <variable name="Na_i" public_interface="in" units="millimolar"/>
+      <variable name="Ca_i" public_interface="in" units="millimolar"/>
+      <variable name="V_cyto" public_interface="in" units="volume_units"/>
+      <variable name="FoRT" public_interface="in" units="Inverse_Voltage_units"/>
+      <variable name="RToF" public_interface="in" units="voltage_units"/>
+      <variable initial_value="0.0000902" name="Ca_PU" private_interface="out" public_interface="out" units="millimolar"/>
+
+      <variable name="F" public_interface="in" units="F_units"/>
+      <variable initial_value="0.000136" name="Ca_m" units="millimolar"/>
+      <variable initial_value="0.007299" name="Ca_ER" units="millimolar"/>
+      <variable initial_value="2.60093454" name="ADP_m" units="millimolar"/>
+      <variable initial_value="0.0077282" name="ADP_i" units="millimolar"/>
+      <variable initial_value="0.101476" name="NADH_m" units="millimolar"/>
+      <variable initial_value="0.9397" name="h" units="dimensionless"/>
+      <variable initial_value="0.0006" name="IP3" units="millimolar"/>
+      <variable initial_value="164.000044" name="deltaPsi" units="voltage_units"/>
+
+      <variable initial_value="-0.4" name="deltapH" units="dimensionless"/>
+      <variable initial_value="0.006995" name="Cmito" units="millifarads"/>
+      <variable initial_value="1.35e18" name="K_res" units="dimensionless"/>
+      <variable initial_value="2.077e-18" name="r1" units="dimensionless"/>
+      <variable initial_value="1.728e-9" name="r2" units="dimensionless"/>
+      <variable initial_value="1.059e-26" name="r3" units="dimensionless"/>
+      <variable initial_value="6.394e-10" name="ra" units="rate_constants_units"/>
+      <variable initial_value="1.762e-13" name="rb" units="rate_constants_units"/>
+      <variable initial_value="2.656e-19" name="rc1" units="rate_constants_units"/>
+
+      <variable initial_value="8.632e-27" name="rc2" units="rate_constants_units"/>
+      <variable initial_value="50" name="deltaPsi_B" units="voltage_units"/>
+      <variable initial_value="0.85" name="g" units="dimensionless"/>
+      <variable initial_value="1.71e9" name="K_F1" units="millimolar"/>
+      <variable initial_value="20" name="Pi_m" units="millimolar"/>
+      <variable initial_value="1.346e-8" name="p1" units="dimensionless"/>
+      <variable initial_value="7.739e-7" name="p2" units="dimensionless"/>
+      <variable initial_value="6.65e-15" name="p3" units="dimensionless"/>
+      <variable initial_value="1.656e-5" name="pa" units="rate_constants_units"/>
+
+      <variable initial_value="3.373e-7" name="pb" units="rate_constants_units"/>
+      <variable initial_value="9.651e-14" name="pc1" units="rate_constants_units"/>
+      <variable initial_value="4.845e-19" name="pc2" units="rate_constants_units"/>
+      <variable initial_value="0.5" name="frac" units="dimensionless"/>
+      <variable initial_value="0.00038" name="K_act" units="millimolar"/>
+      <variable initial_value="2.8" name="na" units="dimensionless"/>
+      <variable initial_value="91" name="deltaPsi_star" units="voltage_units"/>
+      <variable initial_value="9.4" name="K_Na" units="millimolar"/>
+      <variable initial_value="0.003" name="K_Ca" units="millimolar"/>
+
+      <variable initial_value="0.006" name="K_trans" units="millimolar"/>
+      <variable initial_value="50" name="L" units="dimensionless"/>
+      <variable initial_value="0.5" name="b" units="dimensionless"/>
+      <variable initial_value="2.055" name="beta_max" units="rate_constants_units"/>
+      <variable initial_value="1.66" name="beta1" units="per_millimolar"/>
+      <variable initial_value="0.0249" name="beta2" units="per_millimolar"/>
+      <variable initial_value="4" name="beta3" units="per_millimolar"/>
+      <variable initial_value="2.83" name="beta4" units="per_millimolar"/>
+      <variable initial_value="1.3" name="beta5" units="per_millimolar"/>
+
+      <variable initial_value="2.66" name="beta6" units="per_millimolar"/>
+      <variable initial_value="0.16" name="beta7" units="per_millimolar"/>
+      <variable initial_value="0.00005" name="KCa_PDH" units="millimolar"/>
+      <variable initial_value="15" name="u1" units="dimensionless"/>
+      <variable initial_value="1.1" name="u2" units="dimensionless"/>
+      <variable initial_value="2" name="n" units="dimensionless"/>
+      <variable initial_value="8.7" name="K_Glc" units="millimolar"/>
+      <variable initial_value="2.7" name="nhyd" units="dimensionless"/>
+      <variable initial_value="0.05125" name="K_hyd" units="rate_constants_units"/>
+
+      <variable initial_value="1.666667" name="J_ERleak" units="rate_constants_units"/>
+      <variable initial_value="50000" name="Jmax_IP3" units="rate_constants_units"/>
+      <variable initial_value="0.00025" name="d_IP3" units="millimolar"/>
+      <variable initial_value="0.001" name="d_ACT" units="millimolar"/>
+      <variable initial_value="0.0014" name="d_INH" units="millimolar"/>
+      <variable initial_value="4" name="tauh" units="time_units"/>
+      <variable initial_value="1.8333" name="Jmax_serca" units="millimolar_per_second"/>
+      <variable initial_value="0.00042" name="k_serca" units="millimolar"/>
+      <variable initial_value="0.001" name="conc" units="millimolar"/>
+
+      <variable initial_value="5000" name="Jmax_uni" units="rate_constants_units"/>
+      <variable initial_value="0.05" name="Jmax_NaCa" units="millimolar_per_second"/>
+      <variable initial_value="0.01" name="J_max_leak" units="rate_constants_units"/>
+      <variable initial_value="0.4" name="rho_res" units="millimolar"/>
+      <variable initial_value="0.7" name="rho_F1" units="millimolar"/>
+      <variable initial_value="0.0033333" name="g_H" units="millimolar_per_second_per_millivolt"/>
+      <variable initial_value="0.3333" name="J_red_basal" units="millimolar_per_second"/>
+      <variable initial_value="15" name="Jmax_ANT" units="millimolar_per_second"/>
+      <variable initial_value="0.037625" name="J_hyd_max" units="millimolar_per_second"/>
+
+      <variable initial_value="1" name="Glc" units="millimolar"/>
+      <variable initial_value="8" name="total_NAD_m" units="millimolar"/>
+      <variable initial_value="12" name="total_ANP_m" units="millimolar"/>
+      <variable initial_value="2" name="total_ANP_i" units="millimolar"/>
+      <variable name="NAD_m" units="millimolar"/>
+      <variable name="ATP_m" units="millimolar"/>
+      <variable name="ADP_mfree" units="millimolar"/>
+      <variable name="ADP3_m" units="millimolar"/>
+      <variable name="ATP4_m" units="millimolar"/>
+
+      <variable name="ATP_i" units="millimolar"/>
+      <variable name="ADP_ifree" units="millimolar"/>
+      <variable name="ADP3_i" units="millimolar"/>
+      <variable name="MgADP_i" units="millimolar"/>
+      <variable name="ATP4_i" units="millimolar"/>
+      <variable name="J_ERout" units="millimolar_per_second"/>
+      <variable name="J_SERCA" units="millimolar_per_second"/>
+      <variable name="MWC" units="millimolar"/>
+      <variable name="J_uni" units="millimolar_per_second"/>
+
+      <variable name="J_NaCa" units="millimolar_per_second"/>
+      <variable name="J_leak" public_interface="out" units="millimolar_per_second"/>
+      <variable name="J_red" units="millimolar_per_second"/>
+      <variable name="J_pTCA" units="millimolar_per_second"/>
+      <variable name="A_F1" units="voltage_units"/>
+      <variable name="J_pF1" units="millimolar_per_second"/>
+      <variable name="J_HF1" units="millimolar_per_second"/>
+      <variable name="A_res" units="voltage_units"/>
+      <variable name="J_o" units="millimolar_per_second"/>
+
+      <variable name="J_glyTotal" units="millimolar_per_second"/>
+      <variable name="f_PDHa" units="dimensionless"/>
+      <variable name="J_Hres" units="millimolar_per_second"/>
+      <variable name="J_ANT" units="millimolar_per_second"/>
+      <variable name="PMF" units="voltage_units"/>
+      <variable name="J_Hleak" units="millimolar_per_second"/>
+      <variable name="J_pGly" units="millimolar_per_second"/>
+      <variable name="J_hydSS" units="millimolar_per_second"/>
+      <variable name="J_hyd" units="millimolar_per_second"/>
+
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_MITO</ci>
+            <apply>
+               <times/>
+               <ci>Vol</ci>
+               <ci>P_mito</ci>
+
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>V_PU</ci>
+            <apply>
+               <times/>
+               <ci>Vol</ci>
+
+               <ci>P_PU</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>V_ER</ci>
+            <apply>
+               <times/>
+
+               <ci>Vol</ci>
+               <ci>P_ER</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_ERout</ci>
+
+            <apply>
+               <times/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>Jmax_IP3</ci>
+                     <apply>
+
+                        <power/>
+                        <apply>
+                           <divide/>
+                           <ci>IP3</ci>
+                           <apply>
+                              <plus/>
+                              <ci>IP3</ci>
+                              <ci>d_IP3</ci>
+
+                           </apply>
+                        </apply>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+                     </apply>
+                     <apply>
+                        <power/>
+                        <apply>
+                           <divide/>
+
+                           <ci>Ca_PU</ci>
+                           <apply>
+                              <plus/>
+                              <ci>Ca_PU</ci>
+                              <ci>d_ACT</ci>
+                           </apply>
+                        </apply>
+
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+                     </apply>
+                     <apply>
+                        <power/>
+                        <ci>h</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+                     </apply>
+
+                  </apply>
+                  <ci>J_ERleak</ci>
+               </apply>
+               <apply>
+                  <minus/>
+                  <ci>Ca_ER</ci>
+                  <ci>Ca_PU</ci>
+
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_SERCA</ci>
+            <apply>
+               <divide/>
+
+               <apply>
+                  <times/>
+                  <ci>Jmax_serca</ci>
+                  <apply>
+                     <power/>
+                     <ci>Ca_PU</ci>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+
+                  </apply>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <power/>
+                     <ci>k_serca</ci>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+
+                  </apply>
+                  <apply>
+                     <power/>
+                     <ci>Ca_PU</ci>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                  </apply>
+               </apply>
+            </apply>
+
+         </apply>
+         <apply>
+            <eq/>
+            <ci>MWC</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>conc</ci>
+                        <ci>Ca_PU</ci>
+                     </apply>
+                     <ci>K_trans</ci>
+
+                  </apply>
+                  <apply>
+                     <power/>
+                     <apply>
+                        <plus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        <apply>
+                           <divide/>
+
+                           <ci>Ca_PU</ci>
+                           <ci>K_trans</ci>
+                        </apply>
+                     </apply>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+                  </apply>
+               </apply>
+
+               <apply>
+                  <plus/>
+                  <apply>
+                     <power/>
+                     <apply>
+                        <plus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        <apply>
+
+                           <divide/>
+                           <ci>Ca_PU</ci>
+                           <ci>K_trans</ci>
+                        </apply>
+                     </apply>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4</cn>
+                  </apply>
+
+                  <apply>
+                     <divide/>
+                     <ci>L</ci>
+                     <apply>
+                        <power/>
+                        <apply>
+                           <plus/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+
+                           <apply>
+                              <divide/>
+                              <ci>Ca_PU</ci>
+                              <ci>K_act</ci>
+                           </apply>
+                        </apply>
+                        <ci>na</ci>
+
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_uni</ci>
+
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>Jmax_uni</ci>
+                  <apply>
+                     <minus/>
+                     <ci>MWC</ci>
+
+                     <apply>
+                        <times/>
+                        <ci>Ca_m</ci>
+                        <apply>
+                           <exp/>
+                           <apply>
+                              <times/>
+                              <apply>
+
+                                 <minus/>
+                                 <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                              </apply>
+                              <ci>FoRT</ci>
+                              <apply>
+                                 <minus/>
+                                 <ci>deltaPsi</ci>
+
+                                 <ci>deltaPsi_star</ci>
+                              </apply>
+                           </apply>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                  <ci>FoRT</ci>
+
+                  <apply>
+                     <minus/>
+                     <ci>deltaPsi</ci>
+                     <ci>deltaPsi_star</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <minus/>
+
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <minus/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+
+                        </apply>
+                        <ci>FoRT</ci>
+                        <apply>
+                           <minus/>
+                           <ci>deltaPsi</ci>
+                           <ci>deltaPsi_star</ci>
+                        </apply>
+
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_NaCa</ci>
+
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>Jmax_NaCa</ci>
+                  <apply>
+                     <exp/>
+                     <apply>
+
+                        <times/>
+                        <ci>b</ci>
+                        <ci>FoRT</ci>
+                        <apply>
+                           <minus/>
+                           <ci>deltaPsi</ci>
+                           <ci>deltaPsi_star</ci>
+
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <plus/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+
+                     <apply>
+                        <power/>
+                        <apply>
+                           <divide/>
+                           <ci>K_Na</ci>
+                           <ci>Na_i</ci>
+                        </apply>
+                        <ci>n</ci>
+
+                     </apply>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                     <apply>
+                        <divide/>
+                        <ci>K_Ca</ci>
+
+                        <ci>Ca_m</ci>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+
+            <ci>J_leak</ci>
+            <apply>
+               <times/>
+               <ci>J_max_leak</ci>
+               <apply>
+                  <minus/>
+                  <ci>Ca_PU</ci>
+
+                  <ci>Ca_i</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>A_res</ci>
+            <apply>
+
+               <times/>
+               <ci>RToF</ci>
+               <apply>
+                  <ln/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+
+                        <ci>K_res</ci>
+                        <apply>
+                           <root/>
+                           <ci>NADH_m</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <root/>
+
+                        <ci>NAD_m</ci>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+
+            <ci>J_o</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>rho_res</ci>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.5</cn>
+
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <plus/>
+                           <apply>
+                              <times/>
+                              <ci>ra</ci>
+
+                              <apply>
+                                 <power/>
+                                 <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">10</cn>
+                                 <apply>
+                                    <times/>
+                                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">6</cn>
+                                    <ci>deltapH</ci>
+
+                                 </apply>
+                              </apply>
+                           </apply>
+                           <apply>
+                              <times/>
+                              <ci>rc1</ci>
+                              <apply>
+                                 <exp/>
+
+                                 <apply>
+                                    <times/>
+                                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">6</cn>
+                                    <ci>deltaPsi_B</ci>
+                                    <ci>FoRT</ci>
+                                 </apply>
+                              </apply>
+
+                           </apply>
+                        </apply>
+                        <apply>
+                           <exp/>
+                           <apply>
+                              <times/>
+                              <ci>A_res</ci>
+                              <ci>FoRT</ci>
+
+                           </apply>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <minus/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+
+                        </apply>
+                        <ci>ra</ci>
+                        <apply>
+                           <exp/>
+                           <apply>
+                              <times/>
+                              <ci>g</ci>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">6</cn>
+
+                              <ci>FoRT</ci>
+                              <ci>deltaPsi</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>rc2</ci>
+
+                        <apply>
+                           <exp/>
+                           <apply>
+                              <times/>
+                              <ci>FoRT</ci>
+                              <ci>A_res</ci>
+                           </apply>
+                        </apply>
+
+                        <apply>
+                           <exp/>
+                           <apply>
+                              <times/>
+                              <ci>FoRT</ci>
+                              <ci>deltaPsi</ci>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">6</cn>
+
+                              <ci>g</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <plus/>
+
+                  <apply>
+                     <times/>
+                     <apply>
+                        <plus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        <apply>
+                           <times/>
+                           <ci>r1</ci>
+
+                           <apply>
+                              <exp/>
+                              <apply>
+                                 <times/>
+                                 <ci>FoRT</ci>
+                                 <ci>A_res</ci>
+                              </apply>
+                           </apply>
+
+                        </apply>
+                     </apply>
+                     <apply>
+                        <exp/>
+                        <apply>
+                           <times/>
+                           <ci>FoRT</ci>
+                           <ci>deltaPsi_B</ci>
+
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">6</cn>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <plus/>
+
+                        <ci>r2</ci>
+                        <apply>
+                           <times/>
+                           <ci>r3</ci>
+                           <apply>
+                              <exp/>
+                              <apply>
+                                 <times/>
+
+                                 <ci>FoRT</ci>
+                                 <ci>A_res</ci>
+                              </apply>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <exp/>
+
+                        <apply>
+                           <times/>
+                           <ci>FoRT</ci>
+                           <ci>deltaPsi</ci>
+                           <ci>g</ci>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">6</cn>
+                        </apply>
+
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_Hres</ci>
+
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>rho_res</ci>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3.966</cn>
+                  <apply>
+                     <plus/>
+
+                     <apply>
+                        <times/>
+                        <ci>ra</ci>
+                        <apply>
+                           <power/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">10</cn>
+                           <apply>
+                              <times/>
+
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">6</cn>
+                              <ci>deltapH</ci>
+                           </apply>
+                        </apply>
+                        <apply>
+                           <exp/>
+                           <apply>
+                              <times/>
+
+                              <ci>FoRT</ci>
+                              <ci>A_res</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>rb</ci>
+
+                        <apply>
+                           <power/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">10</cn>
+                           <apply>
+                              <times/>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">6</cn>
+                              <ci>deltapH</ci>
+
+                           </apply>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <minus/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+
+                        </apply>
+                        <apply>
+                           <plus/>
+                           <ci>ra</ci>
+                           <ci>rb</ci>
+                        </apply>
+                        <apply>
+                           <exp/>
+
+                           <apply>
+                              <times/>
+                              <ci>g</ci>
+                              <ci>FoRT</ci>
+                              <ci>deltaPsi</ci>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">6</cn>
+                           </apply>
+
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <apply>
+
+                        <plus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        <apply>
+                           <times/>
+                           <ci>r1</ci>
+                           <apply>
+                              <exp/>
+                              <apply>
+
+                                 <times/>
+                                 <ci>FoRT</ci>
+                                 <ci>A_res</ci>
+                              </apply>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <apply>
+
+                        <exp/>
+                        <apply>
+                           <times/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">6</cn>
+                           <ci>FoRT</ci>
+                           <ci>deltaPsi_B</ci>
+                        </apply>
+
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <plus/>
+                        <ci>r2</ci>
+                        <apply>
+
+                           <times/>
+                           <ci>r3</ci>
+                           <apply>
+                              <exp/>
+                              <apply>
+                                 <times/>
+                                 <ci>FoRT</ci>
+                                 <ci>A_res</ci>
+
+                              </apply>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <exp/>
+                        <apply>
+                           <times/>
+                           <ci>g</ci>
+
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">6</cn>
+                           <ci>FoRT</ci>
+                           <ci>deltaPsi</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_glyTotal</ci>
+            <apply>
+               <divide/>
+               <apply>
+
+                  <times/>
+                  <ci>beta_max</ci>
+                  <apply>
+                     <plus/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                     <apply>
+                        <times/>
+                        <ci>beta1</ci>
+
+                        <ci>Glc</ci>
+                     </apply>
+                  </apply>
+                  <ci>beta2</ci>
+                  <ci>Glc</ci>
+                  <ci>ATP_i</ci>
+               </apply>
+
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <times/>
+                     <ci>beta3</ci>
+                     <ci>ATP_i</ci>
+
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <plus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        <apply>
+                           <times/>
+
+                           <ci>beta4</ci>
+                           <ci>ATP_i</ci>
+                        </apply>
+                     </apply>
+                     <ci>beta5</ci>
+                     <ci>Glc</ci>
+                  </apply>
+
+                  <apply>
+                     <times/>
+                     <apply>
+                        <plus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        <apply>
+                           <times/>
+                           <ci>beta6</ci>
+
+                           <ci>ATP_i</ci>
+                        </apply>
+                     </apply>
+                     <ci>beta7</ci>
+                     <ci>Glc</ci>
+                  </apply>
+               </apply>
+
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>f_PDHa</ci>
+            <apply>
+               <divide/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <times/>
+                     <ci>u2</ci>
+                     <apply>
+                        <plus/>
+
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        <apply>
+                           <divide/>
+                           <ci>u1</ci>
+                           <apply>
+                              <power/>
+                              <apply>
+                                 <plus/>
+
+                                 <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                                 <apply>
+                                    <divide/>
+                                    <ci>Ca_m</ci>
+                                    <ci>KCa_PDH</ci>
+                                 </apply>
+                              </apply>
+
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                           </apply>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+
+         <apply>
+            <eq/>
+            <ci>J_red</ci>
+            <apply>
+               <plus/>
+               <ci>J_red_basal</ci>
+               <apply>
+                  <times/>
+
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">6.3944</cn>
+                  <ci>f_PDHa</ci>
+                  <ci>J_glyTotal</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+
+            <eq/>
+            <ci>J_pTCA</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <divide/>
+                  <ci>J_red_basal</ci>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+
+               </apply>
+               <apply>
+                  <times/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.84</cn>
+                  <ci>f_PDHa</ci>
+                  <ci>J_glyTotal</ci>
+               </apply>
+
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>A_F1</ci>
+            <apply>
+               <times/>
+               <ci>RToF</ci>
+
+               <apply>
+                  <ln/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>K_F1</ci>
+                        <ci>ATP_m</ci>
+
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>ADP_mfree</ci>
+                        <ci>Pi_m</ci>
+                     </apply>
+                  </apply>
+               </apply>
+
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_pF1</ci>
+            <apply>
+               <divide/>
+               <apply>
+
+                  <times/>
+                  <ci>rho_F1</ci>
+                  <apply>
+                     <minus/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  </apply>
+                  <apply>
+                     <plus/>
+
+                     <apply>
+                        <times/>
+                        <apply>
+                           <plus/>
+                           <apply>
+                              <times/>
+                              <ci>pa</ci>
+                              <apply>
+
+                                 <power/>
+                                 <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">10</cn>
+                                 <apply>
+                                    <times/>
+                                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+                                    <ci>deltapH</ci>
+                                 </apply>
+
+                              </apply>
+                           </apply>
+                           <apply>
+                              <times/>
+                              <ci>pc1</ci>
+                              <apply>
+                                 <exp/>
+                                 <apply>
+
+                                    <times/>
+                                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+                                    <ci>FoRT</ci>
+                                    <ci>deltaPsi_B</ci>
+                                 </apply>
+                              </apply>
+                           </apply>
+
+                        </apply>
+                        <apply>
+                           <exp/>
+                           <apply>
+                              <times/>
+                              <ci>FoRT</ci>
+                              <ci>A_F1</ci>
+                           </apply>
+
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <minus/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        </apply>
+
+                        <ci>pa</ci>
+                        <apply>
+                           <exp/>
+                           <apply>
+                              <times/>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+                              <ci>FoRT</ci>
+
+                              <ci>deltaPsi</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>pc2</ci>
+                        <apply>
+
+                           <exp/>
+                           <apply>
+                              <times/>
+                              <ci>FoRT</ci>
+                              <ci>A_F1</ci>
+                           </apply>
+                        </apply>
+                        <apply>
+
+                           <exp/>
+                           <apply>
+                              <times/>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+                              <ci>FoRT</ci>
+                              <ci>deltaPsi</ci>
+                           </apply>
+
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <apply>
+
+                        <plus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        <apply>
+                           <times/>
+                           <ci>p1</ci>
+                           <apply>
+                              <exp/>
+                              <apply>
+
+                                 <times/>
+                                 <ci>FoRT</ci>
+                                 <ci>A_F1</ci>
+                              </apply>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <apply>
+
+                        <exp/>
+                        <apply>
+                           <times/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+                           <ci>FoRT</ci>
+                           <ci>deltaPsi_B</ci>
+                        </apply>
+
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <plus/>
+                        <ci>p2</ci>
+                        <apply>
+
+                           <times/>
+                           <ci>p3</ci>
+                           <apply>
+                              <exp/>
+                              <apply>
+                                 <times/>
+                                 <ci>FoRT</ci>
+                                 <ci>A_F1</ci>
+
+                              </apply>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <exp/>
+                        <apply>
+                           <times/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+
+                           <ci>FoRT</ci>
+                           <ci>deltaPsi</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+
+         <apply>
+            <eq/>
+            <ci>J_HF1</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <apply>
+
+                     <minus/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  </apply>
+                  <ci>rho_F1</ci>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+                  <apply>
+                     <plus/>
+
+                     <apply>
+                        <times/>
+                        <ci>pa</ci>
+                        <apply>
+                           <power/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">10</cn>
+                           <apply>
+                              <times/>
+
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+                              <ci>deltapH</ci>
+                           </apply>
+                        </apply>
+                        <apply>
+                           <exp/>
+                           <apply>
+                              <times/>
+
+                              <ci>FoRT</ci>
+                              <ci>A_F1</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>pb</ci>
+
+                        <apply>
+                           <power/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">10</cn>
+                           <apply>
+                              <times/>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+                              <ci>deltapH</ci>
+
+                           </apply>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <minus/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+
+                        </apply>
+                        <apply>
+                           <plus/>
+                           <ci>pa</ci>
+                           <ci>pb</ci>
+                        </apply>
+                        <apply>
+                           <exp/>
+
+                           <apply>
+                              <times/>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+                              <ci>FoRT</ci>
+                              <ci>deltaPsi</ci>
+                           </apply>
+                        </apply>
+
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <plus/>
+
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        <apply>
+                           <times/>
+                           <ci>p1</ci>
+                           <apply>
+                              <exp/>
+                              <apply>
+                                 <times/>
+
+                                 <ci>FoRT</ci>
+                                 <ci>A_F1</ci>
+                              </apply>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <exp/>
+
+                        <apply>
+                           <times/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+                           <ci>FoRT</ci>
+                           <ci>deltaPsi_B</ci>
+                        </apply>
+                     </apply>
+
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <plus/>
+                        <ci>p2</ci>
+                        <apply>
+                           <times/>
+
+                           <ci>p3</ci>
+                           <apply>
+                              <exp/>
+                              <apply>
+                                 <times/>
+                                 <ci>FoRT</ci>
+                                 <ci>A_F1</ci>
+
+                              </apply>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <exp/>
+                        <apply>
+                           <times/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+
+                           <ci>FoRT</ci>
+                           <ci>deltaPsi</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_ANT</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+
+                  <ci>Jmax_ANT</ci>
+                  <apply>
+                     <minus/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+
+                           <apply>
+                              <times/>
+                              <ci>ATP4_i</ci>
+                              <ci>ADP3_m</ci>
+                           </apply>
+                           <apply>
+                              <times/>
+                              <ci>ADP3_i</ci>
+
+                              <ci>ATP4_m</ci>
+                           </apply>
+                        </apply>
+                        <apply>
+                           <exp/>
+                           <apply>
+                              <times/>
+                              <apply>
+
+                                 <minus/>
+                                 <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                              </apply>
+                              <ci>FoRT</ci>
+                              <ci>deltaPsi</ci>
+                           </apply>
+                        </apply>
+
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <plus/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>ATP4_i</ci>
+                           <ci>ADP3_i</ci>
+                        </apply>
+                        <apply>
+
+                           <exp/>
+                           <apply>
+                              <times/>
+                              <apply>
+                                 <minus/>
+                                 <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                              </apply>
+                              <ci>frac</ci>
+
+                              <ci>FoRT</ci>
+                              <ci>deltaPsi</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <plus/>
+
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                     <apply>
+                        <divide/>
+                        <ci>ADP3_m</ci>
+                        <ci>ATP4_m</ci>
+                     </apply>
+                  </apply>
+
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>PMF</ci>
+            <apply>
+               <minus/>
+
+               <ci>deltaPsi</ci>
+               <apply>
+                  <times/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2.303</cn>
+                  <ci>RToF</ci>
+                  <ci>deltapH</ci>
+               </apply>
+
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_Hleak</ci>
+            <apply>
+               <times/>
+               <ci>g_H</ci>
+
+               <ci>PMF</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_pGly</ci>
+            <apply>
+               <times/>
+
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.15</cn>
+               <ci>J_glyTotal</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_hydSS</ci>
+
+            <apply>
+               <divide/>
+               <ci>J_hyd_max</ci>
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <power/>
+
+                     <apply>
+                        <divide/>
+                        <ci>K_Glc</ci>
+                        <ci>Glc</ci>
+                     </apply>
+                     <ci>nhyd</ci>
+                  </apply>
+
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_hyd</ci>
+            <apply>
+               <plus/>
+
+               <apply>
+                  <times/>
+                  <ci>K_hyd</ci>
+                  <ci>ATP_i</ci>
+               </apply>
+               <ci>J_hydSS</ci>
+            </apply>
+
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+
+               <ci>NADH_m</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>J_red</ci>
+               <ci>J_o</ci>
+            </apply>
+
+         </apply>
+         <apply>
+            <eq/>
+            <ci>NAD_m</ci>
+            <apply>
+               <minus/>
+               <ci>total_NAD_m</ci>
+               <ci>NADH_m</ci>
+
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+
+               </bvar>
+               <ci>ADP_m</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <ci>J_ANT</ci>
+               <apply>
+                  <times/>
+
+                  <apply>
+                     <minus/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  </apply>
+                  <ci>J_pTCA</ci>
+               </apply>
+               <apply>
+                  <times/>
+
+                  <apply>
+                     <minus/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  </apply>
+                  <ci>J_pF1</ci>
+               </apply>
+            </apply>
+         </apply>
+
+         <apply>
+            <eq/>
+            <ci>ATP_m</ci>
+            <apply>
+               <minus/>
+               <ci>total_ANP_m</ci>
+               <ci>ADP_m</ci>
+
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>ADP_mfree</ci>
+            <apply>
+               <times/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.8</cn>
+
+               <ci>ADP_m</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>ADP3_m</ci>
+            <apply>
+               <times/>
+
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.45</cn>
+               <ci>ADP_mfree</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>ATP4_m</ci>
+
+            <apply>
+               <times/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.05</cn>
+               <ci>ATP_m</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>ADP_i</ci>
+            </apply>
+            <apply>
+
+               <plus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <minus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+
+                     </apply>
+                     <ci>J_ANT</ci>
+                     <ci>V_MITO</ci>
+                  </apply>
+                  <ci>V_cyto</ci>
+               </apply>
+               <ci>J_hyd</ci>
+
+               <apply>
+                  <times/>
+                  <apply>
+                     <minus/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  </apply>
+                  <ci>J_pGly</ci>
+               </apply>
+
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>ATP_i</ci>
+            <apply>
+               <minus/>
+               <ci>total_ANP_i</ci>
+
+               <ci>ADP_i</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>ADP_ifree</ci>
+            <apply>
+               <times/>
+
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.3</cn>
+               <ci>ADP_i</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>ADP3_i</ci>
+
+            <apply>
+               <times/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.45</cn>
+               <ci>ADP_ifree</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+
+            <ci>MgADP_i</ci>
+            <apply>
+               <times/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.55</cn>
+               <ci>ADP_ifree</ci>
+            </apply>
+         </apply>
+
+         <apply>
+            <eq/>
+            <ci>ATP4_i</ci>
+            <apply>
+               <times/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.05</cn>
+               <ci>ATP_i</ci>
+
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+
+               </bvar>
+               <ci>Ca_PU</ci>
+            </apply>
+            <apply>
+               <times/>
+               <ci>fc</ci>
+               <apply>
+                  <plus/>
+
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <minus/>
+                           <ci>J_NaCa</ci>
+                           <ci>J_uni</ci>
+
+                        </apply>
+                        <ci>V_MITO</ci>
+                     </apply>
+                     <ci>V_PU</ci>
+                  </apply>
+                  <apply>
+                     <divide/>
+                     <apply>
+
+                        <times/>
+                        <apply>
+                           <minus/>
+                           <ci>J_ERout</ci>
+                           <ci>J_SERCA</ci>
+                        </apply>
+                        <ci>V_ER</ci>
+
+                     </apply>
+                     <ci>V_PU</ci>
+                  </apply>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <apply>
+
+                           <minus/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        </apply>
+                        <ci>J_leak</ci>
+                        <ci>V_cyto</ci>
+                     </apply>
+                     <ci>V_PU</ci>
+
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+
+                  <ci>time</ci>
+               </bvar>
+               <ci>Ca_m</ci>
+            </apply>
+            <apply>
+               <times/>
+               <ci>fm</ci>
+
+               <apply>
+                  <minus/>
+                  <ci>J_uni</ci>
+                  <ci>J_NaCa</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Ca_ER</ci>
+            </apply>
+
+            <apply>
+               <times/>
+               <ci>fe</ci>
+               <apply>
+                  <minus/>
+                  <ci>J_SERCA</ci>
+                  <ci>J_ERout</ci>
+
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+
+               </bvar>
+               <ci>deltaPsi</ci>
+            </apply>
+            <apply>
+               <times/>
+               <apply>
+                  <divide/>
+                  <apply>
+
+                     <times/>
+                     <apply>
+                        <minus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                     </apply>
+                     <ci>F</ci>
+                     <ci>V_MITO</ci>
+
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millimole_to_nanomole">1000000</cn>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  </apply>
+                  <ci>Cmito</ci>
+               </apply>
+               <apply>
+                  <plus/>
+
+                  <ci>J_Hleak</ci>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <minus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                     </apply>
+                     <ci>J_Hres</ci>
+
+                  </apply>
+                  <ci>J_ANT</ci>
+                  <ci>J_HF1</ci>
+                  <apply>
+                     <times/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                     <ci>J_uni</ci>
+
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+
+                  <ci>time</ci>
+               </bvar>
+               <ci>h</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="per_millimolar">1</cn>
+                  <apply>
+                     <minus/>
+                     <ci>d_INH</ci>
+                     <apply>
+                        <times/>
+                        <ci>h</ci>
+
+                        <apply>
+                           <plus/>
+                           <ci>Ca_PU</ci>
+                           <ci>d_INH</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+
+               <ci>tauh</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <group>
+      <relationship_ref relationship="encapsulation"/>
+      <component_ref component="ICC_Membrane">
+
+         <component_ref component="I_Na">
+            <component_ref component="d_Na"/>
+            <component_ref component="f_Na"/>
+         </component_ref>
+         <component_ref component="I_Ltype">
+            <component_ref component="d_Ltype"/>
+            <component_ref component="f_Ltype"/>
+            <component_ref component="f_ca_Ltype"/>
+         </component_ref>
+
+         <component_ref component="I_VDDR">
+            <component_ref component="d_VDDR"/>
+            <component_ref component="f_VDDR"/>
+         </component_ref>
+         <component_ref component="I_BK">
+            <component_ref component="d_BK"/>
+         </component_ref>
+         <component_ref component="I_CaCl">
+            <component_ref component="d_CaCl"/>
+
+         </component_ref>
+         <component_ref component="I_kv11">
+            <component_ref component="d_kv11"/>
+            <component_ref component="f_kv11"/>
+         </component_ref>
+         <component_ref component="I_ERG">
+            <component_ref component="d_ERG"/>
+         </component_ref>
+         <component_ref component="I_bk"/>
+
+         <component_ref component="I_NSCC">
+            <component_ref component="d_NSCC"/>
+         </component_ref>
+         <component_ref component="J_PMCA"/>
+         <component_ref component="PU_unit"/>
+      </component_ref>
+   </group>
+   <connection>
+      <map_components component_1="d_Na" component_2="I_Na"/>
+
+      <map_variables variable_1="Vm" variable_2="Vm"/>
+      <map_variables variable_1="d_Na" variable_2="d_Na"/>
+      <map_variables variable_1="time" variable_2="time"/>
+      <map_variables variable_1="T_correction_Na" variable_2="T_correction_Na"/>
+   </connection>
+   <connection>
+      <map_components component_1="f_Na" component_2="I_Na"/>
+      <map_variables variable_1="Vm" variable_2="Vm"/>
+      <map_variables variable_1="f_Na" variable_2="f_Na"/>
+
+      <map_variables variable_1="time" variable_2="time"/>
+      <map_variables variable_1="T_correction_Na" variable_2="T_correction_Na"/>
+   </connection>
+   <connection>
+      <map_components component_1="I_Na" component_2="ICC_Membrane"/>
+      <map_variables variable_1="Na_i" variable_2="Na_i"/>
+      <map_variables variable_1="Vm" variable_2="Vm"/>
+      <map_variables variable_1="I_Na" variable_2="I_Na"/>
+      <map_variables variable_1="time" variable_2="time"/>
+
+      <map_variables variable_1="RToF" variable_2="RToF"/>
+      <map_variables variable_1="Na_o" variable_2="Na_o"/>
+      <map_variables variable_1="T_correction_Na" variable_2="T_correction_Na"/>
+   </connection>
+   <connection>
+      <map_components component_1="d_Ltype" component_2="I_Ltype"/>
+      <map_variables variable_1="Vm" variable_2="Vm"/>
+      <map_variables variable_1="d_Ltype" variable_2="d_Ltype"/>
+      <map_variables variable_1="time" variable_2="time"/>
+
+      <map_variables variable_1="T_correction_Ca" variable_2="T_correction_Ca"/>
+   </connection>
+   <connection>
+      <map_components component_1="f_Ltype" component_2="I_Ltype"/>
+      <map_variables variable_1="Vm" variable_2="Vm"/>
+      <map_variables variable_1="f_Ltype" variable_2="f_Ltype"/>
+      <map_variables variable_1="time" variable_2="time"/>
+      <map_variables variable_1="T_correction_Ca" variable_2="T_correction_Ca"/>
+   </connection>
+
+   <connection>
+      <map_components component_1="f_ca_Ltype" component_2="I_Ltype"/>
+      <map_variables variable_1="f_ca_Ltype" variable_2="f_ca_Ltype"/>
+      <map_variables variable_1="Ca_i" variable_2="Ca_i"/>
+      <map_variables variable_1="time" variable_2="time"/>
+      <map_variables variable_1="T_correction_Ca" variable_2="T_correction_Ca"/>
+   </connection>
+   <connection>
+      <map_components component_1="I_Ltype" component_2="ICC_Membrane"/>
+
+      <map_variables variable_1="Ca_i" variable_2="Ca_i"/>
+      <map_variables variable_1="Vm" variable_2="Vm"/>
+      <map_variables variable_1="I_Ltype" variable_2="I_Ltype"/>
+      <map_variables variable_1="time" variable_2="time"/>
+      <map_variables variable_1="RToF" variable_2="RToF"/>
+      <map_variables variable_1="Ca_o" variable_2="Ca_o"/>
+      <map_variables variable_1="T_correction_Ca" variable_2="T_correction_Ca"/>
+   </connection>
+   <connection>
+
+      <map_components component_1="d_VDDR" component_2="I_VDDR"/>
+      <map_variables variable_1="Vm" variable_2="Vm"/>
+      <map_variables variable_1="d_VDDR" variable_2="d_VDDR"/>
+      <map_variables variable_1="time" variable_2="time"/>
+      <map_variables variable_1="T_correction_Ca" variable_2="T_correction_Ca"/>
+   </connection>
+   <connection>
+      <map_components component_1="f_VDDR" component_2="I_VDDR"/>
+      <map_variables variable_1="Vm" variable_2="Vm"/>
+
+      <map_variables variable_1="f_VDDR" variable_2="f_VDDR"/>
+      <map_variables variable_1="time" variable_2="time"/>
+      <map_variables variable_1="T_correction_Ca" variable_2="T_correction_Ca"/>
+   </connection>
+   <connection>
+      <map_components component_1="I_VDDR" component_2="ICC_Membrane"/>
+      <map_variables variable_1="Ca_i" variable_2="Ca_i"/>
+      <map_variables variable_1="Vm" variable_2="Vm"/>
+      <map_variables variable_1="I_VDDR" variable_2="I_VDDR"/>
+
+      <map_variables variable_1="time" variable_2="time"/>
+      <map_variables variable_1="RToF" variable_2="RToF"/>
+      <map_variables variable_1="Ca_o" variable_2="Ca_o"/>
+      <map_variables variable_1="T_correction_Ca" variable_2="T_correction_Ca"/>
+   </connection>
+   <connection>
+      <map_components component_1="d_kv11" component_2="I_kv11"/>
+      <map_variables variable_1="Vm" variable_2="Vm"/>
+      <map_variables variable_1="d_kv11" variable_2="d_kv11"/>
+
+      <map_variables variable_1="time" variable_2="time"/>
+      <map_variables variable_1="T_correction_K" variable_2="T_correction_K"/>
+   </connection>
+   <connection>
+      <map_components component_1="f_kv11" component_2="I_kv11"/>
+      <map_variables variable_1="Vm" variable_2="Vm"/>
+      <map_variables variable_1="f_kv11" variable_2="f_kv11"/>
+      <map_variables variable_1="time" variable_2="time"/>
+      <map_variables variable_1="T_correction_K" variable_2="T_correction_K"/>
+
+   </connection>
+   <connection>
+      <map_components component_1="I_kv11" component_2="ICC_Membrane"/>
+      <map_variables variable_1="K_i" variable_2="K_i"/>
+      <map_variables variable_1="Vm" variable_2="Vm"/>
+      <map_variables variable_1="I_kv11" variable_2="I_kv11"/>
+      <map_variables variable_1="time" variable_2="time"/>
+      <map_variables variable_1="RToF" variable_2="RToF"/>
+      <map_variables variable_1="K_o" variable_2="K_o"/>
+
+      <map_variables variable_1="T_correction_K" variable_2="T_correction_K"/>
+   </connection>
+   <connection>
+      <map_components component_1="d_ERG" component_2="I_ERG"/>
+      <map_variables variable_1="Vm" variable_2="Vm"/>
+      <map_variables variable_1="d_ERG" variable_2="d_ERG"/>
+      <map_variables variable_1="time" variable_2="time"/>
+      <map_variables variable_1="T_correction_K" variable_2="T_correction_K"/>
+   </connection>
+
+   <connection>
+      <map_components component_1="I_ERG" component_2="ICC_Membrane"/>
+      <map_variables variable_1="K_i" variable_2="K_i"/>
+      <map_variables variable_1="Vm" variable_2="Vm"/>
+      <map_variables variable_1="I_ERG" variable_2="I_ERG"/>
+      <map_variables variable_1="time" variable_2="time"/>
+      <map_variables variable_1="RToF" variable_2="RToF"/>
+      <map_variables variable_1="K_o" variable_2="K_o"/>
+      <map_variables variable_1="T_correction_K" variable_2="T_correction_K"/>
+
+   </connection>
+   <connection>
+      <map_components component_1="d_CaCl" component_2="I_CaCl"/>
+      <map_variables variable_1="Ca_i" variable_2="Ca_i"/>
+      <map_variables variable_1="d_CaCl" variable_2="d_CaCl"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="I_CaCl" component_2="ICC_Membrane"/>
+
+      <map_variables variable_1="Cl_i" variable_2="Cl_i"/>
+      <map_variables variable_1="Ca_i" variable_2="Ca_i"/>
+      <map_variables variable_1="Vm" variable_2="Vm"/>
+      <map_variables variable_1="I_CaCl" variable_2="I_CaCl"/>
+      <map_variables variable_1="time" variable_2="time"/>
+      <map_variables variable_1="RToF" variable_2="RToF"/>
+      <map_variables variable_1="Cl_o" variable_2="Cl_o"/>
+   </connection>
+   <connection>
+
+      <map_components component_1="d_BK" component_2="I_BK"/>
+      <map_variables variable_1="Vm" variable_2="Vm"/>
+      <map_variables variable_1="Ca_i" variable_2="Ca_i"/>
+      <map_variables variable_1="d_BK" variable_2="d_BK"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="I_BK" component_2="ICC_Membrane"/>
+      <map_variables variable_1="K_i" variable_2="K_i"/>
+
+      <map_variables variable_1="Ca_i" variable_2="Ca_i"/>
+      <map_variables variable_1="Vm" variable_2="Vm"/>
+      <map_variables variable_1="I_BK" variable_2="I_BK"/>
+      <map_variables variable_1="time" variable_2="time"/>
+      <map_variables variable_1="RToF" variable_2="RToF"/>
+      <map_variables variable_1="K_o" variable_2="K_o"/>
+      <map_variables variable_1="T_correction_BK" variable_2="T_correction_BK"/>
+   </connection>
+   <connection>
+
+      <map_components component_1="I_bk" component_2="ICC_Membrane"/>
+      <map_variables variable_1="K_i" variable_2="K_i"/>
+      <map_variables variable_1="Vm" variable_2="Vm"/>
+      <map_variables variable_1="I_bk" variable_2="I_bk"/>
+      <map_variables variable_1="RToF" variable_2="RToF"/>
+      <map_variables variable_1="K_o" variable_2="K_o"/>
+   </connection>
+   <connection>
+      <map_components component_1="d_NSCC" component_2="I_NSCC"/>
+
+      <map_variables variable_1="Ca_PU" variable_2="Ca_PU"/>
+      <map_variables variable_1="d_NSCC" variable_2="d_NSCC"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="I_NSCC" component_2="ICC_Membrane"/>
+      <map_variables variable_1="K_i" variable_2="K_i"/>
+      <map_variables variable_1="Na_i" variable_2="Na_i"/>
+      <map_variables variable_1="Vm" variable_2="Vm"/>
+
+      <map_variables variable_1="I_NSCC" variable_2="I_NSCC"/>
+      <map_variables variable_1="time" variable_2="time"/>
+      <map_variables variable_1="RToF" variable_2="RToF"/>
+      <map_variables variable_1="K_o" variable_2="K_o"/>
+      <map_variables variable_1="Na_o" variable_2="Na_o"/>
+   </connection>
+   <connection>
+      <map_components component_1="PU_unit" component_2="I_NSCC"/>
+      <map_variables variable_1="Ca_PU" variable_2="Ca_PU"/>
+
+   </connection>
+   <connection>
+      <map_components component_1="PU_unit" component_2="ICC_Membrane"/>
+      <map_variables variable_1="Vol" variable_2="Vol"/>
+      <map_variables variable_1="fc" variable_2="fc"/>
+      <map_variables variable_1="V_cyto" variable_2="V_cyto"/>
+      <map_variables variable_1="FoRT" variable_2="FoRT"/>
+      <map_variables variable_1="RToF" variable_2="RToF"/>
+      <map_variables variable_1="Na_i" variable_2="Na_i"/>
+
+      <map_variables variable_1="Ca_i" variable_2="Ca_i"/>
+      <map_variables variable_1="time" variable_2="time"/>
+      <map_variables variable_1="J_leak" variable_2="J_leak"/>
+      <map_variables variable_1="F" variable_2="F"/>
+   </connection>
+   <connection>
+      <map_components component_1="J_PMCA" component_2="ICC_Membrane"/>
+      <map_variables variable_1="J_PMCA" variable_2="J_PMCA"/>
+      <map_variables variable_1="Ca_i" variable_2="Ca_i"/>
+
+   </connection>
+   <connection>
+      <map_components component_1="ICC_Membrane" component_2="Environment"/>
+      <map_variables variable_1="Ca_o" variable_2="Ca_o"/>
+      <map_variables variable_1="Na_o" variable_2="Na_o"/>
+      <map_variables variable_1="K_o" variable_2="K_o"/>
+      <map_variables variable_1="Cl_o" variable_2="Cl_o"/>
+      <map_variables variable_1="RToF" variable_2="RToF"/>
+      <map_variables variable_1="FoRT" variable_2="FoRT"/>
+
+      <map_variables variable_1="F" variable_2="F"/>
+      <map_variables variable_1="T_correction_Ca" variable_2="T_correction_Ca"/>
+      <map_variables variable_1="T_correction_Na" variable_2="T_correction_Na"/>
+      <map_variables variable_1="T_correction_K" variable_2="T_correction_K"/>
+      <map_variables variable_1="T_correction_BK" variable_2="T_correction_BK"/>
+   </connection>
+   <connection>
+      <map_components component_1="Time" component_2="ICC_Membrane"/>
+      <map_variables variable_1="time" variable_2="time"/>
+
+   </connection>
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:about="rdf:#3f223f43-0c27-4aed-8994-94ef0606dc7d"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Martin</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Buist</Family><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">L</Other></rdf:Description><rdf:Description rdf:about="#simulation"><iterationMethod xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">newton</iterationMethod><multistepMethod xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">bdf</multistepMethod><simulationName xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">Control ICC simulation</simulationName><boundIntervals xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:about="rdf:#88e6fcb2-1632-4383-afc8-ecd9578ce8ef"/></boundIntervals><linearSolver xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">dense</linearSolver></rdf:Description><rdf:Description rdf:about="rdf:#afc06574-c5a3-49c8-b6e0-3abf127dd373"><subject xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#ce3236eb-d538-43f6-9d3b-76c77471aa63"/></subject></rdf:Description><rdf:Description rdf:about="#ICC_model"><cmeta:comment><rdf:Description rdf:about="rdf:#12c09eab-8c0d-443c-b063-20f1986ee82d"/></cmeta:comment><simulation xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:about="#simulation"/></simulation><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:about="rdf:#e90088d5-9b13-46c8-994b-85bef2b0c803"/></reference><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:about="rdf:#afc06574-c5a3-49c8-b6e0-3abf127dd373"/></reference><graph xmlns="http://www.cellml.org/metadata/graphs/1.0#"><rdf:Description rdf:about="#membrane_potential_graph"/></graph></rdf:Description><rdf:Description rdf:about="rdf:#390b1cc6-49d4-4823-8484-06feacc3b0a5"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2008-03-01T00:00:00+00:00</W3CDTF></rdf:Description><rdf:Description rdf:about="rdf:#ce3236eb-d538-43f6-9d3b-76c77471aa63"><rdf:value><rdf:Description rdf:about="rdf:#01fb1a6d-4faa-4491-aade-4b5c9627319a"/></rdf:value><subject_type xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">keyword</subject_type></rdf:Description><rdf:Description rdf:about="rdf:#fa17c078-e887-43db-aafe-5024530192aa"><rdf:type><rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/></rdf:type><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#fd972d44-bae6-4301-81f4-82646cf3acf2"/></N></rdf:Description><rdf:Description rdf:about="#membrane_potential_graph"><colour xmlns="http://www.cellml.org/metadata/graphs/1.0#background-" xml:lang="en">#ffffff</colour><label xmlns="http://www.cellml.org/metadata/graphs/1.0#y-" xml:lang="en">Membrane potential (mV)</label><label xmlns="http://www.cellml.org/metadata/graphs/1.0#x-" xml:lang="en">Time (s)</label><traces xmlns="http://www.cellml.org/metadata/graphs/1.0#"><rdf:Description rdf:about="rdf:#21baef3f-2926-4c96-8483-29b7dd949f28"/></traces></rdf:Description><rdf:Description rdf:about="rdf:#5302fc76-d317-4b5c-9e5f-af0e3a8295cc"><EMAIL xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#a42325d9-c970-42d8-9303-44e0da1cbed8"/></EMAIL><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#2b8a4f86-2b30-4b73-b2d8-88238e41d963"/></N><ORG xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#590b4089-1bbc-4ff5-aed6-fef335815af3"/></ORG></rdf:Description><rdf:Description rdf:about="rdf:#e90088d5-9b13-46c8-994b-85bef2b0c803"><Pubmed_id xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">18276830</Pubmed_id><JournalArticle xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:about="rdf:#43cf44da-23f1-4137-9533-3d767e542e8d"/></JournalArticle></rdf:Description><rdf:Description rdf:about="rdf:#590b4089-1bbc-4ff5-aed6-fef335815af3"><Orgname xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">National University of Singapore</Orgname><Orgunit xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Division of BioEngineering</Orgunit></rdf:Description><rdf:Description rdf:about="rdf:#b511d665-4c2e-404f-b5a8-f764e0ee5eab"><type xmlns="http://www.cellml.org/metadata/graphs/1.0#"><rdf:Description rdf:about="http://www.cellml.org/metadata/graphs/1.0#line"/></type><variable xmlns="http://www.cellml.org/metadata/graphs/1.0#x-"><rdf:Description rdf:about="rdf:#5a75aa15-c88f-43b1-a786-d075d960710b"/></variable><variable xmlns="http://www.cellml.org/metadata/graphs/1.0#y-"><rdf:Description rdf:about="rdf:#c31f6f44-a934-4b6b-aca1-2ce9d0e77447"/></variable><colour xmlns="http://www.cellml.org/metadata/graphs/1.0#" xml:lang="en">#ff0000</colour><type xmlns="http://www.cellml.org/metadata/graphs/1.0#line-" xml:lang="en">1</type></rdf:Description><rdf:Description rdf:about="rdf:#7bfcb41a-5e61-4e4b-b3e7-e3c8bbeff10c"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2008</W3CDTF></rdf:Description><rdf:Description rdf:about="rdf:#21baef3f-2926-4c96-8483-29b7dd949f28"><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/></rdf:type><rdf:first><rdf:Description rdf:about="rdf:#b511d665-4c2e-404f-b5a8-f764e0ee5eab"/></rdf:first><rdf:rest><rdf:Description rdf:about="http://www.w3.org/2002/07/owl#Nothing"/></rdf:rest></rdf:Description><rdf:Description rdf:about="rdf:#5f524a91-5bf6-458e-9aa5-5c40be37e33c"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">Am J Physiol Gastrointest Liver Physiol</title></rdf:Description><rdf:Description rdf:about="rdf:#2b8a4f86-2b30-4b73-b2d8-88238e41d963"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Alberto</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Corrias</Family><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en"></Other></rdf:Description><rdf:Description rdf:about="rdf:#88e6fcb2-1632-4383-afc8-ecd9578ce8ef"><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/></rdf:type><rdf:first><rdf:Description rdf:about="rdf:#50a58fdb-1438-4af8-88bd-d441339d8f15"/></rdf:first><rdf:rest><rdf:Description rdf:about="http://www.w3.org/2002/07/owl#Nothing"/></rdf:rest></rdf:Description><rdf:Description rdf:about="rdf:#a42325d9-c970-42d8-9303-44e0da1cbed8"><rdf:type><rdf:Description rdf:about="http://imc.org/vCard/3.0#internet"/></rdf:type><rdf:value xml:lang="en">albertocorrias@nus.edu.sg</rdf:value></rdf:Description><rdf:Description rdf:about="rdf:#12c09eab-8c0d-443c-b063-20f1986ee82d"><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#a307b301-886c-44f0-b8c1-cc59e7eb01c4"/></creator><rdf:value xml:lang="en">This model is known to run in JSIM to recreate the published results. It was created by Alberto Corrias and taken from the NUS Computational Bioengineering Laboratory website.</rdf:value></rdf:Description><rdf:Description rdf:about="rdf:#e2157c3d-e2f8-410b-8fd0-0cf347cd2e69"><FN xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Geoff Nunns</FN></rdf:Description><rdf:Description rdf:about="rdf:#01fb1a6d-4faa-4491-aade-4b5c9627319a"><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag"/></rdf:type><rdf:_1 xml:lang="en">electrophysiology</rdf:_1><rdf:_2 xml:lang="en">gastric</rdf:_2><rdf:_3 xml:lang="en">ICC</rdf:_3></rdf:Description><rdf:Description rdf:about="rdf:#a307b301-886c-44f0-b8c1-cc59e7eb01c4"><FN xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Geoff Nunns</FN></rdf:Description><rdf:Description rdf:about="rdf:#50a58fdb-1438-4af8-88bd-d441339d8f15"><tabulationStepSize xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">
+                0.1
+              </tabulationStepSize><endingValue xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">30</endingValue><startingValue xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">
+                0.0
+              </startingValue><maximumStepSize xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">0.01</maximumStepSize><boundVariable xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:about="#time"/></boundVariable></rdf:Description><rdf:Description rdf:about="rdf:#5a75aa15-c88f-43b1-a786-d075d960710b"><simulation xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:about="#simulation"/></simulation><variable xmlns="http://www.cellml.org/metadata/graphs/1.0#"><rdf:Description rdf:about="#time"/></variable></rdf:Description><rdf:Description rdf:about="rdf:#43cf44da-23f1-4137-9533-3d767e542e8d"><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#cb5717ab-6075-45a2-9c74-9f077624e9ad"/></creator><Journal xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:about="rdf:#5f524a91-5bf6-458e-9aa5-5c40be37e33c"/></Journal><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">Quantitative cellular description of gastric slow wave activity</title><last_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">G995</last_page><volume xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">294</volume><first_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">G989</first_page><issued xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:about="rdf:#7bfcb41a-5e61-4e4b-b3e7-e3c8bbeff10c"/></issued></rdf:Description><rdf:Description rdf:about="rdf:#6168b12c-9763-415d-bafc-b99c31b46e31"><rdf:type><rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/></rdf:type><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#3f223f43-0c27-4aed-8994-94ef0606dc7d"/></N></rdf:Description><rdf:Description rdf:about="rdf:#cb5717ab-6075-45a2-9c74-9f077624e9ad"><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq"/></rdf:type><rdf:_1><rdf:Description rdf:about="rdf:#fa17c078-e887-43db-aafe-5024530192aa"/></rdf:_1><rdf:_2><rdf:Description rdf:about="rdf:#6168b12c-9763-415d-bafc-b99c31b46e31"/></rdf:_2></rdf:Description><rdf:Description rdf:about="rdf:#65d99544-e87a-4b6d-bd10-9a39c5c73413"><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#e2157c3d-e2f8-410b-8fd0-0cf347cd2e69"/></creator><rdf:value xml:lang="en">This model is known to run in JSIM to recreate the published results. It was created by Alberto Corrias and taken from the NUS Computational Bioengineering Laboratory website.</rdf:value></rdf:Description><rdf:Description rdf:about=""><cmeta:comment><rdf:Description rdf:about="rdf:#65d99544-e87a-4b6d-bd10-9a39c5c73413"/></cmeta:comment><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#5302fc76-d317-4b5c-9e5f-af0e3a8295cc"/></creator><created xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:about="rdf:#390b1cc6-49d4-4823-8484-06feacc3b0a5"/></created><publisher xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">National University of Singapore</publisher></rdf:Description><rdf:Description rdf:about="rdf:#fd972d44-bae6-4301-81f4-82646cf3acf2"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Alberto</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Corrias</Family></rdf:Description><rdf:Description rdf:about="rdf:#c31f6f44-a934-4b6b-aca1-2ce9d0e77447"><simulation xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:about="#simulation"/></simulation><variable xmlns="http://www.cellml.org/metadata/graphs/1.0#"><rdf:Description rdf:about="#Vm"/></variable></rdf:Description></rdf:RDF></model>

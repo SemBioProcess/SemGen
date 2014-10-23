@@ -1,0 +1,645 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- FILE : schuster_model_2003.xml
+
+CREATED : 20th January 2004
+
+LAST MODIFIED : 20th January 2004
+
+AUTHOR : Catherine Lloyd
+         Bioengineering Instute
+         The University of Auckland
+         
+MODEL STATUS : This model conforms to the CellML 1.0 Specification released on
+10th August 2001, and the 16/01/2002 CellML Metadata 1.0 Specification.
+
+DESCRIPTION : This file contains a CellML description of Schuster et al.'s 2003 mathematical model of the electrophysiological endothelial cell response to bradykinin.
+
+CHANGES: 
+  
+-->
+
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="schuster_2003" name="schuster_2003">
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Modelling the Electrophysiological Endothelial Cell Response to Bradykinin</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+         This CellML model runs in OpenCell and COR but does not relicate the published results. There are unit inconsistencies which need fixing. Also in the absence of published initial conditions/parameter values for Cai, IP3 and C, arbitary values were used. Further, there is no defining equation or paramter value for PoSKCa (the probability of the SK_Ca channel being open).
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+ABSTRACT: The goal of the present study is to construct a biophysical model of the coronary artery endothelial cell response to bradykinin. This model takes into account intracellular Ca2+ dynamics, membrane potential, a non-selective cation channel, and two Ca(2+)-dependent K+ channels, as well as intra- and extracellular Ca2+ sources. The model reproduces the experimental data available, and predicts certain quantities which would be hard to obtain experimentally, like the individual K+ channel currents when the membrane potential is allowed to freely evolve, the implication of epoxyeicosatrienoic acids (EETs), and the total K+ released during stimulation. The main results are: (1) the large-conductance K+ channel participates only very little in the overall response; (2) EETs are required in order to explain the experimental current-potential relationships, but are not an essential component of the bradykinin response; and (3) the total K+ released during stimulation gives rise to a concentration in the intercellular space which is of millimolar order. This concentration change is compatible with the hypothesis that K+ contributes to the endothelium-derived hyperpolarizing factor phenomenon.
+</para>
+
+<para>
+The original paper reference is cited below:
+</para>
+
+<para>
+Modelling the electrophysiological endothelial cell response to bradykinin, Alexander Schuster, Jean-Louis Beny, and Jean-Jacques Meister, 2003, <emphasis>European Biophysics Journal</emphasis>, 32, 370-380. <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/12851795">PubMed ID: 12851795</ulink>
+</para>
+
+<informalfigure float="0" id="fig_cell_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>cell diagram</title>
+    </objectinfo>
+    <imagedata fileref="schuster_2003.png"/>
+  </imageobject>
+</mediaobject>
+<caption>Schematic diagram of the model, describing the electrophysiological endothelial cell response to bradykinin.</caption>
+</informalfigure>
+
+</sect1>
+</article>
+</documentation>
+  
+  
+  
+  <units name="first_order_rate_constant">
+    <unit units="second" exponent="-1"/>
+  </units>
+ 
+  <units name="millivolt">
+    <unit units="volt" prefix="milli"/>
+  </units>
+
+  <units name="flux">
+    <unit units="nanomolar"/>
+    <unit units="second" exponent="-1"/>
+  </units>
+  
+  <units name="nanomolar_per_millivolt_second">
+    <unit units="nanomolar"/>
+    <unit units="millivolt" exponent="-1"/>
+    <unit units="second" exponent="-1"/>
+  </units>
+  
+  <units name="picoS">
+    <unit units="siemens" prefix="pico"/>
+  </units>
+  
+  <units name="picoF">
+    <unit units="farad" prefix="pico"/>
+  </units>
+  
+  <units name="picoA">
+    <unit units="ampere" prefix="pico"/>
+  </units>
+
+  <units name="nanomolar">
+    <unit units="mole" prefix="nano"/>
+    <unit units="litre" exponent="-1"/>
+  </units>
+  
+  
+  <component name="environment">
+    <variable units="second" public_interface="out" name="time"/>
+  </component> 
+  
+  <component name="membrane">
+    <variable units="millivolt" public_interface="out" initial_value="-31.1" name="Vm"/>
+             
+    <variable units="picoF" initial_value="1.0" name="C"/>
+    
+    <variable units="second" public_interface="in" name="time"/>
+    <variable units="picoA" public_interface="in" name="i_K"/>
+    <variable units="picoA" public_interface="in" name="i_R"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="membrane_voltage_diff_eq">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> Vm </ci>
+        </apply>
+        <apply>
+          <times/>
+          <apply>
+            <minus/>
+            <apply>
+              <divide/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <ci> C </ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <ci> i_K  </ci>
+            <ci> i_R </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="IP3">
+    <variable units="nanomolar" public_interface="out" initial_value="1.0" name="IP3"/>
+
+    <variable units="dimensionless" name="m3IP3" initial_value="4.0"/>
+    <variable units="dimensionless" name="m4IP3" initial_value="55.0"/>
+    <variable units="first_order_rate_constant" name="kIP3" initial_value="0.1733"/>
+    <variable units="dimensionless" name="A" initial_value="0.211"/>
+   
+    <variable units="second" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="IP3_calculation">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> IP3 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> A </ci>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <tanh/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> m3IP3 </ci>
+                    <ci> time </ci>
+                  </apply>
+                  <ci> m4IP3 </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> kIP3 </ci>
+            <ci> IP3 </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="Ca">
+    <variable units="nanomolar" public_interface="out" initial_value="50.0" name="Ca"/>
+
+    <variable units="dimensionless" name="m3SR" initial_value="1.1"/>
+    <variable units="dimensionless" name="m4SR" initial_value="0.3"/>
+    <variable units="dimensionless" name="m3PMCA" initial_value="-6.19"/>
+    <variable units="dimensionless" name="m4PMCA" initial_value="0.39"/>
+    <variable units="flux" name="kSR_rel" initial_value="180.0"/>
+    <variable units="flux" name="kPMCA" initial_value="0.679"/>
+   
+    <variable units="second" public_interface="in" name="time"/>
+    <variable units="nanomolar" public_interface="in" name="IP3"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="Ca_calculation">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> Ca </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <apply>
+              <divide/>
+              <ci> kSR_rel </ci>
+              <cn cellml:units="flux"> 2.0 </cn>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <tanh/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> IP3 </ci>
+                    <ci> m3SR </ci>
+                  </apply>
+                  <ci> m4SR </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <divide/>
+              <ci> kPMCA </ci>
+              <cn cellml:units="flux"> 2.0 </cn>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <tanh/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <apply>
+                      <log/>
+                      <ci> Ca </ci>
+                    </apply>
+                    <ci> m3PMCA </ci>
+                  </apply>
+                  <ci> m4PMCA </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="Jcat">
+    <variable units="flux" public_interface="out" name="Jcat"/>
+
+    <variable units="millivolt" name="ECa" initial_value="50.0"/>
+    <variable units="nanomolar_per_millivolt_second" name="Gcat" initial_value="0.66"/>
+    <variable units="dimensionless" name="m3cat" initial_value="-6.18"/>
+    <variable units="dimensionless" name="m4cat" initial_value="0.37"/>
+    
+    <variable units="nanomolar" public_interface="in" name="Ca"/>
+    <variable units="millivolt" public_interface="in" name="Vm"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="Jcat_calculation">
+        <eq/>
+        <ci> Jcat </ci>
+        <apply>
+          <times/>
+          <apply>
+            <times/>
+            <ci> Gcat </ci>
+            <apply>
+              <minus/>
+              <ci> ECa </ci>
+              <ci> Vm </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <cn cellml:units="dimensionless"> 0.5 </cn>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <tanh/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <apply>
+                      <log/>
+                      <ci> Ca </ci>
+                    </apply>
+                    <ci> m3cat </ci>
+                  </apply>
+                  <ci> m4cat </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="potassium_current">
+    <variable units="picoA" public_interface="out" name="i_K"/>
+
+    <variable units="picoS" name="Gtot" initial_value="6927"/>
+    <variable units="dimensionless" name="PoBKCa"/>
+    <variable units="dimensionless" name="PoSKCa" initial_value="0.5"/>
+    <variable units="millivolt" name="E_K" initial_value="-80.0"/>
+    <variable units="dimensionless" name="a" initial_value="53.3"/>
+    <variable units="dimensionless" name="b" initial_value="-80.8"/>
+    <variable units="dimensionless" name="c" initial_value="-6.4"/>
+    <variable units="dimensionless" name="m3" initial_value="1.32E-3"/>
+    <variable units="dimensionless" name="m4" initial_value="0.30"/>
+    
+    <variable units="millivolt" public_interface="in" name="Vm"/>
+    <variable units="nanomolar" public_interface="in" name="Ca"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="i_K_calculation">
+        <eq/>
+        <ci> i_K </ci>
+        <apply>
+          <times/>
+          <ci> Gtot </ci>
+          <apply>
+            <minus/>
+            <ci> Vm </ci>
+            <ci> E_K </ci>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <cn cellml:units="dimensionless"> 0.4 </cn>
+              <ci> PoBKCa </ci>
+            </apply>
+            <apply>
+              <times/>
+              <cn cellml:units="dimensionless"> 0.6 </cn>
+              <ci> PoSKCa </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="PoBKCa_calculation">
+        <eq/>
+        <ci> PoBKCa </ci>
+        <apply>
+          <times/>
+          <cn cellml:units="dimensionless"> 0.5 </cn>
+          <apply>
+            <plus/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <tanh/>
+              <apply>
+                <divide/>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <apply>
+                      <minus/>
+                      <apply>
+                        <log/>
+                        <ci> Ca </ci>
+                      </apply>
+                      <ci> c </ci>
+                    </apply>
+                    <apply>
+                      <minus/>
+                      <ci> Vm </ci>
+                      <ci> b </ci>
+                    </apply>
+                  </apply>
+                  <ci> a </ci>
+                </apply>
+                <apply>
+                  <plus/>
+                  <apply>
+                    <times/>
+                    <ci> m3 </ci>
+                    <apply>
+                      <power/>
+                      <apply>
+                        <minus/>
+                        <apply>
+                          <plus/>
+                          <ci> Vm </ci>
+                          <apply>
+                            <times/>
+                            <ci> a </ci>
+                            <apply>
+                              <minus/>
+                              <apply>
+                                <log/>
+                                <ci> Ca </ci>
+                              </apply>
+                              <ci> c </ci>
+                            </apply>
+                          </apply>
+                        </apply>
+                        <ci> b </ci>
+                      </apply>
+                      <cn cellml:units="dimensionless"> 2.0 </cn>
+                    </apply>
+                  </apply>
+                  <ci> m4 </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="repolarising_current">
+    <variable units="picoA" public_interface="out" name="i_R"/>
+
+    <variable units="picoS" name="GR" initial_value="955.0"/>
+    <variable units="millivolt" name="Vrest" initial_value="-31.1"/>
+    
+    <variable units="millivolt" public_interface="in" name="Vm"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="i_R_calculation">
+        <eq/>
+        <ci> i_R </ci>
+        <apply>
+          <times/>
+          <ci> GR </ci>
+          <apply>
+            <minus/>
+            <ci> Vm </ci>
+            <ci> Vrest </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  
+  <connection>
+    <map_components component_2="environment" component_1="IP3"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Ca"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="membrane"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="IP3" component_1="Ca"/>
+    <map_variables variable_2="IP3" variable_1="IP3"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="membrane" component_1="Jcat"/>
+    <map_variables variable_2="Vm" variable_1="Vm"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Ca" component_1="Jcat"/>
+    <map_variables variable_2="Ca" variable_1="Ca"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Ca" component_1="potassium_current"/>
+    <map_variables variable_2="Ca" variable_1="Ca"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="membrane" component_1="potassium_current"/>
+    <map_variables variable_2="Vm" variable_1="Vm"/>
+    <map_variables variable_2="i_K" variable_1="i_K"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="membrane" component_1="repolarising_current"/>
+    <map_variables variable_2="Vm" variable_1="Vm"/>
+    <map_variables variable_2="i_R" variable_1="i_R"/>
+  </connection>
+  
+
+<rdf:RDF>
+  <rdf:Bag rdf:about="rdf:#1e6b6b9c-563f-4056-a28a-c9812bfc8eee">
+    <rdf:li>endothelial cell</rdf:li>
+    <rdf:li>bradykinin</rdf:li>
+    <rdf:li>pharmacology</rdf:li>
+    <rdf:li>signal transduction</rdf:li>
+    <rdf:li>electrophysiology</rdf:li>
+    <rdf:li>endothelial cell</rdf:li>
+    <rdf:li>cardiac</rdf:li>
+  </rdf:Bag>
+  <rdf:Seq rdf:about="rdf:#616fadaa-14ff-410e-8816-232f2729bb3a">
+    <rdf:li rdf:resource="rdf:#d43ed2cb-1d79-48b3-9cf8-5d6d090aed01"/>
+    <rdf:li rdf:resource="rdf:#9f1be305-a6c9-45f3-bc43-5e1bca15cc31"/>
+    <rdf:li rdf:resource="rdf:#0e5d38ee-52c4-4fb4-8484-c7c894b4a2af"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#4dced2da-3cbe-4dcd-8897-c28261573dbf">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value rdf:resource="rdf:#1e6b6b9c-563f-4056-a28a-c9812bfc8eee"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4f182c75-e080-471c-a55a-28cd34987264">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e40d1d1e-7fe9-4076-a183-2e546a20efc3">
+    <vCard:FN>Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#18817d98-c79f-4fc1-98e1-da5584ac3d1c">
+    <dc:creator rdf:resource="rdf:#e40d1d1e-7fe9-4076-a183-2e546a20efc3"/>
+    <rdf:value>
+          This is the CellML description of Schuster et al.'s 2003 mathematical model of the electrophysiological endothelial cell response to bradykinin.
+        </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9f1be305-a6c9-45f3-bc43-5e1bca15cc31">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#7932b434-e747-4cca-a12b-6f33aa4a15fe"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0e762165-9cdd-42a1-ae0c-32f52a2eab40">
+    <dc:creator rdf:resource="rdf:#616fadaa-14ff-410e-8816-232f2729bb3a"/>
+    <dc:title>
+            Modelling the electrophysiological endothelial cell response to bradykinin
+          </dc:title>
+    <bqs:volume>32</bqs:volume>
+    <bqs:first_page>370</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#ea7198f2-5569-4c65-a28d-a083bae395d2"/>
+    <dcterms:issued rdf:resource="rdf:#83a2be7e-4b77-465d-9164-28f82d4df344"/>
+    <bqs:last_page>380</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:publisher>
+        The University of Auckland, Auckland Bioengineering Institute
+      </dc:publisher>
+    <dcterms:created rdf:resource="rdf:#b2caaa19-d363-4c30-b3eb-c683cc170b10"/>
+    <dc:creator rdf:resource="rdf:#a30d25b9-5ea5-4cc4-b71b-62a279e6e05b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0e5d38ee-52c4-4fb4-8484-c7c894b4a2af">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#07cd264a-aa73-4e46-96d5-257e81a7c358"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7932b434-e747-4cca-a12b-6f33aa4a15fe">
+    <vCard:Given>Jean-Louis</vCard:Given>
+    <vCard:Family>Beny</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b06063b1-fc53-483e-addd-f569eb834245">
+    <dc:subject rdf:resource="rdf:#4dced2da-3cbe-4dcd-8897-c28261573dbf"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a30d25b9-5ea5-4cc4-b71b-62a279e6e05b">
+    <vCard:ORG rdf:resource="rdf:#4f182c75-e080-471c-a55a-28cd34987264"/>
+    <vCard:EMAIL rdf:resource="rdf:#d1cd34bd-f4a9-4cd0-844e-909fb6fb201a"/>
+    <vCard:N rdf:resource="rdf:#8a7b10d6-071c-438d-a71c-0c9ee4578ff6"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d43ed2cb-1d79-48b3-9cf8-5d6d090aed01">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#1eb79dc5-9e8c-407d-8ee8-c9f72f681560"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#83a2be7e-4b77-465d-9164-28f82d4df344">
+    <dcterms:W3CDTF>2003-07</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8a7b10d6-071c-438d-a71c-0c9ee4578ff6">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="#schuster_2003">
+    <dc:title>
+        Schuster et al.'s 2003 mathematical model of the electrophysiological endothelial cell response to bradykinin.
+      </dc:title>
+    <cmeta:bio_entity>endothelial cell</cmeta:bio_entity>
+    <cmeta:comment rdf:resource="rdf:#18817d98-c79f-4fc1-98e1-da5584ac3d1c"/>
+    <bqs:reference rdf:resource="rdf:#0599f0d3-51d3-4f35-b99a-4773000f3953"/>
+    <bqs:reference rdf:resource="rdf:#b06063b1-fc53-483e-addd-f569eb834245"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0599f0d3-51d3-4f35-b99a-4773000f3953">
+    <bqs:Pubmed_id>12851795</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#0e762165-9cdd-42a1-ae0c-32f52a2eab40"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b2caaa19-d363-4c30-b3eb-c683cc170b10">
+    <dcterms:W3CDTF>2004-01-20</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1eb79dc5-9e8c-407d-8ee8-c9f72f681560">
+    <vCard:Given>Alexander</vCard:Given>
+    <vCard:Family>Schuster</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ea7198f2-5569-4c65-a28d-a083bae395d2">
+    <dc:title>European Biophysical Journal</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#07cd264a-aa73-4e46-96d5-257e81a7c358">
+    <vCard:Given>Jean-Jacques</vCard:Given>
+    <vCard:Family>Meister</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d1cd34bd-f4a9-4cd0-844e-909fb6fb201a">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+</rdf:RDF>
+</model>

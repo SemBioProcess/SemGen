@@ -1,0 +1,1119 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--
+This CellML file was generated on 14/01/2009 at 4:02:17 at p.m. using:
+
+COR (0.9.31.1125)
+Copyright 2002-2009 Dr Alan Garny
+http://COR.physiol.ox.ac.uk/ - COR@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.CellML.org/
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="novak_1993" name="novak_1993">
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>Numerical analysis of a comprehensive model of M-phase control in <emphasis>Xenopus oocyte</emphasis> extracts and intact embryos</title>
+				<author>
+					<firstname>Jeelean</firstname>
+					<surname>Lim</surname>
+					<affiliation>
+						<shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<section id="sec_status">
+				<title>Model Status</title>
+				<para>
+				This CellML version of the model has been checked in COR and OpenCell. This variant of the model uses parameter values from BioModels as a guide and displays synthesis and degradation of cyclin. The units have been checked and are consistent.
+				</para>
+			</section>
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>
+				ABSTRACT: To contribute to a deeper understanding of M-phase control in eukaryotic cells, we have constructed a model based on the biochemistry of M-phase promoting factor (MPF) in Xenopus oocyte extracts, where there is evidence for two positive feedback loops (MPF stimulates its own production by activating Cdc25 and inhibiting Wee1) and a negative feedback loop (MPF stimulates its own destruction by indirectly activating the ubiquitin pathway that degrades its cyclin subunit). To uncover the full dynamical possibilities of the control system, we translate the regulatory network into a set of differential equations and study these equations by graphical techniques and computer simulation. The positive feedback loops in the model account for thresholds and time lags in cyclin-induced and MPF-induced activation of MPF, and the model can be fitted quantitatively to these experimental observations. The negative feedback loop is consistent with observed time lags in MPF-induced cyclin degradation. Furthermore, our model indicates that there are two possible mechanisms for autonomous oscillations. One is driven by the positive feedback loops, resulting in phosphorylation and abrupt dephosphorylation of the Cdc2 subunit at an inhibitory tyrosine residue. These oscillations are typical of oocyte extracts. The other type is driven by the negative feedback loop, involving rapid cyclin turnover and negligible phosphorylation of the tyrosine residue of Cdc2. The early mitotic cycles of intact embryos exhibit such characteristics. In addition, by assuming that unreplicated DNA interferes with M-phase initiation by activating the phosphatases that oppose MPF in the positive feedback loops, we can simulate the effect of addition of sperm nuclei to oocyte extracts, and the lengthening of cycle times at the mid-blastula transition of intact embryos. 
+				</para>
+				<para>
+				The original paper reference is cited below:
+				</para>
+				<para>
+					Numerical analysis of a comprehensive model of M-phase control in <emphasis>Xenopus oocyte</emphasis> extracts and intact embryos, Bela Novak and John J. Tyson, 1993, <emphasis>Journal of Cell Science</emphasis>, 106, 1153-1168. <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/8126097">PubMed ID: 8126097</ulink>
+				</para>
+				<informalfigure float="0" id="fig_reaction_diagram">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>Figure 1</title>
+							</objectinfo>
+							<imagedata fileref="novak_1993a.png"/>
+						</imageobject>
+					</mediaobject>
+					<caption>The phosphorylation states of MPF.</caption>
+				</informalfigure>
+				<informalfigure float="0" id="fig_reaction_diagram">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>Figure 2</title>
+							</objectinfo>
+							<imagedata fileref="novak_1993b.png"/>
+						</imageobject>
+					</mediaobject>
+					<caption>The positive feedback loops.</caption>
+				</informalfigure>
+				<informalfigure float="0" id="fig_reaction_diagram">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>Figure 3</title>
+							</objectinfo>
+							<imagedata fileref="novak_1993c.png"/>
+						</imageobject>
+					</mediaobject>
+					<caption>The negative feedback loop.</caption>
+				</informalfigure>
+			</sect1>
+		</article>
+	</documentation>   
+	
+   <units name="minute">
+      <unit units="second" multiplier="60"/>
+   </units>
+   <units name="first_order_rate_constant">
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <component name="environment">
+      <variable units="minute" public_interface="out" name="time"/>
+   </component>
+   <component name="rate_constants">
+      <variable units="first_order_rate_constant" public_interface="out" name="k1AA" initial_value="1"/>
+      <variable units="first_order_rate_constant" public_interface="out" name="k3" initial_value="0.01"/>
+      <variable units="first_order_rate_constant" public_interface="out" name="kinh" initial_value="0.025"/>
+      <variable units="first_order_rate_constant" public_interface="out" name="kcak" initial_value="0.25"/>
+      <variable units="first_order_rate_constant" public_interface="out" name="kbPPase" initial_value="0.125"/>
+      <variable units="first_order_rate_constant" public_interface="out" name="kfPPase" initial_value="0.1"/>
+      <variable units="first_order_rate_constant" public_interface="out" name="khPPase" initial_value="0.087"/>
+      <variable units="first_order_rate_constant" public_interface="out" name="kd_antiIE" initial_value="0.095"/>
+      <variable units="first_order_rate_constant" public_interface="out" name="ka" initial_value="0.01"/>
+      <variable units="first_order_rate_constant" public_interface="out" name="kc" initial_value="0.1"/>
+      <variable units="first_order_rate_constant" public_interface="out" name="ke" initial_value="0.0133"/>
+      <variable units="first_order_rate_constant" public_interface="out" name="kg" initial_value="0.0065"/>
+      <variable units="first_order_rate_constant" public_interface="out" name="V2_" initial_value="0.015"/>
+      <variable units="first_order_rate_constant" public_interface="out" name="V2__" initial_value="1"/>
+      <variable units="first_order_rate_constant" public_interface="out" name="V25_" initial_value="0.1"/>
+      <variable units="first_order_rate_constant" public_interface="out" name="V25__" initial_value="2"/>
+      <variable units="first_order_rate_constant" public_interface="out" name="Vwee_" initial_value="0.1"/>
+      <variable units="first_order_rate_constant" public_interface="out" name="Vwee__" initial_value="1"/>
+      <variable units="dimensionless" public_interface="out" name="K_a" initial_value="0.1"/>
+      <variable units="dimensionless" public_interface="out" name="K_b" initial_value="0.1"/>
+      <variable units="dimensionless" public_interface="out" name="K_c" initial_value="0.01"/>
+      <variable units="dimensionless" public_interface="out" name="K_d" initial_value="0.01"/>
+      <variable units="dimensionless" public_interface="out" name="K_e" initial_value="0.3"/>
+      <variable units="dimensionless" public_interface="out" name="K_f" initial_value="0.3"/>
+      <variable units="dimensionless" public_interface="out" name="K_g" initial_value="0.01"/>
+      <variable units="dimensionless" public_interface="out" name="K_h" initial_value="0.01"/>
+      <variable units="dimensionless" public_interface="in" name="Cdc25_T"/>
+      <variable units="dimensionless" public_interface="in" name="Cdc25_P"/>
+      <variable units="dimensionless" public_interface="in" name="Wee1_P"/>
+      <variable units="dimensionless" public_interface="in" name="Wee1_T"/>
+      <variable units="dimensionless" public_interface="in" name="UbE_T"/>
+      <variable units="dimensionless" public_interface="in" name="UbE"/>
+      <variable units="first_order_rate_constant" public_interface="out" name="k25"/>
+      <variable units="first_order_rate_constant" public_interface="out" name="kwee"/>
+      <variable units="first_order_rate_constant" public_interface="out" name="k2"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>k25</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <ci>V25_</ci>
+                  <apply>
+                     <minus/>
+                     <ci>Cdc25_T</ci>
+                     <ci>Cdc25_P</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>V25__</ci>
+                  <ci>Cdc25_P</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>kwee</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <ci>Vwee_</ci>
+                  <ci>Wee1_P</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>Vwee__</ci>
+                  <apply>
+                     <minus/>
+                     <ci>Wee1_T</ci>
+                     <ci>Wee1_P</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>k2</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <ci>V2_</ci>
+                  <apply>
+                     <minus/>
+                     <ci>UbE_T</ci>
+                     <ci>UbE</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>V2__</ci>
+                  <ci>UbE</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="concentration_variables">
+      <variable units="dimensionless" public_interface="out" name="Cdc2_T" initial_value="100"/>
+      <variable units="dimensionless" public_interface="out" name="Cdc25_T" initial_value="1"/>
+      <variable units="dimensionless" public_interface="out" name="Wee1_T" initial_value="1"/>
+      <variable units="dimensionless" public_interface="out" name="IE_T" initial_value="1"/>
+      <variable units="dimensionless" public_interface="out" name="UbE_T" initial_value="1"/>
+   </component>
+   <component name="cyclin">
+      <variable units="dimensionless" public_interface="out" name="cyclin" initial_value="1"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="k1AA"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="k2"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="k3"/>
+      <variable units="dimensionless" public_interface="in" name="Cdc2"/>
+      <variable units="minute" public_interface="in" name="time"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>cyclin</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <ci>k1AA</ci>
+                  <apply>
+                     <times/>
+                     <ci>k2</ci>
+                     <ci>cyclin</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k3</ci>
+                  <ci>cyclin</ci>
+                  <ci>Cdc2</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="cyclin_Cdc2">
+      <variable units="dimensionless" public_interface="out" name="cyclin_Cdc2" initial_value="0"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="kinh"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="kwee"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="kcak"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="k25"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="k3"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="k2"/>
+      <variable units="dimensionless" public_interface="in" name="MPF_active"/>
+      <variable units="dimensionless" public_interface="in" name="Tyr15P_dimer"/>
+      <variable units="dimensionless" public_interface="in" name="cyclin"/>
+      <variable units="dimensionless" public_interface="in" name="Cdc2"/>
+      <variable units="minute" public_interface="in" name="time"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>cyclin_Cdc2</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>kinh</ci>
+                     <ci>MPF_active</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <plus/>
+                        <ci>kwee</ci>
+                        <ci>kcak</ci>
+                        <ci>k2</ci>
+                     </apply>
+                     <ci>cyclin_Cdc2</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k25</ci>
+                  <ci>Tyr15P_dimer</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k3</ci>
+                  <ci>cyclin</ci>
+                  <ci>Cdc2</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Tyr15P_dimer">
+      <variable units="dimensionless" public_interface="out" name="Tyr15P_dimer" initial_value="0"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="kwee"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="k25"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="kcak"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="k2"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="kinh"/>
+      <variable units="dimensionless" public_interface="in" name="cyclin_Cdc2"/>
+      <variable units="dimensionless" public_interface="in" name="MPF_pre"/>
+      <variable units="minute" public_interface="in" name="time"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Tyr15P_dimer</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>kwee</ci>
+                     <ci>cyclin_Cdc2</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <plus/>
+                        <ci>k25</ci>
+                        <ci>kcak</ci>
+                        <ci>k2</ci>
+                     </apply>
+                     <ci>Tyr15P_dimer</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>kinh</ci>
+                  <ci>MPF_pre</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="MPF_pre">
+      <variable units="dimensionless" public_interface="out" name="MPF_pre" initial_value="0"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="kwee"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="kinh"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="k2"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="k25"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="kcak"/>
+      <variable units="dimensionless" public_interface="in" name="MPF_active"/>
+      <variable units="dimensionless" public_interface="in" name="Tyr15P_dimer"/>
+      <variable units="minute" public_interface="in" name="time"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>MPF_pre</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>kwee</ci>
+                     <ci>MPF_active</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <plus/>
+                        <ci>kinh</ci>
+                        <ci>k25</ci>
+                        <ci>k2</ci>
+                     </apply>
+                     <ci>MPF_pre</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>kcak</ci>
+                  <ci>Tyr15P_dimer</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="MPF_active">
+      <variable units="dimensionless" public_interface="out" name="MPF_active" initial_value="0"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="kcak"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="kinh"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="kwee"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="k2"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="k25"/>
+      <variable units="dimensionless" public_interface="in" name="cyclin_Cdc2"/>
+      <variable units="dimensionless" public_interface="in" name="MPF_pre"/>
+      <variable units="minute" public_interface="in" name="time"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>MPF_active</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>kcak</ci>
+                     <ci>cyclin_Cdc2</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <plus/>
+                        <ci>kinh</ci>
+                        <ci>kwee</ci>
+                        <ci>k2</ci>
+                     </apply>
+                     <ci>MPF_active</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k25</ci>
+                  <ci>MPF_pre</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Cdc2">
+      <variable units="dimensionless" public_interface="out" name="Cdc2"/>
+      <variable units="dimensionless" public_interface="in" name="Tyr15P_dimer"/>
+      <variable units="dimensionless" public_interface="in" name="cyclin_Cdc2"/>
+      <variable units="dimensionless" public_interface="in" name="MPF_active"/>
+      <variable units="dimensionless" public_interface="in" name="MPF_pre"/>
+      <variable units="dimensionless" public_interface="in" name="Cdc2_T"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>Cdc2</ci>
+            <apply>
+               <minus/>
+               <ci>Cdc2_T</ci>
+               <apply>
+                  <plus/>
+                  <ci>cyclin_Cdc2</ci>
+                  <ci>MPF_active</ci>
+                  <ci>MPF_pre</ci>
+                  <ci>Tyr15P_dimer</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="cyclin_T">
+      <variable units="dimensionless" public_interface="out" name="cyclin_T"/>
+      <variable units="dimensionless" public_interface="in" name="cyclin"/>
+      <variable units="dimensionless" public_interface="in" name="Tyr15P_dimer"/>
+      <variable units="dimensionless" public_interface="in" name="cyclin_Cdc2"/>
+      <variable units="dimensionless" public_interface="in" name="MPF_active"/>
+      <variable units="dimensionless" public_interface="in" name="MPF_pre"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>cyclin_T</ci>
+            <apply>
+               <plus/>
+               <ci>cyclin</ci>
+               <ci>cyclin_Cdc2</ci>
+               <ci>MPF_active</ci>
+               <ci>MPF_pre</ci>
+               <ci>Tyr15P_dimer</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Cdc25_P">
+      <variable units="dimensionless" public_interface="out" name="Cdc25_P" initial_value="0"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="ka"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="kbPPase"/>
+      <variable units="dimensionless" public_interface="in" name="K_b"/>
+      <variable units="dimensionless" public_interface="in" name="K_a"/>
+      <variable units="dimensionless" public_interface="in" name="MPF_active"/>
+      <variable units="dimensionless" public_interface="in" name="Cdc25_T"/>
+      <variable units="minute" public_interface="in" name="time"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Cdc25_P</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>ka</ci>
+                     <ci>MPF_active</ci>
+                     <apply>
+                        <minus/>
+                        <ci>Cdc25_T</ci>
+                        <ci>Cdc25_P</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <plus/>
+                        <ci>K_a</ci>
+                        <ci>Cdc25_T</ci>
+                     </apply>
+                     <ci>Cdc25_P</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>kbPPase</ci>
+                     <ci>Cdc25_P</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>K_b</ci>
+                     <ci>Cdc25_P</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Wee1_P">
+      <variable units="dimensionless" public_interface="out" name="Wee1_P" initial_value="0"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="ke"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="kfPPase"/>
+      <variable units="dimensionless" public_interface="in" name="K_e"/>
+      <variable units="dimensionless" public_interface="in" name="K_f"/>
+      <variable units="dimensionless" public_interface="in" name="MPF_active"/>
+      <variable units="dimensionless" public_interface="in" name="Wee1_T"/>
+      <variable units="minute" public_interface="in" name="time"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Wee1_P</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>ke</ci>
+                     <ci>MPF_active</ci>
+                     <apply>
+                        <minus/>
+                        <ci>Wee1_T</ci>
+                        <ci>Wee1_P</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <plus/>
+                        <ci>K_e</ci>
+                        <ci>Wee1_T</ci>
+                     </apply>
+                     <ci>Wee1_P</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>kfPPase</ci>
+                     <ci>Wee1_P</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>K_f</ci>
+                     <ci>Wee1_P</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="IE_P">
+      <variable units="dimensionless" public_interface="out" name="IE_P" initial_value="0"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="kg"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="khPPase"/>
+      <variable units="dimensionless" public_interface="in" name="K_g"/>
+      <variable units="dimensionless" public_interface="in" name="K_h"/>
+      <variable units="dimensionless" public_interface="in" name="MPF_active"/>
+      <variable units="dimensionless" public_interface="in" name="IE_T"/>
+      <variable units="minute" public_interface="in" name="time"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>IE_P</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>kg</ci>
+                     <ci>MPF_active</ci>
+                     <apply>
+                        <minus/>
+                        <ci>IE_T</ci>
+                        <ci>IE_P</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <plus/>
+                        <ci>K_g</ci>
+                        <ci>IE_T</ci>
+                     </apply>
+                     <ci>IE_P</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>khPPase</ci>
+                     <ci>IE_P</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>K_h</ci>
+                     <ci>IE_P</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="UbE">
+      <variable units="dimensionless" public_interface="out" name="UbE" initial_value="0"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="kc"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="kd_antiIE"/>
+      <variable units="dimensionless" public_interface="in" name="K_c"/>
+      <variable units="dimensionless" public_interface="in" name="K_d"/>
+      <variable units="dimensionless" public_interface="in" name="IE_P"/>
+      <variable units="dimensionless" public_interface="in" name="UbE_T"/>
+      <variable units="minute" public_interface="in" name="time"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>UbE</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>kc</ci>
+                     <ci>IE_P</ci>
+                     <apply>
+                        <minus/>
+                        <ci>UbE_T</ci>
+                        <ci>UbE</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <plus/>
+                        <ci>K_c</ci>
+                        <ci>UbE_T</ci>
+                     </apply>
+                     <ci>UbE</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>kd_antiIE</ci>
+                     <ci>UbE</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>K_d</ci>
+                     <ci>UbE</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <connection>
+      <map_components component_2="environment" component_1="cyclin"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="cyclin_Cdc2"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="Tyr15P_dimer"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="MPF_pre"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="MPF_active"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="Cdc25_P"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="Wee1_P"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="IE_P"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="UbE"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="Cdc25_P" component_1="rate_constants"/>
+      <map_variables variable_2="Cdc25_P" variable_1="Cdc25_P"/>
+      <map_variables variable_2="ka" variable_1="ka"/>
+      <map_variables variable_2="K_a" variable_1="K_a"/>
+      <map_variables variable_2="kbPPase" variable_1="kbPPase"/>
+      <map_variables variable_2="K_b" variable_1="K_b"/>
+   </connection>
+   <connection>
+      <map_components component_2="Wee1_P" component_1="rate_constants"/>
+      <map_variables variable_2="Wee1_P" variable_1="Wee1_P"/>
+      <map_variables variable_2="ke" variable_1="ke"/>
+      <map_variables variable_2="K_e" variable_1="K_e"/>
+      <map_variables variable_2="kfPPase" variable_1="kfPPase"/>
+      <map_variables variable_2="K_f" variable_1="K_f"/>
+   </connection>
+   <connection>
+      <map_components component_2="UbE" component_1="rate_constants"/>
+      <map_variables variable_2="UbE" variable_1="UbE"/>
+      <map_variables variable_2="kc" variable_1="kc"/>
+      <map_variables variable_2="K_c" variable_1="K_c"/>
+      <map_variables variable_2="kd_antiIE" variable_1="kd_antiIE"/>
+      <map_variables variable_2="K_d" variable_1="K_d"/>
+   </connection>
+   <connection>
+      <map_components component_2="concentration_variables" component_1="rate_constants"/>
+      <map_variables variable_2="Cdc25_T" variable_1="Cdc25_T"/>
+      <map_variables variable_2="Wee1_T" variable_1="Wee1_T"/>
+      <map_variables variable_2="UbE_T" variable_1="UbE_T"/>
+   </connection>
+   <connection>
+      <map_components component_2="rate_constants" component_1="cyclin"/>
+      <map_variables variable_2="k1AA" variable_1="k1AA"/>
+      <map_variables variable_2="k2" variable_1="k2"/>
+      <map_variables variable_2="k3" variable_1="k3"/>
+   </connection>
+   <connection>
+      <map_components component_2="Cdc2" component_1="cyclin"/>
+      <map_variables variable_2="Cdc2" variable_1="Cdc2"/>
+   </connection>
+   <connection>
+      <map_components component_2="rate_constants" component_1="cyclin_Cdc2"/>
+      <map_variables variable_2="kinh" variable_1="kinh"/>
+      <map_variables variable_2="kwee" variable_1="kwee"/>
+      <map_variables variable_2="kcak" variable_1="kcak"/>
+      <map_variables variable_2="k25" variable_1="k25"/>
+      <map_variables variable_2="k2" variable_1="k2"/>
+      <map_variables variable_2="k3" variable_1="k3"/>
+   </connection>
+   <connection>
+      <map_components component_2="MPF_active" component_1="cyclin_Cdc2"/>
+      <map_variables variable_2="MPF_active" variable_1="MPF_active"/>
+      <map_variables variable_2="cyclin_Cdc2" variable_1="cyclin_Cdc2"/>
+   </connection>
+   <connection>
+      <map_components component_2="Tyr15P_dimer" component_1="cyclin_Cdc2"/>
+      <map_variables variable_2="Tyr15P_dimer" variable_1="Tyr15P_dimer"/>
+      <map_variables variable_2="cyclin_Cdc2" variable_1="cyclin_Cdc2"/>
+   </connection>
+   <connection>
+      <map_components component_2="cyclin" component_1="cyclin_Cdc2"/>
+      <map_variables variable_2="cyclin" variable_1="cyclin"/>
+   </connection>
+   <connection>
+      <map_components component_2="Cdc2" component_1="cyclin_Cdc2"/>
+      <map_variables variable_2="Cdc2" variable_1="Cdc2"/>
+      <map_variables variable_2="cyclin_Cdc2" variable_1="cyclin_Cdc2"/>
+   </connection>
+   <connection>
+      <map_components component_2="MPF_pre" component_1="Tyr15P_dimer"/>
+      <map_variables variable_2="MPF_pre" variable_1="MPF_pre"/>
+      <map_variables variable_2="Tyr15P_dimer" variable_1="Tyr15P_dimer"/>
+   </connection>
+   <connection>
+      <map_components component_2="rate_constants" component_1="Tyr15P_dimer"/>
+      <map_variables variable_2="kwee" variable_1="kwee"/>
+      <map_variables variable_2="k25" variable_1="k25"/>
+      <map_variables variable_2="kcak" variable_1="kcak"/>
+      <map_variables variable_2="k2" variable_1="k2"/>
+      <map_variables variable_2="kinh" variable_1="kinh"/>
+   </connection>
+   <connection>
+      <map_components component_2="rate_constants" component_1="MPF_pre"/>
+      <map_variables variable_2="kwee" variable_1="kwee"/>
+      <map_variables variable_2="kinh" variable_1="kinh"/>
+      <map_variables variable_2="k25" variable_1="k25"/>
+      <map_variables variable_2="k2" variable_1="k2"/>
+      <map_variables variable_2="kcak" variable_1="kcak"/>
+   </connection>
+   <connection>
+      <map_components component_2="MPF_active" component_1="MPF_pre"/>
+      <map_variables variable_2="MPF_active" variable_1="MPF_active"/>
+      <map_variables variable_2="MPF_pre" variable_1="MPF_pre"/>
+   </connection>
+   <connection>
+      <map_components component_2="rate_constants" component_1="MPF_active"/>
+      <map_variables variable_2="kcak" variable_1="kcak"/>
+      <map_variables variable_2="kinh" variable_1="kinh"/>
+      <map_variables variable_2="kwee" variable_1="kwee"/>
+      <map_variables variable_2="k2" variable_1="k2"/>
+      <map_variables variable_2="k25" variable_1="k25"/>
+   </connection>
+   <connection>
+      <map_components component_2="Tyr15P_dimer" component_1="Cdc2"/>
+      <map_variables variable_2="Tyr15P_dimer" variable_1="Tyr15P_dimer"/>
+   </connection>
+   <connection>
+      <map_components component_2="MPF_active" component_1="Cdc2"/>
+      <map_variables variable_2="MPF_active" variable_1="MPF_active"/>
+   </connection>
+   <connection>
+      <map_components component_2="MPF_pre" component_1="Cdc2"/>
+      <map_variables variable_2="MPF_pre" variable_1="MPF_pre"/>
+   </connection>
+   <connection>
+      <map_components component_2="concentration_variables" component_1="Cdc2"/>
+      <map_variables variable_2="Cdc2_T" variable_1="Cdc2_T"/>
+   </connection>
+   <connection>
+      <map_components component_2="Tyr15P_dimer" component_1="cyclin_T"/>
+      <map_variables variable_2="Tyr15P_dimer" variable_1="Tyr15P_dimer"/>
+   </connection>
+   <connection>
+      <map_components component_2="MPF_active" component_1="cyclin_T"/>
+      <map_variables variable_2="MPF_active" variable_1="MPF_active"/>
+   </connection>
+   <connection>
+      <map_components component_2="MPF_pre" component_1="cyclin_T"/>
+      <map_variables variable_2="MPF_pre" variable_1="MPF_pre"/>
+   </connection>
+   <connection>
+      <map_components component_2="cyclin" component_1="cyclin_T"/>
+      <map_variables variable_2="cyclin" variable_1="cyclin"/>
+   </connection>
+   <connection>
+      <map_components component_2="cyclin_Cdc2" component_1="cyclin_T"/>
+      <map_variables variable_2="cyclin_Cdc2" variable_1="cyclin_Cdc2"/>
+   </connection>
+   <connection>
+      <map_components component_2="MPF_active" component_1="Cdc25_P"/>
+      <map_variables variable_2="MPF_active" variable_1="MPF_active"/>
+   </connection>
+   <connection>
+      <map_components component_2="concentration_variables" component_1="Cdc25_P"/>
+      <map_variables variable_2="Cdc25_T" variable_1="Cdc25_T"/>
+   </connection>
+   <connection>
+      <map_components component_2="MPF_active" component_1="Wee1_P"/>
+      <map_variables variable_2="MPF_active" variable_1="MPF_active"/>
+   </connection>
+   <connection>
+      <map_components component_2="concentration_variables" component_1="Wee1_P"/>
+      <map_variables variable_2="Wee1_T" variable_1="Wee1_T"/>
+   </connection>
+   <connection>
+      <map_components component_2="rate_constants" component_1="IE_P"/>
+      <map_variables variable_2="kg" variable_1="kg"/>
+      <map_variables variable_2="khPPase" variable_1="khPPase"/>
+      <map_variables variable_2="K_g" variable_1="K_g"/>
+      <map_variables variable_2="K_h" variable_1="K_h"/>
+   </connection>
+   <connection>
+      <map_components component_2="MPF_active" component_1="IE_P"/>
+      <map_variables variable_2="MPF_active" variable_1="MPF_active"/>
+   </connection>
+   <connection>
+      <map_components component_2="concentration_variables" component_1="IE_P"/>
+      <map_variables variable_2="IE_T" variable_1="IE_T"/>
+   </connection>
+   <connection>
+      <map_components component_2="IE_P" component_1="UbE"/>
+      <map_variables variable_2="IE_P" variable_1="IE_P"/>
+   </connection>
+   <connection>
+      <map_components component_2="concentration_variables" component_1="UbE"/>
+      <map_variables variable_2="UbE_T" variable_1="UbE_T"/>
+   </connection>
+   
+
+   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Seq rdf:about="rdf:#a966211d-b17c-4d94-af00-09e9db14782f">
+    <rdf:li rdf:resource="rdf:#dc77f717-7d5a-40c4-b97c-e2775ee7a4bb"/>
+    <rdf:li rdf:resource="rdf:#da8e345a-599a-4841-b47b-3d566cdc5ce3"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#a966211d-b17c-4d94-af00-09e9db14782f"/>
+  <rdf:Seq rdf:about="rdf:#65c35b4c-551f-47c7-b738-e9e9871ba45f">
+    <rdf:li rdf:resource="rdf:#8052f86d-4087-48e0-adff-af6153826ba5"/>
+    <rdf:li rdf:resource="rdf:#e8740de7-a114-4225-bbfd-d8d3915eb950"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#$F3cCB3">
+    <ns7:endingValue xmlns:ns7="http://www.cellml.org/metadata/simulation/1.0#">30</ns7:endingValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#da8e345a-599a-4841-b47b-3d566cdc5ce3">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#4627002c-0d3d-4de5-80c7-23b9f37e38f3"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ba667006-8748-4664-a0b4-58f89628fe24">
+    <bqs:Pubmed_id xmlns:bqs="http://www.cellml.org/bqs/1.0#">8126097</bqs:Pubmed_id>
+    <bqs:JournalArticle xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#777a0078-0445-404a-b3ba-ef6ad8b799cb"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b3c1bd22-984b-4486-85e3-2c26a89a3428">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Bela</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Novak</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#dc77f717-7d5a-40c4-b97c-e2775ee7a4bb">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#97e4faf0-fb86-4c7a-b196-82121377a1ef"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#777a0078-0445-404a-b3ba-ef6ad8b799cb">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#a966211d-b17c-4d94-af00-09e9db14782f"/>
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Numerical analysis of a comprehensive model of M-phase control in Xenopus oocyte extracts and intact embryos.</dc:title>
+    <bqs:volume xmlns:bqs="http://www.cellml.org/bqs/1.0#">106</bqs:volume>
+    <bqs:first_page xmlns:bqs="http://www.cellml.org/bqs/1.0#">1153</bqs:first_page>
+    <bqs:Journal xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#eadbf52e-6f25-4eea-b6bf-f2db80e6bde2"/>
+    <dcterms:issued xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#0caa6a35-2373-4e35-853d-e2c88fe65519"/>
+    <bqs:last_page xmlns:bqs="http://www.cellml.org/bqs/1.0#">1168</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#df6e6994-bc4d-4b3c-85aa-05f353681118">
+    <vCard:Orgname xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Auckland Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#83c7dd33-7659-49c7-96a3-4fa32c726c65">
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Journal of Cell Science</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#6cd0428c-a664-4ca0-a3a6-f27c91d147f5">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Jeelean</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Lim</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#dcb6cef0-498f-4f64-b579-8ad79a51a263">
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#6cd0428c-a664-4ca0-a3a6-f27c91d147f5"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#df1b2566-7ab5-4fb2-a4fe-3077673979fd">
+    <vCard:FN xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Jeelean Lim</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#45b10e31-8d3c-4790-9614-4f032ab0aaaf">
+    <vCard:ORG xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#df6e6994-bc4d-4b3c-85aa-05f353681118"/>
+    <vCard:EMAIL xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#b24a4ed6-e9e8-4637-9a60-716de3cc3d73"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#10f039ea-f932-421b-8a48-0a1570747a10"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3baf96e3-8c82-425a-b2ef-eb6636c06e1b">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">1993-12-00 00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#fb895326-a3f0-4819-aa6e-add73cd83558">
+    <vCard:FN xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Jeelean Lim</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8052f86d-4087-48e0-adff-af6153826ba5">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#b3c1bd22-984b-4486-85e3-2c26a89a3428"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:title>Numerical analysis of a comprehensive model of M-phase control in Xenopus oocyte extracts and intact embryos: parameter values have been taken from the SBML model in the BioModels Database and the model simulates the synthesis and degradation of cyclin.</dc:title>
+	<dc:publisher xmlns:dc="http://purl.org/dc/elements/1.1/">The University of Auckland, Auckland Bioengineering Institute</dc:publisher>
+    <cmeta:comment rdf:resource="rdf:#444f3d97-9261-4be0-a0e5-3ebdda7cb363"/>
+    <dcterms:created xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#2b7b7e7d-99b0-4e66-9101-b3f62dfe7607"/>
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#45b10e31-8d3c-4790-9614-4f032ab0aaaf"/>
+    <cmeta:modification rdf:resource="rdf:#4c436a74-5849-4d6d-b9e4-45e91d066dd9"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4627002c-0d3d-4de5-80c7-23b9f37e38f3">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">John</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Tyson</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="#novak_1993">
+    <ns7:simulation xmlns:ns7="http://www.cellml.org/metadata/simulation/1.0#" rdf:resource="rdf:#$D3cCB3"/>
+    <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#95bd87d4-22ce-4253-88a8-f436d3db05c0"/>
+<bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource">
+  <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value>
+      <rdf:Bag>
+        <rdf:li>cell cycle</rdf:li>
+	<rdf:li>oocyte</rdf:li>
+	<rdf:li>metabolism</rdf:li>
+      </rdf:Bag>
+    </rdf:value>
+  </dc:subject>
+</bqs:reference>
+    <cmeta:comment rdf:resource="rdf:#e37eee6d-50a2-4154-ba7c-807aac6e16c5"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b24a4ed6-e9e8-4637-9a60-716de3cc3d73">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>jlim063@aucklanduni.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9d0aa756-673b-4424-8722-725be1aadbf7">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#65c35b4c-551f-47c7-b738-e9e9871ba45f"/>
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Numerical analysis of a comprehensive model of M-phase control in Xenopus oocyte extracts and intact embryos.</dc:title>
+    <bqs:volume xmlns:bqs="http://www.cellml.org/bqs/1.0#">106</bqs:volume>
+    <bqs:first_page xmlns:bqs="http://www.cellml.org/bqs/1.0#">1153</bqs:first_page>
+    <bqs:Journal xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#83c7dd33-7659-49c7-96a3-4fa32c726c65"/>
+    <dcterms:issued xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#3baf96e3-8c82-425a-b2ef-eb6636c06e1b"/>
+    <bqs:last_page xmlns:bqs="http://www.cellml.org/bqs/1.0#">1168</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#6e38d727-1567-422f-8a35-5e30af64f81a">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2009-02-18T12:32:42+13:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#eadbf52e-6f25-4eea-b6bf-f2db80e6bde2">
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Journal of Cell Science</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#444f3d97-9261-4be0-a0e5-3ebdda7cb363">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#46169fee-3820-48e5-985d-c9438a98236f"/>
+    <rdf:value>This CellML version of the model has been checked in COR and PCEnv. This variant of the model runs to reproduce the original published results as depicted in figure 4A of the paper. Please note that actual concentrations are displayed by this model, instead of the percentage concentrations used in the paper. The units have been checked and are consistent.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0caa6a35-2373-4e35-853d-e2c88fe65519">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">1993-12-00 00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#10f039ea-f932-421b-8a48-0a1570747a10">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Jeelean</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Lim</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#2b7b7e7d-99b0-4e66-9101-b3f62dfe7607">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2009-01-14T00:00:00+00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#97e4faf0-fb86-4c7a-b196-82121377a1ef">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Bela</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Novak</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a543240b-974c-4661-abd9-bf77b109e5de">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#df1b2566-7ab5-4fb2-a4fe-3077673979fd"/>
+    <rdf:value>This is the CellML description of Novak and Tyson's 1993 numerical analysis of a comprehensive model of M-phase control in Xenopus oocyte extracts and intact embryos.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e37eee6d-50a2-4154-ba7c-807aac6e16c5">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#fb895326-a3f0-4819-aa6e-add73cd83558"/>
+    <rdf:value>This is the CellML description of Novak and Tyson's 1993 numerical analysis of a comprehensive model of M-phase control in Xenopus oocyte extracts and intact embryos.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#$D3cCB3">
+    <ns7:boundIntervals xmlns:ns7="http://www.cellml.org/metadata/simulation/1.0#" rdf:resource="rdf:#$E3cCB3"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9690ff73-43c6-4d10-ae69-203344a74978">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">John</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Tyson</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#46169fee-3820-48e5-985d-c9438a98236f">
+    <vCard:FN xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Jeelean Lim</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#95bd87d4-22ce-4253-88a8-f436d3db05c0">
+    <bqs:Pubmed_id xmlns:bqs="http://www.cellml.org/bqs/1.0#">8126097</bqs:Pubmed_id>
+    <bqs:JournalArticle xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#9d0aa756-673b-4424-8722-725be1aadbf7"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4c436a74-5849-4d6d-b9e4-45e91d066dd9">
+    <dcterms:modified xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#6e38d727-1567-422f-8a35-5e30af64f81a"/>
+    <rdf:value>added cmeta id's to several variables</rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#dcb6cef0-498f-4f64-b579-8ad79a51a263"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e8740de7-a114-4225-bbfd-d8d3915eb950">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#9690ff73-43c6-4d10-ae69-203344a74978"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#$E3cCB3">
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+    <rdf:first rdf:resource="rdf:#$F3cCB3"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#novak_1993">
+    <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#ba667006-8748-4664-a0b4-58f89628fe24"/>
+    <cmeta:comment rdf:resource="rdf:#a543240b-974c-4661-abd9-bf77b109e5de"/>
+  </rdf:Description>
+</rdf:RDF>
+</model>

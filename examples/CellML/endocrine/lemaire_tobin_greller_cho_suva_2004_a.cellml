@@ -1,0 +1,659 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This CellML file was generated on 9/04/2010 at 12:35:05 at p.m. using:
+
+COR (0.9.31.1371)
+Copyright 2002-2010 Dr Alan Garny
+http://cor.physiol.ox.ac.uk/ - cor@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.cellml.org/
+-->
+<model xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:ns7="http://www.cellml.org/metadata/simulation/1.0#" name="lemaire_model_2004" cmeta:id="lemaire_model_2004" xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#">
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>Modeling the interactions between osteoblast and osteoclast activities in bone remodeling</title>
+				<author>
+					<firstname>Catherine</firstname>
+					<surname>Lloyd</surname>
+					<affiliation>
+						<shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<section id="sec_status">
+				<title>Model Status</title>
+				<para>
+           This CellML model represents an extension of the core model such that osteoblasts are being added at a constant rate from day 20 to day 80. The model runs in both OpenCell and COR to recreate the published results.   The units are consistent throughout.
+          </para>
+			</section>
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>
+ABSTRACT: We propose a mathematical model explaining the interactions between osteoblasts and osteoclasts, two cell types specialized in the maintenance of the bone integrity. Bone is a dynamic, living tissue whose structure and shape continuously evolves during life. It has the ability to change architecture by removal of old bone and replacement with newly formed bone in a localized process called remodeling. The model described here is based on the idea that the relative proportions of immature and mature osteoblasts control the degree of osteoclastic activity. In addition, osteoclasts control osteoblasts differentially depending on their stage of differentiation. Despite the tremendous complexity of the bone regulatory system and its fragmentary understanding, we obtain surprisingly good correlations between the model simulations and the experimental observations extracted from the literature. The model results corroborate all behaviors of the bone remodeling system that we have simulated, including the tight coupling between osteoblasts and osteoclasts, the catabolic effect induced by continuous administration of PTH, the catabolic action of RANKL, as well as its reversal by soluble antagonist OPG. The model is also able to simulate metabolic bone diseases such as estrogen deficiency, vitamin D deficiency, senescence and glucocorticoid excess. Conversely, possible routes for therapeutic interventions are tested and evaluated. Our model confirms that anti-resorptive therapies are unable to partially restore bone loss, whereas bone formation therapies yield better results. The model enables us to determine and evaluate potential therapies based on their efficacy. In particular, the model predicts that combinations of anti-resorptive and anabolic therapies provide significant benefits compared with monotherapy, especially for certain type of skeletal disease. Finally, the model clearly indicates that increasing the size of the pool of preosteoblasts is an essential ingredient for the therapeutic manipulation of bone formation. This model was conceived as the first step in a bone turnover modeling platform. These initial modeling results are extremely encouraging and lead us to proceed with additional explorations into bone turnover and skeletal remodeling.
+</para>
+				<informalfigure float="0" id="fig_reaction_diagram">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>model diagram</title>
+							</objectinfo>
+							<imagedata fileref="lemaire_2004_new.png"/>
+						</imageobject>
+					</mediaobject>
+					<caption>Schematic diagram of the basic structure of the model.</caption>
+				</informalfigure>
+				<para>
+The original paper reference is cited below:
+</para>
+				<para>
+Modeling the interactions between osteoblast and osteoclast activities in bone remodeling, Vincent Lemaire, Frank L. Tobin, Larry D. Greller, Carolyn R. Cho, and Larry J. Suva, 2004, <emphasis>Journal of Theoretical Biology</emphasis>, 229, 293-309.  <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/15234198">PubMed ID: 15234198</ulink>
+				</para>
+			</sect1>
+		</article>
+	</documentation>
+	<rdf:RDF>
+		<rdf:Description rdf:about="#R">
+			<dc:title>R</dc:title>
+			<dcterms:alternative>responding osteoblasts</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF>
+		<rdf:Description rdf:about="#B">
+			<dc:title>B</dc:title>
+			<dcterms:alternative>active osteoblasts</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF>
+		<rdf:Description rdf:about="#C">
+			<dc:title>C</dc:title>
+			<dcterms:alternative>active osteoclasts</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Bag rdf:about="rdf:#2adcf65c-3a34-4a1e-a15c-ed9b3276d701">
+			<rdf:li>endocrine</rdf:li>
+			<rdf:li>parathyroid hormone</rdf:li>
+			<rdf:li>osteoporosis</rdf:li>
+			<rdf:li>osteoblast</rdf:li>
+			<rdf:li>osteoclast</rdf:li>
+		</rdf:Bag>
+		<rdf:Description rdf:about="rdf:#2adcf65c-3a34-4a1e-a15c-ed9b3276d701"/>
+		<rdf:Seq rdf:about="rdf:#073a484d-b37d-42da-821e-bfcbc7f45fa1">
+			<rdf:li rdf:resource="rdf:#decd5917-ed89-488b-8b0c-0f595b9c2b6f"/>
+			<rdf:li rdf:resource="rdf:#d9c729e8-389c-4ec5-a336-692663c00dfd"/>
+			<rdf:li rdf:resource="rdf:#08083441-edd3-4bb3-9322-7531fe67e596"/>
+			<rdf:li rdf:resource="rdf:#12dcb8cb-5c43-4f28-9b62-93526ae8e5b9"/>
+			<rdf:li rdf:resource="rdf:#745899ce-01ee-43a1-8bc0-9cbe39fcfc6f"/>
+		</rdf:Seq>
+		<rdf:Description rdf:about="rdf:#9a60a263-0a3a-4f33-a72e-173f5d72a367">
+			<vCard:ORG rdf:resource="rdf:#2803dc66-d6cd-4827-b522-075d57bb03ca"/>
+			<vCard:EMAIL rdf:resource="rdf:#491e01f3-f2dd-42f2-9d9f-7695955fa2c0"/>
+			<vCard:N rdf:resource="rdf:#06873b07-bb69-4fc0-9f71-7d2461d483d1"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#06873b07-bb69-4fc0-9f71-7d2461d483d1">
+			<vCard:Given>Catherine</vCard:Given>
+			<vCard:Family>Lloyd</vCard:Family>
+			<vCard:Other>May</vCard:Other>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#448c98e0-ab5d-49d3-af6f-227ceda88842">
+			<vCard:FN/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#08083441-edd3-4bb3-9322-7531fe67e596">
+			<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+			<vCard:N rdf:resource="rdf:#756af352-aaff-4398-9ab3-c70042b2f237"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#$iyVap">
+			<ns7:endingValue>140</ns7:endingValue>
+			<ns7:nonstandard-pointDensity>10000</ns7:nonstandard-pointDensity>
+			<ns7:maximumStepSize>0.1</ns7:maximumStepSize>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#ea051b8f-5c87-45c2-87bf-92d884855d76">
+			<bqs:Pubmed_id>15234198</bqs:Pubmed_id>
+			<bqs:JournalArticle rdf:resource="rdf:#9cac1f9e-95e6-42d2-a1c7-4d4a27c6570b"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#1ba3d4da-11ad-4f13-85c0-34d2602672e0">
+			<vCard:Given>Carolyn</vCard:Given>
+			<vCard:Family>Cho</vCard:Family>
+			<vCard:Other>R</vCard:Other>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#2803dc66-d6cd-4827-b522-075d57bb03ca">
+			<vCard:Orgname>The University of Auckland</vCard:Orgname>
+			<vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+		</rdf:Description>
+		<rdf:Description rdf:about="#lemaire_model_2004">
+			<ns7:simulation rdf:resource="rdf:#$gyVap"/>
+			<dc:title>Lemaire et al's 2004 mathematical model of the interactions between osteoblast and osteoclast activities in bone remodelling.</dc:title>
+			<cmeta:comment xmlns:cmeta="http://www.cellml.org/metadata/1.0#" rdf:resource="rdf:#c278a97c-8d99-40bb-b8e7-f5f83d98b76a"/>
+			<bqs:reference rdf:resource="rdf:#0bf5da3a-6a3e-453c-800a-2b25f588c7b6"/>
+			<bqs:reference rdf:resource="rdf:#ea051b8f-5c87-45c2-87bf-92d884855d76"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#0bf5da3a-6a3e-453c-800a-2b25f588c7b6">
+			<dc:subject rdf:resource="rdf:#6fcd02ce-23c4-4cc2-aa20-e04a1f2e994d"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#c278a97c-8d99-40bb-b8e7-f5f83d98b76a">
+			<dc:creator rdf:resource="rdf:#b2e5c557-75e2-48c9-bf5c-45ba2081ef19"/>
+			<rdf:value>This is a CellML description of Lemaire et al's 2004 mathematical model of the interactions between osteoblast and osteoclast activities in bone remodelling.</rdf:value>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#abd9118b-45ee-43ff-ab89-f6539607e80c">
+			<vCard:Given>James</vCard:Given>
+			<vCard:Family>Lawson</vCard:Family>
+			<vCard:Other>Richard</vCard:Other>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#d9c729e8-389c-4ec5-a336-692663c00dfd">
+			<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+			<vCard:N rdf:resource="rdf:#b3702597-42c9-4eba-999b-82230fb1fe32"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#1dec5c80-0fee-4467-ad6d-e9b21a23a383">
+			<dc:title>Journal of Theoretical Biology</dc:title>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#3819000b-b35c-4839-8477-7aea99976f2f">
+			<dcterms:W3CDTF>2007-07-26T00:00:00+00:00</dcterms:W3CDTF>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#12dcb8cb-5c43-4f28-9b62-93526ae8e5b9">
+			<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+			<vCard:N rdf:resource="rdf:#1ba3d4da-11ad-4f13-85c0-34d2602672e0"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#7bb70135-23af-4bec-8812-dff1eda32c88">
+			<dcterms:modified rdf:resource="rdf:#6a7ddc63-87f5-4323-80c2-cb58a43cdf2f"/>
+			<rdf:value>deleted extraneous connection,
+added simulation metadata, added some cmeta:id's</rdf:value>
+			<cmeta:modifier xmlns:cmeta="http://www.cellml.org/metadata/1.0#" rdf:resource="rdf:#f65d2715-d779-40a4-a44f-f3e3bf4d4bd5"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="">
+			<dc:title>
+			Main Model + Adding Osteoblasts
+			</dc:title>
+			<dc:publisher>The University of Auckland, Auckland Bioengineering Institute</dc:publisher>
+			<cmeta:comment xmlns:cmeta="http://www.cellml.org/metadata/1.0#" rdf:resource="rdf:#1bceecc7-e5dd-44a6-a700-49b94a463687"/>
+			<dcterms:created rdf:resource="rdf:#3819000b-b35c-4839-8477-7aea99976f2f"/>
+			<dc:creator rdf:resource="rdf:#9a60a263-0a3a-4f33-a72e-173f5d72a367"/>
+			<cmeta:modification xmlns:cmeta="http://www.cellml.org/metadata/1.0#" rdf:resource="rdf:#7bb70135-23af-4bec-8812-dff1eda32c88"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#491e01f3-f2dd-42f2-9d9f-7695955fa2c0">
+			<rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+			<rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#92ba9112-40ee-40ab-861d-665cd211370e">
+			<dcterms:W3CDTF>2004-08-07</dcterms:W3CDTF>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#a74e8192-bcda-4e4c-9376-e51da285e607">
+			<vCard:Given>Larry</vCard:Given>
+			<vCard:Family>Suva</vCard:Family>
+			<vCard:Other>J</vCard:Other>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#b2e5c557-75e2-48c9-bf5c-45ba2081ef19">
+			<vCard:FN>Catherine Lloyd</vCard:FN>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#c6c45247-33bf-45f4-a6ab-645a436ac4a8">
+			<vCard:Given>Vincent</vCard:Given>
+			<vCard:Family>Lemaire</vCard:Family>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#6fcd02ce-23c4-4cc2-aa20-e04a1f2e994d">
+			<bqs:subject_type>keyword</bqs:subject_type>
+			<rdf:value rdf:resource="rdf:#2adcf65c-3a34-4a1e-a15c-ed9b3276d701"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#$gyVap">
+			<ns7:boundIntervals rdf:resource="rdf:#$hyVap"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#b3702597-42c9-4eba-999b-82230fb1fe32">
+			<vCard:Given>Frank</vCard:Given>
+			<vCard:Family>Tobin</vCard:Family>
+			<vCard:Other>L</vCard:Other>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#decd5917-ed89-488b-8b0c-0f595b9c2b6f">
+			<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+			<vCard:N rdf:resource="rdf:#c6c45247-33bf-45f4-a6ab-645a436ac4a8"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#f65d2715-d779-40a4-a44f-f3e3bf4d4bd5">
+			<vCard:N rdf:resource="rdf:#abd9118b-45ee-43ff-ab89-f6539607e80c"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#745899ce-01ee-43a1-8bc0-9cbe39fcfc6f">
+			<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+			<vCard:N rdf:resource="rdf:#a74e8192-bcda-4e4c-9376-e51da285e607"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#9cac1f9e-95e6-42d2-a1c7-4d4a27c6570b">
+			<dc:creator rdf:resource="rdf:#073a484d-b37d-42da-821e-bfcbc7f45fa1"/>
+			<dc:title>Modeling the interactions between osteoblast and osteoclast activities in bone remodeling</dc:title>
+			<bqs:volume>229</bqs:volume>
+			<bqs:first_page>293</bqs:first_page>
+			<bqs:Journal rdf:resource="rdf:#1dec5c80-0fee-4467-ad6d-e9b21a23a383"/>
+			<dcterms:issued rdf:resource="rdf:#92ba9112-40ee-40ab-861d-665cd211370e"/>
+			<bqs:last_page>309</bqs:last_page>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#1bceecc7-e5dd-44a6-a700-49b94a463687">
+			<dc:creator rdf:resource="rdf:#448c98e0-ab5d-49d3-af6f-227ceda88842"/>
+			<rdf:value/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#$hyVap">
+			<rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+			<rdf:first rdf:resource="rdf:#$iyVap"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#756af352-aaff-4398-9ab3-c70042b2f237">
+			<vCard:Given>Larry</vCard:Given>
+			<vCard:Family>Greller</vCard:Family>
+			<vCard:Other>D</vCard:Other>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#6a7ddc63-87f5-4323-80c2-cb58a43cdf2f">
+			<dcterms:W3CDTF>2008-09-15T13:02:29+12:00</dcterms:W3CDTF>
+		</rdf:Description>
+	</rdf:RDF>   <units xmlns="http://www.cellml.org/cellml/1.0#" name="day">
+      <unit units="second" multiplier="86400"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="picomole">
+      <unit units="mole" prefix="pico"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="cells" base_units="yes"/>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="picomole_cells">
+      <unit units="picomole"/>
+      <unit units="cells"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="picomole_per_picomole_cells">
+      <unit units="picomole"/>
+      <unit units="picomole_cells" exponent="-1"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="picomole_per_day_per_picomole_cells">
+      <unit units="picomole"/>
+      <unit units="day" exponent="-1"/>
+      <unit units="picomole_cells" exponent="-1"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="picomolar">
+      <unit units="mole" prefix="pico"/>
+      <unit units="litre" exponent="-1"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="flux">
+      <unit units="picomolar"/>
+      <unit units="day" exponent="-1"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="first_order_rate_constant">
+      <unit units="day" exponent="-1"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="second_order_rate_constant">
+      <unit units="picomolar" exponent="-1"/>
+      <unit units="day" exponent="-1"/>
+   </units>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="environment">
+      <variable name="time" units="day" public_interface="out"/>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="R">
+      <variable name="R" units="picomolar" initial_value="0.00077" public_interface="out"/>
+      <variable name="f" units="flux"/>
+      <variable name="DR" units="flux" public_interface="in"/>
+      <variable name="pi_C" units="dimensionless" public_interface="in"/>
+      <variable name="DB" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="day" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>R</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>DR</ci>
+                     <ci>pi_C</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>DB</ci>
+                        <ci>pi_C</ci>
+                     </apply>
+                     <ci>R</ci>
+                  </apply>
+               </apply>
+               <ci>f</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>f</ci>
+            <piecewise>
+               <piece>
+                  <cn cellml:units="flux">0.0001</cn>
+                  <apply>
+                     <and/>
+                     <apply>
+                        <gt/>
+                        <ci>time</ci>
+                        <cn cellml:units="day">20</cn>
+                     </apply>
+                     <apply>
+                        <leq/>
+                        <ci>time</ci>
+                        <cn cellml:units="day">80</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <cn cellml:units="flux">0</cn>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="B">
+      <variable name="B" units="picomolar" initial_value="0.00073" public_interface="out"/>
+      <variable name="kB" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="pi_C" units="dimensionless" public_interface="in"/>
+      <variable name="DB" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="R" units="picomolar" public_interface="in"/>
+      <variable name="time" units="day" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>B</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>DB</ci>
+                     <ci>pi_C</ci>
+                  </apply>
+                  <ci>R</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>kB</ci>
+                  <ci>B</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="C">
+      <variable name="C" units="picomolar" initial_value="0.00091" public_interface="out"/>
+      <variable name="DC" units="flux" public_interface="in"/>
+      <variable name="pi_L" units="dimensionless" public_interface="in"/>
+      <variable name="pi_C" units="dimensionless" public_interface="in"/>
+      <variable name="DA" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="day" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>C</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>DC</ci>
+                  <ci>pi_L</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>DA</ci>
+                  <ci>pi_C</ci>
+                  <ci>C</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="pi_L">
+      <variable name="pi_L" units="dimensionless" public_interface="out"/>
+      <variable name="k1" units="second_order_rate_constant" initial_value="1e-2"/>
+      <variable name="k2" units="first_order_rate_constant" initial_value="10"/>
+      <variable name="k3" units="second_order_rate_constant" initial_value="5.8e-4"/>
+      <variable name="k4" units="first_order_rate_constant" initial_value="1.7e-2"/>
+      <variable name="K" units="picomolar" initial_value="10"/>
+      <variable name="ko" units="first_order_rate_constant" initial_value="0.35"/>
+      <variable name="Io" units="flux" initial_value="0"/>
+      <variable name="IL" units="flux" initial_value="0"/>
+      <variable name="rL" units="flux" initial_value="1e3"/>
+      <variable name="KOP" units="picomole_per_day_per_picomole_cells" initial_value="2e5"/>
+      <variable name="KLP" units="picomole_per_picomole_cells" initial_value="3e6"/>
+      <variable name="pi_P" units="dimensionless" public_interface="in"/>
+      <variable name="B" units="picomolar" public_interface="in"/>
+      <variable name="R" units="picomolar" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>pi_L</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>k3</ci>
+                        <ci>k4</ci>
+                     </apply>
+                     <apply>
+                        <divide/>
+                        <ci>KLP</ci>
+                        <cn cellml:units="picomole_per_picomole_cells">1</cn>
+                     </apply>
+                     <ci>pi_P</ci>
+                     <ci>B</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <cn cellml:units="dimensionless">1</cn>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <ci>k3</ci>
+                           <ci>K</ci>
+                        </apply>
+                        <ci>k4</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>k1</ci>
+                           <apply>
+                              <times/>
+                              <ci>k2</ci>
+                              <ci>ko</ci>
+                           </apply>
+                        </apply>
+                        <apply>
+                           <plus/>
+                           <apply>
+                              <times/>
+                              <apply>
+                                 <divide/>
+                                 <ci>KOP</ci>
+                                 <apply>
+                                    <times/>
+                                    <cn cellml:units="picomole_per_picomole_cells">1</cn>
+                                    <ci>pi_P</ci>
+                                 </apply>
+                              </apply>
+                              <ci>R</ci>
+                           </apply>
+                           <ci>Io</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <plus/>
+                  <cn cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <divide/>
+                     <ci>IL</ci>
+                     <ci>rL</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="model_parameters">
+      <variable name="DA" units="first_order_rate_constant" initial_value="0.7" public_interface="out"/>
+      <variable name="DB" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="DC" units="flux" initial_value="2.1e-3" public_interface="out"/>
+      <variable name="DR" units="flux" initial_value="7e-4" public_interface="out"/>
+      <variable name="kB" units="first_order_rate_constant" initial_value="0.189" public_interface="out"/>
+      <variable name="pi_C" units="dimensionless" public_interface="out"/>
+      <variable name="pi_P" units="dimensionless" public_interface="out"/>
+      <variable name="f0" units="dimensionless" initial_value="0.05"/>
+      <variable name="dB" units="first_order_rate_constant" initial_value="0.7"/>
+      <variable name="IP" units="flux" initial_value="0"/>
+      <variable name="kP" units="first_order_rate_constant" initial_value="86"/>
+      <variable name="P" units="picomolar"/>
+      <variable name="P_0" units="picomolar"/>
+      <variable name="P_s" units="picomolar"/>
+      <variable name="C_s" units="picomolar" initial_value="5e-3"/>
+      <variable name="SP" units="flux" initial_value="250"/>
+      <variable name="k5" units="second_order_rate_constant" initial_value="0.02"/>
+      <variable name="k6" units="first_order_rate_constant" initial_value="3"/>
+      <variable name="C" units="picomolar" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>DB</ci>
+            <apply>
+               <times/>
+               <ci>f0</ci>
+               <ci>dB</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>pi_C</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <plus/>
+                  <ci>C</ci>
+                  <apply>
+                     <times/>
+                     <ci>f0</ci>
+                     <ci>C_s</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>C</ci>
+                  <ci>C_s</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>pi_P</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <plus/>
+                  <ci>P</ci>
+                  <ci>P_0</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>P</ci>
+                  <ci>P_s</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>P</ci>
+            <apply>
+               <divide/>
+               <ci>IP</ci>
+               <ci>kP</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>P_0</ci>
+            <apply>
+               <divide/>
+               <ci>SP</ci>
+               <ci>kP</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>P_s</ci>
+            <apply>
+               <divide/>
+               <ci>k6</ci>
+               <ci>k5</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="R" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="C" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="R" component_2="model_parameters"/>
+      <map_variables variable_1="DR" variable_2="DR"/>
+      <map_variables variable_1="DB" variable_2="DB"/>
+      <map_variables variable_1="pi_C" variable_2="pi_C"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="R" component_2="B"/>
+      <map_variables variable_1="R" variable_2="R"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B" component_2="model_parameters"/>
+      <map_variables variable_1="kB" variable_2="kB"/>
+      <map_variables variable_1="DB" variable_2="DB"/>
+      <map_variables variable_1="pi_C" variable_2="pi_C"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="C" component_2="pi_L"/>
+      <map_variables variable_1="pi_L" variable_2="pi_L"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="C" component_2="model_parameters"/>
+      <map_variables variable_1="DA" variable_2="DA"/>
+      <map_variables variable_1="DC" variable_2="DC"/>
+      <map_variables variable_1="pi_C" variable_2="pi_C"/>
+      <map_variables variable_1="C" variable_2="C"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="B" component_2="pi_L"/>
+      <map_variables variable_1="B" variable_2="B"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="R" component_2="pi_L"/>
+      <map_variables variable_1="R" variable_2="R"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="pi_L" component_2="model_parameters"/>
+      <map_variables variable_1="pi_P" variable_2="pi_P"/>
+   </connection>
+</model>

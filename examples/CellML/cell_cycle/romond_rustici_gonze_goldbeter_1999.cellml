@@ -1,0 +1,817 @@
+<?xml version="1.0"?>
+<!--
+This CellML file was generated on 4/02/2009 at 1:22:41 at p.m. using:
+
+COR (0.9.31.1125)
+Copyright 2002-2009 Dr Alan Garny
+http://COR.physiol.ox.ac.uk/ - COR@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.CellML.org/
+-->
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" cmeta:id="romond_rustici_gonze_goldbeter_1999_version01" name="romond_rustici_gonze_goldbeter_1999_version01">
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>Alternating Oscillations and Chaos in a Model of Two Coupled Biochemical Oscillators Driving Successive Phases of the Cell Cycle</title>
+				<author>
+					<firstname>Jeelean</firstname>
+					<surname>Lim</surname>
+					<affiliation>
+						<shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<section id="sec_status">
+				<title>Model Status</title>
+				<para>
+            This CellML version of the model has been checked in COR and PCEnv and the model runs to replicate the original published results as depicted in figure 3 of the paper. The units have been checked and are consistent. 
+          </para>
+			</section>
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>
+ABSTRACT:  The animal cell cycle is controlled by the periodic variation of two cyclin-dependent protein kinases, cdk1 and cdk2, which govern the entry into the M (mitosis) and S (DNA replication) phases, respectively. The ordered progression between these phases is achieved thanks to the existence of checkpoint mechanisms based on mutual inhibition of these processes. Here we study a simple theoretical model for oscillations in cdk1 and cdk2 activity, involving mutual inhibition of the two oscillators. Each minimal oscillator is described by a three-variable cascade involving a cdk, together with the associated cyclin and cyclin-degrading enzyme. The dynamics of this skeleton model of coupled oscillators is determined as a function of the strength of their mutual inhibition. The most common mode of dynamic behavior, obtained under conditions of strong mutual inhibition, is that of alternating oscillations in cdk1 and cdk2, which correspond to the physiological situation of the ordered recurrence of the M and S phases. In addition, for weaker inhibition we obtain evidence for a variety of dynamic phenomena such as complex periodic oscillations, chaos, and the coexistence between multiple periodic or chaotic attractors. We discuss the conditions of occurrence of these various modes of oscillatory behavior, as well as their possible physiological significance.
+				</para>
+				<para>
+The original paper reference is cited below:
+				</para>
+				<para>
+Alternating Oscillations and Chaos in a Model of Two Coupled Biochemical Oscillators Driving Successive Phases of the Cell Cycle, Pierre-Charles Romond, Mauro Rustici, Didier Gonze, Albert GOldbeter, 1999, <emphasis>Annals of the New York Acedemy of Sciences</emphasis>, 879, 180-193. <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/10415827">PubMed ID: 10415827</ulink>
+				</para>
+				
+				<informalfigure float="0" id="fig_reaction_diagram">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>figure 1</title>
+							</objectinfo>
+							<imagedata fileref="romond_1999.png"/>
+						</imageobject>
+					</mediaobject>
+					<caption>Skeleton model of two coupled biochemical oscillators controlling the M and S phases of the cell cycle. Each oscillator consists of a three-variable cascade involving a cyclin (C1 or C2), a cyclin-dependent kinase (cdk) (M1 or M2), and a cdk-activated ubiquitin ligase (X1 or X2) that controls cyclin degradation. The + sign indicates the inactive form of the enzymes. The dashed lines ending with a horizontal bar represent the inhibition exerted by M1 and M2 on the synthesis of C1 and C2, respectively.</caption>
+				</informalfigure>
+			</sect1>
+		</article>
+	</documentation>   
+	
+	<units name="micromolar">
+      <unit prefix="micro" units="mole"/>
+      <unit exponent="-1" units="litre"/>
+   </units>
+   <units name="minute">
+      <unit multiplier="60" units="second"/>
+   </units>
+   <units name="flux">
+      <unit units="micromolar"/>
+      <unit exponent="-1" units="minute"/>
+   </units>
+   <units name="first_order_rate_constant">
+      <unit exponent="-1" units="minute"/>
+   </units>
+   <component name="environment">
+      <variable cmeta:id="environment_time" name="time" public_interface="out" units="minute"/>
+   </component>
+   <component name="parameters">
+      <variable initial_value="0.01" name="H_1" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.01" name="H_2" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.01" name="H_3" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.01" name="H_4" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.01" name="K_1" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.01" name="K_2" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.01" name="K_3" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.01" name="K_4" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.3" name="V_M1" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="0.1" name="V_M3" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="0.3" name="U_M1" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="0.1" name="U_M3" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="0.15" name="V_2" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="0.05" name="V_4" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="0.15" name="U_2" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="0.05" name="U_4" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="0.5" name="K_c1" public_interface="out" units="micromolar"/>
+      <variable initial_value="0.5" name="K_c2" public_interface="out" units="micromolar"/>
+      <variable initial_value="0.02" name="K_d1" public_interface="out" units="micromolar"/>
+      <variable initial_value="0.02" name="K_d2" public_interface="out" units="micromolar"/>
+      <variable initial_value="0.025" name="v_d1" public_interface="out" units="flux"/>
+      <variable initial_value="0.025" name="v_d2" public_interface="out" units="flux"/>
+      <variable initial_value="0.05" name="v_i1" public_interface="out" units="flux"/>
+      <variable initial_value="0.05" name="v_i2" public_interface="out" units="flux"/>
+      <variable initial_value="0.001" name="k_d1" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="0.001" name="k_d2" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="0.03" name="K_im1" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.03" name="K_im2" public_interface="out" units="dimensionless"/>
+   </component>
+   <component name="C_1">
+      <variable cmeta:id="C_1_C_1" initial_value="2" name="C_1" public_interface="out" units="micromolar"/>
+      <variable name="v_i1" public_interface="in" units="flux"/>
+      <variable name="v_d1" public_interface="in" units="flux"/>
+      <variable name="k_d1" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="K_im1" public_interface="in" units="dimensionless"/>
+      <variable name="M_2" public_interface="in" units="dimensionless"/>
+      <variable name="X_1" public_interface="in" units="dimensionless"/>
+      <variable name="K_d1" public_interface="in" units="micromolar"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>C_1</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>v_i1</ci>
+                        <ci>K_im1</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci>K_im1</ci>
+                        <ci>M_2</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>v_d1</ci>
+                        <ci>X_1</ci>
+                        <ci>C_1</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci>K_d1</ci>
+                        <ci>C_1</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_d1</ci>
+                  <ci>C_1</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="M_1">
+      <variable cmeta:id="M_1_M_1" initial_value="1" name="M_1" public_interface="out" units="dimensionless"/>
+      <variable name="V_1" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="V_2" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="K_1" public_interface="in" units="dimensionless"/>
+      <variable name="K_2" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>M_1</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>V_1</ci>
+                     <apply>
+                        <minus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        <ci>M_1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>K_1</ci>
+                     <apply>
+                        <minus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        <ci>M_1</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>V_2</ci>
+                     <ci>M_1</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>K_2</ci>
+                     <ci>M_1</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="X_1">
+      <variable cmeta:id="X_1_X_1" initial_value="0" name="X_1" public_interface="out" units="dimensionless"/>
+      <variable name="V_3" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="V_4" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="K_3" public_interface="in" units="dimensionless"/>
+      <variable name="K_4" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>X_1</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>V_3</ci>
+                     <apply>
+                        <minus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        <ci>X_1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>K_3</ci>
+                     <apply>
+                        <minus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        <ci>X_1</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>V_4</ci>
+                     <ci>X_1</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>K_4</ci>
+                     <ci>X_1</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="C_2">
+      <variable cmeta:id="C_2_C_2" initial_value="0" name="C_2" public_interface="out" units="micromolar"/>
+      <variable name="v_i2" public_interface="in" units="flux"/>
+      <variable name="v_d2" public_interface="in" units="flux"/>
+      <variable name="k_d2" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="K_im2" public_interface="in" units="dimensionless"/>
+      <variable name="M_1" public_interface="in" units="dimensionless"/>
+      <variable name="X_2" public_interface="in" units="dimensionless"/>
+      <variable name="K_d2" public_interface="in" units="micromolar"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>C_2</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>v_i2</ci>
+                        <ci>K_im2</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci>K_im2</ci>
+                        <ci>M_1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>v_d2</ci>
+                        <ci>X_2</ci>
+                        <ci>C_2</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci>K_d2</ci>
+                        <ci>C_2</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_d2</ci>
+                  <ci>C_2</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="M_2">
+      <variable cmeta:id="M_2_M_2" initial_value="0" name="M_2" public_interface="out" units="dimensionless"/>
+      <variable name="U_1" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="U_2" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="H_1" public_interface="in" units="dimensionless"/>
+      <variable name="H_2" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>M_2</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>U_1</ci>
+                     <apply>
+                        <minus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        <ci>M_2</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>H_1</ci>
+                     <apply>
+                        <minus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        <ci>M_2</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>U_2</ci>
+                     <ci>M_2</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>H_2</ci>
+                     <ci>M_2</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="X_2">
+      <variable cmeta:id="X_2_X_2" initial_value="0" name="X_2" public_interface="out" units="dimensionless"/>
+      <variable name="U_3" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="U_4" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="H_3" public_interface="in" units="dimensionless"/>
+      <variable name="H_4" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>X_2</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>U_3</ci>
+                     <apply>
+                        <minus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        <ci>X_2</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>H_3</ci>
+                     <apply>
+                        <minus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        <ci>X_2</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>U_4</ci>
+                     <ci>X_2</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>H_4</ci>
+                     <ci>X_2</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="V_1">
+      <variable name="V_1" public_interface="out" units="first_order_rate_constant"/>
+      <variable name="V_M1" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="C_1" public_interface="in" units="micromolar"/>
+      <variable name="K_c1" public_interface="in" units="micromolar"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_1</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <divide/>
+                  <ci>C_1</ci>
+                  <apply>
+                     <plus/>
+                     <ci>K_c1</ci>
+                     <ci>C_1</ci>
+                  </apply>
+               </apply>
+               <ci>V_M1</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="V_3">
+      <variable name="V_3" public_interface="out" units="first_order_rate_constant"/>
+      <variable name="V_M3" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="M_1" public_interface="in" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_3</ci>
+            <apply>
+               <times/>
+               <ci>M_1</ci>
+               <ci>V_M3</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="U_1">
+      <variable name="U_1" public_interface="out" units="first_order_rate_constant"/>
+      <variable name="U_M1" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="C_2" public_interface="in" units="micromolar"/>
+      <variable name="K_c2" public_interface="in" units="micromolar"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>U_1</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <divide/>
+                  <ci>C_2</ci>
+                  <apply>
+                     <plus/>
+                     <ci>K_c2</ci>
+                     <ci>C_2</ci>
+                  </apply>
+               </apply>
+               <ci>U_M1</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="U_3">
+      <variable name="U_3" public_interface="out" units="first_order_rate_constant"/>
+      <variable name="U_M3" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="M_2" public_interface="in" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>U_3</ci>
+            <apply>
+               <times/>
+               <ci>M_2</ci>
+               <ci>U_M3</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <connection>
+      <map_components component_1="C_1" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="M_1" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="X_1" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="C_2" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="M_2" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="X_2" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="C_1" component_2="parameters"/>
+      <map_variables variable_1="v_i1" variable_2="v_i1"/>
+      <map_variables variable_1="v_d1" variable_2="v_d1"/>
+      <map_variables variable_1="k_d1" variable_2="k_d1"/>
+      <map_variables variable_1="K_im1" variable_2="K_im1"/>
+      <map_variables variable_1="K_d1" variable_2="K_d1"/>
+   </connection>
+   <connection>
+      <map_components component_1="C_1" component_2="M_2"/>
+      <map_variables variable_1="M_2" variable_2="M_2"/>
+   </connection>
+   <connection>
+      <map_components component_1="C_1" component_2="X_1"/>
+      <map_variables variable_1="X_1" variable_2="X_1"/>
+   </connection>
+   <connection>
+      <map_components component_1="M_1" component_2="parameters"/>
+      <map_variables variable_1="V_2" variable_2="V_2"/>
+      <map_variables variable_1="K_1" variable_2="K_1"/>
+      <map_variables variable_1="K_2" variable_2="K_2"/>
+   </connection>
+   <connection>
+      <map_components component_1="M_1" component_2="V_1"/>
+      <map_variables variable_1="V_1" variable_2="V_1"/>
+   </connection>
+   <connection>
+      <map_components component_1="X_1" component_2="parameters"/>
+      <map_variables variable_1="V_4" variable_2="V_4"/>
+      <map_variables variable_1="K_3" variable_2="K_3"/>
+      <map_variables variable_1="K_4" variable_2="K_4"/>
+   </connection>
+   <connection>
+      <map_components component_1="X_1" component_2="V_3"/>
+      <map_variables variable_1="V_3" variable_2="V_3"/>
+   </connection>
+   <connection>
+      <map_components component_1="C_2" component_2="parameters"/>
+      <map_variables variable_1="v_i2" variable_2="v_i2"/>
+      <map_variables variable_1="v_d2" variable_2="v_d2"/>
+      <map_variables variable_1="k_d2" variable_2="k_d2"/>
+      <map_variables variable_1="K_im2" variable_2="K_im2"/>
+      <map_variables variable_1="K_d2" variable_2="K_d2"/>
+   </connection>
+   <connection>
+      <map_components component_1="C_2" component_2="M_1"/>
+      <map_variables variable_1="M_1" variable_2="M_1"/>
+   </connection>
+   <connection>
+      <map_components component_1="C_2" component_2="X_2"/>
+      <map_variables variable_1="X_2" variable_2="X_2"/>
+   </connection>
+   <connection>
+      <map_components component_1="M_2" component_2="parameters"/>
+      <map_variables variable_1="U_2" variable_2="U_2"/>
+      <map_variables variable_1="H_1" variable_2="H_1"/>
+      <map_variables variable_1="H_2" variable_2="H_2"/>
+   </connection>
+   <connection>
+      <map_components component_1="M_2" component_2="U_1"/>
+      <map_variables variable_1="U_1" variable_2="U_1"/>
+   </connection>
+   <connection>
+      <map_components component_1="X_2" component_2="parameters"/>
+      <map_variables variable_1="U_4" variable_2="U_4"/>
+      <map_variables variable_1="H_3" variable_2="H_3"/>
+      <map_variables variable_1="H_4" variable_2="H_4"/>
+   </connection>
+   <connection>
+      <map_components component_1="X_2" component_2="U_3"/>
+      <map_variables variable_1="U_3" variable_2="U_3"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_1" component_2="parameters"/>
+      <map_variables variable_1="V_M1" variable_2="V_M1"/>
+      <map_variables variable_1="K_c1" variable_2="K_c1"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_1" component_2="C_1"/>
+      <map_variables variable_1="C_1" variable_2="C_1"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_3" component_2="parameters"/>
+      <map_variables variable_1="V_M3" variable_2="V_M3"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_3" component_2="M_1"/>
+      <map_variables variable_1="M_1" variable_2="M_1"/>
+   </connection>
+   <connection>
+      <map_components component_1="U_1" component_2="parameters"/>
+      <map_variables variable_1="U_M1" variable_2="U_M1"/>
+      <map_variables variable_1="K_c2" variable_2="K_c2"/>
+   </connection>
+   <connection>
+      <map_components component_1="U_1" component_2="C_2"/>
+      <map_variables variable_1="C_2" variable_2="C_2"/>
+   </connection>
+   <connection>
+      <map_components component_1="U_3" component_2="parameters"/>
+      <map_variables variable_1="U_M3" variable_2="U_M3"/>
+   </connection>
+   <connection>
+      <map_components component_1="U_3" component_2="M_2"/>
+      <map_variables variable_1="M_2" variable_2="M_2"/>
+   </connection>
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Seq rdf:about="rdf:#6fb00866-2412-4085-a21c-d00f89e281ca">
+    <rdf:li rdf:resource="rdf:#716b8b8e-64e0-47cd-94b5-95d39b6c2054"/>
+    <rdf:li rdf:resource="rdf:#3c83497c-4818-4dd6-8a13-bad1a214e76b"/>
+    <rdf:li rdf:resource="rdf:#7d245063-2212-4d6b-8388-8c6fdc4d531c"/>
+    <rdf:li rdf:resource="rdf:#0adae745-9185-4501-a813-5ef58eab0492"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#e25a6896-2a8f-46ae-9eb3-af558894f7d7">
+    <bqs:Pubmed_id xmlns:bqs="http://www.cellml.org/bqs/1.0#">10415827</bqs:Pubmed_id>
+    <bqs:JournalArticle xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#b176e314-2e93-4afd-bac7-2e1c02f84aef"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#romond_rustici_gonze_goldbeter_1999_version01">
+    <ns7:simulation xmlns:ns7="http://www.cellml.org/metadata/simulation/1.0#" rdf:resource="rdf:#$jRAGq3"/>
+    <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#e25a6896-2a8f-46ae-9eb3-af558894f7d7"/>
+<bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource">
+  <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value>
+      <rdf:Bag>
+        <rdf:li>cell cycle</rdf:li>
+      </rdf:Bag>
+    </rdf:value>
+  </dc:subject>
+</bqs:reference>
+    <cmeta:comment rdf:resource="rdf:#03ed3bde-ca74-4b7d-8af3-3b2c3bc4c0b7"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#fad95e92-dde9-4a92-970f-5c8376317bd6">
+    <dcterms:modified xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#1fe22368-b363-4b12-8adf-d07f917e735a"/>
+    <rdf:value>Added cmeta:id's to some variables</rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#7f9a44cc-6fa3-4d93-aa71-fb3da3da29b2"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b176e314-2e93-4afd-bac7-2e1c02f84aef">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#6fb00866-2412-4085-a21c-d00f89e281ca"/>
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Alternating Oscillations and Chaos in a Model of Two Coupled Biochemical Oscillators Driving Successive Phases of the Cell Cycle</dc:title>
+    <bqs:volume xmlns:bqs="http://www.cellml.org/bqs/1.0#">879</bqs:volume>
+    <bqs:first_page xmlns:bqs="http://www.cellml.org/bqs/1.0#">180</bqs:first_page>
+    <bqs:Journal xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#fc52ce61-256c-43da-a837-7e9beaccde98"/>
+    <dcterms:issued xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#69ad30b2-b90e-47ac-8959-87b26f9130ef"/>
+    <bqs:last_page xmlns:bqs="http://www.cellml.org/bqs/1.0#">193</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#03ed3bde-ca74-4b7d-8af3-3b2c3bc4c0b7">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#3b07aa4d-0fdd-41d3-8b94-2cc0463946ce"/>
+    <rdf:value>This is the CellML description of Romond et al's 1999 paper on alternating oscillations and chaos in a model of two coupled biochemical oscillators driving successive phases of the cell cycle</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#69ad30b2-b90e-47ac-8959-87b26f9130ef">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">1999-06-00 00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:publisher xmlns:dc="http://purl.org/dc/elements/1.1/"/>
+    <cmeta:comment rdf:resource="rdf:#a033afe2-1486-4cf7-a6e8-23cc78c7b5de"/>
+    <dcterms:created xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#808d078d-6ad7-43fa-b863-ee38da61164c"/>
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#be529897-3f0c-4632-b18a-399028bff89e"/>
+    <cmeta:modification rdf:resource="rdf:#fad95e92-dde9-4a92-970f-5c8376317bd6"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0adae745-9185-4501-a813-5ef58eab0492">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#ca8849ad-3398-46ea-a25c-b93a30b9bda2"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#cecd4250-828c-442b-b6e7-4afd3bb6402e">
+    <vCard:FN xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Jeelean Lim</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#808d078d-6ad7-43fa-b863-ee38da61164c">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2009-02-04T00:00:00+00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#$lRAGq3">
+    <ns7:endingValue xmlns:ns7="http://www.cellml.org/metadata/simulation/1.0#">2000</ns7:endingValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7d245063-2212-4d6b-8388-8c6fdc4d531c">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#faf6a4e0-41fb-4d45-8110-610b656ac08f"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1fe22368-b363-4b12-8adf-d07f917e735a">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2009-02-12T10:17:30+13:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ca7d615c-1fd8-4428-ae29-002421c0ad6a">
+    <vCard:FN xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Jeelean Lim</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#$kRAGq3">
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+    <rdf:first rdf:resource="rdf:#$lRAGq3"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#716b8b8e-64e0-47cd-94b5-95d39b6c2054">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#75367d08-3e99-4cec-b8d8-899136c36759"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#faf6a4e0-41fb-4d45-8110-610b656ac08f">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Didier</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Gonze</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a033afe2-1486-4cf7-a6e8-23cc78c7b5de">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#ca7d615c-1fd8-4428-ae29-002421c0ad6a"/>
+    <rdf:value>This CellML version of the model has been checked in COR and PCEnv and the model runs to replicate the original published results as depicted in figure 3 of the paper. The units have been checked and are consistent. Initial concentrations and ratios were set with reference to the BioModels database.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3b07aa4d-0fdd-41d3-8b94-2cc0463946ce">
+    <vCard:FN xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Jeelean Lim</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3a9319b3-f9a9-4e9b-8fc2-994e63e95789">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Jeelean</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Lim</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#75367d08-3e99-4cec-b8d8-899136c36759">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Pierre-Charles</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Romond</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7f9a44cc-6fa3-4d93-aa71-fb3da3da29b2">
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#8fcaea43-88b3-44b5-85c7-39fa20eb0fc9"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d8125570-ffe0-4259-819f-02705346ec4a">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Mauro</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Rustici</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#fc52ce61-256c-43da-a837-7e9beaccde98">
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Annals of the New York Academy of Sciences</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ca8849ad-3398-46ea-a25c-b93a30b9bda2">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Albert</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Goldbeter</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3c83497c-4818-4dd6-8a13-bad1a214e76b">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#d8125570-ffe0-4259-819f-02705346ec4a"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#be529897-3f0c-4632-b18a-399028bff89e">
+    <vCard:ORG xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#fc0e4716-20a8-4860-985f-c8bd57e154ba"/>
+    <vCard:EMAIL xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#f7ce0a8e-7b17-44e5-add3-3f848f58ee04"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#3a9319b3-f9a9-4e9b-8fc2-994e63e95789"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#fc0e4716-20a8-4860-985f-c8bd57e154ba">
+    <vCard:Orgname xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Auckland Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#$jRAGq3">
+    <ns7:boundIntervals xmlns:ns7="http://www.cellml.org/metadata/simulation/1.0#" rdf:resource="rdf:#$kRAGq3"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#974f1289-13f6-42b3-a159-e604257b8ee9">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#cecd4250-828c-442b-b6e7-4afd3bb6402e"/>
+    <rdf:value>This CellML version of the model has been checked in COR and PCEnv and the model runs to replicate the original published results as depicted in figure 3 of the paper. The units have been checked and are consistent. Initial concentrations and ratios were set with reference to the BioModels database.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8fcaea43-88b3-44b5-85c7-39fa20eb0fc9">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Jeelean</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Lim</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f7ce0a8e-7b17-44e5-add3-3f848f58ee04">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>jlim063@aucklanduni.ac.nz</rdf:value>
+  </rdf:Description>
+</rdf:RDF>
+</model>

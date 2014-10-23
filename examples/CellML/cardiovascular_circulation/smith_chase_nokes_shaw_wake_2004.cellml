@@ -1,0 +1,1627 @@
+<?xml version="1.0"?>
+<!--
+This CellML file was generated on 23/11/2009 at 9:23:44 at a.m. using:
+
+COR (0.9.31.1333)
+Copyright 2002-2009 Dr Alan Garny
+http://cor.physiol.ox.ac.uk/ - cor@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.cellml.org/
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" cmeta:id="smith_chase_nokes_shaw_wake_2004" name="smith_chase_nokes_shaw_wake_2004">
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>Minimal haemodynamic system model including ventricular interaction and valve dynamics.</title>
+				<author>
+					<firstname>Geoffrey</firstname>
+					<surname>Nunns</surname>
+					<affiliation>
+						<shortaffil>Bioengineering Institute, The University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<section id="sec_status">
+				<title>Model Status</title>
+				<para> This CellML model will run in PCEnv and OpenCell to recreate the published results. Note that the model will not run in COR because it contains differential algebraic equations (DAEs).  The CellML transaltion of the model is based on the original Matlab code obtained from the model authors. However, the CellML model will only simulate 14 heart beats, because if statements (piecewise equations) were used instead of a remainder operator to cycle the heart beat, but this number of beats can be increased if desired.               </para>
+			</section>
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>Abstract: Characterising circulatory dysfunction and choosing a suitable treatment is often difficult and time consuming, and can result in a deterioration in patient condition, or unsuitable therapy choices. A stable minimal model of the human cardiovascular system (CVS) is developed with the ultimate specific aim of assisting medical staff for rapid, on site modelling to assist in diagnosis and treatment. Models found in the literature simulate specific areas of the CVS with limited direct usefulness to medical staff. Others model the full CVS as a closed loop system, but they were found to be very complex, difficult to solve, or unstable. This paper develops a model that uses a minimal number of governing equations with the primary goal of accurately capturing trends in the CVS dynamics in a simple, easily solved, robust model. The model is shown to have long term stability and consistency with non-specific initial conditions as a result. An "open on pressure close on flow" valve law is created to capture the effects of inertia and the resulting dynamics of blood flow through the cardiac valves. An accurate, stable solution is performed using a method that varies the number of states in the model depending on the specific phase of the cardiac cycle, better matching the real physiological conditions. Examples of results include a 9% drop in cardiac output when increasing the thoracic pressure from -4 to 0 mmHg, and an increase in blood pressure from 120/80 to 165/130 mmHg when the systemic resistance is doubled. These results show that the model adequately provides appropriate magnitudes and trends that are in agreement with existing data for a variety of physiologically verified test cases simulating human CVS function.   </para>
+				<para>The complete original paper reference is cited below:</para>
+				<para>Minimal haemodynamic system model including ventricular interaction and valve dynamics, Bram W Smith, J Geoffrey Chase, Roger I Nokes, Geoffrey M Shaw, Graeme Wake, 2004, <emphasis>Medical Engineering and Physics</emphasis>, 26, 131-139. <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;list_uids=15036180&amp;dopt=Abstract">PubMed ID: 15036180    </ulink>
+				</para>
+				<informalfigure float="0" id="fig_reaction_diagram">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>model diagram</title>
+							</objectinfo>
+							<imagedata fileref="shaw_2007.png"/>
+						</imageobject>
+					</mediaobject>
+					<caption>Schematic diagram of the minimal closed loop model of the cardiovascular system.</caption>
+				</informalfigure>
+			</sect1>
+		</article>
+	</documentation>
+	
+	<units name="kPa">
+      <unit prefix="kilo" units="pascal"/>
+   </units>
+   <units name="mL">
+      <unit prefix="milli" units="liter"/>
+   </units>   
+   <units name="per_mL">
+      <unit exponent="-1" prefix="milli" units="liter"/>
+   </units>
+   <units name="kPa_per_mL">
+      <unit units="kPa"/>
+      <unit units="per_mL"/>
+   </units>
+   <units name="kPa_second_per_mL">
+      <unit prefix="kilo" units="pascal"/>
+      <unit units="second"/>
+      <unit exponent="-1" units="mL"/>
+   </units>
+   <units name="mL_per_second">
+      <unit units="mL"/>
+      <unit exponent="-1" units="second"/>
+   </units>
+   <units name="mL_per_second2">
+      <unit units="mL"/>
+      <unit exponent="-2" units="second"/>
+   </units>
+   <units name="per_second2">
+      <unit exponent="-2" units="second"/>
+   </units>
+   <units name="kPa_second2_per_mL">
+	  <unit prefix="kilo" units="pascal"/>
+	  <unit exponent="2" units="second"/>
+	  <unit exponent="-1" units="mL"/>
+   </units>
+   
+   <component name="environment">
+      <variable cmeta:id="environment_time" name="time" public_interface="out" units="second"/>
+   </component>
+   <component name="heart_parameters">
+      <variable initial_value="0.0158" name="R_mt" public_interface="out" units="kPa_second_per_mL"/>
+      <variable cmeta:id="heart_parameters_R_av" initial_value="0.0180" name="R_av" public_interface="out" units="kPa_second_per_mL"/>
+      <variable cmeta:id="heart_parameters_R_tc" initial_value="0.0237" name="R_tc" public_interface="out" units="kPa_second_per_mL"/>
+      <variable cmeta:id="heart_parameters_R_pv" initial_value="0.0055" name="R_pv" public_interface="out" units="kPa_second_per_mL"/>
+      <variable cmeta:id="heart_parameters_R_pul" initial_value="0.1552" name="R_pul" public_interface="out" units="kPa_second_per_mL"/>
+      <variable cmeta:id="heart_parameters_R_sys" initial_value="1.0889" name="R_sys" public_interface="out" units="kPa_second_per_mL"/>
+      <variable initial_value="8.0093e-5" name="L_tc" public_interface="out" units="kPa_second2_per_mL"/>
+      <variable initial_value="1.4868e-4" name="L_pv" public_interface="out" units="kPa_second2_per_mL"/>
+      <variable initial_value="7.6968e-5" name="L_mt" public_interface="out" units="kPa_second2_per_mL"/>
+      <variable initial_value="1.2189e-4" name="L_av" public_interface="out" units="kPa_second2_per_mL"/>
+      <variable initial_value="5.5" name="V_tot" public_interface="out" units="mL"/>
+      <variable initial_value="-4" name="P_th" public_interface="out" units="kPa"/>
+   </component>
+   <component name="driver_function">
+      <variable name="e_t" public_interface="out" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <variable initial_value="1" name="A" units="dimensionless"/>
+      <variable initial_value="80" name="B" units="per_second2"/>
+      <variable initial_value="0.375" name="C" units="second"/>
+      <variable name="tau" units="second"/>
+      <variable initial_value="0.75" name="period" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>tau</ci>
+            <piecewise>
+               <piece>
+                  <ci>time</ci>
+                  <apply>
+                     <leq/>
+                     <ci>time</ci>
+                     <ci>period</ci>
+                  </apply>
+               </piece>
+               <piece>
+                  <apply>
+                     <minus/>
+                     <ci>time</ci>
+                     <ci>period</ci>
+                  </apply>
+                  <apply>
+                     <leq/>
+                     <ci>time</ci>
+                     <apply>
+                        <times/>
+                        <ci>period</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <piece>
+                  <apply>
+                     <minus/>
+                     <ci>time</ci>
+                     <apply>
+                        <times/>
+                        <ci>period</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <leq/>
+                     <ci>time</ci>
+                     <apply>
+                        <times/>
+                        <ci>period</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <piece>
+                  <apply>
+                     <minus/>
+                     <ci>time</ci>
+                     <apply>
+                        <times/>
+                        <ci>period</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <leq/>
+                     <ci>time</ci>
+                     <apply>
+                        <times/>
+                        <ci>period</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <piece>
+                  <apply>
+                     <minus/>
+                     <ci>time</ci>
+                     <apply>
+                        <times/>
+                        <ci>period</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4</cn>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <leq/>
+                     <ci>time</ci>
+                     <apply>
+                        <times/>
+                        <ci>period</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">5</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <piece>
+                  <apply>
+                     <minus/>
+                     <ci>time</ci>
+                     <apply>
+                        <times/>
+                        <ci>period</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">5</cn>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <leq/>
+                     <ci>time</ci>
+                     <apply>
+                        <times/>
+                        <ci>period</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">6</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <piece>
+                  <apply>
+                     <minus/>
+                     <ci>time</ci>
+                     <apply>
+                        <times/>
+                        <ci>period</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">6</cn>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <leq/>
+                     <ci>time</ci>
+                     <apply>
+                        <times/>
+                        <ci>period</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">7</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <piece>
+                  <apply>
+                     <minus/>
+                     <ci>time</ci>
+                     <apply>
+                        <times/>
+                        <ci>period</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">7</cn>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <leq/>
+                     <ci>time</ci>
+                     <apply>
+                        <times/>
+                        <ci>period</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">8</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <piece>
+                  <apply>
+                     <minus/>
+                     <ci>time</ci>
+                     <apply>
+                        <times/>
+                        <ci>period</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">8</cn>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <leq/>
+                     <ci>time</ci>
+                     <apply>
+                        <times/>
+                        <ci>period</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">9</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <piece>
+                  <apply>
+                     <minus/>
+                     <ci>time</ci>
+                     <apply>
+                        <times/>
+                        <ci>period</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">9</cn>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <leq/>
+                     <ci>time</ci>
+                     <apply>
+                        <times/>
+                        <ci>period</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">10</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <piece>
+                  <apply>
+                     <minus/>
+                     <ci>time</ci>
+                     <apply>
+                        <times/>
+                        <ci>period</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">10</cn>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <leq/>
+                     <ci>time</ci>
+                     <apply>
+                        <times/>
+                        <ci>period</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">11</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <piece>
+                  <apply>
+                     <minus/>
+                     <ci>time</ci>
+                     <apply>
+                        <times/>
+                        <ci>period</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">11</cn>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <leq/>
+                     <ci>time</ci>
+                     <apply>
+                        <times/>
+                        <ci>period</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">12</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <piece>
+                  <apply>
+                     <minus/>
+                     <ci>time</ci>
+                     <apply>
+                        <times/>
+                        <ci>period</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">12</cn>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <leq/>
+                     <ci>time</ci>
+                     <apply>
+                        <times/>
+                        <ci>period</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">13</cn>
+                     </apply>
+                  </apply>
+               </piece>
+            </piecewise>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>e_t</ci>
+            <apply>
+               <times/>
+               <ci>A</ci>
+               <apply>
+                  <exp/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <minus/>
+                        <ci>B</ci>
+                     </apply>
+                     <apply>
+                        <power/>
+                        <apply>
+                           <minus/>
+                           <ci>tau</ci>
+                           <ci>C</ci>
+                        </apply>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="pericardium">
+      <variable name="V_pcd" public_interface="out" units="mL"/>
+      <variable name="P_pcd" public_interface="out" units="kPa"/>
+      <variable name="P_peri" public_interface="out" units="kPa"/>
+      <variable name="V_lv" public_interface="in" units="mL"/>
+      <variable name="V_rv" public_interface="in" units="mL"/>
+      <variable name="P_th" public_interface="in" units="kPa"/>
+      <variable initial_value="0.5003" name="P_0_pcd" units="kPa"/>
+      <variable initial_value="200" name="V_0_pcd" units="mL"/>
+      <variable initial_value="0.03" name="lambda_pcd" units="per_mL"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_pcd</ci>
+            <apply>
+               <plus/>
+               <ci>V_lv</ci>
+               <ci>V_rv</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>P_pcd</ci>
+            <apply>
+               <times/>
+               <ci>P_0_pcd</ci>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <times/>
+                        <ci>lambda_pcd</ci>
+                        <apply>
+                           <minus/>
+                           <ci>V_pcd</ci>
+                           <ci>V_0_pcd</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>P_peri</ci>
+            <apply>
+               <plus/>
+               <ci>P_pcd</ci>
+               <ci>P_th</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="left_ventricle">
+      <variable name="V_lvf" private_interface="out" public_interface="out" units="mL"/>
+      <variable name="P_lvf" public_interface="out" units="kPa"/>
+      <variable cmeta:id="left_ventricle_P_lv" name="P_lv" public_interface="out" units="kPa"/>
+      <variable cmeta:id="left_ventricle_V_lv" initial_value="94.6812" name="V_lv" public_interface="out" units="mL"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <variable name="V_spt" public_interface="in" units="mL"/>
+      <variable name="e_t" public_interface="in" units="dimensionless"/>
+      <variable name="P_peri" public_interface="in" units="kPa"/>
+      <variable name="P_es_lvf" private_interface="in" units="kPa"/>
+      <variable name="P_ed_lvf" private_interface="in" units="kPa"/>
+      <variable name="R_mt" public_interface="in" units="kPa_second_per_mL"/>
+      <variable name="R_av" public_interface="in" units="kPa_second_per_mL"/>
+      <variable name="P_pu" public_interface="in" units="kPa"/>
+      <variable name="P_ao" public_interface="in" units="kPa"/>
+      <variable name="E_es_lvf" private_interface="in" public_interface="out" units="kPa_per_mL"/>
+      <variable name="lambda_lvf" private_interface="in" public_interface="out" units="per_mL"/>
+      <variable name="P_0_lvf" private_interface="in" public_interface="out" units="kPa"/>
+      <variable name="Q_mt" public_interface="in" units="mL_per_second"/>
+      <variable name="Q_av" public_interface="in" units="mL_per_second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_lvf</ci>
+            <apply>
+               <minus/>
+               <ci>V_lv</ci>
+               <ci>V_spt</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>P_lvf</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <ci>e_t</ci>
+                  <ci>P_es_lvf</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <minus/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                     <ci>e_t</ci>
+                  </apply>
+                  <ci>P_ed_lvf</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>P_lv</ci>
+            <apply>
+               <plus/>
+               <ci>P_lvf</ci>
+               <ci>P_peri</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>V_lv</ci>
+            </apply>
+            <piecewise>
+               <piece>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mL_per_second">0</cn>
+                  <apply>
+                     <and/>
+                     <apply>
+                        <lt/>
+                        <ci>Q_mt</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mL_per_second">0</cn>
+                     </apply>
+                     <apply>
+                        <lt/>
+                        <ci>Q_av</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mL_per_second">0</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <piece>
+                  <apply>
+                     <minus/>
+                     <ci>Q_av</ci>
+                  </apply>
+                  <apply>
+                     <lt/>
+                     <ci>Q_mt</ci>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mL_per_second">0</cn>
+                  </apply>
+               </piece>
+               <piece>
+                  <ci>Q_mt</ci>
+                  <apply>
+                     <lt/>
+                     <ci>Q_av</ci>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mL_per_second">0</cn>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <apply>
+                     <minus/>
+                     <ci>Q_mt</ci>
+                     <ci>Q_av</ci>
+                  </apply>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   <component name="lvf_calculator">
+      <variable name="P_es_lvf" public_interface="out" units="kPa"/>
+      <variable name="P_ed_lvf" public_interface="out" units="kPa"/>
+      <variable initial_value="2.8798" name="E_es_lvf" public_interface="out" units="kPa_per_mL"/>
+      <variable name="V_lvf" public_interface="in" units="mL"/>
+      <variable initial_value="0" name="V_d_lvf" units="mL"/>
+      <variable initial_value="0.1203" name="P_0_lvf" public_interface="out" units="kPa"/>
+      <variable initial_value="0.033" name="lambda_lvf" public_interface="out" units="per_mL"/>
+      <variable initial_value="0" name="V_0_lvf" units="mL"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>P_es_lvf</ci>
+            <apply>
+               <times/>
+               <ci>E_es_lvf</ci>
+               <apply>
+                  <minus/>
+                  <ci>V_lvf</ci>
+                  <ci>V_d_lvf</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>P_ed_lvf</ci>
+            <apply>
+               <times/>
+               <ci>P_0_lvf</ci>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <times/>
+                        <ci>lambda_lvf</ci>
+                        <apply>
+                           <minus/>
+                           <ci>V_lvf</ci>
+                           <ci>V_0_lvf</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="right_ventricle">
+      <variable name="V_rvf" private_interface="out" public_interface="out" units="mL"/>
+      <variable name="P_rvf" public_interface="out" units="kPa"/>
+      <variable cmeta:id="right_ventricle_P_rv" name="P_rv" public_interface="out" units="kPa"/>
+      <variable cmeta:id="right_ventricle_V_rv" initial_value="90.7302" name="V_rv" public_interface="out" units="mL"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <variable name="V_spt" public_interface="in" units="mL"/>
+      <variable name="e_t" public_interface="in" units="dimensionless"/>
+      <variable name="P_peri" public_interface="in" units="kPa"/>
+      <variable name="P_es_rvf" private_interface="in" units="kPa"/>
+      <variable name="P_ed_rvf" private_interface="in" units="kPa"/>
+      <variable name="R_tc" public_interface="in" units="kPa_second_per_mL"/>
+      <variable name="R_pv" public_interface="in" units="kPa_second_per_mL"/>
+      <variable name="P_pa" public_interface="in" units="kPa"/>
+      <variable name="P_vc" public_interface="in" units="kPa"/>
+      <variable name="E_es_rvf" private_interface="in" public_interface="out" units="kPa_per_mL"/>
+      <variable name="lambda_rvf" private_interface="in" public_interface="out" units="per_mL"/>
+      <variable name="P_0_rvf" private_interface="in" public_interface="out" units="kPa"/>
+      <variable name="Q_tc" public_interface="in" units="mL_per_second"/>
+      <variable name="Q_pv" public_interface="in" units="mL_per_second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_rvf</ci>
+            <apply>
+               <plus/>
+               <ci>V_rv</ci>
+               <ci>V_spt</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>P_rvf</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <ci>e_t</ci>
+                  <ci>P_es_rvf</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <minus/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                     <ci>e_t</ci>
+                  </apply>
+                  <ci>P_ed_rvf</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>P_rv</ci>
+            <apply>
+               <plus/>
+               <ci>P_rvf</ci>
+               <ci>P_peri</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>V_rv</ci>
+            </apply>
+            <piecewise>
+               <piece>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mL_per_second">0</cn>
+                  <apply>
+                     <and/>
+                     <apply>
+                        <lt/>
+                        <ci>Q_tc</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mL_per_second">0</cn>
+                     </apply>
+                     <apply>
+                        <lt/>
+                        <ci>Q_pv</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mL_per_second">0</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <piece>
+                  <apply>
+                     <minus/>
+                     <ci>Q_pv</ci>
+                  </apply>
+                  <apply>
+                     <lt/>
+                     <ci>Q_tc</ci>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mL_per_second">0</cn>
+                  </apply>
+               </piece>
+               <piece>
+                  <ci>Q_tc</ci>
+                  <apply>
+                     <lt/>
+                     <ci>Q_pv</ci>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mL_per_second">0</cn>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <apply>
+                     <minus/>
+                     <ci>Q_tc</ci>
+                     <ci>Q_pv</ci>
+                  </apply>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   <component name="rvf_calculator">
+      <variable name="P_es_rvf" public_interface="out" units="kPa"/>
+      <variable name="P_ed_rvf" public_interface="out" units="kPa"/>
+      <variable initial_value="0.585" name="E_es_rvf" public_interface="out" units="kPa_per_mL"/>
+      <variable name="V_rvf" public_interface="in" units="mL"/>
+      <variable initial_value="0" name="V_d_rvf" units="mL"/>
+      <variable initial_value="0.2157" name="P_0_rvf" public_interface="out" units="kPa"/>
+      <variable initial_value="0.023" name="lambda_rvf" public_interface="out" units="per_mL"/>
+      <variable initial_value="0" name="V_0_rvf" units="mL"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>P_es_rvf</ci>
+            <apply>
+               <times/>
+               <ci>E_es_rvf</ci>
+               <apply>
+                  <minus/>
+                  <ci>V_rvf</ci>
+                  <ci>V_d_rvf</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>P_ed_rvf</ci>
+            <apply>
+               <times/>
+               <ci>P_0_rvf</ci>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <times/>
+                        <ci>lambda_rvf</ci>
+                        <apply>
+                           <minus/>
+                           <ci>V_rvf</ci>
+                           <ci>V_0_rvf</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="septum">
+      <variable name="V_spt" public_interface="out" units="mL"/>
+      <variable name="P_lv" public_interface="in" units="kPa"/>
+      <variable name="P_rv" public_interface="in" units="kPa"/>
+      <variable name="e_t" public_interface="in" units="dimensionless"/>
+      <variable initial_value="48.754" name="E_es_spt" units="kPa_per_mL"/>
+      <variable initial_value="2" name="V_d_spt" units="mL"/>
+      <variable initial_value="1.1101" name="P_0_spt" units="kPa"/>
+      <variable initial_value="0.435" name="lambda_spt" units="per_mL"/>
+      <variable initial_value="2" name="V_0_spt" units="mL"/>
+      <variable initial_value="1" name="one" units="dimensionless"/>
+      <variable name="E_es_lvf" public_interface="in" units="kPa_per_mL"/>
+      <variable name="P_0_lvf" public_interface="in" units="kPa"/>
+      <variable name="lambda_lvf" public_interface="in" units="per_mL"/>
+      <variable name="V_lv" public_interface="in" units="mL"/>
+      <variable name="E_es_rvf" public_interface="in" units="kPa_per_mL"/>
+      <variable name="P_0_rvf" public_interface="in" units="kPa"/>
+      <variable name="V_rv" public_interface="in" units="mL"/>
+      <variable name="lambda_rvf" public_interface="in" units="per_mL"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="kPa">0</cn>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <times/>
+                           <ci>e_t</ci>
+                           <ci>E_es_spt</ci>
+                           <apply>
+                              <minus/>
+                              <ci>V_spt</ci>
+                              <ci>V_d_spt</ci>
+                           </apply>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <apply>
+                              <minus/>
+                              <ci>one</ci>
+                              <ci>e_t</ci>
+                           </apply>
+                           <ci>P_0_spt</ci>
+                           <apply>
+                              <minus/>
+                              <apply>
+                                 <exp/>
+                                 <apply>
+                                    <times/>
+                                    <ci>lambda_spt</ci>
+                                    <apply>
+                                       <minus/>
+                                       <ci>V_spt</ci>
+                                       <ci>V_0_spt</ci>
+                                    </apply>
+                                 </apply>
+                              </apply>
+                              <ci>one</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>e_t</ci>
+                        <ci>E_es_lvf</ci>
+                        <apply>
+                           <minus/>
+                           <ci>V_lv</ci>
+                           <ci>V_spt</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <minus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        <ci>e_t</ci>
+                     </apply>
+                     <ci>P_0_lvf</ci>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <exp/>
+                           <apply>
+                              <times/>
+                              <ci>lambda_lvf</ci>
+                              <apply>
+                                 <minus/>
+                                 <ci>V_lv</ci>
+                                 <ci>V_spt</ci>
+                              </apply>
+                           </apply>
+                        </apply>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>e_t</ci>
+                  <ci>E_es_rvf</ci>
+                  <apply>
+                     <plus/>
+                     <ci>V_rv</ci>
+                     <ci>V_spt</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <minus/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                     <ci>e_t</ci>
+                  </apply>
+                  <ci>P_0_rvf</ci>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <exp/>
+                        <apply>
+                           <times/>
+                           <ci>lambda_rvf</ci>
+                           <apply>
+                              <plus/>
+                              <ci>V_rv</ci>
+                              <ci>V_spt</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="pulmonary_artery">
+      <variable name="P_pa" public_interface="out" units="kPa"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <variable initial_value="0.369" name="E_es_pa" units="kPa_per_mL"/>
+      <variable cmeta:id="pulmonary_artery_V_pa" initial_value="43.0123" name="V_pa" units="mL"/>
+      <variable initial_value="0" name="V_d_pa" units="mL"/>
+      <variable name="R_pv" public_interface="in" units="kPa_second_per_mL"/>
+      <variable name="R_pul" public_interface="in" units="kPa_second_per_mL"/>
+      <variable name="P_th" public_interface="in" units="kPa"/>
+      <variable name="P_rv" public_interface="in" units="kPa"/>
+      <variable name="P_pu" public_interface="in" units="kPa"/>
+      <variable name="Q_pul" public_interface="in" units="mL_per_second"/>
+      <variable name="Q_pv" public_interface="in" units="mL_per_second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>P_pa</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <ci>E_es_pa</ci>
+                  <apply>
+                     <minus/>
+                     <ci>V_pa</ci>
+                     <ci>V_d_pa</ci>
+                  </apply>
+               </apply>
+               <ci>P_th</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>V_pa</ci>
+            </apply>
+            <piecewise>
+               <piece>
+                  <apply>
+                     <minus/>
+                     <ci>Q_pul</ci>
+                  </apply>
+                  <apply>
+                     <lt/>
+                     <ci>Q_pv</ci>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mL_per_second">0</cn>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <apply>
+                     <minus/>
+                     <ci>Q_pv</ci>
+                     <ci>Q_pul</ci>
+                  </apply>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   <component name="pulmonary_vein">
+      <variable name="P_pu" public_interface="out" units="kPa"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <variable initial_value="0.0073" name="E_es_pu" units="kPa_per_mL"/>
+      <variable cmeta:id="pulmonary_vein_V_pu" initial_value="808.4579" name="V_pu" units="mL"/>
+      <variable initial_value="0" name="V_d_pu" units="mL"/>
+      <variable name="R_pul" public_interface="in" units="kPa_second_per_mL"/>
+      <variable name="R_mt" public_interface="in" units="kPa_second_per_mL"/>
+      <variable name="P_th" public_interface="in" units="kPa"/>
+      <variable name="P_pa" public_interface="in" units="kPa"/>
+      <variable name="P_lv" public_interface="in" units="kPa"/>
+      <variable name="Q_mt" public_interface="in" units="mL_per_second"/>
+      <variable name="Q_pul" public_interface="in" units="mL_per_second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>P_pu</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <ci>E_es_pu</ci>
+                  <apply>
+                     <minus/>
+                     <ci>V_pu</ci>
+                     <ci>V_d_pu</ci>
+                  </apply>
+               </apply>
+               <ci>P_th</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>V_pu</ci>
+            </apply>
+            <piecewise>
+               <piece>
+                  <ci>Q_pul</ci>
+                  <apply>
+                     <lt/>
+                     <ci>Q_mt</ci>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mL_per_second">0</cn>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <apply>
+                     <minus/>
+                     <ci>Q_pul</ci>
+                     <ci>Q_mt</ci>
+                  </apply>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   <component name="aorta">
+      <variable cmeta:id="aorta_P_ao" name="P_ao" public_interface="out" units="kPa"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <variable initial_value="0.6913" name="E_es_ao" units="kPa_per_mL"/>
+      <variable cmeta:id="aorta_V_ao" initial_value="133.3381" name="V_ao" units="mL"/>
+      <variable initial_value="0" name="V_d_ao" units="mL"/>
+      <variable name="R_av" public_interface="in" units="kPa_second_per_mL"/>
+      <variable name="R_sys" public_interface="in" units="kPa_second_per_mL"/>
+      <variable name="P_lv" public_interface="in" units="kPa"/>
+      <variable name="P_vc" public_interface="in" units="kPa"/>
+      <variable name="Q_av" public_interface="in" units="mL_per_second"/>
+      <variable name="Q_sys" public_interface="in" units="mL_per_second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>P_ao</ci>
+            <apply>
+               <times/>
+               <ci>E_es_ao</ci>
+               <apply>
+                  <minus/>
+                  <ci>V_ao</ci>
+                  <ci>V_d_ao</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>V_ao</ci>
+            </apply>
+            <piecewise>
+               <piece>
+                  <apply>
+                     <minus/>
+                     <ci>Q_sys</ci>
+                  </apply>
+                  <apply>
+                     <lt/>
+                     <ci>Q_av</ci>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mL_per_second">0</cn>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <apply>
+                     <minus/>
+                     <ci>Q_av</ci>
+                     <ci>Q_sys</ci>
+                  </apply>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   <component name="vena_cava">
+      <variable cmeta:id="vena_cava_P_vc" name="P_vc" public_interface="out" units="kPa"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <variable initial_value="0.0059" name="E_es_vc" units="kPa_per_mL"/>
+      <variable cmeta:id="vena_cava_V_vc" initial_value="329.7803" name="V_vc" units="mL"/>
+      <variable initial_value="0" name="V_d_vc" units="mL"/>
+      <variable name="R_sys" public_interface="in" units="kPa_second_per_mL"/>
+      <variable name="R_tc" public_interface="in" units="kPa_second_per_mL"/>
+      <variable name="P_ao" public_interface="in" units="kPa"/>
+      <variable name="P_rv" public_interface="in" units="kPa"/>
+      <variable name="Q_sys" public_interface="in" units="mL_per_second"/>
+      <variable name="Q_tc" public_interface="in" units="mL_per_second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>P_vc</ci>
+            <apply>
+               <times/>
+               <ci>E_es_vc</ci>
+               <apply>
+                  <minus/>
+                  <ci>V_vc</ci>
+                  <ci>V_d_vc</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>V_vc</ci>
+            </apply>
+            <piecewise>
+               <piece>
+                  <ci>Q_sys</ci>
+                  <apply>
+                     <lt/>
+                     <ci>Q_tc</ci>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mL_per_second">0</cn>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <apply>
+                     <minus/>
+                     <ci>Q_sys</ci>
+                     <ci>Q_tc</ci>
+                  </apply>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   <component name="flow">
+      <variable name="Q_sys" public_interface="out" units="mL_per_second"/>
+      <variable name="Q_pul" public_interface="out" units="mL_per_second"/>
+      <variable initial_value="245.5813" name="Q_mt" public_interface="out" units="mL_per_second"/>
+      <variable initial_value="0" name="Q_av" public_interface="out" units="mL_per_second"/>
+      <variable initial_value="190.0661" name="Q_tc" public_interface="out" units="mL_per_second"/>
+      <variable initial_value="0" name="Q_pv" public_interface="out" units="mL_per_second"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <variable name="P_ao" public_interface="in" units="kPa"/>
+      <variable name="P_vc" public_interface="in" units="kPa"/>
+      <variable name="P_pa" public_interface="in" units="kPa"/>
+      <variable name="P_pu" public_interface="in" units="kPa"/>
+      <variable name="P_rv" public_interface="in" units="kPa"/>
+      <variable name="P_lv" public_interface="in" units="kPa"/>
+      <variable name="R_sys" public_interface="in" units="kPa_second_per_mL"/>
+      <variable name="R_pul" public_interface="in" units="kPa_second_per_mL"/>
+      <variable name="R_mt" public_interface="in" units="kPa_second_per_mL"/>
+      <variable name="R_av" public_interface="in" units="kPa_second_per_mL"/>
+      <variable name="R_tc" public_interface="in" units="kPa_second_per_mL"/>
+      <variable name="R_pv" public_interface="in" units="kPa_second_per_mL"/>
+      <variable name="L_mt" public_interface="in" units="kPa_second2_per_mL"/>
+      <variable name="L_av" public_interface="in" units="kPa_second2_per_mL"/>
+      <variable name="L_tc" public_interface="in" units="kPa_second2_per_mL"/>
+      <variable name="L_pv" public_interface="in" units="kPa_second2_per_mL"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>Q_sys</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <ci>P_ao</ci>
+                  <ci>P_vc</ci>
+               </apply>
+               <ci>R_sys</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>Q_pul</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <ci>P_pa</ci>
+                  <ci>P_pu</ci>
+               </apply>
+               <ci>R_pul</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Q_mt</ci>
+            </apply>
+            <piecewise>
+               <piece>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mL_per_second2">0</cn>
+                  <apply>
+                     <and/>
+                     <apply>
+                        <lt/>
+                        <apply>
+                           <minus/>
+                           <ci>P_pu</ci>
+                           <ci>P_lv</ci>
+                        </apply>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="kPa">0</cn>
+                     </apply>
+                     <apply>
+                        <lt/>
+                        <ci>Q_mt</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mL_per_second">0</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <minus/>
+                           <ci>P_pu</ci>
+                           <ci>P_lv</ci>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>Q_mt</ci>
+                           <ci>R_mt</ci>
+                        </apply>
+                     </apply>
+                     <ci>L_mt</ci>
+                  </apply>
+               </otherwise>
+            </piecewise>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Q_av</ci>
+            </apply>
+            <piecewise>
+               <piece>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mL_per_second2">0</cn>
+                  <apply>
+                     <and/>
+                     <apply>
+                        <lt/>
+                        <apply>
+                           <minus/>
+                           <ci>P_lv</ci>
+                           <ci>P_ao</ci>
+                        </apply>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="kPa">0</cn>
+                     </apply>
+                     <apply>
+                        <lt/>
+                        <ci>Q_av</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mL_per_second">0</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <minus/>
+                           <ci>P_lv</ci>
+                           <ci>P_ao</ci>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>Q_av</ci>
+                           <ci>R_av</ci>
+                        </apply>
+                     </apply>
+                     <ci>L_av</ci>
+                  </apply>
+               </otherwise>
+            </piecewise>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Q_tc</ci>
+            </apply>
+            <piecewise>
+               <piece>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mL_per_second2">0</cn>
+                  <apply>
+                     <and/>
+                     <apply>
+                        <lt/>
+                        <apply>
+                           <minus/>
+                           <ci>P_vc</ci>
+                           <ci>P_rv</ci>
+                        </apply>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="kPa">0</cn>
+                     </apply>
+                     <apply>
+                        <lt/>
+                        <ci>Q_tc</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mL_per_second">0</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <minus/>
+                           <ci>P_vc</ci>
+                           <ci>P_rv</ci>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>Q_tc</ci>
+                           <ci>R_tc</ci>
+                        </apply>
+                     </apply>
+                     <ci>L_tc</ci>
+                  </apply>
+               </otherwise>
+            </piecewise>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Q_pv</ci>
+            </apply>
+            <piecewise>
+               <piece>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mL_per_second2">0</cn>
+                  <apply>
+                     <and/>
+                     <apply>
+                        <lt/>
+                        <apply>
+                           <minus/>
+                           <ci>P_rv</ci>
+                           <ci>P_pa</ci>
+                        </apply>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="kPa">0</cn>
+                     </apply>
+                     <apply>
+                        <lt/>
+                        <ci>Q_pv</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mL_per_second">0</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <minus/>
+                           <ci>P_rv</ci>
+                           <ci>P_pa</ci>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>Q_pv</ci>
+                           <ci>R_pv</ci>
+                        </apply>
+                     </apply>
+                     <ci>L_pv</ci>
+                  </apply>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   <group>
+      <relationship_ref relationship="encapsulation"/>
+      <component_ref component="left_ventricle">
+         <component_ref component="lvf_calculator"/>
+      </component_ref>
+      <component_ref component="right_ventricle">
+         <component_ref component="rvf_calculator"/>
+      </component_ref>
+   </group>
+   <connection>
+      <map_components component_1="environment" component_2="driver_function"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="left_ventricle"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="right_ventricle"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="pulmonary_artery"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="pulmonary_vein"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="aorta"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="vena_cava"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="flow"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="driver_function" component_2="left_ventricle"/>
+      <map_variables variable_1="e_t" variable_2="e_t"/>
+   </connection>
+   <connection>
+      <map_components component_1="driver_function" component_2="right_ventricle"/>
+      <map_variables variable_1="e_t" variable_2="e_t"/>
+   </connection>
+   <connection>
+      <map_components component_1="driver_function" component_2="septum"/>
+      <map_variables variable_1="e_t" variable_2="e_t"/>
+   </connection>
+   <connection>
+      <map_components component_1="septum" component_2="left_ventricle"/>
+      <map_variables variable_1="P_lv" variable_2="P_lv"/>
+      <map_variables variable_1="V_lv" variable_2="V_lv"/>
+      <map_variables variable_1="V_spt" variable_2="V_spt"/>
+      <map_variables variable_1="E_es_lvf" variable_2="E_es_lvf"/>
+      <map_variables variable_1="lambda_lvf" variable_2="lambda_lvf"/>
+      <map_variables variable_1="P_0_lvf" variable_2="P_0_lvf"/>
+   </connection>
+   <connection>
+      <map_components component_1="septum" component_2="right_ventricle"/>
+      <map_variables variable_1="P_rv" variable_2="P_rv"/>
+      <map_variables variable_1="V_rv" variable_2="V_rv"/>
+      <map_variables variable_1="V_spt" variable_2="V_spt"/>
+      <map_variables variable_1="E_es_rvf" variable_2="E_es_rvf"/>
+      <map_variables variable_1="lambda_rvf" variable_2="lambda_rvf"/>
+      <map_variables variable_1="P_0_rvf" variable_2="P_0_rvf"/>
+   </connection>
+   <connection>
+      <map_components component_1="pericardium" component_2="left_ventricle"/>
+      <map_variables variable_1="V_lv" variable_2="V_lv"/>
+      <map_variables variable_1="P_peri" variable_2="P_peri"/>
+   </connection>
+   <connection>
+      <map_components component_1="pericardium" component_2="right_ventricle"/>
+      <map_variables variable_1="V_rv" variable_2="V_rv"/>
+      <map_variables variable_1="P_peri" variable_2="P_peri"/>
+   </connection>
+   <connection>
+      <map_components component_1="left_ventricle" component_2="lvf_calculator"/>
+      <map_variables variable_1="P_ed_lvf" variable_2="P_ed_lvf"/>
+      <map_variables variable_1="P_es_lvf" variable_2="P_es_lvf"/>
+      <map_variables variable_1="V_lvf" variable_2="V_lvf"/>
+      <map_variables variable_1="E_es_lvf" variable_2="E_es_lvf"/>
+      <map_variables variable_1="lambda_lvf" variable_2="lambda_lvf"/>
+      <map_variables variable_1="P_0_lvf" variable_2="P_0_lvf"/>
+   </connection>
+   <connection>
+      <map_components component_1="right_ventricle" component_2="rvf_calculator"/>
+      <map_variables variable_1="P_ed_rvf" variable_2="P_ed_rvf"/>
+      <map_variables variable_1="P_es_rvf" variable_2="P_es_rvf"/>
+      <map_variables variable_1="V_rvf" variable_2="V_rvf"/>
+      <map_variables variable_1="E_es_rvf" variable_2="E_es_rvf"/>
+      <map_variables variable_1="lambda_rvf" variable_2="lambda_rvf"/>
+      <map_variables variable_1="P_0_rvf" variable_2="P_0_rvf"/>
+   </connection>
+   <connection>
+      <map_components component_1="heart_parameters" component_2="left_ventricle"/>
+      <map_variables variable_1="R_mt" variable_2="R_mt"/>
+      <map_variables variable_1="R_av" variable_2="R_av"/>
+   </connection>
+   <connection>
+      <map_components component_1="heart_parameters" component_2="right_ventricle"/>
+      <map_variables variable_1="R_tc" variable_2="R_tc"/>
+      <map_variables variable_1="R_pv" variable_2="R_pv"/>
+   </connection>
+   <connection>
+      <map_components component_1="heart_parameters" component_2="pulmonary_artery"/>
+      <map_variables variable_1="R_pv" variable_2="R_pv"/>
+      <map_variables variable_1="R_pul" variable_2="R_pul"/>
+      <map_variables variable_1="P_th" variable_2="P_th"/>
+   </connection>
+   <connection>
+      <map_components component_1="heart_parameters" component_2="pulmonary_vein"/>
+      <map_variables variable_1="R_mt" variable_2="R_mt"/>
+      <map_variables variable_1="R_pul" variable_2="R_pul"/>
+      <map_variables variable_1="P_th" variable_2="P_th"/>
+   </connection>
+   <connection>
+      <map_components component_1="heart_parameters" component_2="aorta"/>
+      <map_variables variable_1="R_av" variable_2="R_av"/>
+      <map_variables variable_1="R_sys" variable_2="R_sys"/>
+   </connection>
+   <connection>
+      <map_components component_1="heart_parameters" component_2="vena_cava"/>
+      <map_variables variable_1="R_sys" variable_2="R_sys"/>
+      <map_variables variable_1="R_tc" variable_2="R_tc"/>
+   </connection>
+   <connection>
+      <map_components component_1="heart_parameters" component_2="pericardium"/>
+      <map_variables variable_1="P_th" variable_2="P_th"/>
+   </connection>
+   <connection>
+      <map_components component_1="heart_parameters" component_2="flow"/>
+      <map_variables variable_1="R_pul" variable_2="R_pul"/>
+      <map_variables variable_1="R_pv" variable_2="R_pv"/>
+      <map_variables variable_1="R_tc" variable_2="R_tc"/>
+      <map_variables variable_1="R_mt" variable_2="R_mt"/>
+      <map_variables variable_1="R_av" variable_2="R_av"/>
+      <map_variables variable_1="R_sys" variable_2="R_sys"/>
+      <map_variables variable_1="L_tc" variable_2="L_tc"/>
+      <map_variables variable_1="L_pv" variable_2="L_pv"/>
+      <map_variables variable_1="L_mt" variable_2="L_mt"/>
+      <map_variables variable_1="L_av" variable_2="L_av"/>
+   </connection>
+   <connection>
+      <map_components component_1="left_ventricle" component_2="pulmonary_vein"/>
+      <map_variables variable_1="P_lv" variable_2="P_lv"/>
+      <map_variables variable_1="P_pu" variable_2="P_pu"/>
+   </connection>
+   <connection>
+      <map_components component_1="left_ventricle" component_2="aorta"/>
+      <map_variables variable_1="P_lv" variable_2="P_lv"/>
+      <map_variables variable_1="P_ao" variable_2="P_ao"/>
+   </connection>
+   <connection>
+      <map_components component_1="right_ventricle" component_2="pulmonary_artery"/>
+      <map_variables variable_1="P_rv" variable_2="P_rv"/>
+      <map_variables variable_1="P_pa" variable_2="P_pa"/>
+   </connection>
+   <connection>
+      <map_components component_1="right_ventricle" component_2="vena_cava"/>
+      <map_variables variable_1="P_rv" variable_2="P_rv"/>
+      <map_variables variable_1="P_vc" variable_2="P_vc"/>
+   </connection>
+   <connection>
+      <map_components component_1="pulmonary_vein" component_2="pulmonary_artery"/>
+      <map_variables variable_1="P_pu" variable_2="P_pu"/>
+      <map_variables variable_1="P_pa" variable_2="P_pa"/>
+   </connection>
+   <connection>
+      <map_components component_1="aorta" component_2="vena_cava"/>
+      <map_variables variable_1="P_ao" variable_2="P_ao"/>
+      <map_variables variable_1="P_vc" variable_2="P_vc"/>
+   </connection>
+   <connection>
+      <map_components component_1="aorta" component_2="flow"/>
+      <map_variables variable_1="P_ao" variable_2="P_ao"/>
+      <map_variables variable_1="Q_sys" variable_2="Q_sys"/>
+      <map_variables variable_1="Q_av" variable_2="Q_av"/>
+   </connection>
+   <connection>
+      <map_components component_1="vena_cava" component_2="flow"/>
+      <map_variables variable_1="P_vc" variable_2="P_vc"/>
+      <map_variables variable_1="Q_sys" variable_2="Q_sys"/>
+      <map_variables variable_1="Q_tc" variable_2="Q_tc"/>
+   </connection>
+   <connection>
+      <map_components component_1="pulmonary_vein" component_2="flow"/>
+      <map_variables variable_1="P_pu" variable_2="P_pu"/>
+      <map_variables variable_1="Q_mt" variable_2="Q_mt"/>
+      <map_variables variable_1="Q_pul" variable_2="Q_pul"/>
+   </connection>
+   <connection>
+      <map_components component_1="pulmonary_artery" component_2="flow"/>
+      <map_variables variable_1="P_pa" variable_2="P_pa"/>
+      <map_variables variable_1="Q_pul" variable_2="Q_pul"/>
+      <map_variables variable_1="Q_pv" variable_2="Q_pv"/>
+   </connection>
+   <connection>
+      <map_components component_1="left_ventricle" component_2="flow"/>
+      <map_variables variable_1="P_lv" variable_2="P_lv"/>
+      <map_variables variable_1="Q_mt" variable_2="Q_mt"/>
+      <map_variables variable_1="Q_av" variable_2="Q_av"/>
+   </connection>
+   <connection>
+      <map_components component_1="right_ventricle" component_2="flow"/>
+      <map_variables variable_1="P_rv" variable_2="P_rv"/>
+      <map_variables variable_1="Q_tc" variable_2="Q_tc"/>
+      <map_variables variable_1="Q_pv" variable_2="Q_pv"/>
+   </connection>
+   
+   
+   
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:about="#smith_chase_nokes_shaw_wake_2004"><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n1"/></reference><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n2"/></reference><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">The Smith et al. 2004 minimal haemodynamic system model including valve mechanics and ventricular interactions</title><cmeta:comment><rdf:Description rdf:nodeID="n3"/></cmeta:comment><cmeta:species xml:lang="en">Human</cmeta:species><cmeta:bio_entity xml:lang="en">heart</cmeta:bio_entity><simulation xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n4"/></simulation></rdf:Description><rdf:Description rdf:nodeID="n5"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Wake</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Graeme</Given></rdf:Description><rdf:Description rdf:nodeID="n6"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2004-03-26</W3CDTF></rdf:Description><rdf:Description rdf:nodeID="n7"><subject_type xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">keyword</subject_type><rdf:value><rdf:Description rdf:nodeID="n8"/></rdf:value></rdf:Description><rdf:Description rdf:nodeID="n3"><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n9"/></creator><rdf:value xml:lang="en">This is the CellML description of Smith et al.'s 2004 minimal haemodynamic system model including valve mechanics and ventricular interactions</rdf:value></rdf:Description><rdf:Description rdf:nodeID="n10"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n11"/></Person></rdf:Description><rdf:Description rdf:nodeID="n9"><FN xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Geoffrey Nunns</FN></rdf:Description><rdf:Description rdf:nodeID="n12"><rdf:type><rdf:Description rdf:about="http://imc.org/vCard/3.0#internet"/></rdf:type><rdf:value xml:lang="en">gnunns1@jhu.edu</rdf:value></rdf:Description><rdf:Description rdf:nodeID="n13"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">Medical Engineering and Physics</title></rdf:Description><rdf:Description rdf:nodeID="n14"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n15"/></N></rdf:Description><rdf:Description rdf:nodeID="n8"><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag"/></rdf:type><rdf:_1 xml:lang="en">cardiovascular circulation</rdf:_1></rdf:Description><rdf:Description rdf:about=""><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n16"/></creator><created xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:nodeID="n17"/></created></rdf:Description><rdf:Description rdf:nodeID="n11"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n18"/></N></rdf:Description><rdf:Description rdf:nodeID="n19"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Smith</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Bram</Given><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">W</Other></rdf:Description><rdf:Description rdf:nodeID="n4"><boundIntervals xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n20"/></boundIntervals></rdf:Description><rdf:Description rdf:nodeID="n21"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n22"/></Person></rdf:Description><rdf:Description rdf:nodeID="n23"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n19"/></N></rdf:Description><rdf:Description rdf:nodeID="n24"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n25"/></N></rdf:Description><rdf:Description rdf:nodeID="n26"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n23"/></Person></rdf:Description><rdf:Description rdf:nodeID="n17"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2009-12-01</W3CDTF></rdf:Description><rdf:Description rdf:nodeID="n27"><volume xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">26</volume><last_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">139</last_page><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">Minimal haemodynamic system model including ventricular interaction and valve dynamics.</title><Journal xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n13"/></Journal><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n28"/></creator><issued xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:nodeID="n6"/></issued><first_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">131</first_page></rdf:Description><rdf:Description rdf:nodeID="n15"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Shaw</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Geoffrey</Given><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">M</Other></rdf:Description><rdf:Description rdf:nodeID="n29"><pointDensity xmlns="http://www.cellml.org/metadata/simulation/1.0#nonstandard-" xml:lang="en">10000</pointDensity><endingValue xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">2</endingValue><maximumStepSize xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">0.1</maximumStepSize></rdf:Description><rdf:Description rdf:nodeID="n2"><subject xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n7"/></subject></rdf:Description><rdf:Description rdf:nodeID="n30"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n24"/></Person></rdf:Description><rdf:Description rdf:nodeID="n20"><rdf:first><rdf:Description rdf:nodeID="n29"/></rdf:first><rdf:rest><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/></rdf:rest></rdf:Description><rdf:Description rdf:nodeID="n18"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Chase</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">J</Given><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Geoffrey</Other></rdf:Description><rdf:Description rdf:nodeID="n28"><rdf:_3><rdf:Description rdf:nodeID="n30"/></rdf:_3><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq"/></rdf:type><rdf:_1><rdf:Description rdf:nodeID="n26"/></rdf:_1><rdf:_4><rdf:Description rdf:nodeID="n31"/></rdf:_4><rdf:_5><rdf:Description rdf:nodeID="n21"/></rdf:_5><rdf:_2><rdf:Description rdf:nodeID="n10"/></rdf:_2></rdf:Description><rdf:Description rdf:nodeID="n25"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Nokes</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Roger</Given><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">I</Other></rdf:Description><rdf:Description rdf:nodeID="n16"><EMAIL xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n12"/></EMAIL><ORG xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n32"/></ORG><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n33"/></N></rdf:Description><rdf:Description rdf:nodeID="n34"><rdf:type><rdf:Description rdf:about="http://www.example.org/foo/bar/bazfoo"/></rdf:type></rdf:Description><rdf:Description rdf:nodeID="n1"><JournalArticle xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n27"/></JournalArticle><Pubmed_id xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">15036180</Pubmed_id></rdf:Description><rdf:Description rdf:nodeID="n22"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n5"/></N></rdf:Description><rdf:Description rdf:nodeID="n32"><Orgname xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">The University of Auckland</Orgname><Orgunit xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Auckland Bioengineering Institute</Orgunit></rdf:Description><rdf:Description rdf:nodeID="n31"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n14"/></Person></rdf:Description><rdf:Description rdf:nodeID="n33"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Nunns</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Geoffrey</Given><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Rogan</Other></rdf:Description></rdf:RDF></model>

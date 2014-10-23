@@ -1,0 +1,1402 @@
+<?xml version="1.0"?>
+<!--
+This CellML file was generated on 27/11/2008 at 1:12:04 at p.m. using:
+
+COR (0.9.31.1125)
+Copyright 2002-2008 Dr Alan Garny
+http://COR.physiol.ox.ac.uk/ - COR@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.CellML.org/
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" cmeta:id="bental_2005" name="bental_2005">
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Simplified Models For Gas Exchange In The Human Lungs</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Bioengineering Institute, University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+<section id="sec_status">
+    <title>Model Status</title>
+    <para>
+This CellML model runs in both PCEnv and COR to recreate the published results.  The units have been checked and they are balanced.  Please note that this particular version of the CellML model does not correspond with any one of the four possible models from the original publication.  Rather it is a combination model, made up of equations 2,7,9,10,11,12,13,16, and 20.
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+ABSTRACT: This paper presents a hierarchy of models with increasing complexity for gas exchange in the human lungs. The models span from a single compartment, inflexible lung to a single compartment, flexible lung with pulmonary gas exchange. It is shown how the models are related to well-known models in the literature. A long-term purpose of this work is to study nonlinear phenomena seen in the cardio-respiratory system (for example, synchronization between ventilation rate and heart rate, and Cheyne-Stokes respiration). The models developed in this paper can be regarded as the controlled system (plant) and provide a mathematical framework to link between "molecular-level", and "systems-level" models. It is shown how changes in molecular level affect the alveolar partial pressure. Two assumptions that have previously been made are re-examined: (1) the hidden assumption that the air flow through the mouth is equal to the rate of volume change in the lungs, and, (2) the assumption that the process of oxygen binding to hemoglobin is near equilibrium. Conditions under which these assumptions are valid are studied. All the parameters in the models, except two, are physiologically realistic. Numerical results are consistent with published experimental observations.</para>
+
+<para>
+<informalfigure float="0" id="fig_reaction_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>model diagram</title>
+    </objectinfo>
+    <imagedata fileref="ben-tal_2006a.png"/>
+  </imageobject>
+</mediaobject>
+<caption>Schematic diagram of inflexible lung model. The lung is modelled as a single, inflexible container.  Pm represents the mouth pressure, PA is the alveolar pressure, air flow is represented by q, R is the resistance to air flow and V0 is the volume of the container.</caption>
+</informalfigure>
+</para>
+
+<para>
+<informalfigure float="0" id="fig_reaction_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>model diagram</title>
+    </objectinfo>
+    <imagedata fileref="ben-tal_2006b.png"/>
+  </imageobject>
+</mediaobject>
+<caption>Schematic diagram of flexible lung model. The lung modelled as a single, flexible container.  VA - total lung volume, Pm - mouth pressure, PL - pleural pressure, q - air flow, R - overall resistance of the conducting airways, ks - spring constant.</caption>
+</informalfigure>
+</para>
+
+<para>
+<informalfigure float="0" id="fig_reaction_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>model diagram</title>
+    </objectinfo>
+    <imagedata fileref="ben-tal_2006c.png"/>
+  </imageobject>
+</mediaobject>
+<caption>Schematic diagram of flexible lung model with gas exchange. The lung modelled as a flexible container with gas exchange.  All the symbols are the same as in the diagram above.  In addition, fo and fc are the alveolar concentrations of oxygen and carbon dioxide respectively, and pao and pac are the alveolar partial pressures of oxygen and carbon dioxide respectively.  po and pc are the blood partial pressures of oxygen and carbon dioxide respectively.</caption>
+</informalfigure>
+</para>
+
+<para>
+<informalfigure float="0" id="fig_reaction_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>model diagram</title>
+    </objectinfo>
+    <imagedata fileref="ben-tal_2006d.png"/>
+  </imageobject>
+</mediaobject>
+<caption>Schematic diagram of flexible lung model with gas exchange and gas transport. The lung modelled as a flexible container with gas exchange and gas transport.  With each heart beat a new compartment is pushed into the lung.  Each compartment consists of a small container representing dissolved gas, and a large container representing the means by which oxygen and carbon dioxide are transported.</caption>
+</informalfigure>
+</para>
+
+<para>
+The original paper reference is cited below:
+</para>
+
+<para>
+Simplified models for gas exchange in the human lungs, Alona Ben-Tal, 2006.
+	 <emphasis>Journal of Theoretical Biology</emphasis>, 238(2), 474-495.  <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/16038941">PubMed ID: 16038941</ulink>  </para>
+	 
+</sect1>
+</article>
+</documentation>
+
+   <units name="mmHg">
+      <unit multiplier="133.32" units="pascal"/>
+   </units>
+   <units name="per_mmHg">
+      <unit exponent="-1" units="mmHg"/>
+   </units>
+   <units name="mmHg_second_per_litre">
+      <unit units="mmHg"/>
+      <unit units="second"/>
+      <unit exponent="-1" units="litre"/>
+   </units>
+   <units name="mmHg_per_litre">
+      <unit units="mmHg"/>
+      <unit exponent="-1" units="litre"/>
+   </units>
+   <units name="mmHg_per_second">
+      <unit units="mmHg"/>
+      <unit exponent="-1" units="second"/>
+   </units>
+   <units name="mmHg_litre_second2">
+      <unit units="mmHg"/>
+      <unit units="litre"/>
+      <unit exponent="2" units="second"/>
+   </units>
+   <units name="litre_per_second_mmHg">
+      <unit units="litre"/>
+      <unit exponent="-1" units="second"/>
+      <unit exponent="-1" units="mmHg"/>
+   </units>
+   <units name="litre_per_second">
+      <unit units="litre"/>
+      <unit exponent="-1" units="second"/>
+   </units>
+   <units name="radian_per_second">
+      <unit units="radian"/>
+      <unit exponent="-1" units="second"/>
+   </units>
+   <units name="mole_per_litre">
+      <unit units="mole"/>
+      <unit exponent="-1" units="litre"/>
+   </units>
+   <units name="litre_per_mole">
+      <unit units="litre"/>
+      <unit exponent="-1" units="mole"/>
+   </units>
+   <units name="per_second">
+      <unit exponent="-1" units="second"/>
+   </units>
+   <units name="litre_per_second_mole">
+      <unit units="litre"/>
+      <unit exponent="-1" units="second"/>
+      <unit exponent="-1" units="mole"/>
+   </units>
+   <units name="m2_kg_per_K_second2">
+      <unit exponent="2" units="metre"/>
+      <unit units="kilogram"/>
+      <unit exponent="-1" units="kelvin"/>
+      <unit exponent="2" units="second"/>
+   </units>
+   <units name="mm3">
+      <unit exponent="3" prefix="milli" units="metre"/>
+   </units>
+   <units name="mole_per_second_mmHg">
+      <unit units="mole"/>
+      <unit exponent="-1" units="second"/>
+      <unit exponent="-1" units="mmHg"/>
+   </units>
+   <units name="mole_per_litre_mmHg">
+      <unit units="mole"/>
+      <unit exponent="-1" units="litre"/>
+      <unit exponent="-1" units="mmHg"/>
+   </units>
+   <units name="ms">
+      <unit prefix="milli" units="second"/>
+   </units>
+   <component name="Environment">
+      <variable cmeta:id="Environment_time" name="time" public_interface="out" units="second"/>
+   </component>
+   <component name="PluralPressureFunction">
+      <variable name="time" public_interface="in" units="second"/>
+      <variable name="P_L" public_interface="out" units="mmHg"/>
+      <variable name="dP_Ldt" public_interface="out" units="mmHg_per_second"/>
+      <variable cmeta:id="PluralPressureFunction_P_m" initial_value="760" name="P_m" units="mmHg"/>
+      <variable name="R" units="mmHg_second_per_litre"/>
+      <variable initial_value="1.256637" name="omega" units="radian_per_second"/>
+      <variable initial_value="0.41" name="V_T" units="litre"/>
+      <variable initial_value="2.5" name="E" units="mmHg_per_second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>R</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mmHg">2</cn>
+                  <pi/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="second">1</cn>
+               </apply>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="litre">5</cn>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>P_L</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <ci>P_m</ci>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <ci>R</ci>
+                           <ci>omega</ci>
+                           <ci>V_T</ci>
+                        </apply>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="radian">2</cn>
+                     </apply>
+                     <apply>
+                        <sin/>
+                        <apply>
+                           <divide/>
+                           <apply>
+                              <times/>
+                              <ci>omega</ci>
+                              <ci>time</ci>
+                           </apply>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="radian">1</cn>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>E</ci>
+                  <apply>
+                     <minus/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="second">2.5</cn>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <apply>
+                              <times/>
+                              <ci>V_T</ci>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="second">1</cn>
+                           </apply>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="litre">2</cn>
+                        </apply>
+                        <apply>
+                           <cos/>
+                           <apply>
+                              <divide/>
+                              <apply>
+                                 <times/>
+                                 <ci>omega</ci>
+                                 <ci>time</ci>
+                              </apply>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="radian">1</cn>
+                           </apply>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>dP_Ldt</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <minus/>
+                           <ci>R</ci>
+                        </apply>
+                        <apply>
+                           <power/>
+                           <ci>omega</ci>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                        </apply>
+                        <ci>V_T</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="radian">2</cn>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="radian">1</cn>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <cos/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <ci>omega</ci>
+                           <ci>time</ci>
+                        </apply>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="radian">1</cn>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>E</ci>
+                  <apply>
+                     <minus/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2.5</cn>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>V_T</ci>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="litre">2</cn>
+                        </apply>
+                        <apply>
+                           <sin/>
+                           <apply>
+                              <divide/>
+                              <apply>
+                                 <times/>
+                                 <ci>omega</ci>
+                                 <ci>time</ci>
+                              </apply>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="radian">1</cn>
+                           </apply>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="lungMechanics">
+      <variable name="time" public_interface="in" units="second"/>
+      <variable name="P_L" public_interface="in" units="mmHg"/>
+      <variable name="dP_Ldt" public_interface="in" units="mmHg_per_second"/>
+      <variable initial_value="760" name="P_m" units="mmHg"/>
+      <variable cmeta:id="lungMechanics_V_A" initial_value="1" name="V_A" public_interface="out" units="litre"/>
+      <variable initial_value="2.5" name="E" units="mmHg_per_second"/>
+      <variable cmeta:id="lungMechanics_P_A" initial_value="760" name="P_A" public_interface="out" units="mmHg"/>
+      <variable cmeta:id="lungMechanics_R" initial_value="1" name="R" units="mmHg_second_per_litre"/>
+      <variable name="Q_A" public_interface="in" units="litre_per_second"/>
+      <variable name="q" public_interface="out" units="litre_per_second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>q</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <ci>P_m</ci>
+                  <ci>P_A</ci>
+               </apply>
+               <ci>R</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>P_A</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>P_m</ci>
+                     <ci>E</ci>
+                     <ci>Q_A</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>P_A</ci>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="litre_per_second">1</cn>
+                  </apply>
+               </apply>
+               <ci>dP_Ldt</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>V_A</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <ci>P_m</ci>
+                     <ci>P_L</ci>
+                  </apply>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>V_A</ci>
+                        <ci>E</ci>
+                     </apply>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="litre_per_second">1</cn>
+                  </apply>
+               </apply>
+               <ci>R</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="gasExchange">
+      <variable name="time" public_interface="in" units="second"/>
+      <variable name="P_A" public_interface="in" units="mmHg"/>
+      <variable name="V_A" public_interface="in" units="litre"/>
+      <variable initial_value="0.0000156" name="D_o" public_interface="out" units="mole_per_second_mmHg"/>
+      <variable cmeta:id="gasExchange_f_o" initial_value="0.1368" name="f_o" public_interface="out" units="dimensionless"/>
+      <variable name="f_oi" units="dimensionless"/>
+      <variable initial_value="0.0000316" name="D_c" public_interface="out" units="mole_per_second_mmHg"/>
+      <variable cmeta:id="gasExchange_f_c" initial_value="0.05263" name="f_c" units="dimensionless"/>
+      <variable name="f_ci" units="dimensionless"/>
+      <variable initial_value="47" name="P_w" public_interface="out" units="mmHg"/>
+      <variable name="p_ao" units="mmHg"/>
+      <variable name="p_o" public_interface="in" units="mmHg"/>
+      <variable name="p_ac" public_interface="out" units="mmHg"/>
+      <variable initial_value="0.21" name="f_om" units="dimensionless"/>
+      <variable initial_value="0" name="f_cm" units="dimensionless"/>
+      <variable name="Q_A" public_interface="out" units="litre_per_second"/>
+      <variable name="p_c" public_interface="in" units="mmHg"/>
+      <variable initial_value="0.151" name="V_D" units="litre"/>
+      <variable initial_value="0.41" name="V_T" units="litre"/>
+      <variable name="q" public_interface="in" units="litre_per_second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>p_ao</ci>
+            <apply>
+               <times/>
+               <ci>f_o</ci>
+               <apply>
+                  <minus/>
+                  <ci>P_A</ci>
+                  <ci>P_w</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>p_ac</ci>
+            <apply>
+               <times/>
+               <ci>f_c</ci>
+               <apply>
+                  <minus/>
+                  <ci>P_A</ci>
+                  <ci>P_w</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>Q_A</ci>
+            <apply>
+               <plus/>
+               <ci>q</ci>
+               <apply>
+                  <times/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="litre_per_mole">1</cn>
+                  <ci>D_c</ci>
+                  <apply>
+                     <minus/>
+                     <ci>p_c</ci>
+                     <ci>p_ac</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="litre_per_mole">1</cn>
+                  <ci>D_o</ci>
+                  <apply>
+                     <minus/>
+                     <ci>p_o</ci>
+                     <ci>p_ao</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>f_oi</ci>
+            <piecewise>
+               <piece>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <times/>
+                           <ci>f_o</ci>
+                           <ci>V_D</ci>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>f_om</ci>
+                           <apply>
+                              <minus/>
+                              <ci>V_T</ci>
+                              <ci>V_D</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <ci>V_T</ci>
+                  </apply>
+                  <apply>
+                     <geq/>
+                     <ci>V_T</ci>
+                     <ci>V_D</ci>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <ci>f_o</ci>
+               </otherwise>
+            </piecewise>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>f_ci</ci>
+            <piecewise>
+               <piece>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <times/>
+                           <ci>f_c</ci>
+                           <ci>V_D</ci>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>f_cm</ci>
+                           <apply>
+                              <minus/>
+                              <ci>V_T</ci>
+                              <ci>V_D</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <ci>V_T</ci>
+                  </apply>
+                  <apply>
+                     <geq/>
+                     <ci>V_T</ci>
+                     <ci>V_D</ci>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <ci>f_c</ci>
+               </otherwise>
+            </piecewise>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>f_o</ci>
+            </apply>
+            <apply>
+               <times/>
+               <apply>
+                  <divide/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <ci>V_A</ci>
+               </apply>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="litre_per_mole">1</cn>
+                        <ci>D_o</ci>
+                        <apply>
+                           <minus/>
+                           <ci>p_o</ci>
+                           <ci>p_ao</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <minus/>
+                           <ci>f_oi</ci>
+                           <ci>f_o</ci>
+                        </apply>
+                        <ci>q</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>f_o</ci>
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <times/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="litre_per_mole">1</cn>
+                           <ci>D_c</ci>
+                           <apply>
+                              <minus/>
+                              <ci>p_c</ci>
+                              <ci>p_ac</ci>
+                           </apply>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="litre_per_mole">1</cn>
+                           <ci>D_o</ci>
+                           <apply>
+                              <minus/>
+                              <ci>p_o</ci>
+                              <ci>p_ao</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>f_c</ci>
+            </apply>
+            <apply>
+               <times/>
+               <apply>
+                  <divide/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <ci>V_A</ci>
+               </apply>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="litre_per_mole">1</cn>
+                        <ci>D_c</ci>
+                        <apply>
+                           <minus/>
+                           <ci>p_c</ci>
+                           <ci>p_ac</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <minus/>
+                           <ci>f_ci</ci>
+                           <ci>f_c</ci>
+                        </apply>
+                        <ci>q</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>f_c</ci>
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <times/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="litre_per_mole">1</cn>
+                           <ci>D_o</ci>
+                           <apply>
+                              <minus/>
+                              <ci>p_o</ci>
+                              <ci>p_ao</ci>
+                           </apply>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="litre_per_mole">1</cn>
+                           <ci>D_c</ci>
+                           <apply>
+                              <minus/>
+                              <ci>p_c</ci>
+                              <ci>p_ac</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="gasTransport">
+      <variable name="time" public_interface="in" units="second"/>
+      <variable name="f_o" public_interface="in" units="dimensionless"/>
+      <variable name="df_satdp" units="dimensionless"/>
+      <variable initial_value="171200000" name="L" units="dimensionless"/>
+      <variable initial_value="10000" name="K_T" units="litre_per_mole"/>
+      <variable initial_value="3600000" name="K_R" units="litre_per_mole"/>
+      <variable cmeta:id="gasTransport_p_o" initial_value="40" name="p_o" public_interface="out" units="mmHg"/>
+      <variable initial_value="0.0000014" name="sigma" units="mole_per_litre_mmHg"/>
+      <variable name="D_o" public_interface="in" units="mole_per_second_mmHg"/>
+      <variable initial_value="0.071" name="V_c" units="litre"/>
+      <variable name="P_A" public_interface="in" units="mmHg"/>
+      <variable name="P_w" public_interface="in" units="mmHg"/>
+      <variable initial_value="0.002" name="T_h" units="mole_per_litre"/>
+      <variable name="D_c" public_interface="in" units="mole_per_second_mmHg"/>
+      <variable name="delta" units="dimensionless"/>
+      <variable name="h" units="mole_per_litre"/>
+      <variable initial_value="164000" name="l_2" units="litre_per_second_mole"/>
+      <variable cmeta:id="gasTransport_p_c" initial_value="46" name="p_c" public_interface="out" units="mmHg"/>
+      <variable name="p_ac" public_interface="in" units="mmHg"/>
+      <variable initial_value="0.12" name="r_2" units="per_second"/>
+      <variable initial_value="0.000033" name="sigma_c" units="mole_per_litre_mmHg"/>
+      <variable initial_value="0.00000044219" name="z" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>delta</ci>
+            <apply>
+               <power/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">10</cn>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1.9</cn>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>h</ci>
+            <apply>
+               <times/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mole_per_litre">1</cn>
+               <apply>
+                  <power/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">10</cn>
+                  <apply>
+                     <minus/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">7.4</cn>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>df_satdp</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <times/>
+                           <ci>L</ci>
+                           <apply>
+                              <power/>
+                              <apply>
+                                 <plus/>
+                                 <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                                 <apply>
+                                    <times/>
+                                    <ci>K_T</ci>
+                                    <ci>sigma</ci>
+                                    <ci>p_o</ci>
+                                 </apply>
+                              </apply>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4</cn>
+                           </apply>
+                        </apply>
+                        <apply>
+                           <power/>
+                           <apply>
+                              <plus/>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                              <apply>
+                                 <times/>
+                                 <ci>K_R</ci>
+                                 <ci>sigma</ci>
+                                 <ci>p_o</ci>
+                              </apply>
+                           </apply>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4</cn>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <times/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+                           <ci>L</ci>
+                           <apply>
+                              <power/>
+                              <ci>K_T</ci>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                           </apply>
+                           <apply>
+                              <power/>
+                              <ci>sigma</ci>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                           </apply>
+                           <ci>p_o</ci>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mmHg">1</cn>
+                           <apply>
+                              <power/>
+                              <apply>
+                                 <plus/>
+                                 <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                                 <apply>
+                                    <times/>
+                                    <ci>K_T</ci>
+                                    <ci>sigma</ci>
+                                    <ci>p_o</ci>
+                                 </apply>
+                              </apply>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                           </apply>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>L</ci>
+                           <ci>K_T</ci>
+                           <ci>sigma</ci>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mmHg">1</cn>
+                           <apply>
+                              <power/>
+                              <apply>
+                                 <plus/>
+                                 <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                                 <apply>
+                                    <times/>
+                                    <ci>K_T</ci>
+                                    <ci>sigma</ci>
+                                    <ci>p_o</ci>
+                                 </apply>
+                              </apply>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+                           </apply>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+                           <apply>
+                              <power/>
+                              <ci>K_R</ci>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                           </apply>
+                           <apply>
+                              <power/>
+                              <ci>sigma</ci>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                           </apply>
+                           <ci>p_o</ci>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mmHg">1</cn>
+                           <apply>
+                              <power/>
+                              <apply>
+                                 <plus/>
+                                 <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                                 <apply>
+                                    <times/>
+                                    <ci>K_R</ci>
+                                    <ci>sigma</ci>
+                                    <ci>p_o</ci>
+                                 </apply>
+                              </apply>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                           </apply>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>K_R</ci>
+                           <ci>sigma</ci>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mmHg">1</cn>
+                           <apply>
+                              <power/>
+                              <apply>
+                                 <plus/>
+                                 <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                                 <apply>
+                                    <times/>
+                                    <ci>K_R</ci>
+                                    <ci>sigma</ci>
+                                    <ci>p_o</ci>
+                                 </apply>
+                              </apply>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+                           </apply>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <times/>
+                           <ci>L</ci>
+                           <ci>K_T</ci>
+                           <ci>sigma</ci>
+                           <ci>p_o</ci>
+                           <apply>
+                              <power/>
+                              <apply>
+                                 <plus/>
+                                 <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                                 <apply>
+                                    <times/>
+                                    <ci>K_T</ci>
+                                    <ci>sigma</ci>
+                                    <ci>p_o</ci>
+                                 </apply>
+                              </apply>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+                           </apply>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>K_R</ci>
+                           <ci>sigma</ci>
+                           <ci>p_o</ci>
+                           <apply>
+                              <power/>
+                              <apply>
+                                 <plus/>
+                                 <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                                 <apply>
+                                    <times/>
+                                    <ci>K_R</ci>
+                                    <ci>sigma</ci>
+                                    <ci>p_o</ci>
+                                 </apply>
+                              </apply>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <times/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4</cn>
+                           <ci>L</ci>
+                           <ci>K_T</ci>
+                           <ci>sigma</ci>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mmHg">1</cn>
+                           <apply>
+                              <power/>
+                              <apply>
+                                 <plus/>
+                                 <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                                 <apply>
+                                    <times/>
+                                    <ci>K_T</ci>
+                                    <ci>sigma</ci>
+                                    <ci>p_o</ci>
+                                 </apply>
+                              </apply>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+                           </apply>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4</cn>
+                           <ci>K_R</ci>
+                           <ci>sigma</ci>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mmHg">1</cn>
+                           <apply>
+                              <power/>
+                              <apply>
+                                 <plus/>
+                                 <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                                 <apply>
+                                    <times/>
+                                    <ci>K_R</ci>
+                                    <ci>sigma</ci>
+                                    <ci>p_o</ci>
+                                 </apply>
+                              </apply>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+                           </apply>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <power/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>L</ci>
+                        <apply>
+                           <power/>
+                           <apply>
+                              <plus/>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                              <apply>
+                                 <times/>
+                                 <ci>K_T</ci>
+                                 <ci>sigma</ci>
+                                 <ci>p_o</ci>
+                              </apply>
+                           </apply>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4</cn>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <power/>
+                        <apply>
+                           <plus/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                           <apply>
+                              <times/>
+                              <ci>K_R</ci>
+                              <ci>sigma</ci>
+                              <ci>p_o</ci>
+                           </apply>
+                        </apply>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4</cn>
+                     </apply>
+                  </apply>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>p_o</ci>
+            </apply>
+            <apply>
+               <times/>
+               <apply>
+                  <divide/>
+                  <ci>D_o</ci>
+                  <apply>
+                     <times/>
+                     <ci>sigma</ci>
+                     <ci>V_c</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <power/>
+                  <apply>
+                     <plus/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <apply>
+                              <times/>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="per_mmHg">4</cn>
+                              <ci>T_h</ci>
+                           </apply>
+                           <ci>sigma</ci>
+                        </apply>
+                        <ci>df_satdp</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  </apply>
+               </apply>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>f_o</ci>
+                     <apply>
+                        <minus/>
+                        <ci>P_A</ci>
+                        <ci>P_w</ci>
+                     </apply>
+                  </apply>
+                  <ci>p_o</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>p_c</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>D_c</ci>
+                        <apply>
+                           <times/>
+                           <ci>sigma_c</ci>
+                           <ci>V_c</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <ci>p_ac</ci>
+                        <ci>p_c</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mole_per_litre">1</cn>
+                           <ci>delta</ci>
+                           <ci>l_2</ci>
+                        </apply>
+                        <ci>sigma_c</ci>
+                     </apply>
+                     <ci>h</ci>
+                     <ci>z</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>delta</ci>
+                  <ci>r_2</ci>
+                  <ci>p_c</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>z</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>delta</ci>
+                     <ci>r_2</ci>
+                     <ci>sigma_c</ci>
+                     <ci>p_c</ci>
+                  </apply>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mole_per_litre">1</cn>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>delta</ci>
+                  <ci>l_2</ci>
+                  <ci>h</ci>
+                  <ci>z</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <connection>
+      <map_components component_1="gasTransport" component_2="gasExchange"/>
+      <map_variables variable_1="p_o" variable_2="p_o"/>
+      <map_variables variable_1="D_o" variable_2="D_o"/>
+      <map_variables variable_1="f_o" variable_2="f_o"/>
+      <map_variables variable_1="P_w" variable_2="P_w"/>
+      <map_variables variable_1="p_c" variable_2="p_c"/>
+      <map_variables variable_1="D_c" variable_2="D_c"/>
+      <map_variables variable_1="p_ac" variable_2="p_ac"/>
+   </connection>
+   <connection>
+      <map_components component_1="Environment" component_2="gasTransport"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="lungMechanics" component_2="gasTransport"/>
+      <map_variables variable_1="P_A" variable_2="P_A"/>
+   </connection>
+   <connection>
+      <map_components component_1="Environment" component_2="gasExchange"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="lungMechanics" component_2="gasExchange"/>
+      <map_variables variable_1="q" variable_2="q"/>
+      <map_variables variable_1="Q_A" variable_2="Q_A"/>
+      <map_variables variable_1="P_A" variable_2="P_A"/>
+      <map_variables variable_1="V_A" variable_2="V_A"/>
+   </connection>
+   <connection>
+      <map_components component_1="Environment" component_2="PluralPressureFunction"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="Environment" component_2="lungMechanics"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="PluralPressureFunction" component_2="lungMechanics"/>
+      <map_variables variable_1="P_L" variable_2="P_L"/>
+      <map_variables variable_1="dP_Ldt" variable_2="dP_Ldt"/>
+   </connection>
+
+
+
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Bag rdf:about="rdf:#80ad09f5-7983-41cb-81e4-91212fd89f55">
+    <rdf:li>lung mechanics</rdf:li>
+    <rdf:li>gas exchange</rdf:li>
+    <rdf:li>cardio-respiratory</rdf:li>
+    <rdf:li>mechanical constitutive laws</rdf:li>
+  </rdf:Bag>
+  <rdf:Seq rdf:about="rdf:#d13a5c9a-2f6d-41b9-9d0b-aa246822f95b">
+    <rdf:li rdf:resource="rdf:#f99c9605-ccb0-4129-8a62-befd5496589e"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#14d846ef-343f-4034-918d-811b01d61a79">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Alona</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Ben-Tal</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:publisher xmlns:dc="http://purl.org/dc/elements/1.1/">The University of Auckland, Auckland Bioengineering Institute</dc:publisher>
+    <cmeta:comment rdf:resource="rdf:#d0dc1567-6cf6-49b4-9904-08da852511ba"/>
+    <dcterms:created xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#0ce657cb-4b4f-419f-98f9-b911d2e4a15e"/>
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#10f32ef2-f602-457a-bd1a-5d0af211f746"/>
+    <cmeta:modification rdf:resource="rdf:#a682b8cd-93d7-4070-b8d0-16db04d1b5fe"/>
+    <cmeta:modification rdf:resource="rdf:#4322ebdd-3675-4de0-84b2-4f079aa1a008"/>
+    <cmeta:modification rdf:resource="rdf:#e8415ce0-b8e8-4a1f-be02-82a4719cca9d"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b49a85b8-386d-4770-b8a6-1b9364c9bc88">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2007-06-11T12:34:22+12:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ec2ee4b4-22fb-48aa-b7b6-9afc95a994af">
+    <bqs:Pubmed_id xmlns:bqs="http://www.cellml.org/bqs/1.0#">16038941</bqs:Pubmed_id>
+    <bqs:JournalArticle xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#21a1d8d3-d33f-4aff-bf10-3df60e76a881"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#17598e77-e2b2-49ac-b1fa-879e403a52ec">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Catherine</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Lloyd</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d0dc1567-6cf6-49b4-9904-08da852511ba">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#f1f7c430-da54-4569-bbc5-d87a61c0374c"/>
+    <rdf:value>This CellML model runs in both PCEnv and COR to recreate the published results.  The units have been checked and they are balanced.  Please note that this particular version of the CellML model does not correspond with any one of the four possible models from the original publication.  Rather it is a combination model, made up of equations 2,7,9,10,11,12,13,16, and 20.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1c4df839-3955-4e46-9879-446ae04005d7">
+    <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#0326936c-a125-494e-8667-ab5e38b64d76"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#af358a27-e9a9-4607-aff7-905c79979c14">
+    <bqs:Person xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#0a2b99bf-c735-4211-89ee-e766f0f0ddc4"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#li"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8d1d194f-2172-4fab-9810-a9450479b472">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#82c62564-81f1-430c-bc8e-cec7ec99a033"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#47580436-d92e-4fa0-ae2f-7546dad64d6f">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2008-01-11T15:13:33+13:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f667d587-d81f-4f17-8110-42a064c0f5da">
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Journal of theoretical biology</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#5fc234c3-6127-4e7f-aeb3-d59963fb490d">
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#91b718ff-6e96-4613-b9a8-f9e5e9eef132"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#cc9a1a0f-fee8-4896-9c72-0f306f0ba969">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Vignesh</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Kumar</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f1f7c430-da54-4569-bbc5-d87a61c0374c">
+    <vCard:FN xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#97129f5f-f3aa-49f8-972a-99da38e2110a">
+    <vCard:Orgname xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">The Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a11a4eb9-73d7-48f4-b2ca-399a99432610">
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#ba0dc6c4-083d-4e0e-9efd-918c436b150c"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#bental_2005">
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">
+        Alona Ben-Tal's 2005 mathematical model for a human, inflexible lung.
+      </dc:title>
+    <cmeta:comment rdf:resource="rdf:#8d1d194f-2172-4fab-9810-a9450479b472"/>
+    <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#1c4df839-3955-4e46-9879-446ae04005d7"/>
+    <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#ec2ee4b4-22fb-48aa-b7b6-9afc95a994af"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0326936c-a125-494e-8667-ab5e38b64d76">
+    <bqs:subject_type xmlns:bqs="http://www.cellml.org/bqs/1.0#">keyword</bqs:subject_type>
+    <rdf:value rdf:resource="rdf:#80ad09f5-7983-41cb-81e4-91212fd89f55"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ba0dc6c4-083d-4e0e-9efd-918c436b150c">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">David</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Cumin</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1af849c0-3c9d-438e-9cc6-65eb14527a40">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Alona</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Ben-Tal</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a682b8cd-93d7-4070-b8d0-16db04d1b5fe">
+    <dcterms:modified xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#4d0d58e0-8b1e-4b33-bb9b-c6580f91000f"/>
+    <rdf:value>Rebuilt the model from scratch using COR.  No single model is represented here.  Rather this is a representation of equations 2,7,9,10,11,12,13,16, and 20.</rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#a11a4eb9-73d7-48f4-b2ca-399a99432610"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#5ac006df-ff1c-4a26-b383-7ec9680c3888">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2006-01-21 00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#83dfcbc6-2be4-4711-8311-d19737a98f65">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0ce657cb-4b4f-419f-98f9-b911d2e4a15e">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2004-12-21T00:00:00+13:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0a2b99bf-c735-4211-89ee-e766f0f0ddc4">
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#1af849c0-3c9d-438e-9cc6-65eb14527a40"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e8415ce0-b8e8-4a1f-be02-82a4719cca9d">
+    <dcterms:modified xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#b49a85b8-386d-4770-b8a6-1b9364c9bc88"/>
+    <rdf:value>Added publication data to the model documentation.</rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#5fc234c3-6127-4e7f-aeb3-d59963fb490d"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4d0d58e0-8b1e-4b33-bb9b-c6580f91000f">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2008-12-08T12:44:08+13:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#10f32ef2-f602-457a-bd1a-5d0af211f746">
+    <vCard:ORG xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#97129f5f-f3aa-49f8-972a-99da38e2110a"/>
+    <vCard:EMAIL xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#83dfcbc6-2be4-4711-8311-d19737a98f65"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#17598e77-e2b2-49ac-b1fa-879e403a52ec"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4322ebdd-3675-4de0-84b2-4f079aa1a008">
+    <dcterms:modified xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#47580436-d92e-4fa0-ae2f-7546dad64d6f"/>
+    <rdf:value>Re-ordered the existing 8 versions as 2 versions of the 4 variants (models A,B,C and D).</rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#1ead7f0a-c56c-48d3-8e7d-e1c78669acef"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1ead7f0a-c56c-48d3-8e7d-e1c78669acef">
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#cc9a1a0f-fee8-4896-9c72-0f306f0ba969"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#91b718ff-6e96-4613-b9a8-f9e5e9eef132">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Catherine</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Lloyd</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#21a1d8d3-d33f-4aff-bf10-3df60e76a881">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#d13a5c9a-2f6d-41b9-9d0b-aa246822f95b"/>
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Simplified models for gas exchange in the human lungs</dc:title>
+    <bqs:volume xmlns:bqs="http://www.cellml.org/bqs/1.0#">238</bqs:volume>
+    <bqs:first_page xmlns:bqs="http://www.cellml.org/bqs/1.0#">474</bqs:first_page>
+    <bqs:Journal xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#f667d587-d81f-4f17-8110-42a064c0f5da"/>
+    <dcterms:issued xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#5ac006df-ff1c-4a26-b383-7ec9680c3888"/>
+    <bqs:last_page xmlns:bqs="http://www.cellml.org/bqs/1.0#">495</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f99c9605-ccb0-4129-8a62-befd5496589e">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#14d846ef-343f-4034-918d-811b01d61a79"/>
+  </rdf:Description>
+</rdf:RDF>
+</model>

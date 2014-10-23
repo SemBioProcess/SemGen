@@ -1,0 +1,1739 @@
+<?xml version="1.0"?>
+<!--
+This CellML file was generated on 19/04/2010 at 4:11:30 at p.m. using:
+
+COR (0.9.31.1371)
+Copyright 2002-2010 Dr Alan Garny
+http://cor.physiol.ox.ac.uk/ - cor@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.cellml.org/
+-->
+<model xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" name="sedaghat_2002" cmeta:id="sedaghat_2002" xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#">
+
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>A Mathematical Model of Metabolic Insulin Signalling Pathways</title>
+				<author>
+					<firstname>Catherine</firstname>
+					<surname>Lloyd</surname>
+					<affiliation>
+						<shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			
+			<section id="sec_status">
+				<title>Model Status</title>
+				<para>
+            This model runs in OpenCell and COR and the units are consistent throughout. It describes the complete model without feedback, and recreates figures 6 and 7 from the paper. 
+          </para>
+			</section>
+			
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>
+ABSTRACT: We develop a mathematical model that explicitly represents many of the known signaling components mediating translocation of the insulin-responsive glucose transporter GLUT4 to gain insight into the complexities of metabolic insulin signaling pathways. A novel mechanistic model of postreceptor events including phosphorylation of insulin receptor substrate-1, activation of phosphatidylinositol 3-kinase, and subsequent activation of downstream kinases Akt and protein kinase C-zeta is coupled with previously validated subsystem models of insulin receptor binding, receptor recycling, and GLUT4 translocation. A system of differential equations is defined by the structure of the model. Rate constants and model parameters are constrained by published experimental data. Model simulations of insulin dose-response experiments agree with published experimental data and also generate expected qualitative behaviors such as sequential signal amplification and increased sensitivity of downstream components. We examined the consequences of incorporating feedback pathways as well as representing pathological conditions, such as increased levels of protein tyrosine phosphatases, to illustrate the utility of our model for exploring molecular mechanisms. We conclude that mathematical modeling of signal transduction pathways is a useful approach for gaining insight into the complexities of metabolic insulin signaling.
+</para>
+				<para>
+The original paper reference is cited below:
+</para>
+				<para>
+A mathematical model of metabolic insulin signaling pathways, Ahmad R. Sedaghat, Arthur Sherman, and Michael J. Quon, 2002,<emphasis>American Journal of Physiology</emphasis>, 283, E1084-E1101. <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;list_uids=12376338&amp;dopt=Abstract">PubMed ID: 12376338</ulink>
+				</para>
+			
+				<informalfigure float="0" id="fig_reaction_diagram">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>reaction_diagram</title>
+							</objectinfo>
+							<imagedata fileref="sedaghat_2002.png"/>
+						</imageobject>
+					</mediaobject>
+					<caption>Layout of the model elements.</caption>
+				</informalfigure>
+			</sect1>
+		</article>
+	</documentation>
+	
+	   
+	
+   <units name="percentage">
+      <unit units="dimensionless"/>
+   </units>
+   <units name="molar">
+      <unit exponent="-1" units="litre"/>
+   </units>
+   <units name="minute">
+      <unit multiplier="60" units="second"/>
+   </units>
+   <units name="rate">
+      <unit units="molar"/>
+      <unit exponent="-1" units="minute"/>
+   </units>
+   <units name="first_order_rate_constant">
+      <unit exponent="-1" units="minute"/>
+   </units>
+   <units name="second_order_rate_constant">
+      <unit exponent="-1" units="molar"/>
+      <unit exponent="-1" units="minute"/>
+   </units>
+   
+   <component name="environment">
+      <variable cmeta:id="environment_time" name="time" public_interface="out" units="minute"/>
+   </component>
+   
+   <component cmeta:id="x1" name="x1">
+       
+	  <variable cmeta:id="x1_x1" name="x1" public_interface="out" units="molar"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>x1</ci>
+            <piecewise>
+               <piece>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" type="e-notation" cellml:units="molar">1   <sep/>
+                  -7</cn>
+                  <apply>
+                     <lt/>
+                     <ci>time</ci>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute">15</cn>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="molar">0</cn>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   
+   <component cmeta:id="x2" name="x2">
+       
+      <variable cmeta:id="x2_x2" initial_value="9e-13" name="x2" public_interface="out" units="molar"/>
+      <variable name="k1" public_interface="in" units="second_order_rate_constant"/>
+      <variable name="k_minus1" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k4" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k_minus4" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k_minus3" public_interface="in" units="second_order_rate_constant"/>
+      <variable name="x1" public_interface="in" units="molar"/>
+      <variable name="x3" public_interface="in" units="molar"/>
+      <variable name="x5" public_interface="in" units="molar"/>
+      <variable name="x6" public_interface="in" units="molar"/>
+      <variable name="PTP" public_interface="in" units="molar"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>x2</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>k_minus1</ci>
+                     <ci>x3</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_minus3</ci>
+                     <ci>PTP</ci>
+                     <ci>x5</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_minus4</ci>
+                     <ci>x6</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>k1</ci>
+                     <ci>x1</ci>
+                     <ci>x2</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k4</ci>
+                     <ci>x2</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component cmeta:id="x3" name="x3">
+       
+      <variable cmeta:id="x3_x3" initial_value="0" name="x3" public_interface="out" units="molar"/>
+      <variable name="k1" public_interface="in" units="second_order_rate_constant"/>
+      <variable name="k_minus1" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k3" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="x1" public_interface="in" units="molar"/>
+      <variable name="x2" public_interface="in" units="molar"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>x3</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k1</ci>
+                  <ci>x1</ci>
+                  <ci>x2</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>k_minus1</ci>
+                     <ci>x3</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k3</ci>
+                     <ci>x3</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component cmeta:id="x4" name="x4">
+       
+      <variable cmeta:id="x4_x4" initial_value="0" name="x4" public_interface="out" units="molar"/>
+      <variable name="k2" public_interface="in" units="second_order_rate_constant"/>
+      <variable name="k_minus2" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k4b" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k_minus4b" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="x1" public_interface="in" units="molar"/>
+      <variable name="x5" public_interface="in" units="molar"/>
+      <variable name="x7" public_interface="in" units="molar"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>x4</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>k2</ci>
+                     <ci>x1</ci>
+                     <ci>x5</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_minus4b</ci>
+                     <ci>x7</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>k_minus2</ci>
+                     <ci>x4</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k4b</ci>
+                     <ci>x4</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component cmeta:id="x5" name="x5">
+       
+      <variable cmeta:id="x5_x5" initial_value="0" name="x5" public_interface="out" units="molar"/>
+      <variable name="k2" public_interface="in" units="second_order_rate_constant"/>
+      <variable name="k_minus2" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k3" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k_minus3" public_interface="in" units="second_order_rate_constant"/>
+      <variable name="k4b" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k_minus4b" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="x1" public_interface="in" units="molar"/>
+      <variable name="x3" public_interface="in" units="molar"/>
+      <variable name="x4" public_interface="in" units="molar"/>
+      <variable name="x8" public_interface="in" units="molar"/>
+      <variable name="PTP" public_interface="in" units="molar"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>x5</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>k3</ci>
+                     <ci>x3</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_minus2</ci>
+                     <ci>x4</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_minus4b</ci>
+                     <ci>x8</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>k2</ci>
+                     <ci>x1</ci>
+                     <ci>x5</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_minus3</ci>
+                     <ci>PTP</ci>
+                     <ci>x5</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k4b</ci>
+                     <ci>x5</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component cmeta:id="x6" name="x6">
+       
+      <variable cmeta:id="x6_x6" initial_value="1e-13" name="x6" public_interface="out" units="molar"/>
+      <variable name="k4" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k_minus4" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k5" public_interface="in" units="rate"/>
+      <variable name="k_minus5" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k6" public_interface="in" units="second_order_rate_constant"/>
+      <variable name="x2" public_interface="in" units="molar"/>
+      <variable name="x7" public_interface="in" units="molar"/>
+      <variable name="x8" public_interface="in" units="molar"/>
+      <variable name="PTP" public_interface="in" units="molar"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>x6</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <ci>k5</ci>
+                  <apply>
+                     <times/>
+                     <ci>k6</ci>
+                     <ci>PTP</ci>
+                     <apply>
+                        <plus/>
+                        <ci>x7</ci>
+                        <ci>x8</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k4</ci>
+                     <ci>x2</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>k_minus5</ci>
+                     <ci>x6</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_minus4</ci>
+                     <ci>x6</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component cmeta:id="x7" name="x7">
+       
+      <variable cmeta:id="x7_x7" initial_value="0" name="x7" public_interface="out" units="molar"/>
+      <variable name="k4b" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k_minus4b" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k6" public_interface="in" units="second_order_rate_constant"/>
+      <variable name="x4" public_interface="in" units="molar"/>
+      <variable name="PTP" public_interface="in" units="molar"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>x7</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k4b</ci>
+                  <ci>x4</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>k_minus4b</ci>
+                     <ci>x7</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k6</ci>
+                     <ci>PTP</ci>
+                     <ci>x7</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component cmeta:id="x8" name="x8">
+       
+      <variable cmeta:id="x8_x8" initial_value="0" name="x8" public_interface="out" units="molar"/>
+      <variable name="k4b" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k_minus4b" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k6" public_interface="in" units="second_order_rate_constant"/>
+      <variable name="x5" public_interface="in" units="molar"/>
+      <variable name="PTP" public_interface="in" units="molar"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>x8</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k4b</ci>
+                  <ci>x5</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>k_minus4b</ci>
+                     <ci>x8</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k6</ci>
+                     <ci>PTP</ci>
+                     <ci>x8</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component cmeta:id="x9" name="x9">
+       
+      <variable cmeta:id="x9_x9" initial_value="1e-13" name="x9" public_interface="out" units="molar"/>
+      <variable name="k7" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k_minus7" public_interface="in" units="second_order_rate_constant"/>
+      <variable name="x4" public_interface="in" units="molar"/>
+      <variable name="x5" public_interface="in" units="molar"/>
+      <variable name="x10" public_interface="in" units="molar"/>
+      <variable name="IRp" public_interface="in" units="molar"/>
+      <variable name="PTP" public_interface="in" units="molar"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>x9</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k_minus7</ci>
+                  <ci>PTP</ci>
+                  <ci>x10</ci>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>k7</ci>
+                     <ci>x9</ci>
+                     <apply>
+                        <plus/>
+                        <ci>x4</ci>
+                        <ci>x5</ci>
+                     </apply>
+                  </apply>
+                  <ci>IRp</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component cmeta:id="x10" name="x10">
+       
+      <variable cmeta:id="x10_x10" initial_value="1e-13" name="x10" public_interface="out" units="molar"/>
+      <variable name="k7" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k_minus7" public_interface="in" units="second_order_rate_constant"/>
+      <variable name="k8" public_interface="in" units="second_order_rate_constant"/>
+      <variable name="k_minus8" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="x4" public_interface="in" units="molar"/>
+      <variable name="x5" public_interface="in" units="molar"/>
+      <variable name="x9" public_interface="in" units="molar"/>
+      <variable name="x11" public_interface="in" units="molar"/>
+      <variable name="x12" public_interface="in" units="molar"/>
+      <variable name="IRp" public_interface="in" units="molar"/>
+      <variable name="PTP" public_interface="in" units="molar"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>x10</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>k7</ci>
+                        <ci>x9</ci>
+                        <apply>
+                           <plus/>
+                           <ci>x4</ci>
+                           <ci>x5</ci>
+                        </apply>
+                     </apply>
+                     <ci>IRp</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_minus8</ci>
+                     <ci>x12</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>k_minus7</ci>
+                        <ci>PTP</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k8</ci>
+                        <ci>x11</ci>
+                     </apply>
+                  </apply>
+                  <ci>x10</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component cmeta:id="x11" name="x11">
+       
+      <variable cmeta:id="x11_x11" initial_value="1e-13" name="x11" public_interface="out" units="molar"/>
+      <variable name="k8" public_interface="in" units="second_order_rate_constant"/>
+      <variable name="k_minus8" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="x10" public_interface="in" units="molar"/>
+      <variable name="x12" public_interface="in" units="molar"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>x11</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k_minus8</ci>
+                  <ci>x12</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k8</ci>
+                  <ci>x10</ci>
+                  <ci>x11</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component cmeta:id="x12" name="x12">
+       
+      <variable cmeta:id="x12_x12" initial_value="0" name="x12" public_interface="out" units="molar"/>
+      <variable name="k8" public_interface="in" units="second_order_rate_constant"/>
+      <variable name="k_minus8" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="x10" public_interface="in" units="molar"/>
+      <variable name="x11" public_interface="in" units="molar"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>x12</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k8</ci>
+                  <ci>x10</ci>
+                  <ci>x11</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_minus8</ci>
+                  <ci>x12</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component cmeta:id="x13" name="x13">
+       
+      <variable cmeta:id="x13_x13" initial_value="0.31" name="x13" public_interface="out" units="percentage"/>
+      <variable name="k9" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k_minus9" public_interface="in" units="second_order_rate_constant"/>
+      <variable name="k10" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k_minus10" public_interface="in" units="second_order_rate_constant"/>
+      <variable name="x14" public_interface="in" units="percentage"/>
+      <variable name="x15" public_interface="in" units="percentage"/>
+      <variable name="PTEN" public_interface="in" units="molar"/>
+      <variable name="SHIP" public_interface="in" units="molar"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>x13</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>k9</ci>
+                     <ci>x14</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k10</ci>
+                     <ci>x15</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>k_minus9</ci>
+                        <ci>PTEN</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k_minus10</ci>
+                        <ci>SHIP</ci>
+                     </apply>
+                  </apply>
+                  <ci>x13</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component cmeta:id="x14" name="x14">
+       
+      <variable cmeta:id="x14_x14" initial_value="99.4" name="x14" public_interface="out" units="percentage"/>
+      <variable name="k9" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k_minus9" public_interface="in" units="second_order_rate_constant"/>
+      <variable name="x13" public_interface="in" units="percentage"/>
+      <variable name="PTEN" public_interface="in" units="molar"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>x14</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k_minus9</ci>
+                  <ci>PTEN</ci>
+                  <ci>x13</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k9</ci>
+                  <ci>x14</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component cmeta:id="x15" name="x15">
+       
+      <variable cmeta:id="x15_x15" initial_value="0.29" name="x15" public_interface="out" units="percentage"/>
+      <variable name="k10" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k_minus10" public_interface="in" units="second_order_rate_constant"/>
+      <variable name="x13" public_interface="in" units="percentage"/>
+      <variable name="SHIP" public_interface="in" units="molar"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>x15</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k_minus10</ci>
+                  <ci>SHIP</ci>
+                  <ci>x13</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k10</ci>
+                  <ci>x15</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component cmeta:id="x16" name="x16">
+       
+      <variable cmeta:id="x16_x16" initial_value="100" name="x16" public_interface="out" units="percentage"/>
+      <variable name="k11" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k_minus11" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="x17" public_interface="in" units="percentage"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>x16</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k_minus11</ci>
+                  <ci>x17</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k11</ci>
+                  <ci>x16</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component cmeta:id="x17" name="x17">
+       
+      <variable cmeta:id="x17_x17" initial_value="0" name="x17" public_interface="out" units="percentage"/>
+      <variable name="k11" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k_minus11" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="x16" public_interface="in" units="percentage"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>x17</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k11</ci>
+                  <ci>x16</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_minus11</ci>
+                  <ci>x17</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component cmeta:id="x18" name="x18">
+       
+      <variable cmeta:id="x18_x18" initial_value="100" name="x18" public_interface="out" units="percentage"/>
+      <variable name="k12" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k_minus12" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="x19" public_interface="in" units="percentage"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>x18</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k_minus12</ci>
+                  <ci>x19</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k12</ci>
+                  <ci>x18</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component cmeta:id="x19" name="x19">
+       
+      <variable cmeta:id="x19_x19" initial_value="0" name="x19" public_interface="out" units="percentage"/>
+      <variable name="k12" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k_minus12" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="x18" public_interface="in" units="percentage"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>x19</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k12</ci>
+                  <ci>x18</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_minus12</ci>
+                  <ci>x19</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component cmeta:id="x20" name="x20">
+       
+      <variable cmeta:id="x20_x20" initial_value="96" name="x20" public_interface="out" units="percentage"/>
+      <variable name="k13" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k_minus13" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k13b" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k14" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k_minus14" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="x21" public_interface="in" units="percentage"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>x20</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>k_minus13</ci>
+                     <ci>x21</ci>
+                  </apply>
+                  <ci>k14</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <plus/>
+                        <ci>k13</ci>
+                        <ci>k13b</ci>
+                     </apply>
+                     <ci>x20</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_minus14</ci>
+                     <ci>x20</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component cmeta:id="x21" name="x21">
+       
+      <variable cmeta:id="x21_x21" initial_value="4" name="x21" public_interface="out" units="percentage"/>
+      <variable name="k13" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k_minus13" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="k13b" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="x20" public_interface="in" units="percentage"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>x21</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <apply>
+                     <minus/>
+                     <ci>k_minus13</ci>
+                  </apply>
+                  <ci>x21</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <plus/>
+                     <ci>k13</ci>
+                     <ci>k13b</ci>
+                  </apply>
+                  <ci>x20</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="reaction_constants">
+      <variable initial_value="1" name="PTP" public_interface="out" units="molar"/>
+      <variable initial_value="1" name="SHIP" public_interface="out" units="molar"/>
+      <variable initial_value="1" name="PTEN" public_interface="out" units="molar"/>
+      <variable initial_value="8.97e-13" name="IRp" public_interface="out" units="molar"/>
+      <variable initial_value="6e7" name="k1" public_interface="out" units="second_order_rate_constant"/>
+      <variable initial_value="0.2" name="k_minus1" public_interface="out" units="first_order_rate_constant"/>
+      <variable name="k2" public_interface="out" units="second_order_rate_constant"/>
+      <variable name="k_minus2" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="2500" name="k3" public_interface="out" units="first_order_rate_constant"/>
+      <variable name="k_minus3" public_interface="out" units="second_order_rate_constant"/>
+      <variable name="k4" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="0.003" name="k_minus4" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="2.1e-3" name="k4b" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="2.1e-4" name="k_minus4b" public_interface="out" units="first_order_rate_constant"/>
+      <variable name="k5" public_interface="out" units="rate"/>
+      <variable initial_value="1.67e-18" name="k_minus5" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="0.461" name="k6" public_interface="out" units="second_order_rate_constant"/>
+      <variable initial_value="4.16" name="k7" public_interface="out" units="first_order_rate_constant"/>
+      <variable name="k_minus7" public_interface="out" units="second_order_rate_constant"/>
+      <variable name="k8" public_interface="out" units="second_order_rate_constant"/>
+      <variable initial_value="10" name="k_minus8" public_interface="out" units="first_order_rate_constant"/>
+      <variable name="k9" public_interface="out" units="first_order_rate_constant"/>
+      <variable name="k_minus9" public_interface="out" units="second_order_rate_constant"/>
+      <variable name="k10" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="2.77" name="k_minus10" public_interface="out" units="second_order_rate_constant"/>
+      <variable name="k11" public_interface="out" units="first_order_rate_constant"/>
+      <variable name="k_minus11" public_interface="out" units="first_order_rate_constant"/>
+      <variable name="k12" public_interface="out" units="first_order_rate_constant"/>
+      <variable name="k_minus12" public_interface="out" units="first_order_rate_constant"/>
+      <variable name="k13" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="0.167" name="k_minus13" public_interface="out" units="first_order_rate_constant"/>
+      <variable name="k13b" public_interface="out" units="first_order_rate_constant"/>
+      <variable name="k14" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="0.001155" name="k_minus14" public_interface="out" units="first_order_rate_constant"/>
+      <variable name="k9_basal" units="first_order_rate_constant"/>
+      <variable initial_value="1.39" name="k9_stimulated" units="first_order_rate_constant"/>
+      <variable name="effect" units="dimensionless"/>
+      <variable initial_value="9.09" name="APequil" units="dimensionless"/>
+      <variable initial_value="5e-15" name="PI3K" units="molar"/>
+      <variable name="x6" public_interface="in" units="molar"/>
+      <variable name="x7" public_interface="in" units="molar"/>
+      <variable name="x8" public_interface="in" units="molar"/>
+      <variable name="x12" public_interface="in" units="molar"/>
+      <variable name="x13" public_interface="in" units="percentage"/>
+      <variable name="x17" public_interface="in" units="percentage"/>
+      <variable name="x19" public_interface="in" units="percentage"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>k2</ci>
+            <ci>k1</ci>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>k_minus2</ci>
+            <apply>
+               <times/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">100</cn>
+               <ci>k_minus1</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>k_minus3</ci>
+            <apply>
+               <divide/>
+               <ci>k_minus1</ci>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="molar">1</cn>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>k4</ci>
+            <apply>
+               <divide/>
+               <ci>k_minus4</ci>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">9</cn>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>k5</ci>
+            <piecewise>
+               <piece>
+                  <apply>
+                     <times/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="molar">10</cn>
+                     <ci>k_minus5</ci>
+                  </apply>
+                  <apply>
+                     <gt/>
+                     <apply>
+                        <plus/>
+                        <ci>x6</ci>
+                        <ci>x7</ci>
+                        <ci>x8</ci>
+                     </apply>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" type="e-notation" cellml:units="molar">1   <sep/>
+                     -13</cn>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <apply>
+                     <times/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="molar">60</cn>
+                     <ci>k_minus5</ci>
+                  </apply>
+               </otherwise>
+            </piecewise>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>k_minus7</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <divide/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2.5</cn>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="molar">7.45</cn>
+               </apply>
+               <ci>k7</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>k8</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>k_minus8</ci>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">5</cn>
+                  </apply>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="molar">70.775</cn>
+               </apply>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" type="e-notation" cellml:units="dimensionless">1   <sep/>
+               12</cn>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>k9</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <minus/>
+                        <ci>k9_stimulated</ci>
+                        <ci>k9_basal</ci>
+                     </apply>
+                     <ci>x12</ci>
+                  </apply>
+                  <ci>PI3K</ci>
+               </apply>
+               <ci>k9_basal</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>k_minus9</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <divide/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">94</cn>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="molar">3.1</cn>
+               </apply>
+               <ci>k9_stimulated</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>k9_basal</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <divide/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="molar">0.31</cn>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">99.4</cn>
+               </apply>
+               <ci>k_minus9</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>k10</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <divide/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="molar">3.1</cn>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2.9</cn>
+               </apply>
+               <ci>k_minus10</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>k11</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.1</cn>
+                  <ci>k_minus11</ci>
+                  <apply>
+                     <minus/>
+                     <ci>x13</ci>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="percentage">0.31</cn>
+                  </apply>
+               </apply>
+               <apply>
+                  <minus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="percentage">3.1</cn>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="percentage">0.31</cn>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>k_minus11</ci>
+            <apply>
+               <times/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">10</cn>
+               <apply>
+                  <ln/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+               </apply>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="first_order_rate_constant">1</cn>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>k12</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.1</cn>
+                  <ci>k_minus12</ci>
+                  <apply>
+                     <minus/>
+                     <ci>x13</ci>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="percentage">0.31</cn>
+                  </apply>
+               </apply>
+               <apply>
+                  <minus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="percentage">3.1</cn>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="percentage">0.31</cn>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>k_minus12</ci>
+            <apply>
+               <times/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">10</cn>
+               <apply>
+                  <ln/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+               </apply>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="first_order_rate_constant">1</cn>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>k13</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <divide/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4</cn>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">96</cn>
+               </apply>
+               <ci>k_minus13</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>k13b</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <divide/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">40</cn>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">60</cn>
+                  </apply>
+                  <apply>
+                     <divide/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4</cn>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">96</cn>
+                  </apply>
+               </apply>
+               <ci>k_minus13</ci>
+               <ci>effect</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>k14</ci>
+            <apply>
+               <divide/>
+               <ci>k_minus14</ci>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">96</cn>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>effect</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.2</cn>
+                     <ci>x17</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.8</cn>
+                     <ci>x19</ci>
+                  </apply>
+               </apply>
+               <ci>APequil</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <connection>
+      <map_components component_1="x1" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="x2" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="x3" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="x4" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="x5" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="x6" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="x7" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="x8" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="x9" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="x10" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="x11" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="x12" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="x13" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="x14" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="x15" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="x16" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="x17" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="x18" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="x19" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="x20" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="x21" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="x2" component_2="x1"/>
+      <map_variables variable_1="x1" variable_2="x1"/>
+   </connection>
+   <connection>
+      <map_components component_1="x2" component_2="x3"/>
+      <map_variables variable_1="x2" variable_2="x2"/>
+      <map_variables variable_1="x3" variable_2="x3"/>
+   </connection>
+   <connection>
+      <map_components component_1="x2" component_2="x5"/>
+      <map_variables variable_1="x5" variable_2="x5"/>
+   </connection>
+   <connection>
+      <map_components component_1="x2" component_2="x6"/>
+      <map_variables variable_1="x6" variable_2="x6"/>
+      <map_variables variable_1="x2" variable_2="x2"/>
+   </connection>
+   <connection>
+      <map_components component_1="x3" component_2="x1"/>
+      <map_variables variable_1="x1" variable_2="x1"/>
+   </connection>
+   <connection>
+      <map_components component_1="x4" component_2="x1"/>
+      <map_variables variable_1="x1" variable_2="x1"/>
+   </connection>
+   <connection>
+      <map_components component_1="x5" component_2="x3"/>
+      <map_variables variable_1="x3" variable_2="x3"/>
+   </connection>
+   <connection>
+      <map_components component_1="x4" component_2="x5"/>
+      <map_variables variable_1="x4" variable_2="x4"/>
+      <map_variables variable_1="x5" variable_2="x5"/>
+   </connection>
+   <connection>
+      <map_components component_1="x4" component_2="x7"/>
+      <map_variables variable_1="x4" variable_2="x4"/>
+      <map_variables variable_1="x7" variable_2="x7"/>
+   </connection>
+   <connection>
+      <map_components component_1="x5" component_2="x1"/>
+      <map_variables variable_1="x1" variable_2="x1"/>
+   </connection>
+   <connection>
+      <map_components component_1="x8" component_2="x5"/>
+      <map_variables variable_1="x8" variable_2="x8"/>
+      <map_variables variable_1="x5" variable_2="x5"/>
+   </connection>
+   <connection>
+      <map_components component_1="x6" component_2="x7"/>
+      <map_variables variable_1="x7" variable_2="x7"/>
+   </connection>
+   <connection>
+      <map_components component_1="x8" component_2="x6"/>
+      <map_variables variable_1="x8" variable_2="x8"/>
+   </connection>
+   <connection>
+      <map_components component_1="x9" component_2="x10"/>
+      <map_variables variable_1="x9" variable_2="x9"/>
+      <map_variables variable_1="x10" variable_2="x10"/>
+   </connection>
+   <connection>
+      <map_components component_1="x4" component_2="x9"/>
+      <map_variables variable_1="x4" variable_2="x4"/>
+   </connection>
+   <connection>
+      <map_components component_1="x9" component_2="x5"/>
+      <map_variables variable_1="x5" variable_2="x5"/>
+   </connection>
+   <connection>
+      <map_components component_1="x4" component_2="x10"/>
+      <map_variables variable_1="x4" variable_2="x4"/>
+   </connection>
+   <connection>
+      <map_components component_1="x10" component_2="x5"/>
+      <map_variables variable_1="x5" variable_2="x5"/>
+   </connection>
+   <connection>
+      <map_components component_1="x11" component_2="x10"/>
+      <map_variables variable_1="x11" variable_2="x11"/>
+      <map_variables variable_1="x10" variable_2="x10"/>
+   </connection>
+   <connection>
+      <map_components component_1="x12" component_2="x10"/>
+      <map_variables variable_1="x12" variable_2="x12"/>
+      <map_variables variable_1="x10" variable_2="x10"/>
+   </connection>
+   <connection>
+      <map_components component_1="x11" component_2="x12"/>
+      <map_variables variable_1="x11" variable_2="x11"/>
+      <map_variables variable_1="x12" variable_2="x12"/>
+   </connection>
+   <connection>
+      <map_components component_1="x13" component_2="x14"/>
+      <map_variables variable_1="x13" variable_2="x13"/>
+      <map_variables variable_1="x14" variable_2="x14"/>
+   </connection>
+   <connection>
+      <map_components component_1="x15" component_2="x13"/>
+      <map_variables variable_1="x15" variable_2="x15"/>
+      <map_variables variable_1="x13" variable_2="x13"/>
+   </connection>
+   <connection>
+      <map_components component_1="x16" component_2="x17"/>
+      <map_variables variable_1="x16" variable_2="x16"/>
+      <map_variables variable_1="x17" variable_2="x17"/>
+   </connection>
+   <connection>
+      <map_components component_1="x18" component_2="x19"/>
+      <map_variables variable_1="x18" variable_2="x18"/>
+      <map_variables variable_1="x19" variable_2="x19"/>
+   </connection>
+   <connection>
+      <map_components component_1="x20" component_2="x21"/>
+      <map_variables variable_1="x20" variable_2="x20"/>
+      <map_variables variable_1="x21" variable_2="x21"/>
+   </connection>
+   <connection>
+      <map_components component_1="x2" component_2="reaction_constants"/>
+      <map_variables variable_1="k1" variable_2="k1"/>
+      <map_variables variable_1="k_minus1" variable_2="k_minus1"/>
+      <map_variables variable_1="k_minus3" variable_2="k_minus3"/>
+      <map_variables variable_1="k4" variable_2="k4"/>
+      <map_variables variable_1="k_minus4" variable_2="k_minus4"/>
+      <map_variables variable_1="PTP" variable_2="PTP"/>
+   </connection>
+   <connection>
+      <map_components component_1="x3" component_2="reaction_constants"/>
+      <map_variables variable_1="k1" variable_2="k1"/>
+      <map_variables variable_1="k_minus1" variable_2="k_minus1"/>
+      <map_variables variable_1="k3" variable_2="k3"/>
+   </connection>
+   <connection>
+      <map_components component_1="x4" component_2="reaction_constants"/>
+      <map_variables variable_1="k2" variable_2="k2"/>
+      <map_variables variable_1="k_minus2" variable_2="k_minus2"/>
+      <map_variables variable_1="k_minus4b" variable_2="k_minus4b"/>
+      <map_variables variable_1="k4b" variable_2="k4b"/>
+   </connection>
+   <connection>
+      <map_components component_1="x5" component_2="reaction_constants"/>
+      <map_variables variable_1="k2" variable_2="k2"/>
+      <map_variables variable_1="k_minus2" variable_2="k_minus2"/>
+      <map_variables variable_1="k3" variable_2="k3"/>
+      <map_variables variable_1="k_minus3" variable_2="k_minus3"/>
+      <map_variables variable_1="k4b" variable_2="k4b"/>
+      <map_variables variable_1="k_minus4b" variable_2="k_minus4b"/>
+      <map_variables variable_1="PTP" variable_2="PTP"/>
+   </connection>
+   <connection>
+      <map_components component_1="x6" component_2="reaction_constants"/>
+      <map_variables variable_1="k4" variable_2="k4"/>
+      <map_variables variable_1="k_minus4" variable_2="k_minus4"/>
+      <map_variables variable_1="k5" variable_2="k5"/>
+      <map_variables variable_1="k_minus5" variable_2="k_minus5"/>
+      <map_variables variable_1="k6" variable_2="k6"/>
+      <map_variables variable_1="PTP" variable_2="PTP"/>
+      <map_variables variable_1="x6" variable_2="x6"/>
+   </connection>
+   <connection>
+      <map_components component_1="x7" component_2="reaction_constants"/>
+      <map_variables variable_1="k4b" variable_2="k4b"/>
+      <map_variables variable_1="k_minus4b" variable_2="k_minus4b"/>
+      <map_variables variable_1="k6" variable_2="k6"/>
+      <map_variables variable_1="PTP" variable_2="PTP"/>
+      <map_variables variable_1="x7" variable_2="x7"/>
+   </connection>
+   <connection>
+      <map_components component_1="x8" component_2="reaction_constants"/>
+      <map_variables variable_1="k4b" variable_2="k4b"/>
+      <map_variables variable_1="k_minus4b" variable_2="k_minus4b"/>
+      <map_variables variable_1="k6" variable_2="k6"/>
+      <map_variables variable_1="PTP" variable_2="PTP"/>
+      <map_variables variable_1="x8" variable_2="x8"/>
+   </connection>
+   <connection>
+      <map_components component_1="x9" component_2="reaction_constants"/>
+      <map_variables variable_1="k7" variable_2="k7"/>
+      <map_variables variable_1="k_minus7" variable_2="k_minus7"/>
+      <map_variables variable_1="IRp" variable_2="IRp"/>
+      <map_variables variable_1="PTP" variable_2="PTP"/>
+   </connection>
+   <connection>
+      <map_components component_1="x10" component_2="reaction_constants"/>
+      <map_variables variable_1="k7" variable_2="k7"/>
+      <map_variables variable_1="k_minus7" variable_2="k_minus7"/>
+      <map_variables variable_1="k8" variable_2="k8"/>
+      <map_variables variable_1="k_minus8" variable_2="k_minus8"/>
+      <map_variables variable_1="IRp" variable_2="IRp"/>
+      <map_variables variable_1="PTP" variable_2="PTP"/>
+   </connection>
+   <connection>
+      <map_components component_1="x11" component_2="reaction_constants"/>
+      <map_variables variable_1="k8" variable_2="k8"/>
+      <map_variables variable_1="k_minus8" variable_2="k_minus8"/>
+   </connection>
+   <connection>
+      <map_components component_1="x12" component_2="reaction_constants"/>
+      <map_variables variable_1="k8" variable_2="k8"/>
+      <map_variables variable_1="k_minus8" variable_2="k_minus8"/>
+      <map_variables variable_1="x12" variable_2="x12"/>
+   </connection>
+   <connection>
+      <map_components component_1="x13" component_2="reaction_constants"/>
+      <map_variables variable_1="k9" variable_2="k9"/>
+      <map_variables variable_1="k_minus9" variable_2="k_minus9"/>
+      <map_variables variable_1="k10" variable_2="k10"/>
+      <map_variables variable_1="k_minus10" variable_2="k_minus10"/>
+      <map_variables variable_1="PTEN" variable_2="PTEN"/>
+      <map_variables variable_1="SHIP" variable_2="SHIP"/>
+      <map_variables variable_1="x13" variable_2="x13"/>
+   </connection>
+   <connection>
+      <map_components component_1="x14" component_2="reaction_constants"/>
+      <map_variables variable_1="k9" variable_2="k9"/>
+      <map_variables variable_1="k_minus9" variable_2="k_minus9"/>
+      <map_variables variable_1="PTEN" variable_2="PTEN"/>
+   </connection>
+   <connection>
+      <map_components component_1="x15" component_2="reaction_constants"/>
+      <map_variables variable_1="k10" variable_2="k10"/>
+      <map_variables variable_1="k_minus10" variable_2="k_minus10"/>
+      <map_variables variable_1="SHIP" variable_2="SHIP"/>
+   </connection>
+   <connection>
+      <map_components component_1="x16" component_2="reaction_constants"/>
+      <map_variables variable_1="k11" variable_2="k11"/>
+      <map_variables variable_1="k_minus11" variable_2="k_minus11"/>
+   </connection>
+   <connection>
+      <map_components component_1="x17" component_2="reaction_constants"/>
+      <map_variables variable_1="k11" variable_2="k11"/>
+      <map_variables variable_1="k_minus11" variable_2="k_minus11"/>
+      <map_variables variable_1="x17" variable_2="x17"/>
+   </connection>
+   <connection>
+      <map_components component_1="x18" component_2="reaction_constants"/>
+      <map_variables variable_1="k12" variable_2="k12"/>
+      <map_variables variable_1="k_minus12" variable_2="k_minus12"/>
+   </connection>
+   <connection>
+      <map_components component_1="x19" component_2="reaction_constants"/>
+      <map_variables variable_1="k12" variable_2="k12"/>
+      <map_variables variable_1="k_minus12" variable_2="k_minus12"/>
+      <map_variables variable_1="x19" variable_2="x19"/>
+   </connection>
+   <connection>
+      <map_components component_1="x20" component_2="reaction_constants"/>
+      <map_variables variable_1="k13" variable_2="k13"/>
+      <map_variables variable_1="k_minus13" variable_2="k_minus13"/>
+      <map_variables variable_1="k13b" variable_2="k13b"/>
+      <map_variables variable_1="k14" variable_2="k14"/>
+      <map_variables variable_1="k_minus14" variable_2="k_minus14"/>
+   </connection>
+   <connection>
+      <map_components component_1="x21" component_2="reaction_constants"/>
+      <map_variables variable_1="k13" variable_2="k13"/>
+      <map_variables variable_1="k_minus13" variable_2="k_minus13"/>
+      <map_variables variable_1="k13b" variable_2="k13b"/>
+   </connection>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:about="#x15"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">x15</title><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">percentage of PI(3,4)P2 out of the total lipid population</alternative></rdf:Description><rdf:Description rdf:about="rdf:#f28485ce-a366-49d0-b659-32e1c05935b4"><JournalArticle xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:about="rdf:#82267b64-a57c-4916-9f5a-7262f78c8c2d"/></JournalArticle><Pubmed_id xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">12376338</Pubmed_id></rdf:Description><rdf:Description rdf:about="#x10"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">x10</title><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">concentration of tyrosine-phosphorylated IRS-1</alternative></rdf:Description><rdf:Description rdf:nodeID="n1"><rdf:first><rdf:Description rdf:nodeID="n2"/></rdf:first><rdf:rest><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/></rdf:rest></rdf:Description><rdf:Description rdf:about="#x21"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">x21</title><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">percentage of cell surface GLUT4</alternative></rdf:Description><rdf:Description rdf:about="#x3"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">x3</title><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">concentration of unphosphorylated once-bound surface receptors</alternative></rdf:Description><rdf:Description rdf:about="rdf:#a5177780-c771-465f-944c-b5e72ec3332f"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2007-06-05T10:44:09+12:00</W3CDTF></rdf:Description><rdf:Description rdf:about="rdf:#0845471f-c397-4dd2-acfe-13147503e398"><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">J</Other><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Michael</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Quon</Family></rdf:Description><rdf:Description rdf:about="rdf:#82267b64-a57c-4916-9f5a-7262f78c8c2d"><volume xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">283</volume><first_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">E1084</first_page><last_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">E1101</last_page><issued xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:about="rdf:#31b0bb35-1dc4-47af-85ab-f7f25b97175c"/></issued><Journal xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:about="rdf:#00bce995-bc27-4a50-952b-aa66fdf620c9"/></Journal><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">A mathematical model of metabolic insulin signaling pathways</title><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#4ed87e60-9f47-4506-b77f-7416faaa46a6"/></creator></rdf:Description><rdf:Description rdf:about="#x7"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">x7</title><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">concentration of phosphorylated twice-bound intracellular receptors</alternative></rdf:Description><rdf:Description rdf:about="#x14"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">x14</title><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">percentage of PI(4,5)P2 out of the total lipid population</alternative></rdf:Description><rdf:Description rdf:about="rdf:#02916c0c-8480-4b3c-9b34-166bb293e1c8"><rdf:value><rdf:Description rdf:about="rdf:#39254427-3b3f-462b-a6bc-d68f970e122e"/></rdf:value><subject_type xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">keyword</subject_type></rdf:Description><rdf:Description rdf:about="#x16"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">x16</title><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">percentage of unactivated Akt</alternative></rdf:Description><rdf:Description rdf:about="#x19"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">x19</title><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">percentage of activated PKC-zeta</alternative></rdf:Description><rdf:Description rdf:nodeID="n2"><maximumStepSize xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">0.01</maximumStepSize></rdf:Description><rdf:Description rdf:about="#x17"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">x17</title><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">percentage of activated Akt</alternative></rdf:Description><rdf:Description rdf:about="rdf:#00bce995-bc27-4a50-952b-aa66fdf620c9"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">American Journal of Physiology</title></rdf:Description><rdf:Description rdf:about="rdf:#e4e87078-2949-4439-a682-d98dc488da00"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2007-05-30T00:00:00+00:00</W3CDTF></rdf:Description><rdf:Description rdf:about="rdf:#4ed87e60-9f47-4506-b77f-7416faaa46a6"><rdf:_2><rdf:Description rdf:about="rdf:#14facd09-3be0-403d-b2ea-4259fe4ebe90"/></rdf:_2><rdf:_3><rdf:Description rdf:about="rdf:#b975b2c0-b584-4bbc-8022-c78ff3c33149"/></rdf:_3><rdf:_1><rdf:Description rdf:about="rdf:#8b458e20-b12c-4aed-9f1e-6d74baa3de21"/></rdf:_1><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq"/></rdf:type></rdf:Description><rdf:Description rdf:about="rdf:#d68b7f2d-4b9d-4eb6-964d-5541ce454606"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#8dd3109b-d246-41af-9b8d-26e5e1a5d7fd"/></N></rdf:Description><rdf:Description rdf:about="rdf:#1661ad6f-7272-4cfe-8d42-ce4453e3f14b"><Orgname xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">The University of Auckland</Orgname><Orgunit xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Auckland Bioengineering Institute</Orgunit></rdf:Description><rdf:Description rdf:about="#x11"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">x11</title><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">concentration of unactivated PI 3-kinase</alternative></rdf:Description><rdf:Description rdf:nodeID="n3"><boundIntervals xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n1"/></boundIntervals></rdf:Description><rdf:Description rdf:about="#x20"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">x20</title><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">percentage of intracellular GLUT4</alternative></rdf:Description><rdf:Description rdf:about="#x6"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">x6</title><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">concentration of unbound unphosphorylated intracellular receptors</alternative></rdf:Description><rdf:Description rdf:about="rdf:#747105d6-d0f4-4660-8293-4ab80c2e58f6"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Arthur</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Sherman</Family></rdf:Description><rdf:Description rdf:about="rdf:#f52146fb-7c25-48d3-a442-9d213013e363"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#f7a14255-1db4-448a-9d0c-859245f3c1e9"/></N><ORG xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#1661ad6f-7272-4cfe-8d42-ce4453e3f14b"/></ORG><EMAIL xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#a59cdc74-38da-4737-94e7-2f225fec7e1c"/></EMAIL></rdf:Description><rdf:Description rdf:about="#x13"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">x13</title><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">percentage of PI(3,4,5)P3 out of the total lipid population</alternative></rdf:Description><rdf:Description rdf:about="#x4"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">x4</title><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">concentration of phosphorylated twice-bound surface receptors</alternative></rdf:Description><rdf:Description rdf:about="rdf:#a59cdc74-38da-4737-94e7-2f225fec7e1c"><rdf:type><rdf:Description rdf:about="http://imc.org/vCard/3.0#internet"/></rdf:type><rdf:value xml:lang="en">c.lloyd@auckland.ac.nz</rdf:value></rdf:Description><rdf:Description rdf:about="#x8"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">x8</title><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">concentration of phosphorylated once-bound intracellular receptors</alternative></rdf:Description><rdf:Description rdf:about="#x18"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">x18</title><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">percentage of unactivated PKC-zeta</alternative></rdf:Description><rdf:Description rdf:about="rdf:#b975b2c0-b584-4bbc-8022-c78ff3c33149"><rdf:type><rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/></rdf:type><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#0845471f-c397-4dd2-acfe-13147503e398"/></N></rdf:Description><rdf:Description rdf:about="rdf:#8b458e20-b12c-4aed-9f1e-6d74baa3de21"><rdf:type><rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/></rdf:type><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#c0501950-1da1-44d4-8ae8-dc39ee16cf8c"/></N></rdf:Description><rdf:Description rdf:about="#sedaghat_2002"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">
+        Sedaghat, Sherman and Quon's 2002 mathematical model of metabolic insulin signaling pathways.
+      </title><cmeta:comment><rdf:Description rdf:about="rdf:#201846e9-20ac-45cf-9102-2dc6a48f0d27"/></cmeta:comment><simulation xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n3"/></simulation><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:about="rdf:#24751578-0ee7-4b03-b9a9-5876aacb39b8"/></reference><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:about="rdf:#f28485ce-a366-49d0-b659-32e1c05935b4"/></reference></rdf:Description><rdf:Description rdf:about="#x9"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">x9</title><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">concentration of unphosphorylated IRS-1</alternative></rdf:Description><rdf:Description rdf:about="#x1"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">x1</title><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">insulin input</alternative></rdf:Description><rdf:Description rdf:about="rdf:#c0501950-1da1-44d4-8ae8-dc39ee16cf8c"><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">R</Other><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Ahmad</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Sedaghat</Family></rdf:Description><rdf:Description rdf:about=""><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">A mathematical model of metabolic insulin signaling pathways (without feedback)</title><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#f52146fb-7c25-48d3-a442-9d213013e363"/></creator><cmeta:comment><rdf:Description rdf:about="rdf:#70967069-ca4f-48c6-afe5-f4cf181ec1e7"/></cmeta:comment><created xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:about="rdf:#e4e87078-2949-4439-a682-d98dc488da00"/></created><publisher xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">The University of Auckland, Bioengineering Institute</publisher><cmeta:modification><rdf:Description rdf:about="rdf:#e11fd06d-02bb-4af6-b39d-6a2c41f0d075"/></cmeta:modification></rdf:Description><rdf:Description rdf:about="rdf:#e11fd06d-02bb-4af6-b39d-6a2c41f0d075"><modified xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:about="rdf:#a5177780-c771-465f-944c-b5e72ec3332f"/></modified><cmeta:modifier><rdf:Description rdf:about="rdf:#d68b7f2d-4b9d-4eb6-964d-5541ce454606"/></cmeta:modifier><rdf:value xml:lang="en">The new version of this model has been re-coded to remove the reaction element and replace it with a simple MathML description of the model reaction kinetics. This is thought to be truer to the original publication, and information regarding the enzyme kinetics etc will later be added to the metadata through use of an ontology.</rdf:value></rdf:Description><rdf:Description rdf:about="#x12"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">x12</title><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">concentration of tyrosine-phosphorylated IRS-1/activated PI 3-kinase complex</alternative></rdf:Description><rdf:Description rdf:about="rdf:#70967069-ca4f-48c6-afe5-f4cf181ec1e7"><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#f69b10c8-be5a-4a17-8cb7-e8a6c932eeae"/></creator></rdf:Description><rdf:Description rdf:about="#x2"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">x2</title><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">concentration of unbound surface insulin receptors</alternative></rdf:Description><rdf:Description rdf:about="#x5"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">x5</title><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">concentration of phosphorylated once-bound surface receptors</alternative></rdf:Description><rdf:Description rdf:about="rdf:#639bd322-a99e-44e7-ba00-006f844511bc"><FN xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Catherine Lloyd</FN></rdf:Description><rdf:Description rdf:about="rdf:#201846e9-20ac-45cf-9102-2dc6a48f0d27"><rdf:value xml:lang="en">This is the CellML descripition of Sedaghat, Sherman and Quon's 2002 
+          mathematical model of metabolic insulin signaling pathways.</rdf:value><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#639bd322-a99e-44e7-ba00-006f844511bc"/></creator></rdf:Description><rdf:Description rdf:about="rdf:#14facd09-3be0-403d-b2ea-4259fe4ebe90"><rdf:type><rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/></rdf:type><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#747105d6-d0f4-4660-8293-4ab80c2e58f6"/></N></rdf:Description><rdf:Description rdf:about="rdf:#31b0bb35-1dc4-47af-85ab-f7f25b97175c"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2002-11</W3CDTF></rdf:Description><rdf:Description rdf:about="rdf:#8dd3109b-d246-41af-9b8d-26e5e1a5d7fd"><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">May</Other><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Catherine</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Lloyd</Family></rdf:Description><rdf:Description rdf:about="rdf:#39254427-3b3f-462b-a6bc-d68f970e122e"><rdf:_2 xml:lang="en">metabolism</rdf:_2><rdf:_3 xml:lang="en">insulin</rdf:_3><rdf:_1 xml:lang="en">signal transduction</rdf:_1><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag"/></rdf:type></rdf:Description><rdf:Description rdf:about="rdf:#24751578-0ee7-4b03-b9a9-5876aacb39b8"><subject xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#02916c0c-8480-4b3c-9b34-166bb293e1c8"/></subject></rdf:Description><rdf:Description rdf:about="rdf:#f7a14255-1db4-448a-9d0c-859245f3c1e9"><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">May</Other><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Catherine</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Lloyd</Family></rdf:Description></rdf:RDF></model>

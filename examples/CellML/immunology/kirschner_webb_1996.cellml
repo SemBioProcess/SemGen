@@ -1,0 +1,792 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--  FILE :  kirschner_model_II_1996.xml
+
+CREATED :  28th March 2004
+
+LAST MODIFIED : 27th April 2005
+
+AUTHOR :  Catherine Lloyd
+          Bioengineering Institute
+          The University of Auckland
+          
+MODEL STATUS :  This model conforms to the CellML 1.0 Specification released on
+10th August 2001, and the 16/1/02 CellML Metadata 1.0 Specification.
+
+DESCRIPTION :  This file contains a CellML description of Kirschner and Webb's 1996 mathematical model for treatment strategy in the chemotherapy of AIDS.
+
+CHANGES:  
+    27/04/2005 - PJV - Added units to cn elements where they were missing.
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="kirschner_webb_1996_version02" name="kirschner_webb_1996_version02">
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>A Model for Treatment Strategy in the Chemotherapy of AIDS</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Bioengineering Institute, University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+            This model contains partial differentials and as such can not currently be solved by existing CellML tools.
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+Optimal treatment strategies for patients with the human immunodeficiency virus (HIV) are needed for improving the effectiveness of chemotherapy for aquired immune deficiency syndrome (AIDS).  AZT is an approved method of chemotherapy for the treatment of HIV infection.  The drug works as an inhibitor of the reverse transcriptase enzyme, which catalyses the conversion of RNA to DNA during gene transcription.  HIV is an RNA virus.  The presence of AZT in a cell prevents the viral RNA from being transcribed into DNA, thus halting cellular infection and hence, viral spread.    
+</para>
+
+<para>
+Unfortunately AZT is not a cure for HIV, it only serves to control the virus and prevent its further progress.  This often has the effect of prolonging the life of a HIV positive patient, and sometimes, AZT treatment also makes them less infectious to their sexual partners.  There is debate as to what stage during the disease the drug should be administered (early or late?), and at what dose (high or low?).  Further problems concerning AIDS therapy involve the possibility of negative side effects and the evolution of viral resistance.   
+</para>
+
+<para>
+To date, there have been several mathematical models published which describe the dynamics of HIV and different therapies.  These include:
+</para>
+<itemizedlist>
+  <listitem>
+            <para>
+              <ulink url="${HTML_EXMPL_PERELSON_MODEL}">Perelson <emphasis>et al.</emphasis>, Modelling HIV-1 Dynamics <emphasis>In Vivo</emphasis>, 1996</ulink>
+            </para>
+          </listitem>
+  <listitem>
+            <para>
+              <ulink url="${HTML_EXMPL_MITTLER_MODEL}">Mittler <emphasis>et al.</emphasis>, Influence of Delayed Viral Production on Viral Dynamics in HIV-1 Infected Patients, 1998</ulink>, and</para>
+          </listitem>
+  <listitem>
+            <para>
+              <ulink url="${HTML_EXMPL_WODARZ_MODEL}">Wodarz and Nowak, Modelling the Interaction Between HIV and the Immune System, 1999</ulink>.</para>
+          </listitem>
+</itemizedlist> 
+
+<para>
+In the publication decribed here, Kirschner and Webb present a mathematical model which describes the interactions of chemotherapy with the HIV infected immune system, as shown in <xref linkend="fig_cell_diagram"/> below.  They define three populations:
+</para>
+<itemizedlist>
+  <listitem>
+            <para>1) non-infected CD4<superscript>+</superscript> (helper) T cells;</para>
+          </listitem>         <listitem>
+            <para>2) CD4<superscript>+</superscript> T cells which are infected with HIV; and</para>
+          </listitem> 
+  <listitem>
+            <para>3) the population of HIV that is free living in the blood.</para>
+          </listitem>
+</itemizedlist>
+<para>
+The effects of AZT chemotherapy are also included in the model.  AZT reduces the ability of the virus to infect the CD4<superscript>+</superscript> T cells.
+</para>
+
+<para>
+The 1996 Kirschner and Webb publication present two mathematical models.  In order to provide a mechanistic description of chemotherapy, age structure is incorporated into the infected CD4<superscript>+</superscript> T cells in the second model.  Introducing a time scale allows the model to mimic the effects of several drug doses, administered over a defined time period (e.g. 24 hours).  The models have been described here in CellML, (the raw CellML descriptions of the Kirschner and Webb 1996 models can be downloaded in various formats as described in <xref linkend="sec_download_this_model"/>).     
+</para>
+
+<para>
+The complete original paper reference is cited below:
+</para>
+
+<para>
+<ulink url="http://www.springerlink.com/index/9J1172706112X5P8.pdf">A Model for Treatment Strategy in the Chemotherapy of AIDS</ulink>, Denise Kirschner and G. F. Webb, 1996, <ulink url="http://www.springerlink.com/content/0092-8240">
+            <emphasis>Bulletin of Mathematical Biology</emphasis>
+          </ulink>, 58, 367-390.  <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/8713663">PubMed ID: 8713663</ulink>
+</para>
+
+<informalfigure float="0" id="fig_cell_diagram">
+          <mediaobject>
+            <imageobject>
+              <objectinfo>
+                <title>reaction diagram</title>
+              </objectinfo>
+              <imagedata fileref="kirschner_1996.png"/>
+            </imageobject>
+            <caption>
+Schematic diagram of a mathematical model of the interaction between HIV and the immune system.
+</caption>
+          </mediaobject>
+        </informalfigure>
+
+</sect1>
+</article>
+</documentation>
+  
+  
+  
+  <units name="day">
+    <unit units="second" multiplier="86400.0"/>
+  </units>
+  
+  <units name="first_order_rate_constant">
+    <unit units="day" exponent="-1"/>
+  </units>
+  
+  <units base_units="yes" name="cells"/>
+  
+  <units base_units="yes" name="free_virus"/>
+  
+  <units name="cells_per_microlitre">
+    <unit units="cells"/>
+    <unit units="litre" prefix="micro" exponent="-1"/>
+  </units> 
+  
+  <units name="free_virus_per_microlitre">
+    <unit units="free_virus"/>
+    <unit units="litre" prefix="micro" exponent="-1"/>
+  </units>  
+  
+  <units name="flux">
+    <unit units="cells"/>
+    <unit units="litre" prefix="micro" exponent="-1"/>
+    <unit units="day" exponent="-1"/>
+  </units>
+  
+  
+  <component name="environment">
+    <variable units="day" public_interface="out" name="time"/>
+  </component>
+  
+  <component cmeta:id="T" name="T">
+    <rdf:RDF>
+      <rdf:Description rdf:about="T">
+        <dc:title>T</dc:title>
+        <dcterms:alternative>non-infected CD4+ T cells</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable units="cells_per_microlitre" public_interface="out" name="T" initial_value="2000.0"/>
+    
+    <variable units="first_order_rate_constant" name="muT" initial_value="0.02"/>
+    <variable units="flux" name="s"/>
+    <variable units="flux" name="kv" initial_value="2.4E-5"/>
+    
+    <variable units="first_order_rate_constant" public_interface="in" name="a"/>
+    <variable units="dimensionless" public_interface="in" name="gamma"/> 
+    <variable units="first_order_rate_constant" public_interface="in" name="a1"/>  
+    <variable units="first_order_rate_constant" public_interface="in" name="r"/>
+    <variable units="free_virus_per_microlitre" public_interface="in" name="V"/>
+    <variable units="cells_per_microlitre" public_interface="in" name="Ti"/>
+    <variable units="cells_per_microlitre" public_interface="in" name="C"/>
+    <variable units="day" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>T</ci> 
+        </apply>
+        <apply>
+          <plus/>
+          <apply>
+            <minus/>
+            <ci> s </ci>
+            <apply>
+              <plus/>
+              <ci> muT </ci>
+              <apply>
+                <times/>
+                <ci> kv </ci>
+                <ci> T </ci>
+                <ci> V </ci>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> r </ci>
+            <ci> T </ci>
+            <apply>
+              <divide/>
+              <ci> V </ci>
+              <apply>
+                <plus/>
+                <ci> C </ci>
+                <ci> V </ci>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <int/>
+            <bvar>
+              <ci> a </ci>
+            </bvar>
+            <lowlimit>
+              <cn cellml:units="first_order_rate_constant"> 0 </cn>
+            </lowlimit>
+            <uplimit>
+              <ci> a1 </ci>
+            </uplimit>
+            <apply>
+              <times/>
+              <ci> gamma </ci>
+              <ci> Ti </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="s_calculation">
+        <eq/>
+        <ci> s </ci>
+        <apply>
+          <plus/>
+          <cn cellml:units="dimensionless"> 5.0 </cn>
+          <apply>
+            <divide/>
+            <cn cellml:units="dimensionless"> 5.0 </cn>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <ci> V </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>         
+    </math>
+  </component>
+  
+  <component cmeta:id="Ti" name="Ti">
+    <rdf:RDF>
+      <rdf:Description rdf:about="Ti">
+        <dc:title>Ti</dc:title>
+        <dcterms:alternative>infected CD4+ T cells</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable units="cells_per_microlitre" public_interface="out" name="Ti" initial_value="0.0"/>
+    
+    <variable units="first_order_rate_constant" name="muTi" initial_value="0.24"/>
+    <variable units="dimensionless" name="dTi_da"/>
+    
+    <variable units="dimensionless" public_interface="in" name="gamma"/> 
+    <variable units="first_order_rate_constant" public_interface="in" name="a"/> 
+    <variable units="first_order_rate_constant" public_interface="in" name="r"/>
+    <variable units="free_virus_per_microlitre" public_interface="in" name="V"/>
+    <variable units="cells_per_microlitre" public_interface="in" name="C"/>
+    <variable units="day" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <partialdiff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>Ti</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> muTi </ci>
+              <ci> Ti </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> r </ci>
+              <ci> Ti </ci> 
+              <apply>
+                <divide/>
+                <ci> V </ci>
+                <apply>
+                  <plus/>
+                  <ci> C </ci>
+                  <ci> V </ci>
+                </apply>
+              </apply>
+            </apply>
+            <apply>
+              <times/>
+              <ci> gamma </ci>
+              <ci> Ti </ci>
+            </apply>
+            <ci> dTi_da </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply>
+        <eq/> 
+        <apply>
+          <partialdiff/> 
+          <bvar>
+            <ci> a </ci>
+          </bvar> 
+          <ci> Ti </ci> 
+        </apply>
+        <ci> dTi_da </ci>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="V" name="V">
+    <rdf:RDF>
+      <rdf:Description rdf:about="V">
+        <dc:title>V</dc:title>
+        <dcterms:alternative>concentration of virus that is free living in the blood</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable units="free_virus_per_microlitre" public_interface="out" name="V" initial_value="1.0E-3"/>
+    
+    <variable units="free_virus_per_microlitre" name="N" initial_value="1000.0"/>
+    <variable units="flux" name="kT" initial_value="7.4E-4"/>
+    <variable units="first_order_rate_constant" name="gV" initial_value="5.0"/>
+    <variable units="free_virus_per_microlitre" name="b" initial_value="10.0"/>
+    <variable units="day" name="amax" initial_value="12.0"/>
+    
+    <variable units="first_order_rate_constant" public_interface="in" name="a"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="a1"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="r"/>
+    <variable units="cells_per_microlitre" public_interface="in" name="Ti"/>
+    <variable units="cells_per_microlitre" public_interface="in" name="T"/>
+    <variable units="cells_per_microlitre" public_interface="in" name="C"/>
+    <variable units="day" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <partialdiff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>V</ci> 
+        </apply>
+        <apply>
+          <plus/>
+          <apply>
+            <minus/>
+            <apply>
+              <times/>
+              <ci> N </ci>
+              <ci> r </ci>
+              <apply>
+                <divide/>
+                <ci> V </ci>
+                <apply>
+                  <plus/>
+                  <ci> C </ci>
+                  <ci> V </ci>
+                </apply>
+              </apply>
+              <apply>
+                <int/>
+                <bvar>
+                  <ci> a </ci>
+                </bvar>
+                <lowlimit>
+                  <cn cellml:units="first_order_rate_constant"> 0 </cn>
+                </lowlimit>
+                <uplimit>
+                  <ci> amax </ci>
+                </uplimit>
+                <apply>
+                  <ci> Ti </ci>
+                </apply>
+              </apply>
+            </apply>
+            <apply>
+              <times/>
+              <ci> kT </ci>
+              <ci> T </ci> 
+              <ci> V </ci>
+            </apply>
+          </apply> 
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <ci> gV </ci>
+              <ci> V </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <ci> b </ci>
+              <ci> V </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="gamma" name="gamma">
+    <rdf:RDF>
+      <rdf:Description rdf:about="gamma">
+        <dc:title>gamma</dc:title>
+        <dcterms:alternative>treatment function</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable units="dimensionless" public_interface="out" name="gamma"/>
+    
+    <variable units="dimensionless" name="c"/>
+    <variable units="day" name="p" initial_value="0.1"/>
+    <variable units="first_order_rate_constant" name="k" initial_value="16.66"/>
+    
+    <variable units="first_order_rate_constant" public_interface="in" name="a"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="a1"/>
+    <variable units="day" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci>gamma</ci>
+        <piecewise>
+          <piece>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> c </ci>
+                  <ci> p </ci>
+                </apply>
+                <apply>
+                  <minus/> 
+                  <cn cellml:units="dimensionless"> 1.0 </cn>
+                  <apply>
+                    <exp/>
+                    <apply>
+                      <minus/>
+                      <apply>
+                        <times/>
+                        <ci> k </ci>
+                        <ci> p </ci>
+                      </apply>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+              <apply>
+                <exp/>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <ci> k </ci>
+                    <ci> time </ci>
+                  </apply>
+                </apply> 
+              </apply>
+            </apply>
+            <apply>
+              <and/>
+              <apply>
+                <and/>
+                <apply>
+                  <geq/>
+                  <ci> a </ci> 
+                  <cn cellml:units="first_order_rate_constant"> 0.0 </cn>
+                </apply>
+                <apply>
+                  <leq/>
+                  <ci> a </ci> 
+                  <ci> a1 </ci> 
+                </apply>
+              </apply>
+              <apply>
+                <and/>
+                <apply>
+                  <geq/>
+                  <ci> time </ci> 
+                  <cn cellml:units="day"> 0.0 </cn>
+                </apply>
+                <apply>
+                  <leq/>
+                  <ci> time </ci> 
+                  <ci> p </ci> 
+                </apply>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> c </ci>
+                  <ci> p </ci>
+                </apply>
+                <apply>
+                  <minus/> 
+                  <cn cellml:units="dimensionless"> 1.0 </cn>
+                  <apply>
+                    <exp/>
+                    <apply>
+                      <minus/>
+                      <apply>
+                        <times/>
+                        <ci> k </ci>
+                        <ci> p </ci>
+                      </apply>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+              <apply>
+                <exp/>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <ci> k </ci>
+                    <apply>
+                      <minus/>
+                      <ci> time </ci>
+                      <ci> p </ci>
+                    </apply>
+                  </apply>
+                </apply> 
+              </apply>
+            </apply>
+            <apply>
+              <and/>
+              <apply>
+                <and/>
+                <apply>
+                  <geq/>
+                  <ci> a </ci> 
+                  <cn cellml:units="first_order_rate_constant"> 0.0 </cn>
+                </apply>
+                <apply>
+                  <leq/>
+                  <ci> a </ci> 
+                  <ci> a1 </ci> 
+                </apply>
+              </apply>
+              <apply>
+                <and/>
+                <apply>
+                  <geq/>
+                  <ci> time </ci>
+                  <ci> p </ci> 
+                </apply>
+                <apply>
+                  <leq/>
+                  <ci> time </ci>
+                  <apply>
+                    <times/>
+                    <cn cellml:units="dimensionless"> 2.0 </cn> 
+                    <ci> p </ci>
+                  </apply> 
+                </apply>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <gt/>
+              <ci> a </ci> 
+              <ci> a1 </ci> 
+            </apply>
+          </piece>
+        </piecewise>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="model_parameters">  
+    <variable units="first_order_rate_constant" public_interface="out" name="a"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="a1" initial_value="0.25"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="r" initial_value="0.01"/>
+    <variable units="cells_per_microlitre" public_interface="out" name="C" initial_value="100.0"/>
+  </component>
+  
+  
+  <connection>
+    <map_components component_2="environment" component_1="T"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Ti"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="V"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="gamma"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="model_parameters" component_1="T"/>
+    <map_variables variable_2="r" variable_1="r"/>
+    <map_variables variable_2="C" variable_1="C"/>
+    <map_variables variable_2="a" variable_1="a"/>
+    <map_variables variable_2="a1" variable_1="a1"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="gamma" component_1="T"/>
+    <map_variables variable_2="gamma" variable_1="gamma"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V" component_1="T"/>
+    <map_variables variable_2="V" variable_1="V"/>
+    <map_variables variable_2="T" variable_1="T"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Ti" component_1="T"/>
+    <map_variables variable_2="Ti" variable_1="Ti"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="gamma" component_1="Ti"/>
+    <map_variables variable_2="gamma" variable_1="gamma"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V" component_1="Ti"/>
+    <map_variables variable_2="V" variable_1="V"/>
+    <map_variables variable_2="Ti" variable_1="Ti"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="model_parameters" component_1="Ti"/>
+    <map_variables variable_2="r" variable_1="r"/>
+    <map_variables variable_2="C" variable_1="C"/>
+    <map_variables variable_2="a" variable_1="a"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="model_parameters" component_1="V"/>
+    <map_variables variable_2="r" variable_1="r"/>
+    <map_variables variable_2="C" variable_1="C"/>
+    <map_variables variable_2="a" variable_1="a"/>
+    <map_variables variable_2="a1" variable_1="a1"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="model_parameters" component_1="gamma"/>
+    <map_variables variable_2="a" variable_1="a"/>
+    <map_variables variable_2="a1" variable_1="a1"/>
+  </connection>
+  
+
+
+
+
+
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Bag rdf:about="rdf:#7710b36d-c07b-4106-8cfe-822e90cda5a5">
+    <rdf:li>immunology</rdf:li>
+    <rdf:li>pharmacology</rdf:li>
+    <rdf:li>T cell</rdf:li>
+    <rdf:li>hiv-1</rdf:li>
+    <rdf:li>t cell</rdf:li>
+    <rdf:li>aids</rdf:li>
+    <rdf:li>AIDS</rdf:li>
+  </rdf:Bag>
+  <rdf:Seq rdf:about="rdf:#citationAuthorsSeq">
+    <rdf:li rdf:resource="rdf:#author1Vcard"/>
+    <rdf:li rdf:resource="rdf:#author2Vcard"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#author2VcardN">
+    <vCard:Given>G</vCard:Given>
+    <vCard:Family>Webb</vCard:Family>
+    <vCard:Other>F</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#5aa3c3fa-0b92-4931-969f-cd988f6175e0">
+    <dcterms:W3CDTF>2004-03-28</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#32e52df2-f96a-4662-9054-d57a73e0d247">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e0870754-e715-4f71-8d2d-c3d378db198c">
+    <dc:creator rdf:resource="rdf:#679f6a6f-bbda-4a80-8ec8-4b2856518d9c"/>
+    <rdf:value>This is the CellML description of Kirschner and Webb's 1996 mathematical model for treatment strategy in the chemotherapy of AIDS.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author2Vcard">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#author2VcardN"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#18a5200d-e073-49ef-8994-7137391a330a">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>The Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a98aaf32-aa69-48bf-a3ef-0f3456dd2df0">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#255f9904-152e-4b14-9c45-a54115ae5f95">
+    <dc:subject rdf:resource="rdf:#353ce3e8-172d-4581-98b5-cd31dda3ad63"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author1VcardN">
+    <vCard:Given>Denise</vCard:Given>
+    <vCard:Family>Kirschner</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#353ce3e8-172d-4581-98b5-cd31dda3ad63">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value rdf:resource="rdf:#7710b36d-c07b-4106-8cfe-822e90cda5a5"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#679f6a6f-bbda-4a80-8ec8-4b2856518d9c">
+    <vCard:FN>Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="#kirschner_webb_1996_version02">
+    <dc:title>
+        Kirschner and Webb's 1996 mathematical model for treatment strategy in the chemotherapy of AIDS.
+      </dc:title>
+    <cmeta:bio_entity>T lymphocyte</cmeta:bio_entity>
+    <cmeta:comment rdf:resource="rdf:#e0870754-e715-4f71-8d2d-c3d378db198c"/>
+    <bqs:reference rdf:resource="rdf:#255f9904-152e-4b14-9c45-a54115ae5f95"/>
+    <bqs:reference rdf:resource="rdf:#f8c2ae2a-f15d-4dc5-ac17-abb4aadfe41b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:publisher>
+        The University of Auckland, Bioengineering Institute
+      </dc:publisher>
+    <dcterms:created rdf:resource="rdf:#5aa3c3fa-0b92-4931-969f-cd988f6175e0"/>
+    <dc:creator rdf:resource="rdf:#608f54cb-10e5-4ea1-a072-c3cafe4e0009"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f8c2ae2a-f15d-4dc5-ac17-abb4aadfe41b">
+    <bqs:Pubmed_id>8713663</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#dce28fbb-5329-4c72-834f-0af2d93e2ca6"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#608f54cb-10e5-4ea1-a072-c3cafe4e0009">
+    <vCard:ORG rdf:resource="rdf:#18a5200d-e073-49ef-8994-7137391a330a"/>
+    <vCard:EMAIL rdf:resource="rdf:#a98aaf32-aa69-48bf-a3ef-0f3456dd2df0"/>
+    <vCard:N rdf:resource="rdf:#32e52df2-f96a-4662-9054-d57a73e0d247"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d4bc17de-f91a-4ba9-a98d-688564906d32">
+    <dcterms:W3CDTF>1996-03-01</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author1Vcard">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#author1VcardN"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#dce28fbb-5329-4c72-834f-0af2d93e2ca6">
+    <dc:creator rdf:resource="rdf:#citationAuthorsSeq"/>
+    <dc:title>A Model For Treatment Strategy In The Chemotherapy Of AIDS</dc:title>
+    <bqs:volume>58</bqs:volume>
+    <bqs:first_page>367</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#34306167-1d71-4a50-a36c-d11e965fbf06"/>
+    <dcterms:issued rdf:resource="rdf:#d4bc17de-f91a-4ba9-a98d-688564906d32"/>
+    <bqs:last_page>390</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#34306167-1d71-4a50-a36c-d11e965fbf06">
+    <dc:title>Bulletin of Mathematical Biology</dc:title>
+  </rdf:Description>
+</rdf:RDF>
+</model>

@@ -1,0 +1,960 @@
+<?xml version="1.0"?>
+
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="schneider_shimayoshi_amano_matsuda_2006" name="schneider_shimayoshi_amano_matsuda_2006">
+
+<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>Mechanism of the Frank-Starling law-- A simulation study with a novel cardiac muscle contraction model that includes titin and tropomyosin</title>
+				<author>
+					<firstname>Geoffrey</firstname>
+					<surname>Nunns</surname>
+					<affiliation>
+						<shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<section id="sec_status">
+				<title>Model Status</title>
+				<para>
+            This model is known to run in both OpenCell and COR. The current model is based on the M1 model from the paper, but other variants are possible via simple modifications. In particular, to recreate the published results found in most of the paper, Ca(2+) concentration was modeled as an explicit function of time, and graphed on a log scale.  
+          </para>
+			</section>
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>
+Abstract: A stretch-induced increase of active tension is one of the most important properties of the heart, known as the Frank-Starling law. Although a variation of myofilament Ca(2+) sensitivity with sarcomere length (SL) change was found to be involved, the underlying molecular mechanisms are not fully clarified. Some recent experimental studies indicate that a reduction of the lattice spacing between thin and thick filaments, through the increase of passive tension caused by the sarcomeric protein titin with an increase in SL within the physiological range, promotes formation of force-generating crossbridges (Xbs). However, the mechanism by which the Xb concentration determines the degree of cooperativity for a given SL has so far evaded experimental elucidation. In this simulation study, a novel, rather simple molecular-based cardiac contraction model, appropriate for integration into a ventricular cell model, was designed, being the first model to introduce experimental data on titin-based radial tension to account for the SL-dependent modulation of the interfilament lattice spacing and to include a conformational change of troponin I (TnI). Simulation results for the isometric twitch contraction time course, the length-tension and the force-[Ca(2+)] relationships are comparable to experimental data. A complete potential Frank-Starling mechanism was analyzed by this simulation study. The SL-dependent modulation of the myosin binding rate through titin's passive tension determines the Xb concentration which then alters the degree of positive cooperativity affecting the rate of the TnI conformation change and causing the Hill coefficient to be SL-dependent.</para>
+				<para>
+The original paper reference is cited below:
+</para>
+				<para>
+Mechanism of the Frank-Starling law-- A simulation study with a novel cardiac muscle contraction model that includes titin and tropomyosin, Natalie S. Schneider, Takao Shimayoshi, Akira Amano, Tetsuya Matsuda, 2006, <emphasis>Journal of Molecular and Cellular Cardiology</emphasis>, 41, 522-536. <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;list_uids=16860336&amp;dopt=Abstract">PubMed ID: 16860336 </ulink>
+				</para>
+				
+				<informalfigure float="0" id="fig_reaction_diagram">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>model diagram</title>
+							</objectinfo>
+							<imagedata fileref="schneider_2006.png"/>
+						</imageobject>
+					</mediaobject>
+					<caption>Schematic diagram for the cardiac contraction model (M1). The model consists of seven different states of an RU (RUNA: not activated RU; RUTCaoff: Ca2+ bound to TnC with TnI still bound to A; RUTCaon: TnI released from A; RUTMon: Tm in the activated conformation; RUAMADPPi: M with a hydrolyzed ATP bound to A of a activated RU = weak Xb; M pocket for Pi closed; RUA_MADPPi: strong Xb, M pocket for Pi open; RUA_MADP: strong Xb, Pi released from the acto-myosin complex). Bold rate parameters are dynamic with koffI, ktmon and k3 changing due to cooperativity and k12 depending on titin-based radial force.</caption>
+				</informalfigure>
+			</sect1>
+		</article>
+	</documentation>
+
+
+   <units name="millisecond">
+      <unit prefix="milli" units="second"/>
+   </units>
+   <units name="mM">
+      <unit prefix="milli" units="mole"/>
+      <unit exponent="-1" units="liter"/>
+   </units>
+   <units name="mM_per_msec">
+      <unit units="mM"/>
+      <unit exponent="-1" units="millisecond"/>
+   </units>
+   <units name="per_msec">
+      <unit exponent="-1" units="millisecond"/>
+   </units>
+   <units name="per_mM_per_msec">
+      <unit exponent="-1" units="mM"/>
+      <unit exponent="-1" units="millisecond"/>
+   </units>
+   <units name="mN_per_mm2">
+      <unit prefix="milli" units="newton"/>
+      <unit exponent="-2" prefix="milli" units="meter"/>
+   </units>
+   <units name="mmeter">
+      <unit prefix="milli" units="meter"/>
+   </units>
+   <units name="mN_per_mm2_per_mM">
+      <unit units="mN_per_mm2"/>
+      <unit exponent="-1" units="mM"/>
+   </units>
+   <component name="environment">
+      <variable cmeta:id="environment_time" name="time" public_interface="out" units="millisecond"/>
+   </component>
+   <component name="parameters">
+      <variable initial_value="9000" name="A_iso" public_interface="out" units="mN_per_mm2_per_mM"/>
+      <variable initial_value="0.2" name="k_off" public_interface="out" units="per_msec"/>
+      <variable initial_value="17.3" name="k_on" public_interface="out" units="per_mM_per_msec"/>
+      <variable initial_value="0.2" name="k_onI" public_interface="out" units="per_msec"/>
+      <variable initial_value="0.075" name="k_offi" public_interface="out" units="per_msec"/>
+      <variable initial_value="-0.32" name="k_OFF" public_interface="out" units="dimensionless"/>
+      <variable initial_value="-1.37" name="k_xboff" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.067" name="k_tmoff" public_interface="out" units="per_msec"/>
+      <variable initial_value="0.014" name="k_tmonc" public_interface="out" units="per_msec"/>
+      <variable initial_value="10" name="k_tmRU" public_interface="out" units="dimensionless"/>
+      <variable initial_value="-1.86" name="k_tmxb" public_interface="out" units="dimensionless"/>
+      <variable initial_value="2" name="k_12" public_interface="out" units="per_mM_per_msec"/>
+      <variable initial_value="0.6" name="k_minus12" public_interface="out" units="per_msec"/>
+      <variable initial_value="0.2" name="k_Titin" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.025" name="k_3c" public_interface="out" units="per_msec"/>
+      <variable initial_value="50" name="k_3f" public_interface="out" units="dimensionless"/>
+      <variable initial_value="-1.23" name="k_3xb" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.008" name="k_minus3" public_interface="out" units="per_msec"/>
+      <variable initial_value="0.077" name="k_4" public_interface="out" units="per_msec"/>
+      <variable initial_value="0.001" name="k_minus4" public_interface="out" units="per_msec"/>
+      <variable initial_value="0.03723" name="k_5" public_interface="out" units="per_msec"/>
+   </component>
+   <component name="active_force">
+      <variable name="F_b" units="mN_per_mm2"/>
+      <variable name="A_iso" public_interface="in" units="mN_per_mm2_per_mM"/>
+      <variable name="RUA_MADPPi" public_interface="in" units="mM"/>
+      <variable name="RUA_MADP" public_interface="in" units="mM"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>F_b</ci>
+            <apply>
+               <times/>
+               <ci>A_iso</ci>
+               <apply>
+                  <plus/>
+                  <ci>RUA_MADPPi</ci>
+                  <ci>RUA_MADP</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Ca_binding_rate">
+      <variable name="Q_CaB" public_interface="out" units="mM_per_msec"/>
+      <variable name="RUNA" public_interface="in" units="mM"/>
+      <variable name="Ca" public_interface="in" units="mM"/>
+      <variable name="RUTCa_off" public_interface="in" units="mM"/>
+      <variable name="k_on" public_interface="in" units="per_mM_per_msec"/>
+      <variable name="k_off" public_interface="in" units="per_msec"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>Q_CaB</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k_on</ci>
+                  <ci>RUNA</ci>
+                  <ci>Ca</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_off</ci>
+                  <ci>RUTCa_off</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="TnI_conf_change_rate">
+      <variable name="Q_TCaA" public_interface="out" units="mM_per_msec"/>
+      <variable name="k_offI" units="per_msec"/>
+      <variable name="k_onI" public_interface="in" units="per_msec"/>
+      <variable name="k_offi" public_interface="in" units="per_msec"/>
+      <variable name="k_OFF" public_interface="in" units="dimensionless"/>
+      <variable name="k_xboff" public_interface="in" units="dimensionless"/>
+      <variable name="RUTCa_off" public_interface="in" units="mM"/>
+      <variable name="RUTCa_on" public_interface="in" units="mM"/>
+      <variable name="RUA" public_interface="in" units="mM"/>
+      <variable name="RU_total" public_interface="in" units="mM"/>
+      <variable name="RUA_MADPPi" public_interface="in" units="mM"/>
+      <variable name="RUA_MADP" public_interface="in" units="mM"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>Q_TCaA</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k_onI</ci>
+                  <ci>RUTCa_off</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_offI</ci>
+                  <ci>RUTCa_on</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>k_offI</ci>
+            <apply>
+               <times/>
+               <ci>k_offi</ci>
+               <apply>
+                  <power/>
+                  <apply>
+                     <plus/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                     <apply>
+                        <times/>
+                        <ci>k_OFF</ci>
+                        <apply>
+                           <divide/>
+                           <ci>RUA</ci>
+                           <ci>RU_total</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+               </apply>
+               <apply>
+                  <power/>
+                  <apply>
+                     <plus/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                     <apply>
+                        <times/>
+                        <ci>k_xboff</ci>
+                        <apply>
+                           <divide/>
+                           <apply>
+                              <plus/>
+                              <ci>RUA_MADPPi</ci>
+                              <ci>RUA_MADP</ci>
+                           </apply>
+                           <ci>RU_total</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4.4</cn>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Tm_conf_change_rate">
+      <variable cmeta:id="Tm_conf_change_rate_Q_TMA" name="Q_TMA" public_interface="out" units="mM_per_msec"/>
+      <variable name="k_tmon" units="per_msec"/>
+      <variable name="k_tmoff" public_interface="in" units="per_msec"/>
+      <variable name="k_tmRU" public_interface="in" units="dimensionless"/>
+      <variable name="k_tmonc" public_interface="in" units="per_msec"/>
+      <variable name="k_tmxb" public_interface="in" units="dimensionless"/>
+      <variable name="RUTM_on" public_interface="in" units="mM"/>
+      <variable name="RUTCa_on" public_interface="in" units="mM"/>
+      <variable name="RU_total" public_interface="in" units="mM"/>
+      <variable name="RUA_MADPPi" public_interface="in" units="mM"/>
+      <variable name="RUA_MADP" public_interface="in" units="mM"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>Q_TMA</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k_tmon</ci>
+                  <ci>RUTCa_on</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_tmoff</ci>
+                  <ci>RUTM_on</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>k_tmon</ci>
+            <apply>
+               <times/>
+               <ci>k_tmonc</ci>
+               <apply>
+                  <divide/>
+                  <ci>RUTCa_on</ci>
+                  <ci>RU_total</ci>
+               </apply>
+               <apply>
+                  <power/>
+                  <apply>
+                     <plus/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                     <apply>
+                        <times/>
+                        <ci>k_tmRU</ci>
+                        <apply>
+                           <divide/>
+                           <ci>RUTM_on</ci>
+                           <ci>RU_total</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+               </apply>
+               <apply>
+                  <power/>
+                  <apply>
+                     <plus/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                     <apply>
+                        <times/>
+                        <ci>k_tmxb</ci>
+                        <apply>
+                           <divide/>
+                           <apply>
+                              <plus/>
+                              <ci>RUA_MADPPi</ci>
+                              <ci>RUA_MADP</ci>
+                           </apply>
+                           <ci>RU_total</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="myosin_binding_rate">
+      <variable name="Q_MB" public_interface="out" units="mM_per_msec"/>
+      <variable name="KTitin" private_interface="in" units="dimensionless"/>
+      <variable name="k_Titin" private_interface="out" public_interface="in" units="dimensionless"/>
+      <variable name="L" private_interface="out" public_interface="in" units="mmeter"/>
+      <variable name="L_0" private_interface="out" public_interface="in" units="mmeter"/>
+      <variable name="k_12" public_interface="in" units="per_mM_per_msec"/>
+      <variable name="k_minus12" public_interface="in" units="per_msec"/>
+      <variable name="MADPPi" public_interface="in" units="mM"/>
+      <variable name="RUTM_on_eff" public_interface="in" units="mM"/>
+      <variable name="RUAMADPPi" public_interface="in" units="mM"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>Q_MB</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k_12</ci>
+                  <ci>KTitin</ci>
+                  <ci>MADPPi</ci>
+                  <ci>RUTM_on_eff</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_minus12</ci>
+                  <ci>RUAMADPPi</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="KTitin">
+      <variable name="KTitin" public_interface="out" units="dimensionless"/>
+      <variable name="f_titinNormal" units="dimensionless"/>
+      <variable name="f_titinDamaged" units="dimensionless"/>
+      <variable name="k_Titin" public_interface="in" units="dimensionless"/>
+      <variable name="L" public_interface="in" units="mmeter"/>
+      <variable name="L_0" public_interface="in" units="mmeter"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>f_titinNormal</ci>
+            <apply>
+               <times/>
+               <ci>k_Titin</ci>
+               <apply>
+                  <divide/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">9.9663</cn>
+                  <apply>
+                     <plus/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                     <apply>
+                        <exp/>
+                        <apply>
+                           <divide/>
+                           <apply>
+                              <plus/>
+                              <apply>
+                                 <divide/>
+                                 <ci>L</ci>
+                                 <ci>L_0</ci>
+                              </apply>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1.0639</cn>
+                           </apply>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.0696</cn>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>f_titinDamaged</ci>
+            <apply>
+               <times/>
+               <ci>k_Titin</ci>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <minus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">31</cn>
+                     </apply>
+                     <apply>
+                        <divide/>
+                        <ci>L</ci>
+                        <ci>L_0</ci>
+                     </apply>
+                  </apply>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">40</cn>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>KTitin</ci>
+            <piecewise>
+               <piece>
+                  <ci>f_titinNormal</ci>
+                  <apply>
+                     <leq/>
+                     <ci>L</ci>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mmeter">1.1</cn>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <ci>f_titinDamaged</ci>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   <component name="Force_Generating_rate">
+      <variable name="Q_Fgen" public_interface="out" units="mM_per_msec"/>
+      <variable name="k_3" units="per_msec"/>
+      <variable name="k_3c" public_interface="in" units="per_msec"/>
+      <variable name="k_3f" public_interface="in" units="dimensionless"/>
+      <variable name="k_3xb" public_interface="in" units="dimensionless"/>
+      <variable name="k_minus3" public_interface="in" units="per_msec"/>
+      <variable name="RUAMADPPi" public_interface="in" units="mM"/>
+      <variable name="RUA_MADPPi" public_interface="in" units="mM"/>
+      <variable name="RUTCa_on_eff" public_interface="in" units="mM"/>
+      <variable name="RUTM_on_eff" public_interface="in" units="mM"/>
+      <variable name="RUA_MADP" public_interface="in" units="mM"/>
+      <variable name="RU_total" public_interface="in" units="mM"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>Q_Fgen</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k_3</ci>
+                  <ci>RUAMADPPi</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_minus3</ci>
+                  <ci>RUA_MADPPi</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>k_3</ci>
+            <apply>
+               <times/>
+               <ci>k_3c</ci>
+               <apply>
+                  <power/>
+                  <apply>
+                     <plus/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <ci>k_3f</ci>
+                           <apply>
+                              <plus/>
+                              <ci>RUTCa_on_eff</ci>
+                              <ci>RUTM_on_eff</ci>
+                              <ci>RUAMADPPi</ci>
+                           </apply>
+                        </apply>
+                        <ci>RU_total</ci>
+                     </apply>
+                  </apply>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+               </apply>
+               <apply>
+                  <power/>
+                  <apply>
+                     <plus/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <ci>k_3xb</ci>
+                           <apply>
+                              <plus/>
+                              <ci>RUA_MADPPi</ci>
+                              <ci>RUA_MADP</ci>
+                           </apply>
+                        </apply>
+                        <ci>RU_total</ci>
+                     </apply>
+                  </apply>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Pi_release_rate">
+      <variable name="Q_PiR" public_interface="out" units="mM_per_msec"/>
+      <variable name="k_4" public_interface="in" units="per_msec"/>
+      <variable name="k_minus4" public_interface="in" units="per_msec"/>
+      <variable name="RUA_MADPPi" public_interface="in" units="mM"/>
+      <variable name="RUA_MADP" public_interface="in" units="mM"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>Q_PiR</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k_4</ci>
+                  <ci>RUA_MADPPi</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_minus4</ci>
+                  <ci>RUA_MADP</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="ADP_release_rate">
+      <variable name="Q_ADPR" public_interface="out" units="mM_per_msec"/>
+      <variable name="k_5" public_interface="in" units="per_msec"/>
+      <variable name="RUA_MADP" public_interface="in" units="mM"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>Q_ADPR</ci>
+            <apply>
+               <times/>
+               <ci>k_5</ci>
+               <ci>RUA_MADP</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="RU_species">
+      <variable initial_value="0" name="RUTCa_off" public_interface="out" units="mM"/>
+      <variable cmeta:id="RU_species_RUTCa_on" initial_value="0" name="RUTCa_on" public_interface="out" units="mM"/>
+      <variable cmeta:id="RU_species_RUTM_on" initial_value="0" name="RUTM_on" public_interface="out" units="mM"/>
+      <variable cmeta:id="RU_species_RUAMADPPi" initial_value="0" name="RUAMADPPi" public_interface="out" units="mM"/>
+      <variable initial_value="0" name="RUA_MADPPi" public_interface="out" units="mM"/>
+      <variable cmeta:id="RU_species_RUA_MADP" initial_value="0" name="RUA_MADP" public_interface="out" units="mM"/>
+      <variable initial_value="0.01" name="Ca" public_interface="out" units="mM"/>
+      <variable name="RUNA" public_interface="out" units="mM"/>
+      <variable name="RUA" public_interface="out" units="mM"/>
+      <variable name="RUTM_on_eff" public_interface="out" units="mM"/>
+      <variable name="RUTCa_on_eff" public_interface="out" units="mM"/>
+      <variable initial_value="0.0726" name="RU_total" public_interface="out" units="mM"/>
+      <variable cmeta:id="RU_species_MADPPi" initial_value="0.1375" name="MADPPi" public_interface="out" units="mM"/>
+      <variable name="alpha" private_interface="in" units="dimensionless"/>
+      <variable name="L" private_interface="out" public_interface="in" units="mmeter"/>
+      <variable name="L_0" private_interface="out" public_interface="in" units="mmeter"/>
+      <variable name="time" public_interface="in" units="millisecond"/>
+      <variable name="Q_CaB" public_interface="in" units="mM_per_msec"/>
+      <variable name="Q_TCaA" public_interface="in" units="mM_per_msec"/>
+      <variable name="Q_TMA" public_interface="in" units="mM_per_msec"/>
+      <variable name="Q_MB" public_interface="in" units="mM_per_msec"/>
+      <variable name="Q_ADPR" public_interface="in" units="mM_per_msec"/>
+      <variable name="Q_Fgen" public_interface="in" units="mM_per_msec"/>
+      <variable name="Q_PiR" public_interface="in" units="mM_per_msec"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>RUTCa_off</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>Q_CaB</ci>
+               <ci>Q_TCaA</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>RUTCa_on</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>Q_TCaA</ci>
+               <ci>Q_TMA</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>RUTM_on</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <ci>Q_TMA</ci>
+                  <ci>Q_MB</ci>
+               </apply>
+               <ci>Q_ADPR</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>RUAMADPPi</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>Q_MB</ci>
+               <ci>Q_Fgen</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>RUA_MADPPi</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>Q_Fgen</ci>
+               <ci>Q_PiR</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>RUA_MADP</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>Q_PiR</ci>
+               <ci>Q_ADPR</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Ca</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>Q_CaB</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>RUNA</ci>
+            <apply>
+               <minus/>
+               <ci>RU_total</ci>
+               <apply>
+                  <plus/>
+                  <ci>RUTCa_off</ci>
+                  <ci>RUTCa_on</ci>
+                  <ci>RUTM_on</ci>
+                  <ci>RUAMADPPi</ci>
+                  <ci>RUA_MADPPi</ci>
+                  <ci>RUA_MADP</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>RUA</ci>
+            <apply>
+               <plus/>
+               <ci>RUTCa_on</ci>
+               <ci>RUTM_on</ci>
+               <ci>RUAMADPPi</ci>
+               <ci>RUA_MADPPi</ci>
+               <ci>RUA_MADP</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>RUTM_on_eff</ci>
+            <apply>
+               <times/>
+               <ci>alpha</ci>
+               <ci>RUTM_on</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>RUTCa_on_eff</ci>
+            <apply>
+               <times/>
+               <ci>alpha</ci>
+               <ci>RUTCa_on</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="alpha">
+      <variable name="alpha" public_interface="out" units="dimensionless"/>
+      <variable name="L" public_interface="in" units="mmeter"/>
+      <variable name="L_0" public_interface="in" units="mmeter"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>alpha</ci>
+            <piecewise>
+               <piece>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <times/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1.5</cn>
+                        <apply>
+                           <divide/>
+                           <ci>L</ci>
+                           <ci>L_0</ci>
+                        </apply>
+                     </apply>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.5</cn>
+                  </apply>
+                  <apply>
+                     <lt/>
+                     <ci>L</ci>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mmeter">1</cn>
+                  </apply>
+               </piece>
+               <piece>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <and/>
+                     <apply>
+                        <leq/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mmeter">1</cn>
+                        <ci>L</ci>
+                     </apply>
+                     <apply>
+                        <lt/>
+                        <ci>L</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mmeter">1.1</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <minus/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1.6</cn>
+                        </apply>
+                        <apply>
+                           <divide/>
+                           <ci>L</ci>
+                           <ci>L_0</ci>
+                        </apply>
+                     </apply>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2.76</cn>
+                  </apply>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   <component name="length">
+      <variable name="L" public_interface="out" units="mmeter"/>
+      <variable initial_value="0.001" name="L_0" public_interface="out" units="mmeter"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>L</ci>
+            <ci>L_0</ci>
+         </apply>
+      </math>
+   </component>
+   <group>
+      <relationship_ref relationship="encapsulation"/>
+      <component_ref component="myosin_binding_rate">
+         <component_ref component="KTitin"/>
+      </component_ref>
+      <component_ref component="RU_species">
+         <component_ref component="alpha"/>
+      </component_ref>
+   </group>
+   <connection>
+      <map_components component_1="environment" component_2="RU_species"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="parameters" component_2="active_force"/>
+      <map_variables variable_1="A_iso" variable_2="A_iso"/>
+   </connection>
+   <connection>
+      <map_components component_1="parameters" component_2="Ca_binding_rate"/>
+      <map_variables variable_1="k_on" variable_2="k_on"/>
+      <map_variables variable_1="k_off" variable_2="k_off"/>
+   </connection>
+   <connection>
+      <map_components component_1="parameters" component_2="TnI_conf_change_rate"/>
+      <map_variables variable_1="k_onI" variable_2="k_onI"/>
+      <map_variables variable_1="k_offi" variable_2="k_offi"/>
+      <map_variables variable_1="k_OFF" variable_2="k_OFF"/>
+      <map_variables variable_1="k_xboff" variable_2="k_xboff"/>
+   </connection>
+   <connection>
+      <map_components component_1="parameters" component_2="Tm_conf_change_rate"/>
+      <map_variables variable_1="k_tmoff" variable_2="k_tmoff"/>
+      <map_variables variable_1="k_tmRU" variable_2="k_tmRU"/>
+      <map_variables variable_1="k_tmonc" variable_2="k_tmonc"/>
+      <map_variables variable_1="k_tmxb" variable_2="k_tmxb"/>
+   </connection>
+   <connection>
+      <map_components component_1="parameters" component_2="myosin_binding_rate"/>
+      <map_variables variable_1="k_12" variable_2="k_12"/>
+      <map_variables variable_1="k_minus12" variable_2="k_minus12"/>
+      <map_variables variable_1="k_Titin" variable_2="k_Titin"/>
+   </connection>
+   <connection>
+      <map_components component_1="parameters" component_2="Force_Generating_rate"/>
+      <map_variables variable_1="k_3c" variable_2="k_3c"/>
+      <map_variables variable_1="k_3f" variable_2="k_3f"/>
+      <map_variables variable_1="k_3xb" variable_2="k_3xb"/>
+      <map_variables variable_1="k_minus3" variable_2="k_minus3"/>
+   </connection>
+   <connection>
+      <map_components component_1="parameters" component_2="Pi_release_rate"/>
+      <map_variables variable_1="k_4" variable_2="k_4"/>
+      <map_variables variable_1="k_minus4" variable_2="k_minus4"/>
+   </connection>
+   <connection>
+      <map_components component_1="parameters" component_2="ADP_release_rate"/>
+      <map_variables variable_1="k_5" variable_2="k_5"/>
+   </connection>
+   <connection>
+      <map_components component_1="active_force" component_2="RU_species"/>
+      <map_variables variable_1="RUA_MADPPi" variable_2="RUA_MADPPi"/>
+      <map_variables variable_1="RUA_MADP" variable_2="RUA_MADP"/>
+   </connection>
+   <connection>
+      <map_components component_1="Ca_binding_rate" component_2="RU_species"/>
+      <map_variables variable_1="Q_CaB" variable_2="Q_CaB"/>
+      <map_variables variable_1="RUNA" variable_2="RUNA"/>
+      <map_variables variable_1="Ca" variable_2="Ca"/>
+      <map_variables variable_1="RUTCa_off" variable_2="RUTCa_off"/>
+   </connection>
+   <connection>
+      <map_components component_1="TnI_conf_change_rate" component_2="RU_species"/>
+      <map_variables variable_1="Q_TCaA" variable_2="Q_TCaA"/>
+      <map_variables variable_1="RUTCa_off" variable_2="RUTCa_off"/>
+      <map_variables variable_1="RUTCa_on" variable_2="RUTCa_on"/>
+      <map_variables variable_1="RUA" variable_2="RUA"/>
+      <map_variables variable_1="RU_total" variable_2="RU_total"/>
+      <map_variables variable_1="RUA_MADPPi" variable_2="RUA_MADPPi"/>
+      <map_variables variable_1="RUA_MADP" variable_2="RUA_MADP"/>
+   </connection>
+   <connection>
+      <map_components component_1="Tm_conf_change_rate" component_2="RU_species"/>
+      <map_variables variable_1="Q_TMA" variable_2="Q_TMA"/>
+      <map_variables variable_1="RUTM_on" variable_2="RUTM_on"/>
+      <map_variables variable_1="RUTCa_on" variable_2="RUTCa_on"/>
+      <map_variables variable_1="RU_total" variable_2="RU_total"/>
+      <map_variables variable_1="RUA_MADPPi" variable_2="RUA_MADPPi"/>
+      <map_variables variable_1="RUA_MADP" variable_2="RUA_MADP"/>
+   </connection>
+   <connection>
+      <map_components component_1="myosin_binding_rate" component_2="RU_species"/>
+      <map_variables variable_1="Q_MB" variable_2="Q_MB"/>
+      <map_variables variable_1="RUTM_on_eff" variable_2="RUTM_on_eff"/>
+      <map_variables variable_1="RUAMADPPi" variable_2="RUAMADPPi"/>
+      <map_variables variable_1="MADPPi" variable_2="MADPPi"/>
+   </connection>
+   <connection>
+      <map_components component_1="myosin_binding_rate" component_2="KTitin"/>
+      <map_variables variable_1="KTitin" variable_2="KTitin"/>
+      <map_variables variable_1="k_Titin" variable_2="k_Titin"/>
+      <map_variables variable_1="L" variable_2="L"/>
+      <map_variables variable_1="L_0" variable_2="L_0"/>
+   </connection>
+   <connection>
+      <map_components component_1="Force_Generating_rate" component_2="RU_species"/>
+      <map_variables variable_1="Q_Fgen" variable_2="Q_Fgen"/>
+      <map_variables variable_1="RUTCa_on_eff" variable_2="RUTCa_on_eff"/>
+      <map_variables variable_1="RUTM_on_eff" variable_2="RUTM_on_eff"/>
+      <map_variables variable_1="RUAMADPPi" variable_2="RUAMADPPi"/>
+      <map_variables variable_1="RU_total" variable_2="RU_total"/>
+      <map_variables variable_1="RUA_MADPPi" variable_2="RUA_MADPPi"/>
+      <map_variables variable_1="RUA_MADP" variable_2="RUA_MADP"/>
+   </connection>
+   <connection>
+      <map_components component_1="Pi_release_rate" component_2="RU_species"/>
+      <map_variables variable_1="Q_PiR" variable_2="Q_PiR"/>
+      <map_variables variable_1="RUA_MADPPi" variable_2="RUA_MADPPi"/>
+      <map_variables variable_1="RUA_MADP" variable_2="RUA_MADP"/>
+   </connection>
+   <connection>
+      <map_components component_1="ADP_release_rate" component_2="RU_species"/>
+      <map_variables variable_1="Q_ADPR" variable_2="Q_ADPR"/>
+      <map_variables variable_1="RUA_MADP" variable_2="RUA_MADP"/>
+   </connection>
+   <connection>
+      <map_components component_1="RU_species" component_2="alpha"/>
+      <map_variables variable_1="alpha" variable_2="alpha"/>
+      <map_variables variable_1="L" variable_2="L"/>
+      <map_variables variable_1="L_0" variable_2="L_0"/>
+   </connection>
+   <connection>
+      <map_components component_1="myosin_binding_rate" component_2="length"/>
+      <map_variables variable_1="L" variable_2="L"/>
+      <map_variables variable_1="L_0" variable_2="L_0"/>
+   </connection>
+   <connection>
+      <map_components component_1="RU_species" component_2="length"/>
+      <map_variables variable_1="L" variable_2="L"/>
+      <map_variables variable_1="L_0" variable_2="L_0"/>
+   </connection>
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:about="rdf:#55ce0f30-8d03-4881-a10d-a92b4903d87b"><rdf:type><rdf:Description rdf:about="//www.w3.org/1999/02/22-rdf-syntax-ns#Seq"/></rdf:type><rdf:_3><rdf:Description rdf:about="rdf:#56571cf7-6691-434b-a6b6-9facc5261831"/></rdf:_3><rdf:_2><rdf:Description rdf:about="rdf:#565d3862-1898-4324-9628-08e1c4ec5e01"/></rdf:_2><rdf:_4><rdf:Description rdf:about="rdf:#e8c058c7-bca8-4828-acf7-d8b2ac78c43a"/></rdf:_4><rdf:_1><rdf:Description rdf:about="rdf:#9f62392f-84ea-4eb4-b556-0b5de13767ed"/></rdf:_1></rdf:Description><rdf:Description rdf:nodeID="n1"><pointDensity xmlns="http://www.cellml.org/metadata/simulation/1.0#nonstandard-" xml:lang="en">100000</pointDensity><maximumStepSize xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">.1</maximumStepSize><endingValue xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">200</endingValue></rdf:Description><rdf:Description rdf:nodeID="n2"><rdf:type><rdf:Description rdf:about="//www.w3.org/1999/02/22-rdf-syntax-ns#Bag"/></rdf:type><rdf:_3 xml:lang="en">titin</rdf:_3><rdf:_2 xml:lang="en">cardiac</rdf:_2><rdf:_4 xml:lang="en">tropomyosin</rdf:_4><rdf:_1 xml:lang="en">electrophysiology</rdf:_1></rdf:Description><rdf:Description rdf:about="rdf:#75d46cc5-875b-4176-8e48-678ee3fd513d"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Geoffrey</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Nunns</Family><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Rogan</Other></rdf:Description><rdf:Description rdf:about="rdf:#fabb1d98-babc-469e-8e65-65b0ff514d9b"><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#55ce0f30-8d03-4881-a10d-a92b4903d87b"/></creator><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">Mechanism of the Frank-Starling law-- A simulation study with a novel cardiac muscle contraction model that includes titin and tropomyosin</title><issued xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:about="rdf:#32a5cfd9-72df-482d-9fe4-3e9d7b379052"/></issued><first_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">522</first_page><last_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">536</last_page><volume xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">41</volume><Journal xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:about="rdf:#0e8c7f06-364c-4397-be49-7bb93c07e435"/></Journal></rdf:Description><rdf:Description rdf:about="rdf:#c1850d66-351f-47b1-a6b0-c8696e29b30d"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Takao</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Shimayoshi</Family><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en"></Other></rdf:Description><rdf:Description rdf:about="#schneider_shimayoshi_amano_matsuda_2006"><cmeta:comment><rdf:Description rdf:about="rdf:#a4f7fba2-d7ab-42b7-8666-586bb10d48c3"/></cmeta:comment><simulation xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n3"/></simulation><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n4"/></reference><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:about="rdf:#1a7784ed-f764-4947-aa9c-a811669fc9f1"/></reference></rdf:Description><rdf:Description rdf:about="rdf:#954938f8-595b-406d-b80f-6e6769c42615"><FN xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Geoff Nunns</FN></rdf:Description><rdf:Description rdf:about="rdf:#56571cf7-6691-434b-a6b6-9facc5261831"><rdf:type><rdf:Description rdf:about="//www.cellml.org/bqs/1.0#Person"/></rdf:type><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#fa99492e-f80a-41a1-b4d8-7a3b09cf35a0"/></N></rdf:Description><rdf:Description rdf:about="rdf:#e8c058c7-bca8-4828-acf7-d8b2ac78c43a"><rdf:type><rdf:Description rdf:about="//www.cellml.org/bqs/1.0#Person"/></rdf:type><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#c38b8a61-a4c4-49c8-b319-af3b16afad61"/></N></rdf:Description><rdf:Description rdf:about="rdf:#1a7784ed-f764-4947-aa9c-a811669fc9f1"><JournalArticle xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:about="rdf:#fabb1d98-babc-469e-8e65-65b0ff514d9b"/></JournalArticle><Pubmed_id xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">16860336</Pubmed_id></rdf:Description><rdf:Description rdf:nodeID="n3"><boundIntervals xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n5"/></boundIntervals></rdf:Description><rdf:Description rdf:about="rdf:#a4f7fba2-d7ab-42b7-8666-586bb10d48c3"><rdf:value xml:lang="en">This model is known to run in both PCEnv and COR. The current model is based on the M1 model from the paper, but other variants are possible via simple modifications. In particular, to recreate the published results found in most of the paper, Ca(2+) concentration was modeled as an explicit function of time, and graphed on a log scale.</rdf:value><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#954938f8-595b-406d-b80f-6e6769c42615"/></creator></rdf:Description><rdf:Description rdf:nodeID="n4"><subject xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n6"/></subject></rdf:Description><rdf:Description rdf:about="rdf:#453b3e52-b83b-43b4-ba8f-0d9766af26b0"><Orgname xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Auckland Bioengineering Institute</Orgname><Orgunit xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">CellML Team</Orgunit></rdf:Description><rdf:Description rdf:about="rdf:#c38b8a61-a4c4-49c8-b319-af3b16afad61"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Tetsuya</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Matsuda</Family></rdf:Description><rdf:Description rdf:about="rdf:#32a5cfd9-72df-482d-9fe4-3e9d7b379052"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2006-06-00 00:00</W3CDTF></rdf:Description><rdf:Description rdf:about="rdf:#565d3862-1898-4324-9628-08e1c4ec5e01"><rdf:type><rdf:Description rdf:about="//www.cellml.org/bqs/1.0#Person"/></rdf:type><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#c1850d66-351f-47b1-a6b0-c8696e29b30d"/></N></rdf:Description><rdf:Description rdf:about="rdf:#f8a02b07-d159-4957-8f17-d54c4d742c99"><rdf:value xml:lang="en">This model is known to run in both PCEnv and COR. The current model is based on the M1 model from the paper, but other variants are possible via simple modifications. In particular, to recreate the published results found in most of the paper, Ca(2+) concentration was modeled as an explicit function of time, and graphed on a log scale.</rdf:value><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#f98c9f15-3400-43af-bde6-d184e5a24063"/></creator></rdf:Description><rdf:Description rdf:about="rdf:#f98c9f15-3400-43af-bde6-d184e5a24063"><FN xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Geoff Nunns</FN></rdf:Description><rdf:Description rdf:about=""><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#0dd5c104-040e-450a-9a58-a8098044f30f"/></creator><cmeta:comment><rdf:Description rdf:about="rdf:#f8a02b07-d159-4957-8f17-d54c4d742c99"/></cmeta:comment><created xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:about="rdf:#61f40e62-74c8-434d-b2b1-ad4f37816b9e"/></created><publisher xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en"></publisher></rdf:Description><rdf:Description rdf:about="rdf:#64f78a04-77c1-4300-a207-29b21b1683f1"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Natalie</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Schneider</Family><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">S</Other></rdf:Description><rdf:Description rdf:about="rdf:#fa99492e-f80a-41a1-b4d8-7a3b09cf35a0"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Akira</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Amano</Family></rdf:Description><rdf:Description rdf:about="rdf:#fd691468-c29d-49b9-a1c3-b02511eb2716"><rdf:type><rdf:Description rdf:about="//imc.org/vCard/3.0#internet"/></rdf:type><rdf:value xml:lang="en">gnunns1@jhem.jhu.edu</rdf:value></rdf:Description><rdf:Description rdf:nodeID="n6"><rdf:value><rdf:Description rdf:nodeID="n2"/></rdf:value><subject_type xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">keyword</subject_type></rdf:Description><rdf:Description rdf:about="rdf:#9f62392f-84ea-4eb4-b556-0b5de13767ed"><rdf:type><rdf:Description rdf:about="//www.cellml.org/bqs/1.0#Person"/></rdf:type><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#64f78a04-77c1-4300-a207-29b21b1683f1"/></N></rdf:Description><rdf:Description rdf:about="rdf:#0e8c7f06-364c-4397-be49-7bb93c07e435"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">Journal of Molecular and Cellular Cardiology</title></rdf:Description><rdf:Description rdf:about="rdf:#0dd5c104-040e-450a-9a58-a8098044f30f"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#75d46cc5-875b-4176-8e48-678ee3fd513d"/></N><ORG xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#453b3e52-b83b-43b4-ba8f-0d9766af26b0"/></ORG><EMAIL xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#fd691468-c29d-49b9-a1c3-b02511eb2716"/></EMAIL></rdf:Description><rdf:Description rdf:about="rdf:#61f40e62-74c8-434d-b2b1-ad4f37816b9e"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2008-07-14T00:00:00+12:00</W3CDTF></rdf:Description><rdf:Description rdf:nodeID="n5"><rdf:rest><rdf:Description rdf:about="//www.w3.org/1999/02/22-rdf-syntax-ns#nil"/></rdf:rest><rdf:first><rdf:Description rdf:nodeID="n1"/></rdf:first></rdf:Description></rdf:RDF></model>

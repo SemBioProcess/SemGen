@@ -1,0 +1,400 @@
+<?xml version="1.0"?>
+<!--
+This CellML file was generated on 20/04/2010 at 2:07:39 at p.m. using:
+
+COR (0.9.31.1371)
+Copyright 2002-2010 Dr Alan Garny
+http://cor.physiol.ox.ac.uk/ - cor@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.cellml.org/
+-->
+
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="lenbury_1991" name="lenbury_1991">
+
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>Modelling fluctuation phenomena in the plasma cortisol secretion system in normal man</title>
+				<author>
+					<firstname>Catherine</firstname>
+					<surname>Lloyd</surname>
+					<affiliation>
+						<shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<section id="sec_status">
+				<title>Model Status</title>
+				<para>
+				This CellML model runs in OpenCell and COR, and the units are consistent. The model is an accurate representation of the published model (equations 1a-1c), and runs to recreate the published results (figure 4). Parameter values were taken from the legend of figure 4.			 
+				</para>
+			</section>
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>
+ABSTRACT: A system of three non-linear differential equations with exponential feedback terms is proposed to model the self-regulating cortisol secretion system and explain the fluctuation patterns observed in clinical data. It is shown that the model exhibits bifurcation and chaos patterns for a certain range of parametric values. This helps us to explain clinical observations and characterize different dynamic behaviors of the self-regulative system.
+</para>
+				<para>
+The original paper reference is cited below:
+</para>
+				<para>
+Modelling fluctuation phenomena in the plasma cortisol secretion system in normal man, Yongwimon Lenbury and Pariwatana Pacheenburawana, 1991, <emphasis>BioSystems</emphasis>
+, 26, 117-125.  <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/1668715">PubMed ID: 1668715</ulink>
+				</para>
+				<informalfigure float="0" id="fig_reaction_diagram">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>model diagram</title>
+							</objectinfo>
+							<imagedata fileref="lenbury_1991.png"/>
+						</imageobject>
+					</mediaobject>
+					<caption>Schematic diagram of the self-regulatory system for corticol secretion.  CRH represents corticotropin-releasing hormone, ACTH is adrenocorticotropic hormone, and F represents cortisol.  The red lines represent positive feedback pathways, while the blue lines represent negative feedback loops.</caption>
+				</informalfigure>
+			</sect1>
+		</article>
+	</documentation>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Bag rdf:about="rdf:#62cd98a3-3340-4195-9187-0ab991c5eab9">
+			<rdf:li>cortisol</rdf:li>
+			<rdf:li>endocrine</rdf:li>
+		</rdf:Bag>
+		<rdf:Seq rdf:about="rdf:#a62cc4b7-2656-49ca-b3a8-cd8b2783b45b">
+			<rdf:li rdf:resource="rdf:#36980057-255c-4731-ae86-6949da25648c"/>
+			<rdf:li rdf:resource="rdf:#8cb807b9-8e10-4539-814a-a15a738f156e"/>
+		</rdf:Seq>
+		<rdf:Description rdf:about="rdf:#29063455-1832-46d4-b041-54fb0ff202a1">
+			<bqs:subject_type xmlns:bqs="http://www.cellml.org/bqs/1.0#">keyword</bqs:subject_type>
+			<rdf:value rdf:resource="rdf:#62cd98a3-3340-4195-9187-0ab991c5eab9"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="">
+			<dc:publisher xmlns:dc="http://purl.org/dc/elements/1.1/">The University of Auckland, Auckland Bioengineering Institute</dc:publisher>
+			<cmeta:comment rdf:resource="rdf:#ae708714-c2a5-4302-a389-36aa59da5edb"/>
+			<dcterms:created xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#a88040a7-0586-4744-a891-a6a2873893b0"/>
+			<dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#74591caf-5409-4edc-81d1-80a7a1f18a0d"/>
+			<cmeta:modification rdf:resource="rdf:#f516b5bf-3c23-488a-ae1a-6450f9d97fba"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#36980057-255c-4731-ae86-6949da25648c">
+			<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+			<vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#71b5215f-1bf2-49e8-9043-fd3ea94c9cfd"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#ff78f070-a0e9-4872-8a79-99039eef3e8a">
+			<vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Catherine</vCard:Given>
+			<vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Lloyd</vCard:Family>
+			<vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">May</vCard:Other>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#82c3bd86-d7d4-4a68-bd66-2db213c2fcee">
+			<dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">1991-00-00 00:00</dcterms:W3CDTF>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#b7ca4040-22ba-495b-a4d6-87a2d4893f07">
+			<dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#a62cc4b7-2656-49ca-b3a8-cd8b2783b45b"/>
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Modelling fluctuation phenomena in the plasma cortisol secretion system in normal man</dc:title>
+			<bqs:volume xmlns:bqs="http://www.cellml.org/bqs/1.0#">26</bqs:volume>
+			<bqs:first_page xmlns:bqs="http://www.cellml.org/bqs/1.0#">117</bqs:first_page>
+			<bqs:Journal xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#037b859a-48f6-49d4-ac7d-15f85debfe49"/>
+			<dcterms:issued xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#82c3bd86-d7d4-4a68-bd66-2db213c2fcee"/>
+			<bqs:last_page xmlns:bqs="http://www.cellml.org/bqs/1.0#">125</bqs:last_page>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#b6ccef2f-ce16-4a60-a236-1922fcec51f4">
+			<vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Pariwatana</vCard:Given>
+			<vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Pacheenburawana</vCard:Family>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#a0c4bc06-c6a0-43e7-b015-b5965f489006">
+			<dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#29063455-1832-46d4-b041-54fb0ff202a1"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#d1da35ad-0973-49e4-b327-ab4f588cf03e">
+			<vCard:FN xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Catherine Lloyd</vCard:FN>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#037b859a-48f6-49d4-ac7d-15f85debfe49">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">BioSystems</dc:title>
+		</rdf:Description>
+		<rdf:Description rdf:about="#z">
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">cortisol</dcterms:alternative>
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">z</dc:title>
+		</rdf:Description>
+		<rdf:Description rdf:about="#x">
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">CRH</dcterms:alternative>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">corticotropin releasing hormone</dcterms:alternative>
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">x</dc:title>
+		</rdf:Description>
+		<rdf:Description rdf:about="#y">
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">ACTH</dcterms:alternative>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">adrenocorticotropic hormone</dcterms:alternative>
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">y</dc:title>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#67b91ecb-8651-4d46-9d51-d1ccbd0b298e">
+			<vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#a3ed552c-c45d-4e7d-b5fa-5f7a82e9458a"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#ae708714-c2a5-4302-a389-36aa59da5edb">
+			<dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#d1da35ad-0973-49e4-b327-ab4f588cf03e"/>
+			<rdf:value>I've checked the model in COR and I've made all the units (except time) dimensionless to be true to the paper.  I've also replaced the stimulus equation with a cosine function.  This is the original stimulus.  The equation I'd included in the previous model was taken from a theoretical study.  I think the CellML model can recreate the original model's results.  I can't be 100% sure though as the figures published in the paper are based on altering the model in a matrix form...  and I can't set those initial conditions because they're not mentioned in the core model.</rdf:value>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#3ba414d7-5552-4862-9ed0-e772fbd49990">
+			<bqs:Pubmed_id xmlns:bqs="http://www.cellml.org/bqs/1.0#">1668715</bqs:Pubmed_id>
+			<bqs:JournalArticle xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#b7ca4040-22ba-495b-a4d6-87a2d4893f07"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#29b17695-5cc3-4243-9300-a5580b13498b">
+			<vCard:FN xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Catherine Lloyd</vCard:FN>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#8cb807b9-8e10-4539-814a-a15a738f156e">
+			<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+			<vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#b6ccef2f-ce16-4a60-a236-1922fcec51f4"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#f516b5bf-3c23-488a-ae1a-6450f9d97fba">
+			<dcterms:modified xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#409942d3-c1e5-45d4-bb47-409d5e2288fb"/>
+			<rdf:value>I've checked the model in COR and I've made all the units (except time) dimensionless to be true to the paper.  I've also replaced the stimulus equation with a cosine function.  This is the original stimulus.  The equation I'd included in the previous model was taken from a theoretical study.  I think the CellML model can recreate the original model's results.  I can't be 100% sure though as the figures published in the paper are based on altering the model in a matrix form...  and I can't set those initial conditions because they're not mentioned in the core model.</rdf:value>
+			<cmeta:modifier rdf:resource="rdf:#67b91ecb-8651-4d46-9d51-d1ccbd0b298e"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#409942d3-c1e5-45d4-bb47-409d5e2288fb">
+			<dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2007-09-03T08:45:42+12:00</dcterms:W3CDTF>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#c89fac29-abea-47e0-a5d8-dacdbf72dc39">
+			<dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#29b17695-5cc3-4243-9300-a5580b13498b"/>
+			<rdf:value>This is the CellML description of Lenbury and Pacheenburawana's 1991 mathematical model of plasma cortisol secretion fluctuations.</rdf:value>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#74591caf-5409-4edc-81d1-80a7a1f18a0d">
+			<vCard:ORG xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#f42dad4f-f453-4ee6-8a00-7569e7849215"/>
+			<vCard:EMAIL xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#9f584c17-e686-4a44-b335-eaa712234bc2"/>
+			<vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#ff78f070-a0e9-4872-8a79-99039eef3e8a"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#9f584c17-e686-4a44-b335-eaa712234bc2">
+			<rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+			<rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#71b5215f-1bf2-49e8-9043-fd3ea94c9cfd">
+			<vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Yongwimon</vCard:Given>
+			<vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Lenbury</vCard:Family>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#f42dad4f-f453-4ee6-8a00-7569e7849215">
+			<vCard:Orgname xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">The University of Auckland</vCard:Orgname>
+			<vCard:Orgunit xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Auckland Bioengineering Institute</vCard:Orgunit>
+		</rdf:Description>
+		<rdf:Description rdf:about="#lenbury_1991">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">
+        Lenbury and Pacheenburawana's 1991 mathematical model of plasma cortisol secretion fluctuations.
+      </dc:title>
+			<cmeta:bio_entity>cortisol</cmeta:bio_entity>
+			<cmeta:comment rdf:resource="rdf:#c89fac29-abea-47e0-a5d8-dacdbf72dc39"/>
+			<bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#3ba414d7-5552-4862-9ed0-e772fbd49990"/>
+			<bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#a0c4bc06-c6a0-43e7-b015-b5965f489006"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#a88040a7-0586-4744-a891-a6a2873893b0">
+			<dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2007-06-18T00:00:00+00:00</dcterms:W3CDTF>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#a3ed552c-c45d-4e7d-b5fa-5f7a82e9458a">
+			<vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Catherine</vCard:Given>
+			<vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Lloyd</vCard:Family>
+			<vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">May</vCard:Other>
+		</rdf:Description>
+	</rdf:RDF>   
+	
+   <units name="per_second">
+      <unit exponent="-1" units="second"/>
+   </units>
+   
+   <component name="environment">
+      <variable cmeta:id="environment_time" name="time" public_interface="out" units="second"/>
+   </component>
+   
+   <component name="x">
+      <variable cmeta:id="x_x" initial_value="1.5" name="x" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.5" name="alpha" units="per_second"/>
+	  <variable initial_value="2" name="omega" units="per_second"/>
+      <variable initial_value="0.8228" name="D" units="per_second"/>
+      <variable initial_value="8.1252" name="a" units="dimensionless"/>
+      <variable name="b" public_interface="in" units="dimensionless"/>
+      <variable name="z" public_interface="in" units="dimensionless"/>
+      <variable name="y" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>x</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>alpha</ci>
+                     <apply>
+                        <exp/>
+                        <apply>
+                           <plus/>
+                           <apply>
+                              <times/>
+                              <ci>a</ci>
+                              <apply>
+                                 <minus/>
+                                 <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                                 <apply>
+                                    <power/>
+                                    <ci>z</ci>
+                                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                                 </apply>
+                              </apply>
+                           </apply>
+                           <apply>
+                              <times/>
+                              <ci>b</ci>
+                              <apply>
+                                 <minus/>
+                                 <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                                 <apply>
+                                    <power/>
+                                    <ci>y</ci>
+                                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                                 </apply>
+                              </apply>
+                           </apply>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>D</ci>
+					 <apply>
+                        <cos/>
+                        <apply>
+                           <times/>
+                           <ci>omega</ci>
+                           <ci>time</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>alpha</ci>
+                  <ci>x</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="y">
+      <variable cmeta:id="y_y" initial_value="0.95" name="y" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.38" name="beta" units="per_second"/>
+      <variable name="b" public_interface="in" units="dimensionless"/>
+      <variable name="z" public_interface="in" units="dimensionless"/>
+      <variable name="x" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>y</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>beta</ci>
+                  <ci>x</ci>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <times/>
+                        <ci>b</ci>
+                        <apply>
+                           <minus/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                           <apply>
+                              <power/>
+                              <ci>z</ci>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                           </apply>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>beta</ci>
+                  <ci>y</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="z">
+      <variable cmeta:id="z_z" initial_value="1.0" name="z" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.6" name="gamma" units="per_second"/>
+      <variable name="y" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>z</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>gamma</ci>
+                  <ci>y</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>gamma</ci>
+                  <ci>z</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="model_constants">
+      <variable initial_value="1.091" name="b" public_interface="out" units="dimensionless"/>
+   </component>
+   <connection>
+      <map_components component_1="x" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="y" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="z" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="x" component_2="y"/>
+      <map_variables variable_1="y" variable_2="y"/>
+      <map_variables variable_1="x" variable_2="x"/>
+   </connection>
+   <connection>
+      <map_components component_1="z" component_2="y"/>
+      <map_variables variable_1="y" variable_2="y"/>
+      <map_variables variable_1="z" variable_2="z"/>
+   </connection>
+   <connection>
+      <map_components component_1="z" component_2="x"/>
+      <map_variables variable_1="z" variable_2="z"/>
+   </connection>
+   <connection>
+      <map_components component_1="x" component_2="model_constants"/>
+      <map_variables variable_1="b" variable_2="b"/>
+   </connection>
+   <connection>
+      <map_components component_1="y" component_2="model_constants"/>
+      <map_variables variable_1="b" variable_2="b"/>
+   </connection>
+</model>

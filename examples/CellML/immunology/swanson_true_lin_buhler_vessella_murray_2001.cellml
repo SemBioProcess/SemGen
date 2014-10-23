@@ -1,0 +1,316 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--  FILE :  swanson_model_2001.xml
+
+CREATED :  6th December 2002
+LAST MODIFIED : 9th April 2003
+AUTHOR :  Catherine Lloyd
+	    Bioengineering Institute
+	    The University of Auckland
+
+MODEL STATUS :  This model conforms to the CellML 1.0 Specification released on
+10th August 2001, and the 16/01/2002 CellML Metadata 1.0 Specification.
+
+DESCRIPTION :  This file contains a CellML description of Swanson et al's 2001 mathematical model for the dynamics of serum prostate-specific antigen as a marker for cancerous growth.
+
+-->
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="swanson_2001" name="swanson_2001">
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>A Model for the Dynamics of Serum Prostate-Specific Antigen as a Marker for Cancerous Growth</title>
+				<author>
+					<firstname>Catherine</firstname>
+					<surname>Lloyd</surname>
+					<affiliation>
+						<shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<section id="sec_status">
+				<title>Model Status</title>
+				<para>This CellML model runs in both OpenCell and COR, the units are consistent and parameter values for constants have been set to LuCaP23.1 from table 1. The general shape of the simulation output seems correct (figure 1), however the scale is not the same as the figure in the published paper.</para>
+			</section>
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>ABSTRACT: Prostate-specific antigen (PSA) is an enzyme produced by both normal and cancerous prostate epithelial cells. Although PSA is the most widely used serum marker to detect and follow patients with prostatic adenocarcinoma, there are certain anomalies in the values of serum levels of PSA that are not understood. We developed a mathematical model for the dynamics of serum levels of PSA as a function of the tumor volume. Our model results show good agreement with experimental observations and provide an explanation for the existence of significant prostatic tumor mass despite a low-serum PSA. This result can be very useful in enhancing the use of serum PSA levels as a marker for cancer growth.</para>
+				
+				<para>The original paper is cited below:</para>
+				<para>A Quantitative Model for the Dynamics of Serum Prostate-Specific Antigen as a Marker for Cancerous Growth, Kristin R. Swanson, Lawrence D. True, Daniel W. Lin, Kent R. Buhler, Robert Vessella, and James D. Murray, 2001, <emphasis>American Journal of Pathology</emphasis>, 158, 2195-2199. <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/11395397">PubMed ID: 11395397</ulink></para>
+
+				<informalfigure float="0" id="fig_cell_diagram">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>reaction schematic for the model</title>
+							</objectinfo>
+							<imagedata fileref="swanson_2001.png"/>
+						</imageobject>
+					</mediaobject>
+					<caption>The mathematical model shown visually in the above diagram can be written in words as: the rate of change of PSA equals the secretion of PSA from benign cells plus the secretion of PSA from cancerous cells minus the loss of PSA from the blood due to its metabolism and clearance. Cancer cells secrete more PSA than do benign cells. The volume of benign cells is assumed to remain constant, and the volume of cancerous cells is dependent on the size of the initial implanted tumour and the rate of tumour growth.</caption>
+				</informalfigure>
+			</sect1>
+		</article>
+	</documentation>
+
+	<!-- units -->
+	<units name="day">
+		<unit units="second" multiplier="86400"/>
+	</units>
+	<units name="per_day">
+		<unit units="day" exponent="-1"/>
+	</units>
+	<units name="mm3">
+		<unit units="metre" prefix="milli" exponent="3"/>
+	</units>
+	<units name="per_mm3">
+		<unit units="mm3" exponent="-1"/>
+	</units>
+	<units name="ng_per_mm3">
+		<unit units="gram" prefix="nano"/>
+		<unit units="mm3" exponent="-1"/>
+	</units>
+	<units name="ng_per_mm3_per_day">
+		<unit units="ng_per_mm3"/>
+		<unit units="day" exponent="-1"/>
+	</units>
+
+
+	<!-- components -->
+	<component name="environment">
+		<variable units="day" public_interface="out" name="time"/>
+	</component>
+	<component name="serum_PSA_dynamics" cmeta:id="serum_PSA_dynamics">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#">
+			<rdf:Description rdf:about="#serum_PSA_dynamics">This component calculates the PSA dynamics</rdf:Description>
+			<rdf:Description rdf:about="#p">Prostate-Specific Antigen (PSA)</rdf:Description>
+		</rdf:RDF>
+		<variable units="ng_per_mm3" name="p" cmeta:id="p" initial_value="0.0"/>
+		<variable units="mm3" name="Vc"/>
+		<variable units="mm3" name="Vo" initial_value="20.0"/>
+		<variable units="mm3" name="Vh" initial_value="0.0"/>
+		<variable units="ng_per_mm3_per_day" name="beta_h" initial_value="0.0"/>
+		<variable units="ng_per_mm3_per_day" name="beta_c" initial_value="1.7210"/>
+		<variable units="per_day" name="gamma" initial_value="1.2896"/>
+		<variable units="per_day" name="rho" initial_value="0.0655"/>
+		<variable units="day" public_interface="in" name="time"/>
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="p_diff_eq">
+				<eq/>
+				<apply>
+					<diff/>
+					<bvar>
+						<ci> time </ci>
+					</bvar>
+					<ci> p </ci>
+				</apply>
+				<apply>
+					<minus/>
+					<apply>
+						<plus/>
+						<apply>
+							<times/>
+							<cn cellml:units="per_mm3">1</cn>
+							<ci> beta_h </ci>
+							<ci> Vh </ci>
+						</apply>
+						<apply>
+							<times/>
+							<cn cellml:units="per_mm3">1</cn>
+							<ci> beta_c </ci>
+							<ci> Vc </ci>
+						</apply>
+					</apply>
+					<apply>
+						<times/>
+						<ci> gamma </ci>
+						<ci> p </ci>
+					</apply>
+				</apply>
+			</apply>
+			<apply id="Vc_calculation">
+				<eq/>
+				<ci> Vc </ci>
+				<apply>
+					<times/>
+					<ci> Vo </ci>
+					<apply>
+						<exp/>
+						<apply>
+							<times/>
+							<ci> rho </ci>
+							<ci> time </ci>
+						</apply>
+					</apply>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+
+	<!-- groups -->
+	<group>
+		<relationship_ref relationship="containment"/>
+		<component_ref component="environment">
+			<component_ref component="serum_PSA_dynamics"/>
+		</component_ref>
+	</group>
+	<connection>
+		<map_components component_2="environment" component_1="serum_PSA_dynamics"/>
+		<map_variables variable_2="time" variable_1="time"/>
+	</connection>
+
+
+	<!-- metadata -->
+	<rdf:RDF>
+		<rdf:Bag rdf:about="rdf:#d2c42a0c-ffa4-41cc-ade0-62f52bd69829">
+			<rdf:li>t lymphocytes</rdf:li>
+			<rdf:li>immunology</rdf:li>
+			<rdf:li>T lymphocytes</rdf:li>
+			<rdf:li>cancer</rdf:li>
+		</rdf:Bag>
+		<rdf:Seq rdf:about="rdf:#a41f0fa4-8eb8-4def-850e-7e4e00e9ad82">
+			<rdf:li rdf:resource="rdf:#4861341d-9059-4a8d-b6b6-dbdad952a768"/>
+			<rdf:li rdf:resource="rdf:#ba8e7016-2d8a-4bd6-b881-11f7ab0b0853"/>
+			<rdf:li rdf:resource="rdf:#d97b0dd8-5c94-4648-a5e3-abcf85b4f95d"/>
+			<rdf:li rdf:resource="rdf:#2d985835-75de-4d02-b6e4-ad1c19c8b1d0"/>
+			<rdf:li rdf:resource="rdf:#22f49f8a-d673-4aca-bc88-866db7c3da8e"/>
+			<rdf:li rdf:resource="rdf:#d4974372-37df-4598-81bc-b364c60f7cb9"/>
+		</rdf:Seq>
+		<rdf:Description rdf:about="#swanson_2001">
+			<dc:title> Swanson et al's 2001 mathematical model for the dynamics of serum prostate-specific antigen as a marker for cancerous growth. </dc:title>
+			<cmeta:bio_entity>T-cells</cmeta:bio_entity>
+			<cmeta:comment rdf:resource="rdf:#dac35146-53e0-4aa8-afc9-588cac763ec6"/>
+			<bqs:reference rdf:resource="rdf:#3b153211-7005-4807-8fed-b06f08f030d9"/>
+			<bqs:reference rdf:resource="rdf:#bbb70c02-9b9d-4d1a-a0db-37d654a8ac9f"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#bbb70c02-9b9d-4d1a-a0db-37d654a8ac9f">
+			<bqs:Pubmed_id>11395397</bqs:Pubmed_id>
+			<bqs:JournalArticle rdf:resource="rdf:#d7d4b927-31aa-4eba-9005-54e5c18d9b67"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#4861341d-9059-4a8d-b6b6-dbdad952a768">
+			<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+			<vCard:N rdf:resource="rdf:#0b3c9345-d561-4407-85c4-e3c359635b31"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#0b3c9345-d561-4407-85c4-e3c359635b31">
+			<vCard:Given>Kristin</vCard:Given>
+			<vCard:Family>Swanson</vCard:Family>
+			<vCard:Other>R</vCard:Other>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#d97b0dd8-5c94-4648-a5e3-abcf85b4f95d">
+			<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+			<vCard:N rdf:resource="rdf:#6d0cd82c-ab89-4e06-8686-21c9a85d9148"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#0b85561e-b432-427c-85cf-49f3f231fd0a">
+			<vCard:Given>James</vCard:Given>
+			<vCard:Family>Murray</vCard:Family>
+			<vCard:Other>D</vCard:Other>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#ba8e7016-2d8a-4bd6-b881-11f7ab0b0853">
+			<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+			<vCard:N rdf:resource="rdf:#7d599c0b-082d-466f-840f-cfc315407b25"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#2d985835-75de-4d02-b6e4-ad1c19c8b1d0">
+			<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+			<vCard:N rdf:resource="rdf:#0d2ad990-f449-4955-ada7-a7f8cb3b73c2"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#d7d4b927-31aa-4eba-9005-54e5c18d9b67">
+			<dc:creator rdf:resource="rdf:#a41f0fa4-8eb8-4def-850e-7e4e00e9ad82"/>
+			<dc:title> A Quantitative Model for the Dynamics of Serum Prostate-Specific Antigen as a Marker for Cancerous Growth </dc:title>
+			<bqs:volume>158</bqs:volume>
+			<bqs:first_page>2195</bqs:first_page>
+			<bqs:Journal rdf:resource="rdf:#40628708-0222-45fc-b9f0-334ce41c1637"/>
+			<dcterms:issued rdf:resource="rdf:#5f089806-04b1-4bd6-bcf4-1ab243fc1c8b"/>
+			<bqs:last_page>2199</bqs:last_page>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#b5001a38-0083-44b1-a840-f915e383d260">
+			<vCard:Given>Robert</vCard:Given>
+			<vCard:Family>Vessella</vCard:Family>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#823c5c3b-4a11-48bc-b4a9-d99fc7a823b9">
+			<vCard:Given>Catherine</vCard:Given>
+			<vCard:Family>Lloyd</vCard:Family>
+			<vCard:Other>May</vCard:Other>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#63426589-2439-4f6b-8362-2f67e7062068">
+			<dcterms:W3CDTF>2003-04-09</dcterms:W3CDTF>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#67585292-4a91-410b-82c8-99e53f1b3f67">
+			<vCard:ORG rdf:resource="rdf:#90fa069e-caab-4cd5-baf7-ba1c45dd92e1"/>
+			<vCard:EMAIL rdf:resource="rdf:#d15ac3d2-d78c-4955-b9ac-a63dfe72c44b"/>
+			<vCard:N rdf:resource="rdf:#823c5c3b-4a11-48bc-b4a9-d99fc7a823b9"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#43d047ae-a359-419b-87c1-cec87dc48770">
+			<vCard:Given>Autumn</vCard:Given>
+			<vCard:Family>Cuellar</vCard:Family>
+			<vCard:Other>A</vCard:Other>
+		</rdf:Description>
+		<rdf:Description rdf:about="">
+			<dc:publisher> The University of Auckland, Auckland Bioengineering Institute </dc:publisher>
+			<cmeta:modification rdf:resource="rdf:#f84d737b-40fd-4a52-b740-30cdce7ab51e"/>
+			<dcterms:created rdf:resource="rdf:#1a60a789-c1fa-4913-ae06-e402c55e3a77"/>
+			<dc:creator rdf:resource="rdf:#67585292-4a91-410b-82c8-99e53f1b3f67"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#6d0cd82c-ab89-4e06-8686-21c9a85d9148">
+			<vCard:Given>Daniel</vCard:Given>
+			<vCard:Family>Lin</vCard:Family>
+			<vCard:Other>W</vCard:Other>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#dc99ad33-46be-429d-8027-d929ddacc83c">
+			<vCard:FN>Catherine Lloyd</vCard:FN>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#3b153211-7005-4807-8fed-b06f08f030d9">
+			<dc:subject rdf:resource="rdf:#eb3b8dd4-6bdf-485c-9464-dd968f1c1d55"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#5f089806-04b1-4bd6-bcf4-1ab243fc1c8b">
+			<dcterms:W3CDTF>2001-06</dcterms:W3CDTF>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#1a60a789-c1fa-4913-ae06-e402c55e3a77">
+			<dcterms:W3CDTF>2002-12-06</dcterms:W3CDTF>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#d15ac3d2-d78c-4955-b9ac-a63dfe72c44b">
+			<rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+			<rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#22f49f8a-d673-4aca-bc88-866db7c3da8e">
+			<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+			<vCard:N rdf:resource="rdf:#b5001a38-0083-44b1-a840-f915e383d260"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#dac35146-53e0-4aa8-afc9-588cac763ec6">
+			<dc:creator rdf:resource="rdf:#dc99ad33-46be-429d-8027-d929ddacc83c"/>
+			<rdf:value> This is the CellML description of Swanson et al's 2001 mathematical model for the dynamics of serum prostate-specific antigen as a marker for cancerous growth. </rdf:value>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#90fa069e-caab-4cd5-baf7-ba1c45dd92e1">
+			<vCard:Orgname>The University of Auckland</vCard:Orgname>
+			<vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#0d2ad990-f449-4955-ada7-a7f8cb3b73c2">
+			<vCard:Given>Kent</vCard:Given>
+			<vCard:Family>Buhler</vCard:Family>
+			<vCard:Other>R</vCard:Other>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#d4974372-37df-4598-81bc-b364c60f7cb9">
+			<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+			<vCard:N rdf:resource="rdf:#0b85561e-b432-427c-85cf-49f3f231fd0a"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#40628708-0222-45fc-b9f0-334ce41c1637">
+			<dc:title>American Journal of Pathology</dc:title>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#eb3b8dd4-6bdf-485c-9464-dd968f1c1d55">
+			<bqs:subject_type>keyword</bqs:subject_type>
+			<rdf:value rdf:resource="rdf:#d2c42a0c-ffa4-41cc-ade0-62f52bd69829"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#d706fe5c-669a-4f66-b94e-7d44e89dcb25">
+			<vCard:N rdf:resource="rdf:#43d047ae-a359-419b-87c1-cec87dc48770"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#f84d737b-40fd-4a52-b740-30cdce7ab51e">
+			<dcterms:modified rdf:resource="rdf:#63426589-2439-4f6b-8362-2f67e7062068"/>
+			<rdf:value> Added publication date information. </rdf:value>
+			<cmeta:modifier rdf:resource="rdf:#d706fe5c-669a-4f66-b94e-7d44e89dcb25"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#7d599c0b-082d-466f-840f-cfc315407b25">
+			<vCard:Given>Lawrence</vCard:Given>
+			<vCard:Family>True</vCard:Family>
+			<vCard:Other>D</vCard:Other>
+		</rdf:Description>
+	</rdf:RDF>
+</model>

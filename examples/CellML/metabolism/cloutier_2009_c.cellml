@@ -1,0 +1,1143 @@
+<?xml version="1.0"?>
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:ns7="http://www.cellml.org/metadata/simulation/1.0#" name="cloutier_2009c" cmeta:id="cloutier_2009c">
+
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>The control systems structures of energy metabolism</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Bioengineering Institute, University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+       This CellML model represents version C of the published model (Table 1.C vOP regulation by ADP/ATP) and runs in both PCEnv and COR to replicate the published results (Figure 2C).  The units have been checked and they are consistent.  We'd like to thank the original model author Mathieu Cloutier for his time spent curating the CellML model to get it matching the published model.
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+  <title>Model Structure</title>
+
+<para>
+ABSTRACT: The biochemical regulation of energy metabolism (EM) allows cells to modulate their energetic output depending on available substrates and requirements. To this end, numerous biomolecular mechanisms exist that allow the sensing of the energetic state and corresponding adjustment of enzymatic reaction rates. This regulation is known to induce dynamic systems properties such as oscillations or perfect adaptation. Although the various mechanisms of energy regulation have been studied in detail from many angles at the experimental and theoretical levels, no framework is available for the systematic analysis of EM from a control systems perspective. In this study, we have used principles well known in control to clarify the basic system features that govern EM. The major result is a subdivision of the biomolecular mechanisms of energy regulation in terms of widely used engineering control mechanisms: proportional, integral, derivative control, and structures: feedback, cascade and feed-forward control. Evidence for each mechanism and structure is demonstrated and the implications for systems properties are shown through simulations. As the equivalence between biological systems and control components presented here is generic, it is also hypothesized that our work could eventually have an applicability that is much wider than the focus of the current study.
+</para>
+
+<informalfigure float="0" id="fig_reaction_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>model diagram</title>
+    </objectinfo>
+    <imagedata fileref="cloutier_2009.png"/>
+  </imageobject>
+</mediaobject>
+<caption>Schematic diagram of a generic model for energy metabolism</caption>
+</informalfigure>
+
+<para>
+The original paper reference is cited below:
+</para>
+
+<para>
+The control systems structures of energy metabolism, Mathieu Cloutier and Peter Wellstead, 2009, <emphasis>Journal of the Royal Society Interface</emphasis>, DOI: 10.1098/rsif.2009.0371.  <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pubmed&amp;cmd=Retrieve&amp;dopt=AbstractPlus&amp;list_uids=19828503&amp;query_hl=1&amp;itool=pubmed_docsum">PubMed ID: 19828503</ulink>
+</para>
+
+</sect1>
+</article>
+</documentation> 
+  
+  <units name="s">
+     <unit units="second"/>
+  </units>
+  
+  <units name="mM">
+    <unit prefix="milli" units="mole"/>
+    <unit exponent="-1" units="litre"/>
+  </units>
+  
+  <units name="per_mM">
+    <unit exponent="-1" units="mM"/>
+  </units>
+
+  <units name="mM_per_s">
+    <unit units="mM"/>
+    <unit exponent="-1" units="second"/>
+  </units>
+  
+  <units name="per_mM_s">
+    <unit exponent="-1" units="mM"/>
+    <unit exponent="-1" units="second"/>
+  </units>
+  
+  <units name="per_s">
+    <unit exponent="-1" units="second"/>
+  </units>
+  
+  <units name="cm_per_mM_s">
+    <unit prefix="centi" units="metre"/>
+    <unit exponent="-1" units="mM"/>
+    <unit exponent="-1" units="second"/>
+  </units>
+  
+  <units name="per_cm">
+    <unit exponent="-1" prefix="centi" units="metre"/>
+  </units>
+  
+  <units name="C_per_mole">
+     <unit units="coulomb"/>
+     <unit exponent="-1" units="mole"/>
+  </units>
+  
+  <units name="L_per_millimole">
+     <unit units="litre"/>
+     <unit exponent="-1" prefix="milli" units="mole"/>
+  </units>
+  
+  <units name="mS_per_cm2">
+     <unit prefix="milli" units="siemens"/>
+     <unit exponent="-2" prefix="centi" units="metre"/>
+  </units>
+  
+  <units name="mV">
+     <unit prefix="milli" units="volt"/>
+  </units>
+  
+  <component name="environment">
+    <variable cmeta:id="environment_time" name="time" public_interface="out" units="s"/>
+  </component>
+  
+  <!-- metabolites -->
+  
+  <component name="F6P">
+    <variable cmeta:id="F6P_F6P" initial_value="0.2" name="F6P" public_interface="out" units="mM"/> 
+    
+    <variable name="V_hk" public_interface="in" units="mM_per_s"/>
+    <variable name="V_pfk" public_interface="in" units="mM_per_s"/>
+	<variable name="V_pfk2" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="1"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> F6P </ci> 
+        </apply>
+        <apply>
+          <minus/> 
+          <ci> V_hk </ci>
+		  <apply>
+            <minus/>
+	        <ci> V_pfk </ci>
+			<ci> V_pfk2 </ci>
+          </apply>
+        </apply>  
+      </apply>
+    </math> 
+  </component>
+  
+  <component name="F26P">
+    <variable cmeta:id="F26P_F26P" initial_value="0.001" name="F26P" public_interface="out" units="mM"/> 
+    
+    <variable name="V_pfk2" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="2"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> F26P </ci> 
+        </apply>
+        <ci> V_pfk2 </ci>
+      </apply>
+    </math> 
+  </component>
+  
+  <component name="GAP">
+    <variable cmeta:id="GAP_GAP" initial_value="0.0405" name="GAP" public_interface="out" units="mM"/> 
+    
+    <variable name="V_pk" public_interface="in" units="mM_per_s"/>
+    <variable name="V_pfk" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="3"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> GAP </ci> 
+        </apply>
+        <apply>
+          <minus/> 
+		  <apply>
+		    <times/>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 2.0 </cn>
+            <ci> V_pfk</ci>    
+          </apply>
+          <ci> V_pk </ci>
+        </apply>  
+      </apply>
+    </math> 
+  </component>
+  
+  <component name="PYR">
+    <variable cmeta:id="PYR_PYR" initial_value="0.1" name="PYR" public_interface="out" units="mM"/> 
+    
+    <variable name="V_pk" public_interface="in" units="mM_per_s"/>
+    <variable name="V_ldh" public_interface="in" units="mM_per_s"/>
+	<variable name="V_op" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="4"> 
+      <apply><eq/><apply><diff/><bvar><ci>time</ci></bvar><ci>PYR</ci></apply><apply><minus/><ci>V_pk</ci><apply><plus/><ci>V_op</ci><ci>V_ldh</ci></apply></apply></apply>
+    </math> 
+  </component>
+  
+  <component name="LAC">
+    <variable cmeta:id="LAC_LAC" initial_value="0.5" name="LAC" public_interface="out" units="mM"/> 
+    
+    <variable name="V_lac" public_interface="in" units="mM_per_s"/>
+    <variable name="V_ldh" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="5"> 
+      <apply><eq/><apply><diff/><bvar><ci>time</ci></bvar><ci>LAC</ci></apply><apply><plus/><apply><times/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2.25</cn><ci>V_ldh</ci></apply><ci>V_lac</ci></apply></apply>
+    </math> 
+  </component>
+  
+  <component name="ATP">
+    <variable cmeta:id="ATP_ATP" initial_value="2.402" name="ATP" public_interface="out" units="mM"/> 
+	
+	<variable name="V_hk" public_interface="in" units="mM_per_s"/>
+    <variable name="V_pfk" public_interface="in" units="mM_per_s"/>
+	<variable name="V_pfk2" public_interface="in" units="mM_per_s"/>
+	<variable name="V_pk" public_interface="in" units="mM_per_s"/>
+    <variable name="V_ATPase" public_interface="in" units="mM_per_s"/>
+	<variable name="V_op" public_interface="in" units="mM_per_s"/>
+	<variable name="V_ck" public_interface="in" units="mM_per_s"/>
+	<variable name="dAMP_dATP" public_interface="in" units="dimensionless"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="6"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> ATP </ci> 
+        </apply>
+        <apply>
+          <times/> 
+		  <apply>
+            <minus/>
+			<apply>
+              <plus/>
+			  <apply>
+		        <times/>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 2.0 </cn>
+                <ci> V_pk </ci>    
+              </apply>
+			  <apply>
+		        <times/>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 15.0 </cn>
+                <ci> V_op </ci>    
+              </apply>
+		      <ci> V_ck </ci>
+		    </apply>
+			<apply>
+              <plus/>
+              <ci> V_hk </ci>
+		      <ci> V_pfk </ci>
+			  <ci> V_pfk2 </ci>
+			  <ci> V_ATPase </ci>
+		    </apply>
+          </apply>
+		  <apply>
+            <power/>
+		    <apply>
+              <minus/>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn> 
+			  <ci> dAMP_dATP </ci>				  
+            </apply>  
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> -1 </cn> 
+		  </apply>
+        </apply> 
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="PCr">
+    <variable cmeta:id="PCr_PCr" initial_value="18.14" name="PCr" public_interface="out" units="mM"/> 
+    
+    <variable name="V_ck" public_interface="in" units="mM_per_s"/>
+    <variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="7"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> PCr </ci> 
+        </apply>
+        <apply>
+          <minus/>
+		  <ci> V_ck </ci>
+        </apply>  
+      </apply>
+    </math> 
+  </component>
+ 
+  <!-- metabolic fluxes -->
+  
+  <component name="V_hk">
+    <variable cmeta:id="V_hk_V_hk" name="V_hk" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="2.5" name="Vmax_hk" units="mM_per_s"/>
+	<variable initial_value="0.5" name="Km_ATP_hk" units="mM"/>
+	<variable initial_value="0.068" name="KI_F6P" units="mM"/>
+	
+	<variable name="F6P" public_interface="in" units="mM"/>
+	<variable name="ATP" public_interface="in" units="mM"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="8"> 
+      <apply>
+        <eq/> 
+        <ci> V_hk </ci> 
+        <apply>
+          <times/>
+		  <ci> Vmax_hk </ci>
+		  <apply>
+            <divide/>
+			<ci> ATP </ci>
+			<apply>
+              <plus/>
+		      <ci> ATP </ci>
+			  <ci> Km_ATP_hk </ci>
+		    </apply>
+	      </apply>
+		  <apply>
+            <power/>
+			<apply>
+              <plus/>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn>
+		      <apply>
+                <power/>
+			    <apply>
+                  <divide/>
+				  <ci> F6P </ci>
+		          <ci> KI_F6P </ci>
+		        </apply>
+		        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 4 </cn>
+		      </apply>	  
+		    </apply>
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> -1 </cn>
+		  </apply>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="V_pfk">
+    <variable cmeta:id="V_pfk_V_pfk" name="V_pfk" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="3.85" name="Vmax_pfk" units="mM_per_s"/>
+	<variable initial_value="0.05" name="Km_ATP_pfk" units="mM"/>
+	<variable initial_value="0.18" name="Km_F6P_pfk" units="mM"/>
+	<variable initial_value="0.01" name="Km_F26P_pfk" units="mM"/>
+	
+	<variable name="ATP" public_interface="in" units="mM"/>
+	<variable name="F6P" public_interface="in" units="mM"/>
+	<variable name="F26P" public_interface="in" units="mM"/>
+	<variable name="AMP_act" public_interface="in" units="dimensionless"/>
+	<variable name="ATP_inh" public_interface="in" units="dimensionless"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="9"> 
+      <apply>
+        <eq/> 
+        <ci> V_pfk </ci> 
+        <apply>
+          <times/>
+		  <ci> Vmax_pfk </ci>
+		  <apply>
+            <divide/>
+			<ci> F6P </ci>
+			<apply>
+              <plus/>
+		      <ci> F6P </ci>
+			  <ci> Km_F6P_pfk </ci>
+		    </apply>
+		  </apply>
+		  <apply>
+            <divide/>
+			<ci> ATP </ci>
+			<apply>
+              <plus/>
+		      <ci> ATP </ci>
+			  <ci> Km_ATP_pfk </ci>
+		    </apply>
+		  </apply>
+		  <apply>
+            <divide/>
+			<ci> F26P </ci>
+			<apply>
+              <plus/>
+		      <ci> F26P </ci>
+			  <ci> Km_F26P_pfk </ci>
+		    </apply>
+		  </apply>
+		  <ci> ATP_inh </ci>
+	      <ci> AMP_act </ci>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="V_pfk2">
+    <variable name="V_pfk2" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="0" name="Vmaxf_pfk2" units="mM_per_s"/>
+	<variable initial_value="0" name="Vmaxr_pfk2" units="mM_per_s"/>
+	<variable initial_value="0.05" name="Km_ATP_pfk2" units="mM"/>
+	<variable initial_value="0.01" name="Km_F6P_pfk2" units="mM"/>
+	<variable initial_value="0.0001" name="Km_F26P_pfk2" units="mM"/>
+	
+	<variable name="ATP" public_interface="in" units="mM"/>
+	<variable name="F6P" public_interface="in" units="mM"/>
+	<variable name="F26P" public_interface="in" units="mM"/>
+	<variable name="AMP_pfk2" public_interface="in" units="dimensionless"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="10"> 
+      <apply><eq/><ci>V_pfk2</ci><apply><minus/><apply><times/><ci>Vmaxf_pfk2</ci><apply><divide/><ci>ATP</ci><apply><plus/><ci>ATP</ci><ci>Km_ATP_pfk2</ci></apply></apply><apply><divide/><ci>F6P</ci><apply><plus/><ci>F6P</ci><ci>Km_F6P_pfk2</ci></apply></apply><ci>AMP_pfk2</ci></apply><apply><times/><ci>Vmaxr_pfk2</ci><apply><divide/><ci>F26P</ci><apply><plus/><ci>F26P</ci><ci>Km_F26P_pfk2</ci></apply></apply></apply></apply></apply> 		
+    </math> 
+  </component>
+  
+  <component name="V_pk">
+    <variable cmeta:id="V_pk_V_pk" name="V_pk" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="5.0" name="Vmax_pk" units="mM_per_s"/>
+	<variable initial_value="0.005" name="Km_ADP_pk" units="mM"/>
+	<variable initial_value="0.4" name="Km_GAP_pk" units="mM"/>
+	
+	<variable name="ADP" public_interface="in" units="mM"/>
+	<variable name="GAP" public_interface="in" units="mM"/>
+	<variable name="ATP_inh" public_interface="in" units="dimensionless"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="11"> 
+      <apply><eq/><ci>V_pk</ci><apply><times/><ci>Vmax_pk</ci><apply><divide/><ci>GAP</ci><apply><plus/><ci>GAP</ci><ci>Km_GAP_pk</ci></apply></apply><apply><divide/><ci>ADP</ci><apply><plus/><ci>ADP</ci><ci>Km_ADP_pk</ci></apply></apply><ci>ATP_inh</ci></apply></apply> 		
+    </math> 
+  </component>
+  
+  <component name="V_op">
+    <variable cmeta:id="V_op_V_op" name="V_op" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="1.0" name="Vmax_op" units="mM_per_s"/>
+	<variable initial_value="0.005" name="Km_ADP_op" units="mM"/>
+	<variable initial_value="0.5" name="Km_PYR_op" units="mM"/>
+	
+	<variable name="ATP" public_interface="in" units="mM"/>
+	<variable name="ADP" public_interface="in" units="mM"/>
+	<variable name="PYR" public_interface="in" units="mM"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="12"> 
+      <apply><eq/><ci>V_op</ci><apply><times/><ci>Vmax_op</ci><apply><divide/><ci>PYR</ci><apply><plus/><ci>PYR</ci><ci>Km_PYR_op</ci></apply></apply><apply><divide/><ci>ADP</ci><apply><plus/><ci>ADP</ci><ci>Km_ADP_op</ci></apply></apply><apply><divide/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn><apply><plus/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn><apply><times/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.1</cn><apply><divide/><ci>ATP</ci><ci>ADP</ci></apply></apply></apply></apply></apply></apply> 		
+    </math> 
+  </component>
+  
+  <component name="V_ldh">
+    <variable name="V_ldh" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="0" name="kf_ldh" units="per_s"/>
+	<variable initial_value="0" name="kr_ldh" units="per_s"/>
+	
+	<variable name="LAC" public_interface="in" units="mM"/>
+	<variable name="PYR" public_interface="in" units="mM"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="13"> 
+      <apply>
+        <eq/> 
+        <ci> V_ldh </ci> 
+        <apply>
+          <minus/>
+		  <apply>
+            <times/>
+			<ci> kf_ldh </ci>
+			<ci> PYR </ci>
+		  </apply>
+		  <apply>
+            <times/>
+			<ci> kr_ldh </ci>
+			<ci> LAC </ci>
+		  </apply>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="V_ck">
+    <variable cmeta:id="V_ck_V_ck" name="V_ck" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="0" name="kf_ck" units="per_mM_s"/>
+	<variable initial_value="0" name="kr_ck" units="per_mM_s"/>
+	
+	<variable name="Cr" public_interface="in" units="mM"/>
+	<variable name="PCr" public_interface="in" units="mM"/>
+	<variable name="ADP" public_interface="in" units="mM"/>
+	<variable name="ATP" public_interface="in" units="mM"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="14"> 
+      <apply>
+        <eq/> 
+        <ci> V_ck </ci> 
+        <apply>
+          <minus/>
+		  <apply>
+            <times/>
+			<ci> kf_ck </ci>
+			<ci> PCr </ci>
+			<ci> ADP </ci>
+		  </apply>
+		  <apply>
+            <times/>
+			<ci> kr_ck </ci>
+			<ci> Cr </ci>
+			<ci> ATP </ci>
+		  </apply>
+		</apply>  
+      </apply> 		
+    </math>
+  </component>
+  
+  <component name="Cr">
+    <variable cmeta:id="Cr_Cr" name="Cr" public_interface="out" units="mM"/> 
+	
+	<variable initial_value="20.0" name="PCrtot" units="mM"/>
+	
+	<variable name="PCr" public_interface="in" units="mM"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="14a"> 
+      <apply>
+        <eq/> 
+        <ci> Cr </ci> 
+        <apply>
+          <minus/>
+		  <ci> PCrtot </ci>
+	      <ci> PCr </ci> 	  
+		</apply>  
+      </apply> 		
+    </math> 	
+  </component>
+  
+  <component name="V_ATPase">
+    <variable name="V_ATPase" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="0.9355" name="Vmax_ATPase" units="mM_per_s"/>
+	<variable initial_value="0.5" name="Km_ATP" units="mM"/>
+	
+	<variable name="ATP" public_interface="in" units="mM"/>
+	<variable name="v_stim" public_interface="in" units="dimensionless"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="15"> 
+      <apply>
+        <eq/> 
+        <ci> V_ATPase </ci> 
+        <apply>
+          <times/>
+		  <ci> Vmax_ATPase </ci>
+		  <apply>
+            <divide/>
+			<ci> ATP </ci>
+			<apply>
+              <plus/>
+		      <ci> ATP </ci>
+			  <ci> Km_ATP </ci>
+		    </apply>
+		  </apply>
+		  <apply>
+            <plus/>
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn>
+			<ci> v_stim </ci>
+		  </apply>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="V_lac">
+    <variable cmeta:id="V_lac_V_lac" name="V_lac" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="0.355" name="Vlac_0" units="mM_per_s"/>
+	<variable initial_value="0.71" name="K_LAC_eff" units="per_s"/>
+	<variable initial_value="0.641" name="K_LAC" units="dimensionless"/>
+	
+	<variable name="LAC" public_interface="in" units="mM"/>
+	<variable name="v_stim" public_interface="in" units="dimensionless"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="16"> 
+      <apply>
+        <eq/> 
+        <ci> V_lac </ci> 
+        <apply>
+          <minus/>
+		  <apply>
+            <times/>
+		    <ci> Vlac_0 </ci>
+			<apply>
+              <plus/>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn>
+		      <apply>
+                <times/>
+			    <ci> v_stim </ci>
+			    <ci> K_LAC </ci>
+		      </apply>
+		    </apply>
+		  </apply>
+		  <apply>
+            <times/>
+			<ci> K_LAC_eff </ci>
+			<ci> LAC </ci>
+		  </apply>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <!-- adenylate kinase -->
+  
+  <component name="ADP">
+    <variable cmeta:id="ADP_ADP" name="ADP" public_interface="out" units="mM"/>
+	<variable name="u" public_interface="out" units="dimensionless"/>   
+	
+	<variable name="ATP" public_interface="in" units="mM"/>
+	<variable name="ANP" public_interface="in" units="mM"/>
+	<variable name="Q_adk" public_interface="in" units="dimensionless"/>   
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="17"> 
+      <apply><eq/>
+	    <ci> ADP </ci>
+		<apply><times/>
+		  <apply><divide/>
+		    <ci> ATP </ci>
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 2 </cn>
+		  </apply>
+		  <apply><plus/>
+		    <apply><minus/>
+			  <ci> Q_adk </ci>
+			</apply>
+			<apply><root/>
+			  <ci> u </ci>
+			</apply>
+		  </apply>
+		</apply>
+      </apply>
+    </math> 
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML" id="18"> 
+      <apply><eq/>
+	    <ci> u </ci>
+		<apply><plus/>
+	      <apply><power/>
+	        <ci> Q_adk </ci>
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 2 </cn>
+		  </apply>
+		  <apply><times/>
+		    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 4 </cn>
+			<ci> Q_adk </ci>
+			<apply><minus/>
+			  <apply><divide/>
+			    <ci> ANP </ci>
+			    <ci> ATP </ci>
+			  </apply>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn>
+		    </apply>
+		  </apply>
+		</apply>
+	  </apply> 
+	</math>
+  </component>
+  
+  <component name="dAMP_dATP">
+    <variable cmeta:id="dAMP_dATP_dAMP_dATP" name="dAMP_dATP" public_interface="out" units="dimensionless"/>
+	
+	<variable name="ATP" public_interface="in" units="mM"/>
+	<variable name="ANP" public_interface="in" units="mM"/>
+	<variable name="u" public_interface="in" units="dimensionless"/>
+	<variable name="Q_adk" public_interface="in" units="dimensionless"/>   
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="19"> 
+      <apply>
+        <eq/> 
+        <ci> dAMP_dATP </ci>
+        <apply>
+          <plus/>
+          <apply>
+            <minus/>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn>
+		  </apply>			
+          <apply>
+            <divide/> 					  
+	        <ci> Q_adk </ci>
+		    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 2 </cn>
+		  </apply>
+		  <apply>
+            <minus/>
+            <apply>
+              <times/>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 0.5 </cn>
+			  <apply>
+                <root/> 
+			    <ci> u </ci>
+			  </apply>
+			</apply>
+		  </apply>
+		  <apply>
+            <times/>
+			<ci> Q_adk </ci>
+			<apply>
+              <divide/> 					  
+	          <ci> ANP </ci>
+			  <apply>
+                <times/>
+			    <ci> ATP </ci>				
+	            <apply>
+                  <root/> 
+			      <ci> u </ci>
+			    </apply> 
+              </apply>			  
+			</apply> 
+		  </apply>
+        </apply>
+      </apply>
+    </math> 
+  </component>
+  
+  <component name="AMP">
+    <variable cmeta:id="AMP_AMP" name="AMP" public_interface="out" units="mM"/>
+	
+	<variable name="ANP" public_interface="in" units="mM"/>  
+    <variable name="ATP" public_interface="in" units="mM"/> 
+	<variable name="ADP" public_interface="in" units="mM"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="19a"> 
+      <apply><eq/>
+	    <ci> AMP </ci>
+		<apply><minus/>
+		  <ci> ANP </ci>
+		  <apply><plus/>
+		    <ci> ATP </ci>
+			<ci> ADP </ci>
+		  </apply>
+		</apply>
+	  </apply>
+    </math> 
+  </component>
+  
+  <!-- energy signalling -->
+  
+  <component name="ATP_inh">
+    <variable name="ATP_inh" public_interface="out" units="dimensionless"/> 
+	
+	<variable initial_value="0.4" name="nATP" units="dimensionless"/>
+	<variable initial_value="1.0" name="KI_ATP" units="mM"/>
+	
+	<variable name="ATP" public_interface="in" units="mM"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="20"> 
+      <apply><eq/><ci>ATP_inh</ci><apply><power/><apply><divide/><apply><plus/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn><apply><times/><ci>nATP</ci><apply><divide/><ci>ATP</ci><ci>KI_ATP</ci></apply></apply></apply><apply><plus/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn><apply><divide/><ci>ATP</ci><ci>KI_ATP</ci></apply></apply></apply><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4</cn></apply></apply> 		
+    </math> 
+  </component>
+  
+  <component name="AMP_act">
+    <variable name="AMP_act" public_interface="out" units="dimensionless"/> 
+	
+	<variable initial_value="0.5" name="nAMP" units="dimensionless"/>
+	<variable initial_value="0.05" name="Ka_AMP" units="mM"/>
+	
+	<variable name="AMP" public_interface="in" units="mM"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="21"> 
+      <apply><eq/><ci>AMP_act</ci><apply><power/><apply><divide/><apply><plus/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn><apply><divide/><ci>AMP</ci><ci>Ka_AMP</ci></apply></apply><apply><plus/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn><apply><times/><ci>nAMP</ci><apply><divide/><ci>AMP</ci><ci>Ka_AMP</ci></apply></apply></apply></apply><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4</cn></apply></apply> 		
+    </math> 
+  </component>
+  
+  <component name="v_stim">
+    <variable name="v_stim" public_interface="out" units="dimensionless"/>
+
+    <variable name="unitpulseSB" units="dimensionless"/>	
+	<variable initial_value="1" name="stim" units="dimensionless"/>
+	<variable initial_value="50" name="to" units="s"/>
+	<variable initial_value="200" name="tend" units="s"/>
+	<variable initial_value="0.5" name="v1_n" units="dimensionless"/>
+	<variable initial_value="0.0" name="v2_n" units="dimensionless"/>
+	<variable initial_value="2" name="t_n_stim" units="s"/>
+	
+	<variable name="time" public_interface="in" units="s"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="22"> 
+      <apply><eq/>
+	    <ci>v_stim</ci>
+		<apply><times/>
+		  <ci>stim</ci>
+		  <apply><plus/>
+		    <ci>v1_n</ci>
+			<apply><times/>
+			  <ci>v2_n</ci>
+			  <apply><divide/>
+			    <apply><minus/>
+				  <ci>time</ci>
+				  <ci>to</ci>
+				</apply>
+				<ci>t_n_stim</ci>
+			  </apply>
+			  <apply><exp/>
+			    <apply><minus/>
+				  <apply><times/>
+				    <apply><minus/>
+					  <ci>time</ci>
+					  <ci>to</ci>
+					</apply>
+					<apply><divide/>
+					  <ci>unitpulseSB</ci>
+					  <ci>t_n_stim</ci>
+					</apply>
+				  </apply>
+				</apply>
+			  </apply>
+			</apply>
+		  </apply>
+		  <ci>unitpulseSB</ci>
+		</apply>
+	  </apply> 	
+	</math>
+
+	<math xmlns="http://www.w3.org/1998/Math/MathML" id="23"> 
+      <apply>
+        <eq/> 
+        <ci> unitpulseSB </ci>  
+        <piecewise>
+          <piece>
+		    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn>
+            <apply>
+              <and/>
+			  <apply>
+                <geq/>
+                <ci> time </ci> 
+                <ci> to </ci> 
+              </apply>
+			  <apply>
+                <leq/>
+                <ci> time </ci> 
+                <apply>
+                  <plus/>
+				  <ci> to </ci> 
+				  <ci> tend </ci> 
+                </apply>
+			  </apply>
+			</apply>
+          </piece>
+          <otherwise>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 0 </cn>
+          </otherwise>
+        </piecewise>
+      </apply>
+	</math>
+  </component>
+  
+  <component name="model_parameters">
+    <variable initial_value="2.51" name="ANP" public_interface="out" units="mM"/>
+	<variable initial_value="0.92" name="Q_adk" public_interface="out" units="dimensionless"/>
+  </component>  
+  
+  
+  <connection>
+    <map_components component_1="F6P" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="F26P" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="GAP" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="PYR" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="LAC" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="ATP" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="PCr" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="v_stim" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_hk" component_2="F6P"/>
+    <map_variables variable_1="V_hk" variable_2="V_hk"/>
+	<map_variables variable_1="F6P" variable_2="F6P"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_pfk" component_2="F6P"/>
+    <map_variables variable_1="V_pfk" variable_2="V_pfk"/>
+	<map_variables variable_1="F6P" variable_2="F6P"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_pfk2" component_2="F6P"/>
+    <map_variables variable_1="V_pfk2" variable_2="V_pfk2"/>
+	<map_variables variable_1="F6P" variable_2="F6P"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_pfk2" component_2="F26P"/>
+    <map_variables variable_1="V_pfk2" variable_2="V_pfk2"/>
+	<map_variables variable_1="F26P" variable_2="F26P"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_pk" component_2="GAP"/>
+    <map_variables variable_1="V_pk" variable_2="V_pk"/>
+	<map_variables variable_1="GAP" variable_2="GAP"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_pfk" component_2="GAP"/>
+    <map_variables variable_1="V_pfk" variable_2="V_pfk"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_pk" component_2="PYR"/>
+    <map_variables variable_1="V_pk" variable_2="V_pk"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_ldh" component_2="PYR"/>
+    <map_variables variable_1="V_ldh" variable_2="V_ldh"/>
+	<map_variables variable_1="PYR" variable_2="PYR"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_op" component_2="PYR"/>
+    <map_variables variable_1="V_op" variable_2="V_op"/>
+	<map_variables variable_1="PYR" variable_2="PYR"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_ldh" component_2="LAC"/>
+    <map_variables variable_1="V_ldh" variable_2="V_ldh"/>
+	<map_variables variable_1="LAC" variable_2="LAC"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_lac" component_2="LAC"/>
+    <map_variables variable_1="V_lac" variable_2="V_lac"/>
+	<map_variables variable_1="LAC" variable_2="LAC"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="dAMP_dATP" component_2="ATP"/>
+    <map_variables variable_1="ATP" variable_2="ATP"/>
+	<map_variables variable_1="dAMP_dATP" variable_2="dAMP_dATP"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_hk" component_2="ATP"/>
+    <map_variables variable_1="V_hk" variable_2="V_hk"/>
+	<map_variables variable_1="ATP" variable_2="ATP"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_pfk" component_2="ATP"/>
+    <map_variables variable_1="V_pfk" variable_2="V_pfk"/>
+	<map_variables variable_1="ATP" variable_2="ATP"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_pfk2" component_2="ATP"/>
+    <map_variables variable_1="V_pfk2" variable_2="V_pfk2"/>
+	<map_variables variable_1="ATP" variable_2="ATP"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_pk" component_2="ATP"/>
+    <map_variables variable_1="V_pk" variable_2="V_pk"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_ATPase" component_2="ATP"/>
+    <map_variables variable_1="V_ATPase" variable_2="V_ATPase"/>
+	<map_variables variable_1="ATP" variable_2="ATP"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_op" component_2="ATP"/>
+    <map_variables variable_1="V_op" variable_2="V_op"/>
+	<map_variables variable_1="ATP" variable_2="ATP"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_ck" component_2="ATP"/>
+    <map_variables variable_1="V_ck" variable_2="V_ck"/>
+	<map_variables variable_1="ATP" variable_2="ATP"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_ck" component_2="PCr"/>
+    <map_variables variable_1="V_ck" variable_2="V_ck"/>
+	<map_variables variable_1="PCr" variable_2="PCr"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_pfk" component_2="F26P"/>
+    <map_variables variable_1="F26P" variable_2="F26P"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_pfk" component_2="AMP_act"/>
+    <map_variables variable_1="AMP_act" variable_2="AMP_act"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_pfk" component_2="ATP_inh"/>
+    <map_variables variable_1="ATP_inh" variable_2="ATP_inh"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_pfk2" component_2="AMP_pfk2"/>
+    <map_variables variable_1="AMP_pfk2" variable_2="AMP_pfk2"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_pk" component_2="ATP_inh"/>
+    <map_variables variable_1="ATP_inh" variable_2="ATP_inh"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_pk" component_2="ADP"/>
+    <map_variables variable_1="ADP" variable_2="ADP"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_op" component_2="ADP"/>
+    <map_variables variable_1="ADP" variable_2="ADP"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_ck" component_2="ADP"/>
+    <map_variables variable_1="ADP" variable_2="ADP"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_ck" component_2="Cr"/>
+    <map_variables variable_1="Cr" variable_2="Cr"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="PCr" component_2="Cr"/>
+    <map_variables variable_1="PCr" variable_2="PCr"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_ATPase" component_2="v_stim"/>
+    <map_variables variable_1="v_stim" variable_2="v_stim"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_lac" component_2="v_stim"/>
+    <map_variables variable_1="v_stim" variable_2="v_stim"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="ADP" component_2="ATP"/>
+    <map_variables variable_1="ATP" variable_2="ATP"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="ADP" component_2="model_parameters"/>
+    <map_variables variable_1="ANP" variable_2="ANP"/>
+	<map_variables variable_1="Q_adk" variable_2="Q_adk"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="dAMP_dATP" component_2="model_parameters"/>
+    <map_variables variable_1="ANP" variable_2="ANP"/>
+	<map_variables variable_1="Q_adk" variable_2="Q_adk"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="dAMP_dATP" component_2="ADP"/>
+    <map_variables variable_1="u" variable_2="u"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="AMP" component_2="ATP"/>
+    <map_variables variable_1="ATP" variable_2="ATP"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="AMP" component_2="ADP"/>
+    <map_variables variable_1="ADP" variable_2="ADP"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="AMP" component_2="model_parameters"/>
+    <map_variables variable_1="ANP" variable_2="ANP"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="ATP_inh" component_2="ATP"/>
+    <map_variables variable_1="ATP" variable_2="ATP"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="AMP_act" component_2="AMP"/>
+    <map_variables variable_1="AMP" variable_2="AMP"/>
+  </connection>
+ 
+
+ 
+
+<component name="AMP_pfk2"><variable name="AMP_pfk2" public_interface="out" units="dimensionless"/><variable initial_value="0.005" name="Kamp_pfk2" units="mM"/><variable initial_value="2" name="nh_amp" units="dimensionless"/><math xmlns="http://www.w3.org/1998/Math/MathML" id="24"><apply><eq/><ci>AMP_pfk2</ci><apply><divide/><apply><power/><apply><divide/><ci>AMP</ci><ci>Kamp_pfk2</ci></apply><ci>nh_amp</ci></apply><apply><plus/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn><apply><power/><apply><divide/><ci>AMP</ci><ci>Kamp_pfk2</ci></apply><ci>nh_amp</ci></apply></apply></apply></apply></math><variable name="AMP" public_interface="in" units="mM"/></component><connection><map_components component_1="AMP_pfk2" component_2="AMP"/><map_variables variable_1="AMP" variable_2="AMP"/></connection><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:nodeID="n1"><JournalArticle xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n2"/></JournalArticle><Pubmed_id xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">19828503</Pubmed_id></rdf:Description><rdf:Description rdf:nodeID="n3"><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n4"/></creator><rdf:value xml:lang="en">
+          This is the CellML description of Cloutier and Wellstead's mathematical model of brain energy metabolism
+        </rdf:value></rdf:Description><rdf:Description rdf:nodeID="n5"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n6"/></N></rdf:Description><rdf:Description rdf:nodeID="n7"><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag"/></rdf:type><rdf:_1 xml:lang="en">brain</rdf:_1><rdf:_3 xml:lang="en">systems biology</rdf:_3><rdf:_4 xml:lang="en">metabolic regulation</rdf:_4><rdf:_2 xml:lang="en">metabolism</rdf:_2></rdf:Description><rdf:Description rdf:nodeID="n8"><rdf:rest><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/></rdf:rest><rdf:first><rdf:Description rdf:nodeID="n9"/></rdf:first></rdf:Description><rdf:Description rdf:nodeID="n10"><subject xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n11"/></subject></rdf:Description><rdf:Description rdf:nodeID="n12"><rdf:type><rdf:Description rdf:about="http://imc.org/vCard/3.0#internet"/></rdf:type><rdf:value xml:lang="en">c.lloyd@auckland@auckland.ac.nz</rdf:value></rdf:Description><rdf:Description rdf:nodeID="n13"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n5"/></Person></rdf:Description><rdf:Description rdf:nodeID="n14"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2009-11-20</W3CDTF></rdf:Description><rdf:Description rdf:nodeID="n15"><rdf:type><rdf:Description rdf:about="http://www.example.org/foo/bar/bazfoo"/></rdf:type></rdf:Description><rdf:Description rdf:nodeID="n16"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2009-10-14</W3CDTF></rdf:Description><rdf:Description rdf:nodeID="n4"><FN xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Catherine Lloyd</FN></rdf:Description><rdf:Description rdf:nodeID="n17"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n18"/></Person></rdf:Description><rdf:Description rdf:nodeID="n19"><Orgname xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">The University of Auckland</Orgname><Orgunit xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Auckland Bioengineering Institute</Orgunit></rdf:Description><rdf:Description rdf:about=""><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">The control systems structures of energy metabolism (Version C)</title><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n20"/></creator><created xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:nodeID="n14"/></created></rdf:Description><rdf:Description rdf:nodeID="n20"><EMAIL xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n12"/></EMAIL><ORG xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n19"/></ORG><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n21"/></N></rdf:Description><rdf:Description rdf:about="#cloutier_2009c"><cmeta:bio_entity xml:lang="en">astrocyte</cmeta:bio_entity><cmeta:bio_entity xml:lang="en">neuron</cmeta:bio_entity><simulation xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n22"/></simulation><cmeta:comment><rdf:Description rdf:nodeID="n3"/></cmeta:comment><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n1"/></reference><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n10"/></reference><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">
+        The Cloutier and Wellstead 2009 Model of Brain Energy Metabolism
+      </title></rdf:Description><rdf:Description rdf:nodeID="n6"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">P</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Wellstead</Family></rdf:Description><rdf:Description rdf:nodeID="n23"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">M</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Cloutier</Family></rdf:Description><rdf:Description rdf:nodeID="n9"><endingValue xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">200</endingValue></rdf:Description><rdf:Description rdf:nodeID="n24"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">Journal of the Royal Society, Interface</title></rdf:Description><rdf:Description rdf:nodeID="n18"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n23"/></N></rdf:Description><rdf:Description rdf:nodeID="n21"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Catherine</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Lloyd</Family><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">May</Other></rdf:Description><rdf:Description rdf:nodeID="n25"><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq"/></rdf:type><rdf:_1><rdf:Description rdf:nodeID="n17"/></rdf:_1><rdf:_2><rdf:Description rdf:nodeID="n13"/></rdf:_2></rdf:Description><rdf:Description rdf:nodeID="n22"><boundIntervals xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n8"/></boundIntervals></rdf:Description><rdf:Description rdf:nodeID="n11"><rdf:value><rdf:Description rdf:nodeID="n7"/></rdf:value><subject_type xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">keyword</subject_type></rdf:Description><rdf:Description rdf:nodeID="n2"><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n25"/></creator><Journal xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n24"/></Journal><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">
+            The control systems structures of energy metabolism
+          </title><issued xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:nodeID="n16"/></issued></rdf:Description></rdf:RDF></model>

@@ -1,0 +1,358 @@
+<?xml version="1.0"?>
+<!--
+This CellML file was generated on 9/8/2011 at 1:55:43 at PM using:
+
+COR (0.9.31.1409)
+Copyright 2002-2011 Dr Alan Garny
+http://cor.physiol.ox.ac.uk/ - cor@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.cellml.org/
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" cmeta:id="goldbeter_guilmot_1995" name="goldbeter_guilmot_1995">
+
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#">
+  <rdf:Description rdf:about="">
+    <dc:creator rdf:parseType="Resource">
+      <vCard:N rdf:parseType="Resource">
+        <vCard:Family>Nielsen</vCard:Family>
+        <vCard:Given>Hanne</vCard:Given>
+       
+      </vCard:N>
+      <vCard:EMAIL rdf:parseType="Resource">
+        <rdf:value>hnie010@aucklanduni.ac.nz</rdf:value>
+        <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+      </vCard:EMAIL>
+      <vCard:ORG rdf:parseType="Resource">
+        <vCard:Orgname>The University of Auckland</vCard:Orgname>
+        <vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+      </vCard:ORG>
+    </dc:creator>
+    <dcterms:created rdf:parseType="Resource">
+      <dcterms:W3CDTF>2011-09-08</dcterms:W3CDTF>
+    </dcterms:created>
+  </rdf:Description>
+  <rdf:Description rdf:about="#goldbeter_guilmot_1995">
+    <cmeta:species>Human</cmeta:species>
+    
+    <bqs:reference rdf:parseType="Resource">
+      <dc:subject rdf:parseType="Resource">
+        <bqs:subject_type>keyword</bqs:subject_type>
+        <rdf:value>
+          <rdf:Bag>
+            <rdf:li>cell cycle</rdf:li>
+            <rdf:li>oscillation</rdf:li>
+        <rdf:li>hepatology</rdf:li>
+        <rdf:li>liver</rdf:li>
+          </rdf:Bag>
+        </rdf:value>
+      </dc:subject>
+    </bqs:reference>
+    <bqs:reference rdf:parseType="Resource">
+      <bqs:Pubmed_id> 8631387 </bqs:Pubmed_id>
+      <bqs:JournalArticle rdf:parseType="Resource">
+        <dc:creator>
+          <rdf:Seq>
+            <rdf:li rdf:parseType="Resource">
+              <bqs:Person rdf:parseType="Resource">
+                <vCard:N rdf:parseType="Resource">
+                  <vCard:Family>Goldbeter</vCard:Family>
+                  <vCard:Given>A</vCard:Given>
+                </vCard:N>
+              </bqs:Person>
+            </rdf:li>
+            
+            <rdf:li rdf:parseType="Resource">
+              <bqs:Person rdf:parseType="Resource">
+                <vCard:N rdf:parseType="Resource">
+                  <vCard:Family>Guilmot</vCard:Family>
+                  <vCard:Given>J</vCard:Given>
+                </vCard:N>
+              </bqs:Person>
+            </rdf:li>
+                      </rdf:Seq>
+        </dc:creator>
+        <dc:title>
+           Arresting the mitotic oscillator and the control of cell proliferation: insights from a cascade model for cdc2 kinase activation
+          </dc:title>
+        <dcterms:issued rdf:parseType="Resource">
+          <dcterms:W3CDTF>1995</dcterms:W3CDTF>
+        </dcterms:issued>
+        <bqs:Journal rdf:parseType="Resource">
+          <dc:title> Experientia </dc:title>
+        </bqs:Journal>
+        <bqs:volume>15</bqs:volume>
+        <bqs:first_page>212</bqs:first_page>
+        <bqs:last_page>216</bqs:last_page>
+      </bqs:JournalArticle>
+    </bqs:reference>
+  </rdf:Description>
+</rdf:RDF>
+
+
+
+   <units name="minute">
+      <unit multiplier="60" units="second"/>
+   </units>
+   <units name="per_minute">
+      <unit exponent="-1" units="minute"/>
+   </units>
+   <units name="micromole">
+      <unit prefix="micro" units="mole"/>
+   </units>
+   <units name="micromolar">
+      <unit units="micromole"/>
+      <unit exponent="-1" units="litre"/>
+   </units>
+   <units name="micromolar_per_minute">
+      <unit units="micromolar"/>
+      <unit exponent="-1" units="minute"/>
+   </units>
+   <component name="environment">
+      <variable cmeta:id="environment_time" name="time" public_interface="out" units="minute"/>
+   </component>
+   <component name="C">
+      <variable cmeta:id="C_C" initial_value="0.1" name="C" public_interface="out" units="micromolar"/>
+      <variable initial_value="0.05" name="v_i" units="micromolar_per_minute"/>
+      <variable initial_value="0.25" name="v_d" units="micromolar_per_minute"/>
+      <variable name="X" public_interface="in" units="micromolar"/>
+      <variable initial_value="0.02" name="K_d" units="micromolar"/>
+      <variable initial_value="0.01" name="k_d" units="per_minute"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>C</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <ci>v_i</ci>
+                  <apply>
+                     <times/>
+                     <ci>v_d</ci>
+                     <ci>X</ci>
+                     <apply>
+                        <divide/>
+                        <ci>C</ci>
+                        <apply>
+                           <plus/>
+                           <ci>K_d</ci>
+                           <ci>C</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_d</ci>
+                  <ci>C</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="M">
+      <variable cmeta:id="M_M" initial_value="0.1" name="M" public_interface="out" units="micromolar"/>
+      <variable name="V_1" public_interface="in" units="micromolar_per_minute"/>
+      <variable initial_value="0.01" name="K_1" units="per_minute"/>
+      <variable initial_value="1.5" name="V_2" units="per_minute"/>
+      <variable initial_value="0.01" name="K_2" units="per_minute"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>M</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>V_1</ci>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <minus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        <ci>M</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci>K_1</ci>
+                        <apply>
+                           <minus/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                           <ci>M</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>V_2</ci>
+                  <apply>
+                     <divide/>
+                     <ci>M</ci>
+                     <apply>
+                        <plus/>
+                        <ci>K_2</ci>
+                        <ci>M</ci>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="X">
+      <variable cmeta:id="X_X" initial_value="0.1" name="X" public_interface="out" units="micromolar"/>
+      <variable name="V_3" public_interface="in" units="micromolar_per_minute"/>
+      <variable initial_value="0.01" name="K_3" units="per_minute"/>
+      <variable initial_value="0.5" name="V_4" units="per_minute"/>
+      <variable initial_value="0.01" name="K_4" units="per_minute"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>X</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>V_3</ci>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <minus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        <ci>X</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci>K_3</ci>
+                        <apply>
+                           <minus/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                           <ci>X</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>V_4</ci>
+                  <apply>
+                     <divide/>
+                     <ci>X</ci>
+                     <apply>
+                        <plus/>
+                        <ci>K_4</ci>
+                        <ci>X</ci>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="V_1">
+      <variable cmeta:id="V_1_V_1" name="V_1" public_interface="out" units="micromolar_per_minute"/>
+      <variable name="C" public_interface="in" units="micromolar"/>
+      <variable initial_value="0.5" name="K_c" units="micromolar"/>
+      <variable initial_value="3" name="V_M1" units="per_minute"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_1</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <divide/>
+                  <ci>C</ci>
+                  <apply>
+                     <plus/>
+                     <ci>K_c</ci>
+                     <ci>C</ci>
+                  </apply>
+               </apply>
+               <ci>V_M1</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="V_3">
+      <variable cmeta:id="V_3_V_3" name="V_3" public_interface="out" units="micromolar_per_minute"/>
+      <variable name="M" public_interface="in" units="micromolar"/>
+      <variable initial_value="1" name="V_M3" units="per_minute"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_3</ci>
+            <apply>
+               <times/>
+               <ci>M</ci>
+               <ci>V_M3</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <connection>
+      <map_components component_1="environment" component_2="C"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="M"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="X"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="V_1"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="V_3"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="C" component_2="X"/>
+      <map_variables variable_1="X" variable_2="X"/>
+   </connection>
+   <connection>
+      <map_components component_1="C" component_2="V_1"/>
+      <map_variables variable_1="C" variable_2="C"/>
+   </connection>
+   <connection>
+      <map_components component_1="M" component_2="V_1"/>
+      <map_variables variable_1="V_1" variable_2="V_1"/>
+   </connection>
+   <connection>
+      <map_components component_1="M" component_2="V_3"/>
+      <map_variables variable_1="M" variable_2="M"/>
+   </connection>
+   <connection>
+      <map_components component_1="X" component_2="V_3"/>
+      <map_variables variable_1="V_3" variable_2="V_3"/>
+   </connection>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:about="#goldbeter_guilmot_1995"><simulation xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n1"/></simulation></rdf:Description><rdf:Description rdf:nodeID="n2"><endingValue xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">80</endingValue></rdf:Description><rdf:Description rdf:nodeID="n3"><rdf:rest><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/></rdf:rest><rdf:first><rdf:Description rdf:nodeID="n2"/></rdf:first></rdf:Description><rdf:Description rdf:nodeID="n1"><boundIntervals xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n3"/></boundIntervals></rdf:Description></rdf:RDF></model>

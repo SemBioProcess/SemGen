@@ -1,0 +1,996 @@
+<?xml version="1.0"?>
+<!--
+This CellML file was generated on 3/05/2010 at 11:39:57 at a.m. using:
+
+COR (0.9.31.1371)
+Copyright 2002-2010 Dr Alan Garny
+http://cor.physiol.ox.ac.uk/ - cor@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.cellml.org/
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" cmeta:id="maurya_2005" name="maurya_2005">
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>Reduced-order modelling of biochemical networks: application to the GTPase-cycle signalling module</title>
+				<author>
+					<firstname>Geoffrey</firstname>
+					<surname>Nunns</surname>
+					<affiliation>
+						<shortaffil>Bioengineering Institute, University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<section id="sec_status">
+				<title>Model Status</title>
+				<para>
+				This CellML model runs in COR and OpenCell and the units are consistent throughout. It reproduces the published results and is representative of the Minimal ROM. Validation was done in both CellML and Matlab, Matlab was used to simulate variations in GAP and R concentrations and to reproduce figure 5C. 
+				 
+				</para>
+			</section>
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>
+ABSTRACT: Biochemical systems embed complex networks and hence development and analysis of their detailed models pose a challenge for computation. Coarse-grained biochemical models, called reduced-order models (ROMs), consisting of essential biochemical mechanisms are more useful for computational analysis and for studying important features of a biochemical network. The authors present a novel method to model-reduction by identifying potentially important parameters using multidimensional sensitivity analysis. A ROM is generated for the GTPase-cycle module of m1 muscarinic acetylcholine receptor, Gq, and regulator of G-protein signalling 4 (a GTPase-activating protein or GAP) starting from a detailed model of 48 reactions. The resulting ROM has only 17 reactions. The ROM suggested that complexes of G-protein coupled receptor (GPCR) and GAP--which were proposed in the detailed model as a hypothesis--are required to fit the experimental data. Models previously published in the literature are also simulated and compared with the ROM. Through this comparison, a minimal ROM, that also requires complexes of GPCR and GAP, with just 15 parameters is generated. The proposed reduced-order modelling methodology is scalable to larger networks and provides a general framework for the reduction of models of biochemical systems.
+</para>
+				<para>
+The original paper reference is cited below:
+</para>
+				<para>
+Reduced-order modelling of biochemical networks: application to the GTPase-cycle signalling module, Mano R. Maurya, Scott J. Bornheimer, Venkat Venkatasubramanian, and Shankar Subramaniam, 2005, <emphasis>IEE Proc.-Syst. Biol</emphasis>, volume 152, 229-242.  <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pubmed&amp;cmd=Retrieve&amp;dopt=AbstractPlus&amp;list_uids=16986265&amp;query_hl=1&amp;itool=pubmed_docsum">PubMed ID: 16986265</ulink>
+				</para>
+				
+				<informalfigure float="0" id="fig_reaction_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>model diagram</title>
+    </objectinfo>
+    <imagedata fileref="maurya_2005.png"/>
+  </imageobject>
+</mediaobject>
+<caption>Reaction network of the GTPase-cycle module.</caption>
+</informalfigure>
+			</sect1>
+		</article>
+	</documentation>
+	
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="">
+			<dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource">
+				<vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+					<vCard:Family>Nunns</vCard:Family>
+					<vCard:Given>Geoffrey</vCard:Given>
+					<vCard:Other>Rogan</vCard:Other>
+				</vCard:N>
+				<vCard:EMAIL xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+					<rdf:value>gnunns1@jhu.edu</rdf:value>
+					<rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+				</vCard:EMAIL>
+				<vCard:ORG xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+					<vCard:Orgname>The University of Auckland</vCard:Orgname>
+					<vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+				</vCard:ORG>
+			</dc:creator>
+			<dcterms:created xmlns:dcterms="http://purl.org/dc/terms/" rdf:parseType="Resource">
+				<dcterms:W3CDTF>2010-05-03</dcterms:W3CDTF>
+			</dcterms:created>
+		</rdf:Description>
+		<rdf:Description rdf:about="#maurya_2005">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">The Maurya et al. 2005 minimal ROM model of a GTPase-cycle module.</dc:title>
+			<cmeta:comment rdf:parseType="Resource">
+				<rdf:value>This is the CellML description of Maurya et al.'s 2005 mathematical model of a minimal ROM GTPase-cycle module.</rdf:value>
+				<dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource">
+					<vCard:FN xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Geoffrey Nunns</vCard:FN>
+				</dc:creator>
+			</cmeta:comment>
+			<bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource">
+				<dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource">
+					<bqs:subject_type>keyword</bqs:subject_type>
+					<rdf:value>
+						<rdf:Bag>
+							<rdf:li>signal transduction</rdf:li>
+							<rdf:li>GTPase-cycle module</rdf:li>
+							<rdf:li>systems biology</rdf:li>
+						</rdf:Bag>
+					</rdf:value>
+				</dc:subject>
+			</bqs:reference>
+			<bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource">
+				<bqs:Pubmed_id>16986265</bqs:Pubmed_id>
+				<bqs:JournalArticle rdf:parseType="Resource">
+					<dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">
+						<rdf:Seq>
+							<rdf:li rdf:parseType="Resource">
+								<bqs:Person rdf:parseType="Resource">
+									<vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+										<vCard:Family>Maurya</vCard:Family>
+										<vCard:Given>Mano</vCard:Given>
+										<vCard:Other>R</vCard:Other>
+									</vCard:N>
+								</bqs:Person>
+							</rdf:li>
+							<rdf:li rdf:parseType="Resource">
+								<bqs:Person rdf:parseType="Resource">
+									<vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+										<vCard:Family>Bornheimer</vCard:Family>
+										<vCard:Given>Scott</vCard:Given>
+										<vCard:Other>J</vCard:Other>
+									</vCard:N>
+								</bqs:Person>
+							</rdf:li>
+							<rdf:li rdf:parseType="Resource">
+								<bqs:Person rdf:parseType="Resource">
+									<vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+										<vCard:Family>Venkatasubramanian</vCard:Family>
+										<vCard:Given>Venkat</vCard:Given>
+									</vCard:N>
+								</bqs:Person>
+							</rdf:li>
+							<rdf:li rdf:parseType="Resource">
+								<bqs:Person rdf:parseType="Resource">
+									<vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+										<vCard:Family>Subramaniam</vCard:Family>
+										<vCard:Given>Shankar</vCard:Given>
+									</vCard:N>
+								</bqs:Person>
+							</rdf:li>
+						</rdf:Seq>
+					</dc:creator>
+					<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/"> Reduced-order modelling of biochemical networks: application to the GTPase-cycle signalling module</dc:title>
+					<dcterms:issued xmlns:dcterms="http://purl.org/dc/terms/" rdf:parseType="Resource">
+						<dcterms:W3CDTF>2005-08-22</dcterms:W3CDTF>
+					</dcterms:issued>
+					<bqs:Journal rdf:parseType="Resource">
+						<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">IEE Proc.-Syst. Biol</dc:title>
+					</bqs:Journal>
+					<bqs:volume>152</bqs:volume>
+					<bqs:first_page>229</bqs:first_page>
+					<bqs:last_page>242</bqs:last_page>
+				</bqs:JournalArticle>
+			</bqs:reference>
+		</rdf:Description>
+	</rdf:RDF>   <units name="molar">
+      <unit units="mole"/>
+      <unit exponent="-1" units="liter"/>
+   </units>
+   <units name="molar_per_second">
+      <unit units="molar"/>
+      <unit exponent="-1" units="second"/>
+   </units>
+   <units name="per_second">
+      <unit exponent="-1" units="second"/>
+   </units>
+   <units name="per_molar_per_second">
+      <unit exponent="-1" units="molar"/>
+      <unit exponent="-1" units="second"/>
+   </units>
+   <component name="environment">
+      <variable cmeta:id="environment_time" name="time" public_interface="out" units="second"/>
+   </component>
+   <component name="differentials">
+      <variable initial_value="0" name="A" public_interface="out" units="molar"/>
+      <variable cmeta:id="differentials_G" initial_value="0" name="G" public_interface="out" units="molar"/>
+      <variable cmeta:id="differentials_GA" initial_value="0" name="GA" public_interface="out" units="molar"/>
+      <variable initial_value="0.000468" name="T" public_interface="out" units="molar"/>
+      <variable initial_value="0" name="R" public_interface="out" units="molar"/>
+      <variable cmeta:id="differentials_GT" initial_value="0" name="GT" public_interface="out" units="molar"/>
+      <variable cmeta:id="differentials_GD" initial_value="1e-8" name="GD" public_interface="out" units="molar"/>
+      <variable initial_value="0.0044" name="Pi_" public_interface="out" units="molar"/>
+      <variable initial_value="0.000149" name="D" public_interface="out" units="molar"/>
+      <variable cmeta:id="differentials_RG" initial_value="0" name="RG" public_interface="out" units="molar"/>
+      <variable cmeta:id="differentials_RGT" initial_value="0" name="RGT" public_interface="out" units="molar"/>
+      <variable cmeta:id="differentials_GAT" initial_value="0" name="GAT" public_interface="out" units="molar"/>
+      <variable cmeta:id="differentials_GAD" initial_value="0" name="GAD" public_interface="out" units="molar"/>
+      <variable cmeta:id="differentials_RGD" initial_value="0" name="RGD" public_interface="out" units="molar"/>
+      <variable cmeta:id="differentials_RGA" initial_value="0" name="RGA" public_interface="out" units="molar"/>
+      <variable cmeta:id="differentials_RGAT" initial_value="0" name="RGAT" public_interface="out" units="molar"/>
+      <variable cmeta:id="differentials_RGAD" initial_value="0" name="RGAD" public_interface="out" units="molar"/>
+      <variable name="A2" public_interface="in" units="molar_per_second"/>
+      <variable name="A3" public_interface="in" units="molar_per_second"/>
+      <variable name="A5" public_interface="in" units="molar_per_second"/>
+      <variable name="R2" public_interface="in" units="molar_per_second"/>
+      <variable name="R3" public_interface="in" units="molar_per_second"/>
+      <variable name="R4" public_interface="in" units="molar_per_second"/>
+      <variable name="T1" public_interface="in" units="molar_per_second"/>
+      <variable name="T3" public_interface="in" units="molar_per_second"/>
+      <variable name="T4" public_interface="in" units="molar_per_second"/>
+      <variable name="P1" public_interface="in" units="molar_per_second"/>
+      <variable name="P2" public_interface="in" units="molar_per_second"/>
+      <variable name="P3" public_interface="in" units="molar_per_second"/>
+      <variable name="P4" public_interface="in" units="molar_per_second"/>
+      <variable name="D1" public_interface="in" units="molar_per_second"/>
+      <variable name="D2" public_interface="in" units="molar_per_second"/>
+      <variable name="D3" public_interface="in" units="molar_per_second"/>
+      <variable name="D4" public_interface="in" units="molar_per_second"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>A</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <ci>A2</ci>
+                  <ci>A3</ci>
+                  <ci>A5</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>G</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>D1</ci>
+               <ci>T1</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>GA</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>D2</ci>
+               <ci>R4</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>T</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <ci>T1</ci>
+                  <ci>T3</ci>
+                  <ci>T4</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>R</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <ci>R2</ci>
+                  <ci>R3</ci>
+                  <ci>R4</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>GT</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <ci>T1</ci>
+                     <ci>P1</ci>
+                  </apply>
+                  <ci>R2</ci>
+               </apply>
+               <ci>A2</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>GD</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <ci>P1</ci>
+                     <ci>D1</ci>
+                  </apply>
+                  <ci>A3</ci>
+               </apply>
+               <ci>R3</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Pi_</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <ci>P1</ci>
+               <ci>P3</ci>
+               <ci>P2</ci>
+               <ci>P4</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>D</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <ci>D1</ci>
+               <ci>D3</ci>
+               <ci>D2</ci>
+               <ci>D4</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>RG</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <ci>T3</ci>
+               </apply>
+               <ci>D3</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>RGT</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <ci>T3</ci>
+                     <ci>R2</ci>
+                  </apply>
+                  <ci>P3</ci>
+               </apply>
+               <ci>A5</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>GAT</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>A2</ci>
+               <ci>P2</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>GAD</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <ci>A3</ci>
+                  <ci>P2</ci>
+               </apply>
+               <ci>D2</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>RGD</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <ci>R3</ci>
+                  <ci>P3</ci>
+               </apply>
+               <ci>D3</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>RGA</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <ci>R4</ci>
+                  <ci>T4</ci>
+               </apply>
+               <ci>D4</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>RGAT</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <ci>T4</ci>
+                  <ci>A5</ci>
+               </apply>
+               <ci>P4</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>RGAD</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>P4</ci>
+               <ci>D4</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="output">
+      <variable name="Z" units="dimensionless"/>
+      <variable name="v" units="per_second"/>
+      <variable initial_value="1e-8" name="G_tot" units="molar"/>
+      <variable name="GT" public_interface="in" units="molar"/>
+      <variable name="RGT" public_interface="in" units="molar"/>
+      <variable name="GAT" public_interface="in" units="molar"/>
+      <variable name="RGAT" public_interface="in" units="molar"/>
+      <variable name="P_minus1" public_interface="in" units="per_second"/>
+      <variable name="P_minus2" public_interface="in" units="per_second"/>
+      <variable name="P_minus3" public_interface="in" units="per_second"/>
+      <variable name="P_minus4" public_interface="in" units="per_second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>Z</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <plus/>
+                  <ci>GT</ci>
+                  <ci>RGT</ci>
+                  <ci>RGAT</ci>
+                  <ci>GAT</ci>
+               </apply>
+               <ci>G_tot</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>v</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>P_minus4</ci>
+                     <ci>RGAT</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>P_minus2</ci>
+                     <ci>GAT</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>P_minus3</ci>
+                     <ci>RGT</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>P_minus1</ci>
+                     <ci>GT</ci>
+                  </apply>
+               </apply>
+               <ci>G_tot</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="T1">
+      <variable name="T1" public_interface="out" units="molar_per_second"/>
+      <variable initial_value="529000" name="k1" units="per_molar_per_second"/>
+      <variable name="G" public_interface="in" units="molar"/>
+      <variable name="T" public_interface="in" units="molar"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>T1</ci>
+            <apply>
+               <times/>
+               <ci>k1</ci>
+               <ci>G</ci>
+               <ci>T</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="P1">
+      <variable name="P1" public_interface="out" units="molar_per_second"/>
+      <variable initial_value="0.013" name="k1" public_interface="out" units="per_second"/>
+      <variable name="GT" public_interface="in" units="molar"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>P1</ci>
+            <apply>
+               <times/>
+               <ci>k1</ci>
+               <ci>GT</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="D1">
+      <variable name="D1" public_interface="out" units="molar_per_second"/>
+      <variable initial_value="0.0001" name="k1" units="per_second"/>
+      <variable name="GD" public_interface="in" units="molar"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>D1</ci>
+            <apply>
+               <times/>
+               <ci>k1</ci>
+               <ci>GD</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="T3">
+      <variable name="T3" public_interface="out" units="molar_per_second"/>
+      <variable initial_value="853000" name="k1" units="per_molar_per_second"/>
+      <variable name="T" public_interface="in" units="molar"/>
+      <variable name="RG" public_interface="in" units="molar"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>T3</ci>
+            <apply>
+               <times/>
+               <ci>k1</ci>
+               <ci>RG</ci>
+               <ci>T</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="R2">
+      <variable name="R2" public_interface="out" units="molar_per_second"/>
+      <variable initial_value="1.28" name="k2" units="per_second"/>
+      <variable name="RGT" public_interface="in" units="molar"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>R2</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <minus/>
+                  <ci>k2</ci>
+               </apply>
+               <ci>RGT</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="A2">
+      <variable name="A2" public_interface="out" units="molar_per_second"/>
+      <variable initial_value="386000" name="k1" units="per_molar_per_second"/>
+      <variable name="A" public_interface="in" units="molar"/>
+      <variable name="GT" public_interface="in" units="molar"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>A2</ci>
+            <apply>
+               <times/>
+               <ci>k1</ci>
+               <ci>GT</ci>
+               <ci>A</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="A3">
+      <variable name="A3" public_interface="out" units="molar_per_second"/>
+      <variable initial_value="0.95" name="k2" units="per_second"/>
+      <variable name="GAD" public_interface="in" units="molar"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>A3</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <minus/>
+                  <ci>k2</ci>
+               </apply>
+               <ci>GAD</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="R3">
+      <variable name="R3" public_interface="out" units="molar_per_second"/>
+      <variable initial_value="94700000" name="k1" units="per_molar_per_second"/>
+      <variable name="R" public_interface="in" units="molar"/>
+      <variable name="GD" public_interface="in" units="molar"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>R3</ci>
+            <apply>
+               <times/>
+               <ci>k1</ci>
+               <ci>GD</ci>
+               <ci>R</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="P3">
+      <variable name="P3" public_interface="out" units="molar_per_second"/>
+      <variable initial_value="0.013" name="k1" public_interface="out" units="per_second"/>
+      <variable name="RGT" public_interface="in" units="molar"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>P3</ci>
+            <apply>
+               <times/>
+               <ci>k1</ci>
+               <ci>RGT</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="D3">
+      <variable name="D3" public_interface="out" units="molar_per_second"/>
+      <variable initial_value="2" name="k1" units="per_second"/>
+      <variable name="RGD" public_interface="in" units="molar"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>D3</ci>
+            <apply>
+               <times/>
+               <ci>k1</ci>
+               <ci>RGD</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="P2">
+      <variable name="P2" public_interface="out" units="molar_per_second"/>
+      <variable initial_value="25" name="k1" public_interface="out" units="per_second"/>
+      <variable name="GAT" public_interface="in" units="molar"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>P2</ci>
+            <apply>
+               <times/>
+               <ci>k1</ci>
+               <ci>GAT</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="D2">
+      <variable name="D2" public_interface="out" units="molar_per_second"/>
+      <variable initial_value="0.0001" name="k1" units="per_second"/>
+      <variable name="GAD" public_interface="in" units="molar"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>D2</ci>
+            <apply>
+               <times/>
+               <ci>k1</ci>
+               <ci>GAD</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="R4">
+      <variable name="R4" public_interface="out" units="molar_per_second"/>
+      <variable initial_value="22800000" name="k1" units="per_molar_per_second"/>
+      <variable name="GA" public_interface="in" units="molar"/>
+      <variable name="R" public_interface="in" units="molar"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>R4</ci>
+            <apply>
+               <times/>
+               <ci>k1</ci>
+               <ci>GA</ci>
+               <ci>R</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="T4">
+      <variable name="T4" public_interface="out" units="molar_per_second"/>
+      <variable initial_value="1620000" name="k1" units="per_molar_per_second"/>
+      <variable name="T" public_interface="in" units="molar"/>
+      <variable name="RGA" public_interface="in" units="molar"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>T4</ci>
+            <apply>
+               <times/>
+               <ci>k1</ci>
+               <ci>RGA</ci>
+               <ci>T</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="A5">
+      <variable name="A5" public_interface="out" units="molar_per_second"/>
+      <variable initial_value="6300000" name="k1" units="per_molar_per_second"/>
+      <variable name="A" public_interface="in" units="molar"/>
+      <variable name="RGT" public_interface="in" units="molar"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>A5</ci>
+            <apply>
+               <times/>
+               <ci>k1</ci>
+               <ci>RGT</ci>
+               <ci>A</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="P4">
+      <variable name="P4" public_interface="out" units="molar_per_second"/>
+      <variable initial_value="25" name="k1" public_interface="out" units="per_second"/>
+      <variable name="RGAT" public_interface="in" units="molar"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>P4</ci>
+            <apply>
+               <times/>
+               <ci>k1</ci>
+               <ci>RGAT</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="D4">
+      <variable name="D4" public_interface="out" units="molar_per_second"/>
+      <variable initial_value="2.75" name="k1" units="per_second"/>
+      <variable name="RGAD" public_interface="in" units="molar"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>D4</ci>
+            <apply>
+               <times/>
+               <ci>k1</ci>
+               <ci>RGAD</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <connection>
+      <map_components component_1="environment" component_2="differentials"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="output" component_2="differentials"/>
+      <map_variables variable_1="GT" variable_2="GT"/>
+      <map_variables variable_1="RGT" variable_2="RGT"/>
+      <map_variables variable_1="GAT" variable_2="GAT"/>
+      <map_variables variable_1="RGAT" variable_2="RGAT"/>
+   </connection>
+   <connection>
+      <map_components component_1="output" component_2="P1"/>
+      <map_variables variable_1="P_minus1" variable_2="k1"/>
+   </connection>
+   <connection>
+      <map_components component_1="output" component_2="P2"/>
+      <map_variables variable_1="P_minus2" variable_2="k1"/>
+   </connection>
+   <connection>
+      <map_components component_1="output" component_2="P3"/>
+      <map_variables variable_1="P_minus3" variable_2="k1"/>
+   </connection>
+   <connection>
+      <map_components component_1="output" component_2="P4"/>
+      <map_variables variable_1="P_minus4" variable_2="k1"/>
+   </connection>
+   <connection>
+      <map_components component_1="T1" component_2="differentials"/>
+      <map_variables variable_1="T1" variable_2="T1"/>
+      <map_variables variable_1="G" variable_2="G"/>
+      <map_variables variable_1="T" variable_2="T"/>
+   </connection>
+   <connection>
+      <map_components component_1="P1" component_2="differentials"/>
+      <map_variables variable_1="P1" variable_2="P1"/>
+      <map_variables variable_1="GT" variable_2="GT"/>
+   </connection>
+   <connection>
+      <map_components component_1="D1" component_2="differentials"/>
+      <map_variables variable_1="D1" variable_2="D1"/>
+      <map_variables variable_1="GD" variable_2="GD"/>
+   </connection>
+   <connection>
+      <map_components component_1="T3" component_2="differentials"/>
+      <map_variables variable_1="T3" variable_2="T3"/>
+      <map_variables variable_1="T" variable_2="T"/>
+      <map_variables variable_1="RG" variable_2="RG"/>
+   </connection>
+   <connection>
+      <map_components component_1="R2" component_2="differentials"/>
+      <map_variables variable_1="R2" variable_2="R2"/>
+      <map_variables variable_1="RGT" variable_2="RGT"/>
+   </connection>
+   <connection>
+      <map_components component_1="A2" component_2="differentials"/>
+      <map_variables variable_1="A2" variable_2="A2"/>
+      <map_variables variable_1="A" variable_2="A"/>
+      <map_variables variable_1="GT" variable_2="GT"/>
+   </connection>
+   <connection>
+      <map_components component_1="A3" component_2="differentials"/>
+      <map_variables variable_1="A3" variable_2="A3"/>
+      <map_variables variable_1="GAD" variable_2="GAD"/>
+   </connection>
+   <connection>
+      <map_components component_1="R3" component_2="differentials"/>
+      <map_variables variable_1="R3" variable_2="R3"/>
+      <map_variables variable_1="R" variable_2="R"/>
+      <map_variables variable_1="GD" variable_2="GD"/>
+   </connection>
+   <connection>
+      <map_components component_1="P3" component_2="differentials"/>
+      <map_variables variable_1="P3" variable_2="P3"/>
+      <map_variables variable_1="RGT" variable_2="RGT"/>
+   </connection>
+   <connection>
+      <map_components component_1="D3" component_2="differentials"/>
+      <map_variables variable_1="D3" variable_2="D3"/>
+      <map_variables variable_1="RGD" variable_2="RGD"/>
+   </connection>
+   <connection>
+      <map_components component_1="P2" component_2="differentials"/>
+      <map_variables variable_1="P2" variable_2="P2"/>
+      <map_variables variable_1="GAT" variable_2="GAT"/>
+   </connection>
+   <connection>
+      <map_components component_1="D2" component_2="differentials"/>
+      <map_variables variable_1="D2" variable_2="D2"/>
+      <map_variables variable_1="GAD" variable_2="GAD"/>
+   </connection>
+   <connection>
+      <map_components component_1="R4" component_2="differentials"/>
+      <map_variables variable_1="R4" variable_2="R4"/>
+      <map_variables variable_1="GA" variable_2="GA"/>
+      <map_variables variable_1="R" variable_2="R"/>
+   </connection>
+   <connection>
+      <map_components component_1="T4" component_2="differentials"/>
+      <map_variables variable_1="T4" variable_2="T4"/>
+      <map_variables variable_1="T" variable_2="T"/>
+      <map_variables variable_1="RGA" variable_2="RGA"/>
+   </connection>
+   <connection>
+      <map_components component_1="A5" component_2="differentials"/>
+      <map_variables variable_1="A5" variable_2="A5"/>
+      <map_variables variable_1="A" variable_2="A"/>
+      <map_variables variable_1="RGT" variable_2="RGT"/>
+   </connection>
+   <connection>
+      <map_components component_1="P4" component_2="differentials"/>
+      <map_variables variable_1="P4" variable_2="P4"/>
+      <map_variables variable_1="RGAT" variable_2="RGAT"/>
+   </connection>
+   <connection>
+      <map_components component_1="D4" component_2="differentials"/>
+      <map_variables variable_1="D4" variable_2="D4"/>
+      <map_variables variable_1="RGAD" variable_2="RGAD"/>
+   </connection>
+</model>

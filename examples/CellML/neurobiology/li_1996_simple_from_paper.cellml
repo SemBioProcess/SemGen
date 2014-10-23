@@ -1,0 +1,850 @@
+<?xml version="1.0"?>
+<!--
+This CellML file was generated on 10/12/2009 at 11:02:53 at a.m. using:
+
+COR (0.9.31.1333)
+Copyright 2002-2009 Dr Alan Garny
+http://cor.physiol.ox.ac.uk/ - cor@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.cellml.org/
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xml:base="" cmeta:id="li_1996" name="li_1996">	
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>Modeling N-methyl-D-aspartate-induced bursting in dopamine neurons</title>
+				<author>
+					<firstname>Catherine</firstname>
+					<surname>Lloyd</surname>
+					<affiliation>
+						<shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<section id="sec_status">
+				<title>Model Status</title>  
+				<para>This is the simple, minimal model based on the equations in the original published paper. The CellML model runs in both COR and OpenCell and the units are consistent. The model recreates figure 2 from the paper (gc=0 so the soma and the dendritic compartments are uncoupled), however - in order to get the frequency of oscillations correct (with a period of 2s) the variable alpha was set to 0.5 (as opposed to 0.173 which was given in the paper). This change has to be confirmed with the original model authors.
+				</para>   
+			</section>
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>ABSTRACT: Burst firing of dopaminergic neurons of the substantia nigra pars compacta can be induced in vitro by the glutamate agonist N-methyl-D-aspartate. It has been suggested that the interburst hyperpolarization is due to Na+ extrusion by a ouabain-sensitive pump (Johnson et al. (1992) Science 258, 665-667). We formulate and explore a theoretical model, with a minimal number of currents, for this novel mechanism of burst generation. This minimal model is further developed into a more elaborate model based on observations of additional currents and hypotheses about their spatial distribution in dopaminergic neurons (Hounsgaard (1992) Neuroscience 50, 513-518; Llinas et al. (1984) Brain Res. 294, 127-132). Using the minimal model, we confirm that interaction between the regenerative, inward N-methyl-D-aspartate-mediated current and the outward Na(+)-pump current is sufficient to generate the slow oscillation (approximately 0.5 Hz) underlying the burst. The negative-slope region of the N-methyl-D-aspartate channel's current-voltage relation is indispensable for this slow rhythm generation. The time-scale of Na(+)-handling determines the burst's slow frequency. Moreover, we show that, given the constraints of sodium handling, such bursting is best explained mechanistically by using at least two spatial, cable-like compartments: a soma where action potentials are produced and a dendritic compartment where the slow rhythm is generated. Our result is consistent with recent experimental evidence that burst generation originates in distal dendrites (Seutin et al. (1994) Neuroscience 58, 201-206). Responses of the model to a number of electrophysiological and pharmacological stimuli are consistent with known responses observed under similar conditions. These include the persistence of the slow rhythm when the tetrodotoxin-sensitive Na+ channel is blocked and when the soma is voltage-clamped at -60 mV. Using our more elaborate model, we account for details of the observed frequency adaptation in N-methyl-D-aspartate-induced bursting, the origin of multiple spiking and bursting mechanisms, and the interaction between two different bursting mechanisms. Besides reproducing several well established firing patterns, this model also suggests that new firing modes, not yet recorded, might also occur in dopaminergic neurons. This model provides mechanistic insights and explanations into the origin of a variety of experimentally observed membrane potential firing patterns in dopaminergic neurons, including N-methyl-D-aspartate-induced bursting and its dendritic origin. Such a model, capable of reproducing a number of realistic behaviors of dopaminergic neurons, could be useful in further studies of the basal ganglia-thalamocortical motor circuit. It may also shed light on bursting that involves N-methyl-D-aspartate channel activity in other neuron types.</para>
+				<para>The original paper reference is cited below.</para>
+				<para>Modeling N-methyl-D-aspartate-induced bursting in dopamine neurons, Y.X. Li, R. Bertram, and J. Rinzel, 1996,
+                                    <emphasis>Neuroscience</emphasis>, 71, 397-410. <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/9053795">PubMed ID: 9053795</ulink>
+				</para>
+				<informalfigure float="0" id="fig_cell_diagram">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>cell schematic for the model</title>
+							</objectinfo>
+							<imagedata fileref="li_1996.png"/>
+						</imageobject>
+					</mediaobject>
+					<caption> Schematic representation of the minimal model of a DA neuron. It consists of a spike-producing compartment(soma) and a slow rhythm-generating compartment (lumped dendrite). The two compartments are electrotonically coupled with coupling conductance gc. The types of ionic channels considered are just sufficient for a qualitative understanding of the mechanism underlying NMDA-induced bursting in DA neurons. No voltage-dependent channels other than the NMDA channel are considered in the dendrite in this minimal model.</caption>
+				</informalfigure>
+			</sect1>
+		</article>
+	</documentation>   
+	
+   <units name="millisecond_per_second">
+      <unit prefix="milli" units="second"/>
+      <unit exponent="-1" units="second"/>
+   </units>
+   <units name="mM">
+      <unit prefix="milli" units="mole"/>
+      <unit exponent="-1" units="litre"/>
+   </units>
+   <units name="uM">
+      <unit prefix="micro" units="mole"/>
+      <unit exponent="-1" units="litre"/>
+   </units>
+   <units name="mV">
+      <unit prefix="milli" units="volt"/>
+   </units>
+   <units name="cm2">
+      <unit exponent="2" prefix="centi" units="meter"/>
+   </units>
+   <units name="uF">
+      <unit prefix="micro" units="farad"/>
+   </units>
+   <units name="uA">
+      <unit prefix="micro" units="ampere"/>
+   </units>
+   <units name="nA">
+      <unit prefix="nano" units="ampere"/>
+   </units>
+   <units name="uF_per_cm2">
+      <unit units="uF"/>
+      <unit exponent="-1" units="cm2"/>
+   </units>
+   <units name="mS_per_cm2">
+      <unit prefix="milli" units="siemens"/>
+      <unit exponent="-1" units="cm2"/>
+   </units>
+   <units name="uA_per_cm2">
+      <unit prefix="micro" units="ampere"/>
+      <unit exponent="-1" units="cm2"/>
+   </units>
+   <units name="mMcm2_per_uAs">
+      <unit units="mM"/>
+      <unit units="cm2"/>
+      <unit exponent="-1" units="uA"/>
+      <unit exponent="-1" units="second"/>
+   </units>
+   <units name="mM_per_mV">
+      <unit exponent="-1" units="mV"/>
+      <unit units="mM"/>
+   </units>
+   <units name="per_mV">
+      <unit exponent="-1" units="mV"/>
+   </units>
+   
+   <component name="environment">
+      <variable cmeta:id="environment_time" name="time" public_interface="out" units="second"/>
+   </component>
+   
+   <component name="soma_compartment">
+      <variable initial_value="-64" name="V_s" public_interface="out" units="mV"/>
+      <variable initial_value="55" name="V_Na" public_interface="out" units="mV"/>
+      
+	  <variable initial_value="-85" name="V_K" units="mV"/>
+      <variable cmeta:id="soma_compartment_I_Na" name="I_Na" units="uA_per_cm2"/>
+      <variable cmeta:id="soma_compartment_I_K_DR" name="I_K_DR" units="uA_per_cm2"/>
+      <variable initial_value="3.2" name="g_K_DR" units="mS_per_cm2"/>
+      <variable initial_value="3.2" name="g_Na" units="mS_per_cm2"/>
+      
+	  <variable name="g_c" public_interface="in" units="mS_per_cm2"/>
+      <variable name="V_D" public_interface="in" units="mV"/>
+	  <variable name="time" public_interface="in" units="second"/>
+      <variable name="C_m" public_interface="in" units="uF_per_cm2"/>
+      <variable name="p" public_interface="in" units="dimensionless"/>
+      <variable name="n" public_interface="in" units="dimensionless"/>
+      <variable name="h" public_interface="in" units="dimensionless"/>
+      <variable name="m_infinity" public_interface="in" units="dimensionless"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+		 <apply>
+            <eq/>
+            <ci>I_Na</ci>
+            <apply>
+               <times/>
+               <ci>g_Na</ci>
+               <ci>h</ci>
+               <apply>
+                  <minus/>
+                  <ci>V_s</ci>
+                  <ci>V_Na</ci>
+               </apply>
+               <apply>
+                  <power/>
+                  <ci>m_infinity</ci>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+               </apply>
+            </apply>
+         </apply>
+         
+		 <apply>
+            <eq/>
+            <ci>I_K_DR</ci>
+            <apply>
+               <times/>
+               <ci>g_K_DR</ci>
+               <apply>
+                  <minus/>
+                  <ci>V_s</ci>
+                  <ci>V_K</ci>
+               </apply>
+               <apply>
+                  <power/>
+                  <ci>n</ci>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+               </apply>
+            </apply>
+         </apply>
+         
+		 <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>V_s</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+					 <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millisecond_per_second">1000.0</cn>
+                     <apply>
+					    <plus/>
+                        <ci>I_K_DR</ci>
+					    <ci>I_Na</ci>
+                        <apply>
+                           <times/>
+                           <apply>
+                              <divide/>
+                              <ci>g_c</ci>
+                              <ci>p</ci>
+                           </apply>
+                           <apply>
+                              <minus/>
+                              <ci>V_s</ci>
+                              <ci>V_D</ci>
+						   </apply>
+                        </apply>
+                     </apply>
+                  </apply>
+			   </apply>
+               <ci>C_m</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="dendritic_compartment">
+      <variable initial_value="-25.0" name="V_D" public_interface="out" units="mV"/>
+      
+	  <variable initial_value="-50" name="V_L" units="mV"/>
+	  <variable initial_value="0" name="V_NMDA" units="mV"/>
+      <variable cmeta:id="dendritic_compartment_I_L" name="I_L" units="uA_per_cm2"/>
+	  <variable name="I_D" units="uA_per_cm2"/>
+      <variable cmeta:id="dendritic_compartment_I_pump" name="I_pump" units="uA_per_cm2"/>
+      <variable cmeta:id="dendritic_compartment_I_NMDA" name="I_NMDA" units="uA_per_cm2"/>
+      <variable name="I_Na_NMDA" units="uA_per_cm2"/>
+      <variable initial_value="18.0" name="R_pump" units="uA_per_cm2"/>
+      <variable initial_value="0.5" name="alpha" units="mMcm2_per_uAs"/>
+      <variable initial_value="1.25" name="g_NMDA" units="mS_per_cm2"/>
+      <variable initial_value="1.0" name="g_Na_NMDA" units="mS_per_cm2"/>
+      <variable initial_value="0.18" name="g_L" units="mS_per_cm2"/>
+      <variable initial_value="5.09" name="Na" units="mM"/>
+      <variable initial_value="8" name="Na_eq" units="mM"/>
+      <variable initial_value="15" name="K_p" units="mM"/>
+      <variable initial_value="1.4" name="Mg_o" units="mM"/>
+	  <variable initial_value="10.0" name="K_Mg" units="mM"/>
+      <variable initial_value="12.5" name="q" units="mV"/>
+      <variable name="phi_Na" units="dimensionless"/>
+	  <variable name="phi_Na_eq" units="dimensionless"/>
+	  
+	  <variable name="V_s" public_interface="in" units="mV"/>
+      <variable name="V_Na" public_interface="in" units="mV"/>
+      <variable name="g_c" public_interface="in" units="mS_per_cm2"/>
+      <variable name="p" public_interface="in" units="dimensionless"/>
+      <variable name="n" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <variable name="C_m" public_interface="in" units="uF_per_cm2"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>I_D</ci>
+            <apply>
+               <plus/>
+               <ci>I_NMDA</ci>
+			   <ci>I_pump</ci>
+               <ci>I_L</ci>
+            </apply>
+         </apply>
+		 
+		 <apply>
+            <eq/>
+            <ci>I_L</ci>
+            <apply>
+               <times/>
+               <ci>g_L</ci>
+               <apply>
+                  <minus/>
+                  <ci>V_D</ci>
+                  <ci>V_L</ci>
+               </apply>
+            </apply>
+         </apply>
+		 
+         <apply>
+            <eq/>
+            <ci>I_pump</ci>
+            <apply>
+               <times/>
+			   <ci>R_pump</ci>
+               <apply>
+                  <minus/>
+                  <ci>phi_Na</ci>
+				  <ci>phi_Na_eq</ci>
+               </apply>
+            </apply>
+         </apply>
+		 
+		 <apply>
+            <eq/>
+            <ci>phi_Na</ci>
+            <apply>
+               <divide/>
+			   <apply>
+                  <power/>
+				  <ci>Na</ci>
+				  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+			   </apply>
+               <apply>
+                  <plus/>
+				  <apply>
+                     <power/>
+				     <ci>Na</ci>
+				     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+			      </apply>
+				  <apply>
+                     <power/>
+				     <ci>K_p</ci>
+				     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+			      </apply>
+               </apply>
+            </apply>
+         </apply>
+		 
+		 <apply>
+            <eq/>
+            <ci>phi_Na_eq</ci>
+            <apply>
+               <divide/>
+			   <apply>
+                  <power/>
+				  <ci>Na_eq</ci>
+				  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+			   </apply>
+               <apply>
+                  <plus/>
+				  <apply>
+                     <power/>
+				     <ci>Na_eq</ci>
+				     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+			      </apply>
+				  <apply>
+                     <power/>
+				     <ci>K_p</ci>
+				     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+			      </apply>
+               </apply>
+            </apply>
+         </apply>
+		 
+		 <apply>
+            <eq/>
+            <ci>I_NMDA</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <divide/>
+				  <ci>g_NMDA</ci>
+				  <apply>
+                     <plus/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+					 <apply>
+                        <times/>
+						<apply>
+                           <divide/>
+				           <ci>Mg_o</ci>
+						   <ci>K_Mg</ci>
+                        </apply>
+						<apply>
+                           <exp/>
+						   <apply>
+                              <minus/>
+							  <apply>
+                                 <divide/>
+				                 <ci>V_D</ci>
+						         <ci>q</ci>
+                              </apply>
+						   </apply>
+						</apply>
+				     </apply>
+				  </apply>
+			   </apply>
+			   <apply>
+                  <minus/>
+                  <ci>V_D</ci>
+                  <ci>V_NMDA</ci>
+               </apply>
+			</apply>
+         </apply>
+		 
+		 <apply>
+            <eq/>
+            <ci>I_Na_NMDA</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <divide/>
+				  <ci>g_Na_NMDA</ci>
+				  <apply>
+                     <plus/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+					 <apply>
+                        <times/>
+						<apply>
+                           <divide/>
+				           <ci>Mg_o</ci>
+						   <ci>K_Mg</ci>
+                        </apply>
+						<apply>
+                           <exp/>
+						   <apply>
+                              <minus/>
+							  <apply>
+                                 <divide/>
+				                 <ci>V_D</ci>
+						         <ci>q</ci>
+                              </apply>
+						   </apply>
+						</apply>
+				     </apply>
+				  </apply>
+			   </apply>
+			   <apply>
+                  <minus/>
+                  <ci>V_D</ci>
+                  <ci>V_Na</ci>
+               </apply>
+			</apply>
+         </apply>
+		 
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>V_D</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+					 <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millisecond_per_second">1000.0</cn>
+					 <apply>
+                        <plus/>
+                        <ci>I_NMDA</ci>
+					    <ci>I_pump</ci>
+					    <ci>I_L</ci>
+                        <apply>
+                           <times/>
+                           <apply>
+                              <divide/>
+                              <ci>g_c</ci>
+                              <apply>
+                                 <minus/>
+                                 <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                                 <ci>p</ci>
+                              </apply>
+                           </apply>
+					       <apply>
+                              <minus/>
+                              <ci>V_D</ci>
+                              <ci>V_s</ci>
+						   </apply>
+						</apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <ci>C_m</ci>
+            </apply>
+         </apply>
+		 
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Na</ci>
+            </apply>
+            <apply>
+               <times/>
+               <ci>alpha</ci>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <ci>I_Na_NMDA</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+                     <ci>I_pump</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="model_parameters">
+      <variable initial_value="1" name="C_m" public_interface="out" units="uF_per_cm2"/>
+      <variable cmeta:id="model_parameters_g_c" initial_value="0.0" name="g_c" public_interface="out" units="mS_per_cm2"/>
+      <variable initial_value="0.5" name="p" public_interface="out" units="dimensionless"/>
+   </component>
+   
+   <component name="gating_variables">
+      <variable name="m_infinity" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.002" name="n" public_interface="out" units="dimensionless"/>
+      <variable initial_value="1" name="h" public_interface="out" units="dimensionless"/>
+      
+	  <variable name="n_infinity" units="dimensionless"/>
+      <variable name="h_infinity" units="dimensionless"/>
+      <variable name="tau_h" units="second"/>
+      <variable name="tau_n" units="second"/>
+      
+	  <variable name="time" public_interface="in" units="second"/>
+      <variable name="V_s" public_interface="in" units="mV"/>
+      <variable name="V_D" public_interface="in" units="mV"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>m_infinity</ci>
+            <apply>
+               <divide/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <minus/>
+                           <apply>
+                              <plus/>
+                              <ci>V_s</ci>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mV">35</cn>
+                           </apply>
+                        </apply>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mV">6.2</cn>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         
+		 <apply>
+            <eq/>
+            <ci>n_infinity</ci>
+            <apply>
+               <divide/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <minus/>
+                           <apply>
+                              <plus/>
+                              <ci>V_s</ci>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mV">31</cn>
+                           </apply>
+                        </apply>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mV">5.3</cn>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         
+		 <apply>
+            <eq/>
+            <ci>h_infinity</ci>
+            <apply>
+               <divide/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <plus/>
+                           <ci>V_s</ci>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mV">30</cn>
+                        </apply>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mV">8.3</cn>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         
+         <apply>
+            <eq/>
+            <ci>tau_h</ci>
+            <apply>
+               <times/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="second">0.4</cn>
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+				  <apply>
+                     <divide/>
+					 <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                     <apply>
+                        <plus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        <apply>
+                           <exp/>
+                           <apply>
+                              <divide/>
+                              <apply>
+                                 <plus/>
+                                 <ci>V_s</ci>
+                                 <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mV">25</cn>
+                              </apply>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mV">5</cn>
+						   </apply>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+
+         <apply>
+            <eq/>
+            <ci>tau_n</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="second">0.8</cn>
+                  <apply>
+                     <divide/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="second">1.6</cn>
+                     <apply>
+                        <plus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        <apply>
+                           <exp/>
+                           <apply>
+                              <times/>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="per_mV">0.1</cn>
+                              <apply>
+                                 <plus/>
+                                 <ci>V_s</ci>
+                                 <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mV">25</cn>
+                              </apply>
+                           </apply>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <minus/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="per_mV">0.1</cn>
+                        </apply>
+                        <apply>
+                           <plus/>
+                           <ci>V_s</ci>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mV">70</cn>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+		 
+		 <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>h</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <ci>h_infinity</ci>
+                  <ci>h</ci>
+               </apply>
+               <ci>tau_h</ci>
+            </apply>
+         </apply>
+         
+		 <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>n</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <ci>n_infinity</ci>
+                  <ci>n</ci>
+               </apply>
+               <ci>tau_n</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <connection>
+      <map_components component_1="environment" component_2="soma_compartment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="dendritic_compartment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="gating_variables"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="model_parameters" component_2="soma_compartment"/>
+      <map_variables variable_1="C_m" variable_2="C_m"/>
+      <map_variables variable_1="g_c" variable_2="g_c"/>
+      <map_variables variable_1="p" variable_2="p"/>
+   </connection>
+   <connection>
+      <map_components component_1="model_parameters" component_2="dendritic_compartment"/>
+      <map_variables variable_1="C_m" variable_2="C_m"/>
+      <map_variables variable_1="g_c" variable_2="g_c"/>
+      <map_variables variable_1="p" variable_2="p"/>
+   </connection>
+   <connection>
+      <map_components component_1="gating_variables" component_2="soma_compartment"/>
+      <map_variables variable_1="V_s" variable_2="V_s"/>
+      <map_variables variable_1="n" variable_2="n"/>
+      <map_variables variable_1="h" variable_2="h"/>
+      <map_variables variable_1="m_infinity" variable_2="m_infinity"/>
+   </connection>
+   <connection>
+      <map_components component_1="dendritic_compartment" component_2="soma_compartment"/>
+      <map_variables variable_1="V_D" variable_2="V_D"/>
+      <map_variables variable_1="V_s" variable_2="V_s"/>
+      <map_variables variable_1="V_Na" variable_2="V_Na"/>
+   </connection>
+   <connection>
+      <map_components component_1="dendritic_compartment" component_2="gating_variables"/>
+      <map_variables variable_1="V_D" variable_2="V_D"/>
+      <map_variables variable_1="n" variable_2="n"/>
+   </connection>
+   
+   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    
+	<rdf:Description rdf:about="">
+	  <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Modeling N-methyl-D-aspartate-induced bursting in dopamine neurons (simple model based on the equations in the published paper)
+          </dc:title>
+      <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource">
+        <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+          <vCard:Family>Lloyd</vCard:Family>
+          <vCard:Given>Catherine</vCard:Given>
+		</vCard:N>
+        <vCard:EMAIL xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+          <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+          <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+        </vCard:EMAIL>
+        <vCard:ORG xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+          <vCard:Orgname>The University of Auckland</vCard:Orgname>
+          <vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+        </vCard:ORG>
+      </dc:creator>
+  
+      <dcterms:created xmlns:dcterms="http://purl.org/dc/terms/" rdf:parseType="Resource">
+        <dcterms:W3CDTF>2010-07-08</dcterms:W3CDTF>
+      </dcterms:created>
+    </rdf:Description>
+    
+    <rdf:Description rdf:about="#li_1996">
+      
+	  <cmeta:bio_entity>neuron</cmeta:bio_entity>
+	  
+      <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource">
+        <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource">
+          <bqs:subject_type>keyword</bqs:subject_type>
+          <rdf:value>
+            <rdf:Bag>
+              <rdf:li>electrophysiology</rdf:li>
+			  <rdf:li>neuron</rdf:li>
+			  <rdf:li>neurobiology</rdf:li>
+			  <rdf:li>bursting</rdf:li>
+			  <rdf:li>dopamine</rdf:li>
+            </rdf:Bag>
+          </rdf:value>
+        </dc:subject>
+      </bqs:reference>
+
+      <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource">
+        <bqs:Pubmed_id>9053795</bqs:Pubmed_id>
+        <bqs:JournalArticle rdf:parseType="Resource">
+          <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <rdf:Seq>
+              <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+                    <vCard:Family>Li</vCard:Family>
+                    <vCard:Given>Y</vCard:Given>
+					<vCard:Other>X</vCard:Other>
+                  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+			  <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+                    <vCard:Family>Bertram</vCard:Family>
+                    <vCard:Given>R</vCard:Given>
+				  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+              <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+                    <vCard:Family>Rinzel</vCard:Family>
+                    <vCard:Given>J</vCard:Given>
+				  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+            </rdf:Seq>
+          </dc:creator>
+          <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">
+            Modeling N-methyl-D-aspartate-induced bursting in dopamine neurons
+          </dc:title>
+          <dcterms:issued xmlns:dcterms="http://purl.org/dc/terms/" rdf:parseType="Resource">
+            <dcterms:W3CDTF>1996-03</dcterms:W3CDTF>
+          </dcterms:issued>
+          <bqs:Journal rdf:parseType="Resource">
+            <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Neuroscience</dc:title>
+          </bqs:Journal>
+		  <bqs:volume>71</bqs:volume>
+          <bqs:first_page>397</bqs:first_page>
+          <bqs:last_page>410</bqs:last_page>
+        </bqs:JournalArticle>
+      </bqs:reference>
+    </rdf:Description>
+  </rdf:RDF>
+</model>

@@ -1,0 +1,1374 @@
+<?xml version="1.0"?>
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" cmeta:id="aguda_tang_1999" name="aguda_tang_1999">
+  <documentation xmlns="http://cellml.org/tmp-documentation">
+    <article>
+      <articleinfo>
+        <title>The kinetic origins of the restriction point in the mammalian cell cycle</title>
+        <author>
+          <firstname>Jeelean</firstname>
+          <surname>Lim</surname>
+          <affiliation>
+            <shortaffil>Bioengineering Institute, University of Auckland</shortaffil>
+          </affiliation>
+        </author>
+      </articleinfo>
+      <section id="sec_status">
+        <title>Model Status</title>
+        <para>
+            This CellML version of the model has been checked in COR and PCEnv and the model runs to replicate the original published results as depicted in figure 5b of the paper.  The units have been checked and are consistent.
+          </para>
+      </section>
+      <sect1 id="sec_structure">
+        <title>Model Structure</title>
+        <para>
+ABSTRACT: A detailed model mechanism for the G1/S transition in the mammalian cell cycle is presented and analysed by computer simulation to investigate whether the kinetic origins of the restriction point (R-point) can be identified. The R-point occurs in mid-to-late G1 phase and marks the transition between mitogendependent to mitogen-independent progression of the cell cycle. For purposes of computer simulations, the R-point is defined as the first point in time after mitosis where cutting off mitogen stimulation does not prevent the cell reaching the threshold activity of cyclin-E/cdk2 required for entry into S phase. The key components of the network that generate a dynamic switching behaviour associated with the R-point include a positive feedback loop between cyclin-E/cdk2 and Cdc25A, along with the mutually negative interaction between the cdk inhibitor p27Kip1 and cyclin-E/cdk2. Simulations of the passage through the R-point were carried out and the factors affecting the position of the R-point in G1 are determined. The detailed model also shows various points in the network where the activation of cyclin-E/cdk2 can be initiated with or without the involvement of the retinoblastoma protein.
+</para>
+        <para>
+The complete original paper reference is cited below:
+</para>
+        <para><ulink url="http://www3.interscience.wiley.com/journal/119096039/abstract">The kinetic origins of the restriction point in the mammalian cell cycle</ulink>, B. D. Aguda and Y. Tang, 1999
+					(A <ulink url="http://www3.interscience.wiley.com/cgi-bin/fulltext/119096039/PDFSTART">PDF version</ulink> of the article is available to subscribers on the journal website.)  <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/10619492">PubMed ID: 10619492 </ulink>
+				</para>
+        <informalfigure float="0" id="fig_reaction_diagram">
+          <mediaobject>
+            <imageobject>
+              <objectinfo>
+                <title>Figure 1</title>
+              </objectinfo>
+              <imagedata fileref="aguda_1999a.png"/>
+            </imageobject>
+          </mediaobject>
+          <caption>A detailed mechanistic model of the GI/S transition in the mammalian cell cycle.</caption>
+        </informalfigure>
+        <informalfigure float="0" id="fig_reaction_diagram">
+          <mediaobject>
+            <imageobject>
+              <objectinfo>
+                <title>Figure 2</title>
+              </objectinfo>
+              <imagedata fileref="aguda_1999b.png"/>
+            </imageobject>
+          </mediaobject>
+          <caption>pRB-independant pathways leading to activation of CycE/Cdk2.</caption>
+        </informalfigure>
+      </sect1>
+    </article>
+  </documentation>
+  <units name="millimolar">
+    <unit prefix="milli" units="mole"/>
+    <unit exponent="-1" units="litre"/>
+  </units>
+  <units name="minute">
+    <unit multiplier="60" units="second"/>
+  </units>
+  <units name="first_order_rate_constant">
+    <unit exponent="-1" units="minute"/>
+  </units>
+  <component name="environment">
+    <variable cmeta:id="environment_time" name="time" public_interface="out" units="minute"/>
+  </component>
+  <component name="rate_constants">
+    <variable initial_value="0.1" name="k1" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="0.5" name="k1_" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="0.5" name="k1__" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="0.001" name="kn1" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="0.1" name="k2" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="1" name="kn2" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="1.42" name="k3" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="0" name="k3_" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="0.016" name="kn4" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="0.02" name="k5" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="5" name="kn6" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="2" name="k8" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="2" name="k9" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="0.035" name="k10" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="3.5" name="k17" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="0.0001" name="k18" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="0.05" name="k19" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="0.01" name="k20" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="0.1" name="k21" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="0.001" name="k22" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="0.1" name="k24" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="0.01" name="k25" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="0.02" name="k25_" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="0.01" name="k26" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="0.1" name="k26_" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="0.01" name="k28" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="0.001" name="k29" public_interface="out" units="first_order_rate_constant"/>
+  </component>
+  <component name="a_CyclinE_Cdk2">
+    <variable cmeta:id="a_CyclinE_Cdk2_a_CyclinE_Cdk2" initial_value="0" name="a_CyclinE_Cdk2" public_interface="out" units="dimensionless"/>
+    <variable name="V_2" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="V_10" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="V_n2" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="V_9" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="V_21" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="time" public_interface="in" units="minute"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>a_CyclinE_Cdk2</ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <ci>V_2</ci>
+            <ci>V_10</ci>
+          </apply>
+          <apply>
+            <plus/>
+            <ci>V_n2</ci>
+            <ci>V_9</ci>
+            <ci>V_21</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="i_CyclinE_Cdk2">
+    <variable cmeta:id="i_CyclinE_Cdk2_i_CyclinE_Cdk2" initial_value="0.01" name="i_CyclinE_Cdk2" public_interface="out" units="dimensionless"/>
+    <variable name="V_3" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="V_2" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="V_n2" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="V_5" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="time" public_interface="in" units="minute"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>i_CyclinE_Cdk2</ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <ci>V_3</ci>
+            <ci>V_n2</ci>
+          </apply>
+          <apply>
+            <plus/>
+            <ci>V_2</ci>
+            <ci>V_5</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="pRB_E2F">
+    <variable cmeta:id="pRB_E2F_pRB_E2F" initial_value="1.95" name="pRB_E2F" public_interface="out" units="dimensionless"/>
+    <variable name="V_n1" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="V_1" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="time" public_interface="in" units="minute"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>pRB_E2F</ci>
+        </apply>
+        <apply>
+          <minus/>
+          <ci>V_n1</ci>
+          <ci>V_1</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="E2F">
+    <variable cmeta:id="E2F_E2F" initial_value="0" name="E2F" public_interface="out" units="dimensionless"/>
+    <variable name="V_1" public_interface="in" units="first_order_rate_constant"/>
+    <variable initial_value="0.000001" name="V_4" units="first_order_rate_constant"/>
+    <variable name="V_18" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="V_n1" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="V_n4" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="time" public_interface="in" units="minute"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>E2F</ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <ci>V_1</ci>
+            <ci>V_4</ci>
+            <ci>V_18</ci>
+          </apply>
+          <apply>
+            <plus/>
+            <ci>V_n1</ci>
+            <ci>V_n4</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="pRB">
+    <variable cmeta:id="pRB_pRB" initial_value="0.05" name="pRB" public_interface="out" units="dimensionless"/>
+    <variable initial_value="0.01" name="V_27" units="first_order_rate_constant"/>
+    <variable name="V_26" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="V_29" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="V_n1" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="V_28" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="time" public_interface="in" units="minute"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>pRB</ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <ci>V_27</ci>
+            <ci>V_26</ci>
+            <ci>V_29</ci>
+          </apply>
+          <apply>
+            <plus/>
+            <ci>V_n1</ci>
+            <ci>V_28</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="CycD_Cdk4">
+    <variable cmeta:id="CycD_Cdk4_CycD_Cdk4" initial_value="0" name="CycD_Cdk4" public_interface="out" units="dimensionless"/>
+    <variable initial_value="0.018" name="V_6" units="first_order_rate_constant"/>
+    <variable name="V_20" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="V_n6" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="V_19" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="V_17" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="time" public_interface="in" units="minute"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>CycD_Cdk4</ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <ci>V_6</ci>
+            <ci>V_20</ci>
+          </apply>
+          <apply>
+            <plus/>
+            <ci>V_n6</ci>
+            <ci>V_19</ci>
+            <ci>V_17</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="p27">
+    <variable cmeta:id="p27_p27" initial_value="5" name="p27" public_interface="out" units="dimensionless"/>
+    <variable initial_value="0.0001" name="V_7" units="first_order_rate_constant"/>
+    <variable name="V_10" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="V_20" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="V_8" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="V_9" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="V_19" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="V_22" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="time" public_interface="in" units="minute"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>p27</ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <ci>V_7</ci>
+            <ci>V_10</ci>
+            <ci>V_20</ci>
+          </apply>
+          <apply>
+            <plus/>
+            <ci>V_8</ci>
+            <ci>V_9</ci>
+            <ci>V_19</ci>
+            <ci>V_22</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="CycE_Cdk2_p27">
+    <variable cmeta:id="CycE_Cdk2_p27_CycE_Cdk2_p27" initial_value="1" name="CycE_Cdk2_p27" public_interface="out" units="dimensionless"/>
+    <variable name="V_9" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="V_10" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="time" public_interface="in" units="minute"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>CycE_Cdk2_p27</ci>
+        </apply>
+        <apply>
+          <minus/>
+          <ci>V_9</ci>
+          <ci>V_10</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="CycD_Cdk4_p27">
+    <variable cmeta:id="CycD_Cdk4_p27_CycD_Cdk4_p27" initial_value="0" name="CycD_Cdk4_p27" public_interface="out" units="dimensionless"/>
+    <variable name="V_19" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="V_20" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="time" public_interface="in" units="minute"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>CycD_Cdk4_p27</ci>
+        </apply>
+        <apply>
+          <minus/>
+          <ci>V_19</ci>
+          <ci>V_20</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="p16">
+    <variable cmeta:id="p16_p16" initial_value="5" name="p16" public_interface="out" units="dimensionless"/>
+    <variable initial_value="0.2" name="V_23" units="first_order_rate_constant"/>
+    <variable name="V_25" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="V_17" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="V_24" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="time" public_interface="in" units="minute"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>p16</ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <ci>V_23</ci>
+            <ci>V_25</ci>
+          </apply>
+          <apply>
+            <plus/>
+            <ci>V_17</ci>
+            <ci>V_24</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="pRB_P">
+    <variable cmeta:id="pRB_P_pRB_P" initial_value="0.01" name="pRB_P" public_interface="out" units="dimensionless"/>
+    <variable name="V_1" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="V_29" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="time" public_interface="in" units="minute"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>pRB_P</ci>
+        </apply>
+        <apply>
+          <minus/>
+          <ci>V_1</ci>
+          <ci>V_29</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="V_1">
+    <variable name="V_1" public_interface="out" units="first_order_rate_constant"/>
+    <variable name="k1" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="k1_" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="k1__" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="CycD_Cdk4" public_interface="in" units="dimensionless"/>
+    <variable name="CycD_Cdk4_p27" public_interface="in" units="dimensionless"/>
+    <variable name="a_CyclinE_Cdk2" public_interface="in" units="dimensionless"/>
+    <variable name="pRB_E2F" public_interface="in" units="dimensionless"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>V_1</ci>
+        <apply>
+          <plus/>
+          <apply>
+            <times/>
+            <ci>k1_</ci>
+            <ci>CycD_Cdk4</ci>
+            <ci>pRB_E2F</ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci>k1__</ci>
+            <ci>CycD_Cdk4_p27</ci>
+            <ci>pRB_E2F</ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci>k1</ci>
+            <ci>a_CyclinE_Cdk2</ci>
+            <ci>pRB_E2F</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="V_n1">
+    <variable name="V_n1" public_interface="out" units="first_order_rate_constant"/>
+    <variable name="kn1" public_interface="in" units="first_order_rate_constant"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>V_n1</ci>
+        <ci>kn1</ci>
+      </apply>
+    </math>
+  </component>
+  <component name="V_2">
+    <variable name="V_2" public_interface="out" units="first_order_rate_constant"/>
+    <variable name="k2" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="a_CyclinE_Cdk2" public_interface="in" units="dimensionless"/>
+    <variable name="i_CyclinE_Cdk2" public_interface="in" units="dimensionless"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>V_2</ci>
+        <apply>
+          <times/>
+          <ci>k2</ci>
+          <ci>a_CyclinE_Cdk2</ci>
+          <ci>i_CyclinE_Cdk2</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="V_n2">
+    <variable name="V_n2" public_interface="out" units="first_order_rate_constant"/>
+    <variable name="kn2" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="a_CyclinE_Cdk2" public_interface="in" units="dimensionless"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>V_n2</ci>
+        <apply>
+          <times/>
+          <ci>kn2</ci>
+          <ci>a_CyclinE_Cdk2</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="V_3">
+    <variable name="V_3" public_interface="out" units="first_order_rate_constant"/>
+    <variable name="k3" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="k3_" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="E2F" public_interface="in" units="dimensionless"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>V_3</ci>
+        <apply>
+          <plus/>
+          <apply>
+            <times/>
+            <ci>k3</ci>
+            <ci>E2F</ci>
+          </apply>
+          <ci>k3_</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="V_n4">
+    <variable name="V_n4" public_interface="out" units="first_order_rate_constant"/>
+    <variable name="kn4" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="E2F" public_interface="in" units="dimensionless"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>V_n4</ci>
+        <apply>
+          <times/>
+          <ci>kn4</ci>
+          <ci>E2F</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="V_5">
+    <variable name="V_5" public_interface="out" units="first_order_rate_constant"/>
+    <variable name="k5" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="i_CyclinE_Cdk2" public_interface="in" units="dimensionless"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>V_5</ci>
+        <apply>
+          <times/>
+          <ci>k5</ci>
+          <ci>i_CyclinE_Cdk2</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="V_n6">
+    <variable name="V_n6" public_interface="out" units="first_order_rate_constant"/>
+    <variable name="kn6" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="CycD_Cdk4" public_interface="in" units="dimensionless"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>V_n6</ci>
+        <apply>
+          <times/>
+          <ci>kn6</ci>
+          <ci>CycD_Cdk4</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="V_8">
+    <variable name="V_8" public_interface="out" units="first_order_rate_constant"/>
+    <variable name="k8" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="p27" public_interface="in" units="dimensionless"/>
+    <variable name="a_CyclinE_Cdk2" public_interface="in" units="dimensionless"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>V_8</ci>
+        <apply>
+          <times/>
+          <ci>k8</ci>
+          <ci>p27</ci>
+          <ci>a_CyclinE_Cdk2</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="V_9">
+    <variable name="V_9" public_interface="out" units="first_order_rate_constant"/>
+    <variable name="k9" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="p27" public_interface="in" units="dimensionless"/>
+    <variable name="a_CyclinE_Cdk2" public_interface="in" units="dimensionless"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>V_9</ci>
+        <apply>
+          <times/>
+          <ci>k9</ci>
+          <ci>p27</ci>
+          <ci>a_CyclinE_Cdk2</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="V_10">
+    <variable name="V_10" public_interface="out" units="first_order_rate_constant"/>
+    <variable name="k10" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="CycE_Cdk2_p27" public_interface="in" units="dimensionless"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>V_10</ci>
+        <apply>
+          <times/>
+          <ci>k10</ci>
+          <ci>CycE_Cdk2_p27</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="V_17">
+    <variable name="V_17" public_interface="out" units="first_order_rate_constant"/>
+    <variable name="k17" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="p16" public_interface="in" units="dimensionless"/>
+    <variable name="CycD_Cdk4" public_interface="in" units="dimensionless"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>V_17</ci>
+        <apply>
+          <times/>
+          <ci>k17</ci>
+          <ci>p16</ci>
+          <ci>CycD_Cdk4</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="V_18">
+    <variable name="V_18" public_interface="out" units="first_order_rate_constant"/>
+    <variable name="k18" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="E2F" public_interface="in" units="dimensionless"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>V_18</ci>
+        <apply>
+          <times/>
+          <ci>k18</ci>
+          <ci>E2F</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="V_19">
+    <variable name="V_19" public_interface="out" units="first_order_rate_constant"/>
+    <variable name="k19" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="CycD_Cdk4" public_interface="in" units="dimensionless"/>
+    <variable name="p27" public_interface="in" units="dimensionless"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>V_19</ci>
+        <apply>
+          <times/>
+          <ci>k19</ci>
+          <ci>p27</ci>
+          <ci>CycD_Cdk4</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="V_20">
+    <variable name="V_20" public_interface="out" units="first_order_rate_constant"/>
+    <variable name="k20" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="CycD_Cdk4_p27" public_interface="in" units="dimensionless"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>V_20</ci>
+        <apply>
+          <times/>
+          <ci>k20</ci>
+          <ci>CycD_Cdk4_p27</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="V_21">
+    <variable name="V_21" public_interface="out" units="first_order_rate_constant"/>
+    <variable name="k21" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="a_CyclinE_Cdk2" public_interface="in" units="dimensionless"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>V_21</ci>
+        <apply>
+          <times/>
+          <ci>k21</ci>
+          <apply>
+            <power/>
+            <ci>a_CyclinE_Cdk2</ci>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="V_22">
+    <variable name="V_22" public_interface="out" units="first_order_rate_constant"/>
+    <variable name="k22" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="p27" public_interface="in" units="dimensionless"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>V_22</ci>
+        <apply>
+          <times/>
+          <ci>k22</ci>
+          <ci>p27</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="V_24">
+    <variable name="V_24" public_interface="out" units="first_order_rate_constant"/>
+    <variable name="k24" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="p16" public_interface="in" units="dimensionless"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>V_24</ci>
+        <apply>
+          <times/>
+          <ci>k24</ci>
+          <ci>p16</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="V_25">
+    <variable name="V_25" public_interface="out" units="first_order_rate_constant"/>
+    <variable name="k25" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="k25_" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="pRB" public_interface="in" units="dimensionless"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>V_25</ci>
+        <apply>
+          <divide/>
+          <ci>k25</ci>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="first_order_rate_constant">1</cn>
+              <apply>
+                <times/>
+                <ci>k25_</ci>
+                <ci>pRB</ci>
+              </apply>
+            </apply>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute">1</cn>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="V_26">
+    <variable name="V_26" public_interface="out" units="first_order_rate_constant"/>
+    <variable name="k26" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="k26_" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="p16" public_interface="in" units="dimensionless"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>V_26</ci>
+        <apply>
+          <divide/>
+          <ci>k26</ci>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="first_order_rate_constant">1</cn>
+              <apply>
+                <times/>
+                <ci>k26_</ci>
+                <ci>p16</ci>
+              </apply>
+            </apply>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute">1</cn>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="V_28">
+    <variable name="V_28" public_interface="out" units="first_order_rate_constant"/>
+    <variable name="k28" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="pRB" public_interface="in" units="dimensionless"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>V_28</ci>
+        <apply>
+          <times/>
+          <ci>k28</ci>
+          <ci>pRB</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="V_29">
+    <variable name="V_29" public_interface="out" units="first_order_rate_constant"/>
+    <variable name="k29" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="pRB_P" public_interface="in" units="dimensionless"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>V_29</ci>
+        <apply>
+          <times/>
+          <ci>k29</ci>
+          <ci>pRB_P</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <connection>
+    <map_components component_1="a_CyclinE_Cdk2" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  <connection>
+    <map_components component_1="i_CyclinE_Cdk2" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  <connection>
+    <map_components component_1="pRB_E2F" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  <connection>
+    <map_components component_1="E2F" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  <connection>
+    <map_components component_1="pRB" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  <connection>
+    <map_components component_1="CycD_Cdk4" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  <connection>
+    <map_components component_1="p27" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  <connection>
+    <map_components component_1="CycE_Cdk2_p27" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  <connection>
+    <map_components component_1="CycD_Cdk4_p27" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  <connection>
+    <map_components component_1="p16" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  <connection>
+    <map_components component_1="pRB_P" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  <connection>
+    <map_components component_1="a_CyclinE_Cdk2" component_2="V_2"/>
+    <map_variables variable_1="V_2" variable_2="V_2"/>
+    <map_variables variable_1="a_CyclinE_Cdk2" variable_2="a_CyclinE_Cdk2"/>
+  </connection>
+  <connection>
+    <map_components component_1="a_CyclinE_Cdk2" component_2="V_10"/>
+    <map_variables variable_1="V_10" variable_2="V_10"/>
+  </connection>
+  <connection>
+    <map_components component_1="a_CyclinE_Cdk2" component_2="V_n2"/>
+    <map_variables variable_1="V_n2" variable_2="V_n2"/>
+    <map_variables variable_1="a_CyclinE_Cdk2" variable_2="a_CyclinE_Cdk2"/>
+  </connection>
+  <connection>
+    <map_components component_1="a_CyclinE_Cdk2" component_2="V_9"/>
+    <map_variables variable_1="V_9" variable_2="V_9"/>
+    <map_variables variable_1="a_CyclinE_Cdk2" variable_2="a_CyclinE_Cdk2"/>
+  </connection>
+  <connection>
+    <map_components component_1="a_CyclinE_Cdk2" component_2="V_21"/>
+    <map_variables variable_1="V_21" variable_2="V_21"/>
+    <map_variables variable_1="a_CyclinE_Cdk2" variable_2="a_CyclinE_Cdk2"/>
+  </connection>
+  <connection>
+    <map_components component_1="i_CyclinE_Cdk2" component_2="V_3"/>
+    <map_variables variable_1="V_3" variable_2="V_3"/>
+  </connection>
+  <connection>
+    <map_components component_1="i_CyclinE_Cdk2" component_2="V_2"/>
+    <map_variables variable_1="V_2" variable_2="V_2"/>
+    <map_variables variable_1="i_CyclinE_Cdk2" variable_2="i_CyclinE_Cdk2"/>
+  </connection>
+  <connection>
+    <map_components component_1="i_CyclinE_Cdk2" component_2="V_n2"/>
+    <map_variables variable_1="V_n2" variable_2="V_n2"/>
+  </connection>
+  <connection>
+    <map_components component_1="i_CyclinE_Cdk2" component_2="V_5"/>
+    <map_variables variable_1="V_5" variable_2="V_5"/>
+    <map_variables variable_1="i_CyclinE_Cdk2" variable_2="i_CyclinE_Cdk2"/>
+  </connection>
+  <connection>
+    <map_components component_1="pRB_E2F" component_2="V_n1"/>
+    <map_variables variable_1="V_n1" variable_2="V_n1"/>
+  </connection>
+  <connection>
+    <map_components component_1="pRB_E2F" component_2="V_1"/>
+    <map_variables variable_1="V_1" variable_2="V_1"/>
+    <map_variables variable_1="pRB_E2F" variable_2="pRB_E2F"/>
+  </connection>
+  <connection>
+    <map_components component_1="E2F" component_2="V_n1"/>
+    <map_variables variable_1="V_n1" variable_2="V_n1"/>
+  </connection>
+  <connection>
+    <map_components component_1="E2F" component_2="V_1"/>
+    <map_variables variable_1="V_1" variable_2="V_1"/>
+  </connection>
+  <connection>
+    <map_components component_1="E2F" component_2="V_18"/>
+    <map_variables variable_1="V_18" variable_2="V_18"/>
+    <map_variables variable_1="E2F" variable_2="E2F"/>
+  </connection>
+  <connection>
+    <map_components component_1="E2F" component_2="V_n4"/>
+    <map_variables variable_1="V_n4" variable_2="V_n4"/>
+    <map_variables variable_1="E2F" variable_2="E2F"/>
+  </connection>
+  <connection>
+    <map_components component_1="pRB" component_2="V_26"/>
+    <map_variables variable_1="V_26" variable_2="V_26"/>
+  </connection>
+  <connection>
+    <map_components component_1="pRB" component_2="V_29"/>
+    <map_variables variable_1="V_29" variable_2="V_29"/>
+  </connection>
+  <connection>
+    <map_components component_1="pRB" component_2="V_n1"/>
+    <map_variables variable_1="V_n1" variable_2="V_n1"/>
+  </connection>
+  <connection>
+    <map_components component_1="pRB" component_2="V_28"/>
+    <map_variables variable_1="V_28" variable_2="V_28"/>
+    <map_variables variable_1="pRB" variable_2="pRB"/>
+  </connection>
+  <connection>
+    <map_components component_1="CycD_Cdk4" component_2="V_20"/>
+    <map_variables variable_1="V_20" variable_2="V_20"/>
+  </connection>
+  <connection>
+    <map_components component_1="CycD_Cdk4" component_2="V_n6"/>
+    <map_variables variable_1="V_n6" variable_2="V_n6"/>
+    <map_variables variable_1="CycD_Cdk4" variable_2="CycD_Cdk4"/>
+  </connection>
+  <connection>
+    <map_components component_1="CycD_Cdk4" component_2="V_19"/>
+    <map_variables variable_1="V_19" variable_2="V_19"/>
+    <map_variables variable_1="CycD_Cdk4" variable_2="CycD_Cdk4"/>
+  </connection>
+  <connection>
+    <map_components component_1="CycD_Cdk4" component_2="V_17"/>
+    <map_variables variable_1="V_17" variable_2="V_17"/>
+    <map_variables variable_1="CycD_Cdk4" variable_2="CycD_Cdk4"/>
+  </connection>
+  <connection>
+    <map_components component_1="p27" component_2="V_10"/>
+    <map_variables variable_1="V_10" variable_2="V_10"/>
+  </connection>
+  <connection>
+    <map_components component_1="p27" component_2="V_20"/>
+    <map_variables variable_1="V_20" variable_2="V_20"/>
+  </connection>
+  <connection>
+    <map_components component_1="p27" component_2="V_8"/>
+    <map_variables variable_1="V_8" variable_2="V_8"/>
+    <map_variables variable_1="p27" variable_2="p27"/>
+  </connection>
+  <connection>
+    <map_components component_1="p27" component_2="V_9"/>
+    <map_variables variable_1="V_9" variable_2="V_9"/>
+    <map_variables variable_1="p27" variable_2="p27"/>
+  </connection>
+  <connection>
+    <map_components component_1="p27" component_2="V_19"/>
+    <map_variables variable_1="V_19" variable_2="V_19"/>
+    <map_variables variable_1="p27" variable_2="p27"/>
+  </connection>
+  <connection>
+    <map_components component_1="p27" component_2="V_22"/>
+    <map_variables variable_1="V_22" variable_2="V_22"/>
+    <map_variables variable_1="p27" variable_2="p27"/>
+  </connection>
+  <connection>
+    <map_components component_1="CycE_Cdk2_p27" component_2="V_9"/>
+    <map_variables variable_1="V_9" variable_2="V_9"/>
+  </connection>
+  <connection>
+    <map_components component_1="CycE_Cdk2_p27" component_2="V_10"/>
+    <map_variables variable_1="V_10" variable_2="V_10"/>
+    <map_variables variable_1="CycE_Cdk2_p27" variable_2="CycE_Cdk2_p27"/>
+  </connection>
+  <connection>
+    <map_components component_1="CycD_Cdk4_p27" component_2="V_19"/>
+    <map_variables variable_1="V_19" variable_2="V_19"/>
+  </connection>
+  <connection>
+    <map_components component_1="CycD_Cdk4_p27" component_2="V_20"/>
+    <map_variables variable_1="V_20" variable_2="V_20"/>
+    <map_variables variable_1="CycD_Cdk4_p27" variable_2="CycD_Cdk4_p27"/>
+  </connection>
+  <connection>
+    <map_components component_1="p16" component_2="V_25"/>
+    <map_variables variable_1="V_25" variable_2="V_25"/>
+  </connection>
+  <connection>
+    <map_components component_1="p16" component_2="V_17"/>
+    <map_variables variable_1="V_17" variable_2="V_17"/>
+    <map_variables variable_1="p16" variable_2="p16"/>
+  </connection>
+  <connection>
+    <map_components component_1="p16" component_2="V_24"/>
+    <map_variables variable_1="V_24" variable_2="V_24"/>
+    <map_variables variable_1="p16" variable_2="p16"/>
+  </connection>
+  <connection>
+    <map_components component_1="pRB_P" component_2="V_1"/>
+    <map_variables variable_1="V_1" variable_2="V_1"/>
+  </connection>
+  <connection>
+    <map_components component_1="pRB_P" component_2="V_29"/>
+    <map_variables variable_1="V_29" variable_2="V_29"/>
+    <map_variables variable_1="pRB_P" variable_2="pRB_P"/>
+  </connection>
+  <connection>
+    <map_components component_1="V_1" component_2="rate_constants"/>
+    <map_variables variable_1="k1" variable_2="k1"/>
+    <map_variables variable_1="k1_" variable_2="k1_"/>
+    <map_variables variable_1="k1__" variable_2="k1__"/>
+  </connection>
+  <connection>
+    <map_components component_1="V_1" component_2="CycD_Cdk4"/>
+    <map_variables variable_1="CycD_Cdk4" variable_2="CycD_Cdk4"/>
+  </connection>
+  <connection>
+    <map_components component_1="V_1" component_2="CycD_Cdk4_p27"/>
+    <map_variables variable_1="CycD_Cdk4_p27" variable_2="CycD_Cdk4_p27"/>
+  </connection>
+  <connection>
+    <map_components component_1="V_1" component_2="a_CyclinE_Cdk2"/>
+    <map_variables variable_1="a_CyclinE_Cdk2" variable_2="a_CyclinE_Cdk2"/>
+  </connection>
+  <connection>
+    <map_components component_1="V_n1" component_2="rate_constants"/>
+    <map_variables variable_1="kn1" variable_2="kn1"/>
+  </connection>
+  <connection>
+    <map_components component_1="V_2" component_2="rate_constants"/>
+    <map_variables variable_1="k2" variable_2="k2"/>
+  </connection>
+  <connection>
+    <map_components component_1="V_n2" component_2="rate_constants"/>
+    <map_variables variable_1="kn2" variable_2="kn2"/>
+  </connection>
+  <connection>
+    <map_components component_1="V_3" component_2="rate_constants"/>
+    <map_variables variable_1="k3" variable_2="k3"/>
+    <map_variables variable_1="k3_" variable_2="k3_"/>
+  </connection>
+  <connection>
+    <map_components component_1="V_3" component_2="E2F"/>
+    <map_variables variable_1="E2F" variable_2="E2F"/>
+  </connection>
+  <connection>
+    <map_components component_1="V_n4" component_2="rate_constants"/>
+    <map_variables variable_1="kn4" variable_2="kn4"/>
+  </connection>
+  <connection>
+    <map_components component_1="V_5" component_2="rate_constants"/>
+    <map_variables variable_1="k5" variable_2="k5"/>
+  </connection>
+  <connection>
+    <map_components component_1="V_n6" component_2="rate_constants"/>
+    <map_variables variable_1="kn6" variable_2="kn6"/>
+  </connection>
+  <connection>
+    <map_components component_1="V_8" component_2="rate_constants"/>
+    <map_variables variable_1="k8" variable_2="k8"/>
+  </connection>
+  <connection>
+    <map_components component_1="V_8" component_2="a_CyclinE_Cdk2"/>
+    <map_variables variable_1="a_CyclinE_Cdk2" variable_2="a_CyclinE_Cdk2"/>
+  </connection>
+  <connection>
+    <map_components component_1="V_9" component_2="rate_constants"/>
+    <map_variables variable_1="k9" variable_2="k9"/>
+  </connection>
+  <connection>
+    <map_components component_1="V_10" component_2="rate_constants"/>
+    <map_variables variable_1="k10" variable_2="k10"/>
+  </connection>
+  <connection>
+    <map_components component_1="V_17" component_2="rate_constants"/>
+    <map_variables variable_1="k17" variable_2="k17"/>
+  </connection>
+  <connection>
+    <map_components component_1="V_18" component_2="rate_constants"/>
+    <map_variables variable_1="k18" variable_2="k18"/>
+  </connection>
+  <connection>
+    <map_components component_1="V_19" component_2="rate_constants"/>
+    <map_variables variable_1="k19" variable_2="k19"/>
+  </connection>
+  <connection>
+    <map_components component_1="V_20" component_2="rate_constants"/>
+    <map_variables variable_1="k20" variable_2="k20"/>
+  </connection>
+  <connection>
+    <map_components component_1="V_21" component_2="rate_constants"/>
+    <map_variables variable_1="k21" variable_2="k21"/>
+  </connection>
+  <connection>
+    <map_components component_1="V_22" component_2="rate_constants"/>
+    <map_variables variable_1="k22" variable_2="k22"/>
+  </connection>
+  <connection>
+    <map_components component_1="V_24" component_2="rate_constants"/>
+    <map_variables variable_1="k24" variable_2="k24"/>
+  </connection>
+  <connection>
+    <map_components component_1="V_25" component_2="rate_constants"/>
+    <map_variables variable_1="k25" variable_2="k25"/>
+    <map_variables variable_1="k25_" variable_2="k25_"/>
+  </connection>
+  <connection>
+    <map_components component_1="V_25" component_2="pRB"/>
+    <map_variables variable_1="pRB" variable_2="pRB"/>
+  </connection>
+  <connection>
+    <map_components component_1="V_26" component_2="rate_constants"/>
+    <map_variables variable_1="k26" variable_2="k26"/>
+    <map_variables variable_1="k26_" variable_2="k26_"/>
+  </connection>
+  <connection>
+    <map_components component_1="V_26" component_2="p16"/>
+    <map_variables variable_1="p16" variable_2="p16"/>
+  </connection>
+  <connection>
+    <map_components component_1="V_28" component_2="rate_constants"/>
+    <map_variables variable_1="k28" variable_2="k28"/>
+  </connection>
+  <connection>
+    <map_components component_1="V_29" component_2="rate_constants"/>
+    <map_variables variable_1="k29" variable_2="k29"/>
+  </connection>
+  <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <rdf:Description rdf:about="#aguda_tang_1999">
+      <reference xmlns="http://www.cellml.org/bqs/1.0#">
+        <rdf:Description rdf:about="rdf:#0c73c3f6-ab1e-420d-a005-e9e57ce78b8c"/>
+      </reference>
+<bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource">
+  <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value>
+      <rdf:Bag>
+        <rdf:li>cell cycle</rdf:li>
+      </rdf:Bag>
+    </rdf:value>
+  </dc:subject>
+</bqs:reference>
+
+      <simulation xmlns="http://www.cellml.org/metadata/simulation/1.0#">
+        <rdf:Description rdf:nodeID="n1"/>
+      </simulation>
+      <cmeta:comment>
+        <rdf:Description rdf:about="rdf:#02d37bc7-2c01-4aa2-92a1-86a44a70815f"/>
+      </cmeta:comment>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#02d37bc7-2c01-4aa2-92a1-86a44a70815f">
+      <rdf:value xml:lang="en">This is the CellML description of Aguda and Tang's 1999 mathematical model of the kinetic origins of the restriction point in the mammalian cell cycle.</rdf:value>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">
+        <rdf:Description rdf:about="rdf:#2ae8387b-24a4-4a5f-b199-64ac48752582"/>
+      </creator>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#1d245675-728b-4781-94ea-ee1bd9b355d4">
+      <Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Y</Given>
+      <Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Tang</Family>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#bf4df4e2-e6a3-4d93-9bb0-ebdfda84c4d4">
+      <W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2009-02-13T13:57:00+13:00</W3CDTF>
+    </rdf:Description>
+    <rdf:Description rdf:about="">
+      <cmeta:comment>
+        <rdf:Description rdf:about="rdf:#5e16d3b7-7fb8-49e3-84c4-e99c61dd9694"/>
+      </cmeta:comment>
+      <created xmlns="http://purl.org/dc/terms/">
+        <rdf:Description rdf:about="rdf:#668bdbec-7020-4733-ba71-52122cdc61be"/>
+      </created>
+      <publisher xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en"/>
+      <cmeta:modification>
+        <rdf:Description rdf:about="rdf:#2d2f20bc-3143-4385-9ee8-845bc8828fa9"/>
+      </cmeta:modification>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">
+        <rdf:Description rdf:about="rdf:#46d1ff60-d44e-41e9-9542-c6ca32119e2f"/>
+      </creator>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#f2a2bc59-ddc3-48b6-8066-73ce5e503256">
+      <N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#">
+        <rdf:Description rdf:about="rdf:#ea8b0039-1e97-4404-9200-8646584f7c3e"/>
+      </N>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#1c27a6e2-e59d-4257-aa13-48a52ed48511">
+      <W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">1999-10-00 00:00</W3CDTF>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#0c73c3f6-ab1e-420d-a005-e9e57ce78b8c">
+      <Pubmed_id xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">10619492</Pubmed_id>
+      <JournalArticle xmlns="http://www.cellml.org/bqs/1.0#">
+        <rdf:Description rdf:about="rdf:#c920ddbc-6398-41e3-aa14-f79d97959f90"/>
+      </JournalArticle>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#9a91c79b-742f-430e-a867-91ac64aae26c">
+      <Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en"/>
+      <Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Jeelean</Given>
+      <Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Lim</Family>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#46d1ff60-d44e-41e9-9542-c6ca32119e2f">
+      <N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#">
+        <rdf:Description rdf:about="rdf:#9a91c79b-742f-430e-a867-91ac64aae26c"/>
+      </N>
+      <EMAIL xmlns="http://www.w3.org/2001/vcard-rdf/3.0#">
+        <rdf:Description rdf:about="rdf:#595c6fea-0218-4a35-b84f-adb2a4ca518c"/>
+      </EMAIL>
+      <ORG xmlns="http://www.w3.org/2001/vcard-rdf/3.0#">
+        <rdf:Description rdf:about="rdf:#deffa367-073d-4587-a993-311ff3a6bc92"/>
+      </ORG>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#2ae8387b-24a4-4a5f-b199-64ac48752582">
+      <FN xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Jeelean Lim</FN>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#eba340a0-daf6-4b7a-bb00-7904b3081e4c">
+      <title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">Cell Proliferation</title>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#a61c6bb2-00b4-4097-be34-5fe13708ee31">
+      <Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Baltazar</Given>
+      <Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Aguda</Family>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#ea8b0039-1e97-4404-9200-8646584f7c3e">
+      <Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en"/>
+      <Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Jeelean</Given>
+      <Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Lim</Family>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#c920ddbc-6398-41e3-aa14-f79d97959f90">
+      <title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">The kinetic origins of the restriction point in the mammalian cell cycle</title>
+      <first_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">321</first_page>
+      <issued xmlns="http://purl.org/dc/terms/">
+        <rdf:Description rdf:about="rdf:#1c27a6e2-e59d-4257-aa13-48a52ed48511"/>
+      </issued>
+      <volume xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">32</volume>
+      <last_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">335</last_page>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">
+        <rdf:Description rdf:about="rdf:#8d6ef68f-a7a6-4e3c-8342-b2ea26b26310"/>
+      </creator>
+      <Journal xmlns="http://www.cellml.org/bqs/1.0#">
+        <rdf:Description rdf:about="rdf:#eba340a0-daf6-4b7a-bb00-7904b3081e4c"/>
+      </Journal>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#7160c67b-4387-4773-ae4c-8639f2787159">
+      <N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#">
+        <rdf:Description rdf:about="rdf:#a61c6bb2-00b4-4097-be34-5fe13708ee31"/>
+      </N>
+      <rdf:type>
+        <rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/>
+      </rdf:type>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#deffa367-073d-4587-a993-311ff3a6bc92">
+      <Orgname xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">University of Auckland</Orgname>
+      <Orgunit xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Bioengineering Institute</Orgunit>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#8d6ef68f-a7a6-4e3c-8342-b2ea26b26310">
+      <rdf:_1>
+        <rdf:Description rdf:about="rdf:#7160c67b-4387-4773-ae4c-8639f2787159"/>
+      </rdf:_1>
+      <rdf:_2>
+        <rdf:Description rdf:about="rdf:#318d4e39-bca9-4c5c-ad2c-b2e9c84a990b"/>
+      </rdf:_2>
+      <rdf:type>
+        <rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq"/>
+      </rdf:type>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#ea39de79-0456-460c-8af0-ca3d3d14b845">
+      <FN xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Jeelean Lim</FN>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#5e16d3b7-7fb8-49e3-84c4-e99c61dd9694">
+      <rdf:value xml:lang="en">This CellML version of the model has been checked in COR and PCEnv and the model runs to replicate the original published results as depicted in figure 5b of the paper.  The units have been checked and are consistent.</rdf:value>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">
+        <rdf:Description rdf:about="rdf:#ea39de79-0456-460c-8af0-ca3d3d14b845"/>
+      </creator>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#318d4e39-bca9-4c5c-ad2c-b2e9c84a990b">
+      <N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#">
+        <rdf:Description rdf:about="rdf:#1d245675-728b-4781-94ea-ee1bd9b355d4"/>
+      </N>
+      <rdf:type>
+        <rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/>
+      </rdf:type>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#595c6fea-0218-4a35-b84f-adb2a4ca518c">
+      <rdf:value xml:lang="en">jlim063@aucklanduni.ac.nz</rdf:value>
+      <rdf:type>
+        <rdf:Description rdf:about="http://imc.org/vCard/3.0#internet"/>
+      </rdf:type>
+    </rdf:Description>
+    <rdf:Description rdf:nodeID="n2">
+      <endingValue xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">500</endingValue>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#2d2f20bc-3143-4385-9ee8-845bc8828fa9">
+      <rdf:value xml:lang="en">added cmeta:id's to some variables</rdf:value>
+      <cmeta:modifier>
+        <rdf:Description rdf:about="rdf:#f2a2bc59-ddc3-48b6-8066-73ce5e503256"/>
+      </cmeta:modifier>
+      <modified xmlns="http://purl.org/dc/terms/">
+        <rdf:Description rdf:about="rdf:#bf4df4e2-e6a3-4d93-9bb0-ebdfda84c4d4"/>
+      </modified>
+    </rdf:Description>
+    <rdf:Description rdf:nodeID="n1">
+      <boundIntervals xmlns="http://www.cellml.org/metadata/simulation/1.0#">
+        <rdf:Description rdf:nodeID="n3"/>
+      </boundIntervals>
+    </rdf:Description>
+    <rdf:Description rdf:nodeID="n3">
+      <rdf:first>
+        <rdf:Description rdf:nodeID="n2"/>
+      </rdf:first>
+      <rdf:rest>
+        <rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+      </rdf:rest>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#668bdbec-7020-4733-ba71-52122cdc61be">
+      <W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2009-01-23T00:00:00+00:00</W3CDTF>
+    </rdf:Description>
+  </rdf:RDF>
+</model>

@@ -1,0 +1,587 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--  FILE :  curien_model_2003.xml
+
+CREATED :  22nd December 2003
+
+LAST MODIFIED : 22nd December 2003
+
+AUTHOR :  Catherine Lloyd
+          Bioengineering Institute
+          The University of Auckland
+          
+MODEL STATUS :  This model conforms to the CellML 1.0 Specification released on
+10th August 2001, and the 16/1/02 CellML Metadata 1.0 Specification.
+
+DESCRIPTION :  This file contains a CellML description of Curien et al.'s 2003 kinetic model of the branch-point between methionine and threonine biosynthesis pathways in Arabidopsis thaliana.
+
+CHANGES:  
+  
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="curien_2003" name="curien_2003">
+
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>A kinetic model of the branch-point between the methionine and threonine biosynthesis pathways in Arabidopsis thaliana</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+            This model contains no ODEs and as such can not currently be solved by any of the available CellML tools. However the model is known to be valid CellML and the units are consistent. Also the CellML model appears to match the published equations.
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+ABSTRACT: This work proposes a model of the metabolic branch-point between the methionine and threonine biosynthesis pathways in Arabidopsis thaliana which involves kinetic competition for phosphohomoserine between the allosteric enzyme threonine synthase and the two-substrate enzyme cystathionine gamma-synthase. Threonine synthase is activated by S-adenosylmethionine and inhibited by AMP. Cystathionine gamma-synthase condenses phosphohomoserine to cysteine via a ping-pong mechanism. Reactions are irreversible and inhibited by inorganic phosphate. The modelling procedure included an examination of the kinetic links, the determination of the operating conditions in chloroplasts and the establishment of a computer model using the enzyme rate equations. To test the model, the branch-point was reconstituted with purified enzymes. The computer model showed a partial agreement with the in vitro results. The model was subsequently improved and was then found consistent with flux partition in vitro and in vivo. Under near physiological conditions, S-adenosylmethionine, but not AMP, modulates the partition of a steady-state flux of phosphohomoserine. The computer model indicates a high sensitivity of cystathionine flux to enzyme and S-adenosylmethionine concentrations. Cystathionine flux is sensitive to modulation of threonine flux whereas the reverse is not true. The cystathionine gamma-synthase kinetic mechanism favours a low sensitivity of the fluxes to cysteine. Though sensitivity to inorganic phosphate is low, its concentration conditions the dynamics of the system. Threonine synthase and cystathionine gamma-synthase display similar kinetic efficiencies in the metabolic context considered and are first-order for the phosphohomoserine substrate. Under these conditions outflows are coordinated. 
+</para>
+
+<para>
+The original paper reference is cited below:
+</para>
+
+<para>
+A Kinetic Model of the Branch-Point between the Methionine and Threonine Biosynthesis Pathways in <emphasis>Arabidopsis thaliana</emphasis>
+          , Gilles Curien, Stephane Ravanel and Renaud Dumas, 2003, 
+            <emphasis>European Journal of Biochemistry </emphasis>
+         , 270, 4615-4627.  <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/14622248">PubMed ID: 14622248</ulink>
+</para>
+
+<informalfigure float="0" id="fig_reaction_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>reaction diagram</title>
+    </objectinfo>
+    <imagedata fileref="curien_2003.png"/>
+  </imageobject>
+</mediaobject>
+<caption>Schematic diagram of the Phser branch-point in the aspartate-derived amino acid biosynthetic pathway in plants.</caption>
+</informalfigure>
+
+</sect1>
+</article>
+</documentation>
+  
+  
+  <units name="micromolar">
+    <unit units="mole" prefix="micro"/>
+    <unit units="litre" exponent="-1"/>
+  </units>
+  
+  <units name="micromolar2">
+    <unit units="micromolar" exponent="2"/>
+  </units>
+  
+  <units name="flux">
+    <unit units="micromolar"/>
+    <unit units="second" exponent="-1"/>
+  </units>
+  
+  <units name="first_order_rate_constant">
+    <unit units="second" exponent="-1"/>
+  </units>
+ 
+
+  
+  <component name="v_cystathionine">
+    <variable units="flux" public_interface="out" name="v_cystathionine"/>
+    
+    <variable units="micromolar" public_interface="in" name="Cys"/>
+    <variable units="micromolar" public_interface="in" name="CGS"/>
+    <variable units="micromolar" public_interface="in" name="Pi"/>
+    <variable units="micromolar" public_interface="in" name="Phser"/>
+    
+	<variable units="micromolar" name="Km_CGS_app_Cys"/>
+    <variable units="micromolar" name="Km_CGS_Cys" initial_value="460.0"/>
+    <variable units="first_order_rate_constant" name="kcat_CGS" initial_value="30.0"/>
+    <variable units="first_order_rate_constant" name="kcat_CGS_app_Cys"/>
+    <variable units="micromolar" name="Km_CGS_Phser" initial_value="2500.0"/>
+    <variable units="micromolar" name="Ki_CGS_Pi" initial_value="2500.0"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="v_cystathionine_calculation">
+        <eq/>
+        <ci> v_cystathionine </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <ci> kcat_CGS_app_Cys </ci>
+            <ci> CGS </ci>
+            <ci> Cys </ci>
+          </apply>
+          <apply>
+            <plus/>
+            <ci> Km_CGS_app_Cys </ci>
+            <ci> Cys </ci>
+          </apply>
+        </apply>
+      </apply> 
+      
+      <apply id="kcat_CGS_app_Cys_calculation">
+        <eq/>
+        <ci> kcat_CGS_app_Cys </ci>
+        <apply>
+          <divide/>
+          <ci> kcat_CGS </ci>
+          <apply>
+            <plus/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> Km_CGS_Phser </ci>
+                <ci> Phser </ci>
+              </apply>
+              <apply>
+                <plus/>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+                <apply>
+                  <divide/>
+                  <ci> Pi </ci>
+                  <ci> Ki_CGS_Pi </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="Km_CGS_app_Cys_calculation">
+        <eq/>
+        <ci> Km_CGS_app_Cys </ci>
+        <apply>
+          <divide/>
+          <ci> Km_CGS_Cys </ci>
+          <apply>
+            <plus/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> Km_CGS_Phser </ci>
+                <ci> Phser </ci>
+              </apply>
+              <apply>
+                <plus/>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+                <apply>
+                  <divide/>
+                  <ci> Pi </ci>
+                  <ci> Ki_CGS_Pi </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+ 
+  <component name="v_Thr">
+    <variable units="flux" public_interface="out" name="v_Thr"/>
+    
+    <variable units="micromolar" public_interface="in" name="TS"/>
+    <variable units="micromolar" public_interface="in" name="AdoMet"/>
+    <variable units="micromolar" public_interface="in" name="Pi"/>
+    <variable units="micromolar" public_interface="in" name="Phser"/>
+     
+    <variable units="micromolar" name="Km_TS"/>
+    <variable units="first_order_rate_constant" name="kcat_TS_noAdoMet" initial_value="0.42"/>
+    <variable units="first_order_rate_constant" name="kcat_TS_AdoMet" initial_value="3.5"/>
+    <variable units="first_order_rate_constant" name="kcat_TS"/>
+    <variable units="micromolar2" name="K1K2" initial_value="73.0"/>
+    <variable units="micromolar" name="Ki_TS_Pi" initial_value="1000.0"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="v_Thr_calculation">
+        <eq/>
+        <ci> v_Thr </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <ci> TS </ci>
+            <ci> kcat_TS </ci>
+            <ci> Phser </ci>
+          </apply>
+          <apply>
+            <plus/>
+            <ci> Km_TS </ci>
+            <ci> Phser </ci>
+          </apply>
+        </apply>
+      </apply> 
+      
+      <apply id="kcat_TS_calculation">
+        <eq/>
+        <ci> kcat_TS </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <plus/>
+            <ci> kcat_TS_noAdoMet </ci>
+            <apply>
+              <times/>
+              <ci> kcat_TS_AdoMet </ci>
+              <apply>
+                <divide/>
+                <apply>
+                  <power/>
+                  <ci> AdoMet </ci>
+                  <cn cellml:units="dimensionless"> 2.0 </cn>
+                </apply>
+                <ci> K1K2 </ci>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <divide/>
+              <apply>
+                <power/>
+                <ci> AdoMet </ci>
+                <cn cellml:units="dimensionless"> 2.0 </cn>
+              </apply>
+              <ci> K1K2 </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="Km_TS_calculation">
+        <eq/>
+        <ci> Km_TS </ci>
+        <apply>
+          <times/>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <cn cellml:units="micromolar"> 250.0 </cn>
+              <apply>
+                <divide/>
+                <apply>
+                  <plus/>
+                  <cn cellml:units="dimensionless"> 1.0 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> AdoMet </ci>
+                    <cn cellml:units="micromolar"> 0.5 </cn>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn cellml:units="dimensionless"> 1.0 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> AdoMet </ci>
+                    <cn cellml:units="micromolar"> 1.1 </cn>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <divide/>
+                <apply>
+                  <power/>
+                  <ci> AdoMet </ci>
+                  <cn cellml:units="dimensionless"> 2.0 </cn>
+                </apply>
+                <cn cellml:units="micromolar2"> 140.0 </cn>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <divide/>
+              <ci> Pi </ci>
+              <ci> Ki_TS_Pi </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="J_Phser">
+    <variable units="flux" name="J_Phser"/>
+    
+    <variable units="flux" public_interface="in" name="v_cystathionine"/>
+    <variable units="flux" public_interface="in" name="v_Thr"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="J_Phser_calculation">
+        <eq/>
+        <ci> J_Phser </ci>
+        <apply>
+          <plus/>
+          <ci> v_cystathionine </ci>
+          <ci> v_Thr </ci>
+        </apply>
+      </apply> 
+    </math>
+  </component>
+  
+  <component name="CGS" cmeta:id="CGS">
+    <rdf:RDF>
+      <rdf:Description rdf:about="CGS">
+        <dc:title>CGS</dc:title>
+        <dcterms:alternative>cystathionine gamma-synthase</dcterms:alternative>        </rdf:Description>
+    </rdf:RDF> 
+    <variable units="micromolar" public_interface="out" name="CGS" initial_value="0.7"/>
+  </component>
+  
+  <component name="Phser" cmeta:id="Phser">
+    <rdf:RDF>
+      <rdf:Description rdf:about="Phser">
+        <dc:title>Phser</dc:title>
+        <dcterms:alternative>phosphohomoserine</dcterms:alternative>                   
+	  </rdf:Description>
+    </rdf:RDF> 
+    <variable units="micromolar" public_interface="out" name="Phser" initial_value="500.0"/>
+  </component>
+  
+  <component name="AdoMet" cmeta:id="AdoMet">
+    <rdf:RDF>
+      <rdf:Description rdf:about="AdoMet">
+        <dc:title>AdoMet</dc:title>
+        <dcterms:alternative>S-adenosylmethionine</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF>
+    <variable units="micromolar" public_interface="out" name="AdoMet" initial_value="20.0"/> 
+  </component>
+  
+  <component name="Cys" cmeta:id="Cys">
+    <rdf:RDF>
+      <rdf:Description rdf:about="Cys">
+        <dc:title>Cys</dc:title>
+        <dcterms:alternative>cysteine</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF>
+    <variable units="micromolar" public_interface="out" name="Cys" initial_value="15.0"/>
+  </component>
+  
+  <component name="Pi" cmeta:id="Pi">
+    <rdf:RDF>
+      <rdf:Description rdf:about="Pi">
+        <dc:title>Pi</dc:title>
+        <dcterms:alternative>inorganic phosphate</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF>
+    <variable units="micromolar" public_interface="out" name="Pi" initial_value="10000.0"/> 
+  </component>
+  
+  <component name="TS" cmeta:id="TS">
+    <rdf:RDF>
+      <rdf:Description rdf:about="TS">
+        <dc:title>TS</dc:title>
+        <dcterms:alternative>threonine synthase</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF>
+    <variable units="micromolar" public_interface="out" name="TS" initial_value="5.0"/> 
+  </component>
+ 
+ 
+  <connection>
+    <map_components component_2="CGS" component_1="v_cystathionine"/>
+    <map_variables variable_2="CGS" variable_1="CGS"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Cys" component_1="v_cystathionine"/>
+    <map_variables variable_2="Cys" variable_1="Cys"/>
+  </connection>
+ 
+  <connection>
+    <map_components component_2="Phser" component_1="v_cystathionine"/>
+    <map_variables variable_2="Phser" variable_1="Phser"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Pi" component_1="v_cystathionine"/>
+    <map_variables variable_2="Pi" variable_1="Pi"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="TS" component_1="v_Thr"/>
+    <map_variables variable_2="TS" variable_1="TS"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Phser" component_1="v_Thr"/>
+    <map_variables variable_2="Phser" variable_1="Phser"/>
+  </connection>
+ 
+  <connection>
+    <map_components component_2="AdoMet" component_1="v_Thr"/>
+    <map_variables variable_2="AdoMet" variable_1="AdoMet"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Pi" component_1="v_Thr"/>
+    <map_variables variable_2="Pi" variable_1="Pi"/>
+  </connection>
+ 
+  <connection>
+    <map_components component_2="v_Thr" component_1="J_Phser"/>
+    <map_variables variable_2="v_Thr" variable_1="v_Thr"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="v_cystathionine" component_1="J_Phser"/>
+    <map_variables variable_2="v_cystathionine" variable_1="v_cystathionine"/>
+  </connection>
+ 
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Seq rdf:about="rdf:#0f71cd06-d502-45e7-9f4e-6c8435286484">
+    <rdf:li rdf:resource="rdf:#269b1dda-2bc6-4409-94b5-6802a22637db"/>
+    <rdf:li rdf:resource="rdf:#e3f449c7-10bc-4e5d-8d6b-0c7fb34954b8"/>
+    <rdf:li rdf:resource="rdf:#20108135-4ac2-465b-9f68-20d9961bdcad"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#a9a0c6ff-48da-4c74-b597-b70290062e2a">
+    <dc:creator rdf:resource="rdf:#0f71cd06-d502-45e7-9f4e-6c8435286484"/>
+    <dc:title>A kinetic model of the branch-point between the methionine and threonine biosynthesis pathways in Arabidopsis thaliana</dc:title>
+    <bqs:volume>270</bqs:volume>
+    <bqs:first_page>4615</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#ebacada7-7e98-44c9-a159-1830b8484408"/>
+    <dcterms:issued rdf:resource="rdf:#5d06fb57-c53e-4bcc-aac9-6df966f6e174"/>
+    <bqs:last_page>4627</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4f0ced65-8230-4704-bf54-cc1db8f2999a">
+    <vCard:Given>Stephane</vCard:Given>
+    <vCard:Family>Ravanel</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="#curien_2003">
+    <dc:title>
+        Curien et al.'s 2003 kinetic model of the branch-point between 
+        methionine and threonine biosynthesis pathways in Arabidopsis thaliana.
+      </dc:title>
+    <cmeta:comment rdf:resource="rdf:#a0c2ab72-272d-4761-b8f1-0b3258a1fde3"/>
+    <bqs:reference rdf:resource="rdf:#9b51b61b-9ebf-46b8-94be-976ad6c8b890"/>
+    <bqs:reference rdf:resource="rdf:#04d901de-2899-4694-bbcb-f5696399fd76"/>
+    <cmeta:species>Arabidopsis thaliana</cmeta:species>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#5d06fb57-c53e-4bcc-aac9-6df966f6e174">
+    <dcterms:W3CDTF>2003-12</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:publisher>The University of Auckland, Auckland Bioengineering Institute</dc:publisher>
+    <cmeta:comment rdf:resource="rdf:#90aa1037-2e7a-4c84-9b9c-6c5597aa2c2e"/>
+    <dcterms:created rdf:resource="rdf:#65c433a7-ff90-495e-8a98-4ad5936b87cd"/>
+    <dc:creator rdf:resource="rdf:#4b7dcb50-4965-4824-b7d8-4692c75b4a8a"/>
+    <cmeta:modification rdf:resource="rdf:#143f106c-7b76-43ab-85b6-6e0d614db162"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#65c433a7-ff90-495e-8a98-4ad5936b87cd">
+    <dcterms:W3CDTF>2003-12-22T00:00:00+00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#2e66f79d-c6f6-457b-ad60-5397caf75536">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b709ef69-eb4f-4c09-a23e-7b37e7d64e83">
+    <vCard:Given>Renaud</vCard:Given>
+    <vCard:Family>Dumas</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#80f3ddc6-91c1-4cf0-9191-59e9c6ec40bf">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#787439a4-0d43-418d-ae37-cadc47263bb4">
+    <dcterms:W3CDTF>2009-06-08T16:07:15+12:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ea53a7ab-6797-4bf7-b8d0-4fde6b16fc9b">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#db831197-e336-4e20-99ac-5304c029cf99">
+    <vCard:Given>Gilles</vCard:Given>
+    <vCard:Family>Curien</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#143f106c-7b76-43ab-85b6-6e0d614db162">
+    <dcterms:modified rdf:resource="rdf:#787439a4-0d43-418d-ae37-cadc47263bb4"/>
+    <rdf:value>updated curation status,&#13;
+removed reference link in documentation</rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#e97f349a-7759-4946-9e21-312079821db4"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#2e8cc104-3ea5-451d-9250-d24ee4a46711">
+    <vCard:FN/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#04d901de-2899-4694-bbcb-f5696399fd76">
+    <bqs:Pubmed_id>14622248</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#a9a0c6ff-48da-4c74-b597-b70290062e2a"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#20108135-4ac2-465b-9f68-20d9961bdcad">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#b709ef69-eb4f-4c09-a23e-7b37e7d64e83"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4b7dcb50-4965-4824-b7d8-4692c75b4a8a">
+    <vCard:ORG rdf:resource="rdf:#80f3ddc6-91c1-4cf0-9191-59e9c6ec40bf"/>
+    <vCard:EMAIL rdf:resource="rdf:#2e66f79d-c6f6-457b-ad60-5397caf75536"/>
+    <vCard:N rdf:resource="rdf:#ea53a7ab-6797-4bf7-b8d0-4fde6b16fc9b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#269b1dda-2bc6-4409-94b5-6802a22637db">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#db831197-e336-4e20-99ac-5304c029cf99"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e97f349a-7759-4946-9e21-312079821db4">
+    <vCard:N rdf:resource="rdf:#263d4bb0-2e47-4496-8646-4cd93e5f1e05"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#90aa1037-2e7a-4c84-9b9c-6c5597aa2c2e">
+    <dc:creator rdf:resource="rdf:#2e8cc104-3ea5-451d-9250-d24ee4a46711"/>
+    <rdf:value/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e3f449c7-10bc-4e5d-8d6b-0c7fb34954b8">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#4f0ced65-8230-4704-bf54-cc1db8f2999a"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#cd6d0250-9053-4458-b047-24af8baf5ad2">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value>
+      <rdf:Bag>
+        <rdf:li>arabidopsis</rdf:li>
+        <rdf:li>metabolism</rdf:li>
+      </rdf:Bag>
+    </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9b51b61b-9ebf-46b8-94be-976ad6c8b890">
+    <dc:subject rdf:resource="rdf:#cd6d0250-9053-4458-b047-24af8baf5ad2"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#263d4bb0-2e47-4496-8646-4cd93e5f1e05">
+    <vCard:Given>James</vCard:Given>
+    <vCard:Family>Lawson</vCard:Family>
+    <vCard:Other>Richard</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a0c2ab72-272d-4761-b8f1-0b3258a1fde3">
+    <dc:creator rdf:resource="rdf:#ab68012b-57dd-4175-bd8b-c952cb8ed221"/>
+    <rdf:value>This is the CellML description of Curien et al.'s 2003 kinetic model &#13;
+          of the branch-point between methionine and threonine biosynthesis &#13;
+          pathways in Arabidopsis thaliana.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ab68012b-57dd-4175-bd8b-c952cb8ed221">
+    <vCard:FN>Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ebacada7-7e98-44c9-a159-1830b8484408">
+    <dc:title>European Journal of Biochemistry</dc:title>
+  </rdf:Description>
+</rdf:RDF>
+</model>

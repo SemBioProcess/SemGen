@@ -1,0 +1,409 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--  FILE :baylor_2002a.xml
+
+CREATED :  23rd May 2007
+
+LAST MODIFIED : 23rd May 2007
+
+AUTHOR :  Catherine Lloyd
+          Bioengineering Institute
+          The University of Auckland
+          
+MODEL STATUS :  This model conforms to the CellML 1.1 Specification.
+
+DESCRIPTION :  This file contains a CellML description of Baylor, Hollingworth and Chandler's 2002 model of the Ca2+-ATP binding reaction in skeletal myocytes.
+
+CHANGES:    
+
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="baylor_2002a" name="baylor_2002a">
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Comparison of simulated and measured calcium sparks in intact skeletal muscle fibers of the frog</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+
+    <affiliation>
+      <shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+     <section id="sec_status">
+    <title>Model Status</title>
+    <para>This CellML model runs in OpenCell and COR and the units are consistent. There are no simple figures of concentration against time in the publication to compare the CellML model simulation output against.
+</para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+ABSTRACT: Calcium sparks in frog intact skeletal muscle fibers were modeled as stereotypical events that arise from a constant efflux of Ca(2+) from a point source for a fixed period of time (e.g., 2.5 pA of Ca(2+) current for 4.6 ms; 18 degrees C). The model calculates the local changes in the concentrations of free Ca(2+) and of Ca(2+) bound to the major intrinsic myoplasmic Ca(2+) buffers (troponin, ATP, parvalbumin, and the SR Ca(2+) pump) and to the Ca(2+) indicator (fluo-3). A distinctive feature of the model is the inclusion of a binding reaction between fluo-3 and myoplasmic proteins, a process that strongly affects fluo-3's Ca(2+)-reaction kinetics, its apparent diffusion constant, and hence the morphology of sparks. DeltaF/F (the change in fluo-3's fluorescence divided by its resting fluorescence) was estimated from the calculated changes in fluo-3 convolved with the microscope point-spread function. To facilitate comparisons with measured sparks, noise and other sources of variability were included in a random repetitive fashion to generate a large number of simulated sparks that could be analyzed in the same way as the measured sparks. In the initial simulations, the binding of Ca(2+) to the two regulatory sites on troponin was assumed to follow identical and independent binding reactions. These simulations failed to accurately predict the falling phase of the measured sparks. A second set of simulations, which incorporated the idea of positive cooperativity in the binding of Ca(2+) to troponin, produced reasonable agreement with the measurements. Under the assumption that the single channel Ca(2+) current of a ryanodine receptor (RYR) is 0.5-2 pA, the results suggest that 1-5 active RYRs generate an average Ca(2+) spark in a frog intact muscle fiber. 
+</para>
+
+<para>
+The original paper reference is cited below:
+</para>
+
+<para>
+Comparison of simulated and measured calcium sparks in intact skeletal muscle fibers of the frog, S.M. Baylor, S. Hollingworth and W.K. Chandler, 2002, <emphasis>Journal of General Physiology</emphasis>, 120, 349-368. <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/12198091">PubMed ID: 12198091</ulink> 
+</para>
+
+<informalfigure float="0" id="fig_reaction_diagram">
+<mediaobject>
+  <imageobject>
+    <imagedata fileref="baylor_2002.png"/>
+  </imageobject>
+</mediaobject>
+<caption>Schematic diagrams of the Ca<superscript>2+</superscript> binding reactions for various buffers and indicators: <emphasis role="bold">A</emphasis>  The reaction of Ca<superscript>2+</superscript> with ATP in the presence of free Mg<superscript>2+</superscript>, <emphasis role="bold">B</emphasis>  Reaction of Ca<superscript>2+</superscript> with protein (Pr) and fluo-3 (Fluo), <emphasis role="bold">C</emphasis>  Competitive reaction of Ca<superscript>2+</superscript> and Mg<superscript>2+</superscript> with parvalbumin (Parv), <emphasis role="bold">D</emphasis>  Binding reaction of Ca<superscript>2+</superscript> binding and transport by the sarcoplasmic reticulum Ca<superscript>2+</superscript> pump (E), <emphasis role="bold">E</emphasis>  One-step reaction of Ca<superscript>2+</superscript> with Troponin (Trop), and <emphasis role="bold">F</emphasis>  Two-step reaction of Ca<superscript>2+</superscript> with Troponin (Trop).</caption>
+
+</informalfigure>
+
+</sect1>
+</article>
+</documentation>
+    
+  
+   <units name="micromolar">
+      <unit units="mole" prefix="micro"/>
+      <unit units="litre" exponent="-1"/>
+   </units>
+
+   <units name="first_order_rate_constant">
+      <unit units="second" exponent="-1"/>
+   </units>
+  
+   <units name="second_order_rate_constant">
+      <unit units="micromolar" exponent="-1"/>
+      <unit units="second" exponent="-1"/>
+   </units>
+  
+   
+   <component name="environment">
+      <variable units="second" public_interface="out" name="time"/>
+   </component>
+   
+   
+   <component cmeta:id="Ca" name="Ca">
+      <variable units="micromolar" public_interface="out" name="Ca" initial_value="0.05"/>
+      
+      <variable units="second_order_rate_constant" public_interface="in" name="k1"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="k1_"/>
+      <variable units="micromolar" public_interface="in" name="ATP"/>
+      <variable units="micromolar" public_interface="in" name="CaATP"/>
+      <variable units="second" public_interface="in" name="time"/>
+      
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <apply>
+        <eq/>
+          <apply>
+          <diff/> 
+            <bvar>
+            <ci>time</ci>
+          </bvar> 
+            <ci> Ca </ci> 
+          </apply>
+          <apply>
+          <minus/>
+            <apply>
+            <times/>
+              <ci> k1_ </ci>
+              <ci> CaATP </ci>
+            </apply>
+            <apply>
+            <times/>
+              <ci> k1 </ci>
+              <ci> Ca </ci>
+              <ci> ATP </ci>
+            </apply>
+          </apply>
+        </apply>
+      </math>
+   </component>
+   
+   <component cmeta:id="ATP" name="ATP">
+      <variable units="micromolar" public_interface="out" name="ATP" initial_value="8000.0"/>
+      
+      <variable units="second_order_rate_constant" public_interface="in" name="k1"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="k1_"/>
+      <variable units="micromolar" public_interface="in" name="Ca"/>
+      <variable units="micromolar" public_interface="in" name="CaATP"/>
+      <variable units="second" public_interface="in" name="time"/>
+      
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <apply>
+        <eq/>
+          <apply>
+          <diff/> 
+            <bvar>
+            <ci>time</ci>
+          </bvar> 
+            <ci> ATP </ci> 
+          </apply>
+          <apply>
+          <minus/>
+            <apply>
+            <times/>
+              <ci> k1_ </ci>
+              <ci> CaATP </ci>
+            </apply>
+            <apply>
+            <times/>
+              <ci> k1 </ci>
+              <ci> Ca </ci>
+              <ci> ATP </ci>
+            </apply>
+          </apply>
+        </apply>
+      </math>
+   </component>
+   
+   <component cmeta:id="CaATP" name="CaATP">
+      <variable units="micromolar" public_interface="out" name="CaATP" initial_value="1.0"/>
+      
+      <variable units="second_order_rate_constant" public_interface="in" name="k1"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="k1_"/>
+      <variable units="micromolar" public_interface="in" name="Ca"/>
+      <variable units="micromolar" public_interface="in" name="ATP"/>
+      <variable units="second" public_interface="in" name="time"/>
+      
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <apply>
+        <eq/>
+          <apply>
+          <diff/> 
+            <bvar>
+            <ci>time</ci>
+          </bvar> 
+            <ci> CaATP </ci> 
+          </apply>
+          <apply>
+          <minus/>
+            <apply>
+            <times/>
+              <ci> k1 </ci>
+              <ci> Ca </ci>
+              <ci> ATP </ci>
+            </apply>
+            <apply>
+            <times/>
+              <ci> k1_ </ci>
+              <ci> CaATP </ci>
+            </apply>
+          </apply>
+        </apply>
+      </math>
+   </component>
+
+   <component cmeta:id="reaction_constants" name="reaction_constants">
+      <variable units="second_order_rate_constant" public_interface="out" name="k1" initial_value="1.566E7"/>
+      <variable units="first_order_rate_constant" public_interface="out" name="k1_" initial_value="34461.0"/>
+   </component>
+  
+   
+   <connection>
+      <map_components component_2="environment" component_1="Ca"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="environment" component_1="ATP"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+  
+   <connection>
+      <map_components component_2="environment" component_1="CaATP"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+
+   <connection>
+      <map_components component_2="ATP" component_1="Ca"/>
+      <map_variables variable_2="Ca" variable_1="Ca"/>
+      <map_variables variable_2="ATP" variable_1="ATP"/>
+   </connection>
+
+   <connection>
+      <map_components component_2="CaATP" component_1="Ca"/>
+      <map_variables variable_2="Ca" variable_1="Ca"/>
+      <map_variables variable_2="CaATP" variable_1="CaATP"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="CaATP" component_1="ATP"/>
+      <map_variables variable_2="ATP" variable_1="ATP"/>
+      <map_variables variable_2="CaATP" variable_1="CaATP"/>
+   </connection>
+
+   <connection>
+      <map_components component_2="reaction_constants" component_1="Ca"/>
+      <map_variables variable_2="k1" variable_1="k1"/>
+      <map_variables variable_2="k1_" variable_1="k1_"/>
+   </connection>
+
+   <connection>
+      <map_components component_2="reaction_constants" component_1="ATP"/>
+      <map_variables variable_2="k1" variable_1="k1"/>
+      <map_variables variable_2="k1_" variable_1="k1_"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="reaction_constants" component_1="CaATP"/>
+      <map_variables variable_2="k1" variable_1="k1"/>
+      <map_variables variable_2="k1_" variable_1="k1_"/>
+   </connection>
+
+
+
+<rdf:RDF>
+  <rdf:Bag rdf:about="rdf:#8f3ab1a1-168a-4891-86b2-f9ad48ca5210">
+    <rdf:li>skeletal muscle</rdf:li>
+    <rdf:li>calcium dynamics</rdf:li>
+  </rdf:Bag>
+  <rdf:Seq rdf:about="rdf:#ba68e019-b5f9-40ce-a8d2-c3480b31061a">
+    <rdf:li rdf:resource="rdf:#79803647-86b0-44f4-9ed2-f84b7ad0374f"/>
+    <rdf:li rdf:resource="rdf:#6e1c85f1-478d-4149-abe8-8c27546d2cc4"/>
+    <rdf:li rdf:resource="rdf:#9557a4f2-3e21-4cb4-bf52-035bf7d44f86"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="">
+    <dc:title>Comparison of Simulated and Measured Calcium Sparks in Intact Skeletal Muscle Fibers of the Frog (Reaction A)</dc:title>
+	<dc:publisher>The University of Auckland, Auckland Bioengineering Institute</dc:publisher>
+    <cmeta:comment rdf:resource="rdf:#85c368e4-1bdb-4ab2-b2c7-73ff580c8d50"/>
+    <dcterms:created rdf:resource="rdf:#eb194ae7-789f-4ecd-be25-d35113376a4a"/>
+    <dc:creator rdf:resource="rdf:#f37be9bb-4680-4462-92b0-13a038b59920"/>
+    <cmeta:modification rdf:resource="rdf:#4e0cd4b9-ed29-4482-849c-ab11ab9857d3"/>
+    <cmeta:modification rdf:resource="rdf:#60b5a5cb-83b4-40b1-8167-27854e8e9acf"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#345b7629-18a6-44d3-b91d-78b8090d3c3b">
+    <vCard:FN>Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f37be9bb-4680-4462-92b0-13a038b59920">
+    <vCard:ORG rdf:resource="rdf:#5cd7d792-06be-4841-9806-18cf6d6d4201"/>
+    <vCard:EMAIL rdf:resource="rdf:#702c3cec-bf31-4eba-b392-98b79f7565c9"/>
+    <vCard:N rdf:resource="rdf:#88bec8c1-b75f-4425-963f-861ccb741a5c"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0d88bbe1-4499-4ec2-a354-1dd81c198cd2">
+    <vCard:Given>S</vCard:Given>
+    <vCard:Family>Baylor</vCard:Family>
+    <vCard:Other>M</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9b2a6f9d-f1dd-4e73-94f8-1ac4ecdd8ec3">
+    <dc:subject rdf:resource="rdf:#4c70e97f-05be-4aad-9e3e-99adfadb8e13"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#baylor_2002a">
+    <dc:title>
+        Baylor, Hollingworth and Chandler's 2002 model of the Ca2+-ATP binding 
+        reaction in skeletal myocytes.
+      </dc:title>
+    <cmeta:bio_entity>Skeletal Myocyte</cmeta:bio_entity>
+    <cmeta:comment rdf:resource="rdf:#c5f21030-1339-422c-a689-9d6b2efdb7c4"/>
+    <bqs:reference rdf:resource="rdf:#9b2a6f9d-f1dd-4e73-94f8-1ac4ecdd8ec3"/>
+    <bqs:reference rdf:resource="rdf:#f2203e46-6837-4c1f-b2a9-1a27822e9f47"/>
+    <cmeta:species>Frog</cmeta:species>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9557a4f2-3e21-4cb4-bf52-035bf7d44f86">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#b46b2f25-6bc0-45d8-a076-5c3a124289dd"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#261b0e32-0b8d-4a91-87ba-bd0d7a6a6266">
+    <dcterms:W3CDTF>2009-05-05T12:08:14+12:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#15bc592d-0a1e-4157-ade8-7d27175bb37c">
+    <dc:creator rdf:resource="rdf:#ba68e019-b5f9-40ce-a8d2-c3480b31061a"/>
+    <dc:title>Comparison of Simulated and Measured Calcium Sparks in Intact Skeletal Muscle Fibers of the Frog</dc:title>
+    <bqs:volume>120</bqs:volume>
+    <bqs:first_page>349</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#ea50a1bf-d361-4501-af5d-bd6dbf73b2d6"/>
+    <dcterms:issued rdf:resource="rdf:#37a839e6-9596-4f13-ac7e-091d8215cdd8"/>
+    <bqs:last_page>368</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#85c368e4-1bdb-4ab2-b2c7-73ff580c8d50">
+    <dc:creator rdf:resource="rdf:#899698fb-ed26-43ce-a5bb-4cf59c3e1780"/>
+    <rdf:value/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#79803647-86b0-44f4-9ed2-f84b7ad0374f">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#0d88bbe1-4499-4ec2-a354-1dd81c198cd2"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f2203e46-6837-4c1f-b2a9-1a27822e9f47">
+    <bqs:Pubmed_id>12198091</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#15bc592d-0a1e-4157-ade8-7d27175bb37c"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#6e1c85f1-478d-4149-abe8-8c27546d2cc4">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#da6be67a-8a06-4754-8936-aada958830ca"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#c5f21030-1339-422c-a689-9d6b2efdb7c4">
+    <dc:creator rdf:resource="rdf:#345b7629-18a6-44d3-b91d-78b8090d3c3b"/>
+    <rdf:value>This is the CellML description of Baylor, Hollingworth and Chandler's &#13;
+          2002 model of the Ca2+-ATP binding reaction in skeletal myocytes.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3e16bafa-b463-49f3-9de6-f05001096423">
+    <vCard:N rdf:resource="rdf:#8ed54bce-052e-44c1-ba4b-5db1bbb48a73"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#79309302-58a7-4692-b3d3-c0589ff972f9">
+    <vCard:Given>James</vCard:Given>
+    <vCard:Family>Lawson</vCard:Family>
+    <vCard:Other>Richard</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#702c3cec-bf31-4eba-b392-98b79f7565c9">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b46b2f25-6bc0-45d8-a076-5c3a124289dd">
+    <vCard:Given>W</vCard:Given>
+    <vCard:Family>Chandler</vCard:Family>
+    <vCard:Other>K</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#5cd7d792-06be-4841-9806-18cf6d6d4201">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#60b5a5cb-83b4-40b1-8167-27854e8e9acf">
+    <dcterms:modified rdf:resource="rdf:#027a98c3-b573-4533-a87c-0019662ad1b6"/>
+    <rdf:value>The new version of this model has been re-coded to remove the reaction element and replace it with a simple MathML description of the model reaction kinetics.  This is thought to be truer to the original publication, and information regarding the enzyme kinetics etc will later be added to the metadata through use of an ontology.
+The model runs in the PCEnv simulator but gives a flat/almost flat output.</rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#3e16bafa-b463-49f3-9de6-f05001096423"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4e0cd4b9-ed29-4482-849c-ab11ab9857d3">
+    <dcterms:modified rdf:resource="rdf:#261b0e32-0b8d-4a91-87ba-bd0d7a6a6266"/>
+    <rdf:value>updated curation status</rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#68a663f2-0b2d-4fd6-82b4-be4f93e1dc24"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#da6be67a-8a06-4754-8936-aada958830ca">
+    <vCard:Given>S</vCard:Given>
+    <vCard:Family>Hollingworth</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#68a663f2-0b2d-4fd6-82b4-be4f93e1dc24">
+    <vCard:N rdf:resource="rdf:#79309302-58a7-4692-b3d3-c0589ff972f9"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#eb194ae7-789f-4ecd-be25-d35113376a4a">
+    <dcterms:W3CDTF>2007-05-23T00:00:00+00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ea50a1bf-d361-4501-af5d-bd6dbf73b2d6">
+    <dc:title>Journal of General Physiology</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#027a98c3-b573-4533-a87c-0019662ad1b6">
+    <dcterms:W3CDTF>2007-06-05T09:15:51+12:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#88bec8c1-b75f-4425-963f-861ccb741a5c">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4c70e97f-05be-4aad-9e3e-99adfadb8e13">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value rdf:resource="rdf:#8f3ab1a1-168a-4891-86b2-f9ad48ca5210"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#899698fb-ed26-43ce-a5bb-4cf59c3e1780">
+    <vCard:FN/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8ed54bce-052e-44c1-ba4b-5db1bbb48a73">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#37a839e6-9596-4f13-ac7e-091d8215cdd8">
+    <dcterms:W3CDTF>2002-09-01</dcterms:W3CDTF>
+  </rdf:Description>
+</rdf:RDF>
+</model>

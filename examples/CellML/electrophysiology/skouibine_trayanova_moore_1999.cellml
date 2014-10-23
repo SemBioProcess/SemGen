@@ -1,0 +1,1761 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="defibrillation_beeler_reuter_model_1999" name="skouibine_trayanova_moore_1999_version02">
+  
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>The Defibrillation Beeler-Reuter Model</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+
+    <affiliation>
+      <shortaffil>Bioengineering Institute, University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+ABSTRACT: The goal of this simulation study is to examine, in a sheet of myocardium, the contribution of anode and cathode break phenomena in terminating a spiral wave reentry by the defibrillation shock. The tissue is represented as a homogeneous bidomain with unequal anisotropy ratios. Two case studies are presented in this article: tissue that can electroporate at high levels of transmembrane potential, and model tissue that does not support electroporation. In both cases, the spiral wave is initiated via cross-field stimulation of the bidomain sheet. The extracellular defibrillation shock is delivered via two small electrodes located at opposite tissue boundaries. Modifications in the active membrane kinetics enable the delivery of high-strength defibrillation shocks. Numerical solutions are obtained using an efficient semi-implicit predictor-corrector scheme that allows one to execute the simulations within reasonable time. The simulation results demonstrate that anode and/or cathode break excitations contribute significantly to the activity during and after the shock. For a successful defibrillation shock, the virtual electrodes and the break excitations restrict the spiral wave and render the tissue refractory so it cannot further maintain the reentry. The results also indicate that electroporation alters the anode/cathode break phenomena, the major impact being on the timing of the cathode-break excitations. Thus, electroporation results in different patterns of transmembrane potential distribution after the shock. This difference in patterns may or may not result in change of the outcome of the shock.
+</para>
+
+<para>
+The original paper reference is cited below:
+</para>
+
+<para>Anode/cathode make and break phenomena during defibrillation: Does electroporation make a difference?, Skouibine, K., Trayanova, N., Moore, P. 1999, <emphasis>IEEE Transactions on Biomedical Engineering</emphasis>, 46, 769-777.  <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;list_uids=10396895&amp;dopt=Abstract">PubMed ID: 10396895</ulink>
+</para>
+
+<informalfigure float="0" id="fig_reaction_diagram">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>model diagram</title>
+							</objectinfo>
+							<imagedata fileref="skouibine_1999.png"/>
+						</imageobject>
+					</mediaobject>
+					<caption>Schematic diagram of the cell model.</caption>
+				</informalfigure>
+			</sect1>
+		</article>
+	</documentation>
+
+  
+  <!--
+    Below, we define some additional units for association with variables and
+    constants within the model. The identifiers are fairly self-explanatory.
+  -->
+  <units name="ms">
+    <unit units="second" prefix="milli"/>
+  </units>
+  
+  <units name="per_ms">
+    <unit units="second" prefix="milli" exponent="-1"/>
+  </units>
+
+  <units name="mV">
+    <unit units="volt" prefix="milli"/>
+  </units>
+
+  <units name="per_mV">
+    <unit units="volt" prefix="milli" exponent="-1"/>
+  </units>
+  
+  <units name="per_mV_ms">
+    <unit units="mV" exponent="-1"/>
+    <unit units="ms" exponent="-1"/>
+  </units>
+  
+  <units name="mS_per_mm2">
+    <unit units="siemens" prefix="milli"/>
+    <unit units="metre" prefix="milli" exponent="-2"/>
+  </units>
+
+  <units name="uF_per_mm2">
+    <unit units="farad" prefix="micro"/>
+    <unit units="metre" prefix="milli" exponent="-2"/>
+  </units>
+
+  <units name="uA_per_mm2">
+    <unit units="ampere" prefix="micro"/>
+    <unit units="metre" prefix="milli" exponent="-2"/>
+  </units>
+  
+  <units name="concentration_units">
+    <unit units="mole" prefix="nano"/>
+    <unit units="metre" prefix="milli" exponent="-3"/>
+  </units>
+  
+  <units name="per_concentration_units">
+    <unit units="concentration_units" exponent="-1"/>
+  </units>
+   
+  <units name="flux">
+    <unit units="concentration_units"/>
+    <unit units="ms" exponent="-1"/>
+  </units>
+  
+  <!--
+    The "environment" component is used to declare variables that are used by
+    all or most of the other components, in this case just "time".
+  -->
+  <component cmeta:id="environment" name="environment">
+    <variable units="ms" public_interface="out" name="time"/>
+  </component>
+  
+  <component cmeta:id="membrane" name="membrane">
+    
+
+    <variable units="mV" public_interface="out" name="V" initial_value="-86.9"/>
+    <variable units="uA_per_mm2" name="I_stim"/>
+    <variable units="uF_per_mm2" name="C" initial_value="1.0e-2"/>
+    <variable units="ms" public_interface="in" name="time"/>
+    <variable units="uA_per_mm2" public_interface="in" name="i_Na"/>
+    <variable units="uA_per_mm2" public_interface="in" name="i_s"/>
+    <variable units="uA_per_mm2" public_interface="in" name="i_x1"/>
+    <variable units="uA_per_mm2" public_interface="in" name="i_K1"/>
+    
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" cmeta:id="membrane_voltage_diff_eq">
+      <apply id="membrane_voltage_diff_eq">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> V </ci>
+        </apply>
+        <apply>
+          <divide/>
+          <apply>
+            <minus/>
+            <ci> I_stim </ci>
+            <apply>
+              <plus/>
+              <ci> i_Na </ci>
+              <ci> i_s </ci>
+              <ci> i_x1 </ci>
+              <ci> i_K1 </ci>
+            </apply>
+          </apply>
+          <ci> C </ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="fast_sodium_current" name="fast_sodium_current">
+    
+
+    <variable units="uA_per_mm2" public_interface="out" name="i_Na"/>
+    <variable units="mS_per_mm2" name="g_Na" initial_value="0.15"/>
+    <variable units="mV" name="E_Na" initial_value="40.0"/>
+    <variable units="ms" public_interface="in" private_interface="out" name="time"/>
+    <variable units="mV" public_interface="in" private_interface="out" name="V"/>
+    <variable units="dimensionless" private_interface="in" name="m"/>
+    <variable units="dimensionless" private_interface="in" name="h"/>
+    
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" cmeta:id="i_Na_calculation_eq">
+      <apply id="i_Na_calculation">
+        <eq/>
+        <ci> i_Na </ci>
+        <apply>
+          <times/>
+          <ci> g_Na </ci>
+            <apply>
+            <power/>
+              <ci> m </ci>
+              <cn cellml:units="dimensionless"> 3.0 </cn>
+            </apply>
+            <ci> h </ci>
+            <apply>
+            <minus/>
+            <ci> V </ci>
+            <ci> E_Na </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="fast_sodium_current_m_gate" name="fast_sodium_current_m_gate">
+    
+
+    <variable units="dimensionless" public_interface="out" name="m" initial_value="0.0"/>
+    <variable units="per_ms" name="alpha_m"/>
+    <variable units="per_ms" name="beta_m"/>
+    <variable units="mV" public_interface="in" name="V"/>
+    <variable units="ms" public_interface="in" name="time"/>
+    
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" cmeta:id="alpha_m_calculation_eq">
+      <apply id="alpha_m_calculation">
+        <eq/>
+        <ci> alpha_m </ci>
+        <piecewise>
+          <piece>
+            <apply>
+              <times/>
+              <cn cellml:units="dimensionless"> 890.9437890 </cn>
+              <apply>
+                <divide/>
+                <apply>
+                  <exp/>
+                  <apply>
+                    <minus/>
+                    <apply>
+                      <times/>
+                      <cn cellml:units="mV"> 0.0486479 </cn>
+                      <ci> V </ci>
+                    </apply>
+                    <cn cellml:units="mV"> 4.8647916 </cn>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn cellml:units="dimensionless"> 1.0 </cn>
+                  <apply>
+                    <times/>
+                    <cn cellml:units="dimensionless"> 5.93962526 </cn>
+                    <apply>
+                      <exp/>
+                      <apply>
+                        <minus/>
+                        <apply>
+                          <times/>
+                          <cn cellml:units="mV"> 0.0486479 </cn>
+                          <ci> V </ci>
+                        </apply>
+                        <cn cellml:units="mV"> 4.8647916 </cn>
+                      </apply>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+            <apply>
+              <gt/>
+              <ci> V </ci>
+              <cn cellml:units="mV"> 100.0 </cn>
+            </apply>
+          </piece>
+          <otherwise>
+            <apply>
+              <times/>
+              <cn cellml:units="dimensionless"> 0.9 </cn>
+              <apply>
+                <divide/>
+                <apply>
+                  <plus/>
+                  <ci> V </ci>
+                  <cn cellml:units="mV"> 42.65 </cn>
+                </apply>
+                <apply>
+                  <minus/>
+                  <cn cellml:units="dimensionless"> 1.0 </cn>
+                  <apply>
+                    <exp/>
+                    <apply>
+                      <minus/>
+                      <apply>
+                        <times/>
+                        <cn cellml:units="dimensionless"> -0.22 </cn>
+                        <ci> V </ci>
+                      </apply>
+                      <cn cellml:units="mV"> 9.3830 </cn>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </otherwise>
+        </piecewise>
+      </apply>
+    </math>
+      
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" cmeta:id="beta_m_calculation_eq">
+      <apply id="beta_m_calculation">
+        <eq/>
+        <ci> beta_m </ci>
+        <piecewise>
+          <piece>
+            <apply>
+              <times/>
+              <cn cellml:units="dimensionless"> 1.437 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <cn cellml:units="dimensionless"> -0.085 </cn>
+                    <ci> V </ci>
+                  </apply>
+                  <cn cellml:units="mV"> 3.37875 </cn>
+                </apply>
+              </apply>
+            </apply> 
+            <apply>
+              <gt/>
+              <ci> V </ci>
+              <cn cellml:units="mV"> -85.0 </cn> 
+            </apply>
+          </piece>
+          <otherwise>
+            <apply>
+              <divide/>
+              <cn cellml:units="dimensionless"> 100.0 </cn>
+              <apply>
+                <plus/>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+                <apply>
+                  <times/>
+                  <cn cellml:units="dimensionless"> 0.486479 </cn>
+                  <apply>
+                    <exp/>
+                    <apply>
+                      <plus/>
+                      <apply>
+                        <times/>
+                        <cn cellml:units="dimensionless"> 0.2597504 </cn>
+                        <ci> V </ci>
+                      </apply>
+                      <cn cellml:units="mV"> 22.0787804 </cn> 
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </otherwise>
+        </piecewise>
+      </apply>
+    </math>
+      
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" cmeta:id="dm_dt_eq">
+      <apply id="dm_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> m </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> alpha_m </ci>
+            <apply>
+              <minus/>
+              <cn cellml:units="per_mV"> 1.0 </cn>
+              <ci> m </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> beta_m </ci>
+            <ci> m </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="fast_sodium_current_h_gate" name="fast_sodium_current_h_gate">
+    
+
+    <variable units="dimensionless" public_interface="out" name="h" initial_value="0.99"/>
+    <variable units="per_ms" name="alpha_h"/>
+    <variable units="per_ms" name="beta_h"/>
+    <variable units="mV" public_interface="in" name="V"/>
+    <variable units="ms" public_interface="in" name="time"/>
+    
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" cmeta:id="alpha_h_calculation_eq">
+      <apply id="alpha_h_calculation">
+        <eq/>
+        <ci> alpha_h </ci>
+        <piecewise>
+          <piece>
+            <apply>
+              <times/>
+              <cn cellml:units="dimensionless"> 0.1 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <cn cellml:units="dimensionless"> -0.193 </cn>
+                    <ci> V </ci>
+                  </apply>
+                  <cn cellml:units="mV"> 15.37245 </cn>
+                </apply>
+              </apply>
+            </apply> 
+            <apply>
+              <gt/>
+              <ci> V </ci>
+              <cn cellml:units="mV"> -90.0 </cn> 
+            </apply>
+          </piece>
+          <otherwise>
+            <apply>
+              <minus/>
+              <cn cellml:units="dimensionless"> -12.0662845 </cn>
+              <apply>
+                <times/>
+                <cn cellml:units="per_mV"> 0.1422598 </cn>
+                <ci> V </ci>
+              </apply>
+            </apply>
+          </otherwise>
+        </piecewise>
+      </apply>
+    </math>
+                
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" cmeta:id="beta_h_calculation_eq">
+      <apply id="beta_h_calculation">
+        <eq/>
+        <ci> beta_h </ci>
+        <apply>
+          <divide/>
+          <cn cellml:units="dimensionless"> 1.7 </cn>
+          <apply>
+            <plus/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <exp/>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <cn cellml:units="dimensionless"> -0.095 </cn>
+                  <ci> V </ci>
+                </apply>
+                <cn cellml:units="mV"> 1.9475 </cn>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+                
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" cmeta:id="dh_dt_eq">
+      <apply id="dh_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> h </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> alpha_h </ci>
+            <apply>
+              <minus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <ci> h </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> beta_h </ci>
+            <ci> h </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+         
+  <component cmeta:id="time_independent_outward_current" name="time_independent_outward_current">
+    
+    <variable units="uA_per_mm2" public_interface="out" name="i_K1"/>
+    <variable units="ms" public_interface="in" name="time"/>
+    <variable units="mV" public_interface="in" name="V"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="i_K1_calculation">
+        <eq/>
+        <ci> i_K1 </ci>
+        <apply>
+          <times/>
+          <cn cellml:units="dimensionless"> 0.35e-2 </cn>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <cn cellml:units="per_ms"> 4.0 </cn>
+              <apply>
+                <divide/>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <exp/>
+                    <apply>
+                      <times/>
+                      <cn cellml:units="per_mV"> 0.04 </cn>
+                      <apply>
+                        <plus/>
+                        <ci> V </ci>
+                        <cn cellml:units="mV"> 85.0 </cn>
+                      </apply>
+                    </apply>                   
+                  </apply>
+                  <cn cellml:units="dimensionless"> 1.0 </cn>
+                </apply>
+                <apply>
+                  <plus/>
+                  <apply>
+                    <exp/>
+                    <apply>
+                      <times/>
+                      <cn cellml:units="per_mV"> 0.08 </cn>
+                      <apply>
+                        <plus/>
+                        <ci> V </ci>
+                        <cn cellml:units="mV"> 53 </cn>
+                      </apply>
+                    </apply>
+                  </apply>
+                  <apply>
+                    <exp/>
+                    <apply>
+                      <times/> 
+                      <cn cellml:units="per_mV"> 0.04 </cn>
+                      <apply>
+                        <plus/>
+                        <ci> V </ci>
+                        <cn cellml:units="mV"> 53.0 </cn>
+                      </apply>
+                    </apply>          
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+            <apply>
+              <times/>
+              <cn cellml:units="per_ms"> 0.2 </cn>
+              <apply>
+                <divide/>
+                <apply>
+                  <plus/>
+                  <ci> V </ci>
+                  <cn cellml:units="mV"> 23.0 </cn>
+                </apply>
+                <apply>
+                  <minus/>
+                  <cn cellml:units="dimensionless"> 1.0 </cn>
+                  <apply>
+                    <exp/>
+                    <apply>
+                      <times/>
+                      <cn cellml:units="per_mV"> -0.04 </cn>
+                      <apply>
+                        <plus/>
+                        <ci> V </ci>
+                        <cn cellml:units="mV"> 23.0 </cn>
+                      </apply>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="time_dependent_outward_current" name="time_dependent_outward_current">
+    
+    <variable units="uA_per_mm2" public_interface="out" name="i_x1"/>
+    <variable units="ms" public_interface="in" private_interface="out" name="time"/>
+    <variable units="mV" public_interface="in" private_interface="out" name="V"/>
+    <variable units="dimensionless" private_interface="in" name="x1"/>
+        
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="i_x1_calculation">
+        <eq/>
+        <ci> i_x1 </ci>
+        <apply>
+          <times/>
+          <ci> x1 </ci>
+          <cn cellml:units="dimensionless"> 0.8e-2 </cn>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <apply>
+                <exp/>
+                <apply>
+                  <times/>
+                  <cn cellml:units="per_mV"> 0.04 </cn>
+                  <apply>
+                    <plus/>
+                    <ci> V </ci>
+                    <cn cellml:units="mV"> 77.0 </cn>
+                  </apply>
+                </apply>
+              </apply>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+            </apply>
+            <apply>
+              <exp/>
+              <apply>
+                <times/>
+                <cn cellml:units="per_mV"> 0.04 </cn>
+                <apply>
+                  <plus/> 
+                  <ci> V </ci>
+                  <cn cellml:units="mV"> 35.0 </cn>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+      
+  <component cmeta:id="time_dependent_outward_current_x1_gate" name="time_dependent_outward_current_x1_gate">
+    
+
+    <variable units="dimensionless" public_interface="out" name="x1" initial_value="0.0"/>
+    <variable units="per_ms" name="alpha_x1"/>
+    <variable units="per_ms" name="beta_x1"/>
+    <variable units="mV" public_interface="in" name="V"/>
+    <variable units="ms" public_interface="in" name="time"/>
+    
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" cmeta:id="alpha_x1_calculation_eq">
+      <apply id="alpha_x1_calculation">
+        <eq/>
+        <ci> alpha_x1 </ci>
+        <piecewise>
+          <piece>
+            <apply>
+              <times/>
+              <cn cellml:units="dimensionless"> 151.7994692 </cn>
+              <apply>
+                <divide/>
+                <apply>
+                  <exp/>
+                  <apply>
+                    <minus/>
+                    <apply>
+                      <times/>
+                      <cn cellml:units="mV"> 0.0654679 </cn>
+                      <ci> V </ci>
+                    </apply>
+                    <cn cellml:units="mV"> 26.1871448 </cn>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn cellml:units="dimensionless"> 1.0 </cn>
+                  <apply>
+                    <times/>
+                    <cn cellml:units="dimensionless"> 1.5179947 </cn>
+                    <apply>
+                      <exp/>
+                      <apply>
+                        <minus/>
+                        <apply>
+                          <times/>
+                          <cn cellml:units="mV"> 0.0654679 </cn>
+                          <ci> V </ci>
+                        </apply>
+                        <cn cellml:units="mV"> 26.1871448 </cn>
+                      </apply>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+            <apply>
+              <gt/>
+              <ci> V </ci>
+              <cn cellml:units="mV"> 400.0 </cn>
+            </apply>
+          </piece>
+          <otherwise>
+            <apply>
+              <times/>
+              <cn cellml:units="dimensionless"> 0.0005 </cn>
+              <apply>
+                <divide/>
+                <apply>
+                  <exp/>
+                  <apply>
+                    <plus/>
+                    <apply>
+                      <times/>
+                      <ci> V </ci>
+                      <cn cellml:units="dimensionless"> 0.083 </cn>
+                    </apply>
+                    <cn cellml:units="mV"> 4.150 </cn>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn cellml:units="dimensionless"> 1.0 </cn>
+                  <apply>
+                    <exp/>
+                    <apply>
+                      <plus/>
+                      <apply>
+                        <times/>
+                        <cn cellml:units="dimensionless"> 0.057 </cn>
+                        <ci> V </ci>
+                      </apply>
+                      <cn cellml:units="mV"> 2.850 </cn>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </otherwise>
+        </piecewise>
+      </apply>
+    </math>
+      
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" cmeta:id="beta_x1_calculation_eq">
+      <apply id="beta_x1_calculation">
+        <eq/>
+        <ci> beta_x1 </ci>
+        <apply>
+          <times/>
+          <cn cellml:units="dimensionless"> 0.0013 </cn>
+          <apply>
+            <divide/>
+            <apply>
+              <exp/>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> V </ci>
+                  <cn cellml:units="dimensionless"> -0.06 </cn>
+                </apply>
+                <cn cellml:units="mV"> 1.2 </cn>
+              </apply>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <cn cellml:units="dimensionless"> -0.04 </cn>
+                    <ci> V </ci>
+                  </apply>
+                  <cn cellml:units="mV"> 0.8 </cn>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+      
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" cmeta:id="dx1_dt_eq">
+      <apply id="dx1_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> x1 </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> alpha_x1 </ci>
+            <apply>
+              <minus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <ci> x1 </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> beta_x1 </ci>
+            <ci> x1 </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="slow_inward_current" name="slow_inward_current">
+    
+    <variable units="uA_per_mm2" public_interface="out" name="i_s"/>
+    <variable units="mS_per_mm2" name="g_s" initial_value="9.0e-4"/>
+    <variable units="mV" name="E_s"/>
+    <variable units="concentration_units" name="Cai" initial_value="1.0e-4"/>
+    <variable units="ms" public_interface="in" private_interface="out" name="time"/>
+    <variable units="mV" public_interface="in" private_interface="out" name="V"/>
+    
+    <variable units="dimensionless" private_interface="in" name="d"/>
+    <variable units="dimensionless" private_interface="in" name="f"/>
+    
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" cmeta:id="E_s_calculation_eq">
+      <apply id="E_s_calculation">
+        <eq/>
+        <ci> E_s </ci>
+        <apply>
+          <minus/>
+          <cn cellml:units="mV"> -82.3 </cn>
+          <apply>
+            <times/>
+            <cn cellml:units="mV"> 13.0287 </cn>
+            <apply>
+              <ln/>
+              <apply>
+                <times/>
+                <ci> Cai </ci>
+                <cn cellml:units="per_concentration_units">0.001</cn>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+      
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" cmeta:id="i_s_calculation_eq">
+      <apply id="i_s_calculation">
+        <eq/>
+        <ci> i_s </ci>
+        <apply>
+          <times/>
+          <ci> g_s </ci>
+          <ci> d </ci>
+          <ci> f </ci>
+          <apply>
+            <minus/>
+            <ci> V </ci>
+            <ci> E_s </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+      
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" cmeta:id="dCai_dt_eq">
+      <apply id="dCai_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> Cai </ci>
+        </apply>
+        <piecewise>
+          <piece>
+            <cn cellml:units="flux"> 0.0 </cn>
+            <apply>
+              <gt/>
+              <ci> V </ci>
+              <cn cellml:units="mV"> 200.0 </cn>
+            </apply>
+          </piece>
+          <otherwise>
+            <apply>
+              <plus/>
+              <apply>
+                <times/>
+                <ci> i_s </ci>
+                <cn cellml:units="dimensionless"> -0.01 </cn>
+              </apply>
+              <apply>
+                <times/>
+                <cn cellml:units="per_ms"> 0.07 </cn>
+                <apply>
+                  <minus/>
+                  <cn cellml:units="concentration_units"> 0.0001 </cn>
+                  <ci> Cai </ci>
+                </apply>
+              </apply>
+            </apply>
+          </otherwise>
+        </piecewise>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="slow_inward_current_d_gate" name="slow_inward_current_d_gate">
+    
+
+    <variable units="dimensionless" public_interface="out" name="d" initial_value="0.0"/>
+    <variable units="per_ms" name="alpha_d"/>
+    <variable units="per_ms" name="beta_d"/>
+    <variable units="dimensionless" name="R_d" initial_value="1.0"/>
+    <variable units="mV" public_interface="in" name="V"/>
+    <variable units="ms" public_interface="in" name="time"/>
+
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" cmeta:id="alpha_d_calculation_eq">
+      <apply id="alpha_d_calculation">
+        <eq/>
+        <ci> alpha_d </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <cn cellml:units="per_ms"> 0.095 </cn>
+            <apply>
+              <exp/>
+              <apply>
+                <minus/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> V </ci>
+                    <cn cellml:units="mV"> 5.0 </cn>
+                  </apply>
+                  <cn cellml:units="mV"> 100.0 </cn>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <exp/>
+              <apply>
+                <minus/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> V </ci>
+                    <cn cellml:units="mV"> 5.0 </cn>
+                  </apply>
+                  <cn cellml:units="mV"> 13.89 </cn>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+      
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" cmeta:id="beta_d_calculation_eq">
+      <apply id="beta_d_calculation">
+        <eq/>
+        <ci> beta_d </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <cn cellml:units="per_ms"> 0.07 </cn>
+            <apply>
+              <exp/>
+              <apply>
+                <minus/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <plus/>
+                    <ci> V </ci>
+                    <cn cellml:units="mV"> 44.0 </cn>
+                  </apply>
+                  <cn cellml:units="mV"> 59.0 </cn>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <exp/>
+              <apply>
+                <divide/>
+                <apply>
+                  <plus/>
+                  <ci> V </ci>
+                  <cn cellml:units="mV"> 44.0 </cn>
+                </apply>
+                <cn cellml:units="mV"> 20.0 </cn>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+      
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" cmeta:id="dd_dt_eq">
+      <apply id="dd_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> d </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <apply>
+              <divide/>
+              <ci> alpha_d </ci>
+              <ci> R_d </ci>
+            </apply>
+            <apply>
+              <minus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <ci> d </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> beta_d </ci>
+            <ci> d </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="slow_inward_current_f_gate" name="slow_inward_current_f_gate">
+    
+
+    <variable units="dimensionless" public_interface="out" name="f" initial_value="1.0"/> 
+    <variable units="per_ms" name="alpha_f"/>
+    <variable units="per_ms" name="beta_f"/>
+    <variable units="dimensionless" name="R_f" initial_value="1.0"/>
+    <variable units="mV" public_interface="in" name="V"/>
+    <variable units="ms" public_interface="in" name="time"/>
+     
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" cmeta:id="alpha_f_calculation_eq">
+      <apply id="alpha_f_calculation">
+        <eq/>
+        <ci> alpha_f </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <cn cellml:units="per_ms"> 0.012 </cn>
+            <apply>
+              <exp/>
+              <apply>
+                <minus/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <plus/>
+                    <ci> V </ci>
+                    <cn cellml:units="mV"> 28.0 </cn>
+                  </apply>
+                  <cn cellml:units="mV"> 125.0 </cn>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <exp/>
+              <apply>
+                <divide/>
+                <apply>
+                  <plus/>
+                  <ci> V </ci>
+                  <cn cellml:units="mV"> 28.0 </cn>
+                </apply>
+                <cn cellml:units="mV"> 6.67 </cn>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+         
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" cmeta:id="beta_f_calculation_eq">
+      <apply id="beta_f_calculation">
+        <eq/>
+        <ci> beta_f </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <cn cellml:units="per_ms"> 0.0065 </cn>
+            <apply>
+              <exp/>
+              <apply>
+                <minus/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <plus/>
+                    <ci> V </ci>
+                    <cn cellml:units="mV"> 30.0 </cn>
+                  </apply>
+                  <cn cellml:units="mV"> 50.0 </cn>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <exp/>
+              <apply>
+                <minus/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <plus/>
+                    <ci> V </ci>
+                    <cn cellml:units="mV"> 30.0 </cn>
+                  </apply>
+                  <cn cellml:units="mV"> 5.0 </cn>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+         
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" cmeta:id="df_dt_eq">
+      <apply id="df_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> f </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <apply>
+              <divide/>
+              <ci> alpha_f </ci>
+              <ci> R_f </ci>
+            </apply>
+            <apply>
+              <minus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <ci> f </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> beta_f </ci>
+            <ci> f </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <group>
+    <relationship_ref relationship="containment"/>
+    <component_ref component="membrane">
+      <component_ref component="fast_sodium_current">
+        <component_ref component="fast_sodium_current_m_gate"/>
+        <component_ref component="fast_sodium_current_h_gate"/>
+      </component_ref>
+      <component_ref component="slow_inward_current">
+        <component_ref component="slow_inward_current_d_gate"/>
+        <component_ref component="slow_inward_current_f_gate"/>
+      </component_ref>
+      <component_ref component="time_dependent_outward_current">
+        <component_ref component="time_dependent_outward_current_x1_gate"/>
+      </component_ref>
+      <component_ref component="time_independent_outward_current"/>
+    </component_ref>
+  </group>
+  
+  <group>
+    <relationship_ref relationship="encapsulation"/>
+    <component_ref component="fast_sodium_current">
+      <component_ref component="fast_sodium_current_m_gate"/>
+      <component_ref component="fast_sodium_current_h_gate"/>
+    </component_ref>
+    <component_ref component="slow_inward_current">
+      <component_ref component="slow_inward_current_d_gate"/>
+      <component_ref component="slow_inward_current_f_gate"/>
+    </component_ref>
+    <component_ref component="time_dependent_outward_current">
+      <component_ref component="time_dependent_outward_current_x1_gate"/>
+    </component_ref>
+  </group>
+  
+  <connection>
+    <map_components component_2="environment" component_1="membrane"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="environment" component_1="fast_sodium_current"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="environment" component_1="slow_inward_current"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="environment" component_1="time_dependent_outward_current"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+   
+  <connection>
+    <map_components component_2="environment" component_1="time_independent_outward_current"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+        
+  <connection>
+    <map_components component_2="fast_sodium_current" component_1="membrane"/>
+    <map_variables variable_2="V" variable_1="V"/>
+     <map_variables variable_2="i_Na" variable_1="i_Na"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="slow_inward_current" component_1="membrane"/>
+    <map_variables variable_2="V" variable_1="V"/>
+    <map_variables variable_2="i_s" variable_1="i_s"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="time_dependent_outward_current" component_1="membrane"/>
+    <map_variables variable_2="V" variable_1="V"/>
+    <map_variables variable_2="i_x1" variable_1="i_x1"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="time_independent_outward_current" component_1="membrane"/>
+    <map_variables variable_2="V" variable_1="V"/>
+    <map_variables variable_2="i_K1" variable_1="i_K1"/>
+  </connection>
+    
+  <connection>
+    <map_components component_2="fast_sodium_current_m_gate" component_1="fast_sodium_current"/>
+    <map_variables variable_2="m" variable_1="m"/>
+    <map_variables variable_2="time" variable_1="time"/>
+    <map_variables variable_2="V" variable_1="V"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="fast_sodium_current_h_gate" component_1="fast_sodium_current"/>
+    <map_variables variable_2="h" variable_1="h"/>
+    <map_variables variable_2="time" variable_1="time"/>
+    <map_variables variable_2="V" variable_1="V"/>
+  </connection>
+ 
+  <connection>
+    <map_components component_2="time_dependent_outward_current_x1_gate" component_1="time_dependent_outward_current"/>
+    <map_variables variable_2="x1" variable_1="x1"/>
+    <map_variables variable_2="time" variable_1="time"/>
+    <map_variables variable_2="V" variable_1="V"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="slow_inward_current_d_gate" component_1="slow_inward_current"/>
+    <map_variables variable_2="d" variable_1="d"/>
+    <map_variables variable_2="time" variable_1="time"/>
+    <map_variables variable_2="V" variable_1="V"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="slow_inward_current_f_gate" component_1="slow_inward_current"/>
+    <map_variables variable_2="f" variable_1="f"/>
+    <map_variables variable_2="time" variable_1="time"/>
+    <map_variables variable_2="V" variable_1="V"/>
+  </connection>
+
+
+
+
+
+
+
+
+<rdf:RDF>
+  <rdf:Seq rdf:about="rdf:#citationAuthorsSeq">
+    <rdf:li rdf:resource="rdf:#author1Vcard"/>
+    <rdf:li rdf:resource="rdf:#author2Vcard"/>
+    <rdf:li rdf:resource="rdf:#author3Vcard"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#c7c69b57-cfae-4412-8e70-1e31bf51ecee">
+    <dcterms:modified rdf:resource="rdf:#3b78c855-a5e5-456a-9baa-25281e24cea4"/>
+    <rdf:value>
+          Added more metadata.
+        </rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#2a2da0ad-9dae-4bc2-919e-ba0812470fd2"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#beta_h_calculation_eq">
+    <cmeta:comment rdf:resource="rdf:#82c4214e-337c-4268-ab27-08aaa1c42c0b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4d85f379-458e-4eff-8ea0-c2b4be3e99e0">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>The Bioengineering Research Group</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f540d6dd-eb83-48c7-8ccf-6cc22602a0b6">
+    <rdf:value>
+            The kinetics of the f gate.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="#time_independent_outward_current">
+    <cmeta:comment rdf:resource="rdf:#9e5bc1c6-d483-4d20-87f8-332792dc4223"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#dCai_dt_eq">
+    <cmeta:comment rdf:resource="rdf:#f03eca1c-378a-48f5-a480-13ee2254ad2c"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d12f8c22-cf5a-44cb-a205-37b9ca58601c">
+    <vCard:Given>Autumn</vCard:Given>
+    <vCard:Family>Cuellar</vCard:Family>
+    <vCard:Other>A</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#bef13593-9d12-4c05-87b0-a9120baa85a9">
+    <dcterms:modified rdf:resource="rdf:#d36aa525-f58c-43b4-9572-d254c54fd731"/>
+    <rdf:value>
+          Changed some units and added a stimulus current and touched up some
+          of the equations.
+        </rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#1a0e9157-9b08-4471-985c-ffa05e53e7fc"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e7e61ee5-2624-423e-880f-7c58e028e478">
+    <rdf:value>
+            The opening rate for the h gate.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#232c13f8-e730-4a15-afd3-c0ea79ffdca4">
+    <rdf:value>
+            The main component for the model, defining the transmembrane
+            potential.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#368bcf42-91e7-480a-8a8b-166f5f840ef2">
+    <rdf:value>
+            The voltage-dependent activation gate for the slow inward current -
+            the d gate.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b12606d9-c6d7-4bad-bd1b-db79dbec301c">
+    <rdf:value>
+            The main differential equation for the model, specifing membrane
+            potential as the summation of all ionic currents and an applied
+            stimulus current.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="#beta_d_calculation_eq">
+    <cmeta:comment rdf:resource="rdf:#1c537c12-951c-4628-8c44-1da4a250cfdb"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#dh_dt_eq">
+    <cmeta:comment rdf:resource="rdf:#4797bc9f-9082-442b-b1fc-087514cd737c"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#334e2ea9-cd55-40f8-ba9f-e2c9bb4ed1ef">
+    <dcterms:W3CDTF>2001-12-28</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#973f7d27-23fa-44a5-bd57-ecc9058cea1a">
+    <rdf:value>
+            While the governing equations for the time dependent outward 
+            potassium current are unchanged, the gating variables (alpha_x1 and 
+            beta_x1) are modified.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3b78c855-a5e5-456a-9baa-25281e24cea4">
+    <dcterms:W3CDTF>2003-04-01</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="#dx1_dt_eq">
+    <cmeta:comment rdf:resource="rdf:#57593dc1-8f39-4a81-b08b-e273b58bc0fa"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#858f05c4-d295-4750-ba89-3fc2d47f4099">
+    <rdf:value>
+            The voltage-dependent inactivation gate for the fast sodium channel
+            - the h gate.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8a93fbe2-14e3-4900-88ac-b5ac751a83aa">
+    <vCard:N rdf:resource="rdf:#19b61da1-a654-47d2-ba57-1eb574bee994"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#slow_inward_current">
+    <cmeta:comment rdf:resource="rdf:#c0709a22-238c-435a-8a39-6cdf2e511dc3"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#fast_sodium_current_h_gate">
+    <cmeta:comment rdf:resource="rdf:#858f05c4-d295-4750-ba89-3fc2d47f4099"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#beta_x1_calculation_eq">
+    <cmeta:comment rdf:resource="rdf:#b1d6da41-9ac3-49ec-9bf3-2192d2531531"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#bc14c895-75d5-4bc8-ab4e-6353188e8a54">
+    <dcterms:W3CDTF>1999-07-01</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b3f8b236-413b-4746-9567-721d0eff69d1">
+    <rdf:value>
+            The kinetics of the m gate.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f03eca1c-378a-48f5-a480-13ee2254ad2c">
+    <rdf:value>
+            The time rate of change of intracellular calcium concentration.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b12532fb-cc21-4165-9a6e-795dc98017ef">
+    <rdf:value>
+            The opening rate of the d gate.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#236a0d67-26ed-42ee-a6e5-b894ea982af2">
+    <rdf:value>
+            The opening rate of the f gate.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f457548d-6226-432e-8250-f1dc23f6038b">
+    <bqs:Pubmed_id>10396895</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#de6e1a4d-2881-4730-bece-21fe7f04ce05"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#dm_dt_eq">
+    <cmeta:comment rdf:resource="rdf:#b3f8b236-413b-4746-9567-721d0eff69d1"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#82c4214e-337c-4268-ab27-08aaa1c42c0b">
+    <rdf:value>
+            The closing rate for the h gate.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author3Vcard">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#author3VcardN"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1c537c12-951c-4628-8c44-1da4a250cfdb">
+    <rdf:value>
+            The closing rate of the d gate.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author2Vcard">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#author2VcardN"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7c738cb4-0d39-4e73-8021-7fd144367e8a">
+    <rdf:value>
+            The gating variable for the time-dependent outward potassium
+            current - the x1 gate.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#79c7ee0f-cee1-43f6-8f29-cf3200708f9d">
+    <rdf:value>
+            The fast sodium current, primarily responsible for the upstroke of
+            the action potential.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#57593dc1-8f39-4a81-b08b-e273b58bc0fa">
+    <rdf:value>
+            The kinetics of the x1 gate.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#5bd403fa-c258-45f7-acfd-98a29d9a5055">
+    <rdf:value>
+            The closing rate of the f gate.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#c164d899-4601-4826-be03-6e14707cf65b">
+    <dcterms:modified rdf:resource="rdf:#3e92833b-741e-47f1-ad79-8899827b7ea1"/>
+    <rdf:value>
+          Changed the model name so the model loads in the database easier.
+        </rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#df383059-c56f-453c-8509-e8817197718e"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#slow_inward_current_d_gate">
+    <cmeta:comment rdf:resource="rdf:#368bcf42-91e7-480a-8a8b-166f5f840ef2"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b1d6da41-9ac3-49ec-9bf3-2192d2531531">
+    <rdf:value>
+            The closing rate of the x1 gate.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#50e4ab1e-9318-49af-8438-10f5a62223e9">
+    <dcterms:modified rdf:resource="rdf:#7e593db8-4aa2-41f2-a90a-c90d8285d887"/>
+    <rdf:value>
+          Updated metadata to conform to the 16/1/02 CellML Metadata 1.0 
+          Specification.
+        </rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#8a93fbe2-14e3-4900-88ac-b5ac751a83aa"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#5d1c089a-0495-449f-99bb-991fe0a3033d">
+    <vCard:Given>David</vCard:Given>
+    <vCard:Family>Nickerson</vCard:Family>
+    <vCard:Other>P</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:publisher>
+        Bioengineering Institute, The University of Auckland
+      </dc:publisher>
+    <cmeta:modification rdf:resource="rdf:#50e4ab1e-9318-49af-8438-10f5a62223e9"/>
+    <cmeta:modification rdf:resource="rdf:#bef13593-9d12-4c05-87b0-a9120baa85a9"/>
+    <cmeta:modification rdf:resource="rdf:#c164d899-4601-4826-be03-6e14707cf65b"/>
+    <cmeta:modification rdf:resource="rdf:#c7c69b57-cfae-4412-8e70-1e31bf51ecee"/>
+    <dcterms:created rdf:resource="rdf:#334e2ea9-cd55-40f8-ba9f-e2c9bb4ed1ef"/>
+    <dc:creator rdf:resource="rdf:#2036acd3-c628-46a6-9512-9c5eb700af31"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#beta_f_calculation_eq">
+    <cmeta:comment rdf:resource="rdf:#5bd403fa-c258-45f7-acfd-98a29d9a5055"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b8b7a30c-edb8-47b6-ad3c-3e17e50e1d5b">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#34c4dc1a-9926-448b-9a8d-79b2e6104f62">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="#fast_sodium_current_m_gate">
+    <cmeta:comment rdf:resource="rdf:#8720158c-85ba-4a59-91bc-c2ed3450ee08"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#membrane">
+    <cmeta:comment rdf:resource="rdf:#232c13f8-e730-4a15-afd3-c0ea79ffdca4"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7e593db8-4aa2-41f2-a90a-c90d8285d887">
+    <dcterms:W3CDTF>2002-01-21</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#55dbf119-b6a1-4873-9e00-1c9e95f24f55">
+    <rdf:value>
+            The opening rate for the m gate.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="#defibrillation_beeler_reuter_model_1999">
+    <dc:title>The defibrillation Beeler-Reuter model</dc:title>
+    <cmeta:comment rdf:resource="rdf:#7dec2b0f-1986-4fc5-abf7-5b5dac773925"/>
+    <bqs:reference rdf:resource="rdf:#f457548d-6226-432e-8250-f1dc23f6038b"/>
+<bqs:reference rdf:parseType="Resource">
+  <dc:subject rdf:parseType="Resource">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value>
+      <rdf:Bag>
+        <rdf:li>excitation-contraction coupling</rdf:li>
+        <rdf:li>ventricular myocyte</rdf:li>
+        <rdf:li>electrophysiology</rdf:li>
+        <rdf:li>defibrillation</rdf:li>
+        <rdf:li>cardiac</rdf:li>
+      </rdf:Bag>
+    </rdf:value>
+  </dc:subject>
+</bqs:reference>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4a862bca-00f3-4b3a-bd11-9a0f2c54b59b">
+    <dc:title>IEEE Trans Biomed Eng.</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#2a2da0ad-9dae-4bc2-919e-ba0812470fd2">
+    <vCard:N rdf:resource="rdf:#d67013b3-3ddf-45af-a05d-44a024b2e17f"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d36aa525-f58c-43b4-9572-d254c54fd731">
+    <dcterms:W3CDTF>2003-07-28</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="#time_dependent_outward_current_x1_gate">
+    <cmeta:comment rdf:resource="rdf:#7c738cb4-0d39-4e73-8021-7fd144367e8a"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#de6e1a4d-2881-4730-bece-21fe7f04ce05">
+    <dc:creator rdf:resource="rdf:#citationAuthorsSeq"/>
+    <dc:title>Anode/cathode make and break phenomena in a model of defibrillation</dc:title>
+    <bqs:volume>46</bqs:volume>
+    <bqs:first_page>769</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#4a862bca-00f3-4b3a-bd11-9a0f2c54b59b"/>
+    <dcterms:issued rdf:resource="rdf:#bc14c895-75d5-4bc8-ab4e-6353188e8a54"/>
+    <bqs:last_page>777</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author3VcardN">
+    <vCard:Given>P</vCard:Given>
+    <vCard:Family>Moore</vCard:Family>
+    <vCard:Other>K</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3e92833b-741e-47f1-ad79-8899827b7ea1">
+    <dcterms:W3CDTF>2003-04-05</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="#slow_inward_current_f_gate">
+    <cmeta:comment rdf:resource="rdf:#e33d0542-033b-45ba-b7b5-ec2bc2329eb9"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#19b61da1-a654-47d2-ba57-1eb574bee994">
+    <vCard:Given>Autumn</vCard:Given>
+    <vCard:Family>Cuellar</vCard:Family>
+    <vCard:Other>A.</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7dec2b0f-1986-4fc5-abf7-5b5dac773925">
+    <dc:creator rdf:resource="rdf:#6ec9f13c-ec2f-46bf-83ca-6b275c7e9e10"/>
+    <rdf:value>This is the CellML description of the defibrillation Beeler-Reuter model. The original Beeler-Reuter model was modified by Drouhard and Roberge (1987) to improve the fast sodium kinetics. This model was then further modified by Skouibine et al (1999) to handle potentials outside the range of normal physiological activity, allowing the model to be used in defibrillation studies.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="#i_Na_calculation_eq">
+    <cmeta:comment rdf:resource="rdf:#4b2a53b7-9820-4e91-b5bd-ceb150ab8ac9"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ea56eca4-c289-4941-91f3-885b4c00c310">
+    <rdf:value>
+            The closing rate for the m gate.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="#beta_m_calculation_eq">
+    <cmeta:comment rdf:resource="rdf:#ea56eca4-c289-4941-91f3-885b4c00c310"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#membrane_voltage_diff_eq">
+    <cmeta:comment rdf:resource="rdf:#b12606d9-c6d7-4bad-bd1b-db79dbec301c"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#c166c403-d0f0-4ff0-833c-0ef9872f464a">
+    <rdf:value>
+            Calculation of the slow inward current.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author1Vcard">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#author1VcardN"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author1VcardN">
+    <vCard:Given>K</vCard:Given>
+    <vCard:Family>Skouibine</vCard:Family>
+    <vCard:Other>B</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4b2a53b7-9820-4e91-b5bd-ceb150ab8ac9">
+    <rdf:value>
+            Calculation of the fast sodium current.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8720158c-85ba-4a59-91bc-c2ed3450ee08">
+    <rdf:value>
+            The voltage-dependent activation gate for the fast sodium channel -
+            the m gate.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d67013b3-3ddf-45af-a05d-44a024b2e17f">
+    <vCard:Given>Autumn</vCard:Given>
+    <vCard:Family>Cuellar</vCard:Family>
+    <vCard:Other>A</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#2036acd3-c628-46a6-9512-9c5eb700af31">
+    <vCard:ORG rdf:resource="rdf:#4d85f379-458e-4eff-8ea0-c2b4be3e99e0"/>
+    <vCard:EMAIL rdf:resource="rdf:#b8b7a30c-edb8-47b6-ad3c-3e17e50e1d5b"/>
+    <vCard:N rdf:resource="rdf:#34c4dc1a-9926-448b-9a8d-79b2e6104f62"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#dd_dt_eq">
+    <cmeta:comment rdf:resource="rdf:#a0770d70-cd58-4d72-ada8-80782eef2cf3"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#df383059-c56f-453c-8509-e8817197718e">
+    <vCard:N rdf:resource="rdf:#d12f8c22-cf5a-44cb-a205-37b9ca58601c"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9e5bc1c6-d483-4d20-87f8-332792dc4223">
+    <rdf:value>
+            The formula for the time independent outward potassium current of 
+            the defibrillation Beeler-Reuter model is the same as for the 
+            original Beeler-Reuter (1977) model.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#c967adca-bdb9-4ee5-a848-ed8b5f1f7de3">
+    <rdf:value>
+            The opening rate of the x1 gate.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#c0709a22-238c-435a-8a39-6cdf2e511dc3">
+    <rdf:value>
+            A minor change is made to the intracellular calcium ion tracking to 
+            limit the movement of calcium ions at large potentials. In addition 
+            to these changes, a scale factor can be added to the time dependent 
+            d and f gates to allow the scaling of the action potential duration.
+            This enables a better representation of an action potential from  
+            ischemic tissue.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a0770d70-cd58-4d72-ada8-80782eef2cf3">
+    <rdf:value>
+            The kinetics of the d gate.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="#alpha_x1_calculation_eq">
+    <cmeta:comment rdf:resource="rdf:#c967adca-bdb9-4ee5-a848-ed8b5f1f7de3"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ae14a4f4-ee6a-4ea2-8457-822eb82f267a">
+    <rdf:value>
+            Calculation of the reversal potential for the slow inward current.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author2VcardN">
+    <vCard:Given>N</vCard:Given>
+    <vCard:Family>Trayanova</vCard:Family>
+    <vCard:Other>A</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1a0e9157-9b08-4471-985c-ffa05e53e7fc">
+    <vCard:N rdf:resource="rdf:#5d1c089a-0495-449f-99bb-991fe0a3033d"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#alpha_h_calculation_eq">
+    <cmeta:comment rdf:resource="rdf:#e7e61ee5-2624-423e-880f-7c58e028e478"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#df_dt_eq">
+    <cmeta:comment rdf:resource="rdf:#f540d6dd-eb83-48c7-8ccf-6cc22602a0b6"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4797bc9f-9082-442b-b1fc-087514cd737c">
+    <rdf:value>
+            The kinetics of the h gate.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="#alpha_f_calculation_eq">
+    <cmeta:comment rdf:resource="rdf:#236a0d67-26ed-42ee-a6e5-b894ea982af2"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e33d0542-033b-45ba-b7b5-ec2bc2329eb9">
+    <rdf:value>
+            The voltage-dependent inactivation gate for the slow inward current
+            - the f gate.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="#i_s_calculation_eq">
+    <cmeta:comment rdf:resource="rdf:#c166c403-d0f0-4ff0-833c-0ef9872f464a"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#alpha_m_calculation_eq">
+    <cmeta:comment rdf:resource="rdf:#55dbf119-b6a1-4873-9e00-1c9e95f24f55"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#6ec9f13c-ec2f-46bf-83ca-6b275c7e9e10">
+    <vCard:FN>Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="#alpha_d_calculation_eq">
+    <cmeta:comment rdf:resource="rdf:#b12532fb-cc21-4165-9a6e-795dc98017ef"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#fast_sodium_current">
+    <cmeta:comment rdf:resource="rdf:#79c7ee0f-cee1-43f6-8f29-cf3200708f9d"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#time_dependent_outward_current">
+    <cmeta:comment rdf:resource="rdf:#973f7d27-23fa-44a5-bd57-ecc9058cea1a"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#E_s_calculation_eq">
+    <cmeta:comment rdf:resource="rdf:#ae14a4f4-ee6a-4ea2-8457-822eb82f267a"/>
+  </rdf:Description>
+</rdf:RDF>
+</model>

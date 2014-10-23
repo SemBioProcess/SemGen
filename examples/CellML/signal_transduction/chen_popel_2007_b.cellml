@@ -1,0 +1,1299 @@
+<?xml version='1.0' encoding='utf-8'?>
+<model xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" name="chen_2007" cmeta:id="chen_2007" xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#">
+
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Vascular and perivascular nitric oxide release and transport: biochemical pathways of neuronal nitric oxide synthase (NOS1) and endothelial nitric oxide synthase (NOS3)</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+        This CellML model runs in OpenCell and COR and is known to be mathematically consistent with the publication it was based on. The units are consistent. An additional variable and equation has been added to allow the CellML model to reproduce Figure 2 of the publication. The three different graphs of this figure can be produced by altering the variable 'Fe3' in the 'Fe3' component (this variable represents the concentration of NOS-1 in its Fe3+ bound state) to 0.3, 0.6 or 0.9 micromolar. In this particular version of the model it has been set to 0.6.
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+  <title>Model Structure</title>
+
+<para>
+ABSTRACT: Nitric oxide (NO) derived from nitric oxide synthase (NOS) is an important paracrine effector that maintains vascular tone. The release of NO mediated by NOS isozymes under various O(2) conditions critically determines the NO bioavailability in tissues. Because of experimental difficulties, there has been no direct information on how enzymatic NO production and distribution change around arterioles under various oxygen conditions. In this study, we used computational models based on the analysis of biochemical pathways of enzymatic NO synthesis and the availability of NOS isozymes to quantify the NO production by neuronal NOS (NOS1) and endothelial NOS (NOS3). We compared the catalytic activities of NOS1 and NOS3 and their sensitivities to the concentration of substrate O(2). Based on the NO release rates predicted from kinetic models, the geometric distribution of NO sources, and mass balance analysis, we predicted the NO concentration profiles around an arteriole under various O(2) conditions. The results indicated that NOS1-catalyzed NO production was significantly more sensitive to ambient O(2) concentration than that catalyzed by NOS3. Also, the high sensitivity of NOS1 catalytic activity to O(2) was associated with significantly reduced NO production and therefore NO concentrations, upon hypoxia. Moreover, the major source determining the distribution of NO was NOS1, which was abundantly expressed in the nerve fibers and mast cells close to arterioles, rather than NOS3, which was expressed in the endothelium. Finally, the perivascular NO concentration predicted by the models under conditions of normoxia was paradoxically at least an order of magnitude lower than a number of experimental measurements, suggesting a higher abundance of NOS1 or NOS3 and/or the existence of other enzymatic or nonenzymatic sources of NO in the microvasculature.
+</para>
+
+<informalfigure float="0" id="fig_reaction_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>model diagram</title>
+    </objectinfo>
+    <imagedata fileref="chen_2007.png"/>
+  </imageobject>
+</mediaobject>
+<caption>Schematic diagram of the mathematical model.  Pathway of NO release and transport catalysed by neuronal nitric oxide synthase ((NOS1), here represented by the heme iron (Fe)).  The heme ion of NOS1 binds L-arginine (Arg), hydroxyl-L-arginine (NOHA), and oxygen (O2), and undergoes a series of oxygenation and reduction reactions.</caption>
+</informalfigure>
+
+<para>
+The original paper reference is cited below:
+</para>
+
+<para>
+Vascular and perivascular nitric oxide release and transport: biochemical pathways of neuronal nitric oxide synthase (NOS1) and endothelial nitric oxide synthase (NOS3), Kejing Chen and Aleksander S. Popel, 2007, 
+            <emphasis>Free Radical Biology and Medicine</emphasis>
+         , 42, 811-822. <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pubmed&amp;cmd=Retrieve&amp;dopt=AbstractPlus&amp;list_uids=17320763&amp;query_hl=1&amp;itool=pubmed_docsum">PubMed ID: 17320763</ulink>
+</para>
+
+</sect1>
+</article>
+</documentation> 
+
+
+
+
+
+  <units name="micromolar">
+    <unit prefix="micro" units="mole"/>
+    <unit exponent="-1" units="litre"/>
+  </units>
+  
+  <units name="first_order_rate_constant">
+    <unit exponent="-1" units="second"/>
+  </units>
+
+  <units name="second_order_rate_constant">
+    <unit exponent="-1" units="second"/>
+    <unit exponent="-1" units="micromolar"/>
+  </units>
+  
+  <units name="flux">
+    <unit units="micromolar"/>
+    <unit exponent="-1" units="second"/>
+  </units>
+
+  
+  <component name="environment">
+    <variable cmeta:id="environment_time" name="time" public_interface="out" units="second"/>
+  </component>
+  
+  <component cmeta:id="Fe3" name="Fe3">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#Fe3">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Fe3</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">neuronal nitric oxide synthase (heme iron 3+)</dcterms:alternative>
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable initial_value="0.6" name="Fe3" public_interface="out" units="micromolar"/>
+    
+    <variable name="Arg" public_interface="in" units="micromolar"/>
+    <variable name="Fe3_Arg" public_interface="in" units="micromolar"/>
+    <variable name="Fe3_NO" public_interface="in" units="micromolar"/>
+    <variable name="Fe2_NO" public_interface="in" units="micromolar"/>
+    <variable name="O2" public_interface="in" units="micromolar"/>
+    <variable name="k1" public_interface="in" units="second_order_rate_constant"/>
+    <variable name="k_1" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="k2" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="k13" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="k12" public_interface="in" units="second_order_rate_constant"/>
+    <variable name="time" public_interface="in" units="second"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="1"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> Fe3 </ci> 
+        </apply>
+        <apply>
+          <minus/> 
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> k_1 </ci>
+              <ci> Fe3_Arg </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> k13 </ci>
+              <ci> Fe3_NO </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> k12 </ci>
+              <ci> Fe2_NO </ci>
+              <ci> O2 </ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> k1 </ci>
+              <ci> Arg </ci>
+              <ci> Fe3 </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> k2 </ci>
+              <ci> Fe3 </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component cmeta:id="Fe3_Arg" name="Fe3_Arg">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#Fe3_Arg">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Fe3_Arg</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">neuronal nitric oxide synthase (heme iron 3+) bound to L-arginine</dcterms:alternative>
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable initial_value="0.0" name="Fe3_Arg" public_interface="out" units="micromolar"/>
+    
+    <variable name="Arg" public_interface="in" units="micromolar"/>
+    <variable name="Fe3" public_interface="in" units="micromolar"/>
+    <variable name="k1" public_interface="in" units="second_order_rate_constant"/>
+    <variable name="k_1" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="k3" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="time" public_interface="in" units="second"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="2"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> Fe3_Arg </ci> 
+        </apply>
+        <apply>
+          <minus/> 
+          <apply>
+            <times/>
+            <ci> k1 </ci>
+            <ci> Fe3 </ci>
+            <ci> Arg </ci>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> k_1 </ci>
+              <ci> Fe3_Arg </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> k3 </ci>
+              <ci> Fe3_Arg </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component cmeta:id="Fe2" name="Fe2">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#Fe2">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Fe2</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">neuronal nitric oxide synthase (heme iron 2+)</dcterms:alternative>
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable initial_value="0.0" name="Fe2" public_interface="out" units="micromolar"/>
+    
+    <variable name="Arg" public_interface="in" units="micromolar"/>
+    <variable name="Fe3" public_interface="in" units="micromolar"/>
+    <variable name="Fe2_Arg" public_interface="in" units="micromolar"/>
+    <variable name="k2" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="k_4" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="k4" public_interface="in" units="second_order_rate_constant"/>
+    <variable name="time" public_interface="in" units="second"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="3"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> Fe2 </ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> k2 </ci>
+              <ci> Fe3 </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> k_4 </ci>
+              <ci> Fe2_Arg </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> k4 </ci>
+            <ci> Fe2 </ci>
+            <ci> Arg </ci>
+	  </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component cmeta:id="Fe2_Arg" name="Fe2_Arg">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#Fe2_Arg">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Fe2_Arg</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">neuronal nitric oxide synthase (heme iron 2+) bound to L-arginine</dcterms:alternative>
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable initial_value="0.0" name="Fe2_Arg" public_interface="out" units="micromolar"/>
+    
+    <variable name="Arg" public_interface="in" units="micromolar"/>
+    <variable name="Fe3_Arg" public_interface="in" units="micromolar"/>
+    <variable name="Fe2" public_interface="in" units="micromolar"/>
+    <variable name="Fe3_O2_Arg" public_interface="in" units="micromolar"/>
+    <variable name="O2" public_interface="in" units="micromolar"/>
+    <variable name="k4" public_interface="in" units="second_order_rate_constant"/>
+    <variable name="k_4" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="k3" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="k5" public_interface="in" units="second_order_rate_constant"/>
+    <variable name="k_5" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="time" public_interface="in" units="second"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="4"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> Fe2_Arg </ci> 
+        </apply>
+        <apply>
+          <minus/> 
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> k3 </ci>
+              <ci> Fe3_Arg </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> k_5 </ci>
+              <ci> Fe3_O2_Arg </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> k4 </ci>
+              <ci> Fe2 </ci>
+              <ci> Arg </ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> k5 </ci>
+              <ci> Fe2_Arg </ci>
+              <ci> O2 </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> k_4 </ci>
+              <ci> Fe2_Arg </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component cmeta:id="Fe3_O2_Arg" name="Fe3_O2_Arg">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#Fe3_O2_Arg">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Fe3_O2_Arg</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">oxidised neuronal nitric oxide synthase (heme iron 3+) bound to L-arginine</dcterms:alternative>
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable initial_value="0.0" name="Fe3_O2_Arg" public_interface="out" units="micromolar"/>
+    
+    <variable name="Fe2_Arg" public_interface="in" units="micromolar"/>
+    <variable name="O2" public_interface="in" units="micromolar"/>
+    <variable name="k6" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="k5" public_interface="in" units="second_order_rate_constant"/>
+    <variable name="k_5" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="time" public_interface="in" units="second"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="5"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> Fe3_O2_Arg </ci> 
+        </apply>
+        <apply>
+          <minus/> 
+          <apply>
+            <times/>
+            <ci> k5 </ci>
+            <ci> Fe2_Arg </ci>
+            <ci> O2 </ci>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> k6 </ci>
+              <ci> Fe3_O2_Arg </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> k_5 </ci>
+              <ci> Fe3_O2_Arg </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component cmeta:id="Fe3_NOHA" name="Fe3_NOHA">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#Fe3_NOHA">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Fe3_NOHA</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">neuronal nitric oxide synthase (heme iron 3+) bound to hydroxyl-L-arginine</dcterms:alternative>
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable initial_value="0.0" name="Fe3_NOHA" public_interface="out" units="micromolar"/>
+    
+    <variable name="Fe3_O2_Arg" public_interface="in" units="micromolar"/>
+    <variable name="k6" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="k7" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="time" public_interface="in" units="second"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="6"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> Fe3_NOHA </ci> 
+        </apply>
+        <apply>
+          <minus/> 
+          <apply>
+            <times/>
+            <ci> k6 </ci>
+            <ci> Fe3_O2_Arg </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> k7 </ci>
+            <ci> Fe3_NOHA </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component cmeta:id="Fe2_NOHA" name="Fe2_NOHA">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#Fe2_NOHA">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Fe2_NOHA</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">neuronal nitric oxide synthase (heme iron 2+) bound to hydroxyl-L-arginine</dcterms:alternative>
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable initial_value="0.0" name="Fe2_NOHA" public_interface="out" units="micromolar"/>
+    
+    <variable name="Fe2" public_interface="in" units="micromolar"/>
+    <variable name="Fe3_NOHA" public_interface="in" units="micromolar"/>
+    <variable name="NOHA" public_interface="in" units="micromolar"/>
+    <variable name="Fe3_O2_NOHA" public_interface="in" units="micromolar"/>
+    <variable name="O2" public_interface="in" units="micromolar"/>
+    <variable name="k9" public_interface="in" units="second_order_rate_constant"/>
+    <variable name="k7" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="k_9" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="k_8" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="k8" public_interface="in" units="second_order_rate_constant"/>
+    <variable name="time" public_interface="in" units="second"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="7"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> Fe2_NOHA </ci> 
+        </apply>
+        <apply>
+          <minus/> 
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> k7 </ci>
+              <ci> Fe3_NOHA </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> k_9 </ci>
+              <ci> Fe3_O2_NOHA </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> k8 </ci>
+              <ci> Fe2 </ci>
+              <ci> NOHA </ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> k_8 </ci>
+              <ci> Fe2_NOHA </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> k9 </ci>
+              <ci> Fe2_NOHA </ci>
+              <ci> O2 </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component cmeta:id="Fe3_O2_NOHA" name="Fe3_O2_NOHA">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#Fe3_O2_NOHA">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Fe3_O2_NOHA</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">oxidised neuronal nitric oxide synthase (heme iron 3+) bound to hydroxyl-L-arginine</dcterms:alternative>
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable initial_value="0.0" name="Fe3_O2_NOHA" public_interface="out" units="micromolar"/>
+    
+    <variable name="Fe2_NOHA" public_interface="in" units="micromolar"/>
+    <variable name="O2" public_interface="in" units="micromolar"/>
+    <variable name="k10" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="k9" public_interface="in" units="second_order_rate_constant"/>
+    <variable name="k_9" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="time" public_interface="in" units="second"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="8"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> Fe3_O2_NOHA </ci> 
+        </apply>
+        <apply>
+          <minus/> 
+          <apply>
+            <times/>
+            <ci> k9 </ci>
+            <ci> Fe2_NOHA </ci>
+            <ci> O2 </ci>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> k10 </ci>
+              <ci> Fe3_O2_NOHA </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> k_9 </ci>
+              <ci> Fe3_O2_NOHA </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component cmeta:id="Fe3_NO" name="Fe3_NO">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#Fe3_NO">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Fe3_NO</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">neuronal nitric oxide synthase (heme iron 3+) bound to nitric oxide</dcterms:alternative>
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable initial_value="0.0" name="Fe3_NO" public_interface="out" units="micromolar"/>
+    
+    <variable name="Fe3_O2_NOHA" public_interface="in" units="micromolar"/>
+    <variable name="k10" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="k13" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="k11" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="time" public_interface="in" units="second"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="9"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> Fe3_NO </ci> 
+        </apply>
+        <apply>
+          <minus/> 
+          <apply>
+            <times/>
+            <ci> k10 </ci>
+            <ci> Fe3_O2_NOHA </ci>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> k13 </ci>
+              <ci> Fe3_NO </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> k11 </ci>
+              <ci> Fe3_NO </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component cmeta:id="Fe2_NO" name="Fe2_NO">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#Fe2_NO">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Fe2_NO</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">neuronal nitric oxide synthase (heme iron 2+) bound to nitric oxide</dcterms:alternative>
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable initial_value="0.0" name="Fe2_NO" public_interface="out" units="micromolar"/>
+    
+    <variable name="Fe3_NO" public_interface="in" units="micromolar"/>
+    <variable name="O2" public_interface="in" units="micromolar"/>
+    <variable name="k12" public_interface="in" units="second_order_rate_constant"/>
+    <variable name="k11" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="time" public_interface="in" units="second"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="10"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> Fe2_NO </ci> 
+        </apply>
+        <apply>
+          <minus/> 
+          <apply>
+            <times/>
+            <ci> k11 </ci>
+            <ci> Fe3_NO </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> k12 </ci>
+            <ci> Fe2_NO </ci>
+            <ci> O2 </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component cmeta:id="NO" name="NO">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#NO">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">NO</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">nitric oxide</dcterms:alternative>
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable cmeta:id="NO_NO" initial_value="0.0" name="NO" units="micromolar"/>
+   
+    <variable cmeta:id="NO_dNOdt" name="dNOdt" units="flux"/>
+    <variable name="Fe3_NO" public_interface="in" units="micromolar"/>
+    <variable name="k13" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="time" public_interface="in" units="second"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="11"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> NO </ci> 
+        </apply>
+        <apply>
+          <times/>
+          <ci> k13 </ci>
+          <ci> Fe3_NO </ci>
+        </apply>
+      </apply>
+      
+	  <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>NO</ci>
+        </apply>
+        <ci>dNOdt</ci>
+      </apply>
+    </math>
+  </component>
+
+  <component name="citrulline">  
+    <variable initial_value="0.0" name="citrulline" units="micromolar"/>
+    
+    <variable name="Fe3_O2_NOHA" public_interface="in" units="micromolar"/>
+    <variable name="k10" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="time" public_interface="in" units="second"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="12"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> citrulline </ci> 
+        </apply>
+        <apply>
+          <times/>
+          <ci> k10 </ci>
+          <ci> Fe3_O2_NOHA </ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component cmeta:id="NO3" name="NO3">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#NO3">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">NO3</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">nitrate</dcterms:alternative>
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable initial_value="0.0" name="NO3" units="micromolar"/>
+    
+    <variable name="Fe2_NO" public_interface="in" units="micromolar"/>
+    <variable name="O2" public_interface="in" units="micromolar"/>
+    <variable name="k12" public_interface="in" units="second_order_rate_constant"/>
+    <variable name="time" public_interface="in" units="second"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="13"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> NO3 </ci> 
+        </apply>
+        <apply>
+          <times/>
+          <ci> k12 </ci>
+          <ci> Fe2_NO </ci>
+          <ci> O2 </ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component cmeta:id="NOHA" name="NOHA">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#NOHA">
+        <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">NOHA</dc:title>
+        <dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">hydroxyl-L-arginine</dcterms:alternative>
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable initial_value="0.0" name="NOHA" public_interface="out" units="micromolar"/>
+    
+    <variable name="Fe2_NOHA" public_interface="in" units="micromolar"/>
+    <variable name="Fe2" public_interface="in" units="micromolar"/>
+    <variable name="k_8" public_interface="in" units="first_order_rate_constant"/>
+    <variable name="k8" public_interface="in" units="second_order_rate_constant"/>
+    <variable name="time" public_interface="in" units="second"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="14"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> NOHA </ci> 
+        </apply>
+        <apply>
+          <minus/> 
+          <apply>
+            <times/>
+            <ci> k_8 </ci>
+            <ci> Fe2_NOHA </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> k8 </ci>
+            <ci> Fe2 </ci>
+            <ci> NOHA </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component name="model_constants"> 
+    <variable initial_value="100.0" name="O2" public_interface="out" units="micromolar"/>
+    <variable initial_value="100.0" name="Arg" public_interface="out" units="micromolar"/>
+    <variable initial_value="6.6" name="k1" public_interface="out" units="second_order_rate_constant"/>
+    <variable initial_value="6.6" name="k_1" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="20.8" name="k2" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="20.8" name="k3" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="6.6" name="k4" public_interface="out" units="second_order_rate_constant"/>
+    <variable initial_value="6.6" name="k_4" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="8.5" name="k5" public_interface="out" units="second_order_rate_constant"/>
+    <variable initial_value="215.6" name="k_5" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="175.6" name="k6" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="20.8" name="k7" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="13.2" name="k8" public_interface="out" units="second_order_rate_constant"/>
+    <variable initial_value="13.2" name="k_8" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="8.6" name="k9" public_interface="out" units="second_order_rate_constant"/>
+    <variable initial_value="399.2" name="k_9" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="39.1" name="k10" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="20.8" name="k11" public_interface="out" units="first_order_rate_constant"/>
+    <variable initial_value="0.01" name="k12" public_interface="out" units="second_order_rate_constant"/>
+    <variable initial_value="39.9" name="k13" public_interface="out" units="first_order_rate_constant"/>
+  </component>
+  
+  <connection>
+    <map_components component_1="Fe3" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Fe3_Arg" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Fe2" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Fe2_Arg" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Fe3_O2_Arg" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Fe3_NOHA" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Fe2_NOHA" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Fe3_O2_NOHA" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Fe3_NO" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Fe2_NO" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="NO" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="citrulline" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="NO3" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="NOHA" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Fe3" component_2="Fe3_Arg"/>
+    <map_variables variable_1="Fe3" variable_2="Fe3"/>
+    <map_variables variable_1="Fe3_Arg" variable_2="Fe3_Arg"/>
+  </connection> 
+
+  <connection>
+    <map_components component_1="Fe3" component_2="Fe3_NO"/>
+    <map_variables variable_1="Fe3_NO" variable_2="Fe3_NO"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Fe3" component_2="Fe2_NO"/>
+    <map_variables variable_1="Fe2_NO" variable_2="Fe2_NO"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Fe3" component_2="model_constants"/>
+    <map_variables variable_1="Arg" variable_2="Arg"/>
+    <map_variables variable_1="O2" variable_2="O2"/>
+    <map_variables variable_1="k1" variable_2="k1"/>
+    <map_variables variable_1="k_1" variable_2="k_1"/>
+    <map_variables variable_1="k2" variable_2="k2"/>
+    <map_variables variable_1="k13" variable_2="k13"/>
+    <map_variables variable_1="k12" variable_2="k12"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Fe3_Arg" component_2="model_constants"/>
+    <map_variables variable_1="Arg" variable_2="Arg"/>
+    <map_variables variable_1="k1" variable_2="k1"/>
+    <map_variables variable_1="k_1" variable_2="k_1"/>
+    <map_variables variable_1="k3" variable_2="k3"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Fe2" component_2="Fe2_Arg"/>
+    <map_variables variable_1="Fe2" variable_2="Fe2"/>
+    <map_variables variable_1="Fe2_Arg" variable_2="Fe2_Arg"/>
+  </connection> 
+
+  <connection>
+    <map_components component_1="Fe2" component_2="Fe3"/>
+    <map_variables variable_1="Fe3" variable_2="Fe3"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Fe2" component_2="model_constants"/>
+    <map_variables variable_1="Arg" variable_2="Arg"/>
+    <map_variables variable_1="k4" variable_2="k4"/>
+    <map_variables variable_1="k_4" variable_2="k_4"/>
+    <map_variables variable_1="k2" variable_2="k2"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Fe3_O2_Arg" component_2="Fe2_Arg"/>
+    <map_variables variable_1="Fe3_O2_Arg" variable_2="Fe3_O2_Arg"/>
+    <map_variables variable_1="Fe2_Arg" variable_2="Fe2_Arg"/>
+  </connection> 
+
+  <connection>
+    <map_components component_1="Fe2_Arg" component_2="Fe3_Arg"/>
+    <map_variables variable_1="Fe3_Arg" variable_2="Fe3_Arg"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Fe2_Arg" component_2="model_constants"/>
+    <map_variables variable_1="Arg" variable_2="Arg"/>
+    <map_variables variable_1="O2" variable_2="O2"/>
+    <map_variables variable_1="k4" variable_2="k4"/>
+    <map_variables variable_1="k_4" variable_2="k_4"/>
+    <map_variables variable_1="k5" variable_2="k5"/>
+    <map_variables variable_1="k_5" variable_2="k_5"/>
+    <map_variables variable_1="k3" variable_2="k3"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Fe3_O2_Arg" component_2="model_constants"/>
+    <map_variables variable_1="O2" variable_2="O2"/>
+    <map_variables variable_1="k5" variable_2="k5"/>
+    <map_variables variable_1="k_5" variable_2="k_5"/>
+    <map_variables variable_1="k6" variable_2="k6"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Fe3_NOHA" component_2="Fe3_O2_Arg"/>
+    <map_variables variable_1="Fe3_O2_Arg" variable_2="Fe3_O2_Arg"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Fe3_NOHA" component_2="model_constants"/>
+    <map_variables variable_1="k6" variable_2="k6"/>
+    <map_variables variable_1="k7" variable_2="k7"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Fe2_NOHA" component_2="NOHA"/>
+    <map_variables variable_1="NOHA" variable_2="NOHA"/>
+    <map_variables variable_1="Fe2_NOHA" variable_2="Fe2_NOHA"/>
+  </connection> 
+
+  <connection>
+    <map_components component_1="Fe2_NOHA" component_2="Fe3_NOHA"/>
+    <map_variables variable_1="Fe3_NOHA" variable_2="Fe3_NOHA"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Fe2_NOHA" component_2="Fe2"/>
+    <map_variables variable_1="Fe2" variable_2="Fe2"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Fe2_NOHA" component_2="Fe3_O2_NOHA"/>
+    <map_variables variable_1="Fe2_NOHA" variable_2="Fe2_NOHA"/>
+    <map_variables variable_1="Fe3_O2_NOHA" variable_2="Fe3_O2_NOHA"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Fe2_NOHA" component_2="model_constants"/>
+    <map_variables variable_1="O2" variable_2="O2"/>
+    <map_variables variable_1="k7" variable_2="k7"/>
+    <map_variables variable_1="k_8" variable_2="k_8"/>
+    <map_variables variable_1="k8" variable_2="k8"/>
+    <map_variables variable_1="k9" variable_2="k9"/>
+    <map_variables variable_1="k_9" variable_2="k_9"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Fe3_O2_NOHA" component_2="model_constants"/>
+    <map_variables variable_1="O2" variable_2="O2"/>
+    <map_variables variable_1="k9" variable_2="k9"/>
+    <map_variables variable_1="k_9" variable_2="k_9"/>
+    <map_variables variable_1="k10" variable_2="k10"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Fe3_NO" component_2="Fe3_O2_NOHA"/>
+    <map_variables variable_1="Fe3_O2_NOHA" variable_2="Fe3_O2_NOHA"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Fe3_NO" component_2="model_constants"/>
+    <map_variables variable_1="k11" variable_2="k11"/>
+    <map_variables variable_1="k13" variable_2="k13"/>
+    <map_variables variable_1="k10" variable_2="k10"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Fe2_NO" component_2="Fe3_NO"/>
+    <map_variables variable_1="Fe3_NO" variable_2="Fe3_NO"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Fe2_NO" component_2="model_constants"/>
+    <map_variables variable_1="O2" variable_2="O2"/>
+    <map_variables variable_1="k11" variable_2="k11"/>
+    <map_variables variable_1="k12" variable_2="k12"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="NO" component_2="Fe3_NO"/>
+    <map_variables variable_1="Fe3_NO" variable_2="Fe3_NO"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="NO" component_2="model_constants"/>
+    <map_variables variable_1="k13" variable_2="k13"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="citrulline" component_2="Fe3_O2_NOHA"/>
+    <map_variables variable_1="Fe3_O2_NOHA" variable_2="Fe3_O2_NOHA"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="citrulline" component_2="model_constants"/>
+    <map_variables variable_1="k10" variable_2="k10"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Fe2_NO" component_2="NO3"/>
+    <map_variables variable_1="Fe2_NO" variable_2="Fe2_NO"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="NO3" component_2="model_constants"/>
+    <map_variables variable_1="O2" variable_2="O2"/>
+    <map_variables variable_1="k12" variable_2="k12"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="NOHA" component_2="Fe2"/>
+    <map_variables variable_1="Fe2" variable_2="Fe2"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="NOHA" component_2="model_constants"/>
+    <map_variables variable_1="k8" variable_2="k8"/>
+    <map_variables variable_1="k_8" variable_2="k_8"/>
+  </connection>
+  
+  
+<RDF:RDF xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <RDF:Description xmlns:NS1="http://purl.org/dc/terms/" NS1:W3CDTF="2007-08-29T00:00:00+00:00" RDF:about="rdf:#7e095026-295d-41ab-8dfd-b1771124ca46"/>
+  <RDF:Description xmlns:NS2="http://www.w3.org/2001/vcard-rdf/3.0#" NS2:FN="James Lawson" RDF:about="rdf:#d5661484-e776-499e-8160-608e630e62d7"/>
+  <RDF:Description RDF:about="rdf:#4692640c-e1cb-43d7-82c4-ba14a4b8ce68">
+    <NS2:ORG xmlns:NS2="http://www.w3.org/2001/vcard-rdf/3.0#" RDF:resource="rdf:#5ad18b65-5c9d-4970-bf06-55898aceaae4"/>
+    <NS2:EMAIL xmlns:NS2="http://www.w3.org/2001/vcard-rdf/3.0#" RDF:resource="rdf:#a5833cdd-d6ec-406b-8c82-c50a9e0fc084"/>
+    <NS2:N xmlns:NS2="http://www.w3.org/2001/vcard-rdf/3.0#" RDF:resource="rdf:#baea8244-c262-4574-b3aa-a5a516e60e94"/>
+  </RDF:Description>
+  <RDF:Description xmlns:NS2="http://www.w3.org/2001/vcard-rdf/3.0#" NS2:Family="Chen" NS2:Given="Kejing" RDF:about="rdf:#d0f8ff97-a0e3-4f97-a357-27a63d67e6e8"/>
+  <RDF:Seq RDF:about="rdf:#417b8307-2b91-4091-8578-8fa82b9394eb">
+    <RDF:li RDF:resource="rdf:#a62e9ec9-4f8e-4fc0-b8ed-ee43d2e09d41"/>
+    <RDF:li RDF:resource="rdf:#004c848f-58a0-497e-b9aa-72bc6e873dda"/>
+  </RDF:Seq>
+  <RDF:Seq RDF:about="rdf:#417b8307-2b91-4091-8578-8fa82b9394eb"/>
+  <RDF:Description xmlns:NS3="http://www.cellml.org/bqs/1.0#" xmlns:NS4="http://purl.org/dc/elements/1.1/" RDF:about="rdf:#757a237a-a6b9-472a-ac8d-a0b241e9de17" NS3:first_page="811" NS3:last_page="822" NS4:title="Vascular and perivascular nitric oxide release and transport: biochemical pathways of neuronal nitric oxide synthase (NOS1) and endothelial nitric oxide synthase (NOS3)" NS3:volume="42">
+    <NS4:creator RDF:resource="rdf:#417b8307-2b91-4091-8578-8fa82b9394eb"/>
+    <NS3:Journal RDF:resource="rdf:#59ed1887-f2be-4631-8c26-a8727eff8ba7"/>
+    <NS1:issued xmlns:NS1="http://purl.org/dc/terms/" RDF:resource="rdf:#9ab22d07-b332-42a5-abd6-946719a15599"/>
+  </RDF:Description>
+  <RDF:Description xmlns:NS2="http://www.w3.org/2001/vcard-rdf/3.0#" NS2:Family="Lloyd" NS2:Given="Catherine" NS2:Other="May" RDF:about="rdf:#baea8244-c262-4574-b3aa-a5a516e60e94"/>
+  <RDF:Description RDF:about="rdf:#$Vjx.53">
+    <RDF:rest RDF:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+    <RDF:first RDF:resource="rdf:#$Wjx.53"/>
+  </RDF:Description>
+  <NS5:internet xmlns:NS5="http://imc.org/vCard/3.0#" RDF:about="rdf:#a5833cdd-d6ec-406b-8c82-c50a9e0fc084" RDF:value="c.lloyd@auckland.ac.nz"/>
+  <RDF:Description RDF:about="rdf:#e23b20aa-2d93-4373-ad8d-379b3e8dd619" RDF:value="This is a CellML description of Chen and Popel's 2007 mathematical model of vascular and perivascular nitric oxide release and transport, which includes biochemical pathways of neuronal nitric oxide synthase (NOS1) and endothelial nitric oxide synthase (NOS3).">
+    <NS4:creator xmlns:NS4="http://purl.org/dc/elements/1.1/" RDF:resource="rdf:#4b403954-93df-45b3-a455-d14b8f76c717"/>
+  </RDF:Description>
+  <RDF:Description xmlns:NS6="http://www.cellml.org/metadata/simulation/1.0#" RDF:about="rdf:#$Wjx.53" NS6:endingValue="10"/>
+  <RDF:Description xmlns:NS4="http://purl.org/dc/elements/1.1/" RDF:about="" NS4:publisher="The University of Auckland, Bioengineering Institute">
+    <NS7:comment xmlns:NS7="http://www.cellml.org/metadata/1.0#" RDF:resource="rdf:#8b7d2933-b6c1-4169-9177-ce310556f065"/>
+    <NS1:created xmlns:NS1="http://purl.org/dc/terms/" RDF:resource="rdf:#7e095026-295d-41ab-8dfd-b1771124ca46"/>
+    <NS4:creator RDF:resource="rdf:#4692640c-e1cb-43d7-82c4-ba14a4b8ce68"/>
+    <NS7:modification xmlns:NS7="http://www.cellml.org/metadata/1.0#" RDF:resource="rdf:#5a75fb5e-ccdf-4c08-8519-6f36a7d46b73"/>
+  </RDF:Description>
+  <RDF:Description xmlns:NS1="http://purl.org/dc/terms/" NS1:W3CDTF="2007-03-15" RDF:about="rdf:#9ab22d07-b332-42a5-abd6-946719a15599"/>
+  <RDF:Bag RDF:about="rdf:#0546cd54-a850-4ec3-8054-cd43fd1dead2">
+    <RDF:li>nitric oxide</RDF:li>
+    <RDF:li>nitric oxide synthase</RDF:li>
+    <RDF:li>signal transduction</RDF:li>
+    <RDF:li>cerebral aneurysm</RDF:li>
+  </RDF:Bag>
+  <RDF:Bag RDF:about="rdf:#0546cd54-a850-4ec3-8054-cd43fd1dead2"/>
+  <RDF:Description RDF:about="rdf:#005371e2-901f-4010-8d27-7e65a90f781e">
+    <NS2:N xmlns:NS2="http://www.w3.org/2001/vcard-rdf/3.0#" RDF:resource="rdf:#f6cc30df-e438-437e-868d-8fdf4874081a"/>
+  </RDF:Description>
+  <RDF:Description xmlns:NS1="http://purl.org/dc/terms/" NS1:W3CDTF="2007-09-03T15:01:40+12:00" RDF:about="rdf:#3eca5c5f-6713-46bc-bb12-cf11bc72877c"/>
+  <RDF:Description xmlns:NS3="http://www.cellml.org/bqs/1.0#" NS3:Pubmed_id="17320763" RDF:about="rdf:#4f3d1b2f-6fd4-419f-ad90-86005dba7317">
+    <NS3:JournalArticle RDF:resource="rdf:#757a237a-a6b9-472a-ac8d-a0b241e9de17"/>
+  </RDF:Description>
+  <RDF:Description xmlns:NS3="http://www.cellml.org/bqs/1.0#" RDF:about="rdf:#fe9bef2b-b05c-4384-9985-5e2e4471dba6" NS3:subject_type="keyword">
+    <RDF:value RDF:resource="rdf:#0546cd54-a850-4ec3-8054-cd43fd1dead2"/>
+  </RDF:Description>
+  <RDF:Description xmlns:NS2="http://www.w3.org/2001/vcard-rdf/3.0#" NS2:Orgname="The University of Auckland" NS2:Orgunit="The Bioengineering Institute" RDF:about="rdf:#5ad18b65-5c9d-4970-bf06-55898aceaae4"/>
+  <RDF:Description RDF:about="rdf:#05f674ca-fed7-4641-8460-37bca5eefe8e">
+    <NS4:subject xmlns:NS4="http://purl.org/dc/elements/1.1/" RDF:resource="rdf:#fe9bef2b-b05c-4384-9985-5e2e4471dba6"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$Ujx.53">
+    <NS6:boundIntervals xmlns:NS6="http://www.cellml.org/metadata/simulation/1.0#" RDF:resource="rdf:#$Vjx.53"/>
+  </RDF:Description>
+  <NS3:Person xmlns:NS3="http://www.cellml.org/bqs/1.0#" RDF:about="rdf:#004c848f-58a0-497e-b9aa-72bc6e873dda">
+    <NS2:N xmlns:NS2="http://www.w3.org/2001/vcard-rdf/3.0#" RDF:resource="rdf:#2cf95807-2065-4347-9526-f9fb0a26f881"/>
+  </NS3:Person>
+  <RDF:Description RDF:about="rdf:#5a75fb5e-ccdf-4c08-8519-6f36a7d46b73" RDF:value="Added equation defining time differential of NO production (i.e. production rate of NO by NOS1 in uM of NO/second). This was done to allow the model to reproduce figure 2 of the publicatio">
+    <NS1:modified xmlns:NS1="http://purl.org/dc/terms/" RDF:resource="rdf:#3eca5c5f-6713-46bc-bb12-cf11bc72877c"/>
+    <NS7:modifier xmlns:NS7="http://www.cellml.org/metadata/1.0#" RDF:resource="rdf:#005371e2-901f-4010-8d27-7e65a90f781e"/>
+  </RDF:Description>
+  <RDF:Description xmlns:NS2="http://www.w3.org/2001/vcard-rdf/3.0#" NS2:Family="Popel" NS2:Given="Aleksander" NS2:Other="S" RDF:about="rdf:#2cf95807-2065-4347-9526-f9fb0a26f881"/>
+  <RDF:Description xmlns:NS4="http://purl.org/dc/elements/1.1/" RDF:about="rdf:#59ed1887-f2be-4631-8c26-a8727eff8ba7" NS4:title="Free Radical Biology and Medicine"/>
+  <RDF:Description xmlns:NS2="http://www.w3.org/2001/vcard-rdf/3.0#" NS2:FN="Catherine Lloyd" RDF:about="rdf:#4b403954-93df-45b3-a455-d14b8f76c717"/>
+  <RDF:Description xmlns:NS4="http://purl.org/dc/elements/1.1/" RDF:about="#chen_2007" NS4:title="Chen and Popel's 2007 mathematical model of vascular and perivascular nitric oxide release and transport, which includes biochemical pathways of neuronal nitric oxide synthase (NOS1) and endothelial nitric oxide synthase (NOS3).">
+    <NS6:simulation xmlns:NS6="http://www.cellml.org/metadata/simulation/1.0#" RDF:resource="rdf:#$Ujx.53"/>
+    <NS7:comment xmlns:NS7="http://www.cellml.org/metadata/1.0#" RDF:resource="rdf:#e23b20aa-2d93-4373-ad8d-379b3e8dd619"/>
+    <NS3:reference xmlns:NS3="http://www.cellml.org/bqs/1.0#" RDF:resource="rdf:#05f674ca-fed7-4641-8460-37bca5eefe8e"/>
+    <NS3:reference xmlns:NS3="http://www.cellml.org/bqs/1.0#" RDF:resource="rdf:#4f3d1b2f-6fd4-419f-ad90-86005dba7317"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#8b7d2933-b6c1-4169-9177-ce310556f065" RDF:value="This model is known to run in PCEnv and COR and is known to be mathematically consistent with the publication it was based on. This model has had an equation added to allow it to reproduce Figure 2 of the publication.">
+    <NS4:creator xmlns:NS4="http://purl.org/dc/elements/1.1/" RDF:resource="rdf:#d5661484-e776-499e-8160-608e630e62d7"/>
+  </RDF:Description>
+  <RDF:Description xmlns:NS2="http://www.w3.org/2001/vcard-rdf/3.0#" NS2:Family="Lawson" NS2:Given="James" NS2:Other="Richard" RDF:about="rdf:#f6cc30df-e438-437e-868d-8fdf4874081a"/>
+  <NS3:Person xmlns:NS3="http://www.cellml.org/bqs/1.0#" RDF:about="rdf:#a62e9ec9-4f8e-4fc0-b8ed-ee43d2e09d41">
+    <NS2:N xmlns:NS2="http://www.w3.org/2001/vcard-rdf/3.0#" RDF:resource="rdf:#d0f8ff97-a0e3-4f97-a357-27a63d67e6e8"/>
+  </NS3:Person>
+</RDF:RDF>
+<rdf:RDF xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:ns7="http://www.cellml.org/metadata/simulation/1.0#">
+  <rdf:Seq rdf:about="rdf:#417b8307-2b91-4091-8578-8fa82b9394eb">
+    <rdf:li rdf:resource="rdf:#a62e9ec9-4f8e-4fc0-b8ed-ee43d2e09d41"/>
+    <rdf:li rdf:resource="rdf:#004c848f-58a0-497e-b9aa-72bc6e873dda"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#417b8307-2b91-4091-8578-8fa82b9394eb"/>
+  <rdf:Bag rdf:about="rdf:#0546cd54-a850-4ec3-8054-cd43fd1dead2">
+    <rdf:li>nitric oxide</rdf:li>
+    <rdf:li>nitric oxide synthase</rdf:li>
+    <rdf:li>signal transduction</rdf:li>
+    <rdf:li>cerebral aneurysm</rdf:li>
+  </rdf:Bag>
+  <rdf:Description rdf:about="rdf:#0546cd54-a850-4ec3-8054-cd43fd1dead2"/>
+  <rdf:Description rdf:about="rdf:#4f3d1b2f-6fd4-419f-ad90-86005dba7317">
+    <bqs:Pubmed_id>17320763</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#757a237a-a6b9-472a-ac8d-a0b241e9de17"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#$Ujx.53">
+    <ns7:boundIntervals rdf:resource="rdf:#$Vjx.53"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#$Wjx.53">
+    <ns7:endingValue>10</ns7:endingValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a62e9ec9-4f8e-4fc0-b8ed-ee43d2e09d41">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#d0f8ff97-a0e3-4f97-a357-27a63d67e6e8"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#chen_2007">
+    <ns7:simulation rdf:resource="rdf:#$Ujx.53"/>
+    <dc:title>Chen and Popel's 2007 mathematical model of vascular and perivascular nitric oxide release and transport, which includes biochemical pathways of neuronal nitric oxide synthase (NOS1) and endothelial nitric oxide synthase (NOS3).</dc:title>
+    <cmeta:comment rdf:resource="rdf:#e23b20aa-2d93-4373-ad8d-379b3e8dd619"/>
+    <bqs:reference rdf:resource="rdf:#05f674ca-fed7-4641-8460-37bca5eefe8e"/>
+    <bqs:reference rdf:resource="rdf:#4f3d1b2f-6fd4-419f-ad90-86005dba7317"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#baea8244-c262-4574-b3aa-a5a516e60e94">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#5a75fb5e-ccdf-4c08-8519-6f36a7d46b73">
+    <dcterms:modified rdf:resource="rdf:#3eca5c5f-6713-46bc-bb12-cf11bc72877c"/>
+    <rdf:value>Added equation defining time differential of NO production (i.e. production rate of NO by NOS1 in uM of NO/second). This was done to allow the model to reproduce figure 2 of the publicatio</rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#005371e2-901f-4010-8d27-7e65a90f781e"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#59ed1887-f2be-4631-8c26-a8727eff8ba7">
+    <dc:title>Free Radical Biology and Medicine</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#5ad18b65-5c9d-4970-bf06-55898aceaae4">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:title>Vascular and perivascular nitric oxide release and transport (Fe3 = 0.6 micromolar)</dc:title>
+	<dc:publisher>The University of Auckland, Auckland Bioengineering Institute</dc:publisher>
+    <cmeta:comment rdf:resource="rdf:#8b7d2933-b6c1-4169-9177-ce310556f065"/>
+    <dcterms:created rdf:resource="rdf:#7e095026-295d-41ab-8dfd-b1771124ca46"/>
+    <dc:creator rdf:resource="rdf:#4692640c-e1cb-43d7-82c4-ba14a4b8ce68"/>
+    <cmeta:modification rdf:resource="rdf:#5a75fb5e-ccdf-4c08-8519-6f36a7d46b73"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e23b20aa-2d93-4373-ad8d-379b3e8dd619">
+    <dc:creator rdf:resource="rdf:#4b403954-93df-45b3-a455-d14b8f76c717"/>
+    <rdf:value>This is a CellML description of Chen and Popel's 2007 mathematical model of vascular and perivascular nitric oxide release and transport, which includes biochemical pathways of neuronal nitric oxide synthase (NOS1) and endothelial nitric oxide synthase (NOS3).</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#005371e2-901f-4010-8d27-7e65a90f781e">
+    <vCard:N rdf:resource="rdf:#f6cc30df-e438-437e-868d-8fdf4874081a"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#004c848f-58a0-497e-b9aa-72bc6e873dda">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#2cf95807-2065-4347-9526-f9fb0a26f881"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#2cf95807-2065-4347-9526-f9fb0a26f881">
+    <vCard:Given>Aleksander</vCard:Given>
+    <vCard:Family>Popel</vCard:Family>
+    <vCard:Other>S</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#fe9bef2b-b05c-4384-9985-5e2e4471dba6">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value rdf:resource="rdf:#0546cd54-a850-4ec3-8054-cd43fd1dead2"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4b403954-93df-45b3-a455-d14b8f76c717">
+    <vCard:FN>Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8b7d2933-b6c1-4169-9177-ce310556f065">
+    <dc:creator rdf:resource="rdf:#d5661484-e776-499e-8160-608e630e62d7"/>
+    <rdf:value>This model is known to run in PCEnv and COR and is known to be mathematically consistent with the publication it was based on. This model has had an equation added to allow it to reproduce Figure 2 of the publication.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a5833cdd-d6ec-406b-8c82-c50a9e0fc084">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4692640c-e1cb-43d7-82c4-ba14a4b8ce68">
+    <vCard:ORG rdf:resource="rdf:#5ad18b65-5c9d-4970-bf06-55898aceaae4"/>
+    <vCard:EMAIL rdf:resource="rdf:#a5833cdd-d6ec-406b-8c82-c50a9e0fc084"/>
+    <vCard:N rdf:resource="rdf:#baea8244-c262-4574-b3aa-a5a516e60e94"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d5661484-e776-499e-8160-608e630e62d7">
+    <vCard:FN>James Lawson</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#05f674ca-fed7-4641-8460-37bca5eefe8e">
+    <dc:subject rdf:resource="rdf:#fe9bef2b-b05c-4384-9985-5e2e4471dba6"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#$Vjx.53">
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+    <rdf:first rdf:resource="rdf:#$Wjx.53"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7e095026-295d-41ab-8dfd-b1771124ca46">
+    <dcterms:W3CDTF>2007-08-29T00:00:00+00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d0f8ff97-a0e3-4f97-a357-27a63d67e6e8">
+    <vCard:Given>Kejing</vCard:Given>
+    <vCard:Family>Chen</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3eca5c5f-6713-46bc-bb12-cf11bc72877c">
+    <dcterms:W3CDTF>2007-09-03T15:01:40+12:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9ab22d07-b332-42a5-abd6-946719a15599">
+    <dcterms:W3CDTF>2007-03-15</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#757a237a-a6b9-472a-ac8d-a0b241e9de17">
+    <dc:creator rdf:resource="rdf:#417b8307-2b91-4091-8578-8fa82b9394eb"/>
+    <dc:title>Vascular and perivascular nitric oxide release and transport: biochemical pathways of neuronal nitric oxide synthase (NOS1) and endothelial nitric oxide synthase (NOS3)</dc:title>
+    <bqs:volume>42</bqs:volume>
+    <bqs:first_page>811</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#59ed1887-f2be-4631-8c26-a8727eff8ba7"/>
+    <dcterms:issued rdf:resource="rdf:#9ab22d07-b332-42a5-abd6-946719a15599"/>
+    <bqs:last_page>822</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f6cc30df-e438-437e-868d-8fdf4874081a">
+    <vCard:Given>James</vCard:Given>
+    <vCard:Family>Lawson</vCard:Family>
+    <vCard:Other>Richard</vCard:Other>
+  </rdf:Description>
+</rdf:RDF>
+</model>

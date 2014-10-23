@@ -1,0 +1,1309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<model xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:ns7="http://www.cellml.org/metadata/simulation/1.0#" name="Pandit_Hinch_Niederer_Model" cmeta:id="Pandit_Hinch_Niederer_Model">
+  
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Using Physiome standards to couple cellular functions for rat cardiac excitation-contraction</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Bioengineering Institute, University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+        Since this is the exact same model encoding which was used to create the results presented in the paper, this CellML model is known to accurately represent the published article.
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+  <title>Model Structure</title>
+
+<para>
+ABSTRACT: Scientific endeavour is reliant upon the extension and reuse of previous knowledge. The formalization of this process for computational modelling is facilitated by the use of accepted standards with which to describe and simulate models, ensuring consistency between the models and thus reducing the development and propagation of errors. CellML 1.1, an XML-based programming language, has been designed as a modelling standard which, by virtue of its import and grouping functions, facilitates model combination and reuse. Using CellML 1.1, we demonstrate the process of formalized model reuse by combining three separate models of rat cardiomyocyte function (an electrophysiology model, a model of cellular calcium dynamics and a mechanics model) which together make up the Pandit-Hinch-Niederer et al. cell model. Not only is this integrative model of rat electromechanics a useful tool for cardiac modelling but it is also an ideal framework with which to demonstrate both the power of model reuse and the challenges associated with this process. We highlight and classify a number of these issues associated with combining models and provide some suggested solutions.
+</para>
+
+<para>
+Using Physiome standards to couple cellular functions for rat cardiac excitation-contraction, Jonna R. Terkildsen, Steven Niederer, Edmund J. Crampin, Peter Hunter and Nicolas P. Smith, 2008, <emphasis>Experimental Physiology</emphasis>, 93, 919-929. <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pubmed&amp;cmd=Retrieve&amp;dopt=AbstractPlus&amp;list_uids=18344258&amp;query_hl=1&amp;itool=pubmed_docsum">PubMed ID: 18344258</ulink>
+</para>
+
+
+
+<informalfigure float="0" id="diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>cell diagram</title>
+    </objectinfo>
+    <imagedata fileref="terkildsen_2008.png"/>
+  </imageobject>
+</mediaobject>
+<caption>A schematic diagram of the CellML model.</caption>
+</informalfigure>
+
+</sect1>
+
+
+</article>
+</documentation>
+
+
+
+   <units name="uL">
+      <unit prefix="micro" units="litre"/>
+   </units> 
+   <units name="uA">
+      <unit prefix="micro" units="ampere"/>
+   </units> 
+
+<!-- These components are imported from the Pandit et al endocardial cell model -->
+	<import xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="Pandit_et_al_2001_endo.cellml">
+		<units name="mV" units_ref="millivolt"/>
+		<units name="uF" units_ref="microF"/>
+		<units name="mM" units_ref="millimolar"/>
+		<units name="mJ_per_mole_K" units_ref="millijoule_per_mole_kelvin"/>
+		<units name="C_per_mole" units_ref="coulomb_per_mole"/>
+
+		<component component_ref="sodium_current" name="pandit_sodium_current"/>
+		<component component_ref="Ca_independent_transient_outward_K_current" name="pandit_Ca_independent_transient_outward_K_current"/>
+		<component component_ref="steady_state_outward_K_current" name="pandit_steady_state_outward_K_current"/>
+		<component component_ref="inward_rectifier" name="pandit_inward_rectifier"/>
+		<component component_ref="hyperpolarisation_activated_current" name="pandit_hyperpolarisation_activated_current"/>
+		<component component_ref="background_currents" name="pandit_background_currents"/>
+		<component component_ref="standard_ionic_concentrations" name="pandit_standard_ionic_concentrations"/>
+	</import>
+
+<!-- These components are imported from the Hinch et al model of calcium dynamics -->
+	<import xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="Hinch_et_al_2004.cellml">
+		<units name="ms" units_ref="ms"/>
+		<units name="mM_per_ms" units_ref="mM_per_ms"/>
+		<units name="um3" units_ref="um3"/>
+	
+<!--		<component component_ref="cell_geometry" name="hinch_cell_geometry"/> -->
+		<component component_ref="CaRU" name="hinch_CaRU"/>
+		<component component_ref="Na_Ca_Exchanger" name="hinch_Na_Ca_Exchanger"/>
+		<component component_ref="SERCA" name="hinch_SERCA"/>
+		<component component_ref="Sarcolemmal_Ca_pump" name="hinch_Sarcolemmal_Ca_pump"/>
+		<component component_ref="Background_Ca_current" name="hinch_Background_Ca_current"/>
+		<component component_ref="SR_Ca_leak_current" name="hinch_SR_Ca_leak_current"/>
+		<component component_ref="calmodulin_Ca_buffer" name="hinch_calmodulin_Ca_current"/>
+	</import>
+
+<!-- These components are imported from the Niederer et al model of active contraction -->
+	<import xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="Niederer_et_al_2006.cellml">
+	
+		<component component_ref="thinfilaments" name="niederer_thinfilaments"/>
+		<component component_ref="tropomyosin" name="niederer_tropomyosin"/>
+		<component component_ref="troponin" name="niederer_troponin"/>
+		<component component_ref="Myofilaments" name="niederer_Myofilaments"/>
+		<component component_ref="filament_overlap" name="niederer_filament_overlap"/>
+		<component component_ref="length_independent_tension" name="niederer_length_independent_tension"/>
+		<component component_ref="isometric_tension" name="niederer_isometric_tension"/>
+		<component component_ref="Cross_Bridges" name="niederer_Cross_Bridges"/>
+	</import>	
+	
+<!-- This component defines the modelling environment and the time step -->
+   <component name="environment">
+      <variable name="time" public_interface="out" units="ms"/>
+   </component>
+
+   
+<!-- The membrane component defines the action potential variable "V" -->
+   <component name="membrane">
+      <variable initial_value="-80.50146" name="V" public_interface="out" units="mV"/>
+      <variable initial_value="8314.5" name="R" public_interface="out" units="mJ_per_mole_K"/>
+      <variable initial_value="295" name="T" public_interface="out" units="kelvin"/>
+      <variable initial_value="96487" name="F" public_interface="out" units="C_per_mole"/>
+
+      <variable name="time" public_interface="in" units="ms"/>
+      <variable name="Cm" initial_value="0.0001" units="uF"/>
+	  
+      <variable name="I_Stim" public_interface="out" units="uA"/>
+      <variable name="stim_period" units="ms" initial_value="1e3"/>
+      <variable name="stim_duration" units="ms" initial_value="10"/>
+      <variable name="stim_amplitude" units="uA" initial_value="-0.6e-3"/>
+  
+      <variable name="I_Na" public_interface="in" units="uA"/>
+      <variable name="I_t" public_interface="in" units="uA"/>
+      <variable name="I_ss" public_interface="in" units="uA"/>
+      <variable name="I_f" public_interface="in" units="uA"/>
+      <variable name="I_K1" public_interface="in" units="uA"/>
+      <variable name="I_B_Na" public_interface="in" units="uA"/>
+      <variable name="I_B_K" public_interface="in" units="uA"/>
+      <variable name="I_NaK" public_interface="in" units="uA"/>
+      <variable name="I_LCC" public_interface="in" units="uA"/>
+      <variable name="I_NaCa" public_interface="in" units="uA"/>
+      <variable name="I_pCa" public_interface="in" units="uA"/>
+      <variable name="I_CaB" public_interface="in" units="uA"/>
+
+      <variable name="FVRT" public_interface="out" units="dimensionless"/>
+      <variable name="FVRT_Ca" public_interface="out" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>I_Stim</ci>
+            <piecewise>
+               <piece>
+                  <ci>stim_amplitude</ci>
+                  <apply>
+                     <and/>
+                     <apply>
+                        <geq/>
+                        <apply>
+                           <minus/>
+                           <ci>time</ci>
+                           <apply>
+                              <times/>
+                              <apply>
+                                 <floor/>
+                                 <apply>
+                                    <divide/>
+                                    <ci>time</ci>
+                                    <ci>stim_period</ci>
+                                 </apply>
+                              </apply>
+                              <ci>stim_period</ci>
+                           </apply>
+                        </apply>
+                        <cn cellml:units="ms">0</cn>
+                     </apply>
+                     <apply>
+                        <leq/>
+                        <apply>
+                           <minus/>
+                           <ci>time</ci>
+                           <apply>
+                              <times/>
+                              <apply>
+                                 <floor/>
+                                 <apply>
+                                    <divide/>
+                                    <ci>time</ci>
+                                    <ci>stim_period</ci>
+                                 </apply>
+                              </apply>
+                              <ci>stim_period</ci>
+                           </apply>
+                        </apply>
+                        <ci>stim_duration</ci>
+                     </apply>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <cn cellml:units="uA">0</cn>
+               </otherwise>
+            </piecewise>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>FVRT</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>F</ci>
+                  <ci>V</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>R</ci>
+                  <ci>T</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>FVRT_Ca</ci>
+            <apply>
+               <times/>
+               <cn cellml:units="dimensionless">2</cn>
+               <ci>FVRT</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>V</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <ci>I_Na</ci>
+                     <ci>I_t</ci>
+                     <ci>I_ss</ci>
+                     <ci>I_f</ci>
+                     <ci>I_K1</ci>
+                     <ci>I_B_Na</ci>
+                     <ci>I_B_K</ci>
+                     <ci>I_NaK</ci>
+                     <ci>I_Stim</ci>
+                     <ci>I_CaB</ci>
+                     <ci>I_NaCa</ci>
+                     <ci>I_pCa</ci>
+                     <ci>I_LCC</ci>
+                  </apply>
+               </apply>
+               <ci>Cm</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+
+<!-- USE HINCH PROPORTIONALITIES   -->
+   <component name="cell_geometry">
+      <variable name="V_myo" units="um3" initial_value="25.85e3" public_interface="out"/>
+      <variable name="V_SR" units="um3" initial_value="2.098e3" public_interface="out"/>
+      <variable name="V_myo_uL" units="uL" initial_value="25.85e-6" public_interface="out"/>
+      <variable name="V_SR_uL" units="uL" initial_value="2.098e-6" public_interface="out"/>
+   </component>
+
+<!-- This component converts the imported components from the Hinch Calcium Model to the correct units for the current composite model -->   
+   <component name="convert_hinch">
+      <variable name="F" units="C_per_mole" public_interface="in"/>
+      <variable name="V_myo_uL" units="uL" public_interface="in"/>
+      <variable name="hinch_I_LCC" units="mM_per_ms" public_interface="in"/>
+      <variable name="hinch_I_NaCa" units="mM_per_ms" public_interface="in"/>
+      <variable name="hinch_I_pCa" units="mM_per_ms" public_interface="in"/>
+      <variable name="hinch_I_CaB" units="mM_per_ms" public_interface="in"/>
+      <variable name="hinch_I_RyR" units="mM_per_ms" public_interface="in"/>
+      <variable name="I_LCC" units="uA" public_interface="out"/>
+      <variable name="I_NaCa" units="uA" public_interface="out"/>
+      <variable name="I_pCa" units="uA" public_interface="out"/>
+      <variable name="I_CaB" units="uA" public_interface="out"/>
+      <variable name="I_RyR" units="mM_per_ms" public_interface="out"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>I_LCC</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <minus/>
+                  <cn cellml:units="dimensionless">1.5</cn>
+               </apply>
+               <ci>hinch_I_LCC</ci>
+               <cn cellml:units="dimensionless">2</cn>
+               <ci>V_myo_uL</ci>
+               <ci>F</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>I_NaCa</ci>
+            <apply>
+               <times/>
+               <ci>hinch_I_NaCa</ci>
+               <ci>V_myo_uL</ci>
+               <ci>F</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>I_pCa</ci>
+            <apply>
+               <times/>
+               <ci>hinch_I_pCa</ci>
+               <cn cellml:units="dimensionless">2</cn>
+               <ci>V_myo_uL</ci>
+               <ci>F</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>I_CaB</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <minus/>
+                  <ci>hinch_I_CaB</ci>
+               </apply>
+               <cn cellml:units="dimensionless">2</cn>
+               <ci>V_myo_uL</ci>
+               <ci>F</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>I_RyR</ci>
+            <apply>
+               <times/>
+               <cn cellml:units="dimensionless">1.5</cn>
+               <ci>hinch_I_RyR</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+
+<!-- This component is a modified version of Pandit Na-K pump component. The maximum current has been increased from 0.8e-4uA to 0.95e-4uA and 
+      the power applied to the intracellular sodium dependence has been increased from 1.5 to 4.0  -->
+   <component name="sodium_potassium_pump">
+      <variable name="i_NaK" units="uA" public_interface="out"/>
+      <variable name="i_NaK_max" units="uA" initial_value="0.95e-4"/>
+      <variable name="K_m_K" units="mM" initial_value="1.5"/>
+      <variable name="K_m_Na" units="mM" initial_value="10"/>
+      <variable name="sigma" units="dimensionless"/>
+      <variable name="K_o" units="mM" public_interface="in"/>
+      <variable name="Na_o" units="mM" public_interface="in"/>
+      <variable name="Na_i" units="mM" public_interface="in"/>
+      <variable name="R" units="mJ_per_mole_K" public_interface="in"/>
+      <variable name="F" units="C_per_mole" public_interface="in"/>
+      <variable name="T" units="kelvin" public_interface="in"/>
+      <variable name="V" units="mV" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>sigma</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <exp/>
+                     <apply>
+                        <divide/>
+                        <ci>Na_o</ci>
+                        <cn cellml:units="mM">67.3</cn>
+                     </apply>
+                  </apply>
+                  <cn cellml:units="dimensionless">1</cn>
+               </apply>
+               <cn cellml:units="dimensionless">7</cn>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>i_NaK</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <apply>
+                              <times/>
+                              <ci>i_NaK_max</ci>
+                              <cn cellml:units="dimensionless">1</cn>
+                           </apply>
+                           <apply>
+                              <plus/>
+                              <cn cellml:units="dimensionless">1</cn>
+                              <apply>
+                                 <times/>
+                                 <cn cellml:units="dimensionless">0.1245</cn>
+                                 <apply>
+                                    <exp/>
+                                    <apply>
+                                       <divide/>
+                                       <apply>
+                                          <times/>
+                                          <apply>
+                                             <minus/>
+                                             <cn cellml:units="dimensionless">0.1</cn>
+                                          </apply>
+                                          <ci>V</ci>
+                                          <ci>F</ci>
+                                       </apply>
+                                       <apply>
+                                          <times/>
+                                          <ci>R</ci>
+                                          <ci>T</ci>
+                                       </apply>
+                                    </apply>
+                                 </apply>
+                              </apply>
+                              <apply>
+                                 <times/>
+                                 <cn cellml:units="dimensionless">0.0365</cn>
+                                 <ci>sigma</ci>
+                                 <apply>
+                                    <exp/>
+                                    <apply>
+                                       <divide/>
+                                       <apply>
+                                          <times/>
+                                          <apply>
+                                             <minus/>
+                                             <ci>V</ci>
+                                          </apply>
+                                          <ci>F</ci>
+                                       </apply>
+                                       <apply>
+                                          <times/>
+                                          <ci>R</ci>
+                                          <ci>T</ci>
+                                       </apply>
+                                    </apply>
+                                 </apply>
+                              </apply>
+                           </apply>
+                        </apply>
+                        <ci>K_o</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci>K_o</ci>
+                        <ci>K_m_K</ci>
+                     </apply>
+                  </apply>
+                  <cn cellml:units="dimensionless">1</cn>
+               </apply>
+               <apply>
+                  <plus/>
+                  <cn cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <power/>
+                     <apply>
+                        <divide/>
+                        <ci>K_m_Na</ci>
+                        <ci>Na_i</ci>
+                     </apply>
+                     <cn cellml:units="dimensionless">4</cn>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>   
+
+   
+   <component name="intracellular_ion_concentrations">
+      <variable initial_value="10.73519" name="Na_i" public_interface="out" units="mM"/>
+      <variable initial_value="0.00007901351" name="Ca_i" public_interface="out" units="mM"/>
+      <variable initial_value="700.0e-3" name="Ca_SR" public_interface="out" units="mM"/>
+      <variable initial_value="139.2751" name="K_i" public_interface="out" units="mM"/>
+      <variable initial_value="0.067593139865" name="TRPN" public_interface="out" units="mM"/> 
+
+      <variable name="V_myo_uL" public_interface="in" units="uL"/>
+      <variable name="V_SR_uL" public_interface="in" units="uL"/>
+
+      <variable name="time" public_interface="in" units="ms"/>
+      <variable name="F" public_interface="in" units="C_per_mole"/>
+
+      <variable name="I_Na" public_interface="in" units="uA"/>
+      <variable name="I_B_Na" public_interface="in" units="uA"/>
+      <variable name="I_B_K" public_interface="in" units="uA"/>
+      <variable name="I_NaK" public_interface="in" units="uA"/>
+      <variable name="I_f_Na" public_interface="in" units="uA"/>
+      <variable name="I_f_K" public_interface="in" units="uA"/>
+      <variable name="I_K1" public_interface="in" units="uA"/>
+      <variable name="I_t" public_interface="in" units="uA"/>
+      <variable name="I_ss" public_interface="in" units="uA"/>
+      <variable name="I_Stim" public_interface="in" units="uA"/>
+
+	  <variable name="I_RyR" public_interface="in" units="mM_per_ms"/>
+      <variable name="I_LCC" public_interface="in" units="uA"/>
+      <variable name="I_NaCa" public_interface="in" units="uA"/>
+      <variable name="I_SERCA" public_interface="in" units="mM_per_ms"/>
+      <variable name="I_pCa" public_interface="in" units="uA"/>
+      <variable name="I_CaB" public_interface="in" units="uA"/>
+      <variable name="I_SR" public_interface="in" units="mM_per_ms"/>
+
+	  <variable name="Ca_b" public_interface="out" units="mM"/>
+	  <variable name="Ca_TRPN_Max" public_interface="in" units="mM"/>
+
+      <variable name="I_TRPN" public_interface="in" units="mM_per_ms"/>
+	  <variable name="beta_CMDN" public_interface="in" units="dimensionless"/>
+	  
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>Ca_b</ci>
+            <apply>
+               <minus/>
+               <ci>Ca_TRPN_Max</ci>
+               <ci>TRPN</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Na_i</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <plus/>
+                        <ci>I_Na</ci>
+                        <ci>I_B_Na</ci>
+                        <apply>
+                           <times/>
+                           <ci>I_NaCa</ci>
+                           <cn cellml:units="dimensionless">3</cn>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>I_NaK</ci>
+                           <cn cellml:units="dimensionless">3</cn>
+                        </apply>
+                        <ci>I_f_Na</ci>
+                     </apply>
+                  </apply>
+                  <cn cellml:units="dimensionless">1</cn>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>V_myo_uL</ci>
+                  <ci>F</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>K_i</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <plus/>
+                        <ci>I_Stim</ci>
+                        <ci>I_ss</ci>
+                        <ci>I_B_K</ci>
+                        <ci>I_t</ci>
+                        <ci>I_K1</ci>
+                        <ci>I_f_K</ci>
+                        <apply>
+                           <times/>
+                           <ci>I_NaK</ci>
+                           <apply>
+                              <minus/>
+                              <cn cellml:units="dimensionless">2</cn>
+                           </apply>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <cn cellml:units="dimensionless">1</cn>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>V_myo_uL</ci>
+                  <ci>F</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>TRPN</ci>
+            </apply>
+            <ci>I_TRPN</ci>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Ca_i</ci>
+            </apply>
+            <apply>
+               <times/>
+               <ci>beta_CMDN</ci>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <minus/>
+                        <ci>I_RyR</ci>
+                        <ci>I_SERCA</ci>
+                     </apply>
+                     <ci>I_SR</ci>
+                     <ci>I_TRPN</ci>
+                  </apply>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <times/>
+                           <apply>
+                              <minus/>
+                              <cn cellml:units="dimensionless">2</cn>
+                           </apply>
+                           <ci>I_NaCa</ci>
+                        </apply>
+                        <ci>I_pCa</ci>
+                        <ci>I_CaB</ci>
+                        <ci>I_LCC</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <cn cellml:units="dimensionless">2</cn>
+                        <ci>V_myo_uL</ci>
+                        <ci>F</ci>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Ca_SR</ci>
+            </apply>
+            <apply>
+               <times/>
+               <apply>
+                  <divide/>
+                  <ci>V_myo_uL</ci>
+                  <ci>V_SR_uL</ci>
+               </apply>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <minus/>
+                        <ci>I_RyR</ci>
+                     </apply>
+                     <ci>I_SERCA</ci>
+                  </apply>
+                  <ci>I_SR</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+
+
+
+   <group>
+      <relationship_ref relationship="containment"/>
+      <component_ref component="membrane">
+         <component_ref component="pandit_sodium_current"/>
+         <component_ref component="pandit_Ca_independent_transient_outward_K_current"/>
+         <component_ref component="pandit_steady_state_outward_K_current"/>
+         <component_ref component="pandit_inward_rectifier"/>
+         <component_ref component="pandit_hyperpolarisation_activated_current"/>
+         <component_ref component="pandit_background_currents"/>
+         <component_ref component="pandit_sodium_potassium_pump"/>
+         <component_ref component="pandit_standard_ionic_concentrations"/>
+         <component_ref component="intracellular_ion_concentrations"/>
+         <component_ref component="cell_geometry"/>
+         <component_ref component="hinch_CaRU"/>
+         <component_ref component="hinch_Na_Ca_Exchanger"/>
+         <component_ref component="hinch_SERCA"/>
+         <component_ref component="hinch_Sarcolemmal_Ca_pump"/>
+         <component_ref component="hinch_Background_Ca_current"/>
+         <component_ref component="hinch_SR_Ca_leak_current"/>
+         <component_ref component="hinch_calmodulin_Ca_current"/>
+         <component_ref component="convert_hinch"/>
+      </component_ref>
+      <component_ref component="niederer_Myofilaments">
+         <component_ref component="niederer_thinfilaments">
+            <component_ref component="niederer_tropomyosin"/>
+            <component_ref component="niederer_troponin"/>
+         </component_ref>
+         <component_ref component="niederer_filament_overlap"/>
+         <component_ref component="niederer_Cross_Bridges"/>
+         <component_ref component="niederer_isometric_tension"/>
+         <component_ref component="niederer_length_independent_tension"/>
+      </component_ref>
+   </group>
+
+<!--
+   <connection>
+      <map_components component_1="" component_2=""/>
+      <map_variables variable_1="" variable_2=""/>
+   </connection>
+-->
+<!-- CONNECTIONS BETWEEN ENVIRONMENT (TIME) AND PANDIT COMPONENTS -->
+   <connection>
+      <map_components component_1="pandit_sodium_current" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="pandit_Ca_independent_transient_outward_K_current" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="pandit_steady_state_outward_K_current" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="pandit_hyperpolarisation_activated_current" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+<!-- CONNECTIONS BETWEEN ENVIRONMENT (TIME) AND HINCH COMPONENTS -->
+   <connection>
+      <map_components component_1="hinch_CaRU" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+
+<!-- CONNECTIONS BETWEEN ENVIRONMENT (TIME) AND NIEDERER COMPONENTS -->   
+   <connection>
+      <map_components component_1="niederer_tropomyosin" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="niederer_Myofilaments" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="niederer_Cross_Bridges" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+
+<!-- CONNECTION BETWEEN ENVIRONMENT (TIME) AND FULL_MODEL COMPONENTS -->
+   <connection>
+      <map_components component_1="environment" component_2="intracellular_ion_concentrations"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="membrane"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+
+<!-- CONNECTION BETWEEN  FULL_MODEL COMPONENTS -->
+   <connection>
+      <map_components component_1="membrane" component_2="intracellular_ion_concentrations"/>
+      <map_variables variable_1="I_Stim" variable_2="I_Stim"/>
+      <map_variables variable_1="F" variable_2="F"/>
+   </connection>
+   <connection> 
+      <map_components component_1="sodium_potassium_pump" component_2="membrane"/>
+      <map_variables variable_1="i_NaK" variable_2="I_NaK"/>
+      <map_variables variable_1="F" variable_2="F"/>
+      <map_variables variable_1="V" variable_2="V"/>
+      <map_variables variable_1="R" variable_2="R"/>
+      <map_variables variable_1="T" variable_2="T"/>
+   </connection>
+   <connection>
+      <map_components component_1="sodium_potassium_pump" component_2="intracellular_ion_concentrations"/>
+      <map_variables variable_1="i_NaK" variable_2="I_NaK"/>
+      <map_variables variable_1="Na_i" variable_2="Na_i"/>
+   </connection>
+   
+<!-- CONNECTIONS BETWEEN PANDIT COMPONENTS AND MEMBRANE -->
+   <connection>
+      <map_components component_1="pandit_sodium_current" component_2="membrane"/>
+      <map_variables variable_1="i_Na" variable_2="I_Na"/>
+      <map_variables variable_1="F" variable_2="F"/>
+      <map_variables variable_1="V" variable_2="V"/>
+      <map_variables variable_1="R" variable_2="R"/>
+      <map_variables variable_1="T" variable_2="T"/>
+   </connection>
+   <connection>
+      <map_components component_1="pandit_Ca_independent_transient_outward_K_current" component_2="membrane"/>
+      <map_variables variable_1="i_t" variable_2="I_t"/>
+      <map_variables variable_1="F" variable_2="F"/>
+      <map_variables variable_1="V" variable_2="V"/>
+      <map_variables variable_1="R" variable_2="R"/>
+      <map_variables variable_1="T" variable_2="T"/>
+   </connection>
+   <connection>
+      <map_components component_1="pandit_steady_state_outward_K_current" component_2="membrane"/>
+      <map_variables variable_1="i_ss" variable_2="I_ss"/>
+      <map_variables variable_1="V" variable_2="V"/>
+   </connection>
+   <connection>
+      <map_components component_1="pandit_inward_rectifier" component_2="membrane"/>
+      <map_variables variable_1="i_K1" variable_2="I_K1"/>
+      <map_variables variable_1="F" variable_2="F"/>
+      <map_variables variable_1="V" variable_2="V"/>
+      <map_variables variable_1="R" variable_2="R"/>
+      <map_variables variable_1="T" variable_2="T"/>
+   </connection>
+   <connection>
+      <map_components component_1="pandit_hyperpolarisation_activated_current" component_2="membrane"/>
+      <map_variables variable_1="i_f" variable_2="I_f"/>
+      <map_variables variable_1="V" variable_2="V"/>
+   </connection>
+   <connection>
+      <map_components component_1="pandit_background_currents" component_2="membrane"/>
+      <map_variables variable_1="i_B_Na" variable_2="I_B_Na"/>
+      <map_variables variable_1="i_B_K" variable_2="I_B_K"/>
+      <map_variables variable_1="F" variable_2="F"/>
+      <map_variables variable_1="V" variable_2="V"/>
+      <map_variables variable_1="R" variable_2="R"/>
+      <map_variables variable_1="T" variable_2="T"/>
+   </connection>
+
+<!-- CONNECTIONS BETWEEN HINCH COMPONENTS AND MEMBRANE -->
+   <connection>
+      <map_components component_1="hinch_CaRU" component_2="membrane"/>
+      <map_variables variable_1="V" variable_2="V"/>
+      <map_variables variable_1="FVRT_Ca" variable_2="FVRT_Ca"/>
+   </connection>
+   <connection>
+      <map_components component_1="hinch_Na_Ca_Exchanger" component_2="membrane"/>
+      <map_variables variable_1="FVRT" variable_2="FVRT"/>
+   </connection>
+   <connection>
+      <map_components component_1="hinch_Background_Ca_current" component_2="membrane"/>
+      <map_variables variable_1="V" variable_2="V"/>
+      <map_variables variable_1="R" variable_2="R"/>
+      <map_variables variable_1="T" variable_2="T"/>
+      <map_variables variable_1="F" variable_2="F"/>
+   </connection>
+   
+<!-- CONNECTIONS BETWEEN PANDIT COMPONENTS AND INTRACELLULAR ION CONCENTRATIONS -->
+   <connection>
+      <map_components component_1="pandit_sodium_current" component_2="intracellular_ion_concentrations"/>
+      <map_variables variable_1="i_Na" variable_2="I_Na"/>
+      <map_variables variable_1="Na_i" variable_2="Na_i"/>
+   </connection>
+   <connection>
+      <map_components component_1="pandit_Ca_independent_transient_outward_K_current" component_2="intracellular_ion_concentrations"/>
+      <map_variables variable_1="i_t" variable_2="I_t"/>
+      <map_variables variable_1="K_i" variable_2="K_i"/>
+   </connection>
+   <connection>
+      <map_components component_1="pandit_steady_state_outward_K_current" component_2="intracellular_ion_concentrations"/>
+      <map_variables variable_1="i_ss" variable_2="I_ss"/>
+   </connection>
+   <connection>
+      <map_components component_1="pandit_inward_rectifier" component_2="intracellular_ion_concentrations"/>
+      <map_variables variable_1="i_K1" variable_2="I_K1"/>
+      <map_variables variable_1="K_i" variable_2="K_i"/>
+   </connection>
+   <connection>
+      <map_components component_1="pandit_hyperpolarisation_activated_current" component_2="intracellular_ion_concentrations"/>
+      <map_variables variable_1="i_f_Na" variable_2="I_f_Na"/>
+      <map_variables variable_1="i_f_K" variable_2="I_f_K"/>
+   </connection>
+   <connection>
+      <map_components component_1="pandit_background_currents" component_2="intracellular_ion_concentrations"/>
+      <map_variables variable_1="i_B_Na" variable_2="I_B_Na"/>
+      <map_variables variable_1="i_B_K" variable_2="I_B_K"/>
+      <map_variables variable_1="Ca_i" variable_2="Ca_i"/>
+   </connection>
+
+<!-- CONNECTIONS BETWEEN FULL_CELL_MODEL COMPONENTS AND EXTRACELLULAR ION CONCENTRATIONS -->
+   <connection> 
+      <map_components component_1="sodium_potassium_pump" component_2="pandit_standard_ionic_concentrations"/>
+      <map_variables variable_1="K_o" variable_2="K_o"/>
+      <map_variables variable_1="Na_o" variable_2="Na_o"/>
+   </connection>
+
+<!-- CONNECTIONS BETWEEN PANDIT COMPONENTS AND EXTRACELLULAR ION CONCENTRATIONS -->
+   <connection>
+      <map_components component_1="pandit_sodium_current" component_2="pandit_standard_ionic_concentrations"/>
+      <map_variables variable_1="Na_o" variable_2="Na_o"/>
+   </connection>
+   <connection>
+      <map_components component_1="pandit_Ca_independent_transient_outward_K_current" component_2="pandit_standard_ionic_concentrations"/>
+      <map_variables variable_1="K_o" variable_2="K_o"/>
+   </connection>
+   <connection>
+      <map_components component_1="pandit_inward_rectifier" component_2="pandit_standard_ionic_concentrations"/>
+      <map_variables variable_1="K_o" variable_2="K_o"/>
+   </connection>
+   <connection> 
+      <map_components component_1="pandit_background_currents" component_2="pandit_standard_ionic_concentrations"/>
+      <map_variables variable_1="Ca_o" variable_2="Ca_o"/>
+   </connection>
+
+<!-- CONNECTION OF E_K BETWEEN PANDIT COMPONENTS -->
+   <connection>
+      <map_components component_1="pandit_Ca_independent_transient_outward_K_current" component_2="pandit_steady_state_outward_K_current"/>
+      <map_variables variable_1="E_K" variable_2="E_K"/>
+   </connection>
+   <connection>
+      <map_components component_1="pandit_Ca_independent_transient_outward_K_current" component_2="pandit_inward_rectifier"/>
+      <map_variables variable_1="E_K" variable_2="E_K"/>
+   </connection>
+   <connection>
+      <map_components component_1="pandit_Ca_independent_transient_outward_K_current" component_2="pandit_hyperpolarisation_activated_current"/>
+      <map_variables variable_1="E_K" variable_2="E_K"/>
+   </connection>
+   <connection>
+      <map_components component_1="pandit_Ca_independent_transient_outward_K_current" component_2="pandit_background_currents"/>
+      <map_variables variable_1="E_K" variable_2="E_K"/>
+   </connection>
+
+<!-- CONNECTION OF E_Na BETWEEN PANDIT COMPONENTS -->
+   <connection>
+      <map_components component_1="pandit_sodium_current" component_2="pandit_hyperpolarisation_activated_current"/>
+      <map_variables variable_1="E_Na" variable_2="E_Na"/>
+   </connection>
+   <connection>
+      <map_components component_1="pandit_sodium_current" component_2="pandit_background_currents"/>
+      <map_variables variable_1="E_Na" variable_2="E_Na"/>
+   </connection>
+
+   
+   <connection> 
+      <map_components component_1="cell_geometry" component_2="intracellular_ion_concentrations"/>
+      <map_variables variable_1="V_myo_uL" variable_2="V_myo_uL"/>
+      <map_variables variable_1="V_SR_uL" variable_2="V_SR_uL"/>
+   </connection>
+   <connection>
+      <map_components component_1="cell_geometry" component_2="hinch_CaRU"/>
+      <map_variables variable_1="V_myo" variable_2="V_myo"/>
+   </connection>
+
+   
+<!-- CONNECTIONS TO AND FROM CONVERT_HINCH -->   
+   <connection>
+      <map_components component_1="membrane" component_2="convert_hinch"/>
+      <map_variables variable_1="F" variable_2="F"/>
+   </connection>
+   <connection>
+      <map_components component_1="cell_geometry" component_2="convert_hinch"/>
+      <map_variables variable_1="V_myo_uL" variable_2="V_myo_uL"/>
+   </connection>
+   <connection>
+      <map_components component_1="hinch_CaRU" component_2="convert_hinch"/>
+      <map_variables variable_1="I_RyR" variable_2="hinch_I_RyR"/>
+      <map_variables variable_1="I_LCC" variable_2="hinch_I_LCC"/>
+   </connection>
+   <connection>
+      <map_components component_1="hinch_Na_Ca_Exchanger" component_2="convert_hinch"/>
+      <map_variables variable_1="I_NaCa" variable_2="hinch_I_NaCa"/>
+   </connection>
+   <connection>
+      <map_components component_1="hinch_Sarcolemmal_Ca_pump" component_2="convert_hinch"/>
+      <map_variables variable_1="I_pCa" variable_2="hinch_I_pCa"/>
+   </connection>
+   <connection>
+      <map_components component_1="hinch_Background_Ca_current" component_2="convert_hinch"/>
+      <map_variables variable_1="I_CaB" variable_2="hinch_I_CaB"/>
+   </connection>
+   <connection>
+      <map_components component_1="hinch_calmodulin_Ca_current" component_2="intracellular_ion_concentrations"/>
+      <map_variables variable_1="beta_CMDN" variable_2="beta_CMDN"/>
+      <map_variables variable_1="Ca_i" variable_2="Ca_i"/>
+   </connection>
+   <connection>
+      <map_components component_1="convert_hinch" component_2="intracellular_ion_concentrations"/>
+      <map_variables variable_1="I_RyR" variable_2="I_RyR"/>
+      <map_variables variable_1="I_LCC" variable_2="I_LCC"/>
+      <map_variables variable_1="I_NaCa" variable_2="I_NaCa"/>
+      <map_variables variable_1="I_pCa" variable_2="I_pCa"/>
+      <map_variables variable_1="I_CaB" variable_2="I_CaB"/>
+   </connection>
+   <connection>
+      <map_components component_1="convert_hinch" component_2="membrane"/>
+      <map_variables variable_1="I_NaCa" variable_2="I_NaCa"/>
+      <map_variables variable_1="I_LCC" variable_2="I_LCC"/>
+      <map_variables variable_1="I_pCa" variable_2="I_pCa"/>
+      <map_variables variable_1="I_CaB" variable_2="I_CaB"/>
+   </connection>
+
+<!-- CONNECTIONS BETWEEN HINCH COMPONENTS AND INTRACELLULAR ION CONCENTRATIONS -->
+   <connection>
+      <map_components component_1="hinch_CaRU" component_2="intracellular_ion_concentrations"/>
+      <map_variables variable_1="Ca_i" variable_2="Ca_i"/>
+      <map_variables variable_1="Ca_SR" variable_2="Ca_SR"/>
+   </connection>
+   <connection>
+      <map_components component_1="hinch_Na_Ca_Exchanger" component_2="intracellular_ion_concentrations"/>
+      <map_variables variable_1="Ca_i" variable_2="Ca_i"/>
+      <map_variables variable_1="Na_i" variable_2="Na_i"/>
+   </connection>
+   <connection>
+      <map_components component_1="hinch_SERCA" component_2="intracellular_ion_concentrations"/>
+      <map_variables variable_1="Ca_i" variable_2="Ca_i"/>
+	  <map_variables variable_1="I_SERCA" variable_2="I_SERCA"/>
+   </connection>
+   <connection>
+      <map_components component_1="hinch_Sarcolemmal_Ca_pump" component_2="intracellular_ion_concentrations"/>
+      <map_variables variable_1="Ca_i" variable_2="Ca_i"/>
+   </connection>
+   <connection>
+      <map_components component_1="hinch_Background_Ca_current" component_2="intracellular_ion_concentrations"/>
+      <map_variables variable_1="Ca_i" variable_2="Ca_i"/>
+   </connection>
+   <connection>
+      <map_components component_1="hinch_SR_Ca_leak_current" component_2="intracellular_ion_concentrations"/>
+      <map_variables variable_1="Ca_i" variable_2="Ca_i"/>
+      <map_variables variable_1="Ca_SR" variable_2="Ca_SR"/>
+      <map_variables variable_1="I_SR" variable_2="I_SR"/>
+   </connection>
+
+<!-- CONNECTIONS BETWEEN HINCH COMPONENTS AND EXTRACELLULAR ION CONCENTRATIONS -->   
+   <connection>
+      <map_components component_1="hinch_CaRU" component_2="pandit_standard_ionic_concentrations"/>
+      <map_variables variable_1="Ca_o" variable_2="Ca_o"/>
+   </connection>
+   <connection>
+      <map_components component_1="hinch_Na_Ca_Exchanger" component_2="pandit_standard_ionic_concentrations"/>
+      <map_variables variable_1="Ca_o" variable_2="Ca_o"/>
+      <map_variables variable_1="Na_o" variable_2="Na_o"/>
+   </connection>
+   <connection>
+      <map_components component_1="hinch_Background_Ca_current" component_2="pandit_standard_ionic_concentrations"/>
+      <map_variables variable_1="Ca_o" variable_2="Ca_o"/>
+   </connection>
+
+<!-- CONNECTIONS BETWEEN NIEDERER COMPONENTS AND INTRACELLULAR ION CONCENTRATIONS -->
+   <connection>
+      <map_components component_1="niederer_troponin" component_2="intracellular_ion_concentrations"/>
+      <map_variables variable_1="TRPN" variable_2="TRPN"/>
+      <map_variables variable_1="Ca_i" variable_2="Ca_i"/>
+      <map_variables variable_1="J_TRPN" variable_2="I_TRPN"/>
+      <map_variables variable_1="Ca_TRPN_Max" variable_2="Ca_TRPN_Max"/>
+   </connection>
+   <connection>
+      <map_components component_1="niederer_tropomyosin" component_2="intracellular_ion_concentrations"/>
+      <map_variables variable_1="Ca_b" variable_2="Ca_b"/>
+   </connection>
+
+
+<!-- CONNECTIONS WITHIN NIEDERER COMPONENTS -->
+   <connection>
+      <map_components component_1="niederer_length_independent_tension" component_2="niederer_tropomyosin"/>
+      <map_variables variable_1="z" variable_2="z"/>
+      <map_variables variable_1="z_max" variable_2="z_max"/>
+   </connection>
+   <connection>
+      <map_components component_1="niederer_troponin" component_2="niederer_Cross_Bridges"/>
+      <map_variables variable_1="Tension" variable_2="Tension"/>
+   </connection>
+   <connection>
+      <map_components component_1="niederer_troponin" component_2="niederer_length_independent_tension"/>
+      <map_variables variable_1="T_ref" variable_2="T_ref"/>
+   </connection>
+   <connection>
+      <map_components component_1="niederer_tropomyosin" component_2="niederer_troponin"/>
+      <map_variables variable_1="k_on" variable_2="k_on"/>
+      <map_variables variable_1="k_Ref_off" variable_2="k_Ref_off"/>
+      <map_variables variable_1="gamma_trpn" variable_2="gamma_trpn"/>
+      <map_variables variable_1="Ca_TRPN_Max" variable_2="Ca_TRPN_Max"/>
+   </connection>
+   <connection>
+      <map_components component_1="niederer_tropomyosin" component_2="niederer_filament_overlap"/>
+      <map_variables variable_1="beta_0" variable_2="beta_0"/>
+   </connection>
+   <connection>
+      <map_components component_1="niederer_tropomyosin" component_2="niederer_Myofilaments"/>
+      <map_variables variable_1="lambda" variable_2="lambda"/>
+   </connection>
+   <connection>
+      <map_components component_1="niederer_filament_overlap" component_2="niederer_Myofilaments"/>
+      <map_variables variable_1="lambda" variable_2="lambda"/>
+   </connection>
+   <connection>
+      <map_components component_1="niederer_isometric_tension" component_2="niederer_length_independent_tension"/>
+      <map_variables variable_1="T_Base" variable_2="T_Base"/>
+   </connection>
+   <connection>
+      <map_components component_1="niederer_isometric_tension" component_2="niederer_filament_overlap"/>
+      <map_variables variable_1="overlap" variable_2="overlap"/>
+   </connection>
+   <connection>
+      <map_components component_1="niederer_Cross_Bridges" component_2="niederer_Myofilaments"/>
+      <map_variables variable_1="dExtensionRatiodt" variable_2="dExtensionRatiodt"/>
+   </connection>
+   <connection>
+      <map_components component_1="niederer_Cross_Bridges" component_2="niederer_isometric_tension"/>
+      <map_variables variable_1="T_0" variable_2="T_0"/>
+   </connection>
+   
+<rdf:RDF>
+  <rdf:Seq rdf:about="rdf:#0a540d49-9617-4b05-9341-8a7f17f683b3">
+    <rdf:li rdf:resource="rdf:#1f27c209-2bce-4b3a-be80-c363512900f9"/>
+    <rdf:li rdf:resource="rdf:#86547e45-c5f4-4929-8993-d95fc2b621d2"/>
+    <rdf:li rdf:resource="rdf:#917da876-d567-45f1-b4c1-b340a3d648b2"/>
+    <rdf:li rdf:resource="rdf:#29081242-31b1-4b24-ad1d-eb9f01ddc28d"/>
+    <rdf:li rdf:resource="rdf:#b26a1772-6d22-4107-8cee-ef6dec68e161"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#f21899cf-1bbb-4a30-a8ff-97742d0e80f5">
+    <vCard:ORG rdf:resource="rdf:#40f32e3c-a471-4581-8b87-734a2319d764"/>
+    <vCard:EMAIL rdf:resource="rdf:#ad0325ea-d8e4-40b6-9759-f182c7432669"/>
+    <vCard:N rdf:resource="rdf:#59cdee69-09af-4c7c-bd3e-d49982596429"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#65988d73-d3a5-4cce-ba08-4d43789cea4c">
+    <vCard:Given>Jonna</vCard:Given>
+    <vCard:Family>Terkildsen</vCard:Family>
+    <vCard:Other>R</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#6ac7103b-c16d-475d-a345-fc7279edaa17">
+    <vCard:Given>James</vCard:Given>
+    <vCard:Family>Lawson</vCard:Family>
+    <vCard:Other>Richard</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#84adde57-db78-466a-97e6-9671c7d199a8">
+    <vCard:Given>Edmund</vCard:Given>
+    <vCard:Family>Crampin</vCard:Family>
+    <vCard:Other>J</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d4a45d7d-9362-4575-92bc-587671e78fcc">
+    <dc:creator rdf:resource="rdf:#2516a582-bc38-4e4c-a67e-164902ff8929"/>
+    <rdf:value/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#$DtFl5">
+    <ns7:boundIntervals rdf:resource="rdf:#$EtFl5"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1f27c209-2bce-4b3a-be80-c363512900f9">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#65988d73-d3a5-4cce-ba08-4d43789cea4c"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d864f300-bb41-438b-a374-22885e9a74e3">
+    <vCard:N rdf:resource="rdf:#6ac7103b-c16d-475d-a345-fc7279edaa17"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#2c7e2db3-8c58-442c-b51b-6fc6d8be0003">
+    <dc:title>Experimental Physiology</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#86547e45-c5f4-4929-8993-d95fc2b621d2">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#e49f696e-26ed-4881-90ca-867d63100bae"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#39d628a5-b6eb-46b5-bacc-7e550717e71e">
+    <dcterms:W3CDTF>2008-07-00 00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#$FtFl5">
+    <ns7:endingValue>5000</ns7:endingValue>
+    <ns7:nonstandard-pointDensity>10000</ns7:nonstandard-pointDensity>
+    <ns7:maximumStepSize>0.1</ns7:maximumStepSize>
+  </rdf:Description>
+  <rdf:Description rdf:about="#Pandit_Hinch_Niederer_Model">
+    <ns7:simulation rdf:resource="rdf:#$ekohZ3"/>
+    <bqs:reference rdf:resource="rdf:#fbb24ccf-610d-44f1-a665-dd284da2e47f"/>
+<bqs:reference rdf:parseType="Resource">
+  <dc:subject rdf:parseType="Resource">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value>
+      <rdf:Bag>
+        <rdf:li>cardiac</rdf:li>
+        <rdf:li>electrophysiology</rdf:li>
+        <rdf:li>rat</rdf:li>
+        <rdf:li>excitation-contraction coupling</rdf:li>
+      </rdf:Bag>
+    </rdf:value>
+  </dc:subject>
+</bqs:reference>
+    <cmeta:comment rdf:resource="rdf:#d4a45d7d-9362-4575-92bc-587671e78fcc"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:publisher>The University of Auckland, Bioengineering Institute</dc:publisher>
+    <dc:creator rdf:resource="rdf:#f21899cf-1bbb-4a30-a8ff-97742d0e80f5"/>
+    <ns7:simulation rdf:resource="rdf:#$DtFl5"/>
+    <cmeta:comment rdf:resource="rdf:#b399eb56-4c31-4dcb-9ed9-0ffa50d99506"/>
+    <dcterms:created rdf:resource="rdf:#c8c45897-f27e-41c8-bdf4-fdad5311d2c3"/>
+    <cmeta:modification rdf:resource="rdf:#01b1f3a9-8550-4c31-972a-2233ea5606b5"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#$gkohZ3">
+    <ns7:endingValue>5000</ns7:endingValue>
+    <ns7:nonstandard-pointDensity>10000</ns7:nonstandard-pointDensity>
+    <ns7:maximumStepSize>0.1</ns7:maximumStepSize>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#$fkohZ3">
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+    <rdf:first rdf:resource="rdf:#$gkohZ3"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#2516a582-bc38-4e4c-a67e-164902ff8929">
+    <vCard:FN/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#917da876-d567-45f1-b4c1-b340a3d648b2">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#84adde57-db78-466a-97e6-9671c7d199a8"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9ba8480f-fd11-476d-a01a-fef741bf1259">
+    <vCard:FN>Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b399eb56-4c31-4dcb-9ed9-0ffa50d99506">
+    <dc:creator rdf:resource="rdf:#9ba8480f-fd11-476d-a01a-fef741bf1259"/>
+    <rdf:value>Since this is the exact same model encoding which was used to create the results presented in the paper, this CellML model is known to accurately represent the published article.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e49f696e-26ed-4881-90ca-867d63100bae">
+    <vCard:Given>Steven</vCard:Given>
+    <vCard:Family>Niederer</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#29081242-31b1-4b24-ad1d-eb9f01ddc28d">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#afbd09d3-ee03-467d-88b1-4f9dfae56348"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#afbd09d3-ee03-467d-88b1-4f9dfae56348">
+    <vCard:Given>Peter</vCard:Given>
+    <vCard:Family>Hunter</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#$ekohZ3">
+    <ns7:boundIntervals rdf:resource="rdf:#$fkohZ3"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b26a1772-6d22-4107-8cee-ef6dec68e161">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#cc93efe7-f009-4939-91ea-8c40d10419d2"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#$EtFl5">
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+    <rdf:first rdf:resource="rdf:#$FtFl5"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b92ac5a4-36f4-4746-b65b-68ec42ad7b53">
+    <dc:creator rdf:resource="rdf:#0a540d49-9617-4b05-9341-8a7f17f683b3"/>
+    <dc:title>Using Physiome standards to couple cellular functions for rat cardiac excitation-contraction</dc:title>
+    <bqs:volume>93</bqs:volume>
+    <bqs:first_page>919</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#2c7e2db3-8c58-442c-b51b-6fc6d8be0003"/>
+    <dcterms:issued rdf:resource="rdf:#39d628a5-b6eb-46b5-bacc-7e550717e71e"/>
+    <bqs:last_page>929</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#cc93efe7-f009-4939-91ea-8c40d10419d2">
+    <vCard:Given>Nicolas</vCard:Given>
+    <vCard:Family>Smith</vCard:Family>
+    <vCard:Other>P</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#18e2d24c-8f28-4fb3-84b1-d0125c52598a">
+    <dcterms:W3CDTF>2008-08-06T12:44:02+12:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#40f32e3c-a471-4581-8b87-734a2319d764">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>The Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#01b1f3a9-8550-4c31-972a-2233ea5606b5">
+    <dcterms:modified rdf:resource="rdf:#18e2d24c-8f28-4fb3-84b1-d0125c52598a"/>
+    <rdf:value>Added CellML 1.0 model to version 01's documentation. 
+
+Added some cmeta:ids to variables</rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#d864f300-bb41-438b-a374-22885e9a74e3"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#c8c45897-f27e-41c8-bdf4-fdad5311d2c3">
+    <dcterms:W3CDTF>2008-07-15T00:00:00+00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ad0325ea-d8e4-40b6-9759-f182c7432669">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>j.terkildsen@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#59cdee69-09af-4c7c-bd3e-d49982596429">
+    <vCard:Given>Jonna</vCard:Given>
+    <vCard:Family>Terkildsen</vCard:Family>
+    <vCard:Other/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#fbb24ccf-610d-44f1-a665-dd284da2e47f">
+    <bqs:Pubmed_id>18344258</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#b92ac5a4-36f4-4746-b65b-68ec42ad7b53"/>
+  </rdf:Description>
+</rdf:RDF>
+   
+</model>

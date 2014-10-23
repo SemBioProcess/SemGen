@@ -1,0 +1,1263 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- FILE : lebeau_model_1997.xml
+
+CREATED : 20th March 2004
+
+LAST MODIFIED : 20th April 2005
+
+AUTHOR : Catherine Lloyd
+         Bioengineering Instute
+         The University of Auckland
+         
+MODEL STATUS : This model conforms to the CellML 1.0 Specification released on
+10th August 2001, and the 16/01/2002 CellML Metadata 1.0 Specification.
+
+DESCRIPTION : This file contains a CellML description of LeBeau et al.'s 1997 mathematical model of the generation of action potentials in corticotrophs.
+
+CHANGES:
+  20/04/2005 - PJV - Made MathML id's unique 
+  
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="lebeau_robson_mckinnon_donald_sneyd_1997_version01" name="lebeau_robson_mckinnon_donald_sneyd_1997_version01">
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>A Mathematical Model of the Generation of Action Potentials in Corticotrophs</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Bioengineering Institute, University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+            This model is not currently functional.
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+Corticotropin-releaseing hormone (CRH) is an important regulator of adrenocorticotropin (ACTH) secretion from the pituitary corticotroph cells.  CRH induces the secretion of ACTH through the actication of the cAMP second messenger system, which results in the activation of protein kinase A (PKA).  Secretion of ACTH alo requires an influx of Ca<superscript>2+</superscript>, which occurs mainly through voltage-sensitive Ca<superscript>2+</superscript> channels.  Corticotrophs generate both spontaneous and CRG-induced action potentials.  L-type voltage-sensitive Ca<superscript>2+</superscript> channels are the main channel type that underlie Ca<superscript>2+</superscript>-induced action potential generation.  It is likely that following activation by CRH, PKA phosphorylates the L-type channel and promotes Ca<superscript>2+</superscript> action potential generation with subsequent Ca<superscript>2+</superscript> influx.  The rise in the intracellular concentration of Ca<superscript>2+</superscript> ([Ca<superscript>2+</superscript>]<subscript>i</subscript>), then leads to the activation of exocytotic pathways, resulting in the secretion of ACTH. 
+</para>
+
+<para>
+Although the PKA-induced action potential activity is known to play an important role in this secretory pathway, the mechanism by which PKA activates the L-type  Ca<superscript>2+</superscript> channel is currently unknown.  In the publication described here, LeBeau <emphasis>et al.</emphasis> investigate PKA regulation of the L-type  Ca<superscript>2+</superscript> channel.  They develop a Hodgkin-Huxley-type mathematical model of action potential generation in corticotrophs (see <xref linkend="fig_cell_diagram"/> below).  The model includes descriptions of four plasma membrane ionic channels, which allows the analysis of the roles of each channel type in corticotroph electrical responses.
+</para>
+
+<para>
+The complete original paper reference is cited below:
+</para>
+
+<para>
+<ulink url="http://www.biophysj.org/cgi/content/abstract/73/3/1263">Generation of Action Potentials in a Mathematical Model of Corticotrophs</ulink>, Andrew P. LeBeau, A. Bruce Robson, Alan E. McKinnon, Richard A. Donald, and James Sneyd, 1997, <ulink url="http://www.biophysj.org/">
+            <emphasis>Biophysical Journal</emphasis>
+          </ulink>, 73, 1263-1275.  <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/9284294">PubMed ID: 9284294</ulink>
+</para>
+
+<informalfigure float="0" id="fig_cell_diagram">
+          <mediaobject>
+            <imageobject>
+              <objectinfo>
+                <title>cell diagram</title>
+              </objectinfo>
+              <imagedata fileref="lebeau_1997.png"/>
+            </imageobject>
+            <caption>
+Schematic diagram of the model of a corticotroph.  The arrows represent ionic currents and fluxes across the plama membrane and across the membrane of the endoplasmic reticulum.
+</caption>
+          </mediaobject>
+        </informalfigure>
+
+<para>
+Using model simulations, the authors found that an increase in the L-type Ca<superscript>2+</superscript> current was sufficient to generate action potentials from a previously resting state.  The favoured mechanism which was thought to underlie this increase in the L-type Ca<superscript>2+</superscript> current was a shift in the voltage-dependence of the current towards more negative potentials.  The model also showed that the T-type Ca<superscript>2+</superscript> current plays a role in establishing the excitability of the plasma membrane, but it doesn't plauy a major role in action potential generation.
+</para>
+
+<para>
+The model has been described here in CellML (the raw CellML description of the LeBeau <emphasis>et al.</emphasis> 1997 model can be downloaded in various formats as described in <xref linkend="sec_download_this_model"/>).     
+</para>
+
+</sect1>
+</article>
+</documentation>
+  
+  
+  
+  <units name="micrometre">
+    <unit units="metre" prefix="micro"/>
+  </units>
+  
+  <units name="per_micrometre">
+    <unit units="metre" prefix="micro" exponent="-1"/>
+  </units>
+  
+  <units name="micrometre2">
+    <unit units="metre" prefix="micro" exponent="2"/>
+  </units>
+  
+  <units name="picoL">
+    <unit units="litre" prefix="pico"/>
+  </units>
+  
+  <units name="picoF">
+    <unit units="farad" prefix="pico"/>
+  </units>
+  
+  <units name="picoA">
+    <unit units="ampere" prefix="pico"/>
+  </units>
+  
+  <units name="micromolar">
+    <unit units="mole" prefix="micro"/>
+    <unit units="litre" exponent="-1"/>
+  </units>
+  
+  <units name="millimolar">
+    <unit units="mole" prefix="milli"/>
+    <unit units="litre" exponent="-1"/>
+  </units>
+  
+  <units name="micromolar_micrometre_per_s_pA">
+    <unit units="micromolar"/>
+    <unit units="micrometre"/>
+    <unit units="second" exponent="-1"/>
+    <unit units="ampere" prefix="pico" exponent="-1"/>
+  </units>
+  
+  <units name="nanoS_per_millimolar">
+    <unit units="siemens" prefix="nano"/>
+    <unit units="millimolar" exponent="-1"/>
+  </units>
+  
+  <units name="nanoS">
+    <unit units="siemens" prefix="nano"/>
+  </units>
+  
+  <units name="millivolt">
+    <unit units="volt" prefix="milli"/>
+  </units>
+  
+  <units name="millisecond">
+    <unit units="second" prefix="milli"/>
+  </units>
+  
+  <units name="flux">
+    <unit units="millimolar"/>
+    <unit units="millisecond" exponent="-1"/>
+  </units>
+  
+  <units name="micromolar_micrometre_per_s">
+    <unit units="micromolar"/>
+    <unit units="micrometre"/>
+    <unit units="second" exponent="-1"/>
+  </units>
+  
+  <units name="joule_per_mole_kelvin">
+    <unit units="joule"/>
+    <unit units="mole" exponent="-1"/>
+    <unit units="kelvin" exponent="-1"/>
+  </units>
+  
+  <units name="coulomb_per_mole">
+    <unit units="coulomb" exponent="-1"/>
+    <unit units="mole" prefix="milli"/>
+  </units>
+    
+  
+  <component name="environment">
+    <variable units="millisecond" public_interface="out" name="time"/>
+  </component>
+  
+  <component name="membrane">
+    <variable units="millivolt" public_interface="out" name="V"/>
+             
+    <variable units="picoF" name="Cm" initial_value="7.0"/>
+    
+    <variable units="millisecond" public_interface="in" name="time"/>
+    <variable units="picoA" public_interface="in" name="i_CaT"/>
+    <variable units="picoA" public_interface="in" name="i_CaL"/>
+    <variable units="picoA" public_interface="in" name="i_K_DR"/>
+    <variable units="picoA" public_interface="in" name="i_K_Ca"/>
+    <variable units="picoA" public_interface="in" name="i_Leak"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="membrane_voltage_diff_eq">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> V </ci>
+        </apply>
+        <apply>
+          <divide/>
+          <apply>
+            <minus/>
+            <apply>
+              <plus/>
+              <ci> i_CaL  </ci>
+              <ci> i_CaT </ci>
+              <ci> i_K_DR </ci>
+              <ci> i_K_Ca </ci>
+              <ci> i_Leak </ci>
+            </apply>
+          </apply>
+          <ci> Cm </ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="reversal_potentials">
+    <variable units="millivolt" public_interface="out" name="E_Ca"/>
+    <variable units="millivolt" public_interface="out" name="E_K"/>
+    
+    <variable units="millimolar" name="Ki" initial_value="140.0"/>
+    <variable units="millimolar" name="Ke" initial_value="5.6"/>
+    <variable units="millimolar" name="Cae" initial_value="2.0"/>
+    <variable units="joule_per_mole_kelvin" name="R" initial_value="8.3144"/>
+    <variable units="kelvin" name="T" initial_value="310.15"/>
+    <variable units="coulomb_per_mole" name="F" initial_value="96485"/>
+    
+    <variable units="millivolt" public_interface="in" name="V"/>
+    <variable units="millimolar" public_interface="in" name="Cai"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="E_Ca_calculation">
+        <eq/>
+        <ci> E_Ca </ci>
+        <apply>
+          <times/>
+          <ci> V </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> Cai </ci>
+              <apply>
+                <times/>
+                <ci> Cae </ci>
+                <apply>
+                  <exp/>
+                  <apply>
+                    <minus/>
+                    <apply>
+                      <divide/>
+                      <apply>
+                        <times/>
+                        <cn cellml:units="dimensionless"> 2.0 </cn>
+                        <ci> F </ci>
+                        <ci> V </ci>
+                      </apply>
+                      <apply>
+                        <times/>
+                        <ci> R </ci>
+                        <ci> T </ci>
+                      </apply>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+            <apply>
+              <minus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <divide/>
+                    <apply>
+                      <times/>
+                      <cn cellml:units="dimensionless"> 2.0 </cn>
+                      <ci> F </ci>
+                      <ci> V </ci>
+                    </apply>
+                    <apply>
+                      <times/>
+                      <ci> R </ci>
+                      <ci> T </ci>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="E_K_calculation">
+        <eq/>
+        <ci> E_K </ci>
+        <apply>
+          <times/>
+          <ci> V </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> Ki </ci>
+              <apply>
+                <times/>
+                <ci> Ke </ci>
+                <apply>
+                  <exp/>
+                  <apply>
+                    <minus/>
+                    <apply>
+                      <divide/>
+                      <apply>
+                        <times/>
+                        <ci> F </ci>
+                        <ci> V </ci>
+                      </apply>
+                      <apply>
+                        <times/>
+                        <ci> R </ci>
+                        <ci> T </ci>
+                      </apply>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+            <apply>
+              <minus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <divide/>
+                    <apply>
+                      <times/>
+                      <ci> F </ci>
+                      <ci> V </ci>
+                    </apply>
+                    <apply>
+                      <times/>
+                      <ci> R </ci>
+                      <ci> T </ci>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="L_type_calcium_channel_current">
+    <variable units="picoA" public_interface="out" name="i_CaL"/>
+
+    <variable units="nanoS_per_millimolar" name="g_CaL" initial_value="9.0"/>
+    
+    <variable units="millivolt" public_interface="in" name="E_Ca"/>
+    <variable units="millisecond" public_interface="in" private_interface="out" name="time"/>
+    <variable units="millivolt" public_interface="in" private_interface="out" name="V"/>
+    
+    <variable units="dimensionless" private_interface="in" name="m"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="i_CaL_calculation">
+        <eq/>
+        <ci> i_CaL </ci>
+        <apply>
+          <times/>
+          <ci> g_CaL </ci>
+          <apply>
+            <power/>
+            <ci> m </ci>
+            <cn cellml:units="dimensionless"> 2.0 </cn>
+          </apply>
+          <ci> E_Ca </ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="L_type_calcium_channel_current_m_gate">
+    <variable units="dimensionless" public_interface="out" name="m"/>
+        
+    <variable units="dimensionless" name="m_infinity"/>
+    <variable units="millisecond" name="tau_m"/>
+    <variable units="millisecond" name="tau_m_" initial_value="27.0"/>
+    
+    <variable units="millivolt" public_interface="in" name="V"/>
+    <variable units="millisecond" public_interface="in" name="time"/>
+   
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="L_type_calcium_channel_current_m_gate_m_infinity_calculation">
+        <eq/>
+        <ci> m_infinity </ci>
+        <apply>
+          <divide/>
+          <cn cellml:units="dimensionless"> 1.0 </cn>
+          <apply>
+            <plus/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <exp/>
+              <apply>
+                <minus/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> V </ci>
+                    <cn cellml:units="millivolt"> -12.0 </cn>
+                  </apply>
+                  <cn cellml:units="millivolt"> 12.0 </cn>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="L_type_calcium_channel_current_m_gate_tau_m_calculation">
+        <eq/>
+        <ci> tau_m </ci>
+        <apply>
+          <divide/>
+          <ci> tau_m_ </ci>
+          <apply>
+            <plus/>
+            <apply>
+              <exp/>
+              <apply>
+                <divide/>
+                <apply>
+                  <minus/>
+                  <ci> V </ci>
+                  <cn cellml:units="millivolt"> -60.0 </cn>
+                </apply>
+                <cn cellml:units="millivolt"> 22.0 </cn>
+              </apply>
+            </apply>
+            <apply>
+              <times/>
+              <cn cellml:units="dimensionless"> 2.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <cn cellml:units="dimensionless"> 2.0 </cn>
+                    <apply>
+                      <divide/>
+                      <apply>
+                        <minus/>
+                        <ci> V </ci>
+                        <cn cellml:units="millivolt"> -60.0 </cn>
+                      </apply>
+                      <cn cellml:units="millivolt"> 22.0 </cn>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+
+      <apply id="L_type_calcium_channel_current_m_gate_dm_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> m </ci>
+        </apply>
+        <apply>
+          <divide/>
+          <apply>
+            <minus/>
+            <ci> m_infinity </ci>
+            <ci> m </ci>
+          </apply>
+          <ci> tau_m </ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="T_type_calcium_channel_current">
+    <variable units="picoA" public_interface="out" name="i_CaT"/>
+
+    <variable units="nanoS_per_millimolar" name="g_CaT" initial_value="10.0"/>
+    
+    <variable units="millivolt" public_interface="in" name="E_Ca"/>
+    <variable units="millisecond" public_interface="in" private_interface="out" name="time"/>
+    <variable units="millivolt" public_interface="in" private_interface="out" name="V"/>
+    
+    <variable units="dimensionless" private_interface="in" name="m"/>
+    <variable units="dimensionless" private_interface="in" name="h"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathMT">
+      <apply id="i_CaT_calculation">
+        <eq/>
+        <ci> i_CaT </ci>
+        <apply>
+          <times/>
+          <ci> g_CaT </ci>
+          <apply>
+            <power/>
+            <ci> m </ci>
+            <cn cellml:units="dimensionless"> 2.0 </cn>
+          </apply>
+          <ci> h </ci>
+          <ci> E_Ca </ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="T_type_calcium_channel_current_m_gate">
+    <variable units="dimensionless" public_interface="out" name="m"/>
+        
+    <variable units="dimensionless" name="m_infinity"/>
+    <variable units="millisecond" name="tau_m"/>
+    <variable units="millisecond" name="tau_m_" initial_value="10.0"/>
+    
+    <variable units="millivolt" public_interface="in" name="V"/>
+    <variable units="millisecond" public_interface="in" name="time"/>
+   
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="T_type_calcium_channel_current_m_gate_m_infinity_calculation">
+        <eq/>
+        <ci> m_infinity </ci>
+        <apply>
+          <divide/>
+          <cn cellml:units="dimensionless"> 1.0 </cn>
+          <apply>
+            <plus/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <exp/>
+              <apply>
+                <minus/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> V </ci>
+                    <cn cellml:units="millivolt"> -30.0 </cn>
+                  </apply>
+                  <cn cellml:units="millivolt"> 10.5 </cn>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="T_type_calcium_channel_current_m_gate_tau_m_calculation">
+        <eq/>
+        <ci> tau_m </ci>
+        <apply>
+          <divide/>
+          <ci> tau_m_ </ci>
+          <apply>
+            <plus/>
+            <apply>
+              <exp/>
+              <apply>
+                <divide/>
+                <apply>
+                  <minus/>
+                  <ci> V </ci>
+                  <cn cellml:units="millivolt"> -60.0 </cn>
+                </apply>
+                <cn cellml:units="millivolt"> 22.0 </cn>
+              </apply>
+            </apply>
+            <apply>
+              <times/>
+              <cn cellml:units="dimensionless"> 2.0 </cn>
+              <apply>
+                <exp/>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <cn cellml:units="dimensionless"> 2.0 </cn>
+                    <apply>
+                      <divide/>
+                      <apply>
+                        <minus/>
+                        <ci> V </ci>
+                        <cn cellml:units="millivolt"> -60.0 </cn>
+                      </apply>
+                      <cn cellml:units="millivolt"> 22.0 </cn>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+                  
+      <apply id="T_type_calcium_channel_current_m_gate_dm_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> m </ci>
+        </apply>
+        <apply>
+          <divide/>
+          <apply>
+            <minus/>
+            <ci> m_infinity </ci>
+            <ci> m </ci>
+          </apply>
+          <ci> tau_m </ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="T_type_calcium_channel_current_h_gate">
+    <variable units="dimensionless" public_interface="out" name="h"/>
+        
+    <variable units="dimensionless" name="h_infinity"/>
+    <variable units="millisecond" name="tau_h" initial_value="15.0"/>
+    
+    <variable units="millivolt" public_interface="in" name="V"/>
+    <variable units="millisecond" public_interface="in" name="time"/>
+   
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="h_infinity_calculation">
+        <eq/>
+        <ci> h_infinity </ci>
+        <apply>
+          <divide/>
+          <cn cellml:units="dimensionless"> 1.0 </cn>
+          <apply>
+            <plus/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <exp/>
+              <apply>
+                <divide/>
+                <apply>
+                  <minus/>
+                  <ci> V </ci>
+                  <cn cellml:units="millivolt"> -57.0 </cn>
+                </apply>
+                <cn cellml:units="millivolt"> 5.0 </cn>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+                  
+      <apply id="dh_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> h </ci>
+        </apply>
+        <apply>
+          <divide/>
+          <apply>
+            <minus/>
+            <ci> h_infinity </ci>
+            <ci> h </ci>
+          </apply>
+          <ci> tau_h </ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="voltage_sensitive_potassium_current">
+    <variable units="picoA" public_interface="out" name="i_K_DR"/>
+
+    <variable units="nanoS_per_millimolar" name="g_K_DR" initial_value="0.1"/>
+    
+    <variable units="millivolt" public_interface="in" name="E_K"/>
+    <variable units="millisecond" public_interface="in" private_interface="out" name="time"/>
+    <variable units="millivolt" public_interface="in" private_interface="out" name="V"/>
+    
+    <variable units="dimensionless" private_interface="in" name="n"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathMT">
+      <apply id="i_K_DR_calculation">
+        <eq/>
+        <ci> i_K_DR </ci>
+        <apply>
+          <times/>
+          <ci> g_K_DR </ci>
+          <ci> n </ci>
+          <ci> E_K </ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="voltage_sensitive_potassium_current_n_gate">
+    <variable units="dimensionless" public_interface="out" name="n"/>
+        
+    <variable units="dimensionless" name="n_infinity"/>
+    <variable units="millisecond" name="tau_n" initial_value="20.0"/>
+    
+    <variable units="millivolt" public_interface="in" name="V"/>
+    <variable units="millisecond" public_interface="in" name="time"/>
+   
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="n_infinity_calculation">
+        <eq/>
+        <ci> n_infinity </ci>
+        <apply>
+          <divide/>
+          <cn cellml:units="dimensionless"> 1.0 </cn>
+          <apply>
+            <plus/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <exp/>
+              <apply>
+                <minus/>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <minus/>
+                    <ci> V </ci>
+                    <cn cellml:units="millivolt"> -20.0 </cn>
+                  </apply>
+                  <cn cellml:units="millivolt"> 4.5 </cn>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+                 
+      <apply id="dn_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> n </ci>
+        </apply>
+        <apply>
+          <divide/>
+          <apply>
+            <minus/>
+            <ci> n_infinity </ci>
+            <ci> n </ci>
+          </apply>
+          <ci> tau_n </ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="calcium_activated_potassium_current">
+    <variable units="picoA" public_interface="out" name="i_K_Ca"/>
+
+    <variable units="nanoS_per_millimolar" name="g_K_Ca" initial_value="0.09"/>
+    <variable units="micromolar" name="KC" initial_value="0.4"/>
+    
+    <variable units="millivolt" public_interface="in" name="E_K"/>
+    <variable units="millimolar" public_interface="in" name="Cai"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathMT">
+      <apply id="i_K_Ca_calculation">
+        <eq/>
+        <ci> i_K_Ca </ci>
+        <apply>
+          <times/>
+          <ci> g_K_Ca </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <power/>
+              <ci> Cai </ci>
+              <cn cellml:units="dimensionless"> 4.0 </cn>
+            </apply>
+            <apply>
+              <plus/>
+              <apply>
+                <power/>
+                <ci> Cai </ci>
+                <cn cellml:units="dimensionless"> 4.0 </cn>
+              </apply>
+              <apply>
+                <power/>
+                <ci> KC </ci>
+                <cn cellml:units="dimensionless"> 4.0 </cn>
+              </apply>
+            </apply>
+          </apply>
+          <ci> E_K </ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="leak_current">
+    <variable units="picoA" public_interface="out" name="i_Leak"/>
+
+    <variable units="nanoS" name="g_L" initial_value="0.3"/>
+    <variable units="millivolt" name="E_L" initial_value="-67.0"/>
+    
+    <variable units="millivolt" public_interface="in" name="V"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathMT">
+      <apply id="i_Leak_calculation">
+        <eq/>
+        <ci> i_Leak </ci>
+        <apply>
+          <times/>
+          <ci> g_L </ci>
+          <apply>
+            <minus/>
+            <ci> V </ci>
+            <ci> E_L </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="intracellular_calcium_concentration">
+    <variable units="millimolar" public_interface="out" name="Cai"/>
+    
+    <variable units="dimensionless" name="f" initial_value="0.01"/>
+    <variable units="per_micrometre" name="beta" initial_value="0.4"/>
+    
+    <variable units="millisecond" public_interface="in" name="time"/>
+    <variable units="flux" public_interface="in" name="j_exch"/>
+    <variable units="flux" public_interface="in" name="j_in"/>
+    <variable units="flux" public_interface="in" name="j_eff"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathMT">
+      <apply id="Cai_calculation">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> Cai </ci>
+        </apply>
+        <apply>
+          <plus/>
+          <ci> j_exch </ci>
+          <apply>
+            <times/>
+            <ci> f </ci>
+            <ci> beta </ci>
+            <apply>
+              <minus/>
+              <ci> j_in </ci>
+              <ci> j_eff </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="intracellular_calcium_dynamics">
+    <variable units="flux" public_interface="out" name="j_exch"/>
+    <variable units="flux" public_interface="out" name="j_in"/>
+    <variable units="flux" public_interface="out" name="j_eff"/>
+    
+    <variable units="millisecond" name="tau" initial_value="500.0"/>
+    <variable units="micromolar_micrometre_per_s_pA" name="alpha" initial_value="7.4"/>
+    <variable units="micromolar_micrometre_per_s" name="vp" initial_value="40.0"/>
+    <variable units="micromolar" name="Kp" initial_value="0.08"/>
+    <variable units="micromolar" name="Ca_eq" initial_value="0.1"/>
+    
+    <variable units="millimolar" public_interface="in" name="Cai"/>
+    <variable units="picoA" public_interface="in" name="i_CaL"/>
+    <variable units="picoA" public_interface="in" name="i_CaT"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="j_exch_calculation">
+        <eq/>
+        <ci> j_exch </ci>
+        <apply>
+          <divide/>
+          <apply>
+            <minus/>
+            <ci> Ca_eq </ci>
+            <ci> Cai </ci>
+          </apply>
+          <ci> tau </ci>
+        </apply>
+      </apply>
+      
+      <apply id="j_in_calculation">
+        <eq/>
+        <ci> j_in </ci>
+        <apply>
+          <times/>
+          <apply>
+            <minus/>
+            <ci> alpha </ci>
+          </apply>
+          <apply>
+            <plus/>
+            <ci> i_CaL </ci>
+            <ci> i_CaT </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="j_eff_calculation">
+        <eq/>
+        <ci> j_eff </ci>
+        <apply>
+          <times/>
+          <ci> vp </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <power/>
+              <ci> Cai </ci>
+              <cn cellml:units="dimensionless"> 2.0 </cn>
+            </apply>
+            <apply>
+              <plus/>
+              <apply>
+                <power/>
+                <ci> Cai </ci>
+                <cn cellml:units="dimensionless"> 2.0 </cn>
+              </apply>
+              <apply>
+                <power/>
+                <ci> Kp </ci>
+                <cn cellml:units="dimensionless"> 2.0 </cn>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <group>
+    <relationship_ref relationship="containment"/>
+    <component_ref component="membrane">
+      <component_ref component="L_type_calcium_channel_current">
+        <component_ref component="L_type_calcium_channel_current_m_gate"/>
+      </component_ref>
+      <component_ref component="T_type_calcium_channel_current">
+        <component_ref component="T_type_calcium_channel_current_m_gate"/>
+        <component_ref component="T_type_calcium_channel_current_h_gate"/>
+      </component_ref>
+      <component_ref component="voltage_sensitive_potassium_current">
+        <component_ref component="voltage_sensitive_potassium_current_n_gate"/>
+      </component_ref>
+      <component_ref component="calcium_activated_potassium_current"/>
+      <component_ref component="leak_current"/>
+      <component_ref component="intracellular_calcium_concentration"/>
+      <component_ref component="intracellular_calcium_dynamics"/> 
+    </component_ref>
+  </group>
+  
+  <group>
+    <relationship_ref relationship="encapsulation"/>
+    <component_ref component="L_type_calcium_channel_current">
+      <component_ref component="L_type_calcium_channel_current_m_gate"/>
+    </component_ref>
+    <component_ref component="T_type_calcium_channel_current">
+      <component_ref component="T_type_calcium_channel_current_m_gate"/>
+      <component_ref component="T_type_calcium_channel_current_h_gate"/>
+    </component_ref>
+    <component_ref component="voltage_sensitive_potassium_current">
+      <component_ref component="voltage_sensitive_potassium_current_n_gate"/>
+    </component_ref>
+  </group>
+  
+  <connection>
+    <map_components component_2="environment" component_1="membrane"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="L_type_calcium_channel_current"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection> 
+  
+  <connection>
+    <map_components component_2="environment" component_1="T_type_calcium_channel_current"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="voltage_sensitive_potassium_current"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="intracellular_calcium_concentration"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="L_type_calcium_channel_current" component_1="reversal_potentials"/>
+    <map_variables variable_2="E_Ca" variable_1="E_Ca"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="T_type_calcium_channel_current" component_1="reversal_potentials"/>
+    <map_variables variable_2="E_Ca" variable_1="E_Ca"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="voltage_sensitive_potassium_current" component_1="reversal_potentials"/>
+    <map_variables variable_2="E_K" variable_1="E_K"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="calcium_activated_potassium_current" component_1="reversal_potentials"/>
+    <map_variables variable_2="E_K" variable_1="E_K"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="intracellular_calcium_concentration" component_1="reversal_potentials"/>
+    <map_variables variable_2="Cai" variable_1="Cai"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="membrane" component_1="L_type_calcium_channel_current"/>
+    <map_variables variable_2="V" variable_1="V"/>
+    <map_variables variable_2="i_CaL" variable_1="i_CaL"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="membrane" component_1="T_type_calcium_channel_current"/>
+    <map_variables variable_2="V" variable_1="V"/>
+    <map_variables variable_2="i_CaT" variable_1="i_CaT"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="membrane" component_1="voltage_sensitive_potassium_current"/>
+    <map_variables variable_2="V" variable_1="V"/>
+    <map_variables variable_2="i_K_DR" variable_1="i_K_DR"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="membrane" component_1="calcium_activated_potassium_current"/>
+    <map_variables variable_2="i_K_Ca" variable_1="i_K_Ca"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="membrane" component_1="leak_current"/>
+    <map_variables variable_2="V" variable_1="V"/>
+    <map_variables variable_2="i_Leak" variable_1="i_Leak"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="intracellular_calcium_concentration" component_1="calcium_activated_potassium_current"/>
+    <map_variables variable_2="Cai" variable_1="Cai"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="membrane" component_1="reversal_potentials"/>
+    <map_variables variable_2="V" variable_1="V"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="intracellular_calcium_concentration" component_1="intracellular_calcium_dynamics"/>
+    <map_variables variable_2="Cai" variable_1="Cai"/>
+    <map_variables variable_2="j_exch" variable_1="j_exch"/>
+    <map_variables variable_2="j_in" variable_1="j_in"/>
+    <map_variables variable_2="j_eff" variable_1="j_eff"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="L_type_calcium_channel_current" component_1="intracellular_calcium_dynamics"/>
+    <map_variables variable_2="i_CaL" variable_1="i_CaL"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="T_type_calcium_channel_current" component_1="intracellular_calcium_dynamics"/>
+    <map_variables variable_2="i_CaT" variable_1="i_CaT"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="L_type_calcium_channel_current_m_gate" component_1="L_type_calcium_channel_current"/>
+    <map_variables variable_2="m" variable_1="m"/>
+    <map_variables variable_2="time" variable_1="time"/>
+    <map_variables variable_2="V" variable_1="V"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="T_type_calcium_channel_current_m_gate" component_1="T_type_calcium_channel_current"/>
+    <map_variables variable_2="m" variable_1="m"/>
+    <map_variables variable_2="time" variable_1="time"/>
+    <map_variables variable_2="V" variable_1="V"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="T_type_calcium_channel_current_h_gate" component_1="T_type_calcium_channel_current"/>
+    <map_variables variable_2="h" variable_1="h"/>
+    <map_variables variable_2="time" variable_1="time"/>
+    <map_variables variable_2="V" variable_1="V"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="voltage_sensitive_potassium_current_n_gate" component_1="voltage_sensitive_potassium_current"/>
+    <map_variables variable_2="n" variable_1="n"/>
+    <map_variables variable_2="time" variable_1="time"/>
+    <map_variables variable_2="V" variable_1="V"/>
+  </connection>
+  
+
+<rdf:RDF>
+  <rdf:Bag rdf:about="rdf:#851a654b-40dc-44cd-af11-4f99996789c7">
+    <rdf:li>pituitary gland</rdf:li>
+    <rdf:li>electrophysiology</rdf:li>
+    <rdf:li>neuron</rdf:li>
+    <rdf:li>corticotroph</rdf:li>
+  </rdf:Bag>
+  <rdf:Seq rdf:about="rdf:#7aac18b0-156d-48de-bd51-0d1ba15b35f3">
+    <rdf:li rdf:resource="rdf:#8b3ffb85-1c30-4f61-aeaa-5b8237080f9b"/>
+    <rdf:li rdf:resource="rdf:#781d46a3-4b95-41bf-a082-c0b4b21369d8"/>
+    <rdf:li rdf:resource="rdf:#32878a4b-26b3-4e1c-ad78-65b7a238f392"/>
+    <rdf:li rdf:resource="rdf:#80bd6fd8-0234-4e99-bc7c-1d277e163bc4"/>
+    <rdf:li rdf:resource="rdf:#4e4ec4a2-f908-4df4-85f7-c48fc35a6b3a"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#32878a4b-26b3-4e1c-ad78-65b7a238f392">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#70e2834c-d87b-413f-b17d-754cee352c35"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#781d46a3-4b95-41bf-a082-c0b4b21369d8">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#3f138053-501c-48fd-88c7-47b29faa637b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:publisher>
+        The University of Auckland, Bioengineering Institute
+      </dc:publisher>
+    <dcterms:created rdf:resource="rdf:#fdd6ae36-019e-4843-90ef-f42886967c7a"/>
+    <dc:creator rdf:resource="rdf:#4bba5b9b-dec0-421d-a3a7-3af7f4dc5e52"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#994f1d4b-1fcd-42b6-bea9-418cf095fe63">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3043131c-a2a9-4649-8866-df8e1fd74655">
+    <bqs:Pubmed_id>9284294</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#501094ee-e09f-44a9-8a15-3341e19da087"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8c5d14a6-5be1-46b6-83da-cbcf750670a4">
+    <vCard:Given>James</vCard:Given>
+    <vCard:Family>Sneyd</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#2bd2df34-27b8-43e8-bcd4-489fcd0c924a">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>The Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#70e2834c-d87b-413f-b17d-754cee352c35">
+    <vCard:Given>Alan</vCard:Given>
+    <vCard:Family>McKinnon</vCard:Family>
+    <vCard:Other>E</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4bba5b9b-dec0-421d-a3a7-3af7f4dc5e52">
+    <vCard:ORG rdf:resource="rdf:#2bd2df34-27b8-43e8-bcd4-489fcd0c924a"/>
+    <vCard:EMAIL rdf:resource="rdf:#64a0af37-7def-4f84-93ba-e1486ce6b876"/>
+    <vCard:N rdf:resource="rdf:#994f1d4b-1fcd-42b6-bea9-418cf095fe63"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#edb26349-b0bf-4a4e-9f0c-c1091f968921">
+    <vCard:Given>Richard</vCard:Given>
+    <vCard:Family>Donald</vCard:Family>
+    <vCard:Other>A</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#64a0af37-7def-4f84-93ba-e1486ce6b876">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f515d115-f984-4697-9790-7f33e72a3f73">
+    <dc:creator rdf:resource="rdf:#bea3489e-9471-403f-9511-36c6cc1042f9"/>
+    <rdf:value>
+          This is the CellML description of LeBeau et al.'s 1997 mathematical model of the generation of action potentials in corticotrophs.
+        </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#731d2db7-997c-41b9-81aa-e0329832f520">
+    <dc:title>Biophysical Journal</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#80bd6fd8-0234-4e99-bc7c-1d277e163bc4">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#edb26349-b0bf-4a4e-9f0c-c1091f968921"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#501094ee-e09f-44a9-8a15-3341e19da087">
+    <dc:creator rdf:resource="rdf:#7aac18b0-156d-48de-bd51-0d1ba15b35f3"/>
+    <dc:title>
+            Generation of Action Potentials in a Mathematical Model of Corticotrophs
+          </dc:title>
+    <bqs:volume>73</bqs:volume>
+    <bqs:first_page>1263</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#731d2db7-997c-41b9-81aa-e0329832f520"/>
+    <dcterms:issued rdf:resource="rdf:#d84da594-ba46-4c8b-b032-3b2f057822e7"/>
+    <bqs:last_page>1275</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#fdd6ae36-019e-4843-90ef-f42886967c7a">
+    <dcterms:W3CDTF>2004-03-20</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d1e54192-281f-4a67-8467-b00438e9efd3">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value rdf:resource="rdf:#851a654b-40dc-44cd-af11-4f99996789c7"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d84da594-ba46-4c8b-b032-3b2f057822e7">
+    <dcterms:W3CDTF>1997-09</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3f138053-501c-48fd-88c7-47b29faa637b">
+    <vCard:Given>A</vCard:Given>
+    <vCard:Family>Robson</vCard:Family>
+    <vCard:Other>Bruce</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="#lebeau_robson_mckinnon_donald_sneyd_1997_version01">
+    <dc:title>
+        LeBeau et al.'s 1997 mathematical model of the generation of action potentials in corticotrophs.
+      </dc:title>
+    <cmeta:bio_entity>corticotroph</cmeta:bio_entity>
+    <cmeta:comment rdf:resource="rdf:#f515d115-f984-4697-9790-7f33e72a3f73"/>
+    <bqs:reference rdf:resource="rdf:#3043131c-a2a9-4649-8866-df8e1fd74655"/>
+    <bqs:reference rdf:resource="rdf:#f4a7bd5a-4d2b-4e36-928c-7fcc9c804c65"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d5bbf67a-ebe9-4a01-9b80-8c9a0b4aada7">
+    <vCard:Given>Andrew</vCard:Given>
+    <vCard:Family>LeBeau</vCard:Family>
+    <vCard:Other>P</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4e4ec4a2-f908-4df4-85f7-c48fc35a6b3a">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#8c5d14a6-5be1-46b6-83da-cbcf750670a4"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8b3ffb85-1c30-4f61-aeaa-5b8237080f9b">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#d5bbf67a-ebe9-4a01-9b80-8c9a0b4aada7"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#bea3489e-9471-403f-9511-36c6cc1042f9">
+    <vCard:FN>Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f4a7bd5a-4d2b-4e36-928c-7fcc9c804c65">
+    <dc:subject rdf:resource="rdf:#d1e54192-281f-4a67-8467-b00438e9efd3"/>
+  </rdf:Description>
+</rdf:RDF>
+</model>

@@ -1,0 +1,1408 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="raposo_2002" name="raposo_2002">
+
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>A minimal mathematical model of calcium homeostasis</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+<section id="sec_status">
+    <title>Model Status</title>
+    <para>
+        This CellML model runs in both OpenCell and COR but unfortunately it does not replicate the published results. The units have been checked and they are consistent. Several parameter values were missing from the model description in the original paper. Where a value for a variable is unknown it has been defined as 1.000 in this CellML model (these added values are distinct from any value which is definitely known to be 1 by including 3 decimal places). 		
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+  <title>Model Structure</title>
+
+<para>
+ABSTRACT: A mathematical model of calcium homeostasis is presented in which the controlling factors are the plasma concentrations of calcium, PTH, and calcitriol, and the effector organs are the parathyroids, bone, kidney, and intestine. Other factors can be added as the need arises. The model is aimed at simulating what happens in a single individual, but its parameters and variables were adjusted to the corresponding published average values. Simulations of published observations in humans undergoing the infusion of calcium or its chelators are presented. With a single exception, these simulations provided a good fit to the data. The response of the system to extrinsic perturbations was characterized by simulating chronic infusions of calcium, PTH, and calcitriol. Finally, the steady state response to perturbations in some of its parameters (the secretory mass of the parathyroids and the affinity and/or sensitivity of the calcium, PTH, and calcitriol receptors) and to renal failure were also investigated in an attempt to analyze the pathogenesis of clinical hypo- or hypercalcemias. In its present form the model cannot be used to base clinical decisions in individual cases. However, it requires modest computational resources, and clinicians with a modest mathematical background can manipulate it. It is a useful tool for the analysis of general mechanisms of the diseases of calcium metabolism and for the design of clinical experiments aimed at characterizing these diseases. The model can also be the core of future autoadaptive extensions to be used in individual patients.
+</para>
+
+<informalfigure float="0" id="fig_reaction_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>model diagram</title>
+    </objectinfo>
+    <imagedata fileref="raposo_2002.png"/>
+  </imageobject>
+</mediaobject>
+<caption>Block diagram of calcium homeostasis. Arrows represent the equations of the model; solid lines are feed forward actions; dashed lines are feedback loops; dotted lines are calcium and phosphate millimole_per_hours; shaded rounded rectangles are pools; open rounded rectangles are target organs; open rectangles are relevant quantities; crossed circle represents an instantaneous difference between phosphate intake and phosphate excretion; starred blocks are pools introduced to produce adjustable delays; triple arrow represents coupling between calcium and phosphate millimole_per_hours in and out of the bone.</caption>
+</informalfigure>
+
+<para>
+The original paper reference is cited below:
+</para>
+
+<para>
+A minimal mathematical model of calcium homeostasis, Raposo JF, Sobrinho LG, Ferreira HG, 2002, <emphasis>The Journal of Clinical Endocrinology and Metabolism</emphasis>, 87, 4330-4340. <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/12213894">PubMed ID: 12213894</ulink>
+</para>
+
+</sect1>
+</article>
+</documentation> 
+
+
+
+
+  <units name="hour">
+    <unit units="second" multiplier="3600.0"/>
+  </units>
+  
+  <units name="millimolar">
+    <unit units="mole" prefix="milli"/>
+    <unit units="litre" exponent="-1"/>
+  </units>
+  
+  <units name="picomolar">
+    <unit units="mole" prefix="pico"/>
+    <unit units="litre" exponent="-1"/>
+  </units>
+  
+  <units name="millimolar_per_picomolar">
+    <unit units="millimolar"/>
+    <unit units="picomolar" exponent="-1"/>
+  </units>
+  
+  <units name="picomolar_per_millimolar">
+    <unit units="picomolar"/>
+    <unit units="millimolar" exponent="-1"/>
+  </units>
+  
+  <units name="millimole">
+    <unit units="mole" prefix="milli"/>
+  </units>
+  
+  <units name="picomole">
+    <unit units="mole" prefix="pico"/>
+  </units>
+  
+  <units name="first_order_rate_constant">
+    <unit units="hour" exponent="-1"/>
+  </units>
+  
+  <units name="second_order_rate_constant">
+    <unit units="hour" exponent="-1"/>
+	<unit units="millimolar" exponent="-1"/>
+  </units>
+  
+  <units name="litre_per_hour">
+    <unit units="litre"/>
+	<unit units="hour" exponent="-1"/>
+  </units>
+  
+  <units name="millimole_per_hour">
+    <unit units="millimole"/>
+	<unit units="hour" exponent="-1"/>
+  </units>
+  
+  <units name="litre_per_picomole">
+    <unit units="litre"/>
+	<unit units="picomole" exponent="-1"/>
+  </units>
+  
+  <units name="litre_per_millimole">
+    <unit units="litre"/>
+	<unit units="millimole" exponent="-1"/>
+  </units>
+  
+  
+  <component name="environment">
+    <variable units="hour" public_interface="out" name="time"/>
+  </component>
+
+  <component cmeta:id="Q_Ca_p" name="Q_Ca_p">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#Q_Ca_p">
+        <dc:title>Q_Ca_p</dc:title>
+        <dcterms:alternative>calcium pool</dcterms:alternative>
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable units="millimole" public_interface="out" name="Q_Ca_p" initial_value="1.000"/>
+    
+    <variable units="millimole_per_hour" public_interface="in" name="J_bp_Ca"/>
+    <variable units="millimole_per_hour" public_interface="in" name="J_pb_Ca"/>
+    <variable units="millimole_per_hour" public_interface="in" name="J_pu_Ca"/>
+    <variable units="millimole_per_hour" public_interface="in" name="J_ip_Ca"/>
+	<variable units="hour" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> Q_Ca_p </ci> 
+        </apply>
+		<apply>
+          <minus/>
+		  <apply>
+            <plus/>
+            <ci> J_bp_Ca </ci>
+			<ci> J_ip_Ca </ci>
+          </apply>
+		  <apply>
+            <plus/>
+            <ci> J_pb_Ca </ci>
+			<ci> J_pu_Ca </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="Q_P_p" name="Q_P_p">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#Q_P_p">
+        <dc:title>Q_P_p</dc:title>
+        <dcterms:alternative>phosphate pool</dcterms:alternative>
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable units="millimole" public_interface="out" name="Q_P_p" initial_value="1.000"/>
+    
+    <variable units="millimole_per_hour" public_interface="in" name="J_bp_P"/>
+    <variable units="millimole_per_hour" public_interface="in" name="J_pb_P"/>
+    <variable units="millimole_per_hour" public_interface="in" name="J_pu_P"/>
+    <variable units="millimole_per_hour" public_interface="in" name="J_ip_P"/>
+	<variable units="millimole_per_hour" public_interface="in" name="J_pc_P"/>
+    <variable units="millimole_per_hour" public_interface="in" name="J_cp_P"/>
+	<variable units="hour" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> Q_P_p </ci> 
+        </apply>
+		<apply>
+          <minus/>
+		  <apply>
+            <plus/>
+            <ci> J_bp_P </ci>
+			<ci> J_ip_P </ci>
+			<ci> J_cp_P </ci>
+          </apply>
+		  <apply>
+            <plus/>
+            <ci> J_pb_P </ci>
+			<ci> J_pu_P </ci>
+			<ci> J_pc_P </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="Q_P_c" name="Q_P_c">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#Q_P_c">
+        <dc:title>Q_P_c</dc:title>
+        <dcterms:alternative>intracellular phosphate</dcterms:alternative>
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable units="millimole" public_interface="out" name="Q_P_c" initial_value="3226.0"/>
+    
+    <variable units="millimole_per_hour" public_interface="in" name="J_pc_P"/>
+    <variable units="millimole_per_hour" public_interface="in" name="J_cp_P"/>
+    <variable units="hour" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> Q_P_c </ci> 
+        </apply>
+		<apply>
+          <minus/>
+		  <ci> J_pc_P </ci>
+		  <ci> J_cp_P </ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="Q_PTH_p" name="Q_PTH_p">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#Q_PTH_p">
+        <dc:title>Q_PTH_p</dc:title>
+        <dcterms:alternative>PTH pool</dcterms:alternative>
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable units="millimole" public_interface="out" name="Q_PTH_p" initial_value="1.000"/>
+    
+    <variable units="millimole_per_hour" public_interface="in" name="S_PTH"/>
+	<variable units="millimolar" public_interface="in" name="C_PTH_p"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="k_PTH"/>
+    <variable units="hour" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> Q_PTH_p </ci> 
+        </apply>
+		<apply>
+          <minus/>
+		  <ci> S_PTH </ci>
+		  <apply>
+            <times/>
+		    <ci> k_PTH </ci>
+			<cn cellml:units="litre"> 1.0 </cn>
+			<ci> C_PTH_p </ci>
+		  </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="Q_Ca_b" name="Q_Ca_b">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#Q_Ca_b">
+        <dc:title>Q_Ca_b</dc:title>
+        <dcterms:alternative>exchangeable pool of calcium in the bone</dcterms:alternative>
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable units="millimole" public_interface="out" name="Q_Ca_b" initial_value="100.0"/>
+    
+    <variable units="millimole_per_hour" public_interface="in" name="J_bp_Ca"/>
+    <variable units="millimole_per_hour" public_interface="in" name="J_pb_Ca"/>
+    <variable units="hour" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> Q_Ca_b </ci> 
+        </apply>
+		<apply>
+          <minus/>
+		  <ci> J_pb_Ca </ci>
+		  <ci> J_bp_Ca </ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="Q_P_b" name="Q_P_b">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#Q_P_b">
+        <dc:title>Q_P_b</dc:title>
+        <dcterms:alternative>exchangeable pool of phosphate in the bone</dcterms:alternative>
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable units="millimole" public_interface="out" name="Q_P_b" initial_value="1.000"/>
+    
+    <variable units="millimole_per_hour" public_interface="in" name="J_bp_P"/>
+    <variable units="millimole_per_hour" public_interface="in" name="J_pb_P"/>
+    <variable units="hour" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> Q_P_b </ci> 
+        </apply>
+		<apply>
+          <minus/>
+		  <ci> J_pb_P </ci>
+		  <ci> J_bp_P </ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="Q_E_k" name="Q_E_k">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#Q_E_k">
+        <dc:title>Q_E_k</dc:title>
+        <dcterms:alternative>1-alpha-hydroxylase in the kidney</dcterms:alternative>
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable units="millimole" public_interface="out" name="Q_E_k" initial_value="1.000"/>
+    
+    <variable units="millimole_per_hour" public_interface="in" name="S_E"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_E"/>
+    <variable units="hour" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> Q_E_k </ci> 
+        </apply>
+		<apply>
+          <minus/>
+		  <ci> S_E </ci>
+		  <apply>
+            <times/>
+		    <ci> k_E </ci>
+			<ci> Q_E_k </ci>
+		  </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="Q_D_p" name="Q_D_p">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#Q_D_p">
+        <dc:title>Q_D_p</dc:title>
+        <dcterms:alternative>calcitriol in the extracellular fluid compartment</dcterms:alternative>
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable units="millimole" public_interface="out" name="Q_D_p" initial_value="1.000"/>
+    
+    <variable units="first_order_rate_constant" public_interface="in" name="k_D"/>
+	<variable units="millimole" public_interface="in" name="Q_E_k"/>
+    <variable units="hour" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> Q_D_p </ci> 
+        </apply>
+		<apply>
+          <minus/>
+		  <apply>
+            <times/>
+			<cn cellml:units="first_order_rate_constant"> 1.0 </cn>
+			<ci> Q_E_k </ci>
+		  </apply>
+		  <apply>
+            <times/>
+		    <ci> k_D </ci>
+			<ci> Q_D_p </ci>
+		  </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="Q_TCa_i" name="Q_TCa_i">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#Q_TCa_i">
+        <dc:title>Q_TCa_i</dc:title>
+        <dcterms:alternative>calcitriol-dependent intestinal calcium transport pool</dcterms:alternative>
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable units="millimole" public_interface="out" name="Q_TCa_i" initial_value="1.000"/>
+    
+    <variable units="first_order_rate_constant" public_interface="in" name="k1_D"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k2_D"/>
+    <variable units="hour" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> Q_TCa_i </ci> 
+        </apply>
+		<apply>
+          <minus/>
+		  <apply>
+            <times/>
+		    <apply>
+              <minus/>
+			  <cn cellml:units="millimole"> 1.0 </cn>
+			  <ci> Q_TCa_i </ci>
+		    </apply>
+			<ci> k1_D </ci>
+		  </apply>
+		  <apply>
+            <times/>
+			<ci> Q_TCa_i </ci>
+			<ci> k2_D </ci>
+		  </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="Q_C_PT" name="Q_C_PT">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#Q_C_PT">
+        <dc:title>Q_C_PT</dc:title>
+        <dcterms:alternative>secretory mass of the parathyroid gland</dcterms:alternative>
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable units="millimole" public_interface="out" name="Q_C_PT" initial_value="1.000"/>
+    
+    <variable units="first_order_rate_constant" public_interface="in" name="k3_D"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k4_D"/>
+    <variable units="hour" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> Q_C_PT </ci> 
+        </apply>
+		<apply>
+          <minus/>
+		  <apply>
+            <times/>
+		    <apply>
+              <minus/>
+			  <cn cellml:units="millimole"> 1.0 </cn>
+			  <ci> Q_C_PT </ci>
+		    </apply>
+			<ci> k3_D </ci>
+		  </apply>
+		  <apply>
+            <times/>
+			<ci> Q_C_PT </ci>
+			<ci> k4_D </ci>
+		  </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="Q_TP_k" name="Q_TP_k">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about="#Q_TP_k">
+        <dc:title>Q_TP_k</dc:title>
+        <dcterms:alternative>external balance-dependent phosphate kidney transport pool</dcterms:alternative>
+      </rdf:Description>
+    </rdf:RDF>  
+    <variable units="millimole" public_interface="out" name="Q_TP_k" initial_value="1.000"/>
+    
+    <variable units="first_order_rate_constant" public_interface="in" name="k1_P"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k2_P"/>
+    <variable units="hour" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> Q_TP_k </ci> 
+        </apply>
+		<apply>
+          <minus/>
+		  <apply>
+            <times/>
+		    <apply>
+              <minus/>
+			  <cn cellml:units="millimole"> 1.0 </cn>
+			  <ci> Q_TP_k </ci>
+		    </apply>
+			<ci> k1_P </ci>
+		  </apply>
+		  <apply>
+            <times/>
+			<ci> Q_TP_k </ci>
+			<ci> k2_P </ci>
+		  </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="model_fluxes"> 
+    <variable units="millimole_per_hour" public_interface="out" initial_value="3.3" name="J_bp_Ca"/>
+	<variable units="millimole_per_hour" public_interface="out" name="J_pb_Ca"/>
+	<variable units="millimole_per_hour" public_interface="out" name="J_bp_P"/>
+	<variable units="millimole_per_hour" public_interface="out" name="J_pb_P"/>
+	<variable units="millimole_per_hour" public_interface="out" initial_value="0.21" name="J_pu_Ca"/>
+	<variable units="millimole_per_hour" public_interface="out" initial_value="1.27" name="J_pu_P"/>
+	<variable units="millimole_per_hour" public_interface="out" name="J_ip_Ca"/>
+	<variable units="millimole_per_hour" public_interface="out" name="J_ip_P"/>
+	<variable units="millimole_per_hour" public_interface="out" name="J_pc_P"/>
+	<variable units="millimole_per_hour" public_interface="out" name="J_cp_P"/>
+	<variable units="millimole_per_hour" public_interface="out" name="S_PTH"/>
+	
+	<variable units="millimole_per_hour" name="J_P_ing" initial_value="1.000"/>
+	<variable units="dimensionless" name="Stoic_Ca_P" initial_value="0.464"/>
+	<variable units="first_order_rate_constant" name="k_Ca_i"  initial_value="1.000"/>
+	
+	<variable units="millimole" public_interface="in" name="Q_Ca_b"/>
+	<variable units="millimole" public_interface="in" name="Q_Ca_p"/>
+	<variable units="millimole" public_interface="in" name="Q_TCa_i"/>
+	<variable units="millimole" public_interface="in" name="Q_C_PT"/>
+	<variable units="millimole" public_interface="in" name="Q_P_c"/>
+	<variable units="millimolar" public_interface="in" name="C_Ca_i"/>
+	<variable units="millimolar" public_interface="in" name="C_Ca_p"/>
+	<variable units="millimolar" public_interface="in" name="C_P_p"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_Ca_b"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k1_D"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k2_D"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k3_D"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k4_D"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k3_P"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k4_P"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="Y_Ca_i_2plus"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="Y_Ca_p_1minus"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci> J_pb_Ca </ci> 
+        <apply>
+          <times/>
+		  <ci> k_Ca_b </ci>
+		  <ci> Q_Ca_b </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci> J_bp_P </ci> 
+        <apply>
+          <times/>
+		  <ci> Stoic_Ca_P </ci>
+		  <ci> J_bp_Ca </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci> J_pb_P </ci> 
+        <apply>
+          <times/>
+		  <ci> Stoic_Ca_P </ci>
+		  <ci> J_pb_Ca </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci> J_ip_Ca </ci> 
+        <apply>
+          <minus/>
+		  <apply>
+            <plus/>
+		    <apply>
+              <times/>
+			  <ci> Y_Ca_i_2plus </ci>
+		      <apply>
+                <minus/>
+			    <cn cellml:units="millimole"> 1.0 </cn>
+			    <ci> Q_TCa_i </ci>
+		      </apply>
+			  <cn cellml:units="hour"> 1.0 </cn>
+			  <ci> k1_D </ci>
+		    </apply>
+		    <apply>
+              <times/>
+			  <ci> k_Ca_i </ci>
+			  <cn cellml:units="litre"> 1.0 </cn>
+			  <apply>
+                <minus/>
+				<ci> C_Ca_i </ci>
+				<ci> C_Ca_p </ci>
+		      </apply>
+		    </apply>
+          </apply>
+		  <apply>
+            <times/>
+			<ci> Q_TCa_i </ci>
+			<ci> k2_D </ci>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci> J_ip_P </ci> 
+        <ci> J_P_ing </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci> S_PTH </ci> 
+        <apply>
+          <times/>
+		  <cn cellml:units="hour"> 1.0 </cn>
+		  <ci> Y_Ca_p_1minus </ci>
+		  <apply>
+            <minus/>
+		    <apply>
+              <times/>
+			  <ci> k3_D </ci>
+			  <apply>
+                <minus/>
+			    <cn cellml:units="millimole"> 1.0 </cn>
+			    <ci> Q_C_PT </ci>
+		      </apply>
+			</apply>
+		    <apply>
+              <times/>
+			  <ci> k4_D </ci>
+			  <ci> Q_C_PT </ci>
+		    </apply>
+          </apply>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci> J_pc_P </ci> 
+        <apply>
+          <times/>
+		  <ci> k4_P </ci>
+		  <cn cellml:units="litre"> 1.0 </cn>
+		  <ci> C_P_p </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci> J_cp_P </ci> 
+        <apply>
+          <times/>
+		  <ci> k3_P </ci>
+		  <ci> Q_P_c </ci>
+		</apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="model_parameters"> 
+    <variable units="first_order_rate_constant" public_interface="out" name="k1_D"/>
+	<variable units="first_order_rate_constant" public_interface="out" name="k2_D"/>
+	<variable units="first_order_rate_constant" public_interface="out" name="k3_D"/>
+	<variable units="first_order_rate_constant" public_interface="out" name="k4_D"/>
+	<variable units="first_order_rate_constant" public_interface="out" name="k1_P"/>
+	<variable units="first_order_rate_constant" public_interface="out" initial_value="1.000" name="k2_P"/>
+	<variable units="first_order_rate_constant" public_interface="out" initial_value="1.000" name="k3_P"/>
+	<variable units="first_order_rate_constant" public_interface="out" initial_value="51.8" name="k4_P"/>
+	<variable units="first_order_rate_constant" public_interface="out" initial_value="100.0" name="k_PTH"/>
+	<variable units="first_order_rate_constant" public_interface="out" initial_value="0.05" name="k_E"/>
+	<variable units="first_order_rate_constant" public_interface="out" initial_value="0.1" name="k_D"/>
+	<variable units="first_order_rate_constant" public_interface="out" initial_value="1.000" name="k_Ca_b"/>
+	<variable units="millimolar" public_interface="out" initial_value="2.4" name="C_Ca_p"/>
+	<variable units="millimolar" public_interface="out" initial_value="1.000" name="C_Ca_i"/>
+	<variable units="millimolar" public_interface="out" initial_value="1.2" name="C_P_p"/>
+	<variable units="millimolar" public_interface="out" initial_value="3.85" name="C_PTH_p"/>
+	<variable units="picomolar" public_interface="out" initial_value="90.0" name="C_D_p"/>
+	<variable units="first_order_rate_constant" public_interface="out" name="Y_Ca_i_2plus"/>
+	<variable units="first_order_rate_constant" public_interface="out" name="Y_Ca_p_1minus"/>
+	<variable units="millimole_per_hour" public_interface="out" initial_value="1.000" name="S_E"/>
+	
+	<variable units="first_order_rate_constant" name="Ca_thr"/>
+	<variable units="second_order_rate_constant" name="Ca_T"/>
+	<variable units="millimole_per_hour" name="P_thr"/>
+	<variable units="litre_per_hour" name="P_T"/>
+	<variable units="first_order_rate_constant" name="Y_i_D_p_1plus"/>
+	<variable units="first_order_rate_constant" name="Y_PT_D_p_1plus"/>
+	<variable units="first_order_rate_constant" name="Y_k_Jext_1plus"/>
+	<variable units="first_order_rate_constant" name="Y_PTH_p_2plus"/>
+	<variable units="first_order_rate_constant" name="Y_PTH_p_2minus"/>
+	<variable units="first_order_rate_constant" name="Y_i_D_p_1minus"/>
+	<variable units="first_order_rate_constant" name="Y_PT_D_p_1minus"/>
+	<variable units="first_order_rate_constant" initial_value="1.000" name="Y_Ca_i_2plus_Max"/>
+	<variable units="first_order_rate_constant" initial_value="1.000" name="Y_PTH_p_2plus_Max"/>
+	<variable units="first_order_rate_constant" initial_value="1.000" name="Y_PTH_p_2minus_Max"/>
+	<variable units="first_order_rate_constant" initial_value="0.02" name="Y_Ca_p_1plus_minus_Max"/>
+	<variable units="first_order_rate_constant" initial_value="0.02" name="Y_i_D_p_1plus_minus_Max"/>
+	<variable units="first_order_rate_constant" initial_value="0.01" name="Y_PT_D_p_1plus_minus_Max"/>
+	<variable units="first_order_rate_constant" initial_value="0.01" name="Y_k_Jext_1plus_minus_Max"/>
+	<variable units="millimolar" initial_value="1.0" name="X_R_PTH_Ca"/>
+	<variable units="millimolar" initial_value="1.0" name="X_R_i_Ca"/>
+	<variable units="picomolar" initial_value="90.0" name="X_R_PTH_D"/>
+	<variable units="picomolar" initial_value="3.85" name="X_R_E_PTH"/>
+	<variable units="picomolar" initial_value="90.0" name="X_R_i_D"/>
+	<variable units="picomolar" initial_value="90.0" name="X_R_P_k_PTH"/>
+	<variable units="litre_per_millimole" initial_value="0.05" name="b_PTH_Ca"/>
+	<variable units="litre_per_picomole" initial_value="0.03" name="b_PTH_D"/>
+	<variable units="litre_per_picomole" initial_value="0.55" name="b_E_PTH"/>
+	<variable units="litre_per_picomole" initial_value="0.03" name="b_i_D"/>
+	<variable units="dimensionless" initial_value="0.85" name="a"/>
+	<variable units="dimensionless" initial_value="0.15" name="d"/>
+	
+	<variable units="millimole" public_interface="in" name="Q_TP_k"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci> Ca_thr </ci> 
+        <apply>
+          <plus/>
+		  <cn cellml:units="first_order_rate_constant"> 1.95 </cn>
+		  <ci> Y_PTH_p_2plus </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci> Ca_T </ci> 
+        <apply>
+          <divide/>
+		  <ci> Ca_thr </ci> 
+		  <ci> C_Ca_p </ci> 
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci> P_thr </ci> 
+        <apply>
+          <times/>
+		  <ci> Y_PTH_p_2minus </ci>
+		  <ci> Q_TP_k </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci> P_T </ci> 
+        <apply>
+          <divide/>
+		  <ci> P_thr </ci> 
+		  <ci> C_P_p </ci> 
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci> k1_D </ci> 
+        <ci> Y_i_D_p_1plus </ci> 
+	  </apply>
+	</math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci> k2_D </ci> 
+        <ci> Y_i_D_p_1minus </ci> 
+	  </apply>
+	</math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci> k3_D </ci> 
+        <ci> Y_PT_D_p_1plus </ci> 
+	  </apply>
+	</math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci> k4_D </ci> 
+        <ci> Y_PT_D_p_1minus </ci> 
+	  </apply>
+	</math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci> k1_P </ci> 
+        <ci> Y_k_Jext_1plus </ci> 
+	  </apply>
+	</math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci> Y_i_D_p_1plus </ci> 
+        <apply>
+          <times/>
+		  <ci> Y_i_D_p_1plus_minus_Max </ci>
+		  <apply>
+            <plus/>
+		    <apply>
+              <times/>
+			  <ci> a </ci>
+			  <apply>
+                <plus/>
+			    <cn cellml:units="dimensionless"> 1.0 </cn>
+			    <apply>
+                  <tanh/>
+                  <apply>
+                    <times/>
+			        <ci> b_i_D </ci>
+					<apply>
+                      <minus/>
+					  <ci> C_D_p </ci>
+					  <ci> X_R_i_D </ci>
+                    </apply>
+		          </apply>
+			    </apply>
+			  </apply>
+			</apply>
+			<ci> d </ci>
+          </apply>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci> Y_PT_D_p_1plus </ci> 
+        <apply>
+          <times/>
+		  <ci> Y_PT_D_p_1plus_minus_Max </ci>
+		  <apply>
+            <plus/>
+		    <apply>
+              <times/>
+			  <ci> a </ci>
+			  <apply>
+                <plus/>
+			    <cn cellml:units="dimensionless"> 1.0 </cn>
+			    <apply>
+                  <tanh/>
+                  <apply>
+                    <times/>
+			        <ci> b_PTH_D </ci>
+					<apply>
+                      <minus/>
+					  <ci> C_D_p </ci>
+					  <ci> X_R_PTH_D </ci>
+                    </apply>
+		          </apply>
+			    </apply>
+			  </apply>
+			</apply>
+			<ci> d </ci>
+          </apply>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci> Y_k_Jext_1plus </ci> 
+        <apply>
+          <times/>
+		  <ci> Y_k_Jext_1plus_minus_Max </ci>
+		  <apply>
+            <plus/>
+		    <apply>
+              <times/>
+			  <ci> a </ci>
+			  <apply>
+                <plus/>
+			    <cn cellml:units="dimensionless"> 1.0 </cn>
+			    <apply>
+                  <tanh/>
+                  <apply>
+                    <times/>
+			        <ci> b_E_PTH </ci>
+					<apply>
+                      <minus/>
+					  <apply>
+                        <times/>
+						<cn cellml:units="picomolar_per_millimolar"> 1.0 </cn>
+						<ci> C_P_p </ci>
+					  </apply>
+					  <ci> X_R_E_PTH </ci>
+                    </apply>
+		          </apply>
+			    </apply>
+			  </apply>
+			</apply>
+			<ci> d </ci>
+          </apply>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci> Y_Ca_p_1minus </ci> 
+        <apply>
+          <times/>
+		  <ci> Y_Ca_p_1plus_minus_Max </ci>
+		  <apply>
+            <plus/>
+		    <apply>
+              <times/>
+			  <ci> a </ci>
+			  <apply>
+                <minus/>
+			    <cn cellml:units="dimensionless"> 1.0 </cn>
+			    <apply>
+                  <tanh/>
+                  <apply>
+                    <times/>
+			        <ci> b_PTH_Ca </ci>
+					<apply>
+                      <minus/>
+					  <ci> C_Ca_p </ci>
+					  <ci> X_R_PTH_Ca </ci>
+                    </apply>
+		          </apply>
+			    </apply>
+			  </apply>
+			</apply>
+			<ci> d </ci>
+          </apply>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci> Y_i_D_p_1minus </ci> 
+        <apply>
+          <times/>
+		  <ci> Y_i_D_p_1plus_minus_Max </ci>
+		  <apply>
+            <plus/>
+		    <apply>
+              <times/>
+			  <ci> a </ci>
+			  <apply>
+                <minus/>
+			    <cn cellml:units="dimensionless"> 1.0 </cn>
+			    <apply>
+                  <tanh/>
+                  <apply>
+                    <times/>
+			        <ci> b_i_D </ci>
+					<apply>
+                      <minus/>
+					  <ci> C_D_p </ci>
+					  <ci> X_R_i_D </ci>
+                    </apply>
+		          </apply>
+			    </apply>
+			  </apply>
+			</apply>
+			<ci> d </ci>
+          </apply>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci> Y_PT_D_p_1minus </ci> 
+        <apply>
+          <times/>
+		  <ci> Y_PT_D_p_1plus_minus_Max </ci>
+		  <apply>
+            <plus/>
+		    <apply>
+              <times/>
+			  <ci> a </ci>
+			  <apply>
+                <minus/>
+			    <cn cellml:units="dimensionless"> 1.0 </cn>
+			    <apply>
+                  <tanh/>
+                  <apply>
+                    <times/>
+			        <ci> b_PTH_D </ci>
+					<apply>
+                      <minus/>
+					  <ci> C_D_p </ci>
+					  <ci> X_R_PTH_D </ci>
+                    </apply>
+		          </apply>
+			    </apply>
+			  </apply>
+			</apply>
+			<ci> d </ci>
+          </apply>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci> Y_Ca_i_2plus </ci> 
+        <apply>
+          <times/>
+		  <ci> Y_Ca_i_2plus_Max </ci>
+		  <apply>
+            <divide/>
+		    <ci> C_Ca_i </ci>
+			<apply>
+              <plus/>
+			  <ci> C_Ca_i </ci>
+			  <ci> X_R_i_Ca </ci>
+            </apply>
+          </apply>			 
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci> Y_PTH_p_2plus </ci> 
+        <apply>
+          <times/>
+		  <ci> Y_PTH_p_2plus_Max </ci>
+		  <apply>
+            <divide/>
+		    <ci> C_PTH_p </ci>
+			<apply>
+              <plus/>
+			  <ci> C_PTH_p </ci>
+			  <apply>
+                <times/>
+				<cn cellml:units="millimolar_per_picomolar"> 1.0 </cn>
+				<ci> X_R_P_k_PTH </ci>
+			  </apply>
+            </apply>
+          </apply>			 
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <ci> Y_PTH_p_2minus </ci> 
+        <apply>
+          <times/>
+		  <ci> Y_PTH_p_2minus_Max </ci>
+		  <apply>
+            <divide/>
+		    <ci> X_R_P_k_PTH </ci>
+			<apply>
+              <plus/>
+			  <apply>
+                <times/>
+				<cn cellml:units="picomolar_per_millimolar"> 1.0 </cn>
+				<ci> C_PTH_p </ci>
+			  </apply>
+			  <ci> X_R_P_k_PTH </ci>
+            </apply>
+          </apply>			 
+		</apply>
+      </apply>
+    </math>
+  </component>
+
+  
+  <connection>
+    <map_components component_2="environment" component_1="Q_Ca_p"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Q_P_p"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Q_P_c"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Q_PTH_p"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Q_Ca_b"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Q_P_b"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Q_E_k"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Q_D_p"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Q_TCa_i"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Q_C_PT"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Q_TP_k"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Ca_p" component_1="model_fluxes"/>
+    <map_variables variable_2="J_bp_Ca" variable_1="J_bp_Ca"/>
+	<map_variables variable_2="J_pb_Ca" variable_1="J_pb_Ca"/>
+	<map_variables variable_2="J_pu_Ca" variable_1="J_pu_Ca"/>
+	<map_variables variable_2="J_ip_Ca" variable_1="J_ip_Ca"/>
+	<map_variables variable_2="Q_Ca_p" variable_1="Q_Ca_p"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_P_p" component_1="model_fluxes"/>
+    <map_variables variable_2="J_bp_P" variable_1="J_bp_P"/>
+	<map_variables variable_2="J_pb_P" variable_1="J_pb_P"/>
+	<map_variables variable_2="J_pu_P" variable_1="J_pu_P"/>
+	<map_variables variable_2="J_ip_P" variable_1="J_ip_P"/>
+	<map_variables variable_2="J_pc_P" variable_1="J_pc_P"/>
+	<map_variables variable_2="J_cp_P" variable_1="J_cp_P"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_P_c" component_1="model_fluxes"/>
+    <map_variables variable_2="J_pc_P" variable_1="J_pc_P"/>
+	<map_variables variable_2="J_cp_P" variable_1="J_cp_P"/>
+	<map_variables variable_2="Q_P_c" variable_1="Q_P_c"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_PTH_p" component_1="model_fluxes"/>
+    <map_variables variable_2="S_PTH" variable_1="S_PTH"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_PTH_p" component_1="model_parameters"/>
+    <map_variables variable_2="k_PTH" variable_1="k_PTH"/>
+	<map_variables variable_2="C_PTH_p" variable_1="C_PTH_p"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Ca_b" component_1="model_fluxes"/>
+    <map_variables variable_2="J_bp_Ca" variable_1="J_bp_Ca"/>
+	<map_variables variable_2="J_pb_Ca" variable_1="J_pb_Ca"/>
+	<map_variables variable_2="Q_Ca_b" variable_1="Q_Ca_b"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_P_b" component_1="model_fluxes"/>
+    <map_variables variable_2="J_bp_P" variable_1="J_bp_P"/>
+	<map_variables variable_2="J_pb_P" variable_1="J_pb_P"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_E_k" component_1="model_parameters"/>
+    <map_variables variable_2="k_E" variable_1="k_E"/>
+	<map_variables variable_2="S_E" variable_1="S_E"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_D_p" component_1="model_parameters"/>
+    <map_variables variable_2="k_D" variable_1="k_D"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="Q_D_p" component_1="Q_E_k"/>
+    <map_variables variable_2="Q_E_k" variable_1="Q_E_k"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_TCa_i" component_1="model_parameters"/>
+    <map_variables variable_2="k1_D" variable_1="k1_D"/>
+	<map_variables variable_2="k2_D" variable_1="k2_D"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_TCa_i" component_1="model_fluxes"/>
+    <map_variables variable_2="Q_TCa_i" variable_1="Q_TCa_i"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_C_PT" component_1="model_fluxes"/>
+    <map_variables variable_2="Q_C_PT" variable_1="Q_C_PT"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_C_PT" component_1="model_parameters"/>
+    <map_variables variable_2="k3_D" variable_1="k3_D"/>
+	<map_variables variable_2="k4_D" variable_1="k4_D"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_TP_k" component_1="model_parameters"/>
+    <map_variables variable_2="k1_P" variable_1="k1_P"/>
+	<map_variables variable_2="k2_P" variable_1="k2_P"/>
+	<map_variables variable_2="Q_TP_k" variable_1="Q_TP_k"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_fluxes" component_1="model_parameters"/>
+    <map_variables variable_2="C_Ca_i" variable_1="C_Ca_i"/>
+    <map_variables variable_2="C_Ca_p" variable_1="C_Ca_p"/>
+    <map_variables variable_2="C_P_p" variable_1="C_P_p"/>
+	<map_variables variable_2="Y_Ca_i_2plus" variable_1="Y_Ca_i_2plus"/>
+	<map_variables variable_2="Y_Ca_p_1minus" variable_1="Y_Ca_p_1minus"/>
+    <map_variables variable_2="k_Ca_b" variable_1="k_Ca_b"/>
+	<map_variables variable_2="k1_D" variable_1="k1_D"/>
+	<map_variables variable_2="k2_D" variable_1="k2_D"/>
+	<map_variables variable_2="k3_D" variable_1="k3_D"/>
+	<map_variables variable_2="k4_D" variable_1="k4_D"/>
+	<map_variables variable_2="k3_P" variable_1="k3_P"/>
+	<map_variables variable_2="k4_P" variable_1="k4_P"/>
+  </connection>
+  
+  
+  
+  <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
+    
+	<rdf:Description rdf:about="">
+      <dc:creator rdf:parseType="Resource">
+        <vCard:N rdf:parseType="Resource">
+          <vCard:Family>Lloyd</vCard:Family>
+          <vCard:Given>Catherine</vCard:Given>
+		  <vCard:Other>May</vCard:Other>
+        </vCard:N>
+        <vCard:EMAIL rdf:parseType="Resource">
+          <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+          <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+        </vCard:EMAIL>
+        <vCard:ORG rdf:parseType="Resource">
+          <vCard:Orgname>The University of Auckland</vCard:Orgname>
+          <vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+        </vCard:ORG>
+      </dc:creator>
+    </rdf:Description>
+    
+    <rdf:Description rdf:about="#raposo_2002">
+      
+	  <bqs:reference rdf:parseType="Resource">
+        <dc:subject rdf:parseType="Resource">
+          <bqs:subject_type>keyword</bqs:subject_type>
+          <rdf:value>
+            <rdf:Bag>
+              <rdf:li>calcium dynamics</rdf:li>
+			  <rdf:li>phosphate</rdf:li>
+			  <rdf:li>bone</rdf:li>
+			  <rdf:li>parathyroid hormone</rdf:li>
+			  <rdf:li>endocrine</rdf:li>
+            </rdf:Bag>
+          </rdf:value>
+        </dc:subject>
+      </bqs:reference>
+
+      <bqs:reference rdf:parseType="Resource">
+        <bqs:Pubmed_id>12213894</bqs:Pubmed_id>
+        <bqs:JournalArticle rdf:parseType="Resource">
+          <dc:creator>
+            <rdf:Seq>
+              <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Raposo</vCard:Family>
+                    <vCard:Given>J</vCard:Given>
+					<vCard:Other>F</vCard:Other>
+                  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+			  <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Sobrinho</vCard:Family>
+                    <vCard:Given>L</vCard:Given>
+					<vCard:Other>G</vCard:Other>
+                  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+			  <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Ferreira</vCard:Family>
+                    <vCard:Given>H</vCard:Given>
+					<vCard:Other>G</vCard:Other>
+                  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+            </rdf:Seq>
+          </dc:creator>
+          <dc:title>
+            A minimal mathematical model of calcium homeostasis
+          </dc:title>
+          <dcterms:issued rdf:parseType="Resource">
+            <dcterms:W3CDTF>2002-09</dcterms:W3CDTF>
+          </dcterms:issued>
+          <bqs:Journal rdf:parseType="Resource">
+            <dc:title>The Journal of Clinical Endocrinology and Metabolism</dc:title>
+          </bqs:Journal>
+		  <bqs:volume>87</bqs:volume>
+          <bqs:first_page>4330</bqs:first_page>
+          <bqs:last_page>4340</bqs:last_page>
+        </bqs:JournalArticle>
+      </bqs:reference>
+    </rdf:Description>
+  </rdf:RDF>
+</model>

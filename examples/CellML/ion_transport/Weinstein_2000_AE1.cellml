@@ -1,0 +1,782 @@
+<?xml version="1.0" encoding="utf-8"?>
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="weinstein_2000_AE1" name="weinstein_2000_AE1">
+
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>A mathematical model of the outer medullary collecting duct of the rat</title>
+				<author>
+					<firstname>Jonna</firstname>
+					<surname>Terkildsen</surname>
+					<affiliation>
+						<shortaffil>Auckland Bioengineering Institute, University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<sect1 id="sec_status">
+				<title>Model Status</title>
+				<para>
+This CellML model represents the renal AE1 (Cl/HCO3) exchanger. It has been curated, the units are consistent and the model runs in COR and PCEnv to replicate the published results.
+</para>
+        </sect1>
+        <sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>
+Abstract: A mathematical model of the outer medullary collecting duct (OMCD) has been developed, consisting of a-intercalated cells and a paracellular pathway, and which includes Na, K, Cl, HCO3, CO2, H2CO3, phosphate, ammonia, and urea. Proton secretion across the luminal cell membrane is mediated by both H-ATPase and H-K-ATPase, with fluxes through the H-K-ATPase given by a previously developed kinetic model (Weinstein AM. Am J Physiol Renal Physiol 274: F856-F867, 1998). The flux across each ATPase is substantial, and variation in abundance of either pump can be used to control OMCD proton secretion. In comparison with the H-ATPase, flux through the H-K-ATPase is relatively insensitive to changes in lumen pH, so as luminal acidification proceeds, proton secretion shifts toward this pathway. Peritubular HCO3 exit is via a conductive pathway and via the Cl/HCO3 exchanger, AE1. To represent AE1, a kinetic model has been developed based on transport studies obtained at 38 degrees celcius in red blood cells. (Gasbjerg PK, Knauf PA, and Brahm J. J Gen Physiol 108: 565-575, 1996; Knauf PA, Gasbjerg PK, and Brahm J. J Gen Physiol 108: 577-589, 1996). Model calculations indicate that if all of the chloride entry via AE1 recycles across a peritubular chloride channel and if this channel is anything other than highly selective for chloride, then it should conduct a substantial fraction of the bicarbonate exit. Since both luminal membrane proton pumps are sensitive to small changes in cytosolic pH, variation in density of either AE1 or peritubular anion conductance can modulate OMCD proton secretory rate. With respect to the OMCD in situ, available buffer is predicted to be abundant, including delivered HCO3 and HPO4, as well as peritubular NH3. Thus, buffer availability is unlikely to exert a regulatory role in total proton secretion by this tubule segment.
+				</para>
+				
+				<para>
+The original paper reference is cited below:
+				</para>
+				
+				<para>
+					A mathematical model of the outer medullary collecting duct of the rat, A.M. Weinstein, 2000,  
+						<emphasis>American Journal of Physiology (Renal Physiology)</emphasis>, 279, F24-F45.  <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/10894785">PubMed ID: 10894785</ulink>
+				</para>
+				
+				<informalfigure float="0" id="fig_reaction_diagram">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>model diagram</title>
+							</objectinfo>
+							<imagedata fileref="weinstein_2000.png"/>
+						</imageobject>
+					</mediaobject>
+					<caption>Schematic diagram of the Weinstein 2000 AE1 transporter model (Cl/HCO3 exchanger).</caption>
+				</informalfigure>
+			</sect1>
+		</article>
+	</documentation>
+
+
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="mmol">
+      <unit units="mole" prefix="milli"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="mM">
+      <unit units="mole" prefix="milli"/>
+      <unit units="litre" exponent="-1"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="umol">
+      <unit units="mole" prefix="micro"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="cm2">
+      <unit units="metre" prefix="centi" exponent="2"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="mM_per_s">
+      <unit units="mM"/>
+      <unit units="second" exponent="-1"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="cm_per_s">
+      <unit units="metre" prefix="centi"/>
+      <unit units="second" exponent="-1"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="per_s">
+      <unit units="second" exponent="-1"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="umol_per_s_per_cm2">
+      <unit units="umol"/>
+      <unit units="second" exponent="-1"/>
+      <unit units="cm2" exponent="-1"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="mmol_per_s_per_cm2">
+      <unit units="mole" prefix="milli"/>
+      <unit units="second" exponent="-1"/>
+      <unit units="cm2" exponent="-1"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="nmol_per_s_per_cm2">
+      <unit units="mole" prefix="nano"/>
+      <unit units="second" exponent="-1"/>
+      <unit units="cm2" exponent="-1"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="mmol_per_cm2">
+      <unit units="mole" prefix="milli"/>
+      <unit units="cm2" exponent="-1"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="nmol_per_cm2">
+      <unit units="mole" prefix="nano"/>
+      <unit units="cm2" exponent="-1"/>
+   </units>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="environment">
+      <variable name="time" units="second" public_interface="out"/>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="Concentrations">
+      <variable name="time" units="second" public_interface="in"/>
+      <variable name="HCO3_i" units="mM" initial_value="0" public_interface="out"/>
+      <variable name="HCO3_e" units="mM" initial_value="26" public_interface="out"/>
+      <variable name="Cl_i" units="mM" initial_value="29" public_interface="out"/>
+      <variable name="Cl_e" units="mM" initial_value="114" public_interface="out"/>
+      <variable name="x_Tmax" units="nmol_per_cm2" initial_value="1"/>
+      <variable name="x_T" units="nmol_per_cm2" public_interface="out"/>
+      <variable name="K_I" units="mM" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>x_T</ci>
+            <apply>
+               <divide/>
+               <ci>x_Tmax</ci>
+               <apply>
+                  <plus/>
+                  <cn cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <divide/>
+                     <ci>HCO3_i</ci>
+                     <ci>K_I</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>HCO3_i</ci>
+            </apply>
+            <cn cellml:units="mM_per_s">60</cn>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="AE1_rate_constants">
+      <variable name="K_I" units="mM" initial_value="172" public_interface="out"/>
+      <variable name="Kc_p" units="mM" initial_value="50" public_interface="out"/>
+      <variable name="Kc_pp" units="mM" initial_value="50" public_interface="out"/>
+      <variable name="Kb_p" units="mM" initial_value="198" public_interface="out"/>
+      <variable name="Kb_pp" units="mM" initial_value="198" public_interface="out"/>
+      <variable name="Pc_p" units="per_s" initial_value="562" public_interface="out"/>
+      <variable name="Pc_pp" units="per_s" initial_value="61" public_interface="out"/>
+      <variable name="Pb_p" units="per_s" initial_value="1247" public_interface="out"/>
+      <variable name="Pb_pp" units="per_s" initial_value="135" public_interface="out"/>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="AE1">
+      <variable name="x_T" units="nmol_per_cm2" public_interface="in"/>
+      <variable name="HCO3_i" units="mM" public_interface="in"/>
+      <variable name="HCO3_e" units="mM" public_interface="in"/>
+      <variable name="Cl_i" units="mM" public_interface="in"/>
+      <variable name="Cl_e" units="mM" public_interface="in"/>
+      <variable name="Kc_p" units="mM" public_interface="in"/>
+      <variable name="Kc_pp" units="mM" public_interface="in"/>
+      <variable name="Kb_p" units="mM" public_interface="in"/>
+      <variable name="Kb_pp" units="mM" public_interface="in"/>
+      <variable name="Pc_p" units="per_s" public_interface="in"/>
+      <variable name="Pc_pp" units="per_s" public_interface="in"/>
+      <variable name="Pb_p" units="per_s" public_interface="in"/>
+      <variable name="Pb_pp" units="per_s" public_interface="in"/>
+      <variable name="beta_p" units="dimensionless"/>
+      <variable name="beta_pp" units="dimensionless"/>
+      <variable name="gamma_p" units="dimensionless"/>
+      <variable name="gamma_pp" units="dimensionless"/>
+      <variable name="sigma" units="per_s"/>
+      <variable name="x_p" units="nmol_per_cm2"/>
+      <variable name="x_pp" units="nmol_per_cm2"/>
+      <variable name="J_HCO3" units="nmol_per_s_per_cm2" public_interface="out"/>
+      <variable name="J_Cl" units="nmol_per_s_per_cm2" public_interface="out"/>
+      <variable name="Jb_influx" units="nmol_per_s_per_cm2" public_interface="out"/>
+      <variable name="Jc_influx" units="nmol_per_s_per_cm2" public_interface="out"/>
+      <variable name="Jo_bm" units="nmol_per_s_per_cm2"/>
+      <variable name="Ji_bm" units="nmol_per_s_per_cm2"/>
+      <variable name="Js_bm" units="nmol_per_s_per_cm2"/>
+      <variable name="Jo_cm" units="nmol_per_s_per_cm2"/>
+      <variable name="Ji_cm" units="nmol_per_s_per_cm2"/>
+      <variable name="Js_cm" units="nmol_per_s_per_cm2"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>beta_p</ci>
+            <apply>
+               <divide/>
+               <ci>HCO3_e</ci>
+               <ci>Kb_p</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>beta_pp</ci>
+            <apply>
+               <divide/>
+               <ci>HCO3_i</ci>
+               <ci>Kb_pp</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>gamma_p</ci>
+            <apply>
+               <divide/>
+               <ci>Cl_e</ci>
+               <ci>Kc_p</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>gamma_pp</ci>
+            <apply>
+               <divide/>
+               <ci>Cl_i</ci>
+               <ci>Kc_pp</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>sigma</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <apply>
+                     <plus/>
+                     <cn cellml:units="dimensionless">1</cn>
+                     <ci>beta_p</ci>
+                     <ci>gamma_p</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>Pb_pp</ci>
+                        <ci>beta_pp</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>Pc_pp</ci>
+                        <ci>gamma_pp</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <plus/>
+                     <cn cellml:units="dimensionless">1</cn>
+                     <ci>beta_pp</ci>
+                     <ci>gamma_pp</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>Pb_p</ci>
+                        <ci>beta_p</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>Pc_p</ci>
+                        <ci>gamma_p</ci>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>x_p</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>x_T</ci>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>Pb_pp</ci>
+                        <ci>beta_pp</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>Pc_pp</ci>
+                        <ci>gamma_pp</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <ci>sigma</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>x_pp</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>x_T</ci>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>Pb_p</ci>
+                        <ci>beta_p</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>Pc_p</ci>
+                        <ci>gamma_p</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <ci>sigma</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>Jb_influx</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <divide/>
+                  <ci>x_T</ci>
+                  <ci>sigma</ci>
+               </apply>
+               <ci>Pb_p</ci>
+               <ci>beta_p</ci>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>Pb_pp</ci>
+                     <ci>beta_pp</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>Pc_pp</ci>
+                     <ci>gamma_pp</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>Jc_influx</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <divide/>
+                  <ci>x_T</ci>
+                  <ci>sigma</ci>
+               </apply>
+               <ci>Pc_p</ci>
+               <ci>gamma_p</ci>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>Pb_pp</ci>
+                     <ci>beta_pp</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>Pc_pp</ci>
+                     <ci>gamma_pp</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_HCO3</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <divide/>
+                  <ci>x_T</ci>
+                  <ci>sigma</ci>
+               </apply>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>Pb_pp</ci>
+                     <ci>beta_pp</ci>
+                     <ci>Pc_p</ci>
+                     <ci>gamma_p</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>Pb_p</ci>
+                     <ci>beta_p</ci>
+                     <ci>Pc_pp</ci>
+                     <ci>gamma_pp</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J_Cl</ci>
+            <apply>
+               <minus/>
+               <ci>J_HCO3</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>Jo_bm</ci>
+            <apply>
+               <power/>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <cn cellml:units="dimensionless">1</cn>
+                     <ci>x_T</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <divide/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>Pb_p</ci>
+                     </apply>
+                     <apply>
+                        <divide/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>Pb_pp</ci>
+                     </apply>
+                     <apply>
+                        <divide/>
+                        <ci>Kb_pp</ci>
+                        <apply>
+                           <times/>
+                           <ci>Pb_pp</ci>
+                           <ci>HCO3_i</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <minus/>
+                  <cn cellml:units="dimensionless">1</cn>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>Ji_bm</ci>
+            <apply>
+               <power/>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <cn cellml:units="dimensionless">1</cn>
+                     <ci>x_T</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <divide/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>Pb_p</ci>
+                     </apply>
+                     <apply>
+                        <divide/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>Pb_pp</ci>
+                     </apply>
+                     <apply>
+                        <divide/>
+                        <ci>Kb_p</ci>
+                        <apply>
+                           <times/>
+                           <ci>Pb_p</ci>
+                           <ci>HCO3_e</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <minus/>
+                  <cn cellml:units="dimensionless">1</cn>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>Js_bm</ci>
+            <apply>
+               <power/>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <cn cellml:units="dimensionless">1</cn>
+                     <ci>x_T</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <divide/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>Pb_p</ci>
+                     </apply>
+                     <apply>
+                        <divide/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>Pb_pp</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <minus/>
+                  <cn cellml:units="dimensionless">1</cn>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>Jo_cm</ci>
+            <apply>
+               <power/>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <cn cellml:units="dimensionless">1</cn>
+                     <ci>x_T</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <divide/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>Pc_p</ci>
+                     </apply>
+                     <apply>
+                        <divide/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>Pc_pp</ci>
+                     </apply>
+                     <apply>
+                        <divide/>
+                        <ci>Kc_pp</ci>
+                        <apply>
+                           <times/>
+                           <ci>Pc_pp</ci>
+                           <ci>Cl_i</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <minus/>
+                  <cn cellml:units="dimensionless">1</cn>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>Ji_cm</ci>
+            <apply>
+               <power/>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <cn cellml:units="dimensionless">1</cn>
+                     <ci>x_T</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <divide/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>Pc_p</ci>
+                     </apply>
+                     <apply>
+                        <divide/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>Pc_pp</ci>
+                     </apply>
+                     <apply>
+                        <divide/>
+                        <ci>Kc_p</ci>
+                        <apply>
+                           <times/>
+                           <ci>Pc_p</ci>
+                           <ci>Cl_e</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <minus/>
+                  <cn cellml:units="dimensionless">1</cn>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>Js_cm</ci>
+            <apply>
+               <power/>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <cn cellml:units="dimensionless">1</cn>
+                     <ci>x_T</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <divide/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>Pc_p</ci>
+                     </apply>
+                     <apply>
+                        <divide/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>Pc_pp</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <minus/>
+                  <cn cellml:units="dimensionless">1</cn>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="Concentrations" component_2="AE1"/>
+      <map_variables variable_1="HCO3_e" variable_2="HCO3_e"/>
+      <map_variables variable_1="HCO3_i" variable_2="HCO3_i"/>
+      <map_variables variable_1="Cl_e" variable_2="Cl_e"/>
+      <map_variables variable_1="Cl_i" variable_2="Cl_i"/>
+      <map_variables variable_1="x_T" variable_2="x_T"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="Concentrations" component_2="AE1_rate_constants"/>
+      <map_variables variable_1="K_I" variable_2="K_I"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="AE1_rate_constants" component_2="AE1"/>
+      <map_variables variable_1="Kc_p" variable_2="Kc_p"/>
+      <map_variables variable_1="Kc_pp" variable_2="Kc_pp"/>
+      <map_variables variable_1="Pc_p" variable_2="Pc_p"/>
+      <map_variables variable_1="Pc_pp" variable_2="Pc_pp"/>
+      <map_variables variable_1="Kb_p" variable_2="Kb_p"/>
+      <map_variables variable_1="Kb_pp" variable_2="Kb_pp"/>
+      <map_variables variable_1="Pb_p" variable_2="Pb_p"/>
+      <map_variables variable_1="Pb_pp" variable_2="Pb_pp"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="Concentrations" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   
+ <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
+    
+    <!--
+      The following RDF block contains metadata that applies to this document
+      as a whole, as indicated by the empty about attribute on the 
+      <rdf:Description> element.
+    -->
+    <rdf:Description rdf:about="">
+      <!--
+        The Model Builder Metadata.  The Dublin Core "creator" element is used  
+        to indicate the person who translated the model into CellML.
+      -->
+      <dc:creator rdf:parseType="Resource">
+        <vCard:N rdf:parseType="Resource">
+          <vCard:Family>Terkildsen</vCard:Family>
+          <vCard:Given>Jonna</vCard:Given>
+		</vCard:N>
+        <vCard:EMAIL rdf:parseType="Resource">
+          <rdf:value>j.terkildsen@auckland.ac.nz</rdf:value>
+          <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+        </vCard:EMAIL>
+        <vCard:ORG rdf:parseType="Resource">
+          <vCard:Orgname>Auckland Bioengineering Institute</vCard:Orgname>
+        </vCard:ORG>
+      </dc:creator>
+      
+      <!--
+        The Creation Date metadata. This is the date on which the model
+        was translated into CellML.
+      -->
+      <dcterms:created rdf:parseType="Resource">
+        <dcterms:W3CDTF>2009-11-11</dcterms:W3CDTF>
+      </dcterms:created>
+      
+      <!--
+        The Modification History metadata. This lists the changes that have been
+        made to the document, who made the changes, and when they were made.
+      -->
+     
+    </rdf:Description>
+    
+    <!--
+      The following metadata refers to the model itself, as indicated by the
+      reference to the ID "weinstein_2000_AE1", which is    
+      declared on the <model> element.
+    -->
+    <rdf:Description rdf:about="#weinstein_2000_AE1">
+      <!-- A human readable name for the model. -->
+      <dc:title>
+        The Weinstein 2000 quantitative model of AE1 (Cl/HCO3 exchanger).
+      </dc:title>
+      
+      <!-- A comment regarding the model. -->
+      <cmeta:comment rdf:parseType="Resource">
+        <rdf:value>
+          This is the CellML description of the Weinstein 2000 quantitative model of AE1 (Cl/HCO3 exchanger)
+        </rdf:value>
+        <!-- The creator of the comment. -->
+        <dc:creator rdf:parseType="Resource">
+          <vCard:FN>Jonna Terkildsen</vCard:FN>
+        </dc:creator>
+      </cmeta:comment>
+	   
+      <!--  Keyword(s) -->
+      <bqs:reference rdf:parseType="Resource">
+        <dc:subject rdf:parseType="Resource">
+          <bqs:subject_type>keyword</bqs:subject_type>
+          <rdf:value>
+            <rdf:Bag>
+              <rdf:li>renal</rdf:li>
+              <rdf:li>ion transport</rdf:li>
+			  <rdf:li>kidney</rdf:li>
+              <rdf:li>medullary collecting duct</rdf:li>
+			</rdf:Bag>
+          </rdf:value>
+        </dc:subject>
+      </bqs:reference>
+
+      <bqs:reference rdf:parseType="Resource">
+       <bqs:Pubmed_id>10894785</bqs:Pubmed_id>
+        <bqs:JournalArticle rdf:parseType="Resource">
+          <dc:creator>
+            <rdf:Seq>
+              <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Weinstein</vCard:Family>
+                    <vCard:Given>A</vCard:Given>
+					<vCard:Other>M</vCard:Other>
+				  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+            </rdf:Seq>
+          </dc:creator>
+          <dc:title>
+           A mathematical model of the outer medullary collecting duct of the rat
+          </dc:title>
+          <dcterms:issued rdf:parseType="Resource">
+            <dcterms:W3CDTF>2000-07</dcterms:W3CDTF>
+          </dcterms:issued>
+          <bqs:Journal rdf:parseType="Resource">
+            <dc:title>American Journal of Physiology</dc:title>
+          </bqs:Journal>
+          <bqs:volume>279</bqs:volume>
+          <bqs:first_page>24</bqs:first_page> 
+		  <bqs:last_page>45</bqs:last_page>
+        </bqs:JournalArticle>
+      </bqs:reference>
+    </rdf:Description>
+  </rdf:RDF>
+</model>

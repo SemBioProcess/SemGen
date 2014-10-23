@@ -1,0 +1,214 @@
+<?xml version="1.0"?>
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" cmeta:id="friel_1995" name="friel_1995">
+  <units name="per_second">
+    <unit exponent="-1" units="second"/>
+  </units>
+  
+  <units name="nanomolar">
+    <unit prefix="nano" units="mole"/>
+    <unit exponent="-1" units="litre"/>
+  </units>
+  
+  <units name="micromolar">
+    <unit prefix="micro" units="mole"/>
+    <unit exponent="-1" units="litre"/>
+  </units>
+  
+  <units name="nanomolar_per_second">
+    <unit units="nanomolar"/>
+    <unit exponent="-1" units="second"/>
+  </units>
+  
+  <units name="picolitre">
+    <unit prefix="pico" units="litre"/>
+  </units>
+  
+  <units name="picolitre_per_second">
+    <unit units="picolitre"/>
+	<unit exponent="-1" units="second"/>
+  </units>
+  
+  <units name="picolitre_nanomolar_per_second">
+    <unit units="picolitre"/>
+	<unit units="nanomolar"/>
+    <unit exponent="-1" units="second"/>
+  </units>
+  
+  
+  <component name="environment">
+    <variable cmeta:id="environment_time" name="time" public_interface="out" units="second"/>
+  </component>
+  
+  <component name="rate_constants">
+    <variable name="kappa_L1" public_interface="out" units="per_second"/>
+    <variable initial_value="0.132" name="kappa_P1" public_interface="out" units="per_second"/>
+	<variable name="kappa_L2" public_interface="out" units="per_second"/>
+	<variable initial_value="3.78" name="kappa_P2" public_interface="out" units="per_second"/>
+    
+	<variable initial_value="0.054" name="kappa_L2_0" units="per_second"/>
+    <variable initial_value="2.4" name="kappa_L2_1" units="per_second"/>
+    <variable name="Kd_Ca" units="nanomolar"/>
+    <variable initial_value="3" name="n" units="dimensionless"/>
+    
+    <variable name="time" public_interface="in" units="second"/>
+    <variable name="Ca_i" public_interface="in" units="nanomolar"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="kappa_L1_calculation"><eq/><ci>kappa_L1</ci><piecewise><piece><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="per_second">0.000005</cn><apply><and/><apply><geq/><ci>time</ci><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="second">0</cn></apply><apply><lt/><ci>time</ci><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="second">40</cn></apply></apply></piece><otherwise><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="per_second">0.00002</cn></otherwise></piecewise></apply>
+	  
+	  <apply id="kappa_L2_calculation"><eq/><ci>kappa_L2</ci><apply><plus/><ci>kappa_L2_0</ci><apply><divide/><ci>kappa_L2_1</ci><apply><plus/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn><apply><power/><apply><divide/><ci>Kd_Ca</ci><ci>Ca_i</ci></apply><ci>n</ci></apply></apply></apply></apply></apply>
+	  
+	  <apply id="Kd_Ca_calculation"><eq/><ci>Kd_Ca</ci><piecewise><piece><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="nanomolar">1000</cn><apply><and/><apply><geq/><ci>time</ci><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="second">0</cn></apply><apply><lt/><ci>time</ci><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="second">80</cn></apply></apply></piece><otherwise><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="nanomolar">500</cn></otherwise></piecewise></apply>
+    </math>
+  </component>
+  
+  <component name="cytosolic_calcium">
+    <variable cmeta:id="cytosolic_calcium_Ca_i" initial_value="75" name="Ca_i" public_interface="out" units="nanomolar"/>
+    <variable initial_value="2000000.0" name="Ca_o" public_interface="out" units="nanomolar"/>
+    <variable name="Ca_i_ss" public_interface="out" units="nanomolar"/>
+    <variable initial_value="0.24" name="gamma" public_interface="out" units="dimensionless"/>
+    
+    <variable name="kappa_L1" public_interface="in" units="per_second"/>
+	<variable name="kappa_P1" public_interface="in" units="per_second"/>
+	<variable name="kappa_L2" public_interface="in" units="per_second"/>
+	<variable name="kappa_P2" public_interface="in" units="per_second"/>
+    <variable name="Ca_s" public_interface="in" units="nanomolar"/>
+    <variable name="time" public_interface="in" units="second"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="Ca_i_diff_eq"><eq/><apply><diff/><bvar><ci>time</ci></bvar><ci>Ca_i</ci></apply><apply><plus/><apply><times/><apply><minus/><apply><plus/><ci>kappa_L1</ci><ci>kappa_P1</ci><apply><times/><ci>gamma</ci><apply><plus/><ci>kappa_L2</ci><ci>kappa_P2</ci></apply></apply></apply></apply><ci>Ca_i</ci></apply><apply><times/><ci>gamma</ci><ci>kappa_L2</ci><ci>Ca_s</ci></apply><apply><times/><ci>kappa_L1</ci><ci>Ca_o</ci></apply></apply></apply>
+	    
+      <apply id="Ca_i_ss_calculation">
+        <eq/>
+        <ci> Ca_i_ss </ci>
+        <apply>
+          <divide/>
+          <ci> Ca_o </ci>
+          <apply>
+            <plus/>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1.0 </cn>
+			<apply>
+              <divide/>
+              <ci> kappa_P1 </ci>
+              <ci> kappa_L1 </ci>
+			</apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="subspace_calcium">
+    <variable cmeta:id="subspace_calcium_Ca_s" initial_value="5300.0" name="Ca_s" public_interface="out" units="nanomolar"/>
+    <variable name="Ca_s_ss" public_interface="out" units="nanomolar"/>
+    
+	<variable name="Ca_i" public_interface="in" units="nanomolar"/>
+    <variable name="Ca_i_ss" public_interface="in" units="nanomolar"/>
+    <variable name="kappa_L2" public_interface="in" units="per_second"/>
+    <variable name="kappa_P2" public_interface="in" units="per_second"/>
+    <variable name="time" public_interface="in" units="second"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="Ca_s_diff_eq">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> Ca_s </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <ci> kappa_L2 </ci>
+              <ci> kappa_P2 </ci>
+            </apply>
+            <ci> Ca_i </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> kappa_L2 </ci>
+            <ci> Ca_s </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="Ca_s_ss_calculation">
+        <eq/>
+        <ci> Ca_s_ss </ci>
+        <apply>
+          <times/>
+          <ci> Ca_i_ss </ci>
+          <apply>
+            <plus/>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1.0 </cn>
+			<apply>
+              <divide/>
+              <ci> kappa_P2 </ci>
+              <ci> kappa_L2 </ci>
+			</apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <connection>
+    <map_components component_1="rate_constants" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="cytosolic_calcium" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="subspace_calcium" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="cytosolic_calcium" component_2="rate_constants"/>
+    <map_variables variable_1="kappa_L1" variable_2="kappa_L1"/>
+	<map_variables variable_1="kappa_L2" variable_2="kappa_L2"/>
+	<map_variables variable_1="kappa_P1" variable_2="kappa_P1"/>
+	<map_variables variable_1="kappa_P2" variable_2="kappa_P2"/>
+    <map_variables variable_1="Ca_i" variable_2="Ca_i"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="subspace_calcium" component_2="rate_constants"/>
+    <map_variables variable_1="kappa_L2" variable_2="kappa_L2"/>
+	<map_variables variable_1="kappa_P2" variable_2="kappa_P2"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="cytosolic_calcium" component_2="subspace_calcium"/>
+    <map_variables variable_1="Ca_i" variable_2="Ca_i"/>
+    <map_variables variable_1="Ca_i_ss" variable_2="Ca_i_ss"/>
+    <map_variables variable_1="Ca_s" variable_2="Ca_s"/>
+  </connection>
+
+
+    
+
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:nodeID="n1"><boundIntervals xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n2"/></boundIntervals></rdf:Description><rdf:Description rdf:about="rdf:#aac2b6ce-2e80-4cb5-b672-8a1c263e01e4"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Cuellar</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Autumn</Given><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">A</Other></rdf:Description><rdf:Description rdf:about="rdf:#d0e39266-dde4-4a8a-81c5-66d11b4e003e"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">Biophysical Journal</title></rdf:Description><rdf:Description rdf:about="rdf:#370c9a52-4b33-4c61-a3d0-795baa44bf25"><rdf:value xml:lang="en">
+          Added more metadata.
+            </rdf:value><modified xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:about="rdf:#330f494b-128e-4382-b84f-7063551353bb"/></modified><cmeta:modifier><rdf:Description rdf:about="rdf:#f360b3e3-ad5a-4519-b3cf-c28fd8addb44"/></cmeta:modifier></rdf:Description><rdf:Description rdf:about="rdf:#1b72924c-01df-4725-b754-69fa4f3496d8"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">1995-05</W3CDTF></rdf:Description><rdf:Description rdf:about="rdf:#330f494b-128e-4382-b84f-7063551353bb"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2002-07-22</W3CDTF></rdf:Description><rdf:Description rdf:about="rdf:#38593c84-2b8a-4e76-9f16-2450acbdce46"><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag"/></rdf:type><rdf:_5 xml:lang="en">neurobiology</rdf:_5><rdf:_2 xml:lang="en">sympathetic</rdf:_2><rdf:_3 xml:lang="en">electrophysiology</rdf:_3><rdf:_4 xml:lang="en">neuron</rdf:_4><rdf:_1 xml:lang="en">calcium dynamics</rdf:_1></rdf:Description><rdf:Description rdf:about="rdf:#c0ab5e71-5262-443b-aba7-7db714a2affe"><rdf:value xml:lang="en">
+          This is the CellML description of David Friel's 1995 model of calcium 
+          oscillations in sympathetic neurons.
+            </rdf:value><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#1442df3c-4a09-4214-9c05-42c0a1765b54"/></creator></rdf:Description><rdf:Description rdf:about="rdf:#209e8eea-1e47-4185-b87d-d3704e8d95f7"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Friel</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">David</Given><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">D</Other></rdf:Description><rdf:Description rdf:about="rdf:#acac6a63-a306-4fe0-beb7-c549e7998a2d"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Lloyd</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Catherine</Given><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">May</Other></rdf:Description><rdf:Description rdf:nodeID="n2"><rdf:rest><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/></rdf:rest><rdf:first><rdf:Description rdf:nodeID="n3"/></rdf:first></rdf:Description><rdf:Description rdf:about="rdf:#91828417-0569-4499-b066-fc8c6af1379b"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#aac2b6ce-2e80-4cb5-b672-8a1c263e01e4"/></N></rdf:Description><rdf:Description rdf:about="rdf:#1442df3c-4a09-4214-9c05-42c0a1765b54"><FN xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Catherine Lloyd</FN></rdf:Description><rdf:Description rdf:about="rdf:#67948363-0da2-4b6d-9fcc-0d233741ddd2"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:about="rdf:#0d6247e7-8a49-4371-a91d-0f1b62e4519b"/></Person></rdf:Description><rdf:Description rdf:about="rdf:#f360b3e3-ad5a-4519-b3cf-c28fd8addb44"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#acac6a63-a306-4fe0-beb7-c549e7998a2d"/></N></rdf:Description><rdf:Description rdf:about="rdf:#5f1a4948-db95-4dbd-bdd6-85879e1d13f4"><rdf:type><rdf:Description rdf:about="http://imc.org/vCard/3.0#internet"/></rdf:type><rdf:value xml:lang="en">c.lloyd@auckland.ac.nz</rdf:value></rdf:Description><rdf:Description rdf:about="rdf:#097b3f66-46c3-4f5d-8533-55b2f977180f"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2003-04-09</W3CDTF></rdf:Description><rdf:Description rdf:about="rdf:#113e461c-7f67-4e70-b08f-998352b084f3"><ORG xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#cf2f6d31-4136-41fb-9590-2d8ada1b579c"/></ORG><EMAIL xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#5f1a4948-db95-4dbd-bdd6-85879e1d13f4"/></EMAIL><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#a523d839-d741-4ac6-8d0d-a940a448694b"/></N></rdf:Description><rdf:Description rdf:about="#friel_1995"><cmeta:comment><rdf:Description rdf:about="rdf:#c0ab5e71-5262-443b-aba7-7db714a2affe"/></cmeta:comment><cmeta:bio_entity xml:lang="en">Sympathetic Neuron</cmeta:bio_entity><simulation xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n1"/></simulation><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:about="rdf:#9d759697-4299-4616-b8fb-d7c18b622781"/></reference><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:about="rdf:#404066de-08f8-46f1-937e-9d554b7d5480"/></reference><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">
+        A Model Of Calcium Oscillations in Sympathetic Neurons 
+            </title></rdf:Description><rdf:Description rdf:about="rdf:#fdb08dac-74db-4f52-9895-16f933ba43e5"><rdf:value><rdf:Description rdf:about="rdf:#38593c84-2b8a-4e76-9f16-2450acbdce46"/></rdf:value><subject_type xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">keyword</subject_type></rdf:Description><rdf:Description rdf:nodeID="n3"><tabStepSize xmlns="http://www.cellml.org/metadata/simulation/1.0#nonstandard-" xml:lang="en">0.02</tabStepSize><tabStrict xmlns="http://www.cellml.org/metadata/simulation/1.0#nonstandard-" xml:lang="en">true</tabStrict><algorithm xmlns="http://www.cellml.org/metadata/simulation/1.0#nonstandard-" xml:lang="en">bdf15</algorithm><endingValue xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">400</endingValue><maximumStepSize xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">0.02</maximumStepSize><pointDensity xmlns="http://www.cellml.org/metadata/simulation/1.0#nonstandard-" xml:lang="en">10000</pointDensity><tabInt xmlns="http://www.cellml.org/metadata/simulation/1.0#nonstandard-" xml:lang="en">true</tabInt></rdf:Description><rdf:Description rdf:about="rdf:#783f94d7-a602-4efe-a009-70789daf65c9"><rdf:value xml:lang="en">
+          Added publication date information.
+            </rdf:value><modified xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:about="rdf:#097b3f66-46c3-4f5d-8533-55b2f977180f"/></modified><cmeta:modifier><rdf:Description rdf:about="rdf:#91828417-0569-4499-b066-fc8c6af1379b"/></cmeta:modifier></rdf:Description><rdf:Description rdf:about="rdf:#a523d839-d741-4ac6-8d0d-a940a448694b"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Lloyd</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Catherine</Given><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">May</Other></rdf:Description><rdf:Description rdf:about="rdf:#9d759697-4299-4616-b8fb-d7c18b622781"><subject xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#fdb08dac-74db-4f52-9895-16f933ba43e5"/></subject></rdf:Description><rdf:Description rdf:about="rdf:#59e4443d-4c3b-40eb-a8ab-b9029bd9ea90"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2002-04-02</W3CDTF></rdf:Description><rdf:Description rdf:about="rdf:#cf2f6d31-4136-41fb-9590-2d8ada1b579c"><Orgname xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">The University of Auckland</Orgname><Orgunit xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Auckland Bioengineering Institute</Orgunit></rdf:Description><rdf:Description rdf:about=""><publisher xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">
+        The University of Auckland, Auckland Bioengineering Institute
+            </publisher><cmeta:modification><rdf:Description rdf:about="rdf:#370c9a52-4b33-4c61-a3d0-795baa44bf25"/></cmeta:modification><cmeta:modification><rdf:Description rdf:about="rdf:#783f94d7-a602-4efe-a009-70789daf65c9"/></cmeta:modification><created xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:about="rdf:#59e4443d-4c3b-40eb-a8ab-b9029bd9ea90"/></created><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#113e461c-7f67-4e70-b08f-998352b084f3"/></creator></rdf:Description><rdf:Description rdf:about="rdf:#364d5d63-5b8f-4d5b-b27d-874df4234b04"><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#67948363-0da2-4b6d-9fcc-0d233741ddd2"/></creator><issued xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:about="rdf:#1b72924c-01df-4725-b754-69fa4f3496d8"/></issued><Journal xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:about="rdf:#d0e39266-dde4-4a8a-81c5-66d11b4e003e"/></Journal><first_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">1752</first_page><last_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">1766</last_page><volume xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">68</volume><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">
+            [Ca2+]i oscillations in sympathetic neurons: an experimental test of a theoretical model
+            </title></rdf:Description><rdf:Description rdf:about="rdf:#404066de-08f8-46f1-937e-9d554b7d5480"><Pubmed_id xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">7612818</Pubmed_id><JournalArticle xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:about="rdf:#364d5d63-5b8f-4d5b-b27d-874df4234b04"/></JournalArticle></rdf:Description><rdf:Description rdf:about="rdf:#0d6247e7-8a49-4371-a91d-0f1b62e4519b"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#209e8eea-1e47-4185-b87d-d3704e8d95f7"/></N></rdf:Description></rdf:RDF></model>

@@ -1,0 +1,2752 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--  FILE :  bakker_model_1997.xml
+
+CREATED :  1st August 2002
+
+LAST MODIFIED : 27th April 2005
+
+AUTHOR :  Catherine Lloyd
+          Department of Engineering Science
+          The University of Auckland
+          
+MODEL STATUS :  This model conforms to the CellML 1.0 Specification released on
+10th August 2001, and the 16/01/2002 CellML Metadata 1.0 Specification.
+
+DESCRIPTION :  This file contains a CellML description of the 1997 Bakker et al. mathematical model of glycolysis in the parasite Trypanosoma brucei.
+
+CHANGES:  
+  09/04/2003 - AAC - Added publication date information.
+  01/09/2003 - CML - Changed model structure to remove the model element from 
+                     the CellML.
+  27/04/2005 - PJV - Modified names to conform with cellml1.1 naming
+                     conventions and alligned comment brackets correctly.
+  
+-->
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="bakker_1997" name="bakker_1997">
+
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Glycolysis in bloodstream form Trypanosoma brucei can be understood in terms of the kinetics of the glycolytic enzymes</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+           This model is valid CellML and appears to match the published equations. However the model will not run in either COR or OpenCell.
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+ABSTRACT: In trypanosomes the first part of glycolysis takes place in specialized microbodies, the glycosomes. Most glycolytic enzymes of Trypanosoma brucei have been purified and characterized kinetically. In this paper a mathematical model of glycolysis in the bloodstream form of this organism is developed on the basis of all available kinetic data. The fluxes and the cytosolic metabolite concentrations as predicted by the model were in accordance with available data as measured in non-growing trypanosomes, both under aerobic and under anaerobic conditions. The model also reproduced the inhibition of anaerobic glycolysis by glycerol, although the amount of glycerol needed to inhibit glycolysis completely was lower than experimentally determined. At low extracellular glucose concentrations the intracellular glucose concentration remained very low, and only at 5 mM of extracellular glucose, free glucose started to accumulate intracellularly, in close agreement with experimental observations. This biphasic relation could be related to the large difference between the affinities of the glucose transporter and hexokinase for intracellular glucose. The calculated intraglycosomal metabolite concentrations demonstrated that enzymes that have been shown to be near-equilibrium in the cytosol must work far from equilibrium in the glycosome in order to maintain the high glycolytic flux in the latter.
+</para>
+
+<para>
+The original paper reference is cited below:
+</para>
+
+<para>
+Glycolysis in Bloodstream Form <emphasis>Trypanosoma brucei</emphasis> Can Be Understood in Terms of the Kinetics of the Glycolytic Enzyme, Barbara M. Bakker, Paul A. M. Michels, Fred R. Opperdoes, and Hans V. Westerhoff, 1997, <emphasis>The Journal of Biological Chemistry</emphasis>
+          , 272, 3207-3215. <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/9013556">PubMed ID: 9013556</ulink> 
+</para>
+
+<informalfigure float="0" id="fig_reaction_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>A reaction diagram of glycolysis</title>
+    </objectinfo>
+    <imagedata fileref="bakker_1997.png"/>
+  </imageobject>
+</mediaobject>
+<caption>The stoichiometric scheme of the model of glycolysis in the bloodstream form of the parasite <emphasis>Trypanosoma brucei</emphasis>.</caption>
+</informalfigure>
+
+</sect1>
+</article>
+</documentation>
+  
+  
+   <units name="minute">
+      <unit units="second" multiplier="60.0"/>
+   </units>
+   
+   <units name="micromolar">
+      <unit units="mole" prefix="micro"/>
+      <unit units="litre" exponent="-1"/>
+   </units>
+   
+   <units name="millimolar">
+      <unit units="mole" prefix="milli"/>
+      <unit units="litre" exponent="-1"/>
+   </units>
+   
+   <units name="nanomolar">
+      <unit units="mole" prefix="nano"/>
+      <unit units="litre" exponent="-1"/>
+   </units>
+   
+   <units name="flux">
+      <unit units="nanomolar"/>
+      <unit units="minute" exponent="-1"/>
+   </units>
+   
+  <component name="environment">
+    <variable units="second" public_interface="out" name="time"/>
+  </component>
+  
+  <component name="volume_ratio">
+    <variable units="dimensionless" public_interface="out" name="Vc_Vg" initial_value="22.3"/>
+  </component>
+
+  <component cmeta:id="Glc_o" name="Glc_o">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#Glc_o">
+        <dc:title>Glc_o</dc:title>
+        <dcterms:alternative>external glucose</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimolar" public_interface="out" name="Glc_o" initial_value="5.0"/>
+  </component>
+
+  <component cmeta:id="Glc_i" name="Glc_i">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#Glc_i">
+        <dc:title>Glc_i</dc:title>
+        <dcterms:alternative>cytosolic glucose</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimolar" public_interface="out" name="Glc_i" initial_value="0.01"/>
+    <variable units="flux" public_interface="in" name="V_HK"/>
+    <variable units="flux" public_interface="in" name="V_glucose_transport"/>
+    <variable units="second" public_interface="in" name="time"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>Glc_i</ci>
+        </apply>
+        <apply>
+          <minus/>
+          <ci>V_glucose_transport</ci>
+          <ci>V_HK</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component cmeta:id="Glc_6_P_g" name="Glc_6_P_g">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#Glc_6_P_g">
+        <dc:title>Glc_6_P_g</dc:title>
+        <dcterms:alternative>glycosomal glucose-6-phopshate</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimolar" public_interface="out" name="Glc_6_P_g"/>
+    <variable units="dimensionless" name="Keq_PGI" initial_value="0.29"/>    
+    <variable units="millimolar" public_interface="in" name="Fru_6_P_g"/>
+    <variable units="millimolar" public_interface="in" name="hexose_P_g"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>Glc_6_P_g</ci>
+        <apply>
+          <divide/>
+          <ci>hexose_P_g</ci>
+          <ci>Keq_PGI</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component cmeta:id="Fru_6_P_g" name="Fru_6_P_g">
+   <rdf:RDF>
+      <rdf:Description rdf:about="#Fru_6_P_g">
+        <dc:title>Fru_6_P_g</dc:title>
+        <dcterms:alternative>glycosomal fructose 6-phopshate</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimolar" public_interface="out" name="Fru_6_P_g"/>
+    <variable units="millimolar" public_interface="in" name="Glc_6_P_g"/>
+    <variable units="millimolar" public_interface="in" name="hexose_P_g"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>Fru_6_P_g</ci>
+        <apply>
+          <minus/>
+          <ci>hexose_P_g</ci>
+          <ci>Glc_6_P_g</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="hexose_P_g" name="hexose_P_g">
+   <rdf:RDF>
+      <rdf:Description rdf:about="#hexose_P_g">
+        <dc:title>hexose_P_g</dc:title>
+        <dcterms:alternative>total concentration of glycosomal six carbon phosphates</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimolar" public_interface="out" name="hexose_P_g" initial_value="0.01"/>
+    <variable units="flux" public_interface="in" name="V_HK"/>
+    <variable units="flux" public_interface="in" name="V_PFK"/>
+    <variable units="second" public_interface="in" name="time"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>hexose_P_g</ci>
+        </apply>
+        <apply>
+          <minus/>
+          <ci>V_HK</ci>
+          <ci>V_PFK</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component cmeta:id="Fru_1_6_BP_g" name="Fru_1_6_BP_g">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#Fru_1_6_BP_g">
+        <dc:title>Fru_1_6_BP_g</dc:title>
+        <dcterms:alternative>glycosomal fructose 1,6-bisphopshate</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimolar" public_interface="out" name="Fru_1_6_BP_g" initial_value="0.01"/>
+    <variable units="flux" public_interface="in" name="V_PFK"/>
+    <variable units="flux" public_interface="in" name="V_ALD"/>
+    <variable units="second" public_interface="in" name="time"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>Fru_1_6_BP_g</ci>
+        </apply>
+        <apply>
+          <minus/>
+          <ci>V_PFK</ci>
+          <ci>V_ALD</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component cmeta:id="GA_3_P_g" name="GA_3_P_g">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#GA_3_P_g">
+        <dc:title>GA_3_P_g</dc:title>
+        <dcterms:alternative>glycosomal glyceraldehyde 3-phopshate</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimolar" public_interface="out" name="GA_3_P_g"/>
+    <variable units="dimensionless" public_interface="in" name="Keq_TIM"/>
+    <variable units="millimolar" public_interface="in" name="DHAP_g"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>GA_3_P_g</ci>
+        <apply>
+          <times/>
+          <ci>Keq_TIM</ci>
+          <ci>DHAP_g</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="triose_P" name="triose_P">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#triose_P">
+        <dc:title>triose_P</dc:title>
+        <dcterms:alternative>total concentration of three carbon phopshates</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimolar" public_interface="out" name="triose_P" initial_value="0.01"/>
+    <variable units="flux" public_interface="in" name="V_ALD"/>
+    <variable units="flux" public_interface="in" name="V_GAPDH"/>
+    <variable units="flux" public_interface="in" name="V_GDH"/>
+    <variable units="flux" public_interface="in" name="V_GPO"/>
+    <variable units="second" public_interface="in" name="time"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>triose_P</ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <cn cellml:units="dimensionless"> 2.0 </cn>
+              <ci>V_ALD</ci>
+            </apply>
+            <ci>V_GPO</ci>
+          </apply>
+          <apply>
+            <plus/>
+            <ci>V_GAPDH</ci>
+            <ci>V_GDH</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component cmeta:id="one_three_BPGA_g" name="one_three_BPGA_g">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#one_three_BPGA_g">
+        <dc:title>one_three_BPGA_g</dc:title>
+        <dcterms:alternative>glycosomal 1,3-bisphosphoglycerate</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimolar" public_interface="out" name="one_three_BPGA_g" initial_value="0.01"/>
+    <variable units="flux" public_interface="in" name="V_GAPDH"/>
+    <variable units="flux" public_interface="in" name="V_PGK"/>
+    <variable units="second" public_interface="in" name="time"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>one_three_BPGA_g</ci>
+        </apply>
+        <apply>
+          <minus/>
+          <ci>V_GAPDH</ci>
+          <ci>V_PGK</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component cmeta:id="three_PGA" name="three_PGA">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#three_PGA">
+        <dc:title>three_PGA</dc:title>
+        <dcterms:alternative>3-phosphoglycerate</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimolar" public_interface="out" name="three_PGA"/>
+    <variable units="millimolar" public_interface="in" name="N"/>
+    <variable units="dimensionless" public_interface="in" name="Vc_Vg"/>
+    <variable units="dimensionless" public_interface="out" name="Keq_PGM" initial_value="0.187"/>
+    <variable units="dimensionless" public_interface="out" name="Keq_ENO" initial_value="6.7"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>three_PGA</ci>
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <ci>N</ci>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <ci>Vc_Vg</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <times/>
+              <apply>
+                <plus/>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+                <ci>Keq_PGM</ci>
+                <apply>
+                  <times/>
+                  <ci>Keq_PGM</ci>
+                  <ci>Keq_ENO</ci>
+                </apply>
+              </apply>
+              <ci>Vc_Vg</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="two_PGA_c" name="two_PGA_c">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#two_PGA_c">
+        <dc:title>two_PGA_c</dc:title>
+        <dcterms:alternative>cytosolic 2-phosphoglycerate</dcterms:alternative>        
+	  </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimolar" public_interface="out" name="two_PGA_c"/>
+    <variable units="millimolar" public_interface="in" name="three_PGA"/>
+    <variable units="dimensionless" public_interface="in" name="Keq_PGM"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>two_PGA_c</ci>
+        <apply>
+          <times/>
+          <ci>Keq_PGM</ci>
+          <ci>three_PGA</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="N" name="N">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#N">
+        <dc:title>N</dc:title>
+        <dcterms:alternative>the sum of 3-phosphoglycerate, 2-phosphoglycerate, and phosphoenolpyruvate</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimolar" public_interface="out" name="N" initial_value="0.01"/>
+    <variable units="flux" public_interface="in" name="V_PGK"/>
+    <variable units="flux" public_interface="in" name="V_PYK"/>
+    <variable units="second" public_interface="in" name="time"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>N</ci>
+        </apply>
+        <apply>
+          <minus/>
+          <ci>V_PGK</ci>
+          <ci>V_PYK</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component cmeta:id="PEP_c" name="PEP_c">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#PEP_c">
+        <dc:title>PEP_c</dc:title>
+        <dcterms:alternative>cytosolic phosphoenolpyruvate</dcterms:alternative>       
+	  </rdf:Description>
+    </rdf:RDF>
+    <variable units="millimolar" public_interface="out" name="PEP_c"/>
+    <variable units="millimolar" public_interface="in" name="two_PGA_c"/>
+    <variable units="dimensionless" public_interface="in" name="Keq_ENO"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>PEP_c</ci>
+        <apply>
+          <times/>
+          <ci>Keq_ENO</ci>
+          <ci>two_PGA_c</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component cmeta:id="PYR_c" name="PYR_c">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#PYR_c">
+        <dc:title>PYR_c</dc:title>
+        <dcterms:alternative>cytosolic pyruvate</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimolar" public_interface="out" name="PYR_c" initial_value="0.01"/>
+    <variable units="flux" public_interface="in" name="V_PYK"/>
+    <variable units="flux" public_interface="in" name="V_pyruvate_transport"/>
+    <variable units="second" public_interface="in" name="time"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>PYR_c</ci>
+        </apply>
+        <apply>
+          <minus/>
+          <ci>V_PYK</ci>
+          <ci>V_pyruvate_transport</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component cmeta:id="glycerol_g" name="glycerol_g">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#glycerol_g">
+        <dc:title>glycerol_g</dc:title>
+        <dcterms:alternative>glycosomal glycerol</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF>
+    <variable units="millimolar" public_interface="out" name="glycerol_g" initial_value="0.00"/>
+  </component>
+
+  <component cmeta:id="DHAP" name="DHAP">
+   <rdf:RDF>
+      <rdf:Description rdf:about="#DHAP">
+        <dc:title>DHAP</dc:title>
+        <dcterms:alternative>dihydroxyacetone phosphate</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimolar" public_interface="out" name="DHAP"/>
+    <variable units="millimolar" public_interface="in" name="triose_P"/>
+    <variable units="dimensionless" public_interface="in" name="Vc_Vg"/>
+    <variable units="dimensionless" public_interface="out" name="Keq_TIM" initial_value="0.045"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>DHAP</ci>
+        <apply>
+          <divide/>
+          <apply>
+            <times/>
+            <ci>triose_P</ci>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <ci>Vc_Vg</ci>
+            </apply>
+		  </apply>
+		  <apply>
+            <plus/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+			<ci>Vc_Vg</ci>
+            <ci>Keq_TIM</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="DHAP_c" name="DHAP_c">
+   <rdf:RDF>
+      <rdf:Description rdf:about="#DHAP_c">
+        <dc:title>DHAP_c</dc:title>
+        <dcterms:alternative>cytosolic dihydroxyacetone phosphate</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimolar" public_interface="out" name="DHAP_c"/>
+    <variable units="millimolar" public_interface="in" name="DHAP"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>DHAP_c</ci>
+        <ci>DHAP</ci>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="DHAP_g" name="DHAP_g">
+   <rdf:RDF>
+      <rdf:Description rdf:about="#DHAP_g">
+        <dc:title>DHAP_g</dc:title>
+        <dcterms:alternative>glycosomal dihydroxyacetone phosphate</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimolar" public_interface="out" name="DHAP_g"/>
+    <variable units="millimolar" public_interface="in" name="DHAP"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>DHAP_g</ci>
+        <ci>DHAP</ci>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="Gly_3_P" name="Gly_3_P">
+   <rdf:RDF>
+      <rdf:Description rdf:about="#Gly_3_P">
+        <dc:title>Gly_3_P</dc:title>
+        <dcterms:alternative>glyceraldehyde 3-phopshate</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimolar" public_interface="out" name="Gly_3_P"/>
+    
+	<variable units="millimolar" public_interface="in" name="DHAP"/>
+	<variable units="millimolar" public_interface="in" name="Glc_6_P_g"/>
+	<variable units="millimolar" public_interface="in" name="Fru_6_P_g"/>
+	<variable units="millimolar" public_interface="in" name="Fru_1_6_BP_g"/>
+	<variable units="millimolar" public_interface="in" name="GA_3_P_g"/>
+	<variable units="millimolar" public_interface="in" name="one_three_BPGA_g"/>
+	<variable units="millimolar" public_interface="in" name="ATP_g"/>
+	<variable units="millimolar" public_interface="in" name="ADP_g"/>
+	<variable units="millimolar" public_interface="in" name="C4"/>
+    <variable units="dimensionless" public_interface="in" name="Vc_Vg"/>
+    
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>Gly_3_P</ci>
+        <apply>
+          <minus/>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci>C4</ci>
+              <apply>
+                <plus/>
+                <ci>Glc_6_P_g</ci>
+                <ci>Fru_6_P_g</ci>
+				<apply>
+                  <times/>
+                  <cn cellml:units="dimensionless"> 2 </cn>
+                  <ci>Fru_1_6_BP_g</ci>
+                </apply>
+				<ci>GA_3_P_g</ci>
+                <ci>one_three_BPGA_g</ci>
+				<apply>
+                  <times/>
+                  <cn cellml:units="dimensionless"> 2 </cn>
+                  <ci>ATP_g</ci>
+                </apply>
+				<ci>ADP_g</ci>
+              </apply>
+			</apply>
+			<apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1 </cn>
+              <ci>Vc_Vg</ci>
+            </apply>
+          </apply>
+		  <ci>DHAP</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="Gly_3_P_c" name="Gly_3_P_c">
+   <rdf:RDF>
+      <rdf:Description rdf:about="#Gly_3_P_c">
+        <dc:title>Gly_3_P_c</dc:title>
+        <dcterms:alternative>cytosolic glyceraldehyde 3-phopshate</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimolar" public_interface="out" name="Gly_3_P_c"/>
+    <variable units="millimolar" public_interface="in" name="Gly_3_P"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>Gly_3_P_c</ci>
+        <ci>Gly_3_P</ci>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="Gly_3_P_g" name="Gly_3_P_g">
+   <rdf:RDF>
+      <rdf:Description rdf:about="#Gly_3_P_g">
+        <dc:title>Gly_3_P_g</dc:title>
+        <dcterms:alternative>glycosomal glyceraldehyde 3-phopshate</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimolar" public_interface="out" name="Gly_3_P_g"/>
+    <variable units="millimolar" public_interface="in" name="Gly_3_P"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>Gly_3_P_g</ci>
+        <ci>Gly_3_P</ci>
+      </apply>
+    </math>
+  </component>
+
+  <component cmeta:id="NAD_g" name="NAD_g">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#NAD_g">
+        <dc:title>NAD_g</dc:title>
+        <dcterms:alternative>glycosomal nicotinamide adenine dinucleotide positive</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimolar" public_interface="out" name="NAD_g"/>
+    <variable units="millimolar" public_interface="in" name="NADH_g"/>
+    <variable units="millimolar" public_interface="in" name="C3"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+         <ci>NAD_g</ci>
+         <apply>
+          <minus/>
+           <ci>C3</ci>
+           <ci>NADH_g</ci>
+         </apply>
+       </apply>
+     </math>
+  </component>
+
+  <component cmeta:id="NADH_g" name="NADH_g">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#NADH_g">
+        <dc:title>NADH_g</dc:title>
+        <dcterms:alternative>glycosomal nicotinamide adenine dinucleotide</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="millimolar" public_interface="out" name="NADH_g" initial_value="0.01"/>
+    <variable units="flux" public_interface="in" name="V_GAPDH"/>
+    <variable units="flux" public_interface="in" name="V_GDH"/>
+    <variable units="second" public_interface="in" name="time"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+         <apply>
+          <diff/>
+           <bvar>
+             <ci>time</ci>
+           </bvar>
+           <ci>NADH_g</ci>
+         </apply>
+         <apply>
+          <minus/>
+           <ci>V_GAPDH</ci>
+           <ci>V_GDH</ci>
+         </apply>
+       </apply>
+     </math>
+   </component>
+   
+   <component cmeta:id="P_g" name="P_g">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#P_g">
+        <dc:title>P_g</dc:title>
+        <dcterms:alternative>total concentration of glycosomal adenosine phosphates</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF>
+    <variable units="millimolar" public_interface="out" name="P_g" initial_value="0.01"/>
+    <variable units="flux" public_interface="in" name="V_HK"/>
+    <variable units="flux" public_interface="in" name="V_PGK"/>
+    <variable units="flux" public_interface="in" name="V_PFK"/>
+    <variable units="flux" public_interface="in" name="V_GK"/>
+    <variable units="second" public_interface="in" name="time"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>P_g</ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <ci>V_PGK</ci>
+            <ci>V_GK</ci>
+          </apply>
+          <apply>
+            <plus/>
+            <ci>V_HK</ci>
+            <ci>V_PFK</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="P_c" name="P_c">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#P_c">
+        <dc:title>P_c</dc:title>
+        <dcterms:alternative>total concentration of cytosolic adenosine phosphates</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF>
+    <variable units="millimolar" public_interface="out" name="P_c" initial_value="0.01"/>
+    <variable units="flux" public_interface="in" name="V_PYK"/>
+    <variable units="flux" public_interface="in" name="V_ATP_utilisation"/>
+    <variable units="second" public_interface="in" name="time"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>P_c</ci>
+        </apply>
+        <apply>
+          <minus/>
+          <ci>V_PYK</ci>
+          <ci>V_ATP_utilisation</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component cmeta:id="ATP_g" name="ATP_g">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#ATP_g">
+        <dc:title>ATP_g</dc:title>
+        <dcterms:alternative>glycosomal adenosine triphosphate</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF>
+    <variable units="millimolar" public_interface="out" name="ATP_g"/>
+    <variable units="millimolar" public_interface="in" name="P_g"/>
+    <variable units="dimensionless" name="Keq_AK" initial_value="0.442"/>
+    <variable units="millimolar" public_interface="in" name="C1"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>ATP_g</ci>
+        <apply>
+          <divide/>
+          <apply>
+            <plus/>
+            <apply>
+              <minus/>
+              <ci>C1</ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci>P_g</ci>
+                  <apply>
+                    <minus/>
+                    <cn cellml:units="dimensionless"> 1.0 </cn>
+                    <apply>
+                      <times/>
+                      <cn cellml:units="dimensionless"> 4.0 </cn>
+                      <ci>Keq_AK</ci>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+            <apply>
+              <power/>
+              <apply>
+                <minus/>
+                <apply>
+                  <power/>
+                  <apply>
+                    <minus/>
+                    <ci>C1</ci>
+                    <apply>
+                      <minus/>
+                      <apply>
+                        <times/>
+                        <ci>P_g</ci>
+                        <apply>
+                          <minus/>
+                          <cn cellml:units="dimensionless"> 1.0 </cn>
+                          <apply>
+                            <times/>
+                            <cn cellml:units="dimensionless"> 4.0 </cn>
+                            <ci>Keq_AK</ci>
+                          </apply>
+                        </apply>
+                      </apply>
+                    </apply>
+                  </apply>
+                  <cn cellml:units="dimensionless"> 2.0 </cn>
+                </apply>
+                <apply>
+                  <times/>
+                  <cn cellml:units="dimensionless"> 4.0 </cn>
+                  <apply>
+                    <minus/>
+                    <cn cellml:units="dimensionless"> 1.0 </cn>
+                    <apply>
+                      <times/>
+                      <cn cellml:units="dimensionless"> 4.0 </cn>
+                      <ci>Keq_AK</ci>
+                    </apply>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <apply>
+                      <minus/>
+                      <ci>Keq_AK</ci>
+                    </apply>
+                    <apply>
+                      <power/>
+                      <ci>P_g</ci>
+                      <cn cellml:units="dimensionless"> 2.0 </cn>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+              <cn cellml:units="dimensionless"> 0.5 </cn>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <cn cellml:units="dimensionless"> 2.0 </cn>
+            <apply>
+              <minus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <times/>
+                <cn cellml:units="dimensionless"> 4.0 </cn>
+                <ci>Keq_AK</ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="ATP_c" name="ATP_c">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#ATP_c">
+        <dc:title>ATP_c</dc:title>
+        <dcterms:alternative>cytosolic adenosine triphosphate</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF>
+    <variable units="millimolar" public_interface="out" name="ATP_c"/>
+    <variable units="millimolar" public_interface="in" name="P_c"/>
+    <variable units="dimensionless" name="Keq_AK" initial_value="0.442"/>
+    <variable units="millimolar" public_interface="in" name="C2"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>ATP_c</ci>
+        <apply>
+          <divide/>
+          <apply>
+            <plus/>
+            <apply>
+              <minus/>
+              <ci>C2</ci>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci>P_c</ci>
+                  <apply>
+                    <minus/>
+                    <cn cellml:units="dimensionless"> 1.0 </cn>
+                    <apply>
+                      <times/>
+                      <cn cellml:units="dimensionless"> 4.0 </cn>
+                      <ci>Keq_AK</ci>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+            <apply>
+              <power/>
+              <apply>
+                <minus/>
+                <apply>
+                  <power/>
+                  <apply>
+                    <minus/>
+                    <ci>C2</ci>
+                    <apply>
+                      <minus/>
+                      <apply>
+                        <times/>
+                        <ci>P_c</ci>
+                        <apply>
+                          <minus/>
+                          <cn cellml:units="dimensionless"> 1.0 </cn>
+                          <apply>
+                            <times/>
+                            <cn cellml:units="dimensionless"> 4.0 </cn>
+                            <ci>Keq_AK</ci>
+                          </apply>
+                        </apply>
+                      </apply>
+                    </apply>
+                  </apply>
+                  <cn cellml:units="dimensionless"> 2.0 </cn>
+                </apply>
+                <apply>
+                  <times/>
+                  <cn cellml:units="dimensionless"> 4.0 </cn>
+                  <apply>
+                    <minus/>
+                    <cn cellml:units="dimensionless"> 1.0 </cn>
+                    <apply>
+                      <times/>
+                      <cn cellml:units="dimensionless"> 4.0 </cn>
+                      <ci>Keq_AK</ci>
+                    </apply>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <apply>
+                      <minus/>
+                      <ci>Keq_AK</ci>
+                    </apply>
+                    <apply>
+                      <power/>
+                      <ci>P_c</ci>
+                      <cn cellml:units="dimensionless"> 2.0 </cn>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+              <cn cellml:units="dimensionless"> 0.5 </cn>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <cn cellml:units="dimensionless"> 2.0 </cn>
+            <apply>
+              <minus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <times/>
+                <cn cellml:units="dimensionless"> 4.0 </cn>
+                <ci>Keq_AK</ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component cmeta:id="ADP_g" name="ADP_g">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#ADP_g">
+        <dc:title>ADP_g</dc:title>
+        <dcterms:alternative>glycosomal adenosine diphosphate</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF>
+    <variable units="millimolar" public_interface="out" name="ADP_g"/>
+    <variable units="millimolar" public_interface="in" name="ATP_g"/>
+    <variable units="millimolar" public_interface="in" name="P_g"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>ADP_g</ci>
+        <apply>
+          <minus/>
+          <ci>P_g</ci>
+          <apply>
+            <times/>
+            <cn cellml:units="dimensionless"> 2.0 </cn>
+            <ci>ATP_g</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="ADP_c" name="ADP_c">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#ADP_c">
+        <dc:title>ADP_c</dc:title>
+        <dcterms:alternative>cytosolic adenosine diphosphate</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF>
+    <variable units="millimolar" public_interface="out" name="ADP_c"/>
+    <variable units="millimolar" public_interface="in" name="ATP_c"/>
+    <variable units="millimolar" public_interface="in" name="P_c"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>ADP_c</ci>
+        <apply>
+          <minus/>
+          <ci>P_c</ci>
+          <apply>
+            <times/>
+            <cn cellml:units="dimensionless"> 2.0 </cn>
+            <ci>ATP_c</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component cmeta:id="AMP_g" name="AMP_g">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#AMP_g">
+        <dc:title>AMP_g</dc:title>
+        <dcterms:alternative>glycosomal adenosine monophosphate</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF>
+    <variable units="millimolar" public_interface="out" name="AMP_g"/>
+    <variable units="millimolar" public_interface="in" name="ATP_g"/>
+    <variable units="millimolar" public_interface="in" name="ADP_g"/>
+    <variable units="millimolar" public_interface="in" name="C1"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>AMP_g</ci>
+        <apply>
+          <minus/>
+          <ci>C1</ci>
+          <apply>
+            <plus/>
+            <ci>ATP_g</ci>
+            <ci>ADP_g</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component cmeta:id="AMP_c" name="AMP_c">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#AMP_c">
+        <dc:title>AMP_c</dc:title>
+        <dcterms:alternative>cytosolic adenosine monophosphate</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF>
+    <variable units="millimolar" public_interface="out" name="AMP_c"/>
+    <variable units="millimolar" public_interface="in" name="ATP_c"/>
+    <variable units="millimolar" public_interface="in" name="ADP_c"/>
+    <variable units="millimolar" public_interface="in" name="C2"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>AMP_c</ci>
+        <apply>
+          <minus/>
+          <ci>C2</ci>
+          <apply>
+            <plus/>
+            <ci>ATP_c</ci>
+            <ci>ADP_c</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="C1">
+    <variable units="millimolar" public_interface="out" name="C1" initial_value="3.9"/>
+  </component>
+  
+  <component name="C2">
+    <variable units="millimolar" public_interface="out" name="C2" initial_value="3.9"/>
+  </component>
+  
+  <component name="C3">
+    <variable units="millimolar" public_interface="out" name="C3" initial_value="4.0"/>
+  </component>
+  
+  <component name="C4">
+    <variable units="millimolar" public_interface="out" name="C4" initial_value="120.0"/>
+  </component>
+  
+  <component name="V_glucose_transport">
+    <variable units="flux" public_interface="out" name="V_glucose_transport"/>
+    
+    <variable units="millimolar" public_interface="in" name="Glc_o"/>
+    <variable units="millimolar" public_interface="in" name="Glc_i"/>
+    
+    <variable units="millimolar" name="K_Glc" initial_value="2.0"/>
+    <variable units="dimensionless" name="alpha" initial_value="0.75"/>
+    <variable units="flux" name="V_glucose_transport_max" initial_value="106.2"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="V_glucose_transport_calculation">
+        <eq/>
+        <ci> V_glucose_transport </ci>
+        <apply>
+          <times/>
+          <ci> V_glucose_transport_max </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <ci> Glc_o </ci>
+              <ci> Glc_i </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <ci> K_Glc </ci>
+              <ci> Glc_o </ci>
+              <ci> Glc_i </ci>
+              <apply>
+                <times/>
+                <ci> alpha </ci>
+                <ci> Glc_o </ci>
+                <apply>
+                  <divide/>
+                  <ci> Glc_i </ci>
+                  <ci> K_Glc </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="V_pyruvate_transport">
+    <variable units="flux" public_interface="out" name="V_pyruvate_transport"/>
+    
+    <variable units="millimolar" public_interface="in" name="PYR_c"/>
+    
+    <variable units="millimolar" name="K_pyruvate" initial_value="1.96"/>
+    <variable units="flux" name="V_pyruvate_transport_max" initial_value="160.0"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="V_pyruvate_transport_calculation">
+        <eq/>
+        <ci> V_pyruvate_transport </ci>
+        <apply>
+          <times/>
+          <ci> V_pyruvate_transport_max </ci>
+          <apply>
+            <divide/>
+            <ci> PYR_c </ci>
+            <ci> K_pyruvate </ci>
+          </apply>
+          <apply>
+            <plus/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <divide/>
+              <ci> PYR_c </ci>
+              <ci> K_pyruvate </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="V_GPO">
+    <variable units="flux" public_interface="out" name="V_GPO"/>
+    
+    <variable units="millimolar" public_interface="in" name="Gly_3_P_c"/>
+    
+    <variable units="millimolar" name="K_Gly_3_P" initial_value="1.7"/>
+    <variable units="flux" name="V_GPO_max" initial_value="200.0"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="V_GPO_calculation">
+        <eq/>
+        <ci> V_GPO </ci>
+        <apply>
+          <times/>
+          <ci> V_GPO_max </ci>
+          <apply>
+            <divide/>
+            <ci> Gly_3_P_c </ci>
+            <ci> K_Gly_3_P </ci>
+          </apply>
+          <apply>
+            <plus/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <divide/>
+              <ci> Gly_3_P_c </ci>
+              <ci> K_Gly_3_P </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="V_HK">
+    <variable units="flux" public_interface="out" name="V_HK"/>
+    
+    <variable units="millimolar" public_interface="in" name="Glc_i"/>
+    <variable units="millimolar" public_interface="in" name="ATP_g"/>
+    <variable units="millimolar" public_interface="in" name="ADP_g"/>
+    
+    <variable units="millimolar" name="K_Glc_i" initial_value="0.1"/>
+    <variable units="millimolar" name="K_ATP" initial_value="0.116"/>
+    <variable units="millimolar" name="K_ADP" initial_value="0.126"/>
+    <variable units="flux" name="V_HK_max" initial_value="625.0"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="V_HK_calculation">
+        <eq/>
+        <ci> V_HK </ci>
+        <apply>
+          <times/>
+          <ci> V_HK_max </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+		      <apply>
+                <divide/>
+                <ci> ATP_g </ci>
+                <ci> K_ATP </ci>
+              </apply>
+			  <apply>
+                <divide/>
+                <ci> Glc_i </ci>
+                <ci> K_Glc_i </ci>
+              </apply>
+			</apply>
+            <apply>
+              <times/>
+			  <apply>
+                <plus/>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+                <apply>
+                  <divide/>
+                  <ci> ATP_g </ci>
+                  <ci> K_ATP </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> ADP_g </ci>
+                  <ci> K_ADP </ci>
+                </apply> 
+              </apply>
+			  <apply>
+                <plus/>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+                <apply>
+                  <divide/>
+				  <ci> Glc_i </ci>
+                  <ci> K_Glc_i </ci>
+				</apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="V_GAPDH">
+    <variable units="flux" public_interface="out" name="V_GAPDH"/>
+    
+    <variable units="millimolar" public_interface="in" name="NAD_g"/>
+    <variable units="millimolar" public_interface="in" name="GA_3_P_g"/>
+    <variable units="millimolar" public_interface="in" name="one_three_BPGA_g"/>
+    <variable units="millimolar" public_interface="in" name="NADH_g"/>
+    
+    <variable units="millimolar" name="K_NAD" initial_value="0.45"/>
+    <variable units="millimolar" name="K_GA_3_P" initial_value="0.15"/>
+    <variable units="millimolar" name="K_1_3_BPGA" initial_value="0.1"/>
+    <variable units="millimolar" name="K_NADH" initial_value="0.02"/>
+    <variable units="flux" name="V_GAPDH_max_plus" initial_value="1470.0"/>
+    <variable units="dimensionless" name="V_GAPDH_max_ratio" initial_value="0.67"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="V_GAPDH_calculation">
+        <eq/>
+        <ci> V_GAPDH </ci>
+        <apply>
+          <times/>
+          <ci> V_GAPDH_max_plus </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> GA_3_P_g </ci>
+                <ci> K_GA_3_P </ci>
+              </apply>
+              <apply>
+                <minus/>
+                <apply>
+                  <divide/>
+                  <ci> NAD_g </ci>
+                  <ci> K_NAD </ci>
+                </apply>
+                <ci> V_GAPDH_max_ratio </ci>
+              </apply>
+              <apply>
+                <divide/>
+                <ci> one_three_BPGA_g </ci>
+                <ci> K_1_3_BPGA </ci>
+              </apply>
+              <apply>
+                <divide/>
+                <ci> NADH_g </ci>
+                <ci> K_NADH </ci>
+              </apply>
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <plus/>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+                <apply>
+                  <divide/>
+                  <ci> GA_3_P_g </ci>
+                  <ci> K_GA_3_P </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> one_three_BPGA_g </ci>
+                  <ci> K_1_3_BPGA </ci>
+                </apply>
+              </apply>
+              <apply>
+                <plus/>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+                <apply>
+                  <divide/>
+                  <ci> NAD_g </ci>
+                  <ci> K_NAD </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> NADH_g </ci>
+                  <ci> K_NADH </ci>
+                </apply> 
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="V_PGK">
+    <variable units="flux" public_interface="out" name="V_PGK"/>
+    
+    <variable units="millimolar" public_interface="in" name="ADP_g"/>
+    <variable units="millimolar" public_interface="in" name="one_three_BPGA_g"/>
+    <variable units="millimolar" public_interface="in" name="three_PGA"/>
+    <variable units="millimolar" public_interface="in" name="ATP_g"/>
+    
+    <variable units="millimolar" name="K_ADP" initial_value="0.1"/>
+    <variable units="millimolar" name="K_1_3_BPGA" initial_value="0.05"/>
+    <variable units="millimolar" name="K_3_PGA" initial_value="1.62"/>
+    <variable units="millimolar" name="K_ATP" initial_value="0.29"/>
+    <variable units="flux" name="V_PGK_max_plus" initial_value="640.0"/>
+    <variable units="dimensionless" name="V_PGK_max_ratio" initial_value="0.029"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="V_PGK_calculation">
+        <eq/>
+        <ci> V_PGK </ci>
+        <apply>
+          <times/>
+          <ci> V_PGK_max_plus </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> one_three_BPGA_g </ci>
+                <ci> K_1_3_BPGA </ci>
+              </apply>
+              <apply>
+                <minus/>
+                <apply>
+                  <divide/>
+                  <ci> ADP_g </ci>
+                  <ci> K_ADP </ci>
+                </apply>
+                <ci> V_PGK_max_ratio </ci>
+              </apply>
+              <apply>
+                <divide/>
+                <ci> three_PGA </ci>
+                <ci> K_3_PGA </ci>
+              </apply>
+              <apply>
+                <divide/>
+                <ci> ATP_g </ci>
+                <ci> K_ATP </ci>
+              </apply>
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <plus/>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+                <apply>
+                  <divide/>
+                  <ci> one_three_BPGA_g </ci>
+                  <ci> K_1_3_BPGA </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> three_PGA </ci>
+                  <ci> K_3_PGA </ci>
+                </apply>
+              </apply>
+              <apply>
+                <plus/>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+                <apply>
+                  <divide/>
+                  <ci> ADP_g </ci>
+                  <ci> K_ADP </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> ATP_g </ci>
+                  <ci> K_ATP </ci>
+                </apply> 
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="V_GK">
+    <variable units="flux" public_interface="out" name="V_GK"/>
+    
+    <variable units="millimolar" public_interface="in" name="ADP_g"/>
+    <variable units="millimolar" public_interface="in" name="Gly_3_P_g"/>
+    <variable units="millimolar" public_interface="in" name="glycerol_g"/>
+    <variable units="millimolar" public_interface="in" name="ATP_g"/>
+    
+    <variable units="millimolar" name="K_ADP" initial_value="0.12"/>
+    <variable units="millimolar" name="K_Gly_3_P" initial_value="5.1"/>
+    <variable units="millimolar" name="K_glycerol" initial_value="0.12"/>
+    <variable units="millimolar" name="K_ATP" initial_value="0.19"/>
+    <variable units="flux" name="V_GK_max_plus" initial_value="0.0"/>
+    <variable units="dimensionless" name="V_GK_max_ratio" initial_value="167.0"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="V_GK_calculation">
+        <eq/>
+        <ci> V_GK </ci>
+        <apply>
+          <times/>
+          <ci> V_GK_max_plus </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> Gly_3_P_g </ci>
+                <ci> K_Gly_3_P </ci>
+              </apply>
+              <apply>
+                <minus/>
+                <apply>
+                  <divide/>
+                  <ci> ADP_g </ci>
+                  <ci> K_ADP </ci>
+                </apply>
+               <ci> V_GK_max_ratio </ci>
+              </apply>
+              <apply>
+                <divide/>
+                <ci> glycerol_g </ci>
+                <ci> K_glycerol </ci>
+              </apply>
+              <apply>
+                <divide/>
+                <ci> ATP_g </ci>
+                <ci> K_ATP </ci>
+              </apply>
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <plus/>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+                <apply>
+                  <divide/>
+                  <ci> Gly_3_P_g </ci>
+                  <ci> K_Gly_3_P </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> glycerol_g </ci>
+                  <ci> K_glycerol </ci>
+                </apply>
+              </apply>
+              <apply>
+                <plus/>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+                <apply>
+                  <divide/>
+                  <ci> ADP_g </ci>
+                  <ci> K_ADP </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> ATP_g </ci>
+                  <ci> K_ATP </ci>
+                </apply> 
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+
+  <component name="V_GDH">
+    <variable units="flux" public_interface="out" name="V_GDH"/>
+    
+    <variable units="millimolar" public_interface="in" name="NADH_g"/>
+    <variable units="millimolar" public_interface="in" name="Gly_3_P_g"/>
+    <variable units="millimolar" public_interface="in" name="DHAP_g"/>
+    <variable units="millimolar" public_interface="in" name="NAD_g"/>
+    
+    <variable units="millimolar" name="K_NADH" initial_value="0.01"/>
+    <variable units="millimolar" name="K_Gly_3_P" initial_value="2.0"/>
+    <variable units="millimolar" name="K_DHAP" initial_value="0.1"/>
+    <variable units="millimolar" name="K_NAD" initial_value="0.4"/>
+    <variable units="flux" name="V_GDH_max_plus" initial_value="533.0"/>
+    <variable units="dimensionless" name="V_GDH_max_ratio" initial_value="0.28"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="V_GDH_calculation">
+        <eq/>
+        <ci> V_GDH </ci>
+        <apply>
+          <times/>
+          <ci> V_GDH_max_plus </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> DHAP_g </ci>
+                <ci> K_DHAP </ci>
+              </apply>
+              <apply>
+                <minus/>
+                <apply>
+                  <divide/>
+                  <ci> NADH_g </ci>
+                  <ci> K_NADH </ci>
+                </apply>
+                <ci> V_GDH_max_ratio </ci>
+              </apply>
+              <apply>
+                <divide/>
+                <ci> Gly_3_P_g </ci>
+                <ci> K_Gly_3_P </ci>
+              </apply>
+              <apply>
+                <divide/>
+                <ci> NAD_g </ci>
+                <ci> K_NAD </ci>
+              </apply>
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <plus/>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+                <apply>
+                  <divide/>
+                  <ci> DHAP_g </ci>
+                  <ci> K_DHAP </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> Gly_3_P_g </ci>
+                  <ci> K_Gly_3_P </ci>
+                </apply>
+              </apply>
+              <apply>
+                <plus/>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+                <apply>
+                  <divide/>
+                  <ci> NADH_g </ci>
+                  <ci> K_NADH </ci>
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> NAD_g </ci>
+                  <ci> K_NAD </ci>
+                </apply> 
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+
+  <component name="V_PFK">
+    <variable units="flux" public_interface="out" name="V_PFK"/>
+    
+    <variable units="millimolar" public_interface="in" name="Fru_6_P_g"/>
+    <variable units="millimolar" public_interface="in" name="ATP_g"/>
+    
+    <variable units="dimensionless" name="n" initial_value="1.2"/>
+    <variable units="millimolar" name="Km_Fru_6_P" initial_value="0.82"/>
+    <variable units="millimolar" name="Km_ATP" initial_value="2.6E-2"/>
+    <variable units="flux" name="V_PFK_max" initial_value="780.0"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="V_PFK_calculation">
+        <eq/>
+        <ci> V_PFK </ci>
+        <apply>
+          <times/>
+          <ci> V_PFK_max </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+			  <apply>
+                <power/>
+				<apply>
+                  <divide/>
+                  <ci> Fru_6_P_g </ci>
+                  <ci> Km_Fru_6_P </ci>
+                </apply>
+				<ci> n </ci>
+              </apply>
+			  <apply>
+                <divide/>
+				<ci> ATP_g </ci>
+                <ci> Km_ATP </ci>
+              </apply>
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <plus/>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+				<apply>
+                  <power/>
+				  <apply>
+                    <divide/>
+                    <ci> Fru_6_P_g </ci>
+                    <ci> Km_Fru_6_P </ci>
+                  </apply>
+				  <ci> n </ci>
+                </apply>
+			  </apply>
+			  <apply>
+                <plus/>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+                <apply>
+                  <divide/>
+                  <ci> ATP_g </ci>
+                  <ci> Km_ATP </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="V_PYK">
+    <variable units="flux" public_interface="out" name="V_PYK"/>
+    
+    <variable units="millimolar" public_interface="in" name="PEP_c"/>
+    <variable units="millimolar" public_interface="in" name="ADP_c"/>
+    <variable units="millimolar" public_interface="in" name="ATP_c"/>
+    
+    <variable units="millimolar" name="Km_PEP"/>
+    <variable units="millimolar" name="Km_ADP" initial_value="0.114"/>
+    <variable units="dimensionless" name="n" initial_value="2.5"/>
+    <variable units="flux" name="V_PYK_max" initial_value="2.6E3"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="V_PYK_calculation">
+        <eq/>
+        <ci> V_PYK </ci>
+        <apply>
+          <times/>
+          <ci> V_PYK_max </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <times/>
+		      <apply>
+                <power/>
+                <apply>
+                  <divide/>
+                  <ci> PEP_c </ci>
+                  <ci> Km_PEP </ci>
+                </apply>
+                <ci> n </ci>
+              </apply>
+			  <apply>
+                <divide/>
+                <ci> ADP_c </ci>
+                <ci> Km_ADP </ci>
+              </apply>
+			</apply>
+            <apply>
+              <times/>
+			  <apply>
+                <plus/>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+                <apply>
+                  <power/>
+                  <apply>
+                    <divide/>
+                    <ci> PEP_c </ci>
+                    <ci> Km_PEP </ci>
+                  </apply>
+                  <ci> n </ci>
+                </apply>
+              </apply>
+              <apply>
+                <plus/>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+                <apply>
+                  <divide/>
+                  <ci> ADP_c </ci>
+                  <ci> Km_ADP </ci>
+				</apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="Km_PEP_calculation">
+        <eq/>
+        <ci> Km_PEP </ci>
+        <apply>
+          <times/>
+          <cn cellml:units="millimolar"> 0.34 </cn>
+          <apply>
+            <plus/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <divide/>
+              <ci> ATP_c </ci>
+              <cn cellml:units="millimolar"> 0.57 </cn>
+            </apply>
+            <apply>
+              <divide/>
+              <ci> ADP_c </ci>
+              <cn cellml:units="millimolar"> 0.64 </cn>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component name="V_ALD">
+    <variable units="flux" public_interface="out" name="V_ALD"/>
+    
+    <variable units="millimolar" public_interface="in" name="Fru_1_6_BP_g"/>
+    <variable units="millimolar" public_interface="in" name="GA_3_P_g"/>
+    <variable units="millimolar" public_interface="in" name="DHAP_g"/>
+    <variable units="millimolar" public_interface="in" name="ATP_g"/>
+    <variable units="millimolar" public_interface="in" name="ADP_g"/>
+    <variable units="millimolar" public_interface="in" name="AMP_g"/>
+    
+    <variable units="millimolar" name="Km_Fru_1_6_BP"/>
+    <variable units="millimolar" name="Km_GA_3_P" initial_value="6.7E-2"/>
+    <variable units="millimolar" name="Ki_GA_3_P" initial_value="9.8E-2"/>
+    <variable units="millimolar" name="Km_DHAP" initial_value="1.5E-2"/>
+    <variable units="flux" name="V_ALD_max_plus" initial_value="780.0"/>
+    <variable units="dimensionless" name="V_ALD_max_ratio" initial_value="1.19"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="V_ALD_calculation">
+        <eq/>
+        <ci> V_ALD </ci>
+        <apply>
+          <times/>
+          <ci> V_ALD_max_plus </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <apply>
+                <divide/>
+                <ci> Fru_1_6_BP_g </ci>
+                <ci> Km_Fru_1_6_BP </ci>
+              </apply>
+              <apply>
+                <times/>
+                <ci> V_ALD_max_ratio </ci>
+                <apply>
+                  <divide/>
+                  <apply>
+                    <times/>
+					<ci> GA_3_P_g </ci>
+                    <ci> DHAP_g </ci>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <ci> Km_GA_3_P </ci>
+                    <ci> Km_DHAP </ci>
+                  </apply>
+				</apply>
+              </apply>
+            </apply>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <divide/>
+                <ci> Fru_1_6_BP_g </ci>
+                <ci> Km_Fru_1_6_BP </ci>
+              </apply>
+              <apply>
+                <divide/>
+                <ci> GA_3_P_g </ci>
+                <ci> Km_GA_3_P </ci>
+              </apply>
+              <apply>
+                <divide/>
+                <ci> DHAP_g </ci>
+                <ci> Km_DHAP </ci>
+              </apply>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> Fru_1_6_BP_g </ci>
+                  <ci> GA_3_P_g </ci>
+                </apply>
+                <apply>
+                  <times/>
+                  <ci> Km_Fru_1_6_BP </ci>
+                  <ci> Ki_GA_3_P </ci>
+                </apply>
+              </apply>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> DHAP_g </ci>
+                  <ci> GA_3_P_g </ci>
+                </apply>
+                <apply>
+                  <times/>
+                  <ci> Km_DHAP </ci>
+                  <ci> Km_GA_3_P </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="Km_Fru_1_6_BP_calculation">
+        <eq/>
+        <ci> Km_Fru_1_6_BP </ci>
+        <apply>
+          <times/>
+          <cn cellml:units="millimolar" type="e-notation">9<sep/>-3</cn>
+          <apply>
+            <plus/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <divide/>
+              <ci> ATP_g </ci>
+              <cn cellml:units="millimolar"> 0.68 </cn>
+            </apply>
+            <apply>
+              <divide/>
+              <ci> ADP_g </ci>
+              <cn cellml:units="millimolar"> 1.51 </cn>
+            </apply>
+            <apply>
+              <divide/>
+              <ci> AMP_g </ci>
+              <cn cellml:units="millimolar"> 3.65 </cn>
+            </apply>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="V_ATP_utilisation">
+    <variable units="flux" public_interface="out" name="V_ATP_utilisation"/>
+    
+    <variable units="millimolar" public_interface="in" name="ATP_c"/>
+    <variable units="millimolar" public_interface="in" name="ADP_c"/>
+    
+    <variable units="flux" name="k" initial_value="50"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="V_ATP_utilisation_calculation">
+        <eq/>
+        <ci> V_ATP_utilisation </ci>
+        <apply>
+          <times/>
+          <ci> k </ci>
+          <apply>
+            <divide/>
+            <ci> ATP_c </ci>
+            <ci> ADP_c </ci>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+    
+
+  <connection>
+    <map_components component_2="V_glucose_transport" component_1="Glc_o"/>
+    <map_variables variable_2="Glc_o" variable_1="Glc_o"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="V_glucose_transport" component_1="Glc_i"/>
+    <map_variables variable_2="Glc_i" variable_1="Glc_i"/>
+    <map_variables variable_2="V_glucose_transport" variable_1="V_glucose_transport"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="V_HK" component_1="Glc_i"/>
+    <map_variables variable_2="Glc_i" variable_1="Glc_i"/>
+    <map_variables variable_2="V_HK" variable_1="V_HK"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V_HK" component_1="hexose_P_g"/>
+    <map_variables variable_2="V_HK" variable_1="V_HK"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V_PFK" component_1="Fru_6_P_g"/>
+    <map_variables variable_2="Fru_6_P_g" variable_1="Fru_6_P_g"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="V_PFK" component_1="hexose_P_g"/>
+    <map_variables variable_2="V_PFK" variable_1="V_PFK"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="V_PFK" component_1="Fru_1_6_BP_g"/>
+    <map_variables variable_2="V_PFK" variable_1="V_PFK"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="V_ALD" component_1="Fru_1_6_BP_g"/>
+    <map_variables variable_2="Fru_1_6_BP_g" variable_1="Fru_1_6_BP_g"/>
+    <map_variables variable_2="V_ALD" variable_1="V_ALD"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="V_ALD" component_1="DHAP_g"/>
+    <map_variables variable_2="DHAP_g" variable_1="DHAP_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V_GDH" component_1="DHAP_g"/>
+    <map_variables variable_2="DHAP_g" variable_1="DHAP_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V_ALD" component_1="triose_P"/>
+    <map_variables variable_2="V_ALD" variable_1="V_ALD"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="V_GAPDH" component_1="triose_P"/>
+    <map_variables variable_2="V_GAPDH" variable_1="V_GAPDH"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="V_GDH" component_1="triose_P"/>
+    <map_variables variable_2="V_GDH" variable_1="V_GDH"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="V_GPO" component_1="triose_P"/>
+    <map_variables variable_2="V_GPO" variable_1="V_GPO"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="V_ALD" component_1="GA_3_P_g"/>
+    <map_variables variable_2="GA_3_P_g" variable_1="GA_3_P_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V_GAPDH" component_1="GA_3_P_g"/>
+    <map_variables variable_2="GA_3_P_g" variable_1="GA_3_P_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V_GDH" component_1="Gly_3_P_g"/>
+    <map_variables variable_2="Gly_3_P_g" variable_1="Gly_3_P_g"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="V_GK" component_1="Gly_3_P_g"/>
+    <map_variables variable_2="Gly_3_P_g" variable_1="Gly_3_P_g"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="V_GAPDH" component_1="one_three_BPGA_g"/>
+    <map_variables variable_2="one_three_BPGA_g" variable_1="one_three_BPGA_g"/>
+    <map_variables variable_2="V_GAPDH" variable_1="V_GAPDH"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="V_PGK" component_1="one_three_BPGA_g"/>
+    <map_variables variable_2="one_three_BPGA_g" variable_1="one_three_BPGA_g"/>
+    <map_variables variable_2="V_PGK" variable_1="V_PGK"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="V_PYK" component_1="PEP_c"/>
+    <map_variables variable_2="PEP_c" variable_1="PEP_c"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="V_PGK" component_1="N"/>
+    <map_variables variable_2="V_PGK" variable_1="V_PGK"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="V_PYK" component_1="N"/>
+    <map_variables variable_2="V_PYK" variable_1="V_PYK"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="V_PYK" component_1="PYR_c"/>
+    <map_variables variable_2="V_PYK" variable_1="V_PYK"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="V_pyruvate_transport" component_1="PYR_c"/>
+    <map_variables variable_2="PYR_c" variable_1="PYR_c"/>
+    <map_variables variable_2="V_pyruvate_transport" variable_1="V_pyruvate_transport"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="V_HK" component_1="P_g"/>
+    <map_variables variable_2="V_HK" variable_1="V_HK"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V_PFK" component_1="P_g"/>
+    <map_variables variable_2="V_PFK" variable_1="V_PFK"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V_PGK" component_1="P_g"/>
+    <map_variables variable_2="V_PGK" variable_1="V_PGK"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V_GK" component_1="P_g"/>
+    <map_variables variable_2="V_GK" variable_1="V_GK"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V_PYK" component_1="P_c"/>
+    <map_variables variable_2="V_PYK" variable_1="V_PYK"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V_ATP_utilisation" component_1="P_c"/>
+    <map_variables variable_2="V_ATP_utilisation" variable_1="V_ATP_utilisation"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="environment" component_1="Glc_i"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="environment" component_1="Fru_1_6_BP_g"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="environment" component_1="one_three_BPGA_g"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="environment" component_1="PYR_c"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="environment" component_1="NADH_g"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="hexose_P_g"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="triose_P"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="N"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="P_c"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="P_g"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Glc_6_P_g" component_1="Fru_6_P_g"/>
+    <map_variables variable_2="Fru_6_P_g" variable_1="Fru_6_P_g"/>
+    <map_variables variable_2="Glc_6_P_g" variable_1="Glc_6_P_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Glc_6_P_g" component_1="hexose_P_g"/>
+    <map_variables variable_2="hexose_P_g" variable_1="hexose_P_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Fru_6_P_g" component_1="hexose_P_g"/>
+    <map_variables variable_2="hexose_P_g" variable_1="hexose_P_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="DHAP" component_1="DHAP_c"/>
+    <map_variables variable_2="DHAP" variable_1="DHAP"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="DHAP" component_1="DHAP_g"/>
+    <map_variables variable_2="DHAP" variable_1="DHAP"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="DHAP_g" component_1="GA_3_P_g"/>
+    <map_variables variable_2="DHAP_g" variable_1="DHAP_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="DHAP" component_1="GA_3_P_g"/>
+    <map_variables variable_2="Keq_TIM" variable_1="Keq_TIM"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="DHAP" component_1="triose_P"/>
+    <map_variables variable_2="triose_P" variable_1="triose_P"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Gly_3_P" component_1="Gly_3_P_c"/>
+    <map_variables variable_2="Gly_3_P" variable_1="Gly_3_P"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Gly_3_P" component_1="Gly_3_P_g"/>
+    <map_variables variable_2="Gly_3_P" variable_1="Gly_3_P"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Gly_3_P" component_1="DHAP"/>
+    <map_variables variable_2="DHAP" variable_1="DHAP"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Gly_3_P" component_1="Glc_6_P_g"/>
+    <map_variables variable_2="Glc_6_P_g" variable_1="Glc_6_P_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Gly_3_P" component_1="Fru_6_P_g"/>
+    <map_variables variable_2="Fru_6_P_g" variable_1="Fru_6_P_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Gly_3_P" component_1="Fru_1_6_BP_g"/>
+    <map_variables variable_2="Fru_1_6_BP_g" variable_1="Fru_1_6_BP_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Gly_3_P" component_1="GA_3_P_g"/>
+    <map_variables variable_2="GA_3_P_g" variable_1="GA_3_P_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Gly_3_P" component_1="one_three_BPGA_g"/>
+    <map_variables variable_2="one_three_BPGA_g" variable_1="one_three_BPGA_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Gly_3_P" component_1="ATP_g"/>
+    <map_variables variable_2="ATP_g" variable_1="ATP_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Gly_3_P" component_1="ADP_g"/>
+    <map_variables variable_2="ADP_g" variable_1="ADP_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Gly_3_P" component_1="C4"/>
+    <map_variables variable_2="C4" variable_1="C4"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Gly_3_P" component_1="volume_ratio"/>
+    <map_variables variable_2="Vc_Vg" variable_1="Vc_Vg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="three_PGA" component_1="N"/>
+    <map_variables variable_2="N" variable_1="N"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="two_PGA_c" component_1="three_PGA"/>
+    <map_variables variable_2="three_PGA" variable_1="three_PGA"/>
+    <map_variables variable_2="Keq_PGM" variable_1="Keq_PGM"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="PEP_c" component_1="two_PGA_c"/>
+    <map_variables variable_2="two_PGA_c" variable_1="two_PGA_c"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="PEP_c" component_1="three_PGA"/>
+    <map_variables variable_2="Keq_ENO" variable_1="Keq_ENO"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V_GPO" component_1="Gly_3_P_c"/>
+    <map_variables variable_2="Gly_3_P_c" variable_1="Gly_3_P_c"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="NADH_g" component_1="NAD_g"/>
+    <map_variables variable_2="NADH_g" variable_1="NADH_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="C3" component_1="NAD_g"/>
+    <map_variables variable_2="C3" variable_1="C3"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V_GAPDH" component_1="NADH_g"/>
+    <map_variables variable_2="V_GAPDH" variable_1="V_GAPDH"/>
+    <map_variables variable_2="NADH_g" variable_1="NADH_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V_GDH" component_1="NADH_g"/>
+    <map_variables variable_2="V_GDH" variable_1="V_GDH"/>
+    <map_variables variable_2="NADH_g" variable_1="NADH_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="C1" component_1="ATP_g"/>
+    <map_variables variable_2="C1" variable_1="C1"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="C2" component_1="ATP_c"/>
+    <map_variables variable_2="C2" variable_1="C2"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="ATP_g" component_1="P_g"/>
+    <map_variables variable_2="P_g" variable_1="P_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="ADP_g" component_1="ATP_g"/>
+    <map_variables variable_2="ATP_g" variable_1="ATP_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="ADP_g" component_1="P_g"/>
+    <map_variables variable_2="P_g" variable_1="P_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="AMP_g" component_1="ATP_g"/>
+    <map_variables variable_2="ATP_g" variable_1="ATP_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="AMP_g" component_1="ADP_g"/>
+    <map_variables variable_2="ADP_g" variable_1="ADP_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="C1" component_1="AMP_g"/>
+    <map_variables variable_2="C1" variable_1="C1"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="ADP_c" component_1="ATP_c"/>
+    <map_variables variable_2="ATP_c" variable_1="ATP_c"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="ATP_c" component_1="P_c"/>
+    <map_variables variable_2="P_c" variable_1="P_c"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="ADP_c" component_1="P_c"/>
+    <map_variables variable_2="P_c" variable_1="P_c"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="AMP_c" component_1="ATP_c"/>
+    <map_variables variable_2="ATP_c" variable_1="ATP_c"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="AMP_c" component_1="ADP_c"/>
+    <map_variables variable_2="ADP_c" variable_1="ADP_c"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="C2" component_1="AMP_c"/>
+    <map_variables variable_2="C2" variable_1="C2"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V_HK" component_1="ATP_g"/>
+    <map_variables variable_2="ATP_g" variable_1="ATP_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V_GK" component_1="ATP_g"/>
+    <map_variables variable_2="ATP_g" variable_1="ATP_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V_PYK" component_1="ATP_c"/>
+    <map_variables variable_2="ATP_c" variable_1="ATP_c"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V_ALD" component_1="ATP_g"/>
+    <map_variables variable_2="ATP_g" variable_1="ATP_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V_ATP_utilisation" component_1="ATP_c"/>
+    <map_variables variable_2="ATP_c" variable_1="ATP_c"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V_ATP_utilisation" component_1="ADP_c"/>
+    <map_variables variable_2="ADP_c" variable_1="ADP_c"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V_HK" component_1="ADP_g"/>
+    <map_variables variable_2="ADP_g" variable_1="ADP_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V_ALD" component_1="ADP_g"/>
+    <map_variables variable_2="ADP_g" variable_1="ADP_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V_ALD" component_1="AMP_g"/>
+    <map_variables variable_2="AMP_g" variable_1="AMP_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V_PGK" component_1="ADP_g"/>
+    <map_variables variable_2="ADP_g" variable_1="ADP_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V_GK" component_1="ADP_g"/>
+    <map_variables variable_2="ADP_g" variable_1="ADP_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V_PYK" component_1="ADP_c"/>
+    <map_variables variable_2="ADP_c" variable_1="ADP_c"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V_GK" component_1="glycerol_g"/>
+    <map_variables variable_2="glycerol_g" variable_1="glycerol_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V_PGK" component_1="ATP_g"/>
+    <map_variables variable_2="ATP_g" variable_1="ATP_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V_PFK" component_1="ATP_g"/>
+    <map_variables variable_2="ATP_g" variable_1="ATP_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V_GAPDH" component_1="NAD_g"/>
+    <map_variables variable_2="NAD_g" variable_1="NAD_g"/>
+  </connection> 
+  
+  <connection>
+    <map_components component_2="V_PGK" component_1="three_PGA"/>
+    <map_variables variable_2="three_PGA" variable_1="three_PGA"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V_GDH" component_1="NAD_g"/>
+    <map_variables variable_2="NAD_g" variable_1="NAD_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="three_PGA" component_1="volume_ratio"/>
+    <map_variables variable_2="Vc_Vg" variable_1="Vc_Vg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="DHAP" component_1="volume_ratio"/>
+    <map_variables variable_2="Vc_Vg" variable_1="Vc_Vg"/>
+  </connection>
+  
+  
+ 
+
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Seq rdf:about="rdf:#fed6dc9c-1bd0-44ad-a754-e5c05bcffac0">
+    <rdf:li rdf:resource="rdf:#29658639-cb1e-45ec-818a-eb8ffe443173"/>
+    <rdf:li rdf:resource="rdf:#d3bb2e17-0a7b-43a6-a7c2-459cdf0e5d63"/>
+    <rdf:li rdf:resource="rdf:#907b4ae5-9c24-41aa-b60c-00fd06ada9f8"/>
+    <rdf:li rdf:resource="rdf:#fb36ed12-145a-4012-b848-45b8e1519de9"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#b95be0b8-32c4-468e-88eb-61f27b27ae7c">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:publisher>The University of Auckland, Auckland Bioengineering Institute</dc:publisher>
+    <cmeta:comment rdf:resource="rdf:#5d291dd8-b4f0-4166-a553-4d2f463e008e"/>
+    <dcterms:created rdf:resource="rdf:#bda71aed-9c77-4835-bf37-62e5d37a6120"/>
+    <dc:creator rdf:resource="rdf:#b19e53b2-21b5-4134-9d0b-6e3dd0427599"/>
+    <cmeta:modification rdf:resource="rdf:#3ec536d4-e5a5-423b-92be-d478ca41cadf"/>
+    <cmeta:modification rdf:resource="rdf:#50ba4847-7bff-4cbe-81b9-3187546a42ec"/>
+    <cmeta:modification rdf:resource="rdf:#75a3b7b3-ea7d-46ab-90ed-4708e4a18c06"/>
+    <cmeta:modification rdf:resource="rdf:#faa003ff-a4f2-40b6-ac41-749c7c173c12"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#60626625-956e-42e3-a121-feb8c6793be3">
+    <vCard:N rdf:resource="rdf:#fa295e45-f0a4-4166-85bf-fd373fa503bb"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3e31cc54-d6b6-4697-ba0b-316c0f10af90">
+    <dcterms:W3CDTF>2005-04-27</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0b1dd12e-3d59-4a2e-a9a9-832c337b26cd">
+    <vCard:FN/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#29658639-cb1e-45ec-818a-eb8ffe443173">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#8653ef5c-8429-4225-8662-8323cbba6516"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#dd9d54ae-6ab3-4a2f-8119-41a02c3eb3e5">
+    <dcterms:W3CDTF>2003-04-09</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#75a3b7b3-ea7d-46ab-90ed-4708e4a18c06">
+    <dcterms:modified rdf:resource="rdf:#bbf2616f-66cf-4519-acf1-ec81b1fc8cd0"/>
+    <rdf:value>
+          Changed model structure to remove the model element from the CellML.
+        </rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#25a9b8dd-3a16-444f-92a6-d36a37f7076f"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#eb2e30c4-450f-4499-8979-6f2b58599e44">
+    <vCard:Given>Hans</vCard:Given>
+    <vCard:Family>Westerhoff</vCard:Family>
+    <vCard:Other>V</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#24de549f-b1db-4699-9d2b-4bf394161324">
+    <dc:creator rdf:resource="rdf:#bb434dac-d7e9-4c70-90e8-ae4f66c1ab5b"/>
+    <rdf:value>This is the CellML description of Bakker et al's 1997 mathematical &#13;
+          model of glycolysis in the parasite Trypanosoma brucei.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e1cd12b3-7d1d-4013-99a1-0cdccfc3ef60">
+    <dc:creator rdf:resource="rdf:#fed6dc9c-1bd0-44ad-a754-e5c05bcffac0"/>
+    <dc:title>Glycolysis in Bloodstream Form Trypanosoma brucei Can Be Understood in Terms of the Kinetics of the Glycolytic Enzymes</dc:title>
+    <bqs:volume>272</bqs:volume>
+    <bqs:first_page>3207</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#832a7b08-8e71-4e7c-9222-7eeceabc06ee"/>
+    <dcterms:issued rdf:resource="rdf:#7aee7287-64dd-435d-82ca-17b6becb0053"/>
+    <bqs:last_page>3215</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#50ba4847-7bff-4cbe-81b9-3187546a42ec">
+    <dcterms:modified rdf:resource="rdf:#dd9d54ae-6ab3-4a2f-8119-41a02c3eb3e5"/>
+    <rdf:value>
+          Added publication date information.
+        </rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#e256dd86-e28f-4a2e-a1d5-b0e0e11ad401"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#fa295e45-f0a4-4166-85bf-fd373fa503bb">
+    <vCard:Given>James</vCard:Given>
+    <vCard:Family>Lawson</vCard:Family>
+    <vCard:Other>Richard</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0cbe075f-698f-4fae-a130-d0cd3d5fd22e">
+    <vCard:Given>Peter</vCard:Given>
+    <vCard:Family>Villiger</vCard:Family>
+    <vCard:Other>John</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3ec536d4-e5a5-423b-92be-d478ca41cadf">
+    <dcterms:modified rdf:resource="rdf:#a547bd0a-fb8d-457f-9206-91b5dec1df59"/>
+    <rdf:value>Fixed e-notation error&#13;
+&#13;
+Updated curation status</rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#60626625-956e-42e3-a121-feb8c6793be3"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7aee7287-64dd-435d-82ca-17b6becb0053">
+    <dcterms:W3CDTF>1997-02-07</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#bda71aed-9c77-4835-bf37-62e5d37a6120">
+    <dcterms:W3CDTF>2002-08-01T00:00:00+00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9314edd7-211f-4079-8944-8724d81e1082">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3e218bf1-eb1e-4dee-81e3-13d64b555e8b">
+    <vCard:N rdf:resource="rdf:#0cbe075f-698f-4fae-a130-d0cd3d5fd22e"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a547bd0a-fb8d-457f-9206-91b5dec1df59">
+    <dcterms:W3CDTF>2009-05-05T11:37:58+12:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#907b4ae5-9c24-41aa-b60c-00fd06ada9f8">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#459dfc27-bf72-43a4-9e2e-dc207e933589"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#78d8bf59-b7bb-4081-a702-123e05fea6dc">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#459dfc27-bf72-43a4-9e2e-dc207e933589">
+    <vCard:Given>Fred</vCard:Given>
+    <vCard:Family>Opperdoes</vCard:Family>
+    <vCard:Other>R</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#25a9b8dd-3a16-444f-92a6-d36a37f7076f">
+    <vCard:N rdf:resource="rdf:#9314edd7-211f-4079-8944-8724d81e1082"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#832a7b08-8e71-4e7c-9222-7eeceabc06ee">
+    <dc:title>The Journal of Biological Chemistry</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="#bakker_1997">
+    <dc:title>
+        A model of glycolysis in the parasite Trypanosoma brucei.
+      </dc:title>
+    <cmeta:comment rdf:resource="rdf:#24de549f-b1db-4699-9d2b-4bf394161324"/>
+    <bqs:reference rdf:resource="rdf:#fc274f67-6d08-467f-ab87-3af1d3c27745"/>
+<bqs:reference rdf:parseType="Resource">
+  <dc:subject rdf:parseType="Resource">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value>
+      <rdf:Bag>
+        <rdf:li>metabolism</rdf:li>
+        <rdf:li>glycolysis</rdf:li>
+      </rdf:Bag>
+    </rdf:value>
+  </dc:subject>
+</bqs:reference>
+    <cmeta:species>Trypanosoma brucei</cmeta:species>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e256dd86-e28f-4a2e-a1d5-b0e0e11ad401">
+    <vCard:N rdf:resource="rdf:#ee01e3ae-e398-46be-a0ec-9a13860cb379"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d3bb2e17-0a7b-43a6-a7c2-459cdf0e5d63">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#42a6816e-e7df-4f06-812a-7ed9579570a3"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#bb434dac-d7e9-4c70-90e8-ae4f66c1ab5b">
+    <vCard:FN>Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4a77d9a0-6355-4e41-862f-159468754997">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#faa003ff-a4f2-40b6-ac41-749c7c173c12">
+    <dcterms:modified rdf:resource="rdf:#3e31cc54-d6b6-4697-ba0b-316c0f10af90"/>
+    <rdf:value>
+          Modified names to conform with cellml 1.1 naming conventions
+          and modified comment brackets.
+        </rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#3e218bf1-eb1e-4dee-81e3-13d64b555e8b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#bbf2616f-66cf-4519-acf1-ec81b1fc8cd0">
+    <dcterms:W3CDTF>2003-09-01</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ee01e3ae-e398-46be-a0ec-9a13860cb379">
+    <vCard:Given>Autumn</vCard:Given>
+    <vCard:Family>Cuellar</vCard:Family>
+    <vCard:Other>A</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#fb36ed12-145a-4012-b848-45b8e1519de9">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#eb2e30c4-450f-4499-8979-6f2b58599e44"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b19e53b2-21b5-4134-9d0b-6e3dd0427599">
+    <vCard:ORG rdf:resource="rdf:#78d8bf59-b7bb-4081-a702-123e05fea6dc"/>
+    <vCard:EMAIL rdf:resource="rdf:#b95be0b8-32c4-468e-88eb-61f27b27ae7c"/>
+    <vCard:N rdf:resource="rdf:#4a77d9a0-6355-4e41-862f-159468754997"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8653ef5c-8429-4225-8662-8323cbba6516">
+    <vCard:Given>Barbara</vCard:Given>
+    <vCard:Family>Bakker</vCard:Family>
+    <vCard:Other>M</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#42a6816e-e7df-4f06-812a-7ed9579570a3">
+    <vCard:Given>Paul</vCard:Given>
+    <vCard:Family>Michels</vCard:Family>
+    <vCard:Other>A</vCard:Other>
+    <vCard:Other>M</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#fc274f67-6d08-467f-ab87-3af1d3c27745">
+    <bqs:Pubmed_id>9013556</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#e1cd12b3-7d1d-4013-99a1-0cdccfc3ef60"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#5d291dd8-b4f0-4166-a553-4d2f463e008e">
+    <dc:creator rdf:resource="rdf:#0b1dd12e-3d59-4a2e-a9a9-832c337b26cd"/>
+    <rdf:value/>
+  </rdf:Description>
+</rdf:RDF>
+</model>

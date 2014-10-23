@@ -1,0 +1,743 @@
+<?xml version="1.0"?>
+<!--  FILE :  butera_model_1999.xml
+
+CREATED :  9th May 2002
+
+LAST MODIFIED : 20th April 2005
+
+AUTHOR :  Catherine Lloyd
+          Bioengineering Institute
+          The University of Auckland
+          
+MODEL STATUS :  This model conforms to the CellML 1.0 Specification released on
+10th August 2001, and the 16/01/2002 CellML Metadata 1.0 Specification.
+
+DESCRIPTION :  This file contains a CellML description of Butera et al's first 1999 mathematical model of respiratory rhythm generation in the pre-Botzinger complex in bursting pacemaker neurons.
+
+CHANGES:  
+  18/07/2002 - CML - Added more metadata.
+  09/04/2003 - AAC - Added publication date information.
+  20/04/2005 - PJV - Made MathML id's unique  
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" cmeta:id="butera_1999" name="butera_1999">
+
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Models Of Respiratory Rhythm Generation In The Pre-Botzinger Complex. I. Bursting Pacemaker Neurons</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+          This CellML model runs in OpenCell and COR to reproduce the published results (Figure 4 A3 where E_L = -57.5 mv).  Please note that the model has to be run for a duration of 10000 ms with a step size of 0.01 ms and a high point density of 100000 points/graph.  This model represents model 1 from the published paper (which does not include a slow potassium current).
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+ABSTRACT: A network of oscillatory bursting neurons with excitatory coupling is hypothesized to define the primary kernel for respiratory rhythm generation in the pre-Botzinger complex (pre-BotC) in mammals. Two minimal models of these neurons are proposed. In model 1, bursting arises via fast activation and slow inactivation of a persistent Na+ current INaP-h. In model 2, bursting arises via a fast-activating persistent Na+ current INaP and slow activation of a K+ current IKS. In both models, action potentials are generated via fast Na+ and K+ currents. The two models have few differences in parameters to facilitate a rigorous comparison of the two different burst-generating mechanisms. Both models are consistent with many of the dynamic features of electrophysiological recordings from pre-BotC oscillatory bursting neurons in vitro, including voltage-dependent activity modes (silence, bursting, and beating), a voltage-dependent burst frequency that can vary from 0.05 to &gt;1 Hz, and a decaying spike frequency during bursting. These results are robust and persist across a wide range of parameter values for both models. However, the dynamics of model 1 are more consistent with experimental data in that the burst duration decreases as the baseline membrane potential is depolarized and the model has a relatively flat membrane potential trajectory during the interburst interval. We propose several experimental tests to demonstrate the validity of either model and to differentiate between the two mechanisms.
+</para>
+
+<para>
+The complete original paper reference is cited below:
+</para>
+
+<para>
+Models of Respiratory Rhythm Generation in the Pre-Botzinger Complex. I. Bursting Pacemaker Neurons, Robert J. Butera, Jr., John Rinzel and Jeffrey C. Smith, 1999, <emphasis>Journal of Neurophysiology</emphasis>, 81, 382-397. <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/10400966">PubMed ID: 10400966</ulink> 
+</para>
+
+<informalfigure float="0" id="fig_cell_diagram1">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>diagram of the first model</title>
+    </objectinfo>
+    <imagedata fileref="butera_1999a.png"/>
+  </imageobject>
+</mediaobject>
+<caption>The first mathematical model is based on a single-compartment Hodgkin-Huxley type formalism.  It is composed of five ionic currents across the plasma membrane: a fast sodium current, I<subscript>Na</subscript>; a delayed rectifier potassium current, I<subscript>K</subscript>; a persistent sodium current,  I<subscript>NaP</subscript>; a passive leakage current, I<subscript>L</subscript>; and a tonic current, I<subscript>tonic_e</subscript> (although this last current is considered to be inactive in these models).</caption>
+</informalfigure>
+
+<informalfigure float="0" id="fig_cell_diagram2">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>diagram of the first model</title>
+    </objectinfo>
+    <imagedata fileref="butera_1999b.png"/>
+  </imageobject>
+</mediaobject>
+<caption>The second model appears identical to the first except with the addition of a slow K<superscript>+</superscript> current, I<subscript>KS</subscript>.  (The removal of the inactivation term "h" from I<subscript>NaP</subscript> is not visible in the model diagram.)</caption>
+</informalfigure>
+
+</sect1>
+</article>
+</documentation>
+  
+  
+ 
+  
+  <units name="millisecond">
+    <unit prefix="milli" units="second"/>
+  </units>
+  
+  <units name="millivolt">
+    <unit prefix="milli" units="volt"/>
+  </units>
+  
+  <units name="picoA">
+    <unit prefix="nano" units="ampere"/>
+  </units>
+  
+  <units name="nanoS">
+    <unit prefix="nano" units="siemens"/>
+  </units>
+  
+  <units name="picoF">
+    <unit prefix="pico" units="farad"/>
+  </units>
+  
+  <component name="environment">
+    <variable cmeta:id="environment_time" name="time" public_interface="out" units="millisecond"/>
+  </component>
+  
+  <component name="membrane">
+    <variable cmeta:id="membrane_V" initial_value="-50.0" name="V" public_interface="out" units="millivolt"/>
+    
+    <variable initial_value="21.0" name="C" units="picoF"/>
+    <variable initial_value="0.0" name="i_app" units="picoA"/>
+    
+    <variable name="time" public_interface="in" units="millisecond"/>
+    <variable name="i_NaP" public_interface="in" units="picoA"/>
+    <variable name="i_Na" public_interface="in" units="picoA"/>
+    <variable name="i_K" public_interface="in" units="picoA"/>
+    <variable name="i_L" public_interface="in" units="picoA"/>
+    <variable name="i_tonic_e" public_interface="in" units="picoA"/>
+     
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="membrane_voltage_diff_eq">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> V </ci>
+        </apply>
+        <apply>
+          <divide/>
+          <apply>
+            <plus/>
+            <apply>
+              <minus/>
+              <apply>
+                <plus/>
+                <ci> i_NaP </ci>
+                <ci> i_Na </ci>
+                <ci> i_K </ci>
+                <ci> i_L </ci>
+                <ci> i_tonic_e </ci>
+              </apply>
+            </apply>
+            <ci> i_app </ci>
+          </apply>
+          <ci> C </ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="fast_sodium_current">
+    <variable cmeta:id="fast_sodium_current_i_Na" name="i_Na" public_interface="out" units="picoA"/>
+    <variable initial_value="50.0" name="E_Na" public_interface="out" units="millivolt"/>
+    
+    <variable initial_value="28.0" name="g_Na" units="nanoS"/>   
+   
+    <variable name="time" private_interface="out" public_interface="in" units="millisecond"/>
+    <variable name="V" private_interface="out" public_interface="in" units="millivolt"/>
+    
+    <variable name="m_infinity" private_interface="in" units="dimensionless"/>
+    <variable name="n" private_interface="in" units="dimensionless"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="i_Na_calculation">
+        <eq/>
+        <ci> i_Na </ci>
+        <apply>
+          <times/>
+          <ci> g_Na </ci>
+          <apply>
+            <power/>
+            <ci> m_infinity </ci>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 3.0 </cn>
+          </apply>
+          <apply>
+            <minus/>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1.0 </cn>
+            <ci> n </ci>
+          </apply>
+          <apply>
+            <minus/>
+            <ci> V </ci>
+            <ci> E_Na </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="fast_sodium_current_m_gate">
+    <variable name="m_infinity" public_interface="out" units="dimensionless"/>
+    
+    <variable initial_value="-34.0" name="theta_m" units="millivolt"/>
+    <variable initial_value="-5.0" name="sigma_m" units="millivolt"/>
+     
+    <variable name="V" public_interface="in" units="millivolt"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="fast_sodium_current_m_gate_m_infinity_calculation">
+        <eq/>
+        <ci> m_infinity </ci>
+        <apply>
+          <divide/>
+          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1.0 </cn>
+          <apply>
+            <plus/>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <exp/>
+              <apply>
+                <divide/>
+                <apply>
+                  <minus/>
+                  <ci> V </ci>
+                  <ci> theta_m </ci>
+                </apply>
+                <ci> sigma_m </ci>
+              </apply>
+            </apply>    
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="fast_sodium_current_n_gate">
+    <variable initial_value="0.01" name="n" public_interface="out" units="dimensionless"/>
+    
+    <variable name="n_infinity" units="dimensionless"/>
+    <variable name="tau_n" units="millisecond"/>
+    <variable initial_value="10.0" name="tau_n_max" units="millisecond"/>
+    <variable initial_value="-29.0" name="theta_n" units="millivolt"/>
+    <variable initial_value="-4.0" name="sigma_n" units="millivolt"/>
+     
+    <variable name="V" public_interface="in" units="millivolt"/>
+    <variable name="time" public_interface="in" units="millisecond"/>
+   
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="fast_sodium_current_n_gate_n_diff_eq">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> n </ci>
+        </apply>
+        <apply>
+          <divide/>
+          <apply>
+            <minus/>
+            <ci> n_infinity </ci>
+            <ci> n </ci>
+          </apply>
+          <ci> tau_n </ci>
+        </apply>
+      </apply>
+      
+      <apply id="fast_sodium_current_n_gate_n_infinity_calculation">
+        <eq/>
+        <ci> n_infinity </ci>
+        <apply>
+          <divide/>
+          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1.0 </cn>
+          <apply>
+            <plus/>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <exp/>
+              <apply>
+                <divide/>
+                <apply>
+                  <minus/>
+                  <ci> V </ci>
+                  <ci> theta_n </ci>
+                </apply>
+                <ci> sigma_n </ci>
+              </apply>
+            </apply>    
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="fast_sodium_current_n_gate_tau_n_calculation">
+        <eq/>
+        <ci> tau_n </ci>
+        <apply>
+          <divide/>
+          <ci> tau_n_max </ci>
+          <apply>
+            <cosh/>
+            <apply>
+              <divide/>
+              <apply>
+                <minus/>
+                <ci> V </ci>
+                <ci> theta_n </ci>
+              </apply>
+              <apply>
+                <times/>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 2.0 </cn>
+                <ci> sigma_n </ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="potassium_current">
+    <variable cmeta:id="potassium_current_i_K" name="i_K" public_interface="out" units="picoA"/>
+    
+    <variable initial_value="11.2" name="g_K" units="nanoS"/>   
+    <variable initial_value="-85.0" name="E_K" units="millivolt"/>
+    
+    <variable name="time" private_interface="out" public_interface="in" units="millisecond"/>
+    <variable name="V" private_interface="out" public_interface="in" units="millivolt"/>
+    
+    <variable name="n" private_interface="in" units="dimensionless"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="i_K_calculation">
+        <eq/>
+        <ci> i_K </ci>
+        <apply>
+          <times/>
+          <ci> g_K </ci>
+          <apply>
+            <power/>
+            <ci> n </ci>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 4.0 </cn>
+          </apply>
+          <apply>
+            <minus/>
+            <ci> V </ci>
+            <ci> E_K </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="potassium_current_n_gate">
+    <variable initial_value="0.01" name="n" public_interface="out" units="dimensionless"/>
+    
+    <variable name="n_infinity" units="dimensionless"/>
+    <variable name="tau_n" units="millisecond"/>
+    <variable initial_value="10.0" name="tau_n_max" units="millisecond"/>
+    <variable initial_value="-29.0" name="theta_n" units="millivolt"/>
+    <variable initial_value="-4.0" name="sigma_n" units="millivolt"/>
+     
+    <variable name="V" public_interface="in" units="millivolt"/>
+    <variable name="time" public_interface="in" units="millisecond"/>
+   
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="potassium_current_n_gate_n_diff_eq">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> n </ci>
+        </apply>
+        <apply>
+          <divide/>
+          <apply>
+            <minus/>
+            <ci> n_infinity </ci>
+            <ci> n </ci>
+          </apply>
+          <ci> tau_n </ci>
+        </apply>
+      </apply>
+      
+      <apply id="potassium_current_n_gate_n_infinity_calculation">
+        <eq/>
+        <ci> n_infinity </ci>
+        <apply>
+          <divide/>
+          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1.0 </cn>
+          <apply>
+            <plus/>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <exp/>
+              <apply>
+                <divide/>
+                <apply>
+                  <minus/>
+                  <ci> V </ci>
+                  <ci> theta_n </ci>
+                </apply>
+                <ci> sigma_n </ci>
+              </apply>
+            </apply>    
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="potassium_current_n_gate_tau_n_calculation">
+        <eq/>
+        <ci> tau_n </ci>
+        <apply>
+          <divide/>
+          <ci> tau_n_max </ci>
+          <apply>
+            <cosh/>
+            <apply>
+              <divide/>
+              <apply>
+                <minus/>
+                <ci> V </ci>
+                <ci> theta_n </ci>
+              </apply>
+              <apply>
+                <times/>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 2.0 </cn>
+                <ci> sigma_n </ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="persistent_sodium_current">
+    <variable cmeta:id="persistent_sodium_current_i_NaP" name="i_NaP" public_interface="out" units="picoA"/>
+    
+    <variable initial_value="2.8" name="g_NaP" units="nanoS"/>   
+   
+    <variable name="time" private_interface="out" public_interface="in" units="millisecond"/>
+    <variable name="V" private_interface="out" public_interface="in" units="millivolt"/>
+    <variable name="E_Na" public_interface="in" units="millivolt"/>         
+    
+    <variable name="m_infinity" private_interface="in" units="dimensionless"/>
+    <variable name="h" private_interface="in" units="dimensionless"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="i_NaP_calculation">
+        <eq/>
+        <ci> i_NaP </ci>
+        <apply>
+          <times/>
+          <ci> g_NaP </ci>
+          <ci> m_infinity </ci>
+          <ci> h </ci>
+          <apply>
+            <minus/>
+            <ci> V </ci>
+            <ci> E_Na </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="persistent_sodium_current_m_gate">
+    <variable name="m_infinity" public_interface="out" units="dimensionless"/>
+    
+    <variable initial_value="-40.0" name="theta_m" units="millivolt"/>
+    <variable initial_value="-6.0" name="sigma_m" units="millivolt"/>
+     
+    <variable name="V" public_interface="in" units="millivolt"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="persistent_sodium_current_m_gate_m_infinity_calculation">
+        <eq/>
+        <ci> m_infinity </ci>
+        <apply>
+          <divide/>
+          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1.0 </cn>
+          <apply>
+            <plus/>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <exp/>
+              <apply>
+                <divide/>
+                <apply>
+                  <minus/>
+                  <ci> V </ci>
+                  <ci> theta_m </ci>
+                </apply>
+                <ci> sigma_m </ci>
+              </apply>
+            </apply>    
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="persistent_sodium_current_h_gate">
+    <variable initial_value="0.46" name="h" public_interface="out" units="dimensionless"/>
+    
+    <variable name="h_infinity" units="dimensionless"/>
+    <variable name="tau_h" units="millisecond"/>
+    <variable initial_value="10000.0" name="tau_h_max" units="millisecond"/>
+    <variable initial_value="-48.0" name="theta_h" units="millivolt"/>
+    <variable initial_value="6.0" name="sigma_h" units="millivolt"/>
+     
+    <variable name="V" public_interface="in" units="millivolt"/>
+    <variable name="time" public_interface="in" units="millisecond"/>
+   
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="h_diff_eq">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> h </ci>
+        </apply>
+        <apply>
+          <divide/>
+          <apply>
+            <minus/>
+            <ci> h_infinity </ci>
+            <ci> h </ci>
+          </apply>
+          <ci> tau_h </ci>
+        </apply>
+      </apply>
+      
+      <apply id="h_infinity_calculation">
+        <eq/>
+        <ci> h_infinity </ci>
+        <apply>
+          <divide/>
+          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1.0 </cn>
+          <apply>
+            <plus/>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <exp/>
+              <apply>
+                <divide/>
+                <apply>
+                  <minus/>
+                  <ci> V </ci>
+                  <ci> theta_h </ci>
+                </apply>
+                <ci> sigma_h </ci>
+              </apply>
+            </apply>    
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="tau_h_calculation">
+        <eq/>
+        <ci> tau_h </ci>
+        <apply>
+          <divide/>
+          <ci> tau_h_max </ci>
+          <apply>
+            <cosh/>
+            <apply>
+              <divide/>
+              <apply>
+                <minus/>
+                <ci> V </ci>
+                <ci> theta_h </ci>
+              </apply>
+              <apply>
+                <times/>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 2.0 </cn>
+                <ci> sigma_h </ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="leakage_current">
+    <variable cmeta:id="leakage_current_i_L" name="i_L" public_interface="out" units="picoA"/>
+     
+    <variable initial_value="2.8" name="g_L" units="nanoS"/>
+    <variable initial_value="-57.5" name="E_L" units="millivolt"/> 
+    
+    <variable name="V" public_interface="in" units="millivolt"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="i_L_calculation">
+        <eq/>
+        <ci> i_L </ci>
+        <apply>
+          <times/>
+          <ci> g_L </ci>
+          <apply>
+            <minus/>
+            <ci> V </ci>
+            <ci> E_L </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="tonic_current">
+    <variable cmeta:id="tonic_current_i_tonic_e" name="i_tonic_e" public_interface="out" units="picoA"/>
+     
+    <variable cmeta:id="tonic_current_g_tonic_e" initial_value="0.0" name="g_tonic_e" units="nanoS"/>
+    <variable initial_value="0.0" name="E_syn_e" units="millivolt"/> 
+    
+    <variable name="V" public_interface="in" units="millivolt"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="i_tonic_e_calculation">
+        <eq/>
+        <ci> i_tonic_e </ci>
+        <apply>
+          <times/>
+          <ci> g_tonic_e </ci>
+          <apply>
+            <minus/>
+            <ci> V </ci>
+            <ci> E_syn_e </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <group>
+    <relationship_ref relationship="encapsulation"/>
+      <component_ref component="fast_sodium_current">
+        <component_ref component="fast_sodium_current_m_gate"/>
+        <component_ref component="fast_sodium_current_n_gate"/>
+      </component_ref>
+      <component_ref component="potassium_current">
+        <component_ref component="potassium_current_n_gate"/>
+      </component_ref>
+      <component_ref component="persistent_sodium_current">
+        <component_ref component="persistent_sodium_current_m_gate"/>
+        <component_ref component="persistent_sodium_current_h_gate"/>
+      </component_ref>
+  </group>
+  
+  <connection>
+    <map_components component_1="membrane" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="fast_sodium_current" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="potassium_current" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="persistent_sodium_current" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="fast_sodium_current" component_2="membrane"/>
+    <map_variables variable_1="V" variable_2="V"/>
+    <map_variables variable_1="i_Na" variable_2="i_Na"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="potassium_current" component_2="membrane"/>
+    <map_variables variable_1="V" variable_2="V"/>
+    <map_variables variable_1="i_K" variable_2="i_K"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="persistent_sodium_current" component_2="membrane"/>
+    <map_variables variable_1="V" variable_2="V"/>
+    <map_variables variable_1="i_NaP" variable_2="i_NaP"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="leakage_current" component_2="membrane"/>
+    <map_variables variable_1="V" variable_2="V"/>
+    <map_variables variable_1="i_L" variable_2="i_L"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="tonic_current" component_2="membrane"/>
+    <map_variables variable_1="V" variable_2="V"/>
+    <map_variables variable_1="i_tonic_e" variable_2="i_tonic_e"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="fast_sodium_current" component_2="persistent_sodium_current"/>
+    <map_variables variable_1="E_Na" variable_2="E_Na"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="fast_sodium_current" component_2="fast_sodium_current_m_gate"/>
+    <map_variables variable_1="m_infinity" variable_2="m_infinity"/>
+    <map_variables variable_1="V" variable_2="V"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="fast_sodium_current" component_2="fast_sodium_current_n_gate"/>
+    <map_variables variable_1="n" variable_2="n"/>
+    <map_variables variable_1="V" variable_2="V"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="potassium_current" component_2="potassium_current_n_gate"/>
+    <map_variables variable_1="n" variable_2="n"/>
+    <map_variables variable_1="V" variable_2="V"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="persistent_sodium_current" component_2="persistent_sodium_current_m_gate"/>
+    <map_variables variable_1="m_infinity" variable_2="m_infinity"/>
+    <map_variables variable_1="V" variable_2="V"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="persistent_sodium_current" component_2="persistent_sodium_current_h_gate"/>
+    <map_variables variable_1="h" variable_2="h"/>
+    <map_variables variable_1="V" variable_2="V"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:nodeID="n1"><Pubmed_id xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">10400966</Pubmed_id><JournalArticle xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n2"/></JournalArticle></rdf:Description><rdf:Description rdf:nodeID="n3"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n4"/></N></rdf:Description><rdf:Description rdf:nodeID="n5"><rdf:first><rdf:Description rdf:nodeID="n6"/></rdf:first><rdf:rest><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/></rdf:rest></rdf:Description><rdf:Description rdf:nodeID="n7"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Butera</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Robert</Given><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">J</Other></rdf:Description><rdf:Description rdf:nodeID="n6"><endingValue xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">10000</endingValue><pointDensity xmlns="http://www.cellml.org/metadata/simulation/1.0#nonstandard-" xml:lang="en">100000</pointDensity></rdf:Description><rdf:Description rdf:nodeID="n8"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n7"/></N></rdf:Description><rdf:Description rdf:nodeID="n9"><Orgunit xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Auckland Bioengineering Institute</Orgunit><Orgname xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">The University of Auckland</Orgname></rdf:Description><rdf:Description rdf:nodeID="n10"><rdf:type><rdf:Description rdf:about="http://imc.org/vCard/3.0#internet"/></rdf:type><rdf:value xml:lang="en">c.lloyd@auckland.ac.nz</rdf:value></rdf:Description><rdf:Description rdf:nodeID="n11"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Smith</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Jeffrey</Given><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">C</Other></rdf:Description><rdf:Description rdf:nodeID="n2"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">
+            Models of Respiratory Rhythm Generation in the Pre-Botzinger Complex. I. Bursting Pacemaker Neurons
+          </title><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n12"/></creator><Journal xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n13"/></Journal><issued xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:nodeID="n14"/></issued><volume xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">81</volume><first_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">382</first_page><last_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">397</last_page></rdf:Description><rdf:Description rdf:nodeID="n15"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n8"/></Person></rdf:Description><rdf:Description rdf:nodeID="n16"><subject xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n17"/></subject></rdf:Description><rdf:Description rdf:nodeID="n14"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">1999-07</W3CDTF></rdf:Description><rdf:Description rdf:nodeID="n4"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Rinzel</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">John</Given></rdf:Description><rdf:Description rdf:nodeID="n18"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Lloyd</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Catherine</Given><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">May</Other></rdf:Description><rdf:Description rdf:nodeID="n19"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n20"/></Person></rdf:Description><rdf:Description rdf:nodeID="n13"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">Journal of Neurophysiology</title></rdf:Description><rdf:Description rdf:nodeID="n20"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n11"/></N></rdf:Description><rdf:Description rdf:nodeID="n17"><subject_type xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">keyword</subject_type><rdf:value><rdf:Description rdf:nodeID="n21"/></rdf:value></rdf:Description><rdf:Description rdf:nodeID="n22"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n3"/></Person></rdf:Description><rdf:Description rdf:nodeID="n23"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n18"/></N><ORG xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n9"/></ORG><EMAIL xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n10"/></EMAIL></rdf:Description><rdf:Description rdf:nodeID="n21"><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag"/></rdf:type><rdf:_2 xml:lang="en">electrophysiology</rdf:_2><rdf:_1 xml:lang="en">respiratory</rdf:_1><rdf:_3 xml:lang="en">central pattern generator</rdf:_3><rdf:_4 xml:lang="en">neuron</rdf:_4><rdf:_5 xml:lang="en">neurobiology</rdf:_5></rdf:Description><rdf:Description rdf:about=""><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">Models of Respiratory Rhythm Generation in the Pre-Botzinger Complex. I. Bursting Pacemaker Neurons: model 1 (which does not include a slow potassium current)</title><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n23"/></creator></rdf:Description><rdf:Description rdf:about="#butera_1999"><simulation xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n24"/></simulation><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n16"/></reference><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n1"/></reference></rdf:Description><rdf:Description rdf:nodeID="n24"><boundIntervals xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n5"/></boundIntervals></rdf:Description><rdf:Description rdf:nodeID="n12"><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq"/></rdf:type><rdf:_2><rdf:Description rdf:nodeID="n22"/></rdf:_2><rdf:_1><rdf:Description rdf:nodeID="n15"/></rdf:_1><rdf:_3><rdf:Description rdf:nodeID="n19"/></rdf:_3></rdf:Description></rdf:RDF></model>

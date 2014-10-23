@@ -1,0 +1,4916 @@
+<?xml version="1.0"?>
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:ns7="http://www.cellml.org/metadata/simulation/1.0#" name="cloutier_model_2009" cmeta:id="cloutier_model_2009">
+
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>An integrative dynamic model of brain energy metabolism using in vivo neurochemical measurements</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+       This CellMl model runs in OpenCell to recreate the published results.  The units are balanced.  Thank you to the original author Mathieu Cloutier for his invaluable help in the final stages of model curation.  We recommend the followin simulation conditions: a duration of 2500 seconds with a an increase in neuronal activity at 200 seconds.
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+  <title>Model Structure</title>
+
+<para>
+ABSTRACT: An integrative, systems approach to the modelling of brain energy metabolism is presented. Mechanisms such as glutamate cycling between neurons and astrocytes and glycogen storage in astrocytes have been implemented. A unique feature of the model is its calibration using in vivo data of brain glucose and lactate from freely moving rats under various stimuli. The model has been used to perform simulated perturbation experiments that show that glycogen breakdown in astrocytes is significantly activated during sensory (tail pinch) stimulation. This mechanism provides an additional input of energy substrate during high consumption phases. By way of validation, data from the perfusion of 50 microM propranolol in the rat brain was compared with the model outputs. Propranolol affects the glucose dynamics during stimulation, and this was accurately reproduced in the model by a reduction in the glycogen breakdown in astrocytes. The model's predictive capacity was verified by using data from a sensory stimulation (restraint) that was not used for model calibration. Finally, a sensitivity analysis was conducted on the model parameters, this showed that the control of energy metabolism and transport processes are critical in the metabolic behaviour of cerebral tissue.
+</para>
+
+<informalfigure float="0" id="fig_reaction_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>model diagram</title>
+    </objectinfo>
+    <imagedata fileref="cloutier_2009.png"/>
+  </imageobject>
+</mediaobject>
+<caption>Schematic diagram of the model for astrocyte-neuron metabolism</caption>
+</informalfigure>
+
+<para>
+The original paper reference is cited below:
+</para>
+
+<para>
+An integrative dynamic model of brain energy metabolism using in vivo neurochemical measurements, Mathieu Cloutier, Fiachra B. Bolger, John P. Lowry and Peter Wellstead, 2009, <emphasis>Journal of Computational Neuroscience</emphasis>, 27, 391-414.  <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pubmed&amp;cmd=Retrieve&amp;dopt=AbstractPlus&amp;list_uids=19396534&amp;query_hl=1&amp;itool=pubmed_docsum">PubMed ID: 19396534</ulink>
+</para>
+
+</sect1>
+</article>
+</documentation> 
+  
+  <units name="s">
+     <unit units="second"/>
+  </units>
+  
+  <units name="mM">
+    <unit prefix="milli" units="mole"/>
+    <unit exponent="-1" units="litre"/>
+  </units>
+  
+  <units name="per_mM">
+    <unit exponent="-1" units="mM"/>
+  </units>
+
+  <units name="mM_per_s">
+    <unit units="mM"/>
+    <unit exponent="-1" units="second"/>
+  </units>
+  
+  <units name="per_mM_per_s">
+    <unit exponent="-1" units="mM"/>
+    <unit exponent="-1" units="second"/>
+  </units>
+  
+  <units name="per_s">
+    <unit exponent="-1" units="second"/>
+  </units>
+  
+  <units name="cm_per_mM_per_s">
+    <unit prefix="centi" units="metre"/>
+    <unit exponent="-1" units="mM"/>
+    <unit exponent="-1" units="second"/>
+  </units>
+  
+  <units name="per_cm">
+    <unit exponent="-1" prefix="centi" units="metre"/>
+  </units>
+  
+  <units name="C_per_mole">
+     <unit units="coulomb"/>
+     <unit exponent="-1" units="mole"/>
+  </units>
+  
+  <units name="L_per_millimole">
+     <unit units="litre"/>
+     <unit exponent="-1" prefix="milli" units="mole"/>
+  </units>
+  
+  <units name="mS_per_cm2">
+     <unit prefix="milli" units="siemens"/>
+     <unit exponent="-2" prefix="centi" units="metre"/>
+  </units>
+  
+  <units name="mV">
+     <unit prefix="milli" units="volt"/>
+  </units>
+  
+  <component name="environment">
+    <variable cmeta:id="environment_time" name="time" public_interface="out" units="s"/>
+  </component>
+  
+  <!-- model states -->
+  
+  <component name="NAn">
+    <variable initial_value="15.533" name="NAn" public_interface="out" units="mM"/> 
+    
+    <variable name="Vn_leak_Na" public_interface="in" units="mM_per_s"/>
+    <variable name="Vn_pump" public_interface="in" units="mM_per_s"/>
+	<variable name="Vn_stim" public_interface="in" units="mM_per_s"/>
+    <variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="1"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> NAn </ci> 
+        </apply>
+        <apply>
+          <minus/> 
+          <apply>
+            <plus/>
+            <ci> Vn_leak_Na </ci>
+			<ci> Vn_stim </ci>
+          </apply>
+          <apply>
+            <times/>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 3 </cn> 
+			<ci> Vn_pump </ci>
+          </apply>
+        </apply>  
+      </apply>
+    </math> 
+  </component>
+  
+  <component name="GLCn">
+    <variable cmeta:id="GLCn_GLCn" initial_value="0.2633" name="GLCn" public_interface="out" units="mM"/> 
+    
+    <variable name="V_en_GLC" public_interface="in" units="mM_per_s"/>
+    <variable name="Vn_hk" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="2"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> GLCn </ci> 
+        </apply>
+        <apply>
+          <minus/> 
+          <ci> V_en_GLC </ci>
+	      <ci> Vn_hk </ci>
+        </apply>  
+      </apply>
+    </math> 
+  </component>
+  
+  <component name="G6Pn">
+    <variable cmeta:id="G6Pn_G6Pn" initial_value="0.7275" name="G6Pn" public_interface="out" units="mM"/> 
+    
+    <variable name="Vn_pgi" public_interface="in" units="mM_per_s"/>
+    <variable name="Vn_hk" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="3"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> G6Pn </ci> 
+        </apply>
+        <apply>
+          <minus/> 
+          <ci> Vn_hk </ci>
+	      <ci> Vn_pgi </ci>
+        </apply>  
+      </apply>
+    </math> 
+  </component>
+  
+  <component name="F6Pn">
+    <variable cmeta:id="F6Pn_F6Pn" initial_value="0.1091" name="F6Pn" public_interface="out" units="mM"/> 
+    
+    <variable name="Vn_pgi" public_interface="in" units="mM_per_s"/>
+    <variable name="Vn_pfk" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="4"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> F6Pn </ci> 
+        </apply>
+        <apply>
+          <minus/> 
+          <ci> Vn_pgi </ci>
+	      <ci> Vn_pfk </ci>
+        </apply>  
+      </apply>
+    </math> 
+  </component>
+  
+  <component name="GAPn">
+    <variable cmeta:id="GAPn_GAPn" initial_value="0.0418" name="GAPn" public_interface="out" units="mM"/> 
+    
+    <variable name="Vn_pgk" public_interface="in" units="mM_per_s"/>
+    <variable name="Vn_pfk" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="5"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> GAPn </ci> 
+        </apply>
+        <apply>
+          <minus/> 
+		  <apply>
+            <times/>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 2 </cn> 
+			<ci> Vn_pfk </ci>
+          </apply>
+          <ci> Vn_pgk </ci>
+        </apply>  
+      </apply>
+    </math> 
+  </component>
+  
+  <component name="PEPn">
+    <variable cmeta:id="PEPn_PEPn" initial_value="0.0037" name="PEPn" public_interface="out" units="mM"/> 
+    
+    <variable name="Vn_pgk" public_interface="in" units="mM_per_s"/>
+    <variable name="Vn_pk" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="6"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> PEPn </ci> 
+        </apply>
+        <apply>
+          <minus/> 
+		  <ci> Vn_pgk </ci>
+          <ci> Vn_pk </ci>
+        </apply>  
+      </apply>
+    </math> 
+  </component>
+  
+  <component name="PYRn">
+    <variable cmeta:id="PYRn_PYRn" initial_value="0.0388" name="PYRn" public_interface="out" units="mM"/> 
+    
+    <variable name="Vn_pk" public_interface="in" units="mM_per_s"/>
+    <variable name="Vn_ldh" public_interface="in" units="mM_per_s"/>
+	<variable name="Vn_mito" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="7"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> PYRn </ci> 
+        </apply>
+        <apply>
+          <minus/> 
+		  <ci> Vn_pk </ci>
+		  <apply>
+            <plus/> 
+		    <ci> Vn_ldh </ci>
+            <ci> Vn_mito </ci>
+		  </apply> 
+        </apply>  
+      </apply>
+    </math> 
+  </component>
+  
+  <component name="LACn">
+    <variable cmeta:id="LACn_LACn" initial_value="0.3856" name="LACn" public_interface="out" units="mM"/> 
+    
+    <variable name="Vn_ldh" public_interface="in" units="mM_per_s"/>
+    <variable name="Vne_LAC" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="8"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> LACn </ci> 
+        </apply>
+        <apply>
+          <minus/> 
+		  <ci> Vn_ldh </ci>
+          <ci> Vne_LAC </ci>
+        </apply>  
+      </apply>
+    </math> 
+  </component>
+  
+  <component name="NADHn">
+    <variable cmeta:id="NADHn_NADHn" initial_value="0.0319" name="NADHn" public_interface="out" units="mM"/> 
+    
+    <variable name="Vn_pgk" public_interface="in" units="mM_per_s"/>
+    <variable name="Vn_ldh" public_interface="in" units="mM_per_s"/>
+	<variable name="Vn_mito" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="9"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> NADHn </ci> 
+        </apply>
+        <apply>
+          <minus/> 
+		  <ci> Vn_pgk </ci>
+		  <apply>
+            <plus/> 
+		    <ci> Vn_ldh </ci>
+            <ci> Vn_mito </ci>
+		  </apply> 
+        </apply>  
+      </apply>
+    </math> 
+  </component>
+  
+  <component name="ATPn">
+    <variable cmeta:id="ATPn_ATPn" initial_value="2.2592" name="ATPn" public_interface="out" units="mM"/> 
+	
+	<variable name="nOP" public_interface="in" units="dimensionless"/>
+    <variable name="Vn_hk" public_interface="in" units="mM_per_s"/>
+    <variable name="Vn_pfk" public_interface="in" units="mM_per_s"/>
+	<variable name="Vn_pgk" public_interface="in" units="mM_per_s"/>
+	<variable name="Vn_pk" public_interface="in" units="mM_per_s"/>
+    <variable name="Vn_ATPase" public_interface="in" units="mM_per_s"/>
+	<variable name="Vn_pump" public_interface="in" units="mM_per_s"/>
+	<variable name="Vn_mito" public_interface="in" units="mM_per_s"/>
+    <variable name="Vn_ck" public_interface="in" units="mM_per_s"/>
+	<variable name="dAMP_dATPn" public_interface="in" units="dimensionless"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="10"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> ATPn </ci> 
+        </apply>
+        <apply>
+          <times/> 
+		  <apply>
+            <minus/>
+			<apply>
+              <plus/>
+		      <ci> Vn_pgk </ci>
+		      <ci> Vn_pk </ci>
+			  <apply>
+                <times/> 
+                <ci> nOP </ci>
+				<ci> Vn_mito </ci>
+		      </apply>
+              <ci> Vn_ck </ci>
+		    </apply>
+            <apply>
+              <plus/>
+		      <ci> Vn_hk </ci>
+		      <ci> Vn_pfk </ci>	
+              <ci> Vn_ATPase </ci>
+		      <ci> Vn_pump </ci>				  
+            </apply>  
+          </apply>
+		  <apply>
+            <power/>
+		    <apply>
+              <minus/>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn> 
+			  <ci> dAMP_dATPn </ci>				  
+            </apply>  
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> -1 </cn> 
+		  </apply>
+        </apply> 
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="PCrn">
+    <variable initial_value="4.2529" name="PCrn" public_interface="out" units="mM"/> 
+    
+    <variable name="Vn_ck" public_interface="in" units="mM_per_s"/>
+    <variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="11"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> PCrn </ci> 
+        </apply>
+        <apply>
+          <minus/> 
+		  <ci> Vn_ck </ci>
+        </apply>  
+      </apply>
+    </math> 
+  </component>
+  
+  <component name="O2n">
+    <variable cmeta:id="O2n_O2n" initial_value="0.0975" name="O2n" public_interface="out" units="mM"/> 
+	
+	<variable name="NAero" public_interface="in" units="dimensionless"/>
+    <variable name="Vn_mito" public_interface="in" units="mM_per_s"/>
+    <variable name="Vcn_O2" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="12"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> O2n </ci> 
+        </apply>
+        <apply>
+          <minus/> 
+		  <ci> Vcn_O2 </ci>
+		  <apply>
+            <times/>
+			<ci> NAero </ci>
+			<ci> Vn_mito </ci>
+          </apply>
+        </apply> 
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="GLUn">
+    <variable cmeta:id="GLUn_GLUn" initial_value="3.0" name="GLUn" public_interface="out" units="mM"/> 
+	
+	<variable name="Rng" public_interface="in" units="dimensionless"/>
+    <variable name="Vg_gs" public_interface="in" units="mM_per_s"/>
+    <variable name="Vn_stim_GLU" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="13"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> GLUn </ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/> 
+		    <ci> Vg_gs </ci>
+			<apply>
+              <divide/>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn> 		  
+		      <ci> Rng </ci>
+		    </apply>
+		  </apply>
+          <ci> Vn_stim_GLU </ci>
+        </apply> 
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="NAg">
+    <variable cmeta:id="NAg_NAg" initial_value="13.36" name="NAg" public_interface="out" units="mM"/> 
+	
+	<variable name="Vg_leak_Na" public_interface="in" units="mM_per_s"/>
+    <variable name="Vg_pump" public_interface="in" units="mM_per_s"/>
+	<variable name="Veg_GLU" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="14"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> NAg </ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+			<ci> Vg_leak_Na </ci>		  
+		    <apply>
+              <times/>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 3 </cn> 
+			  <ci> Veg_GLU </ci>
+		    </apply>
+          </apply>
+		  <apply>
+            <times/>
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 3 </cn> 
+			<ci> Vg_pump </ci>
+		  </apply>
+        </apply> 
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="GLCg">
+    <variable cmeta:id="GLCg_GLCg" initial_value="0.1656" name="GLCg" public_interface="out" units="mM"/> 
+	
+	<variable name="Vcg_GLC" public_interface="in" units="mM_per_s"/>
+    <variable name="Veg_GLC" public_interface="in" units="mM_per_s"/>
+	<variable name="Vg_hk" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="15"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> GLCg </ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+			<ci> Vcg_GLC </ci>		  
+		    <ci> Veg_GLC </ci>
+		  </apply>
+		  <ci> Vg_hk </ci>
+		</apply> 
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="G6Pg">
+    <variable cmeta:id="G6Pg_G6Pg" initial_value="0.7326" name="G6Pg" public_interface="out" units="mM"/> 
+	
+	<variable name="Vg_pgi" public_interface="in" units="mM_per_s"/>
+    <variable name="Vg_glys" public_interface="in" units="mM_per_s"/>
+	<variable name="Vg_glyp" public_interface="in" units="mM_per_s"/>
+	<variable name="Vg_hk" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="16"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> G6Pg </ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+			<ci> Vg_hk </ci>		  
+		    <ci> Vg_glyp </ci>
+		  </apply>
+		  <apply>
+            <plus/>
+			<ci> Vg_pgi </ci>		  
+		    <ci> Vg_glys </ci>
+		  </apply>
+		</apply> 
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="F6Pg">
+    <variable cmeta:id="F6Pg_F6Pg" initial_value="0.1116" name="F6Pg" public_interface="out" units="mM"/> 
+	
+	<variable name="Vg_pgi" public_interface="in" units="mM_per_s"/>
+    <variable name="Vg_pfk" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="17"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> F6Pg </ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <ci> Vg_pgi </ci>		  
+		  <ci> Vg_pfk </ci>
+		</apply> 
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="GAPg">
+    <variable cmeta:id="GAPg_GAPg" initial_value="0.0698" name="GAPg" public_interface="out" units="mM"/> 
+	
+	<variable name="Vg_pgk" public_interface="in" units="mM_per_s"/>
+    <variable name="Vg_pfk" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="18"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> GAPg </ci> 
+        </apply>
+        <apply>
+          <minus/>
+		  <apply>
+            <times/>
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 2 </cn> 
+            <ci> Vg_pfk </ci>
+		  </apply>		  
+		  <ci> Vg_pgk </ci>
+		</apply> 
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="PEPg">
+    <variable cmeta:id="PEPg_PEPg" initial_value="0.0254" name="PEPg" public_interface="out" units="mM"/> 
+	
+	<variable name="Vg_pgk" public_interface="in" units="mM_per_s"/>
+    <variable name="Vg_pk" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="19"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> PEPg </ci> 
+        </apply>
+        <apply>
+          <minus/>
+		  <ci> Vg_pgk </ci>
+		  <ci> Vg_pk </ci>
+		</apply> 
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="PYRg">
+    <variable cmeta:id="PYRg_PYRg" initial_value="0.1711" name="PYRg" public_interface="out" units="mM"/> 
+	
+	<variable name="Vg_ldh" public_interface="in" units="mM_per_s"/>
+    <variable name="Vg_pk" public_interface="in" units="mM_per_s"/>
+	<variable name="Vg_mito" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="20"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> PYRg </ci> 
+        </apply>
+        <apply>
+          <minus/>
+		  <ci> Vg_pk </ci>
+		  <apply>
+            <plus/>
+		    <ci> Vg_ldh </ci>
+		    <ci> Vg_mito </ci>
+		  </apply>
+		</apply> 
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="LACg">
+    <variable cmeta:id="LACg_LACg" initial_value="0.4651" name="LACg" public_interface="out" units="mM"/> 
+	
+	<variable name="Vg_ldh" public_interface="in" units="mM_per_s"/>
+    <variable name="Vge_LAC" public_interface="in" units="mM_per_s"/>
+	<variable name="Vgc_LAC" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="21"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> LACg </ci> 
+        </apply>
+        <apply>
+          <minus/>
+		  <ci> Vg_ldh </ci>
+		  <apply>
+            <plus/>
+		    <ci> Vge_LAC </ci>
+		    <ci> Vgc_LAC </ci>
+		  </apply>
+		</apply> 
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="NADHg">
+    <variable cmeta:id="NADHg_NADHg" initial_value="0.0445" name="NADHg" public_interface="out" units="mM"/> 
+	
+	<variable name="Vg_pgk" public_interface="in" units="mM_per_s"/>
+    <variable name="Vg_ldh" public_interface="in" units="mM_per_s"/>
+	<variable name="Vg_mito" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="22"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> NADHg </ci> 
+        </apply>
+        <apply>
+          <minus/>
+		  <ci> Vg_pgk </ci>
+		  <apply>
+            <plus/>
+		    <ci> Vg_ldh </ci>
+		    <ci> Vg_mito </ci>
+		  </apply>
+		</apply> 
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="ATPg">
+    <variable cmeta:id="ATPg_ATPg" initial_value="2.24" name="ATPg" public_interface="out" units="mM"/> 
+	
+	<variable name="nOP" public_interface="in" units="dimensionless"/>
+    <variable name="Vg_hk" public_interface="in" units="mM_per_s"/>
+    <variable name="Vg_pfk" public_interface="in" units="mM_per_s"/>
+	<variable name="Vg_pgk" public_interface="in" units="mM_per_s"/>
+	<variable name="Vg_pk" public_interface="in" units="mM_per_s"/>
+    <variable name="Vg_ATPase" public_interface="in" units="mM_per_s"/>
+	<variable name="Vg_pump" public_interface="in" units="mM_per_s"/>
+	<variable name="Vg_mito" public_interface="in" units="mM_per_s"/>
+    <variable name="Vg_ck" public_interface="in" units="mM_per_s"/>
+	<variable name="Vg_gs" public_interface="in" units="mM_per_s"/>
+	<variable name="dAMP_dATPg" public_interface="in" units="dimensionless"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="23"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> ATPg </ci> 
+        </apply>
+        <apply>
+          <times/> 
+		  <apply>
+            <minus/>
+			<apply>
+              <plus/>
+		      <ci> Vg_pgk </ci>
+		      <ci> Vg_pk </ci>
+			  <apply>
+                <times/> 
+                <ci> nOP </ci>
+				<ci> Vg_mito </ci>
+		      </apply>
+              <ci> Vg_ck </ci>
+		    </apply>
+            <apply>
+              <plus/>
+		      <ci> Vg_hk </ci>
+		      <ci> Vg_pfk </ci>	
+              <ci> Vg_ATPase </ci>
+		      <ci> Vg_pump </ci>
+			  <ci> Vg_gs </ci>				  
+            </apply>  
+          </apply>
+		  <apply>
+            <power/>
+		    <apply>
+              <minus/>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn> 
+			  <ci> dAMP_dATPg </ci>				  
+            </apply>  
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> -1 </cn> 
+		  </apply>
+        </apply> 
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="PCrg">
+    <variable initial_value="4.6817" name="PCrg" public_interface="out" units="mM"/> 
+    
+    <variable name="Vg_ck" public_interface="in" units="mM_per_s"/>
+    <variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="24"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> PCrg </ci> 
+        </apply>
+        <apply>
+          <minus/> 
+		  <ci> Vg_ck </ci>
+        </apply>  
+      </apply>
+    </math> 
+  </component>
+  
+  <component name="O2g">
+    <variable cmeta:id="O2g_O2g" initial_value="0.1589" name="O2g" public_interface="out" units="mM"/> 
+	
+	<variable name="NAero" public_interface="in" units="dimensionless"/>
+    <variable name="Vg_mito" public_interface="in" units="mM_per_s"/>
+    <variable name="Vcg_O2" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="25"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> O2g </ci> 
+        </apply>
+        <apply>
+          <minus/> 
+		  <ci> Vcg_O2 </ci>
+		  <apply>
+            <times/>
+			<ci> NAero </ci>
+			<ci> Vg_mito </ci>
+          </apply>
+        </apply> 
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="GLYg">
+    <variable cmeta:id="GLYg_GLYg" initial_value="2.5" name="GLYg" public_interface="out" units="mM"/> 
+	
+	<variable name="Vg_glys" public_interface="in" units="mM_per_s"/>
+    <variable name="Vg_glyp" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="26"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> GLYg </ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <ci> Vg_glys </ci>
+	      <ci> Vg_glyp </ci>
+        </apply> 
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="GLUg">
+    <variable cmeta:id="GLUg_GLUg" initial_value="0.0" name="GLUg" public_interface="out" units="mM"/> 
+	
+	<variable name="Veg_GLU" public_interface="in" units="mM_per_s"/>
+    <variable name="Vg_gs" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="27"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> GLUg </ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <ci> Veg_GLU </ci>
+	      <ci> Vg_gs </ci>
+        </apply> 
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="GLCe">
+    <variable cmeta:id="GLCe_GLCe" initial_value="0.3339" name="GLCe" public_interface="out" units="mM"/> 
+	
+	<variable name="Reg" public_interface="in" units="dimensionless"/>
+	<variable name="Ren" public_interface="in" units="dimensionless"/>
+    <variable name="Vce_GLC" public_interface="in" units="mM_per_s"/>
+    <variable name="Veg_GLC" public_interface="in" units="mM_per_s"/>
+	<variable name="V_en_GLC" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="28"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> GLCe </ci> 
+        </apply>
+        <apply>
+          <minus/>
+		  <ci> Vce_GLC </ci>
+          <apply>
+            <plus/>
+			<apply>
+              <times/>  
+		      <ci> Veg_GLC </ci>
+			  <apply>
+                <divide/>
+			    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn> 		  
+		        <ci> Reg </ci>
+		      </apply>
+			</apply>
+            <apply>
+              <times/>  
+		      <ci> V_en_GLC </ci>
+			  <apply>
+                <divide/>
+			    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn> 		  
+		        <ci> Ren </ci>
+		      </apply>
+			</apply>
+          </apply>
+        </apply> 
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="LACe">
+    <variable initial_value="0.3986" name="LACe" public_interface="out" units="mM"/> 
+	
+	<variable name="Reg" public_interface="in" units="dimensionless"/>
+	<variable name="Ren" public_interface="in" units="dimensionless"/>
+    <variable name="Vec_LAC" public_interface="in" units="mM_per_s"/>
+    <variable name="Vne_LAC" public_interface="in" units="mM_per_s"/>
+	<variable name="Vge_LAC" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="29"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> LACe </ci> 
+        </apply>
+        <apply>
+          <minus/>
+		  <apply>
+            <plus/>
+			<apply>
+              <times/>  
+		      <ci> Vne_LAC </ci>
+			  <apply>
+                <divide/>
+			    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn> 		  
+		        <ci> Ren </ci>
+		      </apply>
+			</apply>
+            <apply>
+              <times/>  
+		      <ci> Vge_LAC </ci>
+			  <apply>
+                <divide/>
+			    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn> 		  
+		        <ci> Reg </ci>
+		      </apply>
+			</apply>
+          </apply>
+		  <ci> Vec_LAC </ci>
+        </apply> 
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="GLUe">
+    <variable cmeta:id="GLUe_GLUe" initial_value="0.0" name="GLUe" public_interface="out" units="mM"/> 
+	
+	<variable name="Reg" public_interface="in" units="dimensionless"/>
+	<variable name="Ren" public_interface="in" units="dimensionless"/>
+    <variable name="Vn_stim_GLU" public_interface="in" units="mM_per_s"/>
+    <variable name="Veg_GLU" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="30"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> GLUe </ci> 
+        </apply>
+        <apply>
+          <minus/>
+		  <apply>
+            <times/>  
+		    <ci> Vn_stim_GLU </ci>
+			<apply>
+              <divide/>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn> 		  
+		      <ci> Ren </ci>
+		    </apply>
+	      </apply>
+          <apply>
+            <times/>  
+		    <ci> Veg_GLU </ci>
+			<apply>
+              <divide/>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn> 		  
+		      <ci> Reg </ci>
+		    </apply>
+	      </apply>
+        </apply> 
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="O2c">
+    <variable cmeta:id="O2c_O2c" initial_value="7.4201" name="O2c" public_interface="out" units="mM"/> 
+	
+	<variable name="Rcn" public_interface="in" units="dimensionless"/>
+	<variable name="Rcg" public_interface="in" units="dimensionless"/>
+    <variable name="Vc_O2" public_interface="in" units="mM_per_s"/>
+    <variable name="Vcn_O2" public_interface="in" units="mM_per_s"/>
+	<variable name="Vcg_O2" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="31"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> O2c </ci> 
+        </apply>
+        <apply>
+          <minus/>
+		  <ci> Vc_O2 </ci>
+		  <apply>
+            <plus/>
+		    <apply>
+              <times/>  
+		      <ci> Vcn_O2 </ci>
+			  <apply>
+                <divide/>
+			    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn> 		  
+		        <ci> Rcn </ci>
+		      </apply>
+	        </apply>
+			<apply>
+              <times/>  
+		      <ci> Vcg_O2 </ci>
+			  <apply>
+                <divide/>
+			    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn> 		  
+		        <ci> Rcg </ci>
+		      </apply>
+	        </apply>
+	      </apply>
+        </apply> 
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="GLCc">
+    <variable cmeta:id="GLCc_GLCc" initial_value="4.6401" name="GLCc" public_interface="out" units="mM"/> 
+	
+	<variable name="Rce" public_interface="in" units="dimensionless"/>
+	<variable name="Rcg" public_interface="in" units="dimensionless"/>
+    <variable name="Vc_GLC" public_interface="in" units="mM_per_s"/>
+    <variable name="Vce_GLC" public_interface="in" units="mM_per_s"/>
+	<variable name="Vcg_GLC" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="32"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> GLCc </ci> 
+        </apply>
+        <apply>
+          <minus/>
+		  <ci> Vc_GLC </ci>
+		  <apply>
+            <plus/>
+		    <apply>
+              <times/>  
+		      <ci> Vce_GLC </ci>
+			  <apply>
+                <divide/>
+			    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn> 		  
+		        <ci> Rce </ci>
+		      </apply>
+	        </apply>
+			<apply>
+              <times/>  
+		      <ci> Vcg_GLC </ci>
+			  <apply>
+                <divide/>
+			    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn> 		  
+		        <ci> Rcg </ci>
+		      </apply>
+	        </apply>
+	      </apply>
+        </apply> 
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="LACc">
+    <variable cmeta:id="LACc_LACc" initial_value="0.3251" name="LACc" public_interface="out" units="mM"/> 
+	
+	<variable name="Rce" public_interface="in" units="dimensionless"/>
+	<variable name="Rcg" public_interface="in" units="dimensionless"/>
+    <variable name="Vc_LAC" public_interface="in" units="mM_per_s"/>
+    <variable name="Vec_LAC" public_interface="in" units="mM_per_s"/>
+	<variable name="Vgc_LAC" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="33"> 
+      <apply><eq/><apply><diff/><bvar><ci>time</ci></bvar><ci>LACc</ci></apply><apply><plus/><ci>Vc_LAC</ci><apply><plus/><apply><times/><ci>Vec_LAC</ci><apply><divide/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn><ci>Rce</ci></apply></apply><apply><times/><ci>Vgc_LAC</ci><apply><divide/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn><ci>Rcg</ci></apply></apply></apply></apply></apply> 		
+    </math> 
+  </component>
+  
+  <component name="CO2c">
+    <variable initial_value="2.12" name="CO2c" public_interface="out" units="mM"/> 
+	
+	<variable name="Rcn" public_interface="in" units="dimensionless"/>
+	<variable name="Rcg" public_interface="in" units="dimensionless"/>
+    <variable name="Vnc_CO2" public_interface="in" units="mM_per_s"/>
+    <variable name="Vc_CO2" public_interface="in" units="mM_per_s"/>
+	<variable name="Vgc_CO2" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="34"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> CO2c </ci> 
+        </apply>
+        <apply>
+          <minus/>
+		  <apply>
+            <plus/>
+		    <apply>
+              <times/>  
+		      <ci> Vnc_CO2 </ci>
+			  <apply>
+                <divide/>
+			    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn> 		  
+		        <ci> Rcn </ci>
+		      </apply>
+	        </apply>
+			<apply>
+              <times/>  
+		      <ci> Vgc_CO2 </ci>
+			  <apply>
+                <divide/>
+			    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn> 		  
+		        <ci> Rcg </ci>
+		      </apply>
+	        </apply>
+	      </apply>
+          <ci> Vc_CO2 </ci>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vv">
+    <variable initial_value="0.0237" name="Vv" public_interface="out" units="dimensionless"/> 
+	
+	<variable name="Fin_t" public_interface="in" units="per_s"/>
+	<variable name="Fout_t" public_interface="in" units="per_s"/>
+    <variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="35"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> Vv </ci> 
+        </apply>
+        <apply>
+          <minus/>
+		  <ci> Fin_t </ci>
+		  <ci> Fout_t </ci>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="dHb">
+    <variable initial_value="0.0218" name="dHb" public_interface="out" units="mM"/> 
+	
+	<variable name="Fin_t" public_interface="in" units="per_s"/>
+	<variable name="Fout_t" public_interface="in" units="per_s"/>
+	<variable name="Vv" public_interface="in" units="dimensionless"/>
+	<variable name="O2a" public_interface="in" units="mM"/>
+	<variable name="O2c" public_interface="in" units="mM"/>
+    <variable name="time" public_interface="in" units="s"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="36"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> dHb </ci> 
+        </apply>
+        <apply>
+          <minus/>
+		  <apply>
+            <times/>
+		    <ci> Fin_t </ci>
+			<apply>
+              <minus/>
+		      <ci> O2a </ci>
+			  <ci> O2c </ci>
+		    </apply>
+		  </apply>
+		  <apply>
+            <times/>
+		    <ci> Fout_t </ci>
+			<apply>
+              <divide/>
+			  <ci> dHb </ci>
+			  <ci> Vv </ci>
+		    </apply>
+		  </apply>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <!-- model reactions -->
+  
+  <component name="Vn_leak_Na">
+    <variable name="Vn_leak_Na" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="0.0039" name="gn_NA" units="mS_per_cm2"/>
+	
+	<variable name="Sm_n" public_interface="in" units="per_cm"/>
+	<variable name="Vm" public_interface="in" units="mV"/>
+	<variable name="Vn" public_interface="in" units="dimensionless"/>
+	<variable name="RT" public_interface="in" units="mV_C_per_mol"/>
+	<variable name="F" public_interface="in" units="C_per_mole"/>
+	<variable name="NAe" public_interface="in" units="mM"/>
+	<variable name="NAn" public_interface="in" units="mM"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="37"> 
+      <apply><eq/><ci>Vn_leak_Na</ci><apply><times/><apply><divide/><ci>Sm_n</ci><ci>Vn</ci></apply><apply><divide/><ci>gn_NA</ci><ci>F</ci></apply><apply><minus/><apply><times/><apply><divide/><ci>RT</ci><ci>F</ci></apply><apply><ln/><apply><divide/><ci>NAe</ci><ci>NAn</ci></apply></apply></apply><ci>Vm</ci></apply></apply></apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vn_pump">
+    <variable name="Vn_pump" public_interface="out" units="mM_per_s"/> 
+	
+	<variable name="kpump" public_interface="in" units="cm_per_mM_per_s"/>
+	<variable name="Km_pump" public_interface="in" units="mM"/>
+	<variable name="Sm_n" public_interface="in" units="per_cm"/>
+	<variable name="Vn" public_interface="in" units="dimensionless"/>
+	<variable name="ATPn" public_interface="in" units="mM"/>
+	<variable name="NAn" public_interface="in" units="mM"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="38"> 
+      <apply>
+        <eq/> 
+        <ci> Vn_pump </ci> 
+        <apply>
+          <times/>
+		  <apply>
+            <divide/>
+		    <ci> Sm_n </ci>
+			<ci> Vn </ci>
+		  </apply>
+		  <ci> kpump </ci>
+	      <ci> ATPn </ci>
+		  <ci> NAn </ci>
+		  <apply>
+            <power/>
+			<apply>
+              <plus/>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn>
+			  <apply>
+                <divide/>
+		        <ci> ATPn </ci>
+			    <ci> Km_pump </ci>
+		      </apply>
+	        </apply>
+		    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> -1 </cn>
+		  </apply>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vn_stim">
+    <variable name="Vn_stim" public_interface="out" units="mM_per_s"/> 
+	
+	<variable name="v_stim" public_interface="in" units="mM_per_s"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="39"> 
+      <apply>
+        <eq/> 
+        <ci> Vn_stim </ci> 
+        <ci> v_stim </ci>
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="V_en_GLC">
+    <variable name="V_en_GLC" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="5.32" name="Km_en_GLC" units="mM"/>
+	<variable initial_value="0.50417" name="Vm_en_GLC" units="mM_per_s"/>
+	
+	<variable name="GLCe" public_interface="in" units="mM"/>
+	<variable name="GLCn" public_interface="in" units="mM"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="40"> 
+      <apply>
+        <eq/> 
+        <ci> V_en_GLC </ci> 
+        <apply>
+          <times/>
+		  <ci> Vm_en_GLC </ci>
+		  <apply>
+            <minus/>
+			<apply>
+              <divide/>
+			  <ci> GLCe </ci>
+			  <apply>
+                <plus/>
+		        <ci> GLCe </ci>
+			    <ci> Km_en_GLC </ci>
+		      </apply>
+	        </apply>
+		    <apply>
+              <divide/>
+			  <ci> GLCn </ci>
+			  <apply>
+                <plus/>
+		        <ci> GLCn </ci>
+			    <ci> Km_en_GLC </ci>
+		      </apply>
+	        </apply>
+		  </apply>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vn_hk">
+    <variable name="Vn_hk" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="0.0513" name="Vmax_n_hk" units="mM_per_s"/>
+	
+	<variable name="Km_GLC" public_interface="in" units="mM"/>
+	<variable name="GLCn" public_interface="in" units="mM"/>
+	<variable name="ATPn" public_interface="in" units="mM"/>
+	<variable name="G6Pn" public_interface="in" units="mM"/>
+	<variable name="G6P_inh_hk" public_interface="in" units="mM"/>
+	<variable name="aG6P_inh_hk" public_interface="in" units="dimensionless"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="41"> 
+      <apply>
+        <eq/> 
+        <ci> Vn_hk </ci> 
+        <apply>
+          <times/>
+		  <ci> Vmax_n_hk </ci>
+		  <ci> ATPn </ci>
+		  <apply>
+            <divide/>
+			<ci> GLCn </ci>
+			<apply>
+              <plus/>
+		      <ci> GLCn </ci>
+			  <ci> Km_GLC </ci>
+		    </apply>
+	      </apply>
+		  <apply>
+            <minus/>
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="per_mM"> 1 </cn>
+		    <apply>
+              <divide/>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="per_mM"> 1 </cn>
+			  <apply>
+                <plus/>
+				<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn>
+		        <apply>
+                  <exp/>
+				  <apply>
+                    <times/>
+					<apply>
+                      <minus/>
+				      <ci> aG6P_inh_hk </ci>
+					</apply>
+					<apply>
+                      <times/>
+					  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="per_mM"> 1 </cn>
+					  <apply>
+                        <minus/>
+				        <ci> G6Pn </ci>
+			            <ci> G6P_inh_hk </ci>
+					  </apply>
+					</apply>
+				  </apply>
+				</apply>
+		      </apply>
+	        </apply>
+		  </apply>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vn_pgi">
+    <variable name="Vn_pgi" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="0.5" name="Vmaxf_n_pgi" units="mM_per_s"/>
+	<variable initial_value="0.45" name="Vmaxr_n_pgi" units="mM_per_s"/>
+	
+	<variable name="Km_G6P" public_interface="in" units="mM"/>
+	<variable name="Km_F6P_pgi" public_interface="in" units="mM"/>
+	<variable name="F6Pn" public_interface="in" units="mM"/>
+	<variable name="G6Pn" public_interface="in" units="mM"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="42"> 
+      <apply>
+        <eq/> 
+        <ci> Vn_pgi </ci> 
+        <apply>
+          <minus/>
+		  <apply>
+            <times/>
+		    <ci> Vmaxf_n_pgi </ci>
+		    <apply>
+              <divide/>
+			  <ci> G6Pn </ci>
+			  <apply>
+                <plus/>
+		        <ci> G6Pn </ci>
+			    <ci> Km_G6P </ci>
+		      </apply>
+	        </apply>
+		  </apply>
+		  <apply>
+            <times/>
+		    <ci> Vmaxr_n_pgi </ci>
+		    <apply>
+              <divide/>
+			  <ci> F6Pn </ci>
+			  <apply>
+                <plus/>
+		        <ci> F6Pn </ci>
+			    <ci> Km_F6P_pgi </ci>
+		      </apply>
+	        </apply>
+		  </apply>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vn_pfk">
+    <variable name="Vn_pfk" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="0.55783" name="kn_pfk" units="per_s"/>
+	
+	<variable name="Km_F6P_pfk" public_interface="in" units="mM"/>
+	<variable name="Ki_ATP" public_interface="in" units="mM"/>
+	<variable name="nH" public_interface="in" units="dimensionless"/>
+	<variable name="ATPn" public_interface="in" units="mM"/>
+	<variable name="F6Pn" public_interface="in" units="mM"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="43"> 
+      <apply>
+        <eq/> 
+        <ci> Vn_pfk </ci> 
+        <apply>
+          <times/>
+		  <ci> kn_pfk </ci>
+		  <ci> ATPn </ci>
+		  <apply>
+            <divide/>
+			<ci> F6Pn </ci>
+			<apply>
+              <plus/>
+		      <ci> F6Pn </ci>
+			  <ci> Km_F6P_pfk </ci>
+		    </apply>
+		  </apply>
+		  <apply>
+            <power/>
+			<apply>
+              <plus/>
+		      <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn>
+			  <apply>
+                <power/>
+			    <apply>
+                  <divide/>
+			      <ci> ATPn </ci>
+				  <ci> Ki_ATP </ci>
+			    </apply>
+                <ci> nH </ci>
+			  </apply>
+	        </apply>
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> -1 </cn>
+		  </apply>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vn_pgk">
+    <variable name="Vn_pgk" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="0.4287" name="kn_pgk" units="per_mM_per_s"/>
+	
+	<variable name="ADPn" public_interface="in" units="mM"/>
+	<variable name="GAPn" public_interface="in" units="mM"/>
+	<variable name="NADn" public_interface="in" units="mM"/>
+	<variable name="NADHn" public_interface="in" units="mM"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="44"> 
+      <apply>
+        <eq/> 
+        <ci> Vn_pgk </ci> 
+        <apply>
+          <times/>
+		  <ci> kn_pgk </ci>
+		  <ci> GAPn </ci>
+		  <ci> ADPn </ci>
+		  <apply>
+            <divide/>
+			<ci> NADn </ci>
+			<ci> NADHn </ci>
+		  </apply>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vn_pk">
+    <variable name="Vn_pk" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="28.6" name="kn_pk" units="per_mM_per_s"/>
+	
+	<variable name="PEPn" public_interface="in" units="mM"/>
+	<variable name="ADPn" public_interface="in" units="mM"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="45"> 
+      <apply>
+        <eq/> 
+        <ci> Vn_pk </ci> 
+        <apply>
+          <times/>
+		  <ci> kn_pk </ci>
+		  <ci> PEPn </ci>
+		  <ci> ADPn </ci>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vn_ldh">
+    <variable name="Vn_ldh" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="5.30" name="kfn_ldh" units="per_mM_per_s"/>
+	<variable initial_value="0.1046" name="krn_ldh" units="per_mM_per_s"/>
+	
+	<variable name="PYRn" public_interface="in" units="mM"/>
+	<variable name="NADHn" public_interface="in" units="mM"/>
+	<variable name="LACn" public_interface="in" units="mM"/>
+	<variable name="NADn" public_interface="in" units="mM"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="46"> 
+      <apply>
+        <eq/> 
+        <ci> Vn_ldh </ci> 
+        <apply>
+          <minus/>
+		  <apply>
+            <times/>
+		    <ci> kfn_ldh </ci>
+		    <ci> PYRn </ci>
+		    <ci> NADHn </ci>
+		  </apply>
+          <apply>
+            <times/>
+		    <ci> krn_ldh </ci>
+		    <ci> LACn </ci>
+		    <ci> NADn </ci>
+		  </apply>  
+		</apply>		  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vn_mito">
+    <variable name="Vn_mito" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="0.05557" name="Vmax_n_mito" units="mM_per_s"/>
+	
+	<variable name="Km_O2" public_interface="in" units="mM"/>
+	<variable name="Km_ADP" public_interface="in" units="mM"/>
+	<variable name="Km_PYR" public_interface="in" units="mM"/>
+	<variable name="O2n" public_interface="in" units="mM"/>
+	<variable name="ADPn" public_interface="in" units="mM"/>
+	<variable name="PYRn" public_interface="in" units="mM"/>
+	<variable name="ATPn" public_interface="in" units="mM"/>
+	<variable name="rATP_mito" public_interface="in" units="dimensionless"/>
+	<variable name="aATP_mito" public_interface="in" units="dimensionless"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="47"> 
+      <apply><eq/><ci>Vn_mito</ci><apply><times/><ci>Vmax_n_mito</ci><apply><divide/><ci>O2n</ci><apply><plus/><ci>O2n</ci><ci>Km_O2</ci></apply></apply><apply><divide/><ci>ADPn</ci><apply><plus/><ci>ADPn</ci><ci>Km_ADP</ci></apply></apply><apply><divide/><ci>PYRn</ci><apply><plus/><ci>PYRn</ci><ci>Km_PYR</ci></apply></apply><apply><minus/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn><apply><divide/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn><apply><plus/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn><apply><exp/><apply><times/><apply><minus/><ci>aATP_mito</ci></apply><apply><times/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn><apply><minus/><apply><divide/><ci>ATPn</ci><ci>ADPn</ci></apply><apply><times/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn><ci>rATP_mito</ci></apply></apply></apply></apply></apply></apply></apply></apply></apply></apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vne_LAC">
+    <variable name="Vne_LAC" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="0.1978" name="Vmax_ne_LAC" units="mM_per_s"/>
+	<variable initial_value="0.09314" name="Km_ne_LAC" units="mM"/>
+	
+	<variable name="LACn" public_interface="in" units="mM"/>
+	<variable name="LACe" public_interface="in" units="mM"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="48"> 
+      <apply><eq/><ci>Vne_LAC</ci><apply><times/><ci>Vmax_ne_LAC</ci><apply><minus/><apply><divide/><ci>LACn</ci><apply><plus/><ci>LACn</ci><ci>Km_ne_LAC</ci></apply></apply><apply><divide/><ci>LACe</ci><apply><plus/><ci>LACe</ci><ci>Km_ne_LAC</ci></apply></apply></apply></apply></apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vn_ATPase">
+    <variable name="Vn_ATPase" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="0.04889" name="Vmax_n_ATPase" units="mM_per_s"/>
+	
+	<variable name="ATPn" public_interface="in" units="mM"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="49"> 
+      <apply>
+        <eq/> 
+        <ci> Vn_ATPase </ci> 
+        <apply>
+          <times/>
+		  <ci> Vmax_n_ATPase </ci>
+		  <apply>
+            <divide/>
+			<ci> ATPn </ci>
+			<apply>
+              <plus/>
+		      <ci> ATPn </ci>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mM"> 0.001 </cn>
+		    </apply>
+		  </apply>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vn_ck">
+    <variable cmeta:id="Vn_ck_Vn_ck" name="Vn_ck" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="0.015" name="krn_ck" units="per_mM_per_s"/>
+	<variable initial_value="0.0524681" name="kfn_ck" units="per_mM_per_s"/>
+	
+	<variable name="PCrn" public_interface="in" units="mM"/>
+	<variable name="ADPn" public_interface="in" units="mM"/>
+	<variable name="CRn" public_interface="in" units="mM"/>
+	<variable name="ATPn" public_interface="in" units="mM"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="50"> 
+      <apply>
+        <eq/> 
+        <ci> Vn_ck </ci> 
+        <apply>
+          <minus/>
+		  <apply>
+            <times/>
+			<ci> kfn_ck </ci>
+			<ci> PCrn </ci>
+			<ci> ADPn </ci>
+		  </apply>
+		  <apply>
+            <times/>
+			<ci> krn_ck </ci>
+			<ci> CRn </ci>
+			<ci> ATPn </ci>
+		  </apply>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vcn_O2">
+    <variable name="Vcn_O2" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="2.7" name="nh_O2" units="dimensionless"/>
+	<variable initial_value="0.2202" name="PScapn" units="per_s"/>
+	
+	<variable name="Ko2" public_interface="in" units="mM"/>
+	<variable name="Vn" public_interface="in" units="dimensionless"/>
+	<variable name="HbOP" public_interface="in" units="mM"/>
+	<variable name="O2c" public_interface="in" units="mM"/>
+	<variable name="O2n" public_interface="in" units="mM"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="51"> 
+      <apply>
+        <eq/> 
+        <ci> Vcn_O2 </ci> 
+        <apply>
+          <times/>
+		  <apply>
+            <divide/>
+			<ci> PScapn </ci>
+			<ci> Vn </ci>
+	      </apply>
+		  <apply>
+            <minus/>
+		    <apply>
+              <times/>
+			  <ci> Ko2 </ci>
+			  <apply>
+                <power/>
+			    <apply>
+                  <minus/>
+				  <apply>
+                    <divide/>
+			        <ci> HbOP </ci>
+			        <ci> O2c </ci>
+			      </apply>
+				  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1.0 </cn>
+		        </apply>
+				<apply>
+                  <divide/>
+			      <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> -1.0 </cn>
+			      <ci> nh_O2 </ci>
+			    </apply>
+		      </apply> 
+			</apply> 
+			<ci> O2n </ci>
+	      </apply>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vg_leak_Na">
+    <variable name="Vg_leak_Na" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="0.00325" name="gg_NA" units="mS_per_cm2"/>
+	
+	<variable name="Sm_g" public_interface="in" units="per_cm"/>
+	<variable name="Vm" public_interface="in" units="mV"/>
+	<variable name="Vg" public_interface="in" units="dimensionless"/>
+	<variable name="RT" public_interface="in" units="mV_C_per_mol"/>
+	<variable name="F" public_interface="in" units="C_per_mole"/>
+	<variable name="NAe" public_interface="in" units="mM"/>
+	<variable name="NAg" public_interface="in" units="mM"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="52"> 
+      <apply><eq/><ci>Vg_leak_Na</ci><apply><times/><apply><divide/><ci>Sm_g</ci><ci>Vg</ci></apply><apply><divide/><ci>gg_NA</ci><ci>F</ci></apply><apply><minus/><apply><times/><apply><divide/><ci>RT</ci><ci>F</ci></apply><apply><ln/><apply><divide/><ci>NAe</ci><ci>NAg</ci></apply></apply></apply><ci>Vm</ci></apply></apply></apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vg_pump">
+    <variable name="Vg_pump" public_interface="out" units="mM_per_s"/> 
+	
+	<variable name="kpump" public_interface="in" units="cm_per_mM_per_s"/>
+	<variable name="Km_pump" public_interface="in" units="mM"/>
+	<variable name="Sm_g" public_interface="in" units="per_cm"/>
+	<variable name="Vg" public_interface="in" units="dimensionless"/>
+	<variable name="ATPg" public_interface="in" units="mM"/>
+	<variable name="NAg" public_interface="in" units="mM"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="53"> 
+      <apply><eq/><ci>Vg_pump</ci><apply><times/><apply><divide/><ci>Sm_g</ci><ci>Vg</ci></apply><ci>kpump</ci><ci>ATPg</ci><ci>NAg</ci><apply><power/><apply><plus/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn><apply><divide/><ci>ATPg</ci><ci>Km_pump</ci></apply></apply><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">-1</cn></apply></apply></apply> 		
+    </math> 
+  </component>
+  
+  <component name="Veg_GLC">
+    <variable name="Veg_GLC" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="3.53" name="Km_eg_GLC" units="mM"/>
+	<variable initial_value="0.038089" name="Vm_eg_GLC" units="mM_per_s"/>
+	
+	<variable name="GLCg" public_interface="in" units="mM"/>
+	<variable name="GLCe" public_interface="in" units="mM"/>
+	<variable name="KO1" public_interface="in" units="dimensionless"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="54"> 
+      <apply>
+        <eq/> 
+        <ci> Veg_GLC </ci> 
+        <apply>
+          <times/>
+		  <ci> KO1 </ci>
+		  <ci> Vm_eg_GLC </ci>
+		  <apply>
+            <minus/>
+			<apply>
+              <divide/>
+			  <ci> GLCe </ci>
+			  <apply>
+                <plus/>
+		        <ci> GLCe </ci>
+			    <ci> Km_eg_GLC </ci>
+		      </apply>
+	        </apply>
+		    <apply>
+              <divide/>
+			  <ci> GLCg </ci>
+			  <apply>
+                <plus/>
+		        <ci> GLCg </ci>
+			    <ci> Km_eg_GLC </ci>
+		      </apply>
+	        </apply>
+		  </apply>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vcg_GLC">
+    <variable name="Vcg_GLC" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="9.92" name="Km_cg_GLC" units="mM"/>
+	<variable initial_value="0.0098394" name="Vm_cg_GLC" units="mM_per_s"/>
+	
+	<variable name="GLCg" public_interface="in" units="mM"/>
+	<variable name="GLCc" public_interface="in" units="mM"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="55"> 
+      <apply>
+        <eq/> 
+        <ci> Vcg_GLC </ci> 
+        <apply>
+          <times/>
+		  <ci> Vm_cg_GLC </ci>
+		  <apply>
+            <minus/>
+			<apply>
+              <divide/>
+			  <ci> GLCc </ci>
+			  <apply>
+                <plus/>
+		        <ci> GLCc </ci>
+			    <ci> Km_cg_GLC </ci>
+		      </apply>
+	        </apply>
+		    <apply>
+              <divide/>
+			  <ci> GLCg </ci>
+			  <apply>
+                <plus/>
+		        <ci> GLCg </ci>
+			    <ci> Km_cg_GLC </ci>
+		      </apply>
+	        </apply>
+		  </apply>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vg_hk">
+    <variable name="Vg_hk" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="0.050461" name="Vmax_g_hk" units="mM_per_s"/>
+	
+	<variable name="Km_GLC" public_interface="in" units="mM"/>
+	<variable name="GLCg" public_interface="in" units="mM"/>
+	<variable name="ATPg" public_interface="in" units="mM"/>
+	<variable name="G6Pg" public_interface="in" units="mM"/>
+	<variable name="G6P_inh_hk" public_interface="in" units="mM"/>
+	<variable name="aG6P_inh_hk" public_interface="in" units="dimensionless"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="56"> 
+      <apply>
+        <eq/> 
+        <ci> Vg_hk </ci> 
+        <apply>
+          <times/>
+		  <ci> Vmax_g_hk </ci>
+		  <ci> ATPg </ci>
+		  <apply>
+            <divide/>
+			<ci> GLCg </ci>
+			<apply>
+              <plus/>
+		      <ci> GLCg </ci>
+			  <ci> Km_GLC </ci>
+		    </apply>
+	      </apply>
+		  <apply>
+            <minus/>
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="per_mM"> 1 </cn>
+		    <apply>
+              <divide/>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="per_mM"> 1 </cn>
+			  <apply>
+                <plus/>
+				<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn>
+		        <apply>
+                  <exp/>
+				  <apply>
+                    <times/>
+					<apply>
+                      <minus/>
+				      <ci> aG6P_inh_hk </ci>
+					</apply>
+					<apply>
+                      <times/>
+			          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="per_mM"> 1 </cn>
+					  <apply>
+                        <minus/>
+				        <ci> G6Pg </ci>
+			            <ci> G6P_inh_hk </ci>
+				      </apply>
+					</apply>
+				  </apply>
+				</apply>
+		      </apply>
+	        </apply>
+		  </apply>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vg_pgi">
+    <variable name="Vg_pgi" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="0.5" name="Vmaxf_g_pgi" units="mM_per_s"/>
+	<variable initial_value="0.45" name="Vmaxr_g_pgi" units="mM_per_s"/>
+	
+	<variable name="Km_G6P" public_interface="in" units="mM"/>
+	<variable name="Km_F6P_pgi" public_interface="in" units="mM"/>
+	<variable name="F6Pg" public_interface="in" units="mM"/>
+	<variable name="G6Pg" public_interface="in" units="mM"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="57"> 
+      <apply>
+        <eq/> 
+        <ci> Vg_pgi </ci> 
+        <apply>
+          <minus/>
+		  <apply>
+            <times/>
+		    <ci> Vmaxf_g_pgi </ci>
+		    <apply>
+              <divide/>
+			  <ci> G6Pg </ci>
+			  <apply>
+                <plus/>
+		        <ci> G6Pg </ci>
+			    <ci> Km_G6P </ci>
+		      </apply>
+	        </apply>
+		  </apply>
+		  <apply>
+            <times/>
+		    <ci> Vmaxr_g_pgi </ci>
+		    <apply>
+              <divide/>
+			  <ci> F6Pg </ci>
+			  <apply>
+                <plus/>
+		        <ci> F6Pg </ci>
+			    <ci> Km_F6P_pgi </ci>
+		      </apply>
+	        </apply>
+		  </apply>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vg_pfk">
+    <variable name="Vg_pfk" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="0.403" name="kg_pfk" units="per_s"/>
+	
+	<variable name="Km_F6P_pfk" public_interface="in" units="mM"/>
+	<variable name="Ki_ATP" public_interface="in" units="mM"/>
+	<variable name="nH" public_interface="in" units="dimensionless"/>
+	<variable name="ATPg" public_interface="in" units="mM"/>
+	<variable name="F6Pg" public_interface="in" units="mM"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="58"> 
+      <apply>
+        <eq/> 
+        <ci> Vg_pfk </ci> 
+        <apply>
+          <times/>
+		  <ci> kg_pfk </ci>
+		  <ci> ATPg </ci>
+		  <apply>
+            <divide/>
+			<ci> F6Pg </ci>
+			<apply>
+              <plus/>
+		      <ci> F6Pg </ci>
+			  <ci> Km_F6P_pfk </ci>
+		    </apply>
+		  </apply>
+		  <apply>
+            <power/>
+			<apply>
+              <plus/>
+		      <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn>
+			  <apply>
+                <power/>
+			    <apply>
+                  <divide/>
+			      <ci> ATPg </ci>
+				  <ci> Ki_ATP </ci>
+			    </apply>
+                <ci> nH </ci>
+			  </apply>
+	        </apply>
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> -1 </cn>
+		  </apply>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vg_pgk">
+    <variable name="Vg_pgk" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="0.2514" name="kg_pgk" units="per_mM_per_s"/>
+	
+	<variable name="ADPg" public_interface="in" units="mM"/>
+	<variable name="GAPg" public_interface="in" units="mM"/>
+	<variable name="NADg" public_interface="in" units="mM"/>
+	<variable name="NADHg" public_interface="in" units="mM"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="59"> 
+      <apply>
+        <eq/> 
+        <ci> Vg_pgk </ci> 
+        <apply>
+          <times/>
+		  <ci> kg_pgk </ci>
+		  <ci> GAPg </ci>
+		  <ci> ADPg </ci>
+		  <apply>
+            <divide/>
+			<ci> NADg </ci>
+			<ci> NADHg </ci>
+		  </apply>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vg_pk">
+    <variable name="Vg_pk" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="2.73" name="kg_pk" units="per_mM_per_s"/>
+	
+	<variable name="PEPg" public_interface="in" units="mM"/>
+	<variable name="ADPg" public_interface="in" units="mM"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="60"> 
+      <apply>
+        <eq/> 
+        <ci> Vg_pk </ci> 
+        <apply>
+          <times/>
+		  <ci> kg_pk </ci>
+		  <ci> PEPg </ci>
+		  <ci> ADPg </ci>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vg_ldh">
+    <variable name="Vg_ldh" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="6.2613" name="kfg_ldh" units="per_mM_per_s"/>
+	<variable initial_value="0.54682" name="krg_ldh" units="per_mM_per_s"/>
+	
+	<variable name="PYRg" public_interface="in" units="mM"/>
+	<variable name="NADHg" public_interface="in" units="mM"/>
+	<variable name="LACg" public_interface="in" units="mM"/>
+	<variable name="NADg" public_interface="in" units="mM"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="61"> 
+      <apply>
+        <eq/> 
+        <ci> Vg_ldh </ci> 
+        <apply>
+          <minus/>
+		  <apply>
+            <times/>
+		    <ci> kfg_ldh </ci>
+		    <ci> PYRg </ci>
+		    <ci> NADHg </ci>
+		  </apply>
+          <apply>
+            <times/>
+		    <ci> krg_ldh </ci>
+		    <ci> LACg </ci>
+		    <ci> NADg </ci>
+		  </apply>  
+		</apply>		  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vg_mito">
+    <variable name="Vg_mito" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="0.008454" name="Vmax_g_mito" units="mM_per_s"/>
+	
+	<variable name="Km_O2" public_interface="in" units="mM"/>
+	<variable name="Km_ADP" public_interface="in" units="mM"/>
+	<variable name="Km_PYR" public_interface="in" units="mM"/>
+	<variable name="O2g" public_interface="in" units="mM"/>
+	<variable name="ADPg" public_interface="in" units="mM"/>
+	<variable name="PYRg" public_interface="in" units="mM"/>
+	<variable name="ATPg" public_interface="in" units="mM"/>
+	<variable name="rATP_mito" public_interface="in" units="dimensionless"/>
+	<variable name="aATP_mito" public_interface="in" units="dimensionless"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="62"> 
+      <apply><eq/><ci>Vg_mito</ci><apply><times/><ci>Vmax_g_mito</ci><apply><divide/><ci>O2g</ci><apply><plus/><ci>O2g</ci><ci>Km_O2</ci></apply></apply><apply><divide/><ci>ADPg</ci><apply><plus/><ci>ADPg</ci><ci>Km_ADP</ci></apply></apply><apply><divide/><ci>PYRg</ci><apply><plus/><ci>PYRg</ci><ci>Km_PYR</ci></apply></apply><apply><minus/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn><apply><divide/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn><apply><plus/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn><apply><exp/><apply><times/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn><apply><minus/><ci>aATP_mito</ci></apply><apply><minus/><apply><divide/><ci>ATPg</ci><ci>ADPg</ci></apply><apply><times/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn><ci>rATP_mito</ci></apply></apply></apply></apply></apply></apply></apply></apply></apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vge_LAC">
+    <variable name="Vge_LAC" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="0.086124" name="Vmax_ge_LAC" units="mM_per_s"/>
+	<variable initial_value="0.22163" name="Km_ge_LAC" units="mM"/>
+	
+	<variable name="LACg" public_interface="in" units="mM"/>
+	<variable name="LACe" public_interface="in" units="mM"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="63"> 
+      <apply><eq/><ci>Vge_LAC</ci><apply><times/><ci>Vmax_ge_LAC</ci><apply><minus/><apply><divide/><ci>LACg</ci><apply><plus/><ci>LACg</ci><ci>Km_ge_LAC</ci></apply></apply><apply><divide/><ci>LACe</ci><apply><plus/><ci>LACe</ci><ci>Km_ge_LAC</ci></apply></apply></apply></apply></apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vgc_LAC">
+    <variable name="Vgc_LAC" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="0.00021856" name="Vmax_gc_LAC" units="mM_per_s"/>
+	<variable initial_value="0.12862" name="Km_gc_LAC" units="mM"/>
+	
+	<variable name="LACg" public_interface="in" units="mM"/>
+	<variable name="LACc" public_interface="in" units="mM"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="64"> 
+      <apply><eq/><ci>Vgc_LAC</ci><apply><times/><ci>Vmax_gc_LAC</ci><apply><minus/><apply><divide/><ci>LACg</ci><apply><plus/><ci>LACg</ci><ci>Km_gc_LAC</ci></apply></apply><apply><divide/><ci>LACc</ci><apply><plus/><ci>LACc</ci><ci>Km_gc_LAC</ci></apply></apply></apply></apply></apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vg_ATPase">
+    <variable name="Vg_ATPase" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="0.035657" name="Vmax_g_ATPase" units="mM_per_s"/>
+	
+	<variable name="ATPg" public_interface="in" units="mM"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="65"> 
+      <apply>
+        <eq/> 
+        <ci> Vg_ATPase </ci> 
+        <apply>
+          <times/>
+		  <ci> Vmax_g_ATPase </ci>
+		  <apply>
+            <divide/>
+			<ci> ATPg </ci>
+			<apply>
+              <plus/>
+		      <ci> ATPg </ci>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mM"> 0.001 </cn>
+		    </apply>
+		  </apply>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vg_ck">
+    <variable cmeta:id="Vg_ck_Vg_ck" name="Vg_ck" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="0.02073" name="krg_ck" units="per_mM_per_s"/>
+	<variable initial_value="0.0243" name="kfg_ck" units="per_mM_per_s"/>
+	
+	<variable name="PCrg" public_interface="in" units="mM"/>
+	<variable name="ADPg" public_interface="in" units="mM"/>
+	<variable name="CRg" public_interface="in" units="mM"/>
+	<variable name="ATPg" public_interface="in" units="mM"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="66"> 
+      <apply>
+        <eq/> 
+        <ci> Vg_ck </ci> 
+        <apply>
+          <minus/>
+		  <apply>
+            <times/>
+			<ci> kfg_ck </ci>
+			<ci> PCrg </ci>
+			<ci> ADPg </ci>
+		  </apply>
+		  <apply>
+            <times/>
+			<ci> krg_ck </ci>
+			<ci> CRg </ci>
+			<ci> ATPg </ci>
+		  </apply>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vcg_O2">
+    <variable name="Vcg_O2" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="0.2457" name="PScapg" units="per_s"/>
+	
+	<variable name="Ko2" public_interface="in" units="mM"/>
+	<variable name="nh_O2" public_interface="in" units="dimensionless"/>
+	<variable name="Vg" public_interface="in" units="dimensionless"/>
+	<variable name="HbOP" public_interface="in" units="mM"/>
+	<variable name="O2c" public_interface="in" units="mM"/>
+	<variable name="O2g" public_interface="in" units="mM"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="67"> 
+      <apply>
+        <eq/> 
+        <ci> Vcg_O2 </ci> 
+        <apply>
+          <times/>
+		  <apply>
+            <divide/>
+			<ci> PScapg </ci>
+			<ci> Vg </ci>
+	      </apply>
+		  <apply>
+            <minus/>
+		    <apply>
+              <times/>
+			  <ci> Ko2 </ci>
+			  <apply>
+                <power/>
+			    <apply>
+                  <minus/>
+				  <apply>
+                    <divide/>
+			        <ci> HbOP </ci>
+			        <ci> O2c </ci>
+			      </apply>
+				  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1.0 </cn>
+		        </apply>
+				<apply>
+                  <divide/>
+			      <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> -1.0 </cn>
+			      <ci> nh_O2 </ci>
+			    </apply>
+		      </apply> 
+			</apply> 
+			<ci> O2g </ci>
+	      </apply>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vc_O2">
+    <variable name="Vc_O2" public_interface="out" units="mM_per_s"/> 
+	
+	<variable name="Fin_t" public_interface="in" units="per_s"/>
+	<variable name="Vc" public_interface="in" units="dimensionless"/>
+	<variable name="O2a" public_interface="in" units="mM"/>
+	<variable name="O2c" public_interface="in" units="mM"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="68"> 
+      <apply>
+        <eq/> 
+        <ci> Vc_O2 </ci> 
+        <apply>
+          <times/>
+		  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 2.0 </cn>
+		  <apply>
+            <divide/>
+		    <ci> Fin_t </ci>
+			<ci> Vc </ci>
+		  </apply>
+		  <apply>
+            <minus/>
+		    <ci> O2a </ci>
+			<ci> O2c </ci>
+		  </apply>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vc_GLC">
+    <variable name="Vc_GLC" public_interface="out" units="mM_per_s"/> 
+	
+	<variable name="Fin_t" public_interface="in" units="per_s"/>
+	<variable name="Vc" public_interface="in" units="dimensionless"/>
+	<variable name="GLCa" public_interface="in" units="mM"/>
+	<variable name="GLCc" public_interface="in" units="mM"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="69"> 
+      <apply>
+        <eq/> 
+        <ci> Vc_GLC </ci> 
+        <apply>
+          <times/>
+		  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 2.0 </cn>
+		  <apply>
+            <divide/>
+		    <ci> Fin_t </ci>
+			<ci> Vc </ci>
+		  </apply>
+		  <apply>
+            <minus/>
+		    <ci> GLCa </ci>
+			<ci> GLCc </ci>
+		  </apply>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vce_GLC">
+    <variable name="Vce_GLC" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="8.4568" name="Km_ce_GLC" units="mM"/>
+	<variable initial_value="0.0489" name="Vm_ce_GLC" units="mM_per_s"/>
+	
+	<variable name="GLCe" public_interface="in" units="mM"/>
+	<variable name="GLCc" public_interface="in" units="mM"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="70"> 
+      <apply>
+        <eq/> 
+        <ci> Vce_GLC </ci> 
+        <apply>
+          <times/>
+		  <ci> Vm_ce_GLC </ci>
+		  <apply>
+            <minus/>
+			<apply>
+              <divide/>
+			  <ci> GLCc </ci>
+			  <apply>
+                <plus/>
+		        <ci> GLCc </ci>
+			    <ci> Km_ce_GLC </ci>
+		      </apply>
+	        </apply>
+		    <apply>
+              <divide/>
+			  <ci> GLCe </ci>
+			  <apply>
+                <plus/>
+		        <ci> GLCe </ci>
+			    <ci> Km_ce_GLC </ci>
+		      </apply>
+	        </apply>
+		  </apply>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vc_LAC">
+    <variable name="Vc_LAC" public_interface="out" units="mM_per_s"/> 
+	
+	<variable name="Fin_t" public_interface="in" units="per_s"/>
+	<variable name="Vc" public_interface="in" units="dimensionless"/>
+	<variable name="LACa" public_interface="in" units="mM"/>
+	<variable name="LACc" public_interface="in" units="mM"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="71"> 
+      <apply>
+        <eq/> 
+        <ci> Vc_LAC </ci> 
+        <apply>
+          <times/>
+		  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 2.0 </cn>
+		  <apply>
+            <divide/>
+		    <ci> Fin_t </ci>
+			<ci> Vc </ci>
+		  </apply>
+		  <apply>
+            <minus/>
+		    <ci> LACa </ci>
+			<ci> LACc </ci>
+		  </apply>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vec_LAC">
+    <variable name="Vec_LAC" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="0.764818" name="Km_ec_LAC" units="mM"/>
+	<variable initial_value="0.0325" name="Vm_ec_LAC" units="mM_per_s"/>
+	
+	<variable name="LACe" public_interface="in" units="mM"/>
+	<variable name="LACc" public_interface="in" units="mM"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="72"> 
+      <apply>
+        <eq/> 
+        <ci> Vec_LAC </ci> 
+        <apply>
+          <times/>
+		  <ci> Vm_ec_LAC </ci>
+		  <apply>
+            <minus/>
+			<apply>
+              <divide/>
+			  <ci> LACe </ci>
+			  <apply>
+                <plus/>
+		        <ci> LACe </ci>
+			    <ci> Km_ec_LAC </ci>
+		      </apply>
+	        </apply>
+			<apply>
+              <divide/>
+			  <ci> LACc </ci>
+			  <apply>
+                <plus/>
+		        <ci> LACc </ci>
+			    <ci> Km_ec_LAC </ci>
+		      </apply>
+	        </apply>
+		  </apply>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vnc_CO2">
+    <variable name="Vnc_CO2" public_interface="out" units="mM_per_s"/> 
+	
+	<variable name="Vn_mito" public_interface="in" units="mM_per_s"/> 
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="73"> 
+      <apply>
+        <eq/> 
+        <ci> Vnc_CO2 </ci> 
+        <apply>
+          <times/>
+		  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 3.0 </cn>
+		  <ci> Vn_mito </ci>
+		</apply> 
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vgc_CO2">
+    <variable name="Vgc_CO2" public_interface="out" units="mM_per_s"/> 
+	
+	<variable name="Vg_mito" public_interface="in" units="mM_per_s"/> 
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="73"> 
+      <apply>
+        <eq/> 
+        <ci> Vgc_CO2 </ci> 
+        <apply>
+          <times/>
+		  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 3.0 </cn>
+		  <ci> Vg_mito </ci>
+		</apply> 
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vn_stim_GLU">
+    <variable name="Vn_stim_GLU" public_interface="out" units="mM_per_s"/> 
+	
+	<variable name="R_GLU_NA" public_interface="in" units="dimensionless"/>
+	<variable name="Km_GLU" public_interface="in" units="mM"/>
+	<variable name="GLUn" public_interface="in" units="mM"/>
+	<variable name="KO2" public_interface="in" units="dimensionless"/>
+	<variable name="Vn_stim" public_interface="in" units="mM_per_s"/> 
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="74"> 
+      <apply>
+        <eq/> 
+        <ci> Vn_stim_GLU </ci> 
+        <apply>
+          <times/>
+		  <ci> Vn_stim </ci>
+		  <ci> R_GLU_NA </ci>
+		  <ci> KO2 </ci>
+		  <apply>
+            <divide/>
+			<ci> GLUn </ci>
+			<apply>
+              <plus/>
+		      <ci> GLUn </ci>
+			  <ci> Km_GLU </ci>
+		    </apply>
+	      </apply>
+		</apply> 
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vg_gs">
+    <variable name="Vg_gs" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="0.3" name="Vmax_g_gs" units="mM_per_s"/>
+	
+	<variable name="Km_GLU" public_interface="in" units="mM"/>
+	<variable name="Km_ATP" public_interface="in" units="mM"/>
+	<variable name="GLUg" public_interface="in" units="mM"/>
+	<variable name="ATPg" public_interface="in" units="mM"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="75"> 
+      <apply><eq/><ci>Vg_gs</ci><apply><times/><ci>Vmax_g_gs</ci><apply><times/><apply><divide/><ci>GLUg</ci><apply><plus/><ci>GLUg</ci><ci>Km_GLU</ci></apply></apply><apply><divide/><ci>ATPg</ci><apply><plus/><ci>ATPg</ci><ci>Km_ATP</ci></apply></apply></apply></apply></apply> 		
+    </math> 
+  </component>
+  
+  <component name="Veg_GLU">
+    <variable name="Veg_GLU" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="0.0208" name="Vmax_eg_GLU" units="mM_per_s"/>
+	
+	<variable name="Km_GLU" public_interface="in" units="mM"/>
+	<variable name="GLUe" public_interface="in" units="mM"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="76"> 
+      <apply>
+        <eq/> 
+        <ci> Veg_GLU </ci> 
+        <apply>
+          <times/>
+		  <ci> Vmax_eg_GLU </ci>
+		  <apply>
+            <divide/>
+			<ci> GLUe </ci>
+			<apply>
+              <plus/>
+		      <ci> GLUe </ci>
+			  <ci> Km_GLU </ci>
+		    </apply>
+	      </apply>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+ 
+  <component name="Vc_CO2">
+    <variable name="Vc_CO2" public_interface="out" units="mM_per_s"/> 
+	
+	<variable name="Fin_t" public_interface="in" units="per_s"/>
+	<variable name="Vc" public_interface="in" units="dimensionless"/>
+	<variable name="CO2a" public_interface="in" units="mM"/>
+	<variable name="CO2c" public_interface="in" units="mM"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="77"> 
+      <apply>
+        <eq/> 
+        <ci> Vc_CO2 </ci> 
+        <apply>
+          <times/>
+		  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 2.0 </cn>
+		  <apply>
+            <divide/>
+		    <ci> Fin_t </ci>
+			<ci> Vc </ci>
+		  </apply>
+		  <apply>
+            <minus/>
+		    <ci> CO2c </ci>
+			<ci> CO2a </ci>
+		  </apply>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vg_glys">
+    <variable name="Vg_glys" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="0.0001528" name="Vmax_glys" units="mM_per_s"/>
+	<variable initial_value="0.5" name="Km_G6P_glys" units="mM"/>
+	
+	<variable name="G6Pg" public_interface="in" units="mM"/>
+	<variable name="GLYg" public_interface="in" units="mM"/>
+	<variable name="GLY_inh" public_interface="in" units="mM"/>
+	<variable name="aGLY_inh" public_interface="in" units="dimensionless"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="78"> 
+      <apply>
+        <eq/> 
+        <ci> Vg_glys </ci> 
+        <apply>
+          <times/>
+		  <ci> Vmax_glys </ci>
+		  <apply>
+            <divide/>
+			<ci> G6Pg </ci>
+			<apply>
+              <plus/>
+		      <ci> G6Pg </ci>
+			  <ci> Km_G6P_glys </ci>
+		    </apply>
+	      </apply>
+		  <apply>
+            <minus/>
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn>
+		    <apply>
+              <divide/>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn>
+			  <apply>
+                <plus/>
+				<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn>
+		        <apply>
+                  <exp/>
+				  <apply>
+                    <times/>
+					<apply>
+                      <minus/>
+				      <ci> aGLY_inh </ci>
+					</apply>
+					<apply>
+                      <times/>
+				      <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="per_mM"> 1 </cn>
+					  <apply>
+                        <minus/>
+				        <ci> GLYg </ci>
+			            <ci> GLY_inh </ci>
+					  </apply>
+					</apply>
+				  </apply>
+				</apply>
+		      </apply>
+	        </apply>
+		  </apply>
+		</apply>  
+      </apply> 		
+    </math> 
+  </component>
+  
+  <component name="Vg_glyp">
+    <variable name="Vg_glyp" public_interface="out" units="mM_per_s"/> 
+	
+	<variable initial_value="4.922e-5" name="Vmax_glyp" units="mM_per_s"/>
+	<variable initial_value="1.0" name="Km_GLY" units="mM"/>
+	<variable name="deltaVt_GLY" units="dimensionless"/>
+	
+	<variable name="unitstepSB2" public_interface="in" units="dimensionless"/>	
+	<variable name="stim" public_interface="in" units="dimensionless"/>
+	<variable name="to" public_interface="in" units="s"/>
+	<variable name="to_GLY" public_interface="in" units="s"/>
+	<variable name="tend_GLY" public_interface="in" units="s"/>
+	<variable name="sr_GLY" public_interface="in" units="dimensionless"/>
+	<variable name="t1" public_interface="in" units="s"/>
+	<variable name="delta_GLY" public_interface="in" units="dimensionless"/>
+	<variable name="time" public_interface="in" units="s"/>
+	<variable name="GLYg" public_interface="in" units="mM"/>
+	<variable name="KO3" public_interface="in" units="dimensionless"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="79"> 
+      <apply>
+        <eq/> 
+        <ci> Vg_glyp </ci> 
+        <apply>
+          <times/>
+		  <ci> Vmax_glyp </ci>
+		  <apply>
+            <divide/>
+			<ci> GLYg </ci>
+			<apply>
+              <plus/>
+		      <ci> GLYg </ci>
+			  <ci> Km_GLY </ci>
+		    </apply>
+	      </apply>
+		  <ci> deltaVt_GLY </ci>
+		</apply>  
+      </apply> 		
+    </math> 
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML" id="79b">
+	  <apply><eq/><ci>deltaVt_GLY</ci><apply><plus/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn><apply><times/><ci>stim</ci><apply><times/><ci>delta_GLY</ci><ci>KO3</ci><apply><divide/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn><apply><plus/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn><apply><exp/><apply><times/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="per_s">1</cn><apply><minus/><ci>sr_GLY</ci></apply><apply><minus/><ci>time</ci><apply><plus/><ci>to</ci><ci>to_GLY</ci></apply></apply></apply></apply></apply></apply><apply><minus/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn><ci>unitstepSB2</ci></apply></apply></apply></apply></apply> 	
+	</math>
+  </component>
+  
+  <!-- model variables -->
+  
+  <component name="Fin_t">
+    <variable name="Fin_t" public_interface="out" units="per_s"/> 
+    
+    <variable initial_value="0.012" name="CBF0" units="per_s"/>	
+	
+	<variable name="stim" public_interface="in" units="dimensionless"/>
+	<variable name="to" public_interface="in" units="s"/>
+	<variable name="tend" public_interface="in" units="s"/>
+	<variable name="sr" public_interface="in" units="dimensionless"/>
+	<variable name="t1" public_interface="in" units="s"/>
+	<variable name="deltaf" public_interface="in" units="dimensionless"/>
+	<variable name="time" public_interface="in" units="s"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="80"> 
+      <apply>
+        <eq/> 
+        <ci> Fin_t </ci>
+		<apply>
+          <plus/>
+		  <ci> CBF0 </ci>
+		  <apply>
+            <minus/>
+		    <apply>
+              <times/> 
+	          <ci> stim </ci>
+			  <ci> CBF0 </ci>
+			  <ci> deltaf </ci>
+			  <apply>
+                <divide/>
+		        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn>
+				<apply>
+                  <plus/>
+		          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn>
+		          <apply>
+                    <exp/> 
+					<apply>
+                      <times/> 
+					  <apply>
+                        <times/>
+		                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="per_s"> 1 </cn>
+						<apply>
+                          <minus/> 
+						  <ci> sr </ci>
+						</apply>
+		              </apply>
+					  <apply>
+                        <minus/> 
+						<ci> time </ci>
+						<apply>
+                          <minus/>
+                          <apply>
+                            <plus/>						  
+	                        <ci> to </ci>
+							<ci> t1 </ci>
+						  </apply>
+						  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="second"> 3 </cn>
+					    </apply>
+					  </apply>
+			        </apply>
+				  </apply>
+			    </apply>
+			  </apply>
+			</apply>
+			<apply>
+              <times/> 
+	          <ci> stim </ci>
+			  <ci> CBF0 </ci>
+			  <ci> deltaf </ci>
+			  <apply>
+                <divide/>
+		        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn>
+				<apply>
+                  <plus/>
+		          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn>
+		          <apply>
+                    <exp/> 
+					<apply>
+                      <times/> 
+					  <apply>
+                        <times/>
+		                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="per_s"> 1 </cn>
+					    <apply>
+                          <minus/> 
+						  <ci> sr </ci>
+						</apply>
+		              </apply>
+					  <apply>
+                        <minus/> 
+						<ci> time </ci>
+						<apply>
+                          <plus/>						  
+	                      <ci> to </ci>
+						  <ci> tend </ci>
+					      <ci> t1 </ci>
+						  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="second"> 3 </cn>
+					    </apply>
+					  </apply>
+			        </apply>
+				  </apply>
+			    </apply>
+			  </apply>
+			</apply> 	
+		  </apply> 	
+		</apply>
+	  </apply> 	
+	</math>
+  </component>
+  
+  <component name="Fout_t">
+    <variable name="Fout_t" public_interface="out" units="per_s"/> 
+    
+    <variable name="Fin_t" public_interface="in" units="per_s"/> 
+    <variable name="CBF0" public_interface="in" units="per_s"/> 
+	<variable name="Vv" public_interface="in" units="dimensionless"/>
+    <variable name="Vv0" public_interface="in" units="dimensionless"/>
+	<variable name="tv" public_interface="in" units="s"/> 	
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="81"> 
+      <apply><eq/><ci>Fout_t</ci><apply><times/><ci>CBF0</ci><apply><divide/><apply><plus/><apply><power/><apply><divide/><ci>Vv</ci><ci>Vv0</ci></apply><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn></apply><apply><times/><ci>tv</ci><apply><power/><apply><divide/><ci>Vv</ci><ci>Vv0</ci></apply><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">-0.5</cn></apply><apply><divide/><ci>Fin_t</ci><ci>Vv0</ci></apply></apply></apply><apply><plus/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn><apply><times/><ci>CBF0</ci><ci>tv</ci><apply><power/><apply><divide/><ci>Vv</ci><ci>Vv0</ci></apply><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">-0.5</cn></apply><apply><divide/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn><ci>Vv0</ci></apply></apply></apply></apply></apply></apply>			  
+    </math> 
+  </component>
+  
+  <component name="NADn">
+    <variable name="NADn" public_interface="out" units="mM"/>
+	
+	<variable initial_value="0.22" name="NADH_n_tot" units="mM"/>  
+    
+    <variable name="NADHn" public_interface="in" units="mM"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="82"> 
+      <apply>
+        <eq/> 
+        <ci> NADn </ci>
+        <apply>
+          <minus/> 
+	      <ci> NADH_n_tot </ci>
+		  <ci> NADHn </ci>
+        </apply>
+      </apply>
+    </math> 
+  </component>
+  
+  <component name="NADg">
+    <variable name="NADg" public_interface="out" units="mM"/>
+	
+	<variable initial_value="0.22" name="NADH_g_tot" units="mM"/>  
+    
+    <variable name="NADHg" public_interface="in" units="mM"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="83"> 
+      <apply>
+        <eq/> 
+        <ci> NADg </ci>
+        <apply>
+          <minus/> 
+	      <ci> NADH_g_tot </ci>
+		  <ci> NADHg </ci>
+        </apply>
+      </apply>
+    </math> 
+  </component>
+  
+  <component name="CRn">
+    <variable cmeta:id="CRn_CRn" name="CRn" public_interface="out" units="mM"/>
+	
+	<variable initial_value="5.0" name="PCrn_tot" units="mM"/>  
+    
+    <variable name="PCrn" public_interface="in" units="mM"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="84"> 
+      <apply>
+        <eq/> 
+        <ci> CRn </ci>
+        <apply>
+          <minus/> 
+	      <ci> PCrn_tot </ci>
+		  <ci> PCrn </ci>
+        </apply>
+      </apply>
+    </math> 
+  </component>
+  
+  <component name="CRg">
+    <variable cmeta:id="CRg_CRg" name="CRg" public_interface="out" units="mM"/>
+	
+	<variable initial_value="5.0" name="PCrg_tot" units="mM"/>  
+    
+    <variable name="PCrg" public_interface="in" units="mM"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="85"> 
+      <apply>
+        <eq/> 
+        <ci> CRg </ci>
+        <apply>
+          <minus/> 
+	      <ci> PCrg_tot </ci>
+		  <ci> PCrg </ci>
+        </apply>
+      </apply>
+    </math> 
+  </component>
+  
+  <component name="ADPn">
+    <variable cmeta:id="ADPn_ADPn" name="ADPn" public_interface="out" units="mM"/>
+	
+	<variable name="ATPn" public_interface="in" units="mM"/>
+	<variable name="ATPtot" public_interface="in" units="mM"/>
+	<variable name="qak" public_interface="in" units="dimensionless"/>   
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="86"> 
+      <apply><eq/><ci>ADPn</ci><apply><times/><apply><divide/><ci>ATPn</ci><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn></apply><apply><plus/><apply><minus/><ci>qak</ci></apply><apply><root/><apply><plus/><apply><power/><ci>qak</ci><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn></apply><apply><times/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4</cn><ci>qak</ci><apply><minus/><apply><divide/><ci>ATPtot</ci><ci>ATPn</ci></apply><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn></apply></apply></apply></apply></apply></apply></apply>
+    </math> 
+  </component>
+  
+  <component name="ADPg">
+    <variable name="ADPg" public_interface="out" units="mM"/>
+	
+	<variable name="ATPg" public_interface="in" units="mM"/>
+	<variable name="ATPtot" public_interface="in" units="mM"/>
+	<variable name="qak" public_interface="in" units="dimensionless"/>   
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="87"> 
+      <apply><eq/><ci>ADPg</ci><apply><times/><apply><divide/><ci>ATPg</ci><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn></apply><apply><plus/><apply><minus/><ci>qak</ci></apply><apply><root/><apply><plus/><apply><power/><ci>qak</ci><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn></apply><apply><times/><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4</cn><ci>qak</ci><apply><minus/><apply><divide/><ci>ATPtot</ci><ci>ATPg</ci></apply><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn></apply></apply></apply></apply></apply></apply></apply>
+    </math> 
+  </component>
+  
+  <component name="u_n">
+    <variable name="u_n" public_interface="out" units="dimensionless"/>
+	
+	<variable name="ATPn" public_interface="in" units="mM"/>
+	<variable name="ATPtot" public_interface="in" units="mM"/>
+	<variable name="qak" public_interface="in" units="dimensionless"/>   
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="88"> 
+      <apply>
+        <eq/> 
+        <ci> u_n </ci>
+        <apply>
+          <plus/> 
+	      <apply>
+            <power/> 
+			<ci> qak </ci>
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 2 </cn>
+		  </apply>
+		  <apply>
+            <times/>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 4 </cn>					
+            <ci> qak </ci>
+			<apply>
+              <minus/>
+              <apply>
+                <divide/> 					  
+	            <ci> ATPtot </ci>
+				<ci> ATPn </ci>
+              </apply> 
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn>			  
+			</apply> 
+		  </apply>
+        </apply>
+      </apply>
+    </math> 
+  </component>
+  
+  <component name="u_g">
+    <variable name="u_g" public_interface="out" units="dimensionless"/>
+	
+	<variable name="ATPg" public_interface="in" units="mM"/>
+	<variable name="ATPtot" public_interface="in" units="mM"/>
+	<variable name="qak" public_interface="in" units="dimensionless"/>   
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="89"> 
+      <apply>
+        <eq/> 
+        <ci> u_g </ci>
+        <apply>
+          <plus/> 
+	      <apply>
+            <power/> 
+			<ci> qak </ci>
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 2 </cn>
+		  </apply>
+		  <apply>
+            <times/>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 4 </cn>					
+            <ci> qak </ci>
+			<apply>
+              <minus/>
+              <apply>
+                <divide/> 					  
+	            <ci> ATPtot </ci>
+				<ci> ATPg </ci>
+              </apply> 
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn>			  
+			</apply> 
+		  </apply>
+        </apply>
+      </apply>
+    </math> 
+  </component>
+  
+  <component name="dAMP_dATPn">
+    <variable name="dAMP_dATPn" public_interface="out" units="dimensionless"/>
+	
+	<variable name="ATPn" public_interface="in" units="mM"/>
+	<variable name="ATPtot" public_interface="in" units="mM"/>
+	<variable name="u_n" public_interface="in" units="dimensionless"/>
+	<variable name="qak" public_interface="in" units="dimensionless"/>   
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="90"> 
+      <apply>
+        <eq/> 
+        <ci> dAMP_dATPn </ci>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/> 
+            <apply>
+              <divide/> 					  
+	          <ci> qak </ci>
+		      <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 2 </cn>
+		    </apply>
+            <apply>
+              <times/>
+			  <ci> qak </ci>
+              <apply>
+                <divide/> 					  
+	            <ci> ATPtot </ci>
+                <apply>
+                  <times/>
+			      <ci> ATPn </ci>				
+	              <apply>
+                    <root/> 
+			        <ci> u_n </ci>
+			      </apply>
+		        </apply> 
+              </apply>			  
+			</apply> 
+		  </apply>
+		  <apply>
+            <plus/> 
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn>
+			<apply>
+              <times/>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 0.5 </cn>
+			  <apply>
+                <root/> 
+			    <ci> u_n </ci>
+			  </apply>
+		    </apply> 
+		  </apply>
+        </apply>
+      </apply>
+    </math> 
+  </component>
+  
+  <component name="dAMP_dATPg">
+    <variable name="dAMP_dATPg" public_interface="out" units="dimensionless"/>
+	
+	<variable name="ATPg" public_interface="in" units="mM"/>
+	<variable name="ATPtot" public_interface="in" units="mM"/>
+	<variable name="u_g" public_interface="in" units="dimensionless"/>
+	<variable name="qak" public_interface="in" units="dimensionless"/>   
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="91"> 
+      <apply>
+        <eq/> 
+        <ci> dAMP_dATPg </ci>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/> 
+            <apply>
+              <divide/> 					  
+	          <ci> qak </ci>
+		      <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 2 </cn>
+		    </apply>
+            <apply>
+              <times/>
+			  <ci> qak </ci>
+              <apply>
+                <divide/> 					  
+	            <ci> ATPtot </ci>
+                <apply>
+                  <times/>
+			      <ci> ATPg </ci>				
+	              <apply>
+                    <root/> 
+			        <ci> u_g </ci>
+			      </apply>
+		        </apply> 
+              </apply>			  
+			</apply> 
+		  </apply>
+		  <apply>
+            <plus/> 
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn>
+			<apply>
+              <times/>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 0.5 </cn>
+			  <apply>
+                <root/> 
+			    <ci> u_g </ci>
+			  </apply>
+		    </apply> 
+		  </apply>
+        </apply>
+      </apply>
+    </math> 
+  </component>
+  
+  <component name="AMPn">
+    <variable name="AMPn" public_interface="out" units="mM"/>
+	
+	<variable name="ATPtot" public_interface="in" units="mM"/>  
+    <variable name="ATPn" public_interface="in" units="mM"/> 
+	<variable name="ADPn" public_interface="in" units="mM"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="92"> 
+      <apply><eq/><ci>AMPn</ci><apply><minus/><ci>ATPtot</ci><apply><plus/><ci>ATPn</ci><ci>ADPn</ci></apply></apply></apply>
+    </math> 
+  </component>
+  
+  <component name="AMPg">
+    <variable name="AMPg" public_interface="out" units="mM"/>
+	
+	<variable name="ATPtot" public_interface="in" units="mM"/>  
+    <variable name="ATPg" public_interface="in" units="mM"/> 
+	<variable name="ADPg" public_interface="in" units="mM"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="93"> 
+      <apply><eq/><ci>AMPg</ci><apply><minus/><ci>ATPtot</ci><apply><plus/><ci>ATPg</ci><ci>ADPg</ci></apply></apply></apply>
+    </math> 
+  </component>
+  
+  <component name="BOLD">
+    <variable name="BOLD" units="dimensionless"/>
+	
+	<variable name="Vv0" public_interface="in" units="dimensionless"/> 
+	<variable name="k1" public_interface="in" units="dimensionless"/>
+	<variable name="k2" public_interface="in" units="dimensionless"/>
+	<variable name="k3" public_interface="in" units="dimensionless"/>  
+    <variable name="Vv" public_interface="in" units="dimensionless"/> 
+	<variable name="dHb" public_interface="in" units="mM"/>
+	<variable name="dHb0" public_interface="in" units="mM"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="94"> 
+      <apply>
+        <eq/> 
+        <ci> BOLD </ci>
+        <apply>
+          <times/> 
+	      <ci> Vv0 </ci>
+		  <apply>
+            <minus/>
+			<apply>
+              <times/>
+			  <apply>
+                <plus/>
+	            <ci> k1 </ci>
+			    <ci> k2 </ci>
+		      </apply>
+			  <apply>
+                <minus/>
+				<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn>
+				<apply>
+                  <divide/>
+	              <ci> dHb </ci>
+			      <ci> dHb0 </ci>
+		        </apply>
+              </apply>
+            </apply>
+			<apply>
+              <times/>
+			  <apply>
+                <plus/>
+	            <ci> k2 </ci>
+			    <ci> k3 </ci>
+		      </apply>
+			  <apply>
+                <minus/>
+				<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn>
+				<apply>
+                  <divide/>
+	              <ci> Vv </ci>
+			      <ci> Vv0 </ci>
+		        </apply>
+              </apply>
+			</apply>
+		  </apply>
+		</apply>
+	  </apply>
+    </math> 
+  </component>
+  
+  <component name="v_stim">
+    <variable name="v_stim" public_interface="out" units="mM_per_s"/>
+
+    <variable name="unitpulseSB" units="dimensionless"/>	
+	
+	<variable name="stim" public_interface="in" units="dimensionless"/>
+	<variable name="to" public_interface="in" units="s"/>
+	<variable name="tend" public_interface="in" units="s"/>
+	<variable name="t_n_stim" public_interface="in" units="s"/>
+	<variable name="v1_n" public_interface="in" units="mM_per_s"/>
+	<variable name="v2_n" public_interface="in" units="mM_per_s"/>
+	<variable name="time" public_interface="in" units="s"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="95"> 
+      <apply><eq/><ci>v_stim</ci><apply><times/><ci>stim</ci><apply><plus/><ci>v1_n</ci><apply><times/><ci>v2_n</ci><apply><divide/><apply><minus/><ci>time</ci><ci>to</ci></apply><ci>t_n_stim</ci></apply><apply><exp/><apply><minus/><apply><times/><apply><minus/><ci>time</ci><ci>to</ci></apply><apply><divide/><ci>unitpulseSB</ci><ci>t_n_stim</ci></apply></apply></apply></apply></apply></apply><ci>unitpulseSB</ci></apply></apply> 	
+	</math>
+
+	<math xmlns="http://www.w3.org/1998/Math/MathML" id="95b"> 
+      <apply>
+        <eq/> 
+        <ci> unitpulseSB </ci>  
+        <piecewise>
+          <piece>
+		    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn>
+            <apply>
+              <and/>
+			  <apply>
+                <geq/>
+                <ci> time </ci> 
+                <ci> to </ci> 
+              </apply>
+			  <apply>
+                <leq/>
+                <ci> time </ci> 
+                <apply>
+                  <plus/>
+				  <ci> to </ci> 
+				  <ci> tend </ci> 
+                </apply>
+			  </apply>
+			</apply>
+          </piece>
+          <otherwise>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 0 </cn>
+          </otherwise>
+        </piecewise>
+      </apply>
+	</math>
+  </component>
+  
+  <component name="unitstepSB">
+    <variable name="unitstepSB" public_interface="out" units="dimensionless"/>	
+	
+	<variable name="to" public_interface="in" units="s"/>
+	<variable name="tend" public_interface="in" units="s"/>
+	<variable name="time" public_interface="in" units="s"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="96"> 
+      <apply>
+        <eq/> 
+        <ci> unitstepSB </ci>  
+        <piecewise>
+          <piece>
+		    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 1 </cn>
+            <apply>
+              <geq/>
+              <apply>
+                <minus/>
+				<ci> time </ci> 
+			    <apply>
+                  <plus/>
+				  <ci> tend </ci> 
+				  <ci> to </ci> 
+                </apply>
+              </apply>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="second"> 0 </cn>
+			</apply>
+		  </piece>
+          <otherwise>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 0 </cn>
+          </otherwise>
+        </piecewise>
+      </apply>
+	</math>
+  </component>
+  
+  <component name="model_parameters">
+    <variable initial_value="0.0632" name="Km_PYR" public_interface="out" units="mM"/>
+	<variable initial_value="0.01532" name="Km_ATP" public_interface="out" units="mM"/>
+	<variable initial_value="0.7595" name="Ki_ATP" public_interface="out" units="mM"/>
+	<variable initial_value="0.00107" name="Km_ADP" public_interface="out" units="mM"/>
+	<variable initial_value="0.0029658" name="Km_O2" public_interface="out" units="mM"/>
+	<variable initial_value="0.105" name="Km_GLC" public_interface="out" units="mM"/>
+	<variable initial_value="0.05" name="Km_GLU" public_interface="out" units="mM"/>
+	<variable initial_value="0.5" name="Km_G6P" public_interface="out" units="mM"/>
+	<variable initial_value="0.06" name="Km_F6P_pgi" public_interface="out" units="mM"/>
+	<variable initial_value="0.18" name="Km_F6P_pfk" public_interface="out" units="mM"/>
+	<variable initial_value="0.4243" name="Km_pump" public_interface="out" units="mM"/>
+	<variable initial_value="2.7" name="nh_O2" public_interface="out" units="dimensionless"/>
+    <variable initial_value="0.089733" name="Ko2" public_interface="out" units="mM"/>
+	<variable initial_value="3.17e-7" name="kpump" public_interface="out" units="cm_per_mM_per_s"/>
+	<variable initial_value="2.379" name="ATPtot" public_interface="out" units="mM"/>
+	<variable initial_value="150.0" name="NAe" public_interface="out" units="mM"/>
+	<variable initial_value="4.0" name="nH" public_interface="out" units="dimensionless"/>
+	<variable initial_value="8.34" name="O2a" public_interface="out" units="mM"/>
+	<variable initial_value="1.2" name="CO2a" public_interface="out" units="mM"/>
+	<variable initial_value="4.8" name="GLCa" public_interface="out" units="mM"/>
+	<variable initial_value="0.313" name="LACa" public_interface="out" units="mM"/>
+	<variable initial_value="15.0" name="nOP" public_interface="out" units="dimensionless"/>
+    <variable initial_value="3.0" name="NAero" public_interface="out" units="dimensionless"/>
+    <variable initial_value="1.8" name="Rng" public_interface="out" units="dimensionless"/>
+    <variable initial_value="0.8" name="Reg" public_interface="out" units="dimensionless"/>
+    <variable initial_value="0.4444444444444444" name="Ren" public_interface="out" units="dimensionless"/>
+    <variable initial_value="0.01222" name="Rcn" public_interface="out" units="dimensionless"/>
+    <variable initial_value="0.022" name="Rcg" public_interface="out" units="dimensionless"/>
+    <variable initial_value="0.0275" name="Rce" public_interface="out" units="dimensionless"/>
+	<variable initial_value="40500" name="Sm_n" public_interface="out" units="per_cm"/>
+	<variable initial_value="-70" name="Vm" public_interface="out" units="mV"/>
+	<variable initial_value="2577340" name="RT" public_interface="out" units="mV_C_per_mol"/>
+	<variable initial_value="96500" name="F" public_interface="out" units="C_per_mole"/>
+	<variable initial_value="0.45" name="Vn" public_interface="out" units="dimensionless"/>
+	<variable initial_value="0.6" name="G6P_inh_hk" public_interface="out" units="mM"/>
+	<variable initial_value="20.0" name="aG6P_inh_hk" public_interface="out" units="dimensionless"/>
+	<variable initial_value="20.0" name="rATP_mito" public_interface="out" units="dimensionless"/>
+	<variable initial_value="5.0" name="aATP_mito" public_interface="out" units="dimensionless"/>
+	<variable initial_value="8.6" name="HbOP" public_interface="out" units="mM"/>
+	<variable initial_value="10500" name="Sm_g" public_interface="out" units="per_cm"/>
+	<variable initial_value="0.25" name="Vg" public_interface="out" units="dimensionless"/>
+	<variable initial_value="1.0" name="KO1" public_interface="out" units="dimensionless"/>
+	<variable initial_value="0.0055" name="Vc" public_interface="out" units="dimensionless"/>
+	<variable initial_value="0.075" name="R_GLU_NA" public_interface="out" units="dimensionless"/>
+	<variable initial_value="1" name="KO2" public_interface="out" units="dimensionless"/>
+	<variable initial_value="1" name="KO3" public_interface="out" units="dimensionless"/>
+	<variable initial_value="4.2" name="GLY_inh" public_interface="out" units="mM"/>
+	<variable initial_value="20.0" name="aGLY_inh" public_interface="out" units="dimensionless"/>
+	<variable initial_value="0.012" name="CBF0" public_interface="out" units="per_s"/> 
+	<variable initial_value="0.0236" name="Vv0" public_interface="out" units="dimensionless"/>
+	<variable initial_value="35.0" name="tv" public_interface="out" units="s"/> 
+	<variable initial_value="0.92" name="qak" public_interface="out" units="dimensionless"/>  
+	<variable initial_value="2.22" name="k1" public_interface="out" units="dimensionless"/>
+	<variable initial_value="0.46" name="k2" public_interface="out" units="dimensionless"/>
+	<variable initial_value="0.43" name="k3" public_interface="out" units="dimensionless"/>  
+    <variable initial_value="0.064" name="dHb0" public_interface="out" units="mM"/>
+	<variable initial_value="1" name="stim" public_interface="out" units="dimensionless"/>
+	<variable initial_value="200" name="to" public_interface="out" units="s"/>
+	<variable initial_value="300" name="tend" public_interface="out" units="s"/>
+	<variable initial_value="0.041" name="v1_n" public_interface="out" units="mM_per_s"/>
+	<variable initial_value="2.55" name="v2_n" public_interface="out" units="mM_per_s"/>
+	<variable initial_value="2" name="t_n_stim" public_interface="out" units="s"/>
+	<variable initial_value="4.59186" name="sr" public_interface="out" units="dimensionless"/>
+	<variable initial_value="2" name="t1" public_interface="out" units="s"/>
+	<variable initial_value="62" name="delta_GLY" public_interface="out" units="dimensionless"/>
+	<variable initial_value="0.42" name="deltaf" public_interface="out" units="dimensionless"/>
+	<variable initial_value="440" name="tend_GLY" public_interface="out" units="s"/>
+	<variable initial_value="83" name="to_GLY" public_interface="out" units="s"/>
+	<variable initial_value="4" name="sr_GLY" public_interface="out" units="dimensionless"/>
+  </component>  
+  
+  
+  <connection>
+    <map_components component_1="NAn" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="GLCn" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="G6Pn" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="F6Pn" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="GAPn" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="PEPn" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="PYRn" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="LACn" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="NADHn" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="ATPn" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="PCrn" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="O2n" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="GLUn" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="NAg" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="GLCg" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="G6Pg" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="F6Pg" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="GAPg" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="PEPg" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="PYRg" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="LACg" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="NADHg" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="ATPg" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="PCrg" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="O2g" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="GLYg" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="GLUg" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="GLCe" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="LACe" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="GLUe" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="O2c" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="GLCc" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="LACc" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="CO2c" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vv" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="dHb" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_glyp" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="v_stim" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="unitstepSB" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Fin_t" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Vn_leak_Na" component_2="NAn"/>
+    <map_variables variable_1="Vn_leak_Na" variable_2="Vn_leak_Na"/>
+	<map_variables variable_1="NAn" variable_2="NAn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vn_pump" component_2="NAn"/>
+    <map_variables variable_1="Vn_pump" variable_2="Vn_pump"/>
+	<map_variables variable_1="NAn" variable_2="NAn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vn_stim" component_2="NAn"/>
+    <map_variables variable_1="Vn_stim" variable_2="Vn_stim"/>  
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_en_GLC" component_2="GLCn"/>
+    <map_variables variable_1="V_en_GLC" variable_2="V_en_GLC"/>
+	<map_variables variable_1="GLCn" variable_2="GLCn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vn_hk" component_2="GLCn"/>
+    <map_variables variable_1="Vn_hk" variable_2="Vn_hk"/>
+	<map_variables variable_1="GLCn" variable_2="GLCn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vn_pgi" component_2="G6Pn"/>
+    <map_variables variable_1="Vn_pgi" variable_2="Vn_pgi"/>
+	<map_variables variable_1="G6Pn" variable_2="G6Pn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vn_hk" component_2="G6Pn"/>
+    <map_variables variable_1="Vn_hk" variable_2="Vn_hk"/>
+	<map_variables variable_1="G6Pn" variable_2="G6Pn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vn_pgi" component_2="F6Pn"/>
+    <map_variables variable_1="Vn_pgi" variable_2="Vn_pgi"/>
+	<map_variables variable_1="F6Pn" variable_2="F6Pn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vn_pfk" component_2="F6Pn"/>
+    <map_variables variable_1="Vn_pfk" variable_2="Vn_pfk"/>
+	<map_variables variable_1="F6Pn" variable_2="F6Pn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vn_pgk" component_2="GAPn"/>
+    <map_variables variable_1="Vn_pgk" variable_2="Vn_pgk"/>
+	<map_variables variable_1="GAPn" variable_2="GAPn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vn_pfk" component_2="GAPn"/>
+    <map_variables variable_1="Vn_pfk" variable_2="Vn_pfk"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vn_pk" component_2="PEPn"/>
+    <map_variables variable_1="Vn_pk" variable_2="Vn_pk"/>
+	<map_variables variable_1="PEPn" variable_2="PEPn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vn_pgk" component_2="PEPn"/>
+    <map_variables variable_1="Vn_pgk" variable_2="Vn_pgk"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vn_pk" component_2="PYRn"/>
+    <map_variables variable_1="Vn_pk" variable_2="Vn_pk"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vn_ldh" component_2="PYRn"/>
+    <map_variables variable_1="Vn_ldh" variable_2="Vn_ldh"/>
+	<map_variables variable_1="PYRn" variable_2="PYRn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vn_mito" component_2="PYRn"/>
+    <map_variables variable_1="Vn_mito" variable_2="Vn_mito"/>
+	<map_variables variable_1="PYRn" variable_2="PYRn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vn_ldh" component_2="LACn"/>
+    <map_variables variable_1="Vn_ldh" variable_2="Vn_ldh"/>
+	<map_variables variable_1="LACn" variable_2="LACn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vne_LAC" component_2="LACn"/>
+    <map_variables variable_1="Vne_LAC" variable_2="Vne_LAC"/>
+	<map_variables variable_1="LACn" variable_2="LACn"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Vn_pgk" component_2="NADHn"/>
+    <map_variables variable_1="Vn_pgk" variable_2="Vn_pgk"/>
+	<map_variables variable_1="NADHn" variable_2="NADHn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vn_ldh" component_2="NADHn"/>
+    <map_variables variable_1="Vn_ldh" variable_2="Vn_ldh"/>
+	<map_variables variable_1="NADHn" variable_2="NADHn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vn_mito" component_2="NADHn"/>
+    <map_variables variable_1="Vn_mito" variable_2="Vn_mito"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="ATPn"/>
+    <map_variables variable_1="nOP" variable_2="nOP"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="dAMP_dATPn" component_2="ATPn"/>
+    <map_variables variable_1="ATPn" variable_2="ATPn"/>
+	<map_variables variable_1="dAMP_dATPn" variable_2="dAMP_dATPn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vn_hk" component_2="ATPn"/>
+    <map_variables variable_1="Vn_hk" variable_2="Vn_hk"/>
+	<map_variables variable_1="ATPn" variable_2="ATPn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vn_pfk" component_2="ATPn"/>
+    <map_variables variable_1="Vn_pfk" variable_2="Vn_pfk"/>
+	<map_variables variable_1="ATPn" variable_2="ATPn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vn_pgk" component_2="ATPn"/>
+    <map_variables variable_1="Vn_pgk" variable_2="Vn_pgk"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vn_pk" component_2="ATPn"/>
+    <map_variables variable_1="Vn_pk" variable_2="Vn_pk"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vn_ATPase" component_2="ATPn"/>
+    <map_variables variable_1="Vn_ATPase" variable_2="Vn_ATPase"/>
+	<map_variables variable_1="ATPn" variable_2="ATPn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vn_pump" component_2="ATPn"/>
+    <map_variables variable_1="Vn_pump" variable_2="Vn_pump"/>
+	<map_variables variable_1="ATPn" variable_2="ATPn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vn_mito" component_2="ATPn"/>
+    <map_variables variable_1="Vn_mito" variable_2="Vn_mito"/>
+	<map_variables variable_1="ATPn" variable_2="ATPn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vn_ck" component_2="ATPn"/>
+    <map_variables variable_1="Vn_ck" variable_2="Vn_ck"/>
+	<map_variables variable_1="ATPn" variable_2="ATPn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vn_ck" component_2="PCrn"/>
+    <map_variables variable_1="Vn_ck" variable_2="Vn_ck"/>
+	<map_variables variable_1="PCrn" variable_2="PCrn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="O2n"/>
+    <map_variables variable_1="NAero" variable_2="NAero"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vn_mito" component_2="O2n"/>
+    <map_variables variable_1="Vn_mito" variable_2="Vn_mito"/>
+	<map_variables variable_1="O2n" variable_2="O2n"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vcn_O2" component_2="O2n"/>
+    <map_variables variable_1="Vcn_O2" variable_2="Vcn_O2"/>
+	<map_variables variable_1="O2n" variable_2="O2n"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="GLUn"/>
+    <map_variables variable_1="Rng" variable_2="Rng"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_gs" component_2="GLUn"/>
+    <map_variables variable_1="Vg_gs" variable_2="Vg_gs"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vn_stim_GLU" component_2="GLUn"/>
+    <map_variables variable_1="Vn_stim_GLU" variable_2="Vn_stim_GLU"/>
+	<map_variables variable_1="GLUn" variable_2="GLUn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_leak_Na" component_2="NAg"/>
+    <map_variables variable_1="Vg_leak_Na" variable_2="Vg_leak_Na"/>
+	<map_variables variable_1="NAg" variable_2="NAg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_pump" component_2="NAg"/>
+    <map_variables variable_1="Vg_pump" variable_2="Vg_pump"/>
+	<map_variables variable_1="NAg" variable_2="NAg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Veg_GLU" component_2="NAg"/>
+    <map_variables variable_1="Veg_GLU" variable_2="Veg_GLU"/>  
+  </connection>
+  
+  <connection>
+    <map_components component_1="Veg_GLC" component_2="GLCg"/>
+    <map_variables variable_1="Veg_GLC" variable_2="Veg_GLC"/>
+	<map_variables variable_1="GLCg" variable_2="GLCg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vcg_GLC" component_2="GLCg"/>
+    <map_variables variable_1="Vcg_GLC" variable_2="Vcg_GLC"/>
+	<map_variables variable_1="GLCg" variable_2="GLCg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_hk" component_2="GLCg"/>
+    <map_variables variable_1="Vg_hk" variable_2="Vg_hk"/>
+	<map_variables variable_1="GLCg" variable_2="GLCg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_pgi" component_2="G6Pg"/>
+    <map_variables variable_1="Vg_pgi" variable_2="Vg_pgi"/>
+	<map_variables variable_1="G6Pg" variable_2="G6Pg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_hk" component_2="G6Pg"/>
+    <map_variables variable_1="Vg_hk" variable_2="Vg_hk"/>
+	<map_variables variable_1="G6Pg" variable_2="G6Pg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_glys" component_2="G6Pg"/>
+    <map_variables variable_1="Vg_glys" variable_2="Vg_glys"/>
+	<map_variables variable_1="G6Pg" variable_2="G6Pg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_glyp" component_2="G6Pg"/>
+    <map_variables variable_1="Vg_glyp" variable_2="Vg_glyp"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_pgi" component_2="F6Pg"/>
+    <map_variables variable_1="Vg_pgi" variable_2="Vg_pgi"/>
+	<map_variables variable_1="F6Pg" variable_2="F6Pg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_pfk" component_2="F6Pg"/>
+    <map_variables variable_1="Vg_pfk" variable_2="Vg_pfk"/>
+	<map_variables variable_1="F6Pg" variable_2="F6Pg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_pfk" component_2="GAPg"/>
+    <map_variables variable_1="Vg_pfk" variable_2="Vg_pfk"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_pk" component_2="PEPg"/>
+    <map_variables variable_1="Vg_pk" variable_2="Vg_pk"/>
+	<map_variables variable_1="PEPg" variable_2="PEPg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_pgk" component_2="PEPg"/>
+    <map_variables variable_1="Vg_pgk" variable_2="Vg_pgk"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_pk" component_2="PYRg"/>
+    <map_variables variable_1="Vg_pk" variable_2="Vg_pk"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_ldh" component_2="PYRg"/>
+    <map_variables variable_1="Vg_ldh" variable_2="Vg_ldh"/>
+	<map_variables variable_1="PYRg" variable_2="PYRg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_mito" component_2="PYRg"/>
+    <map_variables variable_1="Vg_mito" variable_2="Vg_mito"/>
+	<map_variables variable_1="PYRg" variable_2="PYRg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_ldh" component_2="LACg"/>
+    <map_variables variable_1="Vg_ldh" variable_2="Vg_ldh"/>
+	<map_variables variable_1="LACg" variable_2="LACg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vge_LAC" component_2="LACg"/>
+    <map_variables variable_1="Vge_LAC" variable_2="Vge_LAC"/>
+	<map_variables variable_1="LACg" variable_2="LACg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vgc_LAC" component_2="LACg"/>
+    <map_variables variable_1="Vgc_LAC" variable_2="Vgc_LAC"/>
+	<map_variables variable_1="LACg" variable_2="LACg"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="Vg_pgk" component_2="NADHg"/>
+    <map_variables variable_1="Vg_pgk" variable_2="Vg_pgk"/>
+	<map_variables variable_1="NADHg" variable_2="NADHg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_ldh" component_2="NADHg"/>
+    <map_variables variable_1="Vg_ldh" variable_2="Vg_ldh"/>
+	<map_variables variable_1="NADHg" variable_2="NADHg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_mito" component_2="NADHg"/>
+    <map_variables variable_1="Vg_mito" variable_2="Vg_mito"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="ATPg"/>
+    <map_variables variable_1="nOP" variable_2="nOP"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="dAMP_dATPg" component_2="ATPg"/>
+    <map_variables variable_1="ATPg" variable_2="ATPg"/>
+	<map_variables variable_1="dAMP_dATPg" variable_2="dAMP_dATPg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_hk" component_2="ATPg"/>
+    <map_variables variable_1="Vg_hk" variable_2="Vg_hk"/>
+	<map_variables variable_1="ATPg" variable_2="ATPg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_pgk" component_2="ATPg"/>
+    <map_variables variable_1="Vg_pgk" variable_2="Vg_pgk"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_pfk" component_2="ATPg"/>
+    <map_variables variable_1="Vg_pfk" variable_2="Vg_pfk"/>
+	<map_variables variable_1="ATPg" variable_2="ATPg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_gs" component_2="ATPg"/>
+    <map_variables variable_1="Vg_gs" variable_2="Vg_gs"/>
+	<map_variables variable_1="ATPg" variable_2="ATPg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_pk" component_2="ATPg"/>
+    <map_variables variable_1="Vg_pk" variable_2="Vg_pk"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_ATPase" component_2="ATPg"/>
+    <map_variables variable_1="Vg_ATPase" variable_2="Vg_ATPase"/>
+	<map_variables variable_1="ATPg" variable_2="ATPg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_pump" component_2="ATPg"/>
+    <map_variables variable_1="Vg_pump" variable_2="Vg_pump"/>
+	<map_variables variable_1="ATPg" variable_2="ATPg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_mito" component_2="ATPg"/>
+    <map_variables variable_1="Vg_mito" variable_2="Vg_mito"/>
+	<map_variables variable_1="ATPg" variable_2="ATPg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_ck" component_2="ATPg"/>
+    <map_variables variable_1="Vg_ck" variable_2="Vg_ck"/>
+	<map_variables variable_1="ATPg" variable_2="ATPg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_ck" component_2="PCrg"/>
+    <map_variables variable_1="Vg_ck" variable_2="Vg_ck"/>
+	<map_variables variable_1="PCrg" variable_2="PCrg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="O2g"/>
+    <map_variables variable_1="NAero" variable_2="NAero"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_mito" component_2="O2g"/>
+    <map_variables variable_1="Vg_mito" variable_2="Vg_mito"/>
+	<map_variables variable_1="O2g" variable_2="O2g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vcg_O2" component_2="O2g"/>
+    <map_variables variable_1="Vcg_O2" variable_2="Vcg_O2"/>
+	<map_variables variable_1="O2g" variable_2="O2g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_glys" component_2="GLYg"/>
+    <map_variables variable_1="Vg_glys" variable_2="Vg_glys"/>
+	<map_variables variable_1="GLYg" variable_2="GLYg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_glyp" component_2="GLYg"/>
+    <map_variables variable_1="Vg_glyp" variable_2="Vg_glyp"/>
+	<map_variables variable_1="GLYg" variable_2="GLYg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_gs" component_2="GLUg"/>
+    <map_variables variable_1="Vg_gs" variable_2="Vg_gs"/>
+	<map_variables variable_1="GLUg" variable_2="GLUg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Veg_GLU" component_2="GLUg"/>
+    <map_variables variable_1="Veg_GLU" variable_2="Veg_GLU"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="GLCe"/>
+    <map_variables variable_1="Reg" variable_2="Reg"/>
+	<map_variables variable_1="Ren" variable_2="Ren"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vce_GLC" component_2="GLCe"/>
+    <map_variables variable_1="Vce_GLC" variable_2="Vce_GLC"/>
+	<map_variables variable_1="GLCe" variable_2="GLCe"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Veg_GLC" component_2="GLCe"/>
+    <map_variables variable_1="Veg_GLC" variable_2="Veg_GLC"/>
+	<map_variables variable_1="GLCe" variable_2="GLCe"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="V_en_GLC" component_2="GLCe"/>
+    <map_variables variable_1="V_en_GLC" variable_2="V_en_GLC"/>
+	<map_variables variable_1="GLCe" variable_2="GLCe"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="LACe"/>
+    <map_variables variable_1="Reg" variable_2="Reg"/>
+	<map_variables variable_1="Ren" variable_2="Ren"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vec_LAC" component_2="LACe"/>
+    <map_variables variable_1="Vec_LAC" variable_2="Vec_LAC"/>
+	<map_variables variable_1="LACe" variable_2="LACe"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vge_LAC" component_2="LACe"/>
+    <map_variables variable_1="Vge_LAC" variable_2="Vge_LAC"/>
+	<map_variables variable_1="LACe" variable_2="LACe"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vne_LAC" component_2="LACe"/>
+    <map_variables variable_1="Vne_LAC" variable_2="Vne_LAC"/>
+	<map_variables variable_1="LACe" variable_2="LACe"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="GLUe"/>
+    <map_variables variable_1="Reg" variable_2="Reg"/>
+	<map_variables variable_1="Ren" variable_2="Ren"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Veg_GLU" component_2="GLUe"/>
+    <map_variables variable_1="Veg_GLU" variable_2="Veg_GLU"/>
+	<map_variables variable_1="GLUe" variable_2="GLUe"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vn_stim_GLU" component_2="GLUe"/>
+    <map_variables variable_1="Vn_stim_GLU" variable_2="Vn_stim_GLU"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="O2c"/>
+    <map_variables variable_1="Rcg" variable_2="Rcg"/>
+	<map_variables variable_1="Rcn" variable_2="Rcn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vc_O2" component_2="O2c"/>
+    <map_variables variable_1="Vc_O2" variable_2="Vc_O2"/>
+	<map_variables variable_1="O2c" variable_2="O2c"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vcn_O2" component_2="O2c"/>
+    <map_variables variable_1="Vcn_O2" variable_2="Vcn_O2"/>
+	<map_variables variable_1="O2c" variable_2="O2c"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vcg_O2" component_2="O2c"/>
+    <map_variables variable_1="Vcg_O2" variable_2="Vcg_O2"/>
+	<map_variables variable_1="O2c" variable_2="O2c"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="GLCc"/>
+    <map_variables variable_1="Rcg" variable_2="Rcg"/>
+	<map_variables variable_1="Rce" variable_2="Rce"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vc_GLC" component_2="GLCc"/>
+    <map_variables variable_1="Vc_GLC" variable_2="Vc_GLC"/>
+	<map_variables variable_1="GLCc" variable_2="GLCc"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vce_GLC" component_2="GLCc"/>
+    <map_variables variable_1="Vce_GLC" variable_2="Vce_GLC"/>
+	<map_variables variable_1="GLCc" variable_2="GLCc"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vcg_GLC" component_2="GLCc"/>
+    <map_variables variable_1="Vcg_GLC" variable_2="Vcg_GLC"/>
+	<map_variables variable_1="GLCc" variable_2="GLCc"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="LACc"/>
+    <map_variables variable_1="Rcg" variable_2="Rcg"/>
+	<map_variables variable_1="Rce" variable_2="Rce"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vc_LAC" component_2="LACc"/>
+    <map_variables variable_1="Vc_LAC" variable_2="Vc_LAC"/>
+	<map_variables variable_1="LACc" variable_2="LACc"/>
+  </connection> 
+  
+  <connection>
+    <map_components component_1="Vec_LAC" component_2="LACc"/>
+    <map_variables variable_1="Vec_LAC" variable_2="Vec_LAC"/>
+	<map_variables variable_1="LACc" variable_2="LACc"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vgc_LAC" component_2="LACc"/>
+    <map_variables variable_1="Vgc_LAC" variable_2="Vgc_LAC"/>
+	<map_variables variable_1="LACc" variable_2="LACc"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="CO2c"/>
+    <map_variables variable_1="Rcg" variable_2="Rcg"/>
+	<map_variables variable_1="Rcn" variable_2="Rcn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vc_CO2" component_2="CO2c"/>
+    <map_variables variable_1="Vc_CO2" variable_2="Vc_CO2"/>
+	<map_variables variable_1="CO2c" variable_2="CO2c"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vnc_CO2" component_2="CO2c"/>
+    <map_variables variable_1="Vnc_CO2" variable_2="Vnc_CO2"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vgc_CO2" component_2="CO2c"/>
+    <map_variables variable_1="Vgc_CO2" variable_2="Vgc_CO2"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Fin_t" component_2="Vv"/>
+    <map_variables variable_1="Fin_t" variable_2="Fin_t"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Fout_t" component_2="Vv"/>
+    <map_variables variable_1="Fout_t" variable_2="Fout_t"/>
+	<map_variables variable_1="Vv" variable_2="Vv"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Fin_t" component_2="dHb"/>
+    <map_variables variable_1="Fin_t" variable_2="Fin_t"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Fout_t" component_2="dHb"/>
+    <map_variables variable_1="Fout_t" variable_2="Fout_t"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vv" component_2="dHb"/>
+    <map_variables variable_1="Vv" variable_2="Vv"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="O2c" component_2="dHb"/>
+    <map_variables variable_1="O2c" variable_2="O2c"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="dHb"/>
+    <map_variables variable_1="O2a" variable_2="O2a"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="Vn_leak_Na"/>
+    <map_variables variable_1="Sm_n" variable_2="Sm_n"/>
+	<map_variables variable_1="Vm" variable_2="Vm"/>
+	<map_variables variable_1="Vn" variable_2="Vn"/>
+	<map_variables variable_1="RT" variable_2="RT"/>
+	<map_variables variable_1="F" variable_2="F"/>
+	<map_variables variable_1="NAe" variable_2="NAe"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="Vn_pump"/>
+    <map_variables variable_1="Sm_n" variable_2="Sm_n"/>
+	<map_variables variable_1="Vn" variable_2="Vn"/>
+	<map_variables variable_1="kpump" variable_2="kpump"/>
+	<map_variables variable_1="Km_pump" variable_2="Km_pump"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="v_stim" component_2="Vn_stim"/>
+    <map_variables variable_1="v_stim" variable_2="v_stim"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="Vn_hk"/>
+    <map_variables variable_1="Km_GLC" variable_2="Km_GLC"/>
+	<map_variables variable_1="G6P_inh_hk" variable_2="G6P_inh_hk"/>
+	<map_variables variable_1="aG6P_inh_hk" variable_2="aG6P_inh_hk"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="Vn_pgi"/>
+    <map_variables variable_1="Km_G6P" variable_2="Km_G6P"/>
+	<map_variables variable_1="Km_F6P_pgi" variable_2="Km_F6P_pgi"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="Vn_pfk"/>
+    <map_variables variable_1="Km_F6P_pfk" variable_2="Km_F6P_pfk"/>
+	<map_variables variable_1="Ki_ATP" variable_2="Ki_ATP"/>
+	<map_variables variable_1="nH" variable_2="nH"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="ADPn" component_2="Vn_pgk"/>
+    <map_variables variable_1="ADPn" variable_2="ADPn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="NADn" component_2="Vn_pgk"/>
+    <map_variables variable_1="NADn" variable_2="NADn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="ADPn" component_2="Vn_pk"/>
+    <map_variables variable_1="ADPn" variable_2="ADPn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="NADn" component_2="Vn_ldh"/>
+    <map_variables variable_1="NADn" variable_2="NADn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="ADPn" component_2="Vn_mito"/>
+    <map_variables variable_1="ADPn" variable_2="ADPn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="Vn_mito"/>
+    <map_variables variable_1="Km_O2" variable_2="Km_O2"/>
+	<map_variables variable_1="Km_ADP" variable_2="Km_ADP"/>
+	<map_variables variable_1="Km_PYR" variable_2="Km_PYR"/>
+	<map_variables variable_1="rATP_mito" variable_2="rATP_mito"/>
+	<map_variables variable_1="aATP_mito" variable_2="aATP_mito"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="ADPn" component_2="Vn_ck"/>
+    <map_variables variable_1="ADPn" variable_2="ADPn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="CRn" component_2="Vn_ck"/>
+    <map_variables variable_1="CRn" variable_2="CRn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="Vcn_O2"/>
+    <map_variables variable_1="Ko2" variable_2="Ko2"/>
+	<map_variables variable_1="Vn" variable_2="Vn"/>
+	<map_variables variable_1="HbOP" variable_2="HbOP"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="Vg_leak_Na"/>
+    <map_variables variable_1="Sm_g" variable_2="Sm_g"/>
+	<map_variables variable_1="Vm" variable_2="Vm"/>
+	<map_variables variable_1="Vg" variable_2="Vg"/>
+	<map_variables variable_1="RT" variable_2="RT"/>
+	<map_variables variable_1="F" variable_2="F"/>
+	<map_variables variable_1="NAe" variable_2="NAe"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="Vg_pump"/>
+    <map_variables variable_1="Sm_g" variable_2="Sm_g"/>
+	<map_variables variable_1="Vg" variable_2="Vg"/>
+	<map_variables variable_1="kpump" variable_2="kpump"/>
+	<map_variables variable_1="Km_pump" variable_2="Km_pump"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="Veg_GLC"/>
+    <map_variables variable_1="KO1" variable_2="KO1"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="Vg_hk"/>
+    <map_variables variable_1="Km_GLC" variable_2="Km_GLC"/>
+	<map_variables variable_1="G6P_inh_hk" variable_2="G6P_inh_hk"/>
+	<map_variables variable_1="aG6P_inh_hk" variable_2="aG6P_inh_hk"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="Vg_pgi"/>
+    <map_variables variable_1="Km_G6P" variable_2="Km_G6P"/>
+	<map_variables variable_1="Km_F6P_pgi" variable_2="Km_F6P_pgi"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="Vg_pfk"/>
+    <map_variables variable_1="Km_F6P_pfk" variable_2="Km_F6P_pfk"/>
+	<map_variables variable_1="Ki_ATP" variable_2="Ki_ATP"/>
+	<map_variables variable_1="nH" variable_2="nH"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="NADg" component_2="Vg_pgk"/>
+    <map_variables variable_1="NADg" variable_2="NADg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="NADg" component_2="Vg_ldh"/>
+    <map_variables variable_1="NADg" variable_2="NADg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="Vg_mito"/>
+    <map_variables variable_1="Km_O2" variable_2="Km_O2"/>
+	<map_variables variable_1="Km_ADP" variable_2="Km_ADP"/>
+	<map_variables variable_1="Km_PYR" variable_2="Km_PYR"/>
+	<map_variables variable_1="rATP_mito" variable_2="rATP_mito"/>
+	<map_variables variable_1="aATP_mito" variable_2="aATP_mito"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="ADPg" component_2="Vg_mito"/>
+    <map_variables variable_1="ADPg" variable_2="ADPg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="ADPg" component_2="Vg_ck"/>
+    <map_variables variable_1="ADPg" variable_2="ADPg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="ADPg" component_2="Vg_pk"/>
+    <map_variables variable_1="ADPg" variable_2="ADPg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="ADPg" component_2="Vg_pgk"/>
+    <map_variables variable_1="ADPg" variable_2="ADPg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="GAPg" component_2="Vg_pgk"/>
+    <map_variables variable_1="GAPg" variable_2="GAPg"/>
+	<map_variables variable_1="Vg_pgk" variable_2="Vg_pgk"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="CRg" component_2="Vg_ck"/>
+    <map_variables variable_1="CRg" variable_2="CRg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="Vcg_O2"/>
+    <map_variables variable_1="Ko2" variable_2="Ko2"/>
+	<map_variables variable_1="Vg" variable_2="Vg"/>
+	<map_variables variable_1="nh_O2" variable_2="nh_O2"/>
+	<map_variables variable_1="HbOP" variable_2="HbOP"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Fin_t" component_2="Vc_O2"/>
+    <map_variables variable_1="Fin_t" variable_2="Fin_t"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="Vc_O2"/>
+    <map_variables variable_1="O2a" variable_2="O2a"/>
+	<map_variables variable_1="Vc" variable_2="Vc"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Fin_t" component_2="Vc_GLC"/>
+    <map_variables variable_1="Fin_t" variable_2="Fin_t"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="Vc_GLC"/>
+    <map_variables variable_1="GLCa" variable_2="GLCa"/>
+	<map_variables variable_1="Vc" variable_2="Vc"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Fin_t" component_2="Vc_LAC"/>
+    <map_variables variable_1="Fin_t" variable_2="Fin_t"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="Vc_LAC"/>
+    <map_variables variable_1="LACa" variable_2="LACa"/>
+	<map_variables variable_1="Vc" variable_2="Vc"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vn_mito" component_2="Vnc_CO2"/>
+    <map_variables variable_1="Vn_mito" variable_2="Vn_mito"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vg_mito" component_2="Vgc_CO2"/>
+    <map_variables variable_1="Vg_mito" variable_2="Vg_mito"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="Vn_stim_GLU"/>
+    <map_variables variable_1="Km_GLU" variable_2="Km_GLU"/>
+	<map_variables variable_1="KO2" variable_2="KO2"/>
+	<map_variables variable_1="R_GLU_NA" variable_2="R_GLU_NA"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vn_stim" component_2="Vn_stim_GLU"/>
+    <map_variables variable_1="Vn_stim" variable_2="Vn_stim"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="Vg_gs"/>
+    <map_variables variable_1="Km_GLU" variable_2="Km_GLU"/>
+	<map_variables variable_1="Km_ATP" variable_2="Km_ATP"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="Veg_GLU"/>
+    <map_variables variable_1="Km_GLU" variable_2="Km_GLU"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Fin_t" component_2="Vc_CO2"/>
+    <map_variables variable_1="Fin_t" variable_2="Fin_t"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="Vc_CO2"/>
+    <map_variables variable_1="CO2a" variable_2="CO2a"/>
+	<map_variables variable_1="Vc" variable_2="Vc"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="Vg_glys"/>
+    <map_variables variable_1="GLY_inh" variable_2="GLY_inh"/>
+	<map_variables variable_1="aGLY_inh" variable_2="aGLY_inh"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="Vg_glyp"/>
+    <map_variables variable_1="KO3" variable_2="KO3"/>
+	<map_variables variable_1="stim" variable_2="stim"/>
+	<map_variables variable_1="to" variable_2="to"/>
+	<map_variables variable_1="to_GLY" variable_2="to_GLY"/>
+	<map_variables variable_1="tend_GLY" variable_2="tend_GLY"/>
+	<map_variables variable_1="sr_GLY" variable_2="sr_GLY"/>
+	<map_variables variable_1="t1" variable_2="t1"/>
+	<map_variables variable_1="delta_GLY" variable_2="delta_GLY"/>
+  </connection>
+ 
+  <connection>
+    <map_components component_1="unitstepSB2" component_2="Vg_glyp"/>
+    <map_variables variable_1="unitstepSB2" variable_2="unitstepSB2"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="v_stim"/>
+    <map_variables variable_1="stim" variable_2="stim"/>
+	<map_variables variable_1="to" variable_2="to"/>
+	<map_variables variable_1="tend" variable_2="tend"/>
+	<map_variables variable_1="t_n_stim" variable_2="t_n_stim"/>
+	<map_variables variable_1="v1_n" variable_2="v1_n"/>
+	<map_variables variable_1="v2_n" variable_2="v2_n"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="Fin_t"/>
+    <map_variables variable_1="stim" variable_2="stim"/>
+	<map_variables variable_1="to" variable_2="to"/>
+	<map_variables variable_1="tend" variable_2="tend"/>
+	<map_variables variable_1="sr" variable_2="sr"/>
+	<map_variables variable_1="t1" variable_2="t1"/>
+	<map_variables variable_1="deltaf" variable_2="deltaf"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="unitstepSB"/>
+    <map_variables variable_1="to" variable_2="to"/>
+	<map_variables variable_1="tend" variable_2="tend"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Fin_t" component_2="Fout_t"/>
+    <map_variables variable_1="Fin_t" variable_2="Fin_t"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="Fout_t"/>
+    <map_variables variable_1="CBF0" variable_2="CBF0"/>
+	<map_variables variable_1="Vv0" variable_2="Vv0"/>
+	<map_variables variable_1="tv" variable_2="tv"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="NADHn" component_2="NADn"/>
+    <map_variables variable_1="NADHn" variable_2="NADHn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="NADHg" component_2="NADg"/>
+    <map_variables variable_1="NADHg" variable_2="NADHg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="PCrn" component_2="CRn"/>
+    <map_variables variable_1="PCrn" variable_2="PCrn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="PCrg" component_2="CRg"/>
+    <map_variables variable_1="PCrg" variable_2="PCrg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="ATPn" component_2="ADPn"/>
+    <map_variables variable_1="ATPn" variable_2="ATPn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="ADPn"/>
+    <map_variables variable_1="ATPtot" variable_2="ATPtot"/>
+	<map_variables variable_1="qak" variable_2="qak"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="ATPg" component_2="ADPg"/>
+    <map_variables variable_1="ATPg" variable_2="ATPg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="ADPg"/>
+    <map_variables variable_1="ATPtot" variable_2="ATPtot"/>
+	<map_variables variable_1="qak" variable_2="qak"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="ATPn" component_2="u_n"/>
+    <map_variables variable_1="ATPn" variable_2="ATPn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="u_n"/>
+    <map_variables variable_1="ATPtot" variable_2="ATPtot"/>
+	<map_variables variable_1="qak" variable_2="qak"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="ATPg" component_2="u_g"/>
+    <map_variables variable_1="ATPg" variable_2="ATPg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="u_g"/>
+    <map_variables variable_1="ATPtot" variable_2="ATPtot"/>
+	<map_variables variable_1="qak" variable_2="qak"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="u_n" component_2="dAMP_dATPn"/>
+    <map_variables variable_1="u_n" variable_2="u_n"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="dAMP_dATPn"/>
+    <map_variables variable_1="ATPtot" variable_2="ATPtot"/>
+	<map_variables variable_1="qak" variable_2="qak"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="u_g" component_2="dAMP_dATPg"/>
+    <map_variables variable_1="u_g" variable_2="u_g"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="dAMP_dATPg"/>
+    <map_variables variable_1="ATPtot" variable_2="ATPtot"/>
+	<map_variables variable_1="qak" variable_2="qak"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="ATPn" component_2="AMPn"/>
+    <map_variables variable_1="ATPn" variable_2="ATPn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="ADPn" component_2="AMPn"/>
+    <map_variables variable_1="ADPn" variable_2="ADPn"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="AMPn"/>
+    <map_variables variable_1="ATPtot" variable_2="ATPtot"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="ATPg" component_2="AMPg"/>
+    <map_variables variable_1="ATPg" variable_2="ATPg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="ADPg" component_2="AMPg"/>
+    <map_variables variable_1="ADPg" variable_2="ADPg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="AMPg"/>
+    <map_variables variable_1="ATPtot" variable_2="ATPtot"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="model_parameters" component_2="BOLD"/>
+    <map_variables variable_1="Vv0" variable_2="Vv0"/>
+	<map_variables variable_1="k1" variable_2="k1"/>
+	<map_variables variable_1="k2" variable_2="k2"/>
+	<map_variables variable_1="k3" variable_2="k3"/>
+	<map_variables variable_1="dHb0" variable_2="dHb0"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="dHb" component_2="BOLD"/>
+    <map_variables variable_1="dHb" variable_2="dHb"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="Vv" component_2="BOLD"/>
+    <map_variables variable_1="Vv" variable_2="Vv"/>
+  </connection>
+
+<units name="mV_C_per_mol"><unit units="mV"/><unit units="C_per_mole"/></units><component name="unitstepSB2"><variable name="unitstepSB2" public_interface="out" units="dimensionless"/><variable name="tend" public_interface="in" units="s"/><variable name="time" public_interface="in" units="s"/><math xmlns="http://www.w3.org/1998/Math/MathML" id="97"><apply><eq/><ci>unitstepSB2</ci><piecewise><piece><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn><apply><geq/><apply><minus/><ci>time</ci><apply><plus/><ci>tend_GLY</ci><ci>to</ci><ci>to_GLY</ci></apply></apply><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="second">0</cn></apply></piece><otherwise><cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0</cn></otherwise></piecewise></apply></math><variable name="to" public_interface="in" units="s"/><variable name="tend_GLY" public_interface="in" units="s"/><variable name="to_GLY" public_interface="in" units="s"/></component><connection><map_components component_1="unitstepSB2" component_2="environment"/><map_variables variable_1="time" variable_2="time"/></connection><connection><map_components component_1="unitstepSB2" component_2="model_parameters"/><map_variables variable_1="to" variable_2="to"/><map_variables variable_1="tend" variable_2="tend"/><map_variables variable_1="tend_GLY" variable_2="tend_GLY"/><map_variables variable_1="to_GLY" variable_2="to_GLY"/></connection><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:nodeID="n1"><rdf:first><rdf:Description rdf:nodeID="n2"/></rdf:first><rdf:rest><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/></rdf:rest></rdf:Description><rdf:Description rdf:about="#cloutier_model_2009"><simulation xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n3"/></simulation></rdf:Description><rdf:Description rdf:nodeID="n2"><algorithm xmlns="http://www.cellml.org/metadata/simulation/1.0#nonstandard-" xml:lang="en">bdf15</algorithm><releps xmlns="http://www.cellml.org/metadata/simulation/1.0#nonstandard-" xml:lang="en">0.000001</releps><abseps xmlns="http://www.cellml.org/metadata/simulation/1.0#nonstandard-" xml:lang="en">0.000001</abseps><pointDensity xmlns="http://www.cellml.org/metadata/simulation/1.0#nonstandard-" xml:lang="en">2000</pointDensity><endingValue xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">2500</endingValue></rdf:Description><rdf:Description rdf:nodeID="n3"><boundIntervals xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n1"/></boundIntervals></rdf:Description></rdf:RDF>
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   
+    <rdf:Description rdf:about="">
+      <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource">
+        <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+          <vCard:Family>Lloyd</vCard:Family>
+          <vCard:Given>Catherine</vCard:Given>
+		  <vCard:Other>May</vCard:Other>
+        </vCard:N>
+        <vCard:EMAIL xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+          <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+          <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+        </vCard:EMAIL>
+        <vCard:ORG xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+          <vCard:Orgname>The University of Auckland</vCard:Orgname>
+          <vCard:Orgunit>Auckalnd Bioengineering Institute</vCard:Orgunit>
+        </vCard:ORG>
+      </dc:creator>
+      
+     <dcterms:created xmlns:dcterms="http://purl.org/dc/terms/" rdf:parseType="Resource">
+        <dcterms:W3CDTF>2009-09-29</dcterms:W3CDTF>
+      </dcterms:created>
+    </rdf:Description>
+    
+   <rdf:Description rdf:about="#cloutier_model_2009">
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">
+        The Cloutier et al. 2009 Model of Brain Energy Metabolism
+      </dc:title>
+      
+      <cmeta:comment rdf:parseType="Resource">
+        <rdf:value>
+          This is the CellML description of Cloutier et al.'s mathematical model of brain energy metabolism
+        </rdf:value>
+        <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource">
+          <vCard:FN xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Catherine Lloyd</vCard:FN>
+        </dc:creator>
+      </cmeta:comment>
+      
+      <cmeta:bio_entity>neuron</cmeta:bio_entity>
+	  <cmeta:bio_entity>astrocyte</cmeta:bio_entity>
+      
+      <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource">
+        <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource">
+          <bqs:subject_type>keyword</bqs:subject_type>
+          <rdf:value>
+            <rdf:Bag>
+              <rdf:li>brain</rdf:li>
+			  <rdf:li>metabolism</rdf:li>
+              <rdf:li>metabolic pathway</rdf:li>
+			  <rdf:li>neurobiology</rdf:li>
+            </rdf:Bag>
+          </rdf:value>
+        </dc:subject>
+      </bqs:reference>
+
+      <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource">
+        <bqs:Pubmed_id>19396534</bqs:Pubmed_id>
+        <bqs:JournalArticle rdf:parseType="Resource">
+          <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <rdf:Seq>
+              <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+                    <vCard:Family>Cloutier</vCard:Family>
+                    <vCard:Given>M</vCard:Given>
+                  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+			  <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+                    <vCard:Family>Bolger</vCard:Family>
+                    <vCard:Given>F</vCard:Given>
+					<vCard:Other>B</vCard:Other>
+                  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+			  <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+                    <vCard:Family>Lowry</vCard:Family>
+                    <vCard:Given>J</vCard:Given>
+					<vCard:Other>P</vCard:Other>
+                  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+              <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+                    <vCard:Family>Wellstead</vCard:Family>
+                    <vCard:Given>P</vCard:Given>
+				  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+            </rdf:Seq>
+          </dc:creator>
+          <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">
+            An integrative dynamic model of brain energy metabolism using in vivo neurochemical measurements
+          </dc:title>
+          <dcterms:issued rdf:parseType="Resource">
+            <dcterms:W3CDTF>2009-12</dcterms:W3CDTF>
+          </dcterms:issued>
+          <bqs:Journal rdf:parseType="Resource">
+            <dc:title>Journal of Computational Neuroscience</dc:title>
+          </bqs:Journal>
+		  <bqs:volume>27</bqs:volume>
+          <bqs:first_page>391</bqs:first_page>
+          <bqs:last_page>414</bqs:last_page>
+        </bqs:JournalArticle>
+      </bqs:reference>
+    </rdf:Description>
+  </rdf:RDF> 
+</model>

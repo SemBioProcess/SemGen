@@ -1,0 +1,714 @@
+<?xml version="1.0"?>
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:ns7="http://www.cellml.org/metadata/simulation/1.0#" name="bertram_2000_medium" cmeta:id="bertram_2000_medium">
+      <documentation xmlns="http://cellml.org/tmp-documentation">
+            <article>
+                  <articleinfo>
+                        <title>The phantom burster model for pancreatic beta-cells</title>
+                        <author>
+                              <firstname>Catherine</firstname>
+                              <surname>Lloyd</surname>
+                              <affiliation>
+                                    <shortaffil>Auckland Bioengineering Institute, University of Auckland</shortaffil>
+                              </affiliation>
+                        </author>
+                  </articleinfo>
+                  <section id="sec_status">
+                        <title>Model Status</title>
+                        <para> This model has been rebuilt according to the author's original XPPAUT code, which can be found <ulink url="http://www.math.fsu.edu/~bertram/software/islet/BJ_04a.ode">here</ulink>. This version of the CellML model represents the medium bursting model where gs1=7.  The model replicates figure 3 in the published paper (please note you need to run the model for at least 100 seconds to get past the initial unstable stage).  The model runs in both PCEnv and COR and the units are consistent.						</para>
+                  </section>
+                  <sect1 id="sec_structure">
+                        <title>Model Structure</title>
+                        <para>ABSTRACT: Pancreatic beta-cells exhibit bursting oscillations with a wide range of periods. Whereas periods in isolated cells are generally either a few seconds or a few minutes, in intact islets of Langerhans they are intermediate (10-60 s). We develop a mathematical model for beta-cell electrical activity capable of generating this wide range of bursting oscillations. Unlike previous models, bursting is driven by the interaction of two slow processes, one with a relatively small time constant (1-5 s) and the other with a much larger time constant (1-2 min). Bursting on the intermediate time scale is generated without need for a slow process having an intermediate time constant, hence phantom bursting. The model suggests that isolated cells exhibiting a fast pattern may nonetheless possess slower processes that can be brought out by injecting suitable exogenous currents. Guided by this, we devise an experimental protocol using the dynamic clamp technique that reliably elicits islet-like, medium period oscillations from isolated cells. Finally, we show that strong electrical coupling between a fast burster and a slow burster can produce synchronized medium bursting, suggesting that islets may be composed of cells that are intrinsically either fast or slow, with few or none that are intrinsically medium.</para>
+                        <para>The original paper reference is cited below:</para>
+                        <para>The phantom burster model for pancreatic beta-cells, Richard Bertram, Joseph Previte, Arthur Sherman, Tracie A. Kinard and Leslie S. Satin, 2000,
+                                    <emphasis>Biophysical Journal</emphasis>, 79, 2880-2892. <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;list_uids=11106596&amp;dopt=Abstract">PubMed ID: 11106596</ulink>
+                        </para>
+                        <informalfigure float="0" id="fig_cell_diagram">
+                              <mediaobject>
+                                    <imageobject>
+                                          <objectinfo>
+                                                <title>cell schematic for the model</title>
+                                          </objectinfo>
+                                          <imagedata fileref="bertram_2000.png"/>
+                                    </imageobject>
+                              </mediaobject>
+                              <caption>Schematic diagram of the pancreatic beta-cell plasma membrane showing the ionic currents captured by the phantom burster model.</caption>
+                        </informalfigure>
+                  </sect1>
+            </article>
+      </documentation>
+	  
+      <units name="minute">
+            <unit multiplier="60" units="second"/>
+      </units>
+      <units name="femtoA">
+            <unit prefix="femto" units="ampere"/>
+      </units>
+      <units name="femtoF">
+            <unit prefix="femto" units="farad"/>
+      </units>
+      <units name="millivolt">
+            <unit prefix="milli" units="volt"/>
+      </units>
+      <units name="picoS">
+            <unit prefix="pico" units="siemens"/>
+      </units>
+      <units name="millisecond">
+            <unit prefix="milli" units="second"/>
+      </units>
+      <component name="environment">
+            <variable name="time" public_interface="out" units="millisecond"/>
+      </component>
+      <component name="membrane">
+            <variable name="time" public_interface="in" units="millisecond"/>
+            <variable initial_value="4524" name="Cm" units="femtoF"/>
+            <variable initial_value="-43" name="V" public_interface="out" units="millivolt"/>
+            <variable name="ICa" public_interface="in" units="femtoA"/>
+            <variable name="IK" public_interface="in" units="femtoA"/>
+            <variable name="Il" public_interface="in" units="femtoA"/>
+            <variable name="Is1" public_interface="in" units="femtoA"/>
+            <variable name="Is2" public_interface="in" units="femtoA"/>
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <apply>
+                        <eq/>
+                        <apply>
+                              <diff/>
+                              <bvar>
+                                    <ci>time</ci>
+                              </bvar>
+                              <ci>V</ci>
+                        </apply>
+                        <apply>
+                              <divide/>
+                              <apply>
+                                    <minus/>
+                                    <apply>
+                                          <plus/>
+                                          <ci>ICa</ci>
+                                          <ci>IK</ci>
+                                          <ci>Il</ci>
+                                          <ci>Is1</ci>
+                                          <ci>Is2</ci>
+                                    </apply>
+                              </apply>
+                              <ci>Cm</ci>
+                        </apply>
+                  </apply>
+            </math>
+      </component>
+      <component name="Ca_current">
+            <variable name="time" public_interface="in" units="millisecond"/>
+            <variable name="V" public_interface="in" units="millivolt"/>
+            <variable initial_value="-22" name="Vm" units="millivolt"/>
+            <variable initial_value="100" name="VCa" units="millivolt"/>
+            <variable initial_value="280" name="gCa" units="picoS"/>
+            <variable name="minf" units="dimensionless"/>
+            <variable initial_value="7.5" name="sm" units="millivolt"/>
+            <variable name="ICa" public_interface="out" units="femtoA"/>
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <apply>
+                        <eq/>
+                        <ci>minf</ci>
+                        <apply>
+                              <divide/>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                              <apply>
+                                    <plus/>
+                                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                                    <apply>
+                                          <exp/>
+                                          <apply>
+                                                <divide/>
+                                                <apply>
+                                                      <minus/>
+                                                      <ci>Vm</ci>
+                                                      <ci>V</ci>
+                                                </apply>
+                                                <ci>sm</ci>
+                                          </apply>
+                                    </apply>
+                              </apply>
+                        </apply>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>ICa</ci>
+                        <apply>
+                              <times/>
+                              <ci>gCa</ci>
+                              <ci>minf</ci>
+                              <apply>
+                                    <minus/>
+                                    <ci>V</ci>
+                                    <ci>VCa</ci>
+                              </apply>
+                        </apply>
+                  </apply>
+            </math>
+      </component>
+      <component name="rapid_K_current">
+            <variable name="time" public_interface="in" units="millisecond"/>
+            <variable name="IK" public_interface="out" units="femtoA"/>
+            <variable initial_value="-80" name="VK" public_interface="out" units="millivolt"/>
+            <variable name="V" public_interface="in" units="millivolt"/>
+            <variable initial_value="1300" name="gK" units="picoS"/>
+            <variable initial_value="0.03" name="n" units="dimensionless"/>
+            <variable initial_value="1.1" name="lambda" units="dimensionless"/>
+            <variable initial_value="9.09" name="tnbar" units="dimensionless"/>
+            <variable initial_value="-9" name="Vn" units="millivolt"/>
+            <variable initial_value="10" name="sn" units="millivolt"/>
+            <variable name="taun" units="dimensionless"/>
+            <variable name="ninf" units="dimensionless"/>
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <apply>
+                        <eq/>
+                        <ci>IK</ci>
+                        <apply>
+                              <times/>
+                              <ci>gK</ci>
+                              <ci>n</ci>
+                              <apply>
+                                    <minus/>
+                                    <ci>V</ci>
+                                    <ci>VK</ci>
+                              </apply>
+                        </apply>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <apply>
+                              <diff/>
+                              <bvar>
+                                    <ci>time</ci>
+                              </bvar>
+                              <ci>n</ci>
+                        </apply>
+                        <apply>
+                              <divide/>
+                              <apply>
+                                    <times/>
+                                    <ci>lambda</ci>
+                                    <apply>
+                                          <minus/>
+                                          <ci>ninf</ci>
+                                          <ci>n</ci>
+                                    </apply>
+                              </apply>
+                              <apply>
+                                    <times/>
+                                    <ci>taun</ci>
+                                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millisecond">1</cn>
+                              </apply>
+                        </apply>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>ninf</ci>
+                        <apply>
+                              <divide/>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                              <apply>
+                                    <plus/>
+                                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                                    <apply>
+                                          <exp/>
+                                          <apply>
+                                                <divide/>
+                                                <apply>
+                                                      <minus/>
+                                                      <ci>Vn</ci>
+                                                      <ci>V</ci>
+                                                </apply>
+                                                <ci>sn</ci>
+                                          </apply>
+                                    </apply>
+                              </apply>
+                        </apply>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>taun</ci>
+                        <apply>
+                              <divide/>
+                              <ci>tnbar</ci>
+                              <apply>
+                                    <plus/>
+                                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                                    <apply>
+                                          <exp/>
+                                          <apply>
+                                                <divide/>
+                                                <apply>
+                                                      <minus/>
+                                                      <ci>V</ci>
+                                                      <ci>Vn</ci>
+                                                </apply>
+                                                <ci>sn</ci>
+                                          </apply>
+                                    </apply>
+                              </apply>
+                        </apply>
+                  </apply>
+            </math>
+      </component>
+      <component name="slow_K_current">
+            <variable name="time" public_interface="in" units="millisecond"/>
+            <variable name="Is1" public_interface="out" units="femtoA"/>
+            <variable initial_value="7" name="gs1" units="picoS"/>
+            <variable initial_value="0.1" name="s1" units="dimensionless"/>
+            <variable name="V" public_interface="in" units="millivolt"/>
+            <variable name="VK" public_interface="in" units="millivolt"/>
+            <variable name="s1inf" units="dimensionless"/>
+            <variable initial_value="-40" name="Vs1" units="millivolt"/>
+            <variable initial_value="0.5" name="ss1" units="millivolt"/>
+            <variable initial_value="1000" name="taus1" units="dimensionless"/>
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <apply>
+                        <eq/>
+                        <ci>Is1</ci>
+                        <apply>
+                              <times/>
+                              <ci>gs1</ci>
+                              <ci>s1</ci>
+                              <apply>
+                                    <minus/>
+                                    <ci>V</ci>
+                                    <ci>VK</ci>
+                              </apply>
+                        </apply>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>s1inf</ci>
+                        <apply>
+                              <divide/>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                              <apply>
+                                    <plus/>
+                                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                                    <apply>
+                                          <exp/>
+                                          <apply>
+                                                <divide/>
+                                                <apply>
+                                                      <minus/>
+                                                      <ci>Vs1</ci>
+                                                      <ci>V</ci>
+                                                </apply>
+                                                <ci>ss1</ci>
+                                          </apply>
+                                    </apply>
+                              </apply>
+                        </apply>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <apply>
+                              <diff/>
+                              <bvar>
+                                    <ci>time</ci>
+                              </bvar>
+                              <ci>s1</ci>
+                        </apply>
+                        <apply>
+                              <divide/>
+                              <apply>
+                                    <minus/>
+                                    <ci>s1inf</ci>
+                                    <ci>s1</ci>
+                              </apply>
+                              <apply>
+                                    <times/>
+                                    <ci>taus1</ci>
+                                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millisecond">1</cn>
+                              </apply>
+                        </apply>
+                  </apply>
+            </math>
+      </component>
+      <component name="very_slow_K_current">
+            <variable name="time" public_interface="in" units="millisecond"/>
+            <variable name="V" public_interface="in" units="millivolt"/>
+            <variable name="VK" public_interface="in" units="millivolt"/>
+            <variable initial_value="-42" name="Vs2" units="millivolt"/>
+            <variable initial_value="0.434" name="s2" units="dimensionless"/>
+            <variable name="s2inf" units="dimensionless"/>
+            <variable initial_value="0.4" name="ss2" units="millivolt"/>
+            <variable initial_value="32" name="gs2" units="picoS"/>
+            <variable initial_value="120000" name="taus2" units="dimensionless"/>
+            <variable name="Is2" public_interface="out" units="femtoA"/>
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <apply>
+                        <eq/>
+                        <ci>Is2</ci>
+                        <apply>
+                              <times/>
+                              <ci>gs2</ci>
+                              <ci>s2</ci>
+                              <apply>
+                                    <minus/>
+                                    <ci>V</ci>
+                                    <ci>VK</ci>
+                              </apply>
+                        </apply>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <ci>s2inf</ci>
+                        <apply>
+                              <divide/>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                              <apply>
+                                    <plus/>
+                                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                                    <apply>
+                                          <exp/>
+                                          <apply>
+                                                <divide/>
+                                                <apply>
+                                                      <minus/>
+                                                      <ci>Vs2</ci>
+                                                      <ci>V</ci>
+                                                </apply>
+                                                <ci>ss2</ci>
+                                          </apply>
+                                    </apply>
+                              </apply>
+                        </apply>
+                  </apply>
+                  <apply>
+                        <eq/>
+                        <apply>
+                              <diff/>
+                              <bvar>
+                                    <ci>time</ci>
+                              </bvar>
+                              <ci>s2</ci>
+                        </apply>
+                        <apply>
+                              <divide/>
+                              <apply>
+                                    <minus/>
+                                    <ci>s2inf</ci>
+                                    <ci>s2</ci>
+                              </apply>
+                              <apply>
+                                    <times/>
+                                    <ci>taus2</ci>
+                                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millisecond">1</cn>
+                              </apply>
+                        </apply>
+                  </apply>
+            </math>
+      </component>
+      <component name="leak_current">
+            <variable name="time" public_interface="in" units="millisecond"/>
+            <variable name="Il" public_interface="out" units="femtoA"/>
+            <variable initial_value="25" name="gl" units="picoS"/>
+            <variable initial_value="-40" name="Vl" units="millivolt"/>
+            <variable name="V" public_interface="in" units="millivolt"/>
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <apply>
+                        <eq/>
+                        <ci>Il</ci>
+                        <apply>
+                              <times/>
+                              <ci>gl</ci>
+                              <apply>
+                                    <minus/>
+                                    <ci>V</ci>
+                                    <ci>Vl</ci>
+                              </apply>
+                        </apply>
+                  </apply>
+            </math>
+      </component>
+      <connection>
+            <map_components component_1="environment" component_2="membrane"/>
+            <map_variables variable_1="time" variable_2="time"/>
+      </connection>
+      <connection>
+            <map_components component_1="Ca_current" component_2="membrane"/>
+            <map_variables variable_1="ICa" variable_2="ICa"/>
+            <map_variables variable_1="V" variable_2="V"/>
+      </connection>
+      <connection>
+            <map_components component_1="rapid_K_current" component_2="membrane"/>
+            <map_variables variable_1="IK" variable_2="IK"/>
+            <map_variables variable_1="V" variable_2="V"/>
+      </connection>
+      <connection>
+            <map_components component_1="slow_K_current" component_2="membrane"/>
+            <map_variables variable_1="Is1" variable_2="Is1"/>
+            <map_variables variable_1="V" variable_2="V"/>
+      </connection>
+      <connection>
+            <map_components component_1="very_slow_K_current" component_2="membrane"/>
+            <map_variables variable_1="Is2" variable_2="Is2"/>
+            <map_variables variable_1="V" variable_2="V"/>
+      </connection>
+      <connection>
+            <map_components component_1="leak_current" component_2="membrane"/>
+            <map_variables variable_1="Il" variable_2="Il"/>
+            <map_variables variable_1="V" variable_2="V"/>
+      </connection>
+      <connection>
+            <map_components component_1="environment" component_2="Ca_current"/>
+            <map_variables variable_1="time" variable_2="time"/>
+      </connection>
+      <connection>
+            <map_components component_1="environment" component_2="rapid_K_current"/>
+            <map_variables variable_1="time" variable_2="time"/>
+      </connection>
+      <connection>
+            <map_components component_1="environment" component_2="slow_K_current"/>
+            <map_variables variable_1="time" variable_2="time"/>
+      </connection>
+      <connection>
+            <map_components component_1="rapid_K_current" component_2="slow_K_current"/>
+            <map_variables variable_1="VK" variable_2="VK"/>
+      </connection>
+      <connection>
+            <map_components component_1="environment" component_2="very_slow_K_current"/>
+            <map_variables variable_1="time" variable_2="time"/>
+      </connection>
+      <connection>
+            <map_components component_1="rapid_K_current" component_2="very_slow_K_current"/>
+            <map_variables variable_1="VK" variable_2="VK"/>
+      </connection>
+      <connection>
+            <map_components component_1="environment" component_2="leak_current"/>
+            <map_variables variable_1="time" variable_2="time"/>
+      </connection>
+    
+     <rdf:RDF>
+  <rdf:Seq rdf:about="rdf:#10cb6c74-d091-4c4a-934b-d778319a7205">
+    <rdf:li rdf:resource="rdf:#dd61c4b2-b30a-4fdb-b1e3-a459f03f9720"/>
+    <rdf:li rdf:resource="rdf:#3311698a-64a9-4c17-bf09-d283363c94cc"/>
+    <rdf:li rdf:resource="rdf:#de3c3d0e-c2f2-43c8-92fb-014322951a1b"/>
+    <rdf:li rdf:resource="rdf:#7a675be1-22ba-4bc3-bf0d-5e7929af3885"/>
+    <rdf:li rdf:resource="rdf:#7f7852c9-fbc3-4aba-99d7-c45bb885a612"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#2f233643-d042-419a-9deb-cf9f3caf402e">
+    <vCard:Given>Joseph</vCard:Given>
+    <vCard:Family>Previte</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#557b0161-366d-4c04-a1ea-7098cefd4828">
+    <vCard:Given>James</vCard:Given>
+    <vCard:Family>Lawson</vCard:Family>
+    <vCard:Other>Richard</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f4225862-d951-4cdf-bd9c-ca17d407fd11">
+    <dcterms:modified rdf:resource="rdf:#41b0cfc0-f5f9-41d4-aff4-90d30c1c2c8f"/>
+    <rdf:value>
+          Added more metadata.
+        </rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#3ca11ded-a806-4f6e-872c-99fbf0f58600"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a049c1f5-2c5a-4be0-96b8-d394a9fd496a">
+    <vCard:Given>Autumn</vCard:Given>
+    <vCard:Family>Cuellar</vCard:Family>
+    <vCard:Other>A</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#de3c3d0e-c2f2-43c8-92fb-014322951a1b">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#5b2b067b-1cbb-4e76-ad81-4c3a2af72ebf"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b87a5c2c-f4ed-42ee-ac1a-a3c32faa4d6d">
+    <vCard:Given>James</vCard:Given>
+    <vCard:Family>Lawson</vCard:Family>
+    <vCard:Other>Richard</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#41b0cfc0-f5f9-41d4-aff4-90d30c1c2c8f">
+    <dcterms:W3CDTF>2002-07-18</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3311698a-64a9-4c17-bf09-d283363c94cc">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#2f233643-d042-419a-9deb-cf9f3caf402e"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#537ed962-a674-4cf9-a64a-215046b2a8ca">
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+    <rdf:first rdf:resource="rdf:#3a8531b7-1d36-4572-af25-9b5a111283ad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7f7852c9-fbc3-4aba-99d7-c45bb885a612">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#9c50959c-5ea6-43e5-a0d6-d0752f5c79ea"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#890ef4c5-560c-4a44-be85-9c1a4a1f4a59">
+    <vCard:ORG rdf:resource="rdf:#35952d28-2ec7-4dfd-a0c5-c2f98650cc4c"/>
+    <vCard:EMAIL rdf:resource="rdf:#62c568a8-cb4c-4b49-a375-ffe0c1d8db58"/>
+    <vCard:N rdf:resource="rdf:#b87a5c2c-f4ed-42ee-ac1a-a3c32faa4d6d"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#bd449466-f5f3-4e6a-b360-7ad3f275634f">
+    <dcterms:W3CDTF>2009-05-15T16:10:00+12:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#eda135be-a804-4400-a0e2-a1f173f2440b">
+    <dcterms:modified rdf:resource="rdf:#bd449466-f5f3-4e6a-b360-7ad3f275634f"/>
+    <rdf:value>Fixed errors detected by ValidateCellML, including connection duplication and namespace mixing.</rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#272f4426-48f3-4189-b069-ee72500e813d"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#PeAxnu1!T2\">
+    <ns7:simulation rdf:resource="rdf:#$rx2Kt"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#bertram_2000_medium">
+    <ns7:simulation rdf:resource="rdf:#f95e14d0-fc94-49d8-a61b-f27c1d9aabda"/>
+    <dc:title>
+        The Bertram et al 2000 phantom burster model for pancreatic beta-cells.
+      </dc:title>
+    <cmeta:bio_entity>pancreatic beta-cell</cmeta:bio_entity>
+    <cmeta:comment rdf:resource="rdf:#ec6738e2-de8a-4d0e-8385-e803c1a34a79"/>
+    <bqs:reference rdf:resource="rdf:#8297facc-27d3-427d-94fc-4570ce277a0e"/>
+<bqs:reference rdf:parseType="Resource">
+  <dc:subject rdf:parseType="Resource">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value>
+      <rdf:Bag>
+        <rdf:li>calcium dynamics</rdf:li>
+        <rdf:li>electrophysiology</rdf:li>
+        <rdf:li>beta cell</rdf:li>
+        <rdf:li>pancreas</rdf:li>
+      </rdf:Bag>
+    </rdf:value>
+  </dc:subject>
+</bqs:reference>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#866a151e-844d-41d6-b865-4c9108c277c0">
+    <ns7:endingValue>1000</ns7:endingValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#32838f11-2e32-44cb-9ed3-1dd8e655492e">
+    <dcterms:W3CDTF>2000-12</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#82c6de5a-bdcb-49f0-8fe4-bf536af0bd8e">
+    <vCard:Given>Tracie</vCard:Given>
+    <vCard:Family>Kinard</vCard:Family>
+    <vCard:Other>A</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:title>The Phantom Burster Model for Pancreatic Beta Cells (medium bursting model)</dc:title>
+    <dc:publisher>The University of Auckland, Auckland Bioengineering Institute</dc:publisher>
+    <cmeta:comment rdf:resource="rdf:#02f410bc-2f5e-4b35-bd14-c72502505ade"/>
+    <dcterms:created rdf:resource="rdf:#daf3676d-99a8-40d9-9bae-70a8ba718909"/>
+    <dc:creator rdf:resource="rdf:#890ef4c5-560c-4a44-be85-9c1a4a1f4a59"/>
+    <cmeta:modification rdf:resource="rdf:#eda135be-a804-4400-a0e2-a1f173f2440b"/>
+    <cmeta:modification rdf:resource="rdf:#73e9e190-ac5b-463c-be82-ffc62ca74630"/>
+    <cmeta:modification rdf:resource="rdf:#f4225862-d951-4cdf-bd9c-ca17d407fd11"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8297facc-27d3-427d-94fc-4570ce277a0e">
+    <bqs:Pubmed_id>11106596</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#e5bf1ac1-e996-4b58-bf0c-0c80afc4d07a"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#$sx2Kt">
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+    <rdf:first rdf:resource="rdf:#$tx2Kt"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#$r4dx31">
+    <ns7:boundIntervals rdf:resource="rdf:#$s4dx31"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#207a8f98-7b44-41b3-b0e2-a7c9525d1967">
+    <vCard:FN>James Lawson</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ec6738e2-de8a-4d0e-8385-e803c1a34a79">
+    <dc:creator rdf:resource="rdf:#02623e16-e5eb-4549-9712-5f6c0043eb75"/>
+    <rdf:value>This is the CellML description of Bertram et al's 2000 phantom burster model for pancreatic beta-cells.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#$tx2Kt">
+    <ns7:endingValue>100</ns7:endingValue>
+    <ns7:nonstandard-pointDensity>10000</ns7:nonstandard-pointDensity>
+    <ns7:maximumStepSize>0.001</ns7:maximumStepSize>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#272f4426-48f3-4189-b069-ee72500e813d">
+    <vCard:N rdf:resource="rdf:#557b0161-366d-4c04-a1ea-7098cefd4828"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#79357532-a807-4680-8afa-78fdee11adbb">
+    <dcterms:W3CDTF>2003-04-09</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#5b2b067b-1cbb-4e76-ad81-4c3a2af72ebf">
+    <vCard:Given>Arthur</vCard:Given>
+    <vCard:Family>Sherman</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9e045141-9618-42b0-ad6c-de2bdc4c9de9">
+    <dc:title>Biophysical Journal</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#35952d28-2ec7-4dfd-a0c5-c2f98650cc4c">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#62c568a8-cb4c-4b49-a375-ffe0c1d8db58">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>j.lawson@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#fc9fcbc7-0263-4820-a21d-6cb0aab30ea1">
+    <vCard:Given>Richard</vCard:Given>
+    <vCard:Family>Bertram</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#02623e16-e5eb-4549-9712-5f6c0043eb75">
+    <vCard:FN>Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#73e9e190-ac5b-463c-be82-ffc62ca74630">
+    <dcterms:modified rdf:resource="rdf:#79357532-a807-4680-8afa-78fdee11adbb"/>
+    <rdf:value>
+          Added publication date information.
+        </rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#c5b60d22-7baf-4cf2-ad2b-686bea8501f1"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#$t4dx31">
+    <ns7:endingValue>5000</ns7:endingValue>
+    <ns7:nonstandard-pointDensity>100000</ns7:nonstandard-pointDensity>
+    <ns7:maximumStepSize>0.001</ns7:maximumStepSize>
+    <ns7:nonstandard-algorithm>bdf15</ns7:nonstandard-algorithm>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3ca11ded-a806-4f6e-872c-99fbf0f58600">
+    <vCard:N rdf:resource="rdf:#e2fb2f91-4080-49f7-90fd-cc74abe5ca2d"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#PeAxnu1!T2\">
+    <ns7:simulation rdf:resource="rdf:#$r4dx31"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#$s4dx31">
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+    <rdf:first rdf:resource="rdf:#$t4dx31"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7a675be1-22ba-4bc3-bf0d-5e7929af3885">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#82c6de5a-bdcb-49f0-8fe4-bf536af0bd8e"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#daf3676d-99a8-40d9-9bae-70a8ba718909">
+    <dcterms:W3CDTF>2007-08-08T00:00:00+00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#02f410bc-2f5e-4b35-bd14-c72502505ade">
+    <dc:creator rdf:resource="rdf:#207a8f98-7b44-41b3-b0e2-a7c9525d1967"/>
+    <rdf:value>This model has been rebuilt according to the author's original XPPAUT code, which can be found at http://www.math.fsu.edu/~bertram/software/islet/BJ_04a.ode . Unfortunately the model is still unable to produce the correct output. This file is known to run in PCEnv.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a83e4bca-65e9-41b4-97e7-677a3ca94ff7">
+    <ns7:boundIntervals rdf:resource="rdf:#a80fc084-91f0-459b-8f51-e76994c228c7"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#dd61c4b2-b30a-4fdb-b1e3-a459f03f9720">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#fc9fcbc7-0263-4820-a21d-6cb0aab30ea1"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e2fb2f91-4080-49f7-90fd-cc74abe5ca2d">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e5bf1ac1-e996-4b58-bf0c-0c80afc4d07a">
+    <dc:creator rdf:resource="rdf:#10cb6c74-d091-4c4a-934b-d778319a7205"/>
+    <dc:title>The Phantom Burster Model for Pancreatic Beta Cells</dc:title>
+    <bqs:volume>79</bqs:volume>
+    <bqs:first_page>2880</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#9e045141-9618-42b0-ad6c-de2bdc4c9de9"/>
+    <dcterms:issued rdf:resource="rdf:#32838f11-2e32-44cb-9ed3-1dd8e655492e"/>
+    <bqs:last_page>2892</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#c5b60d22-7baf-4cf2-ad2b-686bea8501f1">
+    <vCard:N rdf:resource="rdf:#a049c1f5-2c5a-4be0-96b8-d394a9fd496a"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9c50959c-5ea6-43e5-a0d6-d0752f5c79ea">
+    <vCard:Given>Leslie</vCard:Given>
+    <vCard:Family>Satin</vCard:Family>
+    <vCard:Other>S</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#$rx2Kt">
+    <ns7:boundIntervals rdf:resource="rdf:#$sx2Kt"/>
+  </rdf:Description>
+</rdf:RDF>
+</model>

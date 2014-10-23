@@ -1,0 +1,1310 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--
+This CellML file was generated on 2/02/2009 at 2:04:56 at p.m. using:
+
+COR (0.9.31.1125)
+Copyright 2002-2009 Dr Alan Garny
+http://COR.physiol.ox.ac.uk/ - COR@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.CellML.org/
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="novak_csikasz-nagy_gyorffy_chen_tyson_1998_version01" name="novak_csikasznagy_gyorffy_chen_tyson_1998_version01">
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>Mathematical model of the fission yeast cell cycle with checkpoint controls at the G1/S, G2/M and metaphase/anaphase transitions</title>
+				<author>
+					<firstname>Catherine</firstname>
+					<surname>Lloyd</surname>
+					<affiliation>
+						<shortaffil>Bioengineering Institute, University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<section id="sec_status">
+				<title>Model Status</title>
+				<para>
+This CellML version of the model runs in COR and PCEnv. Units have been checked and are consistent. In order to reproduce the figures in the published paper, initial concentrations for the variables need to be obtained from the author, as they are not listed in the paper. 
+          </para>
+			</section>
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>
+During mitotic cell division, eukaryotic cells will replicate their DNA during the S-phase of the cell cycle, and then divide during the M-phase (see <xref linkend="fig_cell_diagram"/> below).  S and M phases are temporally separated by gaps, G1 and G2 phases.  These discrete phases of the cell cycle are carefully regulated by specific proteins, and in most eukaryotic cells, cell cycle events are coordinated at three checkpoints:
+<itemizedlist>
+						<listitem>
+							<para>In G1 phase, cells analyse both their external environment and their intracellular state before committing to a new cycle of DNA synthesis and division.</para>
+						</listitem>
+						<listitem>
+							<para>In the G2 phase, the cell checks that DNA synthesis and repair are complete, and that the cell has reached a critical size before mitosis is initiated.</para>
+						</listitem>
+						<listitem>
+							<para>Thirdly, at metaphase, the cell ensures that all chromosomes are correctly aligned on the central plate before they are separated to opposite poles of the spindle.</para>
+						</listitem>
+					</itemizedlist>
+				</para>
+				<para>
+Over the past few years advances in molecular genetics have lead to the elucidation of many of the molecular details of these control mechanisms.  But although cyclin-dependent protein kinases (CDKs) are known to trigger the major events of the cell cycle, the precise mechanisms of the checkpoint controls are still uncertain.
+</para>
+				<para>
+Concurrent with advances in experimental techniques and the generation of molecular data, mathematical models of increasing complexity have evolved.  In the study described here, Novak <emphasis>et al.</emphasis> develop a mathematical model of the fission yeast cell cycle with checkpoint controls at the G1/S, G2/M and metaphase/anaphase transitions (see <xref linkend="fig_reaction_diagram"/> below).  Much is known about the physiology, genetics and molecular biology of the fission yeast (<emphasis>Schizosaccharomyces pombe</emphasis>).  By varying the parameter values of their model, the authors were able to represent both wild-type and <emphasis>wee1<superscript>-</superscript>
+					</emphasis> mutant cells.  They found that their model was consistent with the observed phenotypes of many different mutant fission yeast strains, and it also was able to predict interesting phenotypes for some multiple-mutant strains that have not yet been constructed and analysed.  
+</para>
+				<para>
+The model has been described here in CellML (the raw CellML description of the Novak <emphasis>et al.</emphasis> 1998 model can be downloaded in various formats as described in <xref linkend="sec_download_this_model"/>).     
+</para>
+				<para>
+The complete original paper reference is cited below:
+</para>
+				<para>
+Mathematical model of the fission yeast cell cycle with checkpoint controls at the G1/S, G2/M and metaphase/anaphase transitions, Bela Novak, Attila Csikasz-Nagy, Bela Gyorffy, Kathy Chen, and John J. Tyson, 1998, <ulink url="http://www.sciencedirect.com/science/journal/03014622">
+						<emphasis>Biophysical Chemistry</emphasis>
+					</ulink>, 72, 185-200.  (A PDF version of the article is available to subscribers on the <emphasis>Biophysical Chemistry</emphasis> website.)  <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/9652094">PubMed ID: 9652094</ulink>
+				</para>
+				<informalfigure float="0" id="fig_cell_diagram">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>cell cycle diagram</title>
+							</objectinfo>
+							<imagedata fileref="novak_1998a.png"/>
+						</imageobject>
+					</mediaobject>
+					<caption>The fission yeast cell cycle.  The wild-type cell cycle and the <emphasis>wee1<superscript>-</superscript>
+						</emphasis> mutant cell cycle are compared.  The relative durations of the different phases differ, and also, the size of the cells at division differ, with wild-type cells being 14 micrometres in length, and <emphasis>wee1<superscript>-</superscript>
+						</emphasis> cells bing just 8 micrometres in length.</caption>
+				</informalfigure>
+				<informalfigure float="0" id="fig_reaction_diagram">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>reaction diagram</title>
+							</objectinfo>
+							<imagedata fileref="novak_1998b.png"/>
+						</imageobject>
+					</mediaobject>
+					<caption>Schematic diagram of a proposed molecular mechanism for three checkpoint controls in the fission yeast cell cycle.  The G1/S transition is controlled by CDK-Rum1 interactions; the G2/M transition by Wee1-Mik1-Cdc25-controlled tyrosine-phosphorylation of CDK; and the metaphase/anaphase transition is regulated by an APC activating enzyme (AAE).</caption>
+				</informalfigure>
+			</sect1>
+		</article>
+	</documentation>
+	   <units name="minute">
+      <unit units="second" multiplier="60"/>
+   </units>
+   <units name="first_order_rate_constant">
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <component name="environment">
+      <variable units="minute" public_interface="out" name="time"/>
+   </component>
+   <component name="Cdc13_Cdc2">
+      <variable units="dimensionless" public_interface="out" name="Cdc13_Cdc2" initial_value="1"/>
+      <variable units="first_order_rate_constant" name="k1" initial_value="0.03"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="kwee"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="ki"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="kcdc25"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="kir"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="k2"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="k4"/>
+      <variable units="dimensionless" public_interface="in" name="mass"/>
+      <variable units="dimensionless" public_interface="in" name="Cdc13_P_Cdc2"/>
+      <variable units="dimensionless" public_interface="in" name="Rum1_Cdc13_Cdc2"/>
+      <variable units="dimensionless" public_interface="in" name="Rum1"/>
+      <variable units="minute" public_interface="in" name="time"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Cdc13_Cdc2</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>k1</ci>
+                     <ci>mass</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>kcdc25</ci>
+                     <ci>Cdc13_P_Cdc2</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>Rum1_Cdc13_Cdc2</ci>
+                     <apply>
+                        <plus/>
+                        <ci>kir</ci>
+                        <ci>k4</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>kwee</ci>
+                     <ci>Cdc13_Cdc2</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>ki</ci>
+                     <ci>Cdc13_Cdc2</ci>
+                     <ci>Rum1</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k2</ci>
+                     <ci>Cdc13_Cdc2</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Cdc13_P_Cdc2">
+      <variable units="dimensionless" public_interface="out" name="Cdc13_P_Cdc2" initial_value="0"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="kwee"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="kcdc25"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="k2"/>
+      <variable units="dimensionless" public_interface="in" name="Cdc13_Cdc2"/>
+      <variable units="minute" public_interface="in" name="time"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Cdc13_P_Cdc2</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>kwee</ci>
+                  <ci>Cdc13_Cdc2</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>kcdc25</ci>
+                     <ci>Cdc13_P_Cdc2</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k2</ci>
+                     <ci>Cdc13_P_Cdc2</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Rum1_Cdc13_Cdc2">
+      <variable units="dimensionless" public_interface="out" name="Rum1_Cdc13_Cdc2" initial_value="0"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="ki"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="kir"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="k2c"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="k4"/>
+      <variable units="dimensionless" public_interface="in" name="Cdc13_Cdc2"/>
+      <variable units="dimensionless" public_interface="in" name="Rum1"/>
+      <variable units="minute" public_interface="in" name="time"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Rum1_Cdc13_Cdc2</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>ki</ci>
+                  <ci>Rum1</ci>
+                  <ci>Cdc13_Cdc2</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>Rum1_Cdc13_Cdc2</ci>
+                  <apply>
+                     <plus/>
+                     <ci>k4</ci>
+                     <ci>k2c</ci>
+                     <ci>kir</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Rum1">
+      <variable units="dimensionless" public_interface="out" name="Rum1" initial_value="0"/>
+      <variable units="first_order_rate_constant" name="k3" initial_value="0.15"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="ki"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="kir"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="k2c"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="k4"/>
+      <variable units="dimensionless" public_interface="in" name="Cdc13_Cdc2"/>
+      <variable units="dimensionless" public_interface="in" name="Rum1_Cdc13_Cdc2"/>
+      <variable units="minute" public_interface="in" name="time"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Rum1</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <ci>k3</ci>
+                  <apply>
+                     <times/>
+                     <ci>Rum1_Cdc13_Cdc2</ci>
+                     <apply>
+                        <plus/>
+                        <ci>kir</ci>
+                        <ci>k2c</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>k4</ci>
+                     <ci>Rum1</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>ki</ci>
+                     <ci>Cdc13_Cdc2</ci>
+                     <ci>Rum1</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Cdc25P">
+      <variable units="dimensionless" public_interface="out" name="Cdc25P" initial_value="0"/>
+      <variable units="first_order_rate_constant" name="k25" initial_value="0.5"/>
+      <variable units="first_order_rate_constant" name="k25r"/>
+      <variable units="first_order_rate_constant" name="k25r_" initial_value="0.2"/>
+      <variable units="dimensionless" name="J25" initial_value="0.2"/>
+      <variable units="dimensionless" name="J25r" initial_value="0.2"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="ks"/>
+      <variable units="dimensionless" public_interface="in" name="MPF"/>
+      <variable units="minute" public_interface="in" name="time"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Cdc25P</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>k25</ci>
+                     <ci>MPF</ci>
+                     <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>Cdc25P</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <plus/>
+                        <ci>J25</ci>
+                        <cn cellml:units="dimensionless">1</cn>
+                     </apply>
+                     <ci>Cdc25P</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>k25r</ci>
+                     <ci>Cdc25P</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>J25r</ci>
+                     <ci>Cdc25P</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>k25r</ci>
+            <apply>
+               <plus/>
+               <ci>k25r_</ci>
+               <ci>ks</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Wee1">
+      <variable units="dimensionless" public_interface="out" name="Wee1" initial_value="0"/>
+      <variable units="first_order_rate_constant" name="kw" initial_value="0.5"/>
+      <variable units="first_order_rate_constant" name="kwr"/>
+      <variable units="first_order_rate_constant" name="kwr_" initial_value="0.2"/>
+      <variable units="dimensionless" name="Jw" initial_value="0.2"/>
+      <variable units="dimensionless" name="Jwr" initial_value="0.2"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="ks"/>
+      <variable units="dimensionless" public_interface="in" name="MPF"/>
+      <variable units="minute" public_interface="in" name="time"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Wee1</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>kwr</ci>
+                     <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>Wee1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <plus/>
+                        <ci>Jwr</ci>
+                        <cn cellml:units="dimensionless">1</cn>
+                     </apply>
+                     <ci>Wee1</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>kw</ci>
+                     <ci>MPF</ci>
+                     <ci>Wee1</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>Jw</ci>
+                     <ci>Wee1</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>kwr</ci>
+            <apply>
+               <plus/>
+               <ci>kwr_</ci>
+               <ci>ks</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Mik1">
+      <variable units="dimensionless" public_interface="out" name="Mik1" initial_value="0"/>
+      <variable units="first_order_rate_constant" name="km" initial_value="0.1"/>
+      <variable units="first_order_rate_constant" name="kmr"/>
+      <variable units="first_order_rate_constant" name="kmr_" initial_value="0"/>
+      <variable units="dimensionless" name="Jm" initial_value="0.2"/>
+      <variable units="dimensionless" name="Jmr" initial_value="0.2"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="ks"/>
+      <variable units="minute" public_interface="in" name="time"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Mik1</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>kmr</ci>
+                     <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>Mik1</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <plus/>
+                        <ci>Jmr</ci>
+                        <cn cellml:units="dimensionless">1</cn>
+                     </apply>
+                     <ci>Mik1</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>km</ci>
+                     <ci>Mik1</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>Jm</ci>
+                     <ci>Mik1</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>kmr</ci>
+            <apply>
+               <plus/>
+               <ci>kmr_</ci>
+               <ci>ks</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="AAE_total">
+      <variable units="dimensionless" public_interface="out" name="AAE_total" initial_value="2"/>
+      <variable units="first_order_rate_constant" name="kas" initial_value="0.25"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="kad"/>
+      <variable units="dimensionless" public_interface="in" name="MPF"/>
+      <variable units="minute" public_interface="in" name="time"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>AAE_total</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>kas</ci>
+                  <ci>MPF</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>kad</ci>
+                  <ci>AAE_total</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="AAE">
+      <variable units="dimensionless" public_interface="out" name="AAE" initial_value="2"/>
+      <variable units="first_order_rate_constant" name="kaa" initial_value="0.001"/>
+      <variable units="first_order_rate_constant" name="kaa_" initial_value="1"/>
+      <variable units="first_order_rate_constant" name="kai"/>
+      <variable units="first_order_rate_constant" name="kai_" initial_value="0.25"/>
+      <variable units="first_order_rate_constant" name="kx" initial_value="0"/>
+      <variable units="dimensionless" name="Jaa" initial_value="0.1"/>
+      <variable units="dimensionless" name="Jai" initial_value="0.1"/>
+      <variable units="dimensionless" public_interface="in" name="AAE_total"/>
+      <variable units="first_order_rate_constant" public_interface="in" name="kad"/>
+      <variable units="dimensionless" public_interface="in" name="MPF"/>
+      <variable units="minute" public_interface="in" name="time"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>AAE</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <plus/>
+                        <ci>kaa</ci>
+                        <apply>
+                           <times/>
+                           <ci>kaa_</ci>
+                           <ci>MPF</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <ci>AAE_total</ci>
+                        <ci>AAE</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <plus/>
+                        <ci>Jaa</ci>
+                        <ci>AAE_total</ci>
+                     </apply>
+                     <ci>AAE</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>kai</ci>
+                        <ci>AAE</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci>Jai</ci>
+                        <ci>AAE</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>kad</ci>
+                     <ci>AAE</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>kai</ci>
+            <apply>
+               <plus/>
+               <ci>kai_</ci>
+               <ci>kx</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="APC">
+      <variable units="dimensionless" public_interface="out" name="APC" initial_value="0"/>
+      <variable units="first_order_rate_constant" name="kapr" initial_value="0.04"/>
+      <variable units="first_order_rate_constant" name="kapr_" initial_value="3"/>
+      <variable units="first_order_rate_constant" name="kap" initial_value="4"/>
+      <variable units="dimensionless" name="Japr" initial_value="0.01"/>
+      <variable units="dimensionless" name="Jap" initial_value="0.01"/>
+      <variable units="dimensionless" public_interface="in" name="Puc1"/>
+      <variable units="dimensionless" public_interface="in" name="MPF"/>
+      <variable units="dimensionless" public_interface="in" name="AAE"/>
+      <variable units="dimensionless" public_interface="in" name="mass"/>
+      <variable units="minute" public_interface="in" name="time"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>APC</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <plus/>
+                        <ci>kapr</ci>
+                        <apply>
+                           <times/>
+                           <ci>kapr_</ci>
+                           <ci>AAE</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <ci>APC</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <plus/>
+                        <ci>Japr</ci>
+                        <cn cellml:units="dimensionless">1</cn>
+                     </apply>
+                     <ci>APC</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>kap</ci>
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <times/>
+                           <ci>Puc1</ci>
+                           <ci>mass</ci>
+                        </apply>
+                        <ci>MPF</ci>
+                     </apply>
+                     <ci>APC</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>Jap</ci>
+                     <ci>APC</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="mass">
+      <variable units="dimensionless" public_interface="out" name="mass" initial_value="1"/>
+      <variable units="first_order_rate_constant" name="mu" initial_value="0.005776"/>
+      <variable units="minute" public_interface="in" name="time"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>mass</ci>
+            </apply>
+            <apply>
+               <times/>
+               <ci>mu</ci>
+               <ci>mass</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="k2">
+      <variable units="first_order_rate_constant" public_interface="out" name="k2"/>
+      <variable units="first_order_rate_constant" name="V2" initial_value="0.03"/>
+      <variable units="first_order_rate_constant" name="V2_" initial_value="1"/>
+      <variable units="dimensionless" public_interface="in" name="APC"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>k2</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <ci>V2</ci>
+                  <apply>
+                     <minus/>
+                     <cn cellml:units="dimensionless">1</cn>
+                     <ci>APC</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>V2_</ci>
+                  <ci>APC</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="k2c">
+      <variable units="first_order_rate_constant" public_interface="out" name="k2c"/>
+      <variable units="first_order_rate_constant" name="V2c" initial_value="0.03"/>
+      <variable units="first_order_rate_constant" name="V2c_" initial_value="0.16"/>
+      <variable units="dimensionless" public_interface="in" name="APC"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>k2c</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <ci>V2c</ci>
+                  <apply>
+                     <minus/>
+                     <cn cellml:units="dimensionless">1</cn>
+                     <ci>APC</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>V2c_</ci>
+                  <ci>APC</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="k4">
+      <variable units="first_order_rate_constant" public_interface="out" name="k4"/>
+      <variable units="first_order_rate_constant" name="k4_" initial_value="0.15"/>
+      <variable units="first_order_rate_constant" name="k4__" initial_value="20"/>
+      <variable units="dimensionless" public_interface="in" name="MPF"/>
+      <variable units="dimensionless" public_interface="in" name="Puc1"/>
+      <variable units="dimensionless" public_interface="in" name="mass"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>k4</ci>
+            <apply>
+               <plus/>
+               <ci>k4_</ci>
+               <apply>
+                  <times/>
+                  <ci>k4__</ci>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>Puc1</ci>
+                        <ci>mass</ci>
+                     </apply>
+                     <ci>MPF</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="kcdc25">
+      <variable units="first_order_rate_constant" public_interface="out" name="kcdc25"/>
+      <variable units="first_order_rate_constant" name="V25" initial_value="0.01"/>
+      <variable units="first_order_rate_constant" name="V25_" initial_value="0.4"/>
+      <variable units="dimensionless" public_interface="in" name="Cdc25P"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>kcdc25</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <ci>V25</ci>
+                  <apply>
+                     <minus/>
+                     <cn cellml:units="dimensionless">1</cn>
+                     <ci>Cdc25P</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>V25_</ci>
+                  <ci>Cdc25P</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="kwee">
+      <variable units="first_order_rate_constant" public_interface="out" name="kwee"/>
+      <variable units="first_order_rate_constant" name="Vwee" initial_value="0.01"/>
+      <variable units="first_order_rate_constant" name="Vwee_" initial_value="0.93"/>
+      <variable units="first_order_rate_constant" name="Vmik" initial_value="0.002"/>
+      <variable units="first_order_rate_constant" name="Vmik_" initial_value="0.2"/>
+      <variable units="dimensionless" public_interface="in" name="Wee1"/>
+      <variable units="dimensionless" public_interface="in" name="Mik1"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>kwee</ci>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <ci>Vwee</ci>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <minus/>
+                           <cn cellml:units="dimensionless">1</cn>
+                           <ci>Wee1</ci>
+                        </apply>
+                        <cn cellml:units="first_order_rate_constant">1</cn>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>Vwee_</ci>
+                        <ci>Wee1</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>Vmik</ci>
+                        <apply>
+                           <minus/>
+                           <cn cellml:units="dimensionless">1</cn>
+                           <ci>Mik1</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <cn cellml:units="minute">1</cn>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>Vmik_</ci>
+                  <ci>Mik1</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="MPF">
+      <variable units="dimensionless" public_interface="out" name="MPF"/>
+      <variable units="dimensionless" name="alpha" initial_value="0.1"/>
+      <variable units="dimensionless" public_interface="in" name="Cdc13_Cdc2"/>
+      <variable units="dimensionless" public_interface="in" name="Cdc13_P_Cdc2"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>MPF</ci>
+            <apply>
+               <plus/>
+               <ci>Cdc13_Cdc2</ci>
+               <apply>
+                  <times/>
+                  <ci>alpha</ci>
+                  <ci>Cdc13_P_Cdc2</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="parameters">
+      <variable units="first_order_rate_constant" public_interface="out" name="ks"/>
+      <variable units="first_order_rate_constant" public_interface="out" name="ki" initial_value="200"/>
+      <variable units="first_order_rate_constant" public_interface="out" name="kir" initial_value="1"/>
+      <variable units="first_order_rate_constant" public_interface="out" name="kad" initial_value="0.1"/>
+      <variable units="dimensionless" public_interface="out" name="Puc1" initial_value="0.013"/>
+      <variable units="dimensionless" public_interface="in" name="APC"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>ks</ci>
+            <piecewise>
+               <piece>
+                  <cn cellml:units="first_order_rate_constant">0.5</cn>
+                  <apply>
+                     <leq/>
+                     <ci>APC</ci>
+                     <cn cellml:units="dimensionless">0.2</cn>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <cn cellml:units="first_order_rate_constant">0</cn>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   <connection>
+      <map_components component_2="parameters" component_1="Cdc13_Cdc2"/>
+      <map_variables variable_2="ki" variable_1="ki"/>
+      <map_variables variable_2="kir" variable_1="kir"/>
+   </connection>
+   <connection>
+      <map_components component_2="parameters" component_1="Rum1_Cdc13_Cdc2"/>
+      <map_variables variable_2="ki" variable_1="ki"/>
+      <map_variables variable_2="kir" variable_1="kir"/>
+   </connection>
+   <connection>
+      <map_components component_2="parameters" component_1="Rum1"/>
+      <map_variables variable_2="ki" variable_1="ki"/>
+      <map_variables variable_2="kir" variable_1="kir"/>
+   </connection>
+   <connection>
+      <map_components component_2="parameters" component_1="AAE_total"/>
+      <map_variables variable_2="kad" variable_1="kad"/>
+   </connection>
+   <connection>
+      <map_components component_2="parameters" component_1="AAE"/>
+      <map_variables variable_2="kad" variable_1="kad"/>
+   </connection>
+   <connection>
+      <map_components component_2="parameters" component_1="APC"/>
+      <map_variables variable_2="Puc1" variable_1="Puc1"/>
+      <map_variables variable_2="APC" variable_1="APC"/>
+   </connection>
+   <connection>
+      <map_components component_2="parameters" component_1="k4"/>
+      <map_variables variable_2="Puc1" variable_1="Puc1"/>
+   </connection>
+   <connection>
+      <map_components component_2="parameters" component_1="Wee1"/>
+      <map_variables variable_2="ks" variable_1="ks"/>
+   </connection>
+   <connection>
+      <map_components component_2="parameters" component_1="Cdc25P"/>
+      <map_variables variable_2="ks" variable_1="ks"/>
+   </connection>
+   <connection>
+      <map_components component_2="parameters" component_1="Mik1"/>
+      <map_variables variable_2="ks" variable_1="ks"/>
+   </connection>
+   <connection>
+      <map_components component_2="kwee" component_1="Cdc13_Cdc2"/>
+      <map_variables variable_2="kwee" variable_1="kwee"/>
+   </connection>
+   <connection>
+      <map_components component_2="k4" component_1="Cdc13_Cdc2"/>
+      <map_variables variable_2="k4" variable_1="k4"/>
+   </connection>
+   <connection>
+      <map_components component_2="k2" component_1="Cdc13_Cdc2"/>
+      <map_variables variable_2="k2" variable_1="k2"/>
+   </connection>
+   <connection>
+      <map_components component_2="kcdc25" component_1="Cdc13_Cdc2"/>
+      <map_variables variable_2="kcdc25" variable_1="kcdc25"/>
+   </connection>
+   <connection>
+      <map_components component_2="k2" component_1="Cdc13_P_Cdc2"/>
+      <map_variables variable_2="k2" variable_1="k2"/>
+   </connection>
+   <connection>
+      <map_components component_2="kwee" component_1="Cdc13_P_Cdc2"/>
+      <map_variables variable_2="kwee" variable_1="kwee"/>
+   </connection>
+   <connection>
+      <map_components component_2="kcdc25" component_1="Cdc13_P_Cdc2"/>
+      <map_variables variable_2="kcdc25" variable_1="kcdc25"/>
+   </connection>
+   <connection>
+      <map_components component_2="k2c" component_1="Rum1_Cdc13_Cdc2"/>
+      <map_variables variable_2="k2c" variable_1="k2c"/>
+   </connection>
+   <connection>
+      <map_components component_2="k4" component_1="Rum1_Cdc13_Cdc2"/>
+      <map_variables variable_2="k4" variable_1="k4"/>
+   </connection>
+   <connection>
+      <map_components component_2="k2c" component_1="Rum1"/>
+      <map_variables variable_2="k2c" variable_1="k2c"/>
+   </connection>
+   <connection>
+      <map_components component_2="k4" component_1="Rum1"/>
+      <map_variables variable_2="k4" variable_1="k4"/>
+   </connection>
+   <connection>
+      <map_components component_2="kcdc25" component_1="Cdc25P"/>
+      <map_variables variable_2="Cdc25P" variable_1="Cdc25P"/>
+   </connection>
+   <connection>
+      <map_components component_2="k2" component_1="APC"/>
+      <map_variables variable_2="APC" variable_1="APC"/>
+   </connection>
+   <connection>
+      <map_components component_2="k2c" component_1="APC"/>
+      <map_variables variable_2="APC" variable_1="APC"/>
+   </connection>
+   <connection>
+      <map_components component_2="k4" component_1="mass"/>
+      <map_variables variable_2="mass" variable_1="mass"/>
+   </connection>
+   <connection>
+      <map_components component_2="k4" component_1="MPF"/>
+      <map_variables variable_2="MPF" variable_1="MPF"/>
+   </connection>
+   <connection>
+      <map_components component_2="kwee" component_1="Wee1"/>
+      <map_variables variable_2="Wee1" variable_1="Wee1"/>
+   </connection>
+   <connection>
+      <map_components component_2="kwee" component_1="Mik1"/>
+      <map_variables variable_2="Mik1" variable_1="Mik1"/>
+   </connection>
+   <connection>
+      <map_components component_2="Cdc13_P_Cdc2" component_1="Cdc13_Cdc2"/>
+      <map_variables variable_2="Cdc13_P_Cdc2" variable_1="Cdc13_P_Cdc2"/>
+      <map_variables variable_2="Cdc13_Cdc2" variable_1="Cdc13_Cdc2"/>
+   </connection>
+   <connection>
+      <map_components component_2="mass" component_1="Cdc13_Cdc2"/>
+      <map_variables variable_2="mass" variable_1="mass"/>
+   </connection>
+   <connection>
+      <map_components component_2="Rum1" component_1="Cdc13_Cdc2"/>
+      <map_variables variable_2="Cdc13_Cdc2" variable_1="Cdc13_Cdc2"/>
+      <map_variables variable_2="Rum1" variable_1="Rum1"/>
+   </connection>
+   <connection>
+      <map_components component_2="Rum1_Cdc13_Cdc2" component_1="Cdc13_Cdc2"/>
+      <map_variables variable_2="Cdc13_Cdc2" variable_1="Cdc13_Cdc2"/>
+      <map_variables variable_2="Rum1_Cdc13_Cdc2" variable_1="Rum1_Cdc13_Cdc2"/>
+   </connection>
+   <connection>
+      <map_components component_2="Rum1" component_1="Rum1_Cdc13_Cdc2"/>
+      <map_variables variable_2="Rum1_Cdc13_Cdc2" variable_1="Rum1_Cdc13_Cdc2"/>
+      <map_variables variable_2="Rum1" variable_1="Rum1"/>
+   </connection>
+   <connection>
+      <map_components component_2="MPF" component_1="Cdc25P"/>
+      <map_variables variable_2="MPF" variable_1="MPF"/>
+   </connection>
+   <connection>
+      <map_components component_2="MPF" component_1="Wee1"/>
+      <map_variables variable_2="MPF" variable_1="MPF"/>
+   </connection>
+   <connection>
+      <map_components component_2="MPF" component_1="AAE_total"/>
+      <map_variables variable_2="MPF" variable_1="MPF"/>
+   </connection>
+   <connection>
+      <map_components component_2="MPF" component_1="AAE"/>
+      <map_variables variable_2="MPF" variable_1="MPF"/>
+   </connection>
+   <connection>
+      <map_components component_2="AAE_total" component_1="AAE"/>
+      <map_variables variable_2="AAE_total" variable_1="AAE_total"/>
+   </connection>
+   <connection>
+      <map_components component_2="AAE" component_1="APC"/>
+      <map_variables variable_2="AAE" variable_1="AAE"/>
+   </connection>
+   <connection>
+      <map_components component_2="MPF" component_1="APC"/>
+      <map_variables variable_2="MPF" variable_1="MPF"/>
+   </connection>
+   <connection>
+      <map_components component_2="mass" component_1="APC"/>
+      <map_variables variable_2="mass" variable_1="mass"/>
+   </connection>
+   <connection>
+      <map_components component_2="Cdc13_Cdc2" component_1="MPF"/>
+      <map_variables variable_2="Cdc13_Cdc2" variable_1="Cdc13_Cdc2"/>
+   </connection>
+   <connection>
+      <map_components component_2="Cdc13_P_Cdc2" component_1="MPF"/>
+      <map_variables variable_2="Cdc13_P_Cdc2" variable_1="Cdc13_P_Cdc2"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="Cdc13_Cdc2"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="Cdc13_P_Cdc2"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="Rum1_Cdc13_Cdc2"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="Rum1"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="Cdc25P"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="Wee1"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="Mik1"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="AAE_total"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="AAE"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="APC"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   <connection>
+      <map_components component_2="environment" component_1="mass"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+<rdf:RDF>
+  <rdf:Seq rdf:about="rdf:#61637c5d-9ec6-46a7-a4e6-8c0b7d8b6cd2">
+    <rdf:li rdf:resource="rdf:#97abd298-7d4c-44cf-8598-447e64c9c06b"/>
+    <rdf:li rdf:resource="rdf:#647eaa1c-cc2c-4477-bcbf-64a2d156f07a"/>
+    <rdf:li rdf:resource="rdf:#2ce397d4-b3b7-4591-b844-21a4bf427011"/>
+    <rdf:li rdf:resource="rdf:#9f4e94ad-38c6-4fb8-8dda-be10e09c33f7"/>
+    <rdf:li rdf:resource="rdf:#10c233d3-4f68-460a-a46e-0f537ed24d6f"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#b0bdb00a-f5a6-47fc-a406-42fc1a6b1c28">
+    <bqs:Pubmed_id>9652094</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#8bc9c429-4288-4594-8041-8a37cd71a741"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:publisher>The University of Auckland, Bioengineering Institute</dc:publisher>
+    <cmeta:comment rdf:resource="rdf:#d43573a0-36ec-416f-8d21-5797c5f163bf"/>
+    <dcterms:created rdf:resource="rdf:#d8ff4f25-a380-4779-9c2a-87d1fc38b58b"/>
+    <dc:creator rdf:resource="rdf:#03f17577-5343-4fee-bd60-9bfa2178ae83"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9f4e94ad-38c6-4fb8-8dda-be10e09c33f7">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#ee7070e9-4c6d-4d9d-a592-879f081b211e"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#97abd298-7d4c-44cf-8598-447e64c9c06b">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#8740e92b-a4f7-475b-b79b-653e13453e6f"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4651cac8-f08e-438a-9eec-0c9a22b7e42e">
+    <vCard:Given>Bela</vCard:Given>
+    <vCard:Family>Gyorffy</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#10c233d3-4f68-460a-a46e-0f537ed24d6f">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#7765cb77-4193-49da-8284-55c907ab9266"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#aa64dcfb-8455-4fd7-9efe-a35a6daf7dc0">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value>
+      <rdf:Bag>
+        <rdf:li>cell cycle</rdf:li>
+        <rdf:li>yeast</rdf:li>
+      </rdf:Bag>
+    </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#647eaa1c-cc2c-4477-bcbf-64a2d156f07a">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#f2931854-f11c-436d-9cee-ac708c9b236c"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1c2089f6-37f5-4ef9-98bc-67a61603b8d0">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#12a01c92-5d71-46f8-b493-70971cd8d750">
+    <dc:subject rdf:resource="rdf:#aa64dcfb-8455-4fd7-9efe-a35a6daf7dc0"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#03f17577-5343-4fee-bd60-9bfa2178ae83">
+    <vCard:ORG rdf:resource="rdf:#9752052c-0e0e-49f5-b450-34da0108390a"/>
+    <vCard:EMAIL rdf:resource="rdf:#03f095ef-85c0-44ac-93e4-1df60f07ee9e"/>
+    <vCard:N rdf:resource="rdf:#1c2089f6-37f5-4ef9-98bc-67a61603b8d0"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f2931854-f11c-436d-9cee-ac708c9b236c">
+    <vCard:Given>Attila</vCard:Given>
+    <vCard:Family>Csikasz-Nagy</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#688ed1e6-d711-4a85-a30f-a83e499d0de8">
+    <dc:creator rdf:resource="rdf:#d2f0b7ec-279a-48ac-b630-9514c8c9db1c"/>
+    <rdf:value>This is the CellML description of Novak et al.'s mathematical model of           the fission yeast cell cycle.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#69884924-e24e-4ff7-8440-10ad31806fc1">
+    <vCard:FN>Jeelean Lim</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#6c55cf5c-0001-4b6e-921a-741bae8dfad8">
+    <dcterms:W3CDTF>1998-05-05</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9752052c-0e0e-49f5-b450-34da0108390a">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>The Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#03f095ef-85c0-44ac-93e4-1df60f07ee9e">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ee7070e9-4c6d-4d9d-a592-879f081b211e">
+    <vCard:Given>Kathy</vCard:Given>
+    <vCard:Family>Chen</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d2f0b7ec-279a-48ac-b630-9514c8c9db1c">
+    <vCard:FN>Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8bc9c429-4288-4594-8041-8a37cd71a741">
+    <dc:creator rdf:resource="rdf:#61637c5d-9ec6-46a7-a4e6-8c0b7d8b6cd2"/>
+    <dc:title>Mathematical model of the fission yeast cell cycle with checkpoint controls at the G1/S, G2/M and metaphase/anaphase transitions</dc:title>
+    <bqs:volume>72</bqs:volume>
+    <bqs:first_page>185</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#0cd576d6-3fc3-475f-b82e-ad2324e17dae"/>
+    <dcterms:issued rdf:resource="rdf:#6c55cf5c-0001-4b6e-921a-741bae8dfad8"/>
+    <bqs:last_page>200</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d8ff4f25-a380-4779-9c2a-87d1fc38b58b">
+    <dcterms:W3CDTF>2003-10-10T00:00:00+00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d43573a0-36ec-416f-8d21-5797c5f163bf">
+    <dc:creator rdf:resource="rdf:#69884924-e24e-4ff7-8440-10ad31806fc1"/>
+    <rdf:value>This CellML version of the model runs in COR and PCEnv. Units have been checked and are consistent. In order to reproduce the figures in the published paper, initial concentrations for the variables need to be obtained from the author, as they are not listed in the paper.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7765cb77-4193-49da-8284-55c907ab9266">
+    <vCard:Given>John</vCard:Given>
+    <vCard:Family>Tyson</vCard:Family>
+    <vCard:Other>J</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#2ce397d4-b3b7-4591-b844-21a4bf427011">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#4651cac8-f08e-438a-9eec-0c9a22b7e42e"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0cd576d6-3fc3-475f-b82e-ad2324e17dae">
+    <dc:title>Biophysical Chemistry</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="#novak_csikasz-nagy_gyorffy_chen_tyson_1998_version01">
+    <dc:title>
+        Novak et al.'s mathematical model of the fission yeast cell cycle.
+      </dc:title>
+    <cmeta:comment rdf:resource="rdf:#688ed1e6-d711-4a85-a30f-a83e499d0de8"/>
+    <bqs:reference rdf:resource="rdf:#12a01c92-5d71-46f8-b493-70971cd8d750"/>
+    <bqs:reference rdf:resource="rdf:#b0bdb00a-f5a6-47fc-a406-42fc1a6b1c28"/>
+    <cmeta:species>Saccharomyces cerevisiae</cmeta:species>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8740e92b-a4f7-475b-b79b-653e13453e6f">
+    <vCard:Given>Bela</vCard:Given>
+    <vCard:Family>Novak</vCard:Family>
+  </rdf:Description>
+</rdf:RDF>
+</model>

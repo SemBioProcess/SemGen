@@ -1,0 +1,561 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This CellML file was generated on 11/16/2010 at 2:06:11 at PM using:
+
+COR (0.9.31.1409)
+Copyright 2002-2010 Dr Alan Garny
+http://cor.physiol.ox.ac.uk/ - cor@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.cellml.org/
+-->
+<model name="goldbeter_2007" cmeta:id="goldbeter_2007" xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#">
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>Sharp Developmental Thresholds Defined Through Bistability By Antagonistic Gradients of Retinoic Acid and FGF Signaling</title>
+				<author>
+					<firstname>Camille</firstname>
+					<surname>Nicodemus</surname>
+					<affiliation>
+						<shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<section id="sec_status">
+				<title>Model Status</title>
+				<para>
+            This CellML model runs in OpenCell and COR. It was created from equations [1] to [5], and [12] and [13]. The model parameters were taken from the caption of Figure 3. The CellML model cannot recreate the figures from the paper due to constant values for the parameters K_I and K_A. The units have been checked and they are consistent.
+          </para>
+			</section>
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>
+ABSTRACT: The establishment of thresholds along morphogen gradients in the embryo is poorly understood. Using mathematical modeling, we show that mutually inhibitory gradients can generate and position sharp morphogen thresholds in the embryonic space. Taking vertebrate segmentation as a paradigm, we demonstrate that the antagonistic gradients of retinoic acid (RA) and Fibroblast Growth Factor (FGF) along the presomitic mesoderm (PSM) may lead to the coexistence of two stable steady states. Here, we propose that this bistability is associated with abrupt switches in the levels of FGF and RA signaling, which permit the synchronized activation of segmentation genes, such as mesp2, in successive cohorts of PSM cells in response to the segmentation clock, thereby defining the future segments. Bistability resulting from mutual inhibition of RA and FGF provides a molecular mechanism for the all-or-none transitions assumed in the "clock and wavefront" somitogenesis model. Given that mutually antagonistic signaling gradients are common in development, such bistable switches could represent an important principle underlying embryonic patterning.
+</para>
+				<para>
+The original paper reference is cited below:
+</para>
+
+<para>
+Sharp developmental thresholds defined through bistability by antagonistic gradients of retinoic acid and FGF signaling. Goldbeter A, Gonze D, Pourquie O. 2007, <emphasis>Developmental Dynamics</emphasis>, 236, 1495-1508.  <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/17497689?dopt=Abstract">PubMed ID: 17497689</ulink>
+</para>
+				
+<informalfigure float="0" id="fig_reaction diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>reaction diagram</title>
+    </objectinfo>
+    <imagedata fileref="goldbeter_2007.png"/>
+  </imageobject>
+</mediaobject>
+<caption>Scheme of the regulatory interactions between RA and FGF signaling. Synthesis of RA is catalyzed by the enzyme RALDH2, while RA is hydrolyzed by the enzyme CYP26. The inhibitory effect exerted on RA by FGF arises from the induction of cyp26 expression by FGF. The inhibition exerted by RA on FGF occurs through impeding the rate of fgf8 mRNA translation. As shown by the model built according to this regulatory scheme, bistability readily arises from the mutual inhibition between RA and FGF.</caption>
+</informalfigure>
+				
+			</sect1>
+		</article>
+	</documentation>   <units name="nanomolar">
+      <unit units="mole" prefix="nano"/>
+      <unit units="litre" exponent="-1"/>
+   </units>
+   <units name="minute">
+      <unit units="second" multiplier="60"/>
+   </units>
+   <units name="flux">
+      <unit units="nanomolar"/>
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units name="first_order_rate_constant">
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units name="second_order_rate_constant">
+      <unit units="nanomolar" exponent="-1"/>
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <component name="environment">
+      <variable name="time" units="minute" public_interface="out"/>
+   </component>
+   <component name="RA">
+      <variable name="RA" units="nanomolar" initial_value="0.1" public_interface="out"/>
+      <variable name="v_s1" units="flux" public_interface="in"/>
+      <variable name="k_d1" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="C" units="nanomolar" initial_value="0.1"/>
+      <variable name="k_d5" units="first_order_rate_constant" initial_value="0"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>RA</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <ci>v_s1</ci>
+                  <apply>
+                     <times/>
+                     <ci>k_d1</ci>
+                     <ci>C</ci>
+                     <ci>RA</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_d5</ci>
+                  <ci>RA</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="M_C">
+      <variable name="M_C" units="nanomolar" initial_value="0.1" public_interface="out"/>
+      <variable name="V_0" units="flux" initial_value="0.365"/>
+      <variable name="V_sC" units="flux" initial_value="7.1"/>
+      <variable name="F" units="nanomolar" public_interface="in"/>
+      <variable name="n" units="dimensionless" initial_value="2"/>
+      <variable name="K_A" units="nanomolar" initial_value="0.2"/>
+      <variable name="k_d3" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>M_C</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <ci>V_0</ci>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>V_sC</ci>
+                        <apply>
+                           <power/>
+                           <ci>F</ci>
+                           <ci>n</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <power/>
+                           <ci>K_A</ci>
+                           <ci>n</ci>
+                        </apply>
+                        <apply>
+                           <power/>
+                           <ci>F</ci>
+                           <ci>n</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_d3</ci>
+                  <ci>M_C</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="C">
+      <variable name="C" units="nanomolar" initial_value="0.1"/>
+      <variable name="k_s2" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="M_C" units="nanomolar" public_interface="in"/>
+      <variable name="k_d2" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>C</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k_s2</ci>
+                  <ci>M_C</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_d2</ci>
+                  <ci>C</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="F">
+      <variable name="F" units="nanomolar" initial_value="0.0001" public_interface="out"/>
+      <variable name="k_s3" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="M_F" units="nanomolar" public_interface="in"/>
+      <variable name="m" units="dimensionless" initial_value="2"/>
+      <variable name="K_I" units="nanomolar" initial_value="0.2"/>
+      <variable name="RA" units="nanomolar" public_interface="in"/>
+      <variable name="k_d4" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>F</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>k_s3</ci>
+                     <ci>M_F</ci>
+                     <apply>
+                        <power/>
+                        <ci>K_I</ci>
+                        <ci>m</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <power/>
+                        <ci>K_I</ci>
+                        <ci>m</ci>
+                     </apply>
+                     <apply>
+                        <power/>
+                        <ci>RA</ci>
+                        <ci>m</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_d4</ci>
+                  <ci>F</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="v_s1">
+      <variable name="v_s1" units="flux" public_interface="out"/>
+      <variable name="k_s1" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="RALDH2_0" units="nanomolar" public_interface="in"/>
+      <variable name="x" units="dimensionless" public_interface="in"/>
+      <variable name="L" units="dimensionless" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>v_s1</ci>
+            <apply>
+               <times/>
+               <ci>k_s1</ci>
+               <ci>RALDH2_0</ci>
+               <apply>
+                  <minus/>
+                  <cn cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <divide/>
+                     <ci>x</ci>
+                     <ci>L</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="M_F">
+      <variable name="M_F" units="nanomolar" public_interface="out"/>
+      <variable name="M_0" units="nanomolar" public_interface="in"/>
+      <variable name="x" units="dimensionless" public_interface="in"/>
+      <variable name="L" units="dimensionless" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>M_F</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>M_0</ci>
+                  <ci>x</ci>
+               </apply>
+               <ci>L</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="alpha_1">
+      <variable name="alpha_1" units="dimensionless" public_interface="out"/>
+      <variable name="RA" units="nanomolar" public_interface="in"/>
+      <variable name="K_r1" units="nanomolar" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>alpha_1</ci>
+            <apply>
+               <divide/>
+               <ci>RA</ci>
+               <apply>
+                  <plus/>
+                  <ci>RA</ci>
+                  <ci>K_r1</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="alpha_2">
+      <variable name="alpha_2" units="dimensionless" public_interface="out"/>
+      <variable name="F" units="nanomolar" public_interface="in"/>
+      <variable name="K_r2" units="nanomolar" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>alpha_2</ci>
+            <apply>
+               <divide/>
+               <ci>F</ci>
+               <apply>
+                  <plus/>
+                  <ci>F</ci>
+                  <ci>K_r2</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="rho">
+      <variable name="rho" units="dimensionless" public_interface="out"/>
+      <variable name="alpha_1" units="dimensionless" public_interface="in"/>
+      <variable name="alpha_2" units="dimensionless" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>rho</ci>
+            <apply>
+               <divide/>
+               <ci>alpha_2</ci>
+               <ci>alpha_1</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="model_parameters">
+      <variable name="M_0" units="nanomolar" initial_value="5" public_interface="out"/>
+      <variable name="x" units="dimensionless" initial_value="15" public_interface="out"/>
+      <variable name="L" units="dimensionless" initial_value="50" public_interface="out"/>
+      <variable name="k_s1" units="first_order_rate_constant" initial_value="1" public_interface="out"/>
+      <variable name="k_s2" units="first_order_rate_constant" initial_value="1" public_interface="out"/>
+      <variable name="k_s3" units="first_order_rate_constant" initial_value="1" public_interface="out"/>
+      <variable name="k_d3" units="first_order_rate_constant" initial_value="1" public_interface="out"/>
+      <variable name="k_d4" units="first_order_rate_constant" initial_value="1" public_interface="out"/>
+      <variable name="k_d1" units="second_order_rate_constant" initial_value="1" public_interface="out"/>
+      <variable name="k_d2" units="first_order_rate_constant" initial_value="0.28" public_interface="out"/>
+      <variable name="RALDH2_0" units="nanomolar" initial_value="7.1" public_interface="out"/>
+      <variable name="K_r1" units="nanomolar" initial_value="1" public_interface="out"/>
+      <variable name="K_r2" units="nanomolar" initial_value="1" public_interface="out"/>
+   </component>
+   <connection>
+      <map_components component_1="environment" component_2="RA"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="M_C"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="C"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="F"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="RA" component_2="F"/>
+      <map_variables variable_1="RA" variable_2="RA"/>
+   </connection>
+   <connection>
+      <map_components component_1="M_C" component_2="C"/>
+      <map_variables variable_1="M_C" variable_2="M_C"/>
+   </connection>
+   <connection>
+      <map_components component_1="M_C" component_2="F"/>
+      <map_variables variable_1="F" variable_2="F"/>
+   </connection>
+   <connection>
+      <map_components component_1="rho" component_2="alpha_1"/>
+      <map_variables variable_1="alpha_1" variable_2="alpha_1"/>
+   </connection>
+   <connection>
+      <map_components component_1="rho" component_2="alpha_2"/>
+      <map_variables variable_1="alpha_2" variable_2="alpha_2"/>
+   </connection>
+   <connection>
+      <map_components component_1="alpha_1" component_2="RA"/>
+      <map_variables variable_1="RA" variable_2="RA"/>
+   </connection>
+   <connection>
+      <map_components component_1="alpha_2" component_2="F"/>
+      <map_variables variable_1="F" variable_2="F"/>
+   </connection>
+   <connection>
+      <map_components component_1="v_s1" component_2="model_parameters"/>
+      <map_variables variable_1="k_s1" variable_2="k_s1"/>
+      <map_variables variable_1="RALDH2_0" variable_2="RALDH2_0"/>
+      <map_variables variable_1="x" variable_2="x"/>
+      <map_variables variable_1="L" variable_2="L"/>
+   </connection>
+   <connection>
+      <map_components component_1="M_F" component_2="model_parameters"/>
+      <map_variables variable_1="x" variable_2="x"/>
+      <map_variables variable_1="L" variable_2="L"/>
+      <map_variables variable_1="M_0" variable_2="M_0"/>
+   </connection>
+   <connection>
+      <map_components component_1="RA" component_2="v_s1"/>
+      <map_variables variable_1="v_s1" variable_2="v_s1"/>
+   </connection>
+   <connection>
+      <map_components component_1="F" component_2="M_F"/>
+      <map_variables variable_1="M_F" variable_2="M_F"/>
+   </connection>
+   <connection>
+      <map_components component_1="alpha_1" component_2="model_parameters"/>
+      <map_variables variable_1="K_r1" variable_2="K_r1"/>
+   </connection>
+   <connection>
+      <map_components component_1="alpha_2" component_2="model_parameters"/>
+      <map_variables variable_1="K_r2" variable_2="K_r2"/>
+   </connection>
+   <connection>
+      <map_components component_1="RA" component_2="model_parameters"/>
+      <map_variables variable_1="k_d1" variable_2="k_d1"/>
+   </connection>
+   <connection>
+      <map_components component_1="M_C" component_2="model_parameters"/>
+      <map_variables variable_1="k_d3" variable_2="k_d3"/>
+   </connection>
+   <connection>
+      <map_components component_1="C" component_2="model_parameters"/>
+      <map_variables variable_1="k_s2" variable_2="k_s2"/>
+      <map_variables variable_1="k_d2" variable_2="k_d2"/>
+   </connection>
+   <connection>
+      <map_components component_1="F" component_2="model_parameters"/>
+      <map_variables variable_1="k_s3" variable_2="k_s3"/>
+      <map_variables variable_1="k_d4" variable_2="k_d4"/>
+   </connection>
+   
+ <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
+    
+	<rdf:Description rdf:about="">
+      <dc:creator rdf:parseType="Resource">
+        <vCard:N rdf:parseType="Resource">
+          <vCard:Family>Nicodemus</vCard:Family>
+          <vCard:Given>Camille</vCard:Given>
+		  <vCard:Other>Emily</vCard:Other>
+        </vCard:N>
+        <vCard:EMAIL rdf:parseType="Resource">
+          <rdf:value>cnic041@aucklanduni.ac.nz</rdf:value>
+          <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+        </vCard:EMAIL>
+        <vCard:ORG rdf:parseType="Resource">
+          <vCard:Orgname>The University of Auckland</vCard:Orgname>
+          <vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+        </vCard:ORG>
+      </dc:creator>
+  
+      <dcterms:created rdf:parseType="Resource">
+        <dcterms:W3CDTF>2010-11-16</dcterms:W3CDTF>
+      </dcterms:created>
+    </rdf:Description>
+    
+    <rdf:Description rdf:about="#goldbeter_2007">
+   
+      <bqs:reference rdf:parseType="Resource">
+        <dc:subject rdf:parseType="Resource">
+          <bqs:subject_type>keyword</bqs:subject_type>
+          <rdf:value>
+            <rdf:Bag>
+              <rdf:li>signal transduction</rdf:li>
+			  <rdf:li>bistability</rdf:li>
+			  <rdf:li>FGF</rdf:li>
+            </rdf:Bag>
+          </rdf:value>
+        </dc:subject>
+      </bqs:reference>
+
+      <bqs:reference rdf:parseType="Resource">
+        <bqs:Pubmed_id>17497689</bqs:Pubmed_id>
+        <bqs:JournalArticle rdf:parseType="Resource">
+          <dc:creator>
+            <rdf:Seq>
+              <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Goldbeter</vCard:Family>
+                    <vCard:Given>A</vCard:Given>
+                  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+			  <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Gonze</vCard:Family>
+                    <vCard:Given>D</vCard:Given>
+				  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+              <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Pourquie</vCard:Family>
+                    <vCard:Given>O</vCard:Given>
+                  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+            </rdf:Seq>
+          </dc:creator>
+          <dc:title>
+            Sharp Developmental Thresholds Defined Through Bistability By Antagonistic Gradients of Retinoic Acid and FGF Signaling
+          </dc:title>
+          <dcterms:issued rdf:parseType="Resource">
+            <dcterms:W3CDTF>2007-06</dcterms:W3CDTF>
+          </dcterms:issued>
+          <bqs:Journal rdf:parseType="Resource">
+            <dc:title>Developmental Dynamics</dc:title>
+          </bqs:Journal>
+		  <bqs:volume>236</bqs:volume>
+          <bqs:first_page>1495</bqs:first_page>
+          <bqs:last_page>1508</bqs:last_page>
+        </bqs:JournalArticle>
+      </bqs:reference>
+    </rdf:Description>
+  </rdf:RDF>   
+</model>

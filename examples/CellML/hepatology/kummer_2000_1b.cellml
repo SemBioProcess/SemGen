@@ -1,0 +1,476 @@
+<?xml version="1.0"?>
+<!--
+This CellML file was generated on 7/20/2011 at 1:37:41 at PM using:
+
+COR (0.9.31.1409)
+Copyright 2002-2011 Dr Alan Garny
+http://cor.physiol.ox.ac.uk/ - cor@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.cellml.org/
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" cmeta:id="Kummer_2000b" name="Kummer_2000b">
+
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:Description rdf:about="">
+      <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource">
+        <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+          <vCard:Family>Hanne</vCard:Family>
+          <vCard:Given>Nielsen</vCard:Given>
+        </vCard:N>
+        <vCard:EMAIL xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+          <rdf:value>chnie010@aucklanduni.ac.nz</rdf:value>
+          <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+        </vCard:EMAIL>
+        <vCard:ORG xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+          <vCard:Orgname>The University of Auckland</vCard:Orgname>
+          <vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+        </vCard:ORG>
+      </dc:creator>
+  
+      <dcterms:created xmlns:dcterms="http://purl.org/dc/terms/" rdf:parseType="Resource">
+        <dcterms:W3CDTF>2011-07-19</dcterms:W3CDTF>
+      </dcterms:created>
+    </rdf:Description>
+    
+    <rdf:Description rdf:about="#kummer_2000">
+      
+	  <cmeta:species>Human</cmeta:species>
+	  
+      <cmeta:bio_entity>Liver</cmeta:bio_entity>
+	  <cmeta:bio_entity>hepatocyte</cmeta:bio_entity>
+      
+      <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource">
+        <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:parseType="Resource">
+          <bqs:subject_type>keyword</bqs:subject_type>
+          <rdf:value>
+            <rdf:Bag>
+              <rdf:li>liver</rdf:li>
+			  <rdf:li>hepatology</rdf:li>
+			  <rdf:li>hepatocyte</rdf:li>
+            </rdf:Bag>
+          </rdf:value>
+        </dc:subject>
+      </bqs:reference>
+
+      <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:parseType="Resource">
+        <bqs:Pubmed_id>10968983</bqs:Pubmed_id>
+        <bqs:JournalArticle rdf:parseType="Resource">
+          <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <rdf:Seq>
+              <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+                    <vCard:Family>Kummer</vCard:Family>
+                    <vCard:Given>U</vCard:Given>
+                  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+			  <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+                    <vCard:Family>Olsen</vCard:Family>
+                    <vCard:Given>L</vCard:Given>
+					<vCard:Other>F</vCard:Other>
+				  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+              <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+                    <vCard:Family>Dixon</vCard:Family>
+                    <vCard:Given>C</vCard:Given>
+					<vCard:Other>J</vCard:Other>
+                  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+			  <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+                    <vCard:Family>Green</vCard:Family>
+                    <vCard:Given>A</vCard:Given>
+					<vCard:Other>K</vCard:Other>
+				  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+			  <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+                    <vCard:Family>Bornberg-Bauer</vCard:Family>
+                    <vCard:Given>E</vCard:Given>
+				  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+			  <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:parseType="Resource">
+                    <vCard:Family>Baier</vCard:Family>
+                    <vCard:Given>G</vCard:Given>
+				  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+            </rdf:Seq>
+          </dc:creator>
+          <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">
+            Switching from Simple to Complex Oscillations in Calcium Signaling
+          </dc:title>
+          <dcterms:issued xmlns:dcterms="http://purl.org/dc/terms/" rdf:parseType="Resource">
+            <dcterms:W3CDTF>2009-07-08</dcterms:W3CDTF>
+          </dcterms:issued>
+          <bqs:Journal rdf:parseType="Resource">
+            <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Biophysical Journal</dc:title>
+          </bqs:Journal>
+		  <bqs:volume>79</bqs:volume>
+          <bqs:first_page>1188</bqs:first_page>
+          <bqs:last_page>1195</bqs:last_page>
+        </bqs:JournalArticle>
+      </bqs:reference>
+    </rdf:Description>
+  </rdf:RDF>
+
+
+
+         <units name="micromole">
+      <unit prefix="micro" units="mole"/>
+   </units>
+   <units name="micromolar">
+      <unit units="micromole"/>
+      <unit exponent="-1" units="litre"/>
+   </units>
+   <component name="environment">
+      <variable cmeta:id="environment_time" name="time" public_interface="out" units="second"/>
+   </component>
+   <component name="a">
+      <variable cmeta:id="a_a" initial_value="0.01" name="a" public_interface="out" units="micromolar"/>
+      <variable name="k1" public_interface="in" units="dimensionless"/>
+      <variable name="k3" public_interface="in" units="dimensionless"/>
+      <variable name="b" public_interface="in" units="micromolar"/>
+      <variable name="c" public_interface="in" units="micromolar"/>
+      <variable name="K4" public_interface="in" units="dimensionless"/>
+      <variable name="k5" public_interface="in" units="dimensionless"/>
+      <variable name="K6" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>a</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <ci>k1</ci>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>k3</ci>
+                        <ci>a</ci>
+                        <ci>b</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci>a</ci>
+                        <ci>K4</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>k5</ci>
+                     <ci>a</ci>
+                     <ci>c</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>a</ci>
+                     <ci>K6</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="b">
+      <variable cmeta:id="b_b" initial_value="0.01" name="b" public_interface="out" units="micromolar"/>
+      <variable name="k7" public_interface="in" units="dimensionless"/>
+      <variable name="a" public_interface="in" units="micromolar"/>
+      <variable name="k8" public_interface="in" units="dimensionless"/>
+      <variable name="K9" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>b</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k7</ci>
+                  <ci>a</ci>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>k8</ci>
+                     <ci>b</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>b</ci>
+                     <ci>K9</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c">
+      <variable cmeta:id="c_c" initial_value="0.01" name="c" public_interface="out" units="micromolar"/>
+      <variable name="k10" public_interface="in" units="dimensionless"/>
+      <variable name="a" public_interface="in" units="micromolar"/>
+      <variable name="b" public_interface="in" units="micromolar"/>
+      <variable name="d" public_interface="in" units="micromolar"/>
+      <variable name="K11" public_interface="in" units="dimensionless"/>
+      <variable name="k12" public_interface="in" units="dimensionless"/>
+      <variable name="k13" public_interface="in" units="dimensionless"/>
+      <variable name="k14" public_interface="in" units="dimensionless"/>
+      <variable name="K15" public_interface="in" units="dimensionless"/>
+      <variable name="k16" public_interface="in" units="dimensionless"/>
+      <variable name="K17" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <ci>k10</ci>
+                           <ci>c</ci>
+                           <ci>b</ci>
+                           <ci>d</ci>
+                        </apply>
+                        <apply>
+                           <plus/>
+                           <ci>d</ci>
+                           <ci>K11</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k12</ci>
+                        <ci>b</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k13</ci>
+                        <ci>a</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>k14</ci>
+                        <ci>c</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci>c</ci>
+                        <ci>K15</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>k16</ci>
+                     <ci>c</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>c</ci>
+                     <ci>K17</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="d">
+      <variable cmeta:id="d_d" initial_value="20" name="d" public_interface="out" units="micromolar"/>
+      <variable name="k10" public_interface="in" units="dimensionless"/>
+      <variable name="c" public_interface="in" units="micromolar"/>
+      <variable name="b" public_interface="in" units="micromolar"/>
+      <variable name="K11" public_interface="in" units="dimensionless"/>
+      <variable name="k16" public_interface="in" units="dimensionless"/>
+      <variable name="K17" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>d</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <minus/>
+                        <ci>k10</ci>
+                     </apply>
+                     <ci>c</ci>
+                     <ci>b</ci>
+                     <ci>d</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>d</ci>
+                     <ci>K11</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>k16</ci>
+                     <ci>c</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>c</ci>
+                     <ci>K17</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="model_parameters">
+      <variable initial_value="1.5" name="k1" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.00001" name="k3" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.788" name="K4" public_interface="out" units="dimensionless"/>
+      <variable initial_value="1.45" name="k5" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.18" name="K6" public_interface="out" units="dimensionless"/>
+      <variable initial_value="5.82" name="k7" public_interface="out" units="dimensionless"/>
+      <variable initial_value="32.24" name="k8" public_interface="out" units="dimensionless"/>
+      <variable initial_value="29.09" name="K9" public_interface="out" units="dimensionless"/>
+      <variable initial_value="5" name="k10" public_interface="out" units="dimensionless"/>
+      <variable initial_value="2.67" name="K11" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.7" name="k12" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.12" name="k13" public_interface="out" units="dimensionless"/>
+      <variable initial_value="153" name="k14" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.16" name="K15" public_interface="out" units="dimensionless"/>
+      <variable initial_value="4.85" name="k16" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.05" name="K17" public_interface="out" units="dimensionless"/>
+   </component>
+   <connection>
+      <map_components component_1="environment" component_2="a"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="b"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="c"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="environment" component_2="d"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="model_parameters" component_2="a"/>
+      <map_variables variable_1="k1" variable_2="k1"/>
+      <map_variables variable_1="k3" variable_2="k3"/>
+      <map_variables variable_1="K4" variable_2="K4"/>
+      <map_variables variable_1="k5" variable_2="k5"/>
+      <map_variables variable_1="K6" variable_2="K6"/>
+   </connection>
+   <connection>
+      <map_components component_1="model_parameters" component_2="b"/>
+      <map_variables variable_1="k7" variable_2="k7"/>
+      <map_variables variable_1="k8" variable_2="k8"/>
+      <map_variables variable_1="K9" variable_2="K9"/>
+   </connection>
+   <connection>
+      <map_components component_1="model_parameters" component_2="c"/>
+      <map_variables variable_1="k10" variable_2="k10"/>
+      <map_variables variable_1="K11" variable_2="K11"/>
+      <map_variables variable_1="k12" variable_2="k12"/>
+      <map_variables variable_1="k13" variable_2="k13"/>
+      <map_variables variable_1="k14" variable_2="k14"/>
+      <map_variables variable_1="K15" variable_2="K15"/>
+      <map_variables variable_1="k16" variable_2="k16"/>
+      <map_variables variable_1="K17" variable_2="K17"/>
+   </connection>
+   <connection>
+      <map_components component_1="model_parameters" component_2="d"/>
+      <map_variables variable_1="k10" variable_2="k10"/>
+      <map_variables variable_1="K11" variable_2="K11"/>
+      <map_variables variable_1="k16" variable_2="k16"/>
+      <map_variables variable_1="K17" variable_2="K17"/>
+   </connection>
+   <connection>
+      <map_components component_1="a" component_2="b"/>
+      <map_variables variable_1="a" variable_2="a"/>
+      <map_variables variable_1="b" variable_2="b"/>
+   </connection>
+   <connection>
+      <map_components component_1="a" component_2="c"/>
+      <map_variables variable_1="a" variable_2="a"/>
+      <map_variables variable_1="c" variable_2="c"/>
+   </connection>
+   <connection>
+      <map_components component_1="b" component_2="c"/>
+      <map_variables variable_1="b" variable_2="b"/>
+   </connection>
+   <connection>
+      <map_components component_1="b" component_2="d"/>
+      <map_variables variable_1="b" variable_2="b"/>
+   </connection>
+   <connection>
+      <map_components component_1="c" component_2="d"/>
+      <map_variables variable_1="c" variable_2="c"/>
+      <map_variables variable_1="d" variable_2="d"/>
+   </connection>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:nodeID="n1"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Olsen</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">L</Given><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">F</Other></rdf:Description><rdf:Description rdf:nodeID="n2"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n3"/></N></rdf:Description><rdf:Description rdf:nodeID="n4"><endingValue xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">1350</endingValue><startingValue xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">1200</startingValue></rdf:Description><rdf:Description rdf:nodeID="n5"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n6"/></Person></rdf:Description><rdf:Description rdf:about="#kummer_2000b"><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n7"/></reference><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n8"/></reference><cmeta:species xml:lang="en">Human</cmeta:species><cmeta:bio_entity xml:lang="en">Liver</cmeta:bio_entity><cmeta:bio_entity xml:lang="en">hepatocyte</cmeta:bio_entity></rdf:Description><rdf:Description rdf:nodeID="n9"><rdf:rest><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/></rdf:rest><rdf:first><rdf:Description rdf:nodeID="n4"/></rdf:first></rdf:Description><rdf:Description rdf:nodeID="n10"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Bornberg-Bauer</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">E</Given></rdf:Description><rdf:Description rdf:nodeID="n8"><JournalArticle xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n11"/></JournalArticle><Pubmed_id xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">10968983</Pubmed_id></rdf:Description><rdf:Description rdf:nodeID="n12"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n1"/></N></rdf:Description><rdf:Description rdf:nodeID="n13"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Kummer</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">U</Given></rdf:Description><rdf:Description rdf:nodeID="n3"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Baier</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">G</Given></rdf:Description><rdf:Description rdf:nodeID="n14"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Green</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">A</Given><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">K</Other></rdf:Description><rdf:Description rdf:nodeID="n15"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n2"/></Person></rdf:Description><rdf:Description rdf:nodeID="n11"><last_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">1195</last_page><issued xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:nodeID="n16"/></issued><Journal xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n17"/></Journal><volume xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">79</volume><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n18"/></creator><first_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">1188</first_page><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">
+            Switching from Simple to Complex Oscillations in Calcium Signaling
+          </title></rdf:Description><rdf:Description rdf:nodeID="n19"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Dixon</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">C</Given><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">J</Other></rdf:Description><rdf:Description rdf:nodeID="n20"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n21"/></Person></rdf:Description><rdf:Description rdf:nodeID="n22"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n10"/></N></rdf:Description><rdf:Description rdf:nodeID="n23"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n12"/></Person></rdf:Description><rdf:Description rdf:nodeID="n21"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n13"/></N></rdf:Description><rdf:Description rdf:nodeID="n24"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Hanne</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Nielsen</Given></rdf:Description><rdf:Description rdf:nodeID="n25"><boundIntervals xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n9"/></boundIntervals></rdf:Description><rdf:Description rdf:nodeID="n6"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n14"/></N></rdf:Description><rdf:Description rdf:nodeID="n26"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n22"/></Person></rdf:Description><rdf:Description rdf:nodeID="n27"><Orgname xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">The University of Auckland</Orgname><Orgunit xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Auckland Bioengineering Institute</Orgunit></rdf:Description><rdf:Description rdf:nodeID="n7"><subject xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n28"/></subject></rdf:Description><rdf:Description rdf:nodeID="n17"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">Biophysical Journal</title></rdf:Description><rdf:Description rdf:nodeID="n18"><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq"/></rdf:type><rdf:_1><rdf:Description rdf:nodeID="n20"/></rdf:_1><rdf:_3><rdf:Description rdf:nodeID="n29"/></rdf:_3><rdf:_4><rdf:Description rdf:nodeID="n5"/></rdf:_4><rdf:_2><rdf:Description rdf:nodeID="n23"/></rdf:_2><rdf:_5><rdf:Description rdf:nodeID="n26"/></rdf:_5><rdf:_6><rdf:Description rdf:nodeID="n15"/></rdf:_6></rdf:Description><rdf:Description rdf:nodeID="n30"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2011-07-19</W3CDTF></rdf:Description><rdf:Description rdf:nodeID="n29"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n31"/></Person></rdf:Description><rdf:Description rdf:nodeID="n16"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2009-07-08</W3CDTF></rdf:Description><rdf:Description rdf:nodeID="n32"><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag"/></rdf:type><rdf:_1 xml:lang="en">liver</rdf:_1><rdf:_3 xml:lang="en">hepatocyte</rdf:_3><rdf:_2 xml:lang="en">hepatology</rdf:_2></rdf:Description><rdf:Description rdf:nodeID="n28"><rdf:value><rdf:Description rdf:nodeID="n32"/></rdf:value><subject_type xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">keyword</subject_type></rdf:Description><rdf:Description rdf:nodeID="n33"><rdf:type><rdf:Description rdf:about="http://imc.org/vCard/3.0#internet"/></rdf:type><rdf:value xml:lang="en">hnie010@aucklanduni.ac.nz</rdf:value></rdf:Description><rdf:Description rdf:nodeID="n34"><EMAIL xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n33"/></EMAIL><ORG xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n27"/></ORG><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n24"/></N></rdf:Description><rdf:Description rdf:about="#Kummer_2000b"><simulation xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n25"/></simulation></rdf:Description><rdf:Description rdf:nodeID="n31"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n19"/></N></rdf:Description><rdf:Description rdf:about=""><created xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:nodeID="n30"/></created><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n34"/></creator></rdf:Description></rdf:RDF></model>

@@ -1,0 +1,963 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--  FILE :  fink_model_2000.xml
+
+CREATED :  29th July 2002
+
+LAST MODIFIED : 11th August 2003
+
+AUTHOR :  Catherine Lloyd
+          Bioengineering Institute
+          The University of Auckland
+          
+MODEL STATUS :  This model conforms to the CellML 1.0 Specification released on
+10th August 2001, and the 16/1/02 CellML Metadata 1.0 Specification.
+
+DESCRIPTION :  This file contains a CellML description of Fink et al's 2000 model of calcium waves in differentiated neuroblastoma cells.
+
+CHANGES:  
+  09/04/2003 - AAC - Added publication date information.  
+  04/06/2003 - CML - Fixed MathML in a few components.
+  11/08/2003 - CML - Changed equations.
+  
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" name="fink_slepchenko_moraru_watras_schaff_loew_2000_version01" cmeta:id="fink_slepchenko_moraru_watras_schaff_loew_2000_version01">
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Calcium Waves in Differentiated Neuroblastoma Cells</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Bioengineering Institute, University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+      This model is a lumped parameter ODE model produced by taking the original PDE model and stripping out all spatial variation; this gives a spatially homogeneous model which doesn't take into account diffusion.
+    </para>
+    <para>
+      This model validates with the validation service from the CellML API with no errors or warnings, and has been successfully simulated with the CellML Integration Service using the IDA and CVODE Adams-Moulton order 1-12 integrators. Due to the change to a lumped parameter formulation, the results of this model are not expected to be comparable to the published paper, nor to any biological reality, and so the results have not been checked against any other source.
+    </para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+Intracellular calcium dynamics are frequently the subject of theoretical mathematical models (<ulink url="${HTML_EXMPL_IP3_CA2+_MODEL}">De Young and Keizer, 1992</ulink>, <ulink url="${HTML_EXMPL_LI_MODEL}">Li and Rinzel, 1994</ulink>, <ulink url="${HTML_EXMPL_KEIZER_MODEL}">Keizer and Levine, 1996</ulink>, <ulink url="${HTML_EXMPL_JRW_MODEL}">Jafri-Rice-Winslow, 1998</ulink>, and <ulink url="${HTML_EXMPL_SNYDER_MODEL}">Snyder et al., 2000</ulink> are just a few examples of calcium dynamic models that have been coded up into CellML).  The physical and chemical laws of calcium waves and oscillations can be expressed in terms of differential equations describing reaction kinetics, fluxes through membranes, and diffusion.  
+</para>
+
+<para> 
+In this study, Charles C. Fink <emphasis>et al</emphasis>. produce an image-based model of a intracellular calcium wave in differentiated neuroblastoma cells (see <xref linkend="fig_cell_diagram"/> below).  One important conclusion from their analysis is that neuronal morphology plays a key role in controlling and shaping the inositol-1,4,5-triphosphate (IP<subscript>3</subscript>) dynamics that underlie the calcium wave.  The model is comprised of several components including: 
+<itemizedlist>
+  <listitem>
+              <para>
+                <emphasis role="bold">IP<subscript>3</subscript> dynamics</emphasis>
+  -
+ which account for IP<subscript>3</subscript> synthesis at the plasma membrane, diffusion into the cytosol, and its degradation.</para>
+            </listitem>
+  <listitem>
+              <para>
+                <emphasis role="bold">Calcium dynamics</emphasis>
+  -
+ which calculate the changing intracellular calcium concentration.</para>
+            </listitem>
+  <listitem>
+              <para>
+                <emphasis role="bold">Channel kinetics</emphasis>
+  -
+ to describe calcium release from the endoplasmic reticulum (ER) into the cytosol through an IP<subscript>3</subscript>-sensitive channel.</para>
+            </listitem> 
+  <listitem>
+              <para>
+                <emphasis role="bold">SERCA pump kinetics</emphasis>
+  -
+ to describe calcium uptake into the ER via the sarcoplasmic endoplasmic reticulum ATPase (SERCA) pumps.</para>
+            </listitem> <listitem>
+              <para>
+                <emphasis role="bold">Leak</emphasis>
+  -
+ which models calcium leak from the ER to the cytosol.</para>
+            </listitem> and
+  <listitem>
+              <para>
+                <emphasis role="bold">Calcium buffering</emphasis>
+  -
+ with endogenous buffers.</para>
+            </listitem>
+</itemizedlist>    
+</para>
+
+<para>   
+Their model is based on experimental data.  The binding of bradykinin (BK) to its receptor initiates a G-protein cascade, activation of phospholipase C, and degradation of phosphatidylinositol bisphosphate (PIP<subscript>2</subscript>) to IP<subscript>3</subscript>.  IP<subscript>3</subscript> then diffuses through the cytosol from the plasma membrane to the ER where it activates Ca<superscript>2+</superscript> release through the IP<subscript>3</subscript>R channel.  The concentration of cytosolic Ca<superscript>2+</superscript> rises, and is subsequently reduced as Ca<superscript>2+</superscript> binds to calcium buffers and is pumped back into the ER through the SERCA.  This Ca<superscript>2+</superscript> wave was captured by Fink <emphasis>et al</emphasis>. through the use of fluorescent microscopy.  The model of this process was assembled using the <emphasis>Virtual Cell</emphasis>, a computational system for integrating experimentally recorded image, biochemical and electrophysiological data.  The model was tested by comparing several simulation results with the real experimental data, and Fink <emphasis>et al</emphasis>. found that there was good spatiotemporal agreement between the two data sets.
+</para>
+
+<para> 
+It should be noted that the following CellML description (for the raw CellML description of the model, see <xref linkend="sec_download_this_model"/> below) is not quite true to the mathematical model published in the original paper (referenced below).  Currently CellML is unable to handle spatial elements, but this will hopefully be possible in the near future with the development of FieldML, an XML based language for spatially variable models.  This is important, as the relative positions of the cellular components such as receptors, pumps, channels and enzymes will determine the length of diffusion pathways and therefore the rate of reactions.
+</para>
+
+<para>
+<ulink url="http://www.biophysj.org/cgi/content/abstract/79/1/163">An Image-Based Model of Calcium Waves in Differentiated Neuroblastoma Cells</ulink>, Charles C. Fink, Boris Slepchenko, Ion I. Moraru, James Watras, James C. Schaff, and Leslie M. Loew, 2000, <ulink url="http://www.biophysj.org/">
+            <emphasis>Biophysical Journal</emphasis>
+          </ulink>, 79, 163-183. (<ulink url="http://www.biophysj.org/cgi/content/full/79/1/163">Full text</ulink> and <ulink url="http://www.biophysj.org/cgi/reprint/79/1/163.pdf">PDF versions</ulink> of the article are available to subscribers on the Biophysical Journal website.)  <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;list_uids=10866945&amp;dopt=Abstract">PubMed ID: 10866945</ulink> 
+</para>
+
+<informalfigure float="0" id="fig_cell_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>Schematic diagram of model</title>
+    </objectinfo>
+    <imagedata fileref="fink_2000.png"/>
+  </imageobject>
+</mediaobject>
+</informalfigure>
+
+</sect1>
+</article>
+</documentation>
+  
+  
+  <!--
+    Below, we define some additional units for association with variables and
+    constants within the model. The identifiers are fairly self-explanatory.
+  -->
+  
+  <units name="micromolar">
+    <unit units="mole" prefix="micro"/>
+    <unit units="litre" exponent="-1"/>
+  </units>
+  
+  <units name="micrometre">
+    <unit units="metre" prefix="micro"/>
+  </units>
+
+  <units name="per_micrometre">
+    <unit units="metre" prefix="micro" exponent="-1"/>
+  </units>
+  
+  <units name="micromolar_micrometre_per_second">
+    <unit units="micromolar"/>
+    <unit units="micrometre"/>
+    <unit units="second" exponent="-1"/>
+  </units>
+  
+  <units name="micrometre_per_second">
+    <unit units="micrometre"/>
+    <unit units="second" exponent="-1"/>
+  </units>
+  
+  <units name="micrometre_2_per_second">
+    <unit units="micrometre" exponent="2"/>
+    <unit units="second" exponent="-1"/>
+  </units>
+  
+  <units name="flux">
+    <unit units="micromolar"/>
+    <unit units="second" exponent="-1"/>
+  </units>
+
+  <units name="first_order_rate_constant">
+    <unit units="second" exponent="-1"/>
+  </units>
+  
+  <units name="second_order_rate_constant">
+    <unit units="micromolar" exponent="-1"/>
+    <unit units="second" exponent="-1"/>
+  </units>
+  
+  <!--
+    The "environment" component is used to declare variables that are used by
+    all or most of the other components, in this case just "time".
+  -->
+  
+  <component name="environment">
+    <variable units="second" public_interface="out" name="time"/>
+  </component>
+  
+  <component name="IP3_dynamics">
+    <variable units="micromolar" public_interface="out" name="IP3" initial_value="3.0"/> 
+  
+    <variable units="micromolar_micrometre_per_second" name="j_IP3"/>
+    <variable units="micromolar_micrometre_per_second" name="J_IP3" initial_value="20.86"/>
+    <variable units="first_order_rate_constant" name="k_0" initial_value="1.188"/>
+    <variable units="first_order_rate_constant" name="k_degr" initial_value="0.14"/>
+    <variable units="micromolar" name="IP3_0" initial_value="0.16"/>
+    
+    <variable units="second" public_interface="in" name="time"/>
+   
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="j_IP3_calculation">
+        <eq/>
+        <ci> j_IP3 </ci>
+        <apply>
+          <times/>
+          <ci> J_IP3 </ci>
+          <apply>
+            <exp/>
+            <apply>
+              <times/>
+              <apply>
+                <minus/>
+                <ci> k_0 </ci>
+              </apply>
+              <ci> time </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply> 
+      
+      <apply id="IP3_diff_eq">
+        <eq/>
+        <apply>
+          <diff/> 
+          <ci> IP3 </ci> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> k_degr </ci>
+            <apply>
+              <minus/>
+              <ci> IP3 </ci>
+              <ci> IP3_0 </ci> 
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math> 
+  </component>
+  
+  <component name="ER">
+    <variable units="micromolar" public_interface="out" name="Ca_ER" initial_value="400.0"/>
+  </component>
+  
+  <component name="Calcium_dynamics">
+    <variable units="micromolar" public_interface="out" name="Ca" initial_value="0.05"/>
+    
+    <variable units="dimensionless" name="alpha" initial_value="0.0"/>
+    
+    <variable units="second" public_interface="in" name="time"/>
+    <variable units="flux" public_interface="in" name="J_channel"/>
+    <variable units="flux" public_interface="in" name="J_pump"/>
+    <variable units="flux" public_interface="in" name="J_leak"/>
+    <variable units="flux" public_interface="in" name="R_buffering"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="Ca_diff_eq">
+        <eq/>
+        <apply>
+          <diff/> 
+          <ci> Ca </ci> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+        </apply>
+        <apply>
+          <plus/>
+          <apply>
+            <times/>
+            <ci> alpha </ci>
+            <apply>
+              <plus/>
+              <ci> J_channel </ci>
+              <apply>
+                <minus/>
+                <ci> J_pump </ci>
+              </apply>
+              <ci> J_leak </ci> 
+            </apply>
+          </apply>
+          <ci> R_buffering </ci>
+        </apply>
+      </apply>
+    </math> 
+  </component>
+  
+  <component name="Channel_kinetics">
+    <variable units="flux" public_interface="out" name="J_channel"/>
+    
+    <variable units="flux" name="J_max" initial_value="3500.0"/>
+    <variable units="dimensionless" name="h" initial_value="0.8"/>
+    <variable units="micromolar" name="K_act" initial_value="0.3"/>
+    <variable units="micromolar" name="K_IP3" initial_value="0.8"/>
+    <variable units="micromolar" name="K_inh" initial_value="0.2"/>
+    <variable units="second_order_rate_constant" name="k_on" initial_value="2.7"/>
+    
+    <variable units="second" public_interface="in" name="time"/>
+    <variable units="micromolar" public_interface="in" name="IP3"/>
+    <variable units="micromolar" public_interface="in" name="Ca"/>
+    <variable units="micromolar" public_interface="in" name="Ca_ER"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="J_channel_calculation">
+        <eq/>
+        <ci> J_channel </ci>
+        <apply>
+          <times/>
+          <ci> J_max </ci>
+          <apply>
+            <power/>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> IP3 </ci>
+                <apply>
+                  <plus/>
+                  <ci> IP3 </ci>
+                  <ci> K_IP3 </ci>
+                </apply>
+              </apply>
+              <apply>
+                <divide/>
+                <ci> Ca </ci>
+                <apply>
+                  <plus/>
+                  <ci> Ca </ci>
+                  <ci> K_act </ci>
+                </apply>
+              </apply>
+              <ci> h </ci>
+            </apply>
+            <cn cellml:units="dimensionless"> 3.0 </cn>
+          </apply>
+          <apply>
+            <minus/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <divide/>
+              <ci> Ca </ci>
+              <ci> Ca_ER </ci>
+            </apply>  
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="h_diff_eq">
+        <eq/>
+        <apply>
+          <diff/>
+          <ci> h </ci>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+        </apply>
+        <apply>
+          <times/>
+          <ci> k_on </ci>
+          <apply>
+            <minus/>
+            <ci> K_inh </ci>
+            <apply>
+              <times/>
+              <ci> h </ci>
+              <apply>
+                <plus/>
+                <ci> Ca </ci>
+                <ci> K_inh </ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math> 
+  </component>
+  
+  <component name="SERCA_pump_kinetics">
+    <variable units="flux" public_interface="out" name="J_pump"/>
+    
+    <variable units="flux" name="V_max" initial_value="3.75"/>
+    <variable units="micromolar" name="K_p" initial_value="0.27"/>
+    
+    <variable units="second" public_interface="in" name="time"/>
+    <variable units="micromolar" public_interface="in" name="Ca"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="J_pump_calculation">
+        <eq/>
+        <ci> J_pump </ci>
+        <apply>
+          <times/>
+          <ci> V_max </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <power/>
+              <ci> Ca </ci>
+              <cn cellml:units="dimensionless"> 2.0 </cn>
+            </apply>
+            <apply>
+              <plus/>
+              <apply>
+                <power/>
+                <ci> Ca </ci>
+                <cn cellml:units="dimensionless"> 2.0 </cn>
+              </apply>
+              <apply>
+                <power/>
+                <ci> K_p </ci>
+                <cn cellml:units="dimensionless"> 2.0 </cn>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math> 
+  </component>
+     
+  <component name="Leak">
+    <variable units="flux" public_interface="out" name="J_leak"/>
+    
+    <variable units="flux" name="L" initial_value="0.1"/>
+    
+    <variable units="second" public_interface="in" name="time"/>
+    <variable units="micromolar" public_interface="in" name="Ca"/>
+    <variable units="micromolar" public_interface="in" name="Ca_ER"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="J_leak_calculation">
+        <eq/>
+        <ci> J_leak </ci>
+        <apply>
+          <times/>
+          <ci> L </ci>
+          <apply>
+            <minus/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <divide/>
+              <ci> Ca </ci>
+              <ci> Ca_ER </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math> 
+  </component>
+  
+  <component name="Calcium_buffering">
+    <variable units="flux" public_interface="out" name="R_buffering"/>
+    
+    <variable units="flux" name="R1" initial_value="0.1"/>
+    <variable units="flux" name="R2" initial_value="0.1"/>
+    <variable units="micromolar" name="B1" initial_value="450.0"/>
+    <variable units="micromolar" name="B2" initial_value="75.0"/>
+    <!-- In this lumped parameter version of the model, we assume that
+         there is no calcium bound to the buffers initially. -->
+    <variable units="micromolar" name="CaB1" initial_value="0"/>
+    <variable units="micromolar" name="CaB2" initial_value="0"/>
+    <variable units="second_order_rate_constant" name="k1_on"/>
+    <variable units="first_order_rate_constant" name="k1_off"/>
+    <variable units="second_order_rate_constant" name="k2_on"/>
+    <variable units="first_order_rate_constant" name="k2_off"/>
+    <variable units="micromolar" name="K1" initial_value="10.0"/>
+    <variable units="micromolar" name="K2" initial_value="0.24"/>
+    
+    <variable units="second" public_interface="in" name="time"/>
+    <variable units="micromolar" public_interface="in" name="Ca"/>
+     
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="R_buffering_calculation">
+        <eq/>
+        <ci> R_buffering </ci>
+        <apply>
+          <plus/>
+          <ci> R1 </ci>
+          <ci> R2 </ci>
+        </apply>
+      </apply>
+      
+      <apply id="R1_calculation">
+        <eq/>
+        <ci> R1 </ci>
+        <apply>
+          <plus/>
+          <apply>
+            <minus/>
+            <apply>
+              <times/>
+              <ci> k1_on </ci>
+              <ci> Ca </ci>
+              <ci> B1 </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> k1_off </ci>
+            <ci> CaB1 </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="R2_calculation">
+        <eq/>
+        <ci> R2 </ci>
+        <apply>
+          <plus/>
+          <apply>
+            <minus/>
+            <apply>
+              <times/>
+              <ci> k2_on </ci>
+              <ci> Ca </ci>
+              <ci> B2 </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> k2_off </ci>
+            <ci> CaB2 </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="B1_diff_eq">
+        <eq/>
+        <apply>
+          <diff/>
+          <ci> B1 </ci>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+        </apply>
+        <ci> R1 </ci>
+      </apply>
+      
+      <apply id="CaB1_diff_eq">
+        <eq/>
+        <apply>
+          <diff/>
+          <ci> CaB1 </ci>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+        </apply>
+        <apply>
+          <minus/>
+          <ci> R1 </ci>
+        </apply>
+      </apply>
+      
+      <apply id="B2_diff_eq">
+        <eq/>
+        <apply>
+          <diff/>
+          <ci> B2 </ci>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+        </apply>
+        <ci> R2 </ci>
+      </apply>
+      
+      <apply id="CaB2_diff_eq">
+        <eq/>
+        <apply>
+          <diff/>
+          <ci> CaB2 </ci>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+        </apply>
+        <apply>
+          <minus/>
+          <ci> R2 </ci>
+        </apply>
+      </apply>
+      
+      <apply id="K1_calculation">
+        <eq/>
+        <ci> K1 </ci>
+        <apply>
+          <divide/>
+          <ci> k1_off </ci>
+          <ci> k1_on </ci>
+        </apply>
+      </apply>
+      
+      <apply id="K2_calculation">
+        <eq/>
+        <ci> K2 </ci>
+        <apply>
+          <divide/>
+          <ci> k2_off </ci>
+          <ci> k2_on </ci>
+        </apply>
+      </apply>
+    </math> 
+  </component>
+  
+  <component name="Plasma_membrane_extrusion_mechanisms">
+    <!-- <= 0 for soma, > 0 for neurite -->
+    <variable name="soma_or_neurite" units="dimensionless" initial_value="-1"/>
+    <variable units="micromolar_micrometre_per_second" name="j_Ca"/>
+    <variable units="micrometre_per_second" name="gamma_0" initial_value="8.0"/>
+    <variable units="micrometre_per_second" name="gamma"/>
+    <variable units="micrometre_per_second" name="gamma_s"/>
+    <variable units="micrometre_per_second" name="gamma_n"/>
+    <variable units="dimensionless" name="delta" initial_value="1.45"/>
+    <variable units="per_micrometre" name="sigma" initial_value="0.263"/>
+    <variable units="dimensionless" name="w_n" initial_value="0.377"/>
+    <variable units="dimensionless" name="w_s" initial_value="0.623"/>
+    <variable units="per_micrometre" name="sigma_soma_2D" initial_value="0.132"/>
+    <variable units="per_micrometre" name="sigma_neurite_2D" initial_value="0.479"/>
+    <variable units="micromolar" name="Ca_c" initial_value="0.2"/>
+    <variable units="second" public_interface="in" name="time"/>
+    <variable units="micromolar" public_interface="in" name="Ca"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="gamma_calculation">
+        <eq/>
+        <ci> gamma </ci>
+        <piecewise>
+          <piece>
+            <ci> gamma_s </ci>
+            <!-- if soma -->
+            <apply><leq/><ci>soma_or_neurite</ci><cn cellml:units="dimensionless">0</cn></apply>
+          </piece>
+          <otherwise> <ci> gamma_n </ci> </otherwise>
+        </piecewise>
+      </apply>
+      <apply id="gamma_s_calculation"><eq/>
+        <ci> gamma_s </ci>
+        <apply><divide/>
+          <apply><times/>
+            <ci> gamma_0 </ci>
+            <ci> sigma </ci>
+          </apply>
+          <apply><plus/>
+            <apply><times/>
+              <ci> delta </ci>
+              <ci> sigma_neurite_2D </ci>
+              <ci> w_n </ci>
+            </apply>
+            <apply><times/>
+              <ci> sigma_soma_2D </ci>
+              <ci> w_s </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="gamma_n_calculation"><eq/>
+        <ci> gamma_n </ci>
+        <apply><divide/>
+          <apply><times/>
+            <ci> gamma_0 </ci>
+            <ci> sigma </ci>
+            <ci> delta </ci>
+          </apply>
+          <apply><plus/>
+            <apply><times/>
+              <ci> delta </ci>
+              <ci> sigma_neurite_2D </ci>
+              <ci> w_n </ci>
+            </apply>
+            <apply><times/>
+              <ci> sigma_soma_2D </ci>
+              <ci> w_s </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply id="j_Ca_calculation">
+        <eq/>
+        <ci> j_Ca </ci>
+        <piecewise>
+          <piece>
+            <apply>
+              <times/>
+              <ci> gamma </ci>
+              <apply>
+                <minus/>
+                <ci> Ca </ci>
+                <ci> Ca_c </ci>
+              </apply>
+            </apply>
+            <apply>
+              <gt/>
+              <ci> Ca </ci> 
+              <ci> Ca_c </ci>
+            </apply>
+          </piece>
+          <otherwise>
+            <cn cellml:units="micromolar_micrometre_per_second"> 0.0 </cn>
+          </otherwise>
+        </piecewise>
+      </apply>
+    </math> 
+  </component>
+  
+  <connection>
+    <map_components component_2="environment" component_1="IP3_dynamics"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Calcium_dynamics"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Channel_kinetics"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="SERCA_pump_kinetics"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Leak"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Calcium_buffering"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Plasma_membrane_extrusion_mechanisms"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Channel_kinetics" component_1="IP3_dynamics"/>
+    <map_variables variable_2="IP3" variable_1="IP3"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Plasma_membrane_extrusion_mechanisms" component_1="Calcium_dynamics"/>
+    <map_variables variable_2="Ca" variable_1="Ca"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Channel_kinetics" component_1="Calcium_dynamics"/>
+    <map_variables variable_2="Ca" variable_1="Ca"/>
+    <map_variables variable_2="J_channel" variable_1="J_channel"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="SERCA_pump_kinetics" component_1="Calcium_dynamics"/>
+    <map_variables variable_2="Ca" variable_1="Ca"/>
+    <map_variables variable_2="J_pump" variable_1="J_pump"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Leak" component_1="Calcium_dynamics"/>
+    <map_variables variable_2="Ca" variable_1="Ca"/>
+    <map_variables variable_2="J_leak" variable_1="J_leak"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Calcium_buffering" component_1="Calcium_dynamics"/>
+    <map_variables variable_2="Ca" variable_1="Ca"/>
+    <map_variables variable_2="R_buffering" variable_1="R_buffering"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Channel_kinetics" component_1="ER"/>
+    <map_variables variable_2="Ca_ER" variable_1="Ca_ER"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Leak" component_1="ER"/>
+    <map_variables variable_2="Ca_ER" variable_1="Ca_ER"/>
+  </connection>
+
+<rdf:RDF>
+    <rdf:Bag rdf:about="rdf:#05d0a183-762a-46bf-8814-55e8d7bd3965">
+      <rdf:li>Neuroblastoma</rdf:li>
+      <rdf:li>calcium dynamics</rdf:li>
+    </rdf:Bag>
+    <rdf:Seq rdf:about="rdf:#668a7009-6b9b-421b-95a7-1f0c4da352f4">
+      <rdf:li resource="rdf:#7e8fbbe0-7019-408c-95ab-331d4f42af35"/>
+      <rdf:li resource="rdf:#c365acc6-ec20-4c9c-bf75-6358635240ef"/>
+      <rdf:li resource="rdf:#7d709daa-1148-4671-9997-4d2e0305883c"/>
+      <rdf:li resource="rdf:#51a7e766-1bcb-4e21-b60e-b146e5e0c0f1"/>
+      <rdf:li resource="rdf:#f3f30e77-f21c-4872-b03c-b23f0755cdf5"/>
+      <rdf:li resource="rdf:#bfb15983-db48-4517-a7c9-a3c26b51588a"/>
+    </rdf:Seq>
+    <rdf:Description rdf:about="rdf:#1df29f38-197d-4b55-aa95-ee696a6487e0">
+      <vCard:Given>Catherine</vCard:Given>
+      <vCard:Family>Lloyd</vCard:Family>
+      <vCard:Other>May</vCard:Other>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#95d44c65-eae8-46d8-bc22-3e345a865fe0">
+      <vCard:ORG rdf:resource="rdf:#a21243cc-00b5-4ed7-8b4a-8a6ca85a4bf6"/>
+      <vCard:EMAIL rdf:resource="rdf:#d492b819-5112-47a6-b66c-44de1a900c30"/>
+      <vCard:N rdf:resource="rdf:#1df29f38-197d-4b55-aa95-ee696a6487e0"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#b4229164-aa0f-48bf-9e91-ac41bb2b4a3a">
+      <dcterms:W3CDTF>2002-07-29</dcterms:W3CDTF>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#fad786d4-81e4-4c52-8465-997e7180abb9">
+      <dc:creator rdf:resource="rdf:#668a7009-6b9b-421b-95a7-1f0c4da352f4"/>
+      <dc:title>
+            An image-based model of calcium waves in differentiated 
+            neuroblastoma cells
+          </dc:title>
+      <bqs:volume>79</bqs:volume>
+      <bqs:first_page>163</bqs:first_page>
+      <bqs:Journal rdf:resource="rdf:#a555f95a-76d9-4d17-b0eb-242b8329050a"/>
+      <dcterms:issued rdf:resource="rdf:#9c2e13c1-8ec5-4338-b498-f30c6078fb64"/>
+      <bqs:last_page>183</bqs:last_page>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#bfb15983-db48-4517-a7c9-a3c26b51588a">
+      <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+      <vCard:N rdf:resource="rdf:#a71a3d69-c5c3-4dd2-bdc6-672ba91193d0"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#78c17359-3f0b-456c-b735-5f77e76ea777">
+      <vCard:FN>Catherine Lloyd</vCard:FN>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#1a8634f0-ddf3-41d1-b838-edfc7bbcdd91">
+      <bqs:Pubmed_id>10866945</bqs:Pubmed_id>
+      <bqs:JournalArticle rdf:resource="rdf:#fad786d4-81e4-4c52-8465-997e7180abb9"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#2fdfcee9-0d31-4c73-b361-17462bb687ca">
+      <vCard:Given>James</vCard:Given>
+      <vCard:Family>Schaff</vCard:Family>
+      <vCard:Other>C</vCard:Other>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#d492b819-5112-47a6-b66c-44de1a900c30">
+      <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+      <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#919919ca-1d14-4022-8105-14fc0e0c991e">
+      <dcterms:modified rdf:resource="rdf:#6929ff43-ebdd-4fd7-a347-93c32fea78be"/>
+      <rdf:value>
+          Corrected equations: removed all lapacian functions - spatial elements cannot be handled by CellML 1.0.
+        </rdf:value>
+      <cmeta:modifier rdf:resource="rdf:#5e3925e9-15a7-4367-b5ea-4e5ef067f247"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#f3f30e77-f21c-4872-b03c-b23f0755cdf5">
+      <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+      <vCard:N rdf:resource="rdf:#2fdfcee9-0d31-4c73-b361-17462bb687ca"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#9a1a7ee2-0d49-4172-8f22-6cb851347227">
+      <dc:creator rdf:resource="rdf:#78c17359-3f0b-456c-b735-5f77e76ea777"/>
+      <rdf:value>
+          This is the CellML description of Fink et al's 2000 model of calcium 
+          waves in differentiated neuroblastoma cells.
+          
+          It should be noted that the following CellML description is not quite 
+          true to the mathematical model published in the original paper 
+          referenced below.  Currently CellML is unable to handle spatial 
+          elements, but this will hopefully be possible in the near future with 
+          the development of FieldML. 
+        </rdf:value>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#dbc52d7f-0799-4a03-8682-8edac66e0f8f">
+      <vCard:Given>Catherine</vCard:Given>
+      <vCard:Family>Lloyd</vCard:Family>
+      <vCard:Other>May</vCard:Other>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#1e601886-90b2-48a4-8bd1-5a6e47ed8a88">
+      <dc:subject rdf:resource="rdf:#4cd43284-f883-4d48-ad97-cead81408f9d"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#7591ddca-e00e-401b-b346-0b41cab63faa">
+      <vCard:Given>Catherine</vCard:Given>
+      <vCard:Family>Lloyd</vCard:Family>
+      <vCard:Other>May</vCard:Other>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#c365acc6-ec20-4c9c-bf75-6358635240ef">
+      <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+      <vCard:N rdf:resource="rdf:#58f574b3-660f-4efa-9026-d4c92dfa34bb"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#7e8fbbe0-7019-408c-95ab-331d4f42af35">
+      <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+      <vCard:N rdf:resource="rdf:#80346b90-e8f9-4c8e-ab70-aca448469d4f"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#a2f01429-47c8-4de5-a692-f5a6c2da78cc">
+      <dcterms:modified rdf:resource="rdf:#3caadb94-bc07-4830-ac3a-1bd0a7c806d0"/>
+      <rdf:value>
+          Corrected equations: IP3_diff_eq in IP3_dynamics, Ca_diff_eq in 
+          Calcium_dynamics, and B2_diff_eq and CaB2_diff_eq in 
+          Calcium_buffering.
+        </rdf:value>
+      <cmeta:modifier rdf:resource="rdf:#368cc679-6c26-48fa-ad8c-80cedb378781"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#58f574b3-660f-4efa-9026-d4c92dfa34bb">
+      <vCard:Given>Boris</vCard:Given>
+      <vCard:Family>Slepchenko</vCard:Family>
+    </rdf:Description>
+    <rdf:Description rdf:about="">
+      <dc:publisher>
+        The University of Auckland, Bioengineering Institute
+      </dc:publisher>
+      <cmeta:modification rdf:resource="rdf:#919919ca-1d14-4022-8105-14fc0e0c991e"/>
+      <cmeta:modification rdf:resource="rdf:#a2f01429-47c8-4de5-a692-f5a6c2da78cc"/>
+      <dcterms:created rdf:resource="rdf:#b4229164-aa0f-48bf-9e91-ac41bb2b4a3a"/>
+      <dc:creator rdf:resource="rdf:#95d44c65-eae8-46d8-bc22-3e345a865fe0"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#3caadb94-bc07-4830-ac3a-1bd0a7c806d0">
+      <dcterms:W3CDTF>2003-06-04</dcterms:W3CDTF>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#9c2e13c1-8ec5-4338-b498-f30c6078fb64">
+      <dcterms:W3CDTF>2000-07</dcterms:W3CDTF>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#80346b90-e8f9-4c8e-ab70-aca448469d4f">
+      <vCard:Given>Charles</vCard:Given>
+      <vCard:Family>Fink</vCard:Family>
+      <vCard:Other>C</vCard:Other>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#a21243cc-00b5-4ed7-8b4a-8a6ca85a4bf6">
+      <vCard:Orgname>The University of Auckland</vCard:Orgname>
+      <vCard:Orgunit>The Bioengineering Institute</vCard:Orgunit>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#4cd43284-f883-4d48-ad97-cead81408f9d">
+      <bqs:subject_type>keyword</bqs:subject_type>
+      <rdf:value rdf:resource="rdf:#05d0a183-762a-46bf-8814-55e8d7bd3965"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#a555f95a-76d9-4d17-b0eb-242b8329050a">
+      <dc:title>Biophysical Journal</dc:title>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#368cc679-6c26-48fa-ad8c-80cedb378781">
+      <vCard:N rdf:resource="rdf:#7591ddca-e00e-401b-b346-0b41cab63faa"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#c91e57e9-01bb-4f4b-b235-4b7bb7d0ef81">
+      <vCard:Given>Ion</vCard:Given>
+      <vCard:Family>Moraru</vCard:Family>
+      <vCard:Other>I</vCard:Other>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#51a7e766-1bcb-4e21-b60e-b146e5e0c0f1">
+      <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+      <vCard:N rdf:resource="rdf:#fdde7c86-906f-4a16-ad04-d60971f170f6"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#5e3925e9-15a7-4367-b5ea-4e5ef067f247">
+      <vCard:N rdf:resource="rdf:#dbc52d7f-0799-4a03-8682-8edac66e0f8f"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#7d709daa-1148-4671-9997-4d2e0305883c">
+      <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+      <vCard:N rdf:resource="rdf:#c91e57e9-01bb-4f4b-b235-4b7bb7d0ef81"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#a71a3d69-c5c3-4dd2-bdc6-672ba91193d0">
+      <vCard:Given>Leslie</vCard:Given>
+      <vCard:Family>Loew</vCard:Family>
+      <vCard:Other>M</vCard:Other>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#fdde7c86-906f-4a16-ad04-d60971f170f6">
+      <vCard:Given>James</vCard:Given>
+      <vCard:Family>Watras</vCard:Family>
+    </rdf:Description>
+    <rdf:Description rdf:about="#fink_slepchenko_moraru_watras_schaff_loew_2000_version01">
+      <dc:title>
+        Fink et al's 2000 model of calcium waves in differentiated neuroblastoma         cells.
+      </dc:title>
+      <cmeta:bio_entity>Neuroblastoma</cmeta:bio_entity>
+      <cmeta:comment rdf:resource="rdf:#9a1a7ee2-0d49-4172-8f22-6cb851347227"/>
+      <bqs:reference rdf:resource="rdf:#1a8634f0-ddf3-41d1-b838-edfc7bbcdd91"/>
+      <bqs:reference rdf:resource="rdf:#1e601886-90b2-48a4-8bd1-5a6e47ed8a88"/>
+    </rdf:Description>
+    <rdf:Description rdf:about="rdf:#6929ff43-ebdd-4fd7-a347-93c32fea78be">
+      <dcterms:W3CDTF>2003-06-04</dcterms:W3CDTF>
+    </rdf:Description>
+  </rdf:RDF>
+</model>

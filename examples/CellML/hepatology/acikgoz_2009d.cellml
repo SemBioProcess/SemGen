@@ -1,0 +1,651 @@
+<?xml version="1.0"?>
+<!--
+This CellML file was generated on 26/01/2011 at 3:20:47 at p.m. using:
+
+COR (0.9.31.1409)
+Copyright 2002-2011 Dr Alan Garny
+http://cor.physiol.ox.ac.uk/ - cor@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.cellml.org/
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" cmeta:id="Acikgoz_2009d" name="Acikgoz_2009d">
+ 
+<documentation xmlns="http://cellml.org/tmp-documentation">
+    <article>
+      <section id="sec_status">
+        <title>Model Status</title>
+        <para>
+         Made in COR. Model runs in OpenCell to recreate results from figure 3d in published paper. This is the Phenobarbital version of the experiment.
+          </para>
+      </section>
+      <sect1 id="sec_structure">
+        <title>Model Structure</title>
+        <para>
+ABSTRACT: Drug biotransformation is one of the most important parameters of preclinical screening tests for the registration of new drug candidates. Conventional existing tests rely on nonhuman models which deliver an incomplete metabolic profile of drugs due to the lack of proper CYP450 expression as seen in human liver in vivo. In order to overcome this limitation, we used an organotypical model of human primary hepatocytes for the biotransformation of the drug diazepam with special reference to metabolites in both the cell matrix phase and supernatant and its interaction of three inducers (phenobarbital, dexamethasone, aroclor 1254) in different time responses (1, 2, 4, 8, 24 h). Phenobarbital showed the strongest inducing effect in generating desmethyldiazepam and induced up to a 150 fold increase in oxazepam-content which correlates with the increased availability of the precursor metabolites (temazepam and desmethyldiazepam). Aroclor 1254 and dexamethasone had the strongest inducing effect on temazepam and the second strongest on oxazepam. The strong and overlapping inductive role of phenobarbital strengthens the participation of CYP2B6 and CYP3A in diazepam N-demethylation and CYP3A in temazepam formation. Aroclor 1254 preferentially generated temazepam due to the interaction with CYP3A and potentially CYP2C19. In parallel we represented these data in the form of a mathematical model with two compartments explaining the dynamics of diazepam metabolism with the effect of these other inducers in human primary hepatocytes. The model consists of ten differential equations, with one for each concentration c(i,j) (i=diazepam, temazepam, desmethyldiazepam, oxazepam, other metabolites) and one for each compartment (j= cell matrix phase, supernatant), respectively. The parameters p(k) (k=1, 2, 3, 4, 13) are rate constants describing the biotransformation of diazepam and its metabolites and the other parameters (k=5, 6, 7, 8, 9, 10, 11, 12, 14, 15) explain the concentration changes in the two compartments.
+</para>
+
+        <para>
+The complete original paper reference is cited below:
+</para>
+        <para>
+         Two compartment model of diazepam biotransformation in an organotypical culture of primary human hepatocytes, Ali Acikgoz et al, 2009, <emphasis>Toxicology and applied pharmacology</emphasis>, 234, 179-191. <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/18983865">PubMed ID: 18983865</ulink>
+        </para>
+		
+        <informalfigure float="0" id="fig_reaction_diagram">
+          <mediaobject>
+            <imageobject>
+              <objectinfo>
+                <title>Two Comppartment Model Diagram</title>
+              </objectinfo>
+              <imagedata fileref="acikgoz_2009.png"/>
+            </imageobject>
+          </mediaobject>
+          <caption>Structure of the two compartment model of diazepam biotransformation and appropriated model paprameter.</caption>
+        </informalfigure>
+      </sect1>
+    </article>
+  </documentation>
+  <units name="hour">
+      <unit multiplier="3600" units="second"/>
+   </units>
+   <units name="per_hour">
+      <unit exponent="-1" units="hour"/>
+   </units>
+   <units name="nanogram">
+      <unit multiplier="10000000" units="gram"/>
+   </units>
+   <units name="millilitre">
+      <unit multiplier="1000" units="litre"/>
+   </units>
+   <units name="per_millilitre">
+      <unit exponent="-1" units="millilitre"/>
+   </units>
+   <units name="nanogram_per_millilitre">
+      <unit units="nanogram"/>
+      <unit exponent="-1" units="millilitre"/>
+   </units>
+   <component name="environment">
+      <variable cmeta:id="environment_time" name="time" public_interface="out" units="hour"/>
+   </component>
+   <component name="c11">
+      <variable cmeta:id="c11_c11" initial_value="9000" name="c11" public_interface="out" units="per_millilitre"/>
+      <variable name="p1" public_interface="in" units="per_hour"/>
+      <variable name="p2" public_interface="in" units="per_hour"/>
+      <variable name="p5" public_interface="in" units="per_hour"/>
+      <variable name="p6" public_interface="in" units="per_hour"/>
+      <variable name="c12" public_interface="in" units="per_millilitre"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c11</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <minus/>
+                           <ci>p1</ci>
+                        </apply>
+                        <ci>c11</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>p2</ci>
+                        <ci>c11</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p5</ci>
+                     <ci>c11</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>p6</ci>
+                  <ci>c12</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c21">
+      <variable cmeta:id="c21_c21" initial_value="0" name="c21" public_interface="out" units="per_millilitre"/>
+      <variable name="p1" public_interface="in" units="per_hour"/>
+      <variable name="c11" public_interface="in" units="per_millilitre"/>
+      <variable name="p4" public_interface="in" units="per_hour"/>
+      <variable name="p11" public_interface="in" units="per_hour"/>
+      <variable name="p12" public_interface="in" units="per_hour"/>
+      <variable name="c22" public_interface="in" units="per_millilitre"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c21</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <times/>
+                        <ci>p1</ci>
+                        <ci>c11</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>p4</ci>
+                        <ci>c21</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p11</ci>
+                     <ci>c21</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>p12</ci>
+                  <ci>c22</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c31">
+      <variable cmeta:id="c31_c31" initial_value="0" name="c31" public_interface="out" units="per_millilitre"/>
+      <variable name="p2" public_interface="in" units="per_hour"/>
+      <variable name="c11" public_interface="in" units="per_millilitre"/>
+      <variable name="p3" public_interface="in" units="per_hour"/>
+      <variable name="p7" public_interface="in" units="per_hour"/>
+      <variable name="p8" public_interface="in" units="per_hour"/>
+      <variable name="c32" public_interface="in" units="per_millilitre"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c31</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <times/>
+                        <ci>p2</ci>
+                        <ci>c11</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>p3</ci>
+                        <ci>c31</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p7</ci>
+                     <ci>c31</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>p8</ci>
+                  <ci>c32</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c41">
+      <variable cmeta:id="c41_c41" initial_value="0" name="c41" public_interface="out" units="per_millilitre"/>
+      <variable name="p3" public_interface="in" units="per_hour"/>
+      <variable name="c31" public_interface="in" units="per_millilitre"/>
+      <variable name="p4" public_interface="in" units="per_hour"/>
+      <variable name="c21" public_interface="in" units="per_millilitre"/>
+      <variable name="p9" public_interface="in" units="per_hour"/>
+      <variable name="p10" public_interface="in" units="per_hour"/>
+      <variable name="c42" public_interface="in" units="per_millilitre"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c41</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>p3</ci>
+                        <ci>c31</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>p4</ci>
+                        <ci>c21</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p9</ci>
+                     <ci>c41</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>p10</ci>
+                  <ci>c42</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c51">
+      <variable cmeta:id="c51_c51" initial_value="0" name="c51" public_interface="out" units="per_millilitre"/>
+      <variable name="p13" public_interface="in" units="per_hour"/>
+      <variable name="c11" public_interface="in" units="per_millilitre"/>
+      <variable name="p14" public_interface="in" units="per_hour"/>
+      <variable name="p15" public_interface="in" units="per_hour"/>
+      <variable name="c52" public_interface="in" units="per_millilitre"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c51</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>p13</ci>
+                     <ci>c11</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>p14</ci>
+                     <ci>c51</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>p15</ci>
+                  <ci>c52</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c12">
+      <variable cmeta:id="c12_c12" initial_value="10000" name="c12" public_interface="out" units="per_millilitre"/>
+      <variable name="p5" public_interface="in" units="per_hour"/>
+      <variable name="c11" public_interface="in" units="per_millilitre"/>
+      <variable name="p6" public_interface="in" units="per_hour"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c12</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>p5</ci>
+                  <ci>c11</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>p6</ci>
+                  <ci>c12</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c22">
+      <variable cmeta:id="c22_c22" initial_value="0" name="c22" public_interface="out" units="per_millilitre"/>
+      <variable name="p11" public_interface="in" units="per_hour"/>
+      <variable name="c21" public_interface="in" units="per_millilitre"/>
+      <variable name="p12" public_interface="in" units="per_hour"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c22</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>p11</ci>
+                  <ci>c21</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>p12</ci>
+                  <ci>c22</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c32">
+      <variable cmeta:id="c32_c32" initial_value="0" name="c32" public_interface="out" units="per_millilitre"/>
+      <variable name="p7" public_interface="in" units="per_hour"/>
+      <variable name="c31" public_interface="in" units="per_millilitre"/>
+      <variable name="p8" public_interface="in" units="per_hour"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c32</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>p7</ci>
+                  <ci>c31</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>p8</ci>
+                  <ci>c32</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c42">
+      <variable cmeta:id="c42_c42" initial_value="0" name="c42" public_interface="out" units="per_millilitre"/>
+      <variable name="p9" public_interface="in" units="per_hour"/>
+      <variable name="c41" public_interface="in" units="per_millilitre"/>
+      <variable name="p10" public_interface="in" units="per_hour"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c42</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>p9</ci>
+                  <ci>c41</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>p10</ci>
+                  <ci>c42</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="c52">
+      <variable cmeta:id="c52_c52" initial_value="0" name="c52" public_interface="out" units="per_millilitre"/>
+      <variable name="p14" public_interface="in" units="per_hour"/>
+      <variable name="c51" public_interface="in" units="per_millilitre"/>
+      <variable name="p15" public_interface="in" units="per_hour"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c52</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>p14</ci>
+                  <ci>c51</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>p15</ci>
+                  <ci>c52</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="model_parameters">
+      <variable initial_value="0.097884" name="p1" public_interface="out" units="per_hour"/>
+      <variable initial_value="0.085470" name="p2" public_interface="out" units="per_hour"/>
+      <variable initial_value="0.006932" name="p3" public_interface="out" units="per_hour"/>
+      <variable initial_value="0.050607" name="p4" public_interface="out" units="per_hour"/>
+      <variable initial_value="5.119458" name="p5" public_interface="out" units="per_hour"/>
+      <variable initial_value="7.986374" name="p6" public_interface="out" units="per_hour"/>
+      <variable initial_value="1.224656" name="p7" public_interface="out" units="per_hour"/>
+      <variable initial_value="1.488771" name="p8" public_interface="out" units="per_hour"/>
+      <variable initial_value="0.188594" name="p9" public_interface="out" units="per_hour"/>
+      <variable initial_value="0.162463" name="p10" public_interface="out" units="per_hour"/>
+      <variable initial_value="2.527205" name="p11" public_interface="out" units="per_hour"/>
+      <variable initial_value="3.018396" name="p12" public_interface="out" units="per_hour"/>
+      <variable initial_value="0.097796" name="p13" public_interface="out" units="per_hour"/>
+      <variable initial_value="0.359250" name="p14" public_interface="out" units="per_hour"/>
+      <variable initial_value="0.000002" name="p15" public_interface="out" units="per_hour"/>
+      <variable name="time" public_interface="in" units="hour"/>
+   </component>
+   <connection>
+      <map_components component_1="c11" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c21" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c31" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c41" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c51" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c12" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c22" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c32" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c42" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="c52" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="model_parameters" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="model_parameters" component_2="c11"/>
+      <map_variables variable_1="p1" variable_2="p1"/>
+      <map_variables variable_1="p2" variable_2="p2"/>
+      <map_variables variable_1="p5" variable_2="p5"/>
+      <map_variables variable_1="p6" variable_2="p6"/>
+   </connection>
+   <connection>
+      <map_components component_1="model_parameters" component_2="c21"/>
+      <map_variables variable_1="p1" variable_2="p1"/>
+      <map_variables variable_1="p4" variable_2="p4"/>
+      <map_variables variable_1="p11" variable_2="p11"/>
+      <map_variables variable_1="p12" variable_2="p12"/>
+   </connection>
+   <connection>
+      <map_components component_1="model_parameters" component_2="c31"/>
+      <map_variables variable_1="p3" variable_2="p3"/>
+      <map_variables variable_1="p2" variable_2="p2"/>
+      <map_variables variable_1="p7" variable_2="p7"/>
+      <map_variables variable_1="p8" variable_2="p8"/>
+   </connection>
+   <connection>
+      <map_components component_1="model_parameters" component_2="c41"/>
+      <map_variables variable_1="p3" variable_2="p3"/>
+      <map_variables variable_1="p4" variable_2="p4"/>
+      <map_variables variable_1="p9" variable_2="p9"/>
+      <map_variables variable_1="p10" variable_2="p10"/>
+   </connection>
+   <connection>
+      <map_components component_1="model_parameters" component_2="c51"/>
+      <map_variables variable_1="p13" variable_2="p13"/>
+      <map_variables variable_1="p14" variable_2="p14"/>
+      <map_variables variable_1="p15" variable_2="p15"/>
+   </connection>
+   <connection>
+      <map_components component_1="model_parameters" component_2="c12"/>
+      <map_variables variable_1="p5" variable_2="p5"/>
+      <map_variables variable_1="p6" variable_2="p6"/>
+   </connection>
+   <connection>
+      <map_components component_1="model_parameters" component_2="c22"/>
+      <map_variables variable_1="p11" variable_2="p11"/>
+      <map_variables variable_1="p12" variable_2="p12"/>
+   </connection>
+   <connection>
+      <map_components component_1="model_parameters" component_2="c32"/>
+      <map_variables variable_1="p7" variable_2="p7"/>
+      <map_variables variable_1="p8" variable_2="p8"/>
+   </connection>
+   <connection>
+      <map_components component_1="model_parameters" component_2="c42"/>
+      <map_variables variable_1="p9" variable_2="p9"/>
+      <map_variables variable_1="p10" variable_2="p10"/>
+   </connection>
+   <connection>
+      <map_components component_1="model_parameters" component_2="c52"/>
+      <map_variables variable_1="p14" variable_2="p14"/>
+      <map_variables variable_1="p15" variable_2="p15"/>
+   </connection>
+   <connection>
+      <map_components component_1="c11" component_2="c21"/>
+      <map_variables variable_1="c11" variable_2="c11"/>
+   </connection>
+   <connection>
+      <map_components component_1="c11" component_2="c31"/>
+      <map_variables variable_1="c11" variable_2="c11"/>
+   </connection>
+   <connection>
+      <map_components component_1="c11" component_2="c51"/>
+      <map_variables variable_1="c11" variable_2="c11"/>
+   </connection>
+   <connection>
+      <map_components component_1="c11" component_2="c12"/>
+      <map_variables variable_1="c11" variable_2="c11"/>
+      <map_variables variable_1="c12" variable_2="c12"/>
+   </connection>
+   <connection>
+      <map_components component_1="c21" component_2="c41"/>
+      <map_variables variable_1="c21" variable_2="c21"/>
+   </connection>
+   <connection>
+      <map_components component_1="c21" component_2="c22"/>
+      <map_variables variable_1="c22" variable_2="c22"/>
+      <map_variables variable_1="c21" variable_2="c21"/>
+   </connection>
+   <connection>
+      <map_components component_1="c31" component_2="c41"/>
+      <map_variables variable_1="c31" variable_2="c31"/>
+   </connection>
+   <connection>
+      <map_components component_1="c31" component_2="c32"/>
+      <map_variables variable_1="c31" variable_2="c31"/>
+      <map_variables variable_1="c32" variable_2="c32"/>
+   </connection>
+   <connection>
+      <map_components component_1="c41" component_2="c42"/>
+      <map_variables variable_1="c41" variable_2="c41"/>
+      <map_variables variable_1="c42" variable_2="c42"/>
+   </connection>
+   <connection>
+      <map_components component_1="c51" component_2="c52"/>
+      <map_variables variable_1="c51" variable_2="c51"/>
+      <map_variables variable_1="c52" variable_2="c52"/>
+   </connection>
+   
+   
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:nodeID="n1"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Nielsen</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Hanne</Given><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">January</Other></rdf:Description><rdf:Description rdf:nodeID="n2"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2009</W3CDTF></rdf:Description><rdf:Description rdf:nodeID="n3"><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag"/></rdf:type><rdf:_2 xml:lang="en">PKPD</rdf:_2><rdf:_6 xml:lang="en">hepatology</rdf:_6><rdf:_1 xml:lang="en">liver</rdf:_1><rdf:_3 xml:lang="en">metabolism</rdf:_3></rdf:Description><rdf:Description rdf:nodeID="n4"><rdf:type><rdf:Description rdf:about="http://imc.org/vCard/3.0#internet"/></rdf:type><rdf:value xml:lang="en">hnie010@aucklanduni.ac.nz</rdf:value></rdf:Description><rdf:Description rdf:nodeID="n5"><boundIntervals xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n6"/></boundIntervals></rdf:Description><rdf:Description rdf:nodeID="n7"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Giri</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Shibashish</Given></rdf:Description><rdf:Description rdf:nodeID="n8"><Orgname xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">The University of Auckland</Orgname><Orgunit xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Auckland Bioengineering Institute</Orgunit></rdf:Description><rdf:Description rdf:about=""><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n9"/></creator><created xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:nodeID="n10"/></created></rdf:Description><rdf:Description rdf:nodeID="n11"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n12"/></N></rdf:Description><rdf:Description rdf:nodeID="n13"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n14"/></Person></rdf:Description><rdf:Description rdf:nodeID="n9"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n1"/></N><EMAIL xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n4"/></EMAIL><ORG xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n8"/></ORG></rdf:Description><rdf:Description rdf:nodeID="n15"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Karim</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Najibulla</Given></rdf:Description><rdf:Description rdf:nodeID="n16"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Bader</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Augustine</Given></rdf:Description><rdf:Description rdf:nodeID="n17"><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n18"/></creator><issued xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:nodeID="n2"/></issued><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">
+
+            Two compartment model of diazepam biotransformation in an organotypical culture of primary human hepatocytes
+
+          </title><volume xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">234</volume><Journal xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n19"/></Journal><first_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">179</first_page><last_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">191</last_page></rdf:Description><rdf:Description rdf:nodeID="n20"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n21"/></Person></rdf:Description><rdf:Description rdf:about="#Acikgoz_2009d"><simulation xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n5"/></simulation></rdf:Description><rdf:Description rdf:about="#Acikgoz_2009d"><cmeta:species xml:lang="en">Human</cmeta:species><cmeta:bio_entity xml:lang="en">hepatocyte</cmeta:bio_entity><cmeta:bio_entity xml:lang="en">liver</cmeta:bio_entity><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n22"/></reference><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n23"/></reference></rdf:Description><rdf:Description rdf:nodeID="n24"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n25"/></Person></rdf:Description><rdf:Description rdf:nodeID="n26"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Acikgoz</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Ali</Given></rdf:Description><rdf:Description rdf:nodeID="n25"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n7"/></N></rdf:Description><rdf:Description rdf:nodeID="n22"><subject xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n27"/></subject></rdf:Description><rdf:Description rdf:nodeID="n18"><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq"/></rdf:type><rdf:_2><rdf:Description rdf:nodeID="n13"/></rdf:_2><rdf:_1><rdf:Description rdf:nodeID="n28"/></rdf:_1><rdf:_3><rdf:Description rdf:nodeID="n24"/></rdf:_3><rdf:_4><rdf:Description rdf:nodeID="n29"/></rdf:_4><rdf:_5><rdf:Description rdf:nodeID="n20"/></rdf:_5></rdf:Description><rdf:Description rdf:nodeID="n28"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n30"/></Person></rdf:Description><rdf:Description rdf:nodeID="n14"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n15"/></N></rdf:Description><rdf:Description rdf:nodeID="n30"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n26"/></N></rdf:Description><rdf:Description rdf:nodeID="n31"><endingValue xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">24</endingValue></rdf:Description><rdf:Description rdf:nodeID="n10"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2011-01-26</W3CDTF></rdf:Description><rdf:Description rdf:nodeID="n6"><rdf:rest><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/></rdf:rest><rdf:first><rdf:Description rdf:nodeID="n31"/></rdf:first></rdf:Description><rdf:Description rdf:nodeID="n27"><rdf:value><rdf:Description rdf:nodeID="n3"/></rdf:value><subject_type xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">keyword</subject_type></rdf:Description><rdf:Description rdf:nodeID="n12"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Schmidt-Heck</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Wolfgang</Given></rdf:Description><rdf:Description rdf:nodeID="n21"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n16"/></N></rdf:Description><rdf:Description rdf:nodeID="n29"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n11"/></Person></rdf:Description><rdf:Description rdf:nodeID="n19"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">Toxicology and Applied Pharmacology</title></rdf:Description><rdf:Description rdf:nodeID="n23"><Pubmed_id xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">18983865</Pubmed_id><JournalArticle xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n17"/></JournalArticle></rdf:Description></rdf:RDF></model>

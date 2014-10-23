@@ -1,0 +1,627 @@
+<?xml version="1.0"?>
+<!--
+This CellML file was generated on 8/18/2011 at 1:28:59 at PM using:
+
+COR (0.9.31.1409)
+Copyright 2002-2011 Dr Alan Garny
+http://cor.physiol.ox.ac.uk/ - cor@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.cellml.org/
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" cmeta:id="gall_2000b" name="gall_2000b">
+
+
+<documentation xmlns="http://cellml.org/tmp-documentation">
+    <article>
+      <section id="sec_status">
+        <title>Model Status</title>
+        <para>
+         Made in COR. Model a runs in OpenCell to recreate results from  published paper but model b does not reproduce results. CellML files are based on equations 1-3 (a) and 1 and 4-8 (b).
+          </para>
+      </section>
+      <sect1 id="sec_structure">
+        <title>Model Structure</title>
+        <para>
+ABSTRACT: Cytosolic calcium plays a crucial role as a second messenger in cellular signalling. Various cell types, including hepatocytes, display Ca(2+)oscillations when stimulated by an extracellular signal. However, the biological relevance of this temporal organization remains unclear. In this paper, we investigate theoretically the effect of Ca(2+)oscillations on a particular example of cell regulation: the phosphorylation-dephosphorylation cycle controlling the activation of glycogen phosphorylase in hepatocytes. By modelling periodic sinusoidal variations in the intracellular Ca(2+)concentration, we show that Ca(2+)oscillations reduce the threshold for the activation of the enzyme. Furthermore, as the activation of a given enzyme depends on the kinetics of its phosphorylation-dephosphorylation cycle, specificity can be encoded by the oscillation frequency. Finally, using a model for signal-induced Ca(2+)oscillations based on Ca(2+)-induced Ca(2+)release, we show that realistic Ca(2+)oscillations can potentiate the response to a hormonal stimulation. These results indicate that Ca(2+)oscillations in hepatocytes could contribute to increase the efficiency and specificity of cellular signalling, as shown experimentally for gene expression in lymphocytes (Dolmetsch et al., 1998).</para>
+
+        <para>
+The complete original paper reference is cited below:
+</para>
+        <para>
+         Activation of the Liver Glycogen Phosphorylase by Ca2+ Oscillations: a Theoretical Study, David Gall et al, 2009, <emphasis>Activation of the Liver Glycogen Phosphorylase by Ca2+ Oscillations: 
+a Theoretical Study </emphasis>, 207, 445-454. <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/11093832">PubMed ID: 11093832</ulink>
+        </para>
+		
+        <informalfigure float="0" id="fig_reaction_diagram">
+          <mediaobject>
+            <imageobject>
+              <objectinfo>
+                <title>Image depicting calcium flow in model</title>
+              </objectinfo>
+              <imagedata fileref="gall_2000.png"/>
+            </imageobject>
+          </mediaobject>
+          <caption>Calcium in cell</caption>
+        </informalfigure>
+      </sect1>
+    </article>
+  </documentation>
+
+
+
+   <units name="minute">
+      <unit multiplier="60" units="second"/>
+   </units>
+   <units name="per_minute">
+      <unit exponent="-1" units="minute"/>
+   </units>
+   <units name="millimole">
+      <unit prefix="milli" units="mole"/>
+   </units>
+   <units name="micromole">
+      <unit prefix="micro" units="mole"/>
+   </units>
+   <units name="micromolar">
+      <unit units="micromole"/>
+      <unit exponent="-1" units="litre"/>
+   </units>
+   <units name="micromolar_per_minute">
+      <unit units="micromolar"/>
+      <unit exponent="-1" units="minute"/>
+   </units>
+   <units name="millimolar">
+      <unit units="millimole"/>
+      <unit exponent="-1" units="litre"/>
+   </units>
+   <component name="environment">
+      <variable cmeta:id="environment_time" initial_value="0" name="time" public_interface="out" units="minute"/>
+   </component>
+   <component name="Pha">
+      <variable cmeta:id="Pha_Pha" initial_value="0.098" name="Pha" units="dimensionless"/>
+      <variable name="V_1" public_interface="in" units="dimensionless"/>
+      <variable name="Z" public_interface="in" units="dimensionless"/>
+      <variable name="K_1" public_interface="in" units="dimensionless"/>
+      <variable initial_value="0.6" name="V_M2" units="per_minute"/>
+      <variable initial_value="9" name="alpha" units="dimensionless"/>
+      <variable initial_value="10000" name="Glc" units="micromolar"/>
+      <variable initial_value="0.2" name="K_2" units="dimensionless"/>
+      <variable initial_value="10000" name="K_a1" units="micromolar"/>
+      <variable initial_value="10000" name="K_a2" units="micromolar"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Pha</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>V_1</ci>
+                  <ci>Z</ci>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <minus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        <ci>Pha</ci>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <plus/>
+                           <apply>
+                              <times/>
+                              <ci>K_1</ci>
+                              <ci>Z</ci>
+                           </apply>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        </apply>
+                        <ci>Pha</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>V_M2</ci>
+                     <apply>
+                        <plus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        <apply>
+                           <divide/>
+                           <apply>
+                              <times/>
+                              <ci>alpha</ci>
+                              <ci>Glc</ci>
+                           </apply>
+                           <apply>
+                              <plus/>
+                              <ci>K_a1</ci>
+                              <ci>Glc</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <ci>Pha</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <divide/>
+                        <ci>K_2</ci>
+                        <apply>
+                           <plus/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                           <apply>
+                              <divide/>
+                              <ci>Glc</ci>
+                              <ci>K_a2</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <ci>Pha</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="V_1">
+      <variable name="V_1" public_interface="out" units="dimensionless"/>
+      <variable initial_value="1.5" name="V_M1" units="per_minute"/>
+      <variable initial_value="9" name="gamma" units="dimensionless"/>
+      <variable name="Z" public_interface="in" units="dimensionless"/>
+      <variable initial_value="0.5" name="K_a5" units="micromolar"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_1</ci>
+            <apply>
+               <times/>
+               <ci>V_M1</ci>
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <times/>
+                     <ci>gamma</ci>
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <divide/>
+                           <apply>
+                              <power/>
+                              <ci>Z</ci>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4</cn>
+                           </apply>
+                           <apply>
+                              <power/>
+                              <ci>K_a5</ci>
+                              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4</cn>
+                           </apply>
+                        </apply>
+                        <apply>
+                           <power/>
+                           <ci>Z</ci>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4</cn>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="K_1">
+      <variable name="K_1" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.1" name="K_11" units="dimensionless"/>
+      <variable name="Z" public_interface="in" units="dimensionless"/>
+      <variable initial_value="0.5" name="K_a6" units="micromolar"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>K_1</ci>
+            <apply>
+               <divide/>
+               <ci>K_11</ci>
+               <apply>
+                  <plus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <power/>
+                        <ci>Z</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4</cn>
+                     </apply>
+                     <apply>
+                        <power/>
+                        <ci>K_a6</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">4</cn>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Z">
+      <variable cmeta:id="Z_Z" initial_value="0.000179" name="Z" public_interface="out" units="dimensionless"/>
+      <variable name="V_in" public_interface="in" units="dimensionless"/>
+      <variable name="V_2i" public_interface="in" units="dimensionless"/>
+      <variable name="V_3i" public_interface="in" units="dimensionless"/>
+      <variable initial_value="0.7" name="k_f" units="per_minute"/>
+      <variable name="Y" public_interface="in" units="dimensionless"/>
+      <variable initial_value="10" name="k" units="per_minute"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Z</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <minus/>
+                     <ci>V_in</ci>
+                     <ci>V_2i</ci>
+                  </apply>
+                  <ci>V_3i</ci>
+                  <apply>
+                     <times/>
+                     <ci>k_f</ci>
+                     <ci>Y</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k</ci>
+                  <ci>Z</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Y">
+      <variable initial_value="0.00122" name="Y" public_interface="out" units="dimensionless"/>
+      <variable name="V_2i" public_interface="in" units="dimensionless"/>
+      <variable name="V_3i" public_interface="in" units="dimensionless"/>
+      <variable initial_value="0.7" name="k_f" units="per_minute"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Y</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <ci>V_2i</ci>
+                  <ci>V_3i</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_f</ci>
+                  <ci>Y</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="V_in">
+      <variable name="V_in" public_interface="out" units="dimensionless"/>
+      <variable initial_value="1" name="v_0" units="micromolar_per_minute"/>
+      <variable initial_value="5.7" name="v_1" units="micromolar_per_minute"/>
+      <variable initial_value="0.3" name="beta" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_in</ci>
+            <apply>
+               <plus/>
+               <ci>v_0</ci>
+               <apply>
+                  <times/>
+                  <ci>v_1</ci>
+                  <ci>beta</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="V_2i">
+      <variable name="V_2i" public_interface="out" units="dimensionless"/>
+      <variable initial_value="30" name="v_M2i" units="micromolar_per_minute"/>
+      <variable name="Z" public_interface="in" units="dimensionless"/>
+      <variable initial_value="2" name="n" public_interface="out" units="dimensionless"/>
+      <variable initial_value="0.5" name="K_2i" units="micromolar"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_2i</ci>
+            <apply>
+               <times/>
+               <ci>v_M2i</ci>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <power/>
+                     <ci>Z</ci>
+                     <ci>n</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <power/>
+                        <ci>K_2i</ci>
+                        <ci>n</ci>
+                     </apply>
+                     <apply>
+                        <power/>
+                        <ci>Z</ci>
+                        <ci>n</ci>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="V_3i">
+      <variable name="V_3i" public_interface="out" units="dimensionless"/>
+      <variable initial_value="325" name="v_M3i" units="micromolar_per_minute"/>
+      <variable name="Z" public_interface="in" units="dimensionless"/>
+      <variable initial_value="4" name="p" units="dimensionless"/>
+      <variable name="Y" public_interface="in" units="dimensionless"/>
+      <variable initial_value="4" name="m" units="dimensionless"/>
+      <variable name="n" public_interface="in" units="dimensionless"/>
+      <variable initial_value="1.7" name="K_Ri" units="micromolar"/>
+      <variable initial_value="0.46" name="K_Ai" units="micromolar"/>
+      <variable name="time" public_interface="in" units="minute"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_3i</ci>
+            <apply>
+               <times/>
+               <ci>v_M3i</ci>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <power/>
+                        <ci>Y</ci>
+                        <ci>m</ci>
+                     </apply>
+                     <apply>
+                        <power/>
+                        <ci>K_Ri</ci>
+                        <ci>m</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <power/>
+                     <ci>Y</ci>
+                     <ci>n</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <power/>
+                     <ci>Z</ci>
+                     <ci>p</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <power/>
+                        <ci>K_Ai</ci>
+                        <ci>p</ci>
+                     </apply>
+                     <apply>
+                        <power/>
+                        <ci>Z</ci>
+                        <ci>p</ci>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <connection>
+      <map_components component_1="Z" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="Y" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_in" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_2i" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_3i" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="Pha" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_1" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="K_1" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_3i" component_2="V_2i"/>
+      <map_variables variable_1="n" variable_2="n"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_3i" component_2="Y"/>
+      <map_variables variable_1="Y" variable_2="Y"/>
+      <map_variables variable_1="V_3i" variable_2="V_3i"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_2i" component_2="Y"/>
+      <map_variables variable_1="V_2i" variable_2="V_2i"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_3i" component_2="Z"/>
+      <map_variables variable_1="Z" variable_2="Z"/>
+      <map_variables variable_1="V_3i" variable_2="V_3i"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_2i" component_2="Z"/>
+      <map_variables variable_1="Z" variable_2="Z"/>
+      <map_variables variable_1="V_2i" variable_2="V_2i"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_in" component_2="Z"/>
+      <map_variables variable_1="V_in" variable_2="V_in"/>
+   </connection>
+   <connection>
+      <map_components component_1="Y" component_2="Z"/>
+      <map_variables variable_1="Y" variable_2="Y"/>
+   </connection>
+   <connection>
+      <map_components component_1="Z" component_2="V_1"/>
+      <map_variables variable_1="Z" variable_2="Z"/>
+   </connection>
+   <connection>
+      <map_components component_1="Z" component_2="Pha"/>
+      <map_variables variable_1="Z" variable_2="Z"/>
+   </connection>
+   <connection>
+      <map_components component_1="Z" component_2="K_1"/>
+      <map_variables variable_1="Z" variable_2="Z"/>
+   </connection>
+   <connection>
+      <map_components component_1="Pha" component_2="V_1"/>
+      <map_variables variable_1="V_1" variable_2="V_1"/>
+   </connection>
+   <connection>
+      <map_components component_1="Pha" component_2="K_1"/>
+      <map_variables variable_1="K_1" variable_2="K_1"/>
+   </connection>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:nodeID="n1"><boundIntervals xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n2"/></boundIntervals></rdf:Description><rdf:Description rdf:nodeID="n2"><rdf:first><rdf:Description rdf:nodeID="n3"/></rdf:first><rdf:rest><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/></rdf:rest></rdf:Description><rdf:Description rdf:nodeID="n3"><endingValue xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">3</endingValue></rdf:Description><rdf:Description rdf:about="#gall_2000b"><simulation xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n1"/></simulation></rdf:Description></rdf:RDF>
+
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#">
+  <rdf:Description rdf:about="">
+    <dc:creator rdf:parseType="Resource">
+      <vCard:N rdf:parseType="Resource">
+        <vCard:Family>Nielsen</vCard:Family>
+        <vCard:Given>Hanne</vCard:Given>
+    
+      </vCard:N>
+      <vCard:EMAIL rdf:parseType="Resource">
+        <rdf:value>hnie010@aucklanduni.ac.nz</rdf:value>
+        <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+      </vCard:EMAIL>
+      <vCard:ORG rdf:parseType="Resource">
+        <vCard:Orgname>The University of Auckland</vCard:Orgname>
+        <vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+      </vCard:ORG>
+    </dc:creator>
+    <dcterms:created rdf:parseType="Resource">
+      <dcterms:W3CDTF>2009-10-08</dcterms:W3CDTF>
+    </dcterms:created>
+  </rdf:Description>
+  <rdf:Description rdf:about="#gall_2000">
+    <cmeta:species>Human</cmeta:species>
+    <cmeta:bio_entity>Liver</cmeta:bio_entity>
+    <cmeta:bio_entity>hepatocyte</cmeta:bio_entity>
+    <bqs:reference rdf:parseType="Resource">
+      <dc:subject rdf:parseType="Resource">
+        <bqs:subject_type>keyword</bqs:subject_type>
+        <rdf:value>
+          <rdf:Bag>
+            <rdf:li>hepatology</rdf:li>
+            <rdf:li>liver</rdf:li>
+          </rdf:Bag>
+        </rdf:value>
+      </dc:subject>
+    </bqs:reference>
+    <bqs:reference rdf:parseType="Resource">
+      <bqs:Pubmed_id> 11093832 </bqs:Pubmed_id>
+      <bqs:JournalArticle rdf:parseType="Resource">
+        <dc:creator>
+          <rdf:Seq>
+            <rdf:li rdf:parseType="Resource">
+              <bqs:Person rdf:parseType="Resource">
+                <vCard:N rdf:parseType="Resource">
+                  <vCard:Family>Gall</vCard:Family>
+                  <vCard:Given>D</vCard:Given>
+                </vCard:N>
+              </bqs:Person>
+            </rdf:li>
+            <rdf:li rdf:parseType="Resource">
+              <bqs:Person rdf:parseType="Resource">
+                <vCard:N rdf:parseType="Resource">
+                  <vCard:Family>Baus</vCard:Family>
+                  <vCard:Given>E</vCard:Given>
+                </vCard:N>
+              </bqs:Person>
+            </rdf:li>
+            <rdf:li rdf:parseType="Resource">
+              <bqs:Person rdf:parseType="Resource">
+                <vCard:N rdf:parseType="Resource">
+                  <vCard:Family>Dupont</vCard:Family>
+                  <vCard:Given>G</vCard:Given>
+                </vCard:N>
+              </bqs:Person>
+            </rdf:li>
+                      </rdf:Seq>
+        </dc:creator>
+        <dc:title>
+           Activation of the liver glycogen phosphorylase by Ca(2+)oscillations: a theoretical study
+          </dc:title>
+        <dcterms:issued rdf:parseType="Resource">
+          <dcterms:W3CDTF>2009-07-08</dcterms:W3CDTF>
+        </dcterms:issued>
+        <bqs:Journal rdf:parseType="Resource">
+          <dc:title>Journal of Theoretical Biology</dc:title>
+        </bqs:Journal>
+        <bqs:volume>207(4)</bqs:volume>
+        <bqs:first_page>445</bqs:first_page>
+        <bqs:last_page>454</bqs:last_page>
+      </bqs:JournalArticle>
+    </bqs:reference>
+  </rdf:Description>
+</rdf:RDF>
+
+</model>

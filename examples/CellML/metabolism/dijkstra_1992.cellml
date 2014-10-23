@@ -1,0 +1,4812 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:ns7="http://www.cellml.org/metadata/simulation/1.0#" name="dijkstra_1992" cmeta:id="dijkstra_1992">
+
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Simulation of nutrient digestion, absorption and outflow in the rumen: model description</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+         This CellML model runs in both OpenCell and COR. The units have been checked and they are consistent. In order to balance the units in a couple of equations a "balancing factor" had to be introduced (eqs 4.13 and 14.36). Also note there are two typographical errors in the published paper: eq 1.1 should be C_Pd = Q_Pd/V_Ru (not C_Pd = Q_Pd*V_Ru) and eq 8.2 P_Fu_InFu = Y_Fu_InFu*D_Fu (not P_Fu_InFu = U_Fu_InFu*D_Fu). Finally there are quite a few variables with undefined values. To complete the CellML model, where parameter values were missing, a value of 1.000 has been used. Note that there are some genuine values of 1. These have been entered as just 1 or 1.0. The model simulation output looks reasonable, but with no results figures in the published paper it is hard to say whether or not the CellML model accurately recreates the published results.
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+ABSTRACT: A mathematical model is described that stimulates the digestion, absorption and outflow of nutrients in the rumen. The model consists of 17 state variables, representing nitrogen, carbohydrate, lipid, microbial and volatile fatty acid pools. The flux equations are described by Michaelis-Menten or mass action forms with model_parameters calculated from the literature. Several specific areas of improvement in representation of rumen processes were reconsidered during model development. These included microbial substrate preference, differential outflow and chemical composition of rumen microbes, recycling of microbial matter within the rumen, uncoupling of fermentation with respect to nitrogen availability, reduced microbial activity at reduced rumen pH and pH-dependent absorption of volatile fatty acids and ammonia. The model was used to examine the effects of the diet on the profile of nutrients available for absorption and was shown to respond appropriately to different intake and nitrogen levels. The validity of the improvements and the predictions of nutrient supply on a variety of dietary inputs are tested in a companion paper.
+</para>
+
+<para>
+The original paper reference is cited below:
+</para>
+
+<para>
+Simulation of nutrient digestion, absorption and outflow in the rumen: model description, Dijkstra J, Neal HD, Beever DE, and France J, 1992, <emphasis>The Journal of Nutrition</emphasis>, 122, 2239-2256.  <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/1331382">PubMed ID: 1331382</ulink>
+</para>
+
+<informalfigure float="0" id="fig_reaction diamole">
+<mediaobject>
+  <imageobject>
+    <imagedata fileref="dijkstra_1992.png"/>
+  </imageobject>
+</mediaobject>
+<caption>Diagrammatic representation of the rumen model. Purple boxes indicate state variables and arrows indicate fluxes.</caption>
+</informalfigure>
+
+</sect1>
+</article>
+</documentation>
+  
+  
+  
+  <units name="molar">
+    <unit units="mole"/>
+    <unit units="litre" exponent="-1"/>
+  </units>
+  
+  <units name="gram_per_litre">
+    <unit units="gram"/>
+    <unit units="litre" exponent="-1"/>
+  </units>
+  
+  <units name="day">
+    <unit units="second" multiplier="86400.0"/>
+  </units>
+  
+  <units name="mole_per_day">
+    <unit units="mole"/>
+    <unit units="day" exponent="-1"/>
+  </units>
+  
+  <units name="mole_per_litre_day">
+    <unit units="mole"/>
+    <unit units="litre" exponent="-1"/>
+    <unit units="day" exponent="-1"/>
+  </units>
+  
+  <units name="gram_per_day">
+    <unit units="gram"/>
+    <unit units="day" exponent="-1"/>
+  </units>
+  
+  <units name="gram_per_mole">
+    <unit units="gram"/>
+    <unit units="mole" exponent="-1"/>
+  </units>
+  
+  <units name="mole_per_gram_day">
+    <unit units="mole"/>
+	<unit units="gram" exponent="-1"/>
+    <unit units="day" exponent="-1"/>
+  </units>
+  
+  <units name="mole_per_gram">
+    <unit units="mole"/>
+	<unit units="gram" exponent="-1"/>
+  </units>
+  
+  <units name="gram_per_litre_day">
+    <unit units="gram"/>
+	<unit units="litre" exponent="-1"/>
+    <unit units="day" exponent="-1"/>
+  </units>
+  
+  <units name="litre_per_day">
+    <unit units="litre"/>
+    <unit units="day" exponent="-1"/>
+  </units>
+  
+  <units name="first_order_rate_constant">
+    <unit units="day" exponent="-1"/>
+  </units>
+  
+  
+  <component name="environment">
+    <variable units="day" public_interface="out" name="time" cmeta:id="environment_time"/>
+  </component>
+  
+  <component name="Q_Pd" cmeta:id="Q_Pd">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#Q_Pd">
+        <dc:title>Q_Pd</dc:title>
+        <dcterms:alternative>degradable protein pool</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="mole_per_day" public_interface="out" name="U_Pd_PdPs"/>
+	
+	<variable units="mole" name="Q_Pd" initial_value="1.000"/>
+    <variable units="molar" name="C_Pd"/>
+    <variable units="mole_per_day" name="U_Pd_PdEx"/>
+    <variable units="mole_per_day" name="P_Pd_InPd"/>
+	<variable units="mole_per_day" name="v_PdPs"/>
+	<variable units="mole_per_gram_day" name="v_PdPs_star" initial_value="0.0576"/>
+    <variable units="molar" name="M_Pd_PdPs"/>
+	<variable units="molar" name="M_Pd_PdPs_star" initial_value="0.264"/>
+	<variable units="molar" name="Y_Pd_InPd" initial_value="0.0091"/>
+    <variable units="litre_per_day" name="D_Pd" initial_value="1.000"/>
+	<variable units="first_order_rate_constant" name="k_PdEx"/>
+    <variable units="day" name="T_Pd" initial_value="1.000"/>
+	<variable units="day" name="T_Pd_star" initial_value="0.66"/>
+    
+    <variable units="day" public_interface="in" name="time"/>
+	<variable units="gram" public_interface="in" name="Q_Ma"/>
+	<variable units="gram" public_interface="in" name="Q_Mc"/>
+    <variable units="litre" public_interface="in" name="V_Ru"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_SoEx"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>C_Pd</ci> 
+		<apply><divide/>
+          <ci> Q_Pd </ci>
+		  <ci> V_Ru </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Pd_InPd</ci> 
+		<apply><times/>
+          <ci> Y_Pd_InPd </ci>
+		  <ci> D_Pd </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Pd_PdPs</ci> 
+		<apply><divide/>
+          <ci> v_PdPs </ci>
+		  <apply><plus/>
+		    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			<apply><divide/>
+              <ci>M_Pd_PdPs</ci>
+			  <ci>C_Pd</ci>
+            </apply>		
+		  </apply>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Pd_PdEx</ci> 
+		<apply><times/>
+          <ci> k_PdEx </ci>
+		  <ci> Q_Pd </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+	  <apply><eq/> 
+        <apply><diff/> 
+          <bvar><ci>time</ci></bvar> 
+          <ci>Q_Pd</ci> 
+        </apply>
+        <apply><minus/>
+          <ci> P_Pd_InPd </ci>
+          <apply><plus/>
+            <ci> U_Pd_PdPs </ci>
+            <ci> U_Pd_PdEx </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>k_PdEx</ci> 
+		<ci> k_SoEx </ci>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>M_Pd_PdPs</ci> 
+		<apply><times/>
+          <ci> M_Pd_PdPs_star </ci>
+		  <apply><divide/>
+		    <ci>T_Pd</ci>
+			<ci>T_Pd_star</ci>
+          </apply>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>v_PdPs</ci> 
+		<apply><times/>
+          <ci> v_PdPs_star </ci>
+		  <apply><plus/>
+		    <ci>Q_Ma</ci>
+			<ci>Q_Mc</ci>
+          </apply>
+	    </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="Q_Ps" cmeta:id="Q_Ps">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#Q_Ps">
+        <dc:title>Q_Ps</dc:title>
+        <dcterms:alternative>soluble protein pool</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="molar" public_interface="out" name="C_Ps"/>
+    <variable units="mole_per_day" public_interface="out" name="U_McPs_PsAm"/>
+	<variable units="mole_per_day" public_interface="out" name="U_Ps_PsMa"/>
+    <variable units="mole_per_day" public_interface="out" name="U_Ps_PsMc"/>
+	<variable units="mole_per_day" public_interface="out" name="U_MaPs_PsAm"/>
+	<variable units="molar" public_interface="out" name="M_Ha_McMa" initial_value="0.0248"/>
+	
+	<variable units="mole" name="Q_Ps" initial_value="1.000"/>
+    <variable units="mole_per_day" name="P_Ps_InPs"/>
+	<variable units="mole_per_day" name="P_Ps_SaPs"/>
+	<variable units="mole_per_day" name="P_Ps_PdPs"/>
+	<variable units="mole_per_day" name="P_Ps_MaMd"/>
+	<variable units="mole_per_day" name="P_Ps_McPs"/>
+	<variable units="mole_per_day" name="U_Ps_PsEx"/>
+	<variable units="mole_per_day" name="U_Mc_McPs"/>
+    <variable units="mole_per_day" name="v_Ma_PsAm"/>
+	<variable units="mole_per_day" name="v_Mc_PsAm"/>
+	<variable units="mole_per_day" name="v_PsMa"/>
+	<variable units="mole_per_day" name="v_PsMc"/>
+	<variable units="mole_per_gram_day" name="v_PsAm_star" initial_value="0.0144"/>
+	<variable units="mole_per_gram_day" name="v_PsMa_star" initial_value="0.0576"/>
+	<variable units="mole_per_gram_day" name="v_PsMc_star" initial_value="0.0576"/>
+    <variable units="first_order_rate_constant" name="k_PsEx"/>
+    <variable units="molar" name="Y_Ps_InPs" initial_value="0.0091"/>
+	<variable units="molar" name="Y_Ps_SaPs" initial_value="0.0010"/>
+	<variable units="dimensionless" name="Y_Ps_PdPs" initial_value="1.0"/>
+	<variable units="mole_per_gram" name="Y_Ps_MaMd" initial_value="0.0067"/>
+	<variable units="dimensionless" name="Y_Ps_McPs" initial_value="0.0067"/>
+    <variable units="litre_per_day" name="D_Ps" initial_value="1.000"/>
+	<variable units="molar" name="M_Ps_PsAm" initial_value="0.0289"/>
+	<variable units="molar" name="M_Ps_PsMa" initial_value="0.0224"/>
+	<variable units="molar" name="M_Ps_PsMc" initial_value="0.0224"/>
+	<variable units="molar" name="M_Ha_PsMa" initial_value="0.0248"/>
+	<variable units="molar" name="M_Hc_PsMc" initial_value="0.0248"/>
+	<variable units="molar" name="J_Ha_PsAm" initial_value="0.0165"/>
+	<variable units="molar" name="J_Hc_PsAm" initial_value="0.0165"/>
+	
+    <variable units="day" public_interface="in" name="time"/>
+	<variable units="gram" public_interface="in" name="Q_Ma"/>
+	<variable units="gram" public_interface="in" name="Q_Mc"/>
+    <variable units="litre" public_interface="in" name="V_Ru"/>
+    <variable units="mole_per_day" public_interface="in" name="U_Pd_PdPs"/>
+	<variable units="gram_per_day" public_interface="in" name="U_Mc_McEg"/>
+	<variable units="gram_per_day" public_interface="in" name="U_Ma_MaMd"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Hc_PsMc"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Ha_McMa"/>
+	<variable units="molar" public_interface="in" name="C_Ha"/>
+	<variable units="molar" public_interface="in" name="C_Hc"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_FlEx"/>
+	<variable units="molar" public_interface="in" name="J_Ha_McAm"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>C_Ps</ci> 
+		<apply><divide/>
+          <ci> Q_Ps </ci>
+		  <ci> V_Ru </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Ps_InPs</ci> 
+		<apply><times/>
+          <ci> Y_Ps_InPs </ci>
+		  <ci> D_Ps </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Ps_SaPs</ci> 
+		<apply><times/>
+          <ci> Y_Ps_SaPs </ci>
+		  <ci> D_Ps </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Ps_PdPs</ci> 
+		<apply><times/>
+          <ci> Y_Ps_PdPs </ci>
+		  <ci> U_Pd_PdPs </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Ps_MaMd</ci> 
+		<apply><times/>
+          <ci> Y_Ps_MaMd </ci>
+		  <ci> U_Ma_MaMd </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Ps_McPs</ci> 
+		<apply><times/>
+          <ci> Y_Ps_McPs </ci>
+		  <ci> U_Mc_McPs </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_MaPs_PsAm</ci> 
+		<apply><divide/>
+          <ci> v_Ma_PsAm </ci>
+		  <apply><plus/>
+		    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			<apply><divide/>
+              <ci>M_Ps_PsAm</ci>
+			  <ci>C_Ps</ci>
+            </apply>
+            <apply><divide/>
+              <ci>C_Ha</ci>
+			  <ci>J_Ha_PsAm</ci>
+            </apply>			
+		  </apply>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_McPs_PsAm</ci> 
+		<apply><divide/>
+          <ci> v_Mc_PsAm </ci>
+		  <apply><plus/>
+		    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			<apply><divide/>
+              <ci>M_Ps_PsAm</ci>
+			  <ci>C_Ps</ci>
+            </apply>
+            <apply><divide/>
+              <ci>C_Hc</ci>
+			  <ci>J_Hc_PsAm</ci>
+            </apply>			
+		  </apply>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Ps_PsMa</ci> 
+		<apply><divide/>
+          <ci> v_PsMa </ci>
+		  <apply><plus/>
+		    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			<apply><divide/>
+              <ci>M_Ps_PsMa</ci>
+			  <ci>C_Ps</ci>
+            </apply>
+            <apply><divide/>
+              <ci>M_Ha_PsMa</ci>
+			  <ci>C_Ha</ci>
+            </apply>			
+		  </apply>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Ps_PsMc</ci> 
+		<apply><divide/>
+          <ci> v_PsMc </ci>
+		  <apply><plus/>
+		    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			<apply><divide/>
+              <ci>M_Ps_PsMc</ci>
+			  <ci>C_Ps</ci>
+            </apply>
+            <apply><divide/>
+              <ci>M_Hc_PsMc</ci>
+			  <ci>C_Hc</ci>
+            </apply>			
+		  </apply>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Ps_PsEx</ci> 
+		<apply><times/>
+          <ci> k_PsEx </ci>
+		  <ci> Q_Ps </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+	  <apply><eq/> 
+        <apply><diff/> 
+          <bvar><ci>time</ci></bvar> 
+          <ci>Q_Ps</ci> 
+        </apply>
+        <apply><minus/>
+          <apply><plus/>
+		    <ci> P_Ps_InPs </ci>
+			<ci> P_Ps_PdPs </ci>
+			<ci> P_Ps_MaMd </ci>
+			<ci> P_Ps_SaPs </ci>
+			<ci> P_Ps_McPs </ci>
+		  </apply>
+          <apply><plus/>
+            <ci> U_MaPs_PsAm </ci>
+            <ci> U_McPs_PsAm </ci>
+			<ci> U_Ps_PsMa </ci>
+            <ci> U_Ps_PsMc </ci>
+            <ci> U_Ps_PsEx </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Mc_McPs</ci> 
+		<apply><times/>
+          <ci> U_Mc_McEg </ci>
+		  <apply><minus/>
+		    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mole_per_gram">1</cn>
+			<apply><plus/>
+			  <apply><divide/>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mole_per_gram">1</cn>
+			    <apply><plus/>
+		          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+				  <apply><divide/>
+                    <ci>C_Ha</ci>
+			        <ci>J_Ha_McAm</ci>
+                  </apply>
+                </apply>
+			  </apply>
+			  <apply><divide/>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mole_per_gram">1</cn>
+			    <apply><plus/>
+		          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+				  <apply><divide/>
+                    <ci>M_Ha_McMa</ci>
+			        <ci>C_Ha</ci>
+                  </apply>
+                </apply>
+			  </apply>
+            </apply>			
+		  </apply>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>v_Ma_PsAm</ci> 
+		<apply><times/>
+          <ci> v_PsAm_star </ci>
+		  <ci> Q_Ma </ci>
+        </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>v_Mc_PsAm</ci> 
+		<apply><times/>
+          <ci> v_PsAm_star </ci>
+		  <ci> Q_Mc </ci>
+        </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>v_PsMa</ci> 
+		<apply><times/>
+          <ci> v_PsMa_star </ci>
+		  <ci> Q_Ma </ci>
+        </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>v_PsMc</ci> 
+		<apply><times/>
+          <ci> v_PsMc_star </ci>
+		  <ci> Q_Mc </ci>
+        </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>k_PsEx</ci> 
+		<ci>k_FlEx</ci>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="Q_Pu" cmeta:id="Q_Pu">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#Q_Pu">
+        <dc:title>Q_Pu</dc:title>
+        <dcterms:alternative>undegradable protein pool</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="mole" name="Q_Pu" initial_value="1.000"/>
+    <variable units="molar" name="C_Pu"/>
+    <variable units="mole_per_day" name="P_Pu_InPu"/>
+	<variable units="mole_per_day" name="U_Pu_PuEx"/>
+	<variable units="molar" name="Y_Pu_InPu" initial_value="0.0091"/>
+    <variable units="litre_per_day" name="D_Pu" initial_value="1.000"/>
+	<variable units="first_order_rate_constant" name="k_PuEx"/>
+    
+    <variable units="day" public_interface="in" name="time"/>
+	<variable units="litre" public_interface="in" name="V_Ru"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="k_SoEx"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>C_Pu</ci> 
+		<apply><divide/>
+          <ci> Q_Pu </ci>
+		  <ci> V_Ru </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Pu_InPu</ci> 
+		<apply><times/>
+          <ci> Y_Pu_InPu </ci>
+		  <ci> D_Pu </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Pu_PuEx</ci> 
+		<apply><times/>
+          <ci> k_PuEx </ci>
+		  <ci> Q_Pu </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+	  <apply><eq/> 
+        <apply><diff/> 
+          <bvar><ci>time</ci></bvar> 
+          <ci>Q_Pu</ci> 
+        </apply>
+        <apply><minus/>
+          <ci> P_Pu_InPu </ci>
+          <ci> U_Pu_PuEx </ci>
+        </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>k_PuEx</ci> 
+		<ci>k_SoEx</ci>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="Q_Am" cmeta:id="Q_Am">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#Q_Am">
+        <dc:title>Q_Am</dc:title>
+        <dcterms:alternative>ammonia pool</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="molar" public_interface="out" name="C_Am"/>
+    <variable units="mole_per_day" public_interface="out" name="U_Am_AmMc"/>
+	<variable units="mole_per_day" public_interface="out" name="U_Am_AmMa"/>
+    <variable units="mole_per_day" public_interface="out" name="U_Mc_McAm"/>
+	
+	<variable units="mole" name="Q_Am" initial_value="1.000"/>
+    <variable units="mole_per_day" name="P_Am_InAm"/>
+	<variable units="mole_per_day" name="P_Am_UeAm"/>
+	<variable units="mole_per_day" name="P_MaAm_PsAm"/>
+	<variable units="mole_per_day" name="P_McAm_PsAm"/>
+	<variable units="mole_per_day" name="P_Am_McAm"/>
+	<variable units="mole_per_day" name="U_Am_AmAb"/>
+	<variable units="mole_per_day" name="U_Am_AmEx"/>
+    <variable units="mole_per_day" name="v_UeAm"/>
+	<variable units="mole_per_day" name="v_AmAb"/>
+	<variable units="mole_per_day" name="v_AmMa"/>
+	<variable units="mole_per_day" name="v_AmMc"/>
+	<variable units="mole_per_litre_day" name="v_UeAm_star" initial_value="0.00165"/>
+	<variable units="mole_per_litre_day" name="v_AmAb_star" initial_value="1.10"/>
+	<variable units="mole_per_gram_day" name="v_AmMa_star" initial_value="0.0528"/>
+	<variable units="mole_per_gram_day" name="v_AmMc_star" initial_value="0.0528"/>
+    <variable units="first_order_rate_constant" name="k_AmEx"/>
+    <variable units="molar" name="Y_Am_InAm" initial_value="0.0588"/>
+	<variable units="dimensionless" name="Y_Am_UeAm" initial_value="2.0"/>
+	<variable units="dimensionless" name="Y_Am_PsAm" initial_value="1.257"/>
+	<variable units="dimensionless" name="Y_Am_McAm" initial_value="0.0084"/>
+	<variable units="molar" name="M_Am_AmMa" initial_value="0.00135"/>
+	<variable units="molar" name="M_Am_AmMc" initial_value="0.00135"/>
+	<variable units="molar" name="M_Am_AmAb" initial_value="0.0132"/>
+	<variable units="dimensionless" name="M_pH_AmAb" initial_value="7.5"/>
+	<variable units="dimensionless" name="phi_pH_AmAb" initial_value="7.85"/>
+	<variable units="molar" name="M_Ha_AmMa" initial_value="0.0159"/>
+	<variable units="molar" name="M_Hc_AmMc" initial_value="0.0159"/>
+	<variable units="molar" name="J_Am_UeAm" initial_value="0.00621"/>
+	<variable units="litre_per_day" name="D_Am" initial_value="1.000"/>
+	
+    <variable units="day" public_interface="in" name="time"/>
+	<variable units="gram" public_interface="in" name="Q_Ma"/>
+	<variable units="gram" public_interface="in" name="Q_Mc"/>
+    <variable units="litre" public_interface="in" name="V_Ru"/>
+	<variable units="dimensionless" public_interface="in" name="pH"/>
+	<variable units="dimensionless" public_interface="in" name="f_Po_Ma"/>
+	<variable units="dimensionless" public_interface="in" name="f_Ni_Fe"/>
+	<variable units="mole_per_day" public_interface="in" name="U_McPs_PsAm"/>
+	<variable units="mole_per_day" public_interface="in" name="U_MaPs_PsAm"/>
+	<variable units="gram_per_day" public_interface="in" name="U_Mc_McEg"/>
+	<variable units="molar" public_interface="in" name="C_Ha"/>
+	<variable units="molar" public_interface="in" name="C_Hc"/>
+	<variable units="molar" public_interface="in" name="J_Ha_McAm"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_FlEx"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>C_Am</ci> 
+		<apply><divide/>
+          <ci> Q_Am </ci>
+		  <ci> V_Ru </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Am_InAm</ci> 
+		<apply><times/>
+          <ci> Y_Am_InAm </ci>
+		  <ci> D_Am </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Am_UeAm</ci> 
+		<apply><times/>
+          <ci> Y_Am_UeAm </ci>
+		  <ci> v_UeAm </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_MaAm_PsAm</ci> 
+		<apply><times/>
+          <ci> Y_Am_PsAm </ci>
+		  <ci> U_MaPs_PsAm </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_McAm_PsAm</ci> 
+		<apply><times/>
+          <ci> Y_Am_PsAm </ci>
+		  <ci> U_McPs_PsAm </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Am_McAm</ci> 
+		<apply><times/>
+          <ci> Y_Am_McAm </ci>
+		  <ci> U_Mc_McAm </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Am_AmMa</ci> 
+		<apply><divide/>
+          <ci> v_AmMa </ci>
+		  <apply><plus/>
+		    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			<apply><divide/>
+              <ci>M_Am_AmMa</ci>
+			  <ci>C_Am</ci>
+            </apply>
+            <apply><divide/>
+              <ci>M_Ha_AmMa</ci>
+			  <ci>C_Ha</ci>
+            </apply>			
+		  </apply>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Am_AmMc</ci> 
+		<apply><divide/>
+          <ci> v_AmMc </ci>
+		  <apply><plus/>
+		    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			<apply><divide/>
+              <ci>M_Am_AmMc</ci>
+			  <ci>C_Am</ci>
+            </apply>
+            <apply><divide/>
+              <ci>M_Hc_AmMc</ci>
+			  <ci>C_Hc</ci>
+            </apply>			
+		  </apply>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Am_AmAb</ci> 
+		<apply><divide/>
+          <ci> v_AmAb </ci>
+		  <apply><plus/>
+		    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			<apply><divide/>
+              <ci>M_Am_AmAb</ci>
+			  <ci>C_Am</ci>
+            </apply>
+          </apply>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Am_AmEx</ci> 
+		<apply><times/>
+          <ci> k_AmEx </ci>
+		  <ci> Q_Am </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+	  <apply><eq/> 
+        <apply><diff/> 
+          <bvar><ci>time</ci></bvar> 
+          <ci>Q_Am</ci> 
+        </apply>
+        <apply><minus/>
+          <apply><plus/>
+		    <ci> P_Am_InAm </ci>
+			<ci> P_MaAm_PsAm </ci>
+			<ci> P_McAm_PsAm </ci>
+			<ci> P_Am_UeAm </ci>
+			<ci> P_Am_McAm </ci>
+		  </apply>
+          <apply><plus/>
+            <ci> U_Am_AmAb </ci>
+            <ci> U_Am_AmMa </ci>
+			<ci> U_Am_AmMc </ci>
+            <ci> U_Am_AmEx </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>v_UeAm</ci> 
+		<apply><times/>
+          <ci> v_UeAm_star </ci>
+		  <ci> V_Ru </ci>
+		  <apply><divide/>
+		    <ci> f_Ni_Fe </ci>
+		    <apply><plus/>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			  <apply><divide/>
+                <ci>C_Am</ci>
+			    <ci>J_Am_UeAm</ci>
+              </apply>
+            </apply>			
+		  </apply>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>v_AmAb</ci> 
+		<apply><times/>
+          <ci> v_AmAb_star </ci>
+		  <apply><power/>
+		    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="litre">1.0</cn>
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.25</cn>
+		  </apply>
+		  <apply><power/>
+		    <ci> V_Ru </ci>
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.75</cn>
+		  </apply>
+		  <apply><plus/>
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			<apply><power/>
+		      <apply><divide/>
+		        <ci> M_pH_AmAb </ci>
+			    <ci> pH </ci>
+              </apply>
+			  <ci> phi_pH_AmAb </ci>
+            </apply>
+		  </apply>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>v_AmMa</ci> 
+		<apply><times/>
+          <ci> v_AmMa_star </ci>
+		  <ci> Q_Ma </ci>
+		  <apply><minus/>
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			<ci> f_Po_Ma </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>v_AmMc</ci> 
+		<apply><times/>
+          <ci> v_AmMc_star </ci>
+		  <ci> Q_Mc </ci>
+        </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Mc_McAm</ci> 
+		<apply><divide/>
+          <apply><times/>
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mole_per_gram">1</cn>
+			<ci> U_Mc_McEg </ci>
+		  </apply>
+		  <apply><plus/>
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			<apply><divide/>
+              <ci>C_Ha</ci>
+			  <ci>J_Ha_McAm</ci>
+            </apply>			
+		  </apply>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>k_AmEx</ci> 
+		<ci>k_FlEx</ci>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="Q_Li" cmeta:id="Q_Li">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#Q_Li">
+        <dc:title>Q_Li</dc:title>
+        <dcterms:alternative>lipid pool</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="mole" name="Q_Li" initial_value="1.000"/>
+    <variable units="molar" name="C_Li"/>
+    <variable units="mole_per_day" name="P_Li_InLi"/>
+	<variable units="mole_per_day" name="P_Li_MaMd"/>
+	<variable units="mole_per_day" name="U_Li_LiEx"/>
+	<variable units="molar" name="Y_Li_InLi" initial_value="0.0015"/>
+	<variable units="mole_per_gram" name="Y_Li_MaMd" initial_value="0.00021"/>
+    <variable units="litre_per_day" name="D_Li" initial_value="1.000"/>
+	<variable units="first_order_rate_constant" name="k_LiEx"/>
+    
+    <variable units="day" public_interface="in" name="time"/>
+	<variable units="litre" public_interface="in" name="V_Ru"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="k_FlEx"/>
+	<variable units="gram_per_day" public_interface="in" name="U_Ma_MaMd"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>C_Li</ci> 
+		<apply><divide/>
+          <ci> Q_Li </ci>
+		  <ci> V_Ru </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Li_InLi</ci> 
+		<apply><times/>
+          <ci> Y_Li_InLi </ci>
+		  <ci> D_Li </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Li_MaMd</ci> 
+		<apply><times/>
+          <ci> Y_Li_MaMd </ci>
+		  <ci> U_Ma_MaMd </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Li_LiEx</ci> 
+		<apply><times/>
+          <ci> k_LiEx </ci>
+		  <ci> Q_Li </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+	  <apply><eq/> 
+        <apply><diff/> 
+          <bvar><ci>time</ci></bvar> 
+          <ci>Q_Li</ci> 
+        </apply>
+        <apply><minus/>
+          <apply><plus/>
+            <ci> P_Li_InLi </ci>
+		    <ci> P_Li_MaMd </ci>
+		  </apply>
+          <ci> U_Li_LiEx </ci>
+        </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>k_LiEx</ci> 
+		<ci>k_FlEx</ci>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="Q_Sd" cmeta:id="Q_Sd">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#Q_Sd">
+        <dc:title>Q_Sd</dc:title>
+        <dcterms:alternative>degradable starch pool</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="mole_per_day" public_interface="out" name="U_Sd_SdHa"/>
+	
+	<variable units="mole" name="Q_Sd" initial_value="1.000"/>
+    <variable units="molar" name="C_Sd"/>
+    <variable units="mole_per_day" name="P_Sd_InSd"/>
+	<variable units="mole_per_day" name="U_Sd_SdEx"/>
+	<variable units="molar" name="Y_Sd_InSd" initial_value="0.0062"/>
+    <variable units="litre_per_day" name="D_Sd" initial_value="1.000"/>
+	<variable units="first_order_rate_constant" name="k_SdEx"/>
+    <variable units="mole_per_day" name="v_SdHa"/>
+	<variable units="mole_per_gram_day" name="v_SdHa_star" initial_value="0.2179"/>
+	<variable units="molar" name="M_Sd_SdHa"/>
+	<variable units="molar" name="M_Sd_SdHa_star" initial_value="0.416"/>
+	<variable units="day" name="T_Sd" initial_value="1.000"/>
+	<variable units="day" name="T_Sd_star" initial_value="1.04"/>
+	
+    <variable units="day" public_interface="in" name="time"/>
+	<variable units="litre" public_interface="in" name="V_Ru"/>
+	<variable units="gram" public_interface="in" name="Q_Ma"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="k_SoEx"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>C_Sd</ci> 
+		<apply><divide/>
+          <ci> Q_Sd </ci>
+		  <ci> V_Ru </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Sd_InSd</ci> 
+		<apply><times/>
+          <ci> Y_Sd_InSd </ci>
+		  <ci> D_Sd </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Sd_SdHa</ci> 
+		<apply><divide/>
+          <ci> v_SdHa </ci>
+		  <apply><plus/>
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			<apply><divide/>
+              <ci>M_Sd_SdHa</ci>
+			  <ci>C_Sd</ci>
+            </apply>			
+		  </apply>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Sd_SdEx</ci> 
+		<apply><times/>
+          <ci> k_SdEx </ci>
+		  <ci> Q_Sd </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+	  <apply><eq/> 
+        <apply><diff/> 
+          <bvar><ci>time</ci></bvar> 
+          <ci>Q_Sd</ci> 
+        </apply>
+        <apply><minus/>
+          <ci> P_Sd_InSd </ci>
+		  <apply><plus/>
+		    <ci> U_Sd_SdHa </ci>
+			<ci> U_Sd_SdEx </ci>
+		  </apply>
+        </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>v_SdHa</ci> 
+		<apply><times/>
+          <ci> v_SdHa_star </ci>
+		  <ci> Q_Ma </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>M_Sd_SdHa</ci> 
+		<apply><times/>
+          <ci> M_Sd_SdHa_star </ci>
+		  <apply><divide/>
+            <ci> T_Sd </ci>
+			<ci> T_Sd_star </ci>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>k_SdEx</ci> 
+		<ci>k_SoEx</ci>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="Q_Fd" cmeta:id="Q_Fd">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#Q_Fd">
+        <dc:title>Q_Fd</dc:title>
+        <dcterms:alternative>degradable fiber pool</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="mole_per_day" public_interface="out" name="U_Fd_FdHc"/>
+	
+	<variable units="mole" name="Q_Fd" initial_value="1.000"/>
+    <variable units="molar" name="C_Fd"/>
+    <variable units="mole_per_day" name="P_Fd_InFd"/>
+	<variable units="mole_per_day" name="U_Fd_FdEx"/>
+	<variable units="molar" name="Y_Fd_InFd" initial_value="0.0062"/>
+	<variable units="litre_per_day" name="D_Fd" initial_value="1.000"/>
+	<variable units="first_order_rate_constant" name="k_FdEx"/>
+    <variable units="mole_per_day" name="v_FdHc"/>
+	<variable units="mole_per_gram_day" name="v_FdHc_star" initial_value="0.1646"/>
+	<variable units="molar" name="M_Fd_FdHc"/>
+	<variable units="molar" name="M_Fd_FdHc_star" initial_value="0.332"/>
+	<variable units="day" name="T_Fd" initial_value="1.000"/>
+	<variable units="day" name="T_Fd_star" initial_value="0.83"/>
+	<variable units="dimensionless" name="phi_pH_FdHc" initial_value="22.9"/>
+	<variable units="dimensionless" name="M_pH_FdHc" initial_value="5.97"/>
+	
+	<variable units="dimensionless" public_interface="in" name="pm"/>
+	<variable units="dimensionless" public_interface="in" name="f"/>
+    <variable units="day" public_interface="in" name="time"/>
+	<variable units="litre" public_interface="in" name="V_Ru"/>
+	<variable units="gram" public_interface="in" name="Q_Mc"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="k_SoEx"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>C_Fd</ci> 
+		<apply><divide/>
+          <ci> Q_Fd </ci>
+		  <ci> V_Ru </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Fd_InFd</ci> 
+		<apply><times/>
+          <ci> Y_Fd_InFd </ci>
+		  <ci> D_Fd </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Fd_FdHc</ci> 
+		<apply><divide/>
+          <ci> v_FdHc </ci>
+		  <apply><plus/>
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			<apply><divide/>
+              <ci>M_Fd_FdHc</ci>
+			  <ci>C_Fd</ci>
+            </apply>			
+		  </apply>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Fd_FdEx</ci> 
+		<apply><times/>
+          <ci> k_FdEx </ci>
+		  <ci> Q_Fd </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+	  <apply><eq/> 
+        <apply><diff/> 
+          <bvar><ci>time</ci></bvar> 
+          <ci>Q_Fd</ci> 
+        </apply>
+        <apply><minus/>
+          <ci> P_Fd_InFd </ci>
+		  <apply><plus/>
+		    <ci> U_Fd_FdHc </ci>
+			<ci> U_Fd_FdEx </ci>
+		  </apply>
+        </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>v_FdHc</ci> 
+		<apply><times/>
+          <ci> v_FdHc_star </ci>
+		  <ci> Q_Mc </ci>
+		  <apply><plus/>
+		    <apply><minus/>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			  <apply><divide/>
+		        <apply><times/>
+		          <ci> time </ci>
+				  <ci> f </ci>
+				</apply>
+			    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="day">1.0</cn>
+		      </apply>
+			</apply>
+			<apply><divide/>
+			  <apply><divide/>
+			    <apply><times/>
+		          <ci> time </ci>
+				  <ci> f </ci>
+				</apply>
+			    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="day">1.0</cn>
+		      </apply>
+		      <apply><plus/>
+			    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			    <apply><power/>
+		          <apply><divide/>
+		            <ci> M_pH_FdHc </ci>
+			        <ci> pm </ci>
+                  </apply>
+			      <ci> phi_pH_FdHc </ci>
+				</apply>
+			  </apply>
+            </apply>
+		  </apply>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>M_Fd_FdHc</ci> 
+		<apply><times/>
+          <ci> M_Fd_FdHc_star </ci>
+		  <apply><divide/>
+            <ci> T_Fd </ci>
+			<ci> T_Fd_star </ci>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>k_FdEx</ci> 
+		<ci>k_SoEx</ci>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="Q_Fu" cmeta:id="Q_Fu">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#Q_Fu">
+        <dc:title>Q_Fu</dc:title>
+        <dcterms:alternative>undegradable fiber pool</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="mole" name="Q_Fu" initial_value="1.000"/>
+    <variable units="molar" name="C_Fu"/>
+    <variable units="mole_per_day" name="P_Fu_InFu"/>
+	<variable units="mole_per_day" name="U_Fu_FuEx"/>
+	<variable units="molar" name="Y_Fu_InFu" initial_value="0.0062"/>
+	<variable units="litre_per_day" name="D_Fu" initial_value="1.000"/>
+	<variable units="first_order_rate_constant" name="k_FuEx"/>
+    
+    <variable units="day" public_interface="in" name="time"/>
+	<variable units="litre" public_interface="in" name="V_Ru"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_SoEx"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>C_Fu</ci> 
+		<apply><divide/>
+          <ci> Q_Fu </ci>
+		  <ci> V_Ru </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Fu_InFu</ci> 
+		<apply><times/>
+          <ci> Y_Fu_InFu </ci>
+		  <ci> D_Fu </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Fu_FuEx</ci> 
+		<apply><times/>
+          <ci> k_FuEx </ci>
+		  <ci> Q_Fu </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+	  <apply><eq/> 
+        <apply><diff/> 
+          <bvar><ci>time</ci></bvar> 
+          <ci>Q_Fu</ci> 
+        </apply>
+        <apply><minus/>
+          <ci> P_Fu_InFu </ci>
+		  <ci> U_Fu_FuEx </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>k_FuEx</ci> 
+		<ci>k_SoEx</ci>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="Q_Ha" cmeta:id="Q_Ha">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#Q_Ha">
+        <dc:title>Q_Ha</dc:title>
+        <dcterms:alternative>hexose availability to amylolytic microbes</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="molar" public_interface="out" name="C_Ha"/>
+    <variable units="mole_per_day" public_interface="out" name="U_Ha_HaAs"/>
+	<variable units="mole_per_day" public_interface="out" name="U_Ha_AmMa"/>
+    <variable units="mole_per_day" public_interface="out" name="U_Ha_PsMa"/>
+	<variable units="mole_per_day" public_interface="out" name="U_Ha_McMa"/>
+	<variable units="mole_per_day" public_interface="out" name="U_Ha_HaVa"/>
+	<variable units="mole_per_day" public_interface="out" name="P_Ha_WrHa"/>
+	<variable units="mole_per_day" public_interface="out" name="P_Ha_LaHa"/>
+	<variable units="mole_per_day" public_interface="out" name="P_Ha_SrHa"/>
+	<variable units="mole_per_day" public_interface="out" name="P_Ha_SdHa"/>
+	<variable units="mole_per_day" public_interface="out" name="P_Ha_MaMd"/>
+	
+	<variable units="mole" name="Q_Ha" initial_value="1.000"/>
+    <variable units="mole_per_day" name="U_Ha_HaEx"/>
+	<variable units="dimensionless" name="R_Ha_AmMa" initial_value="1.793"/>
+	<variable units="dimensionless" name="R_Ha_PsMa" initial_value="1.291"/>
+	<variable units="mole_per_gram" name="R_Ha_McMa" initial_value="0.0086"/>
+	<variable units="molar" name="M_Ha_HaAs" initial_value="0.0268"/>
+	<variable units="molar" name="M_Ha_HaVa" initial_value="0.055"/>
+	<variable units="mole_per_day" name="v_HaAs"/>
+	<variable units="mole_per_day" name="v_HaVa"/>
+	<variable units="mole_per_gram_day" name="v_HaAs_star" initial_value="0.053"/>
+	<variable units="mole_per_gram_day" name="v_HaVa_star" initial_value="0.1646"/>
+    <variable units="first_order_rate_constant" name="k_HaEx"/>
+    <variable units="molar" name="Y_Ha_WrHa" initial_value="0.0062"/>
+	<variable units="molar" name="Y_Ha_SrHa" initial_value="0.0062"/>
+	<variable units="molar" name="Y_Ha_LaHa" initial_value="0.0025"/>
+	<variable units="dimensionless" name="Y_Ha_SdHa" initial_value="1.0"/>
+	<variable units="mole_per_gram" name="Y_Ha_MaMd" initial_value="0.0062"/>
+	<variable units="litre_per_day" name="D_Wr" initial_value="1.000"/>
+	<variable units="litre_per_day" name="D_Sr" initial_value="1.000"/>
+	<variable units="litre_per_day" name="D_La" initial_value="1.000"/>
+	<variable units="molar" name="J_Am_HaVa" initial_value="0.00861"/>
+	<variable units="molar" name="J_Ps_HaVa" initial_value="0.01465"/>
+	
+    <variable units="day" public_interface="in" name="time"/>
+	<variable units="gram" public_interface="in" name="Q_Ma"/>
+	<variable units="litre" public_interface="in" name="V_Ru"/>
+    <variable units="dimensionless" public_interface="in" name="f_Po_Ma"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Sd_SdHa"/>
+	<variable units="gram_per_day" public_interface="in" name="U_As_MaMd"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Am_AmMa"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Ps_PsMa"/>
+	<variable units="gram_per_day" public_interface="in" name="U_Mc_McMa"/>
+	<variable units="molar" public_interface="in" name="C_Am"/>
+	<variable units="molar" public_interface="in" name="C_Ps"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_FlEx"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>C_Ha</ci> 
+		<apply><divide/>
+          <ci> Q_Ha </ci>
+		  <ci> V_Ru </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Ha_WrHa</ci> 
+		<apply><times/>
+          <ci> Y_Ha_WrHa </ci>
+		  <ci> D_Wr </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Ha_SrHa</ci> 
+		<apply><times/>
+          <ci> Y_Ha_SrHa </ci>
+		  <ci> D_Sr </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Ha_LaHa</ci> 
+		<apply><times/>
+          <ci> Y_Ha_LaHa </ci>
+		  <ci> D_La </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Ha_SdHa</ci> 
+		<apply><times/>
+          <ci> Y_Ha_SdHa </ci>
+		  <ci> U_Sd_SdHa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Ha_MaMd</ci> 
+		<apply><times/>
+          <ci> Y_Ha_MaMd </ci>
+		  <ci> U_As_MaMd </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Ha_AmMa</ci> 
+		<apply><times/>
+          <ci> R_Ha_AmMa </ci>
+		  <ci> U_Am_AmMa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Ha_PsMa</ci> 
+		<apply><times/>
+          <ci> R_Ha_PsMa </ci>
+		  <ci> U_Ps_PsMa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Ha_McMa</ci> 
+		<apply><times/>
+          <ci> R_Ha_McMa </ci>
+		  <ci> U_Mc_McMa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Ha_HaAs</ci> 
+		<apply><divide/>
+          <ci> v_HaAs </ci>
+		  <apply><plus/>
+		    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			<apply><divide/>
+              <ci>M_Ha_HaAs</ci>
+			  <ci>C_Ha</ci>
+            </apply>
+          </apply>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Ha_HaVa</ci> 
+		<apply><plus/>
+		  <apply><times/>
+            <ci> v_HaVa </ci>
+		    <apply><divide/>
+		      <apply><minus/>
+		        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			    <ci> f_Po_Ma</ci>
+              </apply>
+			  <apply><times/>
+				<apply><plus/>
+				  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+				  <apply><divide/>
+				    <ci>M_Ha_HaVa</ci>
+			        <ci>C_Ha</ci>
+                  </apply>
+				</apply>
+				<apply><plus/>
+				  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+				  <apply><divide/>
+					<ci> C_Am </ci>
+			        <ci> J_Am_HaVa </ci>
+                  </apply>
+				</apply>
+				<apply><divide/>
+				  <ci> C_Ps </ci>
+			      <ci> J_Ps_HaVa </ci>
+                </apply>
+		      </apply>
+			</apply>
+		  </apply>
+          <apply><divide/>
+		    <apply><times/>
+              <ci>v_HaVa</ci>
+			  <ci>f_Po_Ma</ci>
+            </apply>
+            <apply><plus/>
+		      <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+		      <apply><divide/>
+				<ci>M_Ha_HaVa</ci>
+			    <ci>C_Ha</ci>
+              </apply>
+		    </apply>			
+		  </apply>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Ha_HaEx</ci> 
+		<apply><times/>
+          <ci> k_HaEx </ci>
+		  <ci> Q_Ha </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+	  <apply><eq/> 
+        <apply><diff/> 
+          <bvar><ci>time</ci></bvar> 
+          <ci>Q_Ha</ci> 
+        </apply>
+        <apply><minus/>
+          <apply><plus/>
+		    <ci> P_Ha_WrHa </ci>
+			<ci> P_Ha_SrHa </ci>
+			<ci> P_Ha_SdHa </ci>
+			<ci> P_Ha_MaMd </ci>
+			<ci> P_Ha_LaHa </ci>
+		  </apply>
+          <apply><plus/>
+            <ci> U_Ha_AmMa </ci>
+            <ci> U_Ha_PsMa </ci>
+			<ci> U_Ha_McMa </ci>
+            <ci> U_Ha_HaAs </ci>
+			<ci> U_Ha_HaVa </ci>
+            <ci> U_Ha_HaEx </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>v_HaAs</ci> 
+		<apply><times/>
+          <ci> v_HaAs_star </ci>
+		  <ci> Q_Ma </ci>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>v_HaVa</ci> 
+		<apply><times/>
+          <ci> v_HaVa_star </ci>
+		  <ci> Q_Ma </ci>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>k_HaEx</ci> 
+		<ci>k_FlEx</ci>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="Q_Hc" cmeta:id="Q_Hc">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#Q_Hc">
+        <dc:title>Q_Hc</dc:title>
+        <dcterms:alternative>hexose availability to fibrolytic microbes</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="molar" public_interface="out" name="C_Hc"/>
+    <variable units="mole_per_day" public_interface="out" name="U_Hc_AmMc"/>
+    <variable units="mole_per_day" public_interface="out" name="U_Hc_HcVa"/>
+	<variable units="mole_per_day" public_interface="out" name="U_Hc_PsMc"/>
+	
+	<variable units="mole" name="Q_Hc" initial_value="1.000"/>
+    <variable units="mole_per_day" name="P_Hc_FdHc"/>
+	<variable units="mole_per_day" name="U_Hc_HcEx"/>
+	<variable units="dimensionless" name="R_Hc_AmMc" initial_value="1.793"/>
+	<variable units="dimensionless" name="R_Hc_PsMc" initial_value="1.291"/>
+	<variable units="mole_per_day" name="v_HcVa"/>
+	<variable units="mole_per_gram_day" name="v_HcVa_star" initial_value="0.1646"/>
+    <variable units="first_order_rate_constant" name="k_HcEx"/>
+    <variable units="dimensionless" name="Y_Hc_FdHc" initial_value="1.0"/>
+	<variable units="molar" name="M_Hc_HcVa" initial_value="0.055"/>
+	<variable units="molar" name="J_Am_HcVa" initial_value="0.00861"/>
+	<variable units="molar" name="J_Ps_HcVa" initial_value="0.01465"/>
+	
+    <variable units="day" public_interface="in" name="time"/>
+	<variable units="gram" public_interface="in" name="Q_Mc"/>
+	<variable units="litre" public_interface="in" name="V_Ru"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Fd_FdHc"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Am_AmMc"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Ps_PsMc"/>
+    <variable units="molar" public_interface="in" name="C_Ps"/>
+	<variable units="molar" public_interface="in" name="C_Am"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_FlEx"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>C_Hc</ci> 
+		<apply><divide/>
+          <ci> Q_Hc </ci>
+		  <ci> V_Ru </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Hc_FdHc</ci> 
+		<apply><times/>
+          <ci> Y_Hc_FdHc </ci>
+		  <ci> U_Fd_FdHc </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Hc_AmMc</ci> 
+		<apply><times/>
+          <ci> R_Hc_AmMc </ci>
+		  <ci> U_Am_AmMc </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Hc_PsMc</ci> 
+		<apply><times/>
+          <ci> R_Hc_PsMc </ci>
+		  <ci> U_Ps_PsMc </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Hc_HcVa</ci> 
+		<apply><divide/>
+		  <ci> v_HcVa </ci>
+		  <apply><times/>
+            <apply><plus/>
+		      <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+		      <apply><divide/>
+				<ci>M_Hc_HcVa</ci>
+			    <ci>C_Hc</ci>
+              </apply>
+			</apply>
+			<apply><plus/>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			  <apply><divide/>
+			    <ci> C_Am </ci>
+			    <ci> J_Am_HcVa </ci>
+              </apply>
+			  <apply><divide/>
+				<ci> C_Ps </ci>
+			    <ci> J_Ps_HcVa </ci>
+              </apply>
+			</apply>
+		  </apply>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Hc_HcEx</ci> 
+		<apply><times/>
+          <ci> k_HcEx </ci>
+		  <ci> Q_Hc </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+	  <apply><eq/> 
+        <apply><diff/> 
+          <bvar><ci>time</ci></bvar> 
+          <ci>Q_Hc</ci> 
+        </apply>
+        <apply><minus/>
+          <ci> P_Hc_FdHc </ci>
+		  <apply><plus/>
+            <ci> U_Hc_AmMc </ci>
+            <ci> U_Hc_PsMc </ci>
+			<ci> U_Hc_HcVa </ci>
+            <ci> U_Hc_HcEx </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>v_HcVa</ci> 
+		<apply><times/>
+          <ci> v_HcVa_star </ci>
+		  <ci> Q_Mc </ci>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>k_HcEx</ci> 
+		<ci>k_FlEx</ci>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="Q_Ma" cmeta:id="Q_Ma">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#Q_Ma">
+        <dc:title>Q_Ma</dc:title>
+        <dcterms:alternative>amylolytic microbes pool</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="gram" public_interface="out" name="Q_Ma" initial_value="1.000"/>
+    <variable units="gram_per_litre" public_interface="out" name="C_Ma"/>
+	<variable units="gram_per_day" public_interface="out" name="U_Ma_MaMd"/>
+    <variable units="gram_per_day" public_interface="out" name="U_Mc_McMa"/>
+    
+    <variable units="gram_per_day" name="P_Ma_AmMa"/>
+	<variable units="gram_per_day" name="P_Ma_PsMa"/>
+	<variable units="gram_per_day" name="P_Ma_McMa"/>
+	<variable units="gram_per_day" name="U_Ma_PoEx"/>
+	<variable units="gram_per_day" name="U_Ma_MaEx"/>
+	<variable units="first_order_rate_constant" name="k_MaMd"/>
+	<variable units="gram_per_mole" name="Y_Ma_AmMa" initial_value="118.91"/>
+	<variable units="gram_per_mole" name="Y_Ma_PsMa" initial_value="149.48"/>
+	<variable units="dimensionless" name="Y_Ma_McMa" initial_value="149.48"/>
+	
+    <variable units="day" public_interface="in" name="time"/>
+	<variable units="litre" public_interface="in" name="V_Ru"/>
+    <variable units="molar" public_interface="in" name="M_Ha_McMa"/>
+	<variable units="dimensionless" public_interface="in" name="f_Po_Ma"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Am_AmMa"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Ps_PsMa"/>
+	<variable units="gram_per_day" public_interface="in" name="U_Mc_McEg"/>
+	<variable units="molar" public_interface="in" name="C_Ha"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_FlEx"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_MaEx"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_PoEx"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>C_Ma</ci> 
+		<apply><divide/>
+          <ci> Q_Ma </ci>
+		  <ci> V_Ru </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Ma_AmMa</ci> 
+		<apply><times/>
+          <ci> Y_Ma_AmMa </ci>
+		  <ci> U_Am_AmMa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Ma_PsMa</ci> 
+		<apply><times/>
+          <ci> Y_Ma_PsMa </ci>
+		  <ci> U_Ps_PsMa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Ma_McMa</ci> 
+		<apply><times/>
+          <ci> Y_Ma_McMa </ci>
+		  <ci> U_Mc_McMa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Ma_MaMd</ci> 
+		<apply><times/>
+          <ci> k_MaMd </ci>
+		  <ci> Q_Ma </ci>
+		  <ci> f_Po_Ma </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Ma_MaEx</ci> 
+		<apply><times/>
+          <ci> k_MaEx </ci>
+		  <ci> Q_Ma </ci>
+		  <apply><minus/>
+		    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+		    <ci> f_Po_Ma </ci>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Ma_PoEx</ci> 
+		<apply><times/>
+          <ci> k_PoEx </ci>
+		  <ci> Q_Ma </ci>
+		  <ci> f_Po_Ma </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+	  <apply><eq/> 
+        <apply><diff/> 
+          <bvar><ci>time</ci></bvar> 
+          <ci>Q_Ma</ci> 
+        </apply>
+        <apply><minus/>
+          <apply><plus/>
+		    <ci> P_Ma_AmMa </ci>
+			<ci> P_Ma_PsMa </ci>
+			<ci> P_Ma_McMa </ci>
+		  </apply>
+          <apply><plus/>
+            <ci> U_Ma_MaMd </ci>
+            <ci> U_Mc_McMa </ci>
+			<ci> U_Ma_PoEx </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Mc_McMa</ci> 
+		<apply><divide/>
+		  <ci> U_Mc_McEg </ci>
+		  <apply><plus/>
+		    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+		    <apply><divide/>
+		      <ci>M_Ha_McMa</ci>
+			  <ci>C_Ha</ci>
+            </apply>
+		  </apply>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>k_MaMd</ci> 
+		<apply><minus/>
+		  <ci>k_MaEx</ci>
+		  <ci>k_PoEx</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="Q_As" cmeta:id="Q_As">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#Q_As">
+        <dc:title>Q_As</dc:title>
+        <dcterms:alternative>microbial storage polysaccharides pool</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="gram_per_day" public_interface="out" name="U_As_MaMd"/>
+	
+	<variable units="gram" name="Q_As" initial_value="1.000"/>
+    <variable units="gram_per_litre" name="C_As"/>
+    <variable units="gram_per_day" name="P_As_HaAs"/>
+	<variable units="gram_per_day" name="U_As_PoEx"/>
+    <variable units="gram_per_day" name="U_As_AsEx"/>
+	<variable units="first_order_rate_constant" name="k_AsEx"/>
+	<variable units="first_order_rate_constant" name="k_AsMd"/>
+    <variable units="gram_per_mole" name="Y_As_HaAs" initial_value="112.5"/>
+	
+    <variable units="day" public_interface="in" name="time"/>
+	<variable units="litre" public_interface="in" name="V_Ru"/>
+    <variable units="mole_per_day" public_interface="in" name="U_Ha_HaAs"/>
+	<variable units="dimensionless" public_interface="in" name="f_Po_Ma"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_FlEx"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_MaEx"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_PoEx"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>C_As</ci> 
+		<apply><divide/>
+          <ci> Q_As </ci>
+		  <ci> V_Ru </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_As_HaAs</ci> 
+		<apply><times/>
+          <ci> Y_As_HaAs </ci>
+		  <ci> U_Ha_HaAs </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_As_MaMd</ci> 
+		<apply><times/>
+          <ci> k_AsMd </ci>
+		  <ci> Q_As </ci>
+		  <ci> f_Po_Ma </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_As_AsEx</ci> 
+		<apply><times/>
+          <ci> k_AsEx </ci>
+		  <ci> Q_As </ci>
+		  <apply><minus/>
+		    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+		    <ci> f_Po_Ma </ci>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_As_PoEx</ci> 
+		<apply><times/>
+          <ci> k_PoEx </ci>
+		  <ci> Q_As </ci>
+		  <ci> f_Po_Ma </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+	  <apply><eq/> 
+        <apply><diff/> 
+          <bvar><ci>time</ci></bvar> 
+          <ci>Q_As</ci> 
+        </apply>
+        <apply><minus/>
+          <ci> P_As_HaAs </ci>
+		  <apply><plus/>
+            <ci> U_As_MaMd </ci>
+            <ci> U_As_AsEx </ci>
+			<ci> U_As_PoEx </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>k_AsEx</ci> 
+		<ci>k_FlEx</ci>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> k_AsMd </ci>
+        <apply><minus/>
+          <ci> k_MaEx </ci>		
+		  <ci> k_PoEx </ci>
+		</apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="Q_Mc" cmeta:id="Q_Mc">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#Q_Mc">
+        <dc:title>Q_Mc</dc:title>
+        <dcterms:alternative>fibrolytic microbes pool</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="gram" public_interface="out" name="Q_Mc" initial_value="1.000"/>
+    <variable units="gram_per_day" public_interface="out" name="U_Mc_McEg"/>
+	
+    <variable units="gram_per_litre" name="C_Mc"/>
+    <variable units="gram_per_day" name="P_Mc_AmMc"/>
+	<variable units="gram_per_day" name="P_Mc_PsMc"/>
+	<variable units="gram_per_day" name="U_Mc_McEx"/>
+	<variable units="first_order_rate_constant" name="k_McEx"/>
+	<variable units="gram_per_mole" name="Y_Mc_AmMc" initial_value="118.91"/>
+	<variable units="gram_per_mole" name="Y_Mc_PsMc" initial_value="149.48"/>
+	<variable units="gram_per_day" name="v_McEg"/>
+	<variable units="first_order_rate_constant" name="v_McEg_star" initial_value="15.439"/>
+	<variable units="gram_per_litre" name="M_Mc_McEg" initial_value="34.694"/>
+    
+    <variable units="day" public_interface="in" name="time"/>
+	<variable units="litre" public_interface="in" name="V_Ru"/>
+	<variable units="gram" public_interface="in" name="Q_Ma"/>
+	<variable units="gram_per_litre" public_interface="in" name="C_Ma"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Am_AmMc"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Ps_PsMc"/>
+	<variable units="dimensionless" public_interface="in" name="f_Po_Ma"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_SoEx"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>C_Mc</ci> 
+		<apply><divide/>
+          <ci> Q_Mc </ci>
+		  <ci> V_Ru </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Mc_AmMc</ci> 
+		<apply><times/>
+          <ci> Y_Mc_AmMc </ci>
+		  <ci> U_Am_AmMc </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Mc_PsMc</ci> 
+		<apply><times/>
+          <ci> Y_Mc_PsMc </ci>
+		  <ci> U_Ps_PsMc </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Mc_McEg</ci> 
+		<apply><divide/>
+          <ci> v_McEg </ci>
+		  <apply><plus/>
+		    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			<apply><divide/>
+		      <ci> M_Mc_McEg </ci>
+			  <apply><plus/>
+		        <ci> C_Mc </ci>
+				<apply><times/>
+		          <ci> C_Ma </ci>
+				  <apply><minus/>
+		            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+					<ci> f_Po_Ma </ci>
+				  </apply>
+				</apply>
+			  </apply>
+			</apply>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Mc_McEx</ci> 
+		<apply><times/>
+          <ci> k_McEx </ci>
+		  <ci> Q_Mc </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+	  <apply><eq/> 
+        <apply><diff/> 
+          <bvar><ci>time</ci></bvar> 
+          <ci>Q_Mc</ci> 
+        </apply>
+        <apply><minus/>
+          <apply><plus/>
+		    <ci> P_Mc_AmMc </ci>
+			<ci> P_Mc_PsMc </ci>
+		  </apply>
+		  <apply><plus/>
+            <ci> U_Mc_McEg </ci>
+            <ci> U_Mc_McEx </ci>
+	      </apply>
+        </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>v_McEg</ci> 
+		<apply><divide/>
+		  <apply><times/>
+            <ci> v_McEg_star </ci>
+			<ci> Q_Ma </ci>
+			<ci> f_Po_Ma </ci>
+			<ci> C_Mc </ci>
+		  </apply>
+		  <apply><plus/>
+		    <ci> C_Mc </ci>
+			<apply><times/>
+			  <ci> C_Ma </ci>
+			  <apply><minus/>
+		        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			    <ci> f_Po_Ma </ci>
+		      </apply>
+		    </apply>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>k_McEx</ci> 
+		<ci>k_SoEx</ci>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="Q_Ac" cmeta:id="Q_Ac">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#Q_Ac">
+        <dc:title>Q_Ac</dc:title>
+        <dcterms:alternative>aceitic acid pool</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="mole" name="Q_Ac" initial_value="1.000"/>
+    <variable units="molar" name="C_Ac"/>
+	<variable units="mole_per_day" name="P_Ac_InAc"/>
+	<variable units="mole_per_day" name="P_Ac_AmMa"/>
+	<variable units="mole_per_day" name="P_Ac_AmMc"/>
+	<variable units="mole_per_day" name="P_Ac_PsMa"/>
+	<variable units="mole_per_day" name="P_Ac_PsMc"/>
+	<variable units="mole_per_day" name="P_Ac_HaAs"/>
+	<variable units="mole_per_day" name="P_Ac_HaVa"/>
+	<variable units="mole_per_day" name="P_Ac_HcVa"/>
+	<variable units="mole_per_day" name="P_MaAc_PsAm"/>
+	<variable units="mole_per_day" name="P_McAc_PsAm"/>
+	<variable units="mole_per_day" name="P_Ac_McMa"/>
+	<variable units="mole_per_day" name="P_Ac_McAm"/>
+    <variable units="mole_per_day" name="U_Ac_AcAb"/>
+    <variable units="mole_per_day" name="U_Ac_AcEx"/>
+	<variable units="mole_per_day" name="U_Hf_AmMa"/>
+    <variable units="mole_per_day" name="U_Hf_AmMc"/>
+	<variable units="mole_per_day" name="U_Hf_PsMa"/>
+    <variable units="mole_per_day" name="U_Hf_PsMc"/>
+	<variable units="mole_per_day" name="U_Hf_HaAs"/>
+	<variable units="mole_per_day" name="U_Hf_McMa"/>
+	<variable units="molar" name="M_Ac_AcAb" initial_value="0.338"/>
+	<variable units="mole_per_day" name="v_AcAb"/>
+	<variable units="mole_per_litre_day" name="v_AcAb_star" initial_value="7.86"/>
+    <variable units="dimensionless" name="Y_Ac_LaAc"/>
+	<variable units="dimensionless" name="Y_Ac_HaVa"/>
+	<variable units="dimensionless" name="Y_Ac_PsVa"/>
+	<variable units="dimensionless" name="Y_Ac_AmMa"/>
+	<variable units="dimensionless" name="Y_Ac_AmMc"/>
+	<variable units="dimensionless" name="Y_Ac_PsMa"/>
+	<variable units="dimensionless" name="Y_Ac_PsMc"/>
+	<variable units="dimensionless" name="Y_Ac_HaAs"/>
+	<variable units="dimensionless" name="Y_Ac_McMa"/>
+	<variable units="dimensionless" name="Y_Ac_PsAm"/>
+	<variable units="dimensionless" name="Y_Ac_McAm"/>
+	<variable units="dimensionless" name="Y_Ac_WrAc" initial_value="1.000"/>
+	<variable units="molar" name="Y_Ac_InAc" initial_value="0.0167"/>
+	<variable units="dimensionless" name="Y_Ac_StAc" initial_value="1.000"/>
+	<variable units="dimensionless" name="Y_Ac_CeAc" initial_value="1.000"/>
+	<variable units="dimensionless" name="Y_Ac_HeAc" initial_value="1.000"/>
+	<variable units="dimensionless" name="Y_Ac_PsAc" initial_value="1.000"/>
+	<variable units="dimensionless" name="Y_Ac_HcVa"/>
+	<variable units="first_order_rate_constant" name="k_AcEx"/>
+	<variable units="litre_per_day" name="D_Ac" initial_value="1.000"/>
+	<variable units="dimensionless" name="J_pH_AcAb" initial_value="6.45"/>
+	<variable units="dimensionless" name="phi_pH_AcAb" initial_value="6.48"/>
+	
+    <variable units="day" public_interface="in" name="time"/>
+	<variable units="dimensionless" public_interface="in" name="pH"/>
+	<variable units="litre" public_interface="in" name="V_Ru"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_FlEx"/>
+	<variable units="dimensionless" public_interface="in" name="f_Hf_AmMa"/>
+	<variable units="dimensionless" public_interface="in" name="f_Hf_AmMc"/>
+	<variable units="dimensionless" public_interface="in" name="f_Hf_PsMa"/>
+	<variable units="dimensionless" public_interface="in" name="f_Hf_PsMc"/>
+	<variable units="dimensionless" public_interface="in" name="f_Hf_HaAs"/>
+	<variable units="dimensionless" public_interface="in" name="f_Hf_McMa"/>
+	<variable units="dimensionless" public_interface="in" name="f_Lc_Le"/>
+	<variable units="dimensionless" public_interface="in" name="f_Ce_Fd"/>
+	<variable units="mole_per_day" public_interface="in" name="U_MaPs_PsAm"/>
+	<variable units="mole_per_day" public_interface="in" name="U_McPs_PsAm"/>
+    <variable units="mole_per_day" public_interface="in" name="U_Ha_HaAs"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Ha_AmMa"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Ha_PsMa"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Hc_PsMc"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Ha_McMa"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Ha_HaVa"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Hc_HcVa"/>
+    <variable units="mole_per_day" public_interface="in" name="U_Hc_AmMc"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Mc_McAm"/>
+	<variable units="mole_per_day" public_interface="in" name="P_Ha_WrHa"/>
+	<variable units="mole_per_day" public_interface="in" name="P_Ha_LaHa"/>
+	<variable units="mole_per_day" public_interface="in" name="P_Ha_SrHa"/>
+	<variable units="mole_per_day" public_interface="in" name="P_Ha_SdHa"/>
+	<variable units="mole_per_day" public_interface="in" name="P_Ha_MaMd"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>C_Ac</ci> 
+		<apply><divide/>
+          <ci> Q_Ac </ci>
+		  <ci> V_Ru </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Ac_InAc</ci> 
+		<apply><times/>
+          <ci> Y_Ac_InAc </ci>
+		  <ci> D_Ac </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Ac_AmMa</ci> 
+		<apply><times/>
+          <ci> Y_Ac_AmMa </ci>
+		  <ci> U_Hf_AmMa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Ac_AmMc</ci> 
+		<apply><times/>
+          <ci> Y_Ac_AmMc </ci>
+		  <ci> U_Hf_AmMc </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Ac_PsMa</ci> 
+		<apply><times/>
+          <ci> Y_Ac_PsMa </ci>
+		  <ci> U_Hf_PsMa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Ac_PsMc</ci> 
+		<apply><times/>
+          <ci> Y_Ac_PsMc </ci>
+		  <ci> U_Hf_PsMc </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Ac_HaAs</ci> 
+		<apply><times/>
+          <ci> Y_Ac_HaAs </ci>
+		  <ci> U_Hf_HaAs </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Ac_HaVa</ci> 
+		<apply><times/>
+          <ci> Y_Ac_HaVa</ci>
+		  <ci> U_Ha_HaVa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Ac_HcVa</ci> 
+		<apply><times/>
+          <ci> Y_Ac_HcVa </ci>
+		  <ci> U_Hc_HcVa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_MaAc_PsAm</ci> 
+		<apply><times/>
+          <ci> Y_Ac_PsAm </ci>
+		  <ci> U_MaPs_PsAm </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_McAc_PsAm</ci> 
+		<apply><times/>
+          <ci> Y_Ac_PsAm </ci>
+		  <ci> U_McPs_PsAm </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Ac_McMa</ci> 
+		<apply><times/>
+          <ci> Y_Ac_McMa </ci>
+		  <ci> U_Hf_McMa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Ac_McAm</ci> 
+		<apply><times/>
+          <ci> Y_Ac_McAm </ci>
+		  <ci> U_Mc_McAm </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Ac_AcAb</ci> 
+		<apply><divide/>
+          <ci> v_AcAb </ci>
+		  <apply><plus/>
+		    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			<apply><divide/>
+              <ci>M_Ac_AcAb</ci>
+			  <ci>C_Ac</ci>
+            </apply>		
+		  </apply>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Ac_AcEx</ci> 
+		<apply><times/>
+          <ci> k_AcEx </ci>
+		  <ci> Q_Ac </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+	  <apply><eq/> 
+        <apply><diff/> 
+          <bvar><ci>time</ci></bvar> 
+          <ci>Q_Ac</ci> 
+        </apply>
+        <apply><minus/>
+          <apply><plus/>
+		    <ci> P_Ac_InAc </ci>
+			<ci> P_Ac_AmMa </ci>
+			<ci> P_Ac_AmMc </ci>
+			<ci> P_Ac_PsMa </ci>
+			<ci> P_Ac_PsMc </ci>
+			<ci> P_Ac_HaAs </ci>
+			<ci> P_Ac_HaVa </ci>
+			<ci> P_Ac_HcVa </ci>
+			<ci> P_MaAc_PsAm </ci>
+			<ci> P_McAc_PsAm </ci>
+			<ci> P_Ac_McMa </ci>
+			<ci> P_Ac_McAm </ci>
+		  </apply>
+          <apply><plus/>
+            <ci> U_Ac_AcAb </ci>
+            <ci> U_Ac_AcEx </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Hf_AmMa</ci> 
+		<apply><times/>
+          <ci> f_Hf_AmMa </ci>
+		  <ci> U_Ha_AmMa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Hf_AmMc</ci> 
+		<apply><times/>
+          <ci> f_Hf_AmMc </ci>
+		  <ci> U_Hc_AmMc </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Hf_PsMa</ci> 
+		<apply><times/>
+          <ci> f_Hf_PsMa </ci>
+		  <ci> U_Ha_PsMa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Hf_PsMc</ci> 
+		<apply><times/>
+          <ci> f_Hf_PsMc </ci>
+		  <ci> U_Hc_PsMc </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Hf_HaAs</ci> 
+		<apply><times/>
+          <ci> f_Hf_HaAs </ci>
+		  <ci> U_Ha_HaAs </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Hf_McMa</ci> 
+		<apply><times/>
+          <ci> f_Hf_McMa </ci>
+		  <ci> U_Ha_McMa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>Y_Ac_LaAc</ci> 
+		<apply><times/>
+          <ci> f_Lc_Le </ci>
+		  <ci> Y_Ac_WrAc </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>Y_Ac_HaVa</ci> 
+		<apply><divide/>
+		  <apply><plus/>
+		    <apply><times/>
+              <ci> Y_Ac_WrAc </ci>
+		      <ci> P_Ha_WrHa </ci>
+		    </apply>
+		    <apply><times/>
+              <ci> Y_Ac_LaAc </ci>
+		      <ci> P_Ha_LaHa </ci>
+		    </apply>
+		    <apply><times/>
+              <ci> Y_Ac_StAc </ci>
+			  <apply><plus/>
+			    <ci> P_Ha_SrHa </ci>
+				<ci> P_Ha_SdHa </ci>
+				<ci> P_Ha_MaMd </ci>
+              </apply>
+			</apply>
+		  </apply>
+		  <apply><plus/>
+			<ci> P_Ha_WrHa </ci>
+		    <ci> P_Ha_LaHa </ci>
+			<ci> P_Ha_SrHa </ci>
+			<ci> P_Ha_SdHa </ci>
+			<ci> P_Ha_MaMd </ci>
+          </apply>
+		</apply>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>Y_Ac_HcVa</ci> 
+		<apply><plus/>
+		  <apply><times/>
+            <ci> f_Ce_Fd </ci>
+		    <ci> Y_Ac_CeAc </ci>
+		  </apply>
+		  <apply><times/>
+		    <apply><minus/>
+		      <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			  <ci> f_Ce_Fd </ci>
+			</apply>
+			<ci> Y_Ac_HeAc </ci>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Ac_PsVa </ci> 
+		<ci> Y_Ac_PsAc </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Ac_AmMa </ci> 
+		<ci> Y_Ac_HaVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Ac_AmMc </ci> 
+		<ci> Y_Ac_HcVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Ac_PsMa </ci> 
+		<ci> Y_Ac_HaVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Ac_PsMc </ci> 
+		<ci> Y_Ac_HcVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Ac_HaAs </ci> 
+		<ci> Y_Ac_HaVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Ac_McMa </ci> 
+		<ci> Y_Ac_HcVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Ac_PsAm </ci> 
+		<ci> Y_Ac_PsVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Ac_McAm </ci> 
+		<ci> Y_Ac_PsVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>v_AcAb</ci> 
+		<apply><times/>
+          <ci> v_AcAb_star </ci>
+		  <apply><power/>
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="litre">1.0</cn>
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.25</cn>
+	      </apply>
+		  <apply><divide/>
+		    <apply><power/>
+		      <ci>V_Ru</ci>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.75</cn>
+			</apply>
+			<apply><plus/>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1.0</cn>
+			  <apply><power/>
+			    <apply><divide/>
+			      <ci>pH</ci>
+				  <ci>J_pH_AcAb</ci>
+                </apply>
+				<ci>phi_pH_AcAb</ci>
+              </apply>
+			</apply>
+          </apply>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> k_AcEx </ci> 
+		<ci> k_FlEx </ci>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="Q_Pr" cmeta:id="Q_Pr">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#Q_Pr">
+        <dc:title>Q_Pr</dc:title>
+        <dcterms:alternative>propionic acid pool</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="mole" name="Q_Pr" initial_value="1.000"/>
+    <variable units="molar" name="C_Pr"/>
+	<variable units="mole_per_day" name="P_Pr_InPr"/>
+	<variable units="mole_per_day" name="P_Pr_AmMa"/>
+	<variable units="mole_per_day" name="P_Pr_AmMc"/>
+	<variable units="mole_per_day" name="P_Pr_PsMa"/>
+	<variable units="mole_per_day" name="P_Pr_PsMc"/>
+	<variable units="mole_per_day" name="P_Pr_HaAs"/>
+	<variable units="mole_per_day" name="P_Pr_HaVa"/>
+	<variable units="mole_per_day" name="P_Pr_HcVa"/>
+	<variable units="mole_per_day" name="P_MaPr_PsAm"/>
+	<variable units="mole_per_day" name="P_McPr_PsAm"/>
+	<variable units="mole_per_day" name="P_Pr_McMa"/>
+	<variable units="mole_per_day" name="P_Pr_McAm"/>
+    <variable units="mole_per_day" name="U_Pr_PrAb"/>
+    <variable units="mole_per_day" name="U_Pr_PrEx"/>
+	<variable units="mole_per_day" name="U_Hf_AmMa"/>
+    <variable units="mole_per_day" name="U_Hf_AmMc"/>
+	<variable units="mole_per_day" name="U_Hf_PsMa"/>
+    <variable units="mole_per_day" name="U_Hf_PsMc"/>
+	<variable units="mole_per_day" name="U_Hf_HaAs"/>
+	<variable units="mole_per_day" name="U_Hf_McMa"/>
+	<variable units="molar" name="M_Pr_PrAb" initial_value="0.338"/>
+	<variable units="mole_per_day" name="v_PrAb"/>
+	<variable units="mole_per_litre_day" name="v_PrAb_star" initial_value="7.86"/>
+    <variable units="dimensionless" name="Y_Pr_LaPr"/>
+	<variable units="dimensionless" name="Y_Pr_HaVa"/>
+	<variable units="dimensionless" name="Y_Pr_PsVa"/>
+	<variable units="dimensionless" name="Y_Pr_AmMa"/>
+	<variable units="dimensionless" name="Y_Pr_AmMc"/>
+	<variable units="dimensionless" name="Y_Pr_PsMa"/>
+	<variable units="dimensionless" name="Y_Pr_PsMc"/>
+	<variable units="dimensionless" name="Y_Pr_HaAs"/>
+	<variable units="dimensionless" name="Y_Pr_McMa"/>
+	<variable units="dimensionless" name="Y_Pr_PsAm"/>
+	<variable units="dimensionless" name="Y_Pr_McAm"/>
+	<variable units="dimensionless" name="Y_Pr_WrPr" initial_value="1.000"/>
+	<variable units="molar" name="Y_Pr_InPr" initial_value="0.0135"/>
+	<variable units="dimensionless" name="Y_Pr_HcVa"/>
+	<variable units="dimensionless" name="Y_Pr_StPr" initial_value="1.000"/>
+	<variable units="dimensionless" name="Y_Pr_CePr" initial_value="1.000"/>
+	<variable units="dimensionless" name="Y_Pr_HePr" initial_value="1.000"/>
+	<variable units="dimensionless" name="Y_Pr_PsPr" initial_value="1.000"/>
+	<variable units="first_order_rate_constant" name="k_PrEx"/>
+	<variable units="litre_per_day" name="D_Pr" initial_value="1.000"/>
+    <variable units="dimensionless" name="phi_pH_PrAb" initial_value="6.48"/>
+	<variable units="dimensionless" name="J_pH_PrAb" initial_value="6.45"/>
+	
+    <variable units="day" public_interface="in" name="time"/>
+	<variable units="dimensionless" public_interface="in" name="pH"/>
+	<variable units="litre" public_interface="in" name="V_Ru"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_FlEx"/>
+	<variable units="dimensionless" public_interface="in" name="f_Hf_AmMa"/>
+	<variable units="dimensionless" public_interface="in" name="f_Hf_AmMc"/>
+	<variable units="dimensionless" public_interface="in" name="f_Hf_PsMa"/>
+	<variable units="dimensionless" public_interface="in" name="f_Hf_PsMc"/>
+	<variable units="dimensionless" public_interface="in" name="f_Hf_HaAs"/>
+	<variable units="dimensionless" public_interface="in" name="f_Hf_McMa"/>
+	<variable units="dimensionless" public_interface="in" name="f_Lc_Le"/>
+	<variable units="dimensionless" public_interface="in" name="f_Ce_Fd"/>
+	<variable units="mole_per_day" public_interface="in" name="U_MaPs_PsAm"/>
+	<variable units="mole_per_day" public_interface="in" name="U_McPs_PsAm"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Ha_HaAs"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Ha_AmMa"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Ha_PsMa"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Hc_PsMc"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Ha_McMa"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Ha_HaVa"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Hc_HcVa"/>
+    <variable units="mole_per_day" public_interface="in" name="U_Mc_McAm"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Hc_AmMc"/>
+	<variable units="mole_per_day" public_interface="in" name="P_Ha_WrHa"/>
+	<variable units="mole_per_day" public_interface="in" name="P_Ha_LaHa"/>
+	<variable units="mole_per_day" public_interface="in" name="P_Ha_SrHa"/>
+	<variable units="mole_per_day" public_interface="in" name="P_Ha_SdHa"/>
+	<variable units="mole_per_day" public_interface="in" name="P_Ha_MaMd"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>C_Pr</ci> 
+		<apply><divide/>
+          <ci> Q_Pr </ci>
+		  <ci> V_Ru </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Pr_InPr</ci> 
+		<apply><times/>
+          <ci> Y_Pr_InPr </ci>
+		  <ci> D_Pr </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Pr_AmMa</ci> 
+		<apply><times/>
+          <ci> Y_Pr_AmMa </ci>
+		  <ci> U_Hf_AmMa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Pr_AmMc</ci> 
+		<apply><times/>
+          <ci> Y_Pr_AmMc </ci>
+		  <ci> U_Hf_AmMc </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Pr_PsMa</ci> 
+		<apply><times/>
+          <ci> Y_Pr_PsMa </ci>
+		  <ci> U_Hf_PsMa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Pr_PsMc</ci> 
+		<apply><times/>
+          <ci> Y_Pr_PsMc </ci>
+		  <ci> U_Hf_PsMc </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Pr_HaAs</ci> 
+		<apply><times/>
+          <ci> Y_Pr_HaAs </ci>
+		  <ci> U_Hf_HaAs </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Pr_HaVa</ci> 
+		<apply><times/>
+          <ci> Y_Pr_HaVa</ci>
+		  <ci> U_Ha_HaVa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Pr_HcVa</ci> 
+		<apply><times/>
+          <ci> Y_Pr_HcVa </ci>
+		  <ci> U_Hc_HcVa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_MaPr_PsAm</ci> 
+		<apply><times/>
+          <ci> Y_Pr_PsAm </ci>
+		  <ci> U_MaPs_PsAm </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_McPr_PsAm</ci> 
+		<apply><times/>
+          <ci> Y_Pr_PsAm </ci>
+		  <ci> U_McPs_PsAm </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Pr_McMa</ci> 
+		<apply><times/>
+          <ci> Y_Pr_McMa </ci>
+		  <ci> U_Hf_McMa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Pr_McAm</ci> 
+		<apply><times/>
+          <ci> Y_Pr_McAm </ci>
+		  <ci> U_Mc_McAm </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Pr_PrAb</ci> 
+		<apply><divide/>
+          <ci> v_PrAb </ci>
+		  <apply><plus/>
+		    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			<apply><divide/>
+              <ci>M_Pr_PrAb</ci>
+			  <ci>C_Pr</ci>
+            </apply>		
+		  </apply>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Pr_PrEx</ci> 
+		<apply><times/>
+          <ci> k_PrEx </ci>
+		  <ci> Q_Pr </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+	  <apply><eq/> 
+        <apply><diff/> 
+          <bvar><ci>time</ci></bvar> 
+          <ci>Q_Pr</ci> 
+        </apply>
+        <apply><minus/>
+          <apply><plus/>
+		    <ci> P_Pr_InPr </ci>
+			<ci> P_Pr_AmMa </ci>
+			<ci> P_Pr_AmMc </ci>
+			<ci> P_Pr_PsMa </ci>
+			<ci> P_Pr_PsMc </ci>
+			<ci> P_Pr_HaAs </ci>
+			<ci> P_Pr_HaVa </ci>
+			<ci> P_Pr_HcVa </ci>
+			<ci> P_MaPr_PsAm </ci>
+			<ci> P_McPr_PsAm </ci>
+			<ci> P_Pr_McMa </ci>
+			<ci> P_Pr_McAm </ci>
+		  </apply>
+          <apply><plus/>
+            <ci> U_Pr_PrAb </ci>
+            <ci> U_Pr_PrEx </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Hf_AmMa</ci> 
+		<apply><times/>
+          <ci> f_Hf_AmMa </ci>
+		  <ci> U_Ha_AmMa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Hf_AmMc</ci> 
+		<apply><times/>
+          <ci> f_Hf_AmMc </ci>
+		  <ci> U_Hc_AmMc </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Hf_PsMa</ci> 
+		<apply><times/>
+          <ci> f_Hf_PsMa </ci>
+		  <ci> U_Ha_PsMa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Hf_PsMc</ci> 
+		<apply><times/>
+          <ci> f_Hf_PsMc </ci>
+		  <ci> U_Hc_PsMc </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Hf_HaAs</ci> 
+		<apply><times/>
+          <ci> f_Hf_HaAs </ci>
+		  <ci> U_Ha_HaAs </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Hf_McMa</ci> 
+		<apply><times/>
+          <ci> f_Hf_McMa </ci>
+		  <ci> U_Ha_McMa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>Y_Pr_LaPr</ci> 
+		<apply><times/>
+          <ci> f_Lc_Le </ci>
+		  <ci> Y_Pr_WrPr </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>Y_Pr_HaVa</ci> 
+		<apply><divide/>
+		  <apply><plus/>
+		    <apply><times/>
+              <ci> Y_Pr_WrPr </ci>
+		      <ci> P_Ha_WrHa </ci>
+		    </apply>
+		    <apply><times/>
+              <ci> Y_Pr_LaPr </ci>
+		      <ci> P_Ha_LaHa </ci>
+		    </apply>
+		    <apply><times/>
+              <ci> Y_Pr_StPr </ci>
+			  <apply><plus/>
+			    <ci> P_Ha_SrHa </ci>
+				<ci> P_Ha_SdHa </ci>
+				<ci> P_Ha_MaMd </ci>
+              </apply>
+			</apply>
+		  </apply>
+		  <apply><plus/>
+			<ci> P_Ha_WrHa </ci>
+		    <ci> P_Ha_LaHa </ci>
+			<ci> P_Ha_SrHa </ci>
+			<ci> P_Ha_SdHa </ci>
+			<ci> P_Ha_MaMd </ci>
+          </apply>
+		</apply>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>Y_Pr_HcVa</ci> 
+		<apply><plus/>
+		  <apply><times/>
+            <ci> f_Ce_Fd </ci>
+		    <ci> Y_Pr_CePr </ci>
+		  </apply>
+		  <apply><times/>
+		    <apply><minus/>
+		      <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			  <ci> f_Ce_Fd </ci>
+			</apply>
+			<ci> Y_Pr_HePr </ci>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Pr_PsVa </ci> 
+		<ci> Y_Pr_PsPr </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Pr_AmMa </ci> 
+		<ci> Y_Pr_HaVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Pr_AmMc </ci> 
+		<ci> Y_Pr_HcVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Pr_PsMa </ci> 
+		<ci> Y_Pr_HaVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Pr_PsMc </ci> 
+		<ci> Y_Pr_HcVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Pr_HaAs </ci> 
+		<ci> Y_Pr_HaVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Pr_McMa </ci> 
+		<ci> Y_Pr_HcVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Pr_PsAm </ci> 
+		<ci> Y_Pr_PsVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Pr_McAm </ci> 
+		<ci> Y_Pr_PsVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>v_PrAb</ci> 
+		<apply><times/>
+          <ci> v_PrAb_star </ci>
+		  <apply><power/>
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="litre">1.0</cn>
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.25</cn>
+	      </apply>
+		  <apply><divide/>
+		    <apply><power/>
+		      <ci>V_Ru</ci>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.75</cn>
+			</apply>
+			<apply><plus/>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1.0</cn>
+			  <apply><power/>
+			    <apply><divide/>
+			      <ci>pH</ci>
+				  <ci>J_pH_PrAb</ci>
+                </apply>
+				<ci>phi_pH_PrAb</ci>
+              </apply>
+			</apply>
+          </apply>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> k_PrEx </ci> 
+		<ci> k_FlEx </ci>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="Q_Bu" cmeta:id="Q_Bu">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#Q_Bu">
+        <dc:title>Q_Bu</dc:title>
+        <dcterms:alternative>butyric acid pool</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="mole" name="Q_Bu" initial_value="1.000"/>
+    <variable units="molar" name="C_Bu"/>
+	<variable units="mole_per_day" name="P_Bu_InBu"/>
+	<variable units="mole_per_day" name="P_Bu_AmMa"/>
+	<variable units="mole_per_day" name="P_Bu_AmMc"/>
+	<variable units="mole_per_day" name="P_Bu_PsMa"/>
+	<variable units="mole_per_day" name="P_Bu_PsMc"/>
+	<variable units="mole_per_day" name="P_Bu_HaAs"/>
+	<variable units="mole_per_day" name="P_Bu_HaVa"/>
+	<variable units="mole_per_day" name="P_Bu_HcVa"/>
+	<variable units="mole_per_day" name="P_MaBu_PsAm"/>
+	<variable units="mole_per_day" name="P_McBu_PsAm"/>
+	<variable units="mole_per_day" name="P_Bu_McMa"/>
+	<variable units="mole_per_day" name="P_Bu_McAm"/>
+    <variable units="mole_per_day" name="U_Bu_BuAb"/>
+    <variable units="mole_per_day" name="U_Bu_BuEx"/>
+	<variable units="mole_per_day" name="U_Hf_AmMa"/>
+    <variable units="mole_per_day" name="U_Hf_AmMc"/>
+	<variable units="mole_per_day" name="U_Hf_PsMa"/>
+    <variable units="mole_per_day" name="U_Hf_PsMc"/>
+	<variable units="mole_per_day" name="U_Hf_HaAs"/>
+	<variable units="mole_per_day" name="U_Hf_McMa"/>
+	<variable units="molar" name="M_Bu_BuAb" initial_value="0.338"/>
+	<variable units="mole_per_day" name="v_BuAb"/>
+	<variable units="mole_per_litre_day" name="v_BuAb_star" initial_value="7.86"/>
+    <variable units="dimensionless" name="Y_Bu_LaBu"/>
+	<variable units="dimensionless" name="Y_Bu_HaVa"/>
+	<variable units="dimensionless" name="Y_Bu_PsVa"/>
+	<variable units="dimensionless" name="Y_Bu_AmMa"/>
+	<variable units="dimensionless" name="Y_Bu_AmMc"/>
+	<variable units="dimensionless" name="Y_Bu_PsMa"/>
+	<variable units="dimensionless" name="Y_Bu_PsMc"/>
+	<variable units="dimensionless" name="Y_Bu_HaAs"/>
+	<variable units="dimensionless" name="Y_Bu_McMa"/>
+	<variable units="dimensionless" name="Y_Bu_PsAm"/>
+	<variable units="dimensionless" name="Y_Bu_McAm"/>
+	<variable units="dimensionless" name="Y_Bu_WrBu" initial_value="1.000"/>
+	<variable units="molar" name="Y_Bu_InBu" initial_value="0.0114"/>
+	<variable units="dimensionless" name="Y_Bu_HcVa"/>
+	<variable units="dimensionless" name="Y_Bu_StBu" initial_value="1.000"/>
+	<variable units="dimensionless" name="Y_Bu_CeBu" initial_value="1.000"/>
+	<variable units="dimensionless" name="Y_Bu_HeBu" initial_value="1.000"/>
+	<variable units="dimensionless" name="Y_Bu_PsBu" initial_value="1.000"/>
+	<variable units="first_order_rate_constant" name="k_BuEx"/>
+	<variable units="litre_per_day" name="D_Bu" initial_value="1.000"/>
+    <variable units="dimensionless" name="phi_pH_BuAb" initial_value="6.48"/>
+	<variable units="dimensionless" name="J_pH_BuAb" initial_value="6.45"/>
+	
+    <variable units="day" public_interface="in" name="time"/>
+	<variable units="dimensionless" public_interface="in" name="pH"/>
+	<variable units="litre" public_interface="in" name="V_Ru"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_FlEx"/>
+    <variable units="dimensionless" public_interface="in" name="f_Hf_AmMa"/>
+	<variable units="dimensionless" public_interface="in" name="f_Hf_AmMc"/>
+	<variable units="dimensionless" public_interface="in" name="f_Hf_PsMa"/>
+	<variable units="dimensionless" public_interface="in" name="f_Hf_PsMc"/>
+	<variable units="dimensionless" public_interface="in" name="f_Hf_HaAs"/>
+	<variable units="dimensionless" public_interface="in" name="f_Hf_McMa"/>
+	<variable units="dimensionless" public_interface="in" name="f_Lc_Le"/>
+	<variable units="dimensionless" public_interface="in" name="f_Ce_Fd"/>
+	<variable units="mole_per_day" public_interface="in" name="U_MaPs_PsAm"/>
+	<variable units="mole_per_day" public_interface="in" name="U_McPs_PsAm"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Ha_HaAs"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Ha_AmMa"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Ha_PsMa"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Hc_PsMc"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Ha_McMa"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Ha_HaVa"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Hc_HcVa"/>
+    <variable units="mole_per_day" public_interface="in" name="U_Mc_McAm"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Hc_AmMc"/>
+	<variable units="mole_per_day" public_interface="in" name="P_Ha_WrHa"/>
+	<variable units="mole_per_day" public_interface="in" name="P_Ha_LaHa"/>
+	<variable units="mole_per_day" public_interface="in" name="P_Ha_SrHa"/>
+	<variable units="mole_per_day" public_interface="in" name="P_Ha_SdHa"/>
+	<variable units="mole_per_day" public_interface="in" name="P_Ha_MaMd"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>C_Bu</ci> 
+		<apply><divide/>
+          <ci> Q_Bu </ci>
+		  <ci> V_Ru </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Bu_InBu</ci> 
+		<apply><times/>
+          <ci> Y_Bu_InBu </ci>
+		  <ci> D_Bu </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Bu_AmMa</ci> 
+		<apply><times/>
+          <ci> Y_Bu_AmMa </ci>
+		  <ci> U_Hf_AmMa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Bu_AmMc</ci> 
+		<apply><times/>
+          <ci> Y_Bu_AmMc </ci>
+		  <ci> U_Hf_AmMc </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Bu_PsMa</ci> 
+		<apply><times/>
+          <ci> Y_Bu_PsMa </ci>
+		  <ci> U_Hf_PsMa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Bu_PsMc</ci> 
+		<apply><times/>
+          <ci> Y_Bu_PsMc </ci>
+		  <ci> U_Hf_PsMc </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Bu_HaAs</ci> 
+		<apply><times/>
+          <ci> Y_Bu_HaAs </ci>
+		  <ci> U_Hf_HaAs </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Bu_HaVa</ci> 
+		<apply><times/>
+          <ci> Y_Bu_HaVa</ci>
+		  <ci> U_Ha_HaVa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Bu_HcVa</ci> 
+		<apply><times/>
+          <ci> Y_Bu_HcVa </ci>
+		  <ci> U_Hc_HcVa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_MaBu_PsAm</ci> 
+		<apply><times/>
+          <ci> Y_Bu_PsAm </ci>
+		  <ci> U_MaPs_PsAm </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_McBu_PsAm</ci> 
+		<apply><times/>
+          <ci> Y_Bu_PsAm </ci>
+		  <ci> U_McPs_PsAm </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Bu_McMa</ci> 
+		<apply><times/>
+          <ci> Y_Bu_McMa </ci>
+		  <ci> U_Hf_McMa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Bu_McAm</ci> 
+		<apply><times/>
+          <ci> Y_Bu_McAm </ci>
+		  <ci> U_Mc_McAm </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Bu_BuAb</ci> 
+		<apply><divide/>
+          <ci> v_BuAb </ci>
+		  <apply><plus/>
+		    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			<apply><divide/>
+              <ci>M_Bu_BuAb</ci>
+			  <ci>C_Bu</ci>
+            </apply>		
+		  </apply>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Bu_BuEx</ci> 
+		<apply><times/>
+          <ci> k_BuEx </ci>
+		  <ci> Q_Bu </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+	  <apply><eq/> 
+        <apply><diff/> 
+          <bvar><ci>time</ci></bvar> 
+          <ci>Q_Bu</ci> 
+        </apply>
+        <apply><minus/>
+          <apply><plus/>
+		    <ci> P_Bu_InBu </ci>
+			<ci> P_Bu_AmMa </ci>
+			<ci> P_Bu_AmMc </ci>
+			<ci> P_Bu_PsMa </ci>
+			<ci> P_Bu_PsMc </ci>
+			<ci> P_Bu_HaAs </ci>
+			<ci> P_Bu_HaVa </ci>
+			<ci> P_Bu_HcVa </ci>
+			<ci> P_MaBu_PsAm </ci>
+			<ci> P_McBu_PsAm </ci>
+			<ci> P_Bu_McMa </ci>
+			<ci> P_Bu_McAm </ci>
+		  </apply>
+          <apply><plus/>
+            <ci> U_Bu_BuAb </ci>
+            <ci> U_Bu_BuEx </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Hf_AmMa</ci> 
+		<apply><times/>
+          <ci> f_Hf_AmMa </ci>
+		  <ci> U_Ha_AmMa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Hf_AmMc</ci> 
+		<apply><times/>
+          <ci> f_Hf_AmMc </ci>
+		  <ci> U_Hc_AmMc </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Hf_PsMa</ci> 
+		<apply><times/>
+          <ci> f_Hf_PsMa </ci>
+		  <ci> U_Ha_PsMa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Hf_PsMc</ci> 
+		<apply><times/>
+          <ci> f_Hf_PsMc </ci>
+		  <ci> U_Hc_PsMc </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Hf_HaAs</ci> 
+		<apply><times/>
+          <ci> f_Hf_HaAs </ci>
+		  <ci> U_Ha_HaAs </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Hf_McMa</ci> 
+		<apply><times/>
+          <ci> f_Hf_McMa </ci>
+		  <ci> U_Ha_McMa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>Y_Bu_LaBu</ci> 
+		<apply><times/>
+          <ci> f_Lc_Le </ci>
+		  <ci> Y_Bu_WrBu </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>Y_Bu_HaVa</ci> 
+		<apply><divide/>
+		  <apply><plus/>
+		    <apply><times/>
+              <ci> Y_Bu_WrBu </ci>
+		      <ci> P_Ha_WrHa </ci>
+		    </apply>
+		    <apply><times/>
+              <ci> Y_Bu_LaBu </ci>
+		      <ci> P_Ha_LaHa </ci>
+		    </apply>
+		    <apply><times/>
+              <ci> Y_Bu_StBu </ci>
+			  <apply><plus/>
+			    <ci> P_Ha_SrHa </ci>
+				<ci> P_Ha_SdHa </ci>
+				<ci> P_Ha_MaMd </ci>
+              </apply>
+			</apply>
+		  </apply>
+		  <apply><plus/>
+			<ci> P_Ha_WrHa </ci>
+		    <ci> P_Ha_LaHa </ci>
+			<ci> P_Ha_SrHa </ci>
+			<ci> P_Ha_SdHa </ci>
+			<ci> P_Ha_MaMd </ci>
+          </apply>
+		</apply>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>Y_Bu_HcVa</ci> 
+		<apply><plus/>
+		  <apply><times/>
+            <ci> f_Ce_Fd </ci>
+		    <ci> Y_Bu_CeBu </ci>
+		  </apply>
+		  <apply><times/>
+		    <apply><minus/>
+		      <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			  <ci> f_Ce_Fd </ci>
+			</apply>
+			<ci> Y_Bu_HeBu </ci>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Bu_PsVa </ci> 
+		<ci> Y_Bu_PsBu </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Bu_AmMa </ci> 
+		<ci> Y_Bu_HaVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Bu_AmMc </ci> 
+		<ci> Y_Bu_HcVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Bu_PsMa </ci> 
+		<ci> Y_Bu_HaVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Bu_PsMc </ci> 
+		<ci> Y_Bu_HcVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Bu_HaAs </ci> 
+		<ci> Y_Bu_HaVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Bu_McMa </ci> 
+		<ci> Y_Bu_HcVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Bu_PsAm </ci> 
+		<ci> Y_Bu_PsVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Bu_McAm </ci> 
+		<ci> Y_Bu_PsVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>v_BuAb</ci> 
+		<apply><times/>
+          <ci> v_BuAb_star </ci>
+		  <apply><power/>
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="litre">1.0</cn>
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.25</cn>
+	      </apply>
+		  <apply><divide/>
+		    <apply><power/>
+		      <ci>V_Ru</ci>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.75</cn>
+			</apply>
+			<apply><plus/>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1.0</cn>
+			  <apply><power/>
+			    <apply><divide/>
+			      <ci>pH</ci>
+				  <ci>J_pH_BuAb</ci>
+                </apply>
+				<ci>phi_pH_BuAb</ci>
+              </apply>
+			</apply>
+          </apply>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> k_BuEx </ci> 
+		<ci> k_FlEx </ci>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="Q_Vl" cmeta:id="Q_Vl">
+    <rdf:RDF>
+      <rdf:Description rdf:about="#Q_Vl">
+        <dc:title>Q_Vl</dc:title>
+        <dcterms:alternative>valeric acid pool</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="mole" name="Q_Vl" initial_value="1.000"/>
+    <variable units="molar" name="C_Vl"/>
+	<variable units="mole_per_day" name="P_Vl_InVl"/>
+	<variable units="mole_per_day" name="P_Vl_AmMa"/>
+	<variable units="mole_per_day" name="P_Vl_AmMc"/>
+	<variable units="mole_per_day" name="P_Vl_PsMa"/>
+	<variable units="mole_per_day" name="P_Vl_PsMc"/>
+	<variable units="mole_per_day" name="P_Vl_HaAs"/>
+	<variable units="mole_per_day" name="P_Vl_HaVa"/>
+	<variable units="mole_per_day" name="P_Vl_HcVa"/>
+	<variable units="mole_per_day" name="P_MaVl_PsAm"/>
+	<variable units="mole_per_day" name="P_McVl_PsAm"/>
+	<variable units="mole_per_day" name="P_Vl_McMa"/>
+	<variable units="mole_per_day" name="P_Vl_McAm"/>
+    <variable units="mole_per_day" name="U_Vl_VlAb"/>
+    <variable units="mole_per_day" name="U_Vl_VlEx"/>
+	<variable units="mole_per_day" name="U_Hf_AmMa"/>
+    <variable units="mole_per_day" name="U_Hf_AmMc"/>
+	<variable units="mole_per_day" name="U_Hf_PsMa"/>
+    <variable units="mole_per_day" name="U_Hf_PsMc"/>
+	<variable units="mole_per_day" name="U_Hf_HaAs"/>
+	<variable units="mole_per_day" name="U_Hf_McMa"/>
+	<variable units="molar" name="M_Vl_VlAb" initial_value="0.338"/>
+	<variable units="mole_per_day" name="v_VlAb"/>
+	<variable units="mole_per_litre_day" name="v_VlAb_star" initial_value="7.86"/>
+    <variable units="dimensionless" name="Y_Vl_LaVl"/>
+	<variable units="dimensionless" name="Y_Vl_HaVa"/>
+	<variable units="dimensionless" name="Y_Vl_PsVa"/>
+	<variable units="dimensionless" name="Y_Vl_AmMa"/>
+	<variable units="dimensionless" name="Y_Vl_AmMc"/>
+	<variable units="dimensionless" name="Y_Vl_PsMa"/>
+	<variable units="dimensionless" name="Y_Vl_PsMc"/>
+	<variable units="dimensionless" name="Y_Vl_HaAs"/>
+	<variable units="dimensionless" name="Y_Vl_McMa"/>
+	<variable units="dimensionless" name="Y_Vl_PsAm"/>
+	<variable units="dimensionless" name="Y_Vl_McAm"/>
+	<variable units="dimensionless" name="Y_Vl_WrVl" initial_value="1.000"/>
+	<variable units="molar" name="Y_Vl_InVl" initial_value="0.0098"/>
+	<variable units="dimensionless" name="Y_Vl_HcVa"/>
+	<variable units="dimensionless" name="Y_Vl_StVl" initial_value="1.000"/>
+	<variable units="dimensionless" name="Y_Vl_CeVl" initial_value="1.000"/>
+	<variable units="dimensionless" name="Y_Vl_HeVl" initial_value="1.000"/>
+	<variable units="dimensionless" name="Y_Vl_PsVl" initial_value="1.000"/>
+	<variable units="first_order_rate_constant" name="k_VlEx"/>
+	<variable units="litre_per_day" name="D_Vl" initial_value="1.000"/>
+    <variable units="dimensionless" name="phi_pH_VlAb" initial_value="6.48"/>
+	<variable units="dimensionless" name="J_pH_VlAb" initial_value="6.45"/>
+	
+    <variable units="day" public_interface="in" name="time"/>
+	<variable units="dimensionless" public_interface="in" name="pH"/>
+	<variable units="litre" public_interface="in" name="V_Ru"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="k_FlEx"/>
+    <variable units="dimensionless" public_interface="in" name="f_Hf_AmMa"/>
+	<variable units="dimensionless" public_interface="in" name="f_Hf_AmMc"/>
+	<variable units="dimensionless" public_interface="in" name="f_Hf_PsMa"/>
+	<variable units="dimensionless" public_interface="in" name="f_Hf_PsMc"/>
+	<variable units="dimensionless" public_interface="in" name="f_Hf_HaAs"/>
+	<variable units="dimensionless" public_interface="in" name="f_Hf_McMa"/>
+	<variable units="dimensionless" public_interface="in" name="f_Lc_Le"/>
+	<variable units="dimensionless" public_interface="in" name="f_Ce_Fd"/>
+	<variable units="mole_per_day" public_interface="in" name="U_MaPs_PsAm"/>
+	<variable units="mole_per_day" public_interface="in" name="U_McPs_PsAm"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Ha_HaAs"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Ha_AmMa"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Ha_PsMa"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Hc_PsMc"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Ha_McMa"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Ha_HaVa"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Hc_HcVa"/>
+    <variable units="mole_per_day" public_interface="in" name="U_Mc_McAm"/>
+	<variable units="mole_per_day" public_interface="in" name="U_Hc_AmMc"/>
+	<variable units="mole_per_day" public_interface="in" name="P_Ha_WrHa"/>
+	<variable units="mole_per_day" public_interface="in" name="P_Ha_LaHa"/>
+	<variable units="mole_per_day" public_interface="in" name="P_Ha_SrHa"/>
+	<variable units="mole_per_day" public_interface="in" name="P_Ha_SdHa"/>
+	<variable units="mole_per_day" public_interface="in" name="P_Ha_MaMd"/>
+	
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>C_Vl</ci> 
+		<apply><divide/>
+          <ci> Q_Vl </ci>
+		  <ci> V_Ru </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Vl_InVl</ci> 
+		<apply><times/>
+          <ci> Y_Vl_InVl </ci>
+		  <ci> D_Vl </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Vl_AmMa</ci> 
+		<apply><times/>
+          <ci> Y_Vl_AmMa </ci>
+		  <ci> U_Hf_AmMa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Vl_AmMc</ci> 
+		<apply><times/>
+          <ci> Y_Vl_AmMc </ci>
+		  <ci> U_Hf_AmMc </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Vl_PsMa</ci> 
+		<apply><times/>
+          <ci> Y_Vl_PsMa </ci>
+		  <ci> U_Hf_PsMa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Vl_PsMc</ci> 
+		<apply><times/>
+          <ci> Y_Vl_PsMc </ci>
+		  <ci> U_Hf_PsMc </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Vl_HaAs</ci> 
+		<apply><times/>
+          <ci> Y_Vl_HaAs </ci>
+		  <ci> U_Hf_HaAs </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Vl_HaVa</ci> 
+		<apply><times/>
+          <ci> Y_Vl_HaVa</ci>
+		  <ci> U_Ha_HaVa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Vl_HcVa</ci> 
+		<apply><times/>
+          <ci> Y_Vl_HcVa </ci>
+		  <ci> U_Hc_HcVa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_MaVl_PsAm</ci> 
+		<apply><times/>
+          <ci> Y_Vl_PsAm </ci>
+		  <ci> U_MaPs_PsAm </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_McVl_PsAm</ci> 
+		<apply><times/>
+          <ci> Y_Vl_PsAm </ci>
+		  <ci> U_McPs_PsAm </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Vl_McMa</ci> 
+		<apply><times/>
+          <ci> Y_Vl_McMa </ci>
+		  <ci> U_Hf_McMa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>P_Vl_McAm</ci> 
+		<apply><times/>
+          <ci> Y_Vl_McAm </ci>
+		  <ci> U_Mc_McAm </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Vl_VlAb</ci> 
+		<apply><divide/>
+          <ci> v_VlAb </ci>
+		  <apply><plus/>
+		    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			<apply><divide/>
+              <ci>M_Vl_VlAb</ci>
+			  <ci>C_Vl</ci>
+            </apply>		
+		  </apply>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Vl_VlEx</ci> 
+		<apply><times/>
+          <ci> k_VlEx </ci>
+		  <ci> Q_Vl </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+	  <apply><eq/> 
+        <apply><diff/> 
+          <bvar><ci>time</ci></bvar> 
+          <ci>Q_Vl</ci> 
+        </apply>
+        <apply><minus/>
+          <apply><plus/>
+		    <ci> P_Vl_InVl </ci>
+			<ci> P_Vl_AmMa </ci>
+			<ci> P_Vl_AmMc </ci>
+			<ci> P_Vl_PsMa </ci>
+			<ci> P_Vl_PsMc </ci>
+			<ci> P_Vl_HaAs </ci>
+			<ci> P_Vl_HaVa </ci>
+			<ci> P_Vl_HcVa </ci>
+			<ci> P_MaVl_PsAm </ci>
+			<ci> P_McVl_PsAm </ci>
+			<ci> P_Vl_McMa </ci>
+			<ci> P_Vl_McAm </ci>
+		  </apply>
+          <apply><plus/>
+            <ci> U_Vl_VlAb </ci>
+            <ci> U_Vl_VlEx </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Hf_AmMa</ci> 
+		<apply><times/>
+          <ci> f_Hf_AmMa </ci>
+		  <ci> U_Ha_AmMa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Hf_AmMc</ci> 
+		<apply><times/>
+          <ci> f_Hf_AmMc </ci>
+		  <ci> U_Hc_AmMc </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Hf_PsMa</ci> 
+		<apply><times/>
+          <ci> f_Hf_PsMa </ci>
+		  <ci> U_Ha_PsMa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Hf_PsMc</ci> 
+		<apply><times/>
+          <ci> f_Hf_PsMc </ci>
+		  <ci> U_Hc_PsMc </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Hf_HaAs</ci> 
+		<apply><times/>
+          <ci> f_Hf_HaAs </ci>
+		  <ci> U_Ha_HaAs </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>U_Hf_McMa</ci> 
+		<apply><times/>
+          <ci> f_Hf_McMa </ci>
+		  <ci> U_Ha_McMa </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>Y_Vl_LaVl</ci> 
+		<apply><times/>
+          <ci> f_Lc_Le </ci>
+		  <ci> Y_Vl_WrVl </ci>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>Y_Vl_HaVa</ci> 
+		<apply><divide/>
+		  <apply><plus/>
+		    <apply><times/>
+              <ci> Y_Vl_WrVl </ci>
+		      <ci> P_Ha_WrHa </ci>
+		    </apply>
+		    <apply><times/>
+              <ci> Y_Vl_LaVl </ci>
+		      <ci> P_Ha_LaHa </ci>
+		    </apply>
+		    <apply><times/>
+              <ci> Y_Vl_StVl </ci>
+			  <apply><plus/>
+			    <ci> P_Ha_SrHa </ci>
+				<ci> P_Ha_SdHa </ci>
+				<ci> P_Ha_MaMd </ci>
+              </apply>
+			</apply>
+		  </apply>
+		  <apply><plus/>
+			<ci> P_Ha_WrHa </ci>
+		    <ci> P_Ha_LaHa </ci>
+			<ci> P_Ha_SrHa </ci>
+			<ci> P_Ha_SdHa </ci>
+			<ci> P_Ha_MaMd </ci>
+          </apply>
+		</apply>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>Y_Vl_HcVa</ci> 
+		<apply><plus/>
+		  <apply><times/>
+            <ci> f_Ce_Fd </ci>
+		    <ci> Y_Vl_CeVl </ci>
+		  </apply>
+		  <apply><times/>
+		    <apply><minus/>
+		      <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+			  <ci> f_Ce_Fd </ci>
+			</apply>
+			<ci> Y_Vl_HeVl </ci>
+		  </apply>
+		</apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Vl_PsVa </ci> 
+		<ci> Y_Vl_PsVl </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Vl_AmMa </ci> 
+		<ci> Y_Vl_HaVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Vl_AmMc </ci> 
+		<ci> Y_Vl_HcVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Vl_PsMa </ci> 
+		<ci> Y_Vl_HaVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Vl_PsMc </ci> 
+		<ci> Y_Vl_HcVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Vl_HaAs </ci> 
+		<ci> Y_Vl_HaVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Vl_McMa </ci> 
+		<ci> Y_Vl_HcVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Vl_PsAm </ci> 
+		<ci> Y_Vl_PsVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> Y_Vl_McAm </ci> 
+		<ci> Y_Vl_PsVa </ci>
+	  </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>v_VlAb</ci> 
+		<apply><times/>
+          <ci> v_VlAb_star </ci>
+		  <apply><power/>
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="litre">1.0</cn>
+			<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.25</cn>
+	      </apply>
+		  <apply><divide/>
+		    <apply><power/>
+		      <ci>V_Ru</ci>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.75</cn>
+			</apply>
+			<apply><plus/>
+			  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1.0</cn>
+			  <apply><power/>
+			    <apply><divide/>
+			      <ci>pH</ci>
+				  <ci>J_pH_VlAb</ci>
+                </apply>
+				<ci>phi_pH_VlAb</ci>
+              </apply>
+			</apply>
+          </apply>
+	    </apply>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci> k_VlEx </ci> 
+		<ci> k_FlEx </ci>
+      </apply>
+    </math>
+  </component>
+    
+  <component name="model_parameters"> 
+    <variable units="dimensionless" public_interface="out" name="f_Hf_AmMa" initial_value="0.526"/>
+	<variable units="dimensionless" public_interface="out" name="f_Hf_AmMc" initial_value="0.526"/>
+	<variable units="dimensionless" public_interface="out" name="f_Hf_PsMa" initial_value="0.711"/>
+	<variable units="dimensionless" public_interface="out" name="f_Hf_PsMc" initial_value="0.711"/>
+	<variable units="dimensionless" public_interface="out" name="f_Hf_HaAs" initial_value="0.306"/>
+	<variable units="dimensionless" public_interface="out" name="f_Hf_McMa" initial_value="0.711"/>
+	<variable units="dimensionless" public_interface="out" name="f_Lc_Le" initial_value="2.250"/>
+	<variable units="dimensionless" public_interface="out" name="f_Ce_Fd" initial_value="1.000"/>
+	<variable units="molar" public_interface="out" name="J_Ha_McAm" initial_value="0.0165"/>
+	<variable units="litre" public_interface="out" name="V_Ru" initial_value="1.000"/>
+	<variable units="first_order_rate_constant" public_interface="out" name="k_FlEx" initial_value="1.000"/>
+	<variable units="first_order_rate_constant" public_interface="out" name="k_SoEx" initial_value="1.000"/>
+	<variable units="dimensionless" public_interface="out" name="pH" initial_value="7.000"/>
+	<variable units="dimensionless" public_interface="out" name="pm" initial_value="1.000"/>
+	<variable units="dimensionless" public_interface="out" name="f" initial_value="1.000"/>
+	<variable units="dimensionless" public_interface="out" name="f_Po_Ma" initial_value="0.35"/>
+	<variable units="dimensionless" public_interface="out" name="f_Ni_Fe" initial_value="1.000"/>
+	<variable units="first_order_rate_constant" public_interface="out" name="k_MaEx"/>
+	<variable units="first_order_rate_constant" public_interface="out" name="k_PoEx"/>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>k_MaEx</ci> 
+		<ci>k_FlEx</ci>
+      </apply>
+    </math>
+	
+	<math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply><eq/> 
+        <ci>k_PoEx</ci> 
+		<apply><divide/>
+		  <ci>k_SoEx</ci>
+		  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  
+  <connection>
+    <map_components component_2="environment" component_1="Q_Pd"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Q_Ps"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Q_Pu"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Q_Am"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Q_Li"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Q_Sd"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Q_Fd"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Q_Fu"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Q_Ha"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Q_Hc"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Q_Ma"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Q_As"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Q_Mc"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Q_Ac"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Q_Pr"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Q_Bu"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Q_Vl"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Pd" component_1="Q_Ma"/>
+    <map_variables variable_2="Q_Ma" variable_1="Q_Ma"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Pd" component_1="Q_Mc"/>
+    <map_variables variable_2="Q_Mc" variable_1="Q_Mc"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Pd" component_1="model_parameters"/>
+    <map_variables variable_2="V_Ru" variable_1="V_Ru"/>
+	<map_variables variable_2="k_SoEx" variable_1="k_SoEx"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Ps" component_1="Q_Ma"/>
+    <map_variables variable_2="Q_Ma" variable_1="Q_Ma"/>
+	<map_variables variable_2="U_Ma_MaMd" variable_1="U_Ma_MaMd"/>
+	<map_variables variable_2="U_Ps_PsMa" variable_1="U_Ps_PsMa"/>
+	<map_variables variable_2="M_Ha_McMa" variable_1="M_Ha_McMa"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Ps" component_1="Q_Mc"/>
+    <map_variables variable_2="Q_Mc" variable_1="Q_Mc"/>
+	<map_variables variable_2="U_Mc_McEg" variable_1="U_Mc_McEg"/>
+	<map_variables variable_2="U_Ps_PsMc" variable_1="U_Ps_PsMc"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Ps" component_1="Q_Ha"/>
+    <map_variables variable_2="C_Ha" variable_1="C_Ha"/>
+	<map_variables variable_2="C_Ps" variable_1="C_Ps"/>
+	<map_variables variable_2="U_Ha_McMa" variable_1="U_Ha_McMa"/>
+	<map_variables variable_2="U_Ps_PsMa" variable_1="U_Ps_PsMa"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Ps" component_1="Q_Pd"/>
+    <map_variables variable_2="U_Pd_PdPs" variable_1="U_Pd_PdPs"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Ps" component_1="Q_Hc"/>
+    <map_variables variable_2="C_Hc" variable_1="C_Hc"/>
+	<map_variables variable_2="U_Hc_PsMc" variable_1="U_Hc_PsMc"/>
+	<map_variables variable_2="U_Ps_PsMc" variable_1="U_Ps_PsMc"/>
+	<map_variables variable_2="C_Ps" variable_1="C_Ps"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Ps" component_1="model_parameters"/>
+    <map_variables variable_2="V_Ru" variable_1="V_Ru"/>
+	<map_variables variable_2="k_FlEx" variable_1="k_FlEx"/>
+	<map_variables variable_2="J_Ha_McAm" variable_1="J_Ha_McAm"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Pu" component_1="model_parameters"/>
+    <map_variables variable_2="V_Ru" variable_1="V_Ru"/>
+	<map_variables variable_2="k_SoEx" variable_1="k_SoEx"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Am" component_1="Q_Ma"/>
+    <map_variables variable_2="Q_Ma" variable_1="Q_Ma"/>
+	<map_variables variable_2="U_Am_AmMa" variable_1="U_Am_AmMa"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Am" component_1="Q_Mc"/>
+    <map_variables variable_2="Q_Mc" variable_1="Q_Mc"/>
+	<map_variables variable_2="U_Am_AmMc" variable_1="U_Am_AmMc"/>
+	<map_variables variable_2="U_Mc_McEg" variable_1="U_Mc_McEg"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Am" component_1="Q_Ha"/>
+    <map_variables variable_2="C_Ha" variable_1="C_Ha"/>
+	<map_variables variable_2="C_Am" variable_1="C_Am"/>
+	<map_variables variable_2="U_Am_AmMa" variable_1="U_Am_AmMa"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Am" component_1="Q_Hc"/>
+    <map_variables variable_2="C_Hc" variable_1="C_Hc"/>
+	<map_variables variable_2="U_Am_AmMc" variable_1="U_Am_AmMc"/>
+	<map_variables variable_2="C_Am" variable_1="C_Am"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Am" component_1="Q_Ps"/>
+    <map_variables variable_2="U_McPs_PsAm" variable_1="U_McPs_PsAm"/>
+	<map_variables variable_2="U_MaPs_PsAm" variable_1="U_MaPs_PsAm"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Am" component_1="model_parameters"/>
+    <map_variables variable_2="V_Ru" variable_1="V_Ru"/>
+	<map_variables variable_2="k_FlEx" variable_1="k_FlEx"/>
+	<map_variables variable_2="J_Ha_McAm" variable_1="J_Ha_McAm"/>
+	<map_variables variable_2="pH" variable_1="pH"/>
+	<map_variables variable_2="f_Po_Ma" variable_1="f_Po_Ma"/>
+	<map_variables variable_2="f_Ni_Fe" variable_1="f_Ni_Fe"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Li" component_1="model_parameters"/>
+    <map_variables variable_2="V_Ru" variable_1="V_Ru"/>
+	<map_variables variable_2="k_FlEx" variable_1="k_FlEx"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Li" component_1="Q_Ma"/>
+    <map_variables variable_2="U_Ma_MaMd" variable_1="U_Ma_MaMd"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Sd" component_1="model_parameters"/>
+    <map_variables variable_2="V_Ru" variable_1="V_Ru"/>
+	<map_variables variable_2="k_SoEx" variable_1="k_SoEx"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Sd" component_1="Q_Ma"/>
+    <map_variables variable_2="Q_Ma" variable_1="Q_Ma"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Fd" component_1="model_parameters"/>
+    <map_variables variable_2="V_Ru" variable_1="V_Ru"/>
+	<map_variables variable_2="k_SoEx" variable_1="k_SoEx"/>
+	<map_variables variable_2="pm" variable_1="pm"/>
+	<map_variables variable_2="f" variable_1="f"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Fd" component_1="Q_Mc"/>
+    <map_variables variable_2="Q_Mc" variable_1="Q_Mc"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Fu" component_1="model_parameters"/>
+    <map_variables variable_2="V_Ru" variable_1="V_Ru"/>
+	<map_variables variable_2="k_SoEx" variable_1="k_SoEx"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Ha" component_1="Q_Ma"/>
+    <map_variables variable_2="Q_Ma" variable_1="Q_Ma"/>
+	<map_variables variable_2="C_Ha" variable_1="C_Ha"/>
+	<map_variables variable_2="U_Mc_McMa" variable_1="U_Mc_McMa"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Ha" component_1="Q_As"/>
+    <map_variables variable_2="U_As_MaMd" variable_1="U_As_MaMd"/>
+	<map_variables variable_2="U_Ha_HaAs" variable_1="U_Ha_HaAs"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Ha" component_1="Q_Sd"/>
+    <map_variables variable_2="U_Sd_SdHa" variable_1="U_Sd_SdHa"/>
+  </connection> 
+  
+  <connection>
+    <map_components component_2="Q_Ha" component_1="model_parameters"/>
+    <map_variables variable_2="V_Ru" variable_1="V_Ru"/>
+	<map_variables variable_2="k_FlEx" variable_1="k_FlEx"/>
+	<map_variables variable_2="f_Po_Ma" variable_1="f_Po_Ma"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Hc" component_1="Q_Mc"/>
+    <map_variables variable_2="Q_Mc" variable_1="Q_Mc"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Hc" component_1="Q_Fd"/>
+    <map_variables variable_2="U_Fd_FdHc" variable_1="U_Fd_FdHc"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Hc" component_1="model_parameters"/>
+    <map_variables variable_2="V_Ru" variable_1="V_Ru"/>
+	<map_variables variable_2="k_FlEx" variable_1="k_FlEx"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Ma" component_1="Q_Mc"/>
+    <map_variables variable_2="U_Mc_McEg" variable_1="U_Mc_McEg"/>
+	<map_variables variable_2="Q_Ma" variable_1="Q_Ma"/>
+	<map_variables variable_2="C_Ma" variable_1="C_Ma"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Ma" component_1="model_parameters"/>
+    <map_variables variable_2="V_Ru" variable_1="V_Ru"/>
+	<map_variables variable_2="k_FlEx" variable_1="k_FlEx"/>
+	<map_variables variable_2="k_MaEx" variable_1="k_MaEx"/>
+	<map_variables variable_2="f_Po_Ma" variable_1="f_Po_Ma"/>
+	<map_variables variable_2="k_PoEx" variable_1="k_PoEx"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_As" component_1="model_parameters"/>
+    <map_variables variable_2="V_Ru" variable_1="V_Ru"/>
+	<map_variables variable_2="k_FlEx" variable_1="k_FlEx"/>
+	<map_variables variable_2="k_MaEx" variable_1="k_MaEx"/>
+	<map_variables variable_2="f_Po_Ma" variable_1="f_Po_Ma"/>
+	<map_variables variable_2="k_PoEx" variable_1="k_PoEx"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Mc" component_1="model_parameters"/>
+    <map_variables variable_2="V_Ru" variable_1="V_Ru"/>
+	<map_variables variable_2="f_Po_Ma" variable_1="f_Po_Ma"/>
+	<map_variables variable_2="k_SoEx" variable_1="k_SoEx"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Ac" component_1="Q_Ps"/>
+    <map_variables variable_2="U_MaPs_PsAm" variable_1="U_MaPs_PsAm"/>
+	<map_variables variable_2="U_McPs_PsAm" variable_1="U_McPs_PsAm"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Ac" component_1="Q_Am"/>
+    <map_variables variable_2="U_Mc_McAm" variable_1="U_Mc_McAm"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Ac" component_1="Q_Ha"/>
+    <map_variables variable_2="U_Ha_HaAs" variable_1="U_Ha_HaAs"/>
+	<map_variables variable_2="U_Ha_AmMa" variable_1="U_Ha_AmMa"/>
+	<map_variables variable_2="U_Ha_McMa" variable_1="U_Ha_McMa"/>
+	<map_variables variable_2="U_Ha_PsMa" variable_1="U_Ha_PsMa"/>
+	<map_variables variable_2="U_Ha_HaVa" variable_1="U_Ha_HaVa"/>
+	<map_variables variable_2="P_Ha_WrHa" variable_1="P_Ha_WrHa"/>
+	<map_variables variable_2="P_Ha_LaHa" variable_1="P_Ha_LaHa"/>
+	<map_variables variable_2="P_Ha_SrHa" variable_1="P_Ha_SrHa"/>
+	<map_variables variable_2="P_Ha_SdHa" variable_1="P_Ha_SdHa"/>
+	<map_variables variable_2="P_Ha_MaMd" variable_1="P_Ha_MaMd"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Ac" component_1="Q_Hc"/>
+    <map_variables variable_2="U_Hc_AmMc" variable_1="U_Hc_AmMc"/>
+	<map_variables variable_2="U_Hc_PsMc" variable_1="U_Hc_PsMc"/>
+	<map_variables variable_2="U_Hc_HcVa" variable_1="U_Hc_HcVa"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Ac" component_1="model_parameters"/>
+    <map_variables variable_2="pH" variable_1="pH"/>
+	<map_variables variable_2="V_Ru" variable_1="V_Ru"/>
+	<map_variables variable_2="k_FlEx" variable_1="k_FlEx"/>
+	<map_variables variable_2="f_Hf_AmMa" variable_1="f_Hf_AmMa"/>
+	<map_variables variable_2="f_Hf_AmMc" variable_1="f_Hf_AmMc"/>
+	<map_variables variable_2="f_Hf_PsMa" variable_1="f_Hf_PsMa"/>
+	<map_variables variable_2="f_Hf_PsMc" variable_1="f_Hf_PsMc"/>
+	<map_variables variable_2="f_Hf_HaAs" variable_1="f_Hf_HaAs"/>
+	<map_variables variable_2="f_Hf_McMa" variable_1="f_Hf_McMa"/>
+	<map_variables variable_2="f_Lc_Le" variable_1="f_Lc_Le"/>
+	<map_variables variable_2="f_Ce_Fd" variable_1="f_Ce_Fd"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Pr" component_1="Q_Ps"/>
+    <map_variables variable_2="U_MaPs_PsAm" variable_1="U_MaPs_PsAm"/>
+	<map_variables variable_2="U_McPs_PsAm" variable_1="U_McPs_PsAm"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Pr" component_1="Q_Am"/>
+    <map_variables variable_2="U_Mc_McAm" variable_1="U_Mc_McAm"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Pr" component_1="Q_Ha"/>
+    <map_variables variable_2="U_Ha_HaAs" variable_1="U_Ha_HaAs"/>
+	<map_variables variable_2="U_Ha_AmMa" variable_1="U_Ha_AmMa"/>
+	<map_variables variable_2="U_Ha_McMa" variable_1="U_Ha_McMa"/>
+	<map_variables variable_2="U_Ha_PsMa" variable_1="U_Ha_PsMa"/>
+	<map_variables variable_2="U_Ha_HaVa" variable_1="U_Ha_HaVa"/>
+	<map_variables variable_2="P_Ha_WrHa" variable_1="P_Ha_WrHa"/>
+	<map_variables variable_2="P_Ha_LaHa" variable_1="P_Ha_LaHa"/>
+	<map_variables variable_2="P_Ha_SrHa" variable_1="P_Ha_SrHa"/>
+	<map_variables variable_2="P_Ha_SdHa" variable_1="P_Ha_SdHa"/>
+	<map_variables variable_2="P_Ha_MaMd" variable_1="P_Ha_MaMd"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Pr" component_1="Q_Hc"/>
+    <map_variables variable_2="U_Hc_AmMc" variable_1="U_Hc_AmMc"/>
+	<map_variables variable_2="U_Hc_PsMc" variable_1="U_Hc_PsMc"/>
+	<map_variables variable_2="U_Hc_HcVa" variable_1="U_Hc_HcVa"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Pr" component_1="model_parameters"/>
+    <map_variables variable_2="pH" variable_1="pH"/>
+	<map_variables variable_2="V_Ru" variable_1="V_Ru"/>
+	<map_variables variable_2="k_FlEx" variable_1="k_FlEx"/>
+	<map_variables variable_2="f_Hf_AmMa" variable_1="f_Hf_AmMa"/>
+	<map_variables variable_2="f_Hf_AmMc" variable_1="f_Hf_AmMc"/>
+	<map_variables variable_2="f_Hf_PsMa" variable_1="f_Hf_PsMa"/>
+	<map_variables variable_2="f_Hf_PsMc" variable_1="f_Hf_PsMc"/>
+	<map_variables variable_2="f_Hf_HaAs" variable_1="f_Hf_HaAs"/>
+	<map_variables variable_2="f_Hf_McMa" variable_1="f_Hf_McMa"/>
+	<map_variables variable_2="f_Lc_Le" variable_1="f_Lc_Le"/>
+	<map_variables variable_2="f_Ce_Fd" variable_1="f_Ce_Fd"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Bu" component_1="Q_Ps"/>
+    <map_variables variable_2="U_MaPs_PsAm" variable_1="U_MaPs_PsAm"/>
+	<map_variables variable_2="U_McPs_PsAm" variable_1="U_McPs_PsAm"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Bu" component_1="Q_Am"/>
+    <map_variables variable_2="U_Mc_McAm" variable_1="U_Mc_McAm"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Bu" component_1="Q_Ha"/>
+    <map_variables variable_2="U_Ha_HaAs" variable_1="U_Ha_HaAs"/>
+	<map_variables variable_2="U_Ha_AmMa" variable_1="U_Ha_AmMa"/>
+	<map_variables variable_2="U_Ha_McMa" variable_1="U_Ha_McMa"/>
+	<map_variables variable_2="U_Ha_PsMa" variable_1="U_Ha_PsMa"/>
+	<map_variables variable_2="U_Ha_HaVa" variable_1="U_Ha_HaVa"/>
+	<map_variables variable_2="P_Ha_WrHa" variable_1="P_Ha_WrHa"/>
+	<map_variables variable_2="P_Ha_LaHa" variable_1="P_Ha_LaHa"/>
+	<map_variables variable_2="P_Ha_SrHa" variable_1="P_Ha_SrHa"/>
+	<map_variables variable_2="P_Ha_SdHa" variable_1="P_Ha_SdHa"/>
+	<map_variables variable_2="P_Ha_MaMd" variable_1="P_Ha_MaMd"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Bu" component_1="Q_Hc"/>
+    <map_variables variable_2="U_Hc_AmMc" variable_1="U_Hc_AmMc"/>
+	<map_variables variable_2="U_Hc_PsMc" variable_1="U_Hc_PsMc"/>
+	<map_variables variable_2="U_Hc_HcVa" variable_1="U_Hc_HcVa"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Bu" component_1="model_parameters"/>
+    <map_variables variable_2="pH" variable_1="pH"/>
+	<map_variables variable_2="V_Ru" variable_1="V_Ru"/>
+	<map_variables variable_2="k_FlEx" variable_1="k_FlEx"/>
+	<map_variables variable_2="f_Hf_AmMa" variable_1="f_Hf_AmMa"/>
+	<map_variables variable_2="f_Hf_AmMc" variable_1="f_Hf_AmMc"/>
+	<map_variables variable_2="f_Hf_PsMa" variable_1="f_Hf_PsMa"/>
+	<map_variables variable_2="f_Hf_PsMc" variable_1="f_Hf_PsMc"/>
+	<map_variables variable_2="f_Hf_HaAs" variable_1="f_Hf_HaAs"/>
+	<map_variables variable_2="f_Hf_McMa" variable_1="f_Hf_McMa"/>
+	<map_variables variable_2="f_Lc_Le" variable_1="f_Lc_Le"/>
+	<map_variables variable_2="f_Ce_Fd" variable_1="f_Ce_Fd"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Vl" component_1="Q_Ps"/>
+    <map_variables variable_2="U_MaPs_PsAm" variable_1="U_MaPs_PsAm"/>
+	<map_variables variable_2="U_McPs_PsAm" variable_1="U_McPs_PsAm"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Vl" component_1="Q_Am"/>
+    <map_variables variable_2="U_Mc_McAm" variable_1="U_Mc_McAm"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Vl" component_1="Q_Ha"/>
+    <map_variables variable_2="U_Ha_HaAs" variable_1="U_Ha_HaAs"/>
+	<map_variables variable_2="U_Ha_AmMa" variable_1="U_Ha_AmMa"/>
+	<map_variables variable_2="U_Ha_McMa" variable_1="U_Ha_McMa"/>
+	<map_variables variable_2="U_Ha_PsMa" variable_1="U_Ha_PsMa"/>
+	<map_variables variable_2="U_Ha_HaVa" variable_1="U_Ha_HaVa"/>
+	<map_variables variable_2="P_Ha_WrHa" variable_1="P_Ha_WrHa"/>
+	<map_variables variable_2="P_Ha_LaHa" variable_1="P_Ha_LaHa"/>
+	<map_variables variable_2="P_Ha_SrHa" variable_1="P_Ha_SrHa"/>
+	<map_variables variable_2="P_Ha_SdHa" variable_1="P_Ha_SdHa"/>
+	<map_variables variable_2="P_Ha_MaMd" variable_1="P_Ha_MaMd"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Vl" component_1="Q_Hc"/>
+    <map_variables variable_2="U_Hc_AmMc" variable_1="U_Hc_AmMc"/>
+	<map_variables variable_2="U_Hc_PsMc" variable_1="U_Hc_PsMc"/>
+	<map_variables variable_2="U_Hc_HcVa" variable_1="U_Hc_HcVa"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Q_Vl" component_1="model_parameters"/>
+    <map_variables variable_2="pH" variable_1="pH"/>
+	<map_variables variable_2="V_Ru" variable_1="V_Ru"/>
+	<map_variables variable_2="k_FlEx" variable_1="k_FlEx"/>
+	<map_variables variable_2="f_Hf_AmMa" variable_1="f_Hf_AmMa"/>
+	<map_variables variable_2="f_Hf_AmMc" variable_1="f_Hf_AmMc"/>
+	<map_variables variable_2="f_Hf_PsMa" variable_1="f_Hf_PsMa"/>
+	<map_variables variable_2="f_Hf_PsMc" variable_1="f_Hf_PsMc"/>
+	<map_variables variable_2="f_Hf_HaAs" variable_1="f_Hf_HaAs"/>
+	<map_variables variable_2="f_Hf_McMa" variable_1="f_Hf_McMa"/>
+	<map_variables variable_2="f_Lc_Le" variable_1="f_Lc_Le"/>
+	<map_variables variable_2="f_Ce_Fd" variable_1="f_Ce_Fd"/>
+  </connection>
+  
+
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
+    
+	<rdf:Description rdf:about="">
+      <dc:creator rdf:parseType="Resource">
+        <vCard:N rdf:parseType="Resource">
+          <vCard:Family>Lloyd</vCard:Family>
+          <vCard:Given>Catherine</vCard:Given>
+		  <vCard:Other>May</vCard:Other>
+        </vCard:N>
+        <vCard:EMAIL rdf:parseType="Resource">
+          <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+          <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+        </vCard:EMAIL>
+        <vCard:ORG rdf:parseType="Resource">
+          <vCard:Orgname>The University of Auckland</vCard:Orgname>
+          <vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+        </vCard:ORG>
+      </dc:creator>
+  
+      <dcterms:created rdf:parseType="Resource">
+        <dcterms:W3CDTF>2010-05-28</dcterms:W3CDTF>
+      </dcterms:created>
+    </rdf:Description>
+    
+    <rdf:Description rdf:about="#dijkstra_1992">
+      
+	  <cmeta:bio_entity>rumen</cmeta:bio_entity>
+	  
+      <bqs:reference rdf:parseType="Resource">
+        <dc:subject rdf:parseType="Resource">
+          <bqs:subject_type>keyword</bqs:subject_type>
+          <rdf:value>
+            <rdf:Bag>
+              <rdf:li>metabolism</rdf:li>
+			  <rdf:li>digestion</rdf:li>
+            </rdf:Bag>
+          </rdf:value>
+        </dc:subject>
+      </bqs:reference>
+
+      <bqs:reference rdf:parseType="Resource">
+        <bqs:Pubmed_id>1331382</bqs:Pubmed_id>
+        <bqs:JournalArticle rdf:parseType="Resource">
+          <dc:creator>
+            <rdf:Seq>
+              <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Dijkstra</vCard:Family>
+                    <vCard:Given>J</vCard:Given>
+                  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+			  <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Neal</vCard:Family>
+                    <vCard:Given>H</vCard:Given>
+					<vCard:Other>D</vCard:Other>
+				  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+              <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Beever</vCard:Family>
+                    <vCard:Given>D</vCard:Given>
+					<vCard:Other>E</vCard:Other>
+                  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+			  <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>France</vCard:Family>
+                    <vCard:Given>J</vCard:Given>
+				  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+            </rdf:Seq>
+          </dc:creator>
+          <dc:title>
+            Simulation of nutrient digestion, absorption and outflow in the rumen: model description
+          </dc:title>
+          <dcterms:issued rdf:parseType="Resource">
+            <dcterms:W3CDTF>1992-11</dcterms:W3CDTF>
+          </dcterms:issued>
+          <bqs:Journal rdf:parseType="Resource">
+            <dc:title>The Journal of Nutrition</dc:title>
+          </bqs:Journal>
+		  <bqs:volume>122</bqs:volume>
+          <bqs:first_page>2239</bqs:first_page>
+          <bqs:last_page>2256</bqs:last_page>
+        </bqs:JournalArticle>
+      </bqs:reference>
+    </rdf:Description>
+  </rdf:RDF>
+</model>

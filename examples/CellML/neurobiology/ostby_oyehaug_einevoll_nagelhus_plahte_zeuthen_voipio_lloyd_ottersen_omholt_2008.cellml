@@ -1,0 +1,2376 @@
+<?xml version="1.0"?>
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xml:base="" cmeta:id="ostby_model_2008" name="ostby_model_2008">
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>Astrocytic processes explaining neural activity-induced shrinkage of extraneuronal space</title>
+				<author>
+					<firstname>Catherine</firstname>
+					<surname>Lloyd</surname>
+					<affiliation>
+						<shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<section id="sec_status">
+				<title>Model Status</title>
+				<para>
+        This cellML model is known to run in OpenCell and COR to recreate the published results.  The units have been checked and they are consistent.
+          </para>
+			</section>
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>
+ABSTRACT: Neuronal stimulation causes approximately 30% shrinkage of the extracellular space (ECS) between neurons and surrounding astrocytes in grey and white matter under experimental conditions. Despite its possible implications for a proper understanding of basic aspects of potassium clearance and astrocyte function, the phenomenon remains unexplained. Here we present a dynamic model that accounts for current experimental data related to the shrinkage phenomenon in wild-type as well as in gene knockout individuals. We find that neuronal release of potassium and uptake of sodium during stimulation, astrocyte uptake of potassium, sodium, and chloride in passive channels, action of the Na/K/ATPase pump, and osmotically driven transport of water through the astrocyte membrane together seem sufficient for generating ECS shrinkage as such. However, when taking into account ECS and astrocyte ion concentrations observed in connection with neuronal stimulation, the actions of the Na(+)/K(+)/Cl(-) (NKCC1) and the Na(+)/HCO(3) (-) (NBC) cotransporters appear to be critical determinants for achieving observed quantitative levels of ECS shrinkage. Considering the current state of knowledge, the model framework appears sufficiently detailed and constrained to guide future key experiments and pave the way for more comprehensive astroglia-neuron interaction models for normal as well as pathophysiological situations.</para>
+
+				<informalfigure float="0" id="fig_reaction_diagram">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>model diagram</title>
+							</objectinfo>
+							<imagedata fileref="ostby_2008.png"/>
+						</imageobject>
+					</mediaobject>
+					<caption>Schematic diagram of the model.  In the excited state there is an exchange of sodium and potassium ions across the neuron membrane and the cotransporters in the astrocyte are active.</caption>
+				</informalfigure>
+				
+				<para>
+The original paper reference is cited below:
+</para>
+
+<para>
+Astrocytic mechanisms explaining neural-activity-induced shrinkage of extraneuronal space, Ostby I, Oyehaug L, Einevoll GT, Nagelhus EA, Plahte E, Zeuthen T, Lloyd CM, Ottersen OP, and Omholt SW, 2009, PLoS Computational Biology, 5, 1, e1000272. <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/19165313">PubMed ID: 19165313</ulink>
+</para>
+			</sect1>
+		</article>
+	</documentation>
+	
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#wi">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">wi</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">ratio of astrocyte volume to astrocyte area</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#wo">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">w_tot</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">ECS volume to area ratio</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#N_Nai">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">N_Nai</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">number of sodium ions in the astrocyte</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#N_Ki">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">N_Ki</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">number of potassium ions in the astrocyte</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#N_HCO3i">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">N_HCO3i</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">number of bicarbonate ions in the astrocyte</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#N_Cli">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">N_Cli</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">number of chloride ions in the astrocyte</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#N_Nao">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">N_Nao</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">number of sodium ions in the extracellular space</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#N_Ko">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">N_Ko</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">number of potassium ions in the extracellular space</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#N_HCO3o">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">N_HCO3o</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">number of bicarbonate ions in the extracellular space</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#N_Clo">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">N_Clo</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">number of chloride ions in the extracellular space</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#J_NaKATPase">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">J_NaKATPase</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">sodium-potassium ATPase pump</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#I_K">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">I_K</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">voltage-dependent potassium current</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#I_Cl">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">I_Cl</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">voltage-dependent chloride current</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<rdf:Description rdf:about="#I_Na">
+			<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">I_Na</dc:title>
+			<dcterms:alternative xmlns:dcterms="http://purl.org/dc/terms/">voltage-dependent sodium current</dcterms:alternative>
+		</rdf:Description>
+	</rdf:RDF>
+   
+   <units name="millisecond">
+      <unit prefix="milli" units="second"/>
+   </units>
+   <units name="picoampere">
+      <unit prefix="pico" units="ampere"/>
+   </units>
+   <units name="millimole">
+      <unit prefix="milli" units="mole"/>
+   </units>
+   <units name="millimole_per_cm2">
+      <unit units="millimole"/>
+      <unit exponent="-2" prefix="centi" units="metre"/>
+   </units>
+   <units name="millimolar">
+      <unit prefix="milli" units="mole"/>
+      <unit exponent="-1" units="litre"/>
+   </units>
+   <units name="millimolar_micrometre">
+      <unit units="millimolar"/>
+      <unit prefix="micro" units="metre"/>
+   </units>
+   <units name="millimolar_micrometre_per_second">
+      <unit units="millimolar"/>
+      <unit prefix="micro" units="metre"/>
+      <unit exponent="-1" units="second"/>
+   </units>
+   <units name="per_millimolar">
+      <unit exponent="-1" units="millimolar"/>
+   </units>
+   <units name="mole_per_cm2_second">
+      <unit units="mole"/>
+      <unit exponent="-2" prefix="centi" units="metre"/>
+      <unit exponent="-1" units="second"/>
+   </units>
+   <units name="millimole_per_cm2_second">
+      <unit prefix="milli" units="mole"/>
+      <unit exponent="-2" prefix="centi" units="metre"/>
+      <unit exponent="-1" units="second"/>
+   </units>
+   <units name="micrometre_per_millimolar_second">
+      <unit prefix="micro" units="metre"/>
+      <unit exponent="-1" units="millimolar"/>
+      <unit exponent="-1" units="second"/>
+   </units>
+   <units name="micrometre_millimolar_per_second">
+      <unit prefix="micro" units="metre"/>
+      <unit units="millimolar"/>
+      <unit exponent="-1" units="second"/>
+   </units>
+   <units name="micrometre_per_centimetre">
+      <unit prefix="micro" units="metre"/>
+      <unit exponent="-1" prefix="centi" units="metre"/>
+   </units>
+   <units name="cm_per_millimolar_second">
+      <unit prefix="centi" units="metre"/>
+      <unit exponent="-1" units="millimolar"/>
+      <unit exponent="-1" units="second"/>
+   </units>
+   <units name="cm2_millimolar_micrometre_per_mol">
+      <unit exponent="2" prefix="centi" units="metre"/>
+      <unit units="millimolar"/>
+      <unit prefix="micro" units="metre"/>
+      <unit exponent="-1" units="mole"/>
+   </units>
+   <units name="millimole_per_cm2_millisecond">
+      <unit prefix="milli" units="mole"/>
+      <unit exponent="-2" prefix="centi" units="metre"/>
+      <unit exponent="-1" prefix="milli" units="second"/>
+   </units>
+   <units name="first_order_rate_constant">
+      <unit exponent="-1" units="millisecond"/>
+   </units>
+   <units name="per_ohm_cm2">
+      <unit exponent="-1" units="ohm"/>
+      <unit exponent="-2" prefix="centi" units="metre"/>
+   </units>
+   <units name="micrometre">
+      <unit prefix="micro" units="metre"/>
+   </units>
+   <units name="micrometre_per_millimolar">
+      <unit prefix="micro" units="metre"/>
+      <unit exponent="-1" units="millimolar"/>
+   </units>
+   <units name="cm2">
+      <unit exponent="2" prefix="centi" units="metre"/>
+   </units>
+   <units name="cm3">
+      <unit exponent="3" prefix="centi" units="metre"/>
+   </units>
+   <units name="J_per_mol_K">
+      <unit units="joule"/>
+      <unit exponent="-1" units="mole"/>
+      <unit exponent="-1" units="kelvin"/>
+   </units>
+   <units name="C">
+      <unit units="coulomb"/>
+   </units>
+   <units name="per_mole">
+      <unit exponent="-1" units="mole"/>
+   </units>
+   <units name="C_per_mol">
+      <unit units="coulomb"/>
+      <unit exponent="-1" units="mole"/>
+   </units>
+   <units name="C_per_cm2">
+      <unit units="coulomb"/>
+      <unit exponent="-2" prefix="centi" units="metre"/>
+   </units>
+   <units name="C_per_cm2_s">
+      <unit units="coulomb"/>
+      <unit exponent="-2" prefix="centi" units="metre"/>
+      <unit exponent="-1" units="second"/>
+   </units>
+   <component name="environment">
+      <variable cmeta:id="environment_time" name="time" public_interface="out" units="second"/>
+   </component>
+   <component name="wi">
+      <variable initial_value="0.061" name="wi" public_interface="out" units="micrometre"/>
+      <variable name="Lp" public_interface="in" units="cm_per_millimolar_second"/>
+      <variable name="Xi" public_interface="in" units="millimolar_micrometre"/>
+      <variable name="Nao" public_interface="in" units="millimolar"/>
+      <variable name="Ko" public_interface="in" units="millimolar"/>
+      <variable name="Clo" public_interface="in" units="millimolar"/>
+      <variable name="HCO3o" public_interface="in" units="millimolar"/>
+      <variable name="Nai" public_interface="in" units="millimolar"/>
+      <variable name="Ki" public_interface="in" units="millimolar"/>
+      <variable name="Cli" public_interface="in" units="millimolar"/>
+      <variable name="HCO3i" public_interface="in" units="millimolar"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>wi</ci>
+            </apply>
+            <apply>
+               <times/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="micrometre_per_centimetre">1</cn>
+               <ci>Lp</ci>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <ci>Nai</ci>
+                     <ci>Ki</ci>
+                     <ci>Cli</ci>
+                     <ci>HCO3i</ci>
+                     <apply>
+                        <divide/>
+                        <ci>Xi</ci>
+                        <ci>wi</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>Nao</ci>
+                     <ci>Ko</ci>
+                     <ci>Clo</ci>
+                     <ci>HCO3o</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="wo">
+      <variable name="wo" public_interface="out" units="micrometre"/>
+      <variable initial_value="0.0879" name="w_tot" units="micrometre"/>
+      <variable name="wi" public_interface="in" units="micrometre"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>wo</ci>
+            <apply>
+               <minus/>
+               <ci>w_tot</ci>
+               <ci>wi</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="N_Nai">
+      <variable initial_value="0.99796" name="N_Nai" public_interface="out" units="millimolar_micrometre"/>
+      <variable name="dN_Nai_dt" public_interface="out" units="millimolar_micrometre_per_second"/>
+      
+      <variable name="gNa" public_interface="in" units="per_ohm_cm2"/>
+      <variable name="ENa" public_interface="in" units="volt"/>
+      <variable name="Vm" public_interface="in" units="volt"/>
+      <variable name="J_NaKATPase" public_interface="in" units="mole_per_cm2_second"/>
+      <variable name="F" public_interface="in" units="C_per_mol"/>
+      <variable name="theta_NKCC1" public_interface="in" units="dimensionless"/>
+      <variable name="J_NKCC1" public_interface="in" units="millimolar_micrometre_per_second"/>
+      <variable name="theta_NBC" public_interface="in" units="dimensionless"/>
+      <variable name="J_NBC" public_interface="in" units="millimolar_micrometre_per_second"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>N_Nai</ci>
+            </apply>
+            <ci>dN_Nai_dt</ci>
+         </apply>
+      </math>
+            
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>dN_Nai_dt</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>theta_NKCC1</ci>
+                     <ci>J_NKCC1</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>theta_NBC</ci>
+                     <ci>J_NBC</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="cm2_millimolar_micrometre_per_mol">1e10</cn>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>gNa</ci>
+                           <ci>F</ci>
+                        </apply>
+                        <apply>
+                           <minus/>
+                           <ci>Vm</ci>
+                           <ci>ENa</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+                        <ci>J_NaKATPase</ci>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="N_Ki">
+      <variable initial_value="5.52782" name="N_Ki" public_interface="out" units="millimolar_micrometre"/>
+      <variable name="dN_Ki_dt" public_interface="out" units="millimolar_micrometre_per_second"/>
+      
+      <variable name="gK" public_interface="in" units="per_ohm_cm2"/>
+      <variable name="EK" public_interface="in" units="volt"/>
+      <variable name="Vm" public_interface="in" units="volt"/>
+      <variable name="J_NaKATPase" public_interface="in" units="mole_per_cm2_second"/>
+      <variable name="F" public_interface="in" units="C_per_mol"/>
+      <variable name="theta_NKCC1" public_interface="in" units="dimensionless"/>
+      <variable name="J_NKCC1" public_interface="in" units="millimolar_micrometre_per_second"/>
+      <variable name="theta_KCC1" public_interface="in" units="dimensionless"/>
+      <variable name="J_KCC1" public_interface="in" units="millimolar_micrometre_per_second"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>N_Ki</ci>
+            </apply>
+            <ci>dN_Ki_dt</ci>
+         </apply>
+      </math>
+            
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>dN_Ki_dt</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>theta_NKCC1</ci>
+                     <ci>J_NKCC1</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>theta_KCC1</ci>
+                     <ci>J_KCC1</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="cm2_millimolar_micrometre_per_mol">1e10</cn>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                     <ci>J_NaKATPase</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="cm2_millimolar_micrometre_per_mol">1e10</cn>
+                        <ci>gK</ci>
+                     </apply>
+                     <ci>F</ci>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <ci>Vm</ci>
+                     <ci>EK</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="N_HCO3i">
+      <variable initial_value="0.58804" name="N_HCO3i" public_interface="out" units="millimolar_micrometre"/>
+      <variable name="dN_HCO3i_dt" public_interface="out" units="millimolar_micrometre_per_second"/>
+      
+      <variable name="theta_NBC" public_interface="in" units="dimensionless"/>
+      <variable name="J_NBC" public_interface="in" units="millimolar_micrometre_per_second"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>N_HCO3i</ci>
+            </apply>
+            <ci>dN_HCO3i_dt</ci>
+         </apply>
+      </math>
+            
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>dN_HCO3i_dt</ci>
+            <apply>
+               <times/>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+               <ci>theta_NBC</ci>
+               <ci>J_NBC</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="N_Cli">
+      <variable initial_value="0.32879" name="N_Cli" public_interface="out" units="millimolar_micrometre"/>
+      
+      <variable name="dN_Ki_dt" public_interface="in" units="millimolar_micrometre_per_second"/>
+      <variable name="dN_Nai_dt" public_interface="in" units="millimolar_micrometre_per_second"/>
+      <variable name="dN_HCO3i_dt" public_interface="in" units="millimolar_micrometre_per_second"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>N_Cli</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <ci>dN_Ki_dt</ci>
+               <ci>dN_Nai_dt</ci>
+               <ci>dN_HCO3i_dt</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="N_Nao">
+      <variable cmeta:id="N_Nao_N_Nao" initial_value="4.301041" name="N_Nao" public_interface="out" units="millimolar_micrometre"/>
+      <variable name="y" public_interface="in" units="dimensionless"/>
+      <variable name="kc" public_interface="in" units="micrometre_millimolar_per_second"/>
+      <variable name="gNa" public_interface="in" units="per_ohm_cm2"/>
+      <variable name="ENa" public_interface="in" units="volt"/>
+      <variable name="Vm" public_interface="in" units="volt"/>
+      <variable name="J_NaKATPase" public_interface="in" units="mole_per_cm2_second"/>
+      <variable name="F" public_interface="in" units="C_per_mol"/>
+      <variable name="theta_NKCC1" public_interface="in" units="dimensionless"/>
+      <variable name="J_NKCC1" public_interface="in" units="millimolar_micrometre_per_second"/>
+      <variable name="theta_NBC" public_interface="in" units="dimensionless"/>
+      <variable name="J_NBC" public_interface="in" units="millimolar_micrometre_per_second"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>N_Nao</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="cm2_millimolar_micrometre_per_mol">1e10</cn>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>gNa</ci>
+                           <ci>F</ci>
+                        </apply>
+                        <apply>
+                           <minus/>
+                           <ci>Vm</ci>
+                           <ci>ENa</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+                        <ci>J_NaKATPase</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>theta_NKCC1</ci>
+                     <ci>J_NKCC1</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>theta_NBC</ci>
+                     <ci>J_NBC</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>kc</ci>
+                     <ci>y</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="N_Ko">
+      <variable cmeta:id="N_Ko_N_Ko" initial_value="0.0807" name="N_Ko" public_interface="out" units="millimolar_micrometre"/>
+      <variable name="y" public_interface="in" units="dimensionless"/>
+      <variable name="kc" public_interface="in" units="micrometre_millimolar_per_second"/>
+      <variable name="gK" public_interface="in" units="per_ohm_cm2"/>
+      <variable name="EK" public_interface="in" units="volt"/>
+      <variable name="Vm" public_interface="in" units="volt"/>
+      <variable name="J_NaKATPase" public_interface="in" units="mole_per_cm2_second"/>
+      <variable name="F" public_interface="in" units="C_per_mol"/>
+      <variable name="theta_NKCC1" public_interface="in" units="dimensionless"/>
+      <variable name="J_NKCC1" public_interface="in" units="millimolar_micrometre_per_second"/>
+      <variable name="theta_KCC1" public_interface="in" units="dimensionless"/>
+      <variable name="J_KCC1" public_interface="in" units="millimolar_micrometre_per_second"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>N_Ko</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="cm2_millimolar_micrometre_per_mol">1e10</cn>
+                           <ci>gK</ci>
+                        </apply>
+                        <ci>F</ci>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <ci>Vm</ci>
+                        <ci>EK</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>kc</ci>
+                     <ci>y</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>theta_NKCC1</ci>
+                     <ci>J_NKCC1</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>theta_KCC1</ci>
+                     <ci>J_KCC1</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="cm2_millimolar_micrometre_per_mol">1e10</cn>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                     <ci>J_NaKATPase</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="N_HCO3o">
+      <variable initial_value="0.432552" name="N_HCO3o" public_interface="out" units="millimolar_micrometre"/>
+      <variable name="theta_NBC" public_interface="in" units="dimensionless"/>
+      <variable name="J_NBC" public_interface="in" units="millimolar_micrometre_per_second"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>N_HCO3o</ci>
+            </apply>
+            <apply>
+               <times/>
+               <apply>
+                  <minus/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+               </apply>
+               <ci>theta_NBC</ci>
+               <ci>J_NBC</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="N_Clo">
+      <variable name="N_Clo" public_interface="out" units="millimolar_micrometre"/>
+      <variable name="N_Ko" public_interface="in" units="millimolar_micrometre"/>
+      <variable name="N_Nao" public_interface="in" units="millimolar_micrometre"/>
+      <variable name="N_HCO3o" public_interface="in" units="millimolar_micrometre"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>N_Clo</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <ci>N_Nao</ci>
+                  <ci>N_Ko</ci>
+               </apply>
+               <ci>N_HCO3o</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Nernst_potentials">
+      <variable name="ENa" public_interface="out" units="volt"/>
+      <variable name="EK" public_interface="out" units="volt"/>
+      <variable name="ECl" public_interface="out" units="volt"/>
+      <variable name="T" public_interface="in" units="kelvin"/>
+      <variable name="R" public_interface="in" units="J_per_mol_K"/>
+      <variable name="F" public_interface="in" units="C_per_mol"/>
+      <variable name="Nao" public_interface="in" units="millimolar"/>
+      <variable name="Ko" public_interface="in" units="millimolar"/>
+      <variable name="Clo" public_interface="in" units="millimolar"/>
+      <variable name="Nai" public_interface="in" units="millimolar"/>
+      <variable name="Ki" public_interface="in" units="millimolar"/>
+      <variable name="Cli" public_interface="in" units="millimolar"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>ENa</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>R</ci>
+                     <ci>T</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                     <ci>F</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <ln/>
+                  <apply>
+                     <divide/>
+                     <ci>Nao</ci>
+                     <ci>Nai</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>EK</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>R</ci>
+                     <ci>T</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                     <ci>F</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <ln/>
+                  <apply>
+                     <divide/>
+                     <ci>Ko</ci>
+                     <ci>Ki</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>ECl</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>R</ci>
+                     <ci>T</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <minus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                     </apply>
+                     <ci>F</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <ln/>
+                  <apply>
+                     <divide/>
+                     <ci>Clo</ci>
+                     <ci>Cli</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="J_KCC1">
+      <variable cmeta:id="J_KCC1_J_KCC1" name="J_KCC1" public_interface="out" units="millimolar_micrometre_per_second"/>
+      <variable initial_value="1e-6" name="gKCC1" units="per_ohm_cm2"/>
+      <variable name="ft" units="dimensionless"/>
+      <variable name="T" public_interface="in" units="kelvin"/>
+      <variable name="R" public_interface="in" units="J_per_mol_K"/>
+      <variable name="F" public_interface="in" units="C_per_mol"/>
+      <variable name="Ko" public_interface="in" units="millimolar"/>
+      <variable name="Ki" public_interface="in" units="millimolar"/>
+      <variable name="Clo" public_interface="in" units="millimolar"/>
+      <variable name="Cli" public_interface="in" units="millimolar"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>J_KCC1</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="cm2_millimolar_micrometre_per_mol">1e10</cn>
+                           <ci>gKCC1</ci>
+                           <ci>ft</ci>
+                        </apply>
+                        <ci>F</ci>
+                     </apply>
+                     <ci>R</ci>
+                     <ci>T</ci>
+                  </apply>
+                  <ci>F</ci>
+               </apply>
+               <apply>
+                  <ln/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>Ko</ci>
+                        <ci>Clo</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>Ki</ci>
+                        <ci>Cli</ci>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>ft</ci>
+            <piecewise>
+               <piece>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <and/>
+                     <apply>
+                        <geq/>
+                        <ci>time</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="second">10</cn>
+                     </apply>
+                     <apply>
+                        <lt/>
+                        <ci>time</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="second">20</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0</cn>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   <component name="J_NBC">
+      <variable cmeta:id="J_NBC_J_NBC" name="J_NBC" public_interface="out" units="millimolar_micrometre_per_second"/>
+      <variable initial_value="9.03e-5" name="gNBC" public_interface="out" units="per_ohm_cm2"/>
+      <variable name="Vm" public_interface="in" units="volt"/>
+      <variable name="ENBC" public_interface="in" units="volt"/>
+      <variable name="F" public_interface="in" units="C_per_mol"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>J_NBC</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="cm2_millimolar_micrometre_per_mol">1e10</cn>
+                     <ci>gNBC</ci>
+                  </apply>
+                  <ci>F</ci>
+               </apply>
+               <apply>
+                  <minus/>
+                  <ci>Vm</ci>
+                  <ci>ENBC</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="J_NKCC1">
+      <variable cmeta:id="J_NKCC1_J_NKCC1" name="J_NKCC1" public_interface="out" units="millimolar_micrometre_per_second"/>
+      <variable initial_value="5.54e-6" name="gNKCC1" units="per_ohm_cm2"/>
+      <variable name="ft" units="dimensionless"/>
+      <variable name="T" public_interface="in" units="kelvin"/>
+      <variable name="R" public_interface="in" units="J_per_mol_K"/>
+      <variable name="F" public_interface="in" units="C_per_mol"/>
+      <variable name="Ko" public_interface="in" units="millimolar"/>
+      <variable name="Nai" public_interface="in" units="millimolar"/>
+      <variable name="Nao" public_interface="in" units="millimolar"/>
+      <variable name="Ki" public_interface="in" units="millimolar"/>
+      <variable name="Clo" public_interface="in" units="millimolar"/>
+      <variable name="Cli" public_interface="in" units="millimolar"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>J_NKCC1</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="cm2_millimolar_micrometre_per_mol">1e10</cn>
+                           <ci>gNKCC1</ci>
+                           <ci>ft</ci>
+                        </apply>
+                        <ci>F</ci>
+                     </apply>
+                     <ci>R</ci>
+                     <ci>T</ci>
+                  </apply>
+                  <ci>F</ci>
+               </apply>
+               <apply>
+                  <ln/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <apply>
+                              <divide/>
+                              <ci>Nao</ci>
+                              <ci>Nai</ci>
+                           </apply>
+                           <ci>Ko</ci>
+                        </apply>
+                        <ci>Ki</ci>
+                     </apply>
+                     <apply>
+                        <power/>
+                        <apply>
+                           <divide/>
+                           <ci>Clo</ci>
+                           <ci>Cli</ci>
+                        </apply>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>ft</ci>
+            <piecewise>
+               <piece>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <and/>
+                     <apply>
+                        <geq/>
+                        <ci>time</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="second">10</cn>
+                     </apply>
+                     <apply>
+                        <lt/>
+                        <ci>time</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="second">20</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0</cn>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   <component name="ENBC">
+      <variable name="ENBC" public_interface="out" units="volt"/>
+      <variable initial_value="-1" name="zNBC" units="dimensionless"/>
+      <variable name="T" public_interface="in" units="kelvin"/>
+      <variable name="R" public_interface="in" units="J_per_mol_K"/>
+      <variable name="F" public_interface="in" units="C_per_mol"/>
+      <variable name="HCO3o" public_interface="in" units="millimolar"/>
+      <variable name="Nai" public_interface="in" units="millimolar"/>
+      <variable name="Nao" public_interface="in" units="millimolar"/>
+      <variable name="HCO3i" public_interface="in" units="millimolar"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>ENBC</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>R</ci>
+                     <ci>T</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>zNBC</ci>
+                     <ci>F</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <ln/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <apply>
+                           <divide/>
+                           <ci>Nao</ci>
+                           <ci>Nai</ci>
+                        </apply>
+                        <apply>
+                           <power/>
+                           <ci>HCO3o</ci>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <power/>
+                        <ci>HCO3i</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="membrane">
+      <variable cmeta:id="membrane_Vm" name="Vm" public_interface="out" units="volt"/>
+      <variable name="F" public_interface="in" units="C_per_mol"/>
+      <variable name="J_NaKATPase" public_interface="in" units="mole_per_cm2_second"/>
+      <variable name="ENa" public_interface="in" units="volt"/>
+      <variable name="EK" public_interface="in" units="volt"/>
+      <variable name="ECl" public_interface="in" units="volt"/>
+      <variable name="ENBC" public_interface="in" units="volt"/>
+      <variable name="gNa" public_interface="in" units="per_ohm_cm2"/>
+      <variable name="gK" public_interface="in" units="per_ohm_cm2"/>
+      <variable name="gCl" public_interface="in" units="per_ohm_cm2"/>
+      <variable name="gNBC" public_interface="in" units="per_ohm_cm2"/>
+      <variable name="theta_NBC" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>Vm</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>gNa</ci>
+                        <ci>ENa</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>gK</ci>
+                        <ci>EK</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>gCl</ci>
+                        <ci>ECl</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>theta_NBC</ci>
+                        <ci>gNBC</ci>
+                        <ci>ENBC</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>J_NaKATPase</ci>
+                     <ci>F</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>gNa</ci>
+                  <ci>gK</ci>
+                  <ci>gCl</ci>
+                  <apply>
+                     <times/>
+                     <ci>theta_NBC</ci>
+                     <ci>gNBC</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="J_NaKATPase">
+      <variable cmeta:id="J_NaKATPase_J_NaKATPase" name="J_NaKATPase" public_interface="out" units="mole_per_cm2_second"/>
+      <variable initial_value="1.4207e-10" name="Pmax" units="mole_per_cm2_second"/>
+      <variable initial_value="10" name="K_Nai" units="millimolar"/>
+      <variable initial_value="1.5" name="K_Ko" units="millimolar"/>
+      <variable name="Nai" public_interface="in" units="millimolar"/>
+      <variable name="Ko" public_interface="in" units="millimolar"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>J_NaKATPase</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>Pmax</ci>
+                        <apply>
+                           <power/>
+                           <ci>Nai</ci>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1.5</cn>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <power/>
+                           <ci>Nai</ci>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1.5</cn>
+                        </apply>
+                        <apply>
+                           <power/>
+                           <ci>K_Nai</ci>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1.5</cn>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <ci>Ko</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>Ko</ci>
+                  <ci>K_Ko</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="I_K">
+      <variable cmeta:id="I_K_I_K" name="I_K" public_interface="out" units="millimolar_micrometre_per_second"/>
+      <variable name="gK" public_interface="in" units="per_ohm_cm2"/>
+      <variable name="EK" public_interface="in" units="volt"/>
+      <variable name="Vm" public_interface="in" units="volt"/>
+      <variable name="F" public_interface="in" units="C_per_mol"/>
+      <variable name="nA" public_interface="in" units="per_mole"/>
+      <variable name="elementary_charge" public_interface="in" units="C"/>
+      <variable name="J_NaKATPase" public_interface="in" units="mole_per_cm2_second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>I_K</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="cm2_millimolar_micrometre_per_mol">1e10</cn>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                     <ci>J_NaKATPase</ci>
+                     <ci>F</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>elementary_charge</ci>
+                     <ci>nA</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="cm2_millimolar_micrometre_per_mol">1e10</cn>
+                        <ci>gK</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>elementary_charge</ci>
+                        <ci>nA</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <ci>Vm</ci>
+                     <ci>EK</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="I_Cl">
+      <variable cmeta:id="I_Cl_I_Cl" name="I_Cl" public_interface="out" units="millimolar_micrometre_per_second"/>
+      <variable name="gCl" public_interface="in" units="per_ohm_cm2"/>
+      <variable name="ECl" public_interface="in" units="volt"/>
+      <variable name="Vm" public_interface="in" units="volt"/>
+      <variable name="nA" public_interface="in" units="per_mole"/>
+      <variable name="elementary_charge" public_interface="in" units="C"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>I_Cl</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="cm2_millimolar_micrometre_per_mol">1e10</cn>
+                     <ci>gCl</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>elementary_charge</ci>
+                     <ci>nA</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <minus/>
+                  <ci>Vm</ci>
+                  <ci>ECl</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="I_Na">
+      <variable cmeta:id="I_Na_I_Na" name="I_Na" public_interface="out" units="millimolar_micrometre_per_second"/>
+      <variable name="gNa" public_interface="in" units="per_ohm_cm2"/>
+      <variable name="ENa" public_interface="in" units="volt"/>
+      <variable name="Vm" public_interface="in" units="volt"/>
+      <variable name="F" public_interface="in" units="C_per_mol"/>
+      <variable name="nA" public_interface="in" units="per_mole"/>
+      <variable name="elementary_charge" public_interface="in" units="C"/>
+      <variable name="J_NaKATPase" public_interface="in" units="mole_per_cm2_second"/>
+      <variable name="J_NBC" public_interface="in" units="millimolar_micrometre_per_second"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>I_Na</ci>
+            <apply>
+               <minus/>
+               <ci>J_NBC</ci>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="cm2_millimolar_micrometre_per_mol">1e10</cn>
+                           <ci>gNa</ci>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>elementary_charge</ci>
+                           <ci>nA</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <ci>Vm</ci>
+                        <ci>ENa</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="cm2_millimolar_micrometre_per_mol">1e10</cn>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3</cn>
+                        <ci>J_NaKATPase</ci>
+                        <ci>F</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>elementary_charge</ci>
+                        <ci>nA</ci>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="model_parameters">
+      <variable name="Nai" public_interface="out" units="millimolar"/>
+      <variable name="Ki" public_interface="out" units="millimolar"/>
+      <variable name="Cli" public_interface="out" units="millimolar"/>
+      <variable name="HCO3i" public_interface="out" units="millimolar"/>
+      <variable name="Nao" public_interface="out" units="millimolar"/>
+      <variable name="Ko" public_interface="out" units="millimolar"/>
+      <variable name="Clo" public_interface="out" units="millimolar"/>
+      <variable name="HCO3o" public_interface="out" units="millimolar"/>
+      <variable initial_value="8.315" name="R" public_interface="out" units="J_per_mol_K"/>
+      <variable initial_value="9.649e4" name="F" public_interface="out" units="C_per_mol"/>
+      <variable initial_value="300" name="T" public_interface="out" units="kelvin"/>
+      <variable initial_value="1.314e-4" name="gNa" public_interface="out" units="per_ohm_cm2"/>
+      <variable initial_value="0.004" name="gK" public_interface="out" units="per_ohm_cm2"/>
+      <variable initial_value="8.797e-5" name="gCl" public_interface="out" units="per_ohm_cm2"/>
+      <variable initial_value="1.6e-19" name="elementary_charge" public_interface="out" units="C"/>
+      <variable initial_value="6.0221415e23" name="nA" public_interface="out" units="per_mole"/>
+      <variable initial_value="12.41" name="Xi" public_interface="out" units="millimolar_micrometre"/>
+      <variable initial_value="7.35e-2" name="kc" public_interface="out" units="micrometre_millimolar_per_second"/>
+      <variable initial_value="1" name="theta_NBC" public_interface="out" units="dimensionless"/>
+      <variable initial_value="1" name="theta_NKCC1" public_interface="out" units="dimensionless"/>
+      <variable initial_value="1" name="theta_KCC1" public_interface="out" units="dimensionless"/>
+      <variable initial_value="2.1e-4" name="Lp" public_interface="out" units="cm_per_millimolar_second"/>
+      <variable name="y" public_interface="out" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="second"/>
+      <variable name="N_Ki" public_interface="in" units="millimolar_micrometre"/>
+      <variable name="N_Ko" public_interface="in" units="millimolar_micrometre"/>
+      <variable name="N_Nai" public_interface="in" units="millimolar_micrometre"/>
+      <variable name="N_Nao" public_interface="in" units="millimolar_micrometre"/>
+      <variable name="N_Cli" public_interface="in" units="millimolar_micrometre"/>
+      <variable name="N_Clo" public_interface="in" units="millimolar_micrometre"/>
+      <variable name="N_HCO3i" public_interface="in" units="millimolar_micrometre"/>
+      <variable name="N_HCO3o" public_interface="in" units="millimolar_micrometre"/>
+      <variable name="wi" public_interface="in" units="micrometre"/>
+      <variable name="wo" public_interface="in" units="micrometre"/>
+
+      <variable initial_value="10" name="t0" units="second"/>
+      <variable initial_value="20" name="t1" units="second"/>
+      <variable initial_value="30" name="t2" units="second"/>
+      <variable initial_value="2" name="alpha" units="dimensionless"/>
+      <variable initial_value="14" name="beta" units="dimensionless"/>
+      <variable name="deltaT" units="second"/>
+      <variable name="gamma_alpha_beta" units="dimensionless"/>
+      <variable name="gamma_alpha" units="dimensionless"/>
+      <variable name="gamma_beta" units="dimensionless"/>
+      
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+        <eq/>
+            <ci>y</ci>
+            <piecewise>
+               <piece>
+                  <apply>
+              <times/>
+                    <apply>
+                <divide/>
+                      <ci>gamma_alpha_beta</ci>
+                      <apply>
+                  <times/>
+                        <ci>gamma_alpha</ci>
+                        <ci>gamma_beta</ci>
+                      </apply>
+                    </apply>
+                    <apply>
+                <power/>
+                      <apply>
+                  <minus/>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                        <apply>
+                    <divide/>
+                          <apply>
+                      <minus/>
+                            <ci>time</ci>
+                            <ci>t0</ci>
+                          </apply>
+                          <ci>deltaT</ci>
+                        </apply>
+                      </apply>
+                      <apply>
+                  <minus/>
+                        <ci>beta</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                      </apply>
+                    </apply>
+                    <apply>
+                <power/>
+                      <apply>
+                  <divide/>
+                        <apply>
+                    <minus/>
+                          <ci>time</ci>
+                          <ci>t0</ci>
+                        </apply>
+                        <ci>deltaT</ci>
+                      </apply>
+                      <apply>
+                  <minus/>
+                        <ci>alpha</ci>
+                        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+                      </apply>
+                    </apply>
+                  </apply>
+                  <apply>
+              <and/>
+                     <apply>
+                <geq/>
+                        <ci>time</ci>
+                        <ci>t0</ci>
+                     </apply>
+                     <apply>
+                <leq/>
+                        <ci>time</ci>
+                        <ci>t1</ci>
+                     </apply>
+                  </apply>
+               </piece>
+               <piece>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">-1</cn>
+                  <apply>
+              <and/>
+                     <apply>
+                <gt/>
+                        <ci>time</ci>
+                        <ci>t1</ci>
+                     </apply>
+                     <apply>
+                <lt/>
+                        <ci>time</ci>
+                        <ci>t2</ci>
+                     </apply>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0</cn>
+               </otherwise>
+            </piecewise>
+         </apply>
+
+         <apply>
+        <eq/>
+           <ci>deltaT</ci>
+           <apply>
+          <minus/>
+             <ci>t1</ci>
+             <ci>t0</ci>
+           </apply>
+         </apply>
+
+         <apply>
+        <eq/>
+           <ci>gamma_alpha_beta</ci>
+           <apply>
+          <factorial/>
+             <apply>
+            <minus/>
+               <apply>
+              <plus/>
+                 <ci>alpha</ci>
+                 <ci>beta</ci>
+               </apply>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+             </apply>
+           </apply>
+         </apply>
+
+         <apply>
+        <eq/>
+           <ci>gamma_alpha</ci>
+           <apply>
+          <factorial/>
+             <apply>
+            <minus/>
+               <ci>alpha</ci>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+             </apply>
+           </apply>
+         </apply>
+
+         <apply>
+        <eq/>
+           <ci>gamma_beta</ci>
+           <apply>
+          <factorial/>
+             <apply>
+            <minus/>
+               <ci>beta</ci>
+               <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+             </apply>
+           </apply>
+         </apply>
+       
+         <apply>
+            <eq/>
+            <ci>Ki</ci>
+            <piecewise>
+               <piece>
+                  <apply>
+                     <divide/>
+                     <ci>N_Ki</ci>
+                     <ci>wi</ci>
+                  </apply>
+                  <apply>
+                     <gt/>
+                     <apply>
+                        <divide/>
+                        <ci>N_Ki</ci>
+                        <ci>wi</ci>
+                     </apply>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millimolar">0</cn>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millimolar">1e-180</cn>
+               </otherwise>
+            </piecewise>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>Ko</ci>
+            <piecewise>
+               <piece>
+                  <apply>
+                     <divide/>
+                     <ci>N_Ko</ci>
+                     <ci>wo</ci>
+                  </apply>
+                  <apply>
+                     <gt/>
+                     <apply>
+                        <divide/>
+                        <ci>N_Ko</ci>
+                        <ci>wo</ci>
+                     </apply>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millimolar">0</cn>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millimolar">1e-180</cn>
+               </otherwise>
+            </piecewise>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>Nai</ci>
+            <piecewise>
+               <piece>
+                  <apply>
+                     <divide/>
+                     <ci>N_Nai</ci>
+                     <ci>wi</ci>
+                  </apply>
+                  <apply>
+                     <gt/>
+                     <apply>
+                        <divide/>
+                        <ci>N_Nai</ci>
+                        <ci>wi</ci>
+                     </apply>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millimolar">0</cn>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millimolar">1e-180</cn>
+               </otherwise>
+            </piecewise>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>Nao</ci>
+            <piecewise>
+               <piece>
+                  <apply>
+                     <divide/>
+                     <ci>N_Nao</ci>
+                     <ci>wo</ci>
+                  </apply>
+                  <apply>
+                     <gt/>
+                     <apply>
+                        <divide/>
+                        <ci>N_Nao</ci>
+                        <ci>wo</ci>
+                     </apply>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millimolar">0</cn>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millimolar">1e-180</cn>
+               </otherwise>
+            </piecewise>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>Cli</ci>
+            <piecewise>
+               <piece>
+                  <apply>
+                     <divide/>
+                     <ci>N_Cli</ci>
+                     <ci>wi</ci>
+                  </apply>
+                  <apply>
+                     <gt/>
+                     <apply>
+                        <divide/>
+                        <ci>N_Cli</ci>
+                        <ci>wi</ci>
+                     </apply>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millimolar">0</cn>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millimolar">1e-180</cn>
+               </otherwise>
+            </piecewise>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>Clo</ci>
+            <piecewise>
+               <piece>
+                  <apply>
+                     <divide/>
+                     <ci>N_Clo</ci>
+                     <ci>wo</ci>
+                  </apply>
+                  <apply>
+                     <gt/>
+                     <apply>
+                        <divide/>
+                        <ci>N_Clo</ci>
+                        <ci>wo</ci>
+                     </apply>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millimolar">0</cn>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millimolar">1e-180</cn>
+               </otherwise>
+            </piecewise>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>HCO3i</ci>
+            <piecewise>
+               <piece>
+                  <apply>
+                     <divide/>
+                     <ci>N_HCO3i</ci>
+                     <ci>wi</ci>
+                  </apply>
+                  <apply>
+                     <gt/>
+                     <apply>
+                        <divide/>
+                        <ci>N_HCO3i</ci>
+                        <ci>wi</ci>
+                     </apply>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millimolar">0</cn>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millimolar">1e-180</cn>
+               </otherwise>
+            </piecewise>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>HCO3o</ci>
+            <piecewise>
+               <piece>
+                  <apply>
+                     <divide/>
+                     <ci>N_HCO3o</ci>
+                     <ci>wo</ci>
+                  </apply>
+                  <apply>
+                     <gt/>
+                     <apply>
+                        <divide/>
+                        <ci>N_HCO3o</ci>
+                        <ci>wo</ci>
+                     </apply>
+                     <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millimolar">0</cn>
+                  </apply>
+               </piece>
+               <otherwise>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="millimolar">1e-180</cn>
+               </otherwise>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   <connection>
+      <map_components component_1="membrane" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="wi" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Nai" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Ki" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_HCO3i" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Cli" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Nao" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Ko" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_HCO3o" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="model_parameters" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="J_KCC1" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="J_NKCC1" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="wi" component_2="model_parameters"/>
+      <map_variables variable_1="Nai" variable_2="Nai"/>
+      <map_variables variable_1="Nao" variable_2="Nao"/>
+      <map_variables variable_1="Ki" variable_2="Ki"/>
+      <map_variables variable_1="Ko" variable_2="Ko"/>
+      <map_variables variable_1="Cli" variable_2="Cli"/>
+      <map_variables variable_1="Clo" variable_2="Clo"/>
+      <map_variables variable_1="HCO3i" variable_2="HCO3i"/>
+      <map_variables variable_1="HCO3o" variable_2="HCO3o"/>
+      <map_variables variable_1="Xi" variable_2="Xi"/>
+      <map_variables variable_1="wi" variable_2="wi"/>
+      <map_variables variable_1="Lp" variable_2="Lp"/>
+   </connection>
+   <connection>
+      <map_components component_1="wi" component_2="wo"/>
+      <map_variables variable_1="wi" variable_2="wi"/>
+   </connection>
+   <connection>
+      <map_components component_1="wo" component_2="model_parameters"/>
+      <map_variables variable_1="wo" variable_2="wo"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Nai" component_2="Nernst_potentials"/>
+      <map_variables variable_1="ENa" variable_2="ENa"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Nai" component_2="J_NaKATPase"/>
+      <map_variables variable_1="J_NaKATPase" variable_2="J_NaKATPase"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Nai" component_2="model_parameters"/>
+      <map_variables variable_1="N_Nai" variable_2="N_Nai"/>
+      <map_variables variable_1="F" variable_2="F"/>
+      <map_variables variable_1="gNa" variable_2="gNa"/>
+      <map_variables variable_1="theta_NKCC1" variable_2="theta_NKCC1"/>
+      <map_variables variable_1="theta_NBC" variable_2="theta_NBC"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Nai" component_2="membrane"/>
+      <map_variables variable_1="Vm" variable_2="Vm"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Nai" component_2="J_NKCC1"/>
+      <map_variables variable_1="J_NKCC1" variable_2="J_NKCC1"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Nai" component_2="J_NBC"/>
+      <map_variables variable_1="J_NBC" variable_2="J_NBC"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Nao" component_2="Nernst_potentials"/>
+      <map_variables variable_1="ENa" variable_2="ENa"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Nao" component_2="J_NaKATPase"/>
+      <map_variables variable_1="J_NaKATPase" variable_2="J_NaKATPase"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Nao" component_2="model_parameters"/>
+      <map_variables variable_1="N_Nao" variable_2="N_Nao"/>
+      <map_variables variable_1="kc" variable_2="kc"/>
+      <map_variables variable_1="y" variable_2="y"/>
+      <map_variables variable_1="F" variable_2="F"/>
+      <map_variables variable_1="gNa" variable_2="gNa"/>
+      <map_variables variable_1="theta_NKCC1" variable_2="theta_NKCC1"/>
+      <map_variables variable_1="theta_NBC" variable_2="theta_NBC"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Nao" component_2="membrane"/>
+      <map_variables variable_1="Vm" variable_2="Vm"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Nao" component_2="J_NKCC1"/>
+      <map_variables variable_1="J_NKCC1" variable_2="J_NKCC1"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Nao" component_2="J_NBC"/>
+      <map_variables variable_1="J_NBC" variable_2="J_NBC"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Ki" component_2="Nernst_potentials"/>
+      <map_variables variable_1="EK" variable_2="EK"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Ki" component_2="J_NaKATPase"/>
+      <map_variables variable_1="J_NaKATPase" variable_2="J_NaKATPase"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Ki" component_2="model_parameters"/>
+      <map_variables variable_1="N_Ki" variable_2="N_Ki"/>
+      <map_variables variable_1="F" variable_2="F"/>
+      <map_variables variable_1="gK" variable_2="gK"/>
+      <map_variables variable_1="theta_NKCC1" variable_2="theta_NKCC1"/>
+      <map_variables variable_1="theta_KCC1" variable_2="theta_KCC1"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Ki" component_2="membrane"/>
+      <map_variables variable_1="Vm" variable_2="Vm"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Ki" component_2="J_NKCC1"/>
+      <map_variables variable_1="J_NKCC1" variable_2="J_NKCC1"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Ki" component_2="J_KCC1"/>
+      <map_variables variable_1="J_KCC1" variable_2="J_KCC1"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Ko" component_2="Nernst_potentials"/>
+      <map_variables variable_1="EK" variable_2="EK"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Ko" component_2="J_NaKATPase"/>
+      <map_variables variable_1="J_NaKATPase" variable_2="J_NaKATPase"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Ko" component_2="model_parameters"/>
+      <map_variables variable_1="N_Ko" variable_2="N_Ko"/>
+      <map_variables variable_1="kc" variable_2="kc"/>
+      <map_variables variable_1="y" variable_2="y"/>
+      <map_variables variable_1="F" variable_2="F"/>
+      <map_variables variable_1="gK" variable_2="gK"/>
+      <map_variables variable_1="theta_NKCC1" variable_2="theta_NKCC1"/>
+      <map_variables variable_1="theta_KCC1" variable_2="theta_KCC1"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Ko" component_2="membrane"/>
+      <map_variables variable_1="Vm" variable_2="Vm"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Ko" component_2="J_NKCC1"/>
+      <map_variables variable_1="J_NKCC1" variable_2="J_NKCC1"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Ko" component_2="J_KCC1"/>
+      <map_variables variable_1="J_KCC1" variable_2="J_KCC1"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_HCO3i" component_2="J_NBC"/>
+      <map_variables variable_1="J_NBC" variable_2="J_NBC"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_HCO3i" component_2="model_parameters"/>
+      <map_variables variable_1="N_HCO3i" variable_2="N_HCO3i"/>
+      <map_variables variable_1="theta_NBC" variable_2="theta_NBC"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_HCO3o" component_2="J_NBC"/>
+      <map_variables variable_1="J_NBC" variable_2="J_NBC"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_HCO3o" component_2="model_parameters"/>
+      <map_variables variable_1="N_HCO3o" variable_2="N_HCO3o"/>
+      <map_variables variable_1="theta_NBC" variable_2="theta_NBC"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Cli" component_2="N_Nai"/>
+      <map_variables variable_1="dN_Nai_dt" variable_2="dN_Nai_dt"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Cli" component_2="N_Ki"/>
+      <map_variables variable_1="dN_Ki_dt" variable_2="dN_Ki_dt"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Cli" component_2="N_HCO3i"/>
+      <map_variables variable_1="dN_HCO3i_dt" variable_2="dN_HCO3i_dt"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Cli" component_2="model_parameters"/>
+      <map_variables variable_1="N_Cli" variable_2="N_Cli"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Clo" component_2="model_parameters"/>
+      <map_variables variable_1="N_Clo" variable_2="N_Clo"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Clo" component_2="N_Nao"/>
+      <map_variables variable_1="N_Nao" variable_2="N_Nao"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Clo" component_2="N_Ko"/>
+      <map_variables variable_1="N_Ko" variable_2="N_Ko"/>
+   </connection>
+   <connection>
+      <map_components component_1="N_Clo" component_2="N_HCO3o"/>
+      <map_variables variable_1="N_HCO3o" variable_2="N_HCO3o"/>
+   </connection>
+   <connection>
+      <map_components component_1="Nernst_potentials" component_2="model_parameters"/>
+      <map_variables variable_1="R" variable_2="R"/>
+      <map_variables variable_1="F" variable_2="F"/>
+      <map_variables variable_1="T" variable_2="T"/>
+      <map_variables variable_1="Nai" variable_2="Nai"/>
+      <map_variables variable_1="Nao" variable_2="Nao"/>
+      <map_variables variable_1="Ki" variable_2="Ki"/>
+      <map_variables variable_1="Ko" variable_2="Ko"/>
+      <map_variables variable_1="Cli" variable_2="Cli"/>
+      <map_variables variable_1="Clo" variable_2="Clo"/>
+   </connection>
+   <connection>
+      <map_components component_1="J_KCC1" component_2="model_parameters"/>
+      <map_variables variable_1="R" variable_2="R"/>
+      <map_variables variable_1="F" variable_2="F"/>
+      <map_variables variable_1="T" variable_2="T"/>
+      <map_variables variable_1="Ki" variable_2="Ki"/>
+      <map_variables variable_1="Ko" variable_2="Ko"/>
+      <map_variables variable_1="Cli" variable_2="Cli"/>
+      <map_variables variable_1="Clo" variable_2="Clo"/>
+   </connection>
+   <connection>
+      <map_components component_1="J_NBC" component_2="ENBC"/>
+      <map_variables variable_1="ENBC" variable_2="ENBC"/>
+   </connection>
+   <connection>
+      <map_components component_1="J_NBC" component_2="membrane"/>
+      <map_variables variable_1="Vm" variable_2="Vm"/>
+      <map_variables variable_1="gNBC" variable_2="gNBC"/>
+   </connection>
+   <connection>
+      <map_components component_1="J_NBC" component_2="model_parameters"/>
+      <map_variables variable_1="F" variable_2="F"/>
+   </connection>
+   <connection>
+      <map_components component_1="J_NKCC1" component_2="model_parameters"/>
+      <map_variables variable_1="R" variable_2="R"/>
+      <map_variables variable_1="F" variable_2="F"/>
+      <map_variables variable_1="T" variable_2="T"/>
+      <map_variables variable_1="Nai" variable_2="Nai"/>
+      <map_variables variable_1="Nao" variable_2="Nao"/>
+      <map_variables variable_1="Ki" variable_2="Ki"/>
+      <map_variables variable_1="Ko" variable_2="Ko"/>
+      <map_variables variable_1="Cli" variable_2="Cli"/>
+      <map_variables variable_1="Clo" variable_2="Clo"/>
+   </connection>
+   <connection>
+      <map_components component_1="ENBC" component_2="model_parameters"/>
+      <map_variables variable_1="R" variable_2="R"/>
+      <map_variables variable_1="F" variable_2="F"/>
+      <map_variables variable_1="T" variable_2="T"/>
+      <map_variables variable_1="Nai" variable_2="Nai"/>
+      <map_variables variable_1="Nao" variable_2="Nao"/>
+      <map_variables variable_1="HCO3i" variable_2="HCO3i"/>
+      <map_variables variable_1="HCO3o" variable_2="HCO3o"/>
+   </connection>
+   <connection>
+      <map_components component_1="membrane" component_2="model_parameters"/>
+      <map_variables variable_1="F" variable_2="F"/>
+      <map_variables variable_1="gK" variable_2="gK"/>
+      <map_variables variable_1="gNa" variable_2="gNa"/>
+      <map_variables variable_1="gCl" variable_2="gCl"/>
+      <map_variables variable_1="theta_NBC" variable_2="theta_NBC"/>
+   </connection>
+   <connection>
+      <map_components component_1="membrane" component_2="Nernst_potentials"/>
+      <map_variables variable_1="EK" variable_2="EK"/>
+      <map_variables variable_1="ENa" variable_2="ENa"/>
+      <map_variables variable_1="ECl" variable_2="ECl"/>
+   </connection>
+   <connection>
+      <map_components component_1="membrane" component_2="J_NaKATPase"/>
+      <map_variables variable_1="J_NaKATPase" variable_2="J_NaKATPase"/>
+   </connection>
+   <connection>
+      <map_components component_1="membrane" component_2="ENBC"/>
+      <map_variables variable_1="ENBC" variable_2="ENBC"/>
+   </connection>
+   <connection>
+      <map_components component_1="I_K" component_2="membrane"/>
+      <map_variables variable_1="Vm" variable_2="Vm"/>
+   </connection>
+   <connection>
+      <map_components component_1="I_K" component_2="J_NaKATPase"/>
+      <map_variables variable_1="J_NaKATPase" variable_2="J_NaKATPase"/>
+   </connection>
+   <connection>
+      <map_components component_1="I_K" component_2="model_parameters"/>
+      <map_variables variable_1="gK" variable_2="gK"/>
+      <map_variables variable_1="nA" variable_2="nA"/>
+      <map_variables variable_1="F" variable_2="F"/>
+      <map_variables variable_1="elementary_charge" variable_2="elementary_charge"/>
+   </connection>
+   <connection>
+      <map_components component_1="I_K" component_2="Nernst_potentials"/>
+      <map_variables variable_1="EK" variable_2="EK"/>
+   </connection>
+   <connection>
+      <map_components component_1="I_Cl" component_2="membrane"/>
+      <map_variables variable_1="Vm" variable_2="Vm"/>
+   </connection>
+   <connection>
+      <map_components component_1="I_Cl" component_2="model_parameters"/>
+      <map_variables variable_1="gCl" variable_2="gCl"/>
+      <map_variables variable_1="nA" variable_2="nA"/>
+      <map_variables variable_1="elementary_charge" variable_2="elementary_charge"/>
+   </connection>
+   <connection>
+      <map_components component_1="I_Cl" component_2="Nernst_potentials"/>
+      <map_variables variable_1="ECl" variable_2="ECl"/>
+   </connection>
+   <connection>
+      <map_components component_1="I_Na" component_2="membrane"/>
+      <map_variables variable_1="Vm" variable_2="Vm"/>
+   </connection>
+   <connection>
+      <map_components component_1="I_Na" component_2="J_NaKATPase"/>
+      <map_variables variable_1="J_NaKATPase" variable_2="J_NaKATPase"/>
+   </connection>
+   <connection>
+      <map_components component_1="I_Na" component_2="model_parameters"/>
+      <map_variables variable_1="gNa" variable_2="gNa"/>
+      <map_variables variable_1="nA" variable_2="nA"/>
+      <map_variables variable_1="F" variable_2="F"/>
+      <map_variables variable_1="elementary_charge" variable_2="elementary_charge"/>
+   </connection>
+   <connection>
+      <map_components component_1="I_Na" component_2="Nernst_potentials"/>
+      <map_variables variable_1="ENa" variable_2="ENa"/>
+   </connection>
+   <connection>
+      <map_components component_1="I_Na" component_2="J_NBC"/>
+      <map_variables variable_1="J_NBC" variable_2="J_NBC"/>
+   </connection>
+   <connection>
+      <map_components component_1="J_NaKATPase" component_2="model_parameters"/>
+      <map_variables variable_1="Nai" variable_2="Nai"/>
+      <map_variables variable_1="Ko" variable_2="Ko"/>
+   </connection>
+
+ <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Bag rdf:about="rdf:#24ce9b23-b0c6-46b4-a409-77890d1bf03c">
+    <rdf:li>neuron</rdf:li>
+	<rdf:li>neurobiology</rdf:li>
+    <rdf:li>electrophysiological</rdf:li>
+    <rdf:li>astrocyte</rdf:li>
+    <rdf:li>extracellular space</rdf:li>
+    <rdf:li>aquaporin</rdf:li>
+  </rdf:Bag>
+  <rdf:Description rdf:about="rdf:#24ce9b23-b0c6-46b4-a409-77890d1bf03c"/>
+  <rdf:Seq rdf:about="rdf:#6319409b-8cea-4431-9cb1-2aa55613c287">
+    <rdf:li rdf:resource="rdf:#b639a444-7b3f-473f-ab95-0f92f3a54ed9"/>
+    <rdf:li rdf:resource="rdf:#75256b5c-572e-42db-a05f-beeb6389cb41"/>
+    <rdf:li rdf:resource="rdf:#fd2b4e03-7ae0-4cc9-9f27-062cd3655f73"/>
+    <rdf:li rdf:resource="rdf:#a339429c-b011-41ad-8842-b70e3bf7f223"/>
+    <rdf:li rdf:resource="rdf:#20269eb7-ce32-4ecf-bded-05c4c729c1b6"/>
+    <rdf:li rdf:resource="rdf:#150d8b4a-4e6a-4eae-9533-7b420472ad69"/>
+    <rdf:li rdf:resource="rdf:#b42ec622-b8ce-4b5b-bcd8-289419878a1a"/>
+    <rdf:li rdf:resource="rdf:#e7a64dfb-1485-4292-bc53-b13d4f4c966a"/>
+    <rdf:li rdf:resource="rdf:#bb2c6baa-7c95-41d2-b5ad-44e9865a0285"/>
+    <rdf:li rdf:resource="rdf:#b83e3157-d76a-4a26-911f-3c44c4afa5dc"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#079767c6-399b-4d64-9c65-e070b6c89341">
+    <dcterms:modified xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#3c057aff-9b70-49a2-b154-41ce77530f84"/>
+    <rdf:value>In collaboration with the original model author I added a piecewise equation to define a time-dependent parameter called "y".  This was added in order to get the CellML model to be able to reproduce a stimulated state.</rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#ce09d571-0228-47c1-b03b-7ccc9fa2425c"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#bb2c6baa-7c95-41d2-b5ad-44e9865a0285">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#468bd2d5-ffe3-427c-a49e-fbd4426c41b5"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e7a64dfb-1485-4292-bc53-b13d4f4c966a">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#83e84e63-a794-41a6-8ee7-76e08de2fbf1"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#68f41035-dd83-4f95-a798-b84c618f0076">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">I</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Ostby</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ecab6026-c240-4da8-af32-615c0d5b3961">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Catherine</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Lloyd</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#80c66712-4a16-4ce8-ba07-221db6738a71">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">E</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Nagelhus</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#$7KI0q1">
+    <ns7:boundIntervals xmlns:ns7="http://www.cellml.org/metadata/simulation/1.0#" rdf:resource="rdf:#$8KI0q1"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ce09d571-0228-47c1-b03b-7ccc9fa2425c">
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#ecab6026-c240-4da8-af32-615c0d5b3961"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d7d3970d-efaa-4b29-8545-962bb21418d7">
+    <bqs:subject_type xmlns:bqs="http://www.cellml.org/bqs/1.0#">keyword</bqs:subject_type>
+    <rdf:value rdf:resource="rdf:#24ce9b23-b0c6-46b4-a409-77890d1bf03c"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#95d4face-b7fb-41d2-830f-2818800428b4">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2008-06-00 00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#cf858615-83ef-4d01-aacd-3a99dfe8ca47">
+    <dcterms:modified xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#94d9880c-9f86-4bb5-b3a1-97f3a883166d"/>
+    <rdf:value>Simulation metadata has been added.
+
+cmeta:id added to variable N_Ko </rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#00cdc01a-642b-4cac-84ca-7d4586780cb2"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#c1551350-7ec4-42ae-a6e7-7fa45d04f2bb">
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#69ebc180-292d-4de6-a1b1-548816f0032b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9b52d9db-b204-4193-8acb-d53c3db9d49b">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Catherine</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Lloyd</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#$9KI0q1">
+    <ns7:endingValue xmlns:ns7="http://www.cellml.org/metadata/simulation/1.0#">60</ns7:endingValue>
+    <ns7:nonstandard-pointDensity xmlns:ns7="http://www.cellml.org/metadata/simulation/1.0#">10000</ns7:nonstandard-pointDensity>
+    <ns7:maximumStepSize xmlns:ns7="http://www.cellml.org/metadata/simulation/1.0#">0.01</ns7:maximumStepSize>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#eecd8d15-9f8e-4d26-8973-7f55744a26f7">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">T</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Zeuthen</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#41e9f005-a926-4f51-9329-6ac6500df708">
+    <vCard:FN xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a49f8b65-2194-40a5-a0f9-679c46f93ea0">
+    <vCard:Orgname xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#"/>
+    <vCard:Orgunit xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Auckland Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#30a8303d-3314-4659-a251-9268ce75065f">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2008-05-22T00:00:00+00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#881e0c0d-a4e8-47a7-b466-62d5659a916c">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">L</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Oyehaug</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#20269eb7-ce32-4ecf-bded-05c4c729c1b6">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#ad29ba2e-f628-4075-81ce-bfb61d364373"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#fd2b4e03-7ae0-4cc9-9f27-062cd3655f73">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#27e4e696-fbc6-4f83-b48a-062f3409d354"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b0193494-643e-4096-a0b1-f2494f57973b">
+    <dc:subject xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#d7d3970d-efaa-4b29-8545-962bb21418d7"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#27e4e696-fbc6-4f83-b48a-062f3409d354">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">G</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Einevoll</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">T</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0a4bcd08-5cd2-41aa-9949-2e91b1f74326">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">S</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Omholt</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">W</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:publisher xmlns:dc="http://purl.org/dc/elements/1.1/">The University of Auckland, Auckland Bioengineering Institute</dc:publisher>
+    <cmeta:comment rdf:resource="rdf:#33ce1499-de98-4101-aedc-1991115f307a"/>
+    <dcterms:created xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#30a8303d-3314-4659-a251-9268ce75065f"/>
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#05f4f596-df4b-4d1e-af7b-1d9916898423"/>
+    <cmeta:modification rdf:resource="rdf:#cf858615-83ef-4d01-aacd-3a99dfe8ca47"/>
+    <cmeta:modification rdf:resource="rdf:#079767c6-399b-4d64-9c65-e070b6c89341"/>
+    <cmeta:modification rdf:resource="rdf:#2d3ab26e-8372-46d7-90c9-dbb74768048e"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#150d8b4a-4e6a-4eae-9533-7b420472ad69">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#eecd8d15-9f8e-4d26-8973-7f55744a26f7"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b42ec622-b8ce-4b5b-bcd8-289419878a1a">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#2acd0248-792e-4c8c-ad19-73d888c916bd"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d2eb7c62-a858-425f-a2cb-7b452c9eae5b">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#6319409b-8cea-4431-9cb1-2aa55613c287"/>
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Astrocytic processes explaining neural-activity-induced shrinkage of extraneuronal space</dc:title>
+    <bqs:volume xmlns:bqs="http://www.cellml.org/bqs/1.0#">5</bqs:volume>
+    <bqs:first_page xmlns:bqs="http://www.cellml.org/bqs/1.0#">e1000272</bqs:first_page>
+    <bqs:Journal xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#6270cdeb-1a55-405d-8bf1-c6820539666e"/>
+    <dcterms:issued xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#95d4face-b7fb-41d2-830f-2818800428b4"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#33ce1499-de98-4101-aedc-1991115f307a">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#9271ba51-f779-4fad-b1a9-67432fcd0a50"/>
+    <rdf:value/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#468bd2d5-ffe3-427c-a49e-fbd4426c41b5">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">O</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Ottersen</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">P</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#00cdc01a-642b-4cac-84ca-7d4586780cb2">
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#fc494e81-0242-40c3-9a78-7132b73f34db"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#83e84e63-a794-41a6-8ee7-76e08de2fbf1">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">C</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Lloyd</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">M</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ec161a1d-be25-4b7f-ba2f-037ad05538b1">
+    <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:resource="rdf:#41e9f005-a926-4f51-9329-6ac6500df708"/>
+    <rdf:value>This is a CellML description of Ostby et al.'s 2008 mathematical model of neuronal activity and shrinkage of the extraneuronal space.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b83e3157-d76a-4a26-911f-3c44c4afa5dc">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#0a4bcd08-5cd2-41aa-9949-2e91b1f74326"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ad29ba2e-f628-4075-81ce-bfb61d364373">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">E</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Plahte</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#05f4f596-df4b-4d1e-af7b-1d9916898423">
+    <vCard:ORG xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#a49f8b65-2194-40a5-a0f9-679c46f93ea0"/>
+    <vCard:EMAIL xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#1a1781ea-7881-4975-a616-da8d9ab0806f"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#9b52d9db-b204-4193-8acb-d53c3db9d49b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9271ba51-f779-4fad-b1a9-67432fcd0a50">
+    <vCard:FN xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f34f5236-bdd5-4f4d-a932-d15a2d4637bc">
+    <bqs:Pubmed_id xmlns:bqs="http://www.cellml.org/bqs/1.0#">19165313</bqs:Pubmed_id>
+    <bqs:JournalArticle xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#d2eb7c62-a858-425f-a2cb-7b452c9eae5b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#6270cdeb-1a55-405d-8bf1-c6820539666e">
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">PLoS Computational Biology</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#75256b5c-572e-42db-a05f-beeb6389cb41">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#881e0c0d-a4e8-47a7-b466-62d5659a916c"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1a1781ea-7881-4975-a616-da8d9ab0806f">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#69ebc180-292d-4de6-a1b1-548816f0032b">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Catherine</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Lloyd</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#94d9880c-9f86-4bb5-b3a1-97f3a883166d">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2008-09-29T10:33:25+13:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3c057aff-9b70-49a2-b154-41ce77530f84">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2008-05-26T08:41:32+12:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b639a444-7b3f-473f-ab95-0f92f3a54ed9">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#68f41035-dd83-4f95-a798-b84c618f0076"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#$8KI0q1">
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+    <rdf:first rdf:resource="rdf:#$9KI0q1"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#43a13f60-3265-4b28-8e10-17e88da4a797">
+    <dcterms:W3CDTF xmlns:dcterms="http://purl.org/dc/terms/">2008-06-19T10:45:41+12:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a339429c-b011-41ad-8842-b70e3bf7f223">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" rdf:resource="rdf:#80c66712-4a16-4ce8-ba07-221db6738a71"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#ostby_model_2008">
+    <ns7:simulation xmlns:ns7="http://www.cellml.org/metadata/simulation/1.0#" rdf:resource="rdf:#$7KI0q1"/>
+    <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Ostby et al.'s 2008 mathematical model of neuronal activity and shrinkage of the extraneuronal space.</dc:title>
+    <cmeta:comment rdf:resource="rdf:#ec161a1d-be25-4b7f-ba2f-037ad05538b1"/>
+    <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#b0193494-643e-4096-a0b1-f2494f57973b"/>
+    <bqs:reference xmlns:bqs="http://www.cellml.org/bqs/1.0#" rdf:resource="rdf:#f34f5236-bdd5-4f4d-a932-d15a2d4637bc"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#fc494e81-0242-40c3-9a78-7132b73f34db">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">James</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Lawson</vCard:Family>
+    <vCard:Other xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Richard</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#2d3ab26e-8372-46d7-90c9-dbb74768048e">
+    <dcterms:modified xmlns:dcterms="http://purl.org/dc/terms/" rdf:resource="rdf:#43a13f60-3265-4b28-8e10-17e88da4a797"/>
+    <rdf:value>Used COR to correct the units such that there are now no error messages at all.</rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#c1551350-7ec4-42ae-a6e7-7fa45d04f2bb"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#2acd0248-792e-4c8c-ad19-73d888c916bd">
+    <vCard:Given xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">J</vCard:Given>
+    <vCard:Family xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">Voipio</vCard:Family>
+  </rdf:Description>
+</rdf:RDF>
+</model>

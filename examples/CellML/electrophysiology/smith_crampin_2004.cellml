@@ -1,0 +1,1422 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- FILE : smith_crampin_Na_K_pump_2004.xml
+
+CREATED : 26th April 2004 
+
+LAST MODIFIED : 19th July 2010
+
+AUTHOR : Alice Boit
+         Bioengineering Institute
+         The University of Auckland
+         
+MODEL STATUS : This model conforms to the CellML 1.0 Specification released on
+10th August 2001, and the 16/01/2002 CellML Metadata 1.0 Specification.
+
+DESCRIPTION : This file contains a CellML description of N. P. Smith' and E. Crampin's 2004 mathematical model of the cardiac sodium-potassium pump.
+
+CHANGES: 
+
+-->
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="smith_2004" name="smith_2004">
+
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Development of models of active ion transport for whole-cell modelling: cardiac sodium-potassium pump as a case study</title>
+  <author>
+    <firstname>Alice</firstname>
+          <surname>Boit</surname>
+    <affiliation>
+      <shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+        This CellML model runs in both OpenCell and COR.
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+ABSTRACT: This study presents a method for the reduction of biophysically-based kinetic models for the active transport of ions. A lumping scheme is presented which exploits the differences in timescales associated with fast and slow transitions between model states, while maintaining the thermodynamic properties of the model. The goal of this approach is to contribute to modelling of the effects of disturbances to metabolism, associated with ischaemic heart disease, on cardiac cell function. The approach is illustrated for the sodium-potassium pump in the myocyte. The lumping scheme is applied to produce a 4-state representation from the detailed 15-state model of Lauger and Apell, Eur. Biophys. J. 13 (1986) 309, for which the principles of free energy transduction are used to link the free energy released from ATP hydrolysis (deltaGATP) to the transition rates between states of the model. An iterative minimisation algorithm is implemented to determine the transition rate parameters based on the model fit to experimental data. Finally, the relationship between deltaGATP and pump cycling direction is investigated and compared with recent experimental findings.
+</para>
+
+<para> 
+The original paper reference is cited below:
+</para>
+
+<para>
+Development of models of active ion transport for whole-cell modelling: cardiac sodium-potassium pump as a case study, N. P. Smith and E. J. Crampin, 2004, <emphasis> Progress in Biophysics and Molecular Biology</emphasis>
+          <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/15142754">PubMed ID: 15142754</ulink>
+</para>
+
+<informalfigure float="0" id="fig_smith_crampin_state_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>15-state State Diagram</title>
+    </objectinfo>
+    <imagedata fileref="smith_2004.png"/>
+  </imageobject>
+</mediaobject>
+<caption>The 15 states of the original model.</caption>
+</informalfigure>
+
+<informalfigure float="0" id="fig_smith_crampin_lumped_state_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>Smith-Crampin 4-state lumping scheme</title>
+    </objectinfo>
+    <imagedata fileref="smith_2004b.png"/>
+  </imageobject>
+</mediaobject>
+<caption>The 4 states of the Smith-Crampin model.</caption>
+</informalfigure>
+
+</sect1>
+</article>
+</documentation>
+
+  
+
+    
+  <units name="ms">
+    <unit units="second" prefix="milli"/>
+  </units>
+  <units name="mV">
+    <unit units="volt" prefix="milli"/>
+  </units>
+  <units name="mV_per_ms">
+    <unit units="mV"/>
+    <unit units="ms" exponent="-1"/>
+  </units>
+  <units name="mM">
+    <unit units="mole" prefix="nano"/>
+    <unit units="metre" prefix="milli" exponent="-3"/>
+  </units>
+  <units name="mM_per_ms">
+    <unit units="mM"/>
+    <unit units="ms" exponent="-1"/>
+  </units>
+  <units name="uA">
+    <unit units="ampere" prefix="micro"/>
+  </units>
+
+ <!-- Global units used in the NaK_pump-->
+
+  <units name="concentration">
+    <unit units="mole" prefix="milli"/>
+    <unit units="litre" exponent="-1"/>
+  </units>
+  <units name="per_concentration">
+    <unit units="concentration" exponent="-1"/>
+  </units>
+  <units name="concentration_per_ms">
+    <unit units="concentration"/>
+	<unit units="ms" exponent="-1"/>
+  </units>
+   <units name="energy">
+    <unit units="joule"/>
+    <unit units="mole" exponent="-1"/>
+  </units>
+  <units name="gas_constant">
+    <unit units="joule"/>
+    <unit units="mole" exponent="-1"/>
+    <unit units="kelvin" exponent="-1"/>
+  </units>
+  <units name="faraday_constant">
+    <unit units="coulomb"/>
+    <unit units="mole" exponent="-1"/>
+  </units>
+  <units name="rate">
+    <unit units="second" exponent="-1"/>
+    </units>
+  <units name="minus_k1_rate">
+    <unit units="second" exponent="-1"/>
+    <unit units="mM" exponent="-1"/>
+  </units>
+  <units name="minus_k3_rate">
+    <unit units="second" exponent="-1"/>
+    <unit units="mM" exponent="-2"/>
+  </units>
+  <units name="rate_diagram_sum">
+    <unit units="second" exponent="-3"/>
+  </units>
+
+
+<!-- interface component -->
+
+<component name="interface">
+  
+ <!-- Variables we expect to be set/controlled externally -->
+ <variable units="ms" private_interface="out" name="time"/>
+ <variable units="mV" private_interface="out" name="Vm" initial_value="-150"/>
+   
+  
+ <!-- Variables used in the NaK_pump we expect to be set/controlled externally -->
+  
+    
+  <variable units="concentration" private_interface="out" name="cMgADP" initial_value="0.01"/>
+  <variable units="concentration" private_interface="out" name="cNa_i" initial_value="50."/>
+ 
+   
+ 
+<!-- Variables used in the NaK_pump we want to make available externally and which are computed by subordinate components-->
+    
+
+<!-- Cycle rate of Na/K-pump -->
+ <variable units="rate" public_interface="out" private_interface="in" name="v_cyc"/>
+
+ 
+<!-- Net Free Energy of cycle -->
+  <variable units="energy" public_interface="out" private_interface="in" name="net_free_energy"/>
+   
+   
+<!-- Some dummy ODEs as a means to handle the three input variables 
+    (membrane potential, ADP concentration, cytosolic sodium concentration)-->
+
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>Vm</ci>
+        </apply>
+        <cn cellml:units="mV_per_ms">1.0</cn>
+      </apply>
+    </math>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>cMgADP</ci>
+        </apply>
+        <cn cellml:units="concentration_per_ms">0.0</cn>
+      </apply>
+    </math>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>cNa_i</ci>
+        </apply>
+        <cn cellml:units="concentration_per_ms">0.0</cn>
+      </apply>
+</math>
+   
+</component> <!--EO interface-->
+
+
+<component name="NaK_pump">
+
+    
+
+
+
+<!-- Variables and Parameters -->
+  
+  
+<!-- Body temperature -->
+  <variable units="kelvin" private_interface="out" name="body_temp" initial_value="310."/>
+
+<!-- General constants -->
+  <variable units="gas_constant" private_interface="out" name="gas_const" initial_value="8.314"/>
+  <variable units="faraday_constant" private_interface="out" name="faraday_const" initial_value="96485."/>
+
+
+<!-- Foward and backward rate constants of the reduced 4-state cycle. They are named with 'k's. They are used in the calculation of the apparent transition rates (called 'alpha's). Note that two backward reaction rates carry unusual units (minus_k1 and minus_k3). For explanations please read subsequent comments.-->
+
+    <variable units="rate" name="k1" initial_value="1050."/>
+    <variable units="minus_k1_rate" name="minus_k1" initial_value="172.1"/>
+    <variable units="rate" name="k2" initial_value="481."/>
+    <variable units="rate" name="minus_k2" initial_value="40.1"/>
+    <variable units="rate" name="k3" initial_value="2000."/>
+    <variable units="minus_k3_rate" name="minus_k3" initial_value="79287.1"/>
+    <variable units="rate" name="k4" initial_value="320."/>
+    <variable units="rate" name="minus_k4" initial_value="40.1"/>
+
+<!-- Kinetic parameters (e: extracellular, i: intracellular). They represent the ratio of corresponding 'k's under rapid equilibrium condition. These equilibrium constants are named with 'eq's. The indices 'e' and 'i' still refer to extra-, intracellular side, respectively.
+    Note: 
+    the Na-equilibrium constants are set to a 
+    baseline level here because they are functions of Vm, see implementation below. -->
+
+    <variable units="concentration" name="eq_Na_base_e" initial_value="15.5"/>
+    <variable units="concentration" name="eq_Na_base_i" initial_value="2.49"/>
+    <variable units="concentration" name="eq_K_e" initial_value="0.213"/>
+    <variable units="concentration" name="eq_K_i" initial_value="0.5"/>
+    <variable units="concentration" name="eq_MgATP" initial_value="2.51"/>
+    <variable units="concentration" name="eq_HPi" initial_value="0.000169"/>
+    <variable units="concentration" name="eq_KPi" initial_value="292."/>
+    <variable units="concentration" name="eq_NaPi" initial_value="224."/>
+
+
+    <!-- To arrange the calculations for the final transition rates more clearly, we introduce
+    another parameter set which consists of the ratios between each ion concentration and its 
+    corresponding equilibrium constant. These ratios are dimensionless because we assigned
+    concentration units to the equilibrium constants.-->
+
+    <variable units="dimensionless" name="dimless_Na_e"/>
+    <variable units="dimensionless" name="dimless_Na_i"/>
+    <variable units="dimensionless" name="dimless_K_e"/>
+    <variable units="dimensionless" name="dimless_K_i"/>
+    <variable units="dimensionless" name="dimless_MgATP"/>
+
+
+    <!-- Apparent transition rates of the lumped scheme. These 'alpha's are the actual rate constants used
+     in the calculation of the cycle rate v_cyc. 
+     Computing the 'alpha's most times involves the rate constants named with 'k's and the dimensionless ratios
+     calculated before, so that the outcome is in usual reaction rate units of [1/s]. -->
+    <variable units="rate" name="alpha1"/>
+    <variable units="rate" name="alpha2"/>
+    <variable units="rate" name="alpha3"/>
+    <variable units="rate" name="alpha4"/>
+
+    <variable units="rate" name="minus_alpha1"/>
+    <variable units="rate" name="minus_alpha2"/>
+    <variable units="rate" name="minus_alpha3"/>
+    <variable units="rate" name="minus_alpha4"/>
+
+
+    <!-- Molecular concentrations -->
+    <variable units="concentration" name="cNa_e" initial_value="150."/>   
+    <variable units="concentration" name="cK_e" initial_value="5.4"/>
+    <variable units="concentration" name="cK_i" initial_value="140."/>
+    <variable units="concentration" name="cMgATP" initial_value="9.8"/>
+    <variable units="concentration" name="cPi_sum" initial_value="4.2"/>
+    <variable units="concentration" name="cPi"/>
+    <variable units="concentration" name="cH" initial_value="0.000081283"/>
+
+    <!-- Energy required to run the pump per cycle consists of two terms; the Na and K contributions-->
+    <variable units="energy" name="dG_Na"/>
+    <variable units="energy" name="dG_K"/>
+    <variable units="energy" name="dG_pump"/>
+   
+<!-- Free Energy of ATP hydrolysis -->
+    <variable units="energy" name="dG_ATP"/>
+
+<!-- Partition factor that determines how the voltage dependency of the two Na equilibrium constants is distributed between extracellular matrix and cytosol-->
+   
+<variable units="dimensionless" name="partition_factor" initial_value="-0.031288692380984445"/>
+
+<!-- Diagram sum of the four states for the denominator used in calculation of cycle rate v_cyc. -->
+<variable units="rate_diagram_sum" name="diagram_sum"/>
+
+
+<!-- Inputs -->
+    
+
+<!-- Externally set variables: Vm, cMgADP and cNa_i should be regulated via the interface  -->
+
+<variable units="mV" public_interface="in" private_interface="out" name="Vm"/>
+<variable units="concentration" public_interface="in" private_interface="out" name="cMgADP"/>
+<variable units="concentration" public_interface="in" private_interface="out" name="cNa_i"/>
+    
+  
+<!-- Outputs computed here -->
+    
+<!-- Clockwise cycle rate-->
+<variable units="rate" public_interface="out" name="v_cyc"/>
+ 
+<!-- Net Free Energy of cycle -->
+<variable units="energy" public_interface="out" name="net_free_energy"/>
+    
+
+<!-- compute the concentration of free inorganic phosphate-->
+
+    
+
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="cPi">
+        <eq/>
+        <ci>cPi</ci>
+        <apply>
+          <divide/>
+         <ci>cPi_sum</ci>
+           
+         <apply>
+            <plus/>
+            <cn cellml:units="dimensionless">1.0</cn>
+             <apply>
+              <divide/>
+             <ci>cK_i</ci>
+             <ci>eq_KPi</ci>
+             </apply>
+             <apply>
+              <divide/>
+             <ci>cH</ci>
+             <ci>eq_HPi</ci>
+             </apply>
+             <apply>
+              <divide/>
+             <ci>cNa_i</ci>
+             <ci>eq_NaPi</ci>
+             </apply>
+         </apply> 
+        </apply>
+      </apply>
+</math>
+
+
+<!-- compute energy required to run pump in dependence of Vm (a positive term). First, the Na-contribution-->
+ 
+
+    
+
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="dG_Na_calc">
+        <eq/>
+        <ci>dG_Na</ci>
+         <apply>
+          <minus/>
+           <apply>
+            <times/>
+            <ci>gas_const</ci> 
+            <ci>body_temp</ci>
+             <apply>
+              <ln/>
+              <apply>
+                <divide/>
+               <ci>cNa_e</ci>
+               <ci>cNa_i</ci>
+              </apply>
+             </apply>
+           </apply>
+            <apply>
+            <times/>
+ 	     <ci>faraday_const</ci>
+             <cn cellml:units="dimensionless">0.001</cn>
+             <ci>Vm</ci>
+            </apply> 
+         </apply>
+      </apply>
+</math>
+
+
+
+<!--K-contribution-->
+
+    
+    
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="dG_K_calc">
+        <eq/>
+        <ci>dG_K</ci>
+         <apply>
+          <plus/>
+           <apply>
+            <times/>
+            <ci>gas_const</ci>
+            <ci>body_temp</ci>
+             <apply>
+              <ln/>
+              <apply>
+                <divide/>
+               <ci>cK_i</ci>
+               <ci>cK_e</ci>
+              </apply>
+             </apply>
+           </apply>
+            <apply>
+            <times/>
+ 	     <ci>faraday_const</ci>
+             <cn cellml:units="dimensionless">0.001</cn>
+             <ci>Vm</ci>
+	    </apply> 
+           
+         </apply>
+      </apply>
+</math>
+      
+<!-- compute energy required to run pump by adding the two contributions-->
+
+   
+
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="dG_pump_calc">
+        <eq/>
+        <ci>dG_pump</ci>
+        <apply>
+          <plus/>
+         <apply>
+            <times/>
+          <cn cellml:units="dimensionless">2.0</cn>
+	   <ci>dG_K</ci>
+         </apply>
+          <apply>
+            <times/>
+           <cn cellml:units="dimensionless">3.0</cn>
+           <ci>dG_Na</ci>
+          </apply>
+        </apply>
+      </apply>
+</math>
+
+
+<!-- compute energy released by exergonic hydrolysis of ATP (a negative term).-->
+
+    
+
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="dG_ATP_calc">
+        <eq/>
+        <ci>dG_ATP</ci>
+       
+         <apply>
+          <minus/>
+           <cn cellml:units="energy">-29600.</cn>
+           <apply>
+            <times/>
+ 	    <ci>gas_const</ci>
+            <ci>body_temp</ci>
+            <apply>
+              <ln/>
+              <apply>
+                <divide/>
+ 	            <ci>cMgATP</ci>
+                <apply>
+                  <times/>
+                  <cn cellml:units="per_concentration">0.001</cn>
+                  <ci>cMgADP</ci>
+                  <ci>cPi</ci>
+               </apply>
+             </apply>
+            </apply>
+           </apply>
+         </apply>  
+       
+       </apply>
+</math>
+    
+<!-- compute net free energy by summing up the last two energy terms-->
+
+    
+
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="net_free_energy_calc">
+        <eq/>
+        <ci>net_free_energy</ci>
+         <apply>
+          <plus/>
+	  <ci>dG_ATP</ci>
+          <ci>dG_pump</ci>
+         </apply>
+      </apply>
+    </math>
+  
+    
+<!-- compute pump cycle rate in dependence of the rate constants. First, calculate the dimensionless 
+  parameters which represent ratios between each ion concentration and its 
+  corresponding equilibrium constant. Then use these parameters to define the rate constants of the 
+  lumped scheme (the 'alpha's)-->
+
+<!-- calculate dimless_Na_i -->
+
+      
+
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="dimless_Na_i_calc">
+        <eq/>
+        <ci>dimless_Na_i</ci>
+       
+       <apply>
+        <divide/>
+        <ci>cNa_i</ci>
+         <apply>
+            <times/>
+         <ci>eq_Na_base_i</ci>
+          <apply>
+              <exp/>
+           <apply>
+                <divide/>
+            <apply>
+                  <times/>
+             <ci>partition_factor</ci>
+             <ci>faraday_const</ci>
+             <cn cellml:units="dimensionless">0.001</cn>
+             <ci>Vm</ci>
+            </apply>
+            <apply>
+                  <times/>
+             <cn cellml:units="dimensionless">3.0</cn>
+             <ci>gas_const</ci>
+             <ci>body_temp</ci>
+            </apply>
+           </apply>
+          </apply>
+         </apply>
+       </apply>
+      </apply>
+</math>
+
+
+
+<!-- calculate dimless_Na_e -->
+      
+      
+
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="dimless_Na_e_calc">
+        <eq/>
+        <ci>dimless_Na_e</ci>
+       
+       <apply>
+        <divide/>
+        <ci>cNa_e</ci>
+         <apply>
+            <times/>
+         <ci>eq_Na_base_e</ci>
+          <apply>
+              <exp/>
+           <apply>
+                <divide/>
+            <apply>
+                  <times/>
+             <apply>
+                    <plus/>
+              <cn cellml:units="dimensionless">1.</cn>
+              <ci>partition_factor</ci>
+              </apply>
+             <ci>faraday_const</ci>
+             <cn cellml:units="dimensionless">0.001</cn>
+             <ci>Vm</ci>
+            </apply>
+            <apply>
+                  <times/>
+             <cn cellml:units="dimensionless">3.0</cn>
+             <ci>gas_const</ci>
+             <ci>body_temp</ci>
+            </apply>
+           </apply>
+          </apply>
+         </apply>
+       </apply>
+
+      </apply>
+</math>
+
+
+<!-- calculate dimless_K_i -->
+
+    
+
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="dimless_K_i_calc">
+        <eq/>
+        <ci>dimless_K_i</ci>
+       <apply>
+        <divide/>
+        <ci>cK_i</ci>
+        <ci>eq_K_i</ci>
+       </apply>
+      </apply>
+</math>
+
+<!-- calculate dimless_K_e -->
+
+    
+
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="dimless_K_e_calc">
+        <eq/>
+        <ci>dimless_K_e</ci>
+       <apply>
+        <divide/>
+        <ci>cK_e</ci>
+        <ci>eq_K_e</ci>
+       </apply>
+      </apply>
+</math>
+
+
+
+<!-- calculate dimless_MgATP -->
+
+    
+
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="dimless_MgATP_calc">
+        <eq/>
+        <ci>dimless_MgATP</ci>
+       <apply>
+        <divide/>
+        <ci>cMgATP</ci>
+        <ci>eq_MgATP</ci>
+       </apply>
+      </apply>
+</math>
+
+
+
+ <!-- now the transition rates: calculate alpha1 -->
+
+     
+
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="alpha1_calc">
+        <eq/>
+        <ci>alpha1</ci>
+       
+        <apply>
+          <divide/>
+         <apply>
+            <times/>
+          <ci>k1</ci>
+	  <apply>
+              <power/>
+           <ci>dimless_Na_i</ci>
+           <cn cellml:units="dimensionless">3</cn>
+          </apply>
+         </apply>
+
+         <apply>
+            <minus/>
+          <apply>
+              <plus/>
+	   <apply>
+                <power/>
+            <apply>
+                  <plus/>
+             <cn cellml:units="dimensionless">1.0</cn>
+             <ci>dimless_Na_i</ci>
+            </apply> 
+             <cn cellml:units="dimensionless">3</cn>
+           </apply>
+           <apply>
+                <power/>
+            <apply>
+                  <plus/>
+             <cn cellml:units="dimensionless">1.0</cn>
+             <ci>dimless_K_i</ci>
+            </apply> 
+             <cn cellml:units="dimensionless">2</cn>
+           </apply>  
+          </apply>
+          <cn cellml:units="dimensionless">1.0</cn>
+         </apply>
+        </apply>
+
+      </apply>
+</math>
+
+<!-- calculate alpha2 -->
+
+      
+    
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="alpha2_calc">
+        <eq/>
+        <ci>alpha2</ci>
+        <ci>k2</ci>
+      </apply>
+</math>
+
+
+
+<!-- calculate alpha3 -->
+
+      
+    
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="alpha3_calc">
+        <eq/>
+        <ci>alpha3</ci>
+       
+        <apply>
+          <divide/>
+         <apply>
+            <times/>
+          <ci>k3</ci>
+	  <apply>
+              <power/>
+           <ci>dimless_K_e</ci>
+           <cn cellml:units="dimensionless">2</cn>
+          </apply>
+         </apply>
+
+         <apply>
+            <minus/>
+          <apply>
+              <plus/>
+	   <apply>
+                <power/>
+            <apply>
+                  <plus/>
+             <cn cellml:units="dimensionless">1.0</cn>
+             <ci>dimless_Na_e</ci>
+            </apply> 
+             <cn cellml:units="dimensionless">3</cn>
+           </apply>
+           <apply>
+                <power/>
+            <apply>
+                  <plus/>
+             <cn cellml:units="dimensionless">1.0</cn>
+             <ci>dimless_K_e</ci>
+            </apply> 
+             <cn cellml:units="dimensionless">2</cn>
+           </apply>
+          </apply>
+          <cn cellml:units="dimensionless">1.0</cn>
+         </apply>
+        </apply>
+
+       
+      </apply>
+</math>
+
+<!-- calculate alpha4 -->
+
+      
+
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="alpha4_calc">
+        <eq/>
+        <ci>alpha4</ci>
+        <apply>
+          <divide/>
+         <apply>
+            <times/>
+          <ci>k4</ci>
+           <ci>dimless_MgATP</ci>
+         </apply>
+
+         <apply>
+            <plus/>
+            <cn cellml:units="dimensionless">1.0</cn>
+            <ci>dimless_MgATP</ci>
+         </apply> 
+        </apply>
+      </apply>
+</math>
+
+
+<!-- now the reverse recation rates: calculate minus_alpha1 -->
+
+      
+
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="minus_alpha1_calc">
+        <eq/>
+        <ci>minus_alpha1</ci>
+         <apply>
+          <times/>
+          <ci>minus_k1</ci>
+          <ci>cMgADP</ci>
+         </apply>
+      </apply>
+</math>
+
+
+
+
+<!-- calculate minus_alpha2 -->
+
+      
+
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="minus_alpha2_calc">
+        <eq/>
+        <ci>minus_alpha2</ci>
+       
+        <apply>
+          <divide/>
+         <apply>
+            <times/>
+          <ci>minus_k2</ci>
+	  <apply>
+              <power/>
+           <ci>dimless_Na_e</ci>
+           <cn cellml:units="dimensionless">3</cn>
+          </apply>
+         </apply>
+
+         <apply>
+            <minus/>
+          <apply>
+              <plus/>
+	   <apply>
+                <power/>
+            <apply>
+                  <plus/>
+             <cn cellml:units="dimensionless">1.0</cn>
+             <ci>dimless_Na_e</ci>
+            </apply> 
+             <cn cellml:units="dimensionless">3</cn>
+           </apply>
+           <apply>
+                <power/>
+            <apply>
+                  <plus/>
+             <cn cellml:units="dimensionless">1.0</cn>
+             <ci>dimless_K_e</ci>
+            </apply> 
+             <cn cellml:units="dimensionless">2</cn>
+           </apply> 
+          </apply>
+           <cn cellml:units="dimensionless">1.0</cn>
+         </apply>
+        </apply>
+      </apply>
+</math>
+
+
+<!-- calculate minus_alpha3 -->
+
+      
+    
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="minus_alpha3_calc">
+        <eq/>
+        <ci>minus_alpha3</ci>
+        <apply>
+          <divide/>
+         <apply>
+            <times/>
+          <ci>minus_k3</ci>
+           <ci>cPi</ci>
+           <ci>cH</ci>
+         </apply>
+
+         <apply>
+            <plus/>
+            <cn cellml:units="dimensionless">1.0</cn>
+            <ci>dimless_MgATP</ci>
+         </apply> 
+        </apply>
+      </apply>
+</math>
+
+
+<!-- calculate minus_alpha4 -->
+
+      
+    
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="minus_alpha4_calc">
+        <eq/>
+        <ci>minus_alpha4</ci>
+       
+        <apply>
+          <divide/>
+         <apply>
+            <times/>
+          <ci>minus_k4</ci>
+	  <apply>
+              <power/>
+           <ci>dimless_K_i</ci>
+           <cn cellml:units="dimensionless">2</cn>
+          </apply>
+         </apply>
+
+         <apply>
+            <minus/>        
+          <apply>
+              <plus/>
+	   <apply>
+                <power/>
+            <apply>
+                  <plus/>
+             <cn cellml:units="dimensionless">1.0</cn>
+             <ci>dimless_Na_i</ci>
+            </apply> 
+             <cn cellml:units="dimensionless">3</cn>
+           </apply>
+           <apply>
+                <power/>
+            <apply>
+                  <plus/>
+             <cn cellml:units="dimensionless">1.0</cn>
+             <ci>dimless_K_i</ci>
+            </apply> 
+             <cn cellml:units="dimensionless">2</cn>
+           </apply>
+          </apply>
+           <cn cellml:units="dimensionless">1.0</cn>
+         </apply>
+        </apply>
+
+      </apply>
+</math>
+
+
+  <!-- now we can calculate the denominator of the clockwise cycle rate v_cyc which is the sum of 16 product terms composed of permutations of alpha rates. The diagram_sum is derived from the diagram method, see paper YD Chen 'Diagram Methods for Evaluating Exchange Fluxes', Biophys Chem (1990), 35, 55-63 -->
+
+      
+
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="diagram_sum">
+        <eq/>
+        <ci>diagram_sum</ci>
+
+       <apply>
+          <plus/>
+        <apply>
+            <times/>
+         <ci>minus_alpha3</ci>
+         <ci>minus_alpha2</ci>
+         <ci>minus_alpha1</ci>
+        </apply>
+        <apply>
+            <times/>
+         <ci>alpha4</ci>
+         <ci>minus_alpha2</ci>
+         <ci>minus_alpha1</ci>
+        </apply>
+        <apply>
+            <times/>
+         <ci>alpha4</ci>
+         <ci>alpha2</ci>
+         <ci>alpha3</ci>
+        </apply>
+        <apply>
+            <times/>
+         <ci>alpha4</ci>
+         <ci>minus_alpha1</ci>
+         <ci>alpha3</ci>
+        </apply>
+
+         <apply>
+            <times/>
+          <ci>minus_alpha3</ci>
+          <ci>minus_alpha2</ci>
+          <ci>alpha1</ci>
+         </apply>
+         <apply>
+            <times/>
+          <ci>alpha4</ci>
+          <ci>minus_alpha2</ci>
+          <ci>alpha1</ci>
+         </apply>
+         <apply>
+            <times/>
+          <ci>alpha4</ci>
+          <ci>alpha1</ci>
+          <ci>alpha3</ci>
+         </apply>
+	 <apply>
+            <times/>
+          <ci>minus_alpha3</ci>
+          <ci>alpha1</ci>
+          <ci>alpha2</ci>
+         </apply>
+
+         <apply>
+            <times/>
+          <ci>alpha4</ci>
+          <ci>alpha1</ci>
+          <ci>alpha2</ci>
+         </apply>
+         <apply>
+            <times/>
+          <ci>alpha1</ci>
+          <ci>alpha2</ci>
+          <ci>alpha3</ci>
+         </apply>
+         <apply>
+            <times/>
+          <ci>minus_alpha4</ci>
+          <ci>minus_alpha3</ci>
+          <ci>minus_alpha1</ci>
+         </apply>
+	 <apply>
+            <times/>
+          <ci>minus_alpha4</ci>
+          <ci>minus_alpha3</ci>
+          <ci>alpha2</ci>
+         </apply>
+
+         <apply>
+            <times/>
+          <ci>minus_alpha4</ci>
+          <ci>minus_alpha3</ci>
+          <ci>minus_alpha2</ci>
+         </apply>
+         <apply>
+            <times/>
+          <ci>minus_alpha4</ci>
+          <ci>minus_alpha1</ci>
+          <ci>minus_alpha2</ci>
+         </apply>
+         <apply>
+            <times/>
+          <ci>minus_alpha4</ci>
+          <ci>alpha2</ci>
+          <ci>alpha3</ci>
+         </apply>
+	 <apply>
+            <times/>
+          <ci>minus_alpha4</ci>
+          <ci>minus_alpha1</ci>
+          <ci>alpha3</ci>
+         </apply>
+        
+       </apply>
+      </apply>
+</math>
+
+
+<!-- calculate clockwise cycle rate v_cyc-->
+
+      
+    
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="v_cyc_calc">
+        <eq/>
+        <ci>v_cyc</ci>
+       
+        <apply>
+          <divide/>
+         <apply>
+            <minus/>
+          <apply>
+              <times/>
+           <ci>alpha1</ci>
+	   <ci>alpha2</ci>
+           <ci>alpha3</ci>
+	   <ci>alpha4</ci>
+          </apply>
+          <apply>
+              <times/>
+           <ci>minus_alpha1</ci>
+	   <ci>minus_alpha2</ci>
+           <ci>minus_alpha3</ci>
+	   <ci>minus_alpha4</ci>
+          </apply>
+         </apply>
+         <ci>diagram_sum</ci>
+        </apply>
+
+      </apply>
+</math>
+
+  
+</component>
+  <!--EO NaK_pump-->
+
+<!--Connections and relationships between components-->
+
+<connection>
+    <map_components component_2="NaK_pump" component_1="interface"/>
+    <map_variables variable_2="Vm" variable_1="Vm"/>
+    <map_variables variable_2="cNa_i" variable_1="cNa_i"/>
+    <map_variables variable_2="v_cyc" variable_1="v_cyc"/>
+    <map_variables variable_2="net_free_energy" variable_1="net_free_energy"/>
+    <map_variables variable_2="cMgADP" variable_1="cMgADP"/>
+</connection>
+  
+<group>
+    <relationship_ref relationship="encapsulation"/>
+    <component_ref component="interface">
+      <component_ref component="NaK_pump"/>
+    </component_ref>
+</group>
+
+
+
+<rdf:RDF>
+  <rdf:Bag rdf:about="rdf:#b6c23be5-05a3-4e34-b31f-d00db0737132">
+    <rdf:li>active transport</rdf:li>
+    <rdf:li>cardiac myocyte</rdf:li>
+    <rdf:li>electrophysiology</rdf:li>
+    <rdf:li>cardiac</rdf:li>
+    <rdf:li>na/k pump</rdf:li>
+  </rdf:Bag>
+  <rdf:Seq rdf:about="rdf:#b182e5c9-9979-410b-9142-51f6d6c5b2b4">
+    <rdf:li rdf:resource="rdf:#98f3e49f-00aa-4fd6-9112-b3236b124303"/>
+    <rdf:li rdf:resource="rdf:#4ccf58bb-7f92-4793-84b4-03efb6e3c6a5"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="#dG_ATP_calc">
+    <cmeta:comment rdf:resource="rdf:#07acefc0-d7da-4103-80e7-5e9b45616ad3"/>
+    <cmeta:comment rdf:resource="rdf:#7eda74c9-eee6-4811-90f5-a8551c930b04"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7eda74c9-eee6-4811-90f5-a8551c930b04">
+    <rdf:value>
+            Calculation the energy released by ATP hydrolysis.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9a0073c8-2718-41c3-991a-5f3bb96b7e15">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>a.boit@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f6f58a55-01db-45ff-9a37-b8fc810b4e5d">
+    <rdf:value>
+            Calculation of the Na contribution to dG_pump.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8f94dcfc-58fb-4b79-bfe5-545db58f0d46">
+    <rdf:value>
+            Calculation of the reverse transition rate called minus_alpha2 from the 3rd to the second state.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0c4e2915-1b40-49a5-af44-8642b560477c">
+    <rdf:value>
+            Calculation of the dimless_K_i parameter.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="#diagram_sum">
+    <cmeta:comment rdf:resource="rdf:#90b178ef-1b8b-49fb-a484-273533033e62"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a9d5a14c-a97d-456c-b0d8-8b76c7c3e19d">
+    <rdf:value>
+            Calculation of the foward transition rate called alpha3 from the third to the fourth state.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#bb0e207c-146d-4039-9f7c-d06ad25bd9c6">
+    <vCard:ORG rdf:resource="rdf:#bcf6b23d-9335-449b-83be-c2e0c4ac4d75"/>
+    <vCard:EMAIL rdf:resource="rdf:#9a0073c8-2718-41c3-991a-5f3bb96b7e15"/>
+    <vCard:N rdf:resource="rdf:#6ba26935-1582-4d2c-8d63-b5fe38631905"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#da7ec15b-087d-4b57-a579-bff0adc67588">
+    <dc:creator rdf:resource="rdf:#21f8e3dd-bbab-4ff0-80b1-901122c5788a"/>
+    <rdf:value>This is the CellML description of N. P. Smith' and E. Crampin's 2004&#13;
+          mathematical model of the cardiac sodium-potassium pump.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#21f8e3dd-bbab-4ff0-80b1-901122c5788a">
+    <vCard:FN>Alice Boit</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#5d649588-1214-4bf4-ae80-ecee3fae16ad">
+    <rdf:value>
+            Calculation of the reverse transition rate called minus_alpha1 from the second to the first state.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#06ec35f5-3dfe-4cf9-ba33-52ebeda01fe2">
+    <rdf:value>
+            Calculation of the dimless_K_e parameter.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#6ba26935-1582-4d2c-8d63-b5fe38631905">
+    <vCard:Given>Alice</vCard:Given>
+    <vCard:Family>Boit</vCard:Family>
+    <vCard:Other/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#90b178ef-1b8b-49fb-a484-273533033e62">
+    <rdf:value>
+            Calculation of the diagram sum used in the denominator of the equation of cycle rate v_cyc.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#aa877685-c275-475e-a620-83e870461e32">
+    <rdf:value>
+            Calculation of the clockwise cycle rate v_cyc.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="#dimless_Na_i">
+    <cmeta:comment rdf:resource="rdf:#fe1d39b5-c55d-4626-aef5-1d4ef879cd42"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#07acefc0-d7da-4103-80e7-5e9b45616ad3">
+    <rdf:value>
+            Calculation the net free energy of the cycle.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#12528523-5983-4b5e-93f6-279a4ff091f0">
+    <dc:title>Progress in Biophysics &amp; Molecular Biology</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#decab482-727d-4572-b04c-40302d5a17c6">
+    <dcterms:W3CDTF>2004</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#92ebf8ec-5316-4957-9904-1e14495c7df0">
+    <rdf:value>
+            Calculation of the concentration of free inorganic phosphate cPi
+related to the total measurable concentration given by cPi_sum.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:publisher>The University of Auckland, Auckland Bioengineering Institute</dc:publisher>
+    <cmeta:comment rdf:resource="rdf:#59a55738-0e3b-48a0-9a7e-572dc6ab43fe"/>
+    <dcterms:created rdf:resource="rdf:#93a24e90-c784-407e-8e0a-56b5e3ab32a5"/>
+    <dc:creator rdf:resource="rdf:#bb0e207c-146d-4039-9f7c-d06ad25bd9c6"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#dimless_Na_e">
+    <cmeta:comment rdf:resource="rdf:#b63ff27d-53e4-402b-9e2e-264803036dc8"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#dG_K_calc_eq">
+    <cmeta:comment rdf:resource="rdf:#436c5416-0a14-41b1-b7bb-c1fc3ed3ccac"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9b67e2cc-d816-4358-9f48-291b504c8afb">
+    <rdf:value>
+            Calculation of the foward transition rate called alpha1 from the first to the second lumped state.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#53e59201-e39b-4906-b3ac-6ef2d4277a0d">
+    <dc:subject rdf:resource="rdf:#98bc0d3c-d6c3-4da2-ab38-3e3ffac938e4"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7c073ba1-627f-4f0d-b8cc-f1959eee1dbd">
+    <rdf:value>
+            The Na/K-pump is an energy-consuming transporter channel within the membrane.
+            It is indispensible for maintaining the electrochemical gradients of the involved ions 
+            across the membrane which result in resting Vm. The pump splits up one ATP molecule as it undergoes a 
+            conformational change transporting 3Na outwards and 2K inwards in each cycle.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="#alpha1">
+    <cmeta:comment rdf:resource="rdf:#9b67e2cc-d816-4358-9f48-291b504c8afb"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#alpha2">
+    <cmeta:comment rdf:resource="rdf:#8e9e9a79-54ca-4a22-89bb-31588b852e8c"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#alpha3">
+    <cmeta:comment rdf:resource="rdf:#a9d5a14c-a97d-456c-b0d8-8b76c7c3e19d"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#alpha4">
+    <cmeta:comment rdf:resource="rdf:#b63db052-a29a-4645-ae22-6c7a8d394691"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#fdb8d672-10b8-4fba-b93b-af2bf9c89e11">
+    <rdf:value>
+            Calculation of the dimless_MgATP parameter.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="#dimless_MgATP">
+    <cmeta:comment rdf:resource="rdf:#fdb8d672-10b8-4fba-b93b-af2bf9c89e11"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1359ec4c-5e0b-40c4-b30e-4c5e6895cd5e">
+    <vCard:Given>E</vCard:Given>
+    <vCard:Family>Crampin</vCard:Family>
+    <vCard:Other>J</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="#smith_2004">
+    <dc:title>
+        N. P. Smith' and E. Crampin's 2004 mathematical model of the cardiac sodium-potassium pump.
+      </dc:title>
+    <cmeta:bio_entity>Cardiac Myocyte</cmeta:bio_entity>
+    <cmeta:comment rdf:resource="rdf:#da7ec15b-087d-4b57-a579-bff0adc67588"/>
+    <bqs:reference rdf:resource="rdf:#378e8f91-8f18-4deb-a171-8252e74c529a"/>
+    <bqs:reference rdf:resource="rdf:#53e59201-e39b-4906-b3ac-6ef2d4277a0d"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#59a55738-0e3b-48a0-9a7e-572dc6ab43fe">
+    <dc:creator rdf:resource="rdf:#6496b573-b950-4d87-9d53-de4874253a31"/>
+    <rdf:value/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#98bc0d3c-d6c3-4da2-ab38-3e3ffac938e4">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value rdf:resource="rdf:#b6c23be5-05a3-4e34-b31f-d00db0737132"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#NaK_pump">
+    <cmeta:comment rdf:resource="rdf:#7c073ba1-627f-4f0d-b8cc-f1959eee1dbd"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#6496b573-b950-4d87-9d53-de4874253a31">
+    <vCard:FN/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#cPi">
+    <cmeta:comment rdf:resource="rdf:#92ebf8ec-5316-4957-9904-1e14495c7df0"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8e9e9a79-54ca-4a22-89bb-31588b852e8c">
+    <rdf:value>
+            Calculation of the foward transition rate called alpha2 from the second to the third state.
+Note that this transition rate is identical to k2 because state P7 (see paper) is not a lumped state.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b63ff27d-53e4-402b-9e2e-264803036dc8">
+    <rdf:value>
+            Calculation of the dimless_Na_e parameter which is a 
+	    function of Vm because the equilibrium constant is
+            dependent on Vm (which occurs in the denominator's exponential). Note that the partition of the 
+            voltage dependency in the exponential corresponds to the previous calculation of dimless_Na_i.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#fe1d39b5-c55d-4626-aef5-1d4ef879cd42">
+    <rdf:value>
+            Calculation of the dimless_Na_i parameter which is a function of Vm because the equilibrium constant is
+            dependent on Vm (which occurs in the denominator's exponential).
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#98f3e49f-00aa-4fd6-9112-b3236b124303">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#3360fe81-1f36-4dd7-beaf-ea692b63ce5a"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#436c5416-0a14-41b1-b7bb-c1fc3ed3ccac">
+    <rdf:value>
+            Calculation of the K contribution to dG_pump.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="#minus_alpha1">
+    <cmeta:comment rdf:resource="rdf:#5d649588-1214-4bf4-ae80-ecee3fae16ad"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#cfa804d8-c886-480a-8416-ebfa2dfeae86">
+    <rdf:value>
+            Calculation of dG_pump.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="#minus_alpha3">
+    <cmeta:comment rdf:resource="rdf:#df417b59-a805-4786-8a85-33da54677f6b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#minus_alpha2">
+    <cmeta:comment rdf:resource="rdf:#8f94dcfc-58fb-4b79-bfe5-545db58f0d46"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b5a46cc0-fa43-429a-ad0e-7fc775c1802a">
+    <dc:creator rdf:resource="rdf:#b182e5c9-9979-410b-9142-51f6d6c5b2b4"/>
+    <dc:title>Development of models of active ion transport for whole-cell modelling: cardiac sodium-potassium pump as a case study</dc:title>
+    <bqs:volume>85(2-3)</bqs:volume>
+    <bqs:first_page>387</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#12528523-5983-4b5e-93f6-279a4ff091f0"/>
+    <dcterms:issued rdf:resource="rdf:#decab482-727d-4572-b04c-40302d5a17c6"/>
+    <bqs:last_page>405</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="#minus_alpha4">
+    <cmeta:comment rdf:resource="rdf:#e111190b-c9ab-4532-a37b-602af3eca18b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#dimless_K_i">
+    <cmeta:comment rdf:resource="rdf:#0c4e2915-1b40-49a5-af44-8642b560477c"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#dG_Na_calc_eq">
+    <cmeta:comment rdf:resource="rdf:#f6f58a55-01db-45ff-9a37-b8fc810b4e5d"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#bcf6b23d-9335-449b-83be-c2e0c4ac4d75">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#df417b59-a805-4786-8a85-33da54677f6b">
+    <rdf:value>
+            Calculation of the reverse transition rate called minus_alpha3 from the fourth to the 3rd state.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#378e8f91-8f18-4deb-a171-8252e74c529a">
+    <bqs:Pubmed_id>15142754</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#b5a46cc0-fa43-429a-ad0e-7fc775c1802a"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#dG_pump_calc_eq">
+    <cmeta:comment rdf:resource="rdf:#cfa804d8-c886-480a-8416-ebfa2dfeae86"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#dimless_K_e">
+    <cmeta:comment rdf:resource="rdf:#06ec35f5-3dfe-4cf9-ba33-52ebeda01fe2"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b63db052-a29a-4645-ae22-6c7a8d394691">
+    <rdf:value>
+            Calculation of the foward transition rate called alpha4 from the fourth to the first state.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#93a24e90-c784-407e-8e0a-56b5e3ab32a5">
+    <dcterms:W3CDTF>2004-04-26T00:00:00+00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3360fe81-1f36-4dd7-beaf-ea692b63ce5a">
+    <vCard:Given>N</vCard:Given>
+    <vCard:Family>Smith</vCard:Family>
+    <vCard:Other>P</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4ccf58bb-7f92-4793-84b4-03efb6e3c6a5">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#1359ec4c-5e0b-40c4-b30e-4c5e6895cd5e"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e111190b-c9ab-4532-a37b-602af3eca18b">
+    <rdf:value>
+            Calculation of the reverse transition rate called minus_alpha4 from the first to the fourth lumped state.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="#v_cyc">
+    <cmeta:comment rdf:resource="rdf:#aa877685-c275-475e-a620-83e870461e32"/>
+  </rdf:Description>
+</rdf:RDF>
+</model>

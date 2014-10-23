@@ -1,0 +1,2211 @@
+<?xml version="1.0"?>
+<!--
+This CellML file was generated on 20/06/2007 at 12:39:18 at a.m. using:
+
+COR (0.9.31.649)
+Copyright 2002-2007 Dr Alan Garny
+http://COR.physiol.ox.ac.uk/ - COR@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this cellular model
+http://www.CellML.org/
+-->
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" cmeta:id="bhalla_model_1999" name="hatakeyama_model_2003">
+
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>A computational model on the modulation of mitogen-activated protein kinase (MAPK) and Akt pathways in heregulin-induced ErbB signalling</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+        This version of the model has been checked in COR and OpenCell and it runs to replicate the published results.  The units have been checked and they are consistent.
+    </para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+ABSTRACT: ErbB tyrosine kinase receptors mediate mitogenic signal cascade by binding a variety of ligands and recruiting the different cassettes of adaptor proteins. In the present study, we examined heregulin (HRG)-induced signal transduction of ErbB4 receptor and found that the phosphatidylinositol 3'-kinase (PI3K)-Akt pathway negatively regulated the extracellular signal-regulated kinase (ERK) cascade by phosphorylating Raf-1 on Ser(259). As the time-course kinetics of Akt and ERK activities seemed to be transient and complex, we constructed a mathematical simulation model for HRG-induced ErbB4 receptor signalling to explain the dynamics of the regulation mechanism in this signal transduction cascade. The model reflected well the experimental results observed in HRG-induced ErbB4 cells and in other modes of growth hormone-induced cell signalling that involve Raf-Akt cross-talk. The model suggested that HRG signalling is regulated by protein phosphatase 2A as well as Raf-Akt cross-talk, and protein phosphatase 2A modulates the kinase activity in both the PI3K-Akt and MAPK (mitogen-activated protein kinase) pathways.
+</para>
+
+<para>
+The original paper reference is cited below:
+</para>
+
+<para>
+A computational model on the modulation of mitogen-activated protein kinase (MAPK) and Akt pathways in heregulin-induced ErbB signalling, Mariko Hatakeyama, Shuhei Kimura, Takashi Naka, Takuji Kawasaki, Noriko Yumoto, Mio Ichikawa, Jae-Hoon Kim, Kazuki Saito, Mihoro Saeki, Mikako Shirouzu, Shigeyuki Yokoyama, and Akihiko Konagaya, 2003, <emphasis>The Biochemical Journal</emphasis>, 373, 451-463. <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/12691603">PubMed ID: 12691603</ulink> 
+</para>
+
+
+<informalfigure float="0" id="fig_pathway_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>model diagram</title>
+    </objectinfo>
+    <imagedata fileref="hatakeyama_networkdiagram_scaled_2003.png"/>
+  </imageobject>
+</mediaobject>
+<caption>A schematic diagram of the complete signalling network.</caption>
+</informalfigure>
+
+</sect1>
+</article>
+</documentation>
+
+
+
+
+   <units name="s">
+      <unit units="second"/>
+   </units>
+   <units name="nm">
+      <unit prefix="nano" units="mole"/>
+	  <unit exponent="-1" units="litre"/>
+   </units>
+   <units name="flux">
+      <unit units="nm"/>
+      <unit exponent="-1" units="s"/>
+   </units>
+   <units name="second_order_rate_constant">
+      <unit exponent="-1" units="nm"/>
+      <unit exponent="-1" units="s"/>
+   </units>
+   <units name="first_order_rate_constant">
+      <unit exponent="-1" units="s"/>
+   </units>
+   
+   <component name="environment">
+      <variable cmeta:id="environment_time" name="time" public_interface="out" units="s"/>
+   </component>
+   
+   <component name="PI3K">
+      <variable name="time" public_interface="in" units="s"/>
+      <variable initial_value="0.0012" name="kf1" units="second_order_rate_constant"/>
+      <variable initial_value="0.00076" name="kb1" units="first_order_rate_constant"/>
+      <variable initial_value="0.01" name="kf2" units="second_order_rate_constant"/>
+      <variable initial_value="0.1" name="kb2" units="first_order_rate_constant"/>
+      <variable initial_value="1" name="kf3" units="first_order_rate_constant"/>
+      <variable initial_value="0.01" name="kb3" units="first_order_rate_constant"/>
+      <variable initial_value="0.001" name="kf34" units="first_order_rate_constant"/>
+      <variable initial_value="0" name="kb34" units="first_order_rate_constant"/>
+      <variable initial_value="62.5" name="V4" units="flux"/>
+      <variable initial_value="50" name="k4" units="nm"/>
+      <variable initial_value="0.1" name="kf5" units="second_order_rate_constant"/>
+      <variable initial_value="1" name="kb5" units="first_order_rate_constant"/>
+      <variable initial_value="20" name="kf6" units="first_order_rate_constant"/>
+      <variable initial_value="5" name="kb6" units="first_order_rate_constant"/>
+      <variable initial_value="60" name="kf7" units="first_order_rate_constant"/>
+      <variable initial_value="546" name="kb7" units="first_order_rate_constant"/>
+      <variable initial_value="2040" name="kf8" units="first_order_rate_constant"/>
+      <variable initial_value="15700" name="kb8" units="second_order_rate_constant"/>
+      <variable initial_value="40.8" name="kf9" units="first_order_rate_constant"/>
+      <variable initial_value="0" name="kb9" units="second_order_rate_constant"/>
+      <variable initial_value="0.0154" name="V10" units="flux"/>
+      <variable initial_value="340" name="k10" units="nm"/>
+      <variable initial_value="0.1" name="kf23" units="second_order_rate_constant"/>
+      <variable initial_value="2" name="kb23" units="first_order_rate_constant"/>
+      <variable initial_value="9.85" name="kf24" units="first_order_rate_constant"/>
+      <variable initial_value="0.0985" name="kb24" units="first_order_rate_constant"/>
+      <variable initial_value="45.8" name="kf25" units="first_order_rate_constant"/>
+      <variable initial_value="0.047" name="kb25" units="second_order_rate_constant"/>
+      <variable initial_value="2620" name="V26" units="flux"/>
+      <variable initial_value="3680" name="k26" units="nm"/>
+      <variable cmeta:id="PI3K_R" initial_value="80" name="R" units="nm"/>
+      <variable initial_value="1000" name="Shc" units="nm"/>
+      <variable cmeta:id="PI3K_PI3K" initial_value="10" name="PI3K" units="nm"/>
+      <variable cmeta:id="PI3K_HRG" initial_value="10" name="HRG" units="nm"/>
+      <variable cmeta:id="PI3K_R_HRG" initial_value="0" name="R_HRG" units="nm"/>
+      <variable initial_value="0" name="R_HRG2" units="nm"/>
+      <variable initial_value="0" name="Internalisation" units="nm"/>
+      <variable cmeta:id="PI3K_RP" initial_value="0" name="RP" units="nm"/>
+      <variable cmeta:id="PI3K_R_Shc" initial_value="0" name="R_Shc" units="nm"/>
+      <variable cmeta:id="PI3K_R_ShP" initial_value="0" name="R_ShP" units="nm"/>
+      <variable cmeta:id="PI3K_ShP" initial_value="0" name="ShP" units="nm"/>
+      <variable cmeta:id="PI3K_R_ShGS" initial_value="0" name="R_ShGS" units="nm"/>
+      <variable cmeta:id="PI3K_ShGS" initial_value="0" name="ShGS" public_interface="out" units="nm"/>
+      <variable cmeta:id="PI3K_GS" initial_value="10" name="GS" units="nm"/>
+      <variable cmeta:id="PI3K_R_PI3K" initial_value="0" name="R_PI3K" units="nm"/>
+      <variable cmeta:id="PI3K_R_PI3Kstar" initial_value="0" name="R_PI3Kstar" units="nm"/>
+      <variable initial_value="0" name="PI3Kstar" public_interface="out" units="nm"/>
+      <variable initial_value="2" name="two" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>R</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <apply>
+                     <minus/>
+                     <ci>kf1</ci>
+                  </apply>
+                  <ci>R</ci>
+                  <ci>HRG</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>kb1</ci>
+                  <ci>R_HRG</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>HRG</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <times/>
+                  <apply>
+                     <minus/>
+                     <ci>kf1</ci>
+                  </apply>
+                  <ci>R</ci>
+                  <ci>HRG</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>kb1</ci>
+                  <ci>R_HRG</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>R_HRG</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>kf1</ci>
+                     <ci>R</ci>
+                     <ci>HRG</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>kb1</ci>
+                     <ci>R_HRG</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>two</ci>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <times/>
+                        <ci>kf2</ci>
+                        <ci>R_HRG</ci>
+                        <ci>R_HRG</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>kb2</ci>
+                        <ci>R_HRG2</ci>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>R_HRG2</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <times/>
+                        <ci>kf2</ci>
+                        <ci>R_HRG</ci>
+                        <ci>R_HRG</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>kb2</ci>
+                        <ci>R_HRG2</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <times/>
+                        <ci>kf3</ci>
+                        <ci>R_HRG2</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>kb3</ci>
+                        <ci>RP</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>V4</ci>
+                     <ci>RP</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>k4</ci>
+                     <ci>RP</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>RP</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <minus/>
+                           <apply>
+                              <minus/>
+                              <apply>
+                                 <minus/>
+                                 <apply>
+                                    <times/>
+                                    <ci>kf3</ci>
+                                    <ci>R_HRG2</ci>
+                                 </apply>
+                                 <apply>
+                                    <times/>
+                                    <ci>kb3</ci>
+                                    <ci>RP</ci>
+                                 </apply>
+                              </apply>
+                              <apply>
+                                 <divide/>
+                                 <apply>
+                                    <times/>
+                                    <ci>V4</ci>
+                                    <ci>RP</ci>
+                                 </apply>
+                                 <apply>
+                                    <plus/>
+                                    <ci>k4</ci>
+                                    <ci>RP</ci>
+                                 </apply>
+                              </apply>
+                           </apply>
+                           <apply>
+                              <minus/>
+                              <apply>
+                                 <times/>
+                                 <ci>kf5</ci>
+                                 <ci>RP</ci>
+                                 <ci>Shc</ci>
+                              </apply>
+                              <apply>
+                                 <times/>
+                                 <ci>kb5</ci>
+                                 <ci>R_Shc</ci>
+                              </apply>
+                           </apply>
+                        </apply>
+                        <apply>
+                           <minus/>
+                           <apply>
+                              <times/>
+                              <ci>kf8</ci>
+                              <ci>R_ShP</ci>
+                           </apply>
+                           <apply>
+                              <times/>
+                              <ci>kb8</ci>
+                              <ci>ShGS</ci>
+                              <ci>RP</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <times/>
+                           <ci>kf23</ci>
+                           <ci>RP</ci>
+                           <ci>PI3K</ci>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>kb23</ci>
+                           <ci>R_PI3K</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <times/>
+                        <ci>kf25</ci>
+                        <ci>R_PI3Kstar</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>kb25</ci>
+                        <ci>RP</ci>
+                        <ci>PI3Kstar</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>kf34</ci>
+                     <ci>RP</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>kb34</ci>
+                     <ci>Internalisation</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Internalisation</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>kf34</ci>
+                  <ci>RP</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>kb34</ci>
+                  <ci>Internalisation</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>R_Shc</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>kf5</ci>
+                     <ci>RP</ci>
+                     <ci>Shc</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>kb5</ci>
+                     <ci>R_Shc</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>kf6</ci>
+                     <ci>R_Shc</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>kb6</ci>
+                     <ci>R_ShP</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Shc</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <times/>
+                        <ci>kf5</ci>
+                        <ci>RP</ci>
+                        <ci>Shc</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>kb5</ci>
+                        <ci>R_Shc</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>V10</ci>
+                     <ci>ShP</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>k10</ci>
+                     <ci>ShP</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>R_ShP</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>kf6</ci>
+                     <ci>R_Shc</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>kb6</ci>
+                     <ci>R_ShP</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>kf7</ci>
+                     <ci>R_ShP</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>kb7</ci>
+                     <ci>R_ShGS</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>GS</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <times/>
+                        <ci>kf7</ci>
+                        <ci>R_ShP</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>kb7</ci>
+                        <ci>R_ShGS</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>kf9</ci>
+                     <ci>ShGS</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>kb9</ci>
+                     <ci>GS</ci>
+                     <ci>ShP</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>ShP</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>kf9</ci>
+                     <ci>ShGS</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>kb9</ci>
+                     <ci>GS</ci>
+                     <ci>ShP</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>V10</ci>
+                     <ci>ShP</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>k10</ci>
+                     <ci>ShP</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>R_ShGS</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>kf7</ci>
+                     <ci>R_ShP</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>kb7</ci>
+                     <ci>R_ShGS</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>kf8</ci>
+                     <ci>R_ShP</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>kb8</ci>
+                     <ci>ShGS</ci>
+                     <ci>RP</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>ShGS</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>kf8</ci>
+                     <ci>R_ShP</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>kb8</ci>
+                     <ci>ShGS</ci>
+                     <ci>RP</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>kf9</ci>
+                     <ci>ShGS</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>kb9</ci>
+                     <ci>GS</ci>
+                     <ci>ShP</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>R_PI3K</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>kf23</ci>
+                     <ci>RP</ci>
+                     <ci>PI3K</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>kb23</ci>
+                     <ci>R_PI3K</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>kf24</ci>
+                     <ci>R_PI3K</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>kb24</ci>
+                     <ci>R_PI3Kstar</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>PI3K</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <times/>
+                        <ci>kf23</ci>
+                        <ci>RP</ci>
+                        <ci>PI3K</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>kb23</ci>
+                        <ci>R_PI3K</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>V26</ci>
+                     <ci>PI3Kstar</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>k26</ci>
+                     <ci>PI3Kstar</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>R_PI3Kstar</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>kf24</ci>
+                     <ci>R_PI3K</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>kb24</ci>
+                     <ci>R_PI3Kstar</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>kf25</ci>
+                     <ci>R_PI3Kstar</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>kb25</ci>
+                     <ci>RP</ci>
+                     <ci>PI3Kstar</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>PI3Kstar</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>kf25</ci>
+                     <ci>R_PI3Kstar</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>kb25</ci>
+                     <ci>RP</ci>
+                     <ci>PI3Kstar</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>V26</ci>
+                     <ci>PI3Kstar</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>k26</ci>
+                     <ci>PI3Kstar</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="RasGDPtoRasGTP">
+      <variable name="time" public_interface="in" units="s"/>
+      <variable name="ShGS" public_interface="in" units="nm"/>
+      <variable cmeta:id="RasGDPtoRasGTP_RasGTP" initial_value="0" name="RasGTP" public_interface="out" units="nm"/>
+      <variable initial_value="0.222" name="kf11" units="first_order_rate_constant"/>
+      <variable initial_value="0.181" name="k11" units="nm"/>
+      <variable initial_value="0.289" name="V12" units="flux"/>
+      <variable initial_value="0.0571" name="k12" units="nm"/>
+      <variable cmeta:id="RasGDPtoRasGTP_RasGDP" initial_value="120" name="RasGDP" units="nm"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>RasGDP</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>kf11</ci>
+                        <ci>ShGS</ci>
+                        <ci>RasGDP</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci>k11</ci>
+                        <ci>RasGDP</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>V12</ci>
+                     <ci>RasGTP</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>k12</ci>
+                     <ci>RasGTP</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>RasGTP</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>kf11</ci>
+                     <ci>ShGS</ci>
+                     <ci>RasGDP</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>k11</ci>
+                     <ci>RasGDP</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>V12</ci>
+                     <ci>RasGTP</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>k12</ci>
+                     <ci>RasGTP</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="RAF">
+      <variable name="time" public_interface="in" units="s"/>
+      <variable name="RasGTP" public_interface="in" units="nm"/>
+      <variable name="Akt_PIPP" public_interface="in" units="nm"/>
+      <variable cmeta:id="RAF_RAF_star" initial_value="100" name="RAF_star" public_interface="out" units="nm"/>
+      <variable initial_value="1.53" name="kf13" units="first_order_rate_constant"/>
+      <variable initial_value="11.7" name="k13" units="nm"/>
+      <variable initial_value="0.00673" name="kf14" units="first_order_rate_constant"/>
+      <variable initial_value="8.07" name="k14" units="nm"/>
+      <variable initial_value="7" name="E" units="nm"/>
+      <variable cmeta:id="RAF_RAF" initial_value="0" name="RAF" units="nm"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>RAF</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>kf14</ci>
+                     <apply>
+                        <plus/>
+                        <ci>Akt_PIPP</ci>
+                        <ci>E</ci>
+                     </apply>
+                     <ci>RAF_star</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>k14</ci>
+                     <ci>RAF_star</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>kf13</ci>
+                     <ci>RasGTP</ci>
+                     <ci>RAF</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>k13</ci>
+                     <ci>RAF</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>RAF_star</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>kf14</ci>
+                        <apply>
+                           <plus/>
+                           <ci>Akt_PIPP</ci>
+                           <ci>E</ci>
+                        </apply>
+                        <ci>RAF_star</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci>k14</ci>
+                        <ci>RAF_star</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>kf13</ci>
+                     <ci>RasGTP</ci>
+                     <ci>RAF</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>k13</ci>
+                     <ci>RAF</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Akt">
+      <variable name="time" public_interface="in" units="s"/>
+      <variable name="PI3Kstar" public_interface="in" units="nm"/>
+      <variable cmeta:id="Akt_Akt_PIPP" initial_value="0.0" name="Akt_PIPP" public_interface="out" units="nm"/>
+      <variable name="MEKP" public_interface="in" units="nm"/>
+      <variable name="MEKPP" public_interface="in" units="nm"/>
+      <variable initial_value="16.9" name="kf27" units="first_order_rate_constant"/>
+      <variable initial_value="39.1" name="k27" units="nm"/>
+      <variable initial_value="17000" name="V28" units="flux"/>
+      <variable initial_value="9.02" name="k28" units="nm"/>
+      <variable initial_value="507" name="kf29" units="second_order_rate_constant"/>
+      <variable initial_value="234" name="kb29" units="first_order_rate_constant"/>
+      <variable initial_value="20000" name="V30" units="flux"/>
+      <variable initial_value="80000" name="k30" units="nm"/>
+      <variable initial_value="0.107" name="kf31" units="first_order_rate_constant"/>
+      <variable initial_value="4.35" name="k31" units="nm"/>
+      <variable initial_value="20000" name="V32" units="flux"/>
+      <variable initial_value="80000" name="k32" units="nm"/>
+      <variable initial_value="0.211" name="kf33" units="first_order_rate_constant"/>
+      <variable initial_value="12" name="k33" units="nm"/>
+      <variable initial_value="2200" name="k16" units="nm"/>
+      <variable initial_value="60" name="k18" units="nm"/>
+      <variable initial_value="800" name="P" units="nm"/>
+      <variable cmeta:id="Akt_PIP3" initial_value="0" name="PIP3" units="nm"/>
+      <variable cmeta:id="Akt_Akt" initial_value="10" name="Akt" units="nm"/>
+      <variable cmeta:id="Akt_Akt_PIP3" initial_value="0" name="Akt_PIP3" units="nm"/>
+      <variable cmeta:id="Akt_Akt_PIP" initial_value="0" name="Akt_PIP" public_interface="out" units="nm"/>
+      <variable initial_value="11.4" name="PP2A" units="nm"/>
+      <variable initial_value="1" name="one" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>P</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>V28</ci>
+                     <ci>PIP3</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>k28</ci>
+                     <ci>PIP3</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>kf27</ci>
+                     <ci>PI3Kstar</ci>
+                     <ci>P</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>k27</ci>
+                     <ci>P</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>PIP3</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <ci>V28</ci>
+                           <ci>PIP3</ci>
+                        </apply>
+                        <apply>
+                           <plus/>
+                           <ci>k28</ci>
+                           <ci>PIP3</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>kf27</ci>
+                        <ci>PI3Kstar</ci>
+                        <ci>P</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci>k27</ci>
+                        <ci>P</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>kf29</ci>
+                     <ci>PIP3</ci>
+                     <ci>Akt</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>kb29</ci>
+                     <ci>Akt_PIP3</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Akt</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>kf29</ci>
+                     <ci>PIP3</ci>
+                     <ci>Akt</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>kb29</ci>
+                     <ci>Akt_PIP3</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Akt_PIP3</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <times/>
+                        <ci>kf29</ci>
+                        <ci>PIP3</ci>
+                        <ci>Akt</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>kb29</ci>
+                        <ci>Akt_PIP3</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>V30</ci>
+                        <ci>Akt_PIP3</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <times/>
+                           <ci>k30</ci>
+                           <apply>
+                              <plus/>
+                              <ci>one</ci>
+                              <apply>
+                                 <divide/>
+                                 <ci>Akt_PIP</ci>
+                                 <ci>k32</ci>
+                              </apply>
+                           </apply>
+                        </apply>
+                        <ci>Akt_PIP3</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>kf31</ci>
+                     <ci>PP2A</ci>
+                     <ci>Akt_PIP</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>k31</ci>
+                        <apply>
+                           <plus/>
+                           <ci>one</ci>
+                           <apply>
+                              <divide/>
+                              <ci>MEKP</ci>
+                              <ci>k16</ci>
+                           </apply>
+                           <apply>
+                              <divide/>
+                              <ci>MEKPP</ci>
+                              <ci>k18</ci>
+                           </apply>
+                           <apply>
+                              <divide/>
+                              <ci>Akt_PIPP</ci>
+                              <ci>k33</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <ci>Akt_PIP</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Akt_PIP</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <ci>V30</ci>
+                           <ci>Akt_PIP3</ci>
+                        </apply>
+                        <apply>
+                           <plus/>
+                           <apply>
+                              <times/>
+                              <ci>k30</ci>
+                              <apply>
+                                 <plus/>
+                                 <ci>one</ci>
+                                 <apply>
+                                    <divide/>
+                                    <ci>Akt_PIP</ci>
+                                    <ci>k32</ci>
+                                 </apply>
+                              </apply>
+                           </apply>
+                           <ci>Akt_PIP3</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <ci>kf31</ci>
+                           <ci>PP2A</ci>
+                           <ci>Akt_PIP</ci>
+                        </apply>
+                        <apply>
+                           <plus/>
+                           <apply>
+                              <times/>
+                              <ci>k31</ci>
+                              <apply>
+                                 <plus/>
+                                 <ci>one</ci>
+                                 <apply>
+                                    <divide/>
+                                    <ci>MEKP</ci>
+                                    <ci>k16</ci>
+                                 </apply>
+                                 <apply>
+                                    <divide/>
+                                    <ci>MEKPP</ci>
+                                    <ci>k18</ci>
+                                 </apply>
+                                 <apply>
+                                    <divide/>
+                                    <ci>Akt_PIPP</ci>
+                                    <ci>k33</ci>
+                                 </apply>
+                              </apply>
+                           </apply>
+                           <ci>Akt_PIP</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>V32</ci>
+                        <ci>Akt_PIP</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <times/>
+                           <ci>k32</ci>
+                           <apply>
+                              <plus/>
+                              <ci>one</ci>
+                              <apply>
+                                 <divide/>
+                                 <ci>Akt_PIP3</ci>
+                                 <ci>k30</ci>
+                              </apply>
+                           </apply>
+                        </apply>
+                        <ci>Akt_PIP</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>kf33</ci>
+                     <ci>PP2A</ci>
+                     <ci>Akt_PIPP</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>k33</ci>
+                        <apply>
+                           <plus/>
+                           <ci>one</ci>
+                           <apply>
+                              <divide/>
+                              <ci>MEKP</ci>
+                              <ci>k16</ci>
+                           </apply>
+                           <apply>
+                              <divide/>
+                              <ci>MEKPP</ci>
+                              <ci>k18</ci>
+                           </apply>
+                           <apply>
+                              <divide/>
+                              <ci>Akt_PIP</ci>
+                              <ci>k31</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <ci>Akt_PIPP</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Akt_PIPP</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>V32</ci>
+                     <ci>Akt_PIP</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>k32</ci>
+                        <apply>
+                           <plus/>
+                           <ci>one</ci>
+                           <apply>
+                              <divide/>
+                              <ci>Akt_PIP3</ci>
+                              <ci>k30</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <ci>Akt_PIP</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>kf33</ci>
+                     <ci>PP2A</ci>
+                     <ci>Akt_PIPP</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>k33</ci>
+                        <apply>
+                           <plus/>
+                           <ci>one</ci>
+                           <apply>
+                              <divide/>
+                              <ci>MEKP</ci>
+                              <ci>k16</ci>
+                           </apply>
+                           <apply>
+                              <divide/>
+                              <ci>MEKPP</ci>
+                              <ci>k18</ci>
+                           </apply>
+                           <apply>
+                              <divide/>
+                              <ci>Akt_PIP</ci>
+                              <ci>k31</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <ci>Akt_PIPP</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="MEK">
+      <variable name="time" public_interface="in" units="s"/>
+      <variable name="RAF_star" public_interface="in" units="nm"/>
+      <variable cmeta:id="MEK_MEKPP" initial_value="0" name="MEKPP" public_interface="out" units="nm"/>
+      <variable cmeta:id="MEK_PP2A" initial_value="11.4" name="PP2A" units="nm"/>
+      <variable cmeta:id="MEK_MEKP" initial_value="0" name="MEKP" public_interface="out" units="nm"/>
+      <variable cmeta:id="MEK_MEK" initial_value="120" name="MEK" units="nm"/>
+      <variable name="Akt_PIP" public_interface="in" units="nm"/>
+      <variable name="Akt_PIPP" public_interface="in" units="nm"/>
+      <variable initial_value="3.5" name="kf15" units="first_order_rate_constant"/>
+      <variable initial_value="317" name="k15" units="nm"/>
+      <variable initial_value="0.058" name="kf16" units="first_order_rate_constant"/>
+      <variable initial_value="2200" name="k16" units="nm"/>
+      <variable initial_value="2.9" name="kf17" units="first_order_rate_constant"/>
+      <variable initial_value="317" name="k17" units="nm"/>
+      <variable initial_value="0.058" name="kf18" units="first_order_rate_constant"/>
+      <variable initial_value="60" name="k18" units="nm"/>
+      <variable initial_value="4.35" name="k31" units="nm"/>
+      <variable initial_value="12" name="k33" units="nm"/>
+      <variable initial_value="1" name="one" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>MEK</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>kf15</ci>
+                        <ci>RAF_star</ci>
+                        <ci>MEK</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <times/>
+                           <ci>k15</ci>
+                           <apply>
+                              <plus/>
+                              <ci>one</ci>
+                              <apply>
+                                 <divide/>
+                                 <ci>MEKP</ci>
+                                 <ci>k17</ci>
+                              </apply>
+                           </apply>
+                        </apply>
+                        <ci>MEK</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>kf16</ci>
+                     <ci>PP2A</ci>
+                     <ci>MEKP</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>k16</ci>
+                        <apply>
+                           <plus/>
+                           <ci>one</ci>
+                           <apply>
+                              <divide/>
+                              <ci>MEKPP</ci>
+                              <ci>k18</ci>
+                           </apply>
+                           <apply>
+                              <divide/>
+                              <ci>Akt_PIP</ci>
+                              <ci>k31</ci>
+                           </apply>
+                           <apply>
+                              <divide/>
+                              <ci>Akt_PIPP</ci>
+                              <ci>k33</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <ci>MEKP</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>MEKP</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <ci>kf15</ci>
+                           <ci>RAF_star</ci>
+                           <ci>MEK</ci>
+                        </apply>
+                        <apply>
+                           <plus/>
+                           <apply>
+                              <times/>
+                              <ci>k15</ci>
+                              <apply>
+                                 <plus/>
+                                 <ci>one</ci>
+                                 <apply>
+                                    <divide/>
+                                    <ci>MEKP</ci>
+                                    <ci>k17</ci>
+                                 </apply>
+                              </apply>
+                           </apply>
+                           <ci>MEK</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <ci>kf16</ci>
+                           <ci>PP2A</ci>
+                           <ci>MEKP</ci>
+                        </apply>
+                        <apply>
+                           <plus/>
+                           <apply>
+                              <times/>
+                              <ci>k16</ci>
+                              <apply>
+                                 <plus/>
+                                 <ci>one</ci>
+                                 <apply>
+                                    <divide/>
+                                    <ci>MEKPP</ci>
+                                    <ci>k18</ci>
+                                 </apply>
+                                 <apply>
+                                    <divide/>
+                                    <ci>Akt_PIP</ci>
+                                    <ci>k31</ci>
+                                 </apply>
+                                 <apply>
+                                    <divide/>
+                                    <ci>Akt_PIPP</ci>
+                                    <ci>k33</ci>
+                                 </apply>
+                              </apply>
+                           </apply>
+                           <ci>MEKP</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>kf17</ci>
+                        <ci>RAF_star</ci>
+                        <ci>MEKP</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <times/>
+                           <ci>k17</ci>
+                           <apply>
+                              <plus/>
+                              <ci>one</ci>
+                              <apply>
+                                 <divide/>
+                                 <ci>MEK</ci>
+                                 <ci>k15</ci>
+                              </apply>
+                           </apply>
+                        </apply>
+                        <ci>MEKP</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>kf18</ci>
+                     <ci>PP2A</ci>
+                     <ci>MEKPP</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>k18</ci>
+                        <apply>
+                           <plus/>
+                           <ci>one</ci>
+                           <apply>
+                              <divide/>
+                              <ci>MEKP</ci>
+                              <ci>k16</ci>
+                           </apply>
+                           <apply>
+                              <divide/>
+                              <ci>Akt_PIP</ci>
+                              <ci>k31</ci>
+                           </apply>
+                           <apply>
+                              <divide/>
+                              <ci>Akt_PIPP</ci>
+                              <ci>k33</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <ci>MEKPP</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>MEKPP</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>kf17</ci>
+                     <ci>RAF_star</ci>
+                     <ci>MEKP</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>k17</ci>
+                        <apply>
+                           <plus/>
+                           <ci>one</ci>
+                           <apply>
+                              <divide/>
+                              <ci>MEK</ci>
+                              <ci>k15</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <ci>MEKP</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>kf18</ci>
+                     <ci>PP2A</ci>
+                     <ci>MEKPP</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>k18</ci>
+                        <apply>
+                           <plus/>
+                           <ci>one</ci>
+                           <apply>
+                              <divide/>
+                              <ci>MEKP</ci>
+                              <ci>k16</ci>
+                           </apply>
+                           <apply>
+                              <divide/>
+                              <ci>Akt_PIP</ci>
+                              <ci>k31</ci>
+                           </apply>
+                           <apply>
+                              <divide/>
+                              <ci>Akt_PIPP</ci>
+                              <ci>k33</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <ci>MEKPP</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="ERK">
+      <variable name="time" public_interface="in" units="s"/>
+      <variable name="MEKPP" public_interface="in" units="nm"/>
+      <variable cmeta:id="ERK_MKP3" initial_value="2.4" name="MKP3" units="nm"/>
+      <variable cmeta:id="ERK_ERK" initial_value="1000" name="ERK" units="nm"/>
+      <variable cmeta:id="ERK_ERKP" initial_value="0" name="ERKP" units="nm"/>
+      <variable cmeta:id="ERK_ERKPP" initial_value="0" name="ERKPP" units="nm"/>
+      <variable initial_value="9.5" name="kf19" units="first_order_rate_constant"/>
+      <variable initial_value="146000" name="k19" units="nm"/>
+      <variable initial_value="0.3" name="kf20" units="first_order_rate_constant"/>
+      <variable initial_value="160" name="k20" units="nm"/>
+      <variable initial_value="16" name="kf21" units="first_order_rate_constant"/>
+      <variable initial_value="146000" name="k21" units="nm"/>
+      <variable initial_value="0.27" name="kf22" units="first_order_rate_constant"/>
+      <variable initial_value="60" name="k22" units="nm"/>
+      <variable initial_value="1" name="one" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>ERK</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>kf19</ci>
+                        <ci>MEKPP</ci>
+                        <ci>ERK</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <times/>
+                           <ci>k19</ci>
+                           <apply>
+                              <plus/>
+                              <ci>one</ci>
+                              <apply>
+                                 <divide/>
+                                 <ci>ERKP</ci>
+                                 <ci>k21</ci>
+                              </apply>
+                           </apply>
+                        </apply>
+                        <ci>ERK</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>kf20</ci>
+                     <ci>MKP3</ci>
+                     <ci>ERKP</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>k20</ci>
+                        <apply>
+                           <plus/>
+                           <ci>one</ci>
+                           <apply>
+                              <divide/>
+                              <ci>ERKPP</ci>
+                              <ci>k22</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <ci>ERKP</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>ERKPP</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>kf21</ci>
+                     <ci>MEKPP</ci>
+                     <ci>ERKP</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>k21</ci>
+                        <apply>
+                           <plus/>
+                           <ci>one</ci>
+                           <apply>
+                              <divide/>
+                              <ci>ERK</ci>
+                              <ci>k19</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <ci>ERKP</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>kf22</ci>
+                     <ci>MKP3</ci>
+                     <ci>ERKPP</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>k22</ci>
+                        <apply>
+                           <plus/>
+                           <ci>one</ci>
+                           <apply>
+                              <divide/>
+                              <ci>ERKP</ci>
+                              <ci>k20</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <ci>ERKPP</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>ERKP</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <ci>kf19</ci>
+                           <ci>MEKPP</ci>
+                           <ci>ERK</ci>
+                        </apply>
+                        <apply>
+                           <plus/>
+                           <apply>
+                              <times/>
+                              <ci>k19</ci>
+                              <apply>
+                                 <plus/>
+                                 <ci>one</ci>
+                                 <apply>
+                                    <divide/>
+                                    <ci>ERKP</ci>
+                                    <ci>k21</ci>
+                                 </apply>
+                              </apply>
+                           </apply>
+                           <ci>ERK</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <ci>kf20</ci>
+                           <ci>MKP3</ci>
+                           <ci>ERKP</ci>
+                        </apply>
+                        <apply>
+                           <plus/>
+                           <apply>
+                              <times/>
+                              <ci>k20</ci>
+                              <apply>
+                                 <plus/>
+                                 <ci>one</ci>
+                                 <apply>
+                                    <divide/>
+                                    <ci>ERKPP</ci>
+                                    <ci>k22</ci>
+                                 </apply>
+                              </apply>
+                           </apply>
+                           <ci>ERKP</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>kf21</ci>
+                        <ci>MEKPP</ci>
+                        <ci>ERKP</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <times/>
+                           <ci>k21</ci>
+                           <apply>
+                              <plus/>
+                              <ci>one</ci>
+                              <apply>
+                                 <divide/>
+                                 <ci>ERK</ci>
+                                 <ci>k19</ci>
+                              </apply>
+                           </apply>
+                        </apply>
+                        <ci>ERKP</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>kf22</ci>
+                     <ci>MKP3</ci>
+                     <ci>ERKPP</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>k22</ci>
+                        <apply>
+                           <plus/>
+                           <ci>one</ci>
+                           <apply>
+                              <divide/>
+                              <ci>ERKP</ci>
+                              <ci>k20</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <ci>ERKPP</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <connection>
+      <map_components component_1="PI3K" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="Akt" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="RAF" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="RasGDPtoRasGTP" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="MEK" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="ERK" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="PI3K" component_2="RasGDPtoRasGTP"/>
+      <map_variables variable_1="ShGS" variable_2="ShGS"/>
+   </connection>
+   <connection>
+      <map_components component_1="RasGDPtoRasGTP" component_2="RAF"/>
+      <map_variables variable_1="RasGTP" variable_2="RasGTP"/>
+   </connection>
+   <connection>
+      <map_components component_1="RAF" component_2="Akt"/>
+      <map_variables variable_1="Akt_PIPP" variable_2="Akt_PIPP"/>
+   </connection>
+   <connection>
+      <map_components component_1="Akt" component_2="MEK"/>
+      <map_variables variable_1="MEKP" variable_2="MEKP"/>
+      <map_variables variable_1="MEKPP" variable_2="MEKPP"/>
+      <map_variables variable_1="Akt_PIP" variable_2="Akt_PIP"/>
+      <map_variables variable_1="Akt_PIPP" variable_2="Akt_PIPP"/>
+   </connection>
+   <connection>
+      <map_components component_1="ERK" component_2="MEK"/>
+      <map_variables variable_1="MEKPP" variable_2="MEKPP"/>
+   </connection>
+   <connection>
+      <map_components component_1="RAF" component_2="MEK"/>
+      <map_variables variable_1="RAF_star" variable_2="RAF_star"/>
+   </connection>
+   <connection>
+      <map_components component_1="PI3K" component_2="Akt"/>
+      <map_variables variable_1="PI3Kstar" variable_2="PI3Kstar"/>
+   </connection>
+
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:about="rdf:#5712261e-d6f8-4028-833d-dc14399f529c"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2007-10-04T11:06:52+13:00</W3CDTF></rdf:Description><rdf:Description rdf:about="rdf:#0b982b3b-957b-4e0f-ae51-a07d69753957"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#3d848b6a-fb6a-40dd-86d2-27a018cddc24"/></N><ORG xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#9ace0219-fc7a-4208-8425-82e8fea8b11b"/></ORG><EMAIL xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#a1fa1e28-061b-465a-be4b-27f1bca81cbc"/></EMAIL></rdf:Description><rdf:Description rdf:about="rdf:#a41a8346-790a-4c42-a5ae-7850c84d30e6"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Kimura</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Shuhei</Given></rdf:Description><rdf:Description rdf:about="rdf:#9f417d1d-577a-4d7c-a7fc-499e549bc407"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Yokoyama</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Shigeyuki</Given></rdf:Description><rdf:Description rdf:about="rdf:#b1c8e269-357d-4aef-8100-e97a3c9f265b"><Pubmed_id xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">12691603</Pubmed_id><JournalArticle xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:about="rdf:#1c74bac1-b157-4719-a651-f270b48ca264"/></JournalArticle></rdf:Description><rdf:Description rdf:about="rdf:#0d301f2c-f766-48fb-99dc-71d43b3e7e0b"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">The Biochemical Journal</title></rdf:Description><rdf:Description rdf:about="rdf:#5f1ae78c-b27e-480f-8168-6cae9a4fa714"><rdf:type><rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/></rdf:type><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#dc76cc57-9f52-4209-894e-85467cb774aa"/></N></rdf:Description><rdf:Description rdf:about="rdf:#fa213f0e-1ad1-4880-9fc6-3f2d687a1450"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Kawasaki</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Takuji</Given></rdf:Description><rdf:Description rdf:about="rdf:#a6405285-ae6c-4c66-8ef1-a9aa2dba0bf2"><rdf:type><rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/></rdf:type><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#9f417d1d-577a-4d7c-a7fc-499e549bc407"/></N></rdf:Description><rdf:Description rdf:nodeID="n1"><subject xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n2"/></subject></rdf:Description><rdf:Description rdf:about="rdf:#29060d99-83e6-449f-8f70-d7baf3aba53b"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Shirouzu</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Mikako</Given></rdf:Description><rdf:Description rdf:about="rdf:#9ace0219-fc7a-4208-8425-82e8fea8b11b"><Orgunit xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Auckland Bioengineering Institute</Orgunit><Orgname xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">The University of Auckland</Orgname></rdf:Description><rdf:Description rdf:about="rdf:#359d9e86-9562-406f-a7f1-7c71942617f6"><rdf:type><rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/></rdf:type><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#d0a19a37-c244-4e6d-8059-12a3899ad630"/></N></rdf:Description><rdf:Description rdf:about="rdf:#adbe68a2-4be3-4356-8390-9a1b33410923"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2007-08-27T00:00:00+00:00</W3CDTF></rdf:Description><rdf:Description rdf:about="rdf:#fec354de-f07d-4a08-b264-27fef8f02120"><FN xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Catherine Lloyd</FN></rdf:Description><rdf:Description rdf:about="rdf:#fbd36f2c-1317-4c5d-9fbd-3c852ad23ab6"><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#1040aaeb-325f-4711-81cb-da8d592223e6"/></creator><rdf:value xml:lang="en"></rdf:value></rdf:Description><rdf:Description rdf:about="rdf:#afc054f8-64d5-4062-a68e-ec59358088e9"><rdf:type><rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/></rdf:type><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#58aa6253-dd61-453a-8b51-e4fb7c7cb7e2"/></N></rdf:Description><rdf:Description rdf:about="rdf:#4380e64e-7800-49db-a47d-5f4209c330b3"><rdf:type><rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/></rdf:type><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#eb687547-22e6-44d7-b0b1-04d13f55dfb0"/></N></rdf:Description><rdf:Description rdf:about="rdf:#3d848b6a-fb6a-40dd-86d2-27a018cddc24"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">McCormick</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Matthew</Given><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en"></Other></rdf:Description><rdf:Description rdf:about="rdf:#b926f440-af70-45ea-9e4a-8922602d34a8"><rdf:type><rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/></rdf:type><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#29060d99-83e6-449f-8f70-d7baf3aba53b"/></N></rdf:Description><rdf:Description rdf:about="rdf:#2cff3ad8-e43f-4e00-aa66-20182a34a3c9"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#944de2c1-85ad-4dd2-86b2-bd6f30ba820e"/></N></rdf:Description><rdf:Description rdf:about="rdf:#9590e834-5a80-4622-a74d-cd193c7bf5b3"><rdf:type><rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/></rdf:type><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#a41a8346-790a-4c42-a5ae-7850c84d30e6"/></N></rdf:Description><rdf:Description rdf:about="rdf:#b3bb192f-a6c2-4524-8870-c9f7e0cb395d"><rdf:type><rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/></rdf:type><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#786b5a9d-60af-49ba-b688-ea104d4c9bec"/></N></rdf:Description><rdf:Description rdf:about="rdf:#786b5a9d-60af-49ba-b688-ea104d4c9bec"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Hatakeyama</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Mariko</Given></rdf:Description><rdf:Description rdf:about="rdf:#1040aaeb-325f-4711-81cb-da8d592223e6"><FN xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en"></FN></rdf:Description><rdf:Description rdf:about="rdf:#58aa6253-dd61-453a-8b51-e4fb7c7cb7e2"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Ichikawa</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Mio</Given></rdf:Description><rdf:Description rdf:about="rdf:#d0a19a37-c244-4e6d-8059-12a3899ad630"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Konagaya</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Akihiko</Given></rdf:Description><rdf:Description rdf:about="rdf:#dc76cc57-9f52-4209-894e-85467cb774aa"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Kim</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Jae-Hoon</Given></rdf:Description><rdf:Description rdf:about="rdf:#dd0b57d1-d231-489f-b26a-bf49197bdd59"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Saeki</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Mihoro</Given></rdf:Description><rdf:Description rdf:about="rdf:#7ad23968-7a2c-422e-9563-a1672e5c7829"><rdf:type><rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/></rdf:type><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#dd0b57d1-d231-489f-b26a-bf49197bdd59"/></N></rdf:Description><rdf:Description rdf:about="rdf:#1c74bac1-b157-4719-a651-f270b48ca264"><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#4b8aa5ab-0a79-43a4-831d-7d91f6191918"/></creator><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">A computational model on the modulation of mitogen-activated protein kinase (MAPK) and Akt pathways in heregulin-induced ErbB signalling</title><volume xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">373</volume><first_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">451</first_page><issued xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:about="rdf:#c1efcc6c-6f22-48e1-910b-4502f6a68cf9"/></issued><last_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">463</last_page><Journal xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:about="rdf:#0d301f2c-f766-48fb-99dc-71d43b3e7e0b"/></Journal></rdf:Description><rdf:Description rdf:about="rdf:#83271030-6d0f-41c4-a9b8-944163c8609b"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Naka</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Takashi</Given></rdf:Description><rdf:Description rdf:about="rdf:#9418e400-0058-4e1a-af77-6fa626f6c85b"><rdf:type><rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/></rdf:type><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#2bf5b4f6-9e01-423f-a075-6eb7cccff81c"/></N></rdf:Description><rdf:Description rdf:about=""><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#0b982b3b-957b-4e0f-ae51-a07d69753957"/></creator><publisher xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en"></publisher><created xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:about="rdf:#adbe68a2-4be3-4356-8390-9a1b33410923"/></created><cmeta:modification><rdf:Description rdf:about="rdf:#06300c6e-3079-406f-bed8-a105630e7790"/></cmeta:modification><cmeta:comment><rdf:Description rdf:about="rdf:#01b58e17-0256-4f90-af5e-fe062e53696b"/></cmeta:comment></rdf:Description><rdf:Description rdf:about="rdf:#bd35959e-d11d-4041-b346-ec769628bf0a"><rdf:type><rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/></rdf:type><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#fa213f0e-1ad1-4880-9fc6-3f2d687a1450"/></N></rdf:Description><rdf:Description rdf:about="rdf:#a1fa1e28-061b-465a-be4b-27f1bca81cbc"><rdf:type><rdf:Description rdf:about="http://imc.org/vCard/3.0#internet"/></rdf:type><rdf:value xml:lang="en">m.mccormick@auckland.ac.nz</rdf:value></rdf:Description><rdf:Description rdf:about="rdf:#944de2c1-85ad-4dd2-86b2-bd6f30ba820e"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Lloyd</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Catherine</Given><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">May</Other></rdf:Description><rdf:Description rdf:about="rdf:#4b8aa5ab-0a79-43a4-831d-7d91f6191918"><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq"/></rdf:type><rdf:_2><rdf:Description rdf:about="rdf:#9590e834-5a80-4622-a74d-cd193c7bf5b3"/></rdf:_2><rdf:_1><rdf:Description rdf:about="rdf:#b3bb192f-a6c2-4524-8870-c9f7e0cb395d"/></rdf:_1><rdf:_6><rdf:Description rdf:about="rdf:#afc054f8-64d5-4062-a68e-ec59358088e9"/></rdf:_6><rdf:_3><rdf:Description rdf:about="rdf:#b937e063-b84c-4bd4-9896-0ea82a798a20"/></rdf:_3><rdf:_8><rdf:Description rdf:about="rdf:#4380e64e-7800-49db-a47d-5f4209c330b3"/></rdf:_8><rdf:_5><rdf:Description rdf:about="rdf:#9418e400-0058-4e1a-af77-6fa626f6c85b"/></rdf:_5><rdf:_11><rdf:Description rdf:about="rdf:#a6405285-ae6c-4c66-8ef1-a9aa2dba0bf2"/></rdf:_11><rdf:_4><rdf:Description rdf:about="rdf:#bd35959e-d11d-4041-b346-ec769628bf0a"/></rdf:_4><rdf:_12><rdf:Description rdf:about="rdf:#359d9e86-9562-406f-a7f1-7c71942617f6"/></rdf:_12><rdf:_10><rdf:Description rdf:about="rdf:#b926f440-af70-45ea-9e4a-8922602d34a8"/></rdf:_10><rdf:_7><rdf:Description rdf:about="rdf:#5f1ae78c-b27e-480f-8168-6cae9a4fa714"/></rdf:_7><rdf:_9><rdf:Description rdf:about="rdf:#7ad23968-7a2c-422e-9563-a1672e5c7829"/></rdf:_9></rdf:Description><rdf:Description rdf:nodeID="n2"><subject_type xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">keyword</subject_type><rdf:value><rdf:Description rdf:nodeID="n3"/></rdf:value></rdf:Description><rdf:Description rdf:about="#bhalla_model_1999"><cmeta:comment><rdf:Description rdf:about="rdf:#fbd36f2c-1317-4c5d-9fbd-3c852ad23ab6"/></cmeta:comment><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:about="rdf:#b1c8e269-357d-4aef-8100-e97a3c9f265b"/></reference><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n1"/></reference><simulation xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n4"/></simulation></rdf:Description><rdf:Description rdf:nodeID="n5"><pointDensity xmlns="http://www.cellml.org/metadata/simulation/1.0#nonstandard-" xml:lang="en">1000000</pointDensity><endingValue xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">500</endingValue></rdf:Description><rdf:Description rdf:nodeID="n4"><boundIntervals xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n6"/></boundIntervals></rdf:Description><rdf:Description rdf:nodeID="n3"><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag"/></rdf:type><rdf:_2 xml:lang="en">cerebral aneurysm</rdf:_2><rdf:_1 xml:lang="en">signal transduction</rdf:_1></rdf:Description><rdf:Description rdf:about="rdf:#b937e063-b84c-4bd4-9896-0ea82a798a20"><rdf:type><rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/></rdf:type><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#83271030-6d0f-41c4-a9b8-944163c8609b"/></N></rdf:Description><rdf:Description rdf:about="rdf:#06300c6e-3079-406f-bed8-a105630e7790"><rdf:value xml:lang="en">Checked model in COR.  Added a couple of initial values, corrected the unit definitions and also several units in several equations.</rdf:value><modified xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:about="rdf:#5712261e-d6f8-4028-833d-dc14399f529c"/></modified><cmeta:modifier><rdf:Description rdf:about="rdf:#2cff3ad8-e43f-4e00-aa66-20182a34a3c9"/></cmeta:modifier></rdf:Description><rdf:Description rdf:about="rdf:#c1efcc6c-6f22-48e1-910b-4502f6a68cf9"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2003-07-15</W3CDTF></rdf:Description><rdf:Description rdf:about="rdf:#eb687547-22e6-44d7-b0b1-04d13f55dfb0"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Saito</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Kazuki</Given></rdf:Description><rdf:Description rdf:about="rdf:#01b58e17-0256-4f90-af5e-fe062e53696b"><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#fec354de-f07d-4a08-b264-27fef8f02120"/></creator><rdf:value xml:lang="en">The model now runs in PCEnv to replicate the published results - we think!  The only question mark is over how the variables are expressed - as nM in the model and then as %s in the figures.  We're not sure why there's this difference.</rdf:value></rdf:Description><rdf:Description rdf:about="rdf:#2bf5b4f6-9e01-423f-a075-6eb7cccff81c"><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Yumoto</Family><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Noriko</Given></rdf:Description><rdf:Description rdf:nodeID="n6"><rdf:first><rdf:Description rdf:nodeID="n5"/></rdf:first><rdf:rest><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/></rdf:rest></rdf:Description></rdf:RDF></model>

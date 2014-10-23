@@ -1,0 +1,861 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<model xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" name="bertram_2008" cmeta:id="bertram_2008" xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#">	
+
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>A phantom bursting mechanism for episodic bursting</title>
+				<author>
+					<firstname>Catherine</firstname>
+					<surname>Lloyd</surname>
+					<affiliation>
+						<shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<section id="sec_status">
+				<title>Model Status</title>  
+				<para>This CellML model runs in both OpenCell and COR but it does not yet replicate the published results (figure 7 in the original paper) because the model requires a stochastic wiener process to introduce noise into the model. Until stochastic processes can be descibed in CellML "w" in this model has been set to 1.
+				</para>   
+			</section>
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>ABSTRACT: We describe a novel dynamic mechanism for episodic or compound bursting oscillations, in which bursts of electrical impulses are clustered together into episodes, separated by long silent phases. We demonstrate the mechanism for episodic bursting using a minimal mathematical model for "phantom bursting." Depending on the location in parameter space, this model can produce fast, medium, or slow bursting, or in the present case, fast, slow, and episodic bursting. The episodic bursting is modestly robust to noise and to parameter variation, and the effect that noise has on the episodic bursting pattern is quite different from that of an alternate episodic burst mechanism in which the slow envelope is produced by metabolic oscillations. This mechanism could account for episodic bursting produced in endocrine cells or neurons, such as pancreatic islets or gonadotropin releasing neurons of the hypothalamus.s.</para>
+				
+				<para>The original paper reference is cited below.</para>
+				
+				<para>A phantom bursting mechanism for episodic bursting, R. Bertram, J. Rhoads and W.P. Cimbora, 2008,
+                                    <emphasis>Bulletin of Mathematical Biology</emphasis>, 70, 1979-1993. <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/18648884">PubMed ID: 18648884</ulink>
+				</para>
+				
+				<informalfigure float="0" id="fig_cell_diagram">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>cell schematic for the model</title>
+							</objectinfo>
+							<imagedata fileref="bertram_2008.png"/>
+						</imageobject>
+					</mediaobject>
+					<caption>Schematic diagram of the cell model.</caption>
+				</informalfigure>
+			</sect1>
+		</article>
+	</documentation>   
+	
+    <units name="millisecond">
+        <unit prefix="milli" units="second"/>
+    </units>
+	<units name="millivolt">
+        <unit prefix="milli" units="volt"/>
+    </units>
+    <units name="femtofarad">
+        <unit prefix="femto" units="farad"/>
+    </units>
+    <units name="picosiemens">
+        <unit prefix="pico" units="siemens"/>
+    </units>
+    <units name="femtoampere">
+        <unit prefix="femto" units="ampere"/>
+    </units>
+    
+	<component name="environment">
+        <variable cmeta:id="environment_time" name="time" public_interface="out" units="millisecond"/>
+    </component>
+    
+	<component name="membrane">
+        <variable initial_value="-40.0" name="V" public_interface="out" units="millivolt"/>
+        
+		<variable initial_value="4525.0" name="Cm" units="femtofarad"/>
+        
+		<variable name="Ica" public_interface="in" units="femtoampere"/>
+		<variable name="Is1" public_interface="in" units="femtoampere"/>
+        <variable name="Is2" public_interface="in" units="femtoampere"/>
+        <variable name="Il" public_interface="in" units="femtoampere"/>
+        <variable name="Ik" public_interface="in" units="femtoampere"/>
+        <variable name="time" public_interface="in" units="millisecond"/>
+        
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci> V </ci>
+                </apply>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <apply>
+                            <plus/>
+                            <ci> Ica </ci>
+                            <ci> Is1 </ci>
+                            <ci> Is2 </ci>
+                            <ci> Il </ci>
+							<ci> Ik </ci>
+                        </apply>
+                    </apply>
+                    <ci> Cm </ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    
+	<component name="Ica">
+        <variable name="Ica" public_interface="out" units="femtoampere"/>
+        
+		<variable initial_value="280.0" name="gCa" units="picosiemens"/>
+        <variable initial_value="100.0" name="VCa" units="millivolt"/>
+        
+		<variable name="V" private_interface="out" public_interface="in" units="millivolt"/>
+        <variable name="m_infinity" private_interface="in" units="dimensionless"/>
+        
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci> Ica </ci>
+                <apply>
+                    <times/>
+                    <ci> gCa </ci>
+                    <ci> m_infinity </ci>
+                    <apply>
+                        <minus/>
+                        <ci> V </ci>
+                        <ci> VCa </ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+	
+    <component name="m">
+        <variable name="m_infinity" public_interface="out" units="dimensionless"/>
+        
+		<variable initial_value="-22.0" name="vm" units="millivolt"/>
+        <variable initial_value="7.5" name="sm" units="millivolt"/>
+        
+		<variable name="V" public_interface="in" units="millivolt"/>
+        
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci> m_infinity </ci>
+                <apply>
+                    <divide/>
+                    <cn cellml:units="dimensionless"> 1.0 </cn>
+                    <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless"> 1.0 </cn>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <minus/>
+                                    <ci> vm </ci>
+                                    <ci> V </ci>
+                                </apply>
+                                <ci> sm </ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+	
+	<component name="Is1">
+        <variable name="Is1" public_interface="out" units="femtoampere"/>
+        
+		<variable initial_value="22.0" name="gs1" units="picosiemens"/>
+        
+		<variable name="time" private_interface="out" public_interface="in" units="millisecond"/>
+        <variable name="VK" public_interface="in" units="millivolt"/>
+        <variable name="V" private_interface="out" public_interface="in" units="millivolt"/>
+        <variable name="s1" private_interface="in" units="dimensionless"/>
+        
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci> Is1 </ci>
+                <apply>
+                    <times/>
+                    <ci> gs1 </ci>
+                    <ci> s1 </ci>
+                    <apply>
+                        <minus/>
+                        <ci> V </ci>
+                        <ci> VK </ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+	
+    <component name="s1">
+        <variable initial_value="0.9" name="s1" public_interface="out" units="dimensionless"/>
+        
+		<variable name="s1_infinity" units="dimensionless"/>
+		<variable initial_value="1" name="autos1" units="dimensionless"/>
+		<variable initial_value="1" name="s1knot" units="dimensionless"/>
+        <variable initial_value="1000.0" name="tau_s1" units="millisecond"/>
+        <variable initial_value="-50.0" name="vs1" units="millivolt"/>
+        <variable initial_value="5" name="ss1" units="millivolt"/>
+        
+		<variable name="time" public_interface="in" units="millisecond"/>
+		<variable name="V" public_interface="in" units="millivolt"/>
+        
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci> s1 </ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <ci> autos1 </ci>
+						<apply>
+                            <divide/>
+							<apply>
+                                <minus/>
+						        <ci> s1_infinity </ci>
+                                <ci> s1 </ci>
+                            </apply>
+                            <ci> tau_s1 </ci>
+						</apply>
+				    </apply>
+					<apply>
+                        <times/>
+                        <apply>
+                            <minus/>
+							<cn cellml:units="dimensionless"> 1.0 </cn>
+							<ci> autos1 </ci>
+						</apply>
+						<apply>
+                            <minus/>
+							<ci> s1knot </ci>
+							<ci> s1 </ci>
+						</apply>
+					</apply>
+                </apply>
+            </apply>
+			
+			<apply>
+                <eq/>
+                <ci> s1_infinity </ci>
+                <apply>
+                    <divide/>
+                    <cn cellml:units="dimensionless"> 1.0 </cn>
+                    <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless"> 1.0 </cn>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <minus/>
+                                    <ci> vs1 </ci>
+                                    <ci> V </ci>
+                                </apply>
+                                <ci> ss1 </ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+	
+	<component name="Ik">
+        <variable name="Ik" public_interface="out" units="femtoampere"/>
+        <variable initial_value="-80.0" name="VK" public_interface="out" units="millivolt"/>
+		
+		<variable initial_value="1300.0" name="gK" units="picosiemens"/>
+        
+		<variable name="time" private_interface="out" public_interface="in" units="millisecond"/>
+        <variable name="V" private_interface="out" public_interface="in" units="millivolt"/>
+        <variable name="n" private_interface="in" units="dimensionless"/>
+        
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci> Ik </ci>
+                <apply>
+                    <times/>
+                    <ci> gK </ci>
+                    <ci> n </ci>
+                    <apply>
+                        <minus/>
+                        <ci> V </ci>
+                        <ci> VK </ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    
+	<component name="n">
+        <variable initial_value="0.0" name="n" public_interface="out" units="dimensionless"/>
+        
+		<variable name="n_infinity" units="dimensionless"/>
+        <variable initial_value="8.25" name="tau_n_bar" units="millisecond"/>
+		<variable name="tau_n" units="millisecond"/>
+        <variable initial_value="-9.0" name="vn" units="millivolt"/>
+        <variable initial_value="10.0" name="sn" units="millivolt"/>
+        
+		<variable name="time" public_interface="in" units="millisecond"/>
+        <variable name="V" public_interface="in" units="millivolt"/>
+        
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci> n </ci>
+                </apply>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci> n_infinity </ci>
+                        <ci> n </ci>
+                    </apply>
+                    <ci> tau_n </ci>
+                </apply>
+            </apply>
+			
+            <apply>
+                <eq/>
+                <ci> n_infinity </ci>
+                <apply>
+                    <divide/>
+                    <cn cellml:units="dimensionless"> 1.0 </cn>
+                    <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless"> 1.0 </cn>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <minus/>
+                                    <ci> vn </ci>
+                                    <ci> V </ci>
+                                </apply>
+                                <ci> sn </ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+			
+			<apply>
+                <eq/>
+                <ci> tau_n </ci>
+                <apply>
+                    <divide/>
+                    <ci> tau_n_bar </ci>
+                    <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless"> 1.0 </cn>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <minus/>
+                                    <ci> V </ci>
+                                    <ci> vn </ci>
+                                </apply>
+                                <ci> sn </ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    
+    <component name="Il">
+        <variable name="Il" public_interface="out" units="femtoampere"/>
+        
+		<variable initial_value="41.0" name="gl" units="picosiemens"/>
+        <variable initial_value="-40.0" name="Vl" units="millivolt"/>
+		<variable name="q" units="dimensionless"/>
+		<variable initial_value="0.14" name="p" units="dimensionless"/>
+		<variable initial_value="1.0" name="alpha_p" units="dimensionless"/>
+		<variable initial_value="100.0" name="tau_p" units="millisecond"/>
+		<variable name="beta_p" units="dimensionless"/>
+		<variable initial_value="0.2" name="p0" units="dimensionless"/>
+		<variable initial_value="1" name="noise" units="dimensionless"/>
+		<variable name="sigma" units="dimensionless"/>
+		<variable initial_value="1" name="w" units="dimensionless"/>
+		<variable name="nstoc" units="dimensionless"/>
+        <variable initial_value="3" name="delNoise" units="dimensionless"/>
+		
+		<variable name="V" public_interface="in" units="millivolt"/>
+		<variable name="time" public_interface="in" units="millisecond"/>
+        
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci> Il </ci>
+                <apply>
+                    <times/>
+                    <ci> gl </ci>
+					<ci> q </ci>
+                    <apply>
+                        <minus/>
+                        <ci> V </ci>
+                        <ci> Vl </ci>
+                    </apply>
+                </apply>
+            </apply>
+			
+			<apply>
+                <eq/>
+                <ci> q </ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless"> 1.0 </cn>
+                        <ci> p </ci>
+                    </apply>
+					<cn cellml:units="dimensionless"> 2.0 </cn>
+			    </apply>
+            </apply>
+			
+			<apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci> p </ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <minus/>
+							<apply>
+                                <times/>
+						        <ci> alpha_p </ci>
+                                <apply>
+                                    <minus/>
+									<cn cellml:units="dimensionless"> 1.0 </cn>
+									<ci> p </ci>
+                                </apply>
+							</apply>
+                            <apply>
+                                <times/>
+						        <ci> beta_p </ci>
+								<ci> p </ci>
+                            </apply>
+						</apply>
+						<ci> tau_p </ci>
+				    </apply>
+					<apply>
+                        <times/>
+                        <ci> noise </ci>
+						<ci> w </ci>
+						<ci> sigma </ci>
+					</apply>
+                </apply>
+            </apply>
+			
+			<apply>
+                <eq/>
+                <ci> beta_p </ci>
+                <apply>
+                    <times/>
+                    <ci> alpha_p </ci>
+					<apply>
+                        <minus/>
+                        <apply>
+                            <divide/>
+						    <cn cellml:units="dimensionless"> 1.0 </cn>
+                            <ci> p0 </ci>
+                        </apply>
+					    <cn cellml:units="dimensionless"> 1.0 </cn>
+					</apply>
+                </apply>
+            </apply>
+			
+			<apply>
+                <eq/>
+                <ci> nstoc </ci>
+                <apply>
+                    <divide/>
+                    <cn cellml:units="dimensionless"> 1000.0 </cn>
+					<apply>
+                        <power/>
+                        <ci> delNoise </ci>
+                        <cn cellml:units="dimensionless"> 2.0 </cn>
+					</apply>
+                </apply>
+            </apply>
+			
+			<apply>
+                <eq/>
+                <ci> sigma </ci>
+                <apply>
+                    <root/>
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <plus/>
+                            <apply>
+                                <times/>
+						        <ci> alpha_p </ci>
+								<apply>
+                                    <minus/>
+									<cn cellml:units="dimensionless"> 1.0 </cn>
+                                    <ci> p </ci>
+                                </apply>
+							</apply>
+							<apply>
+                                <times/>
+						        <ci> beta_p </ci>
+								<ci> p </ci>
+                            </apply>
+					    </apply>
+					    <apply>
+                            <times/>
+							<ci> tau_p </ci>
+							<ci> nstoc </ci>
+                        </apply>
+					</apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+	
+	<component name="Is2">
+        <variable name="Is2" public_interface="out" units="femtoampere"/>
+        
+		<variable initial_value="16" name="gs2" units="picosiemens"/>
+        
+		<variable name="time" private_interface="out" public_interface="in" units="millisecond"/>
+        <variable name="VK" public_interface="in" units="millivolt"/>
+        <variable name="V" private_interface="out" public_interface="in" units="millivolt"/>
+        <variable name="s2" private_interface="in" units="dimensionless"/>
+        
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci> Is2 </ci>
+                <apply>
+                    <times/>
+                    <ci> gs2 </ci>
+                    <ci> s2 </ci>
+                    <apply>
+                        <minus/>
+                        <ci> V </ci>
+                        <ci> VK </ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+	
+    <component name="s2">
+        <variable initial_value="0.5" name="s2" public_interface="out" units="dimensionless"/>
+        
+		<variable name="s2_infinity" units="dimensionless"/>
+		<variable initial_value="1" name="autos2" units="dimensionless"/>
+		<variable initial_value="0.47" name="s2knot" units="dimensionless"/>
+        <variable initial_value="30000.0" name="tau_s2" units="millisecond"/>
+        <variable initial_value="-40.0" name="vs2" units="millivolt"/>
+        <variable initial_value="15" name="ss2" units="millivolt"/>
+        
+		<variable name="time" public_interface="in" units="millisecond"/>
+		<variable name="V" public_interface="in" units="millivolt"/>
+        
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci> s2 </ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <times/>
+                        <ci> autos2 </ci>
+						<apply>
+                            <divide/>
+							<apply>
+                                <minus/>
+						        <ci> s2_infinity </ci>
+                                <ci> s2 </ci>
+                            </apply>
+                            <ci> tau_s2 </ci>
+						</apply>
+				    </apply>
+					<apply>
+                        <times/>
+                        <apply>
+                            <minus/>
+							<cn cellml:units="dimensionless"> 1.0 </cn>
+							<ci> autos2 </ci>
+						</apply>
+						<apply>
+                            <minus/>
+							<ci> s2knot </ci>
+							<ci> s2 </ci>
+						</apply>
+					</apply>
+                </apply>
+            </apply>
+			
+			<apply>
+                <eq/>
+                <ci> s2_infinity </ci>
+                <apply>
+                    <divide/>
+                    <cn cellml:units="dimensionless"> 1.0 </cn>
+                    <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless"> 1.0 </cn>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <minus/>
+                                    <ci> vs2 </ci>
+                                    <ci> V </ci>
+                                </apply>
+                                <ci> ss2 </ci>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+	
+	<group>
+        <relationship_ref relationship="encapsulation"/>
+        <component_ref component="Ica">
+            <component_ref component="m"/>
+        </component_ref>
+		<component_ref component="Is1">
+            <component_ref component="s1"/>
+        </component_ref>
+        <component_ref component="Ik">
+            <component_ref component="n"/>
+        </component_ref>
+		<component_ref component="Is2">
+            <component_ref component="s2"/>
+        </component_ref>
+    </group>
+	
+	<connection>
+        <map_components component_1="membrane" component_2="environment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+	
+	<connection>
+        <map_components component_1="Is1" component_2="environment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+	
+	<connection>
+        <map_components component_1="Ik" component_2="environment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+	
+	<connection>
+        <map_components component_1="Is2" component_2="environment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    
+	<connection>
+        <map_components component_1="Il" component_2="environment"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+	
+	<connection>
+        <map_components component_1="membrane" component_2="Ica"/>
+        <map_variables variable_1="Ica" variable_2="Ica"/>
+        <map_variables variable_1="V" variable_2="V"/>
+    </connection>
+	
+	<connection>
+        <map_components component_1="membrane" component_2="Is1"/>
+        <map_variables variable_1="Is1" variable_2="Is1"/>
+        <map_variables variable_1="V" variable_2="V"/>
+    </connection>
+	
+	<connection>
+        <map_components component_1="membrane" component_2="Ik"/>
+        <map_variables variable_1="Ik" variable_2="Ik"/>
+        <map_variables variable_1="V" variable_2="V"/>
+    </connection>
+	
+	<connection>
+        <map_components component_1="membrane" component_2="Is2"/>
+        <map_variables variable_1="Is2" variable_2="Is2"/>
+        <map_variables variable_1="V" variable_2="V"/>
+    </connection>
+	
+	<connection>
+        <map_components component_1="membrane" component_2="Il"/>
+        <map_variables variable_1="Il" variable_2="Il"/>
+        <map_variables variable_1="V" variable_2="V"/>
+    </connection>
+	
+	<connection>
+        <map_components component_1="Is1" component_2="Ik"/>
+        <map_variables variable_1="VK" variable_2="VK"/>
+    </connection>
+	
+	<connection>
+        <map_components component_1="Is2" component_2="Ik"/>
+        <map_variables variable_1="VK" variable_2="VK"/>
+    </connection>
+	
+	<connection>
+        <map_components component_1="m" component_2="Ica"/>
+        <map_variables variable_1="m_infinity" variable_2="m_infinity"/>
+		<map_variables variable_1="V" variable_2="V"/>
+    </connection>
+	
+	<connection>
+        <map_components component_1="s1" component_2="Is1"/>
+        <map_variables variable_1="s1" variable_2="s1"/>
+		<map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="V" variable_2="V"/>
+    </connection>
+	
+	<connection>
+        <map_components component_1="n" component_2="Ik"/>
+        <map_variables variable_1="n" variable_2="n"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="V" variable_2="V"/>
+    </connection>
+	
+	<connection>
+        <map_components component_1="s2" component_2="Is2"/>
+        <map_variables variable_1="s2" variable_2="s2"/>
+		<map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="V" variable_2="V"/>
+    </connection>
+
+	
+	  
+   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
+    
+	<rdf:Description rdf:about="">
+	  <dc:title>A phantom bursting mechanism for episodic bursting: modified to include channel noise in the leak current</dc:title>
+      <dc:creator rdf:parseType="Resource">
+        <vCard:N rdf:parseType="Resource">
+          <vCard:Family>Lloyd</vCard:Family>
+          <vCard:Given>Catherine</vCard:Given>
+		</vCard:N>
+        <vCard:EMAIL rdf:parseType="Resource">
+          <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+          <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+        </vCard:EMAIL>
+        <vCard:ORG rdf:parseType="Resource">
+          <vCard:Orgname>The University of Auckland</vCard:Orgname>
+          <vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+        </vCard:ORG>
+      </dc:creator>
+  
+      <dcterms:created rdf:parseType="Resource">
+        <dcterms:W3CDTF>2010-07-09</dcterms:W3CDTF>
+      </dcterms:created>
+    </rdf:Description>
+    
+    <rdf:Description rdf:about="#bertram_2008">
+      
+	  <cmeta:bio_entity>neuron</cmeta:bio_entity>
+	  
+      <bqs:reference rdf:parseType="Resource">
+        <dc:subject rdf:parseType="Resource">
+          <bqs:subject_type>keyword</bqs:subject_type>
+          <rdf:value>
+            <rdf:Bag>
+              <rdf:li>electrophysiology</rdf:li>
+			  <rdf:li>neuron</rdf:li>
+			  <rdf:li>neurobiology</rdf:li>
+			  <rdf:li>bursting</rdf:li>
+			</rdf:Bag>
+          </rdf:value>
+        </dc:subject>
+      </bqs:reference>
+
+      <bqs:reference rdf:parseType="Resource">
+        <bqs:Pubmed_id>18648884</bqs:Pubmed_id>
+        <bqs:JournalArticle rdf:parseType="Resource">
+          <dc:creator>
+            <rdf:Seq>
+              <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Bertram</vCard:Family>
+                    <vCard:Given>R</vCard:Given>
+				  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+			  <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Rhoads</vCard:Family>
+                    <vCard:Given>J</vCard:Given>
+				  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+			  <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Cimbora</vCard:Family>
+                    <vCard:Given>W</vCard:Given>
+					<vCard:Other>P</vCard:Other>
+                  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+            </rdf:Seq>
+          </dc:creator>
+          <dc:title>
+            A phantom bursting mechanism for episodic bursting
+          </dc:title>
+          <dcterms:issued rdf:parseType="Resource">
+            <dcterms:W3CDTF>2008-06</dcterms:W3CDTF>
+          </dcterms:issued>
+          <bqs:Journal rdf:parseType="Resource">
+            <dc:title>Bulletin of Mathematical Biology</dc:title>
+          </bqs:Journal>
+		  <bqs:volume>70</bqs:volume>
+          <bqs:first_page>1979</bqs:first_page>
+          <bqs:last_page>1993</bqs:last_page>
+        </bqs:JournalArticle>
+      </bqs:reference>
+    </rdf:Description>
+  </rdf:RDF>
+</model>
+

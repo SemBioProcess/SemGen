@@ -1,0 +1,764 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--  FILE :  marwan_model_2003.xml
+
+CREATED :  9th February 2004
+
+LAST MODIFIED : 9th February 2004
+
+AUTHOR :  Catherine Lloyd
+          Bioengineering Institute
+          The University of Auckland
+          
+MODEL STATUS :  This model conforms to the CellML 1.0 Specification released on
+10th August 2001, and the 16/1/02 CellML Metadata 1.0 Specification.
+
+DESCRIPTION :  This file contains a CellML description of Marwan's 2003 mathematical model of sporulation control in Physarum polycephalum.
+
+CHANGES:  
+  
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="marwan_2003_version01" name="marwan_2003_version01">
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Kinetic Model for the Sensory Control of Sporulation in Physarum polycephalum</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Bioengineering Institute, University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+            This is the original unchecked version of the model imported from the previous
+            CellML model repository, 24-Jan-2006.
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+Complementation is the production of a wildtype phenotype when two recessive mutant alleles are combined in the same genotype.  In fungi complementation can arise when two mutant cells form to produce a heterokaryon.  In such heterokaryons two nuclear populations mix, providing the biochemical basis for the complementation effect.
+</para>
+
+<para>
+In the Marwan 2003 publication described here, the author uses the photosensory control of sporulation in the protist <emphasis>Physarum polycephalum</emphasis> as an example of how complementation in a heterokaryon can create a wildtype phenotype.  Marwan also investigates how such a process can depend on the time-dependent physiological state adopted after pathway activation by one of the mutant fusion partners. 
+</para>
+
+<para>
+The kinetic model of this process can be seen in <xref linkend="fig_reaction_diagram"/> below.  Two inputs, light of the far-red wavelength and glucose, control the devlopmental switch network through formation of the sporulation signal <emphasis>S</emphasis>.  Photoreceptor and glucose sensor dependent pathways are integrated by a mechanism which behaves like a logic AND gate.  Transcription of gene S is repressed by the product of gene V, while the transcription of gene V is reiprocally repressed by the product of gene S. 
+</para>
+
+<para>
+The model has been described here in CellML (the raw CellML description of the Marwan 2003 model can be downloaded in various formats as described in <xref linkend="sec_download_this_model"/>).     
+</para>
+
+<para>
+The complete original paper reference is cited below:
+</para>
+
+<para>
+<ulink url="http://www.genetics.org/cgi/content/abstract/164/1/105">Theory of Time-Resolved Somatic Complementation and Its Use to Explore the Sporulation Control Network in <emphasis>Physarum polycephalum</emphasis>
+          </ulink>, Wolfgang Marwan, 2003, <ulink url="http://www.genetics.org/">
+            <emphasis>Genetics</emphasis>
+          </ulink>, 164, 105-115.  (<ulink url="http://www.genetics.org/cgi/content/full/164/1/105">Full text (HTML)</ulink> and <ulink url="http://www.genetics.org/cgi/reprint/164/1/105.pdf">PDF</ulink> versions of the article are available on the <emphasis>Genetics</emphasis> website.)  <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;list_uids=12750324&amp;dopt=Abstract">PubMed ID: 12750324</ulink>
+</para>
+
+<informalfigure float="0" id="fig_reaction_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>reaction diagram</title>
+    </objectinfo>
+    <imagedata fileref="marwan_2003.png"/>
+  </imageobject>
+</mediaobject>
+<caption>Schematic diagram of the kinetic model for the sensory control of sporulation in <emphasis>Physarum polycephalum</emphasis>.</caption>
+</informalfigure>
+
+</sect1>
+</article>
+</documentation>
+  
+  
+  
+  <units name="hour">
+    <unit units="second" multiplier="3600.0"/>
+    <unit units="litre" exponent="-1"/>
+  </units>
+         
+  <units name="micromolar">
+    <unit units="mole" prefix="micro"/>
+    <unit units="litre" exponent="-1"/>
+  </units>
+  
+  <units name="flux">
+    <unit units="micromolar"/>
+    <unit units="hour" exponent="-1"/>
+  </units>
+  
+  <units name="first_order_rate_constant">
+    <unit units="hour" exponent="-1"/>
+  </units>
+  
+  <units name="second_order_rate_constant">
+    <unit units="micromolar" exponent="-1"/>
+    <unit units="hour" exponent="-1"/>
+  </units>
+ 
+  
+  <component name="environment">
+    <variable units="hour" public_interface="out" name="time"/>
+  </component>
+  
+  <component cmeta:id="Pfr" name="Pfr">
+    <rdf:RDF>
+      <rdf:Description rdf:about="Pfr">
+        <dc:title>Pfr</dc:title>
+        <dcterms:alternative>inactive Phytochrome</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="micromolar" public_interface="out" name="Pfr" initial_value="10.0"/>
+    
+    <variable units="micromolar" public_interface="in" name="Pr"/> 
+    <variable units="dimensionless" public_interface="in" name="Ifr_sigma_fr_phi_fr"/>
+    <variable units="dimensionless" public_interface="in" name="Ir_sigma_r_phi_r"/>
+    <variable units="hour" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>Pfr</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> Ir_sigma_r_phi_r </ci>
+            <ci> Pr </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> Ifr_sigma_fr_phi_fr </ci>
+            <ci> Pfr </ci>
+          </apply>
+        </apply> 
+      </apply> 
+    </math>  
+  </component>
+  
+  <component cmeta:id="Pr" name="Pr">
+    <rdf:RDF>
+      <rdf:Description rdf:about="Pr">
+        <dc:title>Pr</dc:title>
+        <dcterms:alternative>active Phytochrome</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="micromolar" public_interface="out" name="Pr" initial_value="0.0"/>
+    
+    <variable units="first_order_rate_constant" name="kd" initial_value="0.1"/>
+    
+    <variable units="dimensionless" public_interface="in" name="Ifr_sigma_fr_phi_fr"/>
+    <variable units="dimensionless" public_interface="in" name="Ir_sigma_r_phi_r"/>
+    <variable units="micromolar" public_interface="in" name="Pfr"/> 
+    <variable units="hour" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>Pr</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> Ifr_sigma_fr_phi_fr </ci>
+            <ci> Pr </ci>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> Ir_sigma_r_phi_r </ci>
+              <ci> Pr </ci>
+            </apply>
+            <apply>
+              <times/>
+              <ci> kd </ci>
+              <ci> Pr </ci>
+            </apply>
+          </apply>
+        </apply> 
+      </apply> 
+    </math>  
+  </component>
+  
+  <component cmeta:id="Xi" name="Xi">
+    <rdf:RDF>
+      <rdf:Description rdf:about="Xi">
+        <dc:title>Xi</dc:title>
+        <dcterms:alternative>inactive X-signal</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="micromolar" public_interface="out" name="Xi" initial_value="6.0"/>
+    
+    <variable units="micromolar" public_interface="in" name="Pr"/> 
+    <variable units="micromolar" public_interface="in" name="Xa"/> 
+    <variable units="second_order_rate_constant" public_interface="in" name="kia"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kai"/>
+    <variable units="hour" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>Xi</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> kai </ci>
+            <ci> Xa </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> kia </ci>
+            <ci> Pr </ci>
+            <ci> Xi </ci>
+          </apply>
+        </apply> 
+      </apply> 
+    </math>  
+  </component>
+  
+  <component cmeta:id="Xa" name="Xa">
+    <rdf:RDF>
+      <rdf:Description rdf:about="Xa">
+        <dc:title>Xa</dc:title>
+        <dcterms:alternative>active X-signal</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="micromolar" public_interface="out" name="Xa" initial_value="0.0"/>
+    
+    <variable units="micromolar" public_interface="in" name="Pr"/> 
+    <variable units="micromolar" public_interface="in" name="Xi"/> 
+    <variable units="second_order_rate_constant" public_interface="in" name="kia"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kai"/>
+    <variable units="hour" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>Xa</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> kia </ci>
+            <ci> Pr </ci>
+            <ci> Xi </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> kai </ci>
+            <ci> Xa </ci>
+          </apply>
+        </apply> 
+      </apply> 
+    </math>  
+  </component>
+  
+  <component cmeta:id="prepreS" name="prepreS">
+    <rdf:RDF>
+      <rdf:Description rdf:about="prepreS">
+        <dc:title>prepreS</dc:title>
+        <dcterms:alternative>pre-pre-sporulation signal S</dcterms:alternative>        </rdf:Description>
+    </rdf:RDF> 
+    <variable units="micromolar" public_interface="out" name="prepreS" initial_value="200.0"/>
+    
+    <variable units="micromolar" public_interface="in" name="Xa"/> 
+    <variable units="second_order_rate_constant" public_interface="in" name="kx"/>
+    <variable units="hour" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>prepreS</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> kx </ci>
+            <ci> Xa </ci>
+            <ci> prepreS </ci>
+          </apply>
+        </apply> 
+      </apply> 
+    </math>  
+  </component>
+  
+  <component cmeta:id="preS" name="preS">
+    <rdf:RDF>
+      <rdf:Description rdf:about="preS">
+        <dc:title>preS</dc:title>
+        <dcterms:alternative>pre-sporulation signal S</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="micromolar" public_interface="out" name="preS" initial_value="0.0"/>
+    
+    <variable units="micromolar" public_interface="in" name="prepreS"/> 
+    <variable units="micromolar" public_interface="in" name="Xa"/> 
+    <variable units="micromolar" public_interface="in" name="Ya"/> 
+    <variable units="second_order_rate_constant" public_interface="in" name="kx"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="ky"/>
+    <variable units="hour" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>preS</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> kx </ci>
+            <ci> Xa </ci>
+            <ci> prepreS </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> ky </ci>
+            <ci> Ya </ci>
+            <ci> preS </ci>
+          </apply>
+        </apply> 
+      </apply> 
+    </math>  
+  </component>
+  
+  <component cmeta:id="S" name="S">
+    <rdf:RDF>
+      <rdf:Description rdf:about="S">
+        <dc:title>S</dc:title>
+        <dcterms:alternative>sporulation signal S</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="micromolar" public_interface="out" name="S" initial_value="0.0"/>
+    
+    <variable units="micromolar" name="alpha1" initial_value="30.0"/>
+    
+    <variable units="micromolar" public_interface="in" name="preS"/> 
+    <variable units="micromolar" public_interface="in" name="Ya"/> 
+    <variable units="micromolar" public_interface="in" name="V"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="ky"/>
+    <variable units="hour" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>S</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <ci> ky </ci>
+              <ci> Ya </ci>
+              <ci> preS </ci>
+            </apply>
+            <apply>
+              <divide/>
+              <ci> alpha1 </ci>
+              <apply>
+                <plus/>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+                <apply>
+                  <power/>
+                  <ci> V </ci>
+                  <cn cellml:units="dimensionless"> 3.0 </cn>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+          <ci> S </ci>
+        </apply> 
+      </apply> 
+    </math>  
+  </component>
+  
+  <component cmeta:id="V" name="V">
+    <rdf:RDF>
+      <rdf:Description rdf:about="V">
+        <dc:title>V</dc:title>
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="micromolar" public_interface="out" name="V" initial_value="50.0"/>
+    
+    <variable units="micromolar" name="alpha2" initial_value="50.0"/>
+    
+    <variable units="micromolar" public_interface="in" name="S"/> 
+    <variable units="hour" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>V</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <divide/>
+            <ci> alpha2 </ci>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <power/>
+                <ci> S </ci>
+                <cn cellml:units="dimensionless"> 3.0 </cn>
+              </apply>
+            </apply>
+          </apply>
+          <ci> V </ci>
+        </apply> 
+      </apply> 
+    </math>  
+  </component>
+  
+  <component cmeta:id="Ya" name="Ya">
+    <rdf:RDF>
+      <rdf:Description rdf:about="Ya">
+        <dc:title>Ya</dc:title>
+        <dcterms:alternative>enzyme catalyst</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="micromolar" public_interface="out" name="Ya" initial_value="0.9"/>
+    
+    <variable units="second_order_rate_constant" name="kG" initial_value="0.1"/>
+    
+    <variable units="micromolar" public_interface="in" name="glucose"/> 
+    <variable units="hour" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>Ya</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> kG </ci>
+            <ci> glucose </ci>
+            <ci> Ya </ci>
+          </apply>
+        </apply> 
+      </apply> 
+    </math>  
+  </component>
+  
+  <component name="model_parameters">
+    <variable units="dimensionless" public_interface="out" name="Ifr_sigma_fr_phi_fr" initial_value="0.1"/>
+    <variable units="dimensionless" public_interface="out" name="Ir_sigma_r_phi_r" initial_value="0.0"/>
+    <variable units="second_order_rate_constant" public_interface="out" name="kia" initial_value="0.1"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kai" initial_value="0.8"/>
+    <variable units="second_order_rate_constant" public_interface="out" name="kx" initial_value="0.2"/>
+    <variable units="second_order_rate_constant" public_interface="out" name="ky" initial_value="1.0"/>
+    <variable units="micromolar" public_interface="out" name="glucose" initial_value="1.0"/>
+  </component>
+  
+  
+  <connection>
+    <map_components component_2="environment" component_1="Pfr"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Pr"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Xi"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Xa"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="prepreS"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="preS"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="S"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="V"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Ya"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Pr" component_1="Pfr"/>
+    <map_variables variable_2="Pr" variable_1="Pr"/>
+    <map_variables variable_2="Pfr" variable_1="Pfr"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="model_parameters" component_1="Pfr"/>
+    <map_variables variable_2="Ir_sigma_r_phi_r" variable_1="Ir_sigma_r_phi_r"/>
+    <map_variables variable_2="Ifr_sigma_fr_phi_fr" variable_1="Ifr_sigma_fr_phi_fr"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="model_parameters" component_1="Pr"/>
+    <map_variables variable_2="Ir_sigma_r_phi_r" variable_1="Ir_sigma_r_phi_r"/>
+    <map_variables variable_2="Ifr_sigma_fr_phi_fr" variable_1="Ifr_sigma_fr_phi_fr"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Pr" component_1="Xi"/>
+    <map_variables variable_2="Pr" variable_1="Pr"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Xa" component_1="Xi"/>
+    <map_variables variable_2="Xa" variable_1="Xa"/>
+    <map_variables variable_2="Xi" variable_1="Xi"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="model_parameters" component_1="Xi"/>
+    <map_variables variable_2="kia" variable_1="kia"/>
+    <map_variables variable_2="kai" variable_1="kai"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Pr" component_1="Xa"/>
+    <map_variables variable_2="Pr" variable_1="Pr"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="model_parameters" component_1="Xa"/>
+    <map_variables variable_2="kia" variable_1="kia"/>
+    <map_variables variable_2="kai" variable_1="kai"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Xa" component_1="prepreS"/>
+    <map_variables variable_2="Xa" variable_1="Xa"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="model_parameters" component_1="prepreS"/>
+    <map_variables variable_2="kx" variable_1="kx"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="prepreS" component_1="preS"/>
+    <map_variables variable_2="prepreS" variable_1="prepreS"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Xa" component_1="preS"/>
+    <map_variables variable_2="Xa" variable_1="Xa"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Ya" component_1="preS"/>
+    <map_variables variable_2="Ya" variable_1="Ya"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="model_parameters" component_1="preS"/>
+    <map_variables variable_2="kx" variable_1="kx"/>
+    <map_variables variable_2="ky" variable_1="ky"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="preS" component_1="S"/>
+    <map_variables variable_2="preS" variable_1="preS"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Ya" component_1="S"/>
+    <map_variables variable_2="Ya" variable_1="Ya"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="model_parameters" component_1="S"/>
+    <map_variables variable_2="ky" variable_1="ky"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="S" component_1="V"/>
+    <map_variables variable_2="S" variable_1="S"/>
+    <map_variables variable_2="V" variable_1="V"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="model_parameters" component_1="Ya"/>
+    <map_variables variable_2="glucose" variable_1="glucose"/>
+  </connection>
+  
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Seq rdf:about="rdf:#a1bd9123-2431-4e79-a890-8f89f5f27927">
+    <rdf:li rdf:resource="rdf:#ee1d52eb-9f78-4f3e-b455-950b16529f40"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#831330d3-a8ad-4e52-bdfa-02ca997105e0">
+    <vCard:Given>Wolfgang</vCard:Given>
+    <vCard:Family>Marwan</vCard:Family>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#c5ca8a62-ac20-44a5-a79d-38f7d75f5ec6">
+    <dcterms:W3CDTF>2004-02-09</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ee1d52eb-9f78-4f3e-b455-950b16529f40">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#831330d3-a8ad-4e52-bdfa-02ca997105e0"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#9a92b546-04e9-4a93-9ba4-8b4405fe5621">
+    <dcterms:W3CDTF>2003-05</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#20e3eaec-fda0-4fff-9b8f-33d28a640597">
+    <dc:title>Genetics</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e49dd5cd-a52e-4a9a-b08d-a52d15554adf">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3605311c-997a-4a69-9e77-d93afa3d969e">
+    <vCard:FN>Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d6b78040-9d84-4198-91c8-625cd4e74785">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value>
+      <rdf:Bag>
+        <rdf:li>sporulation control</rdf:li>
+        <rdf:li>signal transduction</rdf:li>
+      </rdf:Bag>
+    </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d8ef67e6-dcac-4797-8630-29ac3cedc96c">
+    <dc:creator rdf:resource="rdf:#3605311c-997a-4a69-9e77-d93afa3d969e"/>
+    <rdf:value>
+          This is the CellML description of Marwan's 2003 mathematical model of sporulation control in Physarum polycephalum.
+        </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7e013fbc-c2c0-4d37-9809-373a64f24700">
+    <vCard:ORG rdf:resource="rdf:#3fe6457b-2960-4fe8-ab3e-233ae9b69a41"/>
+    <vCard:EMAIL rdf:resource="rdf:#e49dd5cd-a52e-4a9a-b08d-a52d15554adf"/>
+    <vCard:N rdf:resource="rdf:#a5e8ee88-397f-43b1-9801-6d9db10b4283"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3fe6457b-2960-4fe8-ab3e-233ae9b69a41">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>The Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#fd5b2a79-7ac3-466e-9e16-d149b45400f5">
+    <bqs:Pubmed_id>12750324</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#8c0cf746-6f48-4cd0-9638-324e254240b2"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8243abd4-f1a4-41f3-bec5-3eeed39c7de2">
+    <dc:subject rdf:resource="rdf:#d6b78040-9d84-4198-91c8-625cd4e74785"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a5e8ee88-397f-43b1-9801-6d9db10b4283">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:publisher>
+        The University of Auckland, Bioengineering Institute
+      </dc:publisher>
+    <dcterms:created rdf:resource="rdf:#c5ca8a62-ac20-44a5-a79d-38f7d75f5ec6"/>
+    <dc:creator rdf:resource="rdf:#7e013fbc-c2c0-4d37-9809-373a64f24700"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8c0cf746-6f48-4cd0-9638-324e254240b2">
+    <dc:creator rdf:resource="rdf:#a1bd9123-2431-4e79-a890-8f89f5f27927"/>
+    <dc:title>
+            Theory of Time-Resolved Somatic Complementation and Its Use to Explore the Sporulation Control Network in Physarum polycephalum
+          </dc:title>
+    <bqs:volume>164</bqs:volume>
+    <bqs:first_page>105</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#20e3eaec-fda0-4fff-9b8f-33d28a640597"/>
+    <dcterms:issued rdf:resource="rdf:#9a92b546-04e9-4a93-9ba4-8b4405fe5621"/>
+    <bqs:last_page>115</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="#marwan_2003_version01">
+    <dc:title>
+        Marwan's 2003 mathematical model of sporulation control in Physarum polycephalum.
+      </dc:title>
+    <cmeta:comment rdf:resource="rdf:#d8ef67e6-dcac-4797-8630-29ac3cedc96c"/>
+    <bqs:reference rdf:resource="rdf:#8243abd4-f1a4-41f3-bec5-3eeed39c7de2"/>
+    <bqs:reference rdf:resource="rdf:#fd5b2a79-7ac3-466e-9e16-d149b45400f5"/>
+    <cmeta:Species>Physarum polycephalum</cmeta:Species>
+  </rdf:Description>
+</rdf:RDF>
+</model>

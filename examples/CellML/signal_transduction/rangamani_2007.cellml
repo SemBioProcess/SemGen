@@ -1,0 +1,1337 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<!-- 
+This CellML file was generated on 21/08/2009 at 9:19:39 at a.m. using:
+
+COR (0.9.31.1309)
+Copyright 2002-2009 Dr Alan Garny
+http://cor.physiol.ox.ac.uk/ - cor@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.cellml.org/
+  --> 
+ <model xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" name="rangamani_2007" cmeta:id="rangamani_2007" xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#">
+ <documentation xmlns="http://cellml.org/tmp-documentation">
+ <article>
+ <section id="sec_status">
+  <title>Model Status</title> 
+  <para>This CellML model can accurately reproduce some published results in orginal paper, but the original model contains time delay factors that cannot be implemented in CellML currently. This time delay factor has been ignored in this current CellML model.</para> 
+  </section>
+ <sect1 id="sec_structure">
+  <title>Model Structure</title> 
+  <para>ABSTRACT: We present a mathematical model which includes TNF-alpha initiated survival and apoptotic cascades, as well as nuclear transcription of IkappaB. These pathways play a crucial role in deciding cell fate in response to inflammation and infection. Our model incorporates known specific protein-protein interactions as identified by experiments. Using these biochemical interactions, we develop a mathematical model of the NF-kappaB-mediated survival and caspase-mediated apoptosis pathways. Using mass action kinetics, we follow the formation of the survival and late complexes as well as the dynamics of DNA fragmentation. The effect of TNF-alpha concentration on DNA fragmentation is modeled and compares well with experiment. Nuclear transcription is also modeled phenomenologically by means of time lagged cytosolic concentrations. This results in transcription related concentrations undergoing under-damped oscillations, in qualitative and quantitative agreement with experiment. Using a tumor cell as a hypothetical model, we explore the interplay between the components of the survival and apoptotic pathways. Results are presented which make predictions on the limits of cellular oscillations in terms of time delay, initial concentration ratios and other features of the model. The model also makes clear predictions on cell viability in terms of DNA damage within the framework of TNF-alpha stimulus duration.</para>
+ 
+  <para>The original paper is cited below:</para> 
+ <para>
+  Survival and Apoptotic Pathways Initiated by TNF-alpha: Modeling and Predictions. Padmini Rangamani and Lawrence Sirovich, 2007, Biotechnology and Bioengineering, 97(5), 1216-1229. 
+  <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pubmed&amp;cmd=Retrieve&amp;dopt=AbstractPlus&amp;list_uids=17171720&amp;query_hl=1&amp;itool=pubmed_docsum">PubMed ID: 17171720</ulink> 
+  </para>
+<informalfigure float="0" id="fig_reaction_diagram">
+<mediaobject>
+ <imageobject>
+ <objectinfo>
+  <title>Diagram of model</title> 
+  </objectinfo>
+  <imagedata fileref="rangamani_2007.png" /> 
+  </imageobject>
+  </mediaobject>
+  <caption>A schematic diagram of the TNF-alpha mediated intrinsic apoptotic pathway and regulation of this pathway by NF-kappaB.</caption> 
+  </informalfigure>
+  </sect1>
+  </article>
+  </documentation>
+  
+   <units name="nanomolar">
+      <unit units="mole" prefix="nano"/>
+      <unit units="litre" exponent="-1"/>
+   </units>
+   <units name="first_order_rate_constant">
+      <unit units="second" exponent="-1"/>
+   </units>
+   <units name="second_2">
+      <unit units="second" exponent="-2"/>
+   </units>
+   <units name="second_order_rate_constant">
+      <unit units="second" exponent="-1"/>
+      <unit units="nanomolar" exponent="-1"/>
+   </units>
+   <units name="flux">
+      <unit units="nanomolar"/>
+      <unit units="second" exponent="-1"/>
+   </units>
+   <units name="rate3">
+      <unit units="nanomolar" exponent="2"/>
+   </units>
+   <component name="environment">
+      <variable name="time" units="second" public_interface="out"/>
+   </component>
+   <component name="constants">
+      <variable name="k1" units="second_order_rate_constant" initial_value="185e-6" public_interface="out"/>
+      <variable name="k2" units="first_order_rate_constant" initial_value="1.25e-6" public_interface="out"/>
+      <variable name="k3" units="second_order_rate_constant" initial_value="185e-6" public_interface="out"/>
+      <variable name="k4" units="first_order_rate_constant" initial_value="1.25e-6" public_interface="out"/>
+      <variable name="k5" units="second_order_rate_constant" initial_value="185e-6" public_interface="out"/>
+      <variable name="k6" units="first_order_rate_constant" initial_value="1.25e-6" public_interface="out"/>
+      <variable name="k7" units="second_order_rate_constant" initial_value="185e-6" public_interface="out"/>
+      <variable name="k8" units="first_order_rate_constant" initial_value="1.25e-6" public_interface="out"/>
+      <variable name="k9" units="second_order_rate_constant" initial_value="185e-6" public_interface="out"/>
+      <variable name="k10" units="first_order_rate_constant" initial_value="1.25e-6" public_interface="out"/>
+      <variable name="k110" units="first_order_rate_constant" initial_value="370e-6" public_interface="out"/>
+      <variable name="k120" units="second_order_rate_constant" initial_value="14e-6" public_interface="out"/>
+      <variable name="k130" units="first_order_rate_constant" initial_value="1.25e-6" public_interface="out"/>
+      <variable name="k140" units="first_order_rate_constant" initial_value="370e-6" public_interface="out"/>
+      <variable name="p" units="first_order_rate_constant" initial_value="1750e-6" public_interface="out"/>
+      <variable name="k15" units="second_order_rate_constant" initial_value="185e-6" public_interface="out"/>
+      <variable name="k16" units="first_order_rate_constant" initial_value="1.25e-6" public_interface="out"/>
+      <variable name="k17" units="first_order_rate_constant" initial_value="370e-6" public_interface="out"/>
+      <variable name="k18" units="second_order_rate_constant" initial_value="500e-6" public_interface="out"/>
+      <variable name="k19" units="first_order_rate_constant" initial_value="200e-6" public_interface="out"/>
+      <variable name="k20" units="first_order_rate_constant" initial_value="100e-6" public_interface="out"/>
+      <variable name="k21" units="second_order_rate_constant" initial_value="100e-6" public_interface="out"/>
+      <variable name="k22" units="first_order_rate_constant" initial_value="60e-6" public_interface="out"/>
+      <variable name="k23" units="first_order_rate_constant" initial_value="100000e-6" public_interface="out"/>
+      <variable name="k24" units="second_order_rate_constant" initial_value="185e-6" public_interface="out"/>
+      <variable name="k25" units="first_order_rate_constant" initial_value="1.25e-6" public_interface="out"/>
+      <variable name="k26" units="first_order_rate_constant" initial_value="370e-6" public_interface="out"/>
+      <variable name="k28" units="second_order_rate_constant" initial_value="500e-6" public_interface="out"/>
+      <variable name="k29" units="second_order_rate_constant" initial_value="750000e-6" public_interface="out"/>
+      <variable name="d_6" units="first_order_rate_constant" initial_value="2.83e-4" public_interface="out"/>
+      <variable name="k_14" units="flux" initial_value="41.6" public_interface="out"/>
+      <variable name="k_m1" units="rate3" initial_value="10e5" public_interface="out"/>
+   </component>
+   <component name="Js">
+      <variable name="J1" units="flux" public_interface="out"/>
+      <variable name="J2" units="flux" public_interface="out"/>
+      <variable name="J3" units="flux" public_interface="out"/>
+      <variable name="J4" units="flux" public_interface="out"/>
+      <variable name="J5" units="flux" public_interface="out"/>
+      <variable name="J6" units="flux" public_interface="out"/>
+      <variable name="J7" units="flux" public_interface="out"/>
+      <variable name="J8" units="flux" public_interface="out"/>
+      <variable name="J9" units="flux" public_interface="out"/>
+      <variable name="J10" units="flux" public_interface="out"/>
+      <variable name="J11" units="flux" public_interface="out"/>
+      <variable name="J12" units="flux" public_interface="out"/>
+      <variable name="J13" units="flux" public_interface="out"/>
+      <variable name="J14" units="flux" public_interface="out"/>
+      <variable name="J15" units="flux" public_interface="out"/>
+      <variable name="J16" units="flux" public_interface="out"/>
+      <variable name="J17" units="flux" public_interface="out"/>
+      <variable name="J18" units="flux" public_interface="out"/>
+      <variable name="J19" units="flux" public_interface="out"/>
+      <variable name="v14" units="flux" public_interface="out"/>
+      <variable name="deg_no" units="flux" public_interface="out"/>
+      <variable name="k_14" units="flux" public_interface="in"/>
+      <variable name="k_m1" units="rate3" public_interface="in"/>
+      <variable name="d_6" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k1" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k2" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k3" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k4" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k5" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k6" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k7" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k8" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k9" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k10" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k110" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k120" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k130" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k140" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="p" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k15" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k16" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k17" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k18" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k19" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k20" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k21" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k22" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k23" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k24" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k25" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k26" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k28" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k29" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="R_NOS2" units="nanomolar" public_interface="in"/>
+      <variable name="c1" units="nanomolar" public_interface="in"/>
+      <variable name="c2" units="nanomolar" public_interface="in"/>
+      <variable name="c3" units="nanomolar" public_interface="in"/>
+      <variable name="c4" units="nanomolar" public_interface="in"/>
+      <variable name="c5" units="nanomolar" public_interface="in"/>
+      <variable name="c6" units="nanomolar" public_interface="in"/>
+      <variable name="c7" units="nanomolar" public_interface="in"/>
+      <variable name="c8" units="nanomolar" public_interface="in"/>
+      <variable name="c9" units="nanomolar" public_interface="in"/>
+      <variable name="c10" units="nanomolar" public_interface="in"/>
+      <variable name="c11" units="nanomolar" public_interface="in"/>
+      <variable name="c12" units="nanomolar" public_interface="in"/>
+      <variable name="c13" units="nanomolar" public_interface="in"/>
+      <variable name="c14" units="nanomolar" public_interface="in"/>
+      <variable name="c15" units="nanomolar" public_interface="in"/>
+      <variable name="c16" units="nanomolar" public_interface="in"/>
+      <variable name="c17" units="nanomolar" public_interface="in"/>
+      <variable name="c18" units="nanomolar" public_interface="in"/>
+      <variable name="c19" units="nanomolar" public_interface="in"/>
+      <variable name="c20" units="nanomolar" public_interface="in"/>
+      <variable name="c21" units="nanomolar" public_interface="in"/>
+      <variable name="c22" units="nanomolar" public_interface="in"/>
+      <variable name="c23" units="nanomolar" public_interface="in"/>
+      <variable name="c24" units="nanomolar" public_interface="in"/>
+      <variable name="c25" units="nanomolar" public_interface="in"/>
+      <variable name="c26" units="nanomolar" public_interface="in"/>
+      <variable name="c27" units="nanomolar" public_interface="in"/>
+      <variable name="c28" units="nanomolar" public_interface="in"/>
+      <variable name="c29" units="nanomolar" public_interface="in"/>
+      <variable name="c30" units="nanomolar" public_interface="in"/>
+      <variable name="c31" units="nanomolar" public_interface="in"/>
+      <variable name="time" units="second" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>J1</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k1</ci>
+                  <ci>c1</ci>
+                  <ci>c2</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k2</ci>
+                  <ci>c3</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J2</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k3</ci>
+                  <ci>c3</ci>
+                  <ci>c4</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k4</ci>
+                  <ci>c5</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J3</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k5</ci>
+                  <ci>c5</ci>
+                  <ci>c6</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k6</ci>
+                  <ci>c7</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J4</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k7</ci>
+                  <ci>c7</ci>
+                  <ci>c8</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k8</ci>
+                  <ci>c9</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J5</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k9</ci>
+                  <ci>c10</ci>
+                  <ci>c9</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k10</ci>
+                  <ci>c11</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J6</ci>
+            <apply>
+               <times/>
+               <ci>k110</ci>
+               <ci>c11</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J7</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k120</ci>
+                  <ci>c12</ci>
+                  <ci>c13</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k130</ci>
+                  <ci>c14</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J8</ci>
+            <apply>
+               <times/>
+               <ci>k140</ci>
+               <ci>c14</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J9</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k15</ci>
+                  <ci>c9</ci>
+                  <ci>c17</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k16</ci>
+                  <ci>c18</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J10</ci>
+            <apply>
+               <times/>
+               <ci>k17</ci>
+               <ci>c18</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J11</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k18</ci>
+                  <ci>c19</ci>
+                  <ci>c20</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k19</ci>
+                  <ci>c21</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J12</ci>
+            <apply>
+               <times/>
+               <ci>k20</ci>
+               <ci>c21</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J13</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k21</ci>
+                  <ci>c22</ci>
+                  <ci>c23</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k22</ci>
+                  <ci>c24</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J14</ci>
+            <apply>
+               <times/>
+               <ci>k23</ci>
+               <ci>c24</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J15</ci>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k24</ci>
+                  <ci>c25</ci>
+                  <ci>c29</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k25</ci>
+                  <ci>c30</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J16</ci>
+            <apply>
+               <times/>
+               <ci>k26</ci>
+               <ci>c30</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J17</ci>
+            <apply>
+               <times/>
+               <ci>p</ci>
+               <ci>c16</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J18</ci>
+            <apply>
+               <times/>
+               <ci>k28</ci>
+               <ci>c27</ci>
+               <ci>c25</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>J19</ci>
+            <apply>
+               <times/>
+               <ci>k29</ci>
+               <ci>c16</ci>
+               <ci>c31</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>v14</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>k_14</ci>
+                  <apply>
+                     <power/>
+                     <ci>c16</ci>
+                     <cn cellml:units="dimensionless">2</cn>
+                  </apply>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>k_m1</ci>
+                  <apply>
+                     <power/>
+                     <ci>c16</ci>
+                     <cn cellml:units="dimensionless">2</cn>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>deg_no</ci>
+            <apply>
+               <times/>
+               <ci>d_6</ci>
+               <ci>R_NOS2</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="cs">
+      <variable name="v14" units="flux" public_interface="in"/>
+      <variable name="deg_no" units="flux" public_interface="in"/>
+      <variable name="J1" units="flux" public_interface="in"/>
+      <variable name="J2" units="flux" public_interface="in"/>
+      <variable name="J3" units="flux" public_interface="in"/>
+      <variable name="J4" units="flux" public_interface="in"/>
+      <variable name="J5" units="flux" public_interface="in"/>
+      <variable name="J6" units="flux" public_interface="in"/>
+      <variable name="J7" units="flux" public_interface="in"/>
+      <variable name="J8" units="flux" public_interface="in"/>
+      <variable name="J9" units="flux" public_interface="in"/>
+      <variable name="J10" units="flux" public_interface="in"/>
+      <variable name="J11" units="flux" public_interface="in"/>
+      <variable name="J12" units="flux" public_interface="in"/>
+      <variable name="J13" units="flux" public_interface="in"/>
+      <variable name="J14" units="flux" public_interface="in"/>
+      <variable name="J15" units="flux" public_interface="in"/>
+      <variable name="J16" units="flux" public_interface="in"/>
+      <variable name="J17" units="flux" public_interface="in"/>
+      <variable name="J18" units="flux" public_interface="in"/>
+      <variable name="J19" units="flux" public_interface="in"/>
+      <variable name="k_14" units="flux" public_interface="in"/>
+      <variable name="k_m1" units="rate3" public_interface="in"/>
+      <variable name="d_6" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k1" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k2" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k3" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k4" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k5" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k6" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k7" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k8" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k9" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k10" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k110" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k120" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k130" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k140" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="p" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k15" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k16" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k17" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k18" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k19" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k20" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k21" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k22" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k23" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k24" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k25" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k26" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k28" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="k29" units="second_order_rate_constant" public_interface="in"/>
+      <variable name="R_NOS2" units="nanomolar" initial_value="0.616" public_interface="out"/>
+      <variable name="c1" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="c2" units="nanomolar" initial_value="100" public_interface="out"/>
+      <variable name="c3" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="c4" units="nanomolar" initial_value="150" public_interface="out"/>
+      <variable name="c5" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="c6" units="nanomolar" initial_value="100" public_interface="out"/>
+      <variable name="c7" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="c8" units="nanomolar" initial_value="100" public_interface="out"/>
+      <variable name="c9" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="c10" units="nanomolar" initial_value="100" public_interface="out"/>
+      <variable name="c11" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="c12" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="c13" units="nanomolar" initial_value="250" public_interface="out"/>
+      <variable name="c14" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="c15" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="c16" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="c17" units="nanomolar" initial_value="100" public_interface="out"/>
+      <variable name="c18" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="c19" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="c20" units="nanomolar" initial_value="80" public_interface="out"/>
+      <variable name="c21" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="c22" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="c23" units="nanomolar" initial_value="200" public_interface="out"/>
+      <variable name="c24" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="c25" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="c26" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="c27" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="c28" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="c29" units="nanomolar" initial_value="800" public_interface="out"/>
+      <variable name="c30" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="c31" units="nanomolar" initial_value="0" public_interface="out"/>
+      <variable name="time" units="second" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>R_NOS2</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>v14</ci>
+               <ci>deg_no</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c1</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>J1</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c2</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <ci>J1</ci>
+               </apply>
+               <ci>J10</ci>
+               <ci>J6</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c3</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>J1</ci>
+               <ci>J2</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c4</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <ci>J2</ci>
+               </apply>
+               <ci>J6</ci>
+               <ci>J12</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c5</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>J2</ci>
+               <ci>J3</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c6</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <ci>J3</ci>
+               </apply>
+               <ci>J6</ci>
+               <ci>J12</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c7</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>J3</ci>
+               <ci>J4</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c8</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <ci>J4</ci>
+               </apply>
+               <ci>J6</ci>
+               <ci>J12</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c9</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <ci>J4</ci>
+                  <ci>J5</ci>
+               </apply>
+               <ci>J9</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c10</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <ci>J5</ci>
+               </apply>
+               <ci>J8</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c11</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>J5</ci>
+               <ci>J6</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c12</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <ci>J7</ci>
+               </apply>
+               <ci>J6</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c13</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <ci>J7</ci>
+               </apply>
+               <ci>J19</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c14</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>J7</ci>
+               <ci>J8</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c15</ci>
+            </apply>
+            <ci>J8</ci>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c16</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>J8</ci>
+               <ci>J19</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c17</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <ci>J9</ci>
+               </apply>
+               <ci>J12</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c18</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>J9</ci>
+               <ci>J10</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c19</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>J10</ci>
+               <ci>J11</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c20</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>J11</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c21</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>J11</ci>
+               <ci>J12</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c22</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <ci>J12</ci>
+                  <ci>J13</ci>
+               </apply>
+               <ci>J14</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c23</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>J13</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c24</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>J13</ci>
+               <ci>J14</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c25</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <ci>J14</ci>
+                     <ci>J18</ci>
+                  </apply>
+                  <ci>J15</ci>
+               </apply>
+               <ci>J16</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c26</ci>
+            </apply>
+            <ci>J16</ci>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c27</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>J17</ci>
+               <ci>J18</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c28</ci>
+            </apply>
+            <ci>J18</ci>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c29</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>J15</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c30</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>J15</ci>
+               <ci>J16</ci>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>c31</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>J17</ci>
+               <ci>J19</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <connection>
+      <map_components component_1="Js" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="cs" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="Js" component_2="constants"/>
+      <map_variables variable_1="k_14" variable_2="k_14"/>
+      <map_variables variable_1="k_m1" variable_2="k_m1"/>
+      <map_variables variable_1="d_6" variable_2="d_6"/>
+      <map_variables variable_1="k1" variable_2="k1"/>
+      <map_variables variable_1="k2" variable_2="k2"/>
+      <map_variables variable_1="k3" variable_2="k3"/>
+      <map_variables variable_1="k4" variable_2="k4"/>
+      <map_variables variable_1="k5" variable_2="k5"/>
+      <map_variables variable_1="k6" variable_2="k6"/>
+      <map_variables variable_1="k7" variable_2="k7"/>
+      <map_variables variable_1="k8" variable_2="k8"/>
+      <map_variables variable_1="k9" variable_2="k9"/>
+      <map_variables variable_1="k10" variable_2="k10"/>
+      <map_variables variable_1="k110" variable_2="k110"/>
+      <map_variables variable_1="k120" variable_2="k120"/>
+      <map_variables variable_1="k130" variable_2="k130"/>
+      <map_variables variable_1="k140" variable_2="k140"/>
+      <map_variables variable_1="k15" variable_2="k15"/>
+      <map_variables variable_1="k16" variable_2="k16"/>
+      <map_variables variable_1="k17" variable_2="k17"/>
+      <map_variables variable_1="k18" variable_2="k18"/>
+      <map_variables variable_1="k19" variable_2="k19"/>
+      <map_variables variable_1="k20" variable_2="k20"/>
+      <map_variables variable_1="k21" variable_2="k21"/>
+      <map_variables variable_1="k22" variable_2="k22"/>
+      <map_variables variable_1="k23" variable_2="k23"/>
+      <map_variables variable_1="k24" variable_2="k24"/>
+      <map_variables variable_1="k25" variable_2="k25"/>
+      <map_variables variable_1="k26" variable_2="k26"/>
+      <map_variables variable_1="k28" variable_2="k28"/>
+      <map_variables variable_1="k29" variable_2="k29"/>
+      <map_variables variable_1="p" variable_2="p"/>
+   </connection>
+   <connection>
+      <map_components component_1="cs" component_2="constants"/>
+      <map_variables variable_1="k_14" variable_2="k_14"/>
+      <map_variables variable_1="k_m1" variable_2="k_m1"/>
+      <map_variables variable_1="d_6" variable_2="d_6"/>
+      <map_variables variable_1="k1" variable_2="k1"/>
+      <map_variables variable_1="k2" variable_2="k2"/>
+      <map_variables variable_1="k3" variable_2="k3"/>
+      <map_variables variable_1="k4" variable_2="k4"/>
+      <map_variables variable_1="k5" variable_2="k5"/>
+      <map_variables variable_1="k6" variable_2="k6"/>
+      <map_variables variable_1="k7" variable_2="k7"/>
+      <map_variables variable_1="k8" variable_2="k8"/>
+      <map_variables variable_1="k9" variable_2="k9"/>
+      <map_variables variable_1="k10" variable_2="k10"/>
+      <map_variables variable_1="k110" variable_2="k110"/>
+      <map_variables variable_1="k120" variable_2="k120"/>
+      <map_variables variable_1="k130" variable_2="k130"/>
+      <map_variables variable_1="k140" variable_2="k140"/>
+      <map_variables variable_1="k15" variable_2="k15"/>
+      <map_variables variable_1="k16" variable_2="k16"/>
+      <map_variables variable_1="k17" variable_2="k17"/>
+      <map_variables variable_1="k18" variable_2="k18"/>
+      <map_variables variable_1="k19" variable_2="k19"/>
+      <map_variables variable_1="k20" variable_2="k20"/>
+      <map_variables variable_1="k21" variable_2="k21"/>
+      <map_variables variable_1="k22" variable_2="k22"/>
+      <map_variables variable_1="k23" variable_2="k23"/>
+      <map_variables variable_1="k24" variable_2="k24"/>
+      <map_variables variable_1="k25" variable_2="k25"/>
+      <map_variables variable_1="k26" variable_2="k26"/>
+      <map_variables variable_1="k28" variable_2="k28"/>
+      <map_variables variable_1="k29" variable_2="k29"/>
+      <map_variables variable_1="p" variable_2="p"/>
+   </connection>
+   <connection>
+      <map_components component_1="cs" component_2="Js"/>
+      <map_variables variable_1="R_NOS2" variable_2="R_NOS2"/>
+      <map_variables variable_1="c1" variable_2="c1"/>
+      <map_variables variable_1="c2" variable_2="c2"/>
+      <map_variables variable_1="c3" variable_2="c3"/>
+      <map_variables variable_1="c4" variable_2="c4"/>
+      <map_variables variable_1="c5" variable_2="c5"/>
+      <map_variables variable_1="c6" variable_2="c6"/>
+      <map_variables variable_1="c7" variable_2="c7"/>
+      <map_variables variable_1="c8" variable_2="c8"/>
+      <map_variables variable_1="c9" variable_2="c9"/>
+      <map_variables variable_1="c10" variable_2="c10"/>
+      <map_variables variable_1="c11" variable_2="c11"/>
+      <map_variables variable_1="c12" variable_2="c12"/>
+      <map_variables variable_1="c13" variable_2="c13"/>
+      <map_variables variable_1="c14" variable_2="c14"/>
+      <map_variables variable_1="c15" variable_2="c15"/>
+      <map_variables variable_1="c16" variable_2="c16"/>
+      <map_variables variable_1="c17" variable_2="c17"/>
+      <map_variables variable_1="c18" variable_2="c18"/>
+      <map_variables variable_1="c19" variable_2="c19"/>
+      <map_variables variable_1="c20" variable_2="c20"/>
+      <map_variables variable_1="c21" variable_2="c21"/>
+      <map_variables variable_1="c22" variable_2="c22"/>
+      <map_variables variable_1="c23" variable_2="c23"/>
+      <map_variables variable_1="c24" variable_2="c24"/>
+      <map_variables variable_1="c25" variable_2="c25"/>
+      <map_variables variable_1="c26" variable_2="c26"/>
+      <map_variables variable_1="c27" variable_2="c27"/>
+      <map_variables variable_1="c28" variable_2="c28"/>
+      <map_variables variable_1="c29" variable_2="c29"/>
+      <map_variables variable_1="c30" variable_2="c30"/>
+      <map_variables variable_1="c31" variable_2="c31"/>
+      <map_variables variable_1="v14" variable_2="v14"/>
+      <map_variables variable_1="deg_no" variable_2="deg_no"/>
+      <map_variables variable_1="J1" variable_2="J1"/>
+      <map_variables variable_1="J2" variable_2="J2"/>
+      <map_variables variable_1="J3" variable_2="J3"/>
+      <map_variables variable_1="J4" variable_2="J4"/>
+      <map_variables variable_1="J5" variable_2="J5"/>
+      <map_variables variable_1="J6" variable_2="J6"/>
+      <map_variables variable_1="J7" variable_2="J7"/>
+      <map_variables variable_1="J8" variable_2="J8"/>
+      <map_variables variable_1="J9" variable_2="J9"/>
+      <map_variables variable_1="J10" variable_2="J10"/>
+      <map_variables variable_1="J11" variable_2="J11"/>
+      <map_variables variable_1="J12" variable_2="J12"/>
+      <map_variables variable_1="J13" variable_2="J13"/>
+      <map_variables variable_1="J14" variable_2="J14"/>
+      <map_variables variable_1="J15" variable_2="J15"/>
+      <map_variables variable_1="J16" variable_2="J16"/>
+      <map_variables variable_1="J17" variable_2="J17"/>
+      <map_variables variable_1="J18" variable_2="J18"/>
+      <map_variables variable_1="J19" variable_2="J19"/>
+   </connection>
+   
+   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
+    <foo xmlns="http://www.example.org/foo/bar/baz" />
+    <!--
+      The following RDF block contains metadata that applies to this document
+      as a whole, as indicated by the empty about attribute on the 
+      <rdf:Description> element.
+    -->
+    <rdf:Description rdf:about="">
+      <!--
+        The Model Builder Metadata.  The Dublin Core "creator" element is used  
+        to indicate the person who translated the model into CellML.
+      -->
+      <dc:creator rdf:parseType="Resource">
+        <vCard:N rdf:parseType="Resource">
+          <vCard:Family>Kang</vCard:Family>
+          <vCard:Given>Wendy</vCard:Given>
+		</vCard:N>
+        <vCard:EMAIL rdf:parseType="Resource">
+          <rdf:value>wkan014@aucklanduni.ac.nz</rdf:value>
+          <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+        </vCard:EMAIL>
+        <vCard:ORG rdf:parseType="Resource">
+          <vCard:Orgname>The University of Auckland</vCard:Orgname>
+        </vCard:ORG>
+      </dc:creator>
+      
+      <!--
+        The Creation Date metadata. This is the date on which the model
+        was translated into CellML.
+      -->
+      <dcterms:created rdf:parseType="Resource">
+        <dcterms:W3CDTF>2009-09-30</dcterms:W3CDTF>
+      </dcterms:created>
+      
+      <!--
+        The Modification History metadata. This lists the changes that have been
+        made to the document, who made the changes, and when they were made.
+      -->
+     
+    </rdf:Description>
+    
+    <!--
+      The following metadata refers to the model itself, as indicated by the
+      reference to the ID "rangamani_2007", which is    
+      declared on the <model> element.
+    -->
+    <rdf:Description rdf:about="#rangamani_2007">
+      <!-- A human readable name for the model. -->
+      <dc:title>
+        The Rangamani and Sirovich 2007 model on cell survival and the apoptotic pathways initiated by TNF-alpha
+      </dc:title>
+      
+      <!-- A comment regarding the model. -->
+      <cmeta:comment rdf:parseType="Resource">
+        <rdf:value>
+          This is the CellML description of Rangamani and Sirovich's mathematical model on cell survival and the apoptotic pathways initiated by TNF-alpha
+        </rdf:value>
+        <!-- The creator of the comment. -->
+        <dc:creator rdf:parseType="Resource">
+          <vCard:FN>Catherine Lloyd</vCard:FN>
+        </dc:creator>
+      </cmeta:comment>
+      
+      <!--  Keyword(s) -->
+      <bqs:reference rdf:parseType="Resource">
+        <dc:subject rdf:parseType="Resource">
+          <bqs:subject_type>keyword</bqs:subject_type>
+          <rdf:value>
+            <rdf:Bag>
+              <rdf:li>signal transduction</rdf:li>
+              <rdf:li>apoptosis</rdf:li>
+			  <rdf:li>cerebral aneurysm</rdf:li>
+            </rdf:Bag>
+          </rdf:value>
+        </dc:subject>
+      </bqs:reference>
+
+      <bqs:reference rdf:parseType="Resource">
+        <bqs:Pubmed_id>17171720</bqs:Pubmed_id>
+        <bqs:JournalArticle rdf:parseType="Resource">
+          <dc:creator>
+            <rdf:Seq>
+              <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Rangamani</vCard:Family>
+                    <vCard:Given>P</vCard:Given>
+                  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+              <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Sirovich</vCard:Family>
+                    <vCard:Given>L</vCard:Given>
+				  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+            </rdf:Seq>
+          </dc:creator>
+          <dc:title>
+           Survival and apoptotic pathways initiated by TNF-alpha: modeling and predictions
+          </dc:title>
+          <dcterms:issued rdf:parseType="Resource">
+            <dcterms:W3CDTF>2007-08-01</dcterms:W3CDTF>
+          </dcterms:issued>
+          <bqs:Journal rdf:parseType="Resource">
+            <dc:title>Biotechnology and Bioengineering</dc:title>
+          </bqs:Journal>
+          <bqs:volume>97</bqs:volume>
+          <bqs:first_page>1216</bqs:first_page>
+		  <bqs:last_page>1229</bqs:last_page>
+        </bqs:JournalArticle>
+      </bqs:reference>
+     </rdf:Description>
+  </rdf:RDF>
+</model>

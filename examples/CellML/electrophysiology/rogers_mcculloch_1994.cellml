@@ -1,0 +1,491 @@
+<?xml version='1.0' encoding='utf-8'?>
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="1994_rogers_mcculloch" name="rogers_mcculloch_1994_version01">
+	
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>A collocation--Galerkin finite element model of cardiac action potential propagation</title>
+				<author>
+					<firstname>Catherine</firstname>
+					<surname>Lloyd</surname>
+					<affiliation>
+						<shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<sect1 id="sec_status">
+				<title>Model Status</title>
+				<para>
+    This is a CellML version of the modified FitzHugh-Nagumo model, published by Rogers and McCulloch in 1994. While the original two-variable model described a non-dimensional activation variable (u) and a non-dimensional recovery variable (v), here we formulate the model in terms of the `real' action potential given by the time course of the transmembrane potential (Vm). In so doing, the time rate of change of the activation variable describes the total `ionic current' through the membrane with the original model parameters adjusted to give the correct dimensionality.
+</para>
+        </sect1>
+        <sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>
+Abstract: A new computational method was developed for modeling the effects of the geometric complexity, nonuniform muscle fiber orientation, and material inhomogeneity of the ventricular wall on cardiac impulse propagation. The method was used to solve a modification to the FitzHugh-Nagumo system of equations. The geometry, local muscle fiber orientation, and material parameters of the domain were defined using linear Lagrange or cubic Hermite finite element interpolation. Spatial variations of time-dependent excitation and recovery variables were approximated using cubic Hermite finite element interpolation, and the governing finite element equations were assembled using the collocation method. To overcome the deficiencies of conventional collocation methods on irregular domains, Galerkin equations for the no-flux boundary conditions were used instead of collocation equations for the boundary degrees-of-freedom. The resulting system was evolved using an adaptive Runge-Kutta method. Converged two-dimensional simulations of normal propagation showed that this method requires less CPU time than a traditional finite difference discretization. The model also reproduced several other physiologic phenomena known to be important in arrhythmogenesis including: Wenckebach periodicity, slowed propagation and unidirectional block due to wavefront curvature, reentry around a fixed obstacle, and spiral wave reentry. In a new result, we observed wavespeed variations and block due to nonuniform muscle fiber orientation. The findings suggest that the finite element method is suitable for studying normal and pathological cardiac activation and has significant advantages over existing techniques.
+				</para>
+				
+				<para>
+The original paper reference is cited below:
+				</para>
+				
+				<para>A collocation--Galerkin finite element model of cardiac action potential propagation, J.M. Rogers and A.D. McCulloch, 1994, <emphasis>IEEE Transactions on Biomedical Engineering</emphasis>, 41, (8), 743-757.  <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pubmed&amp;cmd=Retrieve&amp;dopt=AbstractPlus&amp;list_uids=7927397&amp;query_hl=1&amp;itool=pubmed_docsum">PubMed ID: 7927397</ulink>
+				</para>
+				
+			</sect1>
+		</article>
+	</documentation>
+    
+  
+
+  <!--
+    Generally, we want to move away from initial/default values being
+    stored in the model directly. But until we are using CellML 1.1
+    it is probably quite useful to include the values in the model.
+  -->
+
+  <!-- Global units -->
+  <units name="mV">
+    <unit units="volt" prefix="milli"/>
+  </units>
+  <units name="uApmmsq">
+    <unit units="ampere" prefix="micro"/>
+    <unit units="metre" prefix="milli" exponent="-2"/>
+  </units>
+  <units name="uFpmmsq">
+    <unit units="farad" prefix="micro"/>
+    <unit units="metre" prefix="milli" exponent="-2"/>
+  </units>
+  <units name="ms">
+    <unit units="second" prefix="milli"/>
+  </units>
+  <units name="pms">
+    <unit units="second" prefix="milli" exponent="-1"/>
+  </units>
+
+  <component name="interface" cmeta:id="interface">
+  
+    
+  
+    <!-- Variables we expect to be set/controlled externally -->
+    <variable units="ms" private_interface="out" name="t"/>
+    <variable units="uFpmmsq" private_interface="out" name="Cm" initial_value="0.01"/>
+    <variable units="mV" private_interface="out" name="Vr" initial_value="-85.0"/>
+    <variable units="mV" private_interface="out" name="Vth" initial_value="-75.0"/>
+    <variable units="mV" private_interface="out" name="Vp" initial_value="15.0"/>
+    <variable units="uApmmsq" private_interface="out" name="c1" initial_value="0.26"/>
+    <variable units="uApmmsq" private_interface="out" name="c2" initial_value="0.1"/>
+    <variable units="pms" private_interface="out" name="b" initial_value="0.013"/>
+    <variable units="dimensionless" private_interface="out" name="d" initial_value="0.8"/>
+    <variable units="uApmmsq" private_interface="out" name="Istim"/>
+    
+    <!-- Variables we want to make available externally -->
+    <variable units="mV" public_interface="out" private_interface="in" name="Vm"/>
+    <variable units="dimensionless" public_interface="out" private_interface="in" name="v"/>
+    <variable units="uApmmsq" public_interface="out" private_interface="in" name="Iion"/>
+    
+    
+
+    <variable units="uApmmsq" public_interface="out" name="IStimC"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML" cmeta:id="IStim_for_cmiss_eq">
+      <apply id="IStim_for_cmiss">
+        <eq/>
+        <ci>IStimC</ci>
+        <ci>Istim</ci>
+      </apply>
+    </math>
+    
+  </component> <!--interface-->
+
+  <component name="membrane_potential" cmeta:id="membrane_potential">
+  
+    
+
+    <!-- Inputs -->
+    <variable units="ms" public_interface="in" name="t"/>
+    <variable units="uFpmmsq" public_interface="in" name="Cm"/>
+    <variable units="mV" public_interface="in" name="Vr"/>
+    <variable units="mV" public_interface="in" name="Vth"/>
+    <variable units="mV" public_interface="in" name="Vp"/>
+    <variable units="uApmmsq" public_interface="in" name="Istim"/>
+    <variable units="uApmmsq" public_interface="in" name="Iion"/>
+
+    <!-- Outputs computed here -->
+    <variable units="mV" public_interface="out" private_interface="out" name="Vm" initial_value="-85"/>
+    <variable units="dimensionless" public_interface="out" name="u"/>
+    
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" cmeta:id="Vm_diff_calculation_eq">
+      <apply id="Vm_diff_calculation">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>t</ci>
+          </bvar>
+          <ci>Vm</ci>
+        </apply>
+        <apply>
+          <divide/>
+          <apply>
+            <minus/>
+            <ci>Istim</ci>
+            <ci>Iion</ci>
+          </apply>
+          <ci>Cm</ci>
+        </apply>
+      </apply>
+    </math>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" cmeta:id="u_calculation_eq">
+      <apply id="u_calculation">
+        <eq/>
+        <ci>u</ci>
+        <apply>
+          <divide/>
+          <apply>
+            <minus/>
+            <ci>Vm</ci>
+            <ci>Vr</ci>
+          </apply>
+          <apply>
+            <minus/>
+            <ci>Vp</ci>
+            <ci>Vr</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <!--membrane_potential-->
+  
+  <component name="ionic_current" cmeta:id="ionic_current">
+  
+    
+
+    <!-- Inputs -->
+    <variable units="mV" public_interface="in" name="Vr"/>
+    <variable units="mV" public_interface="in" name="Vth"/>
+    <variable units="mV" public_interface="in" name="Vp"/>
+    <variable units="uApmmsq" public_interface="in" name="c1"/>
+    <variable units="uApmmsq" public_interface="in" name="c2"/>
+    <variable units="dimensionless" public_interface="in" name="v"/>
+    <variable units="dimensionless" public_interface="in" name="u"/>
+
+    <!-- Outputs computed here -->
+    <variable units="uApmmsq" public_interface="out" private_interface="out" name="Iion" initial_value="0.0"/>
+    
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" cmeta:id="Iion_calculation_eq">
+      <apply id="Iion_calculation">
+        <eq/>
+        <ci>Iion</ci>
+        <apply>
+          <plus/>
+          <apply>
+            <times/>
+            <ci>c1</ci>
+            <ci>u</ci>
+            <apply>
+              <minus/>
+              <ci>u</ci>
+              <apply>
+                <divide/>
+                <apply>
+                  <minus/>
+                  <ci>Vth</ci>
+                  <ci>Vr</ci>
+                </apply>
+                <apply>
+                  <minus/>
+                  <ci>Vp</ci>
+                  <ci>Vr</ci>
+                </apply>
+              </apply>
+            </apply>
+            <apply>
+              <minus/>
+              <ci>u</ci>
+              <cn cellml:units="dimensionless">1.0</cn>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci>c2</ci>
+            <ci>u</ci>
+            <ci>v</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <!--ionic_current-->
+  
+  <component name="recovery_variable" cmeta:id="recovery_variable">
+  
+    
+
+    <!-- Inputs -->
+    <variable units="ms" public_interface="in" name="t"/>
+    <variable units="pms" public_interface="in" name="b"/>
+    <variable units="dimensionless" public_interface="in" name="d"/>
+    <variable units="dimensionless" public_interface="in" name="u"/>
+
+    <!-- Outputs computed here -->
+    <variable units="dimensionless" public_interface="out" private_interface="out" name="v" initial_value="0.0"/>
+    
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" cmeta:id="v_diff_eq">
+      <apply id="v_diff">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>t</ci>
+          </bvar>
+          <ci>v</ci>
+        </apply>
+        <apply>
+          <times/>
+          <ci>b</ci>
+          <apply>
+            <minus/>
+            <ci>u</ci>
+            <apply>
+              <times/>
+              <ci>d</ci>
+              <ci>v</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <!--ionic_current-->
+
+  <connection>
+    <map_components component_2="membrane_potential" component_1="interface"/>
+    <map_variables variable_2="t" variable_1="t"/>
+    <map_variables variable_2="Cm" variable_1="Cm"/>
+    <map_variables variable_2="Vr" variable_1="Vr"/>
+    <map_variables variable_2="Vth" variable_1="Vth"/>
+    <map_variables variable_2="Vp" variable_1="Vp"/>
+    <map_variables variable_2="Vm" variable_1="Vm"/>
+    <map_variables variable_2="Istim" variable_1="Istim"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="ionic_current" component_1="interface"/>
+    <map_variables variable_2="Vr" variable_1="Vr"/>
+    <map_variables variable_2="Vth" variable_1="Vth"/>
+    <map_variables variable_2="Vp" variable_1="Vp"/>
+    <map_variables variable_2="c1" variable_1="c1"/>
+    <map_variables variable_2="c2" variable_1="c2"/>
+    <map_variables variable_2="Iion" variable_1="Iion"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="recovery_variable" component_1="interface"/>
+    <map_variables variable_2="t" variable_1="t"/>
+    <map_variables variable_2="b" variable_1="b"/>
+    <map_variables variable_2="d" variable_1="d"/>
+    <map_variables variable_2="v" variable_1="v"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="ionic_current" component_1="membrane_potential"/>
+    <map_variables variable_2="u" variable_1="u"/>
+    <map_variables variable_2="Iion" variable_1="Iion"/>
+  </connection>
+
+   <connection>
+    <map_components component_2="recovery_variable" component_1="membrane_potential"/>
+    <map_variables variable_2="u" variable_1="u"/>
+  </connection>
+
+ <connection>
+    <map_components component_2="recovery_variable" component_1="ionic_current"/>
+    <map_variables variable_2="v" variable_1="v"/>
+  </connection>
+
+  <group>
+    <relationship_ref relationship="encapsulation"/>
+    <component_ref component="interface">
+      <component_ref component="membrane_potential"/>
+      <component_ref component="ionic_current"/>
+      <component_ref component="recovery_variable"/>
+    </component_ref>
+  </group>
+
+
+
+
+
+
+<rdf:RDF>
+  <rdf:Seq rdf:about="rdf:#citationAuthorsSeq">
+    <rdf:li rdf:resource="rdf:#author1Vcard"/>
+    <rdf:li rdf:resource="rdf:#author2Vcard"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="#Iion_calculation_eq">
+    <cmeta:comment rdf:resource="rdf:#b82dbf94-7b33-4823-806a-557ce4536abd"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#aadf7871-c206-4987-902b-a0796dabca8f">
+    <rdf:value>
+            Here we define the total ionic current through the cellular
+            membrane - equivalent to the temporal derivative of the original
+            activation variable. The modification of Rogers and McCulloch is
+            in this equation, with the additional multiplication of recovery 
+            variable with the normalised potential.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="#ionic_current">
+    <cmeta:comment rdf:resource="rdf:#aadf7871-c206-4987-902b-a0796dabca8f"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#v_diff_eq">
+    <cmeta:comment rdf:resource="rdf:#504605b2-6f12-41e5-b56f-05f90c7441a9"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4d7872b8-d9f2-430f-afa4-313a1a399edc">
+    <rdf:value>
+            The non-dimensional and scaled potential value.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author1Vcard">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#author1VcardN"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#IStim_for_cmiss_eq">
+    <cmeta:comment rdf:resource="rdf:#5710d9f3-ae2e-409e-b330-dfe3e7a439d1"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#membrane_potential">
+    <cmeta:comment rdf:resource="rdf:#88d6229e-3b24-462a-a1cc-0bb32f8b3a10"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#5710d9f3-ae2e-409e-b330-dfe3e7a439d1">
+    <rdf:value>
+            This is a dummy equation that we simply use to make grabbing the
+            value in CMISS much easier.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#fa77d824-2aac-4ecc-a456-920282fcc775">
+    <rdf:value>
+            Here we define the non-dimensional recovery variable, v.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b2f86479-026a-4f89-93cf-cb2e47f80e1a">
+    <bqs:Pubmed_id>7927397</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#4a648a70-1b13-4b37-8153-eb3ad4b64f0b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#acd05c22-7e57-4958-b7bd-5b3262d02a04">
+    <vCard:ORG rdf:resource="rdf:#ffefcaa9-9cd5-498a-a31a-c2871f08c8b5"/>
+    <vCard:EMAIL rdf:resource="rdf:#83226f40-5efe-4e39-9158-821581a0f954"/>
+    <vCard:N rdf:resource="rdf:#692fc864-72f9-47b3-90f2-a3b34e326029"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author2VcardN">
+    <vCard:Given>A</vCard:Given>
+    <vCard:Family>McCulloch</vCard:Family>
+    <vCard:Other>D</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="#1994_rogers_mcculloch">
+    <bqs:reference rdf:resource="rdf:#b2f86479-026a-4f89-93cf-cb2e47f80e1a"/>
+<bqs:reference rdf:parseType="Resource">
+  <dc:subject rdf:parseType="Resource">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value>
+      <rdf:Bag>
+        <rdf:li>cardiac</rdf:li>
+        <rdf:li>electrophysiology</rdf:li>
+        <rdf:li>finite element</rdf:li>
+      </rdf:Bag>
+    </rdf:value>
+  </dc:subject>
+</bqs:reference>
+    <cmeta:comment rdf:resource="rdf:#4a90b306-e221-411a-9ec9-45ece7088395"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#recovery_variable">
+    <cmeta:comment rdf:resource="rdf:#fa77d824-2aac-4ecc-a456-920282fcc775"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4a648a70-1b13-4b37-8153-eb3ad4b64f0b">
+    <dc:creator rdf:resource="rdf:#citationAuthorsSeq"/>
+    <dc:title>A collocation--Galerkin finite element model of cardiac action potential propagation</dc:title>
+    <bqs:volume>41</bqs:volume>
+    <bqs:first_page>743</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#e3a772ca-ea52-4b46-95ea-4ca23c97bae5"/>
+    <dcterms:issued rdf:resource="rdf:#1a93d80e-d7f1-409f-b48b-2d6459d4d4b0"/>
+    <bqs:last_page>757</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author2Vcard">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#author2VcardN"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#692fc864-72f9-47b3-90f2-a3b34e326029">
+    <vCard:Given>David</vCard:Given>
+    <vCard:Family>Nickerson</vCard:Family>
+    <vCard:Other>P</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#88d6229e-3b24-462a-a1cc-0bb32f8b3a10">
+    <rdf:value>
+            The component which defines the kinetics of the transmembrane potential.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#60c1f530-1fa3-412c-967e-3f7224c8da93">
+    <dcterms:W3CDTF>2003-06-10</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ffefcaa9-9cd5-498a-a31a-c2871f08c8b5">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>The Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0b486530-a7a6-4dd2-b200-555e663fe21a">
+    <rdf:value>
+            We'll use this component as the "interface" to the model, all 
+            other components are hidden via encapsulation in this component.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#504605b2-6f12-41e5-b56f-05f90c7441a9">
+    <rdf:value>
+            The kinetics of the recovery variable.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7fe4b2e3-4310-4966-9ce6-3d2f5700ddb7">
+    <rdf:value>
+            This equation describes the kinetics of the transmembrane,
+            potential - the action potential.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="#Vm_diff_calculation_eq">
+    <cmeta:comment rdf:resource="rdf:#7fe4b2e3-4310-4966-9ce6-3d2f5700ddb7"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#83226f40-5efe-4e39-9158-821581a0f954">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>d.nickerson@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author1VcardN">
+    <vCard:Given>J</vCard:Given>
+    <vCard:Family>Rogers</vCard:Family>
+    <vCard:Other>M</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e3a772ca-ea52-4b46-95ea-4ca23c97bae5">
+    <dc:title>IEEE Transactions on Biomedical Engineering</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b82dbf94-7b33-4823-806a-557ce4536abd">
+    <rdf:value>
+            The calcuation of the total ionic current.
+          </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1a93d80e-d7f1-409f-b48b-2d6459d4d4b0">
+    <dcterms:W3CDTF>1994-01-01</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dcterms:created rdf:resource="rdf:#60c1f530-1fa3-412c-967e-3f7224c8da93"/>
+    <dc:creator rdf:resource="rdf:#acd05c22-7e57-4958-b7bd-5b3262d02a04"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4a90b306-e221-411a-9ec9-45ece7088395">
+    <rdf:value>This is a CellML version of the modified FitzHugh-Nagumo model, published by Rogers and McCulloch in 1994. While the original two-variable model described a non-dimensional activation variable (u) and a non-dimensional recovery variable (v), here we formulate the model in terms of the `real' action potential given by the time course of the transmembrane potential (Vm). In so doing, the time rate of change of the activation variable describes the total `ionic current' through the membrane with the original model parameters adjusted to give the correct dimensionality.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="#u_calculation_eq">
+    <cmeta:comment rdf:resource="rdf:#4d7872b8-d9f2-430f-afa4-313a1a399edc"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#interface">
+    <cmeta:comment rdf:resource="rdf:#0b486530-a7a6-4dd2-b200-555e663fe21a"/>
+  </rdf:Description>
+</rdf:RDF>
+</model>

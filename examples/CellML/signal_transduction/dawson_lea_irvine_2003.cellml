@@ -1,0 +1,1066 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--  FILE :  dawson_model3_2003.xml
+
+CREATED :  17th October 2003
+
+LAST MODIFIED : 17th October 2003
+
+AUTHOR :  Catherine Lloyd
+          Bioengineering Institute
+          The University of Auckland
+          
+MODEL STATUS :  This model conforms to the CellML 1.0 Specification released on
+10th August 2001, and the 16/1/02 CellML Metadata 1.0 Specification.
+
+DESCRIPTION :  This file contains a CellML description of Dawson et al.'s 2003 kinetic model of the inositol trisphosphate receptor.
+
+CHANGES:  
+  
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="dawson_lea_irvine_2003_version03" name="dawson_lea_irvine_2003_version03">
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Kinetic Model of the Inositol Trisphosphate Receptor</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Bioengineering Institute, University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+            This model can be loaded into OpenCell without errors but can not be integrated properly.
+          </para>
+<para>
+ValidateCellML verifies this model as valid CellML with full unit consistency.
+</para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+The release of Ca<superscript>2+</superscript> from intracellular stores via InsP<subscript>3</subscript> receptors displays unusual kinetics.  It has been shown that successive additions of low concentrations of InsP<subscript>3</subscript> causes successive rapid transients of Ca<superscript>2+</superscript> release.  Two hypotheses have been put forward to explain this phenomenon, either:
+</para>
+<itemizedlist>
+  <listitem>
+            <para>Cells contain a series of Ca<superscript>2+</superscript> stores of various sensitivities to InsP<subscript>3</subscript>, such that at any given concentration of InsP<subscript>3</subscript>, only some stores will release their Ca<superscript>2+</superscript>, whilst others remain intact.  This is also known as the <emphasis>all-or-nothing</emphasis> model; or </para>
+          </listitem>
+  <listitem>
+            <para>InsP<subscript>3</subscript> receptors are able to adapt to a particular InsP<subscript>3</subscript> concentration, such that at a given [InsP<subscript>3</subscript>], all the Ca<superscript>2+</superscript> stores partially empty.  Because partial emptying induces faster cycling of Ca<superscript>2+</superscript> across the store membrane via the SERCA pump, this theory is also known as the <emphasis>steady-state</emphasis> model.</para>
+          </listitem>
+</itemizedlist>
+
+<para>
+There are sets of experimental data in support of both explanations.  The two theories require very different mechanisms.  The <emphasis>all-or-nothing</emphasis> model not only requires differing sensitivities of stores to InsP<subscript>3</subscript>, but also a high degree of cooperativity such that a small range of InsP<subscript>3</subscript> concentrations will empty a particular store whilst leaving others unaffected.  Differences in sensitivity could be due to structural differences, differences in InsP<subscript>3</subscript> density, intracellular cell environment, or luminal [Ca<superscript>2+</superscript>].  In contrast, the <emphasis>steady-state</emphasis> model seems to require complex, adaptive kinetic changes in the receptor.  Mathematical steady-state models have been developed and in general they involve effects of Ca<superscript>2+</superscript> binding to sites within the channel or to sites in the channel mouth, although there is also evidence that the InsP<subscript>3</subscript> receptor can show adaptive behaviour.   
+</para>
+
+<para>
+Models of adaptive behaviour at the single channel level have been developed for the structurally homologous ryanodine receptor.  It has been suggested that similar mechanisms account for the behaviour of the InsP<subscript>3</subscript> receptor.  Using the Sachs <emphasis>et al.</emphasis> ryanodine receptor model as a foundation, Dawson <emphasis>et al.</emphasis> develop such a model.  They begin with a relatively simple situation with no Ca<superscript>2+</superscript> fluxes (see <xref linkend="fig_reaction_diagram1"/>), to more complex situations which account for the positive and negative feedback from Ca<subscript>(cyt)</subscript>, and the inactivation of the receptor in the presence of Ca<superscript>2+</superscript> (see <xref linkend="fig_reaction_diagram2"/> and <xref linkend="fig_reaction_diagram3"/>).  This final model is an adaptive model of the InsP<subscript>3</subscript> receptor that can show either <emphasis>all-or-nothing</emphasis> or <emphasis>steady-state</emphasis> behaviour, depending on the experimental conditions.  The model suggests that the receptor has two interconvertible conformational states: one that rapidly binds InsP<subscript>3</subscript> but has a low affinity for the ligand, while the other state binds slowly but with a high affinity.  
+</para> 
+
+<para>
+The models have been described here in CellML (the raw CellML description of the Dawson <emphasis>et al.</emphasis> 2003 models can be downloaded in various formats as described in <xref linkend="sec_download_this_model"/>).     
+</para>
+
+<para>
+The complete original paper reference is cited below:
+</para>
+
+<para>
+Kinetic model of the inositol trisphosphate receptor that shows both steady-state and quantal patterns of Ca<superscript>2+</superscript> release from intracellular stores, Alan P. Dawson, Edward J. A. Lea, and Robin F. Irvine, 2003,
+            <emphasis>Biochemical Journal</emphasis> 
+          , 370, 621-629.   <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;list_uids=12479792&amp;dopt=Abstract">PubMed ID: 12479792</ulink>
+</para>
+
+<informalfigure float="0" id="fig_reaction_diagram1">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>reaction diagram1</title>
+    </objectinfo>
+    <imagedata fileref="dawson_2003a.png"/>
+  </imageobject>
+</mediaobject>
+<caption>Scheme 1: An adapting model of the InsP<subscript>3</subscript> receptor.</caption>
+</informalfigure>
+
+<informalfigure float="0" id="fig_reaction_diagram2">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>reaction diagram2</title>
+    </objectinfo>
+    <imagedata fileref="dawson_2003b.png"/>
+  </imageobject>
+</mediaobject>
+<caption>Scheme 2: An adapting model of the InsP<subscript>3</subscript> receptor which includes feedback effects of Ca<superscript>2+</superscript> near the channel mouth.</caption>
+</informalfigure>
+
+<informalfigure float="0" id="fig_reaction_diagram3">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>reaction diagram3</title>
+    </objectinfo>
+    <imagedata fileref="dawson_2003c.png"/>
+  </imageobject>
+</mediaobject>
+<caption>Scheme 3: Adaptive channel model based on the occupation of one InsP<subscript>3</subscript> binding site being required to open the channel.</caption>
+</informalfigure>
+
+</sect1>
+</article>
+</documentation>
+  
+  
+ 
+  <units name="micromolar">
+    <unit units="mole" prefix="micro"/>
+    <unit units="litre" exponent="-1"/>
+  </units>
+  
+  <units name="flux">
+    <unit units="micromolar"/>
+    <unit units="second" exponent="-1"/>
+  </units>
+  
+  <units name="first_order_rate_constant">
+    <unit units="second" exponent="-1"/>
+  </units>
+  
+  <units name="second_order_rate_constant">
+    <unit units="micromolar" exponent="-1"/>
+    <unit units="second" exponent="-1"/>
+  </units>
+  
+  
+  <component name="environment">
+    <variable units="second" public_interface="out" name="time"/>
+  </component>
+  
+  <component name="R" cmeta:id="R">
+    <rdf:RDF>
+      <rdf:Description rdf:about="R">
+        <dc:title>R</dc:title>
+        <dcterms:alternative>ryanodine receptor</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="micromolar" public_interface="out" name="R"/>
+    <variable units="flux" public_interface="in" name="V1"/> 
+    <variable units="flux" public_interface="in" name="V4"/> 
+    <variable units="flux" public_interface="in" name="V2"/>
+    <variable units="second" public_interface="in" name="time"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>R</ci> 
+        </apply>
+        <apply>
+          <plus/>
+          <ci>V1</ci>
+          <ci>V4</ci>
+          <ci>V2</ci>
+        </apply> 
+      </apply> 
+    </math>  
+  </component>
+  
+  <component name="R__" cmeta:id="R__">
+    <rdf:R__DF>
+      <rdf:Description rdf:about="R__">
+        <dc:title>R__</dc:title>
+        <dcterms:alternative>inactive ryanodine receptor</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:R__DF> 
+    <variable units="micromolar" public_interface="out" name="R__"/>
+    <variable units="flux" public_interface="in" name="V4"/> 
+    <variable units="flux" public_interface="in" name="V5"/>
+    <variable units="second" public_interface="in" name="time"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>R__</ci> 
+        </apply>
+        <apply>
+          <plus/>
+          <ci>V4</ci>
+          <ci>V5</ci>
+        </apply> 
+      </apply> 
+    </math>  
+  </component>
+  
+  <component name="I" cmeta:id="I">
+    <rdf:IDF>
+      <rdf:Description rdf:about="I">
+        <dc:title>I</dc:title>
+        <dcterms:alternative>InsP3</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:IDF> 
+    <variable units="micromolar" public_interface="out" name="I"/>
+    <variable units="flux" public_interface="in" name="V2"/> 
+    <variable units="flux" public_interface="in" name="V6"/> 
+    <variable units="second" public_interface="in" name="time"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>I</ci> 
+        </apply>
+        <apply>
+          <plus/>
+          <ci>V2</ci>
+          <ci>V6</ci>
+        </apply> 
+      </apply> 
+    </math>  
+  </component>
+
+  <component name="O1" cmeta:id="O1">
+    <rdf:O1DF>
+      <rdf:Description rdf:about="O1">
+        <dc:title>O1</dc:title>
+        <dcterms:alternative>open state</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:O1DF> 
+    <variable units="micromolar" public_interface="out" name="O1"/>
+    <variable units="flux" public_interface="in" name="V2"/> 
+    <variable units="flux" public_interface="in" name="V7"/> 
+    <variable units="flux" public_interface="in" name="V3"/>
+    <variable units="second" public_interface="in" name="time"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>O1</ci> 
+        </apply>
+        <apply>
+          <plus/>
+          <ci>V2</ci>
+          <ci>V7</ci>
+          <ci>V3</ci>
+        </apply> 
+      </apply> 
+    </math>  
+  </component>
+  
+  <component name="O2" cmeta:id="O2">
+    <rdf:O2DF>
+      <rdf:Description rdf:about="O2">
+        <dc:title>O2</dc:title>
+        <dcterms:alternative>second open state</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:O2DF> 
+    <variable units="micromolar" public_interface="out" name="O2"/>
+    <variable units="flux" public_interface="in" name="V3"/> 
+    <variable units="second" public_interface="in" name="time"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>O2</ci> 
+        </apply>
+        <ci>V3</ci>
+      </apply> 
+    </math>  
+  </component>
+  
+  <component name="R_" cmeta:id="R_">
+    <rdf:R_DF>
+      <rdf:Description rdf:about="R_">
+        <dc:title>R_</dc:title>
+        <dcterms:alternative>ryanodine receptor</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:R_DF> 
+    <variable units="micromolar" public_interface="out" name="R_"/>
+    <variable units="flux" public_interface="in" name="V1"/> 
+    <variable units="flux" public_interface="in" name="V5"/> 
+    <variable units="flux" public_interface="in" name="V6"/>
+    <variable units="second" public_interface="in" name="time"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>R_</ci> 
+        </apply>
+        <apply>
+          <plus/>
+          <ci>V1</ci>
+          <ci>V5</ci>
+          <ci>V6</ci>
+        </apply> 
+      </apply> 
+    </math>  
+  </component>
+  
+  <component name="C1" cmeta:id="C1">
+    <rdf:C1DF>
+      <rdf:Description rdf:about="C1">
+        <dc:title>C1</dc:title>
+        <dcterms:alternative>open state</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:C1DF> 
+    <variable units="micromolar" public_interface="out" name="C1"/>
+    <variable units="flux" public_interface="in" name="V6"/> 
+    <variable units="flux" public_interface="in" name="V7"/>
+    <variable units="second" public_interface="in" name="time"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>C1</ci> 
+        </apply>
+        <apply>
+          <plus/>
+          <ci>V6</ci>
+          <ci>V7</ci>
+        </apply> 
+      </apply> 
+    </math>  
+  </component>
+  
+  <component name="Ca_ER" cmeta:id="Ca_ER">
+    <rdf:Ca_ERDF>
+      <rdf:Description rdf:about="Ca_ER">
+        <dc:title>Ca_ER</dc:title>
+        <dcterms:alternative>calcium in the endoplasmic reticulum</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:Ca_ERDF> 
+    <variable units="micromolar" public_interface="out" name="Ca_ER"/>
+    <variable units="flux" public_interface="in" name="V8"/>
+    <variable units="flux" public_interface="in" name="V9"/>
+    <variable units="second" public_interface="in" name="time"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>Ca_ER</ci> 
+        </apply>
+        <apply>
+          <plus/>
+          <ci>V8</ci>
+          <ci>V9</ci>
+        </apply> 
+      </apply> 
+    </math>  
+  </component>
+  
+  <component name="Ca_cyt" cmeta:id="Ca_cyt">
+    <rdf:Ca_cytDF>
+      <rdf:Description rdf:about="Ca_cyt">
+        <dc:title>Ca_cyt</dc:title>
+        <dcterms:alternative>cytosolic calcium</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:Ca_cytDF> 
+    <variable units="micromolar" public_interface="out" name="Ca_cyt"/>
+    <variable units="flux" public_interface="in" name="V10"/>
+    <variable units="second" public_interface="in" name="time"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>Ca_cyt</ci> 
+        </apply>
+        <ci>V10</ci>
+      </apply> 
+    </math>  
+  </component>
+  
+  <component name="Ca_L" cmeta:id="Ca_L">
+    <rdf:Ca_LDF>
+      <rdf:Description rdf:about="Ca_L">
+        <dc:title>Ca_L</dc:title>
+        <dcterms:alternative>calcium in adomain close to the channel mouth</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:Ca_LDF> 
+    <variable units="micromolar" public_interface="out" name="Ca_L"/>
+    <variable units="flux" public_interface="in" name="V10"/>
+    <variable units="flux" public_interface="in" name="V3"/>
+    <variable units="flux" public_interface="in" name="V4"/>
+    <variable units="flux" public_interface="in" name="V5"/>
+    <variable units="second" public_interface="in" name="time"/>
+    <variable units="flux" public_interface="in" name="V8"/>
+    <variable units="flux" public_interface="in" name="V9"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>Ca_L</ci> 
+        </apply>
+        <apply>
+          <plus/>
+          <ci>V4</ci>
+          <ci>V5</ci>
+          <ci>V3</ci>
+          <ci>V10</ci>
+          <ci>V8</ci>
+          <ci>V9</ci>
+        </apply>  
+      </apply> 
+    </math>  
+  </component>
+  
+  
+  <component name="V1">
+    <variable units="flux" public_interface="out" name="V1"/>
+    
+    <variable units="micromolar" public_interface="in" name="R"/>
+    <variable units="micromolar" public_interface="in" name="R_"/>
+    
+    <variable units="first_order_rate_constant" name="k1" initial_value="1.0"/>
+    <variable units="first_order_rate_constant" name="k1_" initial_value="10.0"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="V1_calculation">
+        <eq/>
+        <ci> V1 </ci>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> k1_ </ci>
+            <ci> R_ </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> k1 </ci>
+            <ci> R </ci>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="V2">
+    <variable units="flux" public_interface="out" name="V2"/>
+    
+    <variable units="micromolar" public_interface="in" name="R"/>
+    <variable units="micromolar" public_interface="in" name="O1"/>
+    <variable units="micromolar" public_interface="in" name="I"/>
+    
+    <variable units="second_order_rate_constant" name="k2" initial_value="100.0"/>
+    <variable units="first_order_rate_constant" name="k2_" initial_value="12000.0"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="V2_calculation">
+        <eq/>
+        <ci> V2 </ci>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> k2_ </ci>
+            <ci> O1 </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> k2 </ci>
+            <ci> R </ci>
+            <ci> I </ci>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="V3">
+    <variable units="flux" public_interface="out" name="V3"/>
+    
+    <variable units="micromolar" public_interface="in" name="O1"/>
+    <variable units="micromolar" public_interface="in" name="O2"/>
+    <variable units="micromolar" public_interface="in" name="Ca_L"/>
+    
+    <variable units="second_order_rate_constant" name="k3" initial_value="100.0"/>
+    <variable units="first_order_rate_constant" name="k3_" initial_value="10.0"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="V3_calculation">
+        <eq/>
+        <ci> V3 </ci>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> k3_ </ci>
+            <ci> O2 </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> k3 </ci>
+            <ci> O1 </ci>
+            <ci> Ca_L </ci>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component> 
+  
+  <component name="V4">
+    <variable units="flux" public_interface="out" name="V4"/>
+    
+    <variable units="micromolar" public_interface="in" name="R"/>
+    <variable units="micromolar" public_interface="in" name="R__"/>
+    <variable units="micromolar" public_interface="in" name="Ca_L"/>
+    
+    <variable units="second_order_rate_constant" name="k4" initial_value="1.0"/>
+    <variable units="first_order_rate_constant" name="k4_" initial_value="1.0"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="V4_calculation">
+        <eq/>
+        <ci> V4 </ci>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> k4_ </ci>
+            <ci> R__ </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> k4 </ci>
+            <ci> R </ci>
+            <ci> Ca_L </ci>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component> 
+  
+  <component name="V5">
+    <variable units="flux" public_interface="out" name="V5"/>
+    
+    <variable units="micromolar" public_interface="in" name="R_"/>
+    <variable units="micromolar" public_interface="in" name="R__"/>
+    <variable units="micromolar" public_interface="in" name="Ca_L"/>
+    
+    <variable units="second_order_rate_constant" name="k5" initial_value="10.0"/>
+    <variable units="first_order_rate_constant" name="k5_" initial_value="1.0"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="V5_calculation">
+        <eq/>
+        <ci> V5 </ci>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> k5_ </ci>
+            <ci> R__ </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> k5 </ci>
+            <ci> R_ </ci>
+            <ci> Ca_L </ci>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component> 
+  
+  <component name="V6">
+    <variable units="flux" public_interface="out" name="V6"/>
+    
+    <variable units="micromolar" public_interface="in" name="R_"/>
+    <variable units="micromolar" public_interface="in" name="C1"/>
+    <variable units="micromolar" public_interface="in" name="I"/>
+    
+    <variable units="second_order_rate_constant" name="k6" initial_value="2.0"/>
+    <variable units="first_order_rate_constant" name="k6_" initial_value="2.4"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="V6_calculation">
+        <eq/>
+        <ci> V6 </ci>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> k6_ </ci>
+            <ci> C1 </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> k6 </ci>
+            <ci> R_ </ci>
+            <ci> I </ci>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="V7">
+    <variable units="flux" public_interface="out" name="V7"/>
+    
+    <variable units="micromolar" public_interface="in" name="O1"/>
+    <variable units="micromolar" public_interface="in" name="C1"/>
+    
+    <variable units="first_order_rate_constant" name="k7" initial_value="10.0"/>
+    <variable units="first_order_rate_constant" name="k7_" initial_value="1.0"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="V7_calculation">
+        <eq/>
+        <ci> V7 </ci>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> k7_ </ci>
+            <ci> C1 </ci>
+          </apply>
+          <apply>
+            <times/>
+            <ci> k7 </ci>
+            <ci> O1 </ci>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="V8">
+    <variable units="flux" public_interface="out" name="V8"/>
+    
+    <variable units="micromolar" public_interface="in" name="Ca_ER"/>
+    
+    <variable units="first_order_rate_constant" name="k8" initial_value="500.0"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="V8_calculation">
+        <eq/>
+        <ci> V8 </ci>
+        <apply>
+          <times/>
+          <ci> k8 </ci>
+          <ci> Ca_ER </ci>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="V9">
+    <variable units="flux" public_interface="out" name="V9"/>
+    
+    <variable units="micromolar" public_interface="in" name="Ca_ER"/>
+    
+    <variable units="first_order_rate_constant" name="k9" initial_value="5000.0"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="V9_calculation">
+        <eq/>
+        <ci> V9 </ci>
+        <apply>
+          <times/>
+          <ci> k9 </ci>
+          <ci> Ca_ER </ci>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="V10">
+    <variable units="flux" public_interface="out" name="V10"/>
+    
+    <variable units="micromolar" public_interface="in" name="Ca_L"/>
+    
+    <variable units="first_order_rate_constant" name="k10" initial_value="500.0"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="V10_calculation">
+        <eq/>
+        <ci> V10 </ci>
+        <apply>
+          <times/>
+          <ci> k10 </ci>
+          <ci> Ca_L </ci>
+        </apply>
+      </apply>    
+    </math>
+  </component> 
+  
+  
+  <connection>
+    <map_components component_2="V4" component_1="R__"/>
+    <map_variables variable_2="R__" variable_1="R__"/>
+    <map_variables variable_2="V4" variable_1="V4"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V5" component_1="R__"/>
+    <map_variables variable_2="R__" variable_1="R__"/>
+    <map_variables variable_2="V5" variable_1="V5"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V1" component_1="R"/>
+    <map_variables variable_2="R" variable_1="R"/>
+    <map_variables variable_2="V1" variable_1="V1"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V2" component_1="R"/>
+    <map_variables variable_2="R" variable_1="R"/>
+    <map_variables variable_2="V2" variable_1="V2"/>
+  </connection>
+ 
+  <connection>
+    <map_components component_2="V4" component_1="R"/>
+    <map_variables variable_2="R" variable_1="R"/>
+    <map_variables variable_2="V4" variable_1="V4"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V2" component_1="O1"/>
+    <map_variables variable_2="O1" variable_1="O1"/>
+    <map_variables variable_2="V2" variable_1="V2"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V7" component_1="O1"/>
+    <map_variables variable_2="O1" variable_1="O1"/>
+    <map_variables variable_2="V7" variable_1="V7"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V3" component_1="O1"/>
+    <map_variables variable_2="O1" variable_1="O1"/>
+    <map_variables variable_2="V3" variable_1="V3"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V3" component_1="O2"/>
+    <map_variables variable_2="O2" variable_1="O2"/>
+    <map_variables variable_2="V3" variable_1="V3"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V5" component_1="R_"/>
+    <map_variables variable_2="R_" variable_1="R_"/>
+    <map_variables variable_2="V5" variable_1="V5"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V1" component_1="R_"/>
+    <map_variables variable_2="R_" variable_1="R_"/>
+    <map_variables variable_2="V1" variable_1="V1"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V6" component_1="R_"/>
+    <map_variables variable_2="R_" variable_1="R_"/>
+    <map_variables variable_2="V6" variable_1="V6"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V6" component_1="C1"/>
+    <map_variables variable_2="C1" variable_1="C1"/>
+    <map_variables variable_2="V6" variable_1="V6"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V7" component_1="C1"/>
+    <map_variables variable_2="C1" variable_1="C1"/>
+    <map_variables variable_2="V7" variable_1="V7"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V2" component_1="I"/>
+    <map_variables variable_2="I" variable_1="I"/>
+    <map_variables variable_2="V2" variable_1="V2"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V6" component_1="I"/>
+    <map_variables variable_2="I" variable_1="I"/>
+    <map_variables variable_2="V6" variable_1="V6"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V8" component_1="Ca_ER"/>
+    <map_variables variable_2="Ca_ER" variable_1="Ca_ER"/>
+    <map_variables variable_2="V8" variable_1="V8"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V9" component_1="Ca_ER"/>
+    <map_variables variable_2="Ca_ER" variable_1="Ca_ER"/>
+    <map_variables variable_2="V9" variable_1="V9"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V8" component_1="Ca_L"/>
+    <map_variables variable_2="V8" variable_1="V8"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V9" component_1="Ca_L"/>
+    <map_variables variable_2="V9" variable_1="V9"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V3" component_1="Ca_L"/>
+    <map_variables variable_2="Ca_L" variable_1="Ca_L"/>
+    <map_variables variable_2="V3" variable_1="V3"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V10" component_1="Ca_L"/>
+    <map_variables variable_2="Ca_L" variable_1="Ca_L"/>
+    <map_variables variable_2="V10" variable_1="V10"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V4" component_1="Ca_L"/>
+    <map_variables variable_2="Ca_L" variable_1="Ca_L"/>
+    <map_variables variable_2="V4" variable_1="V4"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V5" component_1="Ca_L"/>
+    <map_variables variable_2="Ca_L" variable_1="Ca_L"/>
+    <map_variables variable_2="V5" variable_1="V5"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="V10" component_1="Ca_cyt"/>
+    <map_variables variable_2="V10" variable_1="V10"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="R"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="R__"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="O1"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="O2"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Ca_ER"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Ca_cyt"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Ca_L"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="I"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="R_"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="C1"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+
+
+
+
+
+
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Bag rdf:about="rdf:#280f2776-20a1-4b92-8ad3-15d674b582eb">
+    <rdf:li>calcium dynamics</rdf:li>
+    <rdf:li>IP3 receptor</rdf:li>
+    <rdf:li>signal transduction</rdf:li>
+  </rdf:Bag>
+  <rdf:Seq rdf:about="rdf:#92901505-89c7-4f44-ac8d-f9bbab5b5e2e">
+    <rdf:li rdf:resource="rdf:#3c8c6c13-9330-4260-88b8-0b667da3e282"/>
+    <rdf:li rdf:resource="rdf:#cec3f006-93d8-4e7f-aced-47288e942b99"/>
+    <rdf:li rdf:resource="rdf:#bb9543cc-ee4c-40f7-bbcf-8e380d7dad9d"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="">
+    <dc:publisher>The University of Auckland, Bioengineering Institute</dc:publisher>
+    <cmeta:comment rdf:resource="rdf:#69f8902b-c937-46c8-a2de-432b65e849db"/>
+    <dcterms:created rdf:resource="rdf:#7442e332-eb3d-428e-a7cd-efd9353dd2b3"/>
+    <dc:creator rdf:resource="rdf:#b23756f0-3670-40bc-80b0-4f25e7be559a"/>
+    <cmeta:modification rdf:resource="rdf:#f7226f39-5ae1-4a8c-8040-789d2b223c31"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3c8c6c13-9330-4260-88b8-0b667da3e282">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#ff76b032-3524-4410-a81b-201e9138fd66"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#6913afc6-902e-4d03-9436-6f447bfbaecf">
+    <dc:subject rdf:resource="rdf:#624b3cdb-2f54-4912-85f3-c237b2647d4f"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#c9544bb7-9244-409e-9f3e-341cb3da4636">
+    <vCard:Given>James</vCard:Given>
+    <vCard:Family>Lawson</vCard:Family>
+    <vCard:Other>Richard</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ff76b032-3524-4410-a81b-201e9138fd66">
+    <vCard:Given>Alan</vCard:Given>
+    <vCard:Family>Dawson</vCard:Family>
+    <vCard:Other>P</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#72dd4372-307d-415e-9da0-eb10e9e25e8c">
+    <vCard:FN/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8b8bd893-9b00-40aa-aca5-a56efdfa6808">
+    <vCard:Given>Edward</vCard:Given>
+    <vCard:Family>Lea</vCard:Family>
+    <vCard:Other>A</vCard:Other>
+    <vCard:Other>J</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8fe06674-8907-48b0-b913-afbf01a53a65">
+    <dc:creator rdf:resource="rdf:#ced3d133-8efc-4d46-9a51-780a44f14a61"/>
+    <rdf:value>This is the CellML description of Dawson et al.'s 2003 kinetic model of the inositol trisphosphate receptor.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#45be0ea0-af7a-46ed-b260-532f8dbcc63c">
+    <vCard:Given>Robin</vCard:Given>
+    <vCard:Family>Irvine</vCard:Family>
+    <vCard:Other>F</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#97bdc196-216b-4068-8c1e-b4b170c36601">
+    <dc:title>Biochemical Journal</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#754ce05b-55b8-40a3-9ff4-d767b97d3869">
+    <dcterms:W3CDTF>2009-06-08T16:42:56+12:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#610a8f88-3b95-427b-835b-8cefb2d1b939">
+    <vCard:N rdf:resource="rdf:#c9544bb7-9244-409e-9f3e-341cb3da4636"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#da3e61a7-cf1c-43c8-bd44-b658d78c83c0">
+    <dc:creator rdf:resource="rdf:#92901505-89c7-4f44-ac8d-f9bbab5b5e2e"/>
+    <dc:title>Kinetic model of the inositol trisphosphate receptor that shows both steady-state and quantal patterns of Ca2+ release from intracellular stores</dc:title>
+    <bqs:volume>370</bqs:volume>
+    <bqs:first_page>621</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#97bdc196-216b-4068-8c1e-b4b170c36601"/>
+    <dcterms:issued rdf:resource="rdf:#727b4d56-030d-4dda-a960-bd899f76c2d3"/>
+    <bqs:last_page>629</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#49ce631f-53aa-42d2-a364-f6c86276cf4c">
+    <bqs:Pubmed_id>12479792</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#da3e61a7-cf1c-43c8-bd44-b658d78c83c0"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ced3d133-8efc-4d46-9a51-780a44f14a61">
+    <vCard:FN>Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#69f8902b-c937-46c8-a2de-432b65e849db">
+    <dc:creator rdf:resource="rdf:#72dd4372-307d-415e-9da0-eb10e9e25e8c"/>
+    <rdf:value/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b23756f0-3670-40bc-80b0-4f25e7be559a">
+    <vCard:ORG rdf:resource="rdf:#2f82d80f-32cd-4193-b223-23beec7f4c2c"/>
+    <vCard:EMAIL rdf:resource="rdf:#1fde30af-c8b1-4523-b357-0567284a5d06"/>
+    <vCard:N rdf:resource="rdf:#3edf2324-1684-4aaa-906d-190c86666688"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#2f82d80f-32cd-4193-b223-23beec7f4c2c">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>The Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f7226f39-5ae1-4a8c-8040-789d2b223c31">
+    <dcterms:modified rdf:resource="rdf:#754ce05b-55b8-40a3-9ff4-d767b97d3869"/>
+    <rdf:value>updated curation status,&#13;
+removed publication link from documentation</rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#610a8f88-3b95-427b-835b-8cefb2d1b939"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#bb9543cc-ee4c-40f7-bbcf-8e380d7dad9d">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#45be0ea0-af7a-46ed-b260-532f8dbcc63c"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#cec3f006-93d8-4e7f-aced-47288e942b99">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#8b8bd893-9b00-40aa-aca5-a56efdfa6808"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#dawson_lea_irvine_2003_version03">
+    <dc:title>
+        Dawson et al.'s 2003 kinetic model of the inositol trisphosphate receptor.
+      </dc:title>
+    <cmeta:comment rdf:resource="rdf:#8fe06674-8907-48b0-b913-afbf01a53a65"/>
+    <bqs:reference rdf:resource="rdf:#49ce631f-53aa-42d2-a364-f6c86276cf4c"/>
+    <bqs:reference rdf:resource="rdf:#6913afc6-902e-4d03-9436-6f447bfbaecf"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7442e332-eb3d-428e-a7cd-efd9353dd2b3">
+    <dcterms:W3CDTF>2003-10-17T00:00:00+00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1fde30af-c8b1-4523-b357-0567284a5d06">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3edf2324-1684-4aaa-906d-190c86666688">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#624b3cdb-2f54-4912-85f3-c237b2647d4f">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value rdf:resource="rdf:#280f2776-20a1-4b92-8ad3-15d674b582eb"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#727b4d56-030d-4dda-a960-bd899f76c2d3">
+    <dcterms:W3CDTF>2003-03-01</dcterms:W3CDTF>
+  </rdf:Description>
+</rdf:RDF>
+</model>

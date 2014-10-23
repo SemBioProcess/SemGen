@@ -1,0 +1,1136 @@
+<?xml version="1.0"?>
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" cmeta:id="wodarz_2007b" name="wodarz_2007b">
+
+      <documentation xmlns="http://cellml.org/tmp-documentation">
+            <article>
+                  <articleinfo>
+                        <title>Dynamics of killer T cell inflation in viral infections</title>
+                        <author>
+                              <firstname>Catherine</firstname>
+                              <surname>Lloyd</surname>
+                              <affiliation>
+                                    <shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+                              </affiliation>
+                        </author>
+                  </articleinfo>
+				  <section id="sec_status">
+				<title>Model Status</title>
+				<para>
+            This CellML model represents the second model in the original paper (this builds on the first 'core' model describing the basic dynamics of the cytotoxic T lymphocyte (CTL) infection by including a description of the CTL response to the virus infection).  The model runs in OpenCell to recreate the results in the published paper.  The units have been checked and they are consistent.  The model also runs in COR but due to the long duration of the simulation is not ideal for use in COR.
+          </para>
+			</section>
+			        <sect1 id="sec_structure">
+                        <title>Model Structure</title>
+                        <para>ABSTRACT: Upon acute viral infection, a typical cytotoxic T lymphocyte (CTL) response is characterized by a phase of expansion and contraction after which it settles at a relatively stable memory level. Recently, experimental data from mice infected with murine cytomegalovirus (MCMV) showed different and unusual dynamics. After acute infection had resolved, some antigen specific CTL started to expand over time despite the fact that no replicative virus was detectable. This phenomenon has been termed as "CTL memory inflation". In order to examine the dynamics of this system further, we developed a mathematical model analysing the impact of innate and adaptive immune responses. According to this model, a potentially important contributor to CTL inflation is competition between the specific CTL response and an innate natural killer (NK) cell response. Inflation occurs most readily if the NK cell response is more efficient than the CTL at reducing virus load during acute infection, but thereafter maintains a chronic virus load which is sufficient to induce CTL proliferation. The model further suggests that weaker NK cell mediated protection can correlate with more pronounced CTL inflation dynamics over time. We present experimental data from mice infected with MCMV which are consistent with the theoretical predictions. This model provides valuable information and may help to explain the inflation of CMV specific CD8+T cells seen in humans as they age.</para>
+						
+						<para>The original paper reference is cited below:</para>
+                        <para>
+                              Dynamics of killer T cell inflation in viral infections, Dominik Wodarz, Sophie Sierro and Paul Klenerman, 2007, <emphasis>Journal of the Royal Society, Interface</emphasis>, volume 4, issue 14, 533-543. <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/17251133">PubMed ID: 17251133</ulink>
+                        </para>
+                        
+                        <informalfigure float="0" id="fig_reaction_diagram">
+                              <mediaobject>
+                                    <imageobject>
+                                          <objectinfo>
+                                                <title>model diagram</title>
+                                          </objectinfo>
+                                          <imagedata fileref="wodarz_2007b.png"/>
+                                    </imageobject>
+                              </mediaobject>
+                              <caption>Schematic diagram of the different components and variables included in the mathematical model of the dynamics of killer T cell inflation.  The core model comprises five components: susceptible host cells (x), free virus particles (v), early-infected cells (y0), late-infected cells (y1), and latently-infected cells (L).  When susceptible host cells become infected with virus, the product cells are either productively infected or are latently infected.  Productively infected cells can be divided into two subsets; those which express early-gene products and those which express late-gene products.  The latter produce new free virus particles and the replication cycle is completed.  Latently infected cells are initially silent but can become activated, giving rise to more productively infected cells.  Virus-specific CTL (za) divide on antigenic stimulation (ca) and kill virus-infected host cells through lysis (pa).</caption>
+                        </informalfigure>
+                     
+                  </sect1>
+            </article>
+      </documentation>
+	  
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+            <rdf:Description rdf:about="rdf:#9254cce3-a691-48ad-bc99-d7f20323d4dd">
+                  <FN xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en"/>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#1da3928c-4d3b-46e9-a68c-fce4e8b12cb6">
+                  <W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2007-06-22</W3CDTF>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#ef5f7b77-0a4b-4aeb-95b6-e49b4f1b6c89">
+                  <creator xmlns="http://purl.org/dc/elements/1.1/">
+                        <rdf:Description rdf:about="rdf:#9254cce3-a691-48ad-bc99-d7f20323d4dd"/>
+                  </creator>
+                  <rdf:value xml:lang="en"/>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#4e2f9915-b75c-4209-96c4-8ecafddcdd34">
+                  <FN xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Catherine Lloyd</FN>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#5a7145a9-cd2c-4d68-9703-eba466b88cf7">
+                  <title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">Journal of the Royal Society, Interface</title>
+            </rdf:Description>
+            <rdf:Description rdf:nodeID="n1">
+                  <boundIntervals xmlns="http://www.cellml.org/metadata/simulation/1.0#">
+                        <rdf:Description rdf:nodeID="n2"/>
+                  </boundIntervals>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#4d66840b-a52c-4145-bbf7-201086584892">
+                  <W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2007-07-17T00:00:00+00:00</W3CDTF>
+            </rdf:Description>
+            <rdf:Description rdf:about="#wodarz_2007b">
+                  <simulation xmlns="http://www.cellml.org/metadata/simulation/1.0#">
+                        <rdf:Description rdf:nodeID="n1"/>
+                  </simulation>
+                  <reference xmlns="http://www.cellml.org/bqs/1.0#">
+                        <rdf:Description rdf:about="rdf:#21b97b01-daf1-4039-9b76-5074a51abe6a"/>
+                  </reference>
+                  <reference xmlns="http://www.cellml.org/bqs/1.0#">
+                        <rdf:Description rdf:about="rdf:#79398042-1e06-4c9e-bdb9-e3039aef9a59"/>
+                  </reference>
+                  <cmeta:comment>
+                        <rdf:Description rdf:about="rdf:#f5908d4a-a325-49a2-8021-67aa2016a321"/>
+                  </cmeta:comment>
+                  <title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en"> Wodarz, Sierro and Klenerman's 2007 mathematical model of the dynamics of killer T cell inflation in viral infections. </title>
+
+            </rdf:Description>
+            <rdf:Description rdf:about="#R0">
+                  <alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">basic reproductive ratio of the virus</alternative>
+                  <title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">R0</title>
+            </rdf:Description>
+			<rdf:Description rdf:about="#za">
+                  <alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">CMV specific effector CTL</alternative>
+                  <title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">za</title>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#03727a06-bc97-4c24-b9ab-2ec910da0503">
+                  <N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#">
+                        <rdf:Description rdf:about="rdf:#8d5a8df7-5120-4f33-bcc9-5bbd0c62519d"/>
+                  </N>
+                  <rdf:type>
+                        <rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/>
+                  </rdf:type>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#49b70c25-c0cc-42ed-afa9-2549e9e24332">
+                  <Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Catherine</Given>
+                  <Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Lloyd</Family>
+                  <Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">May</Other>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#9e1ccfdd-bc4b-4224-87df-dda73ff2aa08">
+                  <rdf:_2>
+                        <rdf:Description rdf:about="rdf:#03727a06-bc97-4c24-b9ab-2ec910da0503"/>
+                  </rdf:_2>
+                  <rdf:_1>
+                        <rdf:Description rdf:about="rdf:#8e1f40d9-db46-4642-bb6e-ac6ed639cda5"/>
+                  </rdf:_1>
+                  <rdf:_3>
+                        <rdf:Description rdf:about="rdf:#f2b765a7-9ab5-4478-a363-cdd561279a87"/>
+                  </rdf:_3>
+                  <rdf:type>
+                        <rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq"/>
+                  </rdf:type>
+            </rdf:Description>
+            <rdf:Description rdf:about="#v">
+                  <alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">free virus particles</alternative>
+                  <title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">v</title>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#21b97b01-daf1-4039-9b76-5074a51abe6a">
+                  <subject xmlns="http://purl.org/dc/elements/1.1/">
+                        <rdf:Description rdf:about="rdf:#6feda7d5-9a7b-4b88-ad96-b4e5cf2ce668"/>
+                  </subject>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#756fa65b-5324-4492-b5f1-10c7ee059aff">
+                  <rdf:_2 xml:lang="en">viral dynamics</rdf:_2>
+                  <rdf:_6 xml:lang="en">NK cell</rdf:_6>
+                  <rdf:_5 xml:lang="en">CTL</rdf:_5>
+                  <rdf:_4 xml:lang="en">CD8+ T cell</rdf:_4>
+                  <rdf:_1 xml:lang="en">immunology</rdf:_1>
+                  <rdf:_3 xml:lang="en">murine cytomegalovirus</rdf:_3>
+                  <rdf:type>
+                        <rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag"/>
+                  </rdf:type>
+            </rdf:Description>
+            <rdf:Description rdf:about="#x">
+                  <alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">susceptible host cells</alternative>
+                  <title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">x</title>
+            </rdf:Description>
+            <rdf:Description rdf:about="#y1">
+                  <alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">infected cells expressing late-viral gene products</alternative>
+                  <title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">y1</title>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#8e1f40d9-db46-4642-bb6e-ac6ed639cda5">
+                  <N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#">
+                        <rdf:Description rdf:about="rdf:#d0195ec3-695f-4958-a5dc-c46c74aecb04"/>
+                  </N>
+                  <rdf:type>
+                        <rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/>
+                  </rdf:type>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#77c3ecec-e0b6-49d2-983f-3c30b73f3f27">
+                  <Orgname xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">The University of Auckland</Orgname>
+                  <Orgunit xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">The Bioengineering Institute</Orgunit>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#6962e870-ecdc-4a91-a5cc-90102902c903">
+                  <last_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">543</last_page>
+                  <creator xmlns="http://purl.org/dc/elements/1.1/">
+                        <rdf:Description rdf:about="rdf:#9e1ccfdd-bc4b-4224-87df-dda73ff2aa08"/>
+                  </creator>
+                  <Journal xmlns="http://www.cellml.org/bqs/1.0#">
+                        <rdf:Description rdf:about="rdf:#5a7145a9-cd2c-4d68-9703-eba466b88cf7"/>
+                  </Journal>
+                  <volume xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">4</volume>
+                  <first_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">533</first_page>
+                  <title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">Dynamics of killer T cell inflation in viral infections</title>
+                  <issued xmlns="http://purl.org/dc/terms/">
+                        <rdf:Description rdf:about="rdf:#1da3928c-4d3b-46e9-a68c-fce4e8b12cb6"/>
+                  </issued>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#e7fdd30d-b059-4e3e-97d4-7603322c22ad">
+                  <rdf:type>
+                        <rdf:Description rdf:about="http://imc.org/vCard/3.0#internet"/>
+                  </rdf:type>
+                  <rdf:value xml:lang="en">c.lloyd@auckland.ac.nz</rdf:value>
+            </rdf:Description>
+            <rdf:Description rdf:nodeID="n3">
+                  <endingValue xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">100</endingValue>
+            </rdf:Description>
+            <rdf:Description rdf:about="#L">
+                  <alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">latently infected cells</alternative>
+                  <title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">L</title>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#d0195ec3-695f-4958-a5dc-c46c74aecb04">
+                  <Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Dominik</Given>
+                  <Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Wodarz</Family>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#6feda7d5-9a7b-4b88-ad96-b4e5cf2ce668">
+                  <rdf:value>
+                        <rdf:Description rdf:about="rdf:#756fa65b-5324-4492-b5f1-10c7ee059aff"/>
+                  </rdf:value>
+                  <subject_type xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">keyword</subject_type>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#f2b765a7-9ab5-4478-a363-cdd561279a87">
+                  <N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#">
+                        <rdf:Description rdf:about="rdf:#b8cd601f-6ad3-4d62-b075-38428f128963"/>
+                  </N>
+                  <rdf:type>
+                        <rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/>
+                  </rdf:type>
+            </rdf:Description>
+            <rdf:Description rdf:about="">
+                  <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Dynamics of killer T cell inflation in viral infections (Core Model + CTL Response)</dc:title>
+				  <cmeta:comment>
+                        <rdf:Description rdf:about="rdf:#ef5f7b77-0a4b-4aeb-95b6-e49b4f1b6c89"/>
+                  </cmeta:comment>
+                  <publisher xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">The University of Auckland, Bioengineering Institute</publisher>
+                  <creator xmlns="http://purl.org/dc/elements/1.1/">
+                        <rdf:Description rdf:about="rdf:#bab1999f-3660-4414-af00-f93eb334c53c"/>
+                  </creator>
+                  <created xmlns="http://purl.org/dc/terms/">
+                        <rdf:Description rdf:about="rdf:#4d66840b-a52c-4145-bbf7-201086584892"/>
+                  </created>
+            </rdf:Description>
+            <rdf:Description rdf:about="#y0">
+                  <alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">infected cells expressing early-viral gene products</alternative>
+                  <title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">y0</title>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#b8cd601f-6ad3-4d62-b075-38428f128963">
+                  <Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Paul</Given>
+                  <Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Klenerman</Family>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#8d5a8df7-5120-4f33-bcc9-5bbd0c62519d">
+                  <Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Sophie</Given>
+                  <Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Sierro</Family>
+            </rdf:Description>
+            <rdf:Description rdf:nodeID="n2">
+                  <rdf:first>
+                        <rdf:Description rdf:nodeID="n3"/>
+                  </rdf:first>
+                  <rdf:rest>
+                        <rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                  </rdf:rest>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#bab1999f-3660-4414-af00-f93eb334c53c">
+                  <N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#">
+                        <rdf:Description rdf:about="rdf:#49b70c25-c0cc-42ed-afa9-2549e9e24332"/>
+                  </N>
+                  <ORG xmlns="http://www.w3.org/2001/vcard-rdf/3.0#">
+                        <rdf:Description rdf:about="rdf:#77c3ecec-e0b6-49d2-983f-3c30b73f3f27"/>
+                  </ORG>
+                  <EMAIL xmlns="http://www.w3.org/2001/vcard-rdf/3.0#">
+                        <rdf:Description rdf:about="rdf:#e7fdd30d-b059-4e3e-97d4-7603322c22ad"/>
+                  </EMAIL>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#f5908d4a-a325-49a2-8021-67aa2016a321">
+                  <creator xmlns="http://purl.org/dc/elements/1.1/">
+                        <rdf:Description rdf:about="rdf:#4e2f9915-b75c-4209-96c4-8ecafddcdd34"/>
+                  </creator>
+                  <rdf:value xml:lang="en">This is a CellML description of Wodarz, Sierro and Klenerman's 2007 mathematical model of the dynamics of killer T cell inflation in viral infections.</rdf:value>
+            </rdf:Description>
+            <rdf:Description rdf:about="rdf:#79398042-1e06-4c9e-bdb9-e3039aef9a59">
+                  <Pubmed_id xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">17251133</Pubmed_id>
+                  <JournalArticle xmlns="http://www.cellml.org/bqs/1.0#">
+                        <rdf:Description rdf:about="rdf:#6962e870-ecdc-4a91-a5cc-90102902c903"/>
+                  </JournalArticle>
+            </rdf:Description>
+      </rdf:RDF>
+	
+	  
+   <units name="hour">
+      <unit multiplier="3600" units="second"/>
+   </units>
+   <units name="first_order_rate_constant">
+      <unit exponent="-1" units="hour"/>
+   </units>
+   <component name="environment">
+      <variable cmeta:id="environment_time" name="time" public_interface="out" units="hour"/>
+   </component>
+   <component name="x">
+      <variable cmeta:id="x_x" initial_value="1" name="x" public_interface="out" units="dimensionless"/>
+      <variable name="d" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="gamma" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="lambda" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="beta" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="v" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>x</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>lambda</ci>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>d</ci>
+                     <ci>x</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>beta</ci>
+                     <ci>x</ci>
+                     <ci>v</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>gamma</ci>
+                     <ci>x</ci>
+                     <ci>v</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="y0">
+      <variable cmeta:id="y0_y0" initial_value="0" name="y0" public_interface="out" units="dimensionless"/>
+      <variable name="beta" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="x" public_interface="in" units="dimensionless"/>
+      <variable name="a0" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="eta" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="phi" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="L" public_interface="in" units="dimensionless"/>
+      <variable name="v" public_interface="in" units="dimensionless"/>
+      <variable name="pa" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="za" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>y0</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <times/>
+                     <ci>beta</ci>
+                     <ci>x</ci>
+                     <ci>v</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>a0</ci>
+                        <ci>y0</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>eta</ci>
+                        <ci>y0</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>pa</ci>
+                        <ci>y0</ci>
+                        <ci>za</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>phi</ci>
+                  <ci>L</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="y1">
+      <variable cmeta:id="y1_y1" initial_value="0" name="y1" public_interface="out" units="dimensionless"/>
+      <variable name="a1" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="eta" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="y0" public_interface="in" units="dimensionless"/>
+      <variable name="pa" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="za" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>y1</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>eta</ci>
+                  <ci>y0</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>a1</ci>
+                     <ci>y1</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>pa</ci>
+                     <ci>y1</ci>
+                     <ci>za</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="L">
+      <variable cmeta:id="L_L" initial_value="0" name="L" public_interface="out" units="dimensionless"/>
+      <variable name="gamma" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="x" public_interface="in" units="dimensionless"/>
+      <variable name="v" public_interface="in" units="dimensionless"/>
+      <variable name="phi" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="d" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>L</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>gamma</ci>
+                  <ci>x</ci>
+                  <ci>v</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>phi</ci>
+                     <ci>L</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>d</ci>
+                     <ci>L</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="v">
+      <variable cmeta:id="v_v" initial_value="1" name="v" public_interface="out" units="dimensionless"/>
+      <variable name="k" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="y1" public_interface="in" units="dimensionless"/>
+      <variable name="u" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>v</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <ci>k</ci>
+                  <ci>y1</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>u</ci>
+                  <ci>v</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="m_8">
+      <variable initial_value="0" name="m_8" public_interface="out" units="dimensionless"/>
+      <variable name="r" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="m_7" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>m_8</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                  <ci>r</ci>
+                  <ci>m_7</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>r</ci>
+                  <ci>m_8</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="m_7">
+      <variable initial_value="0" name="m_7" public_interface="out" units="dimensionless"/>
+      <variable name="r" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="m_6" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>m_7</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                  <ci>r</ci>
+                  <ci>m_6</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>r</ci>
+                  <ci>m_7</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="m_6">
+      <variable initial_value="0" name="m_6" public_interface="out" units="dimensionless"/>
+      <variable name="r" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="m_5" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>m_6</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                  <ci>r</ci>
+                  <ci>m_5</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>r</ci>
+                  <ci>m_6</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="m_5">
+      <variable initial_value="0" name="m_5" public_interface="out" units="dimensionless"/>
+      <variable name="r" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="m_4" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>m_5</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                  <ci>r</ci>
+                  <ci>m_4</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>r</ci>
+                  <ci>m_5</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="m_4">
+      <variable initial_value="0" name="m_4" public_interface="out" units="dimensionless"/>
+      <variable name="r" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="m_3" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>m_4</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                  <ci>r</ci>
+                  <ci>m_3</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>r</ci>
+                  <ci>m_4</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="m_3">
+      <variable initial_value="0" name="m_3" public_interface="out" units="dimensionless"/>
+      <variable name="r" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="m_2" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>m_3</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                  <ci>r</ci>
+                  <ci>m_2</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>r</ci>
+                  <ci>m_3</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="m_2">
+      <variable initial_value="0" name="m_2" public_interface="out" units="dimensionless"/>
+      <variable name="r" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="m_1" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>m_2</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                  <ci>r</ci>
+                  <ci>m_1</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>r</ci>
+                  <ci>m_2</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="m_1">
+      <variable initial_value="0" name="m_1" public_interface="out" units="dimensionless"/>
+      <variable name="r" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="m_0" public_interface="in" units="dimensionless"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>m_1</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <times/>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+                  <ci>r</ci>
+                  <ci>m_0</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>r</ci>
+                  <ci>m_1</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="m_0">
+      <variable initial_value="1" name="m_0" public_interface="out" units="dimensionless"/>
+      <variable name="r" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>m_0</ci>
+            </apply>
+            <apply>
+               <times/>
+               <apply>
+                  <minus/>
+                  <ci>r</ci>
+               </apply>
+               <ci>m_0</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="za">
+      <variable cmeta:id="za_za" initial_value="1" name="za" public_interface="out" units="dimensionless"/>
+      <variable name="alpha" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="m_8" public_interface="in" units="dimensionless"/>
+      <variable name="ca" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="y0" public_interface="in" units="dimensionless"/>
+      <variable name="y1" public_interface="in" units="dimensionless"/>
+      <variable name="ba" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="time" public_interface="in" units="hour"/>
+      <variable name="log_za" units="dimensionless"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>za</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <times/>
+                     <ci>alpha</ci>
+                     <ci>m_8</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>ca</ci>
+                     <apply>
+                        <plus/>
+                        <ci>y0</ci>
+                        <ci>y1</ci>
+                     </apply>
+                     <ci>za</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>ba</ci>
+                  <ci>za</ci>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>log_za</ci>
+            <apply>
+               <log/>
+               <ci>za</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="R0">
+      <variable name="R0" units="dimensionless"/>
+      <variable name="gamma" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="lambda" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="eta" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="a1" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="a0" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="beta" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="phi" public_interface="in" units="first_order_rate_constant"/>
+      <variable name="d" public_interface="in" units="first_order_rate_constant"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>R0</ci>
+            <apply>
+               <times/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>lambda</ci>
+                     <ci>eta</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>d</ci>
+                     <ci>a1</ci>
+                     <apply>
+                        <plus/>
+                        <ci>a0</ci>
+                        <ci>eta</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>beta</ci>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>gamma</ci>
+                        <ci>phi</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci>phi</ci>
+                        <ci>d</ci>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="model_parameters">
+      <variable initial_value="0.1" name="a0" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="0.2" name="a1" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="1" name="k" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="1" name="u" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="10" name="lambda" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="0.1" name="d" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="0.1" name="beta" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="0.5" name="gamma" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="0.2" name="alpha" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="0.1" name="phi" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="0.01" name="eta" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="0.000001" name="pa" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="15.5" name="ca" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="1" name="r" public_interface="out" units="first_order_rate_constant"/>
+      <variable initial_value="0.1" name="ba" public_interface="out" units="first_order_rate_constant"/>
+   </component>
+   <connection>
+      <map_components component_1="x" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="y0" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="y1" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="L" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="v" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="m_8" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="m_7" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="m_6" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="m_5" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="m_4" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="m_3" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="m_2" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="m_1" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="m_0" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="za" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="x" component_2="v"/>
+      <map_variables variable_1="v" variable_2="v"/>
+   </connection>
+   <connection>
+      <map_components component_1="x" component_2="model_parameters"/>
+      <map_variables variable_1="d" variable_2="d"/>
+      <map_variables variable_1="gamma" variable_2="gamma"/>
+      <map_variables variable_1="lambda" variable_2="lambda"/>
+      <map_variables variable_1="beta" variable_2="beta"/>
+   </connection>
+   <connection>
+      <map_components component_1="y0" component_2="v"/>
+      <map_variables variable_1="v" variable_2="v"/>
+   </connection>
+   <connection>
+      <map_components component_1="y0" component_2="x"/>
+      <map_variables variable_1="x" variable_2="x"/>
+   </connection>
+   <connection>
+      <map_components component_1="y0" component_2="L"/>
+      <map_variables variable_1="L" variable_2="L"/>
+   </connection>
+   <connection>
+      <map_components component_1="y0" component_2="za"/>
+      <map_variables variable_1="za" variable_2="za"/>
+      <map_variables variable_1="y0" variable_2="y0"/>
+   </connection>
+   <connection>
+      <map_components component_1="y0" component_2="model_parameters"/>
+      <map_variables variable_1="a0" variable_2="a0"/>
+      <map_variables variable_1="pa" variable_2="pa"/>
+      <map_variables variable_1="beta" variable_2="beta"/>
+      <map_variables variable_1="eta" variable_2="eta"/>
+      <map_variables variable_1="phi" variable_2="phi"/>
+   </connection>
+   <connection>
+      <map_components component_1="y1" component_2="y0"/>
+      <map_variables variable_1="y0" variable_2="y0"/>
+   </connection>
+   <connection>
+      <map_components component_1="y1" component_2="model_parameters"/>
+      <map_variables variable_1="a1" variable_2="a1"/>
+      <map_variables variable_1="pa" variable_2="pa"/>
+      <map_variables variable_1="eta" variable_2="eta"/>
+   </connection>
+   <connection>
+      <map_components component_1="y1" component_2="za"/>
+      <map_variables variable_1="za" variable_2="za"/>
+      <map_variables variable_1="y1" variable_2="y1"/>
+   </connection>
+   <connection>
+      <map_components component_1="L" component_2="v"/>
+      <map_variables variable_1="v" variable_2="v"/>
+   </connection>
+   <connection>
+      <map_components component_1="L" component_2="x"/>
+      <map_variables variable_1="x" variable_2="x"/>
+   </connection>
+   <connection>
+      <map_components component_1="L" component_2="model_parameters"/>
+      <map_variables variable_1="d" variable_2="d"/>
+      <map_variables variable_1="gamma" variable_2="gamma"/>
+      <map_variables variable_1="phi" variable_2="phi"/>
+   </connection>
+   <connection>
+      <map_components component_1="v" component_2="y1"/>
+      <map_variables variable_1="y1" variable_2="y1"/>
+   </connection>
+   <connection>
+      <map_components component_1="v" component_2="model_parameters"/>
+      <map_variables variable_1="k" variable_2="k"/>
+      <map_variables variable_1="u" variable_2="u"/>
+   </connection>
+   <connection>
+      <map_components component_1="m_8" component_2="m_7"/>
+      <map_variables variable_1="m_7" variable_2="m_7"/>
+   </connection>
+   <connection>
+      <map_components component_1="m_8" component_2="model_parameters"/>
+      <map_variables variable_1="r" variable_2="r"/>
+   </connection>
+   <connection>
+      <map_components component_1="m_7" component_2="m_6"/>
+      <map_variables variable_1="m_6" variable_2="m_6"/>
+   </connection>
+   <connection>
+      <map_components component_1="m_7" component_2="model_parameters"/>
+      <map_variables variable_1="r" variable_2="r"/>
+   </connection>
+   <connection>
+      <map_components component_1="m_6" component_2="m_5"/>
+      <map_variables variable_1="m_5" variable_2="m_5"/>
+   </connection>
+   <connection>
+      <map_components component_1="m_6" component_2="model_parameters"/>
+      <map_variables variable_1="r" variable_2="r"/>
+   </connection>
+   <connection>
+      <map_components component_1="m_5" component_2="m_4"/>
+      <map_variables variable_1="m_4" variable_2="m_4"/>
+   </connection>
+   <connection>
+      <map_components component_1="m_5" component_2="model_parameters"/>
+      <map_variables variable_1="r" variable_2="r"/>
+   </connection>
+   <connection>
+      <map_components component_1="m_4" component_2="m_3"/>
+      <map_variables variable_1="m_3" variable_2="m_3"/>
+   </connection>
+   <connection>
+      <map_components component_1="m_4" component_2="model_parameters"/>
+      <map_variables variable_1="r" variable_2="r"/>
+   </connection>
+   <connection>
+      <map_components component_1="m_3" component_2="m_2"/>
+      <map_variables variable_1="m_2" variable_2="m_2"/>
+   </connection>
+   <connection>
+      <map_components component_1="m_3" component_2="model_parameters"/>
+      <map_variables variable_1="r" variable_2="r"/>
+   </connection>
+   <connection>
+      <map_components component_1="m_2" component_2="m_1"/>
+      <map_variables variable_1="m_1" variable_2="m_1"/>
+   </connection>
+   <connection>
+      <map_components component_1="m_2" component_2="model_parameters"/>
+      <map_variables variable_1="r" variable_2="r"/>
+   </connection>
+   <connection>
+      <map_components component_1="m_1" component_2="m_0"/>
+      <map_variables variable_1="m_0" variable_2="m_0"/>
+   </connection>
+   <connection>
+      <map_components component_1="m_1" component_2="model_parameters"/>
+      <map_variables variable_1="r" variable_2="r"/>
+   </connection>
+   <connection>
+      <map_components component_1="m_0" component_2="model_parameters"/>
+      <map_variables variable_1="r" variable_2="r"/>
+   </connection>
+   <connection>
+      <map_components component_1="za" component_2="m_8"/>
+      <map_variables variable_1="m_8" variable_2="m_8"/>
+   </connection>
+   <connection>
+      <map_components component_1="za" component_2="model_parameters"/>
+      <map_variables variable_1="alpha" variable_2="alpha"/>
+      <map_variables variable_1="ca" variable_2="ca"/>
+      <map_variables variable_1="ba" variable_2="ba"/>
+   </connection>
+   <connection>
+      <map_components component_1="R0" component_2="model_parameters"/>
+      <map_variables variable_1="a0" variable_2="a0"/>
+      <map_variables variable_1="gamma" variable_2="gamma"/>
+      <map_variables variable_1="lambda" variable_2="lambda"/>
+      <map_variables variable_1="phi" variable_2="phi"/>
+      <map_variables variable_1="a1" variable_2="a1"/>
+      <map_variables variable_1="beta" variable_2="beta"/>
+      <map_variables variable_1="eta" variable_2="eta"/>
+      <map_variables variable_1="d" variable_2="d"/>
+   </connection>
+</model>

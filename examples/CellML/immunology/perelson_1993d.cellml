@@ -1,0 +1,425 @@
+<?xml version="1.0"?>
+<!--  FILE :  perelson_1993b.cellml
+CREATED :  18th Jan 2010
+LAST MODIFIED :  19th Jan 2010
+AUTHOR :  Ethan Choi
+MODEL STATUS :  This model conforms to the CellML 1.1 Specification. Runs in OpenCell
+DESCRIPTION :  This file contains a CellML description of Perelson's 1993 mathematical model of the dynamics of HIV infection of CD4+ T cells--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" cmeta:id="perelson_1993d" name="perelson_1993d">
+
+	<!-- documentation -->
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>Dynamics of HIV infection of CD4+ T cells</title>
+				<author>
+					<firstname>Ethan</firstname>
+					<surname>Choi</surname>
+					<affiliation>
+						<shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<section id="sec_status">
+				<title>Model Status</title>
+				<para>This model has been built with the differential expressions in Perelson, Kirschner and de Boer's 1993 paper for the 4th model (perelson_1993d); the quasi-steady-state approximation to the [previous model] dynamics. This file is known to run in OpenCell and COR, and is set to the parameters in Table 1 and figure 13 of the paper. The condition t=t_min in the paper was replaced with t less than/equal to t_min because otherwise the model would be incorrect. By changing the the parameters, the model will replicate all panels in figures 13. Note that in the paper, some figure diagrams are scaled logarithmically.</para>
+			</section>
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>ABSTRACT: We examine a model for the interaction of HIV with CD4+ T cells that considers four populations: uninfected T cells, latently infected T cells, actively infected T cells, and free virus. Using this model we show that many of the puzzling quantitative features of HIV infection can be explained simply. We also consider effects of AZT on viral growth and T-cell population dynamics. The model exhibits two steady states, an uninfected state in which no virus is present and an endemically infected state, in which virus and infected T cells are present. We show that if N, the number of infectious virions produced per actively infected T cell, is less a critical value, Ncrit, then the uninfected state is the only steady state in the nonnegative orthant, and this state is stable. For N &gt; Ncrit, the uninfected state is unstable, and the endemically infected state can be either stable, or unstable and surrounded by a stable limit cycle. Using numerical bifurcation techniques we map out the parameter regimes of these various behaviors. oscillatory behavior seems to lie outside the region of biologically realistic parameter values. When the endemically infected state is stable, it is characterized by a reduced number of T cells compared with the uninfected state. Thus T-cell depletion occurs through the establishment of a new steady state. The dynamics of the establishment of this new steady state are examined both numerically and via the quasi-steady-state approximation. We develop approximations for the dynamics at early times in which the free virus rapidly binds to T cells, during an intermediate time scale in which the virus grows exponentially, and a third time scale on which viral growth slows and the endemically infected steady state is approached. Using the quasi-steady-state approximation the model can be simplified to two ordinary differential equations the summarize much of the dynamical behavior. We compute the level of T cells in the endemically infected state and show how that level varies with the parameters in the model. The model predicts that different viral strains, characterized by generating differing numbers of infective virions within infected T cells, can cause different amounts of T-cell depletion and generate depletion at different rates. Two versions of the model are studied. In one the source of T cells from precursors is constant, whereas in the other the source of T cells decreases with viral load, mimicking the infection and killing of T-cell precursors. The latter gives more realistic predictions than the model with a constant source.</para>
+
+				<informalfigure float="0" id="fig_reaction_diagram">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>model diagram</title>
+							</objectinfo>
+							<imagedata fileref="perelson_1993.png"/>
+						</imageobject>
+					</mediaobject>
+					<caption>Schematic diagram of the model.</caption>
+				</informalfigure>
+
+				<para>The original paper reference is cited below:</para>
+				<para>Dynamics of HIV infection of CD4+ T cells, Perelson, Kirschner, Boer, <emphasis>Mathematical Biosciences</emphasis>, 114, 81-125. <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/8096155">PubMed ID: 8096155</ulink></para>
+			</sect1>
+		</article>
+	</documentation>
+
+
+	<!-- units -->
+	<units name="day">
+		<unit multiplier="86400" units="second"/>
+	</units>
+	<units name="per_day">
+		<unit exponent="-1" multiplier="86400" units="second"/>
+	</units>
+	<units name="mm3">
+		<unit exponent="3" prefix="milli" units="metre"/>
+	</units>
+	<units name="per_mm3">
+		<unit exponent="-3" prefix="milli" units="metre"/>
+	</units>
+	<units name="per_day_mm3">
+		<unit units="per_day"/>
+		<unit units="per_mm3"/>
+	</units>
+	<units name="mm3_per_day">
+		<unit exponent="3" prefix="milli" units="metre"/>
+		<unit units="per_day"/>
+	</units>
+
+
+	<!-- components -->
+	<component name="environment">
+		<variable cmeta:id="environment_time" name="time" public_interface="out" units="day"/>
+	</component>
+
+	<component cmeta:id="uninfected" name="uninfected">
+		
+		<variable name="time" public_interface="in" units="day"/>
+		<variable initial_value="10" name="s" units="per_day_mm3"/>
+		<variable initial_value="0.01" name="p" units="per_day"/>
+		<variable initial_value="2E-5" name="gamma" units="per_day"/>
+		<variable name="beta" units="dimensionless"/>
+		<variable name="N" public_interface="in" units="dimensionless"/>
+		<variable name="k_1" public_interface="in" units="mm3_per_day"/>
+		<variable name="k_2" public_interface="in" units="per_day"/>
+		<variable name="k_3" public_interface="in" units="per_day"/>
+		<variable name="mu_V" public_interface="in" units="per_day"/>
+		<variable name="T_1" public_interface="in" units="per_mm3"/>
+		<variable name="mu_b" public_interface="in" units="per_day"/>
+		<variable cmeta:id="T" initial_value="1000" name="T" public_interface="out" units="per_mm3"/>
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="T_diff_eq">
+				<eq/>
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>T</ci>
+				</apply>
+				<apply>
+					<minus/>
+					<apply>
+						<minus/>
+						<apply>
+							<plus/>
+							<ci>s</ci>
+							<apply>
+								<times/>
+								<ci>p</ci>
+								<ci>T</ci>
+							</apply>
+						</apply>
+						<apply>
+							<times/>
+							<ci>gamma</ci>
+							<apply>
+								<power/>
+								<ci>T</ci>
+								<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+							</apply>
+						</apply>
+					</apply>
+					<apply>
+						<times/>
+						<apply>
+							<plus/>
+							<apply>
+								<times/>
+								<ci>k_3</ci>
+								<ci>beta</ci>
+							</apply>
+							<apply>
+								<divide/>
+								<apply>
+									<times/>
+									<ci>N</ci>
+									<ci>k_1</ci>
+									<ci>k_2</ci>
+								</apply>
+								<apply>
+									<plus/>
+									<apply>
+										<times/>
+										<ci>k_1</ci>
+										<ci>T</ci>
+									</apply>
+									<ci>mu_V</ci>
+								</apply>
+							</apply>
+						</apply>
+						<ci>T</ci>
+						<ci>T_1</ci>
+					</apply>
+				</apply>
+			</apply>
+			<apply id="beta_function">
+				<eq/>
+				<ci>beta</ci>
+				<apply>
+					<times/>
+					<apply>
+						<divide/>
+						<ci>gamma</ci>
+						<ci>k_3</ci>
+					</apply>
+					<apply>
+						<plus/>
+						<cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+						<apply>
+							<divide/>
+							<ci>k_2</ci>
+							<ci>mu_b</ci>
+						</apply>
+					</apply>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+	<component cmeta:id="latently_infected" name="latently_infected">
+		
+		<variable name="time" public_interface="in" units="day"/>
+		<variable name="N" public_interface="in" units="dimensionless"/>
+		<variable initial_value="2.4E-5" name="k_1" public_interface="out" units="mm3_per_day"/>
+		<variable name="k_2" public_interface="in" units="per_day"/>
+		<variable initial_value="0.023" name="k_3" public_interface="out" units="per_day"/>
+		<variable initial_value="2.424" name="k_4" units="per_day"/>
+		<variable initial_value="1000" name="T_0" units="per_mm3"/>
+		<variable initial_value="1E-3" name="V_0" units="per_mm3"/>
+		<variable initial_value="2" name="t_min" units="day"/>
+		<variable name="mu_V" public_interface="in" units="per_day"/>
+		<variable name="T" public_interface="in" units="per_mm3"/>
+		<variable name="T_1_t" units="per_mm3"/>
+		<variable cmeta:id="T_1" initial_value="0" name="T_1" public_interface="out" units="per_mm3"/>
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="T_1_diff_eq">
+				<eq/>
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>T_1</ci>
+				</apply>
+				<piecewise>
+					<piece>
+						<ci>T_1_t</ci>
+						<apply>
+							<leq/>
+							<ci>time</ci>
+							<ci>t_min</ci>
+						</apply>
+					</piece>
+					<otherwise>
+						<apply>
+							<minus/>
+							<apply>
+								<times/>
+								<apply>
+									<divide/>
+									<apply>
+										<times/>
+										<ci>N</ci>
+										<ci>k_1</ci>
+										<ci>k_2</ci>
+									</apply>
+									<apply>
+										<plus/>
+										<apply>
+											<times/>
+											<ci>k_1</ci>
+											<ci>T</ci>
+										</apply>
+										<ci>mu_V</ci>
+									</apply>
+								</apply>
+								<ci>T</ci>
+								<ci>T_1</ci>
+							</apply>
+							<apply>
+								<times/>
+								<ci>k_3</ci>
+								<ci>T_1</ci>
+							</apply>
+						</apply>
+					</otherwise>
+				</piecewise>
+			</apply>
+			<apply id="T_1_t_function">
+				<eq/>
+				<ci>T_1_t</ci>
+				<apply>
+					<times/>
+					<apply>
+						<divide/>
+						<apply>
+							<times/>
+							<ci>k_1</ci>
+							<ci>T_0</ci>
+							<ci>V_0</ci>
+						</apply>
+						<apply>
+							<minus/>
+							<ci>k_4</ci>
+							<ci>k_3</ci>
+						</apply>
+					</apply>
+					<apply>
+						<minus/>
+						<apply>
+							<exp/>
+							<apply>
+								<times/>
+								<apply>
+									<minus/>
+									<ci>k_3</ci>
+								</apply>
+								<ci>time</ci>
+							</apply>
+						</apply>
+						<apply>
+							<exp/>
+							<apply>
+								<times/>
+								<apply>
+									<minus/>
+									<ci>k_4</ci>
+								</apply>
+								<ci>time</ci>
+							</apply>
+						</apply>
+					</apply>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+	<component cmeta:id="actively_infected" name="actively_infected">
+		
+		<variable name="time" public_interface="in" units="day"/>
+		<variable initial_value="3E-3" name="k_2" public_interface="out" units="per_day"/>
+		<variable initial_value="0.24" name="mu_b" public_interface="out" units="per_day"/>
+		<variable name="T_1" public_interface="in" units="per_mm3"/>
+		<variable cmeta:id="T_2" name="T_2" units="per_mm3"/>
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="T_2_function">
+				<eq/>
+				<ci>T_2</ci>
+				<apply>
+					<divide/>
+					<apply>
+						<times/>
+						<ci>k_2</ci>
+						<ci>T_1</ci>
+					</apply>
+					<ci>mu_b</ci>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+	<component cmeta:id="free_virus_particle" name="free_virus_particle">
+		
+		<variable name="time" public_interface="in" units="day"/>
+		<variable cmeta:id="free_virus_particle_N" initial_value="1000" name="N" public_interface="out" units="dimensionless"/>
+		<variable initial_value="2.4" name="mu_V" public_interface="out" units="per_day"/>
+		<variable name="k_2" public_interface="in" units="per_day"/>
+		<variable name="T_1" public_interface="in" units="per_mm3"/>
+		<variable name="k_1" public_interface="in" units="mm3_per_day"/>
+		<variable name="T" public_interface="in" units="per_mm3"/>
+		<variable cmeta:id="V" name="V" units="per_mm3"/>
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply id="V_function">
+				<eq/>
+				<ci>V</ci>
+				<apply>
+					<divide/>
+					<apply>
+						<times/>
+						<ci>N</ci>
+						<ci>k_2</ci>
+						<ci>T_1</ci>
+					</apply>
+					<apply>
+						<plus/>
+						<apply>
+							<times/>
+							<ci>k_1</ci>
+							<ci>T</ci>
+						</apply>
+						<ci>mu_V</ci>
+					</apply>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+
+	<!-- connections -->
+	<connection>
+		<map_components component_1="environment" component_2="uninfected"/>
+		<map_variables variable_1="time" variable_2="time"/>
+	</connection>
+	<connection>
+		<map_components component_1="environment" component_2="latently_infected"/>
+		<map_variables variable_1="time" variable_2="time"/>
+	</connection>
+	<connection>
+		<map_components component_1="environment" component_2="actively_infected"/>
+		<map_variables variable_1="time" variable_2="time"/>
+	</connection>
+	<connection>
+		<map_components component_1="environment" component_2="free_virus_particle"/>
+		<map_variables variable_1="time" variable_2="time"/>
+	</connection>
+	<connection>
+		<map_components component_1="uninfected" component_2="latently_infected"/>
+		<map_variables variable_1="T" variable_2="T"/>
+		<map_variables variable_1="k_3" variable_2="k_3"/>
+		<map_variables variable_1="k_1" variable_2="k_1"/>
+		<map_variables variable_1="T_1" variable_2="T_1"/>
+	</connection>
+	<connection>
+		<map_components component_1="uninfected" component_2="free_virus_particle"/>
+		<map_variables variable_1="T" variable_2="T"/>
+		<map_variables variable_1="N" variable_2="N"/>
+		<map_variables variable_1="mu_V" variable_2="mu_V"/>
+	</connection>
+	<connection>
+		<map_components component_1="latently_infected" component_2="free_virus_particle"/>
+		<map_variables variable_1="k_1" variable_2="k_1"/>
+		<map_variables variable_1="mu_V" variable_2="mu_V"/>
+		<map_variables variable_1="T_1" variable_2="T_1"/>
+		<map_variables variable_1="N" variable_2="N"/>
+	</connection>
+	<connection>
+		<map_components component_1="uninfected" component_2="actively_infected"/>
+		<map_variables variable_1="k_2" variable_2="k_2"/>
+		<map_variables variable_1="mu_b" variable_2="mu_b"/>
+	</connection>
+	<connection>
+		<map_components component_1="latently_infected" component_2="actively_infected"/>
+		<map_variables variable_1="k_2" variable_2="k_2"/>
+		<map_variables variable_1="T_1" variable_2="T_1"/>
+	</connection>
+	<connection>
+		<map_components component_1="actively_infected" component_2="free_virus_particle"/>
+		<map_variables variable_1="k_2" variable_2="k_2"/>
+	</connection>
+
+
+	<!-- metadata -->
+	
+
+
+	<!-- OpenCell metadata -->
+	
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:about="#perelson_1993d"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">Dynamics of HIV infection of CD4+ T cells</title><cmeta:comment><rdf:Description rdf:nodeID="n1"/></cmeta:comment><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n2"/></reference><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n3"/></reference><cmeta:bio_entity xml:lang="en">CD4+ T cell</cmeta:bio_entity><simulation xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n4"/></simulation></rdf:Description><rdf:Description rdf:nodeID="n1"><rdf:value xml:lang="en">This is the CellML description of Perelson, Kirschner, and Boer's 1993 mathematical model for the dynamics of HIV infection of CD4+ T cells</rdf:value><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n5"/></creator></rdf:Description><rdf:Description rdf:nodeID="n6"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n7"/></Person></rdf:Description><rdf:Description rdf:nodeID="n8"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n9"/></Person></rdf:Description><rdf:Description rdf:nodeID="n10"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Ethan</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Choi</Family></rdf:Description><rdf:Description rdf:nodeID="n11"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">Mathematical Biosciences</title></rdf:Description><rdf:Description rdf:nodeID="n12"><rdf:first><rdf:Description rdf:nodeID="n13"/></rdf:first><rdf:rest><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/></rdf:rest></rdf:Description><rdf:Description rdf:nodeID="n14"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Rob</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">de Boer</Family></rdf:Description><rdf:Description rdf:nodeID="n15"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">1993-03</W3CDTF></rdf:Description><rdf:Description rdf:about="">
+
+<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">Dynamics of HIV infection of CD4+ T cells (Model 4)</dc:title>
+
+<created xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:nodeID="n16"/></created><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n17"/></creator></rdf:Description><rdf:Description rdf:nodeID="n18"><subject_type xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">keyword</subject_type><rdf:value><rdf:Description rdf:nodeID="n19"/></rdf:value></rdf:Description><rdf:Description rdf:nodeID="n7"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n20"/></N></rdf:Description><rdf:Description rdf:nodeID="n4"><boundIntervals xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n12"/></boundIntervals></rdf:Description><rdf:Description rdf:nodeID="n5"><FN xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Ethan Choi</FN></rdf:Description><rdf:Description rdf:nodeID="n16"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2010-01-13</W3CDTF></rdf:Description><rdf:Description rdf:nodeID="n9"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n14"/></N></rdf:Description><rdf:Description rdf:nodeID="n3"><Pubmed_id xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">8096155</Pubmed_id><JournalArticle xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n21"/></JournalArticle></rdf:Description><rdf:Description rdf:nodeID="n17"><ORG xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n22"/></ORG><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n10"/></N><EMAIL xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n23"/></EMAIL></rdf:Description><rdf:Description rdf:nodeID="n21"><first_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">81</first_page><Journal xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n11"/></Journal><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">Dynamics of HIV infection of CD4+ T cells</title><volume xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">114</volume><issued xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:nodeID="n15"/></issued><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n24"/></creator><last_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">125</last_page></rdf:Description><rdf:Description rdf:nodeID="n13"><pointDensity xmlns="http://www.cellml.org/metadata/simulation/1.0#nonstandard-" xml:lang="en">100000</pointDensity><endingValue xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">3650</endingValue><maximumStepSize xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">365</maximumStepSize></rdf:Description><rdf:Description rdf:nodeID="n25"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Alan</Given><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">S</Other><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Perelson</Family></rdf:Description><rdf:Description rdf:nodeID="n24"><rdf:_3><rdf:Description rdf:nodeID="n8"/></rdf:_3><rdf:_1><rdf:Description rdf:nodeID="n26"/></rdf:_1><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq"/></rdf:type><rdf:_2><rdf:Description rdf:nodeID="n6"/></rdf:_2></rdf:Description><rdf:Description rdf:nodeID="n20"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Denise</Given><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">E</Other><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Kirschner</Family></rdf:Description><rdf:Description rdf:nodeID="n23"><rdf:type><rdf:Description rdf:about="http://imc.org/vCard/3.0#internet"/></rdf:type><rdf:value xml:lang="en">mcho099@aucklanduni.ac.nz</rdf:value></rdf:Description><rdf:Description rdf:nodeID="n22"><Orgname xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">The University of Auckland</Orgname><Orgunit xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Auckland Bioengineering Institute</Orgunit></rdf:Description><rdf:Description rdf:nodeID="n19"><rdf:_3 xml:lang="en">HIV</rdf:_3><rdf:_5 xml:lang="en">AZT</rdf:_5><rdf:_1 xml:lang="en">Immunology</rdf:_1><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag"/></rdf:type><rdf:_4 xml:lang="en">dynamics</rdf:_4><rdf:_2 xml:lang="en">CD4 T cell</rdf:_2></rdf:Description><rdf:Description rdf:nodeID="n26"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n27"/></Person></rdf:Description><rdf:Description rdf:nodeID="n2"><subject xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n18"/></subject></rdf:Description><rdf:Description rdf:nodeID="n27"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n25"/></N></rdf:Description></rdf:RDF></model>

@@ -1,0 +1,720 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--  FILE :  HMT_model_1998.xml
+
+CREATED :  15th March 2002
+
+LAST MODIFIED :  20th August 2002
+
+AUTHOR :  Catherine Lloyd
+          Bioengineering Institute
+          The University of Auckland
+          
+MODEL STATUS :  This model conforms to the CellML 1.0 Specification released on
+10th August 2001, and the CellML Metadata 1.0 Specification released on 16th
+January, 2002.
+
+DESCRIPTION :  This file contains a CellML description of Hunter, McCulloch and ter Keurs's 1998 mathematical model of the mechanical properties of cardiac muscle.
+
+CHANGES: 
+  16/04/2002 - CML - Corrected the name of the model, from HMK to HMT.  Merged 
+                     the two equations for T_11 into one, piecewise equation.
+  18/07/2002 - CML - Added more metadata.
+  20/08/2002 - AAC - Removed the 'passive_elasticity' component.
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="hunter_mcculloch_terkeurs_1998_version02" name="hunter_mcculloch_terkeurs_1998_version02">
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>The Mechanical Properties of Cardiac Muscle, 1998</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Bioengineering Institute, University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+            This model is not currently functional (overconstrained).
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para> 
+Finite element models of the electrical and mechanical behaviour of the whole heart are well established.  At the cellular level, there are several models published which describe the changes in ion concentrations and membrane ionic currents underlying the cardiac cell action potential.  However, the Hunter-McCulloch-ter Keurs 1998 model is the first to capture the mechanical properties of actively contracting cardiac muscle.  The model is based on an extensive review of experimental data from a variety of preparations and species.  These experiments are interpreted with a four state variable model which includes i) the passive elasticity of myocardial tissue, ii) the rapid binding of Ca<superscript>2+</superscript> to troponin C, iii) the kinetics of tropomyosin movement and iv) the kinetics of crossbridge tension development.   
+</para>
+
+<para>
+The complete original paper reference is cited below:
+</para>
+
+<para>
+<ulink url="http://www.sciencedirect.com/science?_ob=ArticleURL&amp;_udi=B6TBN-3V3YR56-B&amp;_user=140507&amp;_handle=B-WA-A-A-WC-MsSAYWA-UUA-AUEWCYYWWE-AUEUAZEUWE-CWBYCADUE-WC-U&amp;_fmt=summary&amp;_coverDate=03%2F05%2F1998&amp;_rdoc=10&amp;_orig=browse&amp;_srch=%23toc%235147%231998%23999309997%2329171!&amp;_cdi=5147&amp;view=c&amp;_acct=C000011498&amp;_version=1&amp;_urlVersion=0&amp;_userid=140507&amp;md5=5533102f7cfadc6100d342bb5f784bcb">Modelling the mechanical properties of cardiac muscle</ulink>, P.J. Hunter, A.D. McCulloch and H.E.D.J. ter Keurs, 1998, <ulink url="http://www.sciencedirect.com/science/journal/00796107">
+            <emphasis>Progress in Biophysics and Molecular Biology</emphasis>
+          </ulink>, 69, 289-331.  (A PDF version of the article is available to <emphasis>Science Direct</emphasis> subscribers.)  <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;list_uids=9785944&amp;dopt=Abstract">PubMed ID: 9785944</ulink> 
+</para>
+
+<para>
+The raw CellML description of the Hunter-McCulloch-ter Keurs model can be downloaded in various formats as described in <xref linkend="sec_download_this_model"/>.  For an example of a more complete documentation for an electrophysiological model, see <ulink url="${HTML_EXMPL_HHSA_INTRO}">The Hodgkin-Huxley Squid Axon Model, 1952</ulink>. 
+</para>
+
+</sect1>
+</article>
+</documentation>
+  
+  
+  <!--
+    Below, we define some additional units for association with variables and
+    constants within the model. The identifiers are fairly self-explanatory.
+  -->
+  
+  <units name="micromolar">
+    <unit units="mole" prefix="micro"/>
+    <unit units="litre" exponent="-1"/>
+  </units>
+  
+  <units name="first_order_rate_constant">
+    <unit units="second" exponent="-1"/>
+  </units>
+
+  <units name="second_order_rate_constant">
+    <unit units="micromolar" exponent="-1"/>
+    <unit units="second" exponent="-1"/>
+  </units>
+  
+  <units name="kilopascal">
+    <unit units="pascal" prefix="kilo"/>
+  </units>
+  
+  <units name="per_kilopascal">
+    <unit units="kilopascal" exponent="-1"/>
+  </units>
+ 
+  <!--
+    The "environment" component is used to declare variables that are used by
+    all or most of the other components, in this case just "time".
+  -->
+  <component name="environment">
+    <variable units="second" public_interface="out" name="time"/>
+  </component>
+  
+  <component name="calcium_transient">
+  <variable units="micromolar" public_interface="out" name="Ca_i" initial_value="10.0"/>
+              
+  <variable units="micromolar" name="Ca_max" initial_value="1.0"/>
+  <variable units="second" name="tau_Ca" initial_value="0.06"/>
+  <variable units="micromolar" name="Ca_o" initial_value="0.01"/>
+  
+  <variable units="second" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="dCa_i_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> Ca_i </ci>
+        </apply>
+        <apply>
+          <plus/>
+          <ci> Ca_o </ci>
+          <apply>
+            <times/>
+            <apply>
+              <minus/>
+              <ci> Ca_max </ci>
+              <ci> Ca_o </ci>
+            </apply>
+            <apply>
+              <divide/>
+              <ci> time </ci>
+              <ci> tau_Ca </ci>
+            </apply>
+            <apply>
+              <exp/>
+              <apply>
+                <divide/>
+                <apply>
+                  <minus/>
+                  <cn cellml:units="dimensionless"> 1.0 </cn>
+                  <ci> time </ci>
+                </apply>
+                <ci> tau_Ca </ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component> 
+  
+  <component name="TnC_Ca_binding_kinetics">
+    <variable units="micromolar" public_interface="out" name="Ca_b"/>
+    <variable units="dimensionless" public_interface="out" name="lambda" initial_value="2.6"/>
+   
+    <variable units="micromolar" name="Ca_b_max" initial_value="2.26"/>
+    <variable units="second_order_rate_constant" name="rho_0" initial_value="100.0"/>
+    <variable units="first_order_rate_constant" name="rho_1" initial_value="163.0"/>
+    
+    <variable units="second" public_interface="in" name="time"/>
+    <variable units="micromolar" public_interface="in" name="Ca_i"/>
+    <variable units="kilopascal" public_interface="in" name="To"/>
+    <variable units="kilopascal" public_interface="in" name="T"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="dCa_b_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> Ca_b </ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci> rho_0 </ci>
+            <ci> Ca_i </ci>
+            <apply>
+              <minus/>
+              <ci> Ca_b_max </ci>
+              <ci> Ca_b </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> rho_1 </ci>
+            <ci> Ca_b </ci>
+            <apply>
+              <minus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <divide/>
+                <ci> T </ci>
+                <apply>
+                  <times/>
+                  <ci> lambda </ci>
+                  <ci> To </ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="thin_filament_kinetics">
+    <variable units="kilopascal" public_interface="out" name="To"/>
+    
+    <variable units="dimensionless" name="z"/>
+    <variable units="micromolar" name="C_50" initial_value="1.0"/>
+    <variable units="micromolar" name="pC_50"/>
+    <variable units="micromolar" name="pC_50_ref" initial_value="6.2"/>
+    <variable units="dimensionless" name="n" initial_value="4.5"/>
+    <variable units="dimensionless" name="n_ref" initial_value="6.9"/>
+    <variable units="first_order_rate_constant" name="alpha_0" initial_value="2.0"/>
+    <variable units="kilopascal" name="T_ref" initial_value="100.0"/>
+    <variable units="per_kilopascal" name="beta_0" initial_value="1.45"/>
+    <variable units="per_kilopascal" name="beta_1" initial_value="1.95"/>
+    <variable units="per_kilopascal" name="beta_2" initial_value="0.31"/>
+     
+    <variable units="second" public_interface="in" name="time"/>
+    <variable units="micromolar" public_interface="in" name="Ca_b"/>
+    <variable units="dimensionless" public_interface="in" name="lambda"/>
+              
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="dz_dt">
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci> time </ci>
+          </bvar>
+          <ci> z </ci>
+        </apply>
+        <apply>
+          <times/>
+          <ci> alpha_0 </ci>
+          <apply>
+            <minus/>
+            <apply>
+              <times/>
+              <apply>
+                <power/>
+                <apply>
+                  <divide/>
+                  <ci> Ca_b </ci>
+                  <ci> C_50 </ci>
+                </apply>
+                <ci> n </ci>
+              </apply>
+              <apply>
+                <minus/>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+                <ci> z </ci>
+              </apply>
+            </apply>
+            <ci> z </ci>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="To_calculation">
+        <eq/>
+        <ci> To </ci>
+        <apply>
+          <times/>
+          <ci> T_ref </ci>
+          <apply>
+            <plus/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <times/>
+              <ci> beta_0 </ci>
+              <apply>
+                <minus/>
+                <ci> lambda </ci>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+              </apply>
+            </apply>
+          </apply>
+          <ci> z </ci>
+        </apply>
+      </apply>
+      
+      <apply id="n_calculation">
+        <eq/>
+        <ci> n </ci>
+        <apply>
+          <times/>
+          <ci> n_ref </ci>
+          <apply>
+            <plus/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <times/>
+              <ci> beta_1 </ci>
+              <apply>
+                <minus/>
+                <ci> lambda </ci>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="pC_50_calculation">
+        <eq/>
+        <ci> pC_50 </ci>
+        <apply>
+          <times/>
+          <ci> pC_50_ref </ci>
+          <apply>
+            <plus/>
+            <cn cellml:units="dimensionless"> 1.0 </cn>
+            <apply>
+              <times/>
+              <ci> beta_2 </ci>
+              <apply>
+                <minus/>
+                <ci> lambda </ci>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <component name="crossbridge_kinetics">
+    <variable units="kilopascal" public_interface="out" name="T"/>
+   
+    <variable units="dimensionless" name="a" initial_value="0.5"/> 
+    <variable units="dimensionless" name="Q"/>
+    <variable units="dimensionless" name="A1" initial_value="50.0"/>
+    <variable units="dimensionless" name="A2" initial_value="175.0"/>
+    <variable units="dimensionless" name="A3" initial_value="175.0"/>
+    <variable units="first_order_rate_constant" name="alpha_1" initial_value="33.0"/>
+    <variable units="first_order_rate_constant" name="alpha_2" initial_value="2850.0"/>
+    <variable units="first_order_rate_constant" name="alpha_3" initial_value="2850.0"/>
+    <variable units="second" name="tau"/>
+    <variable units="first_order_rate_constant" name="dlambda_dt"/>
+     
+    <variable units="second" public_interface="in" name="time"/>
+    <variable units="kilopascal" public_interface="in" name="To"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply id="dlambda_dt_calculation">
+        <eq/>
+        <ci> dlambda_dt </ci>
+        <apply>
+          <times/>
+          <apply>
+            <divide/>
+            <ci> alpha_1 </ci>
+            <ci> A1 </ci>
+          </apply>
+          <apply>
+            <divide/>
+            <apply>
+              <minus/>
+              <apply>
+                <divide/>
+                <ci> T </ci>
+                <ci> To </ci>
+              </apply>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+            </apply>
+            <apply>
+              <plus/>
+              <apply>
+                <divide/>
+                <ci> T </ci>
+                <ci> To </ci>
+              </apply>
+              <ci> a </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>   
+    
+      <apply id="T_calculation">
+        <eq/>
+        <ci> T </ci>
+        <apply>
+          <times/>
+          <ci> To </ci>
+          <apply>
+            <divide/>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <apply>
+                <times/>
+                <ci> a </ci>
+                <ci> Q </ci>
+              </apply>
+            </apply>
+            <apply>
+              <minus/>
+              <cn cellml:units="dimensionless"> 1.0 </cn>
+              <ci> Q </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      
+      <apply id="Q_calculation">
+        <eq/>
+        <ci> Q </ci>
+        <apply>
+          <plus/>
+          <apply>
+            <times/>
+            <ci> A1 </ci>
+            <apply>
+              <times/>
+              <apply>
+                <exp/>
+                <apply>
+                  <times/>
+                  <apply>
+                    <minus/>
+                    <ci> alpha_1 </ci>
+                  </apply>
+                  <apply>
+                    <minus/>
+                    <ci> time </ci>
+                    <ci> tau </ci>
+                  </apply>
+                </apply>
+              </apply>
+              <ci> dlambda_dt </ci>
+              <ci> tau </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> A2 </ci>
+            <apply>
+              <times/>
+              <apply>
+                <exp/>
+                <apply>
+                  <times/>
+                  <apply>
+                    <minus/>
+                    <ci> alpha_2 </ci>
+                  </apply>
+                  <apply>
+                    <minus/>
+                    <ci> time </ci>
+                    <ci> tau </ci>
+                  </apply>
+                </apply>
+              </apply>
+              <ci> dlambda_dt </ci>
+              <ci> tau </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> A3 </ci>
+            <apply>
+              <times/>
+              <apply>
+                <exp/>
+                <apply>
+                  <times/>
+                  <apply>
+                    <minus/>
+                    <ci> alpha_3 </ci>
+                  </apply>
+                  <apply>
+                    <minus/>
+                    <ci> time </ci>
+                    <ci> tau </ci>
+                  </apply>
+                </apply>
+              </apply>
+              <ci> dlambda_dt </ci>
+              <ci> tau </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  
+  <connection>
+    <map_components component_2="environment" component_1="calcium_transient"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="TnC_Ca_binding_kinetics"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="thin_filament_kinetics"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="crossbridge_kinetics"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="TnC_Ca_binding_kinetics" component_1="calcium_transient"/>
+    <map_variables variable_2="Ca_i" variable_1="Ca_i"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="thin_filament_kinetics" component_1="TnC_Ca_binding_kinetics"/>
+    <map_variables variable_2="Ca_b" variable_1="Ca_b"/>
+    <map_variables variable_2="lambda" variable_1="lambda"/>
+    <map_variables variable_2="To" variable_1="To"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="TnC_Ca_binding_kinetics" component_1="crossbridge_kinetics"/>
+    <map_variables variable_2="T" variable_1="T"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="thin_filament_kinetics" component_1="crossbridge_kinetics"/>
+    <map_variables variable_2="To" variable_1="To"/>
+  </connection>
+
+
+
+<rdf:RDF>
+  <rdf:Bag rdf:about="rdf:#e64f3900-2a3f-40fb-94ed-cae94adffddb">
+    <rdf:li>mechanical properties</rdf:li>
+    <rdf:li>Cardiac Myocyte</rdf:li>
+    <rdf:li>electrophysiology</rdf:li>
+    <rdf:li>myofilament mechanics</rdf:li>
+    <rdf:li>cardiac</rdf:li>
+    <rdf:li>mechanical constitutive laws</rdf:li>
+  </rdf:Bag>
+  <rdf:Seq rdf:about="rdf:#140a1602-1889-423b-9f16-f97108912d5f">
+    <rdf:li rdf:resource="rdf:#38af3bde-8bfb-4276-9f6d-f883f4d4ca0f"/>
+    <rdf:li rdf:resource="rdf:#eb51a3ec-e99a-4cbf-b159-098f89e6e7be"/>
+    <rdf:li rdf:resource="rdf:#586d7bd0-5559-422c-a52c-8fb3cda72eb5"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#17958c34-ea68-451e-bb05-e989943aae12">
+    <dc:creator rdf:resource="rdf:#140a1602-1889-423b-9f16-f97108912d5f"/>
+    <dc:title>
+            Modelling the mechanical properties of cardiac muscle
+          </dc:title>
+    <bqs:volume>69</bqs:volume>
+    <bqs:first_page>289</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#ede19969-ba04-4358-80c8-79c1149fd0d1"/>
+    <dcterms:issued rdf:resource="rdf:#33f485ed-0bf8-4246-bf7a-861c70c92087"/>
+    <bqs:last_page>331</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d2e90951-0c81-46c5-8842-6b9a0a8ceadc">
+    <rdf:type rdf:resource="http://www.w3.org/2001/vcard-rdf/3.0#N"/>
+    <vCard:Given>Autumn</vCard:Given>
+    <vCard:Family>Cuellar</vCard:Family>
+    <vCard:Other>A</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7e776454-0b70-4681-9736-13c3b5022f0b">
+    <vCard:FN>Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1eb035e9-4118-401a-89b3-5566e5a4b6f4">
+    <vCard:N rdf:resource="rdf:#aa823aaa-1175-4263-99c2-452148f724e8"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#831f7cdd-7065-4d4e-8f06-50b7d66882ed">
+    <vCard:ORG rdf:resource="rdf:#b82641a9-4285-4780-b05b-fa10962d4d56"/>
+    <vCard:EMAIL rdf:resource="rdf:#eae948f2-ca9f-4c39-a0e9-a51f64ea4a31"/>
+    <vCard:N rdf:resource="rdf:#a72012da-11e7-4ff4-a38e-aeb2261e9326"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#eae948f2-ca9f-4c39-a0e9-a51f64ea4a31">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#eb51a3ec-e99a-4cbf-b159-098f89e6e7be">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#086d8866-7886-4b4b-865b-0ecd7305f579"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f28451af-cd16-411d-b370-67245baf2abe">
+    <dcterms:W3CDTF>2002-07-18</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:publisher>
+        The University of Auckland, Bioengineering Institute
+      </dc:publisher>
+    <cmeta:modification rdf:resource="rdf:#0227f5d5-28ac-40d5-b281-a5bf30949f67"/>
+    <cmeta:modification rdf:resource="rdf:#56c8b95d-682b-4538-b61f-855a88d27136"/>
+    <cmeta:modification rdf:resource="rdf:#8319f21d-d115-40d4-8aaa-fd246f92cd2c"/>
+    <dcterms:created rdf:resource="rdf:#94bd353b-202d-4b7c-bf94-4185850ea0e5"/>
+    <dc:creator rdf:resource="rdf:#831f7cdd-7065-4d4e-8f06-50b7d66882ed"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#38af3bde-8bfb-4276-9f6d-f883f4d4ca0f">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#7f3de144-9c37-493d-a00c-d449fb4376f7"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f2e783c9-7c39-4555-b22f-485433a59e4a">
+    <rdf:type rdf:resource="http://www.w3.org/2001/vcard-rdf/3.0#N"/>
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a72012da-11e7-4ff4-a38e-aeb2261e9326">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#94bd353b-202d-4b7c-bf94-4185850ea0e5">
+    <dcterms:W3CDTF>2002-03-15</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="#hunter_mcculloch_terkeurs_1998_version02">
+    <dc:title>
+        The Hunter-McCulloch-ter Keurs Model of the Mechanical Properties of 
+        Cardiac Muscle, 1998
+      </dc:title>
+    <cmeta:bio_entity>Cardiac Myocyte</cmeta:bio_entity>
+    <cmeta:comment rdf:resource="rdf:#cdb05ca8-c323-45fc-b0e2-36e2163e0737"/>
+    <bqs:reference rdf:resource="rdf:#1a3ae34f-402a-43cb-9ad4-f0145ba8d28b"/>
+    <bqs:reference rdf:resource="rdf:#812f4f81-9191-4598-9e6a-feeab8493711"/>
+    <cmeta:species>Mammalia</cmeta:species>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#086d8866-7886-4b4b-865b-0ecd7305f579">
+    <vCard:Given>Andrew</vCard:Given>
+    <vCard:Family>McCulloch</vCard:Family>
+    <vCard:Other>D</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#cdb05ca8-c323-45fc-b0e2-36e2163e0737">
+    <dc:creator rdf:resource="rdf:#7e776454-0b70-4681-9736-13c3b5022f0b"/>
+    <rdf:value>
+          This is the CellML description of the Hunter-McCulloch-ter Keurs 
+          mathematical model of the mechanical properties of passive and active 
+          cardiac muscle.  It is unique in that it combines electrical and 
+          structural data from the whole heart and transmembrane ionic fluxes at           the cellular level.
+        </rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1a3ae34f-402a-43cb-9ad4-f0145ba8d28b">
+    <bqs:Pubmed_id>9785944</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#17958c34-ea68-451e-bb05-e989943aae12"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#33f485ed-0bf8-4246-bf7a-861c70c92087">
+    <dcterms:W3CDTF>1998</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#56c8b95d-682b-4538-b61f-855a88d27136">
+    <dcterms:modified rdf:resource="rdf:#c869cb17-ea09-47c3-9f86-2352acb0f331"/>
+    <rdf:value>
+          Removed the 'passive_elasticity' component.  It is currently not
+          essential to the CellML description of this model.
+        </rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#d2e90951-0c81-46c5-8842-6b9a0a8ceadc"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ede19969-ba04-4358-80c8-79c1149fd0d1">
+    <dc:title>Progress in Biophysics and Molecular Biology</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#aa823aaa-1175-4263-99c2-452148f724e8">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d93162a3-bf3a-4a5b-90a7-ac4f5d6c25fe">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value rdf:resource="rdf:#e64f3900-2a3f-40fb-94ed-cae94adffddb"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b6ed93f0-f790-4739-ab1d-6d6b0d8b2a1c">
+    <rdf:type rdf:resource="http://purl.org/dc/terms/W3CDTF"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#c869cb17-ea09-47c3-9f86-2352acb0f331">
+    <rdf:type rdf:resource="http://purl.org/dc/terms/W3CDTF"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#b82641a9-4285-4780-b05b-fa10962d4d56">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>The Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7f3de144-9c37-493d-a00c-d449fb4376f7">
+    <vCard:Given>Peter</vCard:Given>
+    <vCard:Family>Hunter</vCard:Family>
+    <vCard:Other>J</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0227f5d5-28ac-40d5-b281-a5bf30949f67">
+    <dcterms:modified rdf:resource="rdf:#f28451af-cd16-411d-b370-67245baf2abe"/>
+    <rdf:value>
+          Added more metadata.
+        </rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#1eb035e9-4118-401a-89b3-5566e5a4b6f4"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#586d7bd0-5559-422c-a52c-8fb3cda72eb5">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#4226855d-20a9-4dd7-8468-170503041419"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#812f4f81-9191-4598-9e6a-feeab8493711">
+    <dc:subject rdf:resource="rdf:#d93162a3-bf3a-4a5b-90a7-ac4f5d6c25fe"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4226855d-20a9-4dd7-8468-170503041419">
+    <vCard:Given>H</vCard:Given>
+    <vCard:Family>ter Keurs</vCard:Family>
+    <vCard:Other>D</vCard:Other>
+    <vCard:Other>E</vCard:Other>
+    <vCard:Other>J</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8319f21d-d115-40d4-8aaa-fd246f92cd2c">
+    <dcterms:modified rdf:resource="rdf:#b6ed93f0-f790-4739-ab1d-6d6b0d8b2a1c"/>
+    <rdf:value>
+          Corrected the name of the model, from HMK to HMT.  Merged the two
+          equations for T_11 into one, piecewise equation.
+        </rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#f2e783c9-7c39-4555-b22f-485433a59e4a"/>
+  </rdf:Description>
+</rdf:RDF>
+</model>

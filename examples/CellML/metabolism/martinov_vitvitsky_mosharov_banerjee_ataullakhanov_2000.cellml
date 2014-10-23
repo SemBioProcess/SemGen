@@ -1,0 +1,577 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This CellML file was generated on 23/04/2010 at 11:45:25 at a.m. using:
+
+COR (0.9.31.1371)
+Copyright 2002-2010 Dr Alan Garny
+http://cor.physiol.ox.ac.uk/ - cor@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.cellml.org/
+-->
+<model xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" name="martinov_2000" cmeta:id="martinov_2000" xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#">
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>A Substrate Switch: A New Mode of Regulation in the Methionine Metabolic Pathway</title>
+				<author>
+					<firstname>Catherine</firstname>
+					<surname>Lloyd</surname>
+					<affiliation>
+						<shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<section id="sec_status">
+				<title>Model Status</title>
+				<para>
+            This model runs in COR and OpenCell, and the units are consistent throughout. It is a faithful reproduction of the paper equations, and the output is similar (but not identical) to the published results (Fig 5).
+          </para>
+			</section>
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>
+ABSTRACT: We propose a simple mathematical model of liver S-adenosylmethionine (AdoMet) metabolism. Analysis of the model has shown that AdoMet metabolism can operate under two different modes. The first, with low metabolic rate and low AdoMet concentration, serves predominantly to supply the cell with AdoMet, the substrate for various cellular methylation reactions. The second, with high metabolic rate and high AdoMet concentration, provides an avenue for cleavage of excess methionine and can serve as a source of cysteine when its increased synthesis is necessary. The switch that triggers interconversion between the "low" and "high" modes is methionine concentration. Under a certain set of parameters both modes may coexist. This behavior results from the kinetic properties of (i) the two isoenzymes of AdoMet synthetase, MATI and MATIII, that catalyse AdoMet production; one is inhibited by AdoMet, whereas the other is activated by it, and (ii) glycine-N-methyltransferase that displays highly cooperative kinetics that is different from that of other AdoMet-dependent methyltransferases. Thus, the model provides an explanation for how different cellular needs are met by regulation of this pathway. The model also correctly identifies a critical role for glycine N-methyltransferase in depleting excess methionine in the high mode, thus avoiding the toxicity associated with elevated levels of this essential amino acid.   
+</para>
+				<para>
+The original paper reference is cited below:
+</para>
+				<para>
+A Substrate Switch: A New Mode of Regulation in the Methionine Metabolic Pathway, Michael V. Martinov, Victor M. Vitvitsky, Eugene V. Mosharov, Ruma Banerjee, and Fazoil I. Ataullakhanov, 2000, 
+            <emphasis>Journal of Theoretical Biology</emphasis>, 204, 521-532. <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;list_uids=10833353&amp;dopt=Abstract">PubMed ID: 10833353</ulink>
+				</para>
+				<informalfigure float="0" id="fig_reaction_diagram">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>reaction diagram</title>
+							</objectinfo>
+							<imagedata fileref="martinov_2000.png"/>
+						</imageobject>
+					</mediaobject>
+					<caption>Simplified pathway of methionine metabolism in liver cells employed for modelling in the study described here.  The main metabolites are shown in blue boxes and the enzymes in red boxes.</caption>
+				</informalfigure>
+			</sect1>
+		</article>
+	</documentation>
+	
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:about="rdf:#e59aa2d1-e015-4a5a-bf38-8e88a3c5f927"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Eugene</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Mosharov</Family><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">V</Other></rdf:Description><rdf:Description rdf:about="rdf:#823423f4-6d06-4dec-9998-03a3009d54bf"><FN xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Catherine Lloyd</FN></rdf:Description><rdf:Description rdf:nodeID="n1"><endingValue xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">100</endingValue></rdf:Description><rdf:Description rdf:about="rdf:#f02e9027-078b-4874-860c-377182418595"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#38535a16-3c7b-4c76-b9b9-4a5f732b8cc2"/></N><ORG xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#a7947112-2d62-4953-8708-012c38e23e65"/></ORG><EMAIL xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#017be787-c0b8-46f4-b626-e2b35b661e9f"/></EMAIL></rdf:Description><rdf:Description rdf:about="rdf:#dc73490a-4348-443f-85a0-6e7774cb4c21"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">
+            A Substrate Switch: A New Mode of Regulation in the Methionine 
+            Metabolic Pathway
+          </title><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#bf3619fb-c609-4106-94f2-b92f0fca3ea4"/></creator><issued xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:about="rdf:#c059907d-36cb-4f47-8951-40bccd50c511"/></issued><volume xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">204</volume><first_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">521</first_page><Journal xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:about="rdf:#63826607-9a1a-45d8-991a-15f94fd3931f"/></Journal><last_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">532</last_page></rdf:Description><rdf:Description rdf:about="rdf:#017be787-c0b8-46f4-b626-e2b35b661e9f"><rdf:type><rdf:Description rdf:about="http://imc.org/vCard/3.0#internet"/></rdf:type><rdf:value xml:lang="en">c.lloyd@auckland.ac.nz</rdf:value></rdf:Description><rdf:Description rdf:nodeID="n2"><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag"/></rdf:type><rdf:_1 xml:lang="en">methionine</rdf:_1><rdf:_2 xml:lang="en">metabolism</rdf:_2></rdf:Description><rdf:Description rdf:about="rdf:#6c32c94e-d8a8-4940-95bd-8a2b6b800cef"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Michael</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Martinov</Family><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">V</Other></rdf:Description><rdf:Description rdf:about="rdf:#7a36b485-9385-43ab-b7df-ae5ab6fbcb76"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2003-11-27</W3CDTF></rdf:Description><rdf:Description rdf:about="rdf:#a7947112-2d62-4953-8708-012c38e23e65"><Orgname xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">The University of Auckland</Orgname><Orgunit xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Auckland Bioengineering Institute</Orgunit></rdf:Description><rdf:Description rdf:about="rdf:#5c44f490-4342-4a98-b47b-de6c03efad2d"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Ruma</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Banerjee</Family></rdf:Description><rdf:Description rdf:about="rdf:#bf3619fb-c609-4106-94f2-b92f0fca3ea4"><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq"/></rdf:type><rdf:_1><rdf:Description rdf:about="rdf:#3fb4a98f-1f6e-4dc0-be42-d444dea5f878"/></rdf:_1><rdf:_2><rdf:Description rdf:about="rdf:#78316a8b-598a-4600-8ac6-2360c2ee8489"/></rdf:_2><rdf:_3><rdf:Description rdf:about="rdf:#4f1976b5-c47e-4868-a0ef-12531d4c23f4"/></rdf:_3><rdf:_4><rdf:Description rdf:about="rdf:#ab117336-0be8-479a-b1e7-db7756456b07"/></rdf:_4><rdf:_5><rdf:Description rdf:about="rdf:#08a61348-6f74-453a-9454-ac8f751d4709"/></rdf:_5></rdf:Description><rdf:Description rdf:about="rdf:#ffeb8f71-c4ca-435a-bdfc-9c8808ff756e"><Pubmed_id xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">10833353</Pubmed_id><JournalArticle xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:about="rdf:#dc73490a-4348-443f-85a0-6e7774cb4c21"/></JournalArticle></rdf:Description><rdf:Description rdf:about="rdf:#a4156d1d-18e4-4398-ba4d-b36d80df52dc"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Victor</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Vitvitsky</Family><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">M</Other></rdf:Description><rdf:Description rdf:about="#AdoHcy"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">AdoHcy</title><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">S-adenosylhomocysteine</alternative></rdf:Description><rdf:Description rdf:about="rdf:#c059907d-36cb-4f47-8951-40bccd50c511"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2000-06-21</W3CDTF></rdf:Description><rdf:Description rdf:about="rdf:#d227611a-a8da-490f-b0af-12622344d713"><rdf:value xml:lang="en">
+          This is the CellML description of Martinov et al.'s mathematical model of substrate switching as a form of regulation in the methionine metabolic pathway.
+        </rdf:value><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#823423f4-6d06-4dec-9998-03a3009d54bf"/></creator></rdf:Description><rdf:Description rdf:about=""><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#f02e9027-078b-4874-860c-377182418595"/></creator><publisher xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">
+        The University of Auckland, Bioengineering Institute
+      </publisher><created xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:about="rdf:#7a36b485-9385-43ab-b7df-ae5ab6fbcb76"/></created></rdf:Description><rdf:Description rdf:about="rdf:#4f1976b5-c47e-4868-a0ef-12531d4c23f4"><rdf:type><rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/></rdf:type><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#e59aa2d1-e015-4a5a-bf38-8e88a3c5f927"/></N></rdf:Description><rdf:Description rdf:about="rdf:#80208633-db1d-45dd-8985-7122ccdb056d"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Fazoil</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Ataullakhanov</Family><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">I</Other></rdf:Description><rdf:Description rdf:about="rdf:#63826607-9a1a-45d8-991a-15f94fd3931f"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">Journal of Theoretical Biology</title></rdf:Description><rdf:Description rdf:nodeID="n3"><rdf:first><rdf:Description rdf:nodeID="n1"/></rdf:first><rdf:rest><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/></rdf:rest></rdf:Description><rdf:Description rdf:about="rdf:#38535a16-3c7b-4c76-b9b9-4a5f732b8cc2"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Catherine</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Lloyd</Family><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">May</Other></rdf:Description><rdf:Description rdf:about="#MetMet"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">MetMet</title><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">methionine</alternative></rdf:Description><rdf:Description rdf:about="rdf:#08a61348-6f74-453a-9454-ac8f751d4709"><rdf:type><rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/></rdf:type><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#80208633-db1d-45dd-8985-7122ccdb056d"/></N></rdf:Description><rdf:Description rdf:about="rdf:#92d4def2-ede6-461f-8c9a-e27e30c35d65"><subject xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#a4d67f32-f600-4ed2-a268-fbe9687178a4"/></subject></rdf:Description><rdf:Description rdf:nodeID="n4"><boundIntervals xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n3"/></boundIntervals></rdf:Description><rdf:Description rdf:about="rdf:#3fb4a98f-1f6e-4dc0-be42-d444dea5f878"><rdf:type><rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/></rdf:type><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#6c32c94e-d8a8-4940-95bd-8a2b6b800cef"/></N></rdf:Description><rdf:Description rdf:about="#HcyMet"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">HcyMet</title><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">homocysteine</alternative></rdf:Description><rdf:Description rdf:about="rdf:#a4d67f32-f600-4ed2-a268-fbe9687178a4"><rdf:value><rdf:Description rdf:nodeID="n2"/></rdf:value><subject_type xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">keyword</subject_type></rdf:Description><rdf:Description rdf:about="#AdoMet"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">AdoMet</title><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">adenosine</alternative><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">S-adenosylmethionine</alternative></rdf:Description><rdf:Description rdf:about="#martinov_2000"><simulation xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n4"/></simulation><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">
+        Martinov et al.'s mathematical model of substrate switching as a form of regulation in the methionine metabolic pathway.
+      </title><cmeta:comment xmlns:cmeta="http://www.cellml.org/metadata/1.0#"><rdf:Description rdf:about="rdf:#d227611a-a8da-490f-b0af-12622344d713"/></cmeta:comment><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:about="rdf:#92d4def2-ede6-461f-8c9a-e27e30c35d65"/></reference><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:about="rdf:#ffeb8f71-c4ca-435a-bdfc-9c8808ff756e"/></reference></rdf:Description><rdf:Description rdf:about="rdf:#ab117336-0be8-479a-b1e7-db7756456b07"><rdf:type><rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/></rdf:type><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#5c44f490-4342-4a98-b47b-de6c03efad2d"/></N></rdf:Description><rdf:Description rdf:about="rdf:#78316a8b-598a-4600-8ac6-2360c2ee8489"><rdf:type><rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/></rdf:type><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#a4156d1d-18e4-4398-ba4d-b36d80df52dc"/></N></rdf:Description></rdf:RDF>   <units xmlns="http://www.cellml.org/cellml/1.0#" name="micromolar">
+      
+	  <unit units="mole" prefix="micro"/>
+      <unit units="litre" exponent="-1"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="hour">
+      <unit units="second" multiplier="3600"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="flux">
+      <unit units="micromolar"/>
+      <unit units="hour" exponent="-1"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="first_order_rate_constant">
+      <unit units="hour" exponent="-1"/>
+   </units>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="environment">
+      <variable name="time" units="hour" public_interface="out"/>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="Ado">
+      <variable name="Ado" units="micromolar" initial_value="1" public_interface="out"/>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="Met">
+      <variable name="Met" units="micromolar" public_interface="out"/>
+      <variable name="time" units="hour" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>Met</ci>
+            <piecewise>
+               <piece>
+                  <cn cellml:units="micromolar">45</cn>
+                  <apply>
+                     <and/>
+                     <apply>
+                        <geq/>
+                        <ci>time</ci>
+                        <cn cellml:units="hour">0</cn>
+                     </apply>
+                     <apply>
+                        <lt/>
+                        <ci>time</ci>
+                        <cn cellml:units="hour">5</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <piece>
+                  <cn cellml:units="micromolar">52</cn>
+                  <apply>
+                     <and/>
+                     <apply>
+                        <geq/>
+                        <ci>time</ci>
+                        <cn cellml:units="hour">5</cn>
+                     </apply>
+                     <apply>
+                        <lt/>
+                        <ci>time</ci>
+                        <cn cellml:units="hour">15</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <piece>
+                  <cn cellml:units="micromolar">55</cn>
+                  <apply>
+                     <and/>
+                     <apply>
+                        <geq/>
+                        <ci>time</ci>
+                        <cn cellml:units="hour">15</cn>
+                     </apply>
+                     <apply>
+                        <lt/>
+                        <ci>time</ci>
+                        <cn cellml:units="hour">60</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <piece>
+                  <cn cellml:units="micromolar">52</cn>
+                  <apply>
+                     <and/>
+                     <apply>
+                        <geq/>
+                        <ci>time</ci>
+                        <cn cellml:units="hour">60</cn>
+                     </apply>
+                     <apply>
+                        <lt/>
+                        <ci>time</ci>
+                        <cn cellml:units="hour">75</cn>
+                     </apply>
+                  </apply>
+               </piece>
+               <piece>
+                  <cn cellml:units="micromolar">45</cn>
+                  <apply>
+                     <geq/>
+                     <ci>time</ci>
+                     <cn cellml:units="hour">75</cn>
+                  </apply>
+               </piece>
+            </piecewise>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="Hcy">
+      <variable name="Hcy" units="micromolar" public_interface="out"/>
+      <variable name="AdoHcy" units="micromolar" public_interface="in"/>
+      <variable name="Ado" units="micromolar" public_interface="in"/>
+      <variable name="K_AHC" units="micromolar" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>Hcy</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>AdoHcy</ci>
+                  <ci>K_AHC</ci>
+               </apply>
+               <ci>Ado</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="K_AHC">
+      <variable name="K_AHC" units="micromolar" initial_value="0.1" public_interface="out"/>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="AdoMet">
+      <variable name="AdoMet" units="micromolar" initial_value="60" public_interface="out"/>
+      <variable name="V_MET" units="flux" public_interface="in"/>
+      <variable name="V_GNMT" units="flux" public_interface="in"/>
+      <variable name="V_MATI" units="flux" public_interface="in"/>
+      <variable name="V_MATIII" units="flux" public_interface="in"/>
+      <variable name="time" units="hour" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>AdoMet</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <ci>V_MATI</ci>
+                  <ci>V_MATIII</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>V_MET</ci>
+                  <ci>V_GNMT</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="AdoHcy">
+      <variable name="AdoHcy" units="micromolar" initial_value="3" public_interface="out"/>
+      <variable name="V_MET" units="flux" public_interface="in"/>
+      <variable name="V_GNMT" units="flux" public_interface="in"/>
+      <variable name="V_D" units="flux" public_interface="in"/>
+      <variable name="Ado" units="micromolar" public_interface="in"/>
+      <variable name="K_AHC" units="micromolar" public_interface="in"/>
+      <variable name="time" units="hour" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>AdoHcy</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <ci>V_MET</ci>
+                     <ci>V_GNMT</ci>
+                  </apply>
+                  <ci>V_D</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <cn cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <divide/>
+                     <ci>K_AHC</ci>
+                     <ci>Ado</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="V_MATI">
+      <variable name="V_MATI" units="flux" public_interface="out"/>
+      <variable name="Met" units="micromolar" public_interface="in"/>
+      <variable name="AdoMet" units="micromolar" public_interface="in"/>
+      <variable name="V_MATImax" units="flux" initial_value="561"/>
+      <variable name="Km_MATI" units="micromolar" initial_value="41"/>
+      <variable name="Ki_MATI" units="micromolar" initial_value="50"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_MATI</ci>
+            <apply>
+               <divide/>
+               <ci>V_MATImax</ci>
+               <apply>
+                  <plus/>
+                  <cn cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <divide/>
+                        <ci>Km_MATI</ci>
+                        <ci>Met</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <apply>
+                           <divide/>
+                           <ci>AdoMet</ci>
+                           <ci>Ki_MATI</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="V_MATIII">
+      <variable name="V_MATIII" units="flux" public_interface="out"/>
+      <variable name="AdoMet" units="micromolar" public_interface="in"/>
+      <variable name="Met" units="micromolar" public_interface="in"/>
+      <variable name="V_MATIIImax" units="flux" initial_value="22870"/>
+      <variable name="Km1_MATIII" units="micromolar"/>
+      <variable name="Km2_MATIII" units="micromolar" initial_value="21.1"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_MATIII</ci>
+            <apply>
+               <divide/>
+               <ci>V_MATIIImax</ci>
+               <apply>
+                  <plus/>
+                  <cn cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>Km1_MATIII</ci>
+                        <ci>Km2_MATIII</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <power/>
+                           <ci>Met</ci>
+                           <cn cellml:units="dimensionless">2</cn>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>Met</ci>
+                           <ci>Km2_MATIII</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>Km1_MATIII</ci>
+            <apply>
+               <divide/>
+               <cn cellml:units="micromolar">20000</cn>
+               <apply>
+                  <plus/>
+                  <cn cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <times/>
+                     <cn cellml:units="dimensionless">5.7</cn>
+                     <apply>
+                        <power/>
+                        <apply>
+                           <divide/>
+                           <ci>AdoMet</ci>
+                           <apply>
+                              <plus/>
+                              <ci>AdoMet</ci>
+                              <cn cellml:units="micromolar">600</cn>
+                           </apply>
+                        </apply>
+                        <cn cellml:units="dimensionless">2</cn>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="V_MET">
+      <variable name="V_MET" units="flux" public_interface="out"/>
+      <variable name="AdoMet" units="micromolar" public_interface="in"/>
+      <variable name="AdoHcy" units="micromolar" public_interface="in"/>
+      <variable name="V_METmax" units="flux" initial_value="4544"/>
+      <variable name="Km1_MET" units="micromolar"/>
+      <variable name="Km2_MET_A" units="dimensionless" initial_value="10"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_MET</ci>
+            <apply>
+               <divide/>
+               <ci>V_METmax</ci>
+               <apply>
+                  <plus/>
+                  <cn cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <divide/>
+                     <ci>Km1_MET</ci>
+                     <ci>AdoMet</ci>
+                  </apply>
+                  <ci>Km2_MET_A</ci>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>Km2_MET_A</ci>
+                        <ci>Km1_MET</ci>
+                     </apply>
+                     <ci>AdoMet</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>Km1_MET</ci>
+            <apply>
+               <times/>
+               <cn cellml:units="micromolar">10</cn>
+               <apply>
+                  <plus/>
+                  <cn cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <divide/>
+                     <ci>AdoHcy</ci>
+                     <cn cellml:units="micromolar">4</cn>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="V_GNMT">
+      <variable name="V_GNMT" units="flux" public_interface="out"/>
+      <variable name="AdoMet" units="micromolar" public_interface="in"/>
+      <variable name="AdoHcy" units="micromolar" public_interface="in"/>
+      <variable name="V_GNMTmax" units="flux" initial_value="10600"/>
+      <variable name="Km_GNMT" units="micromolar" initial_value="4500"/>
+      <variable name="Ki_GNMT" units="micromolar" initial_value="20"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_GNMT</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <ci>V_GNMTmax</ci>
+                     <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <apply>
+                           <power/>
+                           <apply>
+                              <divide/>
+                              <ci>Km_GNMT</ci>
+                              <ci>AdoMet</ci>
+                           </apply>
+                           <cn cellml:units="dimensionless">2.3</cn>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <cn cellml:units="dimensionless">1</cn>
+               </apply>
+               <apply>
+                  <plus/>
+                  <cn cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <divide/>
+                     <ci>AdoHcy</ci>
+                     <ci>Ki_GNMT</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="V_D">
+      <variable name="V_D" units="flux" public_interface="out"/>
+      <variable name="alpha_d" units="first_order_rate_constant" initial_value="1333"/>
+      <variable name="Hcy" units="micromolar" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_D</ci>
+            <apply>
+               <times/>
+               <ci>alpha_d</ci>
+               <ci>Hcy</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="AdoMet" component_2="V_MATI"/>
+      <map_variables variable_1="AdoMet" variable_2="AdoMet"/>
+      <map_variables variable_1="V_MATI" variable_2="V_MATI"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="AdoMet" component_2="V_MATIII"/>
+      <map_variables variable_1="AdoMet" variable_2="AdoMet"/>
+      <map_variables variable_1="V_MATIII" variable_2="V_MATIII"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="AdoMet" component_2="V_GNMT"/>
+      <map_variables variable_1="AdoMet" variable_2="AdoMet"/>
+      <map_variables variable_1="V_GNMT" variable_2="V_GNMT"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="AdoMet" component_2="V_MET"/>
+      <map_variables variable_1="AdoMet" variable_2="AdoMet"/>
+      <map_variables variable_1="V_MET" variable_2="V_MET"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="AdoHcy" component_2="V_D"/>
+      <map_variables variable_1="V_D" variable_2="V_D"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="AdoHcy" component_2="V_GNMT"/>
+      <map_variables variable_1="AdoHcy" variable_2="AdoHcy"/>
+      <map_variables variable_1="V_GNMT" variable_2="V_GNMT"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="AdoHcy" component_2="V_MET"/>
+      <map_variables variable_1="AdoHcy" variable_2="AdoHcy"/>
+      <map_variables variable_1="V_MET" variable_2="V_MET"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="Met" component_2="V_MATI"/>
+      <map_variables variable_1="Met" variable_2="Met"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="Met" component_2="V_MATIII"/>
+      <map_variables variable_1="Met" variable_2="Met"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="K_AHC" component_2="AdoHcy"/>
+      <map_variables variable_1="K_AHC" variable_2="K_AHC"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="K_AHC" component_2="Hcy"/>
+      <map_variables variable_1="K_AHC" variable_2="K_AHC"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="Ado" component_2="AdoHcy"/>
+      <map_variables variable_1="Ado" variable_2="Ado"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="Hcy" component_2="AdoHcy"/>
+      <map_variables variable_1="AdoHcy" variable_2="AdoHcy"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="Hcy" component_2="Ado"/>
+      <map_variables variable_1="Ado" variable_2="Ado"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="Met" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="AdoMet" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="AdoHcy" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="Hcy" component_2="V_D"/>
+      <map_variables variable_1="Hcy" variable_2="Hcy"/>
+   </connection>
+</model>

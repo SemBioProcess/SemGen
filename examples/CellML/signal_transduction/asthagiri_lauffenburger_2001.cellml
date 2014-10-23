@@ -1,0 +1,4236 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--  FILE :  asthagiri_model_2001.xml
+
+CREATED :  25th October 2001
+
+LAST MODIFIED : 27th December 2007
+
+AUTHOR :  Catherine Lloyd
+          Department of Engineering Science
+          The University of Auckland
+          
+MODEL STATUS :  This model conforms to the CellML 1.0 Specification released on
+10th August 2001, and the 16/01/2002 CellML Metadata 1.0 Specification .
+
+DESCRIPTION :  This file contains a CellML description of a study by Asthagiri
+and Lauffenburger (2001) of the feedback effects on signal dynamics in the
+mitogen-activated protein kinase (MAPK) cascade.  
+
+CHANGES:  
+  22/01/2002 - AAC - Updated metadata to conform to the 16/1/02 CellML Metadata
+                     1.0 Specification.
+  25/02/2002 - CML - Altered connections after checking the model with the 
+                     validator.
+  18/07/2002 - CML - Added more metadata.
+  27/08/2002 - AAC - Corrected the initial value of variable 'k6_' in component
+                     'adaptor_heterodimer_syn'.
+  09/04/2003 - AAC - Added publication date information.  
+  26/04/2005 - PJV - Changed unit dimensions to make them consistent
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="asthagiri_model_2001" name="asthagiri_model_2001">
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Feedback Effects On Signal Dynamics In A Mitogen-Activated Protein Kinase (MAPK) Cascade</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Bioengineering Institute, University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+            This model has been recoded in CellML without the use of the reaction element. The parameters and differential equations described in the original publication were used. This CellML model is known to read in both COR and PCEnv although currently it is unable to recreate the published results from the original model.
+          </para>
+<para>
+ValidateCellML detects widespread unit inconsistency within this model.
+</para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+In 2001, Anand Asthagiri and Douglas Lauffenburger published a mathematical model which examined the mechanisms that govern MAPK pathway dynamics (see the figure below).  Their model builds upon the MAPK cascade model of Chi-Ying Huang and James Ferrell (1996).  This earlier model focused on the steady-state effects of signaling, whereas more recently, it has been discovered that a signal's information content partly resides in its dynamics.
+</para>
+
+<para>
+In their model, Anand Asthagiri and Douglas Lauffenburger concentrate on the role of negative feedback mechanisms in the generation of signal adaptation - a term referring to the reset of a signal to prestimulation levels.  They assess how different modes of feedback affect the properties of MAPK signalling dynamics.
+</para>
+
+<para>
+The complete original paper reference is cited below:
+</para>
+
+<para>
+<ulink url="http://pubs.acs.org/cgi-bin/abstract.cgi/bipret/2001/17/i02/abs/bp010009k.html">A Computational Study of Feedback Effects on Signal Dynamics in a Mitogen-Activated Protein Kinase (MAPK) Pathway Model</ulink>, Anand R. Asthagiri and Douglas A. Lauffenburger, 2001, <ulink url="http://pubs.acs.org/journals/bipret/index.html">
+            <emphasis>Biotechnol. Prog</emphasis>
+          </ulink>, 17, 227-239.  (<ulink url="http://pubs.acs.org/cgi-bin/article.cgi/bipret/2001/17/i02/html/bp010009k.html">Full text</ulink> and PDF versions are available to subscribers on the ACS Publications website.  <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;list_uids=11312698&amp;dopt=Abstract">PubMed ID: 11312698</ulink>
+</para>
+
+<informalfigure float="0" id="fig_pathway_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>the conventional rendering of the MAPK cascade with feedback effects</title>
+    </objectinfo>
+    <imagedata fileref="asthagiri_2001.png"/>
+  </imageobject>
+</mediaobject>
+<caption>A rendering of the MAPK cascade with feedback effects. Species are represented by rounded rectangles, and reactions by arrows.  The action of a catalyst on a reaction is represented by dashed lines.</caption>
+</informalfigure>
+
+<para>
+In CellML, models are thought of as connected networks of discrete components. These components may correspond to physiologically separated regions or chemically distinct objects, or may be useful modelling abstractions. This model has 71 components representing chemically distinct objects (41 chemical species and 30 reactions) and one component defined for modelling convenience which stores the universal variable time.  Because this model has so many components, its CellML rendering would be complex.  For an example of a CellML rendering of a reaction pathway see The Bhalla Iyengar EGF Pathway Model, 1999.  
+</para>
+
+</sect1>
+</article>
+</documentation>
+
+  
+  
+  <!--
+    Below, we define some additional units for association with variables and
+    constants within the model. The identifiers are fairly self-explanatory.
+  -->
+  
+  <units name="minute">
+    <unit units="second" multiplier="60.0"/>
+  </units>
+  
+  <units base_units="yes" name="number"/>
+  
+  <units base_units="yes" name="cell"/>
+  
+  <units name="number_per_cell">
+    <unit units="number"/>
+    <unit units="cell" exponent="-1"/>
+  </units>
+  
+  <units name="molar">
+    <unit units="mole"/>
+    <unit units="litre" exponent="-1"/>
+  </units>
+  
+  <units name="first_order_rate_constant">
+    <unit units="minute" exponent="-1"/>
+  </units>
+
+  <units name="second_order_rate_constant">
+    <unit units="molar" exponent="-1"/>
+    <unit units="minute" exponent="-1"/>
+  </units> 
+
+  
+  <component name="environment"> 
+    <variable units="minute" public_interface="out" name="time"/> 
+  </component> 
+
+  
+  <component name="c" cmeta:id="c">
+     
+    <variable units="molar" public_interface="out" name="c" initial_value="0.0"/> 
+    
+    <variable units="molar" public_interface="in" name="c2"/>
+    <variable units="molar" public_interface="in" name="L0"/>
+    <variable units="number_per_cell" public_interface="in" name="R0"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/> 
+    <variable units="second_order_rate_constant" public_interface="in" name="kf"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="ku"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kc"/> 
+    <variable units="number_per_cell" public_interface="in" name="r"/> 
+    <variable units="minute" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="1"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> c </ci> 
+        </apply> 
+        <apply>
+          <minus/>
+          <apply>
+            <plus/> 
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> L0 </ci>
+                <apply>
+                  <divide/>
+                  <ci> kr </ci>  
+                  <ci> kf </ci> 
+                </apply>
+              </apply>
+              <ci> r </ci> 
+            </apply>
+            <apply>
+              <times/>
+              <cn cellml:units="dimensionless"> 2.0 </cn>
+              <apply>
+                <divide/>
+                <ci> ku </ci>
+                <ci> kr </ci> 
+              </apply>
+              <ci> c2 </ci> 
+            </apply>  
+          </apply>
+          <apply>
+            <plus/> 
+            <ci> c </ci> 
+            <apply>
+              <times/>
+              <cn cellml:units="dimensionless"> 2.0 </cn>
+              <apply>
+                <divide/>
+                <ci> R0 </ci>
+                <apply>
+                  <divide/>
+                  <ci> kr </ci>  
+                  <ci> kc </ci> 
+                </apply>
+              </apply>
+              <apply>
+                <power/>
+                <ci> c </ci>
+                <cn cellml:units="dimensionless"> 2.0 </cn> 
+              </apply>  
+            </apply>
+          </apply>  
+        </apply>
+      </apply>  
+    </math> 
+  </component> 
+
+  <component name="c2" cmeta:id="c2">
+      
+    <variable units="molar" public_interface="out" name="c2" initial_value="0.0"/> 
+    
+    <variable units="molar" public_interface="in" name="c"/>
+    <variable units="molar" public_interface="in" name="c_star"/>
+    <variable units="number_per_cell" public_interface="in" name="R0"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="kc_plus"/>
+	<variable units="first_order_rate_constant" public_interface="in" name="kc_minus"/> 
+    <variable units="second_order_rate_constant" public_interface="in" name="kf"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="ku"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kc"/> 
+    <variable units="minute" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="2"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> c2 </ci> 
+        </apply> 
+        <apply>
+          <minus/>
+          <apply>
+            <plus/> 
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> R0 </ci>
+                <apply>
+                  <divide/>
+                  <ci> kr </ci>  
+                  <ci> kc </ci> 
+                </apply>
+              </apply>
+              <apply>
+                <power/>
+                <ci> c </ci>
+                <cn cellml:units="dimensionless"> 2.0 </cn> 
+              </apply>  
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> kc_minus </ci>  
+                <ci> kr </ci> 
+              </apply>
+              <ci> c_star </ci>
+            </apply>
+          </apply>  
+          <apply>
+            <plus/> 
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> ku </ci>
+                <ci> kr </ci> 
+              </apply>
+              <ci> c </ci> 
+            </apply>  
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> kc_plus </ci>
+                <ci> kr </ci> 
+              </apply>
+              <ci> c2 </ci> 
+            </apply>
+          </apply>  
+        </apply>
+      </apply>  
+    </math> 
+  </component>
+
+  <component name="c_star" cmeta:id="c_star">
+     
+    <variable units="molar" public_interface="out" name="c_star" initial_value="0.0"/> 
+    
+    <variable units="molar" public_interface="in" name="c2"/>
+    <variable units="molar" public_interface="in" name="a1"/>
+    <variable units="molar" public_interface="in" name="e0_star"/>
+    <variable units="molar" public_interface="in" name="c_star_a1"/>
+    <variable units="molar" public_interface="in" name="a1a2"/>
+    <variable units="number_per_cell" public_interface="in" name="R0"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr_1"/> 
+    <variable units="second_order_rate_constant" public_interface="in" name="kf_1"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kc_plus"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kc_minus"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr_12"/>
+	<variable units="second_order_rate_constant" public_interface="in" name="kf_12"/> 
+    <variable units="number_per_cell" public_interface="in" name="A1_T"/>
+    <variable units="number_per_cell" public_interface="in" name="A2_T"/> 
+    <variable units="minute" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="3"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> c_star </ci> 
+        </apply> 
+        <apply>
+          <minus/>
+          <apply>
+            <plus/> 
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> kc_plus </ci>  
+                <ci> kr </ci> 
+              </apply>
+              <ci> c2 </ci> 
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> kr_1 </ci>  
+                <ci> kr </ci> 
+              </apply>
+              <apply>
+                <divide/>
+                <ci> A1_T </ci>  
+                <ci> R0 </ci> 
+              </apply>
+              <ci> c_star_a1 </ci> 
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> kr_12 </ci>  
+                <ci> kr </ci> 
+              </apply>
+              <apply>
+                <divide/>
+                <ci> A2_T </ci>  
+                <ci> R0 </ci> 
+              </apply>
+              <ci> e0_star </ci> 
+            </apply>
+          </apply>
+          <apply>
+            <plus/> 
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> kc_minus </ci>  
+                <ci> kr </ci> 
+              </apply>
+              <ci> c_star </ci> 
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> kf_1 </ci>
+                  <ci> A1_T </ci> 
+                </apply>
+                <ci> kr </ci> 
+              </apply>
+              <ci> c_star </ci>
+              <ci> a1 </ci>  
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> kf_12 </ci>
+                  <ci> A1_T </ci> 
+                </apply>
+                <ci> kr </ci> 
+              </apply>
+              <ci> c_star </ci>
+              <ci> a1a2 </ci>  
+            </apply>  
+          </apply>  
+        </apply>
+      </apply>  
+    </math> 
+  </component>  
+
+  <component name="c_star_a1" cmeta:id="c_star_a1">
+     
+    <variable units="molar" public_interface="out" name="c_star_a1" initial_value="0.0"/> 
+    
+    <variable units="molar" public_interface="in" name="c_star"/>
+    <variable units="molar" public_interface="in" name="a1"/>
+    <variable units="molar" public_interface="in" name="e0_star"/>
+    <variable units="molar" public_interface="in" name="a2"/>
+    <variable units="molar" public_interface="in" name="e0_star_e4_star"/>
+    <variable units="number_per_cell" public_interface="in" name="R0"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr_1"/> 
+    <variable units="second_order_rate_constant" public_interface="in" name="kf_1"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr_2"/> 
+    <variable units="second_order_rate_constant" public_interface="in" name="kf_2"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kc_plus"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kc_minus"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kcat_x"/> 
+    <variable units="number_per_cell" public_interface="in" name="A1_T"/>
+    <variable units="number_per_cell" public_interface="in" name="A2_T"/>
+    <variable units="number_per_cell" public_interface="in" name="E4_T"/> 
+    <variable units="minute" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="4"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> c_star_a1 </ci> 
+        </apply> 
+        <apply>
+          <minus/>
+          <apply>
+            <plus/> 
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> kf_1 </ci>
+                  <ci> R0 </ci> 
+                </apply>
+                <ci> kr </ci> 
+              </apply>
+              <ci> c_star </ci>
+              <ci> a1 </ci>  
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> kr_2 </ci>  
+                <ci> kr </ci> 
+              </apply>
+              <apply>
+                <divide/>
+                <ci> A2_T </ci>  
+                <ci> A1_T </ci> 
+              </apply>
+              <ci> e0_star </ci> 
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> kcat_x </ci>  
+                <ci> kr </ci> 
+              </apply>
+              <apply>
+                <divide/>
+                <ci> E4_T </ci>  
+                <ci> A1_T </ci> 
+              </apply>
+              <ci> e0_star_e4_star </ci> 
+            </apply>
+          </apply>
+          <apply>
+            <plus/> 
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> kr_1 </ci>  
+                <ci> kr </ci> 
+              </apply>
+              <ci> c_star_a1 </ci> 
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> kf_2 </ci>
+                  <ci> A2_T </ci> 
+                </apply>
+                <ci> kr </ci> 
+              </apply>
+              <ci> c_star_a1 </ci>
+              <ci> a2 </ci>  
+            </apply>  
+          </apply>  
+        </apply>
+      </apply>  
+    </math> 
+  </component>  
+
+  <component name="e0_star" cmeta:id="e0_star">
+     
+    <variable units="molar" public_interface="out" name="e0_star" initial_value="0.0"/> 
+    
+    <variable units="molar" public_interface="in" name="c_star_a1"/>
+    <variable units="molar" public_interface="in" name="a2"/>
+    <variable units="molar" public_interface="in" name="e1"/>
+    <variable units="molar" public_interface="in" name="e4_star"/>
+    <variable units="molar" public_interface="in" name="e1_e0_star"/>
+    <variable units="molar" public_interface="in" name="c_star"/>
+    <variable units="molar" public_interface="in" name="a1a2"/>
+    <variable units="molar" public_interface="in" name="e0_star_e4_star"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr_12"/> 
+    <variable units="second_order_rate_constant" public_interface="in" name="kf_12"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr_2"/> 
+    <variable units="second_order_rate_constant" public_interface="in" name="kf_2"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="k1_plus"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="k1_minus"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kx_plus"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kx_minus"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kcat_1"/> 
+    <variable units="number_per_cell" public_interface="in" name="A1_T"/>
+    <variable units="number_per_cell" public_interface="in" name="A2_T"/>
+    <variable units="number_per_cell" public_interface="in" name="E1_T"/> 
+    <variable units="number_per_cell" public_interface="in" name="E4_T"/>
+    <variable units="minute" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="5"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> e0_star </ci> 
+        </apply> 
+        <apply>
+          <minus/>
+          <apply>
+            <plus/> 
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> kf_2 </ci>
+                  <ci> A1_T </ci> 
+                </apply>
+                <ci> kr </ci> 
+              </apply>
+              <ci> c_star_a1 </ci>
+              <ci> a2 </ci>  
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> kf_12 </ci>
+                  <ci> A1_T </ci> 
+                </apply>
+                <ci> kr </ci> 
+              </apply>
+              <ci> c_star </ci>
+              <ci> a1a2 </ci>  
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <apply>
+                  <plus/>
+                  <ci> k1_minus </ci>  
+                  <ci> kcat_1 </ci> 
+                </apply>
+                <ci> kr </ci> 
+              </apply>
+              <apply>
+                <divide/>
+                <ci> E1_T </ci>  
+                <ci> A2_T </ci> 
+              </apply>
+              <ci> e1_e0_star </ci> 
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> kx_minus </ci>  
+                <ci> kr </ci> 
+              </apply>
+              <apply>
+                <divide/>
+                <ci> E4_T </ci>  
+                <ci> A2_T </ci> 
+              </apply>
+              <ci> e0_star_e4_star </ci> 
+            </apply>
+          </apply>
+          <apply>
+            <plus/> 
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> kr_2 </ci>  
+                <ci> kr </ci> 
+              </apply>
+              <ci> e0_star </ci> 
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> kr_12 </ci>  
+                <ci> kr </ci> 
+              </apply>
+              <ci> e0_star </ci> 
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> k1_plus </ci>
+                  <ci> E1_T </ci> 
+                </apply>
+                <ci> kr </ci> 
+              </apply>
+              <ci> e0_star </ci>
+              <ci> e1 </ci>  
+            </apply> 
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> kx_plus </ci>
+                  <ci> E4_T </ci> 
+                </apply>
+                <ci> kr </ci> 
+              </apply>
+              <ci> e0_star </ci>
+              <ci> e4_star </ci>  
+            </apply>  
+          </apply>  
+        </apply>
+      </apply>  
+    </math> 
+  </component>
+
+  <component name="a1a2" cmeta:id="a1a2">
+     
+    <variable units="molar" public_interface="out" name="a1a2" initial_value="0.0"/> 
+    
+    <variable units="molar" public_interface="in" name="c_star"/>
+    <variable units="molar" public_interface="in" name="a1"/>
+    <variable units="molar" public_interface="in" name="a2"/>
+    <variable units="molar" public_interface="in" name="e0_star"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr_12"/> 
+    <variable units="second_order_rate_constant" public_interface="in" name="kf_12"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kc_12"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kd_12"/> 
+    <variable units="number_per_cell" public_interface="in" name="A1_T"/>
+    <variable units="number_per_cell" public_interface="in" name="A2_T"/>
+    <variable units="number_per_cell" public_interface="in" name="R0"/> 
+    <variable units="minute" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="6"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> a1a2 </ci> 
+        </apply> 
+        <apply>
+          <minus/>
+          <apply>
+            <plus/> 
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> kr_12 </ci>  
+                <ci> kr </ci> 
+              </apply>
+              <apply>
+                <divide/>
+                <ci> A2_T </ci>  
+                <ci> A1_T </ci> 
+              </apply>
+              <ci> e0_star </ci> 
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> kc_12 </ci>
+                  <ci> A2_T </ci> 
+                </apply>
+                <ci> kr </ci> 
+              </apply>
+              <ci> a1 </ci>
+              <ci> a2 </ci>  
+            </apply>
+          </apply>
+          <apply>
+            <plus/> 
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> kd_12 </ci>  
+                <ci> kr </ci> 
+              </apply>
+              <ci> a1a2 </ci> 
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> kf_12 </ci>
+                  <ci> R0 </ci> 
+                </apply>
+                <ci> kr </ci> 
+              </apply>
+              <ci> c_star </ci>
+              <ci> a1a2 </ci>  
+            </apply> 
+          </apply>  
+        </apply>
+      </apply>  
+    </math> 
+  </component>
+
+  <component name="r" cmeta:id="r">
+     
+    <variable units="number_per_cell" public_interface="out" name="r"/> 
+    
+    <variable units="molar" public_interface="in" name="c"/>
+    <variable units="molar" public_interface="in" name="c2"/>
+    <variable units="molar" public_interface="in" name="c_star"/>
+    <variable units="molar" public_interface="in" name="c_star_a1"/>
+    <variable units="molar" public_interface="in" name="e0_star"/>
+    <variable units="molar" public_interface="in" name="e0_star_e4_star"/>
+    <variable units="molar" public_interface="in" name="e1_e0_star"/>
+    <variable units="number_per_cell" public_interface="in" name="A1_T"/>
+    <variable units="number_per_cell" public_interface="in" name="A2_T"/>
+    <variable units="number_per_cell" public_interface="in" name="E1_T"/>
+    <variable units="number_per_cell" public_interface="in" name="E4_T"/>
+    <variable units="number_per_cell" public_interface="in" name="R0"/> 
+     
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="6a"> 
+      <apply>
+        <eq/> 
+        <ci> r </ci> 
+        <apply>
+          <minus/>
+          <cn cellml:units="molar"> 1.0 </cn>
+          <apply>
+            <plus/> 
+            <ci> c </ci>
+            <apply>
+              <times/>
+              <cn cellml:units="dimensionless"> 2.0 </cn>
+              <apply>
+                <plus/>
+                <ci> c2 </ci>  
+                <ci> c_star </ci> 
+                <apply>
+                  <times/>
+                  <apply>
+                    <divide/>
+                    <ci> A1_T </ci>  
+                    <ci> R0 </ci> 
+                  </apply>
+                  <ci> c_star_a1 </ci> 
+                </apply>
+                <apply>
+                  <times/>
+                  <apply>
+                    <divide/>
+                    <ci> A2_T </ci>  
+                    <ci> R0 </ci> 
+                  </apply>
+                  <ci> e0_star </ci> 
+                </apply>
+                <apply>
+                  <times/>
+                  <apply>
+                    <divide/>
+                    <ci> E4_T </ci>  
+                    <ci> R0 </ci> 
+                  </apply>
+                  <ci> e0_star_e4_star </ci> 
+                </apply>
+                <apply>
+                  <times/>
+                  <apply>
+                    <divide/>
+                    <ci> E1_T </ci>  
+                    <ci> R0 </ci> 
+                  </apply>
+                  <ci> e1_e0_star </ci> 
+                </apply>
+              </apply>
+            </apply>
+          </apply>  
+        </apply>
+      </apply>  
+    </math> 
+  </component>    
+
+  <component name="a1" cmeta:id="a1">
+     
+    <variable units="molar" public_interface="out" name="a1"/> 
+    
+    <variable units="molar" public_interface="in" name="c_star_a1"/>
+    <variable units="molar" public_interface="in" name="a1a2"/>
+    <variable units="molar" public_interface="in" name="e0_star"/>
+    <variable units="molar" public_interface="in" name="e0_star_e4_star"/>
+    <variable units="molar" public_interface="in" name="e1_e0_star"/>
+    <variable units="number_per_cell" public_interface="in" name="A1_T"/>
+    <variable units="number_per_cell" public_interface="in" name="A2_T"/>
+    <variable units="number_per_cell" public_interface="in" name="E1_T"/>
+    <variable units="number_per_cell" public_interface="in" name="E4_T"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="6b"> 
+      <apply>
+        <eq/> 
+        <ci> a1 </ci> 
+        <apply>
+          <minus/>
+          <cn cellml:units="molar"> 1.0 </cn>
+          <apply>
+            <plus/> 
+            <ci> c_star_a1 </ci>
+            <ci> a1a2 </ci>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> A2_T </ci>  
+                <ci> A1_T </ci> 
+              </apply>
+              <ci> e0_star </ci> 
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> E4_T </ci>  
+                <ci> A1_T </ci> 
+              </apply>
+              <ci> e0_star_e4_star </ci> 
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> E1_T </ci>  
+                <ci> A1_T </ci> 
+              </apply>
+              <ci> e1_e0_star </ci> 
+            </apply>
+          </apply>  
+        </apply>
+      </apply>  
+    </math> 
+  </component>
+
+  <component name="a2" cmeta:id="a2">
+     
+    <variable units="molar" public_interface="out" name="a2"/> 
+    
+    <variable units="molar" public_interface="in" name="a2_minus"/>
+    <variable units="molar" public_interface="in" name="a1a2"/>
+    <variable units="molar" public_interface="in" name="e0_star"/>
+    <variable units="molar" public_interface="in" name="e0_star_e4_star"/>
+    <variable units="molar" public_interface="in" name="e1_e0_star"/>
+    <variable units="number_per_cell" public_interface="in" name="A1_T"/>
+    <variable units="number_per_cell" public_interface="in" name="A2_T"/>
+    <variable units="number_per_cell" public_interface="in" name="E1_T"/>
+    <variable units="number_per_cell" public_interface="in" name="E4_T"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="6c"> 
+      <apply>
+        <eq/> 
+        <ci> a2 </ci> 
+        <apply>
+          <minus/>
+          <cn cellml:units="molar"> 1.0 </cn>
+          <apply>
+            <plus/> 
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> A1_T </ci>  
+                <ci> A2_T </ci> 
+              </apply>
+              <ci> a1a2 </ci> 
+            </apply>
+            <ci> e0_star </ci>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> E4_T </ci>  
+                <ci> A2_T </ci> 
+              </apply>
+              <ci> e0_star_e4_star </ci> 
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> E1_T </ci>  
+                <ci> A2_T </ci> 
+              </apply>
+              <ci> e1_e0_star </ci> 
+            </apply>
+            <ci> a2_minus </ci>
+          </apply>  
+        </apply>
+      </apply>  
+    </math> 
+  </component>    
+
+  <component name="a2_minus" cmeta:id="a2_minus">
+     
+    <variable units="molar" public_interface="out" name="a2_minus" initial_value="0.0"/> 
+    
+    <variable units="molar" public_interface="in" name="e0_star_e4_star"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kcat_x"/> 
+    <variable units="number_per_cell" public_interface="in" name="E4_T"/>
+    <variable units="number_per_cell" public_interface="in" name="A2_T"/>
+    <variable units="minute" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="7"> 
+      <apply>
+        <eq/>
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> a2_minus </ci> 
+        </apply> 
+        <apply>
+          <times/>
+          <apply>
+            <divide/>
+            <ci> kcat_x </ci>
+            <ci> kr </ci> 
+          </apply>
+          <apply>
+            <divide/>
+            <ci> E4_T </ci>
+            <ci> A2_T </ci> 
+          </apply>  
+          <ci> e0_star_e4_star </ci>  
+        </apply>
+      </apply> 
+    </math> 
+  </component> 
+
+  <component name="e1_star_p1" cmeta:id="e1_star_p1">
+     
+    <variable units="molar" public_interface="out" name="e1_star_p1" initial_value="0.0"/> 
+    
+    <variable units="molar" public_interface="in" name="e1_star"/>
+    <variable units="molar" public_interface="in" name="p1"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kP1_plus"/> 
+    <variable units="first_order_rate_constant" public_interface="in" name="kP1_minus"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kcat_P1"/> 
+    <variable units="number_per_cell" public_interface="in" name="E1_T"/> 
+    <variable units="minute" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="8"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> e1_star_p1 </ci> 
+        </apply> 
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> kP1_plus </ci>
+                <ci> E1_T </ci> 
+              </apply>
+              <ci> kr </ci> 
+            </apply>
+            <ci> e1_star </ci>
+            <ci> p1 </ci>  
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <apply>
+                <divide/>
+                <ci> kP1_minus </ci>
+                <ci> kr </ci> 
+              </apply>
+              <apply>
+                <divide/>
+                <ci> kcat_P1 </ci>
+                <ci> kr </ci> 
+              </apply>
+            </apply>
+            <ci> e1_star_p1 </ci>
+          </apply>  
+        </apply>
+      </apply>  
+    </math> 
+  </component>
+
+  <component name="e2_star_p2" cmeta:id="e2_star_p2">
+     
+    <variable units="molar" public_interface="out" name="e2_star_p2" initial_value="0.0"/> 
+    
+    <variable units="molar" public_interface="in" name="e2_star"/>
+    <variable units="molar" public_interface="in" name="p2"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kP2_plus"/> 
+    <variable units="first_order_rate_constant" public_interface="in" name="kP2_minus"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kcat_P2"/> 
+    <variable units="number_per_cell" public_interface="in" name="E2_T"/> 
+    <variable units="minute" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="9"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> e2_star_p2 </ci> 
+        </apply> 
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> kP2_plus </ci>
+                <ci> E2_T </ci> 
+              </apply>
+              <ci> kr </ci> 
+            </apply>
+            <ci> e2_star </ci>
+            <ci> p2 </ci>  
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <apply>
+                <divide/>
+                <ci> kP2_minus </ci>
+                <ci> kr </ci> 
+              </apply>
+              <apply>
+                <divide/>
+                <ci> kcat_P2 </ci>
+                <ci> kr </ci> 
+              </apply>
+            </apply>
+            <ci> e2_star_p2 </ci>
+          </apply>  
+        </apply>
+      </apply>  
+    </math> 
+  </component> 
+
+  <component name="e3_star_p3" cmeta:id="e3_star_p3">
+     
+    <variable units="molar" public_interface="out" name="e3_star_p3" initial_value="0.0"/> 
+    
+    <variable units="molar" public_interface="in" name="e3_star"/>
+    <variable units="molar" public_interface="in" name="p3"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kP3_plus"/> 
+    <variable units="first_order_rate_constant" public_interface="in" name="kP3_minus"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kcat_P3"/> 
+    <variable units="number_per_cell" public_interface="in" name="E3_T"/> 
+    <variable units="minute" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="10"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> e3_star_p3 </ci> 
+        </apply> 
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> kP3_plus </ci>
+                <ci> E3_T </ci> 
+              </apply>
+              <ci> kr </ci> 
+            </apply>
+            <ci> e3_star </ci>
+            <ci> p3 </ci>  
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <apply>
+                <divide/>
+                <ci> kP3_minus </ci>
+                <ci> kr </ci> 
+              </apply>
+              <apply>
+                <divide/>
+                <ci> kcat_P3 </ci>
+                <ci> kr </ci> 
+              </apply>
+            </apply>
+            <ci> e3_star_p3 </ci>
+          </apply>  
+        </apply>
+      </apply>  
+    </math> 
+  </component>
+
+  <component name="e4_star_p4" cmeta:id="e4_star_p4">
+     
+    <variable units="molar" public_interface="out" name="e4_star_p4" initial_value="0.0"/> 
+    
+    <variable units="molar" public_interface="in" name="e4_star"/>
+    <variable units="molar" public_interface="in" name="p4"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kP4_plus"/> 
+    <variable units="first_order_rate_constant" public_interface="in" name="kP4_minus"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kcat_P4"/> 
+    <variable units="number_per_cell" public_interface="in" name="E4_T"/> 
+    <variable units="minute" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="11"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> e4_star_p4 </ci> 
+        </apply> 
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> kP4_plus </ci>
+                <ci> E4_T </ci> 
+              </apply>
+              <ci> kr </ci> 
+            </apply>
+            <ci> e4_star </ci>
+            <ci> p4 </ci>  
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <apply>
+                <divide/>
+                <ci> kP4_minus </ci>
+                <ci> kr </ci> 
+              </apply>
+              <apply>
+                <divide/>
+                <ci> kcat_P4 </ci>
+                <ci> kr </ci> 
+              </apply>
+            </apply>
+            <ci> e4_star_p4 </ci>
+          </apply>  
+        </apply>
+      </apply>  
+    </math> 
+  </component>
+
+  <component name="e5_star_p5" cmeta:id="e5_star_p5">
+     
+    <variable units="molar" public_interface="out" name="e5_star_p5" initial_value="0.0"/> 
+    
+    <variable units="molar" public_interface="in" name="e5_star"/>
+    <variable units="molar" public_interface="in" name="p5"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kP5_plus"/> 
+    <variable units="first_order_rate_constant" public_interface="in" name="kP5_minus"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kcat_P5"/> 
+    <variable units="number_per_cell" public_interface="in" name="E5_T"/> 
+    <variable units="minute" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="12"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> e5_star_p5 </ci> 
+        </apply> 
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> kP5_plus </ci>
+                <ci> E5_T </ci> 
+              </apply>
+              <ci> kr </ci> 
+            </apply>
+            <ci> e5_star </ci>
+            <ci> p5 </ci>  
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <apply>
+                <divide/>
+                <ci> kP5_minus </ci>
+                <ci> kr </ci> 
+              </apply>
+              <apply>
+                <divide/>
+                <ci> kcat_P5 </ci>
+                <ci> kr </ci> 
+              </apply>
+            </apply>
+            <ci> e5_star_p5 </ci>
+          </apply>  
+        </apply>
+      </apply>  
+    </math> 
+  </component> 
+
+  <component name="e1_e0_star" cmeta:id="e1_e0_star">
+     
+    <variable units="molar" public_interface="out" name="e1_e0_star" initial_value="0.0"/> 
+    
+    <variable units="molar" public_interface="in" name="e1"/>
+    <variable units="molar" public_interface="in" name="e0_star"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="k1_plus"/> 
+    <variable units="first_order_rate_constant" public_interface="in" name="k1_minus"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kcat_1"/> 
+    <variable units="number_per_cell" public_interface="in" name="A2_T"/> 
+    <variable units="minute" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="13"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> e1_e0_star </ci> 
+        </apply> 
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> k1_plus </ci>
+                <ci> A2_T </ci> 
+              </apply>
+              <ci> kr </ci> 
+            </apply>
+            <ci> e1 </ci>
+            <ci> e0_star </ci>  
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <apply>
+                <divide/>
+                <ci> k1_minus </ci>
+                <ci> kr </ci> 
+              </apply>
+              <apply>
+                <divide/>
+                <ci> kcat_1 </ci>
+                <ci> kr </ci> 
+              </apply>
+            </apply>
+            <ci> e1_e0_star </ci>
+          </apply>  
+        </apply>
+      </apply>  
+    </math> 
+  </component> 
+
+  <component name="e2_e1_star" cmeta:id="e2_e1_star">
+     
+    <variable units="molar" public_interface="out" name="e2_e1_star" initial_value="0.0"/> 
+    
+    <variable units="molar" public_interface="in" name="e2"/>
+    <variable units="molar" public_interface="in" name="e1_star"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="k2_plus"/> 
+    <variable units="first_order_rate_constant" public_interface="in" name="k2_minus"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kcat_2"/> 
+    <variable units="number_per_cell" public_interface="in" name="E1_T"/> 
+    <variable units="minute" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="14"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> e2_e1_star </ci> 
+        </apply> 
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> k2_plus </ci>
+                <ci> E1_T </ci> 
+              </apply>
+              <ci> kr </ci> 
+            </apply>
+            <ci> e2 </ci>
+            <ci> e1_star </ci>  
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <apply>
+                <divide/>
+                <ci> k2_minus </ci>
+                <ci> kr </ci> 
+              </apply>
+              <apply>
+                <divide/>
+                <ci> kcat_2 </ci>
+                <ci> kr </ci> 
+              </apply>
+            </apply>
+            <ci> e2_e1_star </ci>
+          </apply>  
+        </apply>
+      </apply>  
+    </math> 
+  </component> 
+
+  <component name="e3_e2_star" cmeta:id="e3_e2_star">
+     
+    <variable units="molar" public_interface="out" name="e3_e2_star" initial_value="0.0"/> 
+    
+    <variable units="molar" public_interface="in" name="e3"/>
+    <variable units="molar" public_interface="in" name="e2_star"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="k3_plus"/> 
+    <variable units="first_order_rate_constant" public_interface="in" name="k3_minus"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kcat_3"/> 
+    <variable units="number_per_cell" public_interface="in" name="E2_T"/> 
+    <variable units="minute" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="15"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> e3_e2_star </ci> 
+        </apply> 
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> k3_plus </ci>
+                <ci> E2_T </ci> 
+              </apply>
+              <ci> kr </ci> 
+            </apply>
+            <ci> e3 </ci>
+            <ci> e2_star </ci>  
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <apply>
+                <divide/>
+                <ci> k3_minus </ci>
+                <ci> kr </ci> 
+              </apply>
+              <apply>
+                <divide/>
+                <ci> kcat_3 </ci>
+                <ci> kr </ci> 
+              </apply>
+            </apply>
+            <ci> e3_e2_star </ci>
+          </apply>  
+        </apply>
+      </apply>  
+    </math> 
+  </component>
+
+  <component name="e4_e3_star" cmeta:id="e4_e3_star">
+     
+    <variable units="molar" public_interface="out" name="e4_e3_star" initial_value="0.0"/> 
+    
+    <variable units="molar" public_interface="in" name="e4"/>
+    <variable units="molar" public_interface="in" name="e3_star"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="k4_plus"/> 
+    <variable units="first_order_rate_constant" public_interface="in" name="k4_minus"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kcat_4"/> 
+    <variable units="number_per_cell" public_interface="in" name="E3_T"/> 
+    <variable units="minute" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="16"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> e4_e3_star </ci> 
+        </apply> 
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> k4_plus </ci>
+                <ci> E3_T </ci> 
+              </apply>
+              <ci> kr </ci> 
+            </apply>
+            <ci> e4 </ci>
+            <ci> e3_star </ci>  
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <apply>
+                <divide/>
+                <ci> k4_minus </ci>
+                <ci> kr </ci> 
+              </apply>
+              <apply>
+                <divide/>
+                <ci> kcat_4 </ci>
+                <ci> kr </ci> 
+              </apply>
+            </apply>
+            <ci> e4_e3_star </ci>
+          </apply>  
+        </apply>
+      </apply>  
+    </math> 
+  </component>  
+
+  <component name="e5_e4_star" cmeta:id="e5_e4_star">
+     
+    <variable units="molar" public_interface="out" name="e5_e4_star" initial_value="0.0"/> 
+    
+    <variable units="molar" public_interface="in" name="e5"/>
+    <variable units="molar" public_interface="in" name="e4_star"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="k5_plus"/> 
+    <variable units="first_order_rate_constant" public_interface="in" name="k5_minus"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kcat_5"/> 
+    <variable units="number_per_cell" public_interface="in" name="E4_T"/> 
+    <variable units="minute" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="17"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> e5_e4_star </ci> 
+        </apply> 
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> k5_plus </ci>
+                <ci> E4_T </ci> 
+              </apply>
+              <ci> kr </ci> 
+            </apply>
+            <ci> e5 </ci>
+            <ci> e4_star </ci>  
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <apply>
+                <divide/>
+                <ci> k5_minus </ci>
+                <ci> kr </ci> 
+              </apply>
+              <apply>
+                <divide/>
+                <ci> kcat_5 </ci>
+                <ci> kr </ci> 
+              </apply>
+            </apply>
+            <ci> e5_e4_star </ci>
+          </apply>  
+        </apply>
+      </apply>  
+    </math> 
+  </component> 
+
+  <component name="e2_star_e4_star" cmeta:id="e2_star_e4_star">
+     
+    <variable units="molar" public_interface="out" name="e2_star_e4_star" initial_value="0.0"/> 
+    
+    <variable units="molar" public_interface="in" name="e2_star"/>
+    <variable units="molar" public_interface="in" name="e4_star"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kz_plus"/> 
+    <variable units="first_order_rate_constant" public_interface="in" name="kz_minus"/>
+	<variable units="second_order_rate_constant" public_interface="in" name="k2_plus"/> 
+    <variable units="first_order_rate_constant" public_interface="in" name="k2_minus"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kcat_z"/> 
+    <variable units="number_per_cell" public_interface="in" name="E2_T"/> 
+    <variable units="minute" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="18"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> e2_star_e4_star </ci> 
+        </apply> 
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> kz_plus </ci>
+                <ci> E2_T </ci> 
+              </apply>
+              <ci> kr </ci> 
+            </apply>
+            <ci> e4_star </ci>
+            <ci> e2_star </ci>  
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <apply>
+                <divide/>
+                <ci> kz_minus </ci>
+                <ci> kr </ci> 
+              </apply>
+              <apply>
+                <divide/>
+                <ci> kcat_z </ci>
+                <ci> kr </ci> 
+              </apply>
+            </apply>
+            <ci> e2_star_e4_star </ci>
+          </apply>  
+        </apply>
+      </apply>  
+    </math> 
+  </component>                                                          
+
+  <component name="e0_star_e4_star" cmeta:id="e0_star_e4_star">
+     
+    <variable units="molar" public_interface="out" name="e0_star_e4_star" initial_value="0.0"/> 
+    
+    <variable units="molar" public_interface="in" name="e0_star"/>
+    <variable units="molar" public_interface="in" name="e4_star"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kx_plus"/> 
+    <variable units="first_order_rate_constant" public_interface="in" name="kx_minus"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kcat_x"/> 
+    <variable units="number_per_cell" public_interface="in" name="A2_T"/> 
+    <variable units="minute" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="19"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> e0_star_e4_star </ci> 
+        </apply> 
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> kx_plus </ci>
+                <ci> A2_T </ci> 
+              </apply>
+              <ci> kr </ci> 
+            </apply>
+            <ci> e4_star </ci>
+            <ci> e0_star </ci>  
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <plus/>
+              <apply>
+                <divide/>
+                <ci> kx_minus </ci>
+                <ci> kr </ci> 
+              </apply>
+              <apply>
+                <divide/>
+                <ci> kcat_x </ci>
+                <ci> kr </ci> 
+              </apply>
+            </apply>
+            <ci> e0_star_e4_star </ci>
+          </apply>  
+        </apply>
+      </apply>  
+    </math> 
+  </component>
+
+  <component name="e2_minus" cmeta:id="e2_minus">
+     
+    <variable units="molar" public_interface="out" name="e2_minus" initial_value="0.0"/> 
+    
+    <variable units="molar" public_interface="in" name="e2_star_e4_star"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kcat_z"/> 
+    <variable units="number_per_cell" public_interface="in" name="E4_T"/> 
+    <variable units="number_per_cell" public_interface="in" name="E2_T"/>
+    <variable units="minute" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="20"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> e2_minus </ci> 
+        </apply> 
+        <apply>
+          <times/>
+          <apply>
+            <divide/>
+            <ci> kcat_z </ci>
+            <ci> kr </ci> 
+          </apply>
+          <apply>
+            <divide/>
+            <ci> E4_T </ci>
+            <ci> E2_T </ci> 
+          </apply>
+          <ci> e2_star_e4_star </ci>  
+        </apply>
+      </apply>  
+    </math> 
+  </component> 
+
+  <component name="e1_star" cmeta:id="e1_star">
+     
+    <variable units="molar" public_interface="out" name="e1_star" initial_value="0.0"/> 
+    
+    <variable units="molar" public_interface="in" name="e1_e0_star"/>
+    <variable units="molar" public_interface="in" name="e2_e1_star"/>
+    <variable units="molar" public_interface="in" name="e1_star_p1"/>
+    <variable units="molar" public_interface="in" name="p1"/>
+    <variable units="molar" public_interface="in" name="e2"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kcat_1"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kcat_2"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="k2_plus"/> 
+    <variable units="first_order_rate_constant" public_interface="in" name="k2_minus"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kP1_plus"/> 
+    <variable units="first_order_rate_constant" public_interface="in" name="kP1_minus"/>
+    <variable units="number_per_cell" public_interface="in" name="E2_T"/>
+    <variable units="number_per_cell" public_interface="in" name="P1_T"/>
+    <variable units="number_per_cell" public_interface="in" name="E1_T"/> 
+    <variable units="minute" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="21"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> e1_star </ci> 
+        </apply> 
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> kcat_1 </ci>
+                <ci> kr </ci> 
+              </apply>
+              <ci> e1_e0_star </ci> 
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <apply>
+                  <plus/>
+                  <ci> k2_minus </ci>
+                  <ci> kcat_2 </ci> 
+                </apply>
+                <ci> kr </ci> 
+              </apply>
+              <apply>
+                <divide/>
+                <ci> E2_T </ci>
+                <ci> E1_T </ci> 
+              </apply>
+              <ci> e2_e1_star </ci>
+            </apply> 
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> kP1_minus </ci>
+                <ci> kr </ci> 
+              </apply>
+              <apply>
+                <divide/>
+                <ci> P1_T </ci>
+                <ci> E1_T </ci> 
+              </apply>
+              <ci> e1_star_p1 </ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> k2_plus </ci>
+                  <ci> E2_T </ci> 
+                </apply>
+                <ci> kr </ci> 
+              </apply>
+              <ci> e1_star </ci>
+              <ci> e2 </ci>
+            </apply>  
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> kP1_plus </ci>
+                  <ci> P1_T </ci> 
+                </apply>
+                <ci> kr </ci> 
+              </apply>
+              <ci> e1_star </ci>
+              <ci> p1 </ci>
+            </apply>  
+          </apply>
+        </apply>
+      </apply>  
+    </math> 
+  </component> 
+
+  <component name="e3_star" cmeta:id="e3_star">
+     
+    <variable units="molar" public_interface="out" name="e3_star" initial_value="0.0"/> 
+    
+    <variable units="molar" public_interface="in" name="e3_e2_star"/>
+    <variable units="molar" public_interface="in" name="e4_e3_star"/>
+    <variable units="molar" public_interface="in" name="e3_star_p3"/>
+    <variable units="molar" public_interface="in" name="p3"/>
+    <variable units="molar" public_interface="in" name="e4"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kcat_3"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kcat_4"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="k4_plus"/> 
+    <variable units="first_order_rate_constant" public_interface="in" name="k4_minus"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kP3_plus"/> 
+    <variable units="first_order_rate_constant" public_interface="in" name="kP3_minus"/>
+    <variable units="number_per_cell" public_interface="in" name="E4_T"/>
+    <variable units="number_per_cell" public_interface="in" name="P3_T"/>
+    <variable units="number_per_cell" public_interface="in" name="E3_T"/> 
+    <variable units="minute" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="22"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> e3_star </ci> 
+        </apply> 
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> kcat_3 </ci>
+                <ci> kr </ci> 
+              </apply>
+              <ci> e3_e2_star </ci> 
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <apply>
+                  <plus/>
+                  <ci> k4_minus </ci>
+                  <ci> kcat_4 </ci> 
+                </apply>
+                <ci> kr </ci> 
+              </apply>
+              <apply>
+                <divide/>
+                <ci> E4_T </ci>
+                <ci> E3_T </ci> 
+              </apply>
+              <ci> e4_e3_star </ci>
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> kP3_minus </ci>
+                <ci> kr </ci> 
+              </apply>
+              <apply>
+                <divide/>
+                <ci> P3_T </ci>
+                <ci> E3_T </ci> 
+              </apply>
+              <ci> e3_star_p3 </ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> k4_plus </ci>
+                  <ci> E4_T </ci> 
+                </apply>
+                <ci> kr </ci> 
+              </apply>
+              <ci> e3_star </ci>
+              <ci> e4 </ci>
+            </apply>  
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> kP3_plus </ci>
+                  <ci> P3_T </ci> 
+                </apply>
+                <ci> kr </ci> 
+              </apply>
+              <ci> e3_star </ci>
+              <ci> p3 </ci>
+            </apply>  
+          </apply>
+        </apply>
+      </apply>  
+    </math> 
+  </component> 
+
+  <component name="e5_star" cmeta:id="e5_star">
+     
+    <variable units="molar" public_interface="out" name="e5_star" initial_value="0.0"/> 
+    
+    <variable units="molar" public_interface="in" name="e5_e4_star"/>
+    <variable units="molar" public_interface="in" name="e5_star_p5"/>
+    <variable units="molar" public_interface="in" name="p5"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kcat_5"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kP5_plus"/> 
+    <variable units="first_order_rate_constant" public_interface="in" name="kP5_minus"/>
+    <variable units="number_per_cell" public_interface="in" name="P5_T"/>
+    <variable units="number_per_cell" public_interface="in" name="E5_T"/> 
+    <variable units="minute" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="23"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> e5_star </ci> 
+        </apply> 
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> kcat_5 </ci>
+                <ci> kr </ci> 
+              </apply>
+              <ci> e5_e4_star </ci> 
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> kP5_minus </ci>
+                <ci> kr </ci> 
+              </apply>
+              <apply>
+                <divide/>
+                <ci> P5_T </ci>
+                <ci> E5_T </ci> 
+              </apply>
+              <ci> e5_star_p5 </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> kP5_plus </ci>
+                <ci> P5_T </ci> 
+              </apply>
+              <ci> kr </ci> 
+            </apply>
+            <ci> e5_star </ci>
+            <ci> p5 </ci>
+          </apply>
+        </apply>
+      </apply>  
+    </math> 
+  </component> 
+
+  <component name="e2_star" cmeta:id="e2_star">
+     
+    <variable units="molar" public_interface="out" name="e2_star" initial_value="0.0"/> 
+    
+    <variable units="molar" public_interface="in" name="e2_e1_star"/>
+    <variable units="molar" public_interface="in" name="e3_e2_star"/>
+    <variable units="molar" public_interface="in" name="e2_star_p2"/>
+    <variable units="molar" public_interface="in" name="e4_star"/>
+    <variable units="molar" public_interface="in" name="e2_star_e4_star"/>
+    <variable units="molar" public_interface="in" name="p2"/>
+    <variable units="molar" public_interface="in" name="e3"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kcat_2"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kcat_3"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="k3_plus"/> 
+    <variable units="first_order_rate_constant" public_interface="in" name="k3_minus"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kz_plus"/> 
+    <variable units="first_order_rate_constant" public_interface="in" name="kz_minus"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kP2_plus"/> 
+    <variable units="first_order_rate_constant" public_interface="in" name="kP2_minus"/>
+    <variable units="number_per_cell" public_interface="in" name="E2_T"/>
+    <variable units="number_per_cell" public_interface="in" name="P2_T"/>
+    <variable units="number_per_cell" public_interface="in" name="E3_T"/>
+    <variable units="number_per_cell" public_interface="in" name="E4_T"/> 
+    <variable units="minute" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="24"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> e2_star </ci> 
+        </apply> 
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> kcat_2 </ci>
+                <ci> kr </ci> 
+              </apply>
+              <ci> e2_e1_star </ci> 
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <apply>
+                  <plus/>
+                  <ci> k3_minus </ci>
+                  <ci> kcat_3 </ci> 
+                </apply>
+                <ci> kr </ci> 
+              </apply>
+              <apply>
+                <divide/>
+                <ci> E3_T </ci>
+                <ci> E2_T </ci> 
+              </apply>
+              <ci> e3_e2_star </ci>
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> kP2_minus </ci>
+                <ci> kr </ci> 
+              </apply>
+              <apply>
+                <divide/>
+                <ci> P2_T </ci>
+                <ci> E2_T </ci> 
+              </apply>
+              <ci> e2_star_p2 </ci>
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> kz_minus </ci>
+                <ci> kr </ci> 
+              </apply>
+              <apply>
+                <divide/>
+                <ci> E4_T </ci>
+                <ci> E2_T </ci> 
+              </apply>
+              <ci> e2_star_e4_star </ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> k3_plus </ci>
+                  <ci> E3_T </ci> 
+                </apply>
+                <ci> kr </ci> 
+              </apply>
+              <ci> e2_star </ci>
+              <ci> e3 </ci>
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> kP2_plus </ci>
+                  <ci> P2_T </ci> 
+                </apply>
+                <ci> kr </ci> 
+              </apply>
+              <ci> e2_star </ci>
+              <ci> p2 </ci>
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> kz_plus </ci>
+                  <ci> E4_T </ci> 
+                </apply>
+                <ci> kr </ci> 
+              </apply>
+              <ci> e2_star </ci>
+              <ci> e4_star </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>  
+    </math> 
+  </component> 
+
+  <component name="e4_star" cmeta:id="e4_star">
+     
+    <variable units="molar" public_interface="out" name="e4_star" initial_value="0.0"/> 
+    
+    <variable units="molar" public_interface="in" name="e4_e3_star"/>
+    <variable units="molar" public_interface="in" name="e5_e4_star"/>
+    <variable units="molar" public_interface="in" name="e4_star_p4"/>
+    <variable units="molar" public_interface="in" name="e2_star"/>
+    <variable units="molar" public_interface="in" name="e2_star_e4_star"/>
+    <variable units="molar" public_interface="in" name="e0_star"/>
+    <variable units="molar" public_interface="in" name="e0_star_e4_star"/>
+    <variable units="molar" public_interface="in" name="p4"/>
+    <variable units="molar" public_interface="in" name="e5"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kcat_4"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kcat_5"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kcat_x"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kcat_z"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="k5_plus"/> 
+    <variable units="first_order_rate_constant" public_interface="in" name="k5_minus"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kz_plus"/> 
+    <variable units="first_order_rate_constant" public_interface="in" name="kz_minus"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kx_plus"/> 
+    <variable units="first_order_rate_constant" public_interface="in" name="kx_minus"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kP4_plus"/> 
+    <variable units="first_order_rate_constant" public_interface="in" name="kP4_minus"/>
+    <variable units="number_per_cell" public_interface="in" name="A2_T"/>
+    <variable units="number_per_cell" public_interface="in" name="E2_T"/>
+    <variable units="number_per_cell" public_interface="in" name="P4_T"/>
+    <variable units="number_per_cell" public_interface="in" name="E5_T"/>
+    <variable units="number_per_cell" public_interface="in" name="E4_T"/> 
+    <variable units="minute" public_interface="in" name="time"/> 
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="25"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci> time </ci>
+          </bvar> 
+          <ci> e4_star </ci> 
+        </apply> 
+        <apply>
+          <minus/>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> kcat_4 </ci>
+                <ci> kr </ci> 
+              </apply>
+              <ci> e4_e3_star </ci> 
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <apply>
+                  <plus/>
+                  <ci> k5_minus </ci>
+                  <ci> kcat_5 </ci> 
+                </apply>
+                <ci> kr </ci> 
+              </apply>
+              <apply>
+                <divide/>
+                <ci> E5_T </ci>
+                <ci> E4_T </ci> 
+              </apply>
+              <ci> e5_e4_star </ci>
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> kP4_minus </ci>
+                <ci> kr </ci> 
+              </apply>
+              <apply>
+                <divide/>
+                <ci> P4_T </ci>
+                <ci> E4_T </ci> 
+              </apply>
+              <ci> e4_star_p4 </ci>
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <plus/>
+                <apply>
+                  <divide/>
+                  <ci> kx_minus </ci>
+                  <ci> kr </ci> 
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> kcat_x </ci>
+                  <ci> kr </ci> 
+                </apply>
+              </apply>
+              <ci> e0_star_e4_star </ci>
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <plus/>
+                <apply>
+                  <divide/>
+                  <ci> kz_minus </ci>
+                  <ci> kr </ci> 
+                </apply>
+                <apply>
+                  <divide/>
+                  <ci> kcat_z </ci>
+                  <ci> kr </ci> 
+                </apply>
+              </apply>
+              <ci> e2_star_e4_star </ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus/>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> k5_plus </ci>
+                  <ci> E5_T </ci> 
+                </apply>
+                <ci> kr </ci> 
+              </apply>
+              <ci> e4_star </ci>
+              <ci> e5 </ci>
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> kP4_plus </ci>
+                  <ci> P4_T </ci> 
+                </apply>
+                <ci> kr </ci> 
+              </apply>
+              <ci> e4_star </ci>
+              <ci> p4 </ci>
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> kx_plus </ci>
+                  <ci> A2_T </ci> 
+                </apply>
+                <ci> kr </ci> 
+              </apply>
+              <ci> e0_star </ci>
+              <ci> e4_star </ci>
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> kz_plus </ci>
+                  <ci> E2_T </ci> 
+                </apply>
+                <ci> kr </ci> 
+              </apply>
+              <ci> e2_star </ci>
+              <ci> e4_star </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>  
+    </math> 
+  </component>
+
+  <component name="p1" cmeta:id="p1">
+     
+    <variable units="molar" public_interface="out" name="p1" initial_value="5E3"/> 
+    
+    <variable units="molar" public_interface="in" name="e1_star_p1"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="26"> 
+      <apply>
+        <eq/> 
+        <ci> p1 </ci> 
+        <apply>
+          <minus/>
+          <cn cellml:units="molar"> 1.0 </cn>
+          <ci> e1_star_p1 </ci>
+        </apply>
+      </apply>  
+    </math> 
+  </component>
+
+  <component name="p2" cmeta:id="p2">
+     
+    <variable units="molar" public_interface="out" name="p2" initial_value="5E3"/> 
+    
+    <variable units="molar" public_interface="in" name="e2_star_p2"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="27"> 
+      <apply>
+        <eq/> 
+        <ci> p2 </ci> 
+        <apply>
+          <minus/>
+          <cn cellml:units="molar"> 1.0 </cn>
+          <ci> e2_star_p2 </ci>
+        </apply>
+      </apply>  
+    </math> 
+  </component>
+
+  <component name="p3" cmeta:id="p3">
+     
+    <variable units="molar" public_interface="out" name="p3" initial_value="5E3"/> 
+    
+    <variable units="molar" public_interface="in" name="e3_star_p3"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="28"> 
+      <apply>
+        <eq/> 
+        <ci> p3 </ci> 
+        <apply>
+          <minus/>
+          <cn cellml:units="molar"> 1.0 </cn>
+          <ci> e3_star_p3 </ci>
+        </apply>
+      </apply>  
+    </math> 
+  </component>
+
+  <component name="p4" cmeta:id="p4">
+     
+    <variable units="molar" public_interface="out" name="p4" initial_value="5E3"/> 
+    
+    <variable units="molar" public_interface="in" name="e4_star_p4"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="29"> 
+      <apply>
+        <eq/> 
+        <ci> p4 </ci> 
+        <apply>
+          <minus/>
+          <cn cellml:units="molar"> 1.0 </cn>
+          <ci> e4_star_p4 </ci>
+        </apply>
+      </apply>  
+    </math> 
+  </component>
+
+  <component name="p5" cmeta:id="p5">
+     
+    <variable units="molar" public_interface="out" name="p5" initial_value="5E3"/> 
+    
+    <variable units="molar" public_interface="in" name="e5_star_p5"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="30"> 
+      <apply>
+        <eq/> 
+        <ci> p5 </ci> 
+        <apply>
+          <minus/>
+          <cn cellml:units="molar"> 1.0 </cn>
+          <ci> e5_star_p5 </ci>
+        </apply>
+      </apply>  
+    </math> 
+  </component> 
+
+  <component name="e1" cmeta:id="e1">
+     
+    <variable units="molar" public_interface="out" name="e1"/> 
+    
+    <variable units="molar" public_interface="in" name="e1_e0_star"/>
+    <variable units="molar" public_interface="in" name="e1_star"/>
+    <variable units="molar" public_interface="in" name="e2_e1_star"/>
+    <variable units="molar" public_interface="in" name="e1_star_p1"/>
+    <variable units="number_per_cell" public_interface="in" name="E1_T"/>
+    <variable units="number_per_cell" public_interface="in" name="E2_T"/>
+    <variable units="number_per_cell" public_interface="in" name="P1_T"/>
+     
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="31"> 
+      <apply>
+        <eq/> 
+        <ci> e1 </ci> 
+        <apply>
+          <minus/>
+          <cn cellml:units="molar"> 1.0 </cn>
+          <apply>
+            <plus/> 
+            <ci> e1_e0_star </ci>
+            <ci> e1_star </ci>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> E2_T </ci>  
+                <ci> E1_T </ci> 
+              </apply>
+              <ci> e2_e1_star </ci> 
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> P1_T </ci>  
+                <ci> E1_T </ci> 
+              </apply>
+              <ci> e1_star_p1 </ci> 
+            </apply>
+          </apply>  
+        </apply>
+      </apply>  
+    </math> 
+  </component> 
+
+  <component name="e3" cmeta:id="e3">
+     
+    <variable units="molar" public_interface="out" name="e3"/> 
+    
+    <variable units="molar" public_interface="in" name="e3_e2_star"/>
+    <variable units="molar" public_interface="in" name="e3_star"/>
+    <variable units="molar" public_interface="in" name="e4_e3_star"/>
+    <variable units="molar" public_interface="in" name="e3_star_p3"/>
+    <variable units="number_per_cell" public_interface="in" name="E3_T"/>
+    <variable units="number_per_cell" public_interface="in" name="E4_T"/>
+    <variable units="number_per_cell" public_interface="in" name="P3_T"/>
+     
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="32"> 
+      <apply>
+        <eq/> 
+        <ci> e3 </ci> 
+        <apply>
+          <minus/>
+          <cn cellml:units="molar"> 1.0 </cn>
+          <apply>
+            <plus/> 
+            <ci> e3_e2_star </ci>
+            <ci> e3_star </ci>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> E4_T </ci>  
+                <ci> E3_T </ci> 
+              </apply>
+              <ci> e4_e3_star </ci> 
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> P3_T </ci>  
+                <ci> E3_T </ci> 
+              </apply>
+              <ci> e3_star_p3 </ci> 
+            </apply>
+          </apply>  
+        </apply>
+      </apply>  
+    </math> 
+  </component> 
+
+  <component name="e5" cmeta:id="e5">
+     
+    <variable units="molar" public_interface="out" name="e5"/> 
+    
+    <variable units="molar" public_interface="in" name="e5_e4_star"/>
+    <variable units="molar" public_interface="in" name="e5_star"/>
+    <variable units="molar" public_interface="in" name="e5_star_p5"/>
+    <variable units="number_per_cell" public_interface="in" name="E5_T"/>
+    <variable units="number_per_cell" public_interface="in" name="P5_T"/>
+     
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="33"> 
+      <apply>
+        <eq/> 
+        <ci> e5 </ci> 
+        <apply>
+          <minus/>
+          <cn cellml:units="molar"> 1.0 </cn>
+          <apply>
+            <plus/> 
+            <ci> e5_e4_star </ci>
+            <ci> e5_star </ci>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> P5_T </ci>  
+                <ci> E5_T </ci> 
+              </apply>
+              <ci> e5_star_p5 </ci> 
+            </apply>
+          </apply>  
+        </apply>
+      </apply>  
+    </math> 
+  </component> 
+
+  <component name="e2" cmeta:id="e2">
+     
+    <variable units="molar" public_interface="out" name="e2"/> 
+    
+    <variable units="molar" public_interface="in" name="e2_e1_star"/>
+    <variable units="molar" public_interface="in" name="e3_star"/>
+    <variable units="molar" public_interface="in" name="e3_e2_star"/>
+    <variable units="molar" public_interface="in" name="e2_minus"/>
+    <variable units="molar" public_interface="in" name="e2_star_p2"/>
+    <variable units="molar" public_interface="in" name="e2_star_e4_star"/>
+    <variable units="number_per_cell" public_interface="in" name="E2_T"/>
+    <variable units="number_per_cell" public_interface="in" name="E3_T"/>
+    <variable units="number_per_cell" public_interface="in" name="E4_T"/>
+    <variable units="number_per_cell" public_interface="in" name="P2_T"/>
+     
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="34"> 
+      <apply>
+        <eq/> 
+        <ci> e2 </ci> 
+        <apply>
+          <minus/>
+          <cn cellml:units="molar"> 1.0 </cn>
+          <apply>
+            <plus/> 
+            <ci> e3_e2_star </ci>
+            <ci> e3_star </ci>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> E3_T </ci>  
+                <ci> E2_T </ci> 
+              </apply>
+              <ci> e3_e2_star </ci> 
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> E4_T </ci>  
+                <ci> E2_T </ci> 
+              </apply>
+              <ci> e2_star_e4_star </ci> 
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> P2_T </ci>  
+                <ci> E2_T </ci> 
+              </apply>
+              <ci> e2_star_p2 </ci> 
+            </apply>
+          </apply>  
+        </apply>
+      </apply>  
+    </math> 
+  </component> 
+
+  <component name="e4" cmeta:id="e4">
+     
+    <variable units="molar" public_interface="out" name="e4"/> 
+    
+    <variable units="molar" public_interface="in" name="e4_e3_star"/>
+    <variable units="molar" public_interface="in" name="e4_star"/>
+    <variable units="molar" public_interface="in" name="e5_e4_star"/>
+    <variable units="molar" public_interface="in" name="e4_star_p4"/>
+    <variable units="molar" public_interface="in" name="e2_star_e4_star"/>
+    <variable units="molar" public_interface="in" name="e0_star_e4_star"/>
+    <variable units="number_per_cell" public_interface="in" name="E4_T"/>
+    <variable units="number_per_cell" public_interface="in" name="E5_T"/>
+    <variable units="number_per_cell" public_interface="in" name="P4_T"/>
+     
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="35"> 
+      <apply>
+        <eq/> 
+        <ci> e4 </ci> 
+        <apply>
+          <minus/>
+          <cn cellml:units="molar"> 1.0 </cn>
+          <apply>
+            <plus/> 
+            <ci> e4_e3_star </ci>
+            <ci> e4_star </ci>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> E5_T </ci>  
+                <ci> E4_T </ci> 
+              </apply>
+              <ci> e5_e4_star </ci> 
+            </apply>
+            <apply>
+              <times/>
+              <apply>
+                <divide/>
+                <ci> P4_T </ci>  
+                <ci> E4_T </ci> 
+              </apply>
+              <ci> e4_star_p4 </ci> 
+            </apply>
+            <ci> e0_star_e4_star </ci>
+            <ci> e2_star_e4_star </ci>
+          </apply>  
+        </apply>
+      </apply>  
+    </math> 
+  </component>                                 
+
+  <component name="model_parameters">
+    <variable units="molar" public_interface="out" name="L0"/>
+    <variable units="number_per_cell" public_interface="out" name="R0" initial_value="1E5"/>
+    <variable units="number_per_cell" public_interface="out" name="A1_T" initial_value="1E4"/>
+    <variable units="number_per_cell" public_interface="out" name="A2_T" initial_value="1E4"/>
+    <variable units="number_per_cell" public_interface="out" name="E1_T" initial_value="1E4"/>
+    <variable units="number_per_cell" public_interface="out" name="E2_T" initial_value="1E4"/>
+    <variable units="number_per_cell" public_interface="out" name="E3_T" initial_value="1E4"/>
+    <variable units="number_per_cell" public_interface="out" name="E4_T" initial_value="1E4"/>
+    <variable units="number_per_cell" public_interface="out" name="E5_T" initial_value="1E4"/>
+    <variable units="number_per_cell" public_interface="out" name="P1_T" initial_value="5E3"/>
+    <variable units="number_per_cell" public_interface="out" name="P2_T" initial_value="5E3"/>
+    <variable units="number_per_cell" public_interface="out" name="P3_T" initial_value="5E3"/>
+    <variable units="number_per_cell" public_interface="out" name="P4_T" initial_value="5E3"/>
+    <variable units="number_per_cell" public_interface="out" name="P5_T" initial_value="5E3"/>
+    <variable units="second_order_rate_constant" public_interface="out" name="kf" initial_value="1E7"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kr" initial_value="0.3"/>
+    <variable units="second_order_rate_constant" public_interface="out" name="kc" initial_value="6E7"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="ku" initial_value="60.0"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kc_plus" initial_value="50.0"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kc_minus" initial_value="5.0"/>
+    <variable units="second_order_rate_constant" public_interface="out" name="kf_1" initial_value="3E8"/>
+    <variable units="second_order_rate_constant" public_interface="out" name="kf_2" initial_value="3E8"/>
+    <variable units="second_order_rate_constant" public_interface="out" name="kf_12" initial_value="3E8"/>
+    <variable units="second_order_rate_constant" public_interface="out" name="kc_12" initial_value="3E8"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kr_1"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kr_2"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kr_12"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kd_12"/>
+    <variable units="second_order_rate_constant" public_interface="out" name="k1_plus" initial_value="6E8"/>
+    <variable units="second_order_rate_constant" public_interface="out" name="kP1_plus" initial_value="6E8"/>
+    <variable units="second_order_rate_constant" public_interface="out" name="k2_plus" initial_value="6E8"/>
+    <variable units="second_order_rate_constant" public_interface="out" name="kP2_plus" initial_value="6E8"/>
+    <variable units="second_order_rate_constant" public_interface="out" name="k3_plus" initial_value="6E8"/>
+    <variable units="second_order_rate_constant" public_interface="out" name="kP3_plus" initial_value="6E8"/>
+    <variable units="second_order_rate_constant" public_interface="out" name="k4_plus" initial_value="6E8"/>
+    <variable units="second_order_rate_constant" public_interface="out" name="kP4_plus" initial_value="6E8"/>
+    <variable units="second_order_rate_constant" public_interface="out" name="k5_plus" initial_value="6E8"/>
+    <variable units="second_order_rate_constant" public_interface="out" name="kP5_plus" initial_value="6E8"/>
+    <variable units="second_order_rate_constant" public_interface="out" name="kx_plus" initial_value="6E8"/>
+    <variable units="second_order_rate_constant" public_interface="out" name="kz_plus" initial_value="6E8"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="k1_minus" initial_value="30"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kP1_minus" initial_value="30"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="k2_minus" initial_value="30"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kP2_minus" initial_value="30"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="k3_minus" initial_value="30"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kP3_minus" initial_value="30"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="k4_minus" initial_value="30"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kP4_minus" initial_value="30"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="k5_minus" initial_value="30"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kP5_minus" initial_value="30"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kx_minus" initial_value="30"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kz_minus" initial_value="30"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kcat_1" initial_value="6"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kcat_2" initial_value="6"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kcat_3" initial_value="6"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kcat_4" initial_value="6"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kcat_5" initial_value="6"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kcat_P1" initial_value="6"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kcat_P2" initial_value="6"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kcat_P3" initial_value="6"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kcat_P4" initial_value="6"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kcat_P5" initial_value="6"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kcat_x" initial_value="6"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kcat_z" initial_value="6"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="36"> 
+      <apply>
+        <eq/> 
+        <ci> L0 </ci> 
+        <apply>
+          <divide/>
+          <ci> kr </ci>   
+          <ci> kf </ci>  
+        </apply> 
+      </apply>
+
+      <apply>
+        <eq/> 
+        <ci> kr_1 </ci> 
+        <apply>
+          <times/>
+          <ci> kf_1 </ci>   
+          <cn cellml:units="molar"> 1E-7 </cn>
+        </apply> 
+      </apply>
+
+      <apply>
+        <eq/> 
+        <ci> kr_2 </ci> 
+        <apply>
+          <times/>
+          <ci> kf_2 </ci>   
+          <cn cellml:units="molar"> 1E-7 </cn>
+        </apply> 
+      </apply>
+
+      <apply>
+        <eq/> 
+        <ci> kr_12 </ci> 
+        <apply>
+          <times/>
+          <ci> kf_12 </ci>   
+          <cn cellml:units="molar"> 1E-7 </cn>
+        </apply> 
+      </apply>
+
+      <apply>
+        <eq/> 
+        <ci> kd_12 </ci> 
+        <apply>
+          <times/>
+          <ci> kc_12 </ci>   
+          <cn cellml:units="molar"> 1E-7 </cn>
+        </apply> 
+      </apply>
+    </math>
+  </component>
+
+
+  <connection> 
+    <map_components component_2="environment" component_1="c"/> 
+    <map_variables variable_2="time" variable_1="time"/> 
+  </connection> 
+
+  <connection> 
+    <map_components component_2="environment" component_1="c2"/> 
+    <map_variables variable_2="time" variable_1="time"/> 
+  </connection> 
+
+  <connection> 
+    <map_components component_2="environment" component_1="c_star"/> 
+    <map_variables variable_2="time" variable_1="time"/> 
+  </connection> 
+
+  <connection> 
+    <map_components component_2="environment" component_1="c_star_a1"/> 
+    <map_variables variable_2="time" variable_1="time"/> 
+  </connection> 
+
+  <connection> 
+    <map_components component_2="environment" component_1="e0_star"/> 
+    <map_variables variable_2="time" variable_1="time"/> 
+  </connection> 
+
+  <connection> 
+    <map_components component_2="environment" component_1="a1a2"/> 
+    <map_variables variable_2="time" variable_1="time"/> 
+  </connection> 
+  
+  <connection> 
+    <map_components component_2="environment" component_1="a2_minus"/> 
+    <map_variables variable_2="time" variable_1="time"/> 
+  </connection>
+
+  <connection> 
+    <map_components component_2="environment" component_1="e1_star_p1"/> 
+    <map_variables variable_2="time" variable_1="time"/> 
+  </connection> 
+
+  <connection> 
+    <map_components component_2="environment" component_1="e2_star_p2"/> 
+    <map_variables variable_2="time" variable_1="time"/> 
+  </connection>
+
+  <connection> 
+    <map_components component_2="environment" component_1="e3_star_p3"/> 
+    <map_variables variable_2="time" variable_1="time"/> 
+  </connection>
+
+  <connection> 
+    <map_components component_2="environment" component_1="e4_star_p4"/> 
+    <map_variables variable_2="time" variable_1="time"/> 
+  </connection>
+
+  <connection> 
+    <map_components component_2="environment" component_1="e5_star_p5"/> 
+    <map_variables variable_2="time" variable_1="time"/> 
+  </connection>
+
+  <connection> 
+    <map_components component_2="environment" component_1="e1_e0_star"/>       
+    <map_variables variable_2="time" variable_1="time"/> 
+  </connection> 
+
+  <connection> 
+    <map_components component_2="environment" component_1="e2_e1_star"/>       
+    <map_variables variable_2="time" variable_1="time"/> 
+  </connection>
+
+  <connection> 
+    <map_components component_2="environment" component_1="e3_e2_star"/>       
+    <map_variables variable_2="time" variable_1="time"/> 
+  </connection>
+
+  <connection> 
+    <map_components component_2="environment" component_1="e4_e3_star"/>       
+    <map_variables variable_2="time" variable_1="time"/> 
+  </connection>
+
+  <connection> 
+    <map_components component_2="environment" component_1="e5_e4_star"/>       
+    <map_variables variable_2="time" variable_1="time"/> 
+  </connection>
+
+  <connection> 
+    <map_components component_2="environment" component_1="e2_star_e4_star"/> 
+    <map_variables variable_2="time" variable_1="time"/> 
+  </connection> 
+
+  <connection> 
+    <map_components component_2="environment" component_1="e0_star_e4_star"/> 
+    <map_variables variable_2="time" variable_1="time"/> 
+  </connection> 
+
+  <connection> 
+    <map_components component_2="environment" component_1="e2_minus"/> 
+    <map_variables variable_2="time" variable_1="time"/> 
+  </connection> 
+
+  <connection> 
+    <map_components component_2="environment" component_1="e1_star"/> 
+    <map_variables variable_2="time" variable_1="time"/> 
+  </connection>
+
+  <connection> 
+    <map_components component_2="environment" component_1="e2_star"/> 
+    <map_variables variable_2="time" variable_1="time"/> 
+  </connection>
+
+  <connection> 
+    <map_components component_2="environment" component_1="e3_star"/> 
+    <map_variables variable_2="time" variable_1="time"/> 
+  </connection>
+
+  <connection> 
+    <map_components component_2="environment" component_1="e4_star"/> 
+    <map_variables variable_2="time" variable_1="time"/> 
+  </connection>
+
+  <connection> 
+    <map_components component_2="environment" component_1="e5_star"/> 
+    <map_variables variable_2="time" variable_1="time"/> 
+  </connection> 
+
+  <connection>
+    <map_components component_2="c2" component_1="c"/>
+    <map_variables variable_2="c" variable_1="c"/>
+    <map_variables variable_2="c2" variable_1="c2"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="r" component_1="c"/>
+    <map_variables variable_2="c" variable_1="c"/>
+    <map_variables variable_2="r" variable_1="r"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="c"/>
+    <map_variables variable_2="L0" variable_1="L0"/>
+    <map_variables variable_2="R0" variable_1="R0"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="kf" variable_1="kf"/>
+    <map_variables variable_2="ku" variable_1="ku"/>
+    <map_variables variable_2="kc" variable_1="kc"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="c2" component_1="c_star"/>
+    <map_variables variable_2="c_star" variable_1="c_star"/>
+    <map_variables variable_2="c2" variable_1="c2"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="c2"/>
+    <map_variables variable_2="R0" variable_1="R0"/>
+    <map_variables variable_2="kc_minus" variable_1="kc_minus"/>
+	<map_variables variable_2="kc_plus" variable_1="kc_plus"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+	<map_variables variable_2="kf" variable_1="kf"/>
+    <map_variables variable_2="ku" variable_1="ku"/>
+    <map_variables variable_2="kc" variable_1="kc"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="a1" component_1="c_star"/>
+    <map_variables variable_2="a1" variable_1="a1"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e0_star" component_1="c_star"/>
+    <map_variables variable_2="c_star" variable_1="c_star"/>
+    <map_variables variable_2="e0_star" variable_1="e0_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="c_star_a1" component_1="c_star"/>
+    <map_variables variable_2="c_star" variable_1="c_star"/>
+    <map_variables variable_2="c_star_a1" variable_1="c_star_a1"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="a1a2" component_1="c_star"/>
+    <map_variables variable_2="c_star" variable_1="c_star"/>
+    <map_variables variable_2="a1a2" variable_1="a1a2"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="c_star"/>
+    <map_variables variable_2="R0" variable_1="R0"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="kr_1" variable_1="kr_1"/>
+    <map_variables variable_2="kf_1" variable_1="kf_1"/>
+    <map_variables variable_2="kc_plus" variable_1="kc_plus"/>
+    <map_variables variable_2="kc_minus" variable_1="kc_minus"/>
+    <map_variables variable_2="kr_12" variable_1="kr_12"/>
+    <map_variables variable_2="kf_12" variable_1="kf_12"/>
+    <map_variables variable_2="A1_T" variable_1="A1_T"/>
+    <map_variables variable_2="A2_T" variable_1="A2_T"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="a1" component_1="c_star_a1"/>
+    <map_variables variable_2="c_star_a1" variable_1="c_star_a1"/>
+    <map_variables variable_2="a1" variable_1="a1"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e0_star" component_1="c_star_a1"/>
+    <map_variables variable_2="c_star_a1" variable_1="c_star_a1"/>
+    <map_variables variable_2="e0_star" variable_1="e0_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="a2" component_1="c_star_a1"/>
+    <map_variables variable_2="a2" variable_1="a2"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e0_star_e4_star" component_1="c_star_a1"/>
+    <map_variables variable_2="e0_star_e4_star" variable_1="e0_star_e4_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="c_star_a1"/>
+    <map_variables variable_2="R0" variable_1="R0"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="kr_1" variable_1="kr_1"/>
+    <map_variables variable_2="kf_1" variable_1="kf_1"/>
+    <map_variables variable_2="kr_2" variable_1="kr_2"/>
+    <map_variables variable_2="kf_2" variable_1="kf_2"/>
+    <map_variables variable_2="kc_plus" variable_1="kc_plus"/>
+    <map_variables variable_2="kc_minus" variable_1="kc_minus"/>
+    <map_variables variable_2="kcat_x" variable_1="kcat_x"/>
+    <map_variables variable_2="A1_T" variable_1="A1_T"/>
+    <map_variables variable_2="A2_T" variable_1="A2_T"/>
+    <map_variables variable_2="E4_T" variable_1="E4_T"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="a2" component_1="e0_star"/>
+    <map_variables variable_2="e0_star" variable_1="e0_star"/>
+    <map_variables variable_2="a2" variable_1="a2"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e1" component_1="e0_star"/>
+    <map_variables variable_2="e1" variable_1="e1"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e4_star" component_1="e0_star"/>
+    <map_variables variable_2="e0_star" variable_1="e0_star"/>
+    <map_variables variable_2="e4_star" variable_1="e4_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e1_e0_star" component_1="e0_star"/>
+    <map_variables variable_2="e0_star" variable_1="e0_star"/>
+    <map_variables variable_2="e1_e0_star" variable_1="e1_e0_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="a1a2" component_1="e0_star"/>
+    <map_variables variable_2="e0_star" variable_1="e0_star"/>
+    <map_variables variable_2="a1a2" variable_1="a1a2"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e0_star_e4_star" component_1="e0_star"/>
+    <map_variables variable_2="e0_star" variable_1="e0_star"/>
+    <map_variables variable_2="e0_star_e4_star" variable_1="e0_star_e4_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="e0_star"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="kr_12" variable_1="kr_12"/>
+    <map_variables variable_2="kf_12" variable_1="kf_12"/>
+    <map_variables variable_2="kr_2" variable_1="kr_2"/>
+    <map_variables variable_2="kf_2" variable_1="kf_2"/>
+    <map_variables variable_2="k1_plus" variable_1="k1_plus"/>
+    <map_variables variable_2="k1_minus" variable_1="k1_minus"/>
+    <map_variables variable_2="kx_plus" variable_1="kx_plus"/>
+    <map_variables variable_2="kx_minus" variable_1="kx_minus"/>
+    <map_variables variable_2="kcat_1" variable_1="kcat_1"/>
+    <map_variables variable_2="A1_T" variable_1="A1_T"/>
+    <map_variables variable_2="A2_T" variable_1="A2_T"/>
+    <map_variables variable_2="E1_T" variable_1="E1_T"/>
+    <map_variables variable_2="E4_T" variable_1="E4_T"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="a1" component_1="a1a2"/>
+    <map_variables variable_2="a1a2" variable_1="a1a2"/>
+    <map_variables variable_2="a1" variable_1="a1"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="a2" component_1="a1a2"/>
+    <map_variables variable_2="a1a2" variable_1="a1a2"/>
+    <map_variables variable_2="a2" variable_1="a2"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="a1a2"/>
+    <map_variables variable_2="R0" variable_1="R0"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="kr_12" variable_1="kr_12"/>
+    <map_variables variable_2="kf_12" variable_1="kf_12"/>
+    <map_variables variable_2="kc_12" variable_1="kc_12"/>
+    <map_variables variable_2="kd_12" variable_1="kd_12"/>
+    <map_variables variable_2="A1_T" variable_1="A1_T"/>
+    <map_variables variable_2="A2_T" variable_1="A2_T"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="c2" component_1="r"/>
+    <map_variables variable_2="c2" variable_1="c2"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="c_star" component_1="r"/>
+    <map_variables variable_2="c_star" variable_1="c_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="c_star_a1" component_1="r"/>
+    <map_variables variable_2="c_star_a1" variable_1="c_star_a1"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e0_star" component_1="r"/>
+    <map_variables variable_2="e0_star" variable_1="e0_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e0_star_e4_star" component_1="r"/>
+    <map_variables variable_2="e0_star_e4_star" variable_1="e0_star_e4_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e1_e0_star" component_1="r"/>
+    <map_variables variable_2="e1_e0_star" variable_1="e1_e0_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="r"/>
+    <map_variables variable_2="A1_T" variable_1="A1_T"/>
+    <map_variables variable_2="A2_T" variable_1="A2_T"/>
+    <map_variables variable_2="E1_T" variable_1="E1_T"/>
+    <map_variables variable_2="E4_T" variable_1="E4_T"/>
+	<map_variables variable_2="R0" variable_1="R0"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e0_star" component_1="a1"/>
+    <map_variables variable_2="e0_star" variable_1="e0_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e0_star_e4_star" component_1="a1"/>
+    <map_variables variable_2="e0_star_e4_star" variable_1="e0_star_e4_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e1_e0_star" component_1="a1"/>
+    <map_variables variable_2="e1_e0_star" variable_1="e1_e0_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="a1"/>
+    <map_variables variable_2="A1_T" variable_1="A1_T"/>
+    <map_variables variable_2="A2_T" variable_1="A2_T"/>
+    <map_variables variable_2="E1_T" variable_1="E1_T"/>
+    <map_variables variable_2="E4_T" variable_1="E4_T"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="a2_minus" component_1="a2"/>
+    <map_variables variable_2="a2_minus" variable_1="a2_minus"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e0_star_e4_star" component_1="a2"/>
+    <map_variables variable_2="e0_star_e4_star" variable_1="e0_star_e4_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e1_e0_star" component_1="a2"/>
+    <map_variables variable_2="e1_e0_star" variable_1="e1_e0_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="a2"/>
+    <map_variables variable_2="A1_T" variable_1="A1_T"/>
+    <map_variables variable_2="A2_T" variable_1="A2_T"/>
+    <map_variables variable_2="E1_T" variable_1="E1_T"/>
+    <map_variables variable_2="E4_T" variable_1="E4_T"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e0_star_e4_star" component_1="a2_minus"/>
+    <map_variables variable_2="e0_star_e4_star" variable_1="e0_star_e4_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="a2_minus"/>
+    <map_variables variable_2="kcat_x" variable_1="kcat_x"/>
+    <map_variables variable_2="A2_T" variable_1="A2_T"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="E4_T" variable_1="E4_T"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e1_star" component_1="e1_star_p1"/>
+    <map_variables variable_2="e1_star_p1" variable_1="e1_star_p1"/>
+    <map_variables variable_2="e1_star" variable_1="e1_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="p1" component_1="e1_star_p1"/>
+    <map_variables variable_2="e1_star_p1" variable_1="e1_star_p1"/>
+    <map_variables variable_2="p1" variable_1="p1"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="e1_star_p1"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="kP1_plus" variable_1="kP1_plus"/>
+    <map_variables variable_2="kP1_minus" variable_1="kP1_minus"/>
+    <map_variables variable_2="kcat_P1" variable_1="kcat_P1"/>
+    <map_variables variable_2="E1_T" variable_1="E1_T"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e2_star" component_1="e2_star_p2"/>
+    <map_variables variable_2="e2_star_p2" variable_1="e2_star_p2"/>
+    <map_variables variable_2="e2_star" variable_1="e2_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="p2" component_1="e2_star_p2"/>
+    <map_variables variable_2="e2_star_p2" variable_1="e2_star_p2"/>
+    <map_variables variable_2="p2" variable_1="p2"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="e2_star_p2"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="kP2_plus" variable_1="kP2_plus"/>
+    <map_variables variable_2="kP2_minus" variable_1="kP2_minus"/>
+    <map_variables variable_2="kcat_P2" variable_1="kcat_P2"/>
+    <map_variables variable_2="E2_T" variable_1="E2_T"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e3_star" component_1="e3_star_p3"/>
+    <map_variables variable_2="e3_star_p3" variable_1="e3_star_p3"/>
+    <map_variables variable_2="e3_star" variable_1="e3_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="p3" component_1="e3_star_p3"/>
+    <map_variables variable_2="e3_star_p3" variable_1="e3_star_p3"/>
+    <map_variables variable_2="p3" variable_1="p3"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="e3_star_p3"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="kP3_plus" variable_1="kP3_plus"/>
+    <map_variables variable_2="kP3_minus" variable_1="kP3_minus"/>
+    <map_variables variable_2="kcat_P3" variable_1="kcat_P3"/>
+    <map_variables variable_2="E3_T" variable_1="E3_T"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e4_star" component_1="e4_star_p4"/>
+    <map_variables variable_2="e4_star_p4" variable_1="e4_star_p4"/>
+    <map_variables variable_2="e4_star" variable_1="e4_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="p4" component_1="e4_star_p4"/>
+    <map_variables variable_2="e4_star_p4" variable_1="e4_star_p4"/>
+    <map_variables variable_2="p4" variable_1="p4"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="e4_star_p4"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="kP4_plus" variable_1="kP4_plus"/>
+    <map_variables variable_2="kP4_minus" variable_1="kP4_minus"/>
+    <map_variables variable_2="kcat_P4" variable_1="kcat_P4"/>
+    <map_variables variable_2="E4_T" variable_1="E4_T"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e5_star" component_1="e5_star_p5"/>
+    <map_variables variable_2="e5_star_p5" variable_1="e5_star_p5"/>
+    <map_variables variable_2="e5_star" variable_1="e5_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="p5" component_1="e5_star_p5"/>
+    <map_variables variable_2="e5_star_p5" variable_1="e5_star_p5"/>
+    <map_variables variable_2="p5" variable_1="p5"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="e5_star_p5"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="kP5_plus" variable_1="kP5_plus"/>
+    <map_variables variable_2="kP5_minus" variable_1="kP5_minus"/>
+    <map_variables variable_2="kcat_P5" variable_1="kcat_P5"/>
+    <map_variables variable_2="E5_T" variable_1="E5_T"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e1" component_1="e1_e0_star"/>
+    <map_variables variable_2="e1_e0_star" variable_1="e1_e0_star"/>
+    <map_variables variable_2="e1" variable_1="e1"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="e1_e0_star"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="k1_plus" variable_1="k1_plus"/>
+    <map_variables variable_2="k1_minus" variable_1="k1_minus"/>
+    <map_variables variable_2="kcat_1" variable_1="kcat_1"/>
+    <map_variables variable_2="A2_T" variable_1="A2_T"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e2" component_1="e2_e1_star"/>
+    <map_variables variable_2="e2_e1_star" variable_1="e2_e1_star"/>
+    <map_variables variable_2="e2" variable_1="e2"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e1_star" component_1="e2_e1_star"/>
+    <map_variables variable_2="e2_e1_star" variable_1="e2_e1_star"/>
+    <map_variables variable_2="e1_star" variable_1="e1_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="e2_e1_star"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="k2_plus" variable_1="k2_plus"/>
+    <map_variables variable_2="k2_minus" variable_1="k2_minus"/>
+    <map_variables variable_2="kcat_2" variable_1="kcat_2"/>
+    <map_variables variable_2="E1_T" variable_1="E1_T"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e3" component_1="e3_e2_star"/>
+    <map_variables variable_2="e3_e2_star" variable_1="e3_e2_star"/>
+    <map_variables variable_2="e3" variable_1="e3"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e2_star" component_1="e3_e2_star"/>
+    <map_variables variable_2="e3_e2_star" variable_1="e3_e2_star"/>
+    <map_variables variable_2="e2_star" variable_1="e2_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="e3_e2_star"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="k3_plus" variable_1="k3_plus"/>
+    <map_variables variable_2="k3_minus" variable_1="k3_minus"/>
+    <map_variables variable_2="kcat_3" variable_1="kcat_3"/>
+    <map_variables variable_2="E2_T" variable_1="E2_T"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e4" component_1="e4_e3_star"/>
+    <map_variables variable_2="e4_e3_star" variable_1="e4_e3_star"/>
+    <map_variables variable_2="e4" variable_1="e4"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e3_star" component_1="e4_e3_star"/>
+    <map_variables variable_2="e4_e3_star" variable_1="e4_e3_star"/>
+    <map_variables variable_2="e3_star" variable_1="e3_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="e4_e3_star"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="k4_plus" variable_1="k4_plus"/>
+    <map_variables variable_2="k4_minus" variable_1="k4_minus"/>
+    <map_variables variable_2="kcat_4" variable_1="kcat_4"/>
+    <map_variables variable_2="E3_T" variable_1="E3_T"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e5" component_1="e5_e4_star"/>
+    <map_variables variable_2="e5_e4_star" variable_1="e5_e4_star"/>
+    <map_variables variable_2="e5" variable_1="e5"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e4_star" component_1="e5_e4_star"/>
+    <map_variables variable_2="e5_e4_star" variable_1="e5_e4_star"/>
+    <map_variables variable_2="e4_star" variable_1="e4_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="e5_e4_star"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="k5_plus" variable_1="k5_plus"/>
+    <map_variables variable_2="k5_minus" variable_1="k5_minus"/>
+    <map_variables variable_2="kcat_5" variable_1="kcat_5"/>
+    <map_variables variable_2="E4_T" variable_1="E4_T"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e2_star" component_1="e2_star_e4_star"/>
+    <map_variables variable_2="e2_star_e4_star" variable_1="e2_star_e4_star"/>
+    <map_variables variable_2="e2_star" variable_1="e2_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e4_star" component_1="e2_star_e4_star"/>
+    <map_variables variable_2="e2_star_e4_star" variable_1="e2_star_e4_star"/>
+    <map_variables variable_2="e4_star" variable_1="e4_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="e2_star_e4_star"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="k2_plus" variable_1="k2_plus"/>
+    <map_variables variable_2="k2_minus" variable_1="k2_minus"/>
+	<map_variables variable_2="kz_plus" variable_1="kz_plus"/>
+    <map_variables variable_2="kz_minus" variable_1="kz_minus"/>
+    <map_variables variable_2="kcat_z" variable_1="kcat_z"/>
+    <map_variables variable_2="E2_T" variable_1="E2_T"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e4_star" component_1="e0_star_e4_star"/>
+    <map_variables variable_2="e0_star_e4_star" variable_1="e0_star_e4_star"/>
+    <map_variables variable_2="e4_star" variable_1="e4_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="e0_star_e4_star"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="kx_plus" variable_1="kx_plus"/>
+    <map_variables variable_2="kx_minus" variable_1="kx_minus"/>
+    <map_variables variable_2="kcat_x" variable_1="kcat_x"/>
+    <map_variables variable_2="A2_T" variable_1="A2_T"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e2_star_e4_star" component_1="e2_minus"/>
+    <map_variables variable_2="e2_star_e4_star" variable_1="e2_star_e4_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="e2_minus"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="kcat_z" variable_1="kcat_z"/>
+    <map_variables variable_2="E4_T" variable_1="E4_T"/>
+    <map_variables variable_2="E2_T" variable_1="E2_T"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e1_e0_star" component_1="e1_star"/>
+    <map_variables variable_2="e1_e0_star" variable_1="e1_e0_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="p1" component_1="e1_star"/>
+    <map_variables variable_2="p1" variable_1="p1"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e2" component_1="e1_star"/>
+    <map_variables variable_2="e2" variable_1="e2"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="e1_star"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="kP1_plus" variable_1="kP1_plus"/>
+    <map_variables variable_2="kP1_minus" variable_1="kP1_minus"/>
+    <map_variables variable_2="k2_plus" variable_1="k2_plus"/>
+    <map_variables variable_2="k2_minus" variable_1="k2_minus"/>
+    <map_variables variable_2="kcat_1" variable_1="kcat_1"/>
+    <map_variables variable_2="kcat_2" variable_1="kcat_2"/>
+    <map_variables variable_2="E1_T" variable_1="E1_T"/>
+    <map_variables variable_2="E2_T" variable_1="E2_T"/>
+    <map_variables variable_2="P1_T" variable_1="P1_T"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e3_e2_star" component_1="e3_star"/>
+    <map_variables variable_2="e3_e2_star" variable_1="e3_e2_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="p3" component_1="e3_star"/>
+    <map_variables variable_2="p3" variable_1="p3"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e4" component_1="e3_star"/>
+    <map_variables variable_2="e4" variable_1="e4"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="e3_star"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="kP3_plus" variable_1="kP3_plus"/>
+    <map_variables variable_2="kP3_minus" variable_1="kP3_minus"/>
+    <map_variables variable_2="k4_plus" variable_1="k4_plus"/>
+    <map_variables variable_2="k4_minus" variable_1="k4_minus"/>
+    <map_variables variable_2="kcat_3" variable_1="kcat_3"/>
+    <map_variables variable_2="kcat_4" variable_1="kcat_4"/>
+    <map_variables variable_2="E3_T" variable_1="E3_T"/>
+    <map_variables variable_2="E4_T" variable_1="E4_T"/>
+    <map_variables variable_2="P3_T" variable_1="P3_T"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e5_e4_star" component_1="e5_star"/>
+    <map_variables variable_2="e5_e4_star" variable_1="e5_e4_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="p5" component_1="e5_star"/>
+    <map_variables variable_2="p5" variable_1="p5"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="e5_star"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="kP5_plus" variable_1="kP5_plus"/>
+    <map_variables variable_2="kP5_minus" variable_1="kP5_minus"/>
+    <map_variables variable_2="kcat_5" variable_1="kcat_5"/>
+    <map_variables variable_2="E5_T" variable_1="E5_T"/>
+    <map_variables variable_2="P5_T" variable_1="P5_T"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e2_e1_star" component_1="e2_star"/>
+    <map_variables variable_2="e2_e1_star" variable_1="e2_e1_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e4_star" component_1="e2_star"/>
+    <map_variables variable_2="e2_star" variable_1="e2_star"/>
+    <map_variables variable_2="e4_star" variable_1="e4_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="p2" component_1="e2_star"/>
+    <map_variables variable_2="p2" variable_1="p2"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e3" component_1="e2_star"/>
+    <map_variables variable_2="e3" variable_1="e3"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="e2_star"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="kP2_plus" variable_1="kP2_plus"/>
+    <map_variables variable_2="kP2_minus" variable_1="kP2_minus"/>
+    <map_variables variable_2="k3_plus" variable_1="k3_plus"/>
+    <map_variables variable_2="k3_minus" variable_1="k3_minus"/>
+    <map_variables variable_2="kz_plus" variable_1="kz_plus"/>
+    <map_variables variable_2="kz_minus" variable_1="kz_minus"/>
+    <map_variables variable_2="kcat_2" variable_1="kcat_2"/>
+    <map_variables variable_2="kcat_3" variable_1="kcat_3"/>
+    <map_variables variable_2="E2_T" variable_1="E2_T"/>
+    <map_variables variable_2="P2_T" variable_1="P2_T"/>
+    <map_variables variable_2="E3_T" variable_1="E3_T"/>
+    <map_variables variable_2="E4_T" variable_1="E4_T"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e4_e3_star" component_1="e4_star"/>
+    <map_variables variable_2="e4_e3_star" variable_1="e4_e3_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="p4" component_1="e4_star"/>
+    <map_variables variable_2="p4" variable_1="p4"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e5" component_1="e4_star"/>
+    <map_variables variable_2="e5" variable_1="e5"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="e4_star"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="kP4_plus" variable_1="kP4_plus"/>
+    <map_variables variable_2="kP4_minus" variable_1="kP4_minus"/>
+    <map_variables variable_2="k5_plus" variable_1="k5_plus"/>
+    <map_variables variable_2="k5_minus" variable_1="k5_minus"/>
+    <map_variables variable_2="kz_plus" variable_1="kz_plus"/>
+    <map_variables variable_2="kz_minus" variable_1="kz_minus"/>
+    <map_variables variable_2="kx_plus" variable_1="kx_plus"/>
+    <map_variables variable_2="kx_minus" variable_1="kx_minus"/>
+    <map_variables variable_2="kcat_4" variable_1="kcat_4"/>
+    <map_variables variable_2="kcat_5" variable_1="kcat_5"/>
+    <map_variables variable_2="kcat_x" variable_1="kcat_x"/>
+    <map_variables variable_2="kcat_z" variable_1="kcat_z"/>
+    <map_variables variable_2="A2_T" variable_1="A2_T"/>
+    <map_variables variable_2="E2_T" variable_1="E2_T"/>
+    <map_variables variable_2="P4_T" variable_1="P4_T"/>
+    <map_variables variable_2="E5_T" variable_1="E5_T"/>
+    <map_variables variable_2="E4_T" variable_1="E4_T"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e1_star" component_1="e1"/>
+    <map_variables variable_2="e1_star" variable_1="e1_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e2_e1_star" component_1="e1"/>
+    <map_variables variable_2="e2_e1_star" variable_1="e2_e1_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e1_star_p1" component_1="e1"/>
+    <map_variables variable_2="e1_star_p1" variable_1="e1_star_p1"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="e1"/>
+    <map_variables variable_2="P1_T" variable_1="P1_T"/>
+    <map_variables variable_2="E1_T" variable_1="E1_T"/>
+    <map_variables variable_2="E2_T" variable_1="E2_T"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e3_star" component_1="e3"/>
+    <map_variables variable_2="e3_star" variable_1="e3_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e4_e3_star" component_1="e3"/>
+    <map_variables variable_2="e4_e3_star" variable_1="e4_e3_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e3_star_p3" component_1="e3"/>
+    <map_variables variable_2="e3_star_p3" variable_1="e3_star_p3"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="e3"/>
+    <map_variables variable_2="P3_T" variable_1="P3_T"/>
+    <map_variables variable_2="E3_T" variable_1="E3_T"/>
+    <map_variables variable_2="E4_T" variable_1="E4_T"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e5_star" component_1="e5"/>
+    <map_variables variable_2="e5_star" variable_1="e5_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e5_star_p5" component_1="e5"/>
+    <map_variables variable_2="e5_star_p5" variable_1="e5_star_p5"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="e5"/>
+    <map_variables variable_2="P5_T" variable_1="P5_T"/>
+    <map_variables variable_2="E5_T" variable_1="E5_T"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e3_star" component_1="e2"/>
+    <map_variables variable_2="e3_star" variable_1="e3_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e3_e2_star" component_1="e2"/>
+    <map_variables variable_2="e3_e2_star" variable_1="e3_e2_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e2_minus" component_1="e2"/>
+    <map_variables variable_2="e2_minus" variable_1="e2_minus"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e2_star_p2" component_1="e2"/>
+    <map_variables variable_2="e2_star_p2" variable_1="e2_star_p2"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e2_star_e4_star" component_1="e2"/>
+    <map_variables variable_2="e2_star_e4_star" variable_1="e2_star_e4_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="e2"/>
+    <map_variables variable_2="P2_T" variable_1="P2_T"/>
+    <map_variables variable_2="E2_T" variable_1="E2_T"/>
+    <map_variables variable_2="E3_T" variable_1="E3_T"/>
+    <map_variables variable_2="E4_T" variable_1="E4_T"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e4_star" component_1="e4"/>
+    <map_variables variable_2="e4_star" variable_1="e4_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e5_e4_star" component_1="e4"/>
+    <map_variables variable_2="e5_e4_star" variable_1="e5_e4_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e4_star_p4" component_1="e4"/>
+    <map_variables variable_2="e4_star_p4" variable_1="e4_star_p4"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e2_star_e4_star" component_1="e4"/>
+    <map_variables variable_2="e2_star_e4_star" variable_1="e2_star_e4_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="e0_star_e4_star" component_1="e4"/>
+    <map_variables variable_2="e0_star_e4_star" variable_1="e0_star_e4_star"/>
+  </connection>
+
+  <connection>
+    <map_components component_2="model_parameters" component_1="e4"/>
+    <map_variables variable_2="P4_T" variable_1="P4_T"/>
+    <map_variables variable_2="E4_T" variable_1="E4_T"/>
+    <map_variables variable_2="E5_T" variable_1="E5_T"/>
+  </connection>
+ 
+
+<rdf:RDF>
+  <rdf:Bag rdf:about="rdf:#3aa396b9-d0ed-4a66-9d6d-dd4f549232a7">
+    <rdf:li>signal transduction</rdf:li>
+    <rdf:li>MAPK</rdf:li>
+    <rdf:li>kinase</rdf:li>
+    <rdf:li>pathway</rdf:li>
+    <rdf:li>cascade</rdf:li>
+  </rdf:Bag>
+  <rdf:Seq rdf:about="rdf:#6a8d522c-bfa4-4010-a658-bac295b2a18c">
+    <rdf:li rdf:resource="rdf:#f4532efe-c855-426b-9d47-9ddc76369546"/>
+    <rdf:li rdf:resource="rdf:#81cf568e-561f-4f52-9ac6-64716fc97589"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#cc206bb4-0147-4b90-a315-9f92a7834c23">
+    <dc:creator rdf:resource="rdf:#0e234b83-1df4-4639-bcbc-c5e8bcf26eac"/>
+    <rdf:value>This is the CellML description of Asthagiri and Lauffenburger's mathematical model of the mitogen-activated protein kinase (MAPK) cascade (2001).  They examine MAPK pathway dynamics, especially the role of negative feedback mechanisms in generating signal adaptation.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#186b7d65-1176-4297-a817-9feb5ecfae3e">
+    <dcterms:modified rdf:resource="rdf:#6eb02915-423c-473a-90f0-25ffdf39aacc"/>
+    <rdf:value>
+          Added publication date information.
+        </rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#587d23ee-3a7b-4f94-b889-b33187a55bae"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#6d05c7d8-009e-4bca-9e3d-dfa4bcd3f293">
+    <dcterms:modified rdf:resource="rdf:#f70cbe00-00e7-4145-9f1c-c0ebfc3e48bd"/>
+    <rdf:value>
+          Updated metadata to conform to the 16/1/02 CellML Metadata 1.0 
+          Specification.
+        </rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#4e052047-d825-4434-8d2c-54208d7bf566"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#782c7a11-c641-48ff-be52-1ca31c01df63">
+    <vCard:ORG rdf:resource="rdf:#a291236e-3a6d-4303-a815-5a8b6f6ceb66"/>
+    <vCard:EMAIL rdf:resource="rdf:#4bdb62d2-848a-43aa-b3d7-2cd7a323b076"/>
+    <vCard:N rdf:resource="rdf:#0e69a7df-3fa5-4b86-9c3a-1f58e594c835"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#8d98a1d3-8e8a-4cc6-83c9-5420ec4e5249">
+    <vCard:N rdf:resource="rdf:#278fffe8-6d65-44af-8cc0-d1531a03f9df"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f70cbe00-00e7-4145-9f1c-c0ebfc3e48bd">
+    <dcterms:W3CDTF>2002-01-22</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f4e72e5b-6b30-45e9-83b5-7b06baea4211">
+    <dc:title>Biotechnology Progress</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="/a1a2">
+    <dcterms:alternative>adaptor heterodimer</dcterms:alternative>
+    <dc:title>a1a2</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#dfb7b2f6-a488-4b16-a1f7-c7720d678405">
+    <vCard:Given>James</vCard:Given>
+    <vCard:Family>Lawson</vCard:Family>
+    <vCard:Other>Richard</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4c70a99e-bdc6-401d-ae4e-aca9b19bd1e6">
+    <dcterms:modified rdf:resource="rdf:#1f7657b2-5b51-446b-b717-51d244578419"/>
+    <rdf:value>
+          Altered connections after chacking the model with the validator.
+        </rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#569114dc-d6f2-4dd7-8e62-27e466c5085d"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0bf41ebd-c600-4a14-95f0-b0e573599401">
+    <bqs:Pubmed_id>11312698</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#3a159fb0-5742-483f-80db-b7c2af344945"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="/c_star_a1">
+    <dcterms:alternative>active receptor-ligand dimer:adaptor 1 complex</dcterms:alternative>
+    <dc:title>c_star_a1</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#cf517459-10b4-46bd-b2c0-684177f00d7b">
+    <dcterms:W3CDTF>2002-07-18</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d398f452-6bcf-4dc5-923c-f57ede0a101d">
+    <dcterms:W3CDTF>2009-04-30T16:16:27+12:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ddfadf74-23f9-431a-b0ec-05574021c9f3">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3b81ac65-82e2-4278-9d0c-636e36c3887e">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#61772937-6fa0-487e-b63a-b84fc405fc90">
+    <dcterms:modified rdf:resource="rdf:#7a503e08-326d-4cb0-b8c2-5b85ff813b79"/>
+    <rdf:value>Recoded the model to remove the reaction element.</rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#3beddaa9-b945-4b6f-9ad3-76dd66e7e6a2"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#848ff2c4-2759-4879-a9f5-76551b7979c9">
+    <dcterms:W3CDTF>2005-04-26</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="/e5_star">
+    <dcterms:alternative>activated signalling enzyme 5</dcterms:alternative>
+    <dc:title>e5_star</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="/e1_star_p1">
+    <dcterms:alternative>transition complex between an active substate and its deactivating enzyme (1)</dcterms:alternative>
+    <dc:title>e1_star_p1</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#587d23ee-3a7b-4f94-b889-b33187a55bae">
+    <vCard:N rdf:resource="rdf:#296115a5-a320-4113-9390-7194c208710f"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#52baaf6c-7dc0-48c1-8a56-015b05fbf1f7">
+    <vCard:Given>Douglas</vCard:Given>
+    <vCard:Family>Lauffenburger</vCard:Family>
+    <vCard:Other>A</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="/e1">
+    <dcterms:alternative>inactive signalling enzyme 1</dcterms:alternative>
+    <dc:title>e1</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="/e2">
+    <dcterms:alternative>inactive signalling enzyme 2</dcterms:alternative>
+    <dc:title>e2</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="/e3">
+    <dcterms:alternative>inactive signalling enzyme 3</dcterms:alternative>
+    <dc:title>e3</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="/e4">
+    <dcterms:alternative>inactive signalling enzyme 4</dcterms:alternative>
+    <dc:title>e4</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="/e5">
+    <dcterms:alternative>inactive signalling enzyme 5</dcterms:alternative>
+    <dc:title>e5</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7a503e08-326d-4cb0-b8c2-5b85ff813b79">
+    <dcterms:W3CDTF>2007-12-31T11:25:15+13:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0e234b83-1df4-4639-bcbc-c5e8bcf26eac">
+    <vCard:FN>Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#132ab91f-5112-4243-b15e-cd7f656c6653">
+    <dcterms:W3CDTF>2001-03</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="#asthagiri_model_2001">
+    <dc:title>
+        The mitogen-activated protein kinase (MAPK) cascade, 2001
+      </dc:title>
+    <cmeta:comment rdf:resource="rdf:#cc206bb4-0147-4b90-a315-9f92a7834c23"/>
+    <bqs:reference rdf:resource="rdf:#0bf41ebd-c600-4a14-95f0-b0e573599401"/>
+    <bqs:reference rdf:resource="rdf:#3661e7ac-1952-4b28-9fe7-6cbcb32d2ed6"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#0e69a7df-3fa5-4b86-9c3a-1f58e594c835">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="/e0_star">
+    <dcterms:alternative>receptor-ligand dimer:adaptors 1 and 2 complex</dcterms:alternative>
+    <dc:title>e0_star</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="/e2_minus">
+    <dcterms:alternative>nonfunctional second enzyme</dcterms:alternative>
+    <dc:title>e2_minus</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a0b0c2bf-a81e-41f5-99d8-3aa262feca36">
+    <vCard:N rdf:resource="rdf:#fd7db35c-8c68-4afb-ad5f-2a329af6eeb3"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="/e3_e2_star">
+    <dcterms:alternative>transition complex between an inactive substate and its activator (3)</dcterms:alternative>
+    <dc:title>e3_e2_star</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#cd12c312-b0c5-481b-8aa9-c8503cd17711">
+    <vCard:Given>Autumn</vCard:Given>
+    <vCard:Family>Cuellar</vCard:Family>
+    <vCard:Other>A.</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3a159fb0-5742-483f-80db-b7c2af344945">
+    <dc:creator rdf:resource="rdf:#6a8d522c-bfa4-4010-a658-bac295b2a18c"/>
+    <dc:title>A Compuational Study of Feedback Effects on Signal Dynamics in a Mitogen-Activated Protein Kinase (MAPK) Pathway Model</dc:title>
+    <bqs:volume>17</bqs:volume>
+    <bqs:first_page>227</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#f4e72e5b-6b30-45e9-83b5-7b06baea4211"/>
+    <dcterms:issued rdf:resource="rdf:#132ab91f-5112-4243-b15e-cd7f656c6653"/>
+    <bqs:last_page>239</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="/e2_e1_star">
+    <dcterms:alternative>transition complex between an inactive substate and its activator (2)</dcterms:alternative>
+    <dc:title>e2_e1_star</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#81cf568e-561f-4f52-9ac6-64716fc97589">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#52baaf6c-7dc0-48c1-8a56-015b05fbf1f7"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="/e4_e3_star">
+    <dcterms:alternative>transition complex between an inactive substate and its activator (4)</dcterms:alternative>
+    <dc:title>e4_e3_star</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#1f7657b2-5b51-446b-b717-51d244578419">
+    <dcterms:W3CDTF>2002-02-25</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#569114dc-d6f2-4dd7-8e62-27e466c5085d">
+    <vCard:N rdf:resource="rdf:#ddfadf74-23f9-431a-b0ec-05574021c9f3"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="/e0_star_e4_star">
+    <dcterms:alternative>transition complex in feedback mediated by enzyme E4*</dcterms:alternative>
+    <dc:title>e0_star_e4_star</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="/e3_star">
+    <dcterms:alternative>activated signalling enzyme 3</dcterms:alternative>
+    <dc:title>e3_star</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="/e5_e4_star">
+    <dcterms:alternative>transition complex between an inactive substate and its activator (5)</dcterms:alternative>
+    <dc:title>e5_e4_star</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3beddaa9-b945-4b6f-9ad3-76dd66e7e6a2">
+    <vCard:N rdf:resource="rdf:#3b81ac65-82e2-4278-9d0c-636e36c3887e"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="/c2">
+    <dcterms:alternative>ligand-bound and dimerised receptor</dcterms:alternative>
+    <dc:title>c2</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#f4532efe-c855-426b-9d47-9ddc76369546">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#dc9a3938-af2f-426b-8da9-173b83157f78"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#ee3ebc1a-f98e-4459-a052-0aa6d4294edc">
+    <dcterms:W3CDTF>2001-10-25T00:00:00+00:00</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="/e2_star">
+    <dcterms:alternative>activated signalling enzyme 2</dcterms:alternative>
+    <dc:title>e2_star</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#79e36828-c7a4-42e7-8578-b4bf6ec7f463">
+    <dc:creator rdf:resource="rdf:#3ab0996c-5e45-4a86-9d51-70b588781e02"/>
+    <rdf:value>This model has been recoded in CellML without the use of the reaction element. The parameters and differential equations described in the original publication were used. This CellML model is known to read in both COR and PCEnv although currently it is unable to recreate the published results from the original model.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3661e7ac-1952-4b28-9fe7-6cbcb32d2ed6">
+    <dc:subject rdf:resource="rdf:#23110eef-b3ec-4277-9bab-88084b476947"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="/e1_e0_star">
+    <dcterms:alternative>transition complex between an inactive substate and its activator (1)</dcterms:alternative>
+    <dc:title>e1_e0_star</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#dc9a3938-af2f-426b-8da9-173b83157f78">
+    <vCard:Given>Anand</vCard:Given>
+    <vCard:Family>Asthagiri</vCard:Family>
+    <vCard:Other>R</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#64403c15-677d-49df-8507-1cde5cdc073d">
+    <vCard:N rdf:resource="rdf:#c1c1c468-34c2-43ea-bd2f-297cfa25f44e"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="/e2_star_p2">
+    <dcterms:alternative>transition complex between an active substate and its deactivating enzyme (2)</dcterms:alternative>
+    <dc:title>e2_star_p2</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#296115a5-a320-4113-9390-7194c208710f">
+    <vCard:Given>Autumn</vCard:Given>
+    <vCard:Family>Cuellar</vCard:Family>
+    <vCard:Other>A</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:publisher>The University of Auckland, Bioengineering Research Group</dc:publisher>
+    <cmeta:comment rdf:resource="rdf:#79e36828-c7a4-42e7-8578-b4bf6ec7f463"/>
+    <dcterms:created rdf:resource="rdf:#ee3ebc1a-f98e-4459-a052-0aa6d4294edc"/>
+    <dc:creator rdf:resource="rdf:#782c7a11-c641-48ff-be52-1ca31c01df63"/>
+    <cmeta:modification rdf:resource="rdf:#409f387f-9cd8-494c-88c3-0de609f3bf1f"/>
+    <cmeta:modification rdf:resource="rdf:#186b7d65-1176-4297-a817-9feb5ecfae3e"/>
+    <cmeta:modification rdf:resource="rdf:#2080cf23-3665-443b-8f94-ab6aef7163b6"/>
+    <cmeta:modification rdf:resource="rdf:#254c5b36-a8b1-48fa-b7b0-5d3402de7912"/>
+    <cmeta:modification rdf:resource="rdf:#3309c051-39e0-4e52-b794-37b3b004785e"/>
+    <cmeta:modification rdf:resource="rdf:#4c70a99e-bdc6-401d-ae4e-aca9b19bd1e6"/>
+    <cmeta:modification rdf:resource="rdf:#61772937-6fa0-487e-b63a-b84fc405fc90"/>
+    <cmeta:modification rdf:resource="rdf:#6d05c7d8-009e-4bca-9e3d-dfa4bcd3f293"/>
+    <cmeta:modification rdf:resource="rdf:#7adc44a2-7647-49dc-a911-8dc51298114e"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="/p3">
+    <dcterms:alternative>deactivating enzyme 3</dcterms:alternative>
+    <dc:title>p3</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="/p2">
+    <dcterms:alternative>deactivating enzyme 2</dcterms:alternative>
+    <dc:title>p2</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="/p1">
+    <dcterms:alternative>deactivating enzyme 1</dcterms:alternative>
+    <dc:title>p1</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#c1c1c468-34c2-43ea-bd2f-297cfa25f44e">
+    <vCard:Given>Autumn</vCard:Given>
+    <vCard:Family>Cuellar</vCard:Family>
+    <vCard:Other>A.</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="/p5">
+    <dcterms:alternative>deactivating enzyme 5</dcterms:alternative>
+    <dc:title>p5</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="/p4">
+    <dcterms:alternative>deactivating enzyme 4</dcterms:alternative>
+    <dc:title>p4</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3309c051-39e0-4e52-b794-37b3b004785e">
+    <dcterms:modified rdf:resource="rdf:#848ff2c4-2759-4879-a9f5-76551b7979c9"/>
+    <rdf:value>
+          Changed unit dimensions E1_ to make them consistent.
+        </rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#8d98a1d3-8e8a-4cc6-83c9-5420ec4e5249"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#12c302ca-93d4-4750-829c-270cebc71f30">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#6eb02915-423c-473a-90f0-25ffdf39aacc">
+    <dcterms:W3CDTF>2003-04-09</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#c3fb9a68-a752-4381-bf47-85a4c4c76556">
+    <vCard:N rdf:resource="rdf:#12c302ca-93d4-4750-829c-270cebc71f30"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="/e4_star">
+    <dcterms:alternative>activated signalling enzyme 4</dcterms:alternative>
+    <dc:title>e4_star</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4e052047-d825-4434-8d2c-54208d7bf566">
+    <vCard:N rdf:resource="rdf:#cd12c312-b0c5-481b-8aa9-c8503cd17711"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#409f387f-9cd8-494c-88c3-0de609f3bf1f">
+    <dcterms:modified rdf:resource="rdf:#d398f452-6bcf-4dc5-923c-f57ede0a101d"/>
+    <rdf:value>Updated curation status</rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#e8e4d40e-7077-452b-9861-a17c1d895a6b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="/c">
+    <dcterms:alternative>ligand-bound receptor</dcterms:alternative>
+    <dc:title>c</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#2080cf23-3665-443b-8f94-ab6aef7163b6">
+    <dcterms:modified rdf:resource="rdf:#a4905643-761b-40c5-9f69-b28f4d76ed7b"/>
+    <rdf:value>
+          Corrected the initial value of variable 'k6_' in component
+          'adaptor_heterodimer_syn'.
+        </rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#64403c15-677d-49df-8507-1cde5cdc073d"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a4905643-761b-40c5-9f69-b28f4d76ed7b">
+    <dcterms:W3CDTF>2002-08-27</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#4bdb62d2-848a-43aa-b3d7-2cd7a323b076">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="/c_star">
+    <dcterms:alternative>dimerised and activated receptor</dcterms:alternative>
+    <dc:title>c_star</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="/r">
+    <dcterms:alternative>free receptor</dcterms:alternative>
+    <dc:title>r</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="/e3_star_p3">
+    <dcterms:alternative>transition complex between an active substate and its deactivating enzyme (3)</dcterms:alternative>
+    <dc:title>e3_star_p3</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="/a1">
+    <dcterms:alternative>free first adaptor</dcterms:alternative>
+    <dc:title>a1</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="/a2">
+    <dcterms:alternative>free second adaptor</dcterms:alternative>
+    <dc:title>a2</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="/e2_star_e4_star">
+    <dcterms:alternative>transition complex in feedback mediated by enzyme E4*</dcterms:alternative>
+    <dc:title>e2_star_e4_star</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#23110eef-b3ec-4277-9bab-88084b476947">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value rdf:resource="rdf:#3aa396b9-d0ed-4a66-9d6d-dd4f549232a7"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#fd7db35c-8c68-4afb-ad5f-2a329af6eeb3">
+    <vCard:Given>Catherine</vCard:Given>
+    <vCard:Family>Lloyd</vCard:Family>
+    <vCard:Other>May</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e8e4d40e-7077-452b-9861-a17c1d895a6b">
+    <vCard:N rdf:resource="rdf:#dfb7b2f6-a488-4b16-a1f7-c7720d678405"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#278fffe8-6d65-44af-8cc0-d1531a03f9df">
+    <vCard:Given>Peter</vCard:Given>
+    <vCard:Family>Villiger</vCard:Family>
+    <vCard:Other>J</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#254c5b36-a8b1-48fa-b7b0-5d3402de7912">
+    <dcterms:modified rdf:resource="rdf:#221d2a11-1e70-42a7-b79d-74df4dabd9bf"/>
+    <rdf:value>
+          Completely re-wrote the model to remove the reaction element.
+        </rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#a0b0c2bf-a81e-41f5-99d8-3aa262feca36"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#3ab0996c-5e45-4a86-9d51-70b588781e02">
+    <vCard:FN>Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="/a2_minus">
+    <dcterms:alternative>nonfunctional second adaptor</dcterms:alternative>
+    <dc:title>a2_minus</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="/e4_star_p4">
+    <dcterms:alternative>transition complex between an active substate and its deactivating enzyme (4)</dcterms:alternative>
+    <dcterms:alternative>transition complex between an active substate and its deactivating enzyme (5)</dcterms:alternative>
+    <dc:title>e4_star_p4</dc:title>
+    <dc:title>e5_star_p5</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#221d2a11-1e70-42a7-b79d-74df4dabd9bf">
+    <dcterms:W3CDTF>2007-12-27</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="/e1_star">
+    <dcterms:alternative>activated signalling enzyme 1</dcterms:alternative>
+    <dc:title>e1_star</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a291236e-3a6d-4303-a815-5a8b6f6ceb66">
+    <vCard:Orgname>The University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>The Bioengineering Research Group</vCard:Orgunit>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#7adc44a2-7647-49dc-a911-8dc51298114e">
+    <dcterms:modified rdf:resource="rdf:#cf517459-10b4-46bd-b2c0-684177f00d7b"/>
+    <rdf:value>
+          Added more metadata.
+        </rdf:value>
+    <cmeta:modifier rdf:resource="rdf:#c3fb9a68-a752-4381-bf47-85a4c4c76556"/>
+  </rdf:Description>
+</rdf:RDF>
+</model>

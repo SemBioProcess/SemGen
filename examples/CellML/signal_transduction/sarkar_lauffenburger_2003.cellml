@@ -1,0 +1,1054 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--
+MODIFICATION HISTORY
+
+Version 02 was created by James Lawson on 30/04/07 by fixing version 01.
+
+Version 01 of this model produced the following error when run in PCEnv:
+"Error: Model is underconstrained.
+The following variables couldn't be defined:
+- N"
+
+A new component was created defining N using the differential equation for the rate of change of N over time as given in the Sarkar et al. paper. 
+
+The variable L was given an initial value of 0.0001M to represent stimulation of the system with a bolus dose of GCSF. 
+
+Version 03 was created (from version 02) by James Lawson on 01/05/07 and now includes the pharmacokinetic and pharmacodynamic part of the model.
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:ns7="http://www.cellml.org/metadata/simulation/1.0#" cmeta:id="sarkar_lauffenburger_2003_version03" name="sarkar_lauffenburger_2003_version03">
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Computational Model of GCSF Endocytic Trafficking Dynamics</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Bioengineering Institute, University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+  <section id="sec_status">
+    <title>Model Status</title>
+    <para>
+            Version 02 was created from Version 01 on 30/04/07 by James Lawson. The variable N was defined using an equation from the Sarkar and Lauffenburger 2003 paper. Version 03 was created from Version 02 by James Lawson on 01/05/07 and now includes the pharmacological simulations described in the paper. This file is known to read in PCEnv.
+          </para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+Currently, drug design and development takes, on average, 12 years and costs more than 800 million US dollars.  Much of this time and money is spent on experiments and drugs that fail.  There is very little mechanistic understanding as to how the various levels of biological complexity - from molecular interactions, to cellular function, to tissue organisation, to whole organs and beyond - are integrated.  Hierarchical mathematical models provide a method for integrating this data.  Specifically, in the model described here, Sarkar and Lauffenburger focus on the case of granulocyte colony-stimulating factor (GCSF).
+</para>
+
+<para>
+GCSF is of great clinical importance, especially for cancer patients undergoing chemotherapy.  The drug is injected into the blood stream where it then diffuses to the bone marrow and binds to its receptor GCSFR on precursor cells, inducing them to replicate and differentiate into mature neutrophils.  In this way, the neutrophil count of immunocompromised patients is significantly increased.  However, the bone marrow precursor cells engulf and degrade the GCSF, a negative feedback mechanism that reduces its potency.  In addition, mature bone cells express the receptor GCSFR, and they bind, engulf and degrade the drug from the bloodstream.  Thus, there is a significant negative feedback loop that reduces the lifetime of the drug.
+</para>
+
+<para>
+The mathematical model developed by Sarkar and Lauffenburger relates extracellular GCSF depletion to the molecular properties of the ligand and the cells expressing the GCSF receptor (see the figure below).  The authors then further integrated this cell-level model into a physiologically relevant pharmacokinetic/pharmacodynamic model. 
+</para>
+
+<para>
+The model has been described here in CellML (the raw CellML description of the Sarkar and Lauffenburger 2003 model can be downloaded in various formats as described in <xref linkend="sec_download_this_model"/>).     
+</para>
+
+<para>
+The complete original paper reference is cited below:
+</para>
+
+<para>
+<ulink url="http://molpharm.aspetjournals.org/cgi/content/abstract/63/1/147">Cell-Level Pharmacokinetic Model of Granulocyte Colony-Stimulating Factor: Implications for Ligand Lifetime and Potency in Vivo</ulink>, Casim A. Sarkar and Douglas A. Lauffenburger, 2003, <ulink url="http://molpharm.aspetjournals.org/">
+            <emphasis>Molecular Pharmacology</emphasis>
+          </ulink>, 63, 147-158.  (<ulink url="http://molpharm.aspetjournals.org/cgi/content/full/63/1/147">Full text (HTML)</ulink> and <ulink url="http://molpharm.aspetjournals.org/cgi/reprint/63/1/147.pdf">PDF</ulink> versions of the article are available on the <emphasis>Molecular Pharmacology</emphasis> website.)  <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;list_uids=12488547&amp;dopt=Abstract">PubMed ID: 12488547</ulink>
+</para>
+
+<informalfigure float="0" id="fig_reaction_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>reaction diagram</title>
+    </objectinfo>
+    <imagedata fileref="sarkar_2003.png"/>
+  </imageobject>
+</mediaobject>
+<caption>Cell-level trafficking model for the GCSF/GCSFR system.</caption>
+</informalfigure>
+
+</sect1>
+</article>
+</documentation>
+  
+  
+  <units name="molar">
+    <unit units="mole"/>
+    <unit units="litre" exponent="-1"/>
+  </units>
+  
+  <units base_units="yes" name="number_per_cell"/>
+  
+  <units base_units="yes" name="number_per_litre"/>
+  
+  <units base_units="yes" name="molecule"/>
+   
+  <units name="minute">
+    <unit units="second" multiplier="60.0"/>
+  </units>
+ 
+  <units name="molecule_per_mole">
+    <unit units="molecule"/>
+    <unit units="mole" exponent="-1"/>
+  </units>
+  
+  <units name="first_order_rate_constant">
+    <unit units="minute" exponent="-1"/>
+  </units>
+  
+  <units name="second_order_rate_constant">
+    <unit units="molar" exponent="-1"/>
+    <unit units="minute" exponent="-1"/>
+  </units>
+  
+  
+  <component name="environment">
+    <variable units="minute" public_interface="out" name="time"/>
+  </component>
+  
+  
+  <component cmeta:id="Rs" name="Rs">
+    <rdf:RDF>
+      <rdf:Description rdf:about="Rs">
+        <dc:title>Rs</dc:title>
+        <dcterms:alternative>cell surface receptor</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="number_per_cell" public_interface="out" name="Rs"/>
+    
+    <variable units="first_order_rate_constant" public_interface="in" name="keR"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kf"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="Vs"/>
+    <variable units="number_per_cell" public_interface="in" name="Cs"/>
+    <variable units="number_per_litre" public_interface="in" name="N"/>
+    <variable units="molar" public_interface="in" name="L"/>
+    <variable units="minute" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>Rs</ci> 
+        </apply>
+        <apply>
+          <times/>
+          <apply>
+            <minus/>
+            <apply>
+              <plus/>
+              <apply>
+                <times/>
+                <ci> kr </ci>
+                <ci> Cs </ci>
+              </apply>
+              <ci> Vs </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <apply>
+                <times/>
+                <ci> kf </ci>
+                <ci> L </ci>
+                <ci> Rs </ci>
+              </apply>
+              <apply>
+                <times/>
+                <ci> keR </ci>
+                <ci> Rs </ci>
+              </apply>
+            </apply>
+          </apply>
+          <ci> N </ci>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="Cs" name="Cs">
+    <rdf:RDF>
+      <rdf:Description rdf:about="Cs">
+        <dc:title>Cs</dc:title>
+        <dcterms:alternative>cell surface complex</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="number_per_cell" public_interface="out" name="Cs"/>
+    
+    <variable units="first_order_rate_constant" public_interface="in" name="keC"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kf"/>
+    <variable units="number_per_cell" public_interface="in" name="Rs"/>
+    <variable units="number_per_litre" public_interface="in" name="N"/>
+    <variable units="molar" public_interface="in" name="L"/>
+    <variable units="minute" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>Cs</ci> 
+        </apply>
+        <apply>
+          <times/>
+          <apply>
+            <minus/>
+            <apply>
+              <plus/>
+              <apply>
+                <times/>
+                <ci> kf </ci>
+                <ci> L </ci>
+                <ci> Cs </ci>
+              </apply>
+              <apply>
+                <times/>
+                <ci> kr </ci>
+                <ci> Cs </ci>
+              </apply>
+              <apply>
+                <times/>
+                <ci> keC </ci>
+                <ci> Cs </ci>
+              </apply>
+            </apply>
+          </apply>
+          <ci> N </ci>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="Li" name="Li">
+    <rdf:RDF>
+      <rdf:Description rdf:about="Li">
+        <dc:title>Li</dc:title>
+        <dcterms:alternative>intracellular ligand</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="molar" public_interface="out" name="Li"/>
+    
+    <variable units="first_order_rate_constant" public_interface="in" name="krec"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kri"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kfi"/>
+    <variable units="litre" public_interface="in" name="Ve"/>
+    <variable units="number_per_cell" public_interface="in" name="Ci"/>
+    <variable units="number_per_litre" public_interface="in" name="N"/>
+    <variable units="molecule_per_mole" public_interface="in" name="NA"/>
+    <variable units="number_per_cell" public_interface="in" name="Ri"/>
+    <variable units="minute" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>Li</ci> 
+        </apply>
+        <apply>
+          <times/>
+          <apply>
+            <minus/>
+            <apply>
+              <times/>
+              <apply>
+                <minus/>
+                <apply>
+                  <times/>
+                  <ci> kri </ci>
+                  <ci> Ci </ci>
+                </apply>
+                <apply>
+                  <times/>
+                  <ci> kfi </ci>
+                  <ci> Li </ci>
+                  <ci> Ri </ci>
+                </apply>
+              </apply>
+              <apply>
+                <divide/>
+                <cn cellml:units="dimensionless"> 1.0 </cn>
+                <apply>
+                  <times/>
+                  <ci> NA </ci>
+                  <ci> Ve </ci>
+                </apply>
+              </apply>
+            </apply>
+            <apply>
+              <times/>
+              <ci> krec </ci>
+              <ci> Li </ci>
+            </apply>
+          </apply>
+          <ci> N </ci>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="Ri" name="Ri">
+    <rdf:RDF>
+      <rdf:Description rdf:about="Ri">
+        <dc:title>Ri</dc:title>
+        <dcterms:alternative>intracellular receptor</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="number_per_cell" public_interface="out" name="Ri"/>
+    
+    <variable units="first_order_rate_constant" public_interface="in" name="kdeg"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="keR"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kri"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kfi"/>
+    <variable units="number_per_cell" public_interface="in" name="Ci"/>
+    <variable units="number_per_cell" public_interface="in" name="Rs"/>
+    <variable units="number_per_litre" public_interface="in" name="N"/>
+    <variable units="molar" public_interface="in" name="Li"/>
+    <variable units="minute" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>Ri</ci> 
+        </apply>
+        <apply>
+          <times/>
+          <apply>
+            <minus/>
+            <apply>
+              <plus/>
+              <apply>
+                <times/>
+                <ci> kri </ci>
+                <ci> Ci </ci>
+              </apply>
+              <apply>
+                <times/>
+                <ci> keR </ci>
+                <ci> Rs </ci>
+              </apply>
+            </apply>
+            <apply>
+              <plus/>
+              <apply>
+                <times/>
+                <ci> kfi </ci>
+                <ci> Li </ci>
+                <ci> Ri </ci>
+              </apply>
+              <apply>
+                <times/>
+                <ci> kdeg </ci>
+                <ci> Ri </ci>
+              </apply>
+            </apply>
+          </apply>
+          <ci> N </ci>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="Ci" name="Ci">
+    <rdf:RDF>
+      <rdf:Description rdf:about="Ci">
+        <dc:title>Ci</dc:title>
+        <dcterms:alternative>intracellular complex</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="number_per_cell" public_interface="out" name="Ci"/>
+    
+    <variable units="first_order_rate_constant" public_interface="in" name="kdeg"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="keC"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kri"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kfi"/>
+    <variable units="number_per_cell" public_interface="in" name="Ri"/>
+    <variable units="number_per_cell" public_interface="in" name="Rs"/>
+    <variable units="number_per_cell" public_interface="in" name="Cs"/>
+    <variable units="number_per_litre" public_interface="in" name="N"/>
+    <variable units="molar" public_interface="in" name="Li"/>
+    <variable units="minute" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>Ci</ci> 
+        </apply>
+        <apply>
+          <times/>
+          <apply>
+            <minus/>
+            <apply>
+              <plus/>
+              <apply>
+                <times/>
+                <ci> kfi </ci>
+                <ci> Li </ci>
+                <ci> Ri </ci>
+              </apply>
+              <apply>
+                <times/>
+                <ci> keC </ci>
+                <ci> Cs </ci>
+              </apply>
+            </apply>
+            <apply>
+              <plus/>
+              <apply>
+                <times/>
+                <ci> kri </ci>
+                <ci> Ci </ci>
+              </apply>
+              <apply>
+                <times/>
+                <ci> kdeg </ci>
+                <ci> Rs </ci>
+              </apply>
+            </apply>
+          </apply>
+          <ci> N </ci>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="L" name="L">
+    <rdf:RDF>
+      <rdf:Description rdf:about="L">
+        <dc:title>L</dc:title>
+        <dcterms:alternative>extracellular ligand</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="molar" public_interface="out" name="L" initial_value="0.0001"/>
+    
+    <variable units="first_order_rate_constant" public_interface="in" name="kl_WT"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="krec"/>
+    <variable units="first_order_rate_constant" public_interface="in" name="kr"/>
+    <variable units="second_order_rate_constant" public_interface="in" name="kf"/>
+    <variable units="litre" public_interface="in" name="Ve"/>
+    <variable units="number_per_cell" public_interface="in" name="Rs"/>
+    <variable units="number_per_cell" public_interface="in" name="Cs"/>
+    <variable units="number_per_litre" public_interface="in" name="N"/>
+    <variable units="molecule_per_mole" public_interface="in" name="NA"/>
+    <variable units="molar" public_interface="in" name="Li"/>
+    <variable units="minute" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>L</ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <apply>
+              <minus/>
+              <apply>
+                <plus/>
+                <apply>
+                  <times/>
+                  <ci> krec </ci>
+                  <ci> Li </ci>
+                  <ci> Ve </ci>
+                  <ci> NA </ci>
+                </apply>
+                <apply>
+                  <times/>
+                  <ci> kr </ci>
+                  <ci> Cs </ci>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <ci> kf </ci>
+                <ci> L </ci>
+                <ci> Rs </ci>
+              </apply>
+            </apply>
+            <apply>
+              <divide/>
+              <ci> N </ci>
+              <ci> NA </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> kl_WT </ci>
+            <ci> L </ci>
+          </apply>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component cmeta:id="Ld" name="Ld">
+    <rdf:RDF>
+      <rdf:Description rdf:about="Ld">
+        <dc:title>Ld</dc:title>
+        <dcterms:alternative>degraded ligand</dcterms:alternative>  
+      </rdf:Description>
+    </rdf:RDF> 
+    <variable units="number_per_cell" public_interface="out" name="Ld"/>
+    
+    <variable units="first_order_rate_constant" public_interface="in" name="kdeg"/>
+    <variable units="number_per_cell" public_interface="in" name="Ci"/>
+    <variable units="number_per_litre" public_interface="in" name="N"/>
+    <variable units="minute" public_interface="in" name="time"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci>Ld</ci> 
+        </apply>
+        <apply>
+          <times/>
+          <ci> kdeg </ci>
+          <ci> Ci </ci>
+          <ci> N </ci>
+        </apply>
+      </apply>    
+    </math>
+  </component>
+  
+  <component name="parameters">
+    <variable units="first_order_rate_constant" public_interface="out" name="kr" initial_value="0.03"/>
+    <variable units="second_order_rate_constant" public_interface="out" name="kf" initial_value="2.0E8"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kri" initial_value="3.0"/>
+    <variable units="second_order_rate_constant" public_interface="out" name="kfi" initial_value="235294117.6"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="keR" initial_value="0.005"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="keC" initial_value="0.10"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kdeg" initial_value="0.059"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="krec" initial_value="0.15"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="kl_WT" initial_value="4.17E-5"/>
+    <variable units="first_order_rate_constant" public_interface="out" name="Vs" initial_value="25.0"/>
+    <variable units="litre" public_interface="out" name="Ve" initial_value="1.0E-14"/>
+    <variable units="number_per_litre" public_interface="out" name="N"/>
+    <variable units="molecule_per_mole" public_interface="out" name="NA" initial_value="6.02E23"/>
+  <variable units="number_per_litre" public_interface="in" name="n"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <ci>n</ci>
+        <ci>N</ci>
+      </apply>
+    </math>
+  </component>
+  
+  
+  <connection>
+    <map_components component_2="parameters" component_1="Rs"/>
+    <map_variables variable_2="kf" variable_1="kf"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="keR" variable_1="keR"/>
+    <map_variables variable_2="Vs" variable_1="Vs"/>
+    <map_variables variable_2="N" variable_1="N"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="parameters" component_1="Cs"/>
+    <map_variables variable_2="kf" variable_1="kf"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="keC" variable_1="keC"/>
+    <map_variables variable_2="N" variable_1="N"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="parameters" component_1="Li"/>
+    <map_variables variable_2="kfi" variable_1="kfi"/>
+    <map_variables variable_2="kri" variable_1="kri"/>
+    <map_variables variable_2="krec" variable_1="krec"/>
+    <map_variables variable_2="NA" variable_1="NA"/>
+    <map_variables variable_2="Ve" variable_1="Ve"/>
+    <map_variables variable_2="N" variable_1="N"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="parameters" component_1="Ri"/>
+    <map_variables variable_2="kfi" variable_1="kfi"/>
+    <map_variables variable_2="kri" variable_1="kri"/>
+    <map_variables variable_2="keR" variable_1="keR"/>
+    <map_variables variable_2="kdeg" variable_1="kdeg"/>
+    <map_variables variable_2="N" variable_1="N"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="parameters" component_1="Ci"/>
+    <map_variables variable_2="kfi" variable_1="kfi"/>
+    <map_variables variable_2="kri" variable_1="kri"/>
+    <map_variables variable_2="keC" variable_1="keC"/>
+    <map_variables variable_2="kdeg" variable_1="kdeg"/>
+    <map_variables variable_2="N" variable_1="N"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="parameters" component_1="L"/>
+    <map_variables variable_2="kf" variable_1="kf"/>
+    <map_variables variable_2="kr" variable_1="kr"/>
+    <map_variables variable_2="kl_WT" variable_1="kl_WT"/>
+    <map_variables variable_2="krec" variable_1="krec"/>
+    <map_variables variable_2="Ve" variable_1="Ve"/>
+    <map_variables variable_2="NA" variable_1="NA"/>
+    <map_variables variable_2="N" variable_1="N"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="parameters" component_1="Ld"/>
+    <map_variables variable_2="kdeg" variable_1="kdeg"/>
+    <map_variables variable_2="N" variable_1="N"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Cs" component_1="Rs"/>
+    <map_variables variable_2="Cs" variable_1="Cs"/>
+    <map_variables variable_2="Rs" variable_1="Rs"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="L" component_1="Rs"/>
+    <map_variables variable_2="Rs" variable_1="Rs"/>
+    <map_variables variable_2="L" variable_1="L"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Ri" component_1="Li"/>
+    <map_variables variable_2="Ri" variable_1="Ri"/>
+    <map_variables variable_2="Li" variable_1="Li"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Ci" component_1="Li"/>
+    <map_variables variable_2="Ci" variable_1="Ci"/>
+    <map_variables variable_2="Li" variable_1="Li"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Ri" component_1="Ci"/>
+    <map_variables variable_2="Ri" variable_1="Ri"/>
+    <map_variables variable_2="Ci" variable_1="Ci"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Rs" component_1="Ci"/>
+    <map_variables variable_2="Rs" variable_1="Rs"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Ri" component_1="Rs"/>
+    <map_variables variable_2="Rs" variable_1="Rs"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Ci" component_1="Cs"/>
+    <map_variables variable_2="Cs" variable_1="Cs"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="L" component_1="Cs"/>
+    <map_variables variable_2="Cs" variable_1="Cs"/>
+    <map_variables variable_2="L" variable_1="L"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="L" component_1="Li"/>
+    <map_variables variable_2="Li" variable_1="Li"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="Ld" component_1="Ci"/>
+    <map_variables variable_2="Ci" variable_1="Ci"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Rs"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Cs"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Li"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Ri"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Ci"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="L"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_2="environment" component_1="Ld"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  
+
+<component name="N">
+    <variable units="per_litre_per_minute" name="Kin" initial_value="3.13E-6"/>
+    <variable units="dimensionless" name="emax" initial_value="12.7"/>
+    <variable units="molar" name="ec50" initial_value="2.53E-10"/>
+    <variable units="molar" name="kdiwt" initial_value="1.275E-8"/>
+    <variable units="molar" name="kd" initial_value="1.5E-10"/>
+    <variable units="dimensionless" name="gamma" initial_value="1.34"/>
+    <variable units="first_order_rate_constant" name="kout" initial_value="7.57E-4"/>
+    <variable units="molar" public_interface="in" name="L"/>
+    <variable units="minute" public_interface="in" name="time"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>n</ci>
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <times/>
+            <ci>Kin</ci>
+            <apply>
+              <plus/>
+              <cn cellml:units="dimensionless">1</cn>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci>emax</ci>
+                  <apply>
+                    <power/>
+                    <apply>
+                      <divide/>
+                      <apply>
+                        <times/>
+                        <ci>L</ci>
+                        <ci>kdiwt</ci>
+                      </apply>
+                      <ci>kd</ci>
+                    </apply>
+                    <ci>gamma</ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <apply>
+                    <power/>
+                    <ci>ec50</ci>
+                    <ci>gamma</ci>
+                  </apply>
+                  <apply>
+                    <power/>
+                    <apply>
+                      <divide/>
+                      <apply>
+                        <times/>
+                        <ci>L</ci>
+                        <ci>kdiwt</ci>
+                      </apply>
+                      <ci>kd</ci>
+                    </apply>
+                    <ci>gamma</ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci>kout</ci>
+            <ci>n</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+    <variable units="number_per_litre" public_interface="out" name="n"/>
+  </component>
+  <units base_units="no" name="per_litre_per_minute">
+    <unit units="number_per_litre"/>
+    <unit units="minute" exponent="-1"/>
+  </units>
+  <connection>
+    <map_components component_2="N" component_1="environment"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  <connection>
+    <map_variables variable_2="L" variable_1="L"/>
+    <map_components component_2="N" component_1="L"/>
+  </connection>
+  <connection>
+    <map_components component_2="N" component_1="parameters"/>
+    <map_variables variable_2="n" variable_1="n"/>
+  </connection>
+
+
+
+
+
+
+<component name="PKPD">
+    <variable units="minute" public_interface="in" name="time"/>
+    <variable units="molar" name="L4"/>
+    <variable units="litre" name="V4" initial_value="0.249"/>
+    <variable units="litres_per_minute" name="Q" initial_value="4.65E-4"/>
+    <variable units="mole" name="n1"/>
+    <variable units="first_order_rate_constant" name="k13" initial_value="0.0044"/>
+    <variable units="mole" name="n2"/>
+    <variable units="first_order_rate_constant" name="k23" initial_value="0.0033"/>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>L4</ci>
+        </apply>
+        <apply>
+          <times/>
+          <apply>
+            <divide/>
+            <ci>Q</ci>
+            <ci>V4</ci>
+          </apply>
+          <apply>
+            <minus/>
+            <ci>L</ci>
+            <ci>L4</ci>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>n1</ci>
+        </apply>
+        <apply>
+          <times/>
+          <ci>k13</ci>
+          <ci>n1</ci>
+        </apply>
+      </apply>
+      <apply>
+        <eq/>
+        <apply>
+          <diff/>
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>n2</ci>
+        </apply>
+        <apply>
+          <times/>
+          <ci>k23</ci>
+          <ci>n2</ci>
+        </apply>
+      </apply>
+    </math>
+    <variable units="molar" public_interface="in" name="L"/>
+  </component>
+  <connection>
+    <map_components component_2="PKPD" component_1="environment"/>
+    <map_variables variable_2="time" variable_1="time"/>
+  </connection>
+  <units name="litres_per_minute">
+    <unit units="litre"/>
+    <unit units="minute" exponent="-1"/>
+  </units>
+  <connection>
+    <map_components component_2="PKPD" component_1="L"/>
+    <map_variables variable_2="L" variable_1="L"/>
+  </connection>
+
+
+
+
+
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Seq rdf:about="rdf:#95e791e3-7209-40c6-9a20-846f718f30fb"/>
+  <rdf:Seq rdf:about="rdf:#citationAuthorsSeq">
+    <rdf:li rdf:resource="rdf:#author1Vcard"/>
+    <rdf:li rdf:resource="rdf:#author2Vcard"/>
+  </rdf:Seq>
+  <rdf:Description rdf:about="rdf:#$Fsu1C3">
+    <ns7:endingValue>10</ns7:endingValue>
+    <ns7:nonstandard-pointDensity>100000</ns7:nonstandard-pointDensity>
+    <ns7:maximumStepSize>0.001</ns7:maximumStepSize>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#c5d8b823-663a-4966-89a9-0901adfd899c">
+    <vCard:Given>Casim</vCard:Given>
+    <vCard:Family>Sarkar</vCard:Family>
+    <vCard:Other>A</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a7b962eb-4d06-418a-aed9-8bf8e15b7115">
+    <dc:title>Molecular Pharmacology</dc:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#a5806650-4314-434e-b2f6-3e075b4ab707">
+    <vCard:Given>James</vCard:Given>
+    <vCard:Family>Lawson</vCard:Family>
+    <vCard:Other>R.</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#50ce1a81-4a86-4ae6-b1be-a0840d8ed8d3">
+    <bqs:Pubmed_id>12488547</bqs:Pubmed_id>
+    <bqs:JournalArticle rdf:resource="rdf:#22bab453-fd6a-4d20-8c31-d90a25e788da"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author2Vcard">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#author2VcardN"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#96292809-8fcf-4e8b-afca-7dc31544123e">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#c5d8b823-663a-4966-89a9-0901adfd899c"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author2VcardN">
+    <vCard:Given>Douglas</vCard:Given>
+    <vCard:Family>Lauffenburger</vCard:Family>
+    <vCard:Other>A</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#e78a32d8-d7a9-46f8-b495-3da148612106">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#d362ebc9-37a9-4387-ad6e-a3da1a656aed"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#6505872c-c4b6-4857-8bdf-129f3450153a">
+    <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+    <rdf:value>j.lawson@auckland.ac.nz</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="#sarkar_lauffenburger_2003_version01">
+    <ns7:simulation rdf:resource="rdf:#$Dsu1C3"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#$Esu1C3">
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+    <rdf:first rdf:resource="rdf:#$Fsu1C3"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d39599e7-0e07-4fba-8da6-9be4dee9dd65">
+    <vCard:ORG rdf:resource="rdf:#035bd4c8-9149-47cf-9620-a156a5c404eb"/>
+    <vCard:EMAIL rdf:resource="rdf:#6505872c-c4b6-4857-8bdf-129f3450153a"/>
+    <vCard:N rdf:resource="rdf:#a5806650-4314-434e-b2f6-3e075b4ab707"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#69545b1f-d505-4dfc-ba83-47042bd23a91">
+    <dcterms:W3CDTF>2003-01-01</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#d362ebc9-37a9-4387-ad6e-a3da1a656aed">
+    <vCard:Given>Douglas</vCard:Given>
+    <vCard:Family>Lauffenburger</vCard:Family>
+    <vCard:Other>A</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#2d63490a-0b3c-4412-aed5-10f4b734bea2">
+    <dcterms:W3CDTF>2007-05-01</dcterms:W3CDTF>
+  </rdf:Description>
+  <rdf:Description rdf:about="#sarkar_lauffenburger_2003_version03">
+    <dc:title>Sarkar and Lauffenburger's 2003 computational model of GCSF endocytic 
+        trafficking dynamics.</dc:title>
+    <cmeta:bioentity>neutrophil</cmeta:bioentity>
+    <cmeta:comment rdf:resource="rdf:#2c566219-4870-43aa-9a98-bd9e9ca08454"/>
+    <bqs:reference rdf:resource="rdf:#50ce1a81-4a86-4ae6-b1be-a0840d8ed8d3"/>
+<bqs:reference rdf:parseType="Resource">
+  <dc:subject rdf:parseType="Resource">
+    <bqs:subject_type>keyword</bqs:subject_type>
+    <rdf:value>
+      <rdf:Bag>
+        <rdf:li>pharmacology</rdf:li>
+        <rdf:li>signal transduction</rdf:li>
+        <rdf:li>gscf</rdf:li>
+        <rdf:li>gpcr</rdf:li>
+        <rdf:li>pharmacokinetics</rdf:li>
+        <rdf:li>neutrophil</rdf:li>
+      </rdf:Bag>
+    </rdf:value>
+  </dc:subject>
+</bqs:reference>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#22bab453-fd6a-4d20-8c31-d90a25e788da">
+    <dc:creator rdf:resource="rdf:#citationAuthorsSeq"/>
+    <dc:title>Cell-Level Pharmacokinetic Model of Granulocyte Colony-Stimulating Factor: Implications for Ligand Lifetime and Potency in Vivo</dc:title>
+    <bqs:volume>63</bqs:volume>
+    <bqs:first_page>147</bqs:first_page>
+    <bqs:Journal rdf:resource="rdf:#a7b962eb-4d06-418a-aed9-8bf8e15b7115"/>
+    <dcterms:issued rdf:resource="rdf:#69545b1f-d505-4dfc-ba83-47042bd23a91"/>
+    <bqs:last_page>158</bqs:last_page>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author1Vcard">
+    <rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+    <vCard:N rdf:resource="rdf:#author1VcardN"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#author1VcardN">
+    <vCard:Given>Casim</vCard:Given>
+    <vCard:Family>Sarkar</vCard:Family>
+    <vCard:Other>A</vCard:Other>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:publisher>The University of Auckland, Bioengineering Institute</dc:publisher>
+    <dcterms:created rdf:resource="rdf:#2d63490a-0b3c-4412-aed5-10f4b734bea2"/>
+    <dc:creator rdf:resource="rdf:#d39599e7-0e07-4fba-8da6-9be4dee9dd65"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#$Dsu1C3">
+    <ns7:boundIntervals rdf:resource="rdf:#$Esu1C3"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#25233adb-03b0-4b12-8168-020061dcf8a7">
+    <vCard:FN>Catherine Lloyd</vCard:FN>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#2c566219-4870-43aa-9a98-bd9e9ca08454">
+    <dc:creator rdf:resource="rdf:#25233adb-03b0-4b12-8168-020061dcf8a7"/>
+    <rdf:value>This is the CellML description of Sarkar and Lauffenburger's 2003 computational model of GCSF endocytic trafficking dynamics. The pharmacokinetic and pharmacodynamic part of the model is now included in version 03.</rdf:value>
+  </rdf:Description>
+  <rdf:Description rdf:about="rdf:#035bd4c8-9149-47cf-9620-a156a5c404eb">
+    <vCard:Orgname>University of Auckland</vCard:Orgname>
+    <vCard:Orgunit>Bioengineering Institute</vCard:Orgunit>
+  </rdf:Description>
+</rdf:RDF>
+</model>

@@ -1,0 +1,1290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This CellML file was generated on 4/05/2010 at 10:48:51 at a.m. using:
+
+COR (0.9.31.1371)
+Copyright 2002-2010 Dr Alan Garny
+http://cor.physiol.ox.ac.uk/ - cor@physiol.ox.ac.uk
+
+CellML 1.0 was used to generate this model
+http://www.cellml.org/
+-->
+<model xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:pathway_editor="http://www.physiome.com/pathway_editor/1.0#" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" name="chassagnole_2001" cmeta:id="chassagnole_2001" xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#">
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>An integrated study of Threonine-pathway enzyme kinetics in Escherichia coli</title>
+				<author>
+					<firstname>Catherine</firstname>
+					<surname>Lloyd</surname>
+					<affiliation>
+						<shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<section id="sec_status">
+				<title>Model Status</title>
+				<para>
+This model runs in COR and OpenCell and the units are consistent throughout. It is unknown whether it can recreate the published results, as there are no figures containing output of the complete model to compare it to. It is expected that if validation was carried out the model would be unable to recreate the published results, as some equations were missing from the paper and extrapolated from the reaction scheme.
+</para>
+			</section>
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>
+ABSTRACT: We have determined the kinetic parameters of the individual steps of the threonine pathway from aspartate in Escherichia coli under a single set of experimental conditions chosen to be physiologically relevant. Our aim was to summarize the kinetic behaviour of each enzyme in a single tractable equation that takes into account the effect of the products as competitive inhibitors of the substrates in the forward reaction and also, when appropriate (e.g. near-equilibrium reactions), as substrates of the reverse reactions. Co-operative feedback inhibition by threonine and lysine was also included as necessary. We derived the simplest rate equations that describe the salient features of the enzymes in the physiological range of metabolite concentrations in order to incorporate them ultimately into a complete model of the threonine pathway, able to predict quantitatively the behaviour of the pathway under natural or engineered conditions.
+</para>
+				<para>
+The original paper reference is cited below:
+</para>
+				<para>
+An integrated study of threonine-pathway enzyme kinetics in <emphasis>Escherichia coli</emphasis>
+          , Christophe Chassagnole, Badr Rais, Eric Quentin, David A. Fell and Jean-Pierre Mazat, 2001, 
+            <emphasis>Biochemical Journal</emphasis>
+          , 356, 415-423. <ulink url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;list_uids=11368768&amp;dopt=Abstract">PubMed ID: 11368768</ulink>
+				</para>
+				
+				<informalfigure float="0" id="fig_reaction_diagram">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>schematic diagram</title>
+							</objectinfo>
+							<imagedata fileref="chassagnole_2001.png"/>
+						</imageobject>
+					</mediaobject>
+					<caption>Threonine-synthesis pathway from aspartate in <emphasis>E. coli</emphasis>.  The different steps are catalysed by aspartate kinases I and III (AK I and AK III), aspartate semialdehyde dehydrogenase (ASD), homoserine dehydrogenase (HDH), homoserine kinase (HK) and threonine synthase (TS).  The abbreviations used are: asp, aspartate; aspp, beta-aspartyl phosphate; ASA, aspartic beta-semialdehyde; hs, homoserine; hsp, O-phospho-homoserine; thr, threonine and lys, lysine.  Solid black lines represent the individual reaction steps of the pathway and the dashed red lines represent reaction inhibition by threonine and lysine.</caption>
+				</informalfigure>
+			</sect1>
+		</article>
+	</documentation>
+	<rdf:RDF>
+		<rdf:Seq rdf:about="rdf:#cc76a75f-f140-4ec3-a712-f7bce8fa6225">
+			<rdf:li rdf:resource="rdf:#5bb81c51-4ac6-4bbf-b2d8-3d3985be5356"/>
+			<rdf:li rdf:resource="rdf:#866dd023-9fb9-4fd9-ab24-cdb852888b54"/>
+			<rdf:li rdf:resource="rdf:#172d0042-15c2-4522-a33c-cbb88f9297d6"/>
+			<rdf:li rdf:resource="rdf:#bfc42ecb-13fc-4e88-a4d4-73dceb825dd7"/>
+			<rdf:li rdf:resource="rdf:#c6d24adb-18e3-4fee-b8e9-9295f0484433"/>
+		</rdf:Seq>
+		<rdf:Description rdf:about="rdf:#c6d24adb-18e3-4fee-b8e9-9295f0484433">
+			<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+			<vCard:N rdf:resource="rdf:#d2a6b4b9-7858-44e3-b987-f5974cd870ca"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="">
+			<dc:publisher>The University of Auckland, Auckland Bioengineering Institute</dc:publisher>
+			<cmeta:comment xmlns:cmeta="http://www.cellml.org/metadata/1.0#" rdf:resource="rdf:#d82d6589-22e3-49cb-8b5b-953a182a87f2"/>
+			<dcterms:created rdf:resource="rdf:#4592e41d-20ef-45b5-9c0d-20a8a761d0f4"/>
+			<dc:creator rdf:resource="rdf:#d96b2950-1629-4adb-b2c3-bb097408cd78"/>
+			<cmeta:modification xmlns:cmeta="http://www.cellml.org/metadata/1.0#" rdf:resource="rdf:#350da559-18b0-4a26-8d89-bb35e6dc5a9b"/>
+			<cmeta:modification xmlns:cmeta="http://www.cellml.org/metadata/1.0#" rdf:resource="rdf:#cc33d8f3-97d5-421c-9d42-05be89f1746f"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#4592e41d-20ef-45b5-9c0d-20a8a761d0f4">
+			<dcterms:W3CDTF>2007-06-01T00:00:00+00:00</dcterms:W3CDTF>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#95e4d9a9-2c72-4107-9a92-292ef1a4a3a0">
+			<vCard:FN/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#d6030c63-eb63-467e-b9f8-fb3fdbbd8570">
+			<vCard:Given>Eric</vCard:Given>
+			<vCard:Family>Quentin</vCard:Family>
+		</rdf:Description>
+		<rdf:Description rdf:about="#hs">
+			<dcterms:alternative>homoserine</dcterms:alternative>
+			<dc:title>hs</dc:title>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#22585a5c-7522-445e-b21e-1b66610cb054">
+			<vCard:N rdf:resource="rdf:#45e80815-fc83-4183-9f22-1186c8a22437"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="#chassagnole_2001">
+			<dc:title>A model of Threonine-synthesis pathway in Escherichia 
+      coli</dc:title>
+			<cmeta:comment xmlns:cmeta="http://www.cellml.org/metadata/1.0#" rdf:resource="rdf:#fcc8036b-2a3f-4d3c-a81e-12d4d6fa06af"/>
+			<bqs:reference rdf:resource="rdf:#a1b4a02b-f2b3-4cb5-89a6-348e94f2bafc"/>
+			<bqs:reference rdf:resource="rdf:#b0fbdd2a-1e87-4775-ac7a-324a45efd4fd"/>
+			<bqs:reference rdf:parseType="Resource">
+				<dc:subject rdf:parseType="Resource">
+					<bqs:subject_type>keyword</bqs:subject_type>
+					<rdf:value>
+						<rdf:Bag>
+							<rdf:li>e. coli</rdf:li>
+							<rdf:li>metabolism</rdf:li>
+							<rdf:li>threonine synthesis</rdf:li>
+						</rdf:Bag>
+					</rdf:value>
+				</dc:subject>
+			</bqs:reference>
+			<cmeta:species xmlns:cmeta="http://www.cellml.org/metadata/1.0#">Escherichia coli</cmeta:species>
+		</rdf:Description>
+		<rdf:Description rdf:about="#Thr">
+			<dcterms:alternative>threonine</dcterms:alternative>
+			<dc:title>Thr</dc:title>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#350da559-18b0-4a26-8d89-bb35e6dc5a9b">
+			<dcterms:modified rdf:resource="rdf:#4def30e0-b812-4494-8fe3-c9d33232f436"/>
+			<rdf:value>updated curation status, removed reference link from documentation.</rdf:value>
+			<cmeta:modifier xmlns:cmeta="http://www.cellml.org/metadata/1.0#" rdf:resource="rdf:#a013323a-9d78-4c37-a088-8f340164fa57"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#cc33d8f3-97d5-421c-9d42-05be89f1746f">
+			<dcterms:modified rdf:resource="rdf:#bffe8874-378f-47b6-b78a-6925726f36ca"/>
+			<rdf:value>Added Vmax values from a third publication in a paper series provided by the author of the original publication.
+
+The model now runs in PCEnv, but it still gives a flat output.</rdf:value>
+			<cmeta:modifier xmlns:cmeta="http://www.cellml.org/metadata/1.0#" rdf:resource="rdf:#22585a5c-7522-445e-b21e-1b66610cb054"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#a1b4a02b-f2b3-4cb5-89a6-348e94f2bafc">
+			<bqs:Pubmed_id>11368770</bqs:Pubmed_id>
+			<bqs:JournalArticle rdf:resource="rdf:#77df2ad9-851f-4c3b-9f87-6f208ea79742"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#8524f636-6a4d-4b61-b067-20b209280d84">
+			<dc:title>Biochemical Journal</dc:title>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#75922d97-728e-4fb5-82bf-47ad5f792fe1">
+			<dcterms:W3CDTF>2001-06-01</dcterms:W3CDTF>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#9325bdce-80a8-4152-9578-ddad8aef2a27">
+			<bqs:subject_type>keyword</bqs:subject_type>
+			<rdf:value>metabolism</rdf:value>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#172d0042-15c2-4522-a33c-cbb88f9297d6">
+			<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+			<vCard:N rdf:resource="rdf:#d6030c63-eb63-467e-b9f8-fb3fdbbd8570"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#bffe8874-378f-47b6-b78a-6925726f36ca">
+			<dcterms:W3CDTF>2007-06-05T09:42:20+12:00</dcterms:W3CDTF>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#1ff5772c-c3e1-4875-a340-3ff399763ab5">
+			<vCard:Given>Christophe</vCard:Given>
+			<vCard:Family>Chassagnole</vCard:Family>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#7cfd4116-7b5c-4ca5-8dcd-b5b0f7373020">
+			<rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+			<rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#dc18062f-1462-4061-8567-57450d8d1236">
+			<vCard:Given>Catherine</vCard:Given>
+			<vCard:Family>Lloyd</vCard:Family>
+			<vCard:Other>May</vCard:Other>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#c65102ad-4c65-47cf-801d-025a809b3622">
+			<vCard:Given>David</vCard:Given>
+			<vCard:Family>Fell</vCard:Family>
+			<vCard:Other>A</vCard:Other>
+		</rdf:Description>
+		<rdf:Description rdf:about="#ASA">
+			<dcterms:alternative>aspartate beta-semialdehyde</dcterms:alternative>
+			<dc:title>ASA</dc:title>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#45e80815-fc83-4183-9f22-1186c8a22437">
+			<vCard:Given>Catherine</vCard:Given>
+			<vCard:Family>Lloyd</vCard:Family>
+			<vCard:Other>May</vCard:Other>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#485bd401-06c0-4c55-b96a-a4495fa595df">
+			<vCard:Given>James</vCard:Given>
+			<vCard:Family>Lawson</vCard:Family>
+			<vCard:Other>Richard</vCard:Other>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#3183a76e-77b2-4d02-92a1-5c463b5907ab">
+			<vCard:Orgname>The University of Auckland</vCard:Orgname>
+			<vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#d96b2950-1629-4adb-b2c3-bb097408cd78">
+			<vCard:ORG rdf:resource="rdf:#3183a76e-77b2-4d02-92a1-5c463b5907ab"/>
+			<vCard:EMAIL rdf:resource="rdf:#7cfd4116-7b5c-4ca5-8dcd-b5b0f7373020"/>
+			<vCard:N rdf:resource="rdf:#dc18062f-1462-4061-8567-57450d8d1236"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="#Lys">
+			<dcterms:alternative>lysine</dcterms:alternative>
+			<dc:title>Lys</dc:title>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#866dd023-9fb9-4fd9-ab24-cdb852888b54">
+			<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+			<vCard:N rdf:resource="rdf:#ae03f37f-54bf-4445-ae0d-3bbe8073443d"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#a013323a-9d78-4c37-a088-8f340164fa57">
+			<vCard:N rdf:resource="rdf:#485bd401-06c0-4c55-b96a-a4495fa595df"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#d2a6b4b9-7858-44e3-b987-f5974cd870ca">
+			<vCard:Given>Jean-Pierre</vCard:Given>
+			<vCard:Family>Mazat</vCard:Family>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#b0fbdd2a-1e87-4775-ac7a-324a45efd4fd">
+			<dc:subject rdf:resource="rdf:#9325bdce-80a8-4152-9578-ddad8aef2a27"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#5bb81c51-4ac6-4bbf-b2d8-3d3985be5356">
+			<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+			<vCard:N rdf:resource="rdf:#1ff5772c-c3e1-4875-a340-3ff399763ab5"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#bfc42ecb-13fc-4e88-a4d4-73dceb825dd7">
+			<rdf:type rdf:resource="http://www.cellml.org/bqs/1.0#Person"/>
+			<vCard:N rdf:resource="rdf:#c65102ad-4c65-47cf-801d-025a809b3622"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="#hsp">
+			<dcterms:alternative>O-phospho-homoserine</dcterms:alternative>
+			<dc:title>hsp</dc:title>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#fcc8036b-2a3f-4d3c-a81e-12d4d6fa06af">
+			<dc:creator rdf:resource="rdf:#20a58aa2-0556-438c-9ece-2cea7f37e6ef"/>
+			<rdf:value>This is the CellML description of Chassagnole et al's 2001 model of 
+          the Threonine-synthesis pathway in Escherichia coli.</rdf:value>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#d82d6589-22e3-49cb-8b5b-953a182a87f2">
+			<dc:creator rdf:resource="rdf:#95e4d9a9-2c72-4107-9a92-292ef1a4a3a0"/>
+			<rdf:value/>
+		</rdf:Description>
+		<rdf:Description rdf:about="#Asp">
+			<dcterms:alternative>aspartate</dcterms:alternative>
+			<dc:title>Asp</dc:title>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#4def30e0-b812-4494-8fe3-c9d33232f436">
+			<dcterms:W3CDTF>2009-05-29T14:33:21+12:00</dcterms:W3CDTF>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#ae03f37f-54bf-4445-ae0d-3bbe8073443d">
+			<vCard:Given>Badr</vCard:Given>
+			<vCard:Family>Rais</vCard:Family>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#77df2ad9-851f-4c3b-9f87-6f208ea79742">
+			<dc:creator rdf:resource="rdf:#cc76a75f-f140-4ec3-a712-f7bce8fa6225"/>
+			<dc:title>An integrated study of Threonine-pathway enzyme kinetics in Escherichia coli</dc:title>
+			<bqs:volume>356</bqs:volume>
+			<bqs:first_page>415</bqs:first_page>
+			<bqs:Journal rdf:resource="rdf:#8524f636-6a4d-4b61-b067-20b209280d84"/>
+			<dcterms:issued rdf:resource="rdf:#75922d97-728e-4fb5-82bf-47ad5f792fe1"/>
+			<bqs:last_page>423</bqs:last_page>
+		</rdf:Description>
+		<rdf:Description rdf:about="rdf:#20a58aa2-0556-438c-9ece-2cea7f37e6ef">
+			<vCard:FN>Catherine Lloyd</vCard:FN>
+		</rdf:Description>
+		<rdf:Description rdf:about="#aspp">
+			<dcterms:alternative>beta_aspartyl_phosphate</dcterms:alternative>
+			<dc:title>aspp</dc:title>
+		</rdf:Description>
+	</rdf:RDF>   <units xmlns="http://www.cellml.org/cellml/1.0#" name="minute">
+      <unit units="second" multiplier="60"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="molar">
+      <unit units="mole"/>
+      <unit units="litre" exponent="-1"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="millimolar">
+      <unit units="mole" prefix="milli"/>
+      <unit units="litre" exponent="-1"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="per_molar">
+      <unit units="molar" exponent="-1"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="flux">
+      <unit units="millimolar"/>
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="first_order_rate_constant">
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <units xmlns="http://www.cellml.org/cellml/1.0#" name="second_order_rate_constant">
+      <unit units="millimolar" exponent="-1"/>
+      <unit units="minute" exponent="-1"/>
+   </units>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="environment">
+      <variable name="time" units="minute" public_interface="out"/>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="Asp">
+      <variable name="Asp" units="millimolar" initial_value="10" public_interface="out"/>
+      <variable name="vAKI" units="flux" public_interface="in"/>
+      <variable name="vAKIII" units="flux" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Asp</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <ci>vAKI</ci>
+               </apply>
+               <ci>vAKIII</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="aspp">
+      <variable name="aspp" units="millimolar" initial_value="0" public_interface="out"/>
+      <variable name="vAKI" units="flux" public_interface="in"/>
+      <variable name="vAKIII" units="flux" public_interface="in"/>
+      <variable name="vASD" units="flux" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>aspp</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <ci>vAKI</ci>
+                  <ci>vAKIII</ci>
+               </apply>
+               <ci>vASD</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="ASA">
+      <variable name="ASA" units="millimolar" initial_value="0" public_interface="out"/>
+      <variable name="vASD" units="flux" public_interface="in"/>
+      <variable name="vHDH" units="flux" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>ASA</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>vASD</ci>
+               <ci>vHDH</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="hs">
+      <variable name="hs" units="millimolar" initial_value="0" public_interface="out"/>
+      <variable name="vHDH" units="flux" public_interface="in"/>
+      <variable name="vHK" units="flux" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>hs</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <ci>vHDH</ci>
+               <ci>vHK</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="hsp">
+      <variable name="hsp" units="millimolar" initial_value="0" public_interface="out"/>
+      <variable name="vTS" units="flux" public_interface="in"/>
+      <variable name="vHK" units="flux" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>hsp</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <ci>vHK</ci>
+               <ci>vTS</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="Thr">
+      <variable name="Thr" units="millimolar" initial_value="0" public_interface="out"/>
+      <variable name="vTS" units="flux" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Thr</ci>
+            </apply>
+            <ci>vTS</ci>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="ATP">
+      <variable name="ATP" units="millimolar" initial_value="30" public_interface="out"/>
+      <variable name="vAKI" units="flux" public_interface="in"/>
+      <variable name="vAKIII" units="flux" public_interface="in"/>
+      <variable name="vHK" units="flux" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>ATP</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <ci>vAKI</ci>
+                  </apply>
+                  <ci>vAKIII</ci>
+               </apply>
+               <ci>vHK</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="ADP">
+      <variable name="ADP" units="millimolar" initial_value="0" public_interface="out"/>
+      <variable name="vAKI" units="flux" public_interface="in"/>
+      <variable name="vAKIII" units="flux" public_interface="in"/>
+      <variable name="vHK" units="flux" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>ADP</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <ci>vAKI</ci>
+               <ci>vAKIII</ci>
+               <ci>vHK</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="NADPH">
+      <variable name="NADPH" units="millimolar" initial_value="0" public_interface="out"/>
+      <variable name="vASD" units="flux" public_interface="in"/>
+      <variable name="vHDH" units="flux" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>NADPH</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <ci>vASD</ci>
+               </apply>
+               <ci>vHDH</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="NADP">
+      <variable name="NADP" units="millimolar" initial_value="0" public_interface="out"/>
+      <variable name="vASD" units="flux" public_interface="in"/>
+      <variable name="vHDH" units="flux" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>NADP</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <ci>vASD</ci>
+               <ci>vHDH</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="Pi">
+      <variable name="Pi" units="millimolar" initial_value="0" public_interface="out"/>
+      <variable name="vASD" units="flux" public_interface="in"/>
+      <variable name="vTS" units="flux" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Pi</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <ci>vASD</ci>
+               <ci>vTS</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="Lys">
+      <variable name="Lys" units="millimolar" initial_value="0" public_interface="out"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Lys</ci>
+            </apply>
+            <cn cellml:units="flux">0</cn>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="vAKI">
+      <variable name="vAKI" units="flux" public_interface="out"/>
+      <variable name="Asp" units="millimolar" public_interface="in"/>
+      <variable name="aspp" units="millimolar" public_interface="in"/>
+      <variable name="ATP" units="millimolar" public_interface="in"/>
+      <variable name="ADP" units="millimolar" public_interface="in"/>
+      <variable name="Thr" units="millimolar" public_interface="in"/>
+      <variable name="K_asp" units="millimolar" initial_value="0.97"/>
+      <variable name="K_ATP" units="millimolar" initial_value="0.98"/>
+      <variable name="K_aspp" units="millimolar" initial_value="0.017"/>
+      <variable name="K_ADP" units="millimolar" initial_value="0.25"/>
+      <variable name="K_iThr" units="millimolar" initial_value="0.167"/>
+      <variable name="alpha" units="dimensionless" initial_value="2.47"/>
+      <variable name="h_Thr" units="dimensionless" initial_value="4.09"/>
+      <variable name="K_eq" units="dimensionless" initial_value="0.00064"/>
+      <variable name="V_max_AK_I" units="flux" initial_value="463"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>vAKI</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>V_max_AK_I</ci>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <times/>
+                        <ci>Asp</ci>
+                        <ci>ATP</ci>
+                     </apply>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <ci>aspp</ci>
+                           <ci>ADP</ci>
+                        </apply>
+                        <ci>K_eq</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <ci>K_asp</ci>
+                           <apply>
+                              <plus/>
+                              <cn cellml:units="dimensionless">1</cn>
+                              <apply>
+                                 <power/>
+                                 <apply>
+                                    <divide/>
+                                    <ci>Thr</ci>
+                                    <ci>K_iThr</ci>
+                                 </apply>
+                                 <ci>h_Thr</ci>
+                              </apply>
+                           </apply>
+                        </apply>
+                        <apply>
+                           <plus/>
+                           <cn cellml:units="dimensionless">1</cn>
+                           <apply>
+                              <power/>
+                              <apply>
+                                 <divide/>
+                                 <ci>Thr</ci>
+                                 <apply>
+                                    <times/>
+                                    <ci>K_iThr</ci>
+                                    <ci>alpha</ci>
+                                 </apply>
+                              </apply>
+                              <ci>h_Thr</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <ci>aspp</ci>
+                           <ci>K_asp</ci>
+                        </apply>
+                        <ci>K_aspp</ci>
+                     </apply>
+                     <ci>Asp</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>K_ATP</ci>
+                        <apply>
+                           <plus/>
+                           <cn cellml:units="dimensionless">1</cn>
+                           <apply>
+                              <divide/>
+                              <ci>ADP</ci>
+                              <ci>K_ADP</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <ci>ATP</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="vASD">
+      <variable name="vASD" units="flux" public_interface="out"/>
+      <variable name="aspp" units="millimolar" public_interface="in"/>
+      <variable name="ASA" units="millimolar" public_interface="in"/>
+      <variable name="NADPH" units="millimolar" public_interface="in"/>
+      <variable name="NADP" units="millimolar" public_interface="in"/>
+      <variable name="Pi" units="millimolar" public_interface="in"/>
+      <variable name="K_aspp" units="millimolar" initial_value="0.022"/>
+      <variable name="K_NADPH" units="millimolar" initial_value="0.029"/>
+      <variable name="K_ASA" units="millimolar" initial_value="0.11"/>
+      <variable name="K_NADP" units="millimolar" initial_value="0.144"/>
+      <variable name="K_Pi" units="millimolar" initial_value="10.2"/>
+      <variable name="K_eq" units="millimolar" initial_value="284000"/>
+      <variable name="V_max_ASD" units="flux" initial_value="598"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>vASD</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>V_max_ASD</ci>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <times/>
+                        <ci>aspp</ci>
+                        <ci>NADPH</ci>
+                     </apply>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <ci>ASA</ci>
+                           <ci>NADP</ci>
+                           <ci>Pi</ci>
+                        </apply>
+                        <ci>K_eq</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>K_aspp</ci>
+                        <apply>
+                           <plus/>
+                           <cn cellml:units="dimensionless">1</cn>
+                           <apply>
+                              <divide/>
+                              <ci>ASA</ci>
+                              <ci>K_ASA</ci>
+                           </apply>
+                        </apply>
+                        <apply>
+                           <plus/>
+                           <cn cellml:units="dimensionless">1</cn>
+                           <apply>
+                              <divide/>
+                              <ci>Pi</ci>
+                              <ci>K_Pi</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <ci>aspp</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>K_NADPH</ci>
+                        <apply>
+                           <plus/>
+                           <cn cellml:units="dimensionless">1</cn>
+                           <apply>
+                              <divide/>
+                              <ci>NADP</ci>
+                              <ci>K_NADP</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <ci>NADPH</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="vHDH">
+      <variable name="vHDH" units="flux" public_interface="out"/>
+      <variable name="ASA" units="millimolar" public_interface="in"/>
+      <variable name="hs" units="millimolar" public_interface="in"/>
+      <variable name="NADPH" units="millimolar" public_interface="in"/>
+      <variable name="NADP" units="millimolar" public_interface="in"/>
+      <variable name="Thr" units="millimolar" public_interface="in"/>
+      <variable name="K_ASA" units="millimolar" initial_value="0.24"/>
+      <variable name="K_NADPH" units="millimolar" initial_value="0.037"/>
+      <variable name="K_hs" units="millimolar" initial_value="3.39"/>
+      <variable name="K_NADP" units="millimolar" initial_value="0.067"/>
+      <variable name="K_iThr" units="millimolar" initial_value="0.097"/>
+      <variable name="alpha" units="dimensionless" initial_value="3.93"/>
+      <variable name="h" units="dimensionless" initial_value="1.41"/>
+      <variable name="K_eq" units="dimensionless" initial_value="100000000000"/>
+      <variable name="V_max_HDH" units="flux" initial_value="2585"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>vHDH</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>V_max_HDH</ci>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <times/>
+                        <ci>ASA</ci>
+                        <ci>NADPH</ci>
+                     </apply>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <ci>hs</ci>
+                           <ci>NADP</ci>
+                        </apply>
+                        <ci>K_eq</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <apply>
+                           <power/>
+                           <apply>
+                              <divide/>
+                              <ci>Thr</ci>
+                              <ci>K_iThr</ci>
+                           </apply>
+                           <ci>h</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless">1</cn>
+                        <apply>
+                           <power/>
+                           <apply>
+                              <divide/>
+                              <ci>Thr</ci>
+                              <apply>
+                                 <times/>
+                                 <ci>alpha</ci>
+                                 <ci>K_iThr</ci>
+                              </apply>
+                           </apply>
+                           <ci>h</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>K_ASA</ci>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <ci>hs</ci>
+                           <ci>K_ASA</ci>
+                        </apply>
+                        <ci>K_hs</ci>
+                     </apply>
+                     <ci>ASA</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>K_NADPH</ci>
+                        <apply>
+                           <plus/>
+                           <cn cellml:units="dimensionless">1</cn>
+                           <apply>
+                              <divide/>
+                              <ci>NADP</ci>
+                              <ci>K_NADP</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <ci>NADPH</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="vHK">
+      <variable name="vHK" units="flux" public_interface="out"/>
+      <variable name="hs" units="millimolar" public_interface="in"/>
+      <variable name="ATP" units="millimolar" public_interface="in"/>
+      <variable name="Thr" units="millimolar" public_interface="in"/>
+      <variable name="Lys" units="millimolar" public_interface="in"/>
+      <variable name="K_hs" units="millimolar" initial_value="0.11"/>
+      <variable name="K_ATP" units="millimolar" initial_value="0.072"/>
+      <variable name="K_iThr" units="millimolar" initial_value="1.09"/>
+      <variable name="K_iLys" units="millimolar" initial_value="9.45"/>
+      <variable name="K_ihs" units="millimolar" initial_value="4.7"/>
+      <variable name="K_iATP" units="millimolar" initial_value="4.35"/>
+      <variable name="V_max_HK" units="flux" initial_value="483"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>vHK</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>V_max_HK</ci>
+                  <ci>hs</ci>
+                  <ci>ATP</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <ci>K_hs</ci>
+                           <apply>
+                              <plus/>
+                              <cn cellml:units="dimensionless">1</cn>
+                              <apply>
+                                 <divide/>
+                                 <ci>ATP</ci>
+                                 <ci>K_iATP</ci>
+                              </apply>
+                           </apply>
+                        </apply>
+                        <apply>
+                           <plus/>
+                           <cn cellml:units="dimensionless">1</cn>
+                           <apply>
+                              <divide/>
+                              <ci>Thr</ci>
+                              <ci>K_iThr</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <ci>hs</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>K_ATP</ci>
+                        <apply>
+                           <plus/>
+                           <cn cellml:units="dimensionless">1</cn>
+                           <apply>
+                              <divide/>
+                              <ci>hs</ci>
+                              <ci>K_ihs</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <ci>ATP</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <cn cellml:units="dimensionless">1</cn>
+                     <apply>
+                        <divide/>
+                        <ci>Lys</ci>
+                        <ci>K_iLys</ci>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="vTS">
+      <variable name="vTS" units="flux" public_interface="out"/>
+      <variable name="hsp" units="millimolar" public_interface="in"/>
+      <variable name="K_hsp" units="millimolar" initial_value="0.31"/>
+      <variable name="V_max_TS" units="flux" initial_value="208"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>vTS</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>V_max_TS</ci>
+                  <ci>hsp</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <ci>K_hsp</ci>
+                  <ci>hsp</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component xmlns="http://www.cellml.org/cellml/1.0#" name="vAKIII">
+      <variable name="vAKIII" units="flux" public_interface="out"/>
+      <variable name="Asp" units="millimolar" public_interface="in"/>
+      <variable name="aspp" units="millimolar" public_interface="in"/>
+      <variable name="ATP" units="millimolar" public_interface="in"/>
+      <variable name="ADP" units="millimolar" public_interface="in"/>
+      <variable name="Lys" units="millimolar" public_interface="in"/>
+      <variable name="K_asp" units="millimolar" initial_value="0.32"/>
+      <variable name="K_ATP" units="millimolar" initial_value="0.22"/>
+      <variable name="K_aspp" units="millimolar" initial_value="0.017"/>
+      <variable name="K_ADP" units="millimolar" initial_value="0.25"/>
+      <variable name="K_iLys" units="millimolar" initial_value="0.391"/>
+      <variable name="h_Lys" units="dimensionless" initial_value="2.8"/>
+      <variable name="K_eq" units="dimensionless" initial_value="0.00064"/>
+      <variable name="V_max_AK_III" units="flux" initial_value="299"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>vAKIII</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <ci>V_max_AK_III</ci>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <times/>
+                        <ci>Asp</ci>
+                        <ci>ATP</ci>
+                     </apply>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <ci>aspp</ci>
+                           <ci>ADP</ci>
+                        </apply>
+                        <ci>K_eq</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <apply>
+                     <plus/>
+                     <cn cellml:units="dimensionless">1</cn>
+                     <apply>
+                        <power/>
+                        <apply>
+                           <divide/>
+                           <ci>Lys</ci>
+                           <ci>K_iLys</ci>
+                        </apply>
+                        <ci>h_Lys</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>K_asp</ci>
+                        <apply>
+                           <plus/>
+                           <cn cellml:units="dimensionless">1</cn>
+                           <apply>
+                              <divide/>
+                              <ci>aspp</ci>
+                              <ci>K_aspp</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <ci>Asp</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>K_ATP</ci>
+                        <apply>
+                           <plus/>
+                           <cn cellml:units="dimensionless">1</cn>
+                           <apply>
+                              <divide/>
+                              <ci>ADP</ci>
+                              <ci>K_ADP</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <ci>ATP</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="Asp" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="aspp" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="ASA" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="hs" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="hsp" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="Thr" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="ATP" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="ADP" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="NADP" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="NADPH" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="Pi" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="Lys" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="Asp" component_2="vAKI"/>
+      <map_variables variable_1="Asp" variable_2="Asp"/>
+      <map_variables variable_1="vAKI" variable_2="vAKI"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="aspp" component_2="vAKI"/>
+      <map_variables variable_1="aspp" variable_2="aspp"/>
+      <map_variables variable_1="vAKI" variable_2="vAKI"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="Thr" component_2="vAKI"/>
+      <map_variables variable_1="Thr" variable_2="Thr"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="ATP" component_2="vAKI"/>
+      <map_variables variable_1="ATP" variable_2="ATP"/>
+      <map_variables variable_1="vAKI" variable_2="vAKI"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="ADP" component_2="vAKI"/>
+      <map_variables variable_1="ADP" variable_2="ADP"/>
+      <map_variables variable_1="vAKI" variable_2="vAKI"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="aspp" component_2="vASD"/>
+      <map_variables variable_1="aspp" variable_2="aspp"/>
+      <map_variables variable_1="vASD" variable_2="vASD"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="ASA" component_2="vASD"/>
+      <map_variables variable_1="ASA" variable_2="ASA"/>
+      <map_variables variable_1="vASD" variable_2="vASD"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="Pi" component_2="vASD"/>
+      <map_variables variable_1="Pi" variable_2="Pi"/>
+      <map_variables variable_1="vASD" variable_2="vASD"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="Pi" component_2="vTS"/>
+      <map_variables variable_1="vTS" variable_2="vTS"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="NADPH" component_2="vASD"/>
+      <map_variables variable_1="NADPH" variable_2="NADPH"/>
+      <map_variables variable_1="vASD" variable_2="vASD"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="NADP" component_2="vASD"/>
+      <map_variables variable_1="NADP" variable_2="NADP"/>
+      <map_variables variable_1="vASD" variable_2="vASD"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="ASA" component_2="vHDH"/>
+      <map_variables variable_1="ASA" variable_2="ASA"/>
+      <map_variables variable_1="vHDH" variable_2="vHDH"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="hs" component_2="vHDH"/>
+      <map_variables variable_1="hs" variable_2="hs"/>
+      <map_variables variable_1="vHDH" variable_2="vHDH"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="Thr" component_2="vHDH"/>
+      <map_variables variable_1="Thr" variable_2="Thr"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="Thr" component_2="vTS"/>
+      <map_variables variable_1="vTS" variable_2="vTS"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="NADPH" component_2="vHDH"/>
+      <map_variables variable_1="NADPH" variable_2="NADPH"/>
+      <map_variables variable_1="vHDH" variable_2="vHDH"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="NADP" component_2="vHDH"/>
+      <map_variables variable_1="NADP" variable_2="NADP"/>
+      <map_variables variable_1="vHDH" variable_2="vHDH"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="hs" component_2="vHK"/>
+      <map_variables variable_1="hs" variable_2="hs"/>
+      <map_variables variable_1="vHK" variable_2="vHK"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="Thr" component_2="vHK"/>
+      <map_variables variable_1="Thr" variable_2="Thr"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="Lys" component_2="vHK"/>
+      <map_variables variable_1="Lys" variable_2="Lys"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="ATP" component_2="vHK"/>
+      <map_variables variable_1="ATP" variable_2="ATP"/>
+      <map_variables variable_1="vHK" variable_2="vHK"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="ADP" component_2="vHK"/>
+      <map_variables variable_1="vHK" variable_2="vHK"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="hsp" component_2="vTS"/>
+      <map_variables variable_1="hsp" variable_2="hsp"/>
+      <map_variables variable_1="vTS" variable_2="vTS"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="hsp" component_2="vHK"/>
+      <map_variables variable_1="vHK" variable_2="vHK"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="Asp" component_2="vAKIII"/>
+      <map_variables variable_1="Asp" variable_2="Asp"/>
+      <map_variables variable_1="vAKIII" variable_2="vAKIII"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="aspp" component_2="vAKIII"/>
+      <map_variables variable_1="aspp" variable_2="aspp"/>
+      <map_variables variable_1="vAKIII" variable_2="vAKIII"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="Lys" component_2="vAKIII"/>
+      <map_variables variable_1="Lys" variable_2="Lys"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="ATP" component_2="vAKIII"/>
+      <map_variables variable_1="ATP" variable_2="ATP"/>
+      <map_variables variable_1="vAKIII" variable_2="vAKIII"/>
+   </connection>
+   <connection xmlns="http://www.cellml.org/cellml/1.0#">
+      <map_components component_1="ADP" component_2="vAKIII"/>
+      <map_variables variable_1="ADP" variable_2="ADP"/>
+      <map_variables variable_1="vAKIII" variable_2="vAKIII"/>
+   </connection>
+</model>

@@ -1,0 +1,511 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" cmeta:id="morris_1981" name="morris_1981">
+
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Voltage oscillations in the barnacle giant muscle fiber</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+     <section id="sec_status">
+    <title>Model Status</title>
+    <para>This CellML model represents the complete model (equations 1 and 2) with parameters values taken from the legend of figure 6.  The model runs in both OpenCell and COR, and the units are consistent, however it does not replicate the published results (figure 6).
+</para>
+  </section>
+  <sect1 id="sec_structure">
+<title>Model Structure</title>
+
+<para>
+ABSTRACT: Barnacle muscle fibers subjected to constant current stimulation produce a variety of types of oscillatory behavior when the internal medium contains the Ca++ chelator EGTA. Oscillations are abolished if Ca++ is removed from the external medium, or if the K+ conductance is blocked. Available voltage-clamp data indicate that the cell's active conductance systems are exceptionally simple. Given the complexity of barnacle fiber voltage behavior, this seems paradoxical. This paper presents an analysis of the possible modes of behavior available to a system of two noninactivating conductance mechanisms, and indicates a good correspondence to the types of behavior exhibited by barnacle fiber. The differential equations of a simple equivalent circuit for the fiber are dealt with by means of some of the mathematical techniques of nonlinear mechanics. General features of the system are (a) a propensity to produce damped or sustained oscillations over a rather broad parameter range, and (b) considerable latitude in the shape of the oscillatory potentials. It is concluded that for cells subject to changeable parameters (either from cell to cell or with time during cellular activity), a system dominated by two noninactivating conductances can exhibit varied oscillatory and bistable behavior.
+</para>
+
+<para>
+The original paper reference is cited below:
+</para>
+
+<para>
+Voltage oscillations in the barnacle giant muscle fiber, Morris C and Lecar H, 1981, <emphasis>Biophysical Journal</emphasis>, 35, 193-213. <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/7260316">PubMed ID: 7260316</ulink> 
+</para>
+
+<informalfigure float="0" id="fig_reaction_diagram">
+<mediaobject>
+  <imageobject>
+    <imagedata fileref="morris_1981.png"/>
+  </imageobject>
+</mediaobject>
+<caption>Schematic diagrams of the cell model.</caption>
+
+</informalfigure>
+
+</sect1>
+</article>
+</documentation>
+    
+  
+   <units name="millisecond">
+      <unit prefix="milli" units="second"/>
+   </units>
+   
+   <units name="per_millisecond">
+      <unit exponent="-1" units="millisecond"/>
+   </units>
+   
+   <units name="millivolt">
+      <unit prefix="milli" units="volt"/>
+   </units>
+   
+   <units name="microF_per_cm2">
+      <unit prefix="micro" units="farad"/>
+	  <unit prefix="centi" units="metre" exponent="-2" />
+   </units>
+   
+   <units name="microA_per_cm2">
+      <unit prefix="micro" units="ampere"/>
+	  <unit prefix="centi" units="metre" exponent="-2" />
+   </units>
+   
+   <units name="milliS_per_cm2">
+      <unit prefix="milli" units="siemens"/>
+	  <unit prefix="centi" units="metre" exponent="-2" />
+   </units>
+   
+   
+   
+   <component name="environment">
+      <variable name="time" public_interface="out" units="millisecond"/>
+   </component>
+   
+   <component name="V">
+      <variable initial_value="-50" name="V" public_interface="out" units="millivolt"/>
+      
+	  <variable initial_value="20.0" name="C" units="microF_per_cm2"/>
+      <variable initial_value="540.0" name="i_app" units="microA_per_cm2"/>
+      
+	  <variable name="i_L" public_interface="in" units="microA_per_cm2"/>
+      <variable name="i_Ca" public_interface="in" units="microA_per_cm2"/>
+      <variable name="i_K" public_interface="in" units="microA_per_cm2"/>
+	  <variable name="time" public_interface="in" units="millisecond"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>V</ci>
+            </apply>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <ci>i_app</ci>
+				  <apply>
+                     <plus/>
+                     <ci>i_L</ci>
+                     <ci>i_Ca</ci>
+                     <ci>i_K</ci>
+                  </apply>
+               </apply>
+               <ci>C</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+  
+   <component name="i_L">
+      <variable name="i_L" public_interface="out" units="microA_per_cm2"/>
+      
+	  <variable initial_value="2.0" name="g_L" units="milliS_per_cm2"/>
+	  <variable initial_value="-50.00" name="E_L" units="millivolt"/>
+      
+	  <variable units="millivolt" public_interface="in" name="V"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>i_L</ci>
+            <apply>
+               <times/>
+               <ci>g_L</ci>
+               <apply>
+                  <minus/>
+                  <ci>V</ci>
+                  <ci>E_L</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="i_Ca">
+      <variable units="microA_per_cm2" public_interface="out" name="i_Ca"/>
+      
+	  <variable units="millivolt" name="E_Ca" initial_value="100.0"/>
+      <variable units="milliS_per_cm2" name="g_Ca" initial_value="4.0"/>
+      
+	  <variable units="millisecond" public_interface="in" private_interface="out" name="time"/>
+      <variable units="millivolt" public_interface="in" private_interface="out" name="V"/>
+      
+	  <variable units="dimensionless" private_interface="in" name="m"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>i_Ca</ci>
+            <apply>
+               <times/>
+               <ci>g_Ca</ci>
+               <ci>m</ci>
+               <apply>
+                  <minus/>
+                  <ci>V</ci>
+                  <ci>E_Ca</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="i_Ca_m_gate">
+      <variable units="dimensionless" public_interface="out" name="m" initial_value="0.1"/>
+      
+	  <variable units="dimensionless" name="m_infinity"/>
+      <variable units="per_millisecond" name="lambda_m"/>
+	  <variable units="per_millisecond" name="lambda_m_bar" initial_value="1.0"/>
+      <variable units="millivolt" name="V1" initial_value="0.0"/>
+	  <variable units="millivolt" name="V2" initial_value="15.0"/>
+	  
+	  <variable units="millivolt" public_interface="in" name="V"/>
+      <variable units="millisecond" public_interface="in" name="time"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>m_infinity</ci>
+            <apply>
+               <times/>
+               <cn cellml:units="dimensionless">0.5</cn>
+			   <apply>
+                  <plus/>
+                  <cn cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <tanh/>
+                     <apply>
+                        <divide/>
+						<apply>
+                           <minus/>
+						   <ci>V</ci>
+						   <ci>V1</ci>
+                        </apply>
+						<ci>V2</ci>
+                     </apply>
+				  </apply>
+               </apply>
+            </apply>
+         </apply>
+         
+		 <apply>
+            <eq/>
+            <ci>lambda_m</ci>
+            <apply>
+               <times/>
+               <ci>lambda_m_bar</ci>
+               <apply>
+                  <cosh/>
+                  <apply>
+                     <divide/>
+				     <apply>
+                        <minus/>
+						<ci>V</ci>
+						<ci>V1</ci>
+                     </apply>
+					 <apply>
+                        <times/>
+                        <cn cellml:units="dimensionless">2</cn>
+						<ci>V2</ci>
+                     </apply>               
+				  </apply>
+			   </apply>
+            </apply>
+         </apply>
+         
+		 <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>m</ci>
+            </apply>
+            <apply>
+               <times/>
+               <ci>lambda_m</ci>
+               <apply>
+                  <minus/>
+                  <ci>m_infinity</ci>
+				  <ci>m</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="i_K">
+      <variable units="microA_per_cm2" public_interface="out" name="i_K"/>
+      
+	  <variable units="millivolt" name="E_K" initial_value="-70.0"/>
+      <variable units="milliS_per_cm2" name="g_K" initial_value="8.0"/>
+      
+	  <variable units="millisecond" public_interface="in" private_interface="out" name="time"/>
+      <variable units="millivolt" public_interface="in" private_interface="out" name="V"/>
+      
+	  <variable units="dimensionless" private_interface="in" name="n"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>i_K</ci>
+            <apply>
+               <times/>
+               <ci>g_K</ci>
+               <ci>n</ci>
+               <apply>
+                  <minus/>
+                  <ci>V</ci>
+                  <ci>E_K</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   
+   <component name="i_K_n_gate">
+      <variable units="dimensionless" public_interface="out" name="n" initial_value="0.1"/>
+      
+	  <variable units="dimensionless" name="n_infinity"/>
+      <variable units="per_millisecond" name="lambda_n"/>
+	  <variable units="per_millisecond" name="lambda_n_bar" initial_value="0.1"/>
+      <variable units="millivolt" name="V3" initial_value="10.0"/>
+	  <variable units="millivolt" name="V4" initial_value="10.0"/>
+	  
+	  <variable units="millivolt" public_interface="in" name="V"/>
+      <variable units="millisecond" public_interface="in" name="time"/>
+      
+	  <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>n_infinity</ci>
+            <apply>
+               <times/>
+               <cn cellml:units="dimensionless">0.5</cn>
+			   <apply>
+                  <plus/>
+                  <cn cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <tanh/>
+                     <apply>
+                        <divide/>
+						<apply>
+                           <minus/>
+						   <ci>V</ci>
+						   <ci>V3</ci>
+                        </apply>
+						<ci>V4</ci>
+                     </apply>
+				  </apply>
+               </apply>
+            </apply>
+         </apply>
+         
+		 <apply>
+            <eq/>
+            <ci>lambda_n</ci>
+            <apply>
+               <times/>
+               <ci>lambda_n_bar</ci>
+               <apply>
+                  <cosh/>
+                  <apply>
+                     <divide/>
+				     <apply>
+                        <minus/>
+						<ci>V</ci>
+						<ci>V3</ci>
+                     </apply>
+					 <apply>
+                        <times/>
+                        <cn cellml:units="dimensionless">2</cn>
+						<ci>V4</ci>
+                     </apply>               
+				  </apply>
+			   </apply>
+            </apply>
+         </apply>
+         
+		 <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>n</ci>
+            </apply>
+            <apply>
+               <times/>
+               <ci>lambda_n</ci>
+               <apply>
+                  <minus/>
+                  <ci>n_infinity</ci>
+				  <ci>n</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+
+   <group>
+      <relationship_ref relationship="encapsulation"/>
+      <component_ref component="i_Ca">
+         <component_ref component="i_Ca_m_gate"/>
+      </component_ref>
+      <component_ref component="i_K">
+         <component_ref component="i_K_n_gate"/>
+      </component_ref>
+   </group>
+   
+   <connection>
+      <map_components component_2="environment" component_1="V"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="environment" component_1="i_Ca"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+  
+   <connection>
+      <map_components component_2="environment" component_1="i_K"/>
+      <map_variables variable_2="time" variable_1="time"/>
+   </connection>
+
+   <connection>
+      <map_components component_2="V" component_1="i_L"/>
+      <map_variables variable_2="V" variable_1="V"/>
+      <map_variables variable_2="i_L" variable_1="i_L"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="V" component_1="i_Ca"/>
+      <map_variables variable_2="V" variable_1="V"/>
+      <map_variables variable_2="i_Ca" variable_1="i_Ca"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="V" component_1="i_K"/>
+      <map_variables variable_2="V" variable_1="V"/>
+      <map_variables variable_2="i_K" variable_1="i_K"/>
+   </connection>
+
+   <connection>
+      <map_components component_2="i_Ca_m_gate" component_1="i_Ca"/>
+      <map_variables variable_2="m" variable_1="m"/>
+      <map_variables variable_2="time" variable_1="time"/>
+      <map_variables variable_2="V" variable_1="V"/>
+   </connection>
+   
+   <connection>
+      <map_components component_2="i_K_n_gate" component_1="i_K"/>
+      <map_variables variable_2="n" variable_1="n"/>
+      <map_variables variable_2="time" variable_1="time"/>
+      <map_variables variable_2="V" variable_1="V"/>
+   </connection>
+
+   
+   
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
+    
+	<rdf:Description rdf:about="">
+         <dc:title>
+            Voltage oscillations in the barnacle giant muscle fiber: complete model
+          </dc:title>
+		  <dc:creator rdf:parseType="Resource">
+        <vCard:N rdf:parseType="Resource">
+          <vCard:Family>Lloyd</vCard:Family>
+          <vCard:Given>Catherine</vCard:Given>
+		  <vCard:Other>May</vCard:Other>
+        </vCard:N>
+        <vCard:EMAIL rdf:parseType="Resource">
+          <rdf:value>c.lloyd@auckland.ac.nz</rdf:value>
+          <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+        </vCard:EMAIL>
+        <vCard:ORG rdf:parseType="Resource">
+          <vCard:Orgname>The University of Auckland</vCard:Orgname>
+          <vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+        </vCard:ORG>
+      </dc:creator>
+    </rdf:Description>
+    
+    <rdf:Description rdf:about="#morris_1981">
+      <bqs:reference rdf:parseType="Resource">
+        <dc:subject rdf:parseType="Resource">
+          <bqs:subject_type>keyword</bqs:subject_type>
+          <rdf:value>
+            <rdf:Bag>
+              <rdf:li>electrophysiology</rdf:li>
+			  <rdf:li>muscle fibre</rdf:li>
+            </rdf:Bag>
+          </rdf:value>
+        </dc:subject>
+      </bqs:reference>
+
+      <bqs:reference rdf:parseType="Resource">
+        <bqs:Pubmed_id>7260316</bqs:Pubmed_id>
+        <bqs:JournalArticle rdf:parseType="Resource">
+          <dc:creator>
+            <rdf:Seq>
+              <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Morris</vCard:Family>
+                    <vCard:Given>C</vCard:Given>
+				  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+			  <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Lecar</vCard:Family>
+                    <vCard:Given>H</vCard:Given>
+				  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+            </rdf:Seq>
+          </dc:creator>
+          <dc:title>
+            Voltage oscillations in the barnacle giant muscle fiber
+          </dc:title>
+          <dcterms:issued rdf:parseType="Resource">
+            <dcterms:W3CDTF>1981-07</dcterms:W3CDTF>
+          </dcterms:issued>
+          <bqs:Journal rdf:parseType="Resource">
+            <dc:title>Biophysical Journal</dc:title>
+          </bqs:Journal>
+		  <bqs:volume>35</bqs:volume>
+          <bqs:first_page>193</bqs:first_page>
+          <bqs:last_page>213</bqs:last_page>
+        </bqs:JournalArticle>
+      </bqs:reference>
+    </rdf:Description>
+  </rdf:RDF>
+</model>

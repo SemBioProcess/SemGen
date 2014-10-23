@@ -1,0 +1,3142 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<model xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" name="csikasz_nagy_2006" cmeta:id="csikasz_nagy_2006" xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#">
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>Analysis of a Generic Model of Eukaryotic Cell-Cycle Regulation</title>
+				<author>
+					<firstname>Catherine</firstname>
+					<surname>Lloyd</surname>
+					<affiliation>
+						<shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<section id="sec_status">
+				<title>Model Status</title>
+				<para>
+            This CellML model represents the budding yeast model taken from the original model code.  This CellML model represents the budding yeast model taken from the original published paper.  The model runs in both PCEnv and COR but does not replicate the published results.  This may be because of the cell division event which we are currently unable to express in CellML.  The units have been checked and they are consistent.
+          </para>
+			</section>
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>
+ABSTRACT: We propose a protein interaction network for the regulation of DNA synthesis and mitosis that emphasizes the 
+universality of the regulatory system among eukaryotic cells. The idiosyncrasies of cell cycle regulation in particular organisms 
+can be attributed, we claim, to specific settings of rate constants in the dynamic network of chemical reactions. The values of 
+these rate constants are determined ultimately by the genetic makeup of an organism. To support these claims, we convert the 
+reaction mechanism into a set of governing kinetic equations and provide parameter values (specific to budding yeast, fission 
+yeast, frog eggs, and mammalian cells) that account for many curious features of cell cycle regulation in these organisms. Using 
+one-parameter bifurcation diagrams, we show how overall cell growth drives progression through the cell cycle, how cell-size 
+homeostasis can be achieved by two different strategies, and how mutations remodel bifurcation diagrams and create unusual 
+cell-division phenotypes. The relation between gene dosage and phenotype can be summarized compactly in two-parameter 
+bifurcation diagrams. Our approach provides a theoretical framework in which to understand both the universality and 
+particularity of cell cycle regulation, and to construct, in modular fashion, increasingly complex models of the networks 
+controlling cell growth and division.
+</para>
+				
+				<para>
+The original paper reference is cited below:
+</para>
+				<para>
+					Analysis of a Generic Model of Eukaryotic Cell-Cycle Regulation, Attila Csikasz-Nagy, Dorjsuren Battogtokh, Katherine C. Chen, Bela Novak, and John J. Tyson, 2006,
+						<emphasis>Biophysical Journal</emphasis>, 90, 4361-4379.  <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/16581849">PubMed ID: 16581849</ulink>
+				</para>
+				
+				<informalfigure float="0" id="fig_reaction_diagram">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>reaction diagram</title>
+							</objectinfo>
+							<imagedata fileref="csikasz_nagy_2006.png"/>
+						</imageobject>
+						<caption>
+Wiring diagram of the generic cell-cycle regulatory network. Chemical reactions (solid lines), regulatory effects (dashed lines); a protein sitting on a reaction arrow represents an enzyme catalyst of the reaction. Regulatory modules of the system are distinguished by shaded backgrounds: (1) exit of M module, (2) Cdh1 module, (3) CycB transcription factor, (4) CycB synthesis/degradation, (5) G2 module, (6) CycB inhibition by CKI (also includes the binding of phosphorylated CycB, if that is present), (7) CKI transcription factor, (8) CKI synthesis/ degradation, (9) CycE inhibition by CKI, (10) CycE synthesis/degradation, (11) CycE/A transcription factor, (12) CycA inhibition by CKI, (13) CycA synthesis/degradation. An asterisk by the name represents active form of regulated protein; gray rectangles behind cyclins represent their Cdk partners. It is assumed that all Cdk subunits are present in constant, excess amounts. </caption>
+					</mediaobject>
+				</informalfigure>
+			</sect1>
+		</article>
+	</documentation>
+   
+   <units name="minute">
+      <unit units="second" multiplier="60"/>
+   </units>
+   <units name="first_order_rate_constant">
+      <unit units="minute" exponent="-1"/>
+   </units>
+  
+   <component name="environment">
+      <variable name="time" units="minute" public_interface="out"/>
+   </component>
+   
+   <component name="CycA">
+      <variable name="CycA" units="dimensionless" initial_value="0.09450308233499527" public_interface="out"/>
+      <variable name="k_assa" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_dissa" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_di" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_sa" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_da" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="Tri_A" units="dimensionless" public_interface="in"/>
+      <variable name="CKI" units="dimensionless" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>CycA</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>k_dissa</ci>
+                        <ci>Tri_A</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>V_di</ci>
+                        <ci>Tri_A</ci>
+                     </apply>
+                     <ci>V_sa</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>V_da</ci>
+                     <ci>CycA</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_assa</ci>
+                  <ci>CKI</ci>
+                  <ci>CycA</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="CycB">
+      <variable name="CycB" units="dimensionless" initial_value="0.1903585940599442" public_interface="out"/>
+      <variable name="k_assb" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_dissb" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_sb" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_db" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_25" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_wee" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_di" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="pB" units="dimensionless" public_interface="in"/>
+      <variable name="CKI" units="dimensionless" public_interface="in"/>
+      <variable name="BCKI" units="dimensionless" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>CycB</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <minus/>
+                           <ci>V_sb</ci>
+                           <apply>
+                              <times/>
+                              <ci>V_db</ci>
+                              <ci>CycB</ci>
+                           </apply>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>V_25</ci>
+                           <ci>pB</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>V_wee</ci>
+                        <ci>CycB</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_assb</ci>
+                     <ci>CycB</ci>
+                     <ci>CKI</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_dissb</ci>
+                  <ci>BCKI</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>V_di</ci>
+                  <ci>BCKI</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="CycE">
+      <variable name="CycE" units="dimensionless" initial_value="0.2092024385929108" public_interface="out"/>
+      <variable name="k_disse" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_asse" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_di" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_se" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_de" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="Tri_E" units="dimensionless" public_interface="in"/>
+      <variable name="CKI" units="dimensionless" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>CycE</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <times/>
+                        <ci>k_disse</ci>
+                        <ci>Tri_E</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>V_di</ci>
+                        <ci>Tri_E</ci>
+                     </apply>
+                     <ci>V_se</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>V_de</ci>
+                     <ci>CycE</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_asse</ci>
+                  <ci>CKI</ci>
+                  <ci>CycE</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="CycD">
+      <variable name="CycD" units="dimensionless" public_interface="out"/>
+      <variable name="CycD_0" units="dimensionless" initial_value="0.108"/>
+      <variable name="mass" units="dimensionless" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>CycD</ci>
+            <apply>
+               <times/>
+               <ci>CycD_0</ci>
+               <ci>mass</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Cdc20_A">
+      <variable name="Cdc20_A" units="dimensionless" initial_value="0.3572723865509033" public_interface="out"/>
+      <variable name="k_a20" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_i20" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_d20" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="APCP" units="dimensionless" public_interface="in"/>
+      <variable name="Cdc20_i" units="dimensionless" public_interface="in"/>
+      <variable name="J_a20" units="dimensionless" initial_value="1"/>
+      <variable name="J_i20" units="dimensionless" initial_value="1"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Cdc20_A</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>k_a20</ci>
+                        <ci>APCP</ci>
+                        <ci>Cdc20_i</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci>J_a20</ci>
+                        <ci>Cdc20_i</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>Cdc20_A</ci>
+                        <ci>k_i20</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci>J_i20</ci>
+                        <ci>Cdc20_A</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>Cdc20_A</ci>
+                  <ci>k_d20</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Cdc20_i">
+      <variable name="Cdc20_i" units="dimensionless" initial_value="0.7702387571334839" public_interface="out"/>
+      <variable name="Cdc20_A" units="dimensionless" public_interface="in"/>
+      <variable name="k_a20" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_i20" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_d20" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_s20p" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_s20pp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="CycB" units="dimensionless" public_interface="in"/>
+      <variable name="APCP" units="dimensionless" public_interface="in"/>
+      <variable name="n20" units="dimensionless" initial_value="1"/>
+      <variable name="J_20" units="dimensionless" initial_value="10"/>
+      <variable name="J_a20" units="dimensionless" initial_value="1"/>
+      <variable name="J_i20" units="dimensionless" initial_value="1"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Cdc20_i</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <plus/>
+                           <ci>k_s20p</ci>
+                           <apply>
+                              <times/>
+                              <ci>k_s20pp</ci>
+                              <apply>
+                                 <power/>
+                                 <ci>CycB</ci>
+                                 <ci>n20</ci>
+                              </apply>
+                           </apply>
+                        </apply>
+                        <apply>
+                           <plus/>
+                           <apply>
+                              <power/>
+                              <ci>J_20</ci>
+                              <ci>n20</ci>
+                           </apply>
+                           <apply>
+                              <power/>
+                              <ci>CycB</ci>
+                              <ci>n20</ci>
+                           </apply>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <divide/>
+                        <apply>
+                           <times/>
+                           <ci>Cdc20_A</ci>
+                           <ci>k_i20</ci>
+                        </apply>
+                        <apply>
+                           <plus/>
+                           <ci>J_i20</ci>
+                           <ci>Cdc20_A</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_d20</ci>
+                     <ci>Cdc20_i</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>k_a20</ci>
+                     <ci>APCP</ci>
+                     <ci>Cdc20_i</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>J_a20</ci>
+                     <ci>Cdc20_i</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="APC">
+      <variable name="APC" units="dimensionless" public_interface="out"/>
+      <variable name="APCP" units="dimensionless" public_interface="in"/>
+      <variable name="APC_T" units="dimensionless" initial_value="1"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>APC</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <ci>APC_T</ci>
+                  <ci>APCP</ci>
+               </apply>
+               <cn cellml:units="dimensionless">1</cn>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="APCP">
+      <variable name="APCP" units="dimensionless" initial_value="0.07591402530670166" public_interface="out"/>
+      <variable name="k_aie" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_iie" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="CycB" units="dimensionless" public_interface="in"/>
+      <variable name="APC" units="dimensionless" public_interface="in"/>
+      <variable name="J_aie" units="dimensionless" initial_value="0.1"/>
+      <variable name="J_iie" units="dimensionless" initial_value="0.1"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>APCP</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>k_aie</ci>
+                     <ci>CycB</ci>
+                     <ci>APC</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>J_aie</ci>
+                     <ci>APC</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>k_iie</ci>
+                     <ci>APCP</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>J_iie</ci>
+                     <ci>APCP</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="pB">
+      <variable name="pB" units="dimensionless" initial_value="0.01234426256269217" public_interface="out"/>
+      <variable name="k_assb" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_dissb" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_wee" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_25" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_db" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_di" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="CycB" units="dimensionless" public_interface="in"/>
+      <variable name="CKI" units="dimensionless" public_interface="in"/>
+      <variable name="pBCKI" units="dimensionless" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>pB</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <times/>
+                           <ci>V_wee</ci>
+                           <ci>CycB</ci>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>V_db</ci>
+                           <ci>pB</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k_assb</ci>
+                        <ci>pB</ci>
+                        <ci>CKI</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_dissb</ci>
+                     <ci>pBCKI</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>V_di</ci>
+                     <ci>pBCKI</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>V_25</ci>
+                  <ci>pB</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="BCKI">
+      <variable name="BCKI" units="dimensionless" initial_value="0.679449200630188" public_interface="out"/>
+      <variable name="k_assb" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_dissb" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_wee" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_25" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_db" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_di" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="CycB" units="dimensionless" public_interface="in"/>
+      <variable name="CKI" units="dimensionless" public_interface="in"/>
+      <variable name="pBCKI" units="dimensionless" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>BCKI</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <plus/>
+                        <apply>
+                           <minus/>
+                           <apply>
+                              <times/>
+                              <ci>k_assb</ci>
+                              <ci>CycB</ci>
+                              <ci>CKI</ci>
+                           </apply>
+                           <apply>
+                              <times/>
+                              <ci>k_dissb</ci>
+                              <ci>BCKI</ci>
+                           </apply>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>V_25</ci>
+                           <ci>pBCKI</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>V_wee</ci>
+                        <ci>BCKI</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>V_db</ci>
+                     <ci>BCKI</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>V_di</ci>
+                  <ci>BCKI</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="pBCKI">
+      <variable name="pBCKI" units="dimensionless" initial_value="0.04795938357710838" public_interface="out"/>
+      <variable name="k_assb" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_dissb" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_wee" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_25" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_db" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_di" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="pB" units="dimensionless" public_interface="in"/>
+      <variable name="CKI" units="dimensionless" public_interface="in"/>
+      <variable name="BCKI" units="dimensionless" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>pBCKI</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <minus/>
+                           <apply>
+                              <times/>
+                              <ci>k_assb</ci>
+                              <ci>pB</ci>
+                              <ci>CKI</ci>
+                           </apply>
+                           <apply>
+                              <times/>
+                              <ci>k_dissb</ci>
+                              <ci>pBCKI</ci>
+                           </apply>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>V_25</ci>
+                           <ci>pBCKI</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>V_wee</ci>
+                        <ci>BCKI</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>V_db</ci>
+                     <ci>pBCKI</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>V_di</ci>
+                  <ci>pBCKI</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Tri_A">
+      <variable name="Tri_A" units="dimensionless" initial_value="0.3492224216461182" public_interface="out"/>
+      <variable name="k_assa" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_dissa" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="CycA" units="dimensionless" public_interface="in"/>
+      <variable name="CKI" units="dimensionless" public_interface="in"/>
+      <variable name="V_da" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_di" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Tri_A</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <times/>
+                        <ci>k_assa</ci>
+                        <ci>CKI</ci>
+                        <ci>CycA</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k_dissa</ci>
+                        <ci>Tri_A</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>V_di</ci>
+                     <ci>Tri_A</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>V_da</ci>
+                  <ci>Tri_A</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Tri_E">
+      <variable name="Tri_E" units="dimensionless" initial_value="0" public_interface="out"/>
+      <variable name="k_asse" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_disse" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="CycE" units="dimensionless" public_interface="in"/>
+      <variable name="CKI" units="dimensionless" public_interface="in"/>
+      <variable name="V_de" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_di" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Tri_E</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <times/>
+                        <ci>k_asse</ci>
+                        <ci>CKI</ci>
+                        <ci>CycE</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k_disse</ci>
+                        <ci>Tri_E</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>V_di</ci>
+                     <ci>Tri_E</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>V_de</ci>
+                  <ci>Tri_E</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="CKI">
+      <variable name="CKI" units="dimensionless" initial_value="0.02882070094347" public_interface="out"/>
+      <variable name="k_assb" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_dissb" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_assa" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_dissa" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_asse" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_disse" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_db" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_si" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_da" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_di" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_de" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="CycB" units="dimensionless" public_interface="in"/>
+      <variable name="BCKI" units="dimensionless" public_interface="in"/>
+      <variable name="pB" units="dimensionless" public_interface="in"/>
+      <variable name="Tri_E" units="dimensionless" public_interface="in"/>
+      <variable name="pBCKI" units="dimensionless" public_interface="in"/>
+      <variable name="CycA" units="dimensionless" public_interface="in"/>
+      <variable name="CycE" units="dimensionless" public_interface="in"/>
+      <variable name="Tri_A" units="dimensionless" public_interface="in"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>CKI</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <plus/>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <minus/>
+                           <apply>
+                              <plus/>
+                              <apply>
+                                 <minus/>
+                                 <apply>
+                                    <plus/>
+                                    <apply>
+                                       <times/>
+                                       <apply>
+                                          <minus/>
+                                          <ci>k_assb</ci>
+                                       </apply>
+                                       <ci>CycB</ci>
+                                       <ci>CKI</ci>
+                                    </apply>
+                                    <apply>
+                                       <times/>
+                                       <ci>k_dissb</ci>
+                                       <ci>BCKI</ci>
+                                    </apply>
+                                 </apply>
+                                 <apply>
+                                    <times/>
+                                    <ci>k_assb</ci>
+                                    <ci>pB</ci>
+                                    <ci>CKI</ci>
+                                 </apply>
+                              </apply>
+                              <apply>
+                                 <times/>
+                                 <ci>k_dissb</ci>
+                                 <ci>pBCKI</ci>
+                              </apply>
+                              <apply>
+                                 <times/>
+                                 <ci>V_db</ci>
+                                 <ci>BCKI</ci>
+                              </apply>
+                              <apply>
+                                 <times/>
+                                 <ci>V_db</ci>
+                                 <ci>pBCKI</ci>
+                              </apply>
+                              <ci>V_si</ci>
+                           </apply>
+                           <apply>
+                              <times/>
+                              <ci>V_di</ci>
+                              <ci>CKI</ci>
+                           </apply>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <ci>k_assa</ci>
+                           <ci>CKI</ci>
+                           <ci>CycA</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k_dissa</ci>
+                        <ci>Tri_A</ci>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>V_da</ci>
+                        <ci>Tri_A</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_asse</ci>
+                     <ci>CKI</ci>
+                     <ci>CycE</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_disse</ci>
+                  <ci>Tri_E</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>V_de</ci>
+                  <ci>Tri_E</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Cdh1_i">
+      <variable name="Cdh1_i" units="dimensionless" public_interface="out"/>
+      <variable name="Cdh1_T" units="dimensionless" initial_value="1"/>
+      <variable name="Cdh1" units="dimensionless" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>Cdh1_i</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <minus/>
+                  <ci>Cdh1_T</ci>
+                  <ci>Cdh1</ci>
+               </apply>
+               <cn cellml:units="dimensionless">1</cn>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Cdh1">
+      <variable name="Cdh1" units="dimensionless" initial_value="0.7189393639564514" public_interface="out"/>
+      <variable name="V_ah1" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_ih1" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="Cdh1_i" units="dimensionless" public_interface="in"/>
+      <variable name="J_ah1" units="dimensionless" initial_value="0.03"/>
+      <variable name="J_ih1" units="dimensionless" initial_value="0.03"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>Cdh1</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>Cdh1_i</ci>
+                     <ci>V_ah1</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>J_ah1</ci>
+                     <ci>Cdh1_i</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>Cdh1</ci>
+                     <ci>V_ih1</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>J_ih1</ci>
+                     <ci>Cdh1</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="mass">
+      <variable name="mass" units="dimensionless" initial_value="1.338267803192139" public_interface="out"/>
+      <variable name="mu" units="first_order_rate_constant" initial_value="0.005776"/>
+      <variable name="maxmass" units="dimensionless" initial_value="10000"/>
+      <variable name="time" units="minute" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>mass</ci>
+            </apply>
+            <apply>
+               <times/>
+               <ci>mu</ci>
+               <ci>mass</ci>
+               <apply>
+                  <minus/>
+                  <cn cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <divide/>
+                     <ci>mass</ci>
+                     <ci>maxmass</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="V_atf">
+      <variable name="V_atf" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="k_atfp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_atfapp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_atfepp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_atfdpp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="CycA" units="dimensionless" public_interface="in"/>
+      <variable name="CycE" units="dimensionless" public_interface="in"/>
+      <variable name="CycD" units="dimensionless" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_atf</ci>
+            <apply>
+               <plus/>
+               <ci>k_atfp</ci>
+               <apply>
+                  <times/>
+                  <ci>k_atfapp</ci>
+                  <ci>CycA</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_atfepp</ci>
+                  <ci>CycE</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_atfdpp</ci>
+                  <ci>CycD</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="V_itf">
+      <variable name="V_itf" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="k_itfp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_itfapp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_itfbpp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="CycA" units="dimensionless" public_interface="in"/>
+      <variable name="CycB" units="dimensionless" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_itf</ci>
+            <apply>
+               <plus/>
+               <ci>k_itfp</ci>
+               <apply>
+                  <times/>
+                  <ci>k_itfapp</ci>
+                  <ci>CycA</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_itfbpp</ci>
+                  <ci>CycB</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="TF_E">
+      <variable name="TF_E" units="dimensionless" public_interface="out"/>
+      <variable name="V_atf" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="V_itf" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="J_itf" units="dimensionless" initial_value="0.01"/>
+      <variable name="J_atf" units="dimensionless" initial_value="0.01"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>TF_E</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <cn cellml:units="dimensionless">2</cn>
+                  <ci>V_atf</ci>
+                  <ci>J_itf</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <minus/>
+                     <ci>V_itf</ci>
+                     <ci>V_atf</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>J_atf</ci>
+                     <ci>V_itf</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>J_itf</ci>
+                     <ci>V_atf</ci>
+                  </apply>
+                  <apply>
+                     <root/>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <power/>
+                           <apply>
+                              <plus/>
+                              <apply>
+                                 <minus/>
+                                 <ci>V_itf</ci>
+                                 <ci>V_atf</ci>
+                              </apply>
+                              <apply>
+                                 <times/>
+                                 <ci>J_atf</ci>
+                                 <ci>V_itf</ci>
+                              </apply>
+                              <apply>
+                                 <times/>
+                                 <ci>J_itf</ci>
+                                 <ci>V_atf</ci>
+                              </apply>
+                           </apply>
+                           <cn cellml:units="dimensionless">2</cn>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <cn cellml:units="dimensionless">4</cn>
+                           <apply>
+                              <minus/>
+                              <ci>V_itf</ci>
+                              <ci>V_atf</ci>
+                           </apply>
+                           <ci>J_itf</ci>
+                           <ci>V_atf</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="V_de">
+      <variable name="V_de" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="k_dep" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_deepp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_deapp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_debpp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="CycA" units="dimensionless" public_interface="in"/>
+      <variable name="CycE" units="dimensionless" public_interface="in"/>
+      <variable name="CycB" units="dimensionless" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_de</ci>
+            <apply>
+               <plus/>
+               <ci>k_dep</ci>
+               <apply>
+                  <times/>
+                  <ci>k_deepp</ci>
+                  <ci>CycE</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_deapp</ci>
+                  <ci>CycA</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_debpp</ci>
+                  <ci>CycB</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="V_da">
+      <variable name="V_da" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="k_dap" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_dapp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_dappp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="Cdc20_A" units="dimensionless" public_interface="in"/>
+      <variable name="Cdc20_i" units="dimensionless" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_da</ci>
+            <apply>
+               <plus/>
+               <ci>k_dap</ci>
+               <apply>
+                  <times/>
+                  <apply>
+                     <plus/>
+                     <ci>k_dapp</ci>
+                     <ci>k_dappp</ci>
+                  </apply>
+                  <ci>Cdc20_A</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_dappp</ci>
+                  <ci>Cdc20_i</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="TF_I">
+      <variable name="TF_I" units="dimensionless" public_interface="out"/>
+      <variable name="k_afi" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_ifip" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_ifibpp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="J_ifi" units="dimensionless" initial_value="2"/>
+      <variable name="J_afi" units="dimensionless" initial_value="1"/>
+      <variable name="Cdc14" units="dimensionless" public_interface="out"/>
+      <variable name="CycB" units="dimensionless" public_interface="in"/>
+      <variable name="Cdc20_A" units="dimensionless" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>Cdc14</ci>
+            <ci>Cdc20_A</ci>
+         </apply>
+         <apply>
+            <eq/>
+            <ci>TF_I</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <cn cellml:units="dimensionless">2</cn>
+                  <ci>k_afi</ci>
+                  <ci>Cdc14</ci>
+                  <ci>J_ifi</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <plus/>
+                        <ci>k_ifip</ci>
+                        <apply>
+                           <times/>
+                           <ci>k_ifibpp</ci>
+                           <ci>CycB</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <times/>
+                        <ci>k_afi</ci>
+                        <ci>Cdc14</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>J_afi</ci>
+                     <apply>
+                        <plus/>
+                        <ci>k_ifip</ci>
+                        <apply>
+                           <times/>
+                           <ci>k_ifibpp</ci>
+                           <ci>CycB</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>J_ifi</ci>
+                     <ci>k_afi</ci>
+                     <ci>Cdc14</ci>
+                  </apply>
+                  <apply>
+                     <root/>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <power/>
+                           <apply>
+                              <plus/>
+                              <apply>
+                                 <minus/>
+                                 <apply>
+                                    <plus/>
+                                    <ci>k_ifip</ci>
+                                    <apply>
+                                       <times/>
+                                       <ci>k_ifibpp</ci>
+                                       <ci>CycB</ci>
+                                    </apply>
+                                 </apply>
+                                 <apply>
+                                    <times/>
+                                    <ci>k_afi</ci>
+                                    <ci>Cdc14</ci>
+                                 </apply>
+                              </apply>
+                              <apply>
+                                 <times/>
+                                 <ci>J_afi</ci>
+                                 <apply>
+                                    <plus/>
+                                    <ci>k_ifip</ci>
+                                    <apply>
+                                       <times/>
+                                       <ci>k_ifibpp</ci>
+                                       <ci>CycB</ci>
+                                    </apply>
+                                 </apply>
+                              </apply>
+                              <apply>
+                                 <times/>
+                                 <ci>J_ifi</ci>
+                                 <ci>k_afi</ci>
+                                 <ci>Cdc14</ci>
+                              </apply>
+                           </apply>
+                           <cn cellml:units="dimensionless">2</cn>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <cn cellml:units="dimensionless">4</cn>
+                           <apply>
+                              <minus/>
+                              <apply>
+                                 <plus/>
+                                 <ci>k_ifip</ci>
+                                 <apply>
+                                    <times/>
+                                    <ci>k_ifibpp</ci>
+                                    <ci>CycB</ci>
+                                 </apply>
+                              </apply>
+                              <apply>
+                                 <times/>
+                                 <ci>k_afi</ci>
+                                 <ci>Cdc14</ci>
+                              </apply>
+                           </apply>
+                           <ci>J_ifi</ci>
+                           <ci>k_afi</ci>
+                           <ci>Cdc14</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="V_ah1">
+      <variable name="V_ah1" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="k_ah1p" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_ah1pp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="Cdc14" units="dimensionless" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_ah1</ci>
+            <apply>
+               <plus/>
+               <ci>k_ah1p</ci>
+               <apply>
+                  <times/>
+                  <ci>k_ah1pp</ci>
+                  <ci>Cdc14</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="V_ih1">
+      <variable name="V_ih1" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="k_ih1p" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_ih1app" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_ih1bpp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_ih1epp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_ih1dpp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="CycA" units="dimensionless" public_interface="in"/>
+      <variable name="CycB" units="dimensionless" public_interface="in"/>
+      <variable name="CycE" units="dimensionless" public_interface="in"/>
+      <variable name="CycD" units="dimensionless" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_ih1</ci>
+            <apply>
+               <plus/>
+               <ci>k_ih1p</ci>
+               <apply>
+                  <times/>
+                  <ci>k_ih1app</ci>
+                  <ci>CycA</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_ih1bpp</ci>
+                  <ci>CycB</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_ih1epp</ci>
+                  <ci>CycE</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_ih1dpp</ci>
+                  <ci>CycD</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="V_si">
+      <variable name="V_si" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="k_sip" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_sipp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="TF_I" units="dimensionless" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_si</ci>
+            <apply>
+               <plus/>
+               <ci>k_sip</ci>
+               <apply>
+                  <times/>
+                  <ci>k_sipp</ci>
+                  <ci>TF_I</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="V_di">
+      <variable name="V_di" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="k_dip" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_diapp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_diepp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_didpp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_dibpp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_14di" units="dimensionless" public_interface="in"/>
+      <variable name="CycA" units="dimensionless" public_interface="in"/>
+      <variable name="CycB" units="dimensionless" public_interface="in"/>
+      <variable name="CycE" units="dimensionless" public_interface="in"/>
+      <variable name="CycD" units="dimensionless" public_interface="in"/>
+      <variable name="Cdc14" units="dimensionless" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_di</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <plus/>
+                  <ci>k_dip</ci>
+                  <apply>
+                     <times/>
+                     <ci>k_diapp</ci>
+                     <ci>CycA</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_dibpp</ci>
+                     <ci>CycB</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_diepp</ci>
+                     <ci>CycE</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>k_didpp</ci>
+                     <ci>CycD</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <plus/>
+                  <cn cellml:units="dimensionless">1</cn>
+                  <apply>
+                     <times/>
+                     <ci>k_14di</ci>
+                     <ci>Cdc14</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="preMPF">
+      <variable name="preMPF" units="dimensionless" public_interface="out"/>
+      <variable name="pB" units="dimensionless" public_interface="in"/>
+      <variable name="BCKI" units="dimensionless" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>preMPF</ci>
+            <apply>
+               <plus/>
+               <ci>pB</ci>
+               <ci>BCKI</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="CycBT">
+      <variable name="CycBT" units="dimensionless" public_interface="out"/>
+      <variable name="CycB" units="dimensionless" public_interface="in"/>
+      <variable name="pB" units="dimensionless" public_interface="in"/>
+      <variable name="BCKI" units="dimensionless" public_interface="in"/>
+      <variable name="pBCKI" units="dimensionless" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>CycBT</ci>
+            <apply>
+               <plus/>
+               <ci>CycB</ci>
+               <ci>pB</ci>
+               <ci>BCKI</ci>
+               <ci>pBCKI</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="CycAT">
+      <variable name="CycAT" units="dimensionless" public_interface="out"/>
+      <variable name="CycA" units="dimensionless" public_interface="in"/>
+      <variable name="Tri_A" units="dimensionless" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>CycAT</ci>
+            <apply>
+               <plus/>
+               <ci>CycA</ci>
+               <ci>Tri_A</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="CycET">
+      <variable name="CycET" units="dimensionless" public_interface="out"/>
+      <variable name="CycE" units="dimensionless" public_interface="in"/>
+      <variable name="Tri_E" units="dimensionless" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>CycET</ci>
+            <apply>
+               <plus/>
+               <ci>CycE</ci>
+               <ci>Tri_E</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Tri_B">
+      <variable name="Tri_B" units="dimensionless" public_interface="out"/>
+      <variable name="BCKI" units="dimensionless" public_interface="in"/>
+      <variable name="pBCKI" units="dimensionless" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>Tri_B</ci>
+            <apply>
+               <plus/>
+               <ci>BCKI</ci>
+               <ci>pBCKI</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="CKIT">
+      <variable name="CKIT" units="dimensionless" public_interface="out"/>
+      <variable name="CKI" units="dimensionless" public_interface="in"/>
+      <variable name="BCKI" units="dimensionless" public_interface="in"/>
+      <variable name="pBCKI" units="dimensionless" public_interface="in"/>
+      <variable name="Tri_A" units="dimensionless" public_interface="in"/>
+      <variable name="Tri_E" units="dimensionless" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>CKIT</ci>
+            <apply>
+               <plus/>
+               <ci>CKI</ci>
+               <ci>BCKI</ci>
+               <ci>pBCKI</ci>
+               <ci>Tri_A</ci>
+               <ci>Tri_E</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Cdc20_T">
+      <variable name="Cdc20_T" units="dimensionless" public_interface="out"/>
+      <variable name="Cdc20_i" units="dimensionless" public_interface="in"/>
+      <variable name="Cdc20_A" units="dimensionless" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>Cdc20_T</ci>
+            <apply>
+               <plus/>
+               <ci>Cdc20_i</ci>
+               <ci>Cdc20_A</ci>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="TF_B">
+      <variable name="TF_B" units="dimensionless" public_interface="out"/>
+      <variable name="k_afb" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_ifb" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="J_ifb" units="dimensionless" initial_value="0.1"/>
+      <variable name="J_afb" units="dimensionless" initial_value="0.1"/>
+      <variable name="CycB" units="dimensionless" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>TF_B</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <cn cellml:units="dimensionless">2</cn>
+                  <ci>k_afb</ci>
+                  <ci>CycB</ci>
+                  <ci>J_ifb</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <minus/>
+                     <ci>k_ifb</ci>
+                     <apply>
+                        <times/>
+                        <ci>k_afb</ci>
+                        <ci>CycB</ci>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>J_afb</ci>
+                     <ci>k_ifb</ci>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>J_ifb</ci>
+                     <ci>k_afb</ci>
+                     <ci>CycB</ci>
+                  </apply>
+                  <apply>
+                     <root/>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <power/>
+                           <apply>
+                              <plus/>
+                              <apply>
+                                 <minus/>
+                                 <ci>k_ifb</ci>
+                                 <apply>
+                                    <times/>
+                                    <ci>k_afb</ci>
+                                    <ci>CycB</ci>
+                                 </apply>
+                              </apply>
+                              <apply>
+                                 <times/>
+                                 <ci>J_afb</ci>
+                                 <ci>k_ifb</ci>
+                              </apply>
+                              <apply>
+                                 <times/>
+                                 <ci>J_ifb</ci>
+                                 <ci>k_afb</ci>
+                                 <ci>CycB</ci>
+                              </apply>
+                           </apply>
+                           <cn cellml:units="dimensionless">2</cn>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <cn cellml:units="dimensionless">4</cn>
+                           <apply>
+                              <minus/>
+                              <ci>k_ifb</ci>
+                              <apply>
+                                 <times/>
+                                 <ci>k_afb</ci>
+                                 <ci>CycB</ci>
+                              </apply>
+                           </apply>
+                           <ci>k_afb</ci>
+                           <ci>CycB</ci>
+                           <ci>J_ifb</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="V_sb">
+      <variable name="V_sb" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="k_sbp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_sbpp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="TF_B" units="dimensionless" public_interface="in"/>
+      <variable name="mass" units="dimensionless" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_sb</ci>
+            <apply>
+               <times/>
+               <ci>mass</ci>
+               <apply>
+                  <plus/>
+                  <ci>k_sbp</ci>
+                  <apply>
+                     <times/>
+                     <ci>k_sbpp</ci>
+                     <ci>TF_B</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="V_sa">
+      <variable name="V_sa" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="k_sap" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_sapp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="TF_E" units="dimensionless" public_interface="in"/>
+      <variable name="mass" units="dimensionless" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_sa</ci>
+            <apply>
+               <times/>
+               <ci>mass</ci>
+               <apply>
+                  <plus/>
+                  <ci>k_sap</ci>
+                  <apply>
+                     <times/>
+                     <ci>k_sapp</ci>
+                     <ci>TF_E</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="V_se">
+      <variable name="V_se" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="k_sep" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_sepp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="TF_E" units="dimensionless" public_interface="in"/>
+      <variable name="mass" units="dimensionless" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_se</ci>
+            <apply>
+               <times/>
+               <ci>mass</ci>
+               <apply>
+                  <plus/>
+                  <ci>k_sep</ci>
+                  <apply>
+                     <times/>
+                     <ci>k_sepp</ci>
+                     <ci>TF_E</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="V_db">
+      <variable name="V_db" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="k_dbp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_dbhpp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_dbcpp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="Cdc20_A" units="dimensionless" public_interface="in"/>
+      <variable name="Cdh1" units="dimensionless" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_db</ci>
+            <apply>
+               <plus/>
+               <ci>k_dbp</ci>
+               <apply>
+                  <times/>
+                  <ci>k_dbhpp</ci>
+                  <ci>Cdh1</ci>
+               </apply>
+               <apply>
+                  <times/>
+                  <ci>k_dbcpp</ci>
+                  <ci>Cdc20_A</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Wee1">
+      <variable name="Wee1" units="dimensionless" public_interface="out"/>
+      <variable name="k_aweep" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_aweepp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_iweep" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_iweepp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="J_iwee" units="dimensionless" initial_value="0.05"/>
+      <variable name="J_awee" units="dimensionless" initial_value="0.05"/>
+      <variable name="Cdc14" units="dimensionless" public_interface="in"/>
+      <variable name="CycB" units="dimensionless" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>Wee1</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <cn cellml:units="dimensionless">2</cn>
+                  <apply>
+                     <plus/>
+                     <ci>k_aweep</ci>
+                     <apply>
+                        <times/>
+                        <ci>k_aweepp</ci>
+                        <ci>Cdc14</ci>
+                     </apply>
+                  </apply>
+                  <ci>J_iwee</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <plus/>
+                        <ci>k_iweep</ci>
+                        <apply>
+                           <times/>
+                           <ci>k_iweepp</ci>
+                           <ci>CycB</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci>k_aweep</ci>
+                        <apply>
+                           <times/>
+                           <ci>k_aweepp</ci>
+                           <ci>Cdc14</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>J_awee</ci>
+                     <apply>
+                        <plus/>
+                        <ci>k_iweep</ci>
+                        <apply>
+                           <times/>
+                           <ci>k_iweepp</ci>
+                           <ci>CycB</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>J_iwee</ci>
+                     <apply>
+                        <plus/>
+                        <ci>k_aweep</ci>
+                        <apply>
+                           <times/>
+                           <ci>k_aweepp</ci>
+                           <ci>Cdc14</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <root/>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <power/>
+                           <apply>
+                              <plus/>
+                              <apply>
+                                 <minus/>
+                                 <apply>
+                                    <plus/>
+                                    <ci>k_iweep</ci>
+                                    <apply>
+                                       <times/>
+                                       <ci>k_iweepp</ci>
+                                       <ci>CycB</ci>
+                                    </apply>
+                                 </apply>
+                                 <apply>
+                                    <plus/>
+                                    <ci>k_aweep</ci>
+                                    <apply>
+                                       <times/>
+                                       <ci>k_aweepp</ci>
+                                       <ci>Cdc14</ci>
+                                    </apply>
+                                 </apply>
+                              </apply>
+                              <apply>
+                                 <times/>
+                                 <ci>J_awee</ci>
+                                 <apply>
+                                    <plus/>
+                                    <ci>k_iweep</ci>
+                                    <apply>
+                                       <times/>
+                                       <ci>k_iweepp</ci>
+                                       <ci>CycB</ci>
+                                    </apply>
+                                 </apply>
+                              </apply>
+                              <apply>
+                                 <times/>
+                                 <ci>J_iwee</ci>
+                                 <apply>
+                                    <plus/>
+                                    <ci>k_aweep</ci>
+                                    <apply>
+                                       <times/>
+                                       <ci>k_aweepp</ci>
+                                       <ci>Cdc14</ci>
+                                    </apply>
+                                 </apply>
+                              </apply>
+                           </apply>
+                           <cn cellml:units="dimensionless">2</cn>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <cn cellml:units="dimensionless">4</cn>
+                           <apply>
+                              <minus/>
+                              <apply>
+                                 <plus/>
+                                 <ci>k_iweep</ci>
+                                 <apply>
+                                    <times/>
+                                    <ci>k_iweepp</ci>
+                                    <ci>CycB</ci>
+                                 </apply>
+                              </apply>
+                              <apply>
+                                 <plus/>
+                                 <ci>k_aweep</ci>
+                                 <apply>
+                                    <times/>
+                                    <ci>k_aweepp</ci>
+                                    <ci>Cdc14</ci>
+                                 </apply>
+                              </apply>
+                           </apply>
+                           <apply>
+                              <plus/>
+                              <ci>k_aweep</ci>
+                              <apply>
+                                 <times/>
+                                 <ci>k_aweepp</ci>
+                                 <ci>Cdc14</ci>
+                              </apply>
+                           </apply>
+                           <ci>J_iwee</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="V_wee">
+      <variable name="V_wee" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="k_weep" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_weepp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="Wee1" units="dimensionless" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_wee</ci>
+            <apply>
+               <plus/>
+               <ci>k_weep</ci>
+               <apply>
+                  <times/>
+                  <ci>k_weepp</ci>
+                  <ci>Wee1</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="Cdc25">
+      <variable name="Cdc25" units="dimensionless" public_interface="out"/>
+      <variable name="k_a25p" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_a25pp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_i25p" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_i25pp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="J_i25" units="dimensionless" initial_value="0.1"/>
+      <variable name="J_a25" units="dimensionless" initial_value="0.1"/>
+      <variable name="Cdc14" units="dimensionless" public_interface="in"/>
+      <variable name="CycB" units="dimensionless" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>Cdc25</ci>
+            <apply>
+               <divide/>
+               <apply>
+                  <times/>
+                  <cn cellml:units="dimensionless">2</cn>
+                  <apply>
+                     <plus/>
+                     <ci>k_a25p</ci>
+                     <apply>
+                        <times/>
+                        <ci>k_a25pp</ci>
+                        <ci>CycB</ci>
+                     </apply>
+                  </apply>
+                  <ci>J_i25</ci>
+               </apply>
+               <apply>
+                  <plus/>
+                  <apply>
+                     <minus/>
+                     <apply>
+                        <plus/>
+                        <ci>k_i25p</ci>
+                        <apply>
+                           <times/>
+                           <ci>k_i25pp</ci>
+                           <ci>Cdc14</ci>
+                        </apply>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci>k_a25p</ci>
+                        <apply>
+                           <times/>
+                           <ci>k_a25pp</ci>
+                           <ci>CycB</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <ci>J_a25</ci>
+                     <apply>
+                        <plus/>
+                        <ci>k_i25p</ci>
+                        <apply>
+                           <times/>
+                           <ci>k_i25pp</ci>
+                           <ci>Cdc14</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+                  <apply>
+                     <times/>
+                     <apply>
+                        <plus/>
+                        <ci>k_a25p</ci>
+                        <apply>
+                           <times/>
+                           <ci>k_a25pp</ci>
+                           <ci>CycB</ci>
+                        </apply>
+                     </apply>
+                     <ci>J_i25</ci>
+                  </apply>
+                  <apply>
+                     <root/>
+                     <apply>
+                        <minus/>
+                        <apply>
+                           <power/>
+                           <apply>
+                              <plus/>
+                              <apply>
+                                 <minus/>
+                                 <apply>
+                                    <plus/>
+                                    <ci>k_i25p</ci>
+                                    <apply>
+                                       <times/>
+                                       <ci>k_i25pp</ci>
+                                       <ci>Cdc14</ci>
+                                    </apply>
+                                 </apply>
+                                 <apply>
+                                    <plus/>
+                                    <ci>k_a25p</ci>
+                                    <apply>
+                                       <times/>
+                                       <ci>k_a25pp</ci>
+                                       <ci>CycB</ci>
+                                    </apply>
+                                 </apply>
+                              </apply>
+                              <apply>
+                                 <times/>
+                                 <ci>J_a25</ci>
+                                 <apply>
+                                    <plus/>
+                                    <ci>k_i25p</ci>
+                                    <apply>
+                                       <times/>
+                                       <ci>k_i25pp</ci>
+                                       <ci>Cdc14</ci>
+                                    </apply>
+                                 </apply>
+                              </apply>
+                              <apply>
+                                 <times/>
+                                 <apply>
+                                    <plus/>
+                                    <ci>k_a25p</ci>
+                                    <apply>
+                                       <times/>
+                                       <ci>k_a25pp</ci>
+                                       <ci>CycB</ci>
+                                    </apply>
+                                 </apply>
+                                 <ci>J_i25</ci>
+                              </apply>
+                           </apply>
+                           <cn cellml:units="dimensionless">2</cn>
+                        </apply>
+                        <apply>
+                           <times/>
+                           <cn cellml:units="dimensionless">4</cn>
+                           <apply>
+                              <minus/>
+                              <apply>
+                                 <plus/>
+                                 <ci>k_i25p</ci>
+                                 <apply>
+                                    <times/>
+                                    <ci>k_i25pp</ci>
+                                    <ci>Cdc14</ci>
+                                 </apply>
+                              </apply>
+                              <apply>
+                                 <plus/>
+                                 <ci>k_a25p</ci>
+                                 <apply>
+                                    <times/>
+                                    <ci>k_a25pp</ci>
+                                    <ci>CycB</ci>
+                                 </apply>
+                              </apply>
+                           </apply>
+                           <apply>
+                              <plus/>
+                              <ci>k_a25p</ci>
+                              <apply>
+                                 <times/>
+                                 <ci>k_a25pp</ci>
+                                 <ci>CycB</ci>
+                              </apply>
+                           </apply>
+                           <ci>J_i25</ci>
+                        </apply>
+                     </apply>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="V_25">
+      <variable name="V_25" units="first_order_rate_constant" public_interface="out"/>
+      <variable name="k_25p" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="k_25pp" units="first_order_rate_constant" public_interface="in"/>
+      <variable name="Cdc25" units="dimensionless" public_interface="in"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <ci>V_25</ci>
+            <apply>
+               <plus/>
+               <ci>k_25p</ci>
+               <apply>
+                  <times/>
+                  <ci>k_25pp</ci>
+                  <ci>Cdc25</ci>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+   <component name="kinetic_parameters">
+      <variable name="k_25p" units="first_order_rate_constant" initial_value="0.01" public_interface="out"/>
+      <variable name="k_25pp" units="first_order_rate_constant" initial_value="5" public_interface="out"/>
+      <variable name="k_14di" units="dimensionless" initial_value="12" public_interface="out"/>
+      <variable name="k_a20" units="first_order_rate_constant" initial_value="1" public_interface="out"/>
+      <variable name="k_a25p" units="first_order_rate_constant" initial_value="0" public_interface="out"/>
+      <variable name="k_a25pp" units="first_order_rate_constant" initial_value="1" public_interface="out"/>
+      <variable name="k_afb" units="first_order_rate_constant" initial_value="1" public_interface="out"/>
+      <variable name="k_afi" units="first_order_rate_constant" initial_value="6" public_interface="out"/>
+      <variable name="k_ah1p" units="first_order_rate_constant" initial_value="0.02" public_interface="out"/>
+      <variable name="k_ah1pp" units="first_order_rate_constant" initial_value="0.8" public_interface="out"/>
+      <variable name="k_aie" units="first_order_rate_constant" initial_value="0.1" public_interface="out"/>
+      <variable name="k_assa" units="first_order_rate_constant" initial_value="50" public_interface="out"/>
+      <variable name="k_assb" units="first_order_rate_constant" initial_value="60" public_interface="out"/>
+      <variable name="k_asse" units="first_order_rate_constant" initial_value="0" public_interface="out"/>
+      <variable name="k_atfp" units="first_order_rate_constant" initial_value="0" public_interface="out"/>
+      <variable name="k_atfapp" units="first_order_rate_constant" initial_value="1.5" public_interface="out"/>
+      <variable name="k_atfdpp" units="first_order_rate_constant" initial_value="3" public_interface="out"/>
+      <variable name="k_atfepp" units="first_order_rate_constant" initial_value="0.38" public_interface="out"/>
+      <variable name="k_aweep" units="first_order_rate_constant" initial_value="0.3" public_interface="out"/>
+      <variable name="k_aweepp" units="first_order_rate_constant" initial_value="0" public_interface="out"/>
+      <variable name="k_d20" units="first_order_rate_constant" initial_value="0.05" public_interface="out"/>
+      <variable name="k_dap" units="first_order_rate_constant" initial_value="0.01" public_interface="out"/>
+      <variable name="k_dapp" units="first_order_rate_constant" initial_value="0.16" public_interface="out"/>
+      <variable name="k_dappp" units="first_order_rate_constant" initial_value="0" public_interface="out"/>
+      <variable name="k_dbp" units="first_order_rate_constant" initial_value="0.003" public_interface="out"/>
+      <variable name="k_dbhpp" units="first_order_rate_constant" initial_value="0.4" public_interface="out"/>
+      <variable name="k_dbcpp" units="first_order_rate_constant" initial_value="0.15" public_interface="out"/>
+      <variable name="k_dep" units="first_order_rate_constant" initial_value="0.12" public_interface="out"/>
+      <variable name="k_deapp" units="first_order_rate_constant" initial_value="0" public_interface="out"/>
+      <variable name="k_debpp" units="first_order_rate_constant" initial_value="0" public_interface="out"/>
+      <variable name="k_deepp" units="first_order_rate_constant" initial_value="0" public_interface="out"/>
+      <variable name="k_dip" units="first_order_rate_constant" initial_value="0.02" public_interface="out"/>
+      <variable name="k_diapp" units="first_order_rate_constant" initial_value="0.1" public_interface="out"/>
+      <variable name="k_dibpp" units="first_order_rate_constant" initial_value="0.8" public_interface="out"/>
+      <variable name="k_didpp" units="first_order_rate_constant" initial_value="0.1" public_interface="out"/>
+      <variable name="k_diepp" units="first_order_rate_constant" initial_value="0.12" public_interface="out"/>
+      <variable name="k_disse" units="first_order_rate_constant" initial_value="0" public_interface="out"/>
+      <variable name="k_dissb" units="first_order_rate_constant" initial_value="0.05" public_interface="out"/>
+      <variable name="k_dissa" units="first_order_rate_constant" initial_value="0.06" public_interface="out"/>
+      <variable name="k_i20" units="first_order_rate_constant" initial_value="0.16" public_interface="out"/>
+      <variable name="k_i25p" units="first_order_rate_constant" initial_value="0.3" public_interface="out"/>
+      <variable name="k_i25pp" units="first_order_rate_constant" initial_value="0" public_interface="out"/>
+      <variable name="k_ifb" units="first_order_rate_constant" initial_value="0.15" public_interface="out"/>
+      <variable name="k_ifip" units="first_order_rate_constant" initial_value="0.008" public_interface="out"/>
+      <variable name="k_ifibpp" units="first_order_rate_constant" initial_value="0.05" public_interface="out"/>
+      <variable name="k_ih1p" units="first_order_rate_constant" initial_value="0.001" public_interface="out"/>
+      <variable name="k_ih1app" units="first_order_rate_constant" initial_value="0.35" public_interface="out"/>
+      <variable name="k_ih1bpp" units="first_order_rate_constant" initial_value="0.1" public_interface="out"/>
+      <variable name="k_ih1dpp" units="first_order_rate_constant" initial_value="0.005" public_interface="out"/>
+      <variable name="k_ih1epp" units="first_order_rate_constant" initial_value="0.06" public_interface="out"/>
+      <variable name="k_iie" units="first_order_rate_constant" initial_value="0.15" public_interface="out"/>
+      <variable name="k_itfp" units="first_order_rate_constant" initial_value="0.75" public_interface="out"/>
+      <variable name="k_itfapp" units="first_order_rate_constant" initial_value="0" public_interface="out"/>
+      <variable name="k_itfbpp" units="first_order_rate_constant" initial_value="8" public_interface="out"/>
+      <variable name="k_iweep" units="first_order_rate_constant" initial_value="0" public_interface="out"/>
+      <variable name="k_iweepp" units="first_order_rate_constant" initial_value="1" public_interface="out"/>
+      <variable name="k_s20p" units="first_order_rate_constant" initial_value="0.001" public_interface="out"/>
+      <variable name="k_s20pp" units="first_order_rate_constant" initial_value="1" public_interface="out"/>
+      <variable name="k_sap" units="first_order_rate_constant" initial_value="0.0015" public_interface="out"/>
+      <variable name="k_sapp" units="first_order_rate_constant" initial_value="0.01" public_interface="out"/>
+      <variable name="k_sbp" units="first_order_rate_constant" initial_value="0.004" public_interface="out"/>
+      <variable name="k_sbpp" units="first_order_rate_constant" initial_value="0.04" public_interface="out"/>
+      <variable name="k_sep" units="first_order_rate_constant" initial_value="0" public_interface="out"/>
+      <variable name="k_sepp" units="first_order_rate_constant" initial_value="0.15" public_interface="out"/>
+      <variable name="k_sip" units="first_order_rate_constant" initial_value="0.018" public_interface="out"/>
+      <variable name="k_sipp" units="first_order_rate_constant" initial_value="0.18" public_interface="out"/>
+      <variable name="k_weep" units="first_order_rate_constant" initial_value="0.02" public_interface="out"/>
+      <variable name="k_weepp" units="first_order_rate_constant" initial_value="0.2" public_interface="out"/>
+   </component>
+   <connection>
+      <map_components component_1="CycA" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycB" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycE" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="Cdc20_A" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="Cdc20_i" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="APCP" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="pB" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="BCKI" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="pBCKI" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="Tri_A" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="Tri_E" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="CKI" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="Cdh1" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="mass" component_2="environment"/>
+      <map_variables variable_1="time" variable_2="time"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycA" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k_assa" variable_2="k_assa"/>
+      <map_variables variable_1="k_dissa" variable_2="k_dissa"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycA" component_2="V_da"/>
+      <map_variables variable_1="V_da" variable_2="V_da"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycA" component_2="V_di"/>
+      <map_variables variable_1="V_di" variable_2="V_di"/>
+      <map_variables variable_1="CycA" variable_2="CycA"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycA" component_2="V_sa"/>
+      <map_variables variable_1="V_sa" variable_2="V_sa"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycA" component_2="Tri_A"/>
+      <map_variables variable_1="Tri_A" variable_2="Tri_A"/>
+      <map_variables variable_1="CycA" variable_2="CycA"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycA" component_2="CKI"/>
+      <map_variables variable_1="CKI" variable_2="CKI"/>
+      <map_variables variable_1="CycA" variable_2="CycA"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycB" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k_assb" variable_2="k_assb"/>
+      <map_variables variable_1="k_dissb" variable_2="k_dissb"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycB" component_2="V_25"/>
+      <map_variables variable_1="V_25" variable_2="V_25"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycB" component_2="V_sb"/>
+      <map_variables variable_1="V_sb" variable_2="V_sb"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycB" component_2="V_db"/>
+      <map_variables variable_1="V_db" variable_2="V_db"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycB" component_2="V_di"/>
+      <map_variables variable_1="V_di" variable_2="V_di"/>
+      <map_variables variable_1="CycB" variable_2="CycB"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycB" component_2="V_wee"/>
+      <map_variables variable_1="V_wee" variable_2="V_wee"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycB" component_2="pB"/>
+      <map_variables variable_1="pB" variable_2="pB"/>
+      <map_variables variable_1="CycB" variable_2="CycB"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycB" component_2="CKI"/>
+      <map_variables variable_1="CKI" variable_2="CKI"/>
+      <map_variables variable_1="CycB" variable_2="CycB"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycB" component_2="BCKI"/>
+      <map_variables variable_1="BCKI" variable_2="BCKI"/>
+      <map_variables variable_1="CycB" variable_2="CycB"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycE" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k_disse" variable_2="k_disse"/>
+      <map_variables variable_1="k_asse" variable_2="k_asse"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycE" component_2="V_de"/>
+      <map_variables variable_1="V_de" variable_2="V_de"/>
+      <map_variables variable_1="CycE" variable_2="CycE"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycE" component_2="V_di"/>
+      <map_variables variable_1="V_di" variable_2="V_di"/>
+      <map_variables variable_1="CycE" variable_2="CycE"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycE" component_2="V_se"/>
+      <map_variables variable_1="V_se" variable_2="V_se"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycE" component_2="Tri_E"/>
+      <map_variables variable_1="Tri_E" variable_2="Tri_E"/>
+      <map_variables variable_1="CycE" variable_2="CycE"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycE" component_2="CKI"/>
+      <map_variables variable_1="CKI" variable_2="CKI"/>
+      <map_variables variable_1="CycE" variable_2="CycE"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycD" component_2="mass"/>
+      <map_variables variable_1="mass" variable_2="mass"/>
+   </connection>
+   <connection>
+      <map_components component_1="Cdc20_A" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k_a20" variable_2="k_a20"/>
+      <map_variables variable_1="k_i20" variable_2="k_i20"/>
+      <map_variables variable_1="k_d20" variable_2="k_d20"/>
+   </connection>
+   <connection>
+      <map_components component_1="Cdc20_A" component_2="APCP"/>
+      <map_variables variable_1="APCP" variable_2="APCP"/>
+   </connection>
+   <connection>
+      <map_components component_1="Cdc20_A" component_2="Cdc20_i"/>
+      <map_variables variable_1="Cdc20_i" variable_2="Cdc20_i"/>
+      <map_variables variable_1="Cdc20_A" variable_2="Cdc20_A"/>
+   </connection>
+   <connection>
+      <map_components component_1="Cdc20_i" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k_a20" variable_2="k_a20"/>
+      <map_variables variable_1="k_i20" variable_2="k_i20"/>
+      <map_variables variable_1="k_s20p" variable_2="k_s20p"/>
+      <map_variables variable_1="k_d20" variable_2="k_d20"/>
+      <map_variables variable_1="k_s20pp" variable_2="k_s20pp"/>
+   </connection>
+   <connection>
+      <map_components component_1="Cdc20_i" component_2="CycB"/>
+      <map_variables variable_1="CycB" variable_2="CycB"/>
+   </connection>
+   <connection>
+      <map_components component_1="Cdc20_i" component_2="APCP"/>
+      <map_variables variable_1="APCP" variable_2="APCP"/>
+   </connection>
+   <connection>
+      <map_components component_1="APCP" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k_aie" variable_2="k_aie"/>
+      <map_variables variable_1="k_iie" variable_2="k_iie"/>
+   </connection>
+   <connection>
+      <map_components component_1="APCP" component_2="CycB"/>
+      <map_variables variable_1="CycB" variable_2="CycB"/>
+   </connection>
+   <connection>
+      <map_components component_1="APCP" component_2="APC"/>
+      <map_variables variable_1="APCP" variable_2="APCP"/>
+      <map_variables variable_1="APC" variable_2="APC"/>
+   </connection>
+   <connection>
+      <map_components component_1="pB" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k_assb" variable_2="k_assb"/>
+      <map_variables variable_1="k_dissb" variable_2="k_dissb"/>
+   </connection>
+   <connection>
+      <map_components component_1="pB" component_2="V_wee"/>
+      <map_variables variable_1="V_wee" variable_2="V_wee"/>
+   </connection>
+   <connection>
+      <map_components component_1="pB" component_2="V_25"/>
+      <map_variables variable_1="V_25" variable_2="V_25"/>
+   </connection>
+   <connection>
+      <map_components component_1="pB" component_2="V_db"/>
+      <map_variables variable_1="V_db" variable_2="V_db"/>
+   </connection>
+   <connection>
+      <map_components component_1="pB" component_2="V_di"/>
+      <map_variables variable_1="V_di" variable_2="V_di"/>
+   </connection>
+   <connection>
+      <map_components component_1="pB" component_2="CKI"/>
+      <map_variables variable_1="CKI" variable_2="CKI"/>
+      <map_variables variable_1="pB" variable_2="pB"/>
+   </connection>
+   <connection>
+      <map_components component_1="pB" component_2="pBCKI"/>
+      <map_variables variable_1="pBCKI" variable_2="pBCKI"/>
+      <map_variables variable_1="pB" variable_2="pB"/>
+   </connection>
+   <connection>
+      <map_components component_1="BCKI" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k_assb" variable_2="k_assb"/>
+      <map_variables variable_1="k_dissb" variable_2="k_dissb"/>
+   </connection>
+   <connection>
+      <map_components component_1="BCKI" component_2="V_wee"/>
+      <map_variables variable_1="V_wee" variable_2="V_wee"/>
+   </connection>
+   <connection>
+      <map_components component_1="BCKI" component_2="V_25"/>
+      <map_variables variable_1="V_25" variable_2="V_25"/>
+   </connection>
+   <connection>
+      <map_components component_1="BCKI" component_2="V_db"/>
+      <map_variables variable_1="V_db" variable_2="V_db"/>
+   </connection>
+   <connection>
+      <map_components component_1="BCKI" component_2="V_di"/>
+      <map_variables variable_1="V_di" variable_2="V_di"/>
+   </connection>
+   <connection>
+      <map_components component_1="BCKI" component_2="CKI"/>
+      <map_variables variable_1="CKI" variable_2="CKI"/>
+      <map_variables variable_1="BCKI" variable_2="BCKI"/>
+   </connection>
+   <connection>
+      <map_components component_1="BCKI" component_2="pBCKI"/>
+      <map_variables variable_1="pBCKI" variable_2="pBCKI"/>
+      <map_variables variable_1="BCKI" variable_2="BCKI"/>
+   </connection>
+   <connection>
+      <map_components component_1="pBCKI" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k_assb" variable_2="k_assb"/>
+      <map_variables variable_1="k_dissb" variable_2="k_dissb"/>
+   </connection>
+   <connection>
+      <map_components component_1="pBCKI" component_2="V_wee"/>
+      <map_variables variable_1="V_wee" variable_2="V_wee"/>
+   </connection>
+   <connection>
+      <map_components component_1="pBCKI" component_2="V_25"/>
+      <map_variables variable_1="V_25" variable_2="V_25"/>
+   </connection>
+   <connection>
+      <map_components component_1="pBCKI" component_2="V_db"/>
+      <map_variables variable_1="V_db" variable_2="V_db"/>
+   </connection>
+   <connection>
+      <map_components component_1="pBCKI" component_2="V_di"/>
+      <map_variables variable_1="V_di" variable_2="V_di"/>
+   </connection>
+   <connection>
+      <map_components component_1="pBCKI" component_2="CKI"/>
+      <map_variables variable_1="CKI" variable_2="CKI"/>
+      <map_variables variable_1="pBCKI" variable_2="pBCKI"/>
+   </connection>
+   <connection>
+      <map_components component_1="preMPF" component_2="pB"/>
+      <map_variables variable_1="pB" variable_2="pB"/>
+   </connection>
+   <connection>
+      <map_components component_1="preMPF" component_2="BCKI"/>
+      <map_variables variable_1="BCKI" variable_2="BCKI"/>
+   </connection>
+   <connection>
+      <map_components component_1="Tri_A" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k_assa" variable_2="k_assa"/>
+      <map_variables variable_1="k_dissa" variable_2="k_dissa"/>
+   </connection>
+   <connection>
+      <map_components component_1="Tri_A" component_2="CKI"/>
+      <map_variables variable_1="CKI" variable_2="CKI"/>
+      <map_variables variable_1="Tri_A" variable_2="Tri_A"/>
+   </connection>
+   <connection>
+      <map_components component_1="Tri_A" component_2="V_da"/>
+      <map_variables variable_1="V_da" variable_2="V_da"/>
+   </connection>
+   <connection>
+      <map_components component_1="Tri_A" component_2="V_di"/>
+      <map_variables variable_1="V_di" variable_2="V_di"/>
+   </connection>
+   <connection>
+      <map_components component_1="Tri_E" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k_asse" variable_2="k_asse"/>
+      <map_variables variable_1="k_disse" variable_2="k_disse"/>
+   </connection>
+   <connection>
+      <map_components component_1="Tri_E" component_2="CKI"/>
+      <map_variables variable_1="CKI" variable_2="CKI"/>
+      <map_variables variable_1="Tri_E" variable_2="Tri_E"/>
+   </connection>
+   <connection>
+      <map_components component_1="Tri_E" component_2="V_de"/>
+      <map_variables variable_1="V_de" variable_2="V_de"/>
+   </connection>
+   <connection>
+      <map_components component_1="Tri_E" component_2="V_di"/>
+      <map_variables variable_1="V_di" variable_2="V_di"/>
+   </connection>
+   <connection>
+      <map_components component_1="Tri_B" component_2="BCKI"/>
+      <map_variables variable_1="BCKI" variable_2="BCKI"/>
+   </connection>
+   <connection>
+      <map_components component_1="Tri_B" component_2="pBCKI"/>
+      <map_variables variable_1="pBCKI" variable_2="pBCKI"/>
+   </connection>
+   <connection>
+      <map_components component_1="CKI" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k_assb" variable_2="k_assb"/>
+      <map_variables variable_1="k_dissb" variable_2="k_dissb"/>
+      <map_variables variable_1="k_assa" variable_2="k_assa"/>
+      <map_variables variable_1="k_dissa" variable_2="k_dissa"/>
+      <map_variables variable_1="k_asse" variable_2="k_asse"/>
+      <map_variables variable_1="k_disse" variable_2="k_disse"/>
+   </connection>
+   <connection>
+      <map_components component_1="CKI" component_2="V_si"/>
+      <map_variables variable_1="V_si" variable_2="V_si"/>
+   </connection>
+   <connection>
+      <map_components component_1="CKI" component_2="V_di"/>
+      <map_variables variable_1="V_di" variable_2="V_di"/>
+   </connection>
+   <connection>
+      <map_components component_1="CKI" component_2="V_db"/>
+      <map_variables variable_1="V_db" variable_2="V_db"/>
+   </connection>
+   <connection>
+      <map_components component_1="CKI" component_2="V_da"/>
+      <map_variables variable_1="V_da" variable_2="V_da"/>
+   </connection>
+   <connection>
+      <map_components component_1="CKI" component_2="V_de"/>
+      <map_variables variable_1="V_de" variable_2="V_de"/>
+   </connection>
+   <connection>
+      <map_components component_1="Cdh1_i" component_2="Cdh1"/>
+      <map_variables variable_1="Cdh1_i" variable_2="Cdh1_i"/>
+      <map_variables variable_1="Cdh1" variable_2="Cdh1"/>
+   </connection>
+   <connection>
+      <map_components component_1="Cdh1" component_2="V_ah1"/>
+      <map_variables variable_1="V_ah1" variable_2="V_ah1"/>
+   </connection>
+   <connection>
+      <map_components component_1="Cdh1" component_2="V_ih1"/>
+      <map_variables variable_1="V_ih1" variable_2="V_ih1"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_atf" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k_atfp" variable_2="k_atfp"/>
+      <map_variables variable_1="k_atfapp" variable_2="k_atfapp"/>
+      <map_variables variable_1="k_atfepp" variable_2="k_atfepp"/>
+      <map_variables variable_1="k_atfdpp" variable_2="k_atfdpp"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_atf" component_2="CycA"/>
+      <map_variables variable_1="CycA" variable_2="CycA"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_atf" component_2="CycE"/>
+      <map_variables variable_1="CycE" variable_2="CycE"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_atf" component_2="CycD"/>
+      <map_variables variable_1="CycD" variable_2="CycD"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_itf" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k_itfp" variable_2="k_itfp"/>
+      <map_variables variable_1="k_itfapp" variable_2="k_itfapp"/>
+      <map_variables variable_1="k_itfbpp" variable_2="k_itfbpp"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_itf" component_2="CycA"/>
+      <map_variables variable_1="CycA" variable_2="CycA"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_itf" component_2="CycB"/>
+      <map_variables variable_1="CycB" variable_2="CycB"/>
+   </connection>
+   <connection>
+      <map_components component_1="TF_E" component_2="V_atf"/>
+      <map_variables variable_1="V_atf" variable_2="V_atf"/>
+   </connection>
+   <connection>
+      <map_components component_1="TF_E" component_2="V_itf"/>
+      <map_variables variable_1="V_itf" variable_2="V_itf"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_de" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k_dep" variable_2="k_dep"/>
+      <map_variables variable_1="k_deepp" variable_2="k_deepp"/>
+      <map_variables variable_1="k_deapp" variable_2="k_deapp"/>
+      <map_variables variable_1="k_debpp" variable_2="k_debpp"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_de" component_2="CycA"/>
+      <map_variables variable_1="CycA" variable_2="CycA"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_de" component_2="CycB"/>
+      <map_variables variable_1="CycB" variable_2="CycB"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_da" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k_dap" variable_2="k_dap"/>
+      <map_variables variable_1="k_dapp" variable_2="k_dapp"/>
+      <map_variables variable_1="k_dappp" variable_2="k_dappp"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_da" component_2="Cdc20_A"/>
+      <map_variables variable_1="Cdc20_A" variable_2="Cdc20_A"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_da" component_2="Cdc20_i"/>
+      <map_variables variable_1="Cdc20_i" variable_2="Cdc20_i"/>
+   </connection>
+   <connection>
+      <map_components component_1="TF_I" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k_afi" variable_2="k_afi"/>
+      <map_variables variable_1="k_ifip" variable_2="k_ifip"/>
+      <map_variables variable_1="k_ifibpp" variable_2="k_ifibpp"/>
+   </connection>
+   <connection>
+      <map_components component_1="TF_I" component_2="CycB"/>
+      <map_variables variable_1="CycB" variable_2="CycB"/>
+   </connection>
+   <connection>
+      <map_components component_1="TF_I" component_2="Cdc20_A"/>
+      <map_variables variable_1="Cdc20_A" variable_2="Cdc20_A"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_ah1" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k_ah1p" variable_2="k_ah1p"/>
+      <map_variables variable_1="k_ah1pp" variable_2="k_ah1pp"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_ah1" component_2="TF_I"/>
+      <map_variables variable_1="Cdc14" variable_2="Cdc14"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_ih1" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k_ih1p" variable_2="k_ih1p"/>
+      <map_variables variable_1="k_ih1app" variable_2="k_ih1app"/>
+      <map_variables variable_1="k_ih1bpp" variable_2="k_ih1bpp"/>
+      <map_variables variable_1="k_ih1epp" variable_2="k_ih1epp"/>
+      <map_variables variable_1="k_ih1dpp" variable_2="k_ih1dpp"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_ih1" component_2="CycA"/>
+      <map_variables variable_1="CycA" variable_2="CycA"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_ih1" component_2="CycB"/>
+      <map_variables variable_1="CycB" variable_2="CycB"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_ih1" component_2="CycE"/>
+      <map_variables variable_1="CycE" variable_2="CycE"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_ih1" component_2="CycD"/>
+      <map_variables variable_1="CycD" variable_2="CycD"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_si" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k_sip" variable_2="k_sip"/>
+      <map_variables variable_1="k_sipp" variable_2="k_sipp"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_si" component_2="TF_I"/>
+      <map_variables variable_1="TF_I" variable_2="TF_I"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_di" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k_dip" variable_2="k_dip"/>
+      <map_variables variable_1="k_diapp" variable_2="k_diapp"/>
+      <map_variables variable_1="k_diepp" variable_2="k_diepp"/>
+      <map_variables variable_1="k_didpp" variable_2="k_didpp"/>
+      <map_variables variable_1="k_dibpp" variable_2="k_dibpp"/>
+      <map_variables variable_1="k_14di" variable_2="k_14di"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_di" component_2="CycD"/>
+      <map_variables variable_1="CycD" variable_2="CycD"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_di" component_2="TF_I"/>
+      <map_variables variable_1="Cdc14" variable_2="Cdc14"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycBT" component_2="CycB"/>
+      <map_variables variable_1="CycB" variable_2="CycB"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycBT" component_2="pB"/>
+      <map_variables variable_1="pB" variable_2="pB"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycBT" component_2="BCKI"/>
+      <map_variables variable_1="BCKI" variable_2="BCKI"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycBT" component_2="pBCKI"/>
+      <map_variables variable_1="pBCKI" variable_2="pBCKI"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycAT" component_2="CycA"/>
+      <map_variables variable_1="CycA" variable_2="CycA"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycAT" component_2="Tri_A"/>
+      <map_variables variable_1="Tri_A" variable_2="Tri_A"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycET" component_2="CycE"/>
+      <map_variables variable_1="CycE" variable_2="CycE"/>
+   </connection>
+   <connection>
+      <map_components component_1="CycET" component_2="Tri_E"/>
+      <map_variables variable_1="Tri_E" variable_2="Tri_E"/>
+   </connection>
+   <connection>
+      <map_components component_1="CKIT" component_2="CKI"/>
+      <map_variables variable_1="CKI" variable_2="CKI"/>
+   </connection>
+   <connection>
+      <map_components component_1="CKIT" component_2="BCKI"/>
+      <map_variables variable_1="BCKI" variable_2="BCKI"/>
+   </connection>
+   <connection>
+      <map_components component_1="CKIT" component_2="pBCKI"/>
+      <map_variables variable_1="pBCKI" variable_2="pBCKI"/>
+   </connection>
+   <connection>
+      <map_components component_1="CKIT" component_2="Tri_A"/>
+      <map_variables variable_1="Tri_A" variable_2="Tri_A"/>
+   </connection>
+   <connection>
+      <map_components component_1="CKIT" component_2="Tri_E"/>
+      <map_variables variable_1="Tri_E" variable_2="Tri_E"/>
+   </connection>
+   <connection>
+      <map_components component_1="Cdc20_T" component_2="Cdc20_i"/>
+      <map_variables variable_1="Cdc20_i" variable_2="Cdc20_i"/>
+   </connection>
+   <connection>
+      <map_components component_1="Cdc20_T" component_2="Cdc20_A"/>
+      <map_variables variable_1="Cdc20_A" variable_2="Cdc20_A"/>
+   </connection>
+   <connection>
+      <map_components component_1="TF_B" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k_afb" variable_2="k_afb"/>
+      <map_variables variable_1="k_ifb" variable_2="k_ifb"/>
+   </connection>
+   <connection>
+      <map_components component_1="TF_B" component_2="CycB"/>
+      <map_variables variable_1="CycB" variable_2="CycB"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_sb" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k_sbp" variable_2="k_sbp"/>
+      <map_variables variable_1="k_sbpp" variable_2="k_sbpp"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_sb" component_2="TF_B"/>
+      <map_variables variable_1="TF_B" variable_2="TF_B"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_sb" component_2="mass"/>
+      <map_variables variable_1="mass" variable_2="mass"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_sa" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k_sap" variable_2="k_sap"/>
+      <map_variables variable_1="k_sapp" variable_2="k_sapp"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_sa" component_2="TF_E"/>
+      <map_variables variable_1="TF_E" variable_2="TF_E"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_sa" component_2="mass"/>
+      <map_variables variable_1="mass" variable_2="mass"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_se" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k_sep" variable_2="k_sep"/>
+      <map_variables variable_1="k_sepp" variable_2="k_sepp"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_se" component_2="TF_E"/>
+      <map_variables variable_1="TF_E" variable_2="TF_E"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_se" component_2="mass"/>
+      <map_variables variable_1="mass" variable_2="mass"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_db" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k_dbp" variable_2="k_dbp"/>
+      <map_variables variable_1="k_dbhpp" variable_2="k_dbhpp"/>
+      <map_variables variable_1="k_dbcpp" variable_2="k_dbcpp"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_db" component_2="Cdc20_A"/>
+      <map_variables variable_1="Cdc20_A" variable_2="Cdc20_A"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_db" component_2="Cdh1"/>
+      <map_variables variable_1="Cdh1" variable_2="Cdh1"/>
+   </connection>
+   <connection>
+      <map_components component_1="Wee1" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k_aweep" variable_2="k_aweep"/>
+      <map_variables variable_1="k_aweepp" variable_2="k_aweepp"/>
+      <map_variables variable_1="k_iweep" variable_2="k_iweep"/>
+      <map_variables variable_1="k_iweepp" variable_2="k_iweepp"/>
+   </connection>
+   <connection>
+      <map_components component_1="Wee1" component_2="TF_I"/>
+      <map_variables variable_1="Cdc14" variable_2="Cdc14"/>
+   </connection>
+   <connection>
+      <map_components component_1="Wee1" component_2="CycB"/>
+      <map_variables variable_1="CycB" variable_2="CycB"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_wee" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k_weep" variable_2="k_weep"/>
+      <map_variables variable_1="k_weepp" variable_2="k_weepp"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_wee" component_2="Wee1"/>
+      <map_variables variable_1="Wee1" variable_2="Wee1"/>
+   </connection>
+   <connection>
+      <map_components component_1="Cdc25" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k_a25p" variable_2="k_a25p"/>
+      <map_variables variable_1="k_a25pp" variable_2="k_a25pp"/>
+      <map_variables variable_1="k_i25p" variable_2="k_i25p"/>
+      <map_variables variable_1="k_i25pp" variable_2="k_i25pp"/>
+   </connection>
+   <connection>
+      <map_components component_1="Cdc25" component_2="TF_I"/>
+      <map_variables variable_1="Cdc14" variable_2="Cdc14"/>
+   </connection>
+   <connection>
+      <map_components component_1="Cdc25" component_2="CycB"/>
+      <map_variables variable_1="CycB" variable_2="CycB"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_25" component_2="kinetic_parameters"/>
+      <map_variables variable_1="k_25p" variable_2="k_25p"/>
+      <map_variables variable_1="k_25pp" variable_2="k_25pp"/>
+   </connection>
+   <connection>
+      <map_components component_1="V_25" component_2="Cdc25"/>
+      <map_variables variable_1="Cdc25" variable_2="Cdc25"/>
+   </connection>
+   
+   
+   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
+    
+    <rdf:Description rdf:about="">
+      <dc:creator rdf:parseType="Resource">
+        <vCard:N rdf:parseType="Resource">
+          <vCard:Family>Lim</vCard:Family>
+          <vCard:Given>Jeelean</vCard:Given>
+		</vCard:N>
+        <vCard:EMAIL rdf:parseType="Resource">
+          <rdf:value>jlim063@aucklanduni.ac.nz</rdf:value>
+          <rdf:type rdf:resource="http://imc.org/vCard/3.0#internet"/>
+        </vCard:EMAIL>
+        <vCard:ORG rdf:parseType="Resource">
+          <vCard:Orgname>The University of Auckland</vCard:Orgname>
+          <vCard:Orgunit>Auckland Bioengineering Institute</vCard:Orgunit>
+        </vCard:ORG>
+      </dc:creator>
+      
+      <dcterms:created rdf:parseType="Resource">
+        <dcterms:W3CDTF>2010-01-05</dcterms:W3CDTF>
+      </dcterms:created>
+	  <dc:title>Analysis of a generic model of eukaryotic cell-cycle regulation: budding yeast taken from the original model code</dc:title>
+    </rdf:Description>
+    
+    <rdf:Description rdf:about="#csikasz_nagy_2006">
+         
+      <cmeta:bio_entity>budding yeast</cmeta:bio_entity>
+	  
+      <bqs:reference rdf:parseType="Resource">
+        <dc:subject rdf:parseType="Resource">
+          <bqs:subject_type>keyword</bqs:subject_type>
+          <rdf:value>
+            <rdf:Bag>
+              <rdf:li>cell cycle</rdf:li>
+			</rdf:Bag>
+          </rdf:value>
+        </dc:subject>
+      </bqs:reference>
+
+      <bqs:reference rdf:parseType="Resource">
+        <bqs:Pubmed_id>16581849</bqs:Pubmed_id>
+        <bqs:JournalArticle rdf:parseType="Resource">
+          <dc:creator>
+            <rdf:Seq>
+              <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Csikasz-Nagy</vCard:Family>
+                    <vCard:Given>A</vCard:Given>
+				  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+			  <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Battogtokh</vCard:Family>
+                    <vCard:Given>D</vCard:Given>
+				  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+              <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Chen</vCard:Family>
+                    <vCard:Given>K</vCard:Given>
+					<vCard:Other>C</vCard:Other>
+                  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+			  <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Novak</vCard:Family>
+                    <vCard:Given>B</vCard:Given>
+				  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+			  <rdf:li rdf:parseType="Resource">
+                <bqs:Person rdf:parseType="Resource">
+                  <vCard:N rdf:parseType="Resource">
+                    <vCard:Family>Tyson</vCard:Family>
+                    <vCard:Given>J</vCard:Given>
+					<vCard:Other>J</vCard:Other>
+                  </vCard:N>
+                </bqs:Person>
+              </rdf:li>
+            </rdf:Seq>
+          </dc:creator>
+          <dc:title>
+            Analysis of a generic model of eukaryotic cell-cycle regulation
+          </dc:title>
+          <dcterms:issued rdf:parseType="Resource">
+            <dcterms:W3CDTF>2006-06-15</dcterms:W3CDTF>
+          </dcterms:issued>
+          <bqs:Journal rdf:parseType="Resource">
+            <dc:title>Biophysical Journal</dc:title>
+          </bqs:Journal>
+		  <bqs:volume>90</bqs:volume>
+          <bqs:first_page>4361</bqs:first_page>
+          <bqs:last_page>4379</bqs:last_page>
+        </bqs:JournalArticle>
+      </bqs:reference>
+    </rdf:Description>
+  </rdf:RDF>
+  
+</model>

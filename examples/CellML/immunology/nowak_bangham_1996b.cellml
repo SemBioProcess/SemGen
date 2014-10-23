@@ -1,0 +1,258 @@
+<?xml version="1.0"?>
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xml:base="file:///Users/Hanne/Desktop/repository%20models/nowak_bangham_1996/nowak_bangham_1996b.cellml" cmeta:id="nowak_1996b" name="nowak_1996b">
+
+
+
+	<!-- documentation -->
+	<documentation xmlns="http://cellml.org/tmp-documentation">
+		<article>
+			<articleinfo>
+				<title>Population dynamics of immune responses to persistent viruses</title>
+				<author>
+					<firstname>Ethan</firstname>
+					<surname>Choi</surname>
+					<affiliation>
+						<shortaffil>Auckland Bioengineering Institute, University of Auckland</shortaffil>
+					</affiliation>
+				</author>
+			</articleinfo>
+			<section id="sec_status">
+				<title>Model Status</title>
+				<para>This model has been built with the differential expressions in Nowak's 1996 paper for population dynamics of immune responses to persistent viruses and is known to run in PCEnv and COR. The units have been checked and they are consistent. This particular CellML model is the 2nd model out of the 3 outlined in the paper. Note that the figures in the paper display the logged varibale values, and also certain parameters are unspecified and are left for the modeller to decide. Current parameterization portrays the interaction of uninfected cells x, infected cells y, free virus particles v, and CTL response z (model 2).</para>
+			</section>
+			<sect1 id="sec_structure">
+				<title>Model Structure</title>
+				<para>Abstract: Mathematical models, which are based on a firm understanding of biological interactions, can provide nonintuitive insights into the dynamics of host responses to infectious agents and can suggest new avenues for experimentation. Here, a simple mathematical approach is developed to explore the relation between antiviral immune responses, virus load, and virus diversity. The model results are compared to data on cytotoxic T cell responses and viral diversity in infections with the human T cell leukemia virus (HTLV-1) and the human immunodeficiency virus (HIV-1).</para>
+				
+				<para>Population dynamics of immune responses to persistent viruses, Nowak, MA and Bangham, CR, 1996, <emphasis>Science</emphasis>, 272, 74-79 <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/8600540">PubMed ID: 8600540</ulink>
+				</para>
+				<informalfigure float="0" id="______">
+					<mediaobject>
+						<imageobject>
+							<objectinfo>
+								<title>Model Diagram</title>
+							</objectinfo>
+							<imagedata fileref="nowak_1996.png"/>
+						</imageobject>
+					</mediaobject>
+					<caption>Schematic diagram of a model for virus-CTL interaction.</caption>
+				</informalfigure>
+			</sect1>
+		</article>
+	</documentation>
+
+
+	<!-- units -->
+	<units name="day">
+		<unit multiplier="86400" units="second"/>
+	</units>
+	<units name="first_order_rate_constant">
+		<unit exponent="-1" units="day"/>
+	</units>
+
+
+	<!-- components -->
+	<component name="environment">
+		<variable cmeta:id="environment_time" name="time" public_interface="out" units="day"/>
+	</component>
+
+	<component cmeta:id="uninfected" name="uninfected">
+		
+		<variable name="time" public_interface="in" units="day"/>
+		<variable initial_value="1" name="lambda" units="first_order_rate_constant"/>
+		<variable initial_value="0.01" name="d" units="first_order_rate_constant"/>
+		<variable name="beta" public_interface="in" units="first_order_rate_constant"/>
+		<variable name="v" public_interface="in" units="dimensionless"/>
+		<variable cmeta:id="x" initial_value="100" name="x" public_interface="out" units="dimensionless"/>
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply>
+				<eq/>
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>x</ci>
+				</apply>
+				<apply>
+					<minus/>
+					<apply>
+						<minus/>
+						<ci>lambda</ci>
+						<apply>
+							<times/>
+							<ci>d</ci>
+							<ci>x</ci>
+						</apply>
+					</apply>
+					<apply>
+						<times/>
+						<ci>beta</ci>
+						<ci>x</ci>
+						<ci>v</ci>
+					</apply>
+				</apply>
+			</apply>
+		</math>
+	</component>
+	<component cmeta:id="infected" name="infected">
+		
+		<variable name="time" public_interface="in" units="day"/>
+		<variable initial_value="0.02" name="beta" public_interface="out" units="first_order_rate_constant"/>
+		<variable initial_value="0.5" name="a" units="first_order_rate_constant"/>
+		<variable initial_value="1" name="p" units="first_order_rate_constant"/>
+		<variable name="x" public_interface="in" units="dimensionless"/>
+		<variable name="v" public_interface="in" units="dimensionless"/>
+		<variable name="z" public_interface="in" units="dimensionless"/>
+		<variable cmeta:id="y" initial_value="0" name="y" public_interface="out" units="dimensionless"/>
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply>
+				<eq/>
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>y</ci>
+				</apply>
+				<apply>
+					<minus/>
+					<apply>
+						<minus/>
+						<apply>
+							<times/>
+							<ci>beta</ci>
+							<ci>x</ci>
+							<ci>v</ci>
+						</apply>
+						<apply>
+							<times/>
+							<ci>a</ci>
+							<ci>y</ci>
+						</apply>
+					</apply>
+					<apply>
+						<times/>
+						<ci>p</ci>
+						<ci>y</ci>
+						<ci>z</ci>
+					</apply>
+				</apply>
+			</apply>
+		</math>
+	</component>
+	<component cmeta:id="virus" name="virus">
+		
+		<variable name="time" public_interface="in" units="day"/>
+		<variable initial_value="1" name="k" units="first_order_rate_constant"/>
+		<variable initial_value="1" name="u" units="first_order_rate_constant"/>
+		<variable name="y" public_interface="in" units="dimensionless"/>
+		<variable cmeta:id="v" initial_value="10" name="v" public_interface="out" units="dimensionless"/>
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply>
+				<eq/>
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>v</ci>
+				</apply>
+				<apply>
+					<minus/>
+					<apply>
+						<times/>
+						<ci>k</ci>
+						<ci>y</ci>
+					</apply>
+					<apply>
+						<times/>
+						<ci>u</ci>
+						<ci>v</ci>
+					</apply>
+				</apply>
+			</apply>
+		</math>
+	</component>
+	<component cmeta:id="CTL" name="CTL">
+		
+		<variable name="time" public_interface="in" units="day"/>
+		<variable initial_value="1" name="c" units="first_order_rate_constant"/>
+		<variable initial_value="0.05" name="b" units="first_order_rate_constant"/>
+		<variable name="y" public_interface="in" units="dimensionless"/>
+		<variable cmeta:id="z" initial_value="1" name="z" public_interface="out" units="dimensionless"/>
+		<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<apply>
+				<eq/>
+				<apply>
+					<diff/>
+					<bvar>
+						<ci>time</ci>
+					</bvar>
+					<ci>z</ci>
+				</apply>
+				<apply>
+					<minus/>
+					<apply>
+						<times/>
+						<ci>c</ci>
+						<ci>y</ci>
+						<ci>z</ci>
+					</apply>
+					<apply>
+						<times/>
+						<ci>b</ci>
+						<ci>z</ci>
+					</apply>
+				</apply>
+			</apply>
+		</math>
+	</component>
+
+
+	<!-- connections -->
+	<connection>
+		<map_components component_1="environment" component_2="uninfected"/>
+		<map_variables variable_1="time" variable_2="time"/>
+	</connection>
+	<connection>
+		<map_components component_1="environment" component_2="infected"/>
+		<map_variables variable_1="time" variable_2="time"/>
+	</connection>
+	<connection>
+		<map_components component_1="environment" component_2="virus"/>
+		<map_variables variable_1="time" variable_2="time"/>
+	</connection>
+	<connection>
+		<map_components component_1="environment" component_2="CTL"/>
+		<map_variables variable_1="time" variable_2="time"/>
+	</connection>
+	<connection>
+		<map_components component_1="uninfected" component_2="virus"/>
+		<map_variables variable_1="v" variable_2="v"/>
+	</connection>
+	<connection>
+		<map_components component_1="infected" component_2="uninfected"/>
+		<map_variables variable_1="x" variable_2="x"/>
+		<map_variables variable_1="beta" variable_2="beta"/>
+	</connection>
+	<connection>
+		<map_components component_1="infected" component_2="virus"/>
+		<map_variables variable_1="v" variable_2="v"/>
+		<map_variables variable_1="y" variable_2="y"/>
+	</connection>
+	<connection>
+		<map_components component_1="infected" component_2="CTL"/>
+		<map_variables variable_1="z" variable_2="z"/>
+		<map_variables variable_1="y" variable_2="y"/>
+	</connection>
+
+
+	<!-- metadata -->
+	
+
+	<!-- PCEnv specific metadata -->
+	
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:nodeID="n1"><boundIntervals xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n2"/></boundIntervals></rdf:Description><rdf:Description rdf:nodeID="n3"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n4"/></Person></rdf:Description><rdf:Description rdf:nodeID="n5"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Ethan</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Choi</Family></rdf:Description><rdf:Description rdf:nodeID="n6"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">
+            Population dynamics of immune responses to persistent viruses
+          </title><last_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">79</last_page><first_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">74</first_page><volume xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">272</volume><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n7"/></creator><Journal xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n8"/></Journal><issued xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:nodeID="n9"/></issued></rdf:Description><rdf:Description rdf:nodeID="n10"><rdf:value><rdf:Description rdf:nodeID="n11"/></rdf:value><subject_type xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">keyword</subject_type></rdf:Description><rdf:Description rdf:nodeID="n7"><rdf:_2><rdf:Description rdf:nodeID="n3"/></rdf:_2><rdf:_1><rdf:Description rdf:nodeID="n12"/></rdf:_1><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq"/></rdf:type></rdf:Description><rdf:Description rdf:about=""><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">Population dynamics of immune responses to persistent viruses (Model 2)</title><created xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:nodeID="n13"/></created><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n14"/></creator></rdf:Description><rdf:Description rdf:nodeID="n15"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n16"/></N></rdf:Description><rdf:Description rdf:nodeID="n2"><rdf:first><rdf:Description rdf:nodeID="n17"/></rdf:first><rdf:rest><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/></rdf:rest></rdf:Description><rdf:Description rdf:nodeID="n18"><subject xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:nodeID="n10"/></subject></rdf:Description><rdf:Description rdf:nodeID="n8"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">Science</title></rdf:Description><rdf:Description rdf:nodeID="n11"><rdf:_2 xml:lang="en">antiviral immune response</rdf:_2><rdf:_6 xml:lang="en">CTL</rdf:_6><rdf:_5 xml:lang="en">mutation</rdf:_5><rdf:_3 xml:lang="en">virus load</rdf:_3><rdf:_7 xml:lang="en">HTLV-1</rdf:_7><rdf:_1 xml:lang="en">immunology </rdf:_1><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag"/></rdf:type><rdf:_4 xml:lang="en">viral diversity</rdf:_4><rdf:_8 xml:lang="en">HIV-1</rdf:_8></rdf:Description><rdf:Description rdf:nodeID="n9"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">1996-04-05</W3CDTF></rdf:Description><rdf:Description rdf:nodeID="n14"><ORG xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n19"/></ORG><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n5"/></N><EMAIL xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n20"/></EMAIL></rdf:Description><rdf:Description rdf:nodeID="n12"><Person xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n15"/></Person></rdf:Description><rdf:Description rdf:about="#nowak_1996b"><simulation xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n1"/></simulation><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n18"/></reference><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n21"/></reference></rdf:Description><rdf:Description rdf:nodeID="n22"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Charles</Given><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">M</Other><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">R</Other><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Bangham</Family></rdf:Description><rdf:Description rdf:nodeID="n17"><endingValue xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">30</endingValue><pointDensity xmlns="http://www.cellml.org/metadata/simulation/1.0#nonstandard-" xml:lang="en">10000</pointDensity></rdf:Description><rdf:Description rdf:nodeID="n20"><rdf:value xml:lang="en">mcho099@aucklanduni.ac.nz</rdf:value><rdf:type><rdf:Description rdf:about="http://imc.org/vCard/3.0#internet"/></rdf:type></rdf:Description><rdf:Description rdf:nodeID="n16"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Martin</Given><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">A</Other><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Nowak</Family></rdf:Description><rdf:Description rdf:nodeID="n13"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2009-12-22</W3CDTF></rdf:Description><rdf:Description rdf:nodeID="n4"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:nodeID="n22"/></N></rdf:Description><rdf:Description rdf:nodeID="n21"><Pubmed_id xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">8600540</Pubmed_id><JournalArticle xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:nodeID="n6"/></JournalArticle></rdf:Description><rdf:Description rdf:nodeID="n19"><Orgunit xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Auckland Bioengineering Institute</Orgunit><Orgname xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">The University of Auckland</Orgname></rdf:Description></rdf:RDF></model>

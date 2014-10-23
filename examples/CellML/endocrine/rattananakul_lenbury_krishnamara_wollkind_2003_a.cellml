@@ -1,0 +1,318 @@
+<?xml version="1.0"?>
+<!--  FILE :  rattanakul_model_2003.xml
+
+CREATED :  24th July 2007
+
+LAST MODIFIED : 24th July 2007
+
+AUTHOR :  Catherine Lloyd
+          Bioengineering Institute
+          The University of Auckland
+          
+MODEL STATUS :  This model conforms to the CellML 1.1 Specification.
+
+DESCRIPTION :  This file contains a CellML description of Rattanakul et al's 2003 mathematical model of bone formation and resorption mediated by parathyroid hormone: response to estrogen/PTH therapy.
+
+CHANGES:  
+  
+--><model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" cmeta:id="rattanakul_model_2003" name="rattanakul_model_2003">
+
+<documentation xmlns="http://cellml.org/tmp-documentation">
+<article>
+  <articleinfo>
+  <title>Modeling of bone formation and resorption mediated by parathyroid hormone: response to estrogen/PTH therapy</title>
+  <author>
+    <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+    <affiliation>
+      <shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+    </affiliation>
+  </author>
+</articleinfo>
+<section id="sec_status">
+    <title>Model Status</title>
+    <para>
+        This CellML model represents the core model from the published paper (eqs 4-6), and describes changes in the concentration of PTH, the number of osteoclasts and the number of osteoblasts. The model runs in OpenCell to recreate the published results (figure 3b and 3c). The units are all dimensionless (in accordance with the published paper) and are therefore consistent. However a dimensionless time does mean that the model will not run in COR.  
+</para>
+  </section>
+  <sect1 id="sec_structure">
+  <title>Model Structure</title>
+
+<para>
+ABSTRACT: Bone, a major reservoir of body calcium, is under the hormonal control of the parathyroid hormone (PTH). Several aspects of its growth, turnover, and mechanism, occur in the absence of gonadal hormones. Sex steroids such as estrogen, nonetheless, play an important role in bone physiology, and are extremely essential to maintain bone balance in adults. In order to provide a basis for understanding the underlying mechanisms of bone remodeling as it is mediated by PTH, we propose here a mathematical model of the process. The nonlinear system model is then utilized to study the temporal effect of PTH as well as the action of estrogen replacement therapy on bone turnover. Analysis of the model is done on the assumption, supported by reported clinical evidence, that the process is characterized by highly diversified dynamics, which warrants the use of singular perturbation arguments. The model is shown to exhibit limit cycle behavior, which can develop into chaotic dynamics for certain ranges of the system's parametric values. Effects of estrogen and PTH administrations are then investigated by extending on the core model. Analysis of the model seems to indicate that the paradoxical observation that intermittent PTH administration causes net bone deposition while continuous administration causes net bone loss, and certain other reported phenomena may be attributed to the highly diversified dynamics which characterizes this nonlinear remodeling process. 
+</para>
+
+<informalfigure float="0" id="fig_reaction_diagram">
+<mediaobject>
+  <imageobject>
+    <objectinfo>
+      <title>model diagram</title>
+    </objectinfo>
+    <imagedata fileref="rattanakul_2003a.png"/>
+  </imageobject>
+</mediaobject>
+<caption>Schematic diagram depicting the Rattanakul et al 2003 model - effects of PTH on osteoclast differentiation by osteoblasts.</caption>
+</informalfigure>
+
+<para>
+The original paper reference is cited below:
+</para>
+
+<para>
+Modeling of bone formation and resorption mediated by parathyroid hormone: response to estrogen/PTH therapy, Chontita Rattanakul, Yongwimon Lenbury, Nateetip Krishnamara, and David J. Wollkind, 2003,<emphasis>BioSystems</emphasis>, 70, 55-72.  <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/12753937">PubMed ID: 12753937</ulink>
+</para>
+
+</sect1>
+</article>
+</documentation> 
+
+
+  <component name="environment">
+    <variable cmeta:id="environment_time" name="time" public_interface="out" units="dimensionless"/>
+  </component>
+
+  <component cmeta:id="x" name="x">
+      
+    <variable cmeta:id="x_x" initial_value="2.0" name="x" public_interface="out" units="dimensionless"/>
+    
+    <variable name="a1" public_interface="in" units="dimensionless"/>
+    <variable name="k1" public_interface="in" units="dimensionless"/>
+    <variable name="b1" public_interface="in" units="dimensionless"/>
+    <variable name="y" public_interface="in" units="dimensionless"/>
+    <variable name="time" public_interface="in" units="dimensionless"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> x </ci> 
+        </apply>
+        <apply>
+          <minus/>
+          <apply>
+            <divide/>
+            <ci> a1 </ci>
+            <apply>
+              <plus/>
+              <ci> k1 </ci>
+              <ci> y </ci>
+            </apply>
+          </apply>
+          <apply>
+            <times/>
+            <ci> b1 </ci>
+            <ci> x </ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component cmeta:id="y" name="y">
+      
+    <variable cmeta:id="y_y" initial_value="1.0" name="y" public_interface="out" units="dimensionless"/>
+    
+    <variable name="epsilon" public_interface="in" units="dimensionless"/>
+    <variable name="a2" public_interface="in" units="dimensionless"/>
+    <variable name="a3" public_interface="in" units="dimensionless"/>
+    <variable name="k2" public_interface="in" units="dimensionless"/>
+    <variable name="b2" public_interface="in" units="dimensionless"/>
+    <variable name="x" public_interface="in" units="dimensionless"/>
+    <variable name="z" public_interface="in" units="dimensionless"/>
+    <variable name="time" public_interface="in" units="dimensionless"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> y </ci> 
+        </apply>
+        <apply>
+          <times/>
+          <ci> epsilon </ci>
+          <apply>
+            <minus/>
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <apply>
+                  <plus/>
+                  <ci> a2 </ci>
+                  <apply>
+                    <times/>
+                    <ci> a3 </ci>
+                    <ci> x </ci>
+                  </apply>
+                </apply>
+                <ci> y </ci>
+                <ci> z </ci>
+              </apply>
+              <apply>
+                <plus/>
+                <ci> k2 </ci>
+                <apply>
+                  <power/>
+                  <ci> x </ci>
+                  <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless"> 2.0 </cn>
+                </apply>
+              </apply>
+            </apply>
+            <apply>
+              <times/>
+              <ci> b2 </ci>
+              <ci> y </ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component cmeta:id="z" name="z">
+      
+    <variable cmeta:id="z_z" initial_value="0.15" name="z" public_interface="out" units="dimensionless"/>
+    
+    <variable name="epsilon" public_interface="in" units="dimensionless"/>
+    <variable name="delta" public_interface="in" units="dimensionless"/>
+    <variable name="a4" public_interface="in" units="dimensionless"/>
+    <variable name="a5" public_interface="in" units="dimensionless"/>
+    <variable name="k3" public_interface="in" units="dimensionless"/>
+    <variable name="b3" public_interface="in" units="dimensionless"/>
+    <variable name="x" public_interface="in" units="dimensionless"/>
+    <variable name="time" public_interface="in" units="dimensionless"/>
+    
+    <math xmlns="http://www.w3.org/1998/Math/MathML"> 
+      <apply>
+        <eq/> 
+        <apply>
+          <diff/> 
+          <bvar>
+            <ci>time</ci>
+          </bvar> 
+          <ci> z </ci> 
+        </apply>
+        <apply>
+          <times/>
+          <ci> epsilon </ci>
+          <ci> delta </ci>
+          <apply>
+            <minus/>
+            <apply>
+              <times/>
+              <ci> a4 </ci>
+              <ci> x </ci>
+            </apply>
+            <apply>
+              <plus/>
+              <apply>
+                <divide/>
+                <apply>
+                  <times/>
+                  <ci> a5 </ci>
+                  <ci> x </ci>
+                  <ci> z </ci>
+                </apply>
+                <apply>
+                  <plus/>
+                  <ci> k3 </ci>
+                  <ci> x </ci>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <ci> b3 </ci>
+                <ci> z </ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+
+  <component name="model_parameters"> 
+    <variable initial_value="0.1" name="epsilon" public_interface="out" units="dimensionless"/>
+    <variable initial_value="0.9" name="delta" public_interface="out" units="dimensionless"/>
+    <variable initial_value="0.05" name="a1" public_interface="out" units="dimensionless"/>
+    <variable initial_value="0.009" name="a2" public_interface="out" units="dimensionless"/>
+    <variable initial_value="0.675" name="a3" public_interface="out" units="dimensionless"/>
+    <variable initial_value="0.01" name="a4" public_interface="out" units="dimensionless"/>
+    <variable initial_value="0.005" name="a5" public_interface="out" units="dimensionless"/>
+    <variable initial_value="0.1" name="b1" public_interface="out" units="dimensionless"/>
+    <variable initial_value="0.3" name="b2" public_interface="out" units="dimensionless"/>
+    <variable initial_value="0.01" name="b3" public_interface="out" units="dimensionless"/>
+    <variable initial_value="0.1" name="k1" public_interface="out" units="dimensionless"/>
+    <variable initial_value="0.5" name="k2" public_interface="out" units="dimensionless"/>
+    <variable initial_value="0.025" name="k3" public_interface="out" units="dimensionless"/>
+  </component>
+
+  <connection>
+    <map_components component_1="x" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="y" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+  
+  <connection>
+    <map_components component_1="z" component_2="environment"/>
+    <map_variables variable_1="time" variable_2="time"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="y" component_2="x"/>
+    <map_variables variable_1="x" variable_2="x"/>
+    <map_variables variable_1="y" variable_2="y"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="x" component_2="model_parameters"/>
+    <map_variables variable_1="a1" variable_2="a1"/>
+    <map_variables variable_1="k1" variable_2="k1"/>
+    <map_variables variable_1="b1" variable_2="b1"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="y" component_2="z"/>
+    <map_variables variable_1="z" variable_2="z"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="y" component_2="model_parameters"/>
+    <map_variables variable_1="epsilon" variable_2="epsilon"/>
+    <map_variables variable_1="a2" variable_2="a2"/>
+    <map_variables variable_1="a3" variable_2="a3"/>
+    <map_variables variable_1="k2" variable_2="k2"/>
+    <map_variables variable_1="b2" variable_2="b2"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="z" component_2="x"/>
+    <map_variables variable_1="x" variable_2="x"/>
+  </connection>
+
+  <connection>
+    <map_components component_1="z" component_2="model_parameters"/>
+    <map_variables variable_1="epsilon" variable_2="epsilon"/>
+    <map_variables variable_1="delta" variable_2="delta"/>
+    <map_variables variable_1="a4" variable_2="a4"/>
+    <map_variables variable_1="a5" variable_2="a5"/>
+    <map_variables variable_1="k3" variable_2="k3"/>
+    <map_variables variable_1="b3" variable_2="b3"/>
+  </connection>
+
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:about="rdf:#27e9d5e5-f304-4c81-b462-93734d396340"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#e8011f89-de00-4740-9631-918ab3a207f0"/></N><rdf:type><rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/></rdf:type></rdf:Description><rdf:Description rdf:about="rdf:#8115d6a7-3828-4d37-96b1-290c722b4f93"><subject xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#32bc5656-395e-4526-948f-5691a09071e8"/></subject></rdf:Description><rdf:Description rdf:about="rdf:#4d898b70-d4cd-4c6c-b60d-0c9ba38073d0"><rdf:_5 xml:lang="en">osteoclast</rdf:_5><rdf:_3 xml:lang="en">osteoporosis</rdf:_3><rdf:_2 xml:lang="en">parathyroid hormone</rdf:_2><rdf:_4 xml:lang="en">osteoblast</rdf:_4><rdf:_1 xml:lang="en">endocrine</rdf:_1><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag"/></rdf:type></rdf:Description><rdf:Description rdf:about="rdf:#67b1263a-45dd-4f63-9b36-16069fe9b7dd"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#675920c8-34ce-436b-856f-f2067951eaa1"/></N><rdf:type><rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/></rdf:type></rdf:Description><rdf:Description rdf:about="#x"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">x</title><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">concentration of parathyroid hormone</alternative><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">PTH</alternative></rdf:Description><rdf:Description rdf:about=""><created xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:about="rdf:#df8c33fa-042b-459b-b6ef-1e69388a16e0"/></created><cmeta:comment><rdf:Description rdf:about="rdf:#57ee882f-ed77-4d8f-b72d-67b073deebf2"/></cmeta:comment><publisher xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">The University of Auckland, Auckland Bioengineering Institute</publisher><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">Modeling of bone formation and resorption mediated by parathyroid hormone: response to estrogen/PTH therapy (core model)</title><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#b36781d0-3400-40fd-bc78-d2febd04a9ca"/></creator></rdf:Description><rdf:Description rdf:about="rdf:#e8011f89-de00-4740-9631-918ab3a207f0"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Nateetip</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Krishnamara</Family></rdf:Description><rdf:Description rdf:nodeID="n1"><endingValue xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">250</endingValue><maximumStepSize xmlns="http://www.cellml.org/metadata/simulation/1.0#" xml:lang="en">0.1</maximumStepSize><pointDensity xmlns="http://www.cellml.org/metadata/simulation/1.0#nonstandard-" xml:lang="en">100000</pointDensity></rdf:Description><rdf:Description rdf:about="rdf:#7f3d82f1-c2bb-48b7-924e-90289f566b1a"><Pubmed_id xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">12753937</Pubmed_id><JournalArticle xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:about="rdf:#cd61089a-f702-466c-a7ab-36b21ae8098b"/></JournalArticle></rdf:Description><rdf:Description rdf:about="#y"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">y</title><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">number of osteoclastic cells</alternative></rdf:Description><rdf:Description rdf:about="rdf:#6049b112-bd2c-4e19-9e88-4b71df794841"><rdf:value xml:lang="en">c.lloyd@auckland.ac.nz</rdf:value><rdf:type><rdf:Description rdf:about="http://imc.org/vCard/3.0#internet"/></rdf:type></rdf:Description><rdf:Description rdf:about="rdf:#cd61089a-f702-466c-a7ab-36b21ae8098b"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">Modeling of bone formation and resorption mediated by parathyroid hormone: response to estrogen/PTH therapy</title><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#bdf4c2ab-13b1-4391-84e2-a6860da20c1b"/></creator><volume xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">70</volume><first_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">55</first_page><Journal xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:about="rdf:#0ad99ece-a378-4afe-bd42-b0fc2b8e8258"/></Journal><last_page xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">72</last_page><issued xmlns="http://purl.org/dc/terms/"><rdf:Description rdf:about="rdf:#cbaee585-5f8e-45c7-b0ca-d4a21f361be6"/></issued></rdf:Description><rdf:Description rdf:about="rdf:#a7f6215e-4ea8-44fe-bfe3-46af66297246"><FN xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Catherine Lloyd</FN></rdf:Description><rdf:Description rdf:about="rdf:#2abe4edd-0008-4546-804c-720e19d0a1e1"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Catherine</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Lloyd</Family><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">May</Other></rdf:Description><rdf:Description rdf:about="rdf:#bdf4c2ab-13b1-4391-84e2-a6860da20c1b"><rdf:_3><rdf:Description rdf:about="rdf:#27e9d5e5-f304-4c81-b462-93734d396340"/></rdf:_3><rdf:_2><rdf:Description rdf:about="rdf:#38f411c4-1c91-4d15-ac49-dadf7ba71bc7"/></rdf:_2><rdf:_4><rdf:Description rdf:about="rdf:#67b1263a-45dd-4f63-9b36-16069fe9b7dd"/></rdf:_4><rdf:_1><rdf:Description rdf:about="rdf:#957ef84d-713f-4377-956e-f85d1a3f9b71"/></rdf:_1><rdf:type><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq"/></rdf:type></rdf:Description><rdf:Description rdf:about="rdf:#57ee882f-ed77-4d8f-b72d-67b073deebf2"><rdf:value xml:lang="en"></rdf:value><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#59559ec9-b5aa-4999-bac0-eaa5816aef07"/></creator></rdf:Description><rdf:Description rdf:about="rdf:#0ad99ece-a378-4afe-bd42-b0fc2b8e8258"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">BioSystems</title></rdf:Description><rdf:Description rdf:about="#z"><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">z</title><alternative xmlns="http://purl.org/dc/terms/" xml:lang="en">number of osteoblastic cells</alternative></rdf:Description><rdf:Description rdf:about="rdf:#326dd0f1-24f2-4de6-94d3-4562253e1bf7"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Chontita</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Rattananakul</Family></rdf:Description><rdf:Description rdf:about="#rattanakul_model_2003"><cmeta:comment><rdf:Description rdf:about="rdf:#59b08333-534e-4c76-b847-c5591eb2f70a"/></cmeta:comment><title xmlns="http://purl.org/dc/elements/1.1/" xml:lang="en">
+        Rattanakul et al's 2003 mathematical model of bone formation and resorption mediated by parathyroid hormone: response to estrogen/PTH therapy.
+      </title><simulation xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n2"/></simulation><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:about="rdf:#7f3d82f1-c2bb-48b7-924e-90289f566b1a"/></reference><reference xmlns="http://www.cellml.org/bqs/1.0#"><rdf:Description rdf:about="rdf:#8115d6a7-3828-4d37-96b1-290c722b4f93"/></reference></rdf:Description><rdf:Description rdf:about="rdf:#b36781d0-3400-40fd-bc78-d2febd04a9ca"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#2abe4edd-0008-4546-804c-720e19d0a1e1"/></N><EMAIL xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#6049b112-bd2c-4e19-9e88-4b71df794841"/></EMAIL><ORG xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#9773815c-4b6a-41f9-bb98-16f8bd6bb352"/></ORG></rdf:Description><rdf:Description rdf:about="rdf:#df8c33fa-042b-459b-b6ef-1e69388a16e0"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2007-07-24T00:00:00+00:00</W3CDTF></rdf:Description><rdf:Description rdf:about="rdf:#9773815c-4b6a-41f9-bb98-16f8bd6bb352"><Orgunit xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Auckland Bioengineering Institute</Orgunit><Orgname xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">The University of Auckland</Orgname></rdf:Description><rdf:Description rdf:about="rdf:#32bc5656-395e-4526-948f-5691a09071e8"><rdf:value><rdf:Description rdf:about="rdf:#4d898b70-d4cd-4c6c-b60d-0c9ba38073d0"/></rdf:value><subject_type xmlns="http://www.cellml.org/bqs/1.0#" xml:lang="en">keyword</subject_type></rdf:Description><rdf:Description rdf:nodeID="n2"><boundIntervals xmlns="http://www.cellml.org/metadata/simulation/1.0#"><rdf:Description rdf:nodeID="n3"/></boundIntervals></rdf:Description><rdf:Description rdf:about="rdf:#957ef84d-713f-4377-956e-f85d1a3f9b71"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#326dd0f1-24f2-4de6-94d3-4562253e1bf7"/></N><rdf:type><rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/></rdf:type></rdf:Description><rdf:Description rdf:about="rdf:#d2d402fc-61dc-485f-8e90-84818bfa5f7f"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Yongwimon</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Lenbury</Family></rdf:Description><rdf:Description rdf:about="rdf:#38f411c4-1c91-4d15-ac49-dadf7ba71bc7"><N xmlns="http://www.w3.org/2001/vcard-rdf/3.0#"><rdf:Description rdf:about="rdf:#d2d402fc-61dc-485f-8e90-84818bfa5f7f"/></N><rdf:type><rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/></rdf:type></rdf:Description><rdf:Description rdf:about="rdf:#59b08333-534e-4c76-b847-c5591eb2f70a"><rdf:value xml:lang="en">This is a CellML description of Rattanakul et al's 2003 mathematical model of bone formation and resorption mediated by parathyroid hormone: response to estrogen/PTH therapy.</rdf:value><creator xmlns="http://purl.org/dc/elements/1.1/"><rdf:Description rdf:about="rdf:#a7f6215e-4ea8-44fe-bfe3-46af66297246"/></creator></rdf:Description><rdf:Description rdf:about="rdf:#675920c8-34ce-436b-856f-f2067951eaa1"><Given xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">David</Given><Family xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">Wollkind</Family><Other xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en">J</Other></rdf:Description><rdf:Description rdf:about="rdf:#59559ec9-b5aa-4999-bac0-eaa5816aef07"><FN xmlns="http://www.w3.org/2001/vcard-rdf/3.0#" xml:lang="en"></FN></rdf:Description><rdf:Description rdf:nodeID="n3"><rdf:rest><rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/></rdf:rest><rdf:first><rdf:Description rdf:nodeID="n1"/></rdf:first></rdf:Description><rdf:Description rdf:about="rdf:#cbaee585-5f8e-45c7-b0ca-d4a21f361be6"><W3CDTF xmlns="http://purl.org/dc/terms/" xml:lang="en">2003-06-00 00:00</W3CDTF></rdf:Description></rdf:RDF></model>
