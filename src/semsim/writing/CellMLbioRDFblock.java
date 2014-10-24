@@ -258,16 +258,13 @@ public class CellMLbioRDFblock {
 		return out.toString();
 	}
 	
-	
 	protected Resource getResourceForPMCandAnnotate(Model rdf, PhysicalModelComponent pmc){
 		if(pmcsandresourceURIs.containsKey(pmc)){
 			return rdf.getResource(pmcsandresourceURIs.get(pmc).toString());
 		}
 		else{
-			
 			System.out.println(pmc.getName());
-
-			
+	
 			String resname = modelns;
 			
 			String typeprefix = "unknown";

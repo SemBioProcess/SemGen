@@ -321,7 +321,7 @@ public class DataStructure extends ComputationalModelComponent implements Annota
 			if(getPhysicalProperty().hasRefersToAnnotation()){
 				ReferenceOntologyAnnotation roa = (getPhysicalProperty().getFirstRefersToReferenceOntologyAnnotation());
 				
-				if(SemGen.semsimlib.OPBhasStateProperty(roa) ||
+				if(lib.OPBhasStateProperty(roa) ||
 						lib.OPBhasForceProperty(roa)){
 					return SemSimConstants.PROPERTY_OF_PHYSICAL_ENTITY;
 				}

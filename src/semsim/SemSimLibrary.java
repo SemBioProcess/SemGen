@@ -120,7 +120,7 @@ public class SemSimLibrary {
 	}
 	
 	public boolean OPBhasFlowProperty(ReferenceOntologyAnnotation roa) {
-		return OPBflowProperties.contains(roa);
+		return OPBflowProperties.contains(roa.getReferenceURI().toString());
 	}
 	
 	public boolean OPBhasFlowProperty(String s) {
@@ -128,23 +128,23 @@ public class SemSimLibrary {
 	}
 	
 	public boolean OPBhasFlowProperty(URI u) {
-		return OPBflowProperties.contains(u);
+		return OPBflowProperties.contains(u.toString());
 	}
 	
 	public boolean OPBhasForceProperty(ReferenceOntologyAnnotation roa) {
-		return OPBforceProperties.contains(roa);
+		return OPBforceProperties.contains(roa.getReferenceURI().toString());
 	}
 	
 	public boolean OPBhasAmountProperty(ReferenceOntologyAnnotation roa) {
-		return OPBamountProperties.contains(roa);
+		return OPBamountProperties.contains(roa.getReferenceURI().toString());
 	}
 	
 	public boolean OPBhasStateProperty(ReferenceOntologyAnnotation roa) {
-		return OPBstateProperties.contains(roa);
+		return OPBstateProperties.contains(roa.getReferenceURI().toString());
 	}
 	
 	public boolean OPBhasProcessProperty(ReferenceOntologyAnnotation roa) {
-		return OPBprocessProperties.contains(roa);
+		return OPBprocessProperties.contains(roa.getReferenceURI().toString());
 	}
 	
 	public boolean OPBhasProcessProperty(String s) {
@@ -152,6 +152,6 @@ public class SemSimLibrary {
 	}
 	
 	public boolean OPBhasProcessProperty(URI u) {
-		return OPBprocessProperties.contains(u);
+		return OPBprocessProperties.contains(u.toString());
 	}
 }
