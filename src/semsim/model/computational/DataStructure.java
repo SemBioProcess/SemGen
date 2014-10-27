@@ -5,7 +5,6 @@ import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 
-import semgen.SemGen;
 import semsim.Annotatable;
 import semsim.SemSimConstants;
 import semsim.SemSimLibrary;

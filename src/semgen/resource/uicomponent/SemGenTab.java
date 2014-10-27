@@ -50,6 +50,10 @@ public class SemGenTab extends JPanel {
 		tablabel.titlelabel.setText(formatTabName(title));
 	}
 	
+	public void addMouseListenertoTabLabel(MouseListener listener) {
+		tablabel.addMouseListener(listener);
+	}
+	
 	public class TabTitle extends JPanel implements MouseListener {
 		private static final long serialVersionUID = 1L;
 		SemGenTab parent;

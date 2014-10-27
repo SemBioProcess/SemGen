@@ -15,9 +15,7 @@ import semgen.annotation.CodewordButton;
 import semgen.annotation.dialog.AnnotationComponentReplacer;
 import semgen.annotation.dialog.ModelLevelMetadataEditor;
 import semgen.annotation.dialog.RemovePhysicalComponentDialog;
-import semgen.annotation.dialog.SemanticSummaryDialog;
 import semgen.annotation.dialog.referenceclass.AddReferenceClassDialog;
-import semgen.annotation.dialog.textminer.TextMinerDialog;
 import semgen.extraction.ExtractorTab;
 import semgen.merging.MergerTab;
 import semgen.resource.BrowserLauncher;
@@ -104,7 +102,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 	private JMenuItem fileitemsaveas;
 	public JMenuItem fileitemclose;
 	public JMenuItem fileitemexit;
-	public static JMenuItem semanticsummary;
 	private JMenuItem toolsitemannotate;
 	private static JMenuItem annotateitemaddrefterm;
 	private static JMenuItem annotateitemremoverefterm;
@@ -112,7 +109,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 	private JMenuItem annotateitemchangesourcemodelcode;
 	public JMenuItem annotateitemreplacerefterm;
 	public JMenuItem annotateitemcopy;
-	public JMenuItem annotateitemharvestfromtext;
 	public JMenuItem annotateitemeditmodelanns;
 	public JMenuItem annotateitemexportcsv;
 	public static JCheckBoxMenuItem annotateitemshowimports;
@@ -138,11 +134,11 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 	public static String unspecifiedName = "*unspecified*";
 
 	public SemGenGUI(SemGenSettings sets, JMenuBar menubar){
-		settings = sets;
-		settingshandle = sets;
+		settings = new SemGenSettings(sets);
+		settingshandle = settings;
 		factory = manager.getOWLDataFactory();
 
-		setPreferredSize(settings.getAppSize());
+		setPreferredSize(sets.getAppSize());
 		setOpaque(true);
 		setBackground(Color.white);
 		addChangeListener(this);
@@ -152,7 +148,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		numtabs = 0;
 		// Create the menu bar.
 		menubar.setOpaque(true);
-		menubar.setPreferredSize(new Dimension(settings.getAppWidth(), 20));
+		menubar.setPreferredSize(new Dimension(sets.getAppWidth(), 20));
 
 		// Build the File menu
 		JMenu filemenu = new JMenu("File");
@@ -182,9 +178,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		toolsitemannotate.setToolTipText("Open a new Annotator tool");
 		annotatemenu.add(toolsitemannotate);
 		annotatemenu.add(new JSeparator());
-		
-		semanticsummary = formatMenuItem(semanticsummary, "Biological summary", KeyEvent.VK_U, true, true);
-		semanticsummary.setToolTipText("View summary of the biological concepts used in the model");
 
 		autoannotate = new JCheckBoxMenuItem("Auto-annotate during translation");
 		autoannotate.setSelected(settings.doAutoAnnotate());
@@ -192,9 +185,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		autoannotate.setToolTipText("Automatically add annotations based on physical units, etc. when possible");
 		annotatemenu.add(autoannotate);
 		annotatemenu.add(new JSeparator());
-		
-		annotateitemharvestfromtext = formatMenuItem(annotateitemharvestfromtext, "Find terms in text", KeyEvent.VK_F, true, true);
-		annotateitemharvestfromtext.setToolTipText("Use natural language processing to find reference ontology terms in a block of text");
 
 		annotateitemaddrefterm = formatMenuItem(annotateitemaddrefterm, "Add reference term", KeyEvent.VK_D,true,true);
 		annotateitemaddrefterm.setToolTipText("Add a reference ontology term to use for annotating this model");
@@ -399,25 +389,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		if (o == toolsitemannotate) {
 			startNewAnnotatorTask();
 		}
-		
-		if(o == semanticsummary){
-			if(desktop.getSelectedComponent() instanceof AnnotatorTab){
-				AnnotatorTab ann = (AnnotatorTab)desktop.getSelectedComponent();
-				new SemanticSummaryDialog(ann.semsimmodel);
-			}
-		}
-		
-		if(o == annotateitemharvestfromtext){
-			if(desktop.getSelectedComponent() instanceof AnnotatorTab){
-				AnnotatorTab ann = (AnnotatorTab)desktop.getSelectedComponent();
-				if(ann.tmd == null){
-					try {ann.tmd = new TextMinerDialog(ann);} 
-					catch (FileNotFoundException e1) {e1.printStackTrace();}
-				}
-				else{ann.tmd.setVisible(true);}
-			}
-			else{JOptionPane.showMessageDialog(this,"Please select an Annotator tab or open a new Annotator");}
-		} 
 
 		if (o == annotateitemaddrefterm) {
 			if (desktop.getSelectedComponent() instanceof AnnotatorTab) {
@@ -759,7 +730,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 	
 	// Make this into task
 	private static ExtractorTab NewExtractorAction(File file) throws OWLException, IOException, InterruptedException, JDOMException, ServiceException {
-		if (!file.exists()) return null;
+		if ((file == null) || !file.exists()) return null;
 		SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(file);
 		if(ModelClassifier.classify(file)==ModelClassifier.CELLML_MODEL || semsimmodel.getFunctionalSubmodels().size()>0){
 			JOptionPane.showMessageDialog(null, "Sorry. Extraction of models with CellML-type components not yet supported.");
@@ -918,9 +889,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		}
 		return newamounts;
 	}
-	
 
-	
 	public static void startEncoding(Object inputfileormodel, String filenamesuggestion){
 		File outputfile = null;
 		Object[] optionsarray = new Object[] {"CellML", "MML (JSim)"};
@@ -1202,7 +1171,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 	public void updateSemGenMenuOptions(){
 		Component comp = desktop.getSelectedComponent();
 		
-		annotateitemharvestfromtext.setEnabled(comp instanceof AnnotatorTab);
 		annotateitemaddrefterm.setEnabled(comp instanceof AnnotatorTab);
 		annotateitemremoverefterm.setEnabled(comp instanceof AnnotatorTab);
 		annotateitemcopy.setEnabled(comp instanceof AnnotatorTab);
@@ -1226,6 +1194,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		numtabs++;
 		addTab(tab.getName(), tab);
 		setTabComponentAt(numtabs-1, tab.getTabLabel());
+		tab.addMouseListenertoTabLabel(new tabClickedListener(numtabs-1));
 		tab.setClosePolicy(new tabCloseListener(tab));
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			   public void run() { 
@@ -1233,6 +1202,16 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 				   getComponentAt(numtabs - 1).repaint();
 				   getComponentAt(numtabs - 1).validate();
 		}});
+	}
+	
+	private class tabClickedListener extends MouseAdapter {
+		int tabindex;
+		tabClickedListener(int index) {
+			tabindex = index;
+		}
+		public void mouseClicked(MouseEvent arg0) {
+			setSelectedIndex(tabindex);
+		}
 	}
 	
 	private class tabCloseListener extends MouseAdapter {

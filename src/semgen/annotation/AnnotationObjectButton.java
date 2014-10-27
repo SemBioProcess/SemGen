@@ -34,7 +34,6 @@ public class AnnotationObjectButton extends JPanel implements MouseListener{
 	public JLabel compannlabel = new JLabel();
 	public JLabel singularannlabel = new JLabel();
 	public JLabel humdeflabel = new JLabel();
-	public JLabel deplabel = new JLabel();
 	public JPanel indicatorspanel = new JPanel();
 	public JPanel indicatorssuperpanel = new JPanel();
 	public PropertyMarker propoflabel = new PropertyMarker(Color.white, null);
@@ -67,7 +66,6 @@ public class AnnotationObjectButton extends JPanel implements MouseListener{
 		indicatorspanel.setPreferredSize(new Dimension(50, ipph));
 		indicatorspanel.setLayout(new BoxLayout(indicatorspanel, BoxLayout.X_AXIS));
 		indicatorspanel.setAlignmentY(TOP_ALIGNMENT);
-		indicatorspanel.setOpaque(false);
 
 		compannlabel.setText("_");
 		compannlabel.setName("C");
@@ -90,15 +88,11 @@ public class AnnotationObjectButton extends JPanel implements MouseListener{
 		humdeflabel.setBorder(BorderFactory.createEmptyBorder(0, 1, 0, 1));
 		humdeflabel.setAlignmentY(JComponent.CENTER_ALIGNMENT);
 		humdeflabel.setFont(SemGenFont.Plain("Serif", -3));
-
-		deplabel.setText("_");
-		deplabel.setName("D");
 		
 		if(editable){
 			compannlabel.addMouseListener(this);
 			singularannlabel.addMouseListener(this);
 			humdeflabel.addMouseListener(this);
-			deplabel.addMouseListener(this);
 		}
 		else namelabel.setForeground(Color.gray);
 
@@ -204,9 +198,8 @@ public class AnnotationObjectButton extends JPanel implements MouseListener{
 	}
 
 	public void mousePressed(MouseEvent e) {
-		JLabel label = null;
 		if(e.getComponent() instanceof JLabel){
-				label = (JLabel) e.getComponent();
+			JLabel label = (JLabel) e.getComponent();
 			requestFocusInWindow();
 			annotater.changeButtonFocus(this, label);
 			annotater.focusbutton = this;

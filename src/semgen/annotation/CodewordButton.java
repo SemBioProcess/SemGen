@@ -22,11 +22,9 @@ public class CodewordButton extends AnnotationObjectButton implements MouseListe
 
 	public CodewordButton(AnnotatorTab ann, DataStructure ssc, boolean compannfilled,
 			String companntext, boolean noncompannfilled, boolean humdeffilled,
-			boolean depfilled, boolean editable) {
+			boolean editable) {
 		super(ann, ssc, compannfilled, companntext, noncompannfilled, humdeffilled, editable);
 		ds = ssc;
-		if (depfilled) {annotationAdded(deplabel, false);}
-		else {annotationNotAdded(deplabel);}
 		namelabel.setFont(SemGenFont.defaultItalic());
 		refreshAllCodes();
 	}

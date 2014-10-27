@@ -324,8 +324,6 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 				Component[] comps = anndialog.compositepanel.getComponents();
 				for(int c=0; c<comps.length; c++){
 					if(comps[c] == this) componentindex = c;
-					if(comps[c] instanceof SemSimComponentAnnotationPanel) {
-					}
 				}
 				// If we're removing a property annotation, just remove reference anns from property and refresh
 				if(componentindex==0){

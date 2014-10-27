@@ -58,7 +58,6 @@ public class CellMLwriter implements Writer{
 	public String writeToString(SemSimModel model){
 		Document doc = null;
 		try{
-			
 			this.semsimmodel = model;
 			
 			mainNS = CellMLconstants.cellml1_1NS;
@@ -443,7 +442,7 @@ public class CellMLwriter implements Writer{
 				}
 			}
 			
-			if(a.hasRefersToAnnotation() || freetext!=null || hasphysprop){
+			if(a.hasRefersToAnnotation() || (freetext!=null && !freetext.isEmpty()) || hasphysprop){
 				// Create metadata ID for the model element, cache locally
 				if(metaid==null){
 					metaid = idprefix + 0;
@@ -487,7 +486,6 @@ public class CellMLwriter implements Writer{
 					}
 				}
 				
-				
 				// Add the local RDF within the annotated CellML element
 				if(!localrdf.isEmpty()){
 					String rawrdf = CellMLbioRDFblock.getRDFAsString(localrdf);
@@ -498,7 +496,6 @@ public class CellMLwriter implements Writer{
 				
 				// If annotated thing is a variable, include any necessary composite annotation info
 				if(hasphysprop){
-
 					rdfblock.rdf.setNsPrefix("semsim", SemSimConstants.SEMSIM_NAMESPACE);
 					rdfblock.rdf.setNsPrefix("bqbiol", SemSimConstants.BQB_NAMESPACE);
 					rdfblock.rdf.setNsPrefix("opb", SemSimConstants.OPB_NAMESPACE);
