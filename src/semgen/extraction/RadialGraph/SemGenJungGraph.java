@@ -1,4 +1,4 @@
-package semgen.extraction;
+package semgen.extraction.RadialGraph;
 
 
 import java.util.Collection;

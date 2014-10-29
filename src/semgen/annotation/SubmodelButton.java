@@ -1,6 +1,8 @@
 package semgen.annotation;
 
 import java.awt.Dimension;
+
+import semgen.SemGenSettings;
 import semgen.resource.SemGenFont;
 import semsim.model.physical.Submodel;
 
@@ -11,9 +13,9 @@ public class SubmodelButton extends AnnotationObjectButton{
 	 */
 	private static final long serialVersionUID = 1L;
 	public Submodel sub;
-	public SubmodelButton(AnnotatorTab ann, Submodel ssc, boolean compannfilled, String companntext, boolean noncompannfilled,
+	public SubmodelButton(AnnotatorTab ann, SemGenSettings sets, Submodel ssc, boolean compannfilled, String companntext, boolean noncompannfilled,
 			boolean humdeffilled, boolean editable) {
-		super(ann, ssc, compannfilled, companntext, noncompannfilled, humdeffilled, editable);
+		super(ann, sets, ssc, compannfilled, companntext, noncompannfilled, humdeffilled, editable);
 		sub = ssc;
 		compannlabel.setVisible(false);
 		namelabel.setFont(SemGenFont.defaultBold());

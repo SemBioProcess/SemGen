@@ -37,10 +37,13 @@ import prefuse.data.Node;
 import prefuse.data.Schema;
 import semgen.SemGenGUI;
 import semgen.SemGenSettings;
+import semgen.extraction.RadialGraph.Clusterer;
+import semgen.extraction.RadialGraph.SemGenRadialGraphView;
 import semgen.resource.ComparatorByName;
 import semgen.resource.GenericThread;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
+import semgen.resource.SemGenTask;
 import semgen.resource.file.FileFilter;
 import semgen.resource.file.SemGenFileChooser;
 import semgen.resource.uicomponent.SemGenProgressBar;
@@ -92,13 +95,11 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	public static int leftpanewidth = 400;
 	public File sourcefile;
 	public JButton vizsourcebutton = new JButton("Show source model");
-	public JButton closebutton = new JButton("Close tab");
 	public JButton clusterbutton = new JButton("Cluster");
 	public JCheckBox extractionlevelchooserentities = new JCheckBox("More inclusive");
 	public JCheckBox includepartipantscheckbox = new JCheckBox("Include participants");
 	public JCheckBox extractionlevelchooser2 = new JCheckBox("Include full dependency chain");
 	public JButton extractbutton = new JButton("EXTRACT");
-	public JPanel toppanel = new JPanel(new BorderLayout());
 	public ExtractorSelectionPanel processespanel;
 	public ExtractorSelectionPanel entitiespanel;
 	public ExtractorSelectionPanel submodelspanel;
@@ -106,7 +107,6 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	public ExtractorSelectionPanel clusterpanel;
 	public JPanel physiomappanel;
 	public JTabbedPane graphtabpane;
-	public String base;
 	public SemSimModel extractedmodel;
 	public File extractedfile;
 	public SemGenRadialGraphView view;
@@ -121,8 +121,6 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	public Hashtable<PhysicalProcess, Set<DataStructure>> processesanddatastrs = new Hashtable<PhysicalProcess, Set<DataStructure>>();
 	public Hashtable<DataStructure, PhysicalProcess> datastrsandprocesses = new Hashtable<DataStructure, PhysicalProcess>();
 	public File autogendirectory;
-	private float maxclusteringiterations;
-	public SemGenProgressBar progframe;
 
 	public Clusterer cd;
 	public PrintWriter clusterwriter;
@@ -134,26 +132,12 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		this.semsimmodel = ssmodel;
 		this.sourcefile = srcfile;
 
-		base = semsimmodel.getNamespace();
-
-		toppanel.setOpaque(true);
 		vizsourcebutton.setFont(SemGenFont.defaultPlain());
 		vizsourcebutton.addActionListener(this);
 
 		extractbutton.setForeground(Color.blue);
 		extractbutton.setFont(SemGenFont.defaultBold());
 		extractbutton.addActionListener(this);
-
-		closebutton.setForeground(Color.blue);
-		closebutton.setFont(SemGenFont.defaultItalic(-1));
-		closebutton.setBorderPainted(false);
-		closebutton.setContentAreaFilled(false);
-		closebutton.setOpaque(false);
-		closebutton.addActionListener(this);
-		closebutton.addMouseListener(buttonMouseListener);
-		closebutton.setRolloverEnabled(true);
-		JPanel buttonpanel = new JPanel();
-		buttonpanel.add(closebutton);
 		
 		extractionlevelchooserentities.setFont(SemGenFont.defaultPlain(-2));
 		extractionlevelchooserentities.setBorder(BorderFactory.createEmptyBorder(0,35,0,0));
@@ -773,14 +757,6 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 
 		if (o == vizsourcebutton) visualizeAllDataStructures(false);
 
-		if (o == closebutton){
-			try {
-				SemGenGUI.closeTabAction(this);
-			} catch (HeadlessException e0) {
-				e0.printStackTrace();
-			}
-		}
-
 		// If user hits the "Cluster" button
 		if (o == clusterbutton) {
 			clusterpanel.scroller.setVisible(true);
@@ -796,10 +772,6 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 				}
 			}
 		}
-	}
-
-	public void closeAction() {
-		
 	}
 
 	public final static MouseListener buttonMouseListener = new MouseAdapter() {
@@ -846,7 +818,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 			SemGenFileChooser.currentdirectory = fc.getCurrentDirectory();
 			if (file != null) {
 				autogendirectory = file;
-				progframe = new SemGenProgressBar("Performing decomposition", false, null);
+				
 				GenericThread task = new GenericThread(this, "decompose");
 				task.start();
 			}
@@ -854,6 +826,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	}
 
 	public void decompose() {
+		SemGenProgressBar progframe = new SemGenProgressBar("Performing decomposition", false, null);
 		Component[][] setofcomponentsinpanels = new Component[][]{
 				processespanel.checkboxpanel.getComponents(),
 				entitiespanel.checkboxpanel.getComponents(),
@@ -897,7 +870,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 			ebox.setSelected(false);
 		}
 		JOptionPane.showMessageDialog(this, "Atomic decomposition completed");
-		progframe.setVisible(false);
+		progframe.dispose();
 	}
 
 	public void batchCluster() throws IOException {
@@ -953,7 +926,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		}
 	}
 	
-	public class BatchClusterTask extends SwingWorker<Void, Void> {
+	public class BatchClusterTask extends SemGenTask {
         public BatchClusterTask(){}
         @Override
         public Void doInBackground() {
@@ -975,7 +948,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 				statevars++;
 			}
 		}
-		maxclusteringiterations = cd.mygraph.getEdgeCount() - statevars;
+		float maxclusteringiterations = cd.mygraph.getEdgeCount() - statevars;
 
 		// Loop through all clustering levels
 		String moduletable = "";
@@ -999,12 +972,9 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		}
 		clusterwriter.flush();
 		clusterwriter.close();
-		JOptionPane.showMessageDialog(SemGenGUI.desktop, "Finished clustering analysis");
+		JOptionPane.showMessageDialog(null, "Finished clustering analysis");
         }
     }
-
-
-
 
 	public void itemStateChanged(ItemEvent arg0) {
 		try {

@@ -28,6 +28,7 @@ public class SemGenSettings extends Observable{
 	public SemGenSettings() {
 		try {
 				startsettingstable = ResourcesManager.createHashtableFromFile("cfg/startSettings.txt");
+				startsettingstable.put("sortbyCompositeCompleteness", new String[]{"false"});
 		} 
 		catch (FileNotFoundException e3) {
 				e3.printStackTrace();
@@ -101,6 +102,20 @@ public class SemGenSettings extends Observable{
 	
 	public Boolean organizeByPropertyType() {
 		return startsettingstable.get("organizeByPropertyType")[0].trim().equals("true");
+	}
+	
+	public Boolean organizeByCompositeCompleteness() {
+		return startsettingstable.get("sortbyCompositeCompleteness")[0].trim().equals("true");
+	}
+	
+	public void toggleCompositeCompleteness() {
+		Boolean tog = !organizeByCompositeCompleteness();
+		startsettingstable.put("sortbyCompositeCompleteness", new String[]{tog.toString()});
+	}
+	
+	public void toggleByPropertyType() {
+		Boolean tog = !organizeByPropertyType();
+		startsettingstable.put("organizeByPropertyType", new String[]{tog.toString()});
 	}
 	
 	public void toggleDisplayMarkers() {

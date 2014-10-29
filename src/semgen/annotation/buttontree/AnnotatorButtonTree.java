@@ -24,7 +24,6 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 import javax.swing.Painter;
 
-import semgen.SemGenGUI;
 import semgen.SemGenSettings;
 import semgen.annotation.AnnotationObjectButton;
 import semgen.annotation.AnnotatorTab;
@@ -45,10 +44,12 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 	public Set<DataStructure> looseds;
 	public DefaultMutableTreeNode focusnode;
 	public Map<AnnotationObjectButton, DefaultMutableTreeNode> nodebuttonmap = new HashMap<AnnotationObjectButton, DefaultMutableTreeNode>();
-
-	public AnnotatorButtonTree(AnnotatorTab ann, DefaultMutableTreeNode root){
+	protected SemGenSettings settings;
+	
+	public AnnotatorButtonTree(AnnotatorTab ann, SemGenSettings sets, DefaultMutableTreeNode root){
 		super(root);
 		
+		settings = sets;
 		this.ann = ann;
 		
 		UIDefaults dialogTheme = new UIDefaults();
@@ -88,7 +89,7 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 	private void traverseSubmodelBranch(DefaultMutableTreeNode curroot, Submodel sub){
 		DefaultMutableTreeNode submodelnode = new DefaultMutableTreeNode(ann.submodelbuttontable.get(sub.getName()));
 		
-		if(SemGenGUI.annotateitemshowimports.isSelected() || ann.getSubmodelButtonVisibility(ann.submodelbuttontable.get(sub.getName()))){
+		if(settings.showImports() || ann.getSubmodelButtonVisibility(ann.submodelbuttontable.get(sub.getName()))){
 			curroot.add(submodelnode);
 			nodebuttonmap.put(ann.submodelbuttontable.get(sub.getName()), submodelnode);
 			ann.submodelbuttontable.get(sub.getName()).refreshAllCodes();

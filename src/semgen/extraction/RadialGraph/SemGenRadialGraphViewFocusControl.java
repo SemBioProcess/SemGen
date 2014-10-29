@@ -1,4 +1,4 @@
-package semgen.extraction;
+package semgen.extraction.RadialGraph;
 
 import java.awt.Cursor;
 import java.awt.event.InputEvent;

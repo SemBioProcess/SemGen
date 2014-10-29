@@ -29,6 +29,7 @@ public class SemGen extends JFrame{
 	private static final long serialVersionUID = 1L;
 	public static SemSimLibrary semsimlib = new SemSimLibrary();
 	
+	public static double version = 2.0;
 	public static PrintWriter logfilewriter;
 	public static File tempdir = new File(System.getProperty("java.io.tmpdir"));
 	public static final String logfileloc = tempdir.getAbsolutePath() + "/SemGen_log.txt";

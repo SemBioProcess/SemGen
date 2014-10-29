@@ -1,4 +1,4 @@
-package semgen.extraction;
+package semgen.extraction.RadialGraph;
 
 
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;

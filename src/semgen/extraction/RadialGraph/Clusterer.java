@@ -1,4 +1,4 @@
-package semgen.extraction;
+package semgen.extraction.RadialGraph;
 /*
  * Copyright (c) 2003, the JUNG Project and the Regents of the University
  * of California
@@ -54,6 +54,8 @@ import org.apache.commons.collections15.functors.ConstantTransformer;
 import org.apache.commons.collections15.functors.MapTransformer;
 import org.apache.commons.collections15.map.LazyMap;
 
+import semgen.extraction.ExtractorJCheckBox;
+import semgen.extraction.ExtractorTab;
 import semgen.resource.SemGenFont;
 import semgen.resource.uicomponent.SemGenScrollPane;
 import semgen.resource.uicomponent.SemGenTab;
@@ -98,7 +100,7 @@ public class Clusterer extends JFrame {
 	public static JFrame jf;
 	public JSplitPane splitpane;
 	public JPanel clusterpanel;
-	public JPanel sempanel;
+	public JPanel sempanel = new JPanel();
 	public SemGenScrollPane semscroller;
 	public SparseMultigraph<String, Number> mygraph;
 	public ExtractorTab extractor;
@@ -119,7 +121,6 @@ public class Clusterer extends JFrame {
 		this.mygraph = mygraph;
 		this.extractor = extractor;
 		semscroller = new SemGenScrollPane(sempanel);
-		sempanel = new JPanel();
 		sempanel.setLayout(new BoxLayout(sempanel, BoxLayout.Y_AXIS));
 		sempanel.setOpaque(true);
 		setUpView();

@@ -1,8 +1,6 @@
 package semgen.annotation;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
-import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
@@ -76,18 +74,15 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	public JPanel codewordpanel = new JPanel();
 	public JPanel submodelpanel = new JPanel();
 	public AnnotatorTabCodePanel codearea = new AnnotatorTabCodePanel();
-	private JPanel genmodinfo = new JPanel(new BorderLayout());
-	public JTextPane annotationpane = new JTextPane();
 	public JButton addsubmodelbutton = new JButton(SemGenIcon.plusicon);
 	public JButton removesubmodelbutton = new JButton(SemGenIcon.minusicon);
-
+	AnnotatorToolBar toolbar;
+	
 	public int numcomponents;
 	public static int initwidth;
 	public static int initheight;
 	public String ontspref;
-	public JButton extractorbutton = new JButton(SemGenIcon.extractoricon);
-	public JButton coderbutton;
-	private JCheckBox sortbycompletenessbutton = new JCheckBox("Sort by Composite Completeness");
+
 	public TextMinerDialog tmd;
 	public int lastSavedAs = -1;
 	
@@ -133,33 +128,8 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 
 		splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, westsplitpane, eastsplitpane);
 		splitpane.setOneTouchExpandable(true);
-
-		// Create the general model information panel
-		extractorbutton.setToolTipText("Open this model in Extractor");
-		extractorbutton.setSize(new Dimension(10, 10));
-		extractorbutton.setRolloverEnabled(true);
-		extractorbutton.addActionListener(this);
-		extractorbutton.setPreferredSize(new Dimension(20, 20));
-		extractorbutton.setAlignmentY(JButton.TOP_ALIGNMENT);
-
-		coderbutton = new JButton(SemGenIcon.codericon);
-		coderbutton.setToolTipText("Encode this model for simulation");
-		coderbutton.setRolloverEnabled(true);
-		coderbutton.addActionListener(this);
-		coderbutton.setAlignmentY(JButton.TOP_ALIGNMENT);
-		coderbutton.setPreferredSize(new Dimension(20, 20));
-
-		sortbycompletenessbutton.setFont(SemGenFont.defaultPlain(-1));
-		sortbycompletenessbutton.addActionListener(this);
 		
-		JPanel toolpanel = new JPanel();
-		toolpanel.add(extractorbutton);
-		toolpanel.add(coderbutton);
-		toolpanel.add(sortbycompletenessbutton);
-		toolpanel.setAlignmentY(JPanel.TOP_ALIGNMENT);
-
-		genmodinfo.setOpaque(true);
-		genmodinfo.add(toolpanel, BorderLayout.WEST);
+		toolbar = new AnnotatorToolBar(this, settings);
 	}
 
 	// --------------------------------//
@@ -186,51 +156,11 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 				}
 			}
 		}
-		if (o == extractorbutton) {
-			try {
-				if(unsavedChanges()){
-					SemGenGUI.NewExtractorTask task = new SemGenGUI.NewExtractorTask(sourcefile);
-					task.execute();
-				}
-			} catch (Exception e1) {
-				e1.printStackTrace();}
-		}
-		if (o == sortbycompletenessbutton) {
-			AlphabetizeAndSetCodewords();
-		}
-		
-		if (o == coderbutton) {
-			String filenamesuggestion = null;
-			if(sourcefile!=null) filenamesuggestion = sourcefile.getName().substring(0, sourcefile.getName().lastIndexOf("."));
-			try {
-				if (!getModelSaved()) {
-					int savefilechoice = JOptionPane.showConfirmDialog(this,
-							"Save changes before encoding model?",
-							"There are unsaved changes",
-							JOptionPane.YES_NO_CANCEL_OPTION,
-							JOptionPane.QUESTION_MESSAGE);
-					if (savefilechoice == JOptionPane.YES_OPTION) {
-						File tempfile = new File(SemGen.tempdir.getAbsoluteFile() + "/" + SemGenSettings.sdf.format(SemGen.datenow) + ".owl");
-
-						manager.saveOntology(semsimmodel.toOWLOntology(), new RDFXMLOntologyFormat(), IRI.create(tempfile));
-						if(SemGenGUI.SaveAction(this, lastSavedAs)) SemGenGUI.startEncoding(semsimmodel, filenamesuggestion);
-					}
-					else if(savefilechoice == JOptionPane.NO_OPTION)
-						SemGenGUI.startEncoding(semsimmodel, filenamesuggestion);
-				}
-				else SemGenGUI.startEncoding(semsimmodel, filenamesuggestion); 
-			} 
-			catch (OWLException e3) {
-				e3.printStackTrace();
-			} 
-		}
 	}
 	
 	public SemSimModel NewAnnotatorAction(){
 		SemGen.logfilewriter.println("Started new annotater");
-		annotationpane.setText(null);
-		annotationpane.setCaretPosition(0);
-		
+
 		try {
 			codearea.setCodeView(semsimmodel.getLegacyCodeLocation());
 		} catch (IOException e1) {
@@ -240,24 +170,20 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		SemGenProgressBar progframe = new SemGenProgressBar("Sorting codewords...", true);
 		
 		refreshAnnotatableElements();
-		showAnnotaterPanes(this);
-
-		if(SemGenGUI.desktop.getComponentCount()>0){
-			SemGenGUI.desktop.setSelectedComponent(SemGenGUI.desktop.getComponentAt(SemGenGUI.numtabs - 1));
-		}
+		showAnnotaterPanes();
 		
 		codewordscrollpane.scrollToTop();
 		submodelscrollpane.scrollToTop();
 		
 		AnnotationObjectButton initialaob = null; 
 		// If tree view is selected, select first child of the root node
-		if(SemGenGUI.annotateitemtreeview.isSelected()){
+		if(settings.useTreeView()){
 			TreeNode firstChild = ((DefaultMutableTreeNode)tree.getModel().getRoot()).getChildAt(0);
 			tree.setSelectionPath(new TreePath(((DefaultMutableTreeNode)firstChild).getPath()));
 		}
 		
 		// If we are hiding the imported codewords, select the first one that is editable
-		else if(!SemGenGUI.annotateitemtreeview.isSelected()){
+		else if(!settings.useTreeView()){
 			for(int i=0; i<codewordpanel.getComponents().length; i++){
 				if(codewordpanel.getComponent(i) instanceof CodewordButton){
 					CodewordButton tempaob = (CodewordButton)codewordpanel.getComponent(i);
@@ -296,7 +222,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		focusbutton = aob;
 
 		dialogscrollpane.getViewport().removeAll();
-		anndialog = new AnnotationPanel(this, aob);
+		anndialog = new AnnotationPanel(this, settings, aob);
 		dialogscrollpane.getViewport().add(anndialog);
 		
 		// Highlight occurrences of codeword in legacy code
@@ -316,12 +242,12 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 			divLoc = (int)(settings.getAppWidth())/3;
 		
 		// If the "Tree view" menu item is selected...
-		if(SemGenGUI.annotateitemtreeview.isSelected()){
-			sortbycompletenessbutton.setEnabled(false);
+		if(settings.useTreeView()){
+			toolbar.enableSort(false);
 			updateCodewordButtonTable();
 			updateSubmodelButtonTable();
 			splitpane.setTopComponent(treeviewscrollpane);
-			tree = new AnnotatorButtonTree(this, new DefaultMutableTreeNode(semsimmodel));
+			tree = new AnnotatorButtonTree(this, settings, new DefaultMutableTreeNode(semsimmodel));
 			treeviewscrollpane.getViewport().removeAll();
 			treeviewscrollpane.getViewport().add(tree);
 			
@@ -333,19 +259,22 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 			treeviewscrollpane.scrollToLeft();
 		}
 		else{
-			sortbycompletenessbutton.setEnabled(true);
+			toolbar.enableSort(true);
 			splitpane.setTopComponent(westsplitpane);
 			AlphabetizeAndSetCodewords();
 			AlphabetizeAndSetSubmodels();
 			if(focusbutton!=null){
-				if(!SemGenGUI.annotateitemtreeview.isSelected()){
+				if(!settings.useTreeView()){
 					if(focusbutton instanceof CodewordButton)
 						codewordscrollpane.scrollToComponent(focusbutton);
 					else if(focusbutton instanceof SubmodelButton)
 						submodelscrollpane.scrollToComponent(focusbutton);
+					codewordpanel.validate();
+					codewordpanel.repaint();
 				}
 			}
 		}
+
 		splitpane.setDividerLocation(divLoc);
 	}
 	
@@ -355,8 +284,8 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		ArrayList<AnnotationObjectButton> aoblist = getAnnotationObjectButtonArray(codewordbuttontable);
 		
 		addPanelTitle("Codewords ", aoblist.size(), numcdwdsshowing, codewordscrollpane, "No codewords or dependencies found");
-		if(sortbycompletenessbutton.isSelected()) setCodewordsbyAnnCompleteness(aoblist);
-		if(SemGenGUI.annotateitemsortbytype.isSelected()) setCodewordsbyMarker(aoblist);
+		if(settings.organizeByCompositeCompleteness()) setCodewordsbyAnnCompleteness(aoblist);
+		if(settings.organizeByPropertyType()) setCodewordsbyMarker(aoblist);
 		
 		for (AnnotationObjectButton aob : aoblist) {
 			aob.refreshAllCodes();
@@ -367,7 +296,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 			aob.setVisible(getCodewordButtonVisibility(cb));
 			
 			// Set name
-			if(!SemGenGUI.annotateitemtreeview.isSelected()) cb.namelabel.setText(cb.ds.getName());
+			if(!settings.useTreeView()) cb.namelabel.setText(cb.ds.getName());
 			codewordpanel.add(aob);
 		}
 
@@ -471,8 +400,8 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		for(DataStructure ds : semsimmodel.getDataStructures()){
 			if(!codewordbuttontable.containsKey(ds.getName())){
 				boolean hashumreadtext = ds.getDescription()!=null;
-				CodewordButton cbutton = new CodewordButton(this, ds, false, "", ds.hasRefersToAnnotation(), hashumreadtext, false, !ds.isImportedViaSubmodel());
-				if(ds.isImportedViaSubmodel() && !SemGenGUI.annotateitemshowimports.isSelected()){
+				CodewordButton cbutton = new CodewordButton(this, settings, ds, false, "", ds.hasRefersToAnnotation(), hashumreadtext, !ds.isImportedViaSubmodel());
+				if(ds.isImportedViaSubmodel() && !settings.showImports()){
 					cbutton.setVisible(false);
 					numdisplayed--;
 				}
@@ -487,7 +416,6 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	}
 	
 	public int updateSubmodelButtonTable(){
-		
 		int numdisplayed = semsimmodel.getSubmodels().size();
 		// Associate submodel names with their buttons
 		for(Submodel sub : semsimmodel.getSubmodels()){
@@ -497,7 +425,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 					editable = ((FunctionalSubmodel)sub).getParentImport()==null;
 					if(!editable) numdisplayed--;
 				}
-				SubmodelButton sb = new SubmodelButton(this, sub,
+				SubmodelButton sb = new SubmodelButton(this, settings, sub,
 					false, null, sub.hasRefersToAnnotation(), (sub.getDescription()!=null), editable);
 				submodelbuttontable.put(sub.getName(), sb);
 			}
@@ -522,20 +450,20 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		codearea.removeAllHighlights();
 	}
 
-	public static void showAnnotaterPanes(final AnnotatorTab ann){
+	public void showAnnotaterPanes(){
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 		   public void run() { 
-			   ann.add(ann.genmodinfo, BorderLayout.NORTH);
-				ann.add(ann.splitpane, BorderLayout.CENTER);
-				ann.setVisible(true);
-				ann.eastsplitpane.setDividerLocation((int)(initheight-150)/2);
-				ann.westsplitpane.setDividerLocation((int)(initheight-150)/2);
+			  add(toolbar, BorderLayout.NORTH);
+			  add(splitpane, BorderLayout.CENTER);
+			  setVisible(true);
+			  eastsplitpane.setDividerLocation((int)(initheight-150)/2);
+			  westsplitpane.setDividerLocation((int)(initheight-150)/2);
 		   }
 		});
 	}
 
 	public void addNewSubmodelButton() throws OWLException {
-		String newname = JOptionPane.showInputDialog(SemGenGUI.desktop,"Enter a name for the new sub-model");
+		String newname = JOptionPane.showInputDialog(this,"Enter a name for the new sub-model");
 		if(newname !=null && !newname.equals("")){
 			Submodel newsub = semsimmodel.addSubmodel(new Submodel(newname));
 			setModelSaved(false);
@@ -683,12 +611,12 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	}
 
 	public boolean getCodewordButtonVisibility(CodewordButton cb){
-		return !(cb.ds.isImportedViaSubmodel() && !SemGenGUI.annotateitemshowimports.isSelected());
+		return !(cb.ds.isImportedViaSubmodel() && !settings.showImports());
 	}
 	
 	public boolean getSubmodelButtonVisibility(SubmodelButton sb){
 		if(sb.sub instanceof Importable){
-			if(((Importable)sb.sub).getParentImport()!=null && !SemGenGUI.annotateitemshowimports.isSelected()){
+			if(((Importable)sb.sub).getParentImport()!=null && !settings.showImports()){
 				return false;
 			}
 		}
@@ -700,7 +628,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	}
 	
 	public void updateTreeNode(){
-		if(tree!=null && SemGenGUI.annotateitemtreeview.isSelected()){
+		if(tree!=null && settings.useTreeView()){
 			DefaultMutableTreeNode node = (DefaultMutableTreeNode) (tree.getSelectionPath().getLastPathComponent()); 
 			tree.update(node, tree);
 		}
@@ -726,7 +654,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 			if(fileURI!=null){
 				title =  new File(fileURI).getName();
 			}
-			int returnval= JOptionPane.showConfirmDialog(getParent(),
+			int returnval= JOptionPane.showConfirmDialog(this,
 					"Save changes?", title + " has unsaved changes",
 					JOptionPane.YES_NO_CANCEL_OPTION,
 					JOptionPane.QUESTION_MESSAGE);

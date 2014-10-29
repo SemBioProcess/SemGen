@@ -14,6 +14,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import semgen.SemGenSettings;
 import semgen.annotation.annotatorpane.composites.PropertyMarker;
 import semgen.resource.SemGenFont;
 import semsim.Annotatable;
@@ -26,6 +27,7 @@ public class AnnotationObjectButton extends JPanel implements MouseListener{
 	private static final long serialVersionUID = 1L;
 
 	public AnnotatorTab annotater;
+	protected SemGenSettings settings;
 	public SemSimComponent ssc;
 	public String companntext;
 
@@ -40,8 +42,9 @@ public class AnnotationObjectButton extends JPanel implements MouseListener{
 	public int maxHeight = 35;
 	public int ipph = 18;
 	
-	public AnnotationObjectButton(AnnotatorTab ann, SemSimComponent ssc, boolean compannfilled, String companntext, 
+	public AnnotationObjectButton(AnnotatorTab ann, SemGenSettings sets, SemSimComponent ssc, boolean compannfilled, String companntext, 
 			boolean noncompannfilled, boolean humdeffilled, boolean editable) {
+		settings = sets;
 		this.annotater = ann;
 		this.ssc = ssc;
 		this.setLayout(new BorderLayout());

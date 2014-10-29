@@ -69,10 +69,12 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 	private JLabel loadsourcemodelbutton = new JLabel(SemGenIcon.annotatoricon);
 	public Set<DataStructure> cdwdsfromcomps;
 	public String codeword;
+	protected SemGenSettings settings;
 	
 	public int indent = 15;
 
-	public AnnotationPanel(AnnotatorTab ann, AnnotationObjectButton aob) throws IOException{
+	public AnnotationPanel(AnnotatorTab ann, SemGenSettings sets, AnnotationObjectButton aob) throws IOException{
+		settings = sets;
 		annotator = ann;
 		thebutton = aob;
 		codeword = aob.getName();
@@ -155,7 +157,7 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 			if(((DataStructure)thebutton.ssc).hasUnits())
 				units = ((DataStructure)thebutton.ssc).getUnit().getName();
 			codewordlabel.setText(codewordlabel.getText() + " (" + units + ")");
-			compositepanel = new CompositeAnnotationPanel(BoxLayout.Y_AXIS, this);
+			compositepanel = new CompositeAnnotationPanel(BoxLayout.Y_AXIS, settings, this);
 		}
 		subtitlepanel.setBorder(BorderFactory.createEmptyBorder(0, indent, 0, indent));
 		subtitlepanel.setBackground(SemGenSettings.lightblue);
@@ -325,7 +327,7 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 	
 	public void refreshSingularAnnotation(){
 		// Get the singular annotation for the codeword
-		singularannpanel = new SemSimComponentAnnotationPanel(this, (Annotatable)smc);
+		singularannpanel = new SemSimComponentAnnotationPanel(this, settings, (Annotatable)smc);
 		singularannpanel.setBorder(BorderFactory.createEmptyBorder(0, indent+5, 0, 0));
 		annotator.updateTreeNode();
 	}
@@ -405,9 +407,9 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 		}
 		
 		if(thebutton.refreshAllCodes()){
-			if(SemGenGUI.annotateitemsortbytype.isSelected() && !SemGenGUI.annotateitemtreeview.isSelected()) // Not able to sort codewords by marker in tree view yet
+			if(settings.organizeByPropertyType() && !settings.useTreeView()) // Not able to sort codewords by marker in tree view yet
 				annotator.AlphabetizeAndSetCodewords();
-			if(!SemGenGUI.annotateitemtreeview.isSelected())
+			if(!settings.useTreeView())
 				annotator.codewordscrollpane.scrollToComponent(thebutton);
 		}
 	}
@@ -441,12 +443,12 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 		}
 		
 		if(arg0.getComponent()==codewordlabel && thebutton instanceof SubmodelButton){
-			String newcompname = JOptionPane.showInputDialog(SemGenGUI.desktop, "Rename component", annotator.focusbutton.namelabel.getText());
+			String newcompname = JOptionPane.showInputDialog(this, "Rename component", annotator.focusbutton.namelabel.getText());
 			if(newcompname!=null && !newcompname.equals(codewordlabel.getText())){
 				Boolean newnameapproved = validateNewComponentName(newcompname);
 				while(!newnameapproved){
-					JOptionPane.showMessageDialog(SemGenGUI.desktop, "That name is either invalid or already taken");
-					newcompname = JOptionPane.showInputDialog(SemGenGUI.desktop, "Rename component", newcompname);
+					JOptionPane.showMessageDialog(this, "That name is either invalid or already taken");
+					newcompname = JOptionPane.showInputDialog(this, "Rename component", newcompname);
 					newnameapproved = validateNewComponentName(newcompname);
 				}
 				thebutton.ssc.setName(newcompname);
@@ -490,7 +492,7 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 		}
 		
 		if(arg0.getComponent() == copyannsbutton){
-			int x = JOptionPane.showConfirmDialog(SemGenGUI.desktop, "Really copy annotations to mapped variables?", "Confirm", JOptionPane.YES_NO_OPTION);
+			int x = JOptionPane.showConfirmDialog(this, "Really copy annotations to mapped variables?", "Confirm", JOptionPane.YES_NO_OPTION);
 			if(x==JOptionPane.YES_OPTION){
 				MappableVariable thevar = (MappableVariable)smc;
 				
@@ -499,7 +501,7 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 				}
 				
 				// Update the codeword button markers, re-sort if needed
-				if(SemGenGUI.annotateitemsortbytype.isSelected()){
+				if(settings.organizeByPropertyType()){
 					annotator.AlphabetizeAndSetCodewords();
 					annotator.codewordscrollpane.scrollToComponent(thebutton);
 				}
@@ -514,7 +516,7 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 				NewAnnotatorTask task = new SemGenGUI.NewAnnotatorTask(false);
 				task.execute();
 			}
-			else{JOptionPane.showMessageDialog(SemGenGUI.desktop, "Could not locate source file for this sub-model.", "ERROR", JOptionPane.ERROR_MESSAGE);}
+			else{JOptionPane.showMessageDialog(this, "Could not locate source file for this sub-model.", "ERROR", JOptionPane.ERROR_MESSAGE);}
 		}
 	}
 

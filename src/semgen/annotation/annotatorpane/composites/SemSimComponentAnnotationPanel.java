@@ -67,8 +67,9 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 	public Map<String,SemSimComponent> listdataandsmcmap = new HashMap<String, SemSimComponent>();
 	public Object selecteditem;
 	public Boolean editable;
+	protected SemGenSettings settings;
 	
-	public SemSimComponentAnnotationPanel(AnnotationPanel anndia, Annotatable smc){
+	public SemSimComponentAnnotationPanel(AnnotationPanel anndia, SemGenSettings sets, Annotatable smc){
 		this.anndialog = anndia;
 		this.smc = smc;
 		this.semsimmodel = anndia.semsimmodel;
@@ -393,7 +394,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 				
 				// Update the annotation button codes and the order of the button in the scrollpane
 				boolean rescroll = anndialog.thebutton.refreshAllCodes();
-				if(rescroll && SemGenGUI.annotateitemsortbytype.isSelected()){
+				if(rescroll && settings.organizeByPropertyType()){
 					anndialog.annotator.AlphabetizeAndSetCodewords();
 					anndialog.annotator.codewordscrollpane.scrollToComponent(anndialog.thebutton);
 				}

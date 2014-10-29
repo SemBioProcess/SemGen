@@ -5,7 +5,7 @@ import java.awt.Color;
 import java.awt.event.*;
 
 import semgen.SemGen;
-import semgen.SemGenGUI;
+import semgen.SemGenSettings;
 import semgen.annotation.annotatorpane.composites.PropertyMarker;
 import semgen.resource.SemGenFont;
 import semsim.SemSimConstants;
@@ -20,10 +20,10 @@ public class CodewordButton extends AnnotationObjectButton implements MouseListe
 	public Color processgreen = new Color(50,205,50);
 	public DataStructure ds;
 
-	public CodewordButton(AnnotatorTab ann, DataStructure ssc, boolean compannfilled,
+	public CodewordButton(AnnotatorTab ann, SemGenSettings sets, DataStructure ssc, boolean compannfilled,
 			String companntext, boolean noncompannfilled, boolean humdeffilled,
 			boolean editable) {
-		super(ann, ssc, compannfilled, companntext, noncompannfilled, humdeffilled, editable);
+		super(ann, sets, ssc, compannfilled, companntext, noncompannfilled, humdeffilled, editable);
 		ds = ssc;
 		namelabel.setFont(SemGenFont.defaultItalic());
 		refreshAllCodes();
@@ -67,9 +67,9 @@ public class CodewordButton extends AnnotationObjectButton implements MouseListe
 		propoflabel.addMouseListener(this);
 		indicatorssuperpanel.add(propoflabel, BorderLayout.EAST);
 		validate();
-		propoflabel.setVisible(SemGenGUI.annotateitemshowmarkers.isSelected());
+		propoflabel.setVisible(settings.useDisplayMarkers());
 		
-		if(oldcolor!=col && SemGenGUI.annotateitemsortbytype.isSelected()){
+		if(oldcolor!=col && settings.organizeByPropertyType()){
 			return true;  // Indicates to re-scroll to this button
 		}
 		return false;  // Indicates not to re-scroll to this button

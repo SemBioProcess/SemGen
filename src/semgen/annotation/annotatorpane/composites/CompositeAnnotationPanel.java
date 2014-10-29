@@ -40,9 +40,11 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 	public JLabel propertyoflabel = new JLabel("property_of");
 	public JButton addentbutton = new JButton("Add entity");
 	public JButton addprocbutton = new JButton("Add process");
+	protected SemGenSettings settings;
 	
-	public CompositeAnnotationPanel(int orientation, AnnotationPanel ad){
+	public CompositeAnnotationPanel(int orientation, SemGenSettings sets, AnnotationPanel ad){
 		super(orientation);
+		settings = sets;
 		this.setBackground(new Color(207, 215, 252));
 		this.ad = ad;
 		setAlignmentX(Box.LEFT_ALIGNMENT);
@@ -68,7 +70,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 		addempanel.add(addentprocpanel, BorderLayout.WEST);
 		
 		if(datastructure.getPhysicalProperty()!=null){
-			add(new SemSimComponentAnnotationPanel(ad, datastructure.getPhysicalProperty()));
+			add(new SemSimComponentAnnotationPanel(ad, settings, datastructure.getPhysicalProperty()));
 		}
 		else{
 			add(addpropertybutton);
@@ -89,7 +91,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 					CompositePhysicalEntity cpe = (CompositePhysicalEntity)pmc;
 					int s = 0;
 					for(PhysicalEntity ent : cpe.getArrayListOfEntities()){
-						add(new SemSimComponentAnnotationPanel(ad, ent));
+						add(new SemSimComponentAnnotationPanel(ad, settings, ent));
 						if(s<cpe.getArrayListOfStructuralRelations().size()){
 							add(new StructuralRelationPanel(cpe.getArrayListOfStructuralRelations().get(s)));
 						}
@@ -98,7 +100,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 				}
 				// Else the property target is a single physical entity or process
 				else{
-					add(new SemSimComponentAnnotationPanel(ad, pmc));
+					add(new SemSimComponentAnnotationPanel(ad, settings, pmc));
 				}
 			}
 		}
@@ -191,9 +193,9 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 			}
 			ad.annotator.setModelSaved(false);
 			
-			if(ad.thebutton.refreshAllCodes() && SemGenGUI.annotateitemsortbytype.isSelected()){
+			if(ad.thebutton.refreshAllCodes() && settings.organizeByPropertyType()){
 				ad.annotator.AlphabetizeAndSetCodewords();
-				if(!SemGenGUI.annotateitemtreeview.isSelected())
+				if(!settings.useTreeView())
 					ad.annotator.codewordscrollpane.scrollToComponent(ad.thebutton);
 			}
 			refreshUI();

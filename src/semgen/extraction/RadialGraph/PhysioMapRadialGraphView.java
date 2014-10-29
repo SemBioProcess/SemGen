@@ -1,21 +1,19 @@
-package semgen.extraction;
+package semgen.extraction.RadialGraph;
+
+
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.ToolTipManager;
+import javax.swing.JTextArea;
 
 import prefuse.Constants;
 import prefuse.Display;
@@ -35,9 +33,9 @@ import prefuse.action.layout.graph.RadialTreeLayout;
 import prefuse.activity.SlowInSlowOutPacer;
 import prefuse.controls.ControlAdapter;
 import prefuse.controls.DragControl;
+import prefuse.controls.FocusControl;
 import prefuse.controls.HoverActionControl;
 import prefuse.controls.PanControl;
-import prefuse.controls.ToolTipControl;
 import prefuse.controls.ZoomControl;
 import prefuse.controls.ZoomToFitControl;
 import prefuse.data.Graph;
@@ -61,12 +59,12 @@ import prefuse.util.ColorLib;
 import prefuse.util.FontLib;
 import prefuse.util.ui.JSearchPanel;
 import prefuse.util.ui.UILib;
-import prefuse.visual.EdgeItem;
-import prefuse.visual.NodeItem;
 import prefuse.visual.VisualItem;
 import prefuse.visual.expression.InGroupPredicate;
 import prefuse.visual.sort.TreeDepthItemSorter;
+import semgen.SemGenGUI;
 import semgen.SemGenSettings;
+import semgen.extraction.ExtractorTab;
 import semsim.model.SemSimModel;
 
 /**
@@ -75,9 +73,11 @@ import semsim.model.SemSimModel;
  * @version 1.0
  * @author <a href="http://jheer.org">jeffrey heer</a>
  */
-public class SemGenRadialGraphView extends Display {
+public class PhysioMapRadialGraphView extends Display {
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 8464331927479988729L;
-
 	SemGenSettings settings;
 	
 	public static final String DATA_FILE = "/socialnet.xml";
@@ -85,23 +85,21 @@ public class SemGenRadialGraphView extends Display {
 	private static final String treeNodes = "tree.nodes";
 	private static final String treeEdges = "tree.edges";
 	private static final String linear = "linear";
-	private static final String neighbors = "neighbors";
-	private static final String nonneighbors = "nonneighbors";
 
 	private LabelRenderer m_nodeRenderer;
 	private EdgeRenderer m_edgeRenderer;
 
 	public Graph g;
+	private String m_label = "label";
 	public SemSimModel semsimmodel;
 	public static String base;
-    public final static Predicate isinputfilter = ExpressionParser.predicate("input==true");
-    public final static Predicate isvar2inputfilter = ExpressionParser.predicate("var2input==true");
+	
+	 public final static Predicate isprocessfilter = ExpressionParser.predicate("process==true");
 
-    
-	public SemGenRadialGraphView(SemGenSettings sets, Graph g, String label, SemSimModel semsimmodel) {
+	public PhysioMapRadialGraphView(SemGenSettings sets, Graph g, String label, SemSimModel semsimmodel) {
 		super(new Visualization());
-		settings = sets;
 		this.g = g;
+		m_label = label;
 		this.semsimmodel = semsimmodel;
 		base = semsimmodel.getNamespace();
 
@@ -110,7 +108,7 @@ public class SemGenRadialGraphView extends Display {
 		m_vis.setInteractive(treeEdges, null, false);
 
 		// -- set up renderers --
-		m_nodeRenderer = new LabelRenderer(label);
+		m_nodeRenderer = new LabelRenderer(m_label);
 		m_nodeRenderer.setRenderType(AbstractShapeRenderer.RENDER_TYPE_DRAW_AND_FILL);
 		m_nodeRenderer.setHorizontalAlignment(Constants.CENTER);
 		m_nodeRenderer.setRoundedCorner(8, 8);
@@ -118,33 +116,36 @@ public class SemGenRadialGraphView extends Display {
 				prefuse.Constants.EDGE_ARROW_REVERSE);
 		m_edgeRenderer.setArrowType(prefuse.Constants.EDGE_ARROW_REVERSE);
 		m_edgeRenderer.setArrowHeadSize(8, 8);
+		
 
 		// MAYBE HERE?
 		DefaultRendererFactory rf = new DefaultRendererFactory(m_nodeRenderer);
 		rf.add(new InGroupPredicate(treeEdges), m_edgeRenderer);
 		m_vis.setRendererFactory(rf);
+		//m_vis.
 
 		// -- set up processing actions --
 		// colors
 		ItemAction nodeColor = new NodeColorAction(treeNodes);
-        ItemAction borderColor = new BorderColorAction(treeNodes);
+		ItemAction borderColor = new BorderColorAction(treeNodes);
         m_vis.putAction("borderColor", borderColor);
 		ItemAction textColor = new TextColorAction(treeNodes);
 		m_vis.putAction("textColor", textColor);
-		ItemAction arrowColorStroke = new ArrowColorStrokeAction(treeEdges);
-		m_vis.putAction("arrowStrokeColor", arrowColorStroke);
-		ItemAction arrowColorFill = new ArrowColorFillAction(treeEdges);
-		m_vis.putAction("arrowFillColor", arrowColorFill);
+		ItemAction edgeColor = new ColorAction(treeEdges,
+				VisualItem.STROKECOLOR, ColorLib.rgb(0, 0, 0));
+		ItemAction arrowColor = new ArrowColorAction(treeEdges);
+		m_vis.putAction("arrowColor", arrowColor);
 
-		ItemAction fontStyle = new NodeFontAction(treeNodes, FontLib.getFont("Verdana",11));
+		FontAction fonts = new FontAction(treeNodes, FontLib.getFont("Verdana",12));
+		fonts.add("ingroup('_focus_')", FontLib.getFont("Verdana", 12));
 
 		// recolor
+		// When recolor, do these actions
 		ActionList recolor = new ActionList();
-		recolor.add(borderColor);
 		recolor.add(nodeColor);
+		recolor.add(borderColor);
 		recolor.add(textColor);
-		recolor.add(arrowColorStroke);
-		recolor.add(arrowColorFill);
+		recolor.add(arrowColor);
 		m_vis.putAction("recolor", recolor);
 
 		// repaint
@@ -170,14 +171,14 @@ public class SemGenRadialGraphView extends Display {
 		// create the filtering and layout
 		ActionList filter = new ActionList();
 		filter.add(new TreeRootAction(tree));
-		filter.add(fontStyle);
+		filter.add(fonts);
 		filter.add(treeLayout);
+		filter.add(borderColor);
 		filter.add(subLayout);
 		filter.add(textColor);
-		filter.add(borderColor);
 		filter.add(nodeColor);
-		filter.add(arrowColorStroke);
-		filter.add(arrowColorFill);
+		filter.add(edgeColor);
+		filter.add(arrowColor);
 		m_vis.putAction("filter", filter);
 
 		// animated transition
@@ -193,18 +194,15 @@ public class SemGenRadialGraphView extends Display {
 		// ------------------------------------------------
 
 		// initialize the display
-		setSize(settings.getAppWidth()-ExtractorTab.leftpanewidth-50, settings.getAppHeight()-235);
+
+		setSize(sets.getAppWidth()-ExtractorTab.leftpanewidth-50, sets.getAppHeight()-235);
 		setItemSorter(new TreeDepthItemSorter());
 		addControlListener(new DragControl());
 		addControlListener(new ZoomToFitControl());
 		addControlListener(new ZoomControl());
 		addControlListener(new PanControl());
-		addControlListener(new SemGenRadialGraphViewFocusControl(1, "filter"));
+		addControlListener(new FocusControl(1, "filter"));
 		addControlListener(new HoverActionControl("repaint"));
-		addControlListener(new ToolTipControl("tooltip"));
-		addControlListener(new NeighborHighlightControl(m_vis, neighbors, nonneighbors));
-		
-		ToolTipManager.sharedInstance().setDismissDelay(30000);
 
 		// ------------------------------------------------
 
@@ -238,11 +236,13 @@ public class SemGenRadialGraphView extends Display {
 		});
 	}
 
-	public JPanel demo(ExtractorTab eTab) {
-		return demo(DATA_FILE, "name", eTab);
+	// ------------------------------------------------------------------------
+
+	public JPanel demo() {
+		return demo(DATA_FILE, "name");
 	}
 
-	public JPanel demo(String datafile, final String label, ExtractorTab eTab) {
+	public JPanel demo(String datafile, final String label) {
 		Graph g = new Graph();
 		g.addNodeRow();
 
@@ -250,13 +250,14 @@ public class SemGenRadialGraphView extends Display {
 			g = new GraphMLReader().readGraph(datafile);
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.exit(1);
 		}
-		return demo(g, label, eTab);
+		return demo(g, label);
 	}
 
-	public JPanel demo(Graph g, final String label, ExtractorTab eTab) {
+	public JPanel demo(Graph g, final String label) {
 		// create a new radial tree view
-		final SemGenRadialGraphView gview = new SemGenRadialGraphView(settings, g, label, semsimmodel);
+		final PhysioMapRadialGraphView gview = new PhysioMapRadialGraphView(settings, g, label, semsimmodel);
 		Visualization vis = gview.getVisualization();
 		
 
@@ -268,120 +269,43 @@ public class SemGenRadialGraphView extends Display {
 		search.setBorder(BorderFactory.createEmptyBorder(5, 5, 4, 0));
 		search.setFont(FontLib.getFont("Verdana", Font.PLAIN, 11));
 
-		// Used to be for showing annotations for data structures on mouseEntered event
-		gview.addControlListener(new PopupControlAdapter(g, eTab));
+		final JTextArea title = new JTextArea();
+		title.setPreferredSize(new Dimension(450, 500));
+		title.setMaximumSize(new Dimension(450, 500));
+		title.setMinimumSize(new Dimension(450, 500));
+		
+		title.setAlignmentY(CENTER_ALIGNMENT);
+		title.setLineWrap(true);
+		title.setWrapStyleWord(true);
+				title.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
+		title.setFont(FontLib.getFont("Verdana", Font.PLAIN, 11));
+
+		gview.addControlListener(new ControlAdapter() {
+			public void itemEntered(VisualItem item, MouseEvent e) {}
+
+			public void itemExited(VisualItem item, MouseEvent e) {
+				title.setText(null);
+			}
+		});
 
 		Box searchbox = new Box(BoxLayout.X_AXIS);
 		searchbox.add(Box.createHorizontalStrut(10));
 		searchbox.add(search);
 		searchbox.add(Box.createHorizontalStrut(3));
-		searchbox.add(eTab.vizsourcebutton);
-		searchbox.add(eTab.extractbutton);
 		
 		JPanel panel = new JPanel(new BorderLayout());
-		panel.setBackground(Color.white);
 		panel.add(searchbox, BorderLayout.NORTH);
 		panel.add(gview, BorderLayout.CENTER);
 		panel.add(Box.createGlue(), BorderLayout.SOUTH);
 
 		Color BACKGROUND = Color.WHITE;
 		Color FOREGROUND = Color.DARK_GRAY;
-		UILib.setColor(search, BACKGROUND, FOREGROUND);
-		UILib.setColor(gview, BACKGROUND, FOREGROUND);
+		UILib.setColor(panel, BACKGROUND, FOREGROUND);
 
 		return panel;
 	}
 
-	public static class PopupControlAdapter extends ControlAdapter implements ActionListener {
-		public Graph g;
-		public String focusname;
-		public ExtractorTab eTab;
-		public PopupControlAdapter(Graph g, ExtractorTab extractorTab){
-			this.g = g;
-			this.eTab = extractorTab;
-		}
-		public void itemClicked(VisualItem item, MouseEvent e) {
-			e.consume();
-			focusname = item.getString("codeword");
-			if(e.getModifiers()==InputEvent.BUTTON3_MASK | e.getModifiersEx()==128
-					&& eTab.retrieveNodeByLabel(g, focusname).getBoolean(ExtractorTab.VAR2INPUT)){
-				JPopupMenu nodePopupMenu = new JPopupMenu();
-				JMenuItem expand = new JMenuItem("Add inputs (expand)", 'a');
-				expand.addActionListener(this);
-				nodePopupMenu.add(expand);
-				nodePopupMenu.show(e.getComponent(), e.getX(), e.getY());
-			}
-		}
-		// Expand selected node to include direct inputs
-		public void actionPerformed(ActionEvent e) {
-			eTab.codewordspanel.termandcheckboxmap.get(focusname).setSelected(true);
-			eTab.codewordspanel.scroller.scrollToComponent(eTab.codewordspanel.termandcheckboxmap.get(focusname));
-			try {
-				eTab.visualize(eTab.primeextraction(), false);
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
-		}
-	}
-	
-	public class NeighborHighlightControl extends ControlAdapter {
-		private Visualization visu;
-		String activity = "repaint";
-		String sourceGroupName;
-		String nonGroupName;
-		TupleSet sourceTupleSet;
-		TupleSet nonTupleSet;
-
-		public NeighborHighlightControl(Visualization vis, String group, String nongroup) {
-			visu = vis;
-			sourceGroupName = group;
-			nonGroupName = nongroup;
-
-			try {
-				visu.addFocusGroup(sourceGroupName);
-				visu.addFocusGroup(nonGroupName);
-			} catch (Exception e) {
-				System.out.println("Error while adding focus groups to visualization " + e.getMessage());
-			}
-			sourceTupleSet = visu.getFocusGroup(sourceGroupName);
-			nonTupleSet = visu.getFocusGroup(nonGroupName);
-		}
-
-		public void itemEntered(VisualItem item, MouseEvent e) {
-			if (item instanceof NodeItem)
-				setNeighbourHighlight((NodeItem) item);
-            visu.run("repaint");
-		}
-
-		public void itemExited(VisualItem item, MouseEvent e) {
-			if (item instanceof NodeItem) {
-				sourceTupleSet.clear();
-				nonTupleSet.clear();
-			}
-		}
-
-		protected void setNeighbourHighlight(NodeItem centerNode) {
-
-			Iterator<Node> alledges = visu.getGroup(treeEdges).tuples();
-			while(alledges.hasNext())
-				nonTupleSet.addTuple((EdgeItem) alledges.next());
-			
-			Iterator<?> iterInEdges = centerNode.inEdges();
-			while (iterInEdges.hasNext()) {
-				EdgeItem edge = (EdgeItem) iterInEdges.next();
-				sourceTupleSet.addTuple(edge);
-				nonTupleSet.removeTuple(edge);
-			}
-
-			Iterator<?> iterOutEdges = centerNode.outEdges();
-			while (iterOutEdges.hasNext()) {
-				EdgeItem edge = (EdgeItem) iterOutEdges.next();
-				sourceTupleSet.addTuple(edge);
-				nonTupleSet.removeTuple(edge);
-			}
-		}
-
-	} // end of class NeighborHighlightControlForDirectedGraphs
+	// ------------------------------------------------------------------------
 
 	/**
 	 * Switch the root of the tree by requesting a new spanning tree at the
@@ -416,12 +340,14 @@ public class SemGenRadialGraphView extends Display {
 	 */
 	public static class NodeColorAction extends ColorAction {
 		public NodeColorAction(String group) {
-			super(group, VisualItem.FILLCOLOR, ColorLib.rgba(255, 255, 255, 255));
+			super(group, VisualItem.FILLCOLOR, ColorLib
+					.rgba(202, 225, 255, 250));
 			add("_hover", ColorLib.gray(220, 230));
 			add("ingroup('_search_')", ColorLib.rgb(255, 190, 190));
-			add("ingroup('_focus_')", ColorLib.rgb(198, 229, 229));
-			add(isvar2inputfilter, ColorLib.rgba(202, 255, 112, 255));
+			add("ingroup('_focus_')", ColorLib.rgb(205, 197, 191));
+			add(isprocessfilter, ColorLib.rgba(255, 193, 193, 255));
 		}
+
 	} // end of inner class NodeColorAction
 
 	/**
@@ -433,34 +359,18 @@ public class SemGenRadialGraphView extends Display {
 			add("_hover", ColorLib.rgb(255, 0, 0));
 		}
 	} // end of inner class TextColorAction
-	
-	public static class NodeFontAction extends FontAction {
-		public NodeFontAction(String group, Font font){
-			super(group, font);
-			add("ingroup('_focus_')", FontLib.getFont("Verdana", 11));
-			add(isinputfilter, FontLib.getFont("Verdana", Font.ITALIC, 11));
-		}
-	}
-	
-	public static class ArrowColorStrokeAction extends ColorAction {
-		public ArrowColorStrokeAction(String group){
-			super(group, VisualItem.STROKECOLOR, ColorLib.rgb(51, 0, 204));
-			add("ingroup('" + neighbors + "')", ColorLib.rgba(51, 0, 204, 255));
-			add("ingroup('" + nonneighbors + "')", ColorLib.rgba(51,0,204,40));
-		}
-	}
 
-	public static class ArrowColorFillAction extends ColorAction {
-		public ArrowColorFillAction(String group) {
-			super(group, VisualItem.FILLCOLOR, ColorLib.rgb(51, 0, 204));
-			add("ingroup('" + neighbors + "')", ColorLib.rgba(51, 0, 204, 255));
-			add("ingroup('" + nonneighbors + "')", ColorLib.rgba(51, 0, 204, 40));
+	public static class ArrowColorAction extends ColorAction {
+		public ArrowColorAction(String group) {
+			super(group, VisualItem.FILLCOLOR, ColorLib.rgb(0, 0, 0));
 		}
-	} // end of inner class TextColorAction
-
+	} // end of inner class ArrowColorAction
+	
 	public static class BorderColorAction extends ColorAction {
         public BorderColorAction(String group) {
-            super(group, VisualItem.STROKECOLOR, ColorLib.rgba(0, 0, 0, 100));
+            super(group, VisualItem.STROKECOLOR, ColorLib.rgba(0, 0, 255, 255));
+			add(isprocessfilter, ColorLib.rgba(176, 23, 31, 255));
         }
     }
+
 } // end of class RadialGraphView

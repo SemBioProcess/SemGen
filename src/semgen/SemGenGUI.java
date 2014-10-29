@@ -9,18 +9,14 @@ import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
-import semgen.annotation.AnnotationCopier;
 import semgen.annotation.AnnotatorTab;
-import semgen.annotation.CodewordButton;
 import semgen.annotation.dialog.AnnotationComponentReplacer;
-import semgen.annotation.dialog.ModelLevelMetadataEditor;
 import semgen.annotation.dialog.RemovePhysicalComponentDialog;
 import semgen.annotation.dialog.referenceclass.AddReferenceClassDialog;
 import semgen.extraction.ExtractorTab;
+import semgen.menu.HelpMenu;
 import semgen.merging.MergerTab;
-import semgen.resource.BrowserLauncher;
 import semgen.resource.CSVExporter;
-import semgen.resource.LogViewer;
 import semgen.resource.SemGenError;
 import semgen.resource.SemGenTask;
 import semgen.resource.file.LoadSemSimModel;
@@ -58,14 +54,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
@@ -76,7 +70,6 @@ import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -105,30 +98,18 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 	private JMenuItem toolsitemannotate;
 	private static JMenuItem annotateitemaddrefterm;
 	private static JMenuItem annotateitemremoverefterm;
-	public static JCheckBoxMenuItem autoannotate;
-	private JMenuItem annotateitemchangesourcemodelcode;
+	public JCheckBoxMenuItem autoannotate;
 	public JMenuItem annotateitemreplacerefterm;
-	public JMenuItem annotateitemcopy;
-	public JMenuItem annotateitemeditmodelanns;
-	public JMenuItem annotateitemexportcsv;
-	public static JCheckBoxMenuItem annotateitemshowimports;
-	public static JRadioButtonMenuItem annotateitemsortbytype;
-	public static JRadioButtonMenuItem annotateitemsortalphabetically;
-	public static JMenuItem annotateitemshowmarkers;
-	public static JMenuItem annotateitemtreeview;
+	
 	private JMenuItem toolsitemmerge;
 	private JMenuItem toolsitemcode;
 	private JMenuItem toolsitemextract;
-	private JMenuItem extractoritematomicdecomp;
 	private JMenuItem extractoritembatchcluster;
 	public JMenuItem extractoritemopenann;
-	private JMenuItem viewlog;
-	private JMenuItem helpitemabout;
-	private JMenuItem helpitemweb;
 
 	public static SemGenGUI desktop;
 	private ArrayList<AnnotatorTab> anntabs = new ArrayList<AnnotatorTab>(); //Open annotation tabs
-	public static double version = 2.0;
+
 	public static int numtabs = 0;
 	public static int maskkey = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 	public static String unspecifiedName = "*unspecified*";
@@ -194,70 +175,12 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		annotateitemremoverefterm.setToolTipText("Remove a physical entity or process term from the model");
 		annotatemenu.add(annotateitemremoverefterm);
 
-		annotateitemcopy = formatMenuItem(annotateitemcopy, "Import annotations", KeyEvent.VK_I,true,true);
-		annotateitemcopy.setToolTipText("Annotate codewords using data from identical codewords in another model");
-		annotatemenu.add(annotateitemcopy);
-		annotateitemcopy.setEnabled(true);
-
 		annotateitemreplacerefterm = formatMenuItem(annotateitemreplacerefterm, "Replace reference term", KeyEvent.VK_P, true, true);
 		annotateitemreplacerefterm.setToolTipText("Replace a reference ontology term with another");
 		annotatemenu.add(annotateitemreplacerefterm);
 		annotatemenu.add(new JSeparator());
-		
-		annotateitemchangesourcemodelcode = formatMenuItem(annotateitemchangesourcemodelcode, "Change legacy code", KeyEvent.VK_K, true, true);
-		annotateitemchangesourcemodelcode.setToolTipText("Link the SemSim model with its computational code");
-		annotatemenu.add(annotateitemchangesourcemodelcode);
-		
-		annotatemenu.add(new JSeparator());
-		
-		annotateitemexportcsv = formatMenuItem(annotateitemexportcsv, "Export codeword table", KeyEvent.VK_T, true, true);
-		annotateitemexportcsv.setToolTipText("Create a .csv file that tabulates model codeword annotations for use in spreadsheets, manuscript preparation, etc.");
 
-		annotatemenu.add(annotateitemexportcsv);
-		annotateitemexportcsv.setEnabled(true);
-		annotatemenu.add(new JSeparator());
 
-		annotateitemeditmodelanns = formatMenuItem(annotateitemeditmodelanns, "Edit model-level annotations", KeyEvent.VK_J,true, true);
-		annotateitemeditmodelanns.setToolTipText("Edit metadata for this SemSim model");
-		annotatemenu.add(annotateitemeditmodelanns);
-		annotatemenu.add(new JSeparator());
-		
-		annotatemenu.add(new JSeparator());
-		
-		annotateitemshowimports = new JCheckBoxMenuItem("Show imported codewords/sub-models");
-		annotateitemshowimports.setSelected(settings.showImports());
-		annotateitemshowimports.addActionListener(this);
-		annotateitemshowimports.setToolTipText("Make imported codewords and submodels visible");
-		annotatemenu.add(annotateitemshowimports);
-
-		annotateitemshowmarkers = new JCheckBoxMenuItem("Display physical type markers");
-		annotateitemshowmarkers.setSelected(settings.useDisplayMarkers());
-		annotateitemshowmarkers.addActionListener(this);
-		annotateitemshowmarkers.setToolTipText("Display markers that indicate a codeword's property type");
-		annotatemenu.add(annotateitemshowmarkers);
-		
-		annotateitemtreeview = new JCheckBoxMenuItem("Tree view");
-		annotateitemtreeview.setSelected(settings.useTreeView());
-		annotateitemtreeview.addActionListener(this);
-		annotateitemtreeview.setToolTipText("Display codewords and submodels within the submodel tree");
-		annotatemenu.add(annotateitemtreeview);
-		
-		JMenu sortCodewordsMenu = new JMenu("Sort codewords...");
-		annotateitemsortbytype = new JRadioButtonMenuItem("By physical type");
-		annotateitemsortbytype.setSelected(settings.organizeByPropertyType());
-		annotateitemsortalphabetically = new JRadioButtonMenuItem("Alphabetically");
-		annotateitemsortalphabetically.setSelected(!annotateitemsortbytype.isSelected());
-		
-		annotateitemsortbytype.addActionListener(this);
-		annotateitemsortalphabetically.addActionListener(this);
-		
-		ButtonGroup sortbuttons = new ButtonGroup();
-		sortbuttons.add(annotateitemsortbytype);
-		sortbuttons.add(annotateitemsortalphabetically);
-		sortCodewordsMenu.add(annotateitemsortbytype);
-		sortCodewordsMenu.add(annotateitemsortalphabetically);
-		annotateitemsortbytype.setToolTipText("Sort codewords according to whether they represent a property of a physical entity, process, or dependency");
-		annotatemenu.add(sortCodewordsMenu);
 
 		// Extract menu
 		JMenu extractmenu = new JMenu("Extract");
@@ -266,9 +189,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		toolsitemextract = formatMenuItem(toolsitemextract,"New Extractor",KeyEvent.VK_E,true,true);
 		toolsitemextract.setToolTipText("Open a new Extractor tool");
 		extractmenu.add(toolsitemextract);
-		
-		extractoritematomicdecomp = formatMenuItem(extractoritematomicdecomp, "Atomic decomposition",KeyEvent.VK_Y,true,true);
-		extractoritematomicdecomp.setToolTipText("Extract separate SemSim models for each physical entity");
 
 		extractoritembatchcluster = formatMenuItem(extractoritembatchcluster, "Automated clustering analysis", KeyEvent.VK_B,true,true);
 		extractoritembatchcluster.setToolTipText("Performs clustering analysis on model");
@@ -292,22 +212,12 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		toolsitemcode.setToolTipText("Open a new code generator tool");
 		codegenmenu.add(toolsitemcode);
 
-		// Help menu
-		JMenu helpmenu = new JMenu("Help");
-		helpmenu.getAccessibleContext().setAccessibleDescription("User help, Versioning, etc.");
-		helpitemabout = formatMenuItem(helpitemabout,"About",null,true,true);
-		helpmenu.add(helpitemabout);
-		helpitemweb = formatMenuItem(helpitemweb,"Help manual (opens browser)",KeyEvent.VK_H,true,true);
-		helpmenu.add(helpitemweb);
-		viewlog = formatMenuItem(viewlog,"Session log",KeyEvent.VK_L,true,true);
-		viewlog.setToolTipText("View the current session's log file");
-
 		menubar.add(filemenu);
 		menubar.add(annotatemenu);
 		menubar.add(extractmenu);
 		menubar.add(mergermenu);
 		menubar.add(codegenmenu);
-		menubar.add(helpmenu);
+		menubar.add(new HelpMenu(settings));
 	}
 	
 	// Format menu items, assign shortcuts, action listeners
@@ -413,29 +323,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 			}
 		}
 
-		if (o == annotateitemchangesourcemodelcode) {
-			if (desktop.getSelectedComponent() instanceof AnnotatorTab) {
-				AnnotatorTab ann = (AnnotatorTab) desktop.getSelectedComponent();
-				ann.changeLegacyLocation();
-			} else {JOptionPane.showMessageDialog(this,"Please select an Annotator tab or open a new Annotator");}
-		}
-
-		if(o == annotateitemexportcsv){
-			if (desktop.getSelectedComponent() instanceof AnnotatorTab) {
-				AnnotatorTab ann = (AnnotatorTab) desktop.getSelectedComponent();
-				try {
-					new CSVExporter(ann.semsimmodel).exportCodewords();
-				} catch (Exception e1) {e1.printStackTrace();} 
-			}
-		}
-		
-		if(o == annotateitemeditmodelanns){
-			if (desktop.getSelectedComponent() instanceof AnnotatorTab) {
-				AnnotatorTab ann = (AnnotatorTab) desktop.getSelectedComponent();
-				new ModelLevelMetadataEditor(ann);
-			}
-		}
-
 		if (o == annotateitemreplacerefterm) {
 			if (desktop.getSelectedComponent() instanceof AnnotatorTab) {
 				AnnotatorTab ann = (AnnotatorTab) desktop.getSelectedComponent();
@@ -447,62 +334,9 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 			}
 		}
 
-		if (o == annotateitemcopy) {
-			if (desktop.getSelectedComponent() instanceof AnnotatorTab) {
-				AnnotatorTab ann = (AnnotatorTab) desktop.getSelectedComponent();
-				try {
-					new AnnotationCopier(ann);
-				} catch (OWLException | CloneNotSupportedException e1) {
-					e1.printStackTrace();
-				}
-			}
-			else JOptionPane.showMessageDialog(this,"Please select an Annotator tab or open a new Annotator");
-		}
-		
-		if (o == annotateitemshowmarkers){
-			for(Component c : desktop.getComponents()){
-				if(c instanceof AnnotatorTab){
-					AnnotatorTab temp = (AnnotatorTab)c;
-					for(String s : temp.codewordbuttontable.keySet()){
-						CodewordButton cb = temp.codewordbuttontable.get(s);
-						((CodewordButton)cb).propoflabel.setVisible(annotateitemshowmarkers.isSelected());
-						cb.validate();
-					}
-				}
-			}
-		}
-	
-		if(o == annotateitemshowimports){
-			// Set visbility of imported codewords and submodels
-			if(desktop.getSelectedComponent() instanceof AnnotatorTab){
-				AnnotatorTab temp = (AnnotatorTab)desktop.getSelectedComponent();
-				temp.refreshAnnotatableElements();
-			}
-		}
-		
-		if(o == annotateitemsortbytype || o == annotateitemsortalphabetically || o == annotateitemtreeview){
-			for(Component c : desktop.getComponents()){
-				if(c instanceof AnnotatorTab){
-					AnnotatorTab temp = (AnnotatorTab)c;
-					temp.refreshAnnotatableElements();
-					temp.codewordpanel.validate();
-					temp.codewordpanel.repaint();
-				}
-			}
-		}
 		
 		if (o == toolsitemextract) {
 			startNewExtractorTask();
-		}
-
-		if (o == extractoritematomicdecomp) {
-			if (desktop.getSelectedComponent() instanceof ExtractorTab) {
-				ExtractorTab extractor = (ExtractorTab) desktop.getSelectedComponent();
-				extractor.atomicDecomposition();
-			} 
-			else {
-				startAtomicDecomposition();
-			}
 		}
 
 		if (o == extractoritembatchcluster) {
@@ -539,20 +373,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 
 			startEncoding(sgc.getSelectedFile(), sgc.getSelectedFile().getAbsolutePath());
 		}
-			
-
-		if (o == viewlog) {
-			try {
-				new LogViewer();
-			} catch (FileNotFoundException k) {k.printStackTrace();}
-		}
-
-		if (o == helpitemabout) 
-			AboutAction();
-
-		if (o == helpitemweb) 
-			BrowserLauncher.openURL(settings.getHelpURL());
-
 	}
 	
 	public static void startNewAnnotatorTask(){
@@ -1129,15 +949,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		
 		return returnval;
 	}
-	
-	public boolean AboutAction() {
-		String COPYRIGHT = "\u00a9";
-		JOptionPane.showMessageDialog(null, "SemGen\nVersion " + version + "\n"
-						+ COPYRIGHT
-						+ "2010-2014\nMaxwell Lewis Neal\n", "About SemGen",
-						JOptionPane.PLAIN_MESSAGE);
-		return true;
-	}
 
 	public boolean quit() throws HeadlessException, OWLException {
 		Component[] desktopcomponents = desktop.getComponents();
@@ -1173,11 +984,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		
 		annotateitemaddrefterm.setEnabled(comp instanceof AnnotatorTab);
 		annotateitemremoverefterm.setEnabled(comp instanceof AnnotatorTab);
-		annotateitemcopy.setEnabled(comp instanceof AnnotatorTab);
 		annotateitemreplacerefterm.setEnabled(comp instanceof AnnotatorTab);
-		annotateitemchangesourcemodelcode.setEnabled(comp instanceof AnnotatorTab);
-		annotateitemexportcsv.setEnabled(comp instanceof AnnotatorTab);
-		annotateitemeditmodelanns.setEnabled(comp instanceof AnnotatorTab);
 		
 		extractoritembatchcluster.setEnabled(comp instanceof ExtractorTab);
 		extractoritemopenann.setEnabled(comp instanceof ExtractorTab);
