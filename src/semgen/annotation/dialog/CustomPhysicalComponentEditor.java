@@ -22,9 +22,9 @@ import semgen.annotation.dialog.referenceclass.ObjectPropertyEditor;
 import semsim.SemSimConstants;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
+import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
-import semsim.model.physical.ProcessParticipant;
 
 
 public class CustomPhysicalComponentEditor extends JDialog implements PropertyChangeListener {
@@ -147,16 +147,16 @@ public class CustomPhysicalComponentEditor extends JDialog implements PropertyCh
 						  hasmediatoreditor.table.getCellEditor().stopCellEditing();
 					
 					((PhysicalProcess)pmc).getSources().clear();
-					for(ProcessParticipant pp : hassourceeditor.tablemod.data){
-						((PhysicalProcess)pmc).addSource(pp.getPhysicalEntity(), pp.getMultiplier());
+					for(PhysicalEntity pp : hassourceeditor.tablemod.data){
+						((PhysicalProcess)pmc).addSource(pp);
 					}
 					((PhysicalProcess)pmc).getSinks().clear();
-					for(ProcessParticipant pp : hassinkeditor.tablemod.data){
-						((PhysicalProcess)pmc).addSink(pp.getPhysicalEntity(), pp.getMultiplier());
+					for(PhysicalEntity pp : hassinkeditor.tablemod.data){
+						((PhysicalProcess)pmc).addSink(pp);
 					}
 					((PhysicalProcess)pmc).getMediators().clear();
-					for(ProcessParticipant pp : hasmediatoreditor.tablemod.data){
-						((PhysicalProcess)pmc).addMediator(pp.getPhysicalEntity(), pp.getMultiplier());
+					for(PhysicalEntity pp : hasmediatoreditor.tablemod.data){
+						((PhysicalProcess)pmc).addMediator(pp);
 					}
 				}
 				anndia.refreshCompositeAnnotation();
@@ -170,6 +170,5 @@ public class CustomPhysicalComponentEditor extends JDialog implements PropertyCh
 		else if(value == "Cancel"){
 			dispose();
 		}
-		optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 	}
 }

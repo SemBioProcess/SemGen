@@ -7,7 +7,7 @@ import java.util.Set;
 import semsim.model.Importable;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
 import semsim.model.annotation.SemSimRelation;
-import semsim.model.computational.DataStructure;
+import semsim.model.computational.datastructures.DataStructure;
 
 public class Submodel extends PhysicalModelComponent implements Cloneable, Importable{
 	

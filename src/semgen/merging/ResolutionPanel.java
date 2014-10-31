@@ -29,7 +29,7 @@ import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
 import semgen.resource.uicomponent.SemGenScrollPane;
 import semsim.model.SemSimModel;
-import semsim.model.computational.DataStructure;
+import semsim.model.computational.datastructures.DataStructure;
 
 
 public class ResolutionPanel extends JPanel implements ActionListener {

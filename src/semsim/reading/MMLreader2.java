@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
@@ -19,16 +20,15 @@ import org.jdom.output.XMLOutputter;
 import org.semanticweb.owlapi.model.OWLException;
 
 import JSim.util.Xcept;
-
 import semsim.SemSimConstants;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.Annotation;
 import semsim.model.computational.Computation;
-import semsim.model.computational.DataStructure;
-import semsim.model.computational.Decimal;
-import semsim.model.computational.MMLchoice;
 import semsim.model.computational.RelationalConstraint;
-import semsim.model.computational.SemSimInteger;
+import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.datastructures.Decimal;
+import semsim.model.computational.datastructures.MMLchoice;
+import semsim.model.computational.datastructures.SemSimInteger;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalProperty;
 
@@ -49,7 +49,7 @@ public class MMLreader2 extends MMLreader {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public SemSimModel readFromFile(File file) throws FileNotFoundException, IOException, InterruptedException, OWLException {
+	public SemSimModel readFromFile(File file) throws IOException, InterruptedException, OWLException {
 
 		int numdomains = 0;
 		// Collect all tools into a set

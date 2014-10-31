@@ -1,10 +1,11 @@
 package semsim.reading;
 
 import java.io.File;
+
 import org.semanticweb.owlapi.model.OWLException;
 
 import semsim.model.SemSimModel;
-import semsim.model.computational.DataStructure;
+import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.FunctionalSubmodel;

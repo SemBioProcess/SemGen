@@ -23,7 +23,6 @@ public class UniProtSearcher {
 	public static Namespace ns = Namespace.getNamespace("xs", "http://uniprot.org/uniprot");
 	public Hashtable<String,String> classnamesanduris = new Hashtable<String,String>();
 	public Hashtable<String,String> rdflabelsanduris = new Hashtable<String,String>();
-	public Hashtable<String,String> classnamesandshortconceptids = new Hashtable<String,String>();
 	
 	public Map<String,String> search(String thestring) throws JDOMException, IOException{
 		Map<String,String> idnamemap = new HashMap<String,String>();

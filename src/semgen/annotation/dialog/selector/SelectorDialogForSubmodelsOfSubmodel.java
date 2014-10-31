@@ -13,7 +13,6 @@ import semsim.model.physical.Submodel;
 
 public class SelectorDialogForSubmodelsOfSubmodel extends SemSimComponentSelectorDialog implements  PropertyChangeListener{
 	private static final long serialVersionUID = 1L;
-	public String componenturi;
 	public Submodel submodel;
 
 	public SelectorDialogForSubmodelsOfSubmodel(
@@ -33,24 +32,27 @@ public class SelectorDialogForSubmodelsOfSubmodel extends SemSimComponentSelecto
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent e) {
-		String value = optionPane.getValue().toString();
-		if (value == "OK") {
-			Component[] complist = panel.getComponents();
-			// Remove previous submodel nesting data
-			submodel.setSubmodels(new HashSet<Submodel>());
-			// Set the new data
-			for (int r = 0; r < complist.length; r++) {
-				if (complist[r] instanceof JCheckBox) {
-					JCheckBox box = (JCheckBox) complist[r];
-					if (box.isSelected()) {
-						submodel.addSubmodel(anndia.semsimmodel.getSubmodel(box.getText()));
+		String propertyfired = e.getPropertyName();
+		if (propertyfired.equals("value")) {
+				String value = optionPane.getValue().toString();
+			
+			if (value == "OK") {
+				Component[] complist = panel.getComponents();
+				// Remove previous submodel nesting data
+				submodel.setSubmodels(new HashSet<Submodel>());
+				// Set the new data
+				for (int r = 0; r < complist.length; r++) {
+					if (complist[r] instanceof JCheckBox) {
+						JCheckBox box = (JCheckBox) complist[r];
+						if (box.isSelected()) {
+							submodel.addSubmodel(anndia.semsimmodel.getSubmodel(box.getText()));
+						}
 					}
 				}
+				anndia.refreshSubmodelData();
+				anndia.annotator.setModelSaved(false);
 			}
-			anndia.refreshSubmodelData();
-			anndia.annotator.setModelSaved(false);
+			dispose();
 		}
-		dispose();
-		
 	}
 }

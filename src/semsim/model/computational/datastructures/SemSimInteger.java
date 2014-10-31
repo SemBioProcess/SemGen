@@ -1,4 +1,6 @@
-package semsim.model.computational;
+package semsim.model.computational.datastructures;
+
+import semsim.model.computational.Computation;
 
 /** A {@link DataStructure} that is assigned an integer value during simulation.*/
 public class SemSimInteger extends DataStructure{

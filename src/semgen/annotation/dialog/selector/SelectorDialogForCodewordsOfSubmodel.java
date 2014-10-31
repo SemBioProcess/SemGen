@@ -9,7 +9,7 @@ import java.util.Set;
 import javax.swing.JCheckBox;
 
 import semgen.annotation.annotatorpane.AnnotationPanel;
-import semsim.model.computational.DataStructure;
+import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.Submodel;
 
 public class SelectorDialogForCodewordsOfSubmodel extends SemSimComponentSelectorDialog implements PropertyChangeListener{

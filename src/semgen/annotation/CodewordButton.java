@@ -9,7 +9,7 @@ import semgen.SemGenSettings;
 import semgen.annotation.annotatorpane.composites.PropertyMarker;
 import semgen.resource.SemGenFont;
 import semsim.SemSimConstants;
-import semsim.model.computational.DataStructure;
+import semsim.model.computational.datastructures.DataStructure;
 
 public class CodewordButton extends AnnotationObjectButton implements MouseListener {
 	private static final long serialVersionUID = -7555259367118052593L;

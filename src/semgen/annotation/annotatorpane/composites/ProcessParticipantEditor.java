@@ -17,7 +17,6 @@ import java.util.Set;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
@@ -32,7 +31,6 @@ import semsim.model.SemSimModel;
 import semsim.model.annotation.SemSimRelation;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
-import semsim.model.physical.ProcessParticipant;
 
 public class ProcessParticipantEditor extends JPanel implements ActionListener, PropertyChangeListener {
 	
@@ -47,7 +45,7 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 	public JButton minusbutton = new JButton(SemGenIcon.minusicon);
 	public JTable table;
 	public ProcessParticipantTableModel tablemod;
-	public Map<String,ProcessParticipant> namesandparticipantmap = new HashMap<String,ProcessParticipant>();
+	public Map<String,PhysicalEntity> namesandparticipantmap = new HashMap<String,PhysicalEntity>();
 	public SemSimComponentSelectorDialog sscsd; 
 	public int scrollerwidth = 550;
 
@@ -80,13 +78,13 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 	}
 	
 	public void setTableData(){
-		Set<ProcessParticipant> participants = new HashSet<ProcessParticipant>();
+		Set<PhysicalEntity> participants = new HashSet<PhysicalEntity>();
 		if(relation == SemSimConstants.HAS_SOURCE_RELATION) participants.addAll(process.getSources());
 		else if(relation == SemSimConstants.HAS_SINK_RELATION) participants.addAll(process.getSinks());
 		else if(relation == SemSimConstants.HAS_MEDIATOR_RELATION) participants.addAll(process.getMediators());
 		
-		ArrayList<ProcessParticipant> temp = new ArrayList<ProcessParticipant>();
-		for(ProcessParticipant pp : participants){
+		ArrayList<PhysicalEntity> temp = new ArrayList<PhysicalEntity>();
+		for(PhysicalEntity pp : participants){
 			temp.add(pp);
 		}
 		tablemod = new ProcessParticipantTableModel(temp);
@@ -96,10 +94,10 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 	
 	public class ProcessParticipantTableModel extends AbstractTableModel{
 		private static final long serialVersionUID = 1L;
-		private String[] columnNames = new String[]{"Physical entity", "Multiplier"};
-		public ArrayList<ProcessParticipant> data = new ArrayList<ProcessParticipant>();
+		private String[] columnNames = new String[]{"Physical entity"};
+		public ArrayList<PhysicalEntity> data = new ArrayList<PhysicalEntity>();
 		
-		public ProcessParticipantTableModel(ArrayList<ProcessParticipant> data){
+		public ProcessParticipantTableModel(ArrayList<PhysicalEntity> data){
 			this.data = data;
 		}
 		
@@ -116,9 +114,9 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 	    }
 
 		public Object getValueAt(int rowIndex, int columnIndex) {
-			ProcessParticipant pp = data.get(rowIndex);
-			if(columnIndex==0) return pp.getPhysicalEntity().getName();
-			else return pp.getMultiplier();
+			PhysicalEntity pp = data.get(rowIndex);
+			if(columnIndex==0) return pp.getName();
+			else return null;
 		}
 		
 		@Override
@@ -127,7 +125,7 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 		}
 		
 		public void addRow(Object[] rowData){
-			ProcessParticipant pp = ((ProcessParticipant)rowData[0]);
+			PhysicalEntity pp = ((PhysicalEntity)rowData[0]);
 			data.add(pp);
 			fireTableRowsInserted(getRowCount(), getRowCount());
 		}
@@ -142,18 +140,7 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 		@Override
 		public void setValueAt(Object value, int row, int col){
 			if(col==0){
-				data.get(row).setPhysicalEntity((PhysicalEntity)value);
-			}
-			else if(col==1){
-				double val = 1.0;
-				try{
-					val = Double.parseDouble((String)value);
-				}
-				catch(NumberFormatException ex){
-					JOptionPane.showMessageDialog(SemGenGUI.desktop, "Multiplier not a valid number.");
-					return;
-				}
-				data.get(row).setMultiplier(val);
+				data.set(row, (PhysicalEntity)value);
 			}
 		    fireTableCellUpdated(row, col);
 		}
@@ -186,8 +173,8 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 					if(c instanceof JCheckBox){
 						JCheckBox box = (JCheckBox)c;
 						if(box.isSelected()){
-							ProcessParticipant pp = new ProcessParticipant((PhysicalEntity) sscsd.nameobjectmap.get(box.getText()), 1.0);
-							tablemod.addRow(new Object[]{pp});
+							;
+							tablemod.addRow(new Object[]{(PhysicalEntity)sscsd.nameobjectmap.get(box.getText())});
 						}
 					}
 				}

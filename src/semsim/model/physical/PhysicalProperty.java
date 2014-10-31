@@ -1,6 +1,6 @@
 package semsim.model.physical;
 
-import semsim.model.computational.DataStructure;
+import semsim.model.computational.datastructures.DataStructure;
 
 public class PhysicalProperty extends PhysicalModelComponent{
 	

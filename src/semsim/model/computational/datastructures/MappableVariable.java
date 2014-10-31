@@ -1,7 +1,9 @@
-package semsim.model.computational;
+package semsim.model.computational.datastructures;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import semsim.model.computational.Computation;
 
 /**
  * A MappableVariable is a {@link Decimal} that has a specified 

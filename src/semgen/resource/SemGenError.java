@@ -6,7 +6,7 @@ import java.util.Set;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
-import semsim.model.computational.DataStructure;
+import semsim.model.computational.datastructures.DataStructure;
 
 public class SemGenError {
 	public static void showWebConnectionError(JComponent desktop, String location){
@@ -26,5 +26,10 @@ public class SemGenError {
 	public static void showFunctionalSubmodelError(JComponent desktop, File file){
 		JOptionPane.showMessageDialog(desktop, "Did not load " + file.getName() + 
 		"\n\nSemGen does not support merging of models with CellML-type components yet.");
+	}
+	
+	public static void showInvalidOPBpropertyError(JComponent desktop){
+		JOptionPane.showMessageDialog(desktop, "That physical property is not valid for the physical entity\n or process specified in this composite annotation.",
+				"Invalid annotation", JOptionPane.ERROR_MESSAGE);
 	}
 }

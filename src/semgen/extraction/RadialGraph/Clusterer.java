@@ -59,7 +59,7 @@ import semgen.extraction.ExtractorTab;
 import semgen.resource.SemGenFont;
 import semgen.resource.uicomponent.SemGenScrollPane;
 import semgen.resource.uicomponent.SemGenTab;
-import semsim.model.computational.DataStructure;
+import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import edu.uci.ics.jung.algorithms.cluster.EdgeBetweennessClusterer;

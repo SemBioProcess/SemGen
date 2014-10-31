@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -18,11 +20,19 @@ import org.semanticweb.owlapi.model.OWLException;
 import semgen.SemGen;
 import semgen.SemGenGUI;
 import semgen.SemGenSettings;
+import semgen.annotation.dialog.AnnotationComponentReplacer;
 import semgen.annotation.dialog.ModelLevelMetadataEditor;
+import semgen.annotation.dialog.RemovePhysicalComponentDialog;
+import semgen.annotation.dialog.referenceclass.AddReferenceClassDialog;
 import semgen.resource.CSVExporter;
 import semgen.resource.SemGenIcon;
 import semgen.resource.uicomponent.DropDownCheckList;
 import semgen.resource.uicomponent.SemGenToolbarButton;
+import semsim.SemSimConstants;
+import semsim.model.physical.CompositePhysicalEntity;
+import semsim.model.physical.PhysicalEntity;
+import semsim.model.physical.PhysicalModelComponent;
+import semsim.model.physical.PhysicalProcess;
 
 public class AnnotatorToolBar extends JToolBar implements ActionListener {
 	private static final long serialVersionUID = 1L;
@@ -37,7 +47,9 @@ public class AnnotatorToolBar extends JToolBar implements ActionListener {
 	private DropDownCheckList sortselector = new DropDownCheckList("Sort Options");
 	private JButton annotateitemshowmarkers = new JButton("Display markers");
 	private JButton annotateitemshowimports = new JButton("Show imports");
-
+	public JButton annotateitemreplacerefterm = new JButton("Replace reference term");
+	private JButton annotateitemaddrefterm= new JButton("Add reference term");
+	private JButton annotateitemremoverefterm = new JButton("Remove annotation component");
 	private JButton annotateitemtreeview = new JButton("Tree view");
 	private String sortbytype = new String("By Type");
 	private String sortbycompletion = new String("By Composite Completeness");
@@ -75,14 +87,20 @@ public class AnnotatorToolBar extends JToolBar implements ActionListener {
 		annotateitemshowimports.addActionListener(this);
 		annotateitemshowimports.setToolTipText("Make imported codewords and submodels visible");
 		
-
 		annotateitemshowmarkers.addActionListener(this);
 		annotateitemshowmarkers.setToolTipText("Display markers that indicate a codeword's property type");
 		
-		annotateitemtreeview.setSelected(settings.useTreeView());
 		annotateitemtreeview.addActionListener(this);
 		annotateitemtreeview.setToolTipText("Display codewords and submodels within the submodel tree");
 		
+		annotateitemaddrefterm.addActionListener(this);
+		annotateitemaddrefterm.setToolTipText("Add a reference ontology term to use for annotating this model");
+		
+		annotateitemremoverefterm.addActionListener(this);
+		annotateitemremoverefterm.setToolTipText("Remove a physical entity or process term from the model");
+
+		annotateitemreplacerefterm.setToolTipText("Replace a reference ontology term with another");
+
 		add(annotateitemtreeview);
 		add(annotateitemshowmarkers);
 		add(sortselector);
@@ -94,8 +112,13 @@ public class AnnotatorToolBar extends JToolBar implements ActionListener {
 		add(annotateitemcopy);
 		add(annotateitemexportcsv);
 		add(annotateitemeditmodelanns);
-
 		addSeparator();
+		
+		add(annotateitemremoverefterm);
+		add(annotateitemaddrefterm);
+		add(annotateitemreplacerefterm);
+		addSeparator();
+		
 		add(extractorbutton);
 		add(coderbutton);
 		setAlignmentY(JPanel.TOP_ALIGNMENT);
@@ -109,7 +132,6 @@ public class AnnotatorToolBar extends JToolBar implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		
-
 		if (o == annotateitemshowmarkers){
 			settings.toggleDisplayMarkers();
 				for(String s : anntab.codewordbuttontable.keySet()){
@@ -157,6 +179,28 @@ public class AnnotatorToolBar extends JToolBar implements ActionListener {
 				try {
 					new AnnotationCopier(anntab);
 				} catch (OWLException | CloneNotSupportedException e1) {
+					e1.printStackTrace();
+				}
+		}
+		
+		if (o == annotateitemaddrefterm) {
+				new AddReferenceClassDialog(anntab, SemSimConstants.ALL_SEARCHABLE_ONTOLOGIES, 
+						new Object[]{"Add as entity","Add as process","Close"}, anntab.semsimmodel).packAndSetModality();
+			} 
+		
+		if (o == annotateitemremoverefterm) {
+				Set<PhysicalModelComponent> pmcs = new HashSet<PhysicalModelComponent>();
+				for(PhysicalModelComponent pmc : anntab.semsimmodel.getPhysicalModelComponents()){
+					if(!(pmc instanceof CompositePhysicalEntity) && (pmc instanceof PhysicalEntity || pmc instanceof PhysicalProcess))
+						pmcs.add(pmc);
+				}
+				new RemovePhysicalComponentDialog(anntab, pmcs, null, false, "Select components to remove");
+			}
+		
+		if (o == annotateitemreplacerefterm) {
+				try {
+					new AnnotationComponentReplacer(anntab);
+				} catch (OWLException e1) {
 					e1.printStackTrace();
 				}
 		}

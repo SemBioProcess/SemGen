@@ -1,4 +1,6 @@
-package semsim.model.computational;
+package semsim.model.computational.datastructures;
+
+import semsim.model.computational.Computation;
 
 /** This class maps to the JSim-specific data structure called a "choice" 
  * variable. See http://www.physiome.org/jsim/docs16/MML_Topics.html for more info.

@@ -3,6 +3,7 @@ package semsim.model.computational;
 import java.util.HashSet;
 import java.util.Set;
 
+import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalDependency;
 
 /** A Computation represents how the value of a SemSim {@link DataStructure} is determined, computationally. */

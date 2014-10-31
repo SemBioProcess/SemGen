@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.annotation.annotatorpane.composites.SemSimComponentAnnotationPanel;
+import semgen.resource.SemGenError;
 import semsim.SemSimConstants;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
@@ -54,7 +55,7 @@ public class CompositeAnnotationComponentSearchDialog extends AddReferenceClassD
 							pmcPanel.smc.addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, uri, desc);
 						}
 						else{
-							pmcPanel.showInvalidOPBpropertyError();
+							SemGenError.showInvalidOPBpropertyError(null);
 							return;
 						}
 					}

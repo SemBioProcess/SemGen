@@ -7,7 +7,7 @@ import java.util.Set;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.Annotation;
 import semsim.model.computational.Computation;
-import semsim.model.computational.DataStructure;
+import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.Submodel;

@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import semsim.model.computational.Computation;
-import semsim.model.computational.DataStructure;
+import semsim.model.computational.datastructures.DataStructure;
 
 /**
  * Class created to represent CellML component constructs.

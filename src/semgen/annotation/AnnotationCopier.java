@@ -7,9 +7,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.JOptionPane;
+
 import org.semanticweb.owlapi.model.OWLException;
 
-import semgen.SemGenGUI;
 import semgen.resource.SemGenTask;
 import semgen.resource.file.LoadSemSimModel;
 import semgen.resource.file.SemGenOpenFileChooser;
@@ -19,15 +19,12 @@ import semsim.model.SemSimModel;
 import semsim.model.annotation.Annotation;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
 import semsim.model.annotation.StructuralRelation;
-import semsim.model.computational.DataStructure;
-import semsim.model.computational.MappableVariable;
-import semsim.model.physical.MediatorParticipant;
+import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.CompositePhysicalEntity;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
-import semsim.model.physical.SinkParticipant;
-import semsim.model.physical.SourceParticipant;
 import semsim.model.physical.Submodel;
 
 public class AnnotationCopier {
@@ -67,7 +64,7 @@ public class AnnotationCopier {
 		protected Void doInBackground() throws Exception {
 			if (sourcefile==null) return null;
 			progframe = new SemGenProgressBar("Loading model...",true);
-			sourcemod = LoadSemSimModel.loadSemSimModelFromFile(sourcefile);
+			sourcemod = LoadSemSimModel.loadSemSimModelFromFile(sourcefile, false);
 			
 			if (sourcemod.getNumErrors() == 0) {
 				progframe.updateMessage("Copying...");
@@ -94,7 +91,7 @@ public class AnnotationCopier {
 				for(String err : sourcemod.getErrors()){
 					System.err.println(err);
 				}
-				JOptionPane.showMessageDialog(SemGenGUI.desktop, "There were errors associated with the selected model. Not copying.");
+				JOptionPane.showMessageDialog(null, "There were errors associated with the selected model. Not copying.");
 				
 			}
 			return null;
@@ -124,23 +121,21 @@ public class AnnotationCopier {
 		else if(pmc instanceof PhysicalProcess){
 			pmccopy = copySingularPhysicalModelComponent(targetmod, pmc);
 			PhysicalProcess srcprocess = (PhysicalProcess)pmc;
-			for(SourceParticipant source : srcprocess.getSources()){
-				PhysicalEntity sourceentcopy = (PhysicalEntity) copyPhysicalModelComponent(targetmod, source.getPhysicalEntity());
-				((PhysicalProcess) pmccopy).addSource(sourceentcopy, source.getMultiplier());
+			for(PhysicalEntity source : srcprocess.getSources()){
+				PhysicalEntity sourceentcopy = (PhysicalEntity) copyPhysicalModelComponent(targetmod, source);
+				((PhysicalProcess) pmccopy).addSource(sourceentcopy);
 			}
-			for(SinkParticipant sink : srcprocess.getSinks()){
-				PhysicalEntity sinkentcopy = (PhysicalEntity) copyPhysicalModelComponent(targetmod, sink.getPhysicalEntity());
-				((PhysicalProcess) pmccopy).addSink(sinkentcopy, sink.getMultiplier());
+			for(PhysicalEntity sink : srcprocess.getSinks()){
+				PhysicalEntity sinkentcopy = (PhysicalEntity) copyPhysicalModelComponent(targetmod, sink);
+				((PhysicalProcess) pmccopy).addSink(sinkentcopy);
 			}
-			for(MediatorParticipant med : srcprocess.getMediators()){
-				PhysicalEntity medentcopy = (PhysicalEntity) copyPhysicalModelComponent(targetmod, med.getPhysicalEntity());
-				((PhysicalProcess) pmccopy).addMediator(medentcopy, med.getMultiplier());
+			for(PhysicalEntity med : srcprocess.getMediators()){
+				PhysicalEntity medentcopy = (PhysicalEntity) copyPhysicalModelComponent(targetmod, med);
+				((PhysicalProcess) pmccopy).addMediator(medentcopy);
 			}
 		}
 		return pmccopy;
 	}
-	
-	
 	
 	private static PhysicalModelComponent copySingularPhysicalModelComponent(SemSimModel targetmod, PhysicalModelComponent pmc) throws CloneNotSupportedException{
 		PhysicalModelComponent pmccopy = null;

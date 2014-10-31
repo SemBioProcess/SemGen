@@ -10,9 +10,6 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import semgen.annotation.AnnotatorTab;
-import semgen.annotation.dialog.AnnotationComponentReplacer;
-import semgen.annotation.dialog.RemovePhysicalComponentDialog;
-import semgen.annotation.dialog.referenceclass.AddReferenceClassDialog;
 import semgen.extraction.ExtractorTab;
 import semgen.menu.HelpMenu;
 import semgen.merging.MergerTab;
@@ -24,16 +21,11 @@ import semgen.resource.file.SemGenFileChooser;
 import semgen.resource.file.SemGenOpenFileChooser;
 import semgen.resource.uicomponent.SemGenProgressBar;
 import semgen.resource.uicomponent.SemGenTab;
-import semsim.SemSimConstants;
 import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
-import semsim.model.annotation.ReferenceOntologyAnnotation;
-import semsim.model.computational.DataStructure;
-import semsim.model.computational.MappableVariable;
+import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.CompositePhysicalEntity;
 import semsim.model.physical.PhysicalEntity;
-import semsim.model.physical.PhysicalProcess;
-import semsim.model.physical.PhysicalModelComponent;
 import semsim.reading.ModelClassifier;
 import semsim.reading.SemSimOWLreader;
 import semsim.writing.CellMLwriter;
@@ -65,8 +57,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.io.File;
@@ -80,7 +70,7 @@ import java.util.Set;
 
 import javax.xml.rpc.ServiceException;
 
-public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListener, ChangeListener {
+public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeListener {
 
 	private static final long serialVersionUID = 3618439495848469800L;
 	public static OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -93,24 +83,24 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 	private JMenuItem fileitemopen;
 	private JMenuItem fileitemsave;
 	private JMenuItem fileitemsaveas;
+	public JMenuItem fileitemproperties;
 	public JMenuItem fileitemclose;
 	public JMenuItem fileitemexit;
-	private JMenuItem toolsitemannotate;
-	private static JMenuItem annotateitemaddrefterm;
-	private static JMenuItem annotateitemremoverefterm;
-	public JCheckBoxMenuItem autoannotate;
-	public JMenuItem annotateitemreplacerefterm;
 	
+	private JMenuItem toolsitemannotate;
 	private JMenuItem toolsitemmerge;
 	private JMenuItem toolsitemcode;
 	private JMenuItem toolsitemextract;
+
+	private JCheckBoxMenuItem autoannotate;
+
 	private JMenuItem extractoritembatchcluster;
 	public JMenuItem extractoritemopenann;
 
 	public static SemGenGUI desktop;
 	private ArrayList<AnnotatorTab> anntabs = new ArrayList<AnnotatorTab>(); //Open annotation tabs
 
-	public static int numtabs = 0;
+	public int numtabs = 0;
 	public static int maskkey = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 	public static String unspecifiedName = "*unspecified*";
 
@@ -134,7 +124,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		// Build the File menu
 		JMenu filemenu = new JMenu("File");
 		filemenu.getAccessibleContext().setAccessibleDescription("Create new files, opening existing files, import raw model code, etc.");
-		filemenu.addMenuListener(this);
 
 		// File menu items
 		fileitemopen = formatMenuItem(fileitemopen,"Open",KeyEvent.VK_O,true,true);
@@ -147,48 +136,21 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		
 		fileitemclose = formatMenuItem(fileitemclose,"Close",KeyEvent.VK_W,true,true);
 		filemenu.add(fileitemclose);
+		filemenu.add(new JSeparator());
+		fileitemproperties = formatMenuItem(fileitemproperties,"Properties", KeyEvent.VK_Q,true,true);
+		filemenu.add(fileitemproperties);
 		fileitemexit = formatMenuItem(fileitemexit,"Quit SemGen",KeyEvent.VK_Q,true,true);
 		filemenu.add(new JSeparator());
 		filemenu.add(fileitemexit);
-
-		// Build the Annotator menu
-		JMenu annotatemenu = new JMenu("Annotate");
-		annotatemenu.getAccessibleContext().setAccessibleDescription("Annotate a model");
-
-		toolsitemannotate = formatMenuItem(toolsitemannotate, "New Annotator",KeyEvent.VK_A,true,true);
-		toolsitemannotate.setToolTipText("Open a new Annotator tool");
-		annotatemenu.add(toolsitemannotate);
-		annotatemenu.add(new JSeparator());
 
 		autoannotate = new JCheckBoxMenuItem("Auto-annotate during translation");
 		autoannotate.setSelected(settings.doAutoAnnotate());
 		autoannotate.addActionListener(this);
 		autoannotate.setToolTipText("Automatically add annotations based on physical units, etc. when possible");
-		annotatemenu.add(autoannotate);
-		annotatemenu.add(new JSeparator());
-
-		annotateitemaddrefterm = formatMenuItem(annotateitemaddrefterm, "Add reference term", KeyEvent.VK_D,true,true);
-		annotateitemaddrefterm.setToolTipText("Add a reference ontology term to use for annotating this model");
-		annotatemenu.add(annotateitemaddrefterm);
-
-		annotateitemremoverefterm = formatMenuItem(annotateitemremoverefterm, "Remove annotation component", KeyEvent.VK_R,true,true);
-		annotateitemremoverefterm.setToolTipText("Remove a physical entity or process term from the model");
-		annotatemenu.add(annotateitemremoverefterm);
-
-		annotateitemreplacerefterm = formatMenuItem(annotateitemreplacerefterm, "Replace reference term", KeyEvent.VK_P, true, true);
-		annotateitemreplacerefterm.setToolTipText("Replace a reference ontology term with another");
-		annotatemenu.add(annotateitemreplacerefterm);
-		annotatemenu.add(new JSeparator());
-
-
 
 		// Extract menu
 		JMenu extractmenu = new JMenu("Extract");
 		extractmenu.getAccessibleContext().setAccessibleDescription("Extract out a portion of a SemSim model");
-
-		toolsitemextract = formatMenuItem(toolsitemextract,"New Extractor",KeyEvent.VK_E,true,true);
-		toolsitemextract.setToolTipText("Open a new Extractor tool");
-		extractmenu.add(toolsitemextract);
 
 		extractoritembatchcluster = formatMenuItem(extractoritembatchcluster, "Automated clustering analysis", KeyEvent.VK_B,true,true);
 		extractoritembatchcluster.setToolTipText("Performs clustering analysis on model");
@@ -198,25 +160,28 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		extractmenu.add(extractoritemopenann);
 		
 		// Merging menu
-		JMenu mergermenu = new JMenu("Merge");
-		mergermenu.getAccessibleContext().setAccessibleDescription("Create a composite model from two or more existing SemSim models");
+		JMenu toolsmenu = new JMenu("Tasks");
+		toolsmenu.getAccessibleContext().setAccessibleDescription("Select a new SemGen task");
+		
+		toolsitemannotate = formatMenuItem(toolsitemannotate, "New Annotator",KeyEvent.VK_A,true,true);
+		toolsitemannotate.setToolTipText("Open a new Annotator tool");
+		toolsmenu.add(toolsitemannotate);
+		
+		toolsitemextract = formatMenuItem(toolsitemextract,"New Extractor",KeyEvent.VK_E,true,true);
+		toolsitemextract.setToolTipText("Open a new Extractor tool");
+		toolsmenu.add(toolsitemextract);
+		
 		toolsitemmerge = formatMenuItem(toolsitemmerge,"New Merger",KeyEvent.VK_M,true,true);
 		toolsitemmerge.setToolTipText("Open a new Merger tool");
-		mergermenu.add(toolsitemmerge);
-
-		// Encode menu
-		JMenu codegenmenu = new JMenu("Encode");
-		codegenmenu.getAccessibleContext().setAccessibleDescription("Translate a SemSim model into executable simulation code");
+		toolsmenu.add(toolsitemmerge);
 
 		toolsitemcode = formatMenuItem(toolsitemcode, "New code generator", KeyEvent.VK_G,true,true);
 		toolsitemcode.setToolTipText("Open a new code generator tool");
-		codegenmenu.add(toolsitemcode);
+		toolsmenu.add(toolsitemcode);
 
 		menubar.add(filemenu);
-		menubar.add(annotatemenu);
+		menubar.add(toolsmenu);
 		menubar.add(extractmenu);
-		menubar.add(mergermenu);
-		menubar.add(codegenmenu);
 		menubar.add(new HelpMenu(settings));
 	}
 	
@@ -250,16 +215,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 	}
 	
 	// METHODS
-	public void menuCanceled(MenuEvent arg0) {}
-
-	public void menuDeselected(MenuEvent arg0) {}
-
-	public void menuSelected(MenuEvent arg0) {
-		if(desktop.getSelectedComponent() instanceof AnnotatorTab){
-			fileitemsave.setEnabled(!((AnnotatorTab)desktop.getSelectedComponent()).getModelSaved());
-		}
-	}
-	
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 
@@ -287,7 +242,10 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 					e1.printStackTrace();
 				}
 		}
-
+		if (o == fileitemproperties) {
+			new PreferenceDialog(settings);
+		}
+		
 		if (o == fileitemexit) {
 			try {
 				quit();
@@ -300,41 +258,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 			startNewAnnotatorTask();
 		}
 
-		if (o == annotateitemaddrefterm) {
-			if (desktop.getSelectedComponent() instanceof AnnotatorTab) {
-				AnnotatorTab ann = (AnnotatorTab) desktop.getSelectedComponent();
-				new AddReferenceClassDialog(ann, SemSimConstants.ALL_SEARCHABLE_ONTOLOGIES, 
-						new Object[]{"Add as entity","Add as process","Close"}, ann.semsimmodel).packAndSetModality();
-			} else {
-				JOptionPane.showMessageDialog(this,"Please select an Annotator tab or open a new Annotator");
-			}
-		}
-		if (o == annotateitemremoverefterm) {
-			if (desktop.getSelectedComponent() instanceof AnnotatorTab) {
-				AnnotatorTab ann = (AnnotatorTab) desktop.getSelectedComponent();
-				Set<PhysicalModelComponent> pmcs = new HashSet<PhysicalModelComponent>();
-				for(PhysicalModelComponent pmc : ann.semsimmodel.getPhysicalModelComponents()){
-					if(!(pmc instanceof CompositePhysicalEntity) && (pmc instanceof PhysicalEntity || pmc instanceof PhysicalProcess))
-						pmcs.add(pmc);
-				}
-				new RemovePhysicalComponentDialog(ann, pmcs, null, false, "Select components to remove");
-			} else {
-				JOptionPane.showMessageDialog(this,"Please select an Annotator tab or open a new Annotator");
-			}
-		}
-
-		if (o == annotateitemreplacerefterm) {
-			if (desktop.getSelectedComponent() instanceof AnnotatorTab) {
-				AnnotatorTab ann = (AnnotatorTab) desktop.getSelectedComponent();
-				try {
-					new AnnotationComponentReplacer(ann);
-				} catch (OWLException e1) {
-					e1.printStackTrace();
-				}
-			}
-		}
-
-		
 		if (o == toolsitemextract) {
 			startNewExtractorTask();
 		}
@@ -486,7 +409,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
         @Override
         public Void doInBackground() {
     		if(model == null){
-        		model = LoadSemSimModel.loadSemSimModelFromFile(inputfile);
+        		model = LoadSemSimModel.loadSemSimModelFromFile(inputfile, settingshandle.doAutoAnnotate());
     			if(!model.getErrors().isEmpty()){
     				JOptionPane.showMessageDialog(null, "Selected model had errors:", "Could not encode model", JOptionPane.ERROR_MESSAGE);
     				return null;
@@ -499,7 +422,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
     }
 	
 	public static AnnotatorTab AnnotateAction(File file, Boolean autosave) {	
-		SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(file);
+		SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(file, settingshandle.doAutoAnnotate());
 		AnnotatorTab annotator = null;
 
 		// Create a new tempfile using the date
@@ -537,10 +460,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 						
 						annotator.NewAnnotatorAction();
 
-						if(!autosave){
-							annotateitemaddrefterm.setEnabled(true);
-							annotateitemremoverefterm.setEnabled(true);
-						}
 					}
 				}
 			}
@@ -551,7 +470,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 	// Make this into task
 	private static ExtractorTab NewExtractorAction(File file) throws OWLException, IOException, InterruptedException, JDOMException, ServiceException {
 		if ((file == null) || !file.exists()) return null;
-		SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(file);
+		SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(file, settingshandle.doAutoAnnotate());
 		if(ModelClassifier.classify(file)==ModelClassifier.CELLML_MODEL || semsimmodel.getFunctionalSubmodels().size()>0){
 			JOptionPane.showMessageDialog(null, "Sorry. Extraction of models with CellML-type components not yet supported.");
 			return null;
@@ -570,144 +489,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		desktop.addTab(merger);
 
 		merger.PlusButtonAction();
-	}
-
-	// Automatically apply OPB annotations to the physical properties associated
-	// with the model's data structures
-	public static SemSimModel autoAnnotateWithOPB(SemSimModel semsimmodel) {		
-		Set<DataStructure> candidateamounts = new HashSet<DataStructure>();
-		Set<DataStructure> candidateforces = new HashSet<DataStructure>();
-		Set<DataStructure> candidateflows = new HashSet<DataStructure>();
-		
-		// If units present, set up physical property connected to each data structure
-		for(DataStructure ds : semsimmodel.getDataStructures()){
-			if(ds.hasUnits()){
-				ReferenceOntologyAnnotation roa = SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(ds);
-				if(roa!=null){
-
-					// If the codeword represents an OPB:Amount property (OPB_00135)
-					if(SemGen.semsimlib.OPBhasAmountProperty(roa))
-						candidateamounts.add(ds);
-					// If the codeword represents an OPB:Force property (OPB_00574)
-					else if(SemGen.semsimlib.OPBhasForceProperty(roa))
-						candidateforces.add(ds);
-					// If the codeword represents an OPB:Flow rate property (OPB_00573)
-					else if(SemGen.semsimlib.OPBhasFlowProperty(roa)){
-						candidateflows.add(ds);
-					}
-				}
-			}
-		}
-		// ID the amounts
-		Set<DataStructure> unconfirmedamounts = new HashSet<DataStructure>();
-		Set<DataStructure> confirmedamounts = new HashSet<DataStructure>();
-		for(DataStructure camount : candidateamounts){
-			Boolean hasinitval = camount.hasStartValue();
-			if((camount instanceof MappableVariable)) hasinitval = (((MappableVariable)camount).getCellMLinitialValue()!=null);
-			if(hasinitval && !camount.isDiscrete() 
-					&& !camount.getPhysicalProperty().hasRefersToAnnotation()){
-				ReferenceOntologyAnnotation roa = SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(camount);
-				camount.getPhysicalProperty().addReferenceOntologyAnnotation(
-						SemSimConstants.REFERS_TO_RELATION, roa.getReferenceURI(), roa.getValueDescription());
-				confirmedamounts.add(camount);
-			}
-			else unconfirmedamounts.add(camount);
-		}
-		// second pass at amounts
-		Set<DataStructure> temp = new HashSet<DataStructure>();
-		temp.addAll(confirmedamounts);
-		for(DataStructure camount : temp){
-			for(DataStructure newcamount : getDownstreamDataStructures(unconfirmedamounts, camount, camount)){
-				confirmedamounts.add(newcamount);
-				ReferenceOntologyAnnotation roa = SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(newcamount);
-				if(!newcamount.getPhysicalProperty().hasRefersToAnnotation())
-					newcamount.getPhysicalProperty().addReferenceOntologyAnnotation(
-						SemSimConstants.REFERS_TO_RELATION, roa.getReferenceURI(), roa.getValueDescription());
-			}
-		}
-		// ID the forces
-		Set<DataStructure> unconfirmedforces = new HashSet<DataStructure>();
-		Set<DataStructure> confirmedforces = new HashSet<DataStructure>();
-		for(DataStructure cforce : candidateforces){
-			Boolean annotate = false;
-			// If the candidate force is solved using a confirmed amount, annotate it
-			if(cforce.getComputation()!=null){
-				for(DataStructure cforceinput : cforce.getComputation().getInputs()){
-					if(confirmedamounts.contains(cforceinput)){ annotate=true; break;}
-				}
-			}
-			// If already decided to annotate, or the candidate is solved with an ODE and it's not a discrete variable, annotate it
-			if((cforce.hasStartValue() || annotate) && !cforce.isDiscrete() 
-					&& !cforce.getPhysicalProperty().hasRefersToAnnotation()){
-				ReferenceOntologyAnnotation roa = SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(cforce);
-				cforce.getPhysicalProperty().addReferenceOntologyAnnotation(
-						SemSimConstants.REFERS_TO_RELATION, roa.getReferenceURI(), roa.getValueDescription());
-				confirmedforces.add(cforce);
-			}
-			else unconfirmedforces.add(cforce);
-		}
-		
-		// Second pass at forces
-		temp.clear();
-		temp.addAll(confirmedforces);
-		for(DataStructure cforce : temp){
-			for(DataStructure newcforce : getDownstreamDataStructures(unconfirmedforces, cforce, cforce)){
-				confirmedforces.add(newcforce);
-				if(!newcforce.getPhysicalProperty().hasRefersToAnnotation()){
-					ReferenceOntologyAnnotation roa = SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(newcforce);
-					newcforce.getPhysicalProperty().addReferenceOntologyAnnotation(
-						SemSimConstants.REFERS_TO_RELATION, roa.getReferenceURI(), roa.getValueDescription());
-				}
-			}
-		}
-		
-		// ID the flows
-		Set<DataStructure> unconfirmedflows = new HashSet<DataStructure>();
-		Set<DataStructure> confirmedflows = new HashSet<DataStructure>();
-		for(DataStructure cflow : candidateflows){
-			Boolean annotate = false;
-			// If the candidate flow is solved using a confirmed amount or force, annotate it
-			if(cflow.getComputation()!=null){
-				for(DataStructure cflowinput : cflow.getComputation().getInputs()){
-					if(confirmedamounts.contains(cflowinput) || confirmedforces.contains(cflowinput)){ annotate=true; break;}
-				}
-			}
-			// If already decided to annotate, or the candidate is solved with an ODE and it's not a discrete variable, annotate it
-			if((cflow.hasStartValue() || annotate || cflow.getName().contains(":")) && !cflow.isDiscrete()
-					&& !cflow.getPhysicalProperty().hasRefersToAnnotation()){
-				ReferenceOntologyAnnotation roa = SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(cflow);
-				cflow.getPhysicalProperty().addReferenceOntologyAnnotation(
-						SemSimConstants.REFERS_TO_RELATION, roa.getReferenceURI(), roa.getValueDescription());
-				confirmedflows.add(cflow);
-			}
-			else unconfirmedflows.add(cflow);
-		}
-		// Second pass at flows
-		temp.clear();
-		temp.addAll(confirmedflows);
-		for(DataStructure cflow : temp){
-			for(DataStructure newcflow : getDownstreamDataStructures(unconfirmedflows, cflow, cflow)){
-				confirmedforces.add(newcflow);
-				if(!newcflow.getPhysicalProperty().hasRefersToAnnotation()){
-					ReferenceOntologyAnnotation roa = SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(newcflow);
-					newcflow.getPhysicalProperty().addReferenceOntologyAnnotation(
-						SemSimConstants.REFERS_TO_RELATION, roa.getReferenceURI(), roa.getValueDescription());
-				}
-			}
-		}
-		return semsimmodel;
-	}
-	
-	public static Set<DataStructure> getDownstreamDataStructures(Set<DataStructure> candidates, DataStructure mainroot, DataStructure curroot){
-		// traverse all nodes that belong to the parent
-		Set<DataStructure> newamounts = new HashSet<DataStructure>();
-		for(DataStructure downstreamds : curroot.getUsedToCompute()){
-			if(candidates.contains(downstreamds) && !newamounts.contains(downstreamds) && downstreamds!=mainroot && downstreamds!=curroot){
-				newamounts.add(downstreamds);
-				newamounts.addAll(getDownstreamDataStructures(newamounts, mainroot, downstreamds));
-			}
-		}
-		return newamounts;
 	}
 
 	public static void startEncoding(Object inputfileormodel, String filenamesuggestion){
@@ -943,7 +724,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 		if (returnval) {
 			desktop.anntabs.remove(component);
 			desktop.remove(desktop.indexOfComponent(component));
-			numtabs = numtabs - 1;
+			desktop.numtabs = desktop.numtabs - 1;
 			System.gc();
 		}
 		
@@ -981,10 +762,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, MenuListen
 	
 	public void updateSemGenMenuOptions(){
 		Component comp = desktop.getSelectedComponent();
-		
-		annotateitemaddrefterm.setEnabled(comp instanceof AnnotatorTab);
-		annotateitemremoverefterm.setEnabled(comp instanceof AnnotatorTab);
-		annotateitemreplacerefterm.setEnabled(comp instanceof AnnotatorTab);
 		
 		extractoritembatchcluster.setEnabled(comp instanceof ExtractorTab);
 		extractoritemopenann.setEnabled(comp instanceof ExtractorTab);

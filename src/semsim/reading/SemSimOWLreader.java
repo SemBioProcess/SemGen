@@ -39,12 +39,12 @@ import semsim.SemSimConstants;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.Annotation;
 import semsim.model.annotation.StructuralRelation;
-import semsim.model.computational.MappableVariable;
-import semsim.model.computational.DataStructure;
-import semsim.model.computational.Decimal;
-import semsim.model.computational.MMLchoice;
 import semsim.model.computational.RelationalConstraint;
-import semsim.model.computational.SemSimInteger;
+import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.datastructures.Decimal;
+import semsim.model.computational.datastructures.MMLchoice;
+import semsim.model.computational.datastructures.MappableVariable;
+import semsim.model.computational.datastructures.SemSimInteger;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.CompositePhysicalEntity;
@@ -329,23 +329,17 @@ public class SemSimOWLreader {
 					// Enter source information
 					for(String src : srcs){
 						PhysicalEntity srcent = getPhysicalEntityFromURI(ont, URI.create(src));
-						double m = getMultiplierForProcessParticipant(ont, processind, 
-								SemSimConstants.HAS_SOURCE_URI.toString(), src);
-						pproc.addSource(srcent, m);
+						pproc.addSource(srcent);
 					}
 					// Enter sink info
 					for(String sink : sinks){
 						PhysicalEntity sinkent = getPhysicalEntityFromURI(ont, URI.create(sink));
-						double m = getMultiplierForProcessParticipant(ont, processind, 
-								SemSimConstants.HAS_SINK_URI.toString(), sink);
-						pproc.addSink(sinkent, m);
+						pproc.addSink(sinkent);
 					}
 					// Enter mediator info
 					for(String med : mediators){
 						PhysicalEntity medent = getPhysicalEntityFromURI(ont, URI.create(med));
-						double m = getMultiplierForProcessParticipant(ont, processind, 
-								SemSimConstants.HAS_MEDIATOR_URI.toString(), med);
-						pproc.addMediator(medent, m);
+						pproc.addMediator(medent);
 					}
 					URIandPMCmap.put(URI.create(processind), pproc);
 				}
@@ -593,26 +587,6 @@ public class SemSimOWLreader {
 			URIandPMCmap.put(uri, ent);
 		}
 		return ent;
-	}
-	
-	// Get the multiplier for a process participant
-	private double getMultiplierForProcessParticipant(OWLOntology ont, String process, String prop, String ent){
-		double val = 1.0;
-		OWLIndividual procind = factory.getOWLNamedIndividual(IRI.create(process));
-		OWLIndividual entind = factory.getOWLNamedIndividual(IRI.create(ent));
-		OWLObjectProperty owlprop = factory.getOWLObjectProperty(IRI.create(prop));
-		OWLAxiom axiom = factory.getOWLObjectPropertyAssertionAxiom(owlprop, procind, entind);
-		
-		OWLAnnotationProperty annprop = factory.getOWLAnnotationProperty(IRI.create(SemSimConstants.HAS_MULTIPLIER_URI));
-		for(OWLAxiom ax : ont.getAxioms(procind)){
-			if(ax.equalsIgnoreAnnotations(axiom)){
-				if(!ax.getAnnotations(annprop).isEmpty()){
-					OWLLiteral litval = (OWLLiteral) ax.getAnnotations(annprop).toArray(new OWLAnnotation[]{})[0].getValue();
-					val = litval.parseDouble();
-				}
-			}
-		}
-		return val;
 	}
 	
 	// Get the relationship for a submodel subsumption

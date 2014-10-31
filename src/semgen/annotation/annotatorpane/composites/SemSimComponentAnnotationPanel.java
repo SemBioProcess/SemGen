@@ -33,6 +33,7 @@ import semgen.SemGenSettings;
 import semgen.annotation.annotatorpane.AnnotationPanel;
 import semgen.annotation.dialog.CustomPhysicalComponentEditor;
 import semgen.annotation.dialog.referenceclass.CompositeAnnotationComponentSearchDialog;
+import semgen.resource.SemGenError;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
 import semgen.resource.uicomponent.ExternalURLButton;
@@ -40,7 +41,7 @@ import semsim.Annotatable;
 import semsim.SemSimConstants;
 import semsim.model.SemSimComponent;
 import semsim.model.SemSimModel;
-import semsim.model.computational.DataStructure;
+import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
 import semsim.model.physical.CompositePhysicalEntity;
 import semsim.model.physical.CustomPhysicalEntity;
@@ -383,7 +384,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 						}
 						else{
 							combobox.setPopupVisible(false);
-							showInvalidOPBpropertyError();
+							SemGenError.showInvalidOPBpropertyError(this);
 							combobox.setSelectedItem(selecteditem);
 							return;
 						}
@@ -452,11 +453,6 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 			}
 		}
 		return isvalid;
-	}
-	
-	public void showInvalidOPBpropertyError(){
-		JOptionPane.showMessageDialog(SemGenGUI.desktop, "That physical property is not valid for the physical entity\n or process specified in this composite annotation.",
-				"Invalid annotation", JOptionPane.ERROR_MESSAGE);
 	}
 	
 	public void removeComboBoxActionListeners(SemSimComponentAnnotationPanel pan){

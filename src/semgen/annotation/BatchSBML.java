@@ -1,25 +1,19 @@
 package semgen.annotation;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.xml.rpc.ServiceException;
-
 import org.jdom.JDOMException;
 import org.semanticweb.owlapi.model.OWLException;
-
-import JSim.util.Xcept;
 
 import semgen.SemGenGUI;
 import semsim.reading.ModelClassifier;
 
 public class BatchSBML {
 	
-	public BatchSBML() throws FileNotFoundException, IOException, OWLException, InterruptedException, URISyntaxException, JDOMException, Xcept, ServiceException{
+	public BatchSBML() throws IOException, OWLException, JDOMException{
 		File outputdir = new File("/Users/max_neal/Documents/workspace/PhysiomeKBgenerator/semsim_models/");
 		File[] outputfilesarray = outputdir.listFiles();
 		Set<String> outputfiles = new HashSet<String>();

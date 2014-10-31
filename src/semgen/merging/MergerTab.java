@@ -51,7 +51,7 @@ import semgen.resource.uicomponent.SemGenTab;
 import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
-import semsim.model.computational.DataStructure;
+import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.CompositePhysicalEntity;
 import semsim.model.physical.PhysicalProperty;
 import semsim.model.physical.Submodel;
@@ -64,7 +64,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.HeadlessException;
 
 public class MergerTab extends SemGenTab implements ActionListener, MouseListener {
 
@@ -77,7 +76,6 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 	public SemSimModel semsimmodel2;
 
 	public int dividerlocation = 350;
-	public JButton closebutton = new JButton("Close tab");
 	public JPanel filelistpanel = new JPanel();
 	public JButton plusbutton = new JButton(SemGenIcon.plusicon);
 	public JButton minusbutton = new JButton(SemGenIcon.minusicon);
@@ -115,15 +113,6 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 		
 		JPanel filelistheader = new JPanel();
 		filelistheader.add(plusminuspanel);
-		
-		closebutton.setForeground(Color.blue);
-		closebutton.setFont(new Font("SansSerif", Font.ITALIC, 11));
-		closebutton.setBorderPainted(false);
-		closebutton.setContentAreaFilled(false);
-		closebutton.setOpaque(false);
-		closebutton.addActionListener(this);
-		closebutton.addMouseListener(this);
-		closebutton.setRolloverEnabled(true);
 
 		filelistpanel.setBackground(Color.white);
 		filelistpanel.setLayout(new BoxLayout(filelistpanel, BoxLayout.Y_AXIS));
@@ -176,13 +165,6 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 	public void actionPerformed(ActionEvent arg0) {
 		Object o = arg0.getSource();
 		
-		if (o == closebutton){
-			try {
-				SemGenGUI.closeTabAction(this);
-			} catch (HeadlessException e0) {
-				e0.printStackTrace();
-			}
-		}
 		if (o == plusbutton)
 			PlusButtonAction();
 
@@ -700,11 +682,11 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 		file1 = new File(label1.getText());
 		file2 = new File(label2.getText());
 		
-		semsimmodel1 = LoadSemSimModel.loadSemSimModelFromFile(file1);
+		semsimmodel1 = LoadSemSimModel.loadSemSimModelFromFile(file1, settings.doAutoAnnotate());
 		
 		if(semsimmodel1.getFunctionalSubmodels().size()>0) SemGenError.showFunctionalSubmodelError(this, file1);
 		
-		semsimmodel2 = LoadSemSimModel.loadSemSimModelFromFile(file2);
+		semsimmodel2 = LoadSemSimModel.loadSemSimModelFromFile(file2, settings.doAutoAnnotate());
 		
 		if(semsimmodel2.getFunctionalSubmodels().size()>0) SemGenError.showFunctionalSubmodelError(this, file1);
 		

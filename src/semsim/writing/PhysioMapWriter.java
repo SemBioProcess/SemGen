@@ -16,7 +16,7 @@ import com.hp.hpl.jena.rdf.model.ResourceFactory;
 
 import semsim.SemSimConstants;
 import semsim.model.SemSimModel;
-import semsim.model.computational.DataStructure;
+import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;

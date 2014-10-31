@@ -1,4 +1,4 @@
-package semsim.model.computational;
+package semsim.model.computational.datastructures;
 
 
 import java.net.URI;
@@ -11,6 +11,8 @@ import semsim.SemSimLibrary;
 import semsim.model.annotation.Annotation;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
 import semsim.model.annotation.SemSimRelation;
+import semsim.model.computational.Computation;
+import semsim.model.computational.ComputationalModelComponent;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
@@ -206,6 +208,19 @@ public class DataStructure extends ComputationalModelComponent implements Annota
 		return compann;
 	}
 
+	public  Set<DataStructure> getDownstreamDataStructures(Set<DataStructure> candidates, DataStructure mainroot){
+		// traverse all nodes that belong to the parent
+		Set<DataStructure> newamounts = new HashSet<DataStructure>();
+		for(DataStructure downstreamds : getUsedToCompute()){
+			if(candidates.contains(downstreamds) && !newamounts.contains(downstreamds) && downstreamds!=mainroot && downstreamds!=this){
+				newamounts.add(downstreamds);
+				newamounts.addAll(downstreamds.getDownstreamDataStructures(newamounts, mainroot));
+			}
+		}
+		return newamounts;
+	}
+
+	
 	/** Specify which DataStructures in the model are computationally dependent on this DataStructure */
 	public void setUsedToCompute(Set<DataStructure> usedToCompute) {
 		this.usedToCompute = usedToCompute;

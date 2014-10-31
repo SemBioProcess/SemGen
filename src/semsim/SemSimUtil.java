@@ -13,7 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import semsim.model.SemSimModel;
-import semsim.model.computational.DataStructure;
+import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.CompositePhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 

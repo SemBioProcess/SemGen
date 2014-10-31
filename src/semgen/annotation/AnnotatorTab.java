@@ -21,8 +21,8 @@ import semgen.resource.uicomponent.SemGenTab;
 import semsim.SemSimConstants;
 import semsim.model.Importable;
 import semsim.model.SemSimModel;
-import semsim.model.computational.DataStructure;
-import semsim.model.computational.MappableVariable;
+import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.FunctionalSubmodel;
 import semsim.model.physical.Submodel;
 

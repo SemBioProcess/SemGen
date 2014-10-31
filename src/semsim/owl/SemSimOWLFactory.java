@@ -59,7 +59,7 @@ import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 
 import semsim.SemSimConstants;
 import semsim.model.SemSimModel;
-import semsim.model.computational.DataStructure;
+import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.ReferencePhysicalEntity;
 import semsim.model.physical.ReferencePhysicalProcess;

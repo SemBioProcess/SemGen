@@ -2,7 +2,6 @@ package semgen.annotation;
 
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
 
@@ -111,13 +110,9 @@ public class BatchCellML{
 					tmd.setVisible(false);
 					SemGenGUI.SaveAction(ann, ModelClassifier.CELLML_MODEL);
 					SemGenGUI.closeTabAction(ann);
-				} catch (FileNotFoundException e) {
+				} catch (IOException | JDOMException e) {
 					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (JDOMException e) {
-					e.printStackTrace();
-				}
+				} 
 			}
 		}
 		System.out.println(numidsfromrdf + " models had pubmed ids in their rdf tags");
@@ -200,11 +195,9 @@ public class BatchCellML{
 				}
 				// end documentation processing
 			}
-		} catch (JDOMException e) {
+		} catch (JDOMException | IOException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		} 
 		System.out.println("pubmed id: " + ab);
 		return ab;
 	}

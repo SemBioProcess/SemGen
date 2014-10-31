@@ -12,7 +12,7 @@ import org.semanticweb.owlapi.model.OWLException;
 import semgen.SemGenGUI;
 import semgen.resource.file.SemGenOpenFileChooser;
 import semsim.model.SemSimModel;
-import semsim.model.computational.DataStructure;
+import semsim.model.computational.datastructures.DataStructure;
 import semsim.writing.CaseInsensitiveComparator;
 
 public class CSVExporter {

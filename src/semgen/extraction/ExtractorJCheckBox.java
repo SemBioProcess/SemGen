@@ -3,9 +3,10 @@ package semgen.extraction;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.swing.JCheckBox;
 
-import semsim.model.computational.DataStructure;
+import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalModelComponent;
 
 

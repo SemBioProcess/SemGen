@@ -3,6 +3,8 @@ package semsim.model.computational;
 import java.util.HashSet;
 import java.util.Set;
 
+import semsim.model.computational.datastructures.DataStructure;
+
 /** A class to represent relational statements in simulation models that express non-equivalencies.
  * Examples: x > y, z <= 0;
  */

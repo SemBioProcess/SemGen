@@ -24,7 +24,7 @@ import semsim.Annotatable;
 import semsim.SemSimConstants;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.StructuralRelation;
-import semsim.model.computational.DataStructure;
+import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.CompositePhysicalEntity;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
@@ -166,7 +166,6 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 	
 
 	public void actionPerformed(ActionEvent arg0) {
-		
 		// If the "Add entity" button is pressed
 		if(arg0.getSource() == addentbutton){
 			if(datastructure.getPhysicalProperty().getPhysicalPropertyOf()==null){

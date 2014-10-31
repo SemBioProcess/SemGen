@@ -10,18 +10,20 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
+
 import semsim.SemSimConstants;
 import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
 import semsim.model.annotation.StructuralRelation;
-import semsim.model.computational.DataStructure;
+import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.CompositePhysicalEntity;
 import semsim.model.physical.CustomPhysicalEntity;
 import semsim.model.physical.CustomPhysicalProcess;
@@ -29,7 +31,6 @@ import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.PhysicalProperty;
-import semsim.model.physical.ProcessParticipant;
 
 public class CellMLbioRDFblock {
 		
@@ -125,15 +126,15 @@ public class CellMLbioRDFblock {
 							if(!rdf.contains(st)) rdf.add(st);
 							
 							// Set the sources
-							for(ProcessParticipant source : process.getSources()){
+							for(PhysicalEntity source : process.getSources()){
 								setProcessParticipationRDFstatements(processres, source, hassourceparticipant);
 							}
 							// Set the sinks
-							for(ProcessParticipant sink : process.getSinks()){
+							for(PhysicalEntity sink : process.getSinks()){
 								setProcessParticipationRDFstatements(processres, sink, hassinkparticipant);
 							}
 							// Set the mediators
-							for(ProcessParticipant mediator : process.getMediators()){
+							for(PhysicalEntity mediator : process.getMediators()){
 								setProcessParticipationRDFstatements(processres, mediator, hasmediatorparticipant);
 							}
 						}
@@ -144,34 +145,28 @@ public class CellMLbioRDFblock {
 	}
 
 	// For creating the statements that specify which physical entities participate in which processes
-	private void setProcessParticipationRDFstatements(Resource processres, ProcessParticipant participant, Property relationship){
+	private void setProcessParticipationRDFstatements(Resource processres, PhysicalEntity participant, Property relationship){
 		Resource participantres = getResourceForPMCandAnnotate(rdf, participant);
 		Statement partst = rdf.createStatement(processres, relationship, participantres);
 		if(!rdf.contains(partst)) rdf.add(partst);
 		
-		PhysicalEntity pe = participant.getPhysicalEntity();
 		Resource physentrefres = null;
 		
 		// Create link between process participant and the physical entity it references
-		if(pe instanceof CompositePhysicalEntity){
-			URI physentrefuri = addCompositePhysicalEntityMetadata((CompositePhysicalEntity)pe);
+		if(participant instanceof CompositePhysicalEntity){
+			URI physentrefuri = addCompositePhysicalEntityMetadata((CompositePhysicalEntity)participant);
 			physentrefres = rdf.getResource(physentrefuri.toString());
 		}
 		else{
-			physentrefres = getResourceForPMCandAnnotate(rdf, pe);
+			physentrefres = getResourceForPMCandAnnotate(rdf, participant);
 		}
 		if(physentrefres!=null){
 			Statement st = rdf.createStatement(participantres, hasphysicalentityreference, physentrefres);
 			if(!rdf.contains(st)) rdf.add(st);
 		}
 		else{
-			System.err.println("Error in setting participants for process: null value for Resource corresponding to " + pe.getName());
+			System.err.println("Error in setting participants for process: null value for Resource corresponding to " + participant.getName());
 		}
-		
-		// Add the multiplier information
-		double multiplier = participant.getMultiplier();
-		Statement multst = rdf.createLiteralStatement(participantres, hasmultiplier, multiplier);
-		if(!rdf.contains(multst))rdf.add(multst);
 	}
 	
 	// Add statements that describe a composite physical entity in the model
@@ -272,8 +267,6 @@ public class CellMLbioRDFblock {
 				typeprefix = "property";
 			else if(pmc instanceof PhysicalProcess)
 				typeprefix = "process";
-			else if(pmc instanceof ProcessParticipant)
-				typeprefix = "participant";
 			else if(pmc instanceof PhysicalEntity)
 				typeprefix = "entity";
 			

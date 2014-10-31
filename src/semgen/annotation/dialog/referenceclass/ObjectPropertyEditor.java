@@ -29,12 +29,9 @@ import semsim.model.SemSimModel;
 import semsim.model.annotation.Annotation;
 import semsim.model.annotation.SemSimRelation;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
-import semsim.model.physical.MediatorParticipant;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
-import semsim.model.physical.SinkParticipant;
-import semsim.model.physical.SourceParticipant;
 import semsim.owl.SemSimOWLFactory;
 
 public class ObjectPropertyEditor extends JPanel implements ActionListener, PropertyChangeListener {
@@ -87,18 +84,18 @@ public class ObjectPropertyEditor extends JPanel implements ActionListener, Prop
 			
 			else{
 				if(relation == SemSimConstants.HAS_SOURCE_RELATION){
-					for(SourceParticipant sp : ((PhysicalProcess)subject).getSources()){
-						namesandobjects.put(sp.getPhysicalEntity().getName(), sp.getPhysicalEntity());
+					for(PhysicalEntity sp : ((PhysicalProcess)subject).getSources()){
+						namesandobjects.put(sp.getName(), sp);
 					}
 				}
 				else if(relation == SemSimConstants.HAS_SINK_RELATION){
-					for(SinkParticipant sp : ((PhysicalProcess)subject).getSinks()){
-						namesandobjects.put(sp.getPhysicalEntity().getName(), sp.getPhysicalEntity());
+					for(PhysicalEntity sp : ((PhysicalProcess)subject).getSinks()){
+						namesandobjects.put(sp.getName(), sp);
 					}
 				}
 				else if(relation == SemSimConstants.HAS_MEDIATOR_RELATION){
-					for(MediatorParticipant mp : ((PhysicalProcess)subject).getMediators()){
-						namesandobjects.put(mp.getPhysicalEntity().getName(), mp.getPhysicalEntity());
+					for(PhysicalEntity mp : ((PhysicalProcess)subject).getMediators()){
+						namesandobjects.put(mp.getName(), mp);
 					}
 				}
 			}

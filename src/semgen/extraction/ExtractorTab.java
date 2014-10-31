@@ -51,8 +51,8 @@ import semgen.resource.uicomponent.SemGenTab;
 import semsim.SemSimUtil;
 import semsim.extraction.Extractor;
 import semsim.model.SemSimModel;
-import semsim.model.computational.MappableVariable;
-import semsim.model.computational.DataStructure;
+import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
@@ -736,7 +736,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 			try {
 				Map<DataStructure, Set<? extends DataStructure>> table = primeextraction();
 				if (table.size() != 0) {
-					extractedfile = SemGenGUI.SaveAsAction(SemGenGUI.desktop, null, new FileNameExtensionFilter[]{
+					extractedfile = SemGenGUI.SaveAsAction(this, null, new FileNameExtensionFilter[]{
 							SemGenFileChooser.cellmlfilter, SemGenFileChooser.owlfilter});
 					if (extractedfile != null) {
 						try {
@@ -774,7 +774,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		}
 	}
 
-	public final static MouseListener buttonMouseListener = new MouseAdapter() {
+	private final static MouseListener buttonMouseListener = new MouseAdapter() {
 		public void mouseEntered(MouseEvent e) {
 			Component component = e.getComponent();
 			if (component instanceof AbstractButton) {
@@ -886,7 +886,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 			filec.setCurrentDirectory(SemGenFileChooser.currentdirectory);
 			filec.setDialogTitle("Choose location to save clustering results");
 			filec.addChoosableFileFilter(new FileFilter(new String[] { "txt" }));
-			int returnVal = filec.showSaveDialog(SemGenGUI.desktop);
+			int returnVal = filec.showSaveDialog(this);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				batchclusterfile = new File(filec.getSelectedFile().getAbsolutePath());
 				if (!batchclusterfile.getAbsolutePath().endsWith(".txt")
@@ -895,7 +895,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 				} else {
 				}
 				if (batchclusterfile.exists()) {
-					int overwriteval = JOptionPane.showConfirmDialog(SemGenGUI.desktop, "Overwrite existing file?",
+					int overwriteval = JOptionPane.showConfirmDialog(this, "Overwrite existing file?",
 							batchclusterfile.getName() + " already exists",JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE);
 					if (overwriteval == JOptionPane.OK_OPTION) {
 						saveok = true;
