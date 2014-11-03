@@ -1,4 +1,4 @@
-package semgen.annotation.dialog;
+package semgen.annotation.dialog.selector;
 
 import java.awt.Component;
 import java.beans.PropertyChangeEvent;
@@ -11,7 +11,6 @@ import javax.swing.JOptionPane;
 import semgen.SemGenGUI;
 import semgen.annotation.AnnotatorTab;
 import semgen.annotation.CodewordButton;
-import semgen.annotation.dialog.selector.SemSimComponentSelectorDialog;
 import semsim.model.SemSimComponent;
 import semsim.model.physical.CompositePhysicalEntity;
 import semsim.model.physical.PhysicalEntity;

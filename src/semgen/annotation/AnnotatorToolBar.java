@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
@@ -22,8 +23,8 @@ import semgen.SemGenGUI;
 import semgen.SemGenSettings;
 import semgen.annotation.dialog.AnnotationComponentReplacer;
 import semgen.annotation.dialog.ModelLevelMetadataEditor;
-import semgen.annotation.dialog.RemovePhysicalComponentDialog;
 import semgen.annotation.dialog.referenceclass.AddReferenceClassDialog;
+import semgen.annotation.dialog.selector.RemovePhysicalComponentDialog;
 import semgen.resource.CSVExporter;
 import semgen.resource.SemGenIcon;
 import semgen.resource.uicomponent.DropDownCheckList;
@@ -47,9 +48,10 @@ public class AnnotatorToolBar extends JToolBar implements ActionListener {
 	private DropDownCheckList sortselector = new DropDownCheckList("Sort Options");
 	private JButton annotateitemshowmarkers = new JButton("Display markers");
 	private JButton annotateitemshowimports = new JButton("Show imports");
-	public JButton annotateitemreplacerefterm = new JButton("Replace reference term");
-	private JButton annotateitemaddrefterm= new JButton("Add reference term");
-	private JButton annotateitemremoverefterm = new JButton("Remove annotation component");
+
+	private SemGenToolbarButton annotateitemaddrefterm= new SemGenToolbarButton(SemGenIcon.createicon);
+	private SemGenToolbarButton annotateitemremoverefterm = new SemGenToolbarButton(SemGenIcon.eraseicon);
+	public SemGenToolbarButton annotateitemreplacerefterm = new SemGenToolbarButton(SemGenIcon.replaceicon);
 	private JButton annotateitemtreeview = new JButton("Tree view");
 	private String sortbytype = new String("By Type");
 	private String sortbycompletion = new String("By Composite Completeness");
@@ -100,7 +102,8 @@ public class AnnotatorToolBar extends JToolBar implements ActionListener {
 		annotateitemremoverefterm.setToolTipText("Remove a physical entity or process term from the model");
 
 		annotateitemreplacerefterm.setToolTipText("Replace a reference ontology term with another");
-
+		annotateitemreplacerefterm.addActionListener(this);
+		
 		add(annotateitemtreeview);
 		add(annotateitemshowmarkers);
 		add(sortselector);
@@ -114,8 +117,9 @@ public class AnnotatorToolBar extends JToolBar implements ActionListener {
 		add(annotateitemeditmodelanns);
 		addSeparator();
 		
-		add(annotateitemremoverefterm);
+		add(new JLabel("Reference Terms"));
 		add(annotateitemaddrefterm);
+		add(annotateitemremoverefterm);
 		add(annotateitemreplacerefterm);
 		addSeparator();
 		

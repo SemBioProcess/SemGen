@@ -6,36 +6,35 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
+import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import semgen.resource.SemGenFont;
 
-public class PreferenceDialog extends JDialog implements PropertyChangeListener, ActionListener {
+
+public class PreferenceDialog extends JDialog implements PropertyChangeListener {
 
 	private static final long serialVersionUID = 1L;
 	protected SemGenSettings settings;
 	public JOptionPane optionPane;
-	public ArrayList<JCheckBox> checklist = new ArrayList<JCheckBox>();
-	JPanel prefpanel = new JPanel();
+	public ArrayList<PrefCheckBox> checklist = new ArrayList<PrefCheckBox>();
 	
 	public PreferenceDialog(SemGenSettings sets) {
 		settings = sets;
 		setTitle("Set SemGen Default Preferences");
 		
-		Object[] array = new Object[] { prefpanel };
-		Object[] options = new Object[] { "OK", "Cancel" };
-
-		optionPane = new JOptionPane(array, JOptionPane.PLAIN_MESSAGE,
-				JOptionPane.OK_CANCEL_OPTION, null);
-		optionPane.addPropertyChangeListener(this);
+		makePreferences();
+		drawCheckList();
 		
-		optionPane.setOptions(options);
-		optionPane.setInitialValue(options[0]);
 		setContentPane(optionPane);
 		setModal(true);
+		
+		optionPane.getComponent(JOptionPane.OK_OPTION).setEnabled(false);
 		
 		this.pack();
 		this.setVisible(true);
@@ -48,42 +47,77 @@ public class PreferenceDialog extends JDialog implements PropertyChangeListener,
 		if (propertyfired.equals("value")) {
 			String value = optionPane.getValue().toString();
 			if (value == "OK") {
-				
+				for (PrefCheckBox pref : checklist ) {
+					pref.toggleSetting(pref.isSelected());
+				}
 			}
 			dispose();
 		} 
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	@SuppressWarnings("serial")
+	public void makePreferences() {
+		checklist.add(new PrefCheckBox(
+				"Auto Annotate", "Automatically annotate a newly imported model", 
+				settings.doAutoAnnotate()) 
+				{protected void toggleSetting(Boolean sel) {settings.toggleAutoAnnotate(sel);}});
+		checklist.add(new PrefCheckBox(
+				"Tree View", "Display codewords and submodels within the submodel tree", 
+				settings.useTreeView()) 
+				{protected void toggleSetting(Boolean sel) {settings.toggleTreeView(sel);}});
+		checklist.add(new PrefCheckBox(
+				"Show Imports", "Make imported codewords and submodels visible", 
+				settings.showImports()) 
+				{protected void toggleSetting(Boolean sel) {settings.toggleShowImports(sel);}});
+		checklist.add(new PrefCheckBox(
+				"Composite Display Markers", "Display markers that indicate a codeword's property type", 
+				settings.useDisplayMarkers()) 
+				{protected void toggleSetting(Boolean sel) {settings.toggleDisplayMarkers(sel);}});
+		checklist.add(new PrefCheckBox(
+				"Organize by Property Type", "Sort codewords by its property type", 
+				settings.organizeByPropertyType()) 
+				{protected void toggleSetting(Boolean sel) {settings.toggleByPropertyType(sel);}});
+		checklist.add(new PrefCheckBox(
+				"Organize by Composite Completeness", "Sort codewords by how complete their composite annotation is", 
+				settings.organizeByCompositeCompleteness()) 
+				{protected void toggleSetting(Boolean sel) {settings.toggleCompositeCompleteness(sel);}});
 	}
 	
-	class SemGenPreference extends Object {
-		String caption, prefid;
-		boolean isselected;
+	public void drawCheckList() {
+		JPanel prefpanel = new JPanel();
+		prefpanel.setLayout(new BoxLayout(prefpanel, BoxLayout.Y_AXIS));
+		prefpanel.add(new JLabel("Choose Default Preferences"));
 		
-		public SemGenPreference(String capt, String id, boolean selected) {
-			caption = capt;
-			prefid = id;
-			isselected = selected;
+		for (PrefCheckBox pref : checklist) {
+			prefpanel.add(pref);
 		}
 		
-		public String getCaption() {
-			return caption;
+		Object[] array = new Object[] { prefpanel };
+		Object[] options = new Object[] { "OK", "Cancel" };
+
+		optionPane = new JOptionPane(array, JOptionPane.PLAIN_MESSAGE,
+				JOptionPane.OK_CANCEL_OPTION, null);
+		optionPane.addPropertyChangeListener(this);
+		
+		optionPane.setOptions(options);
+		optionPane.setInitialValue(options[0]);
+	}
+	
+	class PrefCheckBox extends JCheckBox implements ActionListener{
+		private static final long serialVersionUID = 1L;
+
+		PrefCheckBox(String capt, String tip, boolean selected) {
+			super(capt, selected);
+			setToolTipText(tip);
+			setFont(SemGenFont.defaultPlain());
+			addActionListener(this);
 		}
 		
-		public String getID() {
-			return prefid;
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			optionPane.getComponent(JOptionPane.OK_OPTION).setEnabled(true);
 		}
 		
-		public boolean isSelected() {
-			return isselected;
-		}
-		
-		public void setSelected(boolean selected) {
-			isselected = selected;
-		}
+		protected void toggleSetting(Boolean sel) {}
 	}
 }

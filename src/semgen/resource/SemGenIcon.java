@@ -29,6 +29,7 @@ public class SemGenIcon {
 	public static final ImageIcon externalURLicon = createImageIcon("icons/externalURL2020.png");
 	public static final ImageIcon expendcontracticon = createImageIcon("icons/expandcontracticon1.gif");
 	public static final ImageIcon questionicon = createImageIcon("icons/questionicon.gif");	
+	public static final ImageIcon replaceicon = createImageIcon("icons/replaceicon.png");	
 	
 	/** Returns an ImageIcon, or null if the path was invalid. */
 	public static ImageIcon createImageIcon(String path) {

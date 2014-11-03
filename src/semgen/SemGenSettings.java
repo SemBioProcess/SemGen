@@ -108,6 +108,11 @@ public class SemGenSettings extends Observable{
 		return startsettingstable.get("sortbyCompositeCompleteness")[0].trim().equals("true");
 	}
 	
+	public void toggleAutoAnnotate() {
+		Boolean tog = !organizeByCompositeCompleteness();
+		startsettingstable.put("autoAnnotate", new String[]{tog.toString()});
+	}
+	
 	public void toggleCompositeCompleteness() {
 		Boolean tog = !organizeByCompositeCompleteness();
 		startsettingstable.put("sortbyCompositeCompleteness", new String[]{tog.toString()});
@@ -133,6 +138,29 @@ public class SemGenSettings extends Observable{
 		startsettingstable.put("showImports", new String[]{tog.toString()});
 	}
 	
+	public void toggleAutoAnnotate(Boolean tog) {
+		startsettingstable.put("autoAnnotate", new String[]{tog.toString()});
+	}
+	
+	public void toggleCompositeCompleteness(Boolean tog) {
+		startsettingstable.put("sortbyCompositeCompleteness", new String[]{tog.toString()});
+	}
+	
+	public void toggleByPropertyType(Boolean tog) {
+		startsettingstable.put("organizeByPropertyType", new String[]{tog.toString()});
+	}
+	
+	public void toggleDisplayMarkers(Boolean tog) {
+		startsettingstable.put("displayMarkers", new String[]{tog.toString()});
+	}
+	
+	public void toggleTreeView(Boolean tog) {
+		startsettingstable.put("treeView", new String[]{tog.toString()});
+	}
+	
+	public void toggleShowImports(Boolean tog) {
+		startsettingstable.put("showImports", new String[]{tog.toString()});
+	}
 	public String getHelpURL() {
 		return startsettingstable.get("helpURL")[0];
 	}
@@ -150,8 +178,10 @@ public class SemGenSettings extends Observable{
 			writer.println("showImports; " + showImports().toString());
 			writer.println("displayMarkers; " + useDisplayMarkers().toString());
 			writer.println("organizeByPropertyType; " + organizeByPropertyType().toString());
+			writer.println("sortbyCompositeCompleteness; " + organizeByCompositeCompleteness());
 			writer.println("treeView; " + useTreeView().toString());
 			writer.println("helpURL; " + getHelpURL());
+			
 			writer.flush();
 			writer.close();
 		} catch (IOException e) {
