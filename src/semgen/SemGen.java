@@ -16,6 +16,7 @@ import java.util.Date;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import org.semanticweb.owlapi.model.OWLException;
@@ -57,6 +58,13 @@ public class SemGen extends JFrame{
 		System.out.print("Loading SemGen...");
 		logfilewriter.println("Loading SemGen");
 		
+		 SwingUtilities.invokeLater(new Runnable() {
+		     public void run() {
+		        createAndShowGUI();
+		     }
+		  });
+	}
+	public static void createAndShowGUI() {
 		try {
 			UIManager.put("nimbusOrange", new Color(51,98,140));
 			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());

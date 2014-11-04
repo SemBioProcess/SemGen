@@ -1,14 +1,9 @@
 package semgen;
 
 import org.jdom.JDOMException;
-import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
 import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLException;
-import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyManager;
-
 import semgen.annotation.AnnotatorTab;
 import semgen.extraction.ExtractorTab;
 import semgen.menu.HelpMenu;
@@ -72,9 +67,6 @@ import javax.xml.rpc.ServiceException;
 public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeListener {
 
 	private static final long serialVersionUID = 3618439495848469800L;
-	public static OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-	public static OWLDataFactory factory;
-	public static OWLOntology OPB;
 
 	private SemGenSettings settings;
 	private static SemGenSettings settingshandle; //Temporary work around for static functions
@@ -101,7 +93,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 	public SemGenGUI(SemGenSettings sets, JMenuBar menubar){
 		settings = new SemGenSettings(sets);
 		settingshandle = settings;
-		factory = manager.getOWLDataFactory();
 
 		setPreferredSize(sets.getAppSize());
 		setOpaque(true);
@@ -391,7 +382,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 			}
 			
 			// Check to make sure SemSim model isn't already being annotated before proceeding
-			if (newannok && !isOntologyOpenForEditing(existingURI)) {
+			if (newannok && !desktop.isOntologyOpenForEditing(existingURI)) {
 	
 				// Create new Annotater object in SemGen desktop
 				annotator = new AnnotatorTab(file,settingshandle);
@@ -658,8 +649,8 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 		return dsset;
 	}
 	
-	public static Boolean isOntologyOpenForEditing(URI uritocheck) {
-		for (AnnotatorTab at : desktop.anntabs) {
+	public Boolean isOntologyOpenForEditing(URI uritocheck) {
+		for (AnnotatorTab at : anntabs) {
 			if (at.checkFile(uritocheck)) {
 				JOptionPane.showMessageDialog(null,"Cannot create or load \n"+ uritocheck.toString()+
 					"\n because the file is already open for editing.",null, JOptionPane.PLAIN_MESSAGE);

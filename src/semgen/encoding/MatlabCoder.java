@@ -11,10 +11,10 @@ import java.util.Set;
 import org.sbml.libsbml.ASTNode;
 import org.sbml.libsbml.libsbml;
 import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.SemGen;
-import semgen.SemGenGUI;
 import semgen.resource.GenericThread;
 import semgen.resource.uicomponent.SemGenProgressBar;
 import semsim.SemSimConstants;
@@ -185,9 +185,10 @@ public class MatlabCoder extends Coder{
 		}
 		// write out the ODEs
 		writer.println();
+		OWLDataFactory factory = SemGen.semsimlib.makeOWLFactory();
 		for(int y=0; y<ODEcdwduriarray.length; y++){
 			writer.println("\t% " + SemSimOWLFactory.getIRIfragment(ODEcdwduriarray[y]) + ": " + 
-					SemSimOWLFactory.getRDFcomment(ontology, SemGenGUI.factory.getOWLNamedIndividual(IRI.create(ODEcdwduriarray[y]))));
+					SemSimOWLFactory.getRDFcomment(ontology, factory.getOWLNamedIndividual(IRI.create(ODEcdwduriarray[y]))));
 			String neweq = replaceCodewordsWithMatlabPointers(cdwdurisandformulas.get(ODEcdwduriarray[y]), ODEcdwduriarray[y], ODEcdwduris);
 			writer.println("\t\tdy(" + (ODEcdwduris.indexOf(ODEcdwduriarray[y])+1) + ") = " + neweq); 
 			writer.println();
@@ -197,7 +198,7 @@ public class MatlabCoder extends Coder{
 		writer.close();
 		
 		if(progframe!=null){
-			progframe.setVisible(false);
+			progframe.dispose();
 		}
 	}
 	

@@ -29,8 +29,6 @@ import org.jdom.JDOMException;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
 import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLClass;
-import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
@@ -694,16 +692,6 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 		models.add(semsimmodel1);
 		models.add(semsimmodel2);
 		return models;
-	}
-
-	public Set<String> getOPBsubclasses(String parentclass) {
-		OWLClass parent = SemGenGUI.factory.getOWLClass(IRI.create(parentclass));
-		Set<OWLClassExpression> subclasses = parent.getSubClasses(SemGenGUI.OPB);
-		Set<String> subclassset = new HashSet<String>();
-		for (OWLClassExpression subclass : subclasses) {
-			subclassset.add(subclass.asOWLClass().getIRI().toString());
-		}
-		return subclassset;
 	}
 
 	public void mouseEntered(MouseEvent arg0) {

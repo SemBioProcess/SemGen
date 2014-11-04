@@ -37,6 +37,7 @@ import org.jdom.input.SAXBuilder;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
+import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLDataPropertyExpression;
 import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.model.OWLOntology;
@@ -121,8 +122,7 @@ public class MoreInfoButton extends JLabel implements PropertyChangeListener, Mo
 			return;
 		}
 		// otherwise...
-		String versionid = "";
-		versionid = SemSimOWLFactory.getLatestVersionIDForBioPortalOntology(bioportalID);
+		String versionid = SemSimOWLFactory.getLatestVersionIDForBioPortalOntology(bioportalID);
 		if(versionid==null){
 			System.err.println("Could not get latest version of ontology from BioPortal");
 			reset();
@@ -260,22 +260,19 @@ public class MoreInfoButton extends JLabel implements PropertyChangeListener, Mo
 				}
 			}
 		}
-
 		
 		// Otherwise we're using a local file and we need to access it with the OWL API (sigh)
 		else {
+			OWLDataFactory factory = SemGen.semsimlib.makeOWLFactory();
 			OWLOntology localont = null;
 			try {
-				localont = SemSimOWLFactory.getOntologyIfPreviouslyLoaded(IRI.create(onturi), SemGenGUI.manager);
-				if (localont == null) {
-					localont = SemGenGUI.manager.loadOntologyFromOntologyDocument(IRI.create(onturi));
-				}
+				localont = SemGen.semsimlib.getLoadedOntology(onturi);
 			} catch (OWLOntologyCreationException e) {
 				JOptionPane.showMessageDialog(this,"Could not load the local ontology");
 				SemGen.logfilewriter.println(e.toString());
 				this.reset();
 			}
-			OWLClass selectedclass = SemGenGUI.factory.getOWLClass(IRI.create(termuri));
+			OWLClass selectedclass = factory.getOWLClass(IRI.create(termuri));
 			CustomRestrictionVisitor rv = new CustomRestrictionVisitor(Collections.singleton(localont));
 
 			for (OWLSubClassOfAxiom ax : localont.getSubClassAxiomsForSubClass(selectedclass)) {
@@ -304,7 +301,7 @@ public class MoreInfoButton extends JLabel implements PropertyChangeListener, Mo
 				Set<String> labels = new HashSet<String>();
 				// use the rdf labels, if they exist
 				for (String objectval : objectvals) {
-					String label = SemSimOWLFactory.getRDFLabels(localont,SemGenGUI.factory.getOWLClass(IRI.create(objectval)))[0];
+					String label = SemSimOWLFactory.getRDFLabels(localont,factory.getOWLClass(IRI.create(objectval)))[0];
 					if (!label.equals("")) {
 						labels.add(label);
 						objectvals2.remove(objectval);

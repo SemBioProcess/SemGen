@@ -13,6 +13,7 @@ import java.util.Set;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
@@ -113,6 +114,23 @@ public class SemSimLibrary {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public OWLOntology getLoadedOntology(String onturi) throws OWLOntologyCreationException {
+		OWLOntology localont = SemSimOWLFactory.getOntologyIfPreviouslyLoaded(IRI.create(onturi), manager);
+		if (localont == null) {
+			localont = manager.loadOntologyFromOntologyDocument(IRI.create(onturi));
+		}
+		return localont;
+	}
+	
+	public Set<String> getOPBsubclasses(String parentclass) throws OWLException {
+		Set<String> subclassset = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + parentclass, false);
+		return subclassset;
+	}
+	
+	public OWLDataFactory makeOWLFactory() {
+		return manager.getOWLDataFactory() ;
 	}
 	
 	public boolean OPBhasProperty(String s) {

@@ -14,21 +14,19 @@ import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.semanticweb.owlapi.model.OWLException;
 
-import semgen.SemGenGUI;
-import semsim.SemSimConstants;
+import semgen.SemGen;
 import semsim.model.SemSimModel;
 import semsim.model.physical.CustomPhysicalEntity;
 import semsim.model.physical.CustomPhysicalProcess;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.PhysicalProperty;
-import semsim.owl.SemSimOWLFactory;
 
 public class ChalkboardCoder {
 
 	public static Hashtable<String,CustomPhysicalEntity> nounnamesandphysents;
-	public static int x;
-	public static Set<Element> nouncollection;
+	public static int x = 1;
+	public static Set<Element> nouncollection = new HashSet<Element>();
 	
 	public static void translate(SemSimModel semsimmodel, File outputfile) throws JDOMException, IOException, OWLException {
 		// Create top of CB xml file
@@ -44,19 +42,16 @@ public class ChalkboardCoder {
 		
 		root.addContent(nounlist);
 		root.addContent(verblist);
-				
-		nouncollection = new HashSet<Element>();
+
 		Set<Element> verbcollection = new HashSet<Element>();
 		
 		Set<CustomPhysicalProcess> setofverbobjects = new HashSet<CustomPhysicalProcess>();
 		
 		nounnamesandphysents = new Hashtable<String,CustomPhysicalEntity>();
-		
-		x = 1;
-		
-		Set<String> allflowrates = SemSimOWLFactory.getAllSubclasses(SemGenGUI.OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00573", false);
-		SemSimOWLFactory.getAllSubclasses(SemGenGUI.OPB, SemSimConstants.OPB_NAMESPACE + "OPB00093", false);
-		SemSimOWLFactory.getAllSubclasses(SemGenGUI.OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00569", false);
+
+		Set<String> allflowrates = SemGen.semsimlib.getOPBsubclasses("OPB_00573");
+		SemGen.semsimlib.getOPBsubclasses("OPB00093");
+		SemGen.semsimlib.getOPBsubclasses("OPB_00569");
 
 		/* For each data structure
 		if has a property that is a flow, get entity-flow physiomap
