@@ -214,7 +214,7 @@ public class Clusterer extends JFrame {
 		JButton scramble = new JButton("Shake");
 		scramble.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Layout layout = vv.getGraphLayout();
+				Layout<String, Number> layout = vv.getGraphLayout();
 				layout.initialize();
 				Relaxer relaxer = vv.getModel().getRelaxer();
 				if (relaxer != null) {
@@ -225,7 +225,7 @@ public class Clusterer extends JFrame {
 			}
 		});
 
-		DefaultModalGraphMouse gm = new DefaultModalGraphMouse();
+		DefaultModalGraphMouse<Object, Object> gm = new DefaultModalGraphMouse<Object, Object>();
 		vv.setGraphMouse(gm);
 
 		groupVertices = new JToggleButton("Group Clusters");
@@ -282,7 +282,6 @@ public class Clusterer extends JFrame {
 				}
 			}
 		});
-
 		
 		clusterAndRecolor(layout, 0, similarColors, groupVertices.isSelected());
 

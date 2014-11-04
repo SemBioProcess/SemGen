@@ -38,7 +38,7 @@ import semsim.model.physical.Submodel;
 
 public class ExtractorSelectionPanel extends JPanel implements ActionListener, MouseListener {
 	private static final long serialVersionUID = -487389420876921191L;
-	public JLabel titlelabel;
+	public JLabel titlelabel = new JLabel();
 	public JCheckBox markallbox = new JCheckBox("");
 	public JPanel checkboxpanel = new JPanel();
 	public SemGenScrollPane scroller;
@@ -69,8 +69,7 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 		expandcontractbutton.setContentAreaFilled(false);
 		expandcontractbutton.setAlignmentX(RIGHT_ALIGNMENT);
 		expandcontractbutton.setToolTipText("Expand/collapse panel");
-		
-		titlelabel = new JLabel();
+
 		titlelabel.addMouseListener(this);
 		titlelabel.setFont(SemGenFont.defaultBold());
 		titlelabel.setForeground(Color.blue);
@@ -98,7 +97,6 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 			((JComponent) c).setAlignmentX(LEFT_ALIGNMENT);
 		}
 	}
-	
 	
 	public int addCheckBoxes(Hashtable<? extends SemSimComponent,Set<DataStructure>> table) {
 		
@@ -138,10 +136,7 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 		}
 		return sortedarray.length;
 	}
-	
-	
-	
-	
+
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if (o == markallbox) {
@@ -155,9 +150,7 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 			}
 			try {
 				extractor.visualize(extractor.primeextraction(), false);
-			} catch (OWLException e1) {
-				e1.printStackTrace();
-			} catch (IOException e1) {
+			} catch (OWLException | IOException e1) {
 				e1.printStackTrace();
 			}
 			// Add the item listener back
@@ -170,7 +163,6 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 		}
 	}
 
-
 	public void mouseClicked(MouseEvent arg0) {
 		if(arg0.getSource() == expandcontractbutton || (arg0.getClickCount()==2 && arg0.getSource()==titlelabel)){
 			scroller.setVisible(!scroller.isVisible());
@@ -178,7 +170,6 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 			extractor.validate();
 		}
 	}
-
 
 	public void mouseEntered(MouseEvent arg0) {
 		if(arg0.getSource() == expandcontractbutton){
@@ -193,7 +184,6 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 			expandcontractbutton.setContentAreaFilled(false);
 		}
 	}
-
 
 	public void mousePressed(MouseEvent arg0) {}
 

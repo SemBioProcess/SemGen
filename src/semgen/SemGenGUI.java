@@ -46,7 +46,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -91,11 +90,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 	private JMenuItem toolsitemmerge;
 	private JMenuItem toolsitemcode;
 	private JMenuItem toolsitemextract;
-
-	private JCheckBoxMenuItem autoannotate;
-
-	private JMenuItem extractoritembatchcluster;
-	public JMenuItem extractoritemopenann;
 
 	public static SemGenGUI desktop;
 	private ArrayList<AnnotatorTab> anntabs = new ArrayList<AnnotatorTab>(); //Open annotation tabs
@@ -143,23 +137,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 		filemenu.add(new JSeparator());
 		filemenu.add(fileitemexit);
 
-		autoannotate = new JCheckBoxMenuItem("Auto-annotate during translation");
-		autoannotate.setSelected(settings.doAutoAnnotate());
-		autoannotate.addActionListener(this);
-		autoannotate.setToolTipText("Automatically add annotations based on physical units, etc. when possible");
-
-		// Extract menu
-		JMenu extractmenu = new JMenu("Extract");
-		extractmenu.getAccessibleContext().setAccessibleDescription("Extract out a portion of a SemSim model");
-
-		extractoritembatchcluster = formatMenuItem(extractoritembatchcluster, "Automated clustering analysis", KeyEvent.VK_B,true,true);
-		extractoritembatchcluster.setToolTipText("Performs clustering analysis on model");
-		extractmenu.add(extractoritembatchcluster);
-
-		extractoritemopenann = formatMenuItem(extractoritemopenann, "Open model in Annotator", null, true, true);
-		extractmenu.add(extractoritemopenann);
-		
-		// Merging menu
+		// Tools menu
 		JMenu toolsmenu = new JMenu("Tasks");
 		toolsmenu.getAccessibleContext().setAccessibleDescription("Select a new SemGen task");
 		
@@ -181,7 +159,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 
 		menubar.add(filemenu);
 		menubar.add(toolsmenu);
-		menubar.add(extractmenu);
 		menubar.add(new HelpMenu(settings));
 	}
 	
@@ -260,30 +237,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 
 		if (o == toolsitemextract) {
 			startNewExtractorTask();
-		}
-
-		if (o == extractoritembatchcluster) {
-			if (desktop.getSelectedComponent() instanceof ExtractorTab) {
-				ExtractorTab extractor = (ExtractorTab) desktop.getSelectedComponent();
-				try {
-					extractor.batchCluster();
-				} catch (IOException e1) {e1.printStackTrace();}
-			} 
-			else {
-				startBatchClustering();
-			}
-		}
-
-		if (o == extractoritemopenann) {
-			if (desktop.getSelectedComponent() instanceof ExtractorTab) {
-				ExtractorTab extractor = (ExtractorTab) desktop.getSelectedComponent();
-				try {
-					NewAnnotatorTask task = new NewAnnotatorTask(extractor.sourcefile, false);
-					task.execute();
-				} catch (Exception e1) {e1.printStackTrace();} 
-			} else {
-				JOptionPane.showMessageDialog(this,"Please first select an Extractor tab or open a new Extractor");
-			}
 		}
 
 		if (o == toolsitemmerge){
@@ -761,9 +714,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 	
 	public void updateSemGenMenuOptions(){
 		Component comp = desktop.getSelectedComponent();
-		
-		extractoritembatchcluster.setEnabled(comp instanceof ExtractorTab);
-		extractoritemopenann.setEnabled(comp instanceof ExtractorTab);
 		
 		if(comp instanceof AnnotatorTab){
 			AnnotatorTab ann = (AnnotatorTab)comp;

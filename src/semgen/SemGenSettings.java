@@ -28,7 +28,6 @@ public class SemGenSettings extends Observable{
 	public SemGenSettings() {
 		try {
 				startsettingstable = ResourcesManager.createHashtableFromFile("cfg/startSettings.txt");
-				startsettingstable.put("sortbyCompositeCompleteness", new String[]{"false"});
 		} 
 		catch (FileNotFoundException e3) {
 				e3.printStackTrace();

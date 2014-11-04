@@ -105,8 +105,8 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	public ExtractorSelectionPanel submodelspanel;
 	public ExtractorSelectionPanel codewordspanel;
 	public ExtractorSelectionPanel clusterpanel;
-	public JPanel physiomappanel;
-	public JTabbedPane graphtabpane;
+	public JPanel physiomappanel = new JPanel();
+	public JTabbedPane graphtabpane = new JTabbedPane();
 	public SemSimModel extractedmodel;
 	public File extractedfile;
 	public SemGenRadialGraphView view;
@@ -168,8 +168,8 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		AlphabetizeCheckBoxes(codewordspanel);
 
 		JPanel leftpanel = new JPanel();
+		leftpanel.add(new ExtractorToolbar(settings, this));
 		leftpanel.setLayout(new BoxLayout(leftpanel, BoxLayout.Y_AXIS));
-
 		leftpanel.add(processespanel.titlepanel);
 		leftpanel.add(processespanel.scroller);
 		leftpanel.add(entitiespanel.titlepanel);
@@ -180,9 +180,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		leftpanel.add(codewordspanel.scroller);
 		leftpanel.add(clusterpanel.titlepanel);
 		leftpanel.add(clusterpanel.scroller);
-
-		graphtabpane = new JTabbedPane();
-		physiomappanel = new JPanel();
+		
 		JPanel rightpanel = new JPanel();
 		rightpanel.setLayout(new BoxLayout(rightpanel,BoxLayout.Y_AXIS));
 		rightpanel.add(graphtabpane);
@@ -585,7 +583,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 					//if(oneinput.isDeclared()){
 					Boolean otheradd = true;
 					Node othernode = null;
-					Iterator othernodeit = tempgraph.nodes();
+					Iterator<Node> othernodeit = tempgraph.nodes();
 					// check if the input has already been added to the graph
 					while (othernodeit.hasNext()) {
 						Node theothernode = (Node) othernodeit.next();
@@ -892,16 +890,13 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 				if (!batchclusterfile.getAbsolutePath().endsWith(".txt")
 						&& !batchclusterfile.getAbsolutePath().endsWith(".TXT")) {
 					batchclusterfile = new File(filec.getSelectedFile().getAbsolutePath() + ".txt");
-				} else {
 				}
 				if (batchclusterfile.exists()) {
 					int overwriteval = JOptionPane.showConfirmDialog(this, "Overwrite existing file?",
 							batchclusterfile.getName() + " already exists",JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE);
 					if (overwriteval == JOptionPane.OK_OPTION) {
 						saveok = true;
-					} else {
-						saveok = false;
-					}
+					} 
 				} else {
 					saveok = true;
 				}
@@ -965,10 +960,9 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 				clusterwriter.println("(no change)");
 			}
 
-			float fltnum = y;
 			float fltmaxnum = maxclusteringiterations;
 
-			progframe.bar.setValue(Math.round(100 * (fltnum / fltmaxnum)));
+			progframe.bar.setValue(Math.round(100 * ((float)y / fltmaxnum)));
 		}
 		clusterwriter.flush();
 		clusterwriter.close();
