@@ -46,9 +46,16 @@ public class DropDownCheckList extends JComboBox<CheckBox> implements ActionList
 	    	this.enableEvents(ActionEvent.ACTION_PERFORMED);
 	    }
 	    
+	    public void addItem(String caption, String tooltip, boolean selected) {
+	    	this.disableEvents(ActionEvent.ACTION_PERFORMED);
+	    	super.addItem(new CheckBox(caption, tooltip, selected));
+	    	this.enableEvents(ActionEvent.ACTION_PERFORMED);
+	    }
+	    
 	    public String toString() {
 			return getName();
 	    }
+	    //Required to preserve the title as the selected item while getting the user's choice
 	    public String getLastSelectedItem() {
 	    	String cur = current.toString();
 	    	current = combotitle;
@@ -68,15 +75,16 @@ public class DropDownCheckList extends JComboBox<CheckBox> implements ActionList
 		                                                  int index,  
 		                                                  boolean isSelected,  
 		                                                  boolean cellHasFocus) {
-		    	
+		    	//Always display the title as the selected icon
 		    	if (item==combotitle) {
 		    		JLabel title = new JLabel(combotitle.toString());
-		    		title.setForeground(Color.gray);
 		    		title.setOpaque(true);
+		    		title.setBackground(Color.lightGray);
 		    		return title;
 		    	}
 		    	
 			    setText(item.toString());
+			    setToolTipText(((CheckBox)item).getTooltip());
 			    setSelected(((CheckBox)item).isSelected());  
 			    setBackground(((CheckBox)item).isSelected() ? Color.red : Color.white);  
 			    setForeground(((CheckBox)item).isSelected() ? Color.white : Color.black);  
@@ -84,7 +92,8 @@ public class DropDownCheckList extends JComboBox<CheckBox> implements ActionList
 		        return this;  
 		    }  
 		}
-
+	//The combobox itself has to be set as editable to allow the addition of items that are not
+	//selectable. This class prevents the user from typing in anything.
 	class ComboBoxEditor extends BasicComboBoxEditor {
 		  public ComboBoxEditor() {
 		   editor.setEditable(false);
@@ -101,6 +110,12 @@ class CheckBox extends Component {
 			selected = sel;
 		}
 		
+		public CheckBox(String capt, String tip, boolean sel) {
+			caption = capt;
+			tooltip = tip;
+			selected = sel;
+		}
+		
 		public Boolean isSelected() {
 			return selected;
 		}
@@ -111,5 +126,9 @@ class CheckBox extends Component {
 		
 		public String toString() {
 			return caption;
+		}
+		
+		public String getTooltip() {
+			return tooltip;
 		}
 	}

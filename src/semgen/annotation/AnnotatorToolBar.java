@@ -10,11 +10,7 @@ import java.util.Set;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JToolBar;
-
 import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLException;
@@ -29,14 +25,14 @@ import semgen.annotation.dialog.selector.RemovePhysicalComponentDialog;
 import semgen.resource.CSVExporter;
 import semgen.resource.SemGenIcon;
 import semgen.resource.uicomponent.DropDownCheckList;
-import semgen.resource.uicomponent.SemGenToolbarButton;
+import semgen.resource.uicomponent.SemGenTabToolbar;
 import semsim.SemSimConstants;
 import semsim.model.physical.CompositePhysicalEntity;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 
-public class AnnotatorToolBar extends JToolBar implements ActionListener {
+public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	AnnotatorTab anntab;
@@ -56,16 +52,11 @@ public class AnnotatorToolBar extends JToolBar implements ActionListener {
 	private DropDownCheckList sortselector = new DropDownCheckList("Sort Options");
 	private String sortbytype = new String("By Type");
 	private String sortbycompletion = new String("By Composite Completeness");
-	protected SemGenSettings settings;
 
 	public AnnotatorToolBar(AnnotatorTab tab, SemGenSettings sets) {
+		super(sets);
 		anntab = tab;
-		settings=sets;
-		this.setFloatable(false);
-		setOpaque(true);
 
-
-		
 		annotateitemshowimports.addActionListener(this);
 		annotateitemshowimports.setToolTipText("Make imported codewords and submodels visible");
 		
@@ -76,8 +67,8 @@ public class AnnotatorToolBar extends JToolBar implements ActionListener {
 		annotateitemtreeview.addActionListener(this);
 		annotateitemtreeview.setToolTipText("Display codewords and submodels within the submodel tree");
 		
-		sortselector.addItem(sortbytype, settings.organizeByPropertyType());
-		sortselector.addItem(sortbycompletion, settings.organizeByCompositeCompleteness());
+		sortselector.addItem(sortbytype, "Sort codewords by physical property type", settings.organizeByPropertyType());
+		sortselector.addItem(sortbycompletion, "Sort by the completeness of the composite term", settings.organizeByCompositeCompleteness());
 		
 		annotateitemcopy.addActionListener(this);
 		annotateitemcopy.setToolTipText("Annotate codewords using data from identical codewords in another model");
@@ -118,7 +109,7 @@ public class AnnotatorToolBar extends JToolBar implements ActionListener {
 		add(annotateitemexportcsv);
 		addSeparator();
 		
-		add(new JLabel("Reference Terms"));
+		add(new ToolBarLabel("Reference Terms:"));
 		add(annotateitemaddrefterm);
 		add(annotateitemremoverefterm);
 		add(annotateitemreplacerefterm);
@@ -126,13 +117,17 @@ public class AnnotatorToolBar extends JToolBar implements ActionListener {
 		
 		add(extractorbutton);
 		add(coderbutton);
-		setAlignmentY(JPanel.TOP_ALIGNMENT);
-		
+
 		sortselector.addItemListener(new SortSelectionListener(settings));
 	}
 	
 	public void enableSort(boolean enable) {
 		sortselector.setEnabled(enable);
+	}
+	
+	private ImageIcon displayIcontoUse() {
+		if (settings.useDisplayMarkers()) return SemGenIcon.onicon;
+		return SemGenIcon.officon;
 	}
 	
 	@Override
@@ -239,12 +234,7 @@ public class AnnotatorToolBar extends JToolBar implements ActionListener {
 			} 
 		}
 	}
-	
-	private ImageIcon displayIcontoUse() {
-		if (settings.useDisplayMarkers()) return SemGenIcon.onicon;
-		return SemGenIcon.officon;
-	}
-	
+
 	class SortSelectionListener implements ItemListener {
 		SemGenSettings settings;
 		public SortSelectionListener(SemGenSettings sets) {
