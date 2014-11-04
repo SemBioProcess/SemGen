@@ -459,7 +459,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 						desktop.anntabs.add(annotator);
 						
 						annotator.NewAnnotatorAction();
-
 					}
 				}
 			}

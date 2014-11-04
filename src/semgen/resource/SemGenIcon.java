@@ -30,6 +30,13 @@ public class SemGenIcon {
 	public static final ImageIcon expendcontracticon = createImageIcon("icons/expandcontracticon1.gif");
 	public static final ImageIcon questionicon = createImageIcon("icons/questionicon.gif");	
 	public static final ImageIcon replaceicon = createImageIcon("icons/replaceicon.png");	
+	public static final ImageIcon importicon = createImageIcon("icons/import_wiz.png");
+	public static final ImageIcon exporticon = createImageIcon("icons/exportpref_obj.png");
+	public static final ImageIcon treeicon = createImageIcon("icons/hierarchicalLayout.gif");
+	public static final ImageIcon setsourceicon = createImageIcon("icons/rebase.gif");	
+	public static final ImageIcon onicon = createImageIcon("icons/onicon.gif");
+	public static final ImageIcon officon = createImageIcon("icons/officon.gif");
+	public static final ImageIcon annotatemodelicon = createImageIcon("icons/annotatemodel.gif");
 	
 	/** Returns an ImageIcon, or null if the path was invalid. */
 	public static ImageIcon createImageIcon(String path) {

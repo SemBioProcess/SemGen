@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -39,20 +40,20 @@ public class AnnotatorToolBar extends JToolBar implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	AnnotatorTab anntab;
-	private SemGenToolbarButton extractorbutton = new SemGenToolbarButton(SemGenIcon.extractoricon);
-	private SemGenToolbarButton coderbutton = new SemGenToolbarButton(SemGenIcon.codericon);
-	private JButton annotateitemchangesourcemodelcode = new JButton("Set Source Code");;
-	private JButton annotateitemcopy = new JButton("Import annotations");
-	private JButton annotateitemeditmodelanns = new JButton("Edit model-level annotations");
-	private JButton annotateitemexportcsv = new JButton("Export codeword table");
-	private DropDownCheckList sortselector = new DropDownCheckList("Sort Options");
-	private JButton annotateitemshowmarkers = new JButton("Display markers");
+	private SemGenToolbarButton annotateitemchangesourcemodelcode = new SemGenToolbarButton(SemGenIcon.setsourceicon);
+	private SemGenToolbarButton annotateitemcopy = new SemGenToolbarButton(SemGenIcon.importicon);
+	private SemGenToolbarButton annotateitemeditmodelanns = new SemGenToolbarButton(SemGenIcon.annotatemodelicon);
+	private SemGenToolbarButton annotateitemexportcsv = new SemGenToolbarButton(SemGenIcon.exporticon);
+	private SemGenToolbarButton annotateitemshowmarkers;
 	private JButton annotateitemshowimports = new JButton("Show imports");
-
 	private SemGenToolbarButton annotateitemaddrefterm= new SemGenToolbarButton(SemGenIcon.createicon);
 	private SemGenToolbarButton annotateitemremoverefterm = new SemGenToolbarButton(SemGenIcon.eraseicon);
 	public SemGenToolbarButton annotateitemreplacerefterm = new SemGenToolbarButton(SemGenIcon.replaceicon);
-	private JButton annotateitemtreeview = new JButton("Tree view");
+	private SemGenToolbarButton annotateitemtreeview = new SemGenToolbarButton(SemGenIcon.treeicon);
+	private SemGenToolbarButton extractorbutton = new SemGenToolbarButton(SemGenIcon.extractoricon);
+	private SemGenToolbarButton coderbutton = new SemGenToolbarButton(SemGenIcon.codericon);
+	
+	private DropDownCheckList sortselector = new DropDownCheckList("Sort Options");
 	private String sortbytype = new String("By Type");
 	private String sortbycompletion = new String("By Composite Completeness");
 	protected SemGenSettings settings;
@@ -62,17 +63,24 @@ public class AnnotatorToolBar extends JToolBar implements ActionListener {
 		settings=sets;
 		this.setFloatable(false);
 		setOpaque(true);
-		
-		extractorbutton.setToolTipText("Open this model in Extractor");
-		extractorbutton.addActionListener(this);
 
-		coderbutton.setToolTipText("Encode this model for simulation");
-		coderbutton.addActionListener(this);
+
+		
+		annotateitemshowimports.addActionListener(this);
+		annotateitemshowimports.setToolTipText("Make imported codewords and submodels visible");
+		
+		annotateitemshowmarkers = new SemGenToolbarButton(displayIcontoUse());
+		annotateitemshowmarkers.addActionListener(this);
+		annotateitemshowmarkers.setToolTipText("Display markers that indicate a codeword's property type");
+		
+		annotateitemtreeview.addActionListener(this);
+		annotateitemtreeview.setToolTipText("Display codewords and submodels within the submodel tree");
+		
+		sortselector.addItem(sortbytype, settings.organizeByPropertyType());
+		sortselector.addItem(sortbycompletion, settings.organizeByCompositeCompleteness());
 		
 		annotateitemcopy.addActionListener(this);
 		annotateitemcopy.setToolTipText("Annotate codewords using data from identical codewords in another model");
-		
-		annotateitemcopy.setEnabled(true);
 		
 		annotateitemchangesourcemodelcode.addActionListener(this);
 		annotateitemchangesourcemodelcode.setToolTipText("Link the SemSim model with its computational code");
@@ -82,18 +90,6 @@ public class AnnotatorToolBar extends JToolBar implements ActionListener {
 
 		annotateitemeditmodelanns.setToolTipText("Edit metadata for this SemSim model");
 		annotateitemeditmodelanns.addActionListener(this);
-
-		sortselector.addItem(sortbytype, settings.organizeByPropertyType());
-		sortselector.addItem(sortbycompletion, settings.organizeByCompositeCompleteness());
-		
-		annotateitemshowimports.addActionListener(this);
-		annotateitemshowimports.setToolTipText("Make imported codewords and submodels visible");
-		
-		annotateitemshowmarkers.addActionListener(this);
-		annotateitemshowmarkers.setToolTipText("Display markers that indicate a codeword's property type");
-		
-		annotateitemtreeview.addActionListener(this);
-		annotateitemtreeview.setToolTipText("Display codewords and submodels within the submodel tree");
 		
 		annotateitemaddrefterm.addActionListener(this);
 		annotateitemaddrefterm.setToolTipText("Add a reference ontology term to use for annotating this model");
@@ -104,17 +100,22 @@ public class AnnotatorToolBar extends JToolBar implements ActionListener {
 		annotateitemreplacerefterm.setToolTipText("Replace a reference ontology term with another");
 		annotateitemreplacerefterm.addActionListener(this);
 		
+		extractorbutton.setToolTipText("Open this model in Extractor");
+		extractorbutton.addActionListener(this);
+
+		coderbutton.setToolTipText("Encode this model for simulation");
+		coderbutton.addActionListener(this);
+		
 		add(annotateitemtreeview);
 		add(annotateitemshowmarkers);
-		add(sortselector);
-		sortselector.addItemListener(new SortSelectionListener(settings));
 		add(annotateitemshowimports);
+		add(sortselector);
 		addSeparator();
 		
+		add(annotateitemeditmodelanns);
 		add(annotateitemchangesourcemodelcode);
 		add(annotateitemcopy);
 		add(annotateitemexportcsv);
-		add(annotateitemeditmodelanns);
 		addSeparator();
 		
 		add(new JLabel("Reference Terms"));
@@ -126,6 +127,8 @@ public class AnnotatorToolBar extends JToolBar implements ActionListener {
 		add(extractorbutton);
 		add(coderbutton);
 		setAlignmentY(JPanel.TOP_ALIGNMENT);
+		
+		sortselector.addItemListener(new SortSelectionListener(settings));
 	}
 	
 	public void enableSort(boolean enable) {
@@ -138,11 +141,12 @@ public class AnnotatorToolBar extends JToolBar implements ActionListener {
 		
 		if (o == annotateitemshowmarkers){
 			settings.toggleDisplayMarkers();
-				for(String s : anntab.codewordbuttontable.keySet()){
-					CodewordButton cb = anntab.codewordbuttontable.get(s);
-					((CodewordButton)cb).propoflabel.setVisible(settings.useDisplayMarkers());
-					cb.validate();
-				}
+			for(String s : anntab.codewordbuttontable.keySet()){
+				CodewordButton cb = anntab.codewordbuttontable.get(s);
+				((CodewordButton)cb).propoflabel.setVisible(settings.useDisplayMarkers());
+				cb.validate();
+			}
+			annotateitemshowmarkers.setIcon(displayIcontoUse());
 		}
 	
 		if(o == annotateitemshowimports){
@@ -234,6 +238,11 @@ public class AnnotatorToolBar extends JToolBar implements ActionListener {
 				e3.printStackTrace();
 			} 
 		}
+	}
+	
+	private ImageIcon displayIcontoUse() {
+		if (settings.useDisplayMarkers()) return SemGenIcon.onicon;
+		return SemGenIcon.officon;
 	}
 	
 	class SortSelectionListener implements ItemListener {
