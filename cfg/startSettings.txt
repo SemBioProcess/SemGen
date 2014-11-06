@@ -1,8 +1,8 @@
-XstartPosition; 1429
-YstartPosition; 121
+XstartPosition; 307
+YstartPosition; 86
 startHeight; 815
 startWidth; 1180
-startDirectory; C:\Users\thomp_000\Dropbox\Work Related
+startDirectory; C:\Users\Ryan\Documents\GitHub\SemGen\examples
 autoAnnotate; true
 showImports; true
 displayMarkers; true
