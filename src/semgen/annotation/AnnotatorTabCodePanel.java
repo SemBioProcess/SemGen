@@ -34,7 +34,6 @@ import semgen.resource.SemGenFont;
 import semgen.resource.uicomponent.SemGenProgressBar;
 import semgen.resource.uicomponent.SemGenTextArea;
 
-
 public class AnnotatorTabCodePanel extends SemGenTextArea {
 	private static final long serialVersionUID = 1L;
 	private int currentindexforcaret;

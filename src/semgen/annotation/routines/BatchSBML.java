@@ -1,4 +1,4 @@
-package semgen.annotation;
+package semgen.annotation.routines;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,6 +9,7 @@ import org.jdom.JDOMException;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.SemGenGUI;
+import semgen.annotation.AnnotatorTab;
 import semsim.reading.ModelClassifier;
 
 public class BatchSBML {

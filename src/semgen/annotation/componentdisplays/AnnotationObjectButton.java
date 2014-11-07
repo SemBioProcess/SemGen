@@ -1,4 +1,4 @@
-package semgen.annotation;
+package semgen.annotation.componentdisplays;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -15,12 +15,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import semgen.SemGenSettings;
+import semgen.annotation.AnnotatorTab;
 import semgen.annotation.annotatorpane.composites.PropertyMarker;
 import semgen.resource.SemGenFont;
 import semsim.Annotatable;
 import semsim.model.SemSimComponent;
 
-public class AnnotationObjectButton extends JPanel implements MouseListener{
+public abstract class AnnotationObjectButton extends JPanel implements MouseListener{
 	/**
 	 * 
 	 */

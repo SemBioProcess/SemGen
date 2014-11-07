@@ -1,4 +1,4 @@
-package semgen.annotation;
+package semgen.annotation.componentdisplays.codewords;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -6,7 +6,9 @@ import java.awt.event.*;
 
 import semgen.SemGen;
 import semgen.SemGenSettings;
+import semgen.annotation.AnnotatorTab;
 import semgen.annotation.annotatorpane.composites.PropertyMarker;
+import semgen.annotation.componentdisplays.AnnotationObjectButton;
 import semgen.resource.SemGenFont;
 import semsim.SemSimConstants;
 import semsim.model.computational.datastructures.DataStructure;
@@ -43,8 +45,7 @@ public class CodewordButton extends AnnotationObjectButton implements MouseListe
 		if(companncode.equals("_")) annotationNotAdded(compannlabel);
 		else annotationAdded(compannlabel, true);
 	}
-	
-	
+
 	public boolean refreshPropertyOfMarker(){
 		indicatorssuperpanel.remove(propoflabel);
 		Color oldcolor = propoflabel.color;

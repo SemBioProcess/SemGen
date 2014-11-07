@@ -24,6 +24,7 @@ import javax.swing.JScrollPane;
 import semgen.SemGenGUI;
 import semgen.annotation.annotatorpane.AnnotationPanel;
 import semsim.model.SemSimComponent;
+import semsim.model.SemSimModel;
 import semsim.writing.CaseInsensitiveComparator;
 
 public class SemSimComponentSelectorDialog extends JDialog implements ActionListener {
@@ -68,7 +69,7 @@ public class SemSimComponentSelectorDialog extends JDialog implements ActionList
 			if(tssc instanceof SemSimComponent){
 				System.out.println(tssc + "; " + ((SemSimComponent) tssc).getName() + "; " + ((SemSimComponent) tssc).getDescription());
 				String name = ((SemSimComponent)tssc).getName();
-				if(!name.equals(SemGenGUI.unspecifiedName))
+				if(!name.equals(SemSimModel.unspecifiedName))
 					nameobjectmap.put(name, (SemSimComponent)tssc);
 			}
 			else if(tssc instanceof URI)

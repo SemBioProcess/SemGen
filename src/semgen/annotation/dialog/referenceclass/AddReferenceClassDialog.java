@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
 import semgen.annotation.AnnotatorTab;
-import semgen.annotation.CodewordButton;
+import semgen.annotation.componentdisplays.codewords.CodewordButton;
 import semgen.resource.SemGenFont;
 import semsim.Annotatable;
 

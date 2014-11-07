@@ -17,7 +17,7 @@ import javax.swing.ListSelectionModel;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.annotation.AnnotatorTab;
-import semgen.annotation.CodewordButton;
+import semgen.annotation.componentdisplays.codewords.CodewordButton;
 import semgen.annotation.dialog.referenceclass.ReferenceClassFinderPanel;
 import semgen.resource.uicomponent.SemGenScrollPane;
 import semsim.SemSimConstants;

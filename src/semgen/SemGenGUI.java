@@ -88,7 +88,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 
 	public int numtabs = 0;
 	public static int maskkey = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-	public static String unspecifiedName = "*unspecified*";
 
 	public SemGenGUI(SemGenSettings sets, JMenuBar menubar){
 		settings = new SemGenSettings(sets);
@@ -395,8 +394,8 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 					if(annotator.getModelSaved()) annotator.lastSavedAs = annotator.semsimmodel.getSourceModelType();
 					
 					// Add unspecified physical model components for use during annotation
-					annotator.semsimmodel.addCustomPhysicalEntity(unspecifiedName, "Non-specific entity for use as a placeholder during annotation");
-					annotator.semsimmodel.addCustomPhysicalProcess(unspecifiedName, "Non-specific process for use as a placeholder during annotation");
+					annotator.semsimmodel.addCustomPhysicalEntity(SemSimModel.unspecifiedName, "Non-specific entity for use as a placeholder during annotation");
+					annotator.semsimmodel.addCustomPhysicalProcess(SemSimModel.unspecifiedName, "Non-specific process for use as a placeholder during annotation");
 	
 					if(annotator.semsimmodel!=null){
 						desktop.addTab(annotator);
@@ -484,7 +483,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 			if(ann.fileURI!=null){
 				Set<DataStructure> unspecds = new HashSet<DataStructure>();
 
-				unspecds.addAll(getDataStructuresWithUnspecifiedAnnotations(ann.semsimmodel));
+				unspecds.addAll(ann.semsimmodel.getDataStructuresWithUnspecifiedAnnotations());
 				if(unspecds.isEmpty()){
 					File targetfile = new File(ann.fileURI);
 					try {
@@ -604,7 +603,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 
 				if (object instanceof AnnotatorTab && saveok == true) {
 					AnnotatorTab ann = (AnnotatorTab) desktop.getSelectedComponent();
-					Set<DataStructure> unspecds = getDataStructuresWithUnspecifiedAnnotations(ann.semsimmodel);
+					Set<DataStructure> unspecds = ann.semsimmodel.getDataStructuresWithUnspecifiedAnnotations();
 					if(unspecds.isEmpty()){
 						ann.fileURI = file.toURI();
 						SaveAction(ann, modeltype);
@@ -628,26 +627,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 		return file;
 	}
 	
-	public static Set<DataStructure> getDataStructuresWithUnspecifiedAnnotations(SemSimModel model){
-		Set<DataStructure> dsset = new HashSet<DataStructure>();
-		for(DataStructure ds : model.getDataStructures()){
-			if(ds.hasPhysicalProperty()){
-				if(ds.getPhysicalProperty().getPhysicalPropertyOf()!=null){
-					if(ds.getPhysicalProperty().getPhysicalPropertyOf().getName().equals(unspecifiedName)){
-						dsset.add(ds);
-					}
-					if(ds.getPhysicalProperty().getPhysicalPropertyOf() instanceof CompositePhysicalEntity){
-						for(PhysicalEntity pe : ((CompositePhysicalEntity)ds.getPhysicalProperty().getPhysicalPropertyOf()).getArrayListOfEntities()){
-							if(pe.getName().equals(unspecifiedName))
-								dsset.add(ds);
-						}
-					}
-				}
-			}
-			else System.out.println(ds.getName() + " didn't have a physical property");
-		}
-		return dsset;
-	}
+
 	
 	public Boolean isOntologyOpenForEditing(URI uritocheck) {
 		for (AnnotatorTab at : anntabs) {

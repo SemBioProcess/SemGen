@@ -1,4 +1,4 @@
-package semgen.annotation.buttontree;
+package semgen.annotation.componentdisplays.buttontree;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;

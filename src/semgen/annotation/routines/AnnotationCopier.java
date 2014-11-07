@@ -1,4 +1,4 @@
-package semgen.annotation;
+package semgen.annotation.routines;
 
 
 import java.io.File;
@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 
 import org.semanticweb.owlapi.model.OWLException;
 
+import semgen.annotation.AnnotatorTab;
 import semgen.resource.SemGenTask;
 import semgen.resource.file.LoadSemSimModel;
 import semgen.resource.file.SemGenOpenFileChooser;

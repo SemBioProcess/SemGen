@@ -47,7 +47,7 @@ import org.jdom.input.SAXBuilder;
 
 import semsim.ResourcesManager;
 import semgen.annotation.AnnotatorTab;
-import semgen.annotation.CodewordButton;
+import semgen.annotation.componentdisplays.codewords.CodewordButton;
 import semgen.resource.GenericThread;
 import semgen.resource.SemGenError;
 import semgen.resource.SemGenFont;

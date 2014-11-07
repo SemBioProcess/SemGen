@@ -145,7 +145,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 					}
 					else if(pmctolist.getName()!=null && !(pmctolist instanceof PhysicalProperty)){
 						if(pmctolist instanceof CompositePhysicalEntity){
-							PhysicalModelComponent unspecpmc = anndialog.semsimmodel.getCustomPhysicalEntityByName(SemGenGUI.unspecifiedName);
+							PhysicalModelComponent unspecpmc = anndialog.semsimmodel.getCustomPhysicalEntityByName(SemSimModel.unspecifiedName);
 							if(!((CompositePhysicalEntity)pmctolist).getArrayListOfEntities().contains(unspecpmc))
 								id = pmctolist.getName();
 						}
@@ -194,8 +194,8 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 
 		// Allow the use of the *unspecified* option for select types of Annotatable structures
 		if(smc instanceof PhysicalProperty || smc instanceof DataStructure || smc instanceof Submodel){
-			stringlist.add(0,SemGenGUI.unspecifiedName);
-			listdataandsmcmap.put(SemGenGUI.unspecifiedName, null);
+			stringlist.add(0,SemSimModel.unspecifiedName);
+			listdataandsmcmap.put(SemSimModel.unspecifiedName, null);
 		}
 		else if(smc instanceof PhysicalProcess) combobox.setFont(SemGenFont.defaultItalic());
 		
@@ -210,7 +210,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 		// ...otherwise select the unspecified option or the SemSimComponent's name, in the case of CustomPhysical_ components
 		else{
 			if(smc instanceof PhysicalProperty || smc instanceof DataStructure || smc instanceof Submodel)
-				text = SemGenGUI.unspecifiedName;
+				text = SemSimModel.unspecifiedName;
 			else text = ((SemSimComponent)smc).getName();
 		}
 		combobox.setModel(new DefaultComboBoxModel<String>(stringarray));
@@ -228,7 +228,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 		
 		if(smc instanceof CustomPhysicalEntity || smc instanceof CustomPhysicalProcess){
 			PhysicalModelComponent pmc = (PhysicalModelComponent)smc;
-			if(!pmc.getName().equals(SemGenGUI.unspecifiedName)){
+			if(!pmc.getName().equals(SemSimModel.unspecifiedName)){
 				modifylabel.setVisible(true);
 				urlbutton.setVisible(false);
 			}
@@ -237,7 +237,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 			modifylabel.setVisible(false);
 			urlbutton.setVisible(true);
 		}
-		if(combobox.getSelectedItem().equals(SemGenGUI.unspecifiedName)){
+		if(combobox.getSelectedItem().equals(SemSimModel.unspecifiedName)){
 			modifylabel.setVisible(false);
 			urlbutton.setVisible(false);
 		}

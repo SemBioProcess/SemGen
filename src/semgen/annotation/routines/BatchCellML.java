@@ -1,4 +1,4 @@
-package semgen.annotation;
+package semgen.annotation.routines;
 
 
 import java.io.File;
@@ -15,6 +15,7 @@ import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
 
 import semgen.SemGenGUI;
+import semgen.annotation.AnnotatorTab;
 import semgen.annotation.dialog.textminer.TextMinerDialog;
 import semgen.resource.file.SemGenOpenFileChooser;
 import semsim.SemSimConstants;
@@ -43,7 +44,7 @@ public class BatchCellML{
 			SemGenOpenFileChooser.currentdirectory = fc.getCurrentDirectory();
 			if (file != null) {
 				processmodels(file);
-				JOptionPane.showMessageDialog(SemGenGUI.desktop, "Finished processing CellML models");
+				JOptionPane.showMessageDialog(null, "Finished processing CellML models");
 			}
 		}
 	}
@@ -221,9 +222,7 @@ public class BatchCellML{
 								Iterator<Element> it = nextsect1.getChildren("para",docns).iterator();
 								System.out.println("paras");
 								while(it.hasNext()){
-									
 									text = text + " " + it.next().getText();
-									
 								}
 							}
 						}

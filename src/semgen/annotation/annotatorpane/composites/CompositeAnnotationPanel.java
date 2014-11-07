@@ -169,7 +169,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 		// If the "Add entity" button is pressed
 		if(arg0.getSource() == addentbutton){
 			if(datastructure.getPhysicalProperty().getPhysicalPropertyOf()==null){
-				datastructure.getPhysicalProperty().setPhysicalPropertyOf(semsimmodel.getCustomPhysicalEntityByName(SemGenGUI.unspecifiedName));
+				datastructure.getPhysicalProperty().setPhysicalPropertyOf(semsimmodel.getCustomPhysicalEntityByName(SemSimModel.unspecifiedName));
 			}
 			else{
 				ArrayList<PhysicalEntity> ents = new ArrayList<PhysicalEntity>();
@@ -186,7 +186,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 						rels.add(srp.structuralRelation);
 					}
 				}
-				ents.add(semsimmodel.getCustomPhysicalEntityByName(SemGenGUI.unspecifiedName));
+				ents.add(semsimmodel.getCustomPhysicalEntityByName(SemSimModel.unspecifiedName));
 				rels.add(SemSimConstants.CONTAINED_IN_RELATION);
 				datastructure.getPhysicalProperty().setPhysicalPropertyOf(semsimmodel.addCompositePhysicalEntity(ents, rels));
 			}
@@ -202,7 +202,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 		// If "Add process" button pressed
 		if(arg0.getSource() == addprocbutton){
 			if(datastructure.getPhysicalProperty().getPhysicalPropertyOf()==null){
-				datastructure.getPhysicalProperty().setPhysicalPropertyOf(semsimmodel.getCustomPhysicalProcessByName(SemGenGUI.unspecifiedName));
+				datastructure.getPhysicalProperty().setPhysicalPropertyOf(semsimmodel.getCustomPhysicalProcessByName(SemSimModel.unspecifiedName));
 				ad.annotator.setModelSaved(false);
 			}
 			refreshUI();

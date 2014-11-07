@@ -36,10 +36,7 @@ public class CustomPhysicalComponentEditor extends JDialog implements PropertyCh
 
 	public JTextField mantextfield;
 	public JTextArea descriptionarea;
-	
-	public JPanel namepanel = new JPanel();
-	public JPanel descriptionpanel = new JPanel();
-	public JPanel mainpanel = new JPanel();
+
 	public JOptionPane optionPane;
 
 	public ObjectPropertyEditor versionofeditor;
@@ -49,7 +46,6 @@ public class CustomPhysicalComponentEditor extends JDialog implements PropertyCh
 	public JComponent[] objectpropertyeditors;
 
 	public CustomPhysicalComponentEditor(AnnotationPanel anndia, PhysicalModelComponent pmc) {
-
 		this.anndia = anndia;
 		this.model = anndia.semsimmodel;
 		this.pmc = pmc;
@@ -67,9 +63,11 @@ public class CustomPhysicalComponentEditor extends JDialog implements PropertyCh
 		JScrollPane descscroller = new JScrollPane(descriptionarea);
 		descscroller.setPreferredSize(new Dimension(450,100));
 		
+		JPanel namepanel = new JPanel();
 		namepanel.add(new JLabel("Name: "));
 		namepanel.add(mantextfield);
 		
+		JPanel descriptionpanel = new JPanel();
 		descriptionpanel.add(new JLabel("Description: "));
 		descriptionpanel.add(descscroller);
 
@@ -90,16 +88,15 @@ public class CustomPhysicalComponentEditor extends JDialog implements PropertyCh
 			objectpropertyeditors = new ObjectPropertyEditor[]{versionofeditor}; 
 		}
 		
+		JPanel mainpanel = new JPanel();
 		mainpanel.setLayout(new BoxLayout(mainpanel, BoxLayout.Y_AXIS));
 		mainpanel.add(namepanel);
 		mainpanel.add(descriptionpanel);
 		for(int y=0; y<objectpropertyeditors.length; y++) mainpanel.add(objectpropertyeditors[y]);
 		mainpanel.add(Box.createVerticalGlue());
-		
-		Object[] array = {mainpanel};
 
 		Object[] options = new Object[]{"OK","Cancel"};
-		optionPane = new JOptionPane(array, JOptionPane.PLAIN_MESSAGE,
+		optionPane = new JOptionPane(mainpanel, JOptionPane.PLAIN_MESSAGE,
 				JOptionPane.OK_CANCEL_OPTION, null);
 		optionPane.addPropertyChangeListener(this);
 		optionPane.setOptions(options);

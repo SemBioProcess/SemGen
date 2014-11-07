@@ -153,7 +153,7 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 			for(String ssctempname : namesandparticipantmap.keySet()){
 				sscs.add((SemSimComponent) namesandparticipantmap.get(ssctempname));
 			}
-			PhysicalEntity unspecent = model.getCustomPhysicalEntityByName(SemGenGUI.unspecifiedName);
+			PhysicalEntity unspecent = model.getCustomPhysicalEntityByName(SemSimModel.unspecifiedName);
 			sscsd = new SemSimComponentSelectorDialog(model.getPhysicalEntitiesAndExclude(unspecent), null, sscs, null, false, "Physical entities in model");
 			sscsd.setUpUI(this);
 		}
