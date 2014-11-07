@@ -79,7 +79,7 @@ foreach ($file in $files)
 	{
 		$running = @(Get-Job | Where-Object { $_.State -eq 'Running' })
 		Write-Host "Num jobs running: "$running.Count
-		Sleep -s 1
+		Sleep -s 0.5
 	}
 	while($running.Count -ge 8)
 	
