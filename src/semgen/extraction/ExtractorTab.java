@@ -35,6 +35,7 @@ import edu.uci.ics.jung.graph.SparseMultigraph;
 import prefuse.data.Graph;
 import prefuse.data.Node;
 import prefuse.data.Schema;
+import semgen.GlobalActions;
 import semgen.SemGenGUI;
 import semgen.SemGenSettings;
 import semgen.extraction.RadialGraph.Clusterer;
@@ -125,8 +126,8 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	public Clusterer cd;
 	public PrintWriter clusterwriter;
 
-	public ExtractorTab(File srcfile, SemSimModel ssmodel, SemGenSettings sets) throws OWLException {
-		super(srcfile.getName(), SemGenIcon.extractoricon, "Extracting from " + srcfile.getName(), sets);
+	public ExtractorTab(File srcfile, SemSimModel ssmodel, SemGenSettings sets, GlobalActions gacts) throws OWLException {
+		super(srcfile.getName(), SemGenIcon.extractoricon, "Extracting from " + srcfile.getName(), sets, gacts);
 		settings = sets;
 		this.setLayout(new BorderLayout());
 		this.semsimmodel = ssmodel;
@@ -976,5 +977,23 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public boolean isSaved() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void requestSave() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void requestSaveAs() {
+		// TODO Auto-generated method stub
+		
 	}
 }

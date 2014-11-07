@@ -12,9 +12,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JFrame;
-import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -22,13 +23,15 @@ import javax.swing.UIManager;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.SemGenGUI;
+import semgen.menu.SemGenMenuBar;
 import semgen.resource.SemGenFont;
 import semgen.resource.file.SemGenOpenFileChooser;
 import semsim.SemSimLibrary;
 
-public class SemGen extends JFrame{
+public class SemGen extends JFrame implements Observer{
 	private static final long serialVersionUID = 1L;
 	public static SemSimLibrary semsimlib = new SemSimLibrary();
+	private GlobalActions gacts = new GlobalActions();
 	
 	public static double version = 2.0;
 	public static PrintWriter logfilewriter;
@@ -42,8 +45,7 @@ public class SemGen extends JFrame{
 	private SemGenSettings settings = new SemGenSettings();
 	public static Date datenow = new Date();
 	public SimpleDateFormat sdflog = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
-	
-	JMenuBar menubar = new JMenuBar();
+
 	SemGenGUI contentpane = null; 
 	
 	/** Main method for running an instance of SemGen */
@@ -98,8 +100,9 @@ public class SemGen extends JFrame{
 
 		setSize(settings.getAppSize());
 		setLocation(settings.getAppXPos(), settings.getAppYPos());
-		
-		contentpane = new SemGenGUI(settings, menubar);
+		gacts.addObserver(this);
+		SemGenMenuBar menubar = new SemGenMenuBar(settings, gacts);
+		contentpane = new SemGenGUI(settings, menubar, gacts);
 		setContentPane(contentpane);
 		setJMenuBar(menubar);
 		
@@ -170,5 +173,17 @@ public class SemGen extends JFrame{
 	//Quit - behavior defined in content frame
 	public boolean quit() throws HeadlessException, OWLException {
 		return contentpane.quit();
+	}
+	
+	@Override
+	public void update(Observable o, Object arg) {
+		if (arg ==GlobalActions.appactions.QUIT) {
+			try {
+				quit();
+			} catch (HeadlessException | OWLException e) {
+				e.printStackTrace();
+			}
+		}
+		
 	}
 }

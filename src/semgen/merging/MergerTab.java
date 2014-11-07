@@ -33,6 +33,7 @@ import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import JSim.util.Xcept;
+import semgen.GlobalActions;
 import semgen.SemGenGUI;
 import semgen.SemGenSettings;
 import semgen.resource.GenericThread;
@@ -90,8 +91,8 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 	public Set<String> initialidenticalinds = new HashSet<String>();
 	public Set<String> identicaldsnames = new HashSet<String>();
 
-	public MergerTab(SemGenSettings sets) {
-		super("Merger", SemGenIcon.mergeicon, "Tab for Merging SemSim Models", sets);
+	public MergerTab(SemGenSettings sets, GlobalActions globalacts) {
+		super("Merger", SemGenIcon.mergeicon, "Tab for Merging SemSim Models", sets, globalacts);
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
 		JLabel filelisttitle = new JLabel("Models to merge");
@@ -738,4 +739,22 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 	
 	public void mouseClicked(MouseEvent arg0) {}
 	public void mouseReleased(MouseEvent arg0) {}
+
+	@Override
+	public boolean isSaved() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void requestSave() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void requestSaveAs() {
+		// TODO Auto-generated method stub
+		
+	}
 }

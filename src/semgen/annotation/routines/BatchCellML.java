@@ -22,7 +22,6 @@ import semsim.SemSimConstants;
 import semsim.model.annotation.Annotation;
 import semsim.reading.ModelClassifier;
 
-
 public class BatchCellML{
 	public AnnotatorTab ann;
 	

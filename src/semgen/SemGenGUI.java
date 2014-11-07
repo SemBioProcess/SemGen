@@ -4,9 +4,11 @@ import org.jdom.JDOMException;
 import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLException;
+
 import semgen.annotation.AnnotatorTab;
 import semgen.extraction.ExtractorTab;
 import semgen.menu.HelpMenu;
+import semgen.menu.SemGenMenuBar;
 import semgen.merging.MergerTab;
 import semgen.resource.CSVExporter;
 import semgen.resource.SemGenError;
@@ -19,8 +21,6 @@ import semgen.resource.uicomponent.SemGenTab;
 import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.physical.CompositePhysicalEntity;
-import semsim.model.physical.PhysicalEntity;
 import semsim.reading.ModelClassifier;
 import semsim.reading.SemSimOWLreader;
 import semsim.writing.CellMLwriter;
@@ -34,7 +34,6 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -43,12 +42,8 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
-import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -58,41 +53,34 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Scanner;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.xml.rpc.ServiceException;
 
-public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeListener {
-
+public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeListener, Observer {
 	private static final long serialVersionUID = 3618439495848469800L;
 
 	private SemGenSettings settings;
 	private static SemGenSettings settingshandle; //Temporary work around for static functions
-	
-	private JMenuItem fileitemopen;
-	private JMenuItem fileitemsave;
-	private JMenuItem fileitemsaveas;
-	public JMenuItem fileitemproperties;
-	public JMenuItem fileitemclose;
-	public JMenuItem fileitemexit;
-	
-	private JMenuItem toolsitemannotate;
-	private JMenuItem toolsitemmerge;
-	private JMenuItem toolsitemcode;
-	private JMenuItem toolsitemextract;
+	protected GlobalActions globalactions;
 
 	public static SemGenGUI desktop;
 	private ArrayList<AnnotatorTab> anntabs = new ArrayList<AnnotatorTab>(); //Open annotation tabs
 
 	public int numtabs = 0;
-	public static int maskkey = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+	private SemGenMenuBar menu;
 
-	public SemGenGUI(SemGenSettings sets, JMenuBar menubar){
+	public SemGenGUI(SemGenSettings sets,  SemGenMenuBar menubar, GlobalActions gacts){
 		settings = new SemGenSettings(sets);
+		menu = menubar;
 		settingshandle = settings;
-
+		globalactions = gacts;
+		globalactions.addObserver(this);
+		
 		setPreferredSize(sets.getAppSize());
 		setOpaque(true);
 		setBackground(Color.white);
@@ -101,64 +89,28 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 		desktop = this; // a specialized layered pane
 			
 		numtabs = 0;
-		// Create the menu bar.
-		menubar.setOpaque(true);
-		menubar.setPreferredSize(new Dimension(sets.getAppWidth(), 20));
 
 		// Build the File menu
 		JMenu filemenu = new JMenu("File");
 		filemenu.getAccessibleContext().setAccessibleDescription("Create new files, opening existing files, import raw model code, etc.");
 
 		// File menu items
-		fileitemopen = formatMenuItem(fileitemopen,"Open",KeyEvent.VK_O,true,true);
-		filemenu.add(fileitemopen);
-		fileitemsave = formatMenuItem(fileitemsave,"Save",KeyEvent.VK_S,true,true);
-		filemenu.add(fileitemsave);
-		fileitemsaveas = formatMenuItem(fileitemsaveas,"Save As",null,true,true);
-		fileitemsaveas.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.SHIFT_MASK + maskkey));
-		filemenu.add(fileitemsaveas);
-		
-		fileitemclose = formatMenuItem(fileitemclose,"Close",KeyEvent.VK_W,true,true);
-		filemenu.add(fileitemclose);
-		filemenu.add(new JSeparator());
-		fileitemproperties = formatMenuItem(fileitemproperties,"Properties", KeyEvent.VK_Q,true,true);
-		filemenu.add(fileitemproperties);
-		fileitemexit = formatMenuItem(fileitemexit,"Quit SemGen",KeyEvent.VK_Q,true,true);
-		filemenu.add(new JSeparator());
-		filemenu.add(fileitemexit);
+		menu.filemenu.fileitemnew.addActionListener(this);
+		menu.filemenu.fileitemsave.addActionListener(this);
+		menu.filemenu.fileitemsaveas.addActionListener(this);
 
 		// Tools menu
 		JMenu toolsmenu = new JMenu("Tasks");
 		toolsmenu.getAccessibleContext().setAccessibleDescription("Select a new SemGen task");
 		
-		toolsitemannotate = formatMenuItem(toolsitemannotate, "New Annotator",KeyEvent.VK_A,true,true);
-		toolsitemannotate.setToolTipText("Open a new Annotator tool");
-		toolsmenu.add(toolsitemannotate);
-		
-		toolsitemextract = formatMenuItem(toolsitemextract,"New Extractor",KeyEvent.VK_E,true,true);
-		toolsitemextract.setToolTipText("Open a new Extractor tool");
-		toolsmenu.add(toolsitemextract);
-		
-		toolsitemmerge = formatMenuItem(toolsitemmerge,"New Merger",KeyEvent.VK_M,true,true);
-		toolsitemmerge.setToolTipText("Open a new Merger tool");
-		toolsmenu.add(toolsitemmerge);
-
-		toolsitemcode = formatMenuItem(toolsitemcode, "New code generator", KeyEvent.VK_G,true,true);
-		toolsitemcode.setToolTipText("Open a new code generator tool");
-		toolsmenu.add(toolsitemcode);
+		menu.toolsmenu.toolsitemannotate.addActionListener(this);
+		menu.toolsmenu.toolsitemextract.addActionListener(this);
+		menu.toolsmenu.toolsitemmerge.addActionListener(this);
+		menu.toolsmenu.toolsitemcode.addActionListener(this);
 
 		menubar.add(filemenu);
 		menubar.add(toolsmenu);
 		menubar.add(new HelpMenu(settings));
-	}
-	
-	// Format menu items, assign shortcuts, action listeners
-	public JMenuItem formatMenuItem(JMenuItem item, String text, Integer accelerator, Boolean enabled, Boolean addactionlistener){
-		item = new JMenuItem(text);
-		item.setEnabled(enabled);
-		if(accelerator!=null){item.setAccelerator(KeyStroke.getKeyStroke(accelerator,maskkey));}
-		if(addactionlistener){item.addActionListener(this);}
-		return item;
 	}
 
 	public void startNewTaskDialog() {
@@ -168,7 +120,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 			startNewAnnotatorTask();
 			break;
 		case Encode:
-			toolsitemcode.doClick();
+			menu.toolsmenu.toolsitemcode.doClick();
 			break;
 		case Extract:
 			startNewExtractorTask();
@@ -185,55 +137,35 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 
-		if (o == fileitemopen) {
+		if (o == menu.filemenu.fileitemnew) {
 			startNewTaskDialog();
 		}
 
-		if (o == fileitemsave) {
+		if (o == menu.filemenu.fileitemsave) {
 			if(desktop.getSelectedComponent() instanceof AnnotatorTab){
 				AnnotatorTab ann = (AnnotatorTab)desktop.getSelectedComponent();
 				SaveAction(ann, ann.lastSavedAs);
 			}
 		}
 
-		if (o == fileitemsaveas) {
+		if (o == menu.filemenu.fileitemsaveas) {
 			SaveAsAction(desktop.getSelectedComponent(),null, 
 					new FileNameExtensionFilter[]{SemGenFileChooser.cellmlfilter, SemGenFileChooser.owlfilter});
 		}
-		if( o == fileitemclose){
-			Component x = desktop.getSelectedComponent();
-			if(x !=null)
-				try {
-					closeTabAction((SemGenTab)x);
-				} catch (HeadlessException e1) {
-					e1.printStackTrace();
-				}
-		}
-		if (o == fileitemproperties) {
-			new PreferenceDialog(settings);
-		}
-		
-		if (o == fileitemexit) {
-			try {
-				quit();
-			} catch (HeadlessException | OWLException e1 ) {
-				e1.printStackTrace();
-			} 
-		}
 
-		if (o == toolsitemannotate) {
+		if (o == menu.toolsmenu.toolsitemannotate) {
 			startNewAnnotatorTask();
 		}
 
-		if (o == toolsitemextract) {
+		if (o == menu.toolsmenu.toolsitemextract) {
 			startNewExtractorTask();
 		}
 
-		if (o == toolsitemmerge){
+		if (o == menu.toolsmenu.toolsitemmerge){
 			NewMergerAction();
 		}
 		
-		if (o == toolsitemcode) {
+		if (o == menu.toolsmenu.toolsitemcode) {
 			SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select SemSim model to encode", 
 					new String[] {"owl"});
 
@@ -271,15 +203,11 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 				File file = sgc.getSelectedFile();
 				if (file.exists()) {
 				SemSimModel ssm = new SemSimOWLreader().readFromFile(file);
-				ExtractorTab extractor = new ExtractorTab(file, ssm, settings);
+				ExtractorTab extractor = new ExtractorTab(file, ssm, settings, globalactions);
 				extractor.batchCluster();
 			}
-		} catch (OWLException e1) {
+		} catch (OWLException | IOException | CloneNotSupportedException e1  ) {
 			e1.printStackTrace();
-		} catch (IOException e2) {
-			e2.printStackTrace();
-		} catch (CloneNotSupportedException e3) {
-			e3.printStackTrace();
 		}
 	}
 	
@@ -384,7 +312,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 			if (newannok && !desktop.isOntologyOpenForEditing(existingURI)) {
 	
 				// Create new Annotater object in SemGen desktop
-				annotator = new AnnotatorTab(file,settingshandle);
+				annotator = new AnnotatorTab(file,settingshandle, desktop.globalactions);
 				annotator.semsimmodel = semsimmodel;
 				
 				if(annotator.semsimmodel.getErrors().isEmpty()){
@@ -419,7 +347,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 		}
 		ExtractorTab extractor = null;
 		if(semsimmodel!=null){
-			extractor = new ExtractorTab(file, semsimmodel, settingshandle);
+			extractor = new ExtractorTab(file, semsimmodel, settingshandle, desktop.globalactions);
 			desktop.addTab(extractor);
 			desktop.setMnemonicAt(0, KeyEvent.VK_1);
 		}
@@ -427,7 +355,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 	}
 	
 	public void NewMergerAction(){
-		MergerTab merger = new MergerTab(settings);
+		MergerTab merger = new MergerTab(settings, globalactions);
 		desktop.addTab(merger);
 
 		merger.PlusButtonAction();
@@ -627,8 +555,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 		return file;
 	}
 	
-
-	
 	public Boolean isOntologyOpenForEditing(URI uritocheck) {
 		for (AnnotatorTab at : anntabs) {
 			if (at.checkFile(uritocheck)) {
@@ -688,16 +614,17 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 		
 		if(comp instanceof AnnotatorTab){
 			AnnotatorTab ann = (AnnotatorTab)comp;
-			fileitemsave.setEnabled(!ann.getModelSaved());
+			menu.filemenu.fileitemsave.setEnabled(!ann.getModelSaved());
 		}
-		else fileitemsave.setEnabled(false);
-		fileitemsaveas.setEnabled(comp instanceof AnnotatorTab);
+		else menu.filemenu.fileitemsave.setEnabled(false);
+		menu.filemenu.fileitemsaveas.setEnabled(comp instanceof AnnotatorTab);
 	}
 	
 	public void addTab(SemGenTab tab) {
 		numtabs++;
 		addTab(tab.getName(), tab);
 		setTabComponentAt(numtabs-1, tab.getTabLabel());
+		globalactions.setCurrentTab(tab);
 		tab.addMouseListenertoTabLabel(new tabClickedListener(numtabs-1));
 		tab.setClosePolicy(new tabCloseListener(tab));
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -715,6 +642,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 		}
 		public void mouseClicked(MouseEvent arg0) {
 			setSelectedIndex(tabindex);
+			globalactions.setCurrentTab((SemGenTab) getComponentAt(tabindex));
 		}
 	}
 	
@@ -726,5 +654,13 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 		public void mouseClicked(MouseEvent arg0) {
 			closeTabAction(tab);
 		}
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		if (arg==GlobalActions.appactions.TABCLOSED) {
+			closeTabAction(globalactions.getCurrentTab());
+		}
+		
 	}
 }

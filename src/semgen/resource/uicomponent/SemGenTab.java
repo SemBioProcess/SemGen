@@ -10,21 +10,24 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import semgen.GlobalActions;
 import semgen.SemGenSettings;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
 
-public class SemGenTab extends JPanel {
+public abstract class SemGenTab extends JPanel {
 
 	private static final long serialVersionUID = 6580200707569122340L;
 	protected SemGenSettings settings;
 	public Component tool;
+	protected GlobalActions globalactions;
 
 	protected TabTitle tablabel = null;
 
-	public SemGenTab(String title, ImageIcon icon, String tooltip, SemGenSettings sets){
+	public SemGenTab(String title, ImageIcon icon, String tooltip, SemGenSettings sets, GlobalActions acts){
 		tablabel = new TabTitle(this, title, icon, tooltip);	
 		settings = new SemGenSettings(sets);
+		globalactions=acts;
 	}
 	
 	public TabTitle getTabLabel() {
@@ -53,6 +56,12 @@ public class SemGenTab extends JPanel {
 	public void addMouseListenertoTabLabel(MouseListener listener) {
 		tablabel.addMouseListener(listener);
 	}
+	
+	abstract public boolean isSaved();
+	
+	abstract public void requestSave();
+	
+	abstract public void requestSaveAs();
 	
 	public class TabTitle extends JPanel implements MouseListener {
 		private static final long serialVersionUID = 1L;

@@ -1,0 +1,86 @@
+package semgen.menu;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+
+import javax.swing.JMenuItem;
+import javax.swing.JSeparator;
+import javax.swing.KeyStroke;
+
+import semgen.GlobalActions;
+import semgen.PreferenceDialog;
+import semgen.SemGenSettings;
+import semgen.resource.uicomponent.SemGenMenu;
+
+public class FileMenu extends SemGenMenu implements ActionListener {
+	private static final long serialVersionUID = 1L;
+	public JMenuItem fileitemnew;
+	private JMenuItem fileitemclose;
+	public JMenuItem fileitemsave;
+	public JMenuItem fileitemsaveas;
+	
+	public JMenuItem fileitemproperties;
+	private JMenuItem fileitemexit;
+	
+	public FileMenu(SemGenSettings sets, GlobalActions acts) {
+		super("File", sets, acts);
+		// Build the File menu
+		getAccessibleContext().setAccessibleDescription("Create new files, opening existing files, import raw model code, etc.");
+
+		// File menu items
+		fileitemnew = formatMenuItem(fileitemnew,"New",KeyEvent.VK_N,false,true);
+		add(fileitemnew);
+		fileitemclose = formatMenuItem(fileitemclose,"Close",KeyEvent.VK_W,true,true);
+		add(fileitemclose);
+		fileitemsave = formatMenuItem(fileitemsave,"Save",KeyEvent.VK_S,true,true);
+		add(new JSeparator());
+		add(fileitemsave);
+		fileitemsaveas = formatMenuItem(fileitemsaveas,"Save As",null,true,true);
+		fileitemsaveas.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.SHIFT_MASK + maskkey));
+		add(fileitemsaveas);
+		
+		
+		add(new JSeparator());
+		fileitemproperties = formatMenuItem(fileitemproperties,"Properties", KeyEvent.VK_Q,true,true);
+		add(fileitemproperties);
+		fileitemexit = formatMenuItem(fileitemexit,"Quit SemGen",KeyEvent.VK_Q,true,true);
+		add(new JSeparator());
+		add(fileitemexit);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Object o = e.getSource();
+		
+//		if (o == fileitemopen) {
+//			globalacts.newTask();
+//		}
+//
+//		if (o == fileitemsave) {
+//			globalacts.getCurrentTab().requestSave();
+//		}
+//
+//		if (o == fileitemsaveas) {
+//			globalacts.requestSaveAs();
+//		}
+		
+		if( o == fileitemclose){
+			globalactions.closeTab();
+		}
+
+		if( o == fileitemproperties){
+			new PreferenceDialog(settings);
+		}
+		
+		if (o == fileitemexit) {
+			globalactions.quit();
+		}
+	}
+	
+		@Override
+		public void updateMenu() {
+			//fileitemsave.setEnabled(!globalacts.getCurrentTab().isSaved());			
+		}	
+
+}

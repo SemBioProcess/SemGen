@@ -4,19 +4,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
-
-import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
-import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLException;
 
-import semgen.SemGen;
 import semgen.SemGenGUI;
 import semgen.SemGenSettings;
 import semgen.annotation.componentdisplays.codewords.CodewordButton;
@@ -25,7 +19,7 @@ import semgen.annotation.dialog.ModelLevelMetadataEditor;
 import semgen.annotation.dialog.referenceclass.AddReferenceClassDialog;
 import semgen.annotation.dialog.selector.RemovePhysicalComponentDialog;
 import semgen.annotation.routines.AnnotationCopier;
-import semgen.resource.CSVExporter;
+import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.resource.SemGenIcon;
 import semgen.resource.uicomponent.DropDownCheckList;
 import semgen.resource.uicomponent.SemGenTabToolbar;
@@ -39,6 +33,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 	private static final long serialVersionUID = 1L;
 
 	AnnotatorTab anntab;
+	private AnnotatorWorkbench workbench;
 	private SemGenToolbarButton annotateitemchangesourcemodelcode = new SemGenToolbarButton(SemGenIcon.setsourceicon);
 	private SemGenToolbarButton annotateitemcopy = new SemGenToolbarButton(SemGenIcon.importicon);
 	private SemGenToolbarButton annotateitemeditmodelanns = new SemGenToolbarButton(SemGenIcon.annotatemodelicon);
@@ -56,8 +51,9 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 	private String sortbytype = new String("By Type");
 	private String sortbycompletion = new String("By Composite Completeness");
 
-	public AnnotatorToolBar(AnnotatorTab tab, SemGenSettings sets) {
+	public AnnotatorToolBar(AnnotatorTab tab, AnnotatorWorkbench wkbnch, SemGenSettings sets) {
 		super(sets);
+		workbench = wkbnch;
 		anntab = tab;
 
 		annotateitemshowimports.addActionListener(this);
@@ -159,7 +155,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		}
 		if (o == extractorbutton) {
 			try {
-				if(anntab.unsavedChanges()){
+				if(workbench.unsavedChanges()){
 					SemGenGUI.NewExtractorTask task = new SemGenGUI.NewExtractorTask(anntab.sourcefile);
 					task.execute();
 				}
@@ -172,9 +168,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		}
 
 		if(o == annotateitemexportcsv){
-				try {
-					new CSVExporter(anntab.semsimmodel).exportCodewords();
-				} catch (Exception e1) {e1.printStackTrace();} 
+				workbench.exportCSV(); 
 		}
 		
 		if(o == annotateitemeditmodelanns){
@@ -214,26 +208,8 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		if (o == coderbutton) {
 			String filenamesuggestion = null;
 			if(anntab.sourcefile!=null) filenamesuggestion = anntab.sourcefile.getName().substring(0, anntab.sourcefile.getName().lastIndexOf("."));
-			try {
-				if (!anntab.getModelSaved()) {
-					int savefilechoice = JOptionPane.showConfirmDialog(this,
-							"Save changes before encoding model?",
-							"There are unsaved changes",
-							JOptionPane.YES_NO_CANCEL_OPTION,
-							JOptionPane.QUESTION_MESSAGE);
-					if (savefilechoice == JOptionPane.YES_OPTION) {
-						File tempfile = new File(SemGen.tempdir.getAbsoluteFile() + "/" + SemGenSettings.sdf.format(SemGen.datenow) + ".owl");
-
-						anntab.manager.saveOntology(anntab.semsimmodel.toOWLOntology(), new RDFXMLOntologyFormat(), IRI.create(tempfile));
-						if(SemGenGUI.SaveAction(this, anntab.lastSavedAs)) SemGenGUI.startEncoding(anntab.semsimmodel, filenamesuggestion);
-					}
-					else if(savefilechoice == JOptionPane.NO_OPTION)
-						SemGenGUI.startEncoding(anntab.semsimmodel, filenamesuggestion);
-				}
-				else SemGenGUI.startEncoding(anntab.semsimmodel, filenamesuggestion); 
-			} 
-			catch (OWLException e3) {
-				e3.printStackTrace();
+			if(workbench.unsavedChanges()){
+				SemGenGUI.startEncoding(anntab.semsimmodel, filenamesuggestion);
 			} 
 		}
 	}

@@ -4,8 +4,8 @@ import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
+import semgen.GlobalActions;
 import semgen.SemGen;
-import semgen.SemGenGUI;
 import semgen.SemGenSettings;
 import semgen.annotation.annotatorpane.AnnotationPanel;
 import semgen.annotation.componentdisplays.AnnotationObjectButton;
@@ -15,6 +15,7 @@ import semgen.annotation.componentdisplays.submodels.SubmodelButton;
 import semgen.annotation.dialog.HumanDefEditor;
 import semgen.annotation.dialog.LegacyCodeChooser;
 import semgen.annotation.dialog.textminer.TextMinerDialog;
+import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.resource.ComparatorByName;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
@@ -89,12 +90,15 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	public TextMinerDialog tmd;
 	public int lastSavedAs = -1;
 	
+	AnnotatorWorkbench workbench;
+	
 	private boolean modelsaved = false;
 	
 	public SemSimModel semsimmodel;
 
-	public AnnotatorTab(File srcfile, SemGenSettings sets) {
-		super(srcfile.getName(), SemGenIcon.annotatoricon, "Annotating " + srcfile.getName(), sets);
+	public AnnotatorTab(File srcfile, SemGenSettings sets, GlobalActions gacts) {
+		super(srcfile.getName(), SemGenIcon.annotatoricon, "Annotating " + srcfile.getName(), sets, gacts);
+		
 		this.sourcefile = srcfile;
 		fileURI = srcfile.toURI();
 		initwidth = settings.getAppWidth();
@@ -132,7 +136,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, westsplitpane, eastsplitpane);
 		splitpane.setOneTouchExpandable(true);
 		
-		toolbar = new AnnotatorToolBar(this, settings);
+
 	}
 
 	// --------------------------------//
@@ -163,7 +167,8 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	
 	public SemSimModel NewAnnotatorAction(){
 		SemGen.logfilewriter.println("Started new annotater");
-
+		workbench = new AnnotatorWorkbench(sourcefile, semsimmodel, modelsaved, lastSavedAs);		
+		toolbar = new AnnotatorToolBar(this, workbench, settings );
 		try {
 			codearea.setCodeView(semsimmodel.getLegacyCodeLocation());
 		} catch (IOException e1) {
@@ -650,29 +655,26 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 				e1.printStackTrace();
 		}
 	}
-	
-	public boolean unsavedChanges() {
-		if (!getModelSaved()) {
-			String title = "[unsaved file]";
-			if(fileURI!=null){
-				title =  new File(fileURI).getName();
-			}
-			int returnval= JOptionPane.showConfirmDialog(this,
-					"Save changes?", title + " has unsaved changes",
-					JOptionPane.YES_NO_CANCEL_OPTION,
-					JOptionPane.QUESTION_MESSAGE);
-			if (returnval == JOptionPane.CANCEL_OPTION)
-				return false;
-			if (returnval == JOptionPane.YES_OPTION) {
-				if(!SemGenGUI.SaveAction(this, lastSavedAs)){
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-	
+
 	public boolean closeTab() {
-		return unsavedChanges();
+		return workbench.unsavedChanges();
 }
+
+	@Override
+	public boolean isSaved() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void requestSave() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void requestSaveAs() {
+		// TODO Auto-generated method stub
+		
+	}
 }
