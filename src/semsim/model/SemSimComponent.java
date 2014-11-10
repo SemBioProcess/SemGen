@@ -41,6 +41,12 @@ public class SemSimComponent {
 		this.description = description;
 	}
 
+	public void copyDescription(SemSimComponent srcds){
+		// Copy free-text description
+		setDescription(srcds.getDescription());
+	}
+	
+	
 	/**
 	 * Set the component's metadata ID. These ID's are often used
 	 * by XML-based modeling languages such as SBML and CellML

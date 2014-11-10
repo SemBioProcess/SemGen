@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URI;
 import java.util.HashSet;
 import java.util.Observable;
+import java.util.Observer;
 import java.util.Set;
 
 import javax.swing.JOptionPane;
@@ -26,11 +27,12 @@ import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.ModelClassifier;
 import semsim.writing.CellMLwriter;
 
-public class AnnotatorWorkbench extends Observable implements Workbench {
+public class AnnotatorWorkbench extends Observable implements Workbench, Observer {
 	private SemSimModel semsimmodel;
 	private File sourcefile; //File originally loaded at start of Annotation session (could be 
 							//in SBML, MML, CellML or SemSim format)
 
+	private ModelAnnotations modanns;
 	private boolean modelsaved = true;
 	private int lastsavedas = -1;
 	
@@ -40,6 +42,8 @@ public class AnnotatorWorkbench extends Observable implements Workbench {
 		sourcefile = file;
 
 		loadModel(autoann);
+		modanns = new ModelAnnotations(semsimmodel);
+		modanns.addObserver(this);
 	}
 	
 	@Override
@@ -55,6 +59,10 @@ public class AnnotatorWorkbench extends Observable implements Workbench {
 			semsimmodel.addCustomPhysicalProcess(SemSimModel.unspecifiedName, "Non-specific process for use as a placeholder during annotation");
 		}
 	}
+	public void addObservertoModelAnnotator(Observer obs) {
+		modanns.addObserver(obs);
+	}
+	
 	//Temporary
 	public SemSimModel getSemSimModel() {
 		return semsimmodel;
@@ -153,11 +161,25 @@ public class AnnotatorWorkbench extends Observable implements Workbench {
 			if (returnval == JOptionPane.CANCEL_OPTION)
 				return false;
 			if (returnval == JOptionPane.YES_OPTION) {
-				if(saveModel()!=null) {
+				if(saveModel()==null) {
 					return false;
 				}
 			}
 		}
 		return true;
 	}
+	
+	public String getSourceModelLocation() {
+		return semsimmodel.getLegacyCodeLocation();
+	}
+
+	public void changeModelSourceFile() {
+		modanns.changeModelSourceFile();
+	}
+	
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		setModelSaved(false);
+	}
+	
 }

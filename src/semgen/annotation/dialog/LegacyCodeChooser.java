@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -13,10 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
-import semgen.annotation.AnnotatorTab;
 import semgen.resource.file.SemGenOpenFileChooser;
-import semsim.SemSimConstants;
-import semsim.model.annotation.Annotation;
 
 public class LegacyCodeChooser extends JDialog implements ActionListener,
 		PropertyChangeListener {
@@ -24,64 +22,47 @@ public class LegacyCodeChooser extends JDialog implements ActionListener,
 	private static final long serialVersionUID = 5097390254331353085L;
 	public JOptionPane optionPane;
 	public JTextField txtfld = new JTextField();
-	private boolean changed = false;
-	public AnnotatorTab ann;
 	public JButton locbutton = new JButton("or choose local file");
-	public Annotation existingann;
-
-	public LegacyCodeChooser(AnnotatorTab ann) {
-		this.ann = ann;
-		
-		for(Annotation a : ann.semsimmodel.getAnnotations()){
-			if(a.getRelation()==SemSimConstants.LEGACY_CODE_LOCATION_RELATION){
-				existingann = a;
-			}
-		}
-
+	private String urltoadd = "";
+	
+	public LegacyCodeChooser() {
 		JPanel srcmodpanel = new JPanel();
 		txtfld.setPreferredSize(new Dimension(250, 25));
 		locbutton.addActionListener(this);
 		srcmodpanel.add(txtfld);
 		srcmodpanel.add(locbutton);
-		Object[] array = new Object[] { srcmodpanel };
 		Object[] options = new Object[] { "OK", "Cancel" };
 
-		optionPane = new JOptionPane(array, JOptionPane.PLAIN_MESSAGE,
+		optionPane = new JOptionPane(srcmodpanel, JOptionPane.PLAIN_MESSAGE,
 				JOptionPane.OK_CANCEL_OPTION, null);
 		optionPane.addPropertyChangeListener(this);
 		optionPane.setOptions(options);
 		optionPane.setInitialValue(options[0]);
 
 		setContentPane(optionPane);
-		setModal(true);
-		this.setTitle("Enter URL of legacy code or choose a local file");
-		this.pack();
-		this.setVisible(true);
+
+		setTitle("Enter URL of legacy code or choose a local file");
+		setModalityType(ModalityType.APPLICATION_MODAL);
+		pack();
 		setLocationRelativeTo(null);
-		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		setVisible(true);
 	}
 
 	public void propertyChange(PropertyChangeEvent e) {
-		String propertyfired = e.getPropertyName();
-		if (propertyfired.equals("value")) {
+		if (e.getPropertyName().equals("value")) {
 			String value = optionPane.getValue().toString();
 			if (value == "OK") {
-				String urltoadd = txtfld.getText();
-				if (urltoadd != null && ann.semsimmodel != null && !urltoadd.equals("")) {
-					changed=true;
-					if(this.existingann!=null){
-						existingann.setValue(urltoadd);
-					}
-					else{
-						existingann = new Annotation(SemSimConstants.LEGACY_CODE_LOCATION_RELATION, urltoadd);
-					}
-					ann.setModelSaved(false);
-				}
-			}
+				urltoadd = txtfld.getText();
+			} 
 			dispose();
-		} 
+		}
 	}
 
+	public String getCodeLocation() {
+		return urltoadd;
+	}
+	
 	public void actionPerformed(ActionEvent arg0) {
 		Object o = arg0.getSource();
 		if (o == locbutton) {
@@ -89,9 +70,7 @@ public class LegacyCodeChooser extends JDialog implements ActionListener,
 			File file = sgc.getSelectedFile();
 			if (file!=null) txtfld.setText(file.getAbsolutePath());
 		}
+		
 	}
-	
-	public boolean wasChanged() {
-		return changed;
-	}
+		
 }

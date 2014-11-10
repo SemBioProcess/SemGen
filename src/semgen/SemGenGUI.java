@@ -6,7 +6,6 @@ import org.semanticweb.owlapi.model.OWLException;
 import semgen.annotation.AnnotatorTab;
 import semgen.encoding.Encoder;
 import semgen.extraction.ExtractorTab;
-import semgen.menu.HelpMenu;
 import semgen.menu.SemGenMenuBar;
 import semgen.merging.MergerTab;
 import semgen.resource.SemGenTask;
@@ -28,7 +27,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.JMenu;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import java.io.File;
@@ -65,25 +63,13 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, Observer {
 		desktop = this; // a specialized layered pane
 			
 		numtabs = 0;
-
-		// Build the File menu
-		JMenu filemenu = new JMenu("File");
-		filemenu.getAccessibleContext().setAccessibleDescription("Create new files, opening existing files, import raw model code, etc.");
-
+		
 		// File menu items
 		menu.filemenu.fileitemnew.addActionListener(this);
-
-		// Tools menu
-		JMenu toolsmenu = new JMenu("Tasks");
-		toolsmenu.getAccessibleContext().setAccessibleDescription("Select a new SemGen task");
 		
 		menu.toolsmenu.toolsitemannotate.addActionListener(this);
 		menu.toolsmenu.toolsitemextract.addActionListener(this);
 		menu.toolsmenu.toolsitemmerge.addActionListener(this);
-
-		menubar.add(filemenu);
-		menubar.add(toolsmenu);
-		menubar.add(new HelpMenu(settings));
 	}
 
 	public void startNewTaskDialog() {
@@ -240,9 +226,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, Observer {
             return null;
         }
     }
-	
 
-	
 	// Make this into task
 	private static ExtractorTab NewExtractorAction(File file) throws OWLException, IOException, InterruptedException, JDOMException, ServiceException {
 		if ((file == null) || !file.exists()) return null;

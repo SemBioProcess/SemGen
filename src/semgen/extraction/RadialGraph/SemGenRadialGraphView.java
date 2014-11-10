@@ -89,12 +89,7 @@ public class SemGenRadialGraphView extends Display {
 	private static final String neighbors = "neighbors";
 	private static final String nonneighbors = "nonneighbors";
 
-	private LabelRenderer m_nodeRenderer;
-	private EdgeRenderer m_edgeRenderer;
-
-	public Graph g;
 	public SemSimModel semsimmodel;
-	public static String base;
     public final static Predicate isinputfilter = ExpressionParser.predicate("input==true");
     public final static Predicate isvar2inputfilter = ExpressionParser.predicate("var2input==true");
 
@@ -102,20 +97,18 @@ public class SemGenRadialGraphView extends Display {
 	public SemGenRadialGraphView(SemGenSettings sets, Graph g, String label, SemSimModel semsimmodel) {
 		super(new Visualization());
 		settings = sets;
-		this.g = g;
 		this.semsimmodel = semsimmodel;
-		base = semsimmodel.getNamespace();
 
 		// -- set up visualization --
 		m_vis.add(tree, g);
 		m_vis.setInteractive(treeEdges, null, false);
 
 		// -- set up renderers --
-		m_nodeRenderer = new LabelRenderer(label);
+		LabelRenderer m_nodeRenderer = new LabelRenderer(label);
 		m_nodeRenderer.setRenderType(AbstractShapeRenderer.RENDER_TYPE_DRAW_AND_FILL);
 		m_nodeRenderer.setHorizontalAlignment(Constants.CENTER);
 		m_nodeRenderer.setRoundedCorner(8, 8);
-		m_edgeRenderer = new EdgeRenderer(Constants.EDGE_TYPE_LINE,
+		EdgeRenderer m_edgeRenderer = new EdgeRenderer(Constants.EDGE_TYPE_LINE,
 				prefuse.Constants.EDGE_ARROW_REVERSE);
 		m_edgeRenderer.setArrowType(prefuse.Constants.EDGE_ARROW_REVERSE);
 		m_edgeRenderer.setArrowHeadSize(8, 8);
@@ -167,7 +160,7 @@ public class SemGenRadialGraphView extends Display {
 
 		CollapsedSubtreeLayout subLayout = new CollapsedSubtreeLayout(tree);
 		m_vis.putAction("subLayout", subLayout);
-
+		
 		// create the filtering and layout
 		ActionList filter = new ActionList();
 		filter.add(new TreeRootAction(tree));
@@ -181,6 +174,8 @@ public class SemGenRadialGraphView extends Display {
 		filter.add(arrowColorFill);
 		m_vis.putAction("filter", filter);
 
+
+		
 		// animated transition
 		ActionList animate = new ActionList(700);
 		animate.setPacingFunction(new SlowInSlowOutPacer());
@@ -200,7 +195,7 @@ public class SemGenRadialGraphView extends Display {
 		addControlListener(new ZoomToFitControl());
 		addControlListener(new ZoomControl());
 		addControlListener(new PanControl());
-		addControlListener(new SemGenRadialGraphViewFocusControl(1, "filter"));
+		addControlListener(new SemGenRadialGraphViewFocusControl(2, "filter"));
 		addControlListener(new HoverActionControl("repaint"));
 		addControlListener(new ToolTipControl("tooltip"));
 		addControlListener(new NeighborHighlightControl(m_vis, neighbors, nonneighbors));
@@ -260,7 +255,6 @@ public class SemGenRadialGraphView extends Display {
 		final SemGenRadialGraphView gview = new SemGenRadialGraphView(settings, g, label, semsimmodel);
 		Visualization vis = gview.getVisualization();
 		
-
 		// create a search panel for the tree map
 		SearchQueryBinding sq = new SearchQueryBinding(
 				(Table) vis.getGroup(treeNodes), label, (SearchTupleSet) vis.getGroup(Visualization.SEARCH_ITEMS));

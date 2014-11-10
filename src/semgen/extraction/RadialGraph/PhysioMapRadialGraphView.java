@@ -62,7 +62,6 @@ import prefuse.util.ui.UILib;
 import prefuse.visual.VisualItem;
 import prefuse.visual.expression.InGroupPredicate;
 import prefuse.visual.sort.TreeDepthItemSorter;
-import semgen.SemGenGUI;
 import semgen.SemGenSettings;
 import semgen.extraction.ExtractorTab;
 import semsim.model.SemSimModel;
@@ -86,33 +85,24 @@ public class PhysioMapRadialGraphView extends Display {
 	private static final String treeEdges = "tree.edges";
 	private static final String linear = "linear";
 
-	private LabelRenderer m_nodeRenderer;
-	private EdgeRenderer m_edgeRenderer;
-
-	public Graph g;
-	private String m_label = "label";
 	public SemSimModel semsimmodel;
-	public static String base;
 	
 	 public final static Predicate isprocessfilter = ExpressionParser.predicate("process==true");
 
 	public PhysioMapRadialGraphView(SemGenSettings sets, Graph g, String label, SemSimModel semsimmodel) {
 		super(new Visualization());
-		this.g = g;
-		m_label = label;
 		this.semsimmodel = semsimmodel;
-		base = semsimmodel.getNamespace();
 
 		// -- set up visualization --
 		m_vis.add(tree, g);
 		m_vis.setInteractive(treeEdges, null, false);
 
 		// -- set up renderers --
-		m_nodeRenderer = new LabelRenderer(m_label);
+		LabelRenderer m_nodeRenderer = new LabelRenderer(label);
 		m_nodeRenderer.setRenderType(AbstractShapeRenderer.RENDER_TYPE_DRAW_AND_FILL);
 		m_nodeRenderer.setHorizontalAlignment(Constants.CENTER);
 		m_nodeRenderer.setRoundedCorner(8, 8);
-		m_edgeRenderer = new EdgeRenderer(Constants.EDGE_TYPE_LINE,
+		EdgeRenderer m_edgeRenderer = new EdgeRenderer(Constants.EDGE_TYPE_LINE,
 				prefuse.Constants.EDGE_ARROW_REVERSE);
 		m_edgeRenderer.setArrowType(prefuse.Constants.EDGE_ARROW_REVERSE);
 		m_edgeRenderer.setArrowHeadSize(8, 8);

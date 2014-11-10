@@ -166,7 +166,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		}
 		
 		if (o == annotateitemchangesourcemodelcode) {
-				anntab.changeLegacyLocation();
+				workbench.changeModelSourceFile();
 		}
 
 		if(o == annotateitemexportcsv){

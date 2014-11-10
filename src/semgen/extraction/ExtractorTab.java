@@ -4,10 +4,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-
 import javax.swing.*;
 
 import java.awt.event.*;
@@ -16,7 +12,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -610,7 +605,6 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 					tempgraph.addEdge(node, othernode);
 					junggraph.addEdge(edgenum, oneinput.getName(), keptds.getName(), EdgeType.UNDIRECTED);
 					edgenum++;
-					//}
 				}
 			}
 			
@@ -721,8 +715,8 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		}
 		ExtractorJCheckBox[] boxarray = boxset.toArray(new ExtractorJCheckBox[] {});
 		// Sort the array alphabetically using the custom Comparator
-		Comparator<Component> byVarName = new ComparatorByName();
-		Arrays.sort(boxarray, byVarName);
+
+		Arrays.sort(boxarray, new ComparatorByName());
 
 		for (int x = 0; x < boxarray.length; x++) {
 			panel.add(boxarray[x]);
@@ -748,10 +742,8 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 				} else {
 					JOptionPane.showMessageDialog(this,"Nothing to extract because no check boxes selected in extraction panels");
 				}
-			} catch (IOException e1) {
+			} catch (IOException | OWLException e1) {
 				e1.printStackTrace();
-			} catch (OWLException e2) {
-				e2.printStackTrace();
 			}
 		}
 
@@ -774,28 +766,6 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		}
 	}
 
-	private final static MouseListener buttonMouseListener = new MouseAdapter() {
-		public void mouseEntered(MouseEvent e) {
-			Component component = e.getComponent();
-			if (component instanceof AbstractButton) {
-				AbstractButton button = (AbstractButton) component;
-				button.setBorderPainted(true);
-				button.setContentAreaFilled(true);
-				button.setOpaque(true);
-			}
-		}
-
-		public void mouseExited(MouseEvent e) {
-			Component component = e.getComponent();
-			if (component instanceof AbstractButton) {
-				AbstractButton button = (AbstractButton) component;
-				button.setBorderPainted(false);
-				button.setContentAreaFilled(false);
-				button.setOpaque(false);
-			}
-		}
-	};
-
 	public void visualizeAllDataStructures(Boolean clusteringonly) {
 		Hashtable<DataStructure, Set<? extends DataStructure>> alldatastrs = new Hashtable<DataStructure, Set<? extends DataStructure>>();
 		for(DataStructure ds : semsimmodel.getDataStructures()){
@@ -812,8 +782,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		fc.setCurrentDirectory(SemGenFileChooser.currentdirectory);
 		fc.setDialogTitle("Select directory for extracted models");
-		int returnVal = fc.showOpenDialog(this);
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
+		if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 			File file = new File(fc.getSelectedFile().getAbsolutePath());
 			SemGenFileChooser.currentdirectory = fc.getCurrentDirectory();
 			if (file != null) {

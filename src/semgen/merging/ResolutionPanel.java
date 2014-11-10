@@ -43,7 +43,6 @@ public class ResolutionPanel extends JPanel implements ActionListener {
 	public SemSimModel semsimmodel2;
 	public DataStructure ds1;
 	public DataStructure ds2;
-	public Boolean manualmapping;
 	public JRadioButton rb1;
 	public JRadioButton rb2;
 	public JRadioButton rb3;
@@ -57,8 +56,7 @@ public class ResolutionPanel extends JPanel implements ActionListener {
 		this.ds2 = ds2;
 		this.semsimmodel1 = semsimmodel1;
 		this.semsimmodel2 = semsimmodel2;
-		this.manualmapping = manualmapping;
-
+		
 		this.setLayout(new BorderLayout());
 		this.setAlignmentX(LEFT_ALIGNMENT);
 		this.setBackground(Color.white);

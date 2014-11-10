@@ -46,7 +46,7 @@ public class AnnotationCopier {
 			System.out.println("Copying to " + otherds.getName());
 			if(!otherds.isImportedViaSubmodel()){
 				ann.setModelSaved(false);
-				copyFreeTextDescription(ds, otherds);
+				ds.copyDescription(otherds);
 				copySingularAnnotations(ds, otherds);
 				copyCompositeAnnotation(ann.semsimmodel, ann.semsimmodel, ds, otherds);
 			}
@@ -76,7 +76,7 @@ public class AnnotationCopier {
 						changemadetodatastructures = true;
 						DataStructure srcds = sourcemod.getDataStructure(ds.getName());
 						
-						copyFreeTextDescription(srcds, ds);
+						ds.copyDescription(srcds);
 						copySingularAnnotations(srcds, ds);
 						copyCompositeAnnotation(targetmod, sourcemod, srcds, ds);
 						
@@ -197,11 +197,6 @@ public class AnnotationCopier {
 			}
 		}
 		return changemadetosubmodels;
-	}
-	
-	public static void copyFreeTextDescription(DataStructure srcds, DataStructure ds){
-		// Copy free-text description
-		ds.setDescription(srcds.getDescription());
 	}
 	
 	public static void copySingularAnnotations(DataStructure srcds, DataStructure ds){

@@ -13,9 +13,8 @@ import semgen.annotation.componentdisplays.buttontree.AnnotatorButtonTree;
 import semgen.annotation.componentdisplays.codewords.CodewordButton;
 import semgen.annotation.componentdisplays.submodels.SubmodelButton;
 import semgen.annotation.dialog.HumanDefEditor;
-import semgen.annotation.dialog.LegacyCodeChooser;
-import semgen.annotation.dialog.textminer.TextMinerDialog;
 import semgen.annotation.workbench.AnnotatorWorkbench;
+import semgen.annotation.workbench.ModelAnnotations;
 import semgen.resource.ComparatorByName;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
@@ -88,8 +87,6 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	public static int initwidth;
 	public static int initheight;
 	public String ontspref;
-
-	public TextMinerDialog tmd;
 	
 	AnnotatorWorkbench workbench;
 
@@ -102,6 +99,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		workbench = new AnnotatorWorkbench(sourcefile, settings.doAutoAnnotate());		
 		semsimmodel = workbench.getSemSimModel();
 		toolbar = new AnnotatorToolBar(this, workbench, settings );
+		workbench.addObservertoModelAnnotator(this);
 		
 		fileURI = srcfile.toURI();
 		initwidth = settings.getAppWidth();
@@ -174,7 +172,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		SemGen.logfilewriter.println("Started new annotater");
 		
 		try {
-			codearea.setCodeView(semsimmodel.getLegacyCodeLocation());
+			codearea.setCodeView(workbench.getModelSourceFile());
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -649,16 +647,6 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	public boolean checkFile(URI uri) {
 		return (uri.toString().equals(fileURI.toString()));
 	}
-	
-	public void changeLegacyLocation() {
-		LegacyCodeChooser lcc = new LegacyCodeChooser(this);
-		try {
-			if (lcc.wasChanged()) 
-				codearea.setCodeView(semsimmodel.getLegacyCodeLocation());
-			} catch (IOException e1) {
-				e1.printStackTrace();
-		}
-	}
 
 	public boolean closeTab() {
 		return workbench.unsavedChanges();
@@ -677,15 +665,21 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	@Override
 	public void requestSaveAs() {
 		setCursor(new Cursor(Cursor.WAIT_CURSOR));
-		workbench.saveModelAs();
-		setTabName(workbench.getCurrentModelName());
-		setToolTipText("Annotating " + workbench.getCurrentModelName());
+		if (workbench.saveModelAs()!=null) {
+			setTabName(workbench.getCurrentModelName());
+			setToolTipText("Annotating " + workbench.getCurrentModelName());
+		}
 		setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-		
 	}
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		refreshAnnotatableElements();
+		if (arg1 == ModelAnnotations.ModelChangeEnum.SOURCECHANGED) {
+			try {
+				codearea.setCodeView(workbench.getModelSourceFile());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
