@@ -3,7 +3,7 @@ package semgen.resource;
 import java.io.File;
 
 public interface Workbench {
-	public void loadModel();
+	public void loadModel(boolean autoannotate);
 	
 	public boolean getModelSaved();
 	

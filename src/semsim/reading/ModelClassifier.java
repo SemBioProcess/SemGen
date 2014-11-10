@@ -38,7 +38,6 @@ public class ModelClassifier {
 				else
 					if(isCellMLmodel(file)) type =  CELLML_MODEL;
 			}
-			
 		}
 		catch(Exception e) {
 			e.printStackTrace();

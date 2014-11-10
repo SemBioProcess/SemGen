@@ -1,38 +1,26 @@
 package semgen;
 
 import org.jdom.JDOMException;
-import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
-import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.annotation.AnnotatorTab;
+import semgen.encoding.Encoder;
 import semgen.extraction.ExtractorTab;
 import semgen.menu.HelpMenu;
 import semgen.menu.SemGenMenuBar;
 import semgen.merging.MergerTab;
-import semgen.resource.CSVExporter;
-import semgen.resource.SemGenError;
 import semgen.resource.SemGenTask;
 import semgen.resource.file.LoadSemSimModel;
-import semgen.resource.file.SemGenFileChooser;
 import semgen.resource.file.SemGenOpenFileChooser;
 import semgen.resource.uicomponent.SemGenProgressBar;
 import semgen.resource.uicomponent.SemGenTab;
-import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
-import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.ModelClassifier;
 import semsim.reading.SemSimOWLreader;
-import semsim.writing.CellMLwriter;
-import semsim.writing.MMLwriter;
-import semsim.writing.Writer;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,28 +28,17 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Scanner;
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.xml.rpc.ServiceException;
 
-public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeListener, Observer {
+public class SemGenGUI extends JTabbedPane implements ActionListener, Observer {
 	private static final long serialVersionUID = 3618439495848469800L;
 
 	private SemGenSettings settings;
@@ -84,7 +61,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 		setPreferredSize(sets.getAppSize());
 		setOpaque(true);
 		setBackground(Color.white);
-		addChangeListener(this);
 		
 		desktop = this; // a specialized layered pane
 			
@@ -96,8 +72,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 
 		// File menu items
 		menu.filemenu.fileitemnew.addActionListener(this);
-		menu.filemenu.fileitemsave.addActionListener(this);
-		menu.filemenu.fileitemsaveas.addActionListener(this);
 
 		// Tools menu
 		JMenu toolsmenu = new JMenu("Tasks");
@@ -106,7 +80,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 		menu.toolsmenu.toolsitemannotate.addActionListener(this);
 		menu.toolsmenu.toolsitemextract.addActionListener(this);
 		menu.toolsmenu.toolsitemmerge.addActionListener(this);
-		menu.toolsmenu.toolsitemcode.addActionListener(this);
 
 		menubar.add(filemenu);
 		menubar.add(toolsmenu);
@@ -120,7 +93,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 			startNewAnnotatorTask();
 			break;
 		case Encode:
-			menu.toolsmenu.toolsitemcode.doClick();
+			new Encoder();
 			break;
 		case Extract:
 			startNewExtractorTask();
@@ -141,18 +114,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 			startNewTaskDialog();
 		}
 
-		if (o == menu.filemenu.fileitemsave) {
-			if(desktop.getSelectedComponent() instanceof AnnotatorTab){
-				AnnotatorTab ann = (AnnotatorTab)desktop.getSelectedComponent();
-				SaveAction(ann, ann.lastSavedAs);
-			}
-		}
-
-		if (o == menu.filemenu.fileitemsaveas) {
-			SaveAsAction(desktop.getSelectedComponent(),null, 
-					new FileNameExtensionFilter[]{SemGenFileChooser.cellmlfilter, SemGenFileChooser.owlfilter});
-		}
-
 		if (o == menu.toolsmenu.toolsitemannotate) {
 			startNewAnnotatorTask();
 		}
@@ -165,17 +126,18 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 			NewMergerAction();
 		}
 		
-		if (o == menu.toolsmenu.toolsitemcode) {
-			SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select SemSim model to encode", 
-					new String[] {"owl"});
-
-			startEncoding(sgc.getSelectedFile(), sgc.getSelectedFile().getAbsolutePath());
-		}
 	}
 	
 	public static void startNewAnnotatorTask(){
 		NewAnnotatorTask task = new NewAnnotatorTask(true);
 		task.execute();
+	}
+	
+	public static AnnotatorTab startNewAnnotatorTask(File existingfile){
+		NewAnnotatorTask task = new NewAnnotatorTask(existingfile, true);
+		task.execute();
+		
+		return task.annotator;
 	}
 	
 	public static void startNewExtractorTask(){
@@ -214,6 +176,8 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 	public static class NewAnnotatorTask extends SemGenTask {
 		public File file;
 		public boolean autosave;
+		
+		AnnotatorTab annotator = null;
         public NewAnnotatorTask(boolean autosave){
         	SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select legacy code or SemSim model to annotate");
         	file = sgc.getSelectedFile();
@@ -232,10 +196,26 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
     			System.out.println("Loading " + file.getName());
     			progframe.updateMessage("Loading " + file.getName() + "...");
     			try{
-    				AnnotateAction(file, autosave);
+    				AnnotateAction(autosave);
     			}
     			catch(Exception e){e.printStackTrace();}
             return null;
+        }
+        
+        public void AnnotateAction(Boolean autosave) {	
+		// Create a new tempfile using the date
+
+			// Check to make sure SemSim model isn't already being annotated before proceeding
+			if (!desktop.isOntologyOpenForEditing(file.toURI())) {
+	
+				// Create new Annotater object in SemGen desktop
+				annotator = new AnnotatorTab(file,settingshandle, desktop.globalactions);
+				
+				desktop.addTab(annotator);
+				desktop.anntabs.add(annotator);
+						
+				annotator.NewAnnotatorAction();
+			}
         }
     }
 	
@@ -261,81 +241,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
         }
     }
 	
-	public static class CoderTask extends SemGenTask {
-		public File inputfile;
-		public File outputfile;
-		public Writer writer;
-		public SemSimModel model;
-        
-		public CoderTask(File inputfile, File outputfile, Writer writer){
-        	this.inputfile = inputfile;
-        	this.outputfile = outputfile;
-        	this.writer = writer;
-        }
-		public CoderTask(SemSimModel model, File outputfile, Writer writer){
-			this.model = model;
-        	this.outputfile = outputfile;
-        	this.writer = writer;
-		}
-        @Override
-        public Void doInBackground() {
-    		if(model == null){
-        		model = LoadSemSimModel.loadSemSimModelFromFile(inputfile, settingshandle.doAutoAnnotate());
-    			if(!model.getErrors().isEmpty()){
-    				JOptionPane.showMessageDialog(null, "Selected model had errors:", "Could not encode model", JOptionPane.ERROR_MESSAGE);
-    				return null;
-    			}
-    		}
-    		progframe = new SemGenProgressBar("Encoding...", true);
-			CoderAction(model, outputfile, writer);
-            return null;
-        }
-    }
-	
-	public static AnnotatorTab AnnotateAction(File file, Boolean autosave) {	
-		SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(file, settingshandle.doAutoAnnotate());
-		AnnotatorTab annotator = null;
 
-		// Create a new tempfile using the date
-
-		if(semsimmodel!=null){
-		
-		URI selectedURI = file.toURI(); // The selected file for annotation
-		URI existingURI = URI.create(""); // The existing file from which to
-			Boolean newannok = true;
-			// If we are annotating an existing SemSim or CellML file...
-			if (semsimmodel.getSourceModelType()==ModelClassifier.SEMSIM_MODEL || semsimmodel.getSourceModelType()==ModelClassifier.CELLML_MODEL) {
-				existingURI = selectedURI;
-			}
-			
-			// Check to make sure SemSim model isn't already being annotated before proceeding
-			if (newannok && !desktop.isOntologyOpenForEditing(existingURI)) {
-	
-				// Create new Annotater object in SemGen desktop
-				annotator = new AnnotatorTab(file,settingshandle, desktop.globalactions);
-				annotator.semsimmodel = semsimmodel;
-				
-				if(annotator.semsimmodel.getErrors().isEmpty()){
-					annotator.setModelSaved(annotator.semsimmodel.getSourceModelType()==ModelClassifier.SEMSIM_MODEL ||
-							annotator.semsimmodel.getSourceModelType()==ModelClassifier.CELLML_MODEL);
-					
-					if(annotator.getModelSaved()) annotator.lastSavedAs = annotator.semsimmodel.getSourceModelType();
-					
-					// Add unspecified physical model components for use during annotation
-					annotator.semsimmodel.addCustomPhysicalEntity(SemSimModel.unspecifiedName, "Non-specific entity for use as a placeholder during annotation");
-					annotator.semsimmodel.addCustomPhysicalProcess(SemSimModel.unspecifiedName, "Non-specific process for use as a placeholder during annotation");
-	
-					if(annotator.semsimmodel!=null){
-						desktop.addTab(annotator);
-						desktop.anntabs.add(annotator);
-						
-						annotator.NewAnnotatorAction();
-					}
-				}
-			}
-		}
-		return annotator;
-	}
 	
 	// Make this into task
 	private static ExtractorTab NewExtractorAction(File file) throws OWLException, IOException, InterruptedException, JDOMException, ServiceException {
@@ -361,200 +267,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 		merger.PlusButtonAction();
 	}
 
-	public static void startEncoding(Object inputfileormodel, String filenamesuggestion){
-		File outputfile = null;
-		Object[] optionsarray = new Object[] {"CellML", "MML (JSim)"};
-		Object selection = JOptionPane.showInputDialog(null, "Select output format", "SemGen coder", JOptionPane.PLAIN_MESSAGE, null, optionsarray, "CellML");
-		
-		if(filenamesuggestion!=null && filenamesuggestion.contains(".")) filenamesuggestion = filenamesuggestion.substring(0, filenamesuggestion.lastIndexOf("."));
-		
-		Writer outwriter = null;
-		
-		if(selection == optionsarray[0]){
-			outputfile = SemGenGUI.SaveAsAction(null, filenamesuggestion, 
-					new FileNameExtensionFilter[]{SemGenFileChooser.cellmlfilter});
-			outwriter = (Writer)new CellMLwriter();
-		}
-		
-		if(selection == optionsarray[1]){
-			outputfile = SemGenGUI.SaveAsAction(null, filenamesuggestion, 
-					new FileNameExtensionFilter[]{SemGenFileChooser.mmlfilter});
-			outwriter = (Writer)new MMLwriter();
-		}
-		if(outputfile!=null){
-			CoderTask task = null;
-			if(inputfileormodel instanceof File){
-				task = new CoderTask((File)inputfileormodel, outputfile, outwriter);
-			}
-			else if(inputfileormodel instanceof SemSimModel){
-				task = new CoderTask((SemSimModel)inputfileormodel, outputfile, outwriter);
-			}
-			task.execute();
-		}
-	}
-
-	public static void CoderAction(SemSimModel model, File outputfile, Writer writer){
-		String content = writer.writeToString(model);
-		if(content!=null)
-			SemSimUtil.writeStringToFile(content, outputfile);
-		else
-			JOptionPane.showMessageDialog(null, "Sorry. There was a problem encoding " + model.getName() + 
-					"\nThe JSim API threw an exception.",  
-					"Error", JOptionPane.ERROR_MESSAGE);
-	}
-
-	// SAVE ACTION 
-	public static boolean SaveAction(Object object, int modeltype){
-		boolean success = false;
-		if (object instanceof AnnotatorTab) {
-			AnnotatorTab ann = (AnnotatorTab) object;
-			if(ann.fileURI!=null){
-				Set<DataStructure> unspecds = new HashSet<DataStructure>();
-
-				unspecds.addAll(ann.semsimmodel.getDataStructuresWithUnspecifiedAnnotations());
-				if(unspecds.isEmpty()){
-					File targetfile = new File(ann.fileURI);
-					try {
-						ann.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-						
-						if(modeltype==ModelClassifier.SEMSIM_MODEL)
-							ann.manager.saveOntology(ann.semsimmodel.toOWLOntology(), new RDFXMLOntologyFormat(), IRI.create(ann.fileURI));
-						else if(modeltype==ModelClassifier.CELLML_MODEL){
-							File outputfile =  new File(ann.fileURI);
-							String content = new CellMLwriter().writeToString(ann.semsimmodel);
-							SemSimUtil.writeStringToFile(content, outputfile);
-						}
-						
-						ann.lastSavedAs = modeltype;
-						ann.setModelSaved(true);
-						ann.sourcefile = targetfile;
-					} catch (Exception e) {e.printStackTrace();}
-					
-					if(desktop.getComponentCount()>0){
-						ann.setTabName(targetfile.getName());
-						desktop.setTabComponentAt(desktop.indexOfComponent(ann), ann);
-						ann.semsimmodel.setName(targetfile.getName().substring(0, targetfile.getName().lastIndexOf(".")));
-						desktop.setToolTipTextAt(desktop.indexOfComponent(ann), "Annotating " + targetfile.getName());
-					}
-					SemGen.logfilewriter.println(targetfile.getName() + " was saved");
-					ann.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-					success = true;
-				}
-				else{
-					SemGenError.showUnspecifiedAnnotationError(desktop, unspecds);
-					success = false;
-				}
-			}
-			else{
-				String path = ann.sourcefile.getAbsolutePath();
-				path = path.substring(0, path.lastIndexOf("."));
-				success = SaveAsAction(ann, path, 
-						new FileNameExtensionFilter[]{SemGenFileChooser.cellmlfilter, SemGenFileChooser.owlfilter})!=null;
-			}
-		}
-		if(object instanceof CSVExporter){
-			CSVExporter exp = (CSVExporter) object;
-			Scanner scanner = new Scanner(exp.datatosave);
-			PrintWriter outfile;
-			try {
-				outfile = new PrintWriter(new FileWriter(new File(exp.savelocation)));
-				while (scanner.hasNextLine()) {
-					String nextline = scanner.nextLine();
-					outfile.println(nextline);
-				}
-				outfile.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			scanner.close();
-			JOptionPane.showMessageDialog(desktop, "Finished exporting .csv file");
-			success = true;
-		}
-
-		if (object instanceof ExtractorTab) {}
-		return success;
-	}
-
-	public static File SaveAsAction(Object object, String selectedfilepath, FileNameExtensionFilter[] filters){
-		JFileChooser filec = new JFileChooser();
-		File file = null;
-		Boolean saveok = false;
-		while (!saveok) {
-			filec.setCurrentDirectory(SemGenFileChooser.currentdirectory);
-			filec.setDialogTitle("Choose location to save file");
-			filec.setPreferredSize(new Dimension(550,550));
-			
-			filec.setAcceptAllFileFilterUsed(false);
-			
-			for(FileNameExtensionFilter filter : filters) filec.addChoosableFileFilter(filter);
-			
-			int returnVal = filec.showSaveDialog(desktop);
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				file = new File(filec.getSelectedFile().getAbsolutePath());
-				SemGenFileChooser.currentdirectory = filec.getCurrentDirectory();
-				
-				String extension = null;
-				int modeltype = -1;
-				
-				if(filec.getFileFilter()==SemGenFileChooser.owlfilter){
-					extension = "owl";
-					modeltype = ModelClassifier.SEMSIM_MODEL;
-				}
-				if(filec.getFileFilter()==SemGenFileChooser.cellmlfilter){
-					extension = "cellml";
-					modeltype = ModelClassifier.CELLML_MODEL;
-				}
-				if(filec.getFileFilter()==SemGenFileChooser.mmlfilter){
-					extension = "mod";
-					modeltype = ModelClassifier.MML_MODEL;
-				}
-				
-				// If there's an extension for the file type, make sure the filename ends in it
-				if(extension!=null){
-					if (!file.getAbsolutePath().endsWith("." + extension.toLowerCase())
-							&& !file.getAbsolutePath().endsWith("." + extension.toUpperCase())) {
-						file = new File(filec.getSelectedFile().getAbsolutePath() + "." + extension);
-					} 
-				}
-				if (file.exists()) {
-					int overwriteval = JOptionPane.showConfirmDialog(desktop,
-							"Overwrite existing file?", file.getName() + " already exists",
-							JOptionPane.OK_CANCEL_OPTION,
-							JOptionPane.QUESTION_MESSAGE);
-					if (overwriteval == JOptionPane.OK_OPTION) saveok = true;
-					else {
-						file = null;
-						saveok = false;
-					}
-				} 
-				else saveok = true;
-
-				if (object instanceof AnnotatorTab && saveok == true) {
-					AnnotatorTab ann = (AnnotatorTab) desktop.getSelectedComponent();
-					Set<DataStructure> unspecds = ann.semsimmodel.getDataStructuresWithUnspecifiedAnnotations();
-					if(unspecds.isEmpty()){
-						ann.fileURI = file.toURI();
-						SaveAction(ann, modeltype);
-					}
-					else{
-						SemGenError.showUnspecifiedAnnotationError(desktop,unspecds);
-					}
-
-				}
-				else if(object instanceof CSVExporter && saveok == true){
-					CSVExporter exp = (CSVExporter) object;
-					exp.savelocation = file.getAbsolutePath();
-					SaveAction(exp, -1);
-				}
-			} 
-			else {
-				saveok = true;
-				file = null;
-			}
-		}
-		return file;
-	}
-	
 	public Boolean isOntologyOpenForEditing(URI uritocheck) {
 		for (AnnotatorTab at : anntabs) {
 			if (at.checkFile(uritocheck)) {
@@ -574,7 +286,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 			desktop.anntabs.remove(component);
 			desktop.remove(desktop.indexOfComponent(component));
 			desktop.numtabs = desktop.numtabs - 1;
-			System.gc();
 		}
 		
 		return returnval;
@@ -587,7 +298,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 		for (int x = 0; x < desktopcomponents.length; x++) {
 			if (desktopcomponents[x] instanceof AnnotatorTab && contchecking) {
 				AnnotatorTab temp = (AnnotatorTab) desktopcomponents[x];
-				desktop.setSelectedComponent(temp);
 				if (!closeTabAction(temp)) {
 					contchecking = false;
 					quit = false;
@@ -604,21 +314,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 		}
 		return quit;
 	}
-
-	public void stateChanged(ChangeEvent arg0) {
-		updateSemGenMenuOptions();
-	}
-	
-	public void updateSemGenMenuOptions(){
-		Component comp = desktop.getSelectedComponent();
-		
-		if(comp instanceof AnnotatorTab){
-			AnnotatorTab ann = (AnnotatorTab)comp;
-			menu.filemenu.fileitemsave.setEnabled(!ann.getModelSaved());
-		}
-		else menu.filemenu.fileitemsave.setEnabled(false);
-		menu.filemenu.fileitemsaveas.setEnabled(comp instanceof AnnotatorTab);
-	}
 	
 	public void addTab(SemGenTab tab) {
 		numtabs++;
@@ -633,6 +328,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, ChangeList
 				   getComponentAt(numtabs - 1).repaint();
 				   getComponentAt(numtabs - 1).validate();
 		}});
+		tab.addObservertoWorkbench(menu.filemenu);
 	}
 	
 	private class tabClickedListener extends MouseAdapter {

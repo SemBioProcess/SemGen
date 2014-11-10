@@ -1,14 +1,16 @@
 package semgen.resource;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Arrays;
+import java.util.Scanner;
 
-import javax.swing.filechooser.FileNameExtensionFilter;
-
+import javax.swing.JOptionPane;
 import org.semanticweb.owlapi.model.OWLException;
 
-import semgen.SemGenGUI;
-import semgen.resource.file.SemGenOpenFileChooser;
+import semgen.resource.file.SemGenSaveFileChooser;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.writing.CaseInsensitiveComparator;
@@ -46,6 +48,26 @@ public class CSVExporter {
 				datatosave = datatosave + ds.getName() + ", " + unitname + ", " + valueifstatic + ", " + desc + "\n";
 			}
 		}
-		SemGenGUI.SaveAsAction(this, "", new FileNameExtensionFilter[]{SemGenOpenFileChooser.csvfilter});
+		saveCSV();
+	}
+	
+	public void saveCSV() {
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("", new String[]{"csv"}); 
+		if (filec!=null) {
+			Scanner scanner = new Scanner(datatosave);
+			PrintWriter outfile;
+			try {
+				outfile = new PrintWriter(new FileWriter(new File(savelocation)));
+				while (scanner.hasNextLine()) {
+					String nextline = scanner.nextLine();
+					outfile.println(nextline);
+				}
+				outfile.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			scanner.close();
+			JOptionPane.showMessageDialog(null, "Finished exporting .csv file");
+		}
 	}
 }

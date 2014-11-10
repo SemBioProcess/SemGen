@@ -3,6 +3,8 @@ package semgen.menu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
@@ -13,14 +15,13 @@ import semgen.PreferenceDialog;
 import semgen.SemGenSettings;
 import semgen.resource.uicomponent.SemGenMenu;
 
-public class FileMenu extends SemGenMenu implements ActionListener {
+public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 	private static final long serialVersionUID = 1L;
 	public JMenuItem fileitemnew;
 	private JMenuItem fileitemclose;
-	public JMenuItem fileitemsave;
-	public JMenuItem fileitemsaveas;
-	
-	public JMenuItem fileitemproperties;
+	private JMenuItem fileitemsave;
+	private JMenuItem fileitemsaveas;
+	private JMenuItem fileitemproperties;
 	private JMenuItem fileitemexit;
 	
 	public FileMenu(SemGenSettings sets, GlobalActions acts) {
@@ -40,7 +41,6 @@ public class FileMenu extends SemGenMenu implements ActionListener {
 		fileitemsaveas.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.SHIFT_MASK + maskkey));
 		add(fileitemsaveas);
 		
-		
 		add(new JSeparator());
 		fileitemproperties = formatMenuItem(fileitemproperties,"Properties", KeyEvent.VK_Q,true,true);
 		add(fileitemproperties);
@@ -54,16 +54,16 @@ public class FileMenu extends SemGenMenu implements ActionListener {
 		Object o = e.getSource();
 		
 //		if (o == fileitemopen) {
-//			globalacts.newTask();
+//			globalactions.newTask();
 //		}
 //
-//		if (o == fileitemsave) {
-//			globalacts.getCurrentTab().requestSave();
-//		}
-//
-//		if (o == fileitemsaveas) {
-//			globalacts.requestSaveAs();
-//		}
+		if (o == fileitemsave) {
+			globalactions.getCurrentTab().requestSave();
+		}
+
+		if (o == fileitemsaveas) {
+			globalactions.requestSaveAs();
+		}
 		
 		if( o == fileitemclose){
 			globalactions.closeTab();
@@ -80,7 +80,14 @@ public class FileMenu extends SemGenMenu implements ActionListener {
 	
 		@Override
 		public void updateMenu() {
-			//fileitemsave.setEnabled(!globalacts.getCurrentTab().isSaved());			
+			fileitemsave.setEnabled(!globalactions.getCurrentTab().isSaved());			
+		}
+
+		@Override
+		public void update(Observable o, Object arg) {
+			if (arg==GlobalActions.appactions.SAVED || arg==GlobalActions.appactions.TABCHANGED) {
+				updateMenu();
+			}
 		}	
 
 }

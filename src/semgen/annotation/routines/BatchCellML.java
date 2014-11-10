@@ -14,13 +14,13 @@ import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
 
+import semgen.GlobalActions;
 import semgen.SemGenGUI;
 import semgen.annotation.AnnotatorTab;
 import semgen.annotation.dialog.textminer.TextMinerDialog;
 import semgen.resource.file.SemGenOpenFileChooser;
 import semsim.SemSimConstants;
 import semsim.model.annotation.Annotation;
-import semsim.reading.ModelClassifier;
 
 public class BatchCellML{
 	public AnnotatorTab ann;
@@ -31,12 +31,13 @@ public class BatchCellML{
 	public Namespace rdfns = Namespace.getNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
 	public Namespace bqsns = Namespace.getNamespace("bqs", "http://www.cellml.org/bqs/1.0#");
 	public int numidsfromrdf = 0;
+	GlobalActions globalactions;
 	
-	public BatchCellML() throws Exception{
-		JFileChooser fc = new JFileChooser();
+	public BatchCellML(GlobalActions gacts) throws Exception{
+		globalactions = gacts;
+		SemGenOpenFileChooser fc = new SemGenOpenFileChooser("Select directory containing cellml models");
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		fc.setCurrentDirectory(SemGenOpenFileChooser.currentdirectory);
-		fc.setDialogTitle("Select directory containing cellml models");
+		
 		int returnVal = fc.showOpenDialog(null);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File file = new File(fc.getSelectedFile().getAbsolutePath());
@@ -62,7 +63,7 @@ public class BatchCellML{
 				
 				try {
 					// Make this into a task
-					ann = SemGenGUI.AnnotateAction(cellmlfile, true);
+					ann = SemGenGUI.startNewAnnotatorTask(cellmlfile);
 					TextMinerDialog tmd = new TextMinerDialog(ann);
 					
 					tmd.pubmedid = getModelIDAndPubMedIdFromCellMLModel(cellmlfile);
@@ -107,9 +108,9 @@ public class BatchCellML{
 						}
 					}
 					
-					tmd.setVisible(false);
-					SemGenGUI.SaveAction(ann, ModelClassifier.CELLML_MODEL);
-					SemGenGUI.closeTabAction(ann);
+					tmd.dispose();
+					globalactions.requestSave();
+					globalactions.closeTab();
 				} catch (IOException | JDOMException e) {
 					e.printStackTrace();
 				} 

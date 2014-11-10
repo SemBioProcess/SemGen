@@ -9,7 +9,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.awt.event.*;
 import java.io.File;
@@ -23,6 +22,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Observer;
 import java.util.Set;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
@@ -36,8 +36,8 @@ import prefuse.data.Graph;
 import prefuse.data.Node;
 import prefuse.data.Schema;
 import semgen.GlobalActions;
-import semgen.SemGenGUI;
 import semgen.SemGenSettings;
+import semgen.encoding.Encoder;
 import semgen.extraction.RadialGraph.Clusterer;
 import semgen.extraction.RadialGraph.SemGenRadialGraphView;
 import semgen.resource.ComparatorByName;
@@ -47,6 +47,7 @@ import semgen.resource.SemGenIcon;
 import semgen.resource.SemGenTask;
 import semgen.resource.file.FileFilter;
 import semgen.resource.file.SemGenFileChooser;
+import semgen.resource.file.SemGenSaveFileChooser;
 import semgen.resource.uicomponent.SemGenProgressBar;
 import semgen.resource.uicomponent.SemGenTab;
 import semsim.SemSimUtil;
@@ -465,7 +466,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 				JOptionPane.YES_NO_OPTION);
 		if (x == JOptionPane.YES_OPTION) {
 			try {
-				SemGenGUI.startEncoding(extractedmodel, filenamesuggestion);
+				new Encoder(extractedmodel, filenamesuggestion);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -735,12 +736,12 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 			try {
 				Map<DataStructure, Set<? extends DataStructure>> table = primeextraction();
 				if (table.size() != 0) {
-					extractedfile = SemGenGUI.SaveAsAction(this, null, new FileNameExtensionFilter[]{
-							SemGenFileChooser.cellmlfilter, SemGenFileChooser.owlfilter});
 					if (extractedfile != null) {
 						try {
 							extractedmodel = Extractor.extract(semsimmodel, table);
-						} catch (CloneNotSupportedException e1) {e1.printStackTrace();}
+						} catch (CloneNotSupportedException e1) {
+							e1.printStackTrace();
+						}
 						manager.saveOntology(extractedmodel.toOWLOntology(), new RDFXMLOntologyFormat(),IRI.create(extractedfile));
 						optionToEncode(extractedfile.getName());
 					}
@@ -982,17 +983,26 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	@Override
 	public boolean isSaved() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
-	public void requestSave() {
-		// TODO Auto-generated method stub
-		
+	public void requestSave() {}
+
+	@Override
+	public void requestSaveAs() {}
+	
+	public File saveExtraction() {
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("Choose location to save file", new String[]{"cellml","owl"});
+		if (filec.SaveAsAction()!=null) {
+			extractedfile = filec.getSelectedFile();
+			return extractedfile;
+		}
+		return null;
 	}
 
 	@Override
-	public void requestSaveAs() {
+	public void addObservertoWorkbench(Observer obs) {
 		// TODO Auto-generated method stub
 		
 	}

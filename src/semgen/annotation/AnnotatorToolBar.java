@@ -9,6 +9,7 @@ import java.util.Set;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+
 import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.SemGenGUI;
@@ -20,6 +21,7 @@ import semgen.annotation.dialog.referenceclass.AddReferenceClassDialog;
 import semgen.annotation.dialog.selector.RemovePhysicalComponentDialog;
 import semgen.annotation.routines.AnnotationCopier;
 import semgen.annotation.workbench.AnnotatorWorkbench;
+import semgen.encoding.Encoder;
 import semgen.resource.SemGenIcon;
 import semgen.resource.uicomponent.DropDownCheckList;
 import semgen.resource.uicomponent.SemGenTabToolbar;
@@ -209,7 +211,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 			String filenamesuggestion = null;
 			if(anntab.sourcefile!=null) filenamesuggestion = anntab.sourcefile.getName().substring(0, anntab.sourcefile.getName().lastIndexOf("."));
 			if(workbench.unsavedChanges()){
-				SemGenGUI.startEncoding(anntab.semsimmodel, filenamesuggestion);
+				new Encoder(anntab.semsimmodel, filenamesuggestion);
 			} 
 		}
 	}

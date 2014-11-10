@@ -23,7 +23,6 @@ public class LoadSemSimModel {
 		int modeltype = ModelClassifier.classify(file);
 
 		String JSimBuildDir = "./jsimhome";
-		Boolean autoannotatesbml = (modeltype==ModelClassifier.SBML_MODEL && autoannotate);
 		try {
 			switch (modeltype){
 			
@@ -33,15 +32,16 @@ public class LoadSemSimModel {
 						semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
 				break;
 					
-			case ModelClassifier.SBML_MODEL:// MML
+		case ModelClassifier.SBML_MODEL:// MML
 					semsimmodel = new MMLreader(JSimBuildDir).readFromFile(file);
-					if(semsimmodel.getErrors().isEmpty() && autoannotatesbml){
+					if(semsimmodel.getErrors().isEmpty() && autoannotate){
 						// If it's an SBML model and we should auto-annotate
 						semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
 						SemGenProgressBar progframe = new SemGenProgressBar("Annotating with web services...",true);
 						boolean online = WebserviceTester.testBioPortalWebservice("Annotation via web services failed.");
 						if(!online) 
 							SemGenError.showWebConnectionError(null, "BioPortal search service");
+						
 						SBMLAnnotator.annotate(file, semsimmodel, online, SemGen.semsimlib.getOntTermsandNamesCache());
 						ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel, SemGen.semsimlib.getOntTermsandNamesCache(), online);
 						SBMLAnnotator.setFreeTextDefinitionsForDataStructuresAndSubmodels(semsimmodel);
@@ -55,6 +55,7 @@ public class LoadSemSimModel {
 					if(autoannotate){
 						semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
 						SemGenProgressBar progframe = new SemGenProgressBar("Annotating " + file.getName() + " with web services...",true);
+					
 						Boolean online = true;
 						
 							online = WebserviceTester.testBioPortalWebservice("Annotation via web services failed.");
@@ -64,7 +65,7 @@ public class LoadSemSimModel {
 						ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel,  SemGen.semsimlib.getOntTermsandNamesCache(), online);
 					}
 				}
-				break;		
+				break;
 			case ModelClassifier.SEMSIM_MODEL:
 				semsimmodel = loadSemSimOWL(file);
 				break;

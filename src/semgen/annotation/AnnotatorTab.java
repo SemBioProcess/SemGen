@@ -49,11 +49,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Hashtable;
+import java.util.Observable;
+import java.util.Observer;
 import java.awt.BorderLayout;
 import java.io.IOException;
 
 public class AnnotatorTab extends SemGenTab implements ActionListener, MouseListener,
-		KeyListener {
+		KeyListener, Observer {
 
 	private static final long serialVersionUID = -5360722647774877228L;
 	public OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -88,18 +90,19 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	public String ontspref;
 
 	public TextMinerDialog tmd;
-	public int lastSavedAs = -1;
 	
 	AnnotatorWorkbench workbench;
-	
-	private boolean modelsaved = false;
-	
+
 	public SemSimModel semsimmodel;
 
 	public AnnotatorTab(File srcfile, SemGenSettings sets, GlobalActions gacts) {
 		super(srcfile.getName(), SemGenIcon.annotatoricon, "Annotating " + srcfile.getName(), sets, gacts);
+		sourcefile = srcfile;
 		
-		this.sourcefile = srcfile;
+		workbench = new AnnotatorWorkbench(sourcefile, settings.doAutoAnnotate());		
+		semsimmodel = workbench.getSemSimModel();
+		toolbar = new AnnotatorToolBar(this, workbench, settings );
+		
 		fileURI = srcfile.toURI();
 		initwidth = settings.getAppWidth();
 		initheight = settings.getAppHeight();
@@ -135,10 +138,12 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 
 		splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, westsplitpane, eastsplitpane);
 		splitpane.setOneTouchExpandable(true);
-		
-
 	}
 
+	public void addObservertoWorkbench(Observer obs) {
+		workbench.addObserver(obs);
+	}
+	
 	// --------------------------------//
 	// METHODS
 	// --------------------------------//
@@ -167,8 +172,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	
 	public SemSimModel NewAnnotatorAction(){
 		SemGen.logfilewriter.println("Started new annotater");
-		workbench = new AnnotatorWorkbench(sourcefile, semsimmodel, modelsaved, lastSavedAs);		
-		toolbar = new AnnotatorToolBar(this, workbench, settings );
+		
 		try {
 			codearea.setCodeView(semsimmodel.getLegacyCodeLocation());
 		} catch (IOException e1) {
@@ -508,11 +512,11 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	}
 	
 	public boolean getModelSaved(){
-		return modelsaved;
+		return workbench.getModelSaved();
 	}
 	
 	public void setModelSaved(boolean val){
-		modelsaved = val;
+		workbench.setModelSaved(val);
 	}
 
 	public void mouseEntered(MouseEvent e) {
@@ -662,19 +666,26 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 
 	@Override
 	public boolean isSaved() {
-		// TODO Auto-generated method stub
-		return false;
+		return getModelSaved();
 	}
 
 	@Override
 	public void requestSave() {
-		// TODO Auto-generated method stub
-		
+		workbench.saveModel();
 	}
 
 	@Override
 	public void requestSaveAs() {
-		// TODO Auto-generated method stub
+		setCursor(new Cursor(Cursor.WAIT_CURSOR));
+		workbench.saveModelAs();
+		setTabName(workbench.getCurrentModelName());
+		setToolTipText("Annotating " + workbench.getCurrentModelName());
+		setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		
+	}
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		refreshAnnotatableElements();
 	}
 }

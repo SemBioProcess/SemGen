@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Observer;
 import java.util.Set;
 
 import javax.swing.AbstractButton;
@@ -23,7 +24,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.jdom.JDOMException;
 import org.semanticweb.owlapi.apibinding.OWLManager;
@@ -36,14 +36,15 @@ import JSim.util.Xcept;
 import semgen.GlobalActions;
 import semgen.SemGenGUI;
 import semgen.SemGenSettings;
+import semgen.encoding.Encoder;
 import semgen.resource.GenericThread;
 import semgen.resource.SemGenError;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
 import semgen.resource.SemGenTask;
 import semgen.resource.file.LoadSemSimModel;
-import semgen.resource.file.SemGenFileChooser;
 import semgen.resource.file.SemGenOpenFileChooser;
+import semgen.resource.file.SemGenSaveFileChooser;
 import semgen.resource.uicomponent.SemGenProgressBar;
 import semgen.resource.uicomponent.SemGenScrollPane;
 import semgen.resource.uicomponent.SemGenTab;
@@ -197,9 +198,7 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 		if (o == mergebutton) {
 			File file = null;
 			if (filelistpanel.getComponents().length == 2) {
-				file = SemGenGUI.SaveAsAction(this, null, 
-						new FileNameExtensionFilter[]{SemGenFileChooser.cellmlfilter, SemGenFileChooser.owlfilter});
-				
+				file = saveMerge();
 				if (file!=null) {
 					mergedfile = file;
 					addmanualmappingbutton.setEnabled(false);
@@ -671,7 +670,7 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 				+ "\nGenerate simulation code from merged model?", "",
 				JOptionPane.YES_NO_OPTION);
 		if (x == JOptionPane.YES_OPTION) {
-			SemGenGUI.startEncoding(model, mergedfile.getName().substring(0, mergedfile.getName().lastIndexOf(".")));
+			new Encoder(model, mergedfile.getName().substring(0, mergedfile.getName().lastIndexOf(".")));
 		}
 	}
 	
@@ -743,7 +742,7 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 	@Override
 	public boolean isSaved() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
@@ -754,6 +753,21 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 
 	@Override
 	public void requestSaveAs() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public File saveMerge() {
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("Choose location to save file", new String[]{"cellml","owl"});
+		if (filec.SaveAsAction()!=null) {
+			mergedfile = filec.getSelectedFile();
+			return mergedfile;
+		}
+		return null;
+	}
+
+	@Override
+	public void addObservertoWorkbench(Observer obs) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -10,6 +10,7 @@ import javax.swing.event.MenuListener;
 
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
+import semgen.encoding.Encoder;
 import semgen.resource.uicomponent.SemGenMenu;
 
 public class ToolsMenu extends SemGenMenu implements ActionListener, MenuListener{
@@ -17,7 +18,7 @@ public class ToolsMenu extends SemGenMenu implements ActionListener, MenuListene
 
 	public JMenuItem toolsitemannotate;
 	public JMenuItem toolsitemmerge;
-	public JMenuItem toolsitemcode;
+	private JMenuItem toolsitemcode;
 	public JMenuItem toolsitemextract;
 	public JMenuItem toolsitemdefaults;
 	
@@ -54,9 +55,9 @@ public class ToolsMenu extends SemGenMenu implements ActionListener, MenuListene
 //			globalactions.NewMergerTab();
 //		}
 //		
-//		if (o == toolsitemcode) {
-//			new Encoder();
-//		}
+		if (o == toolsitemcode) {
+			new Encoder();
+		}
 //		
 //		if (o == toolsitemannotate) {
 //			uacts.NewAnnotatorTab();
@@ -64,10 +65,7 @@ public class ToolsMenu extends SemGenMenu implements ActionListener, MenuListene
 //		if (o == toolsitemextract) {
 //			uacts.NewExtractorTab();
 //		}
-//		
-//		if (o == toolsitemdefaults) {
-//			
-//		}
+		
 	}
 
 	@Override
