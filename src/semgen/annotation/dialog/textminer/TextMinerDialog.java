@@ -1,7 +1,6 @@
 package semgen.annotation.dialog.textminer;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -34,10 +33,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.text.DefaultHighlighter;
-import javax.swing.text.Highlighter;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -46,8 +42,6 @@ import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
 
 import semsim.ResourcesManager;
-import semgen.annotation.AnnotatorTab;
-import semgen.annotation.componentdisplays.codewords.CodewordButton;
 import semgen.resource.GenericThread;
 import semgen.resource.SemGenError;
 import semgen.resource.SemGenFont;
@@ -55,13 +49,12 @@ import semgen.resource.SemGenIcon;
 import semgen.resource.uicomponent.SemGenScrollPane;
 import semgen.resource.uicomponent.SemGenTextArea;
 import semsim.SemSimConstants;
+import semsim.model.physical.ReferencePhysicalEntity;
+import semsim.model.physical.ReferencePhysicalProcess;
 import semsim.webservices.BioPortalAnnotatorClient;
 import semsim.webservices.BioPortalConstants;
 
 public class TextMinerDialog extends JDialog implements PropertyChangeListener, ActionListener{
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -4832887891785870465L;
 	public JButton parsebutton = new JButton("Parse");
 	public JTextField pmarea = new JTextField();
@@ -70,23 +63,15 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 	public SemGenTextArea inputtextarea = new SemGenTextArea();
 	public SemGenScrollPane spresults;
 	public JOptionPane optionPane;
-	public JPanel sppanel = new JPanel();
-	public JPanel resultspanel;
-	public JSplitPane splitpane;
-	public HashMap<String, String> ontidsandns = new HashMap<String,String>();
+	private JPanel sppanel = new JPanel();
+	public JPanel resultspanel = new JPanel();
 	public Namespace zns = Namespace.getNamespace("z", "http://www.ebi.ac.uk/z");
-	public Set<String> ontologyids = new HashSet<String>();
-	public AnnotatorTab annotator;
-	public JButton loadingbutton = new JButton(SemGenIcon.blankloadingicon);
 
-	public TextMinerDialog(AnnotatorTab ann) throws FileNotFoundException{
-		annotator = ann;
-		
-		ontidsandns.put("chebi","http://purl.obolibrary.org/obo/");
-		ontidsandns.put("go","http://purl.org/obo/owl/GO#");
-		ontidsandns.put("fma","http://sig.uw.edu/fma#");
-		ontidsandns.put("opb", "http://bhi.washington.edu/OPB#");
-		
+	public JButton loadingbutton = new JButton(SemGenIcon.blankloadingicon);
+	protected Set<ReferencePhysicalEntity> collectedents = new HashSet<ReferencePhysicalEntity>();
+	protected Set<ReferencePhysicalProcess> collectedproc = new HashSet<ReferencePhysicalProcess>();
+
+	public TextMinerDialog() throws FileNotFoundException{		
 		this.setTitle("Parse text for ontology terms");
 		JLabel toplabel = new JLabel("Enter text to parse, or find a PubMed abstract by its ID, then hit \"Parse\" to identify ontology terms");
 		parsebutton.setMaximumSize(new Dimension(100,999999));
@@ -115,8 +100,7 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 
 		SemGenScrollPane sptext = new SemGenScrollPane(inputtextarea);
 		sptext.setPreferredSize(new Dimension(350,230));
-		JPanel toppanel = new JPanel();
-		toppanel.setLayout(new BorderLayout());
+		JPanel toppanel = new JPanel(new BorderLayout());
 		toppanel.add(parsepanel, BorderLayout.WEST);
 		toppanel.add(pmpanel, BorderLayout.EAST);
 		
@@ -138,12 +122,11 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 		SemGenScrollPane spboxes = new SemGenScrollPane(sppanel);
 		spboxes.setPreferredSize(new Dimension(350,230));
 		
-		resultspanel = new JPanel();
 		resultspanel.setLayout(new BoxLayout(resultspanel,BoxLayout.Y_AXIS));
 		spresults = new SemGenScrollPane(resultspanel);
 		spresults.setPreferredSize(new Dimension(400, 230));
 		
-		splitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,sptext,spboxes),spresults);
+		JSplitPane splitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,sptext,spboxes),spresults);
 		splitpane.setMinimumSize(new Dimension(500,400));
 		
 		Object[] array = { toplabel, toppanel, splitpane, new JLabel()};
@@ -169,6 +152,7 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 		inputtextarea.removeAllHighlights();
 		resultspanel.removeAll();
 		
+		Set<String> ontologyids = new HashSet<String>();
 		// Limit the annotation to just the selected ontologies 
 		ontologyids.clear();
 		for(int y=0; y<sppanel.getComponentCount(); y++){
@@ -229,7 +213,7 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 						
 						System.out.println("Local ont ID: " + concept.getChildText("localOntologyId"));
 						TextMinerPanel newpanel = new TextMinerPanel(box, 
-								"http://rest.bioontology.org/bioportal/ontologies/download/" + concept.getChildText("localOntologyId") + "?apikey=" + SemSimConstants.BIOPORTAL_API_KEY, bioportalID, uri, shortid, this);
+								"http://rest.bioontology.org/bioportal/ontologies/download/" + concept.getChildText("localOntologyId") + "?apikey=" + SemSimConstants.BIOPORTAL_API_KEY, bioportalID, uri, shortid);
 						resultspanel.add(newpanel);
 					}
 				}
@@ -299,19 +283,15 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 								new Object[]{"Entity","Process","Cancel"},
 								"Entity");
 						if(choice == JOptionPane.YES_OPTION){
-							annotator.semsimmodel.addReferencePhysicalEntity(URI.create(panel.box.uri), termname);
-						}
+							collectedents.add(new ReferencePhysicalEntity(URI.create(panel.box.uri), termname));						}
 						else if(choice == JOptionPane.NO_OPTION){
-							annotator.semsimmodel.addReferencePhysicalProcess(URI.create(panel.box.uri), termname);
-						}
+							collectedproc.add(new ReferencePhysicalProcess(URI.create(panel.box.uri), termname));						}
 						else if(choice == JOptionPane.CANCEL_OPTION){
 							return false;
 						}
 					}
 					else{
-						annotator.semsimmodel.addReferencePhysicalEntity(URI.create(panel.box.uri), termname);
-					}
-					annotator.setModelSaved(false);
+						collectedents.add(new ReferencePhysicalEntity(URI.create(panel.box.uri), termname));					}
 				}
 			}
 		}
@@ -373,17 +353,18 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 
 	public void propertyChange(PropertyChangeEvent arg0) {
 		String value = optionPane.getValue().toString();
-		optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 		if (value == "Collect"){
-			if(annotator.focusbutton instanceof CodewordButton) annotator.anndialog.compositepanel.refreshUI();
+			collect(); 
 		}
 		if (value == "Close"){
-			this.setVisible(false);
+			dispose();
 		}
-		if (value == "Collect & Close"){
-			setVisible(!collect());
-			if(annotator.focusbutton instanceof CodewordButton) annotator.anndialog.compositepanel.refreshUI();
+		if (value == "Collect & Close"){			
+			if(collect()){
+				dispose();
+			}
 		}
+		optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
@@ -402,4 +383,12 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 			pubmedthread.start();
 		}
 	}
+	
+	public Set<ReferencePhysicalEntity> getCollectedEntities() {
+		return collectedents;
+	}
+	public Set<ReferencePhysicalProcess> getCollectedProcesses() {
+		return collectedproc;
+	}
+
 }  

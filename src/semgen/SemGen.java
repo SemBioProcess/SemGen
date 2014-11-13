@@ -26,6 +26,7 @@ import semgen.SemGenGUI;
 import semgen.menu.SemGenMenuBar;
 import semgen.resource.SemGenFont;
 import semgen.resource.file.SemGenOpenFileChooser;
+import semgen.resource.uicomponent.SemGenProgressBar;
 import semsim.SemSimLibrary;
 
 public class SemGen extends JFrame implements Observer{
@@ -101,6 +102,7 @@ public class SemGen extends JFrame implements Observer{
 		setSize(settings.getAppSize());
 		setLocation(settings.getAppXPos(), settings.getAppYPos());
 		gacts.addObserver(this);
+		SemGenProgressBar.setLocation(this);
 		SemGenMenuBar menubar = new SemGenMenuBar(settings, gacts);
 		contentpane = new SemGenGUI(settings, menubar, gacts);
 		setContentPane(contentpane);

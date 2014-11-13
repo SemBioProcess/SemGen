@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+
 import javax.swing.*;
 
 import java.awt.event.*;
@@ -121,14 +122,19 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 
 	public Clusterer cd;
 	public PrintWriter clusterwriter;
-
+	public ExtractorToolbar toolbar;
+	
 	public ExtractorTab(File srcfile, SemSimModel ssmodel, SemGenSettings sets, GlobalActions gacts) throws OWLException {
 		super(srcfile.getName(), SemGenIcon.extractoricon, "Extracting from " + srcfile.getName(), sets, gacts);
 		settings = sets;
-		this.setLayout(new BorderLayout());
 		this.semsimmodel = ssmodel;
-		this.sourcefile = srcfile;
-
+		sourcefile = srcfile;
+		loadTab();
+	}
+	
+	@Override
+	protected void loadTab() {
+		this.setLayout(new BorderLayout());
 		vizsourcebutton.setFont(SemGenFont.defaultPlain());
 		vizsourcebutton.addActionListener(this);
 
@@ -163,10 +169,30 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		AlphabetizeCheckBoxes(entitiespanel);
 		AlphabetizeCheckBoxes(submodelspanel);
 		AlphabetizeCheckBoxes(codewordspanel);
+		
+		toolbar = new ExtractorToolbar(settings) {
+			private static final long serialVersionUID = 1L;
 
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Object o = arg0.getSource();
+				if (o == toolbar.extractoritembatchcluster) {
+						try {
+							batchCluster();
+						} catch (IOException e1) {e1.printStackTrace();}
+				}
+
+				if (o == toolbar.extractoritemopenann) {
+						try {
+							globalactions.NewAnnotatorTab(sourcefile);
+						} catch (Exception e1) {e1.printStackTrace();} 
+					}	
+			}
+		};
+		
 		JPanel leftpanel = new JPanel();
-		leftpanel.add(new ExtractorToolbar(settings, this));
 		leftpanel.setLayout(new BoxLayout(leftpanel, BoxLayout.Y_AXIS));
+		leftpanel.add(toolbar);
 		leftpanel.add(processespanel.titlepanel);
 		leftpanel.add(processespanel.scroller);
 		leftpanel.add(entitiespanel.titlepanel);
@@ -186,6 +212,10 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		add(centersplitpane, BorderLayout.CENTER);
 		setVisible(true);
 		visualizeAllDataStructures(false);
+	}
+	
+	public File getSourceFile() {
+		return sourcefile;
 	}
 	
 	// List physical processes
@@ -975,4 +1005,6 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		// TODO Auto-generated method stub
 		
 	}
+
+
 }

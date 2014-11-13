@@ -9,14 +9,13 @@ import org.jdom.JDOMException;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.GlobalActions;
-import semgen.SemGenGUI;
-import semgen.annotation.AnnotatorTab;
+import semgen.annotation.workbench.AnnotatorWorkbench;
 import semsim.reading.ModelClassifier;
 
 public class BatchSBML {
 	GlobalActions globalactions;
 	
-	public BatchSBML(GlobalActions gactions) throws IOException, OWLException, JDOMException{
+	public BatchSBML(GlobalActions gactions, boolean autoannotate) throws IOException, OWLException, JDOMException{
 		globalactions = gactions;
 		File outputdir = new File("/Users/max_neal/Documents/workspace/PhysiomeKBgenerator/semsim_models/");
 		File[] outputfilesarray = outputdir.listFiles();
@@ -34,9 +33,9 @@ public class BatchSBML {
 				if(!outputfiles.contains(outfile.getName())){
 					if(ModelClassifier.classify(sbmlfiles[x]) == ModelClassifier.SBML_MODEL){
 						System.out.println("Processing " + sbmlfiles[x].getName());
-						AnnotatorTab ann = SemGenGUI.startNewAnnotatorTask(sbmlfiles[x]);
-						ann.fileURI = outfile.toURI();
-						globalactions.requestSave();
+						AnnotatorWorkbench annotator = new AnnotatorWorkbench();
+						annotator.initialize(sbmlfiles[x], autoannotate);
+						annotator.saveModelAs();
 					}
 					else{
 						System.out.println(sbmlfiles[x] + " is not valid SBML");

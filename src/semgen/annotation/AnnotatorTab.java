@@ -59,7 +59,6 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	private static final long serialVersionUID = -5360722647774877228L;
 	public OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	public File sourcefile; //File originally loaded at start of Annotation session (could be in SBML, MML, CellML or SemSim format)
-	public URI fileURI;
 	
 	private JSplitPane splitpane;
 	private JSplitPane eastsplitpane;
@@ -81,7 +80,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	public AnnotatorTabCodePanel codearea = new AnnotatorTabCodePanel();
 	public JButton addsubmodelbutton = new JButton(SemGenIcon.plusicon);
 	public JButton removesubmodelbutton = new JButton(SemGenIcon.minusicon);
-	AnnotatorToolBar toolbar;
+	private AnnotatorToolBar toolbar;
 	
 	public int numcomponents;
 	public static int initwidth;
@@ -95,13 +94,43 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	public AnnotatorTab(File srcfile, SemGenSettings sets, GlobalActions gacts) {
 		super(srcfile.getName(), SemGenIcon.annotatoricon, "Annotating " + srcfile.getName(), sets, gacts);
 		sourcefile = srcfile;
-		
-		workbench = new AnnotatorWorkbench(sourcefile, settings.doAutoAnnotate());		
+	}
+	
+	public AnnotatorTab(SemGenSettings sets, GlobalActions gacts) {
+		super(sets, gacts);
+	}
+	
+	public boolean initialize() {
+		workbench = new AnnotatorWorkbench();	
+		if (!workbench.initialize(settings.doAutoAnnotate())) {
+			return false;
+		}	
+		sourcefile = workbench.getFile();
 		semsimmodel = workbench.getSemSimModel();
-		toolbar = new AnnotatorToolBar(this, workbench, settings );
+		String name = workbench.getCurrentModelName();
 		workbench.addObservertoModelAnnotator(this);
+		createTabTitleLabel(name,SemGenIcon.annotatoricon, "Annotating " + name);
 		
-		fileURI = srcfile.toURI();
+		loadTab();	
+		NewAnnotatorAction();
+		return true;
+	}
+	
+	public boolean initialize(File file) {
+		workbench = new AnnotatorWorkbench();		
+		if (!workbench.initialize(sourcefile, settings.doAutoAnnotate())) {
+			return false;
+		}	
+		semsimmodel = workbench.getSemSimModel();
+		workbench.addObservertoModelAnnotator(this);
+		loadTab();	
+		NewAnnotatorAction();
+		return true;
+	}
+	
+	protected void loadTab() {
+		toolbar = new AnnotatorToolBar(this, workbench, settings );
+		
 		initwidth = settings.getAppWidth();
 		initheight = settings.getAppHeight();
 		setOpaque(false);
@@ -137,7 +166,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, westsplitpane, eastsplitpane);
 		splitpane.setOneTouchExpandable(true);
 	}
-
+	
 	public void addObservertoWorkbench(Observer obs) {
 		workbench.addObserver(obs);
 	}
@@ -232,7 +261,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		focusbutton = aob;
 
 		dialogscrollpane.getViewport().removeAll();
-		anndialog = new AnnotationPanel(this, settings, aob);
+		anndialog = new AnnotationPanel(this, settings, aob, globalactions);
 		dialogscrollpane.getViewport().add(anndialog);
 		
 		// Highlight occurrences of codeword in legacy code
@@ -645,7 +674,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	}
 	
 	public boolean checkFile(URI uri) {
-		return (uri.toString().equals(fileURI.toString()));
+		return (uri.toString().equals(sourcefile.toURI().toString()));
 	}
 
 	public boolean closeTab() {

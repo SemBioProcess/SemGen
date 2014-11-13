@@ -1,7 +1,6 @@
 package semgen.annotation.annotatorpane;
 
-import semgen.SemGenGUI;
-import semgen.SemGenGUI.NewAnnotatorTask;
+import semgen.GlobalActions;
 import semgen.SemGenSettings;
 import semgen.annotation.AnnotatorTab;
 import semgen.annotation.annotatorpane.composites.CompositeAnnotationPanel;
@@ -70,11 +69,13 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 	public Set<DataStructure> cdwdsfromcomps;
 	public String codeword;
 	protected SemGenSettings settings;
+	GlobalActions globalacts;
 	
 	public int indent = 15;
 
-	public AnnotationPanel(AnnotatorTab ann, SemGenSettings sets, AnnotationObjectButton aob) throws IOException{
+	public AnnotationPanel(AnnotatorTab ann, SemGenSettings sets, AnnotationObjectButton aob, GlobalActions gacts) throws IOException{
 		settings = sets;
+		globalacts = gacts;
 		annotator = ann;
 		thebutton = aob;
 		codeword = aob.getName();
@@ -513,8 +514,7 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 			File file = new File(annotator.sourcefile.getParent() + "/" + ((Submodel)smc).getHrefValue());
 
 			if(file.exists()){
-				NewAnnotatorTask task = new SemGenGUI.NewAnnotatorTask(false);
-				task.execute();
+				globalacts.NewAnnotatorTab(file);
 			}
 			else{JOptionPane.showMessageDialog(this, "Could not locate source file for this sub-model.", "ERROR", JOptionPane.ERROR_MESSAGE);}
 		}

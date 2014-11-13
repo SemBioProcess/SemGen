@@ -6,7 +6,8 @@ import java.util.Observable;
 import semgen.resource.uicomponent.SemGenTab;
 
 public class GlobalActions extends Observable {
-	public static enum appactions { QUIT, TABCHANGED, TABCLOSED, SAVED, ANNOTATE, EXTRACT, MERGE }
+	public static enum appactions { QUIT, TABCHANGED, TABCLOSED, SAVED, 
+		ANNOTATE, ANNOTATEEXISTING, EXTRACT, MERGE }
 	private SemGenTab currentTab;
 	private File seed;
 	
@@ -44,7 +45,7 @@ public class GlobalActions extends Observable {
 	public void NewAnnotatorTab(File obj) {
 		seed = obj;
 		setChanged();
-		notifyObservers(appactions.ANNOTATE);
+		notifyObservers(appactions.ANNOTATEEXISTING);
 	}
 	
 	public void NewExtractorTab(File obj) {
@@ -60,7 +61,9 @@ public class GlobalActions extends Observable {
 	}
 
 	public File getSeed() {
-		return seed;
+		File file = seed;
+		seed = null;
+		return file;
 	}
 	public void requestSave() {
 		getCurrentTab().requestSave();

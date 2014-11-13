@@ -15,15 +15,13 @@ import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
 
 import semgen.GlobalActions;
-import semgen.SemGenGUI;
-import semgen.annotation.AnnotatorTab;
 import semgen.annotation.dialog.textminer.TextMinerDialog;
+import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.resource.file.SemGenOpenFileChooser;
 import semsim.SemSimConstants;
-import semsim.model.annotation.Annotation;
 
 public class BatchCellML{
-	public AnnotatorTab ann;
+	public AnnotatorWorkbench ann;
 	
 	public Namespace docns = Namespace.getNamespace("http://cellml.org/tmp-documentation");
 	public Namespace cellmlns = Namespace.getNamespace("http://www.cellml.org/cellml/1.0#");
@@ -33,7 +31,7 @@ public class BatchCellML{
 	public int numidsfromrdf = 0;
 	GlobalActions globalactions;
 	
-	public BatchCellML(GlobalActions gacts) throws Exception{
+	public BatchCellML(GlobalActions gacts, boolean autoannotate) throws Exception{
 		globalactions = gacts;
 		SemGenOpenFileChooser fc = new SemGenOpenFileChooser("Select directory containing cellml models");
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -43,14 +41,14 @@ public class BatchCellML{
 			File file = new File(fc.getSelectedFile().getAbsolutePath());
 			SemGenOpenFileChooser.currentdirectory = fc.getCurrentDirectory();
 			if (file != null) {
-				processmodels(file);
+				processmodels(file, autoannotate);
 				JOptionPane.showMessageDialog(null, "Finished processing CellML models");
 			}
 		}
 	}
 	
 	
-	public void processmodels(File file) throws Exception{
+	public void processmodels(File file, boolean autoannotate) throws Exception{
 		File[] cellmlfiles = file.listFiles();
 		String lastpubmedid = "";
 		String lastabstract = "";
@@ -63,8 +61,9 @@ public class BatchCellML{
 				
 				try {
 					// Make this into a task
-					ann = SemGenGUI.startNewAnnotatorTask(cellmlfile);
-					TextMinerDialog tmd = new TextMinerDialog(ann);
+					ann = new AnnotatorWorkbench();
+					ann.initialize(cellmlfile, autoannotate);
+					TextMinerDialog tmd = new TextMinerDialog();
 					
 					tmd.pubmedid = getModelIDAndPubMedIdFromCellMLModel(cellmlfile);
 					// If we don't have a proper pubmed ID
@@ -81,8 +80,7 @@ public class BatchCellML{
 					}
 					// If we DO have a proper pubmed ID
 					else{
-						Annotation dpa = new Annotation(SemSimConstants.REFERENCE_PUBLICATION_PUBMED_ID_RELATION, tmd.pubmedid);
-						ann.semsimmodel.addAnnotation(dpa);
+						ann.addModelAnnotation(SemSimConstants.REFERENCE_PUBLICATION_PUBMED_ID_RELATION, tmd.pubmedid);
 						// If ID is same as last model, use it
 						if(tmd.pubmedid.equals(lastpubmedid)){
 							tmd.inputtextarea.setText(lastabstract);
@@ -93,7 +91,7 @@ public class BatchCellML{
 						
 						// If there's a pubmed id AND abstract text
 						if(!tmd.inputtextarea.getText().equals("")){
-							ann.semsimmodel.addAnnotation(new Annotation(SemSimConstants.REFERENCE_PUBLICATION_ABSTRACT_TEXT_RELATION, tmd.inputtextarea.getText()));
+							ann.addModelAnnotation(SemSimConstants.REFERENCE_PUBLICATION_ABSTRACT_TEXT_RELATION, tmd.inputtextarea.getText());
 						}
 						// If there's a pubmed id but no abstract, do a scrape of the <para> tags in the cellml file
 						else{
@@ -130,9 +128,9 @@ public class BatchCellML{
 				String name = doc.getRootElement().getAttributeValue("name");
 				String id = doc.getRootElement().getAttribute("id",cmetans).getValue();
 				System.out.println("ID: " + id);
-				System.out.println(ann.manager.toString());
-				ann.semsimmodel.addAnnotation(new Annotation(SemSimConstants.MODEL_ID_RELATION, id));
-				ann.semsimmodel.addAnnotation(new Annotation(SemSimConstants.MODEL_NAME_RELATION, name));
+				//System.out.println(ann.manager.toString());
+				ann.addModelAnnotation(SemSimConstants.MODEL_ID_RELATION, id);
+				ann.addModelAnnotation(SemSimConstants.MODEL_NAME_RELATION, name);
 				
 				// Try to get pubmed ID from RDF tags
 				if(doc.getRootElement().getChild("RDF",rdfns).getChildren("Description", rdfns)!=null){

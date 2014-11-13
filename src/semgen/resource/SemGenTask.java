@@ -21,6 +21,10 @@ public abstract class SemGenTask extends SwingWorker<Void, Void> implements Obse
 
     public void endTask() {}
 
+    public void showProgressBar() {
+    	progframe.setVisible(true);
+    	progframe.requestFocusInWindow();
+    }
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		cancel(true);

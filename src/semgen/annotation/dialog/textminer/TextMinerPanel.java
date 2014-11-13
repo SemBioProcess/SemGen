@@ -16,11 +16,9 @@ public class TextMinerPanel extends JPanel{
 	 */
 	private static final long serialVersionUID = -2531564431818333169L;
 	public TextMinerCheckBox box;
-	public TextMinerDialog dialog;
 	public String bioportalID;
 	
-	public TextMinerPanel(TextMinerCheckBox box, String onturi, String bioportalID, String termuri, String shortid, TextMinerDialog dialog){
-		this.dialog = dialog;
+	public TextMinerPanel(TextMinerCheckBox box, String onturi, String bioportalID, String termuri, String shortid){
 		this.box = box;
 		this.bioportalID = bioportalID;
 		Dimension dim = new Dimension(700,35);

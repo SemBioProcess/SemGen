@@ -94,74 +94,78 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 
 	public MergerTab(SemGenSettings sets, GlobalActions globalacts) {
 		super("Merger", SemGenIcon.mergeicon, "Tab for Merging SemSim Models", sets, globalacts);
-		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-		JLabel filelisttitle = new JLabel("Models to merge");
-		filelisttitle.setBorder(BorderFactory.createEmptyBorder(0,0,0,10));
-
-		plusbutton.addActionListener(this);
-		minusbutton.addActionListener(this);
-
-		loadingbutton.setBorderPainted(false);
-		loadingbutton.setContentAreaFilled(false);
-		
-		JPanel plusminuspanel = new JPanel();
-		plusminuspanel.setLayout(new BoxLayout(plusminuspanel, BoxLayout.X_AXIS));
-		plusminuspanel.add(filelisttitle);
-		plusminuspanel.add(plusbutton);
-		plusminuspanel.add(minusbutton);
-		
-		JPanel filelistheader = new JPanel();
-		filelistheader.add(plusminuspanel);
-
-		filelistpanel.setBackground(Color.white);
-		filelistpanel.setLayout(new BoxLayout(filelistpanel, BoxLayout.Y_AXIS));
-
-		JScrollPane filelistscroller = new JScrollPane(filelistpanel);
-
-		mergebutton.setFont(SemGenFont.defaultBold());
-		mergebutton.setForeground(Color.blue);
-		mergebutton.addActionListener(this);
-		
-		JPanel mergebuttonpanel = new JPanel();
-		mergebuttonpanel.add(mergebutton);
-		
-		JPanel filelistpanel = new JPanel(new BorderLayout());
-		filelistpanel.add(filelistheader, BorderLayout.WEST);
-		filelistpanel.add(filelistscroller, BorderLayout.CENTER);
-		filelistpanel.add(mergebuttonpanel, BorderLayout.EAST);
-		filelistpanel.setAlignmentX(LEFT_ALIGNMENT);
-		filelistpanel.setPreferredSize(new Dimension(SemGenGUI.desktop.getWidth() - 200, 60));
-		filelistpanel.setMaximumSize(new Dimension(99999, 175));
-		
-		resolvepanel.setLayout(new BoxLayout(resolvepanel, BoxLayout.Y_AXIS));
-		resolvepanel.setBackground(Color.white);
-		resolvescroller = new SemGenScrollPane(resolvepanel);
-		resolvescroller.setBorder(BorderFactory.createTitledBorder("Resolution points between models"));
-		resolvescroller.setAlignmentX(LEFT_ALIGNMENT);
-
-		JSplitPane mappingsplitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mappingpanelleft, mappingpanelright);
-		mappingsplitpane.setOneTouchExpandable(true);
-		mappingsplitpane.setAlignmentX(LEFT_ALIGNMENT);
-		mappingsplitpane.setDividerLocation((SemGenGUI.desktop.getWidth() - 20) / 2);
-
-		resmapsplitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, resolvescroller, mappingsplitpane);
-		resmapsplitpane.setOneTouchExpandable(true);
-		resmapsplitpane.setDividerLocation(dividerlocation);
-
-		addmanualmappingbutton.addActionListener(this);
-		
-		JPanel mappingbuttonpanel = new JPanel();
-		mappingbuttonpanel.setAlignmentX(LEFT_ALIGNMENT);
-		mappingbuttonpanel.add(addmanualmappingbutton);
-
-		this.add(filelistpanel);
-		this.add(resmapsplitpane);
-		this.add(mappingbuttonpanel);
-		this.add(Box.createGlue());
-		this.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
+		loadTab();
 	}
+	
+	@Override
+	public void loadTab() {
+	this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
+	JLabel filelisttitle = new JLabel("Models to merge");
+	filelisttitle.setBorder(BorderFactory.createEmptyBorder(0,0,0,10));
+
+	plusbutton.addActionListener(this);
+	minusbutton.addActionListener(this);
+
+	loadingbutton.setBorderPainted(false);
+	loadingbutton.setContentAreaFilled(false);
+	
+	JPanel plusminuspanel = new JPanel();
+	plusminuspanel.setLayout(new BoxLayout(plusminuspanel, BoxLayout.X_AXIS));
+	plusminuspanel.add(filelisttitle);
+	plusminuspanel.add(plusbutton);
+	plusminuspanel.add(minusbutton);
+	
+	JPanel filelistheader = new JPanel();
+	filelistheader.add(plusminuspanel);
+
+	filelistpanel.setBackground(Color.white);
+	filelistpanel.setLayout(new BoxLayout(filelistpanel, BoxLayout.Y_AXIS));
+
+	JScrollPane filelistscroller = new JScrollPane(filelistpanel);
+
+	mergebutton.setFont(SemGenFont.defaultBold());
+	mergebutton.setForeground(Color.blue);
+	mergebutton.addActionListener(this);
+	
+	JPanel mergebuttonpanel = new JPanel();
+	mergebuttonpanel.add(mergebutton);
+	
+	JPanel filelistpanel = new JPanel(new BorderLayout());
+	filelistpanel.add(filelistheader, BorderLayout.WEST);
+	filelistpanel.add(filelistscroller, BorderLayout.CENTER);
+	filelistpanel.add(mergebuttonpanel, BorderLayout.EAST);
+	filelistpanel.setAlignmentX(LEFT_ALIGNMENT);
+	filelistpanel.setPreferredSize(new Dimension(SemGenGUI.desktop.getWidth() - 200, 60));
+	filelistpanel.setMaximumSize(new Dimension(99999, 175));
+	
+	resolvepanel.setLayout(new BoxLayout(resolvepanel, BoxLayout.Y_AXIS));
+	resolvepanel.setBackground(Color.white);
+	resolvescroller = new SemGenScrollPane(resolvepanel);
+	resolvescroller.setBorder(BorderFactory.createTitledBorder("Resolution points between models"));
+	resolvescroller.setAlignmentX(LEFT_ALIGNMENT);
+
+	JSplitPane mappingsplitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mappingpanelleft, mappingpanelright);
+	mappingsplitpane.setOneTouchExpandable(true);
+	mappingsplitpane.setAlignmentX(LEFT_ALIGNMENT);
+	mappingsplitpane.setDividerLocation((SemGenGUI.desktop.getWidth() - 20) / 2);
+
+	resmapsplitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, resolvescroller, mappingsplitpane);
+	resmapsplitpane.setOneTouchExpandable(true);
+	resmapsplitpane.setDividerLocation(dividerlocation);
+
+	addmanualmappingbutton.addActionListener(this);
+	
+	JPanel mappingbuttonpanel = new JPanel();
+	mappingbuttonpanel.setAlignmentX(LEFT_ALIGNMENT);
+	mappingbuttonpanel.add(addmanualmappingbutton);
+
+	this.add(filelistpanel);
+	this.add(resmapsplitpane);
+	this.add(mappingbuttonpanel);
+	this.add(Box.createGlue());
+	this.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));}
+	
 	public void actionPerformed(ActionEvent arg0) {
 		Object o = arg0.getSource();
 		
@@ -771,4 +775,6 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 		// TODO Auto-generated method stub
 		
 	}
+
+
 }

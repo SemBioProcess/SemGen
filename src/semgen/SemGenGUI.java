@@ -67,7 +67,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, Observer {
 		// File menu items
 		menu.filemenu.fileitemnew.addActionListener(this);
 		
-		menu.toolsmenu.toolsitemannotate.addActionListener(this);
 		menu.toolsmenu.toolsitemextract.addActionListener(this);
 		menu.toolsmenu.toolsitemmerge.addActionListener(this);
 	}
@@ -76,7 +75,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, Observer {
 		NewTaskDialog ntd = new NewTaskDialog();
 		switch (ntd.getChoice()) {
 		case Annotate:
-			startNewAnnotatorTask();
+			globalactions.NewAnnotatorTab();
 			break;
 		case Encode:
 			new Encoder();
@@ -99,11 +98,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, Observer {
 		if (o == menu.filemenu.fileitemnew) {
 			startNewTaskDialog();
 		}
-
-		if (o == menu.toolsmenu.toolsitemannotate) {
-			startNewAnnotatorTask();
-		}
-
+		
 		if (o == menu.toolsmenu.toolsitemextract) {
 			startNewExtractorTask();
 		}
@@ -111,19 +106,16 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, Observer {
 		if (o == menu.toolsmenu.toolsitemmerge){
 			NewMergerAction();
 		}
-		
 	}
 	
-	public static void startNewAnnotatorTask(){
-		NewAnnotatorTask task = new NewAnnotatorTask(true);
-		task.execute();
+	public void startNewAnnotatorTask(){
+		AnnotatorTab anntab = new AnnotatorTab(settings, globalactions);
+		if (anntab.initialize()) addTab(anntab);
 	}
 	
-	public static AnnotatorTab startNewAnnotatorTask(File existingfile){
-		NewAnnotatorTask task = new NewAnnotatorTask(existingfile, true);
-		task.execute();
-		
-		return task.annotator;
+	public void startNewAnnotatorTask(File existingfile){
+		AnnotatorTab anntab = new AnnotatorTab(existingfile, settings, globalactions);
+		if (anntab.initialize(existingfile)) addTab(anntab);
 	}
 	
 	public static void startNewExtractorTask(){
@@ -158,52 +150,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, Observer {
 			e1.printStackTrace();
 		}
 	}
-	
-	public static class NewAnnotatorTask extends SemGenTask {
-		public File file;
-		public boolean autosave;
-		
-		AnnotatorTab annotator = null;
-        public NewAnnotatorTask(boolean autosave){
-        	SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select legacy code or SemSim model to annotate");
-        	file = sgc.getSelectedFile();
-        	this.autosave = autosave;
-        }
-        
-        public NewAnnotatorTask(File existingfile, boolean autosave){
-        	file = existingfile;
-        	this.autosave = autosave;
-        }
-        
-        @Override
-        public Void doInBackground(){
-        	if (file==null) endTask(); //If no file was selected, abort
-        	progframe = new SemGenProgressBar("Loading " + file.getName() + "...", true);
-    			System.out.println("Loading " + file.getName());
-    			progframe.updateMessage("Loading " + file.getName() + "...");
-    			try{
-    				AnnotateAction(autosave);
-    			}
-    			catch(Exception e){e.printStackTrace();}
-            return null;
-        }
-        
-        public void AnnotateAction(Boolean autosave) {	
-		// Create a new tempfile using the date
-
-			// Check to make sure SemSim model isn't already being annotated before proceeding
-			if (!desktop.isOntologyOpenForEditing(file.toURI())) {
-	
-				// Create new Annotater object in SemGen desktop
-				annotator = new AnnotatorTab(file,settingshandle, desktop.globalactions);
-				
-				desktop.addTab(annotator);
-				desktop.anntabs.add(annotator);
-						
-				annotator.NewAnnotatorAction();
-			}
-        }
-    }
 	
 	public static class NewExtractorTask extends SemGenTask {
 		public File file;
@@ -341,6 +287,11 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, Observer {
 		if (arg==GlobalActions.appactions.TABCLOSED) {
 			closeTabAction(globalactions.getCurrentTab());
 		}
-		
+		if (arg==GlobalActions.appactions.ANNOTATE) {
+			this.startNewAnnotatorTask();
+		}
+		if (arg==GlobalActions.appactions.ANNOTATEEXISTING) {
+			this.startNewAnnotatorTask(globalactions.getSeed());
+		}
 	}
 }

@@ -1,10 +1,11 @@
 package semgen.resource.file;
 
 import java.io.File;
+
 import javax.swing.JOptionPane;
 
 import semgen.SemGen;
-import semgen.annotation.workbench.AutoAnnotate;
+import semgen.annotation.routines.AutoAnnotate;
 import semgen.resource.SemGenError;
 import semgen.resource.uicomponent.SemGenProgressBar;
 import semsim.model.SemSimModel;

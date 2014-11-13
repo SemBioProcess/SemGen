@@ -59,9 +59,10 @@ public class ToolsMenu extends SemGenMenu implements ActionListener, MenuListene
 			new Encoder();
 		}
 //		
-//		if (o == toolsitemannotate) {
-//			uacts.NewAnnotatorTab();
-//		}
+		if (o == toolsitemannotate) {
+			globalactions.NewAnnotatorTab();
+		}
+		
 //		if (o == toolsitemextract) {
 //			uacts.NewExtractorTab();
 //		}
