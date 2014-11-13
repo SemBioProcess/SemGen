@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="unitTests"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="thirdParty/arq-2.8.7.jar"/>
 	<classpathentry kind="lib" path="thirdParty/axis.jar"/>
@@ -33,5 +34,7 @@
 	<classpathentry kind="lib" path="thirdParty/stax-api-1.0.1.jar"/>
 	<classpathentry kind="lib" path="thirdParty/wstx-asl-3.2.9.jar"/>
 	<classpathentry kind="lib" path="thirdParty/xercesImpl-2.7.1.jar"/>
+	<classpathentry kind="lib" path="thirdParty/commons-lang3-3.3.2.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
