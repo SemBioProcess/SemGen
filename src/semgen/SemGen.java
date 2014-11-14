@@ -86,7 +86,7 @@ public class SemGen extends JFrame implements Observer{
 	}
 	
 	//Launch application
-	public SemGen() {
+	public SemGen() throws NoSuchMethodException, SecurityException {
 		super("OSXAdapter");
 		
 		OSValidation();
@@ -118,7 +118,7 @@ public class SemGen extends JFrame implements Observer{
 		contentpane.startNewTaskDialog();
 	}
 	//Check which OS SemGen is being run under
-	private void OSValidation() {
+	private void OSValidation() throws NoSuchMethodException, SecurityException {
 		int OS = 0;
 		if (OSValidator.isMac()) OS = MACOSX;
 		else if (OSValidator.isWindows()) OS = WINDOWS;
@@ -131,7 +131,7 @@ public class SemGen extends JFrame implements Observer{
 			break;
 		case MACOSX :
 		      libsbmlfile = new File("cfg/libsbmlj.jnilib");
-		      new OSXAdapter(this);
+		      OSXAdapter.setQuitHandler(this, getClass().getMethod("quit", (Class<?>[])null));
 		      break;
 		default : 
 			libsbmlfile = new File("cfg/libsbmlj.so");
