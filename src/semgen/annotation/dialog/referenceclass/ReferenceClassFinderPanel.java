@@ -238,6 +238,9 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		resultslistright.setEnabled(true);
 		resultslistright.removeAll();
 
+		if (ontologySelectionsAndBioPortalIDmap.get(ontologyselection)!=null)
+			bioportalID = ontologySelectionsAndBioPortalIDmap.get(ontologyselection);
+		
 		// If the user is searching BioPortal
 		if (bioportalID!=null) {
 			BioPortalSearcher bps = new BioPortalSearcher();
