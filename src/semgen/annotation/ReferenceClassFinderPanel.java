@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -37,7 +38,6 @@ import semgen.SemGenGUI;
 import semsim.Annotatable;
 import semsim.SemSimConstants;
 import semsim.model.physical.PhysicalProperty;
-import semsim.owl.SemSimOWLFactory;
 import semsim.webservices.BioPortalConstants;
 import semsim.webservices.BioPortalSearcher;
 import semsim.webservices.UniProtSearcher;
@@ -57,9 +57,9 @@ public class ReferenceClassFinderPanel extends JPanel implements
 	private JPanel selectKBsourcepanel;
 	private JLabel selectKBsource;
 
-	public JComboBox ontologychooser;
+	public JComboBox<?> ontologychooser;
 	public Map<String,String> ontologySelectionsAndBioPortalIDmap = new HashMap<String,String>();
-	private JComboBox findchooser;
+	private JComboBox<String> findchooser;
 
 
 	public String[] existingresultskeysetarray;
@@ -76,7 +76,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 	private JPanel resultspanelrightheader;
 	private JPanel resultspanelright;
 	private JLabel resultslabelright;
-	public JList resultslistright = new JList();
+	public JList<String> resultslistright = new JList<String>();
 	private JScrollPane resultsscrollerright;
 
 	public Hashtable<String,String> resultsanduris = new Hashtable<String,String>();
@@ -131,7 +131,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		selectKBsource = new JLabel("Select ontology: ");
 		selectKBsource.setFont(new Font("SansSerif", Font.PLAIN, SemGenGUI.defaultfontsize));
 
-		ontologychooser = new JComboBox(ontologyboxitems);
+		ontologychooser = new JComboBox<Object>(ontologyboxitems);
 		ontologychooser.setFont(new Font("SansSerif", Font.PLAIN, SemGenGUI.defaultfontsize));
 		
 		// Set ontology chooser to recently used ontology
@@ -155,7 +155,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		findtext = new JLabel("Term search:  ");
 		findtext.setFont(new Font("SansSerif", Font.PLAIN,SemGenGUI.defaultfontsize));
 
-		findchooser = new JComboBox();
+		findchooser = new JComboBox<String>();
 		findchooser.setFont(new Font("SansSerif", Font.ITALIC, SemGenGUI.defaultfontsize - 1));
 		findchooser.addItem("contains");
 		findchooser.addItem("exact match");
@@ -196,7 +196,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		resultslabelright.setFont(new Font("SansSerif", Font.PLAIN,SemGenGUI.defaultfontsize));
 		resultslabelright.setEnabled(true);
 
-		resultslistright = new JList();
+		resultslistright = new JList<String>();
 		resultslistright.addListSelectionListener(this);
 		resultslistright.setBackground(Color.white);
 		resultslistright.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -246,7 +246,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 			loadingbutton.setIcon(SemGenGUI.loadingicon);
 			findbox.setEnabled(false);
 			findbutton.setEnabled(false);
-			resultslistright.setListData(new Object[] {});
+			resultslistright.setListData(new String[] {});
 			externalURLbutton.setTermURI(null);
 			querythread = new GenericThread(this, "performSearch");
 			querythread.start();
@@ -269,8 +269,12 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		resultslistright.setEnabled(true);
 		resultslistright.removeAll();
 
+		if (ontologySelectionsAndBioPortalIDmap.get(ontologyselection)!=null)
+			bioportalID = ontologySelectionsAndBioPortalIDmap.get(ontologyselection);
+
+		
 		// If the user is searching BioPortal
-		if (bioportalID!=null && SemGenGUI.annotateitemusebioportal.isSelected()) {
+		if (bioportalID!=null) {
 			BioPortalSearcher bps = new BioPortalSearcher();
 			try {
 				bps.search(text, bioportalID, findchooser.getSelectedIndex());
@@ -334,12 +338,10 @@ public class ReferenceClassFinderPanel extends JPanel implements
 	public void valueChanged(ListSelectionEvent arg0) {
         boolean adjust = arg0.getValueIsAdjusting();
         if (!adjust) {
-          JList list = (JList) arg0.getSource();
+          JList<?> list = (JList<?>) arg0.getSource();
           if(list.getSelectedValue()!=null){
         	  String termuri = (String) resultsanduris.get(list.getSelectedValue());
-        	  externalURLbutton.setTermURI(URI.create(termuri)); 
-        	  Boolean uniprotterm = SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.get(
-    					SemSimOWLFactory.getNamespaceFromIRI(termuri))==SemSimConstants.UNIPROT_FULLNAME;
+        	  externalURLbutton.setTermURI(URI.create(termuri));
           }
         }
 	}
