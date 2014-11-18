@@ -16,14 +16,11 @@ import javax.swing.JTextField;
 public class ConversionFactorDialog extends JDialog implements
 		PropertyChangeListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -3182047942231432822L;
 	public JOptionPane optionPane;
 	public JTextField mantextfield = new JTextField();
 	public String cdwd2keep;
-	public JComboBox<String> box;
+	public JComboBox<String> box = new JComboBox<String>(new String[] { "*", "/" });;
 	public Boolean process = true;
 	public String cdwdAndConversionFactor;
 	public double conversionfactor;
@@ -45,7 +42,6 @@ public class ConversionFactorDialog extends JDialog implements
 		
 		JLabel label = new JLabel(cdwd2discard + " (" + cdwd2discardunits + ") = " + cdwd2keep + " (" + cdwd2keepunits + ") ");
 
-		box = new JComboBox<String>(new String[] { "*", "/" });
 		mantextfield.setPreferredSize(new Dimension(250, 30));
 		mantextfield.setForeground(Color.blue);
 		

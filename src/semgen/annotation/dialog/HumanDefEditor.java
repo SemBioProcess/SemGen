@@ -17,9 +17,6 @@ import semsim.model.SemSimComponent;
 
 public class HumanDefEditor extends JDialog implements PropertyChangeListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -4040704987589247388L;
 	private JOptionPane optionPane;
 	private JTextArea defarea = new JTextArea();

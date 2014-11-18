@@ -7,8 +7,8 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,6 +20,7 @@ import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.Icon;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -28,7 +29,6 @@ import javax.swing.JPanel;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.SemGen;
-import semgen.SemGenGUI;
 import semgen.SemGenSettings;
 import semgen.annotation.annotatorpane.AnnotationPanel;
 import semgen.annotation.dialog.CustomPhysicalComponentEditor;
@@ -53,18 +53,23 @@ import semsim.model.physical.PhysicalProperty;
 import semsim.model.physical.Submodel;
 import semsim.writing.CaseInsensitiveComparator;
 
-public class SemSimComponentAnnotationPanel extends JPanel implements MouseListener, ActionListener{
+public class SemSimComponentAnnotationPanel extends JPanel implements ActionListener{
 
 	private static final long serialVersionUID = -6606265105415658572L;
 	public Annotatable smc;
 	public AnnotationPanel anndialog;
 	public SemSimModel semsimmodel;
 	public JComboBox<String> combobox = new JComboBox<String>(new String[]{});
-	public JLabel searchlabel = new JLabel(SemGenIcon.searchicon);
-	public JLabel createlabel = new JLabel(SemGenIcon.createicon);
+	public ComponentPanelLabel searchlabel = 
+			new ComponentPanelLabel(SemGenIcon.searchicon,"Look up reference ontology term");
+	public ComponentPanelLabel createlabel = 
+			new ComponentPanelLabel(SemGenIcon.createicon,"Create new custom term");
+	public ComponentPanelLabel eraselabel = 
+			new ComponentPanelLabel(SemGenIcon.eraseicon, "Remove annotation component");
+	public ComponentPanelLabel modifylabel 
+	= new ComponentPanelLabel(SemGenIcon.modifyicon, "Edit custom term");
 	public ExternalURLButton urlbutton = new ExternalURLButton();
-	public JLabel eraselabel = new JLabel(SemGenIcon.eraseicon);
-	public JLabel modifylabel = new JLabel(SemGenIcon.modifyicon);
+
 	public Map<String,SemSimComponent> listdataandsmcmap = new HashMap<String, SemSimComponent>();
 	public Object selecteditem;
 	public Boolean editable;
@@ -82,31 +87,15 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 		combobox.setMaximumSize(new Dimension(350,30));
 		combobox.setEnabled(editable);
 		
+		searchlabel.setEnabled(editable);
+		createlabel.setEnabled(editable);
+		eraselabel.setEnabled(editable);
+		modifylabel.setEnabled(editable);
+		
 		refreshComboBoxItemsAndButtonVisibility();
 		
 		if(smc.hasRefersToAnnotation())
 			urlbutton.setTermURI(smc.getFirstRefersToReferenceOntologyAnnotation().getReferenceURI());
-		
-		searchlabel.setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
-		searchlabel.setBackground(Color.white);
-		searchlabel.addMouseListener(this);
-		searchlabel.setToolTipText("Look up reference ontology term");
-		searchlabel.setEnabled(editable);
-		createlabel.setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
-		createlabel.setBackground(Color.white);
-		createlabel.addMouseListener(this);
-		createlabel.setToolTipText("Create new custom term");
-		createlabel.setEnabled(editable);
-		eraselabel.setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
-		eraselabel.setBackground(Color.white);
-		eraselabel.addMouseListener(this);
-		eraselabel.setToolTipText("Remove annotation component");
-		eraselabel.setEnabled(editable);
-		modifylabel.setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
-		modifylabel.setBackground(Color.white);
-		modifylabel.addMouseListener(this);
-		modifylabel.setToolTipText("Edit custom term");
-		modifylabel.setEnabled(editable);
 		
 		setLayout(new BorderLayout());
 		JPanel itempanel = new JPanel();
@@ -122,8 +111,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 		add(Box.createGlue(), BorderLayout.EAST);
 	}
 	
-	public void refreshComboBoxItemsAndButtonVisibility(){
-		
+	public void refreshComboBoxItemsAndButtonVisibility(){		
 		ArrayList<String> stringlist = new ArrayList<String>();
 		removeComboBoxActionListeners(this);
 		combobox.removeAllItems();
@@ -244,129 +232,97 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 		if(smc instanceof PhysicalProcess) searchlabel.setVisible(false);
 	}
 	
-
-	public void mouseEntered(MouseEvent e) {
-		Component component = e.getComponent();
-		if (component instanceof JLabel) {
-			((JLabel)component).setCursor(new Cursor(Cursor.HAND_CURSOR));
+	
+	private void searchLabelClicked() {
+		String[] ontList = null;
+		if(smc instanceof PhysicalModelComponent && !(smc instanceof Submodel)){
+			if(smc instanceof PhysicalProperty)
+				ontList = new String[]{SemSimConstants.ONTOLOGY_OF_PHYSICS_FOR_BIOLOGY_FULLNAME};
+			else if(smc instanceof PhysicalEntity){
+				ontList = new String[]{
+						SemSimConstants.CELL_TYPE_ONTOLOGY_FULLNAME,
+						SemSimConstants.CHEMICAL_ENTITIES_OF_BIOLOGICAL_INTEREST_FULLNAME,
+						SemSimConstants.FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME,
+						SemSimConstants.GENE_ONTOLOGY_FULLNAME,
+						SemSimConstants.MOUSE_ADULT_GROSS_ANATOMY_ONTOLOGY_FULLNAME,
+						SemSimConstants.UNIPROT_FULLNAME};
+			}
+			else if(smc instanceof PhysicalProcess)
+				ontList = new String[]{SemSimConstants.GENE_ONTOLOGY_FULLNAME};
+			new CompositeAnnotationComponentSearchDialog(this, ontList, new String[]{"Apply","Cancel"});
+		}
+		else{
+			anndialog.showSingularAnnotationEditor();
 		}
 	}
-
-	public void mouseExited(MouseEvent e) {
-		Component component = e.getComponent();
-		if (component instanceof JLabel) {
-			((JLabel)component).setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+	
+	private void createLabelClicked() {
+		Boolean proc = false;
+		String porestring = "entity";
+		if(smc instanceof PhysicalProcess){
+			proc = true;
+			porestring = "process";
 		}
-	}
-
-	public void mouseClicked(MouseEvent arg0) {
-		Component clickedcomponent = arg0.getComponent();
-		
-		// If we're opening the search dialog for ontology terms
-		if (clickedcomponent == searchlabel) {
-			String[] ontList = null;
-			if(smc instanceof PhysicalModelComponent && !(smc instanceof Submodel)){
-				if(smc instanceof PhysicalProperty)
-					ontList = new String[]{SemSimConstants.ONTOLOGY_OF_PHYSICS_FOR_BIOLOGY_FULLNAME};
-				else if(smc instanceof PhysicalEntity){
-					ontList = new String[]{
-							SemSimConstants.CELL_TYPE_ONTOLOGY_FULLNAME,
-							SemSimConstants.CHEMICAL_ENTITIES_OF_BIOLOGICAL_INTEREST_FULLNAME,
-							SemSimConstants.FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME,
-							SemSimConstants.GENE_ONTOLOGY_FULLNAME,
-							SemSimConstants.MOUSE_ADULT_GROSS_ANATOMY_ONTOLOGY_FULLNAME,
-							SemSimConstants.UNIPROT_FULLNAME};
+		String input = JOptionPane.showInputDialog("Enter name for new custom physical " + porestring);
+		if(input!=null && !input.equals("")){
+			if(proc) smc = semsimmodel.addCustomPhysicalProcess(input, "");
+			else smc = semsimmodel.addCustomPhysicalEntity(input, "");
+			
+			try {
+				anndialog.updateCompositeAnnotationFromUIComponents();
+			} catch (OWLException e) {
+				e.printStackTrace();
+			}
+			
+			for(Component c : anndialog.compositepanel.getComponents()){
+				if(c instanceof SemSimComponentAnnotationPanel){
+					SemSimComponentAnnotationPanel pan = (SemSimComponentAnnotationPanel)c;
+					removeComboBoxActionListeners(pan);
+					pan.refreshComboBoxItemsAndButtonVisibility();
+					pan.combobox.addActionListener(pan);
 				}
-				else if(smc instanceof PhysicalProcess)
-					ontList = new String[]{SemSimConstants.GENE_ONTOLOGY_FULLNAME};
-				new CompositeAnnotationComponentSearchDialog(this, ontList, new String[]{"Apply","Cancel"});
 			}
-			else{
-				anndialog.showSingularAnnotationEditor();
-			}
+			new CustomPhysicalComponentEditor(anndialog, (PhysicalModelComponent)smc);
 		}
-		else if(clickedcomponent == createlabel && smc instanceof PhysicalModelComponent){
-			Boolean proc = false;
-			String porestring = "entity";
-			if(smc instanceof PhysicalProcess){
-				proc = true;
-				porestring = "process";
+	}
+	
+	private void modifyLabelClicked() {
+		new CustomPhysicalComponentEditor(anndialog, (PhysicalModelComponent)smc);
+	}
+	
+	private void eraseLabelClicked() {
+		// If we're erasing a component in a composite annotation...
+		if(smc instanceof PhysicalModelComponent && !(smc instanceof Submodel)){
+			int componentindex = 0;
+			Component[] comps = anndialog.compositepanel.getComponents();
+			for(int c=0; c<comps.length; c++){
+				if(comps[c] == this) componentindex = c;
 			}
-			String input = JOptionPane.showInputDialog("Enter name for new custom physical " + porestring);
-			if(input!=null && !input.equals("")){
-				if(proc) smc = semsimmodel.addCustomPhysicalProcess(input, "");
-				else smc = semsimmodel.addCustomPhysicalEntity(input, "");
-				
+			// If we're removing a property annotation, just remove reference anns from property and refresh
+			if(componentindex==0){
+				removeAsPhysicalPropertyAnnotation();
+				// If only the physical property part of the composite is left, and we're removing it, set the 
+				// data structure's physical property to null
+			}
+			// Otherwise, actually remove the physicalmodelcomponentpanel and structuralrelationpanel, if present
+			else{
+				Component nextcomp = anndialog.compositepanel.getComponent(componentindex + 1);
+				Component prevcomp = anndialog.compositepanel.getComponent(componentindex - 1);
+				anndialog.compositepanel.remove(this);
+				if(nextcomp instanceof StructuralRelationPanel) anndialog.compositepanel.remove(nextcomp);
+				else if(prevcomp instanceof StructuralRelationPanel) anndialog.compositepanel.remove(prevcomp);
 				try {
 					anndialog.updateCompositeAnnotationFromUIComponents();
 				} catch (OWLException e) {
 					e.printStackTrace();
 				}
-				
-				for(Component c : anndialog.compositepanel.getComponents()){
-					if(c instanceof SemSimComponentAnnotationPanel){
-						SemSimComponentAnnotationPanel pan = (SemSimComponentAnnotationPanel)c;
-						removeComboBoxActionListeners(pan);
-						pan.refreshComboBoxItemsAndButtonVisibility();
-						pan.combobox.addActionListener(pan);
-					}
-				}
-				new CustomPhysicalComponentEditor(anndialog, (PhysicalModelComponent)smc);
 			}
+			anndialog.compositepanel.refreshUI();
 		}
-		else if(clickedcomponent == modifylabel && smc instanceof PhysicalModelComponent){
-			new CustomPhysicalComponentEditor(anndialog, (PhysicalModelComponent)smc);
-		}
-		// If we're removing a component of the annotation
-		else if(clickedcomponent == eraselabel){
-			
-			// If we're erasing a component in a composite annotation...
-			if(smc instanceof PhysicalModelComponent && !(smc instanceof Submodel)){
-				int componentindex = 0;
-				Component[] comps = anndialog.compositepanel.getComponents();
-				for(int c=0; c<comps.length; c++){
-					if(comps[c] == this) componentindex = c;
-				}
-				// If we're removing a property annotation, just remove reference anns from property and refresh
-				if(componentindex==0){
-					removeAsPhysicalPropertyAnnotation();
-					// If only the physical property part of the composite is left, and we're removing it, set the 
-					// data structure's physical property to null
-				}
-				// Otherwise, actually remove the physicalmodelcomponentpanel and structuralrelationpanel, if present
-				else{
-					Component nextcomp = anndialog.compositepanel.getComponent(componentindex + 1);
-					Component prevcomp = anndialog.compositepanel.getComponent(componentindex - 1);
-					anndialog.compositepanel.remove(this);
-					if(nextcomp instanceof StructuralRelationPanel) anndialog.compositepanel.remove(nextcomp);
-					else if(prevcomp instanceof StructuralRelationPanel) anndialog.compositepanel.remove(prevcomp);
-					try {
-						anndialog.updateCompositeAnnotationFromUIComponents();
-					} catch (OWLException e) {
-						e.printStackTrace();
-					}
-				}
-				anndialog.compositepanel.refreshUI();
-			}
-			// ...otherwise we're removing a singular annotation
-			else removeAsSingularAnnotation();
-		}
+		// ...otherwise we're removing a singular annotation
+		else removeAsSingularAnnotation();
 	}
-
-	public void mousePressed(MouseEvent arg0) {
-		Component component = arg0.getComponent();
-		if (component instanceof JLabel) {
-			((JLabel)component).setBorder(BorderFactory.createLineBorder(Color.blue,1));
-		}
-	}
-
-	public void mouseReleased(MouseEvent arg0) {
-		Component component = arg0.getComponent();
-		if (component instanceof JLabel) {
-			((JLabel)component).setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
-		}
-	}
-
+	
 	public void actionPerformed(ActionEvent arg0) {
 		Object o = arg0.getSource();
 		if(o == combobox){
@@ -384,7 +340,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 						}
 						else{
 							combobox.setPopupVisible(false);
-							SemGenError.showInvalidOPBpropertyError(this);
+							SemGenError.showInvalidOPBpropertyError();
 							combobox.setSelectedItem(selecteditem);
 							return;
 						}
@@ -440,7 +396,6 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 	}
 	
 	public boolean checkOPBpropertyValidity(URI OPBuri){
-		boolean isvalid = true; 
 		PhysicalProperty prop = (PhysicalProperty)smc;
 		if(prop.getPhysicalPropertyOf()!=null){
 			
@@ -449,10 +404,10 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 			// the OPB term is for a constitutive property. Not sure if it should, yet.
 			if((prop.getPhysicalPropertyOf() instanceof PhysicalEntity || prop.getPhysicalPropertyOf() instanceof PhysicalProcess ) && 
 				(SemGen.semsimlib.OPBhasFlowProperty(OPBuri) || SemGen.semsimlib.OPBhasProcessProperty(OPBuri))) {
-				isvalid = false;
+				return false;
 			}
 		}
-		return isvalid;
+		return true;
 	}
 	
 	public void removeComboBoxActionListeners(SemSimComponentAnnotationPanel pan){
@@ -482,4 +437,54 @@ public class SemSimComponentAnnotationPanel extends JPanel implements MouseListe
 		anndialog.annotator.setModelSaved(false);
 		refreshComboBoxItemsAndButtonVisibility();
 	}
+	
+	class ComponentPanelLabel extends JLabel {
+		private static final long serialVersionUID = 1L;
+
+		ComponentPanelLabel(Icon icon, String tooltip) {
+			super(icon);
+			setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
+			setBackground(Color.white);
+			addMouseListener(new LabelMouseBehavior());
+			setToolTipText(tooltip);
+		}
+		
+		class LabelMouseBehavior extends MouseAdapter {
+			public void mouseClicked(MouseEvent arg0) {
+				Component clickedcomponent = arg0.getComponent();
+				
+				// If we're opening the search dialog for ontology terms
+				if (clickedcomponent == searchlabel) {
+					searchLabelClicked();
+				}
+				else if(clickedcomponent == createlabel && smc instanceof PhysicalModelComponent){
+					createLabelClicked();
+				}
+				else if(clickedcomponent == modifylabel && smc instanceof PhysicalModelComponent){
+					modifyLabelClicked();
+				}
+				// If we're removing a component of the annotation
+				else if(clickedcomponent == eraselabel){
+					eraseLabelClicked();
+				}
+			}
+			
+			public void mouseEntered(MouseEvent e) {
+				setCursor(new Cursor(Cursor.HAND_CURSOR));
+			}
+	
+			public void mouseExited(MouseEvent e) {
+				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+			public void mousePressed(MouseEvent arg0) {
+				setBorder(BorderFactory.createLineBorder(Color.blue,1));
+			}
+	
+			public void mouseReleased(MouseEvent arg0) {
+				setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
+			}
+		}
+	}
+	
+
 }

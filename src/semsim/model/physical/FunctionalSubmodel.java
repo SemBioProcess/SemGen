@@ -19,7 +19,6 @@ import semsim.model.computational.datastructures.DataStructure;
  **/
 
 public class FunctionalSubmodel extends Submodel {
-	
 	private Map<String, Set<FunctionalSubmodel>> relationshipSubmodelMap = new HashMap<String, Set<FunctionalSubmodel>>();
 	private Computation computation;
 	

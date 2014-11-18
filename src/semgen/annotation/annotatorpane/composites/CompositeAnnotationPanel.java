@@ -16,7 +16,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import semgen.SemGen;
-import semgen.SemGenGUI;
 import semgen.SemGenSettings;
 import semgen.annotation.annotatorpane.AnnotationPanel;
 import semgen.resource.SemGenFont;
@@ -31,7 +30,6 @@ import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 
 public class CompositeAnnotationPanel extends Box implements ActionListener{
-
 	private static final long serialVersionUID = -3955122899870904199L;
 	public SemSimModel semsimmodel;
 	public DataStructure datastructure;

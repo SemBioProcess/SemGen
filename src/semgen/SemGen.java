@@ -24,6 +24,7 @@ import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.SemGenGUI;
 import semgen.menu.SemGenMenuBar;
+import semgen.resource.SemGenError;
 import semgen.resource.SemGenFont;
 import semgen.resource.file.SemGenOpenFileChooser;
 import semgen.resource.uicomponent.SemGenProgressBar;
@@ -88,7 +89,7 @@ public class SemGen extends JFrame implements Observer{
 	//Launch application
 	public SemGen() throws NoSuchMethodException, SecurityException {
 		super("OSXAdapter");
-		
+		SemGenError.setFrame(this);
 		OSValidation();
 		
 		SemGenOpenFileChooser.currentdirectory = new File(settings.getStartDirectory());

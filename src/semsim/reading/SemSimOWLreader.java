@@ -388,15 +388,12 @@ public class SemSimOWLreader {
 				}
 			}
 		}
-		
-			
+				
 		// Collect the submodels
 		Set<String> subset = SemSimOWLFactory.getIndividualsAsStrings(ont, SemSimConstants.SUBMODEL_CLASS_URI.toString());
 		
 		for(String sub : subset){
-			
 			String subname = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, sub, SemSimConstants.HAS_NAME_URI.toString());
-			String description = SemSimOWLFactory.getRDFcomment(ont, factory.getOWLNamedIndividual(IRI.create(sub)));
 			String componentmathml = null;
 			
 			boolean hascomputation = !SemSimOWLFactory.getIndObjectProperty(ont, sub, SemSimConstants.HAS_COMPUTATATIONAL_COMPONENT_URI.toString()).isEmpty();
@@ -444,9 +441,7 @@ public class SemSimOWLreader {
 									CellMLreader.whiteBoxFunctionalSubmodelEquations(varmathml, subname, semsimmodel, theds);
 								}
 							}
-						} catch (JDOMException e) {
-							e.printStackTrace();
-						} catch (IOException e) {
+						} catch (JDOMException | IOException e) {
 							e.printStackTrace();
 						}
 					}
@@ -454,7 +449,6 @@ public class SemSimOWLreader {
 				
 				
 				// Set the description
-				if(description.equals("")) sssubmodel.setDescription(null);
 				semsimmodel.addSubmodel(sssubmodel);
 			}
 			// If submodel IS imported

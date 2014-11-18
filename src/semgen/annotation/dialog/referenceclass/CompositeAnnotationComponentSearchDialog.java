@@ -55,7 +55,7 @@ public class CompositeAnnotationComponentSearchDialog extends AddReferenceClassD
 							pmcPanel.smc.addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, uri, desc);
 						}
 						else{
-							SemGenError.showInvalidOPBpropertyError(null);
+							SemGenError.showInvalidOPBpropertyError();
 							return;
 						}
 					}

@@ -229,7 +229,7 @@ public class SemGenOpenFileChooser extends SemGenFileChooser implements ActionLi
 					}
 				} 
 				else{
-					SemGenError.showWebConnectionError(fc, url.toString());
+					SemGenError.showWebConnectionError(url.toString());
 				}
 				fc.closeAndWriteStringAsModelContent(url, content);
 			}

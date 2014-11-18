@@ -270,7 +270,7 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 		identicaldsnames = new HashSet<String>();
 		for (File file : files) {
 			if(ModelClassifier.classify(file)==ModelClassifier.CELLML_MODEL){
-				SemGenError.showFunctionalSubmodelError(this,file);
+				SemGenError.showFunctionalSubmodelError(file);
 			}
 			else{
 				FileToMergeLabel templabel = new FileToMergeLabel(file.getAbsolutePath());
@@ -430,8 +430,7 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 			} // end of iteration through model2 data structures
 		} // end of iteration through model1 data structures
 		if (resolvepanel.getComponents().length==0) {
-			JOptionPane.showMessageDialog(this,
-					"SemGen did not find any semantic equivalencies between the models","Merger message", JOptionPane.PLAIN_MESSAGE);
+			SemGenError.showError("SemGen did not find any semantic equivalencies between the models", "Merger message");
 		}
 		else resolvepanel.remove(resolvepanel.getComponentCount()-1); // remove last JSeparator
 		progframe.dispose();
@@ -482,9 +481,7 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 	public void merge() throws IOException, CloneNotSupportedException, OWLException, InterruptedException, JDOMException, Xcept {
 		SemSimModel ssm1clone = semsimmodel1.clone();
 		SemSimModel ssm2clone = semsimmodel2.clone();
-		
-		SemSimModel modelfordiscardedds = null;
-		
+
 		// First collect all the data structures that aren't going to be used in the resulting merged model
 		// Include a mapping between the solution domains
 		Component[] resolutionpanels = new Component[resolvepanel.getComponentCount()+1]; 
@@ -496,6 +493,7 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 		resolutionpanels[resolutionpanels.length-1] = new ResolutionPanel(soldom1, soldom2, ssm1clone, ssm2clone, 
 				"automated solution domain mapping", false);
 		
+		SemSimModel modelfordiscardedds = null;
 		for (int x = 0; x < resolutionpanels.length; x++) {
 			ResolutionPanel rp = null;
 			if ((resolutionpanels[x] instanceof ResolutionPanel)) {
@@ -682,11 +680,12 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 		
 		semsimmodel1 = LoadSemSimModel.loadSemSimModelFromFile(file1, settings.doAutoAnnotate());
 		
-		if(semsimmodel1.getFunctionalSubmodels().size()>0) SemGenError.showFunctionalSubmodelError(this, file1);
+		if(semsimmodel1.getFunctionalSubmodels().size()>0) SemGenError.showFunctionalSubmodelError(file1);
 		
 		semsimmodel2 = LoadSemSimModel.loadSemSimModelFromFile(file2, settings.doAutoAnnotate());
 		
-		if(semsimmodel2.getFunctionalSubmodels().size()>0) SemGenError.showFunctionalSubmodelError(this, file1);
+		if(semsimmodel2.getFunctionalSubmodels().size()>0) 
+			SemGenError.showFunctionalSubmodelError(file1);
 		
 		Set<SemSimModel> models = new HashSet<SemSimModel>();
 		models.add(semsimmodel1);
@@ -768,6 +767,4 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 		// TODO Auto-generated method stub
 		
 	}
-
-
 }

@@ -248,8 +248,10 @@ public class ReferenceClassFinderPanel extends JPanel implements
 				bps.search(text, bioportalID, findchooser.getSelectedIndex());
 			} catch (IOException e) {
 				e.printStackTrace();
-				SemGenError.showWebConnectionError(null, "BioPortal web service");
-			} catch (JDOMException e) {e.printStackTrace();}
+				SemGenError.showWebConnectionError("BioPortal web service");
+			} catch (JDOMException e) {
+				e.printStackTrace();
+			}
 			
 			rdflabelsanduris = bps.rdflabelsanduris;
 			classnamesandshortconceptids = bps.classnamesandshortconceptids;
@@ -269,7 +271,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
-				SemGenError.showWebConnectionError(null, "UniProt web service");
+				SemGenError.showWebConnectionError("UniProt web service");
 			}
 			rdflabelsanduris = ups.rdflabelsanduris;
 		}

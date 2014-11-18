@@ -41,7 +41,7 @@ public class LoadSemSimModel {
 						SemGenProgressBar progframe = new SemGenProgressBar("Annotating with web services...",true);
 						boolean online = WebserviceTester.testBioPortalWebservice("Annotation via web services failed.");
 						if(!online) 
-							SemGenError.showWebConnectionError(null, "BioPortal search service");
+							SemGenError.showWebConnectionError("BioPortal search service");
 						
 						SBMLAnnotator.annotate(file, semsimmodel, online, SemGen.semsimlib.getOntTermsandNamesCache());
 						ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel, SemGen.semsimlib.getOntTermsandNamesCache(), online);
@@ -60,7 +60,7 @@ public class LoadSemSimModel {
 						Boolean online = true;
 						
 							online = WebserviceTester.testBioPortalWebservice("Annotation via web services failed.");
-							if(!online) SemGenError.showWebConnectionError(null, "BioPortal search service");
+							if(!online) SemGenError.showWebConnectionError("BioPortal search service");
 
 						progframe.dispose();
 						ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel,  SemGen.semsimlib.getOntTermsandNamesCache(), online);

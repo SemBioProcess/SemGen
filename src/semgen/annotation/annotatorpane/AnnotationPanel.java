@@ -111,6 +111,7 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 		humandefsubpanel.setLayout(new BoxLayout(humandefsubpanel, BoxLayout.X_AXIS));
 		humandefpane = new AnnotationClickableTextPane("[unspecified]",indent, thebutton.editable);
 		humandefpane.setAlignmentX(JTextArea.LEFT_ALIGNMENT);
+		humandefpane.addMouseListener(this);
 		humandefsubpanel.add(humandefpane);
 		humandefsubpanel.add(humremovebutton);
 		humandefpanel.add(humandefsubpanel, BorderLayout.WEST);

@@ -136,7 +136,7 @@ public class AnnotatorWorkbench extends Observable implements Workbench, Observe
 				SemGen.logfilewriter.println(sourcefile.getName() + " was saved");
 			}
 			else{
-				SemGenError.showUnspecifiedAnnotationError(null, unspecds);
+				SemGenError.showUnspecifiedAnnotationError(unspecds);
 			}
 		}
 		else{

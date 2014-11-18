@@ -171,7 +171,7 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 		try {
 			xmlresult = client.annotate();
 		} catch (IOException e1) {
-			SemGenError.showWebConnectionError(null, "BioPortal Annotator service");
+			SemGenError.showWebConnectionError("BioPortal Annotator service");
 		} 
 		
 		try {

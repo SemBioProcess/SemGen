@@ -22,9 +22,6 @@ import semsim.Annotatable;
 import semsim.model.SemSimComponent;
 
 public abstract class AnnotationObjectButton extends JPanel implements MouseListener{
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public AnnotatorTab annotater;

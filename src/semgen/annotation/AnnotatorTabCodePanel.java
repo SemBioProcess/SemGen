@@ -30,6 +30,7 @@ import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter.HighlightPainter;
 
 import semgen.SemGenSettings;
+import semgen.resource.SemGenError;
 import semgen.resource.SemGenFont;
 import semgen.resource.uicomponent.SemGenProgressBar;
 import semgen.resource.uicomponent.SemGenTextArea;
@@ -58,7 +59,7 @@ public class AnnotatorTabCodePanel extends SemGenTextArea {
 			// If the legacy model code is on the web
 			if (modelloc.startsWith("http://")) {
 				SemGenProgressBar progframe = new SemGenProgressBar("Retrieving legacy code...", false);
-				
+
 				Boolean online = true;
 				modelfile = new File(modelloc);
 	
@@ -70,7 +71,8 @@ public class AnnotatorTabCodePanel extends SemGenTextArea {
 				try {
 					httpcon.getResponseCode();
 				} catch (Exception e) {
-					e.printStackTrace(); 
+					e.printStackTrace();
+					SemGenError.showError("Legacy code could not be found at http address", "404 Not Found");
 					online = false;
 				}
 				if (online) {

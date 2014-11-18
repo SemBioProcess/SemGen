@@ -25,6 +25,11 @@ public class SemGenProgressBar extends JFrame implements ActionListener {
 	protected static JFrame location = null;
 	
 	public SemGenProgressBar(String msg, Boolean isindeterminant) {
+		setLocationRelativeTo(location);
+		isAlwaysOnTop();
+		setUndecorated(true);
+		requestFocusInWindow();
+		setVisible(true);
 		createBar(msg, isindeterminant);
 	}
 	
@@ -34,8 +39,6 @@ public class SemGenProgressBar extends JFrame implements ActionListener {
 	}
 	
 	private void createBar(String msg, Boolean isindeterminant) {	
-		setLocationRelativeTo(location);
-		isAlwaysOnTop();
 		setPreferredSize(new Dimension(300, 65));
 		JPanel progpanel = new JPanel();
 		progpanel.setBorder(BorderFactory.createLineBorder(Color.gray));
@@ -54,10 +57,9 @@ public class SemGenProgressBar extends JFrame implements ActionListener {
 		progpanel.add(msglabel, BorderLayout.NORTH);
 		progpanel.add(bar, BorderLayout.SOUTH);
 		add(progpanel);
-		setUndecorated(true);
-		setVisible(true);
+		
+		
 		if(isindeterminant) bar.setValue(101);
-		requestFocusInWindow();
 		pack();	
 	}
 	

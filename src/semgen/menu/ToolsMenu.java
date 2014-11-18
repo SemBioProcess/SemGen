@@ -13,14 +13,13 @@ import semgen.SemGenSettings;
 import semgen.encoding.Encoder;
 import semgen.resource.uicomponent.SemGenMenu;
 
-public class ToolsMenu extends SemGenMenu implements ActionListener, MenuListener{
+public class ToolsMenu extends SemGenMenu implements ActionListener{
 	private static final long serialVersionUID = 1L;
 
 	private JMenuItem toolsitemannotate;
 	private JMenuItem toolsitemmerge;
 	private JMenuItem toolsitemcode;
 	public JMenuItem toolsitemextract;
-	private JMenuItem toolsitemdefaults;
 	
 	public ToolsMenu(SemGenSettings sets, GlobalActions acts) {
 		super("Tools", sets, acts);
@@ -42,10 +41,6 @@ public class ToolsMenu extends SemGenMenu implements ActionListener, MenuListene
 		toolsitemcode = formatMenuItem(toolsitemcode, "New code generator", KeyEvent.VK_G,true,true);
 		toolsitemcode.setToolTipText("Open a new code generator tool");
 		add(toolsitemcode);
-		
-		toolsitemdefaults = formatMenuItem(toolsitemdefaults, "Set Defaults", KeyEvent.VK_G,true,true);
-		toolsitemdefaults.setToolTipText("Change SemGen's default settings");
-		add(toolsitemdefaults);
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -66,24 +61,6 @@ public class ToolsMenu extends SemGenMenu implements ActionListener, MenuListene
 //		if (o == toolsitemextract) {
 //			uacts.NewExtractorTab();
 //		}
-		
-	}
-
-	@Override
-	public void menuCanceled(MenuEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void menuDeselected(MenuEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void menuSelected(MenuEvent arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 
