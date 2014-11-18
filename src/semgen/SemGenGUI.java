@@ -104,8 +104,13 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, Observer {
 	}
 	
 	public void startNewAnnotatorTask(){
-		AnnotatorTab anntab = new AnnotatorTab(settings, globalactions);
-		if (anntab.initialize()) addTab(anntab);
+		Thread createann = new Thread() {
+			public void run() {
+				AnnotatorTab anntab = new AnnotatorTab(settings, globalactions);
+				if (anntab.initialize()) addTab(anntab);
+			}
+		};
+		createann.run();
 	}
 	
 	public void startNewAnnotatorTask(File existingfile){

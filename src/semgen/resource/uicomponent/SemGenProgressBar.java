@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.SwingUtilities;
 
 public class SemGenProgressBar extends JFrame implements ActionListener {
 
@@ -25,12 +26,18 @@ public class SemGenProgressBar extends JFrame implements ActionListener {
 	protected static JFrame location = null;
 	
 	public SemGenProgressBar(String msg, Boolean isindeterminant) {
+		setUndecorated(true);
+		createBar(msg, isindeterminant);
 		setLocationRelativeTo(location);
 		isAlwaysOnTop();
-		setUndecorated(true);
-		requestFocusInWindow();
-		setVisible(true);
-		createBar(msg, isindeterminant);
+		
+		SwingUtilities.invokeLater(new Runnable() {
+		     public void run() {
+		    	requestFocusInWindow();
+		        setVisible(true);
+		     }
+		  });
+		
 	}
 	
 	public SemGenProgressBar(String msg, Boolean isindeterminant, Observer obs) {
@@ -57,18 +64,26 @@ public class SemGenProgressBar extends JFrame implements ActionListener {
 		progpanel.add(msglabel, BorderLayout.NORTH);
 		progpanel.add(bar, BorderLayout.SOUTH);
 		add(progpanel);
-		
-		
+
 		if(isindeterminant) bar.setValue(101);
 		pack();	
 	}
 	
-	public void updateMessage(String message){
-		msglabel.setText(message);
+	public void updateMessage(final String message){
+		SwingUtilities.invokeLater(new Runnable() {
+		     public void run() {
+		        msglabel.setText(message);
+		     }
+		  });
+		
 	}
-	public void updateMessageAndValue(String message, int val){
-		msglabel.setText(message);
-		bar.setValue(val);
+	public void updateMessageAndValue(final String message, final int val){
+		SwingUtilities.invokeLater(new Runnable() {
+		     public void run() {
+		        msglabel.setText(message);
+		        bar.setValue(val);
+		     }
+		  });
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
@@ -79,6 +94,15 @@ public class SemGenProgressBar extends JFrame implements ActionListener {
 	
 	public void setProgressValue(int i) {
 		bar.setValue(i);
+	}
+	
+	public void dispose() {
+		final SemGenProgressBar target = this;
+		SwingUtilities.invokeLater(new Runnable() {
+		     public void run() {
+		    	 target.dispose();
+		     }
+		  });
 	}
 	
 	public class CancelEvent extends Observable{

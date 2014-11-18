@@ -3,6 +3,7 @@ package semgen.resource;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 import semgen.resource.uicomponent.SemGenProgressBar;
@@ -15,15 +16,23 @@ public abstract class SemGenTask extends SwingWorker<Void, Void> implements Obse
 	
     @Override
     public void done() {
-    	if (progframe!=null) progframe.dispose();
+    	if (progframe!=null) 
+    		SwingUtilities.invokeLater(new Runnable() {
+			     public void run() {
+			        progframe.dispose();
+			     }
+			  });
     	endTask();
     }
 
     public void endTask() {}
 
     public void showProgressBar() {
-    	progframe.setVisible(true);
-    	progframe.requestFocusInWindow();
+		 SwingUtilities.invokeLater(new Runnable() {
+		     public void run() {
+		        progframe.setVisible(true);
+		     }
+		  });
     }
 	@Override
 	public void update(Observable arg0, Object arg1) {

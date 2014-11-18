@@ -3,6 +3,7 @@ package semgen.resource.file;
 import java.io.File;
 
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import semgen.SemGen;
 import semgen.annotation.routines.AutoAnnotate;
@@ -54,16 +55,19 @@ public class LoadSemSimModel {
 				semsimmodel = new CellMLreader().readFromFile(file);
 				if(semsimmodel.getErrors().isEmpty()){
 					if(autoannotate){
-						semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
-						SemGenProgressBar progframe = new SemGenProgressBar("Annotating " + file.getName() + " with web services...",true);
-					
+						
+						final SemGenProgressBar progframe = new SemGenProgressBar("Annotating " + file.getName() + " with web services...",true);
 						Boolean online = true;
 						
 							online = WebserviceTester.testBioPortalWebservice("Annotation via web services failed.");
 							if(!online) SemGenError.showWebConnectionError("BioPortal search service");
 
-						progframe.dispose();
-						ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel,  SemGen.semsimlib.getOntTermsandNamesCache(), online);
+						
+					ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel,  SemGen.semsimlib.getOntTermsandNamesCache(), online);
+					semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
+					
+					progframe.dispose();
+					
 					}
 				}
 				break;

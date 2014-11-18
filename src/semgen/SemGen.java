@@ -99,9 +99,9 @@ public class SemGen extends JFrame implements Observer{
 		
 		setTitle(":: S e m  G e n ::");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		
+		setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 
-		setSize(settings.getAppSize());
-		setLocation(settings.getAppXPos(), settings.getAppYPos());
 		gacts.addObserver(this);
 		SemGenProgressBar.setLocation(this);
 		SemGenMenuBar menubar = new SemGenMenuBar(settings, gacts);

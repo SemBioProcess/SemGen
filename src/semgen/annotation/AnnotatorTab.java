@@ -240,7 +240,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 			} catch (BadLocationException | IOException e) {
 				e.printStackTrace();
 			} 
-		if (progframe!=null) progframe.dispose();
+		progframe.dispose();
 		return semsimmodel;
 	}
 

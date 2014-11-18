@@ -35,7 +35,7 @@ public abstract class AnnotationObjectButton extends JPanel implements MouseList
 	public JLabel singularannlabel = new JLabel();
 	public JLabel humdeflabel = new JLabel();
 	public JPanel indicatorspanel = new JPanel();
-	public JPanel indicatorssuperpanel = new JPanel();
+	public JPanel indicatorssuperpanel = new JPanel(new BorderLayout());
 	public PropertyMarker propoflabel = new PropertyMarker(Color.white, null);
 	public int maxHeight = 35;
 	public int ipph = 18;
@@ -115,7 +115,6 @@ public abstract class AnnotationObjectButton extends JPanel implements MouseList
 		indicatorspanel.setOpaque(false);
 		
 		indicatorssuperpanel.setOpaque(false);
-		indicatorssuperpanel.setLayout(new BorderLayout());
 		indicatorssuperpanel.add(Box.createGlue(), BorderLayout.WEST);
 		indicatorssuperpanel.add(indicatorspanel, BorderLayout.CENTER);
 		propoflabel.setVisible(false);
