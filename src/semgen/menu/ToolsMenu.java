@@ -16,11 +16,11 @@ import semgen.resource.uicomponent.SemGenMenu;
 public class ToolsMenu extends SemGenMenu implements ActionListener, MenuListener{
 	private static final long serialVersionUID = 1L;
 
-	public JMenuItem toolsitemannotate;
-	public JMenuItem toolsitemmerge;
+	private JMenuItem toolsitemannotate;
+	private JMenuItem toolsitemmerge;
 	private JMenuItem toolsitemcode;
 	public JMenuItem toolsitemextract;
-	public JMenuItem toolsitemdefaults;
+	private JMenuItem toolsitemdefaults;
 	
 	public ToolsMenu(SemGenSettings sets, GlobalActions acts) {
 		super("Tools", sets, acts);
@@ -51,10 +51,10 @@ public class ToolsMenu extends SemGenMenu implements ActionListener, MenuListene
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		
-//		if (o == toolsitemmerge){
-//			globalactions.NewMergerTab();
-//		}
-//		
+		if (o == toolsitemmerge){
+			globalactions.NewMergerTab();
+		}
+	
 		if (o == toolsitemcode) {
 			new Encoder();
 		}

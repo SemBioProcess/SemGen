@@ -432,7 +432,6 @@ public class SBMLAnnotator {
 		return true;
 	}
 	
-	
 	private static void annotateSpecies(Species species, String cdwd, PhysicalEntity pe, Model sbmlmodel, SemSimModel semsimmodel, boolean isonline,
 			Map<Compartment,PhysicalEntity> compsandphysents, Map<Species,PhysicalEntity> speciesandphysents){
 		
@@ -470,8 +469,7 @@ public class SBMLAnnotator {
 	}
 	
 
-	public static void setFreeTextDefinitionsForDataStructuresAndSubmodels(SemSimModel themodel){
-		
+	public static void setFreeTextDefinitionsForDataStructuresAndSubmodels(SemSimModel themodel){		
 		for(DataStructure ds : themodel.getDataStructures()){
 			if(ds.getDescription()==null){
 				
@@ -513,9 +511,7 @@ public class SBMLAnnotator {
 			}
 		}
 	}
-	
-	
-	
+
 	private static MIRIAMannotation collectMiriamAnnotation(int qualifier, String resource, Hashtable<String,MIRIAMannotation> resourcesandanns, 
 			Hashtable<String, String[]> ontologytermsandnamescache){
 		MIRIAMannotation ma = null;

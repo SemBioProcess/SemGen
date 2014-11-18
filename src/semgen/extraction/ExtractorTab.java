@@ -12,7 +12,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -43,6 +45,7 @@ import semgen.resource.SemGenIcon;
 import semgen.resource.SemGenTask;
 import semgen.resource.file.FileFilter;
 import semgen.resource.file.SemGenFileChooser;
+import semgen.resource.file.SemGenOpenFileChooser;
 import semgen.resource.file.SemGenSaveFileChooser;
 import semgen.resource.uicomponent.SemGenProgressBar;
 import semgen.resource.uicomponent.SemGenTab;
@@ -112,12 +115,9 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	public Graph physiomapgraph;
 	public SparseMultigraph<String, Number> junggraph;
 
-	public String initialfocusnodename;
 	public Map<DataStructure, Set<? extends DataStructure>> allpreserveddatastructures;
 	public Hashtable<PhysicalEntity, Set<DataStructure>> entsanddatastrs = new Hashtable<PhysicalEntity, Set<DataStructure>>();
-	public Hashtable<DataStructure, PhysicalEntity> datastrsandents = new Hashtable<DataStructure, PhysicalEntity>();
 	public Hashtable<PhysicalProcess, Set<DataStructure>> processesanddatastrs = new Hashtable<PhysicalProcess, Set<DataStructure>>();
-	public Hashtable<DataStructure, PhysicalProcess> datastrsandprocesses = new Hashtable<DataStructure, PhysicalProcess>();
 	public File autogendirectory;
 
 	public Clusterer cd;
@@ -170,25 +170,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		AlphabetizeCheckBoxes(submodelspanel);
 		AlphabetizeCheckBoxes(codewordspanel);
 		
-		toolbar = new ExtractorToolbar(settings) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				Object o = arg0.getSource();
-				if (o == toolbar.extractoritembatchcluster) {
-						try {
-							batchCluster();
-						} catch (IOException e1) {e1.printStackTrace();}
-				}
-
-				if (o == toolbar.extractoritemopenann) {
-						try {
-							globalactions.NewAnnotatorTab(sourcefile);
-						} catch (Exception e1) {e1.printStackTrace();} 
-					}	
-			}
-		};
+		createToolbar();
 		
 		JPanel leftpanel = new JPanel();
 		leftpanel.setLayout(new BoxLayout(leftpanel, BoxLayout.Y_AXIS));
@@ -214,9 +196,28 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		visualizeAllDataStructures(false);
 	}
 	
-	public File getSourceFile() {
-		return sourcefile;
+	public void createToolbar() {
+		toolbar = new ExtractorToolbar(settings) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Object o = arg0.getSource();
+				if (o == toolbar.extractoritembatchcluster) {
+						try {
+							batchCluster();
+						} catch (IOException e1) {e1.printStackTrace();}
+				}
+
+				if (o == toolbar.extractoritemopenann) {
+						try {
+							globalactions.NewAnnotatorTab(sourcefile);
+						} catch (Exception e1) {e1.printStackTrace();} 
+					}	
+			}
+		};
 	}
+
 	
 	// List physical processes
 	public Hashtable<PhysicalProcess, Set<DataStructure>> listprocesses() {
@@ -233,12 +234,6 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 			else
 				processesanddatastrs.get(proc).add(prop.getAssociatedDataStructure());
 		}
-		
-		for (PhysicalProcess proc : processesanddatastrs.keySet()) {
-			for (DataStructure datastr : processesanddatastrs.get(proc)) {
-				datastrsandprocesses.put(datastr, proc);
-			}
-		}
 		return processesanddatastrs;
 	}
 	
@@ -254,11 +249,6 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 				Set<DataStructure> cdwds = new HashSet<DataStructure>();
 				cdwds.add(prop.getAssociatedDataStructure());
 				entsanddatastrs.put(ent, cdwds);
-			}
-		}
-		for (PhysicalEntity ent : entsanddatastrs.keySet()) {
-			for (DataStructure datastr : entsanddatastrs.get(ent)) {
-				datastrsandents.put(datastr, ent);
 			}
 		}
 		return entsanddatastrs;
@@ -288,8 +278,6 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 
 	// returns the preserved data structures in the extract
 	public Map<DataStructure, Set<? extends DataStructure>> primeextraction() throws IOException, OWLException {
-		initialfocusnodename = null;
-		Boolean first = true;
 		allpreserveddatastructures = new HashMap<DataStructure, Set<? extends DataStructure>>(); 
 		Set<DataStructure> outputspreserveddatastructures = new HashSet<DataStructure>();
 
@@ -303,34 +291,18 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 				if (tempbox.isSelected()) {
 					for (DataStructure onedatastr : tempbox.associateddatastructures) {
 						// Need to reroute for components
-						Set<DataStructure> requiredinputs = onedatastr.getComputation().getInputs();
+						Set<DataStructure> requiredinputs = onedatastr.getComputationInputs();
 						allpreserveddatastructures.put(onedatastr, requiredinputs);						
 						
 						// Un-comment this block and comment out "includeInputsInExtraction", above, to make the extraction more limited
 						for(DataStructure oneinput : requiredinputs){
 							if(!allpreserveddatastructures.containsKey(oneinput))
 								allpreserveddatastructures.put(oneinput, new HashSet<DataStructure>());
-							else{}
 						}
 						
 						// If user wants to include the process participants
 						if (includepartipantscheckbox.isSelected()){
-							// Add data structures associated with the participants in the process
-							for(PhysicalEntity ent : ((PhysicalProcess)tempbox.pmc).getParticipantsAsPhysicalEntities()){
-								if(entitiespanel.termandcdwdstable.containsKey(ent)){
-									for(DataStructure entds : entitiespanel.termandcdwdstable.get(ent)){
-										// Maybe change so that if a cdwd that we're including is dependent on another that's
-										// a participant, make sure to include its inputs (all inputs?)
-										allpreserveddatastructures.put(entds, entds.getComputation().getInputs());
-//										// Add the entity's inputs, make them terminal
-										for(DataStructure oneentin : entds.getComputation().getInputs()){
-											if(!allpreserveddatastructures.containsKey(oneentin)){
-												allpreserveddatastructures.put(oneentin, new HashSet<DataStructure>());
-											}
-										}
-									}
-								}
-							}
+							includeProcessParticipants((PhysicalProcess)tempbox.pmc);
 						}
 						// Add the process data structure's inputs, make them terminal
 					}
@@ -345,13 +317,13 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 				if (tempbox.isSelected()) {
 					for (DataStructure onedatastr : tempbox.associateddatastructures) {
 						// Need to reroute for components
-						allpreserveddatastructures.put(onedatastr, onedatastr.getComputation().getInputs()); 
+						allpreserveddatastructures.put(onedatastr, onedatastr.getComputationInputs()); 
 						// If the more thorough extraction is used, trace the data structure's use in other equations and preserve their output data structures as well
 						if (this.extractionlevelchooserentities.isSelected()) 
 							includeInputsInExtraction(onedatastr);
 						else{
 							// Add the data structure's inputs, make them terminal
-							for(DataStructure onein : onedatastr.getComputation().getInputs()){
+							for(DataStructure onein : onedatastr.getComputationInputs()){
 								if(!allpreserveddatastructures.containsKey(onein)){
 									allpreserveddatastructures.put(onein, new HashSet<DataStructure>());
 								}
@@ -370,7 +342,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 					for (DataStructure onedatastr : tempbox.associateddatastructures) {
 						Set<DataStructure> requiredinputs = new HashSet<DataStructure>();
 						if(onedatastr.getComputation()!=null){
-							requiredinputs.addAll(onedatastr.getComputation().getInputs());
+							requiredinputs.addAll(onedatastr.getComputationInputs());
 						}
 						else if(onedatastr instanceof MappableVariable)
 							requiredinputs.addAll(((MappableVariable)onedatastr).getMappedTo());
@@ -384,7 +356,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 				}
 			}
 		}
-		
+		Boolean first = true;
 		// Collect the data structures to preserve from the codewords checkboxes
 		for (int x = 0; x < codewordspanel.checkboxpanel.getComponentCount(); x++) {
 			if (codewordspanel.checkboxpanel.getComponent(x) instanceof ExtractorJCheckBox) {
@@ -394,7 +366,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 						outputspreserveddatastructures.add(onedatastr);
 					}
 					if (first) {
-						initialfocusnodename = codewordspanel.checkboxpanel.getComponent(x).getName();
+						codewordspanel.checkboxpanel.getComponent(x).getName();
 						first = false;
 					}
 				}
@@ -405,15 +377,15 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 			// If the full dependency chain is requested
 			if (this.extractionlevelchooser2.isSelected()) {
 				for (DataStructure dstokeep : getDependencyChain(pds)) {
-					allpreserveddatastructures.put(dstokeep, dstokeep.getComputation().getInputs());
+					allpreserveddatastructures.put(dstokeep, dstokeep.getComputationInputs());
 				}
 			}
 			// If only the immediate inputs are requested
 			else {
-				Set<DataStructure> tempdsset = pds.getComputation().getInputs();
+				Set<DataStructure> tempdsset = pds.getComputationInputs();
 				allpreserveddatastructures.put(pds, tempdsset);
 				for (DataStructure oneinput : tempdsset) {
-					if (!allpreserveddatastructures.keySet().contains(oneinput)) {
+					if (!allpreserveddatastructures.containsKey(oneinput)) {
 						allpreserveddatastructures.put(oneinput, new HashSet<DataStructure>());
 					} else if (allpreserveddatastructures.get(oneinput).isEmpty()) {
 						System.out.println("Already added " + oneinput.getName() + ": leaving as is");
@@ -431,16 +403,16 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 					for (DataStructure onedatastr : tempbox.associateddatastructures) {
 						if (!allpreserveddatastructures.keySet().contains(onedatastr)) {
 							if(onedatastr.getComputation()!=null)
-								allpreserveddatastructures.put(onedatastr, onedatastr.getComputation().getInputs());
+								allpreserveddatastructures.put(onedatastr, onedatastr.getComputationInputs());
 						}
 						// If the data structure was added as an input but it should be an output, make it an output
 						else if (allpreserveddatastructures.get(onedatastr).isEmpty()) {
 							allpreserveddatastructures.remove(onedatastr);
-							allpreserveddatastructures.put(onedatastr, onedatastr.getComputation().getInputs());
+							allpreserveddatastructures.put(onedatastr, onedatastr.getComputationInputs());
 						}
 					}
 					for (DataStructure onedatastr : tempbox.associateddatastructures) {
-							moduleinputs.addAll(onedatastr.getComputation().getInputs());
+							moduleinputs.addAll(onedatastr.getComputationInputs());
 					}
 				}
 			}
@@ -448,20 +420,55 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		for (DataStructure ds : moduleinputs) {
 			if (!allpreserveddatastructures.keySet().contains(ds)) allpreserveddatastructures.put(ds, new HashSet<DataStructure>());
 		}
-		
 		// Make sure all the state variable derivative terms are included, include their inputs
+		processStateVariables();
+		
+		return allpreserveddatastructures;
+	}
+	
+	public void includeProcessParticipants(PhysicalProcess pmc) {
+		// Add data structures associated with the participants in the process
+		for(PhysicalEntity ent : pmc.getParticipantsAsPhysicalEntities()){
+			if(entitiespanel.termandcdwdstable.containsKey(ent)){
+				for(DataStructure entds : entitiespanel.termandcdwdstable.get(ent)){
+					// Maybe change so that if a cdwd that we're including is dependent on another that's
+					// a participant, make sure to include its inputs (all inputs?)
+					allpreserveddatastructures.put(entds, entds.getComputationInputs());
+					// Add the entity's inputs, make them terminal
+					for(DataStructure oneentin : entds.getComputationInputs()){
+						if(!allpreserveddatastructures.containsKey(oneentin)){
+							allpreserveddatastructures.put(oneentin, new HashSet<DataStructure>());
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	public void includeInputsInExtraction(DataStructure onedatastr) throws OWLException{
+		for (DataStructure nextds : onedatastr.getComputationInputs()) {
+			allpreserveddatastructures.put(nextds, nextds.getComputationInputs());
+			for(DataStructure secondaryds : nextds.getComputationInputs()){
+				if (!allpreserveddatastructures.containsKey(secondaryds)) {
+					allpreserveddatastructures.put(secondaryds, new HashSet<DataStructure>());
+				}
+			}
+		}
+	}
+
+	public void processStateVariables() {
 		Map<DataStructure, Set<DataStructure>> tempmap = new HashMap<DataStructure, Set<DataStructure>>();
 		for(DataStructure ds : allpreserveddatastructures.keySet()){
 			if(ds.hasSolutionDomain()){
 				if(ds.hasStartValue() && !allpreserveddatastructures.get(ds).isEmpty()
 						&& semsimmodel.getDataStructure(ds.getName() + ":" + ds.getSolutionDomain().getName())!=null){
-					tempmap.put(ds, ds.getComputation().getInputs());
+					tempmap.put(ds, ds.getComputationInputs());
 					// Assumes that all inputs to the state variable are derivatives with respect to some solution domain
 					// This is the way the SemSim model is structured, but is different from what is in the XMML
-					for(DataStructure inds : ds.getComputation().getInputs()){
-						tempmap.put(inds, inds.getComputation().getInputs());
+					for(DataStructure inds : ds.getComputationInputs()){
+						tempmap.put(inds, inds.getComputationInputs());
 						// Preserve the inputs to the derivative term. If not already preserved, make them static inputs
-						for(DataStructure ininds : inds.getComputation().getInputs())
+						for(DataStructure ininds : inds.getComputationInputs())
 							if (!allpreserveddatastructures.keySet().contains(ininds))
 								tempmap.put(ininds, new HashSet<DataStructure>());
 					}
@@ -469,21 +476,8 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 			}
 		}
 		allpreserveddatastructures.putAll(tempmap);
-		return allpreserveddatastructures;
 	}
 	
-	
-	public void includeInputsInExtraction(DataStructure onedatastr) throws OWLException{
-		for (DataStructure nextds : onedatastr.getComputation().getInputs()) {
-			allpreserveddatastructures.put(nextds, nextds.getComputation().getInputs());
-			for(DataStructure secondaryds : nextds.getComputation().getInputs()){
-				if (!allpreserveddatastructures.keySet().contains(secondaryds)) {
-					allpreserveddatastructures.put(secondaryds, new HashSet<DataStructure>());
-				}
-			}
-		}
-	}
-
 	public void optionToEncode(String filenamesuggestion) {
 		int x = JOptionPane.showConfirmDialog(this, "Finished extracting "
 				+ extractedfile.getName()
@@ -501,25 +495,19 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	public Set<DataStructure> getDependencyChain(DataStructure startds){
 		// The hashtable contains the data structure URIs and whether the looping alogrithm here should collect 
 		// their inputs (true = collect)
-		Set<DataStructure> dsset = new HashSet<DataStructure>();
 		Hashtable<DataStructure, Boolean> table = new Hashtable<DataStructure, Boolean>();
-		Set<DataStructure> keys = new HashSet<DataStructure>();
-		Set<DataStructure> inputstoadd = new HashSet<DataStructure>();
 		table.put(startds, true);
 		DataStructure key = null;
-		DataStructure[] array = {};
 		Boolean cont = true;
 		while (cont) {
-			cont = false;
-			keys = table.keySet();
-			for (DataStructure onekey : keys) {
+			cont = false; //This aborts the loop immediately! What is the point of this????????????
+			for (DataStructure onekey : table.keySet()) {
 				key = onekey;
 				if ((Boolean) table.get(onekey) == true) {
 					cont = true;
-					inputstoadd = onekey.getComputation().getInputs();
-					for (DataStructure oneaddedinput : inputstoadd) {
-						if (!keys.contains(oneaddedinput)) {
-							table.put(oneaddedinput, !oneaddedinput.getComputation().getInputs().isEmpty());
+					for (DataStructure oneaddedinput : onekey.getComputationInputs()) {
+						if (!table.containsKey(oneaddedinput)) {
+							table.put(oneaddedinput, !oneaddedinput.getComputationInputs().isEmpty());
 						}
 					}
 					break;
@@ -528,23 +516,14 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 			table.remove(key);
 			table.put(key, false);
 		}
-		array = (DataStructure[]) table.keySet().toArray(array);
-		for (int y = 0; y < array.length; y++) {
-			dsset.add(array[y]);
-		}
+		Set<DataStructure> dsset = new HashSet<DataStructure>(table.keySet());
+		
 		return dsset;
 	}
 	
 	// Visualize a graph of the SemSim model
 	public void visualize(Map<DataStructure, Set<? extends DataStructure>> alldatastrs, Boolean clusteringonly) {
 		if (!alldatastrs.keySet().isEmpty()) {
-
-			Set<DataStructure> domaincodewords = new HashSet<DataStructure>();
-			for(DataStructure ds : semsimmodel.getSolutionDomains()){
-				domaincodewords.add(semsimmodel.getDataStructure(ds.getName() + ".min"));
-				domaincodewords.add(semsimmodel.getDataStructure(ds.getName() + ".max"));
-				domaincodewords.add(semsimmodel.getDataStructure(ds.getName() + ".delta"));
-			}
 
 			if (!clusteringonly) {
 				physiomappanel.removeAll();
@@ -583,10 +562,18 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 				while (nodeit.hasNext()) {
 					Node thenode = (Node) nodeit.next();
 					if (keptds.getName().equals(thenode.getString(LABEL))) {
-						add = false;
 						node = thenode;
+						add = false;
 					}
 				}
+				
+				Set<DataStructure> domaincodewords = new HashSet<DataStructure>();
+				for(DataStructure ds : semsimmodel.getSolutionDomains()){
+					domaincodewords.add(semsimmodel.getDataStructure(ds.getName() + ".min"));
+					domaincodewords.add(semsimmodel.getDataStructure(ds.getName() + ".max"));
+					domaincodewords.add(semsimmodel.getDataStructure(ds.getName() + ".delta"));
+				}
+
 				// If the data structure is part of a solution domain declaration and it is not used to compute any other terms, ignore it
 				if ((keptds.isSolutionDomain()
 					|| (domaincodewords.contains(keptds)) && keptds.getUsedToCompute().isEmpty()))
@@ -598,7 +585,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 					node.setBoolean(INPUT, (alldatastrs.get(keptds).isEmpty()));
 					boolean recievesInput = false;
 					if(keptds.getComputation()!=null)
-						recievesInput = !keptds.getComputation().getInputs().isEmpty();
+						recievesInput = !keptds.getComputationInputs().isEmpty();
 					else if(keptds instanceof MappableVariable)
 						recievesInput = !((MappableVariable)keptds).getMappedTo().isEmpty();
 					node.setBoolean(VAR2INPUT, (alldatastrs.get(keptds).isEmpty() && recievesInput));
@@ -625,7 +612,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 						othernode.setBoolean(INPUT, (alldatastrs.get(oneinput).isEmpty()));
 						boolean recievesInput2 = false;
 						if(oneinput.getComputation()!=null)
-							recievesInput2 = !oneinput.getComputation().getInputs().isEmpty();
+							recievesInput2 = !oneinput.getComputationInputs().isEmpty();
 						else if(oneinput instanceof MappableVariable)
 							recievesInput2 = !((MappableVariable)oneinput).getMappedTo().isEmpty();
 						othernode.setBoolean(VAR2INPUT, (alldatastrs.get(oneinput).isEmpty() && recievesInput2));
@@ -695,12 +682,12 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	
 	
 	String getToolTipForDataStructure(DataStructure ds) {
-		String tip = "<html>";
 		String code = "";
 		if(ds.getComputation()!=null)
 			code = ds.getComputation().getComputationalCode();
 		String units = "dimensionless";
 		if(ds.getUnit()!=null) units = ds.getUnit().getComputationalCode();
+		String tip = "<html>";
 		if(ds.getDescription()!=null)
 			tip = tip + ("<p><b>Description:</b> " + ds.getDescription() + "</p>");
 		if(ds.hasPhysicalProperty()){
@@ -733,24 +720,20 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 
 	public void AlphabetizeCheckBoxes(JPanel panel) {
 		// First put all the check boxes in an array so they can be sorted
-		Component[] comparray = panel.getComponents();
-		Set<ExtractorJCheckBox> boxset = new HashSet<ExtractorJCheckBox>();
+		ArrayList<ExtractorJCheckBox> boxset = new ArrayList<ExtractorJCheckBox>();
 
-		for (int i = 0; i < comparray.length; i++) {
-			Component onecomp = comparray[i];
+		for (Component onecomp : Arrays.asList(panel.getComponents())) {
 			if (onecomp instanceof ExtractorJCheckBox) {
 				boxset.add((ExtractorJCheckBox) onecomp);
 				panel.remove(onecomp);
 			}
 		}
-		ExtractorJCheckBox[] boxarray = boxset.toArray(new ExtractorJCheckBox[] {});
+		Collections.sort(boxset, new ComparatorByName());
 		// Sort the array alphabetically using the custom Comparator
-
-		Arrays.sort(boxarray, new ComparatorByName());
-
-		for (int x = 0; x < boxarray.length; x++) {
-			panel.add(boxarray[x]);
-			boxarray[x].setVisible(true);
+		
+		for (ExtractorJCheckBox box : boxset) {
+			panel.add(box);
+			box.setVisible(true);
 		}
 	}
 
@@ -800,7 +783,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		Hashtable<DataStructure, Set<? extends DataStructure>> alldatastrs = new Hashtable<DataStructure, Set<? extends DataStructure>>();
 		for(DataStructure ds : semsimmodel.getDataStructures()){
 			if(ds.getComputation()!=null)
-				alldatastrs.put(ds, ds.getComputation().getInputs());
+				alldatastrs.put(ds, ds.getComputationInputs());
 			else if(ds instanceof MappableVariable)
 				alldatastrs.put(ds, ((MappableVariable)ds).getMappedTo());
 		}
@@ -808,19 +791,14 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	}
 	
 	public void atomicDecomposition() {
-		JFileChooser fc = new JFileChooser();
+		SemGenOpenFileChooser fc = new SemGenOpenFileChooser("Select directory for extracted models");
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		fc.setCurrentDirectory(SemGenFileChooser.currentdirectory);
-		fc.setDialogTitle("Select directory for extracted models");
-		if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-			File file = new File(fc.getSelectedFile().getAbsolutePath());
-			SemGenFileChooser.currentdirectory = fc.getCurrentDirectory();
-			if (file != null) {
-				autogendirectory = file;
-				
-				GenericThread task = new GenericThread(this, "decompose");
-				task.start();
-			}
+
+		File file = new File(fc.getSelectedFile().getAbsolutePath());
+		if (file != null) {
+			autogendirectory = file;
+			GenericThread task = new GenericThread(this, "decompose");
+			task.start();
 		}
 	}
 
@@ -981,7 +959,6 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 
 	@Override
 	public boolean isSaved() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
@@ -1002,7 +979,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 
 	@Override
 	public void addObservertoWorkbench(Observer obs) {
-		// TODO Auto-generated method stub
+
 		
 	}
 

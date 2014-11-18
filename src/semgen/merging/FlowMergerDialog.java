@@ -32,9 +32,6 @@ import semsim.owl.SemSimOWLFactory;
 public class FlowMergerDialog extends JDialog implements
 		PropertyChangeListener, ActionListener{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 7845342502406090947L;
 	public JOptionPane optionPane;
 	public JPanel mainpanel = new JPanel();

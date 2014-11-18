@@ -24,7 +24,6 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
-import semgen.SemGenGUI;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
 import semgen.resource.uicomponent.SemGenScrollPane;
@@ -183,7 +182,7 @@ public class ResolutionPanel extends JPanel implements ActionListener {
 		textpane.setCaretPosition(0);
 		scroller.setPreferredSize(new Dimension(600, 600));
 		scroller.getVerticalScrollBar().setUnitIncrement(12);
-		JOptionPane.showMessageDialog(SemGenGUI.desktop, scroller, "Information about resolution step", JOptionPane.PLAIN_MESSAGE);
+		JOptionPane.showMessageDialog(this, scroller, "Information about resolution step", JOptionPane.PLAIN_MESSAGE);
 	}
 
 	public String makeStringListFromSet(Set<DataStructure> dsset, Boolean forInput) {

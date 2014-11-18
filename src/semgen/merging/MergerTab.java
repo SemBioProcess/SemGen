@@ -18,7 +18,6 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -34,7 +33,6 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import JSim.util.Xcept;
 import semgen.GlobalActions;
-import semgen.SemGenGUI;
 import semgen.SemGenSettings;
 import semgen.encoding.Encoder;
 import semgen.resource.GenericThread;
@@ -136,7 +134,7 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 	filelistpanel.add(filelistscroller, BorderLayout.CENTER);
 	filelistpanel.add(mergebuttonpanel, BorderLayout.EAST);
 	filelistpanel.setAlignmentX(LEFT_ALIGNMENT);
-	filelistpanel.setPreferredSize(new Dimension(SemGenGUI.desktop.getWidth() - 200, 60));
+	filelistpanel.setPreferredSize(new Dimension(settings.getAppWidth() - 200, 60));
 	filelistpanel.setMaximumSize(new Dimension(99999, 175));
 	
 	resolvepanel.setLayout(new BoxLayout(resolvepanel, BoxLayout.Y_AXIS));
@@ -148,7 +146,7 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 	JSplitPane mappingsplitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mappingpanelleft, mappingpanelright);
 	mappingsplitpane.setOneTouchExpandable(true);
 	mappingsplitpane.setAlignmentX(LEFT_ALIGNMENT);
-	mappingsplitpane.setDividerLocation((SemGenGUI.desktop.getWidth() - 20) / 2);
+	mappingsplitpane.setDividerLocation((settings.getAppWidth() - 20) / 2);
 
 	resmapsplitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, resolvescroller, mappingsplitpane);
 	resmapsplitpane.setOneTouchExpandable(true);
@@ -290,10 +288,11 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 	}
 	
 	public class MergeTask extends SemGenTask {
-		public MergeTask(){}
+		public MergeTask(){
+			progframe = new SemGenProgressBar("Merging...", true);
+		}
         @Override
-        public Void doInBackground() {
-        	progframe = new SemGenProgressBar("Merging...", true);
+        public Void doInBackground() {	
         	try {
 				merge();
 			} catch (Exception e) {
@@ -311,13 +310,12 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 		mergebutton.setEnabled(true);
 		Component[] filecomponents = filelistpanel.getComponents();
 		if (filecomponents.length > 1) {
-			
 			refreshModelsToMerge();
 			
 			// If either of the models have errors, quit
 			for(SemSimModel model : refreshModelsToMerge()){
 				if(!model.getErrors().isEmpty()){
-					JOptionPane.showMessageDialog(SemGenGUI.desktop, "Model " + model.getName() + " has errors.",
+					JOptionPane.showMessageDialog(this, "Model " + model.getName() + " has errors.",
 							"Failed to analyze.", JOptionPane.ERROR_MESSAGE);
 					mergebutton.setEnabled(false);
 					return;
@@ -345,8 +343,7 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 			}
 			else nodescannset.add(desc);
 		}
-		JList<String> list = new JList<String>();
-		list.setForeground(color);
+		
 		String[] descannarray = (String[]) descannset.toArray(new String[] {});
 		String[] nodescannarray = (String[]) nodescannset.toArray(new String[] {});
 		Arrays.sort(descannarray,new CaseInsensitiveComparator());
@@ -356,10 +353,9 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 			if(i<descannarray.length) comboarray[i] = descannarray[i];
 			else comboarray[i] = nodescannarray[i-descannarray.length];
 		}
-		list.setListData(comboarray);
 		mappingpanel.scrollercontent.setForeground(color);
 		mappingpanel.scrollercontent.setListData(comboarray);
-		mappingpanel.title.setText(filename);
+		mappingpanel.setTitle(filename);
 	}
 
 	public Set<String> identifyIdenticalCodewords() {
@@ -434,7 +430,7 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 			} // end of iteration through model2 data structures
 		} // end of iteration through model1 data structures
 		if (resolvepanel.getComponents().length==0) {
-			JOptionPane.showMessageDialog(SemGenGUI.desktop,
+			JOptionPane.showMessageDialog(this,
 					"SemGen did not find any semantic equivalencies between the models","Merger message", JOptionPane.PLAIN_MESSAGE);
 		}
 		else resolvepanel.remove(resolvepanel.getComponentCount()-1); // remove last JSeparator
@@ -474,7 +470,7 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 						|| (cdwd1.equals(rp.ds2.getName()) && cdwd2.equals(rp.ds1.getName()))) {
 					alreadymapped = true;
 					if (prompt) {
-						JOptionPane.showMessageDialog(SemGenGUI.desktop, cdwd1
+						JOptionPane.showMessageDialog(this, cdwd1
 								+ " and " + cdwd2 + " are already mapped");
 					}
 				}
@@ -669,7 +665,7 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 	}
 
 	public void optionToEncode(SemSimModel model) throws IOException, OWLException {
-		int x = JOptionPane.showConfirmDialog(SemGenGUI.desktop, "Finished merging "
+		int x = JOptionPane.showConfirmDialog(this, "Finished merging "
 				+ mergedfile.getName()
 				+ "\nGenerate simulation code from merged model?", "",
 				JOptionPane.YES_NO_OPTION);
@@ -723,16 +719,12 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 				&& arg0.getClickCount() > 0) {
 			FileToMergeLabel ftml = (FileToMergeLabel) arg0.getSource();
 			arg0.consume();
-			ftml.setSelected();
+			ftml.setSelected(true);
 
 			for (Component comp : filelistpanel.getComponents()) {
 				if (comp instanceof FileToMergeLabel) {
 					FileToMergeLabel otherftml = (FileToMergeLabel) comp;
-					if (!otherftml.filepath.equals(ftml.filepath)) {
-						otherftml.setUnselected();
-					} else {
-						otherftml.setSelected();
-					}
+					otherftml.setSelected(!otherftml.filepath.equals(ftml.filepath));
 				}
 			}
 		}
@@ -762,7 +754,8 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 	}
 	
 	public File saveMerge() {
-		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("Choose location to save file", new String[]{"cellml","owl"});
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("Choose location to save file", 
+				new String[]{"cellml","owl"});
 		if (filec.SaveAsAction()!=null) {
 			mergedfile = filec.getSelectedFile();
 			return mergedfile;

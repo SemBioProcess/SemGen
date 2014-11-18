@@ -64,6 +64,14 @@ public class DataStructure extends ComputationalModelComponent implements Annota
 		return computation;
 	}
 	
+	public Set<DataStructure> getComputationInputs() {
+		return computation.getInputs();
+	}
+	
+	public Set<DataStructure> getComputationOutputs() {
+		return computation.getOutputs();
+	}
+	
 	/**
 	 * @return The {@link PhysicalProperty} simulated by the DataStructure
 	 */

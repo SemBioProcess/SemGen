@@ -119,7 +119,7 @@ public class SemSimComponentSelectorDialog extends JDialog implements ActionList
 		setTitle(title);
 		setModalityType(ModalityType.APPLICATION_MODAL);  // If put before pack() get null pointer error when hit OK, if here doesn't act modal
 		pack();
-		setLocationRelativeTo(SemGenGUI.desktop);
+		setLocationRelativeTo(anndia);
 		setVisible(true);
 	}
 

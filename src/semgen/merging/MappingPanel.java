@@ -11,7 +11,7 @@ import javax.swing.ListSelectionModel;
 
 public class MappingPanel extends JPanel {
 	private static final long serialVersionUID = 2776275290257952399L;
-	public JLabel title;
+	private JLabel title;
 	public JList<String> scrollercontent = new JList<String>();
 	
 	public MappingPanel(String filename) {
@@ -28,5 +28,9 @@ public class MappingPanel extends JPanel {
 		this.add(title);
 		this.add(scroller);
 		this.setBackground(Color.white);
+	}
+	
+	public void setTitle(String name) {
+		title.setText(name);
 	}
 }

@@ -45,7 +45,6 @@ import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 
 import semgen.SemGen;
-import semgen.SemGenGUI;
 import semgen.resource.GenericThread;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
@@ -365,7 +364,7 @@ public class MoreInfoButton extends JLabel implements PropertyChangeListener, Mo
 			moreinfodialog.setContentPane(optionPane);
 			moreinfodialog.setModalityType(ModalityType.APPLICATION_MODAL);
 			moreinfodialog.pack();
-			moreinfodialog.setLocationRelativeTo(SemGenGUI.desktop);
+			moreinfodialog.setLocationRelativeTo(null);
 			moreinfodialog.setTitle("Properties of " + termlabel + " (" + termuri + ")");
 			moreinfodialog.setResizable(true);
 			moreinfodialog.setVisible(true);

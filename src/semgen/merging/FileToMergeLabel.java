@@ -5,9 +5,6 @@ import javax.swing.JLabel;
 
 public class FileToMergeLabel extends JLabel {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -9210035304014498845L;
 	public Boolean selected;
 	public String filepath;
@@ -20,16 +17,10 @@ public class FileToMergeLabel extends JLabel {
 		this.setText(filepath);
 	}
 
-	public void setSelected() {
-		this.selected = true;
-		setBackground(new Color(207, 215, 252));
+	public void setSelected(boolean selection) {
+		selected = selection;
+		Color background = (selection) ? (new Color(207, 215, 252)) : Color.white;
+		setBackground(background);
 		validate();
 	}
-
-	public void setUnselected() {
-		selected = false;
-		setBackground(Color.white);
-		validate();
-	}
-
 }

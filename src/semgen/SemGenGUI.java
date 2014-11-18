@@ -43,7 +43,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, Observer {
 	private static SemGenSettings settingshandle; //Temporary work around for static functions
 	protected GlobalActions globalactions;
 
-	public static SemGenGUI desktop;
+	private static SemGenGUI desktop;
 	private ArrayList<AnnotatorTab> anntabs = new ArrayList<AnnotatorTab>(); //Open annotation tabs
 
 	public int numtabs = 0;
@@ -68,7 +68,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, Observer {
 		menu.filemenu.fileitemnew.addActionListener(this);
 		
 		menu.toolsmenu.toolsitemextract.addActionListener(this);
-		menu.toolsmenu.toolsitemmerge.addActionListener(this);
 	}
 
 	public void startNewTaskDialog() {
@@ -84,7 +83,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, Observer {
 			startNewExtractorTask();
 			break;
 		case Merge:
-			NewMergerAction();
+			globalactions.NewMergerTab();
 			break;
 		default:
 			break;
@@ -101,10 +100,6 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, Observer {
 		
 		if (o == menu.toolsmenu.toolsitemextract) {
 			startNewExtractorTask();
-		}
-
-		if (o == menu.toolsmenu.toolsitemmerge){
-			NewMergerAction();
 		}
 	}
 	
@@ -209,7 +204,7 @@ public class SemGenGUI extends JTabbedPane implements ActionListener, Observer {
 	}
 
 	// WHEN THE CLOSE TAB ACTION IS PERFORMED ON AN AnnotatorTab, MergerTab OR EXTRACTOR FRAME
-	public static boolean closeTabAction(SemGenTab component) {
+	private boolean closeTabAction(SemGenTab component) {
 		// If the file has been altered, prompt for a save
 		boolean returnval =  component.closeTab();
 		if (returnval) {
