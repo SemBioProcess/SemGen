@@ -91,20 +91,12 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 
 	public SemSimModel semsimmodel;
 
-	public AnnotatorTab(File srcfile, SemGenSettings sets, GlobalActions gacts) {
-		super(srcfile.getName(), SemGenIcon.annotatoricon, "Annotating " + srcfile.getName(), sets, gacts);
-		sourcefile = srcfile;
+	public AnnotatorTab(SemGenSettings sets, GlobalActions gacts, AnnotatorWorkbench bench) {
+		super(bench.getCurrentModelName(), SemGenIcon.annotatoricon, "Annotating " + bench.getCurrentModelName(), sets, gacts);
+		workbench = bench;
 	}
-	
-	public AnnotatorTab(SemGenSettings sets, GlobalActions gacts) {
-		super(sets, gacts);
-	}
-	
+
 	public boolean initialize() {
-		workbench = new AnnotatorWorkbench();	
-		if (!workbench.initialize(settings.doAutoAnnotate())) {
-			return false;
-		}	
 		sourcefile = workbench.getFile();
 		semsimmodel = workbench.getSemSimModel();
 		String name = workbench.getCurrentModelName();
@@ -116,20 +108,8 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		return true;
 	}
 	
-	public boolean initialize(File file) {
-		workbench = new AnnotatorWorkbench();		
-		if (!workbench.initialize(sourcefile, settings.doAutoAnnotate())) {
-			return false;
-		}	
-		semsimmodel = workbench.getSemSimModel();
-		workbench.addObservertoModelAnnotator(this);
-		loadTab();	
-		NewAnnotatorAction();
-		return true;
-	}
-	
 	protected void loadTab() {
-		toolbar = new AnnotatorToolBar(this, workbench, settings );
+		toolbar = new AnnotatorToolBar(this, globalactions, workbench, settings );
 		
 		initwidth = settings.getAppWidth();
 		initheight = settings.getAppHeight();
@@ -711,4 +691,6 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 			}
 		}
 	}
+	
+
 }

@@ -18,12 +18,10 @@ import semgen.GlobalActions;
 import semgen.SemGen;
 import semgen.resource.CSVExporter;
 import semgen.resource.SemGenError;
-import semgen.resource.SemGenTask;
 import semgen.resource.Workbench;
 import semgen.resource.file.LoadSemSimModel;
 import semgen.resource.file.SemGenOpenFileChooser;
 import semgen.resource.file.SemGenSaveFileChooser;
-import semgen.resource.uicomponent.SemGenProgressBar;
 import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.SemSimRelation;
@@ -41,24 +39,26 @@ public class AnnotatorWorkbench extends Observable implements Workbench, Observe
 	
 	public AnnotatorWorkbench() {}
 	
-	public boolean initialize(boolean autoannotate) {
-		NewAnnotatorTask task = new NewAnnotatorTask(autoannotate);
-		if (sourcefile == null) {
-			return false;
-		}
-		return runTask(task);
-	}
-	
 	public boolean initialize(File file, boolean autoannotate) {
-		NewAnnotatorTask task = new NewAnnotatorTask(file, autoannotate);
-		return runTask(task);
+		sourcefile = file;
+		return loadFile(autoannotate);
 	}
-	
-	private boolean runTask(NewAnnotatorTask task) {
-		task.execute();
-		while (!task.isDone());
-		return (sourcefile != null);
-	}
+
+    private boolean loadFile(boolean autoannotate){
+    	System.out.println("Loading " + sourcefile.getName());
+		try{
+			if (!loadModel(autoannotate)) {
+				sourcefile=null;
+				return false;
+			}
+		}
+		catch(Exception e){e.printStackTrace();}
+			
+		modanns = new ModelAnnotations(semsimmodel);
+		modanns.addObserver(this);
+		return true;
+    }
+
 	
 	@Override
 	public boolean loadModel(boolean autoannotate) {
@@ -207,34 +207,5 @@ public class AnnotatorWorkbench extends Observable implements Workbench, Observe
 		setModelSaved(false);
 	}
 
-	private class NewAnnotatorTask extends SemGenTask {
-		public boolean autoannotate;
-        public NewAnnotatorTask(boolean autoann){
-        	SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select legacy code or SemSim model to annotate");
-        	sourcefile = sgc.getSelectedFile();
-        	autoannotate = autoann;
-        	if (sourcefile==null) endTask(); //If no file was selected, abort
-        }
-        
-        public NewAnnotatorTask(File f, boolean autoann){
-        	sourcefile=f;
-        	autoannotate = autoann;
 
-        }
-        @Override
-        public Void doInBackground(){
-        	progframe = new SemGenProgressBar("Loading " + sourcefile.getName() + "...", true);
-        	System.out.println("Loading " + sourcefile.getName());
-    			try{
-    				if (!loadModel(autoannotate)) {
-    					sourcefile=null;
-    					endTask();
-    				}
-    			}
-    			catch(Exception e){e.printStackTrace();}
-    			modanns = new ModelAnnotations(semsimmodel);
-    			modanns.addObserver(this);
-            return null;
-        }
-    }
 }

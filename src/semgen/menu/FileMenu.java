@@ -11,6 +11,7 @@ import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 
 import semgen.GlobalActions;
+import semgen.NewTaskDialog;
 import semgen.PreferenceDialog;
 import semgen.SemGenSettings;
 import semgen.resource.uicomponent.SemGenMenu;
@@ -53,10 +54,10 @@ public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		
-//		if (o == fileitemopen) {
-//			globalactions.newTask();
-//		}
-//
+		if (o == fileitemnew) {
+			new NewTaskDialog(globalactions);
+		}
+
 		if (o == fileitemsave) {
 			globalactions.getCurrentTab().requestSave();
 		}

@@ -7,7 +7,7 @@ import semgen.resource.uicomponent.SemGenTab;
 
 public class GlobalActions extends Observable {
 	public static enum appactions { QUIT, TABCHANGED, TABCLOSED, SAVED, 
-		ANNOTATE, ANNOTATEEXISTING, EXTRACT, MERGE }
+		ANNOTATE, ANNOTATEEXISTING, EXTRACT, EXTRACTEXISTING, MERGE }
 	private SemGenTab currentTab;
 	private File seed;
 	
@@ -51,7 +51,7 @@ public class GlobalActions extends Observable {
 	public void NewExtractorTab(File obj) {
 		seed = obj;
 		setChanged();
-		notifyObservers(appactions.EXTRACT);
+		notifyObservers(appactions.EXTRACTEXISTING);
 	}
 
 	public void NewMergerTab(File obj) {

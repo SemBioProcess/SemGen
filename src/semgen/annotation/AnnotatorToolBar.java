@@ -12,7 +12,7 @@ import javax.swing.JButton;
 
 import org.semanticweb.owlapi.model.OWLException;
 
-import semgen.SemGenGUI;
+import semgen.GlobalActions;
 import semgen.SemGenSettings;
 import semgen.annotation.componentdisplays.codewords.CodewordButton;
 import semgen.annotation.dialog.AnnotationComponentReplacer;
@@ -52,11 +52,13 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 	private DropDownCheckList sortselector = new DropDownCheckList("Sort Options");
 	private String sortbytype = new String("By Type");
 	private String sortbycompletion = new String("By Composite Completeness");
+	GlobalActions globalactions;
 
-	public AnnotatorToolBar(AnnotatorTab tab, AnnotatorWorkbench wkbnch, SemGenSettings sets) {
+	public AnnotatorToolBar(AnnotatorTab tab, GlobalActions gacts, AnnotatorWorkbench wkbnch, SemGenSettings sets) {
 		super(sets);
 		workbench = wkbnch;
 		anntab = tab;
+		globalactions = gacts;
 
 		annotateitemshowimports.addActionListener(this);
 		annotateitemshowimports.setToolTipText("Make imported codewords and submodels visible");
@@ -158,8 +160,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		if (o == extractorbutton) {
 			try {
 				if(workbench.unsavedChanges()){
-					SemGenGUI.NewExtractorTask task = new SemGenGUI.NewExtractorTask(anntab.sourcefile);
-					task.execute();
+					globalactions.NewExtractorTab(workbench.getFile());
 				}
 			} catch (Exception e1) {
 				e1.printStackTrace();}

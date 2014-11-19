@@ -11,7 +11,7 @@ public class SemGenMenuBar extends JMenuBar {
 	private static final long serialVersionUID = 1L;
 	private SemGenSettings settings;
 	public FileMenu filemenu;
-	public ToolsMenu toolsmenu;
+	private ToolsMenu toolsmenu;
 	
 	public SemGenMenuBar(SemGenSettings sets, GlobalActions gacts) {
 		settings = sets;

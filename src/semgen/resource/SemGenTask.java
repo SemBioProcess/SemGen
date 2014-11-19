@@ -16,12 +16,8 @@ public abstract class SemGenTask extends SwingWorker<Void, Void> implements Obse
 	
     @Override
     public void done() {
-    	if (progframe!=null) 
-    		SwingUtilities.invokeLater(new Runnable() {
-			     public void run() {
-			        progframe.dispose();
-			     }
-			  });
+    	if (progframe!=null) progframe.dispose();
+
     	endTask();
     }
 

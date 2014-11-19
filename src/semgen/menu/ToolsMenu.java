@@ -5,9 +5,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JMenuItem;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
-
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
 import semgen.encoding.Encoder;
@@ -58,9 +55,9 @@ public class ToolsMenu extends SemGenMenu implements ActionListener{
 			globalactions.NewAnnotatorTab();
 		}
 		
-//		if (o == toolsitemextract) {
-//			uacts.NewExtractorTab();
-//		}
+		if (o == toolsitemextract) {
+			globalactions.NewExtractorTab();
+		}
 		
 	}
 

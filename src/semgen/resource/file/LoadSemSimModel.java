@@ -3,7 +3,6 @@ package semgen.resource.file;
 import java.io.File;
 
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 
 import semgen.SemGen;
 import semgen.annotation.routines.AutoAnnotate;

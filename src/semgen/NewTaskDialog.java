@@ -11,19 +11,20 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import semgen.encoding.Encoder;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
 
 public class NewTaskDialog extends JDialog implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	public enum newtask {Annotate, Extract, Merge, Encode, None}
 	public JButton annotatebutton = new JButton("Annotate a model",SemGenIcon.annotatoricon);
 	public JButton openmenuextractbutton = new JButton("Extract a model", SemGenIcon.extractoricon);
 	public JButton openmenumergebutton = new JButton("Merge models", SemGenIcon.mergeicon);
 	public JButton encodebutton = new JButton("Encode a model",SemGenIcon.codericon);
-	private newtask choice = newtask.None;
+	private GlobalActions globalactions;
 	
-	public NewTaskDialog() {
+	public NewTaskDialog(GlobalActions gacts) {
+		globalactions = gacts;
 		setTitle("OPEN: Select task");
 		JPanel openpanel = new JPanel();
 		openpanel.setLayout(new BoxLayout(openpanel, BoxLayout.Y_AXIS));
@@ -53,23 +54,18 @@ public class NewTaskDialog extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if (o == annotatebutton) {
-			choice = newtask.Annotate;
+			globalactions.NewAnnotatorTab();
 		}
 		else if (o == openmenuextractbutton) {
-			choice = newtask.Extract;
+			globalactions.NewExtractorTab();
 		}
 		else if (o == openmenumergebutton){
-			choice = newtask.Merge;
+			globalactions.NewMergerTab();
 		}
 		
 		else if (o == encodebutton) {
-			choice = newtask.Encode;
+			new Encoder();
 		}
 		dispose();
 	}
-	
-	public newtask getChoice() {
-		return choice;
-	}
-	
 }
