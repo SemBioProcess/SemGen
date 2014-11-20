@@ -21,7 +21,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import semgen.SemGenGUI;
 import semgen.annotation.annotatorpane.AnnotationPanel;
 import semsim.model.SemSimComponent;
 import semsim.model.SemSimModel;
@@ -29,10 +28,10 @@ import semsim.writing.CaseInsensitiveComparator;
 
 public class SemSimComponentSelectorDialog extends JDialog implements ActionListener {
 	private static final long serialVersionUID = -1776906245210358895L;
-	public JPanel panel;
+	public JPanel panel = new JPanel();
 	public JCheckBox markallbox = new JCheckBox("Mark all/none");
 	public JOptionPane optionPane;
-	protected Object[] options;
+	protected Object[] options = new Object[]{"OK","Cancel"};
 
 	public Map<String, Object> nameobjectmap = new HashMap<String, Object>();
 	public String[] results = null;
@@ -41,7 +40,6 @@ public class SemSimComponentSelectorDialog extends JDialog implements ActionList
 	public SemSimComponent ssctoignore;
 	public Set<? extends SemSimComponent> sscstodisable;
 	public AnnotationPanel anndia;
-	public String title;
 
 	public SemSimComponentSelectorDialog(
 			Set<? extends SemSimComponent> settolist,
@@ -55,7 +53,7 @@ public class SemSimComponentSelectorDialog extends JDialog implements ActionList
 		this.preselectedset = preselectedset;
 		this.ssctoignore = ssctoignore;
 		this.sscstodisable = sscstodisable;
-		this.title = title;
+		setTitle(title);
 	}
 	
 	
@@ -79,16 +77,13 @@ public class SemSimComponentSelectorDialog extends JDialog implements ActionList
 		results = nameobjectmap.keySet().toArray(new String[]{});
 		
 		Arrays.sort(results, new CaseInsensitiveComparator());
-
 		setPreferredSize(new Dimension(500, 600));
-		setTitle(this.title);
 
 		markallbox.setFont(new Font("SansSerif", Font.ITALIC, 11));
 		markallbox.setForeground(Color.blue);
 		markallbox.setSelected(false);
 		markallbox.addActionListener(this);
 
-		panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
 		for (int y = 0; y < results.length; y++) {
@@ -106,7 +101,6 @@ public class SemSimComponentSelectorDialog extends JDialog implements ActionList
 		
 		Object[] array = {scroller};
 
-		options = new Object[]{"OK","Cancel"};
 		optionPane = new JOptionPane(array, JOptionPane.PLAIN_MESSAGE,
 				JOptionPane.OK_CANCEL_OPTION, null);
 		
@@ -116,7 +110,7 @@ public class SemSimComponentSelectorDialog extends JDialog implements ActionList
 		optionPane.setInitialValue(options[0]);
 
 		setContentPane(optionPane);
-		setTitle(title);
+		
 		setModalityType(ModalityType.APPLICATION_MODAL);  // If put before pack() get null pointer error when hit OK, if here doesn't act modal
 		pack();
 		setLocationRelativeTo(anndia);

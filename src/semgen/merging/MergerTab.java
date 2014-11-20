@@ -12,7 +12,6 @@ import java.util.HashSet;
 import java.util.Observer;
 import java.util.Set;
 
-import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -232,7 +231,7 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 					resolvescroller.scrollToComponent(newrespanel);
 				}
 			} else {
-				JOptionPane.showMessageDialog(this,"Please select a codeword from both component models","", JOptionPane.ERROR_MESSAGE);
+				SemGenError.showError("Please select a codeword from both component models","");
 			}
 		}
 	}
@@ -649,8 +648,8 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 			// MIGHT NEED TO COPY IN PHYSICAL MODEL COMPONENTS?
 		}
 		else{
-			JOptionPane.showMessageDialog(this, 
-					"ERROR: One of the models to be merged has multiple solution domains.\nMerged model not saved.");
+			SemGenError.showError(
+					"ERROR: One of the models to be merged has multiple solution domains.\nMerged model not saved.","Merge Failed");
 			return;
 		}
 		
@@ -693,25 +692,9 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 		return models;
 	}
 
-	public void mouseEntered(MouseEvent arg0) {
-		Component component = arg0.getComponent();
-		if (component instanceof AbstractButton) {
-			AbstractButton button = (AbstractButton) component;
-			button.setBorderPainted(true);
-			button.setContentAreaFilled(true);
-			button.setOpaque(true);
-		}
-	}
+	public void mouseEntered(MouseEvent arg0) {}
 
-	public void mouseExited(MouseEvent arg0) {
-		Component component = arg0.getComponent();
-		if (component instanceof AbstractButton) {
-			AbstractButton button = (AbstractButton) component;
-			button.setBorderPainted(false);
-			button.setContentAreaFilled(false);
-			button.setOpaque(false);
-		}
-	}
+	public void mouseExited(MouseEvent arg0) {}
 
 	public void mousePressed(MouseEvent arg0) {
 		if (arg0.getSource() instanceof FileToMergeLabel

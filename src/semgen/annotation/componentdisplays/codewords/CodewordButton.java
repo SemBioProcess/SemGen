@@ -70,10 +70,8 @@ public class CodewordButton extends AnnotationObjectButton implements MouseListe
 		validate();
 		propoflabel.setVisible(settings.useDisplayMarkers());
 		
-		if(oldcolor!=col && settings.organizeByPropertyType()){
-			return true;  // Indicates to re-scroll to this button
-		}
-		return false;  // Indicates not to re-scroll to this button
+		// Indicate whether to re-scroll to this button
+		return (oldcolor!=col && settings.organizeByPropertyType()); 
 	}
 	
 	//Generates the codes in the codeword panel (northwest panel) indicating whether a 

@@ -15,14 +15,13 @@ import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.PhysicalProperty;
 import semsim.model.physical.ReferencePhysicalEntity;
-import semsim.Annotatable;
 
 public class CompositeAnnotationComponentSearchDialog extends AddReferenceClassDialog{
 	private static final long serialVersionUID = -6053255066931420852L;
 	public SemSimComponentAnnotationPanel pmcPanel;
 	
 	public CompositeAnnotationComponentSearchDialog(SemSimComponentAnnotationPanel pmcpanel, String[] ontList, Object[] options){
-		super(pmcpanel.anndialog.annotator, ontList, options, (Annotatable)pmcpanel.smc);
+		super(pmcpanel.anndialog.annotator, ontList, options, pmcpanel.smc);
 		pmcPanel = pmcpanel;
 		utilarea.setText("Current annotation: " + pmcPanel.combobox.getSelectedItem());
 		refclasspanel.ontologychooser.addActionListener(refclasspanel);

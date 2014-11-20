@@ -23,25 +23,25 @@ public class KEGGLocator extends org.apache.axis.client.Service implements KEGG 
         super(config);
     }
 
-    public KEGGLocator(java.lang.String wsdlLoc, javax.xml.namespace.QName sName) throws javax.xml.rpc.ServiceException {
+    public KEGGLocator(String wsdlLoc, javax.xml.namespace.QName sName) throws javax.xml.rpc.ServiceException {
         super(wsdlLoc, sName);
     }
 
     // Use to get a proxy class for KEGGPort
-    private java.lang.String KEGGPort_address = "http://soap.genome.jp/keggapi/request_v6.2.cgi";
+    private String KEGGPort_address = "http://soap.genome.jp/keggapi/request_v6.2.cgi";
 
-    public java.lang.String getKEGGPortAddress() {
+    public String getKEGGPortAddress() {
         return KEGGPort_address;
     }
 
     // The WSDD service name defaults to the port name.
-    private java.lang.String KEGGPortWSDDServiceName = "KEGGPort";
+    private String KEGGPortWSDDServiceName = "KEGGPort";
 
-    public java.lang.String getKEGGPortWSDDServiceName() {
+    public String getKEGGPortWSDDServiceName() {
         return KEGGPortWSDDServiceName;
     }
 
-    public void setKEGGPortWSDDServiceName(java.lang.String name) {
+    public void setKEGGPortWSDDServiceName(String name) {
         KEGGPortWSDDServiceName = name;
     }
 
@@ -67,7 +67,7 @@ public class KEGGLocator extends org.apache.axis.client.Service implements KEGG 
         }
     }
 
-    public void setKEGGPortEndpointAddress(java.lang.String address) {
+    public void setKEGGPortEndpointAddress(String address) {
         KEGGPort_address = address;
     }
 
@@ -84,7 +84,7 @@ public class KEGGLocator extends org.apache.axis.client.Service implements KEGG 
                 return _stub;
             }
         }
-        catch (java.lang.Throwable t) {
+        catch (Throwable t) {
             throw new javax.xml.rpc.ServiceException(t);
         }
         throw new javax.xml.rpc.ServiceException("There is no stub implementation for the interface:  " + (serviceEndpointInterface == null ? "null" : serviceEndpointInterface.getName()));
@@ -99,7 +99,7 @@ public class KEGGLocator extends org.apache.axis.client.Service implements KEGG 
         if (portName == null) {
             return getPort(serviceEndpointInterface);
         }
-        java.lang.String inputPortName = portName.getLocalPart();
+        String inputPortName = portName.getLocalPart();
         if ("KEGGPort".equals(inputPortName)) {
             return getKEGGPort();
         }
@@ -116,7 +116,7 @@ public class KEGGLocator extends org.apache.axis.client.Service implements KEGG 
 
     private HashSet<QName> ports = null;
 
-    public Iterator getPorts() {
+    public Iterator<QName> getPorts() {
         if (ports == null) {
             ports = new HashSet<QName>();
             ports.add(new QName("SOAP/KEGG", "KEGGPort"));
@@ -127,7 +127,7 @@ public class KEGGLocator extends org.apache.axis.client.Service implements KEGG 
     /**
     * Set the endpoint address for the specified port name.
     */
-    public void setEndpointAddress(java.lang.String portName, java.lang.String address) throws javax.xml.rpc.ServiceException {
+    public void setEndpointAddress(String portName, String address) throws javax.xml.rpc.ServiceException {
         
 if ("KEGGPort".equals(portName)) {
             setKEGGPortEndpointAddress(address);
@@ -141,7 +141,7 @@ if ("KEGGPort".equals(portName)) {
     /**
     * Set the endpoint address for the specified port name.
     */
-    public void setEndpointAddress(javax.xml.namespace.QName portName, java.lang.String address) throws javax.xml.rpc.ServiceException {
+    public void setEndpointAddress(javax.xml.namespace.QName portName, String address) throws javax.xml.rpc.ServiceException {
         setEndpointAddress(portName.getLocalPart(), address);
     }
 }

@@ -8,7 +8,9 @@ import semgen.extraction.ExtractorFactory;
 import semgen.menu.SemGenMenuBar;
 import semgen.merging.MergerTab;
 import semgen.resource.SemGenTask;
+import semgen.resource.uicomponent.SemGenProgressBar;
 import semgen.resource.uicomponent.SemGenTab;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.awt.Color;
@@ -53,7 +55,7 @@ public class SemGenGUI extends JTabbedPane implements Observer {
 	
 	// METHODS
 	public void startNewAnnotatorTask(){
-		addTab(new MakeTab() {
+		addTab(new MakeTab("New Annotator Tab") {
 			public void run() {
 				AnnotatorFactory factory = new AnnotatorFactory(settings, globalactions);
 				tab = factory.makeTab();
@@ -62,7 +64,7 @@ public class SemGenGUI extends JTabbedPane implements Observer {
 	}
 	
 	public void startNewAnnotatorTask(final File existingfile){
-		addTab(new MakeTab() {
+		addTab(new MakeTab("New Annotator Tab") {
 			public void run() {
 				AnnotatorFactory factory = new AnnotatorFactory(settings, globalactions);
 				tab = factory.makeTab(existingfile);
@@ -71,7 +73,7 @@ public class SemGenGUI extends JTabbedPane implements Observer {
 	}
 	
 	public void startNewExtractorTask() {
-		addTab(new MakeTab() {
+		addTab(new MakeTab("New Extractor Tab") {
 			public void run() {    	
 				ExtractorFactory factory = new ExtractorFactory(settings, globalactions);
 				tab = factory.makeTab();
@@ -80,7 +82,7 @@ public class SemGenGUI extends JTabbedPane implements Observer {
 	}
 	
 	public void startNewExtractorTask(final File existingfile){
-		addTab(new MakeTab() {
+		addTab(new MakeTab("New Extractor Tab") {
 			public void run() {
 				ExtractorFactory factory = new ExtractorFactory(settings, globalactions);
 				tab = factory.makeTab(existingfile);
@@ -90,7 +92,7 @@ public class SemGenGUI extends JTabbedPane implements Observer {
 	}
 	
 	public void startNewMergerTask(){
-		addTab(new MakeTab() {
+		addTab(new MakeTab("New Merger Tab") {
 			public void run() {
 				MergerTab merger = new MergerTab(settings, globalactions);
 				tab = merger;
@@ -198,32 +200,46 @@ public class SemGenGUI extends JTabbedPane implements Observer {
 		MakeTab maker;
 		AddTabTask(MakeTab maker) {
 			this.maker = maker;
+			progframe = new SemGenProgressBar(maker.getProgress(), true);
 		}
 		@Override
 		protected Void doInBackground() throws Exception {		
 			SwingUtilities.invokeAndWait(maker);
-			SemGenTab tab = maker.getTab();
-			numtabs++;
-			addTab(tab.getName(), tab);
-			tab.addObservertoWorkbench(menu.filemenu);
-			setTabComponentAt(numtabs-1, tab.getTabLabel());
-			globalactions.setCurrentTab(tab);
-			tab.addMouseListenertoTabLabel(new tabClickedListener(numtabs-1));
-			tab.setClosePolicy(new tabCloseListener(tab));
+
 			return null;
 		}
 		
 		public void endTask() {
+			SemGenTab tab = maker.getTab();
+			numtabs++;
+			addTab(tab.getName(), tab);
+			globalactions.setCurrentTab(tab);
+			tab.addObservertoWorkbench(menu.filemenu);
+			setTabComponentAt(numtabs-1, tab.getTabLabel());
+			
+			tab.addMouseListenertoTabLabel(new tabClickedListener(numtabs-1));
+			tab.setClosePolicy(new tabCloseListener(tab));
 			setSelectedComponent(getComponentAt(numtabs - 1));
 			getComponentAt(numtabs - 1).repaint();
-			getComponentAt(numtabs - 1).validate();		
+			getComponentAt(numtabs - 1).validate();
 		}
 	}
 	
 	private abstract class MakeTab implements Runnable {
 		SemGenTab tab;
+		String progress;
+		public MakeTab(String prog) {
+			progress = prog;
+		}
 		protected SemGenTab getTab() {
 			return tab;
+		}
+		public String getProgress() {
+			return progress;
+		}
+		
+		public void setProgress(String prog) {
+			progress = prog;
 		}
 	}
 }

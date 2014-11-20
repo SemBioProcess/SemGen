@@ -7,23 +7,25 @@
 
 package semgen.webservices.KEGG;
 
+import javax.xml.namespace.QName;
+
 public class Subtype  implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private java.lang.String relation;
+	private String relation;
 
     private int element_id;
 
-    private java.lang.String type;
+    private String type;
 
     public Subtype() {
     }
 
     public Subtype(
-           java.lang.String relation,
+           String relation,
            int element_id,
-           java.lang.String type) {
+           String type) {
            this.relation = relation;
            this.element_id = element_id;
            this.type = type;
@@ -35,7 +37,7 @@ public class Subtype  implements java.io.Serializable {
      * 
      * @return relation
      */
-    public java.lang.String getRelation() {
+    public String getRelation() {
         return relation;
     }
 
@@ -45,7 +47,7 @@ public class Subtype  implements java.io.Serializable {
      * 
      * @param relation
      */
-    public void setRelation(java.lang.String relation) {
+    public void setRelation(String relation) {
         this.relation = relation;
     }
 
@@ -75,7 +77,7 @@ public class Subtype  implements java.io.Serializable {
      * 
      * @return type
      */
-    public java.lang.String getType() {
+    public String getType() {
         return type;
     }
 
@@ -85,12 +87,12 @@ public class Subtype  implements java.io.Serializable {
      * 
      * @param type
      */
-    public void setType(java.lang.String type) {
+    public void setType(String type) {
         this.type = type;
     }
 
-    private java.lang.Object __equalsCalc = null;
-    public synchronized boolean equals(java.lang.Object obj) {
+    private Object __equalsCalc = null;
+    public synchronized boolean equals(Object obj) {
         if (!(obj instanceof Subtype)) return false;
         Subtype other = (Subtype) obj;
         if (this == obj) return true;
@@ -134,23 +136,23 @@ public class Subtype  implements java.io.Serializable {
         new org.apache.axis.description.TypeDesc(Subtype.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("SOAP/KEGG", "Subtype"));
+        typeDesc.setXmlType(new QName("SOAP/KEGG", "Subtype"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("relation");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "relation"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setXmlName(new QName("", "relation"));
+        elemField.setXmlType(new QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("element_id");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "element_id"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+        elemField.setXmlName(new QName("", "element_id"));
+        elemField.setXmlType(new QName("http://www.w3.org/2001/XMLSchema", "int"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("type");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "type"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setXmlName(new QName("", "type"));
+        elemField.setXmlType(new QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
     }
@@ -166,9 +168,9 @@ public class Subtype  implements java.io.Serializable {
      * Get Custom Serializer
      */
     public static org.apache.axis.encoding.Serializer getSerializer(
-           java.lang.String mechType, 
+           String mechType, 
            Class<?> _javaType,  
-           javax.xml.namespace.QName _xmlType) {
+           QName _xmlType) {
         return 
           new  org.apache.axis.encoding.ser.BeanSerializer(
             _javaType, _xmlType, typeDesc);
@@ -178,9 +180,9 @@ public class Subtype  implements java.io.Serializable {
      * Get Custom Deserializer
      */
     public static org.apache.axis.encoding.Deserializer getDeserializer(
-           java.lang.String mechType, 
+           String mechType, 
            Class<?> _javaType,  
-           javax.xml.namespace.QName _xmlType) {
+           QName _xmlType) {
         return 
           new  org.apache.axis.encoding.ser.BeanDeserializer(
             _javaType, _xmlType, typeDesc);

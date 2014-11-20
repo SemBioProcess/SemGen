@@ -13,7 +13,7 @@ public class PropertyMarker extends JLabel{
 	 */
 	private static final long serialVersionUID = -8788987331968930201L;
 	public Color color;
-	public int radius = 3;
+	private int radius = 3;
 	public PropertyMarker(Color color, String tooltip){
 		this.color = color;
 		this.setToolTipText(tooltip);

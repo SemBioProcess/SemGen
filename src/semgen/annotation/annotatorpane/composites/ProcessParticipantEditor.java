@@ -21,7 +21,6 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
-import semgen.SemGenGUI;
 import semgen.annotation.dialog.selector.SemSimComponentSelectorDialog;
 import semgen.resource.SemGenIcon;
 import semgen.resource.uicomponent.SemGenScrollPane;
@@ -47,7 +46,6 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 	public ProcessParticipantTableModel tablemod;
 	public Map<String,PhysicalEntity> namesandparticipantmap = new HashMap<String,PhysicalEntity>();
 	public SemSimComponentSelectorDialog sscsd; 
-	public int scrollerwidth = 550;
 
 	public ProcessParticipantEditor(SemSimModel model, SemSimRelation relation, PhysicalProcess process) {	
 		this.model = model;
@@ -69,7 +67,7 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 		setTableData();
 		
 		SemGenScrollPane scroller = new SemGenScrollPane(table);
-		scroller.setPreferredSize(new Dimension(scrollerwidth, 100));
+		scroller.setPreferredSize(new Dimension(550, 100));
 		scroller.getViewport().setBackground(Color.white);
 		
 		setLayout(new BorderLayout());

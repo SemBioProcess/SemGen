@@ -7,6 +7,8 @@
 
 package semgen.webservices.KEGG;
 
+import javax.xml.namespace.QName;
+
 public class LinkDBRelation  implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -113,7 +115,6 @@ public class LinkDBRelation  implements java.io.Serializable {
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof LinkDBRelation)) return false;
         LinkDBRelation other = (LinkDBRelation) obj;
-        if (obj == null) return false;
         if (this == obj) return true;
         if (__equalsCalc != null) {
             return (__equalsCalc == obj);
@@ -165,29 +166,29 @@ public class LinkDBRelation  implements java.io.Serializable {
         new org.apache.axis.description.TypeDesc(LinkDBRelation.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("SOAP/KEGG", "LinkDBRelation"));
+        typeDesc.setXmlType(new QName("SOAP/KEGG", "LinkDBRelation"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("entry_id1");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "entry_id1"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setXmlName(new QName("", "entry_id1"));
+        elemField.setXmlType(new QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("entry_id2");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "entry_id2"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setXmlName(new QName("", "entry_id2"));
+        elemField.setXmlType(new QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("type");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "type"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setXmlName(new QName("", "type"));
+        elemField.setXmlType(new QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("path");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "path"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setXmlName(new QName("", "path"));
+        elemField.setXmlType(new QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
     }
@@ -205,7 +206,7 @@ public class LinkDBRelation  implements java.io.Serializable {
     public static org.apache.axis.encoding.Serializer getSerializer(
            String mechType, 
            Class<?> _javaType,  
-           javax.xml.namespace.QName _xmlType) {
+           QName _xmlType) {
         return 
           new  org.apache.axis.encoding.ser.BeanSerializer(
             _javaType, _xmlType, typeDesc);
@@ -217,7 +218,7 @@ public class LinkDBRelation  implements java.io.Serializable {
     public static org.apache.axis.encoding.Deserializer getDeserializer(
            String mechType, 
            Class<?> _javaType,  
-           javax.xml.namespace.QName _xmlType) {
+           QName _xmlType) {
         return 
           new  org.apache.axis.encoding.ser.BeanDeserializer(
             _javaType, _xmlType, typeDesc);

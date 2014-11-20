@@ -4,6 +4,7 @@ import java.io.File;
 
 import javax.swing.JOptionPane;
 
+import semgen.resource.SemGenError;
 import semgen.resource.SemGenTask;
 import semgen.resource.file.LoadSemSimModel;
 import semgen.resource.file.SemGenOpenFileChooser;
@@ -84,7 +85,7 @@ public class Encoder {
 	    		if(model == null){
 	        		model = LoadSemSimModel.loadSemSimModelFromFile(inputfile, false);
 	    			if(!model.getErrors().isEmpty()){
-	    				JOptionPane.showMessageDialog(null, "Selected model had errors:", "Could not encode model", JOptionPane.ERROR_MESSAGE);
+	    				SemGenError.showError("Selected model had errors:", "Could not encode model");
 	    				return null;
 	    			}
 	    		}
@@ -97,9 +98,9 @@ public class Encoder {
 	    		if(content!=null)
 	    			SemSimUtil.writeStringToFile(content, outputfile);
 	    		else
-	    			JOptionPane.showMessageDialog(null, "Sorry. There was a problem encoding " + model.getName() + 
+	    			SemGenError.showError("Sorry. There was a problem encoding " + model.getName() + 
 	    					"\nThe JSim API threw an exception.",  
-	    					"Error", JOptionPane.ERROR_MESSAGE);
+	    					"Error");
 	    	}
 	    }
 }

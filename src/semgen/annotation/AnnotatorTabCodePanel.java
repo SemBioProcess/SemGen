@@ -123,8 +123,8 @@ public class AnnotatorTabCodePanel extends SemGenTextArea {
 				} else cont = false;
 			}
 		} else { 
-			cont = false; 
 			modelloc = "<file location not specified>";
+			cont = false; 
 		}
 
 		if (!cont) {

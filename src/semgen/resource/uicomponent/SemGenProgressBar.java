@@ -31,13 +31,8 @@ public class SemGenProgressBar extends JFrame implements ActionListener {
 		setLocationRelativeTo(location);
 		isAlwaysOnTop();
 		
-		SwingUtilities.invokeLater(new Runnable() {
-		     public void run() {
-		    	requestFocusInWindow();
-		        setVisible(true);
-		     }
-		  });
-		
+		requestFocusInWindow();
+		setVisible(true);		
 	}
 	
 	public SemGenProgressBar(String msg, Boolean isindeterminant, Observer obs) {
@@ -94,15 +89,6 @@ public class SemGenProgressBar extends JFrame implements ActionListener {
 	
 	public void setProgressValue(int i) {
 		bar.setValue(i);
-	}
-	
-	public void dispose() {
-		final SemGenProgressBar target = this;
-		SwingUtilities.invokeLater(new Runnable() {
-		     public void run() {
-		    	 target.dispose();
-		     }
-		  });
 	}
 	
 	public class CancelEvent extends Observable{

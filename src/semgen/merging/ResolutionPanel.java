@@ -33,9 +33,6 @@ import semsim.model.computational.datastructures.DataStructure;
 
 public class ResolutionPanel extends JPanel implements ActionListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -618244272904338963L;
 
 	public SemSimModel semsimmodel1;
@@ -44,7 +41,7 @@ public class ResolutionPanel extends JPanel implements ActionListener {
 	public DataStructure ds2;
 	public JRadioButton rb1;
 	public JRadioButton rb2;
-	public JRadioButton rb3;
+	public JRadioButton rb3 = new JRadioButton("Ignore equivalency");
 	public JButton questionbutton = new JButton(SemGenIcon.questionicon);
 
 	public ResolutionPanel(DataStructure ds1, DataStructure ds2,
@@ -60,11 +57,6 @@ public class ResolutionPanel extends JPanel implements ActionListener {
 		this.setAlignmentX(LEFT_ALIGNMENT);
 		this.setBackground(Color.white);
 		this.setOpaque(true);
-
-		JPanel annotationpanel = new JPanel(new BorderLayout());
-		annotationpanel.setBackground(Color.white);
-		annotationpanel.setAlignmentX(LEFT_ALIGNMENT);
-		annotationpanel.setOpaque(true);
 
 		JLabel model1label = new JLabel(ds1.getDescription() + " (" + ds1.getName() + ")");
 
@@ -88,11 +80,15 @@ public class ResolutionPanel extends JPanel implements ActionListener {
 		annotationsubpanel.add(model1label);
 		annotationsubpanel.add(mappedtolabel);
 		annotationsubpanel.add(model2label);
-
+		
+		JPanel annotationpanel = new JPanel(new BorderLayout());
+		annotationpanel.setBackground(Color.white);
+		annotationpanel.setAlignmentX(LEFT_ALIGNMENT);
+		annotationpanel.setOpaque(true);
 		annotationpanel.add(annotationsubpanel, BorderLayout.WEST);
 		annotationpanel.add(Box.createGlue(), BorderLayout.EAST);
 
-		ButtonGroup bg = new ButtonGroup();
+		
 		rb1 = new JRadioButton("Use " + ds1.getName() + " (" + semsimmodel1.getName() + ")");
 		rb1.setForeground(Color.blue);
 		rb1.setBackground(Color.white);
@@ -107,12 +103,12 @@ public class ResolutionPanel extends JPanel implements ActionListener {
 			rb2.setToolTipText(ds2.getComputation().getComputationalCode());
 		else rb2.setToolTipText("user-defined input");
 		rb2.setToolTipText(ds2.getComputation().getComputationalCode());
-		
-		rb3 = new JRadioButton("Ignore equivalency");
+
 		rb3.setToolTipText("Preserve both codewords and their equations in the merged model");
 		rb3.setBackground(Color.white);
 		rb1.setSelected(true);
 		
+		ButtonGroup bg = new ButtonGroup();
 		bg.add(rb1);
 		bg.add(rb2);
 		bg.add(rb3);
@@ -125,9 +121,6 @@ public class ResolutionPanel extends JPanel implements ActionListener {
 		JPanel actionpanel = new JPanel();
 		actionpanel.setBackground(Color.white);
 		actionpanel.setAlignmentX(LEFT_ALIGNMENT);
-
-		JPanel actionsubpanel = new JPanel();
-		actionsubpanel.setLayout(new BorderLayout());
 
 		JLabel equalslabel = new JLabel(matchdescription);
 		equalslabel.setOpaque(false);

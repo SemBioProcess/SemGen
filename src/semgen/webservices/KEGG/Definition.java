@@ -10,16 +10,16 @@ package semgen.webservices.KEGG;
 public class Definition  implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private java.lang.String entry_id;
+	private String entry_id;
 
-    private java.lang.String definition;
+    private String definition;
 
     public Definition() {
     }
 
     public Definition(
-           java.lang.String entry_id,
-           java.lang.String definition) {
+           String entry_id,
+           String definition) {
            this.entry_id = entry_id;
            this.definition = definition;
     }
@@ -30,7 +30,7 @@ public class Definition  implements java.io.Serializable {
      * 
      * @return entry_id
      */
-    public java.lang.String getEntry_id() {
+    public String getEntry_id() {
         return entry_id;
     }
 
@@ -40,7 +40,7 @@ public class Definition  implements java.io.Serializable {
      * 
      * @param entry_id
      */
-    public void setEntry_id(java.lang.String entry_id) {
+    public void setEntry_id(String entry_id) {
         this.entry_id = entry_id;
     }
 
@@ -50,7 +50,7 @@ public class Definition  implements java.io.Serializable {
      * 
      * @return definition
      */
-    public java.lang.String getDefinition() {
+    public String getDefinition() {
         return definition;
     }
 
@@ -60,12 +60,12 @@ public class Definition  implements java.io.Serializable {
      * 
      * @param definition
      */
-    public void setDefinition(java.lang.String definition) {
+    public void setDefinition(String definition) {
         this.definition = definition;
     }
 
-    private java.lang.Object __equalsCalc = null;
-    public synchronized boolean equals(java.lang.Object obj) {
+    private Object __equalsCalc = null;
+    public synchronized boolean equals(Object obj) {
         if (!(obj instanceof Definition)) return false;
         Definition other = (Definition) obj;
         if (this == obj) return true;
@@ -133,7 +133,7 @@ public class Definition  implements java.io.Serializable {
      * Get Custom Serializer
      */
     public static org.apache.axis.encoding.Serializer getSerializer(
-           java.lang.String mechType, 
+           String mechType, 
            Class<?> _javaType,  
            javax.xml.namespace.QName _xmlType) {
         return 
@@ -145,7 +145,7 @@ public class Definition  implements java.io.Serializable {
      * Get Custom Deserializer
      */
     public static org.apache.axis.encoding.Deserializer getDeserializer(
-           java.lang.String mechType, 
+           String mechType, 
            Class<?> _javaType,  
            javax.xml.namespace.QName _xmlType) {
         return 

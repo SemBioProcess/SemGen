@@ -1,6 +1,5 @@
 package semgen.resource;
 
-import javax.swing.JOptionPane;
 import java.util.Arrays;
 
 /**
@@ -63,8 +62,7 @@ public class BrowserLauncher {
 						throw new Exception(Arrays.toString(browsers));
 				}
 			} catch (Exception e) {
-				JOptionPane.showMessageDialog(null,
-						errMsg + "\n" + e.toString());
+				SemGenError.showError(errMsg + "\n" + e.toString(), "");
 			}
 		}
 	}

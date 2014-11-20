@@ -43,7 +43,7 @@ public class CustomPhysicalComponentEditor extends JDialog implements PropertyCh
 	public ProcessParticipantEditor hassourceeditor;
 	public ProcessParticipantEditor hassinkeditor;
 	public ProcessParticipantEditor hasmediatoreditor;
-	public JComponent[] objectpropertyeditors;
+
 
 	public CustomPhysicalComponentEditor(AnnotationPanel anndia, PhysicalModelComponent pmc) {
 		this.anndia = anndia;
@@ -70,7 +70,8 @@ public class CustomPhysicalComponentEditor extends JDialog implements PropertyCh
 		JPanel descriptionpanel = new JPanel();
 		descriptionpanel.add(new JLabel("Description: "));
 		descriptionpanel.add(descscroller);
-
+		
+		JComponent[] objectpropertyeditors;
 		String title = "Edit custom physical ";
 		if(pmc instanceof PhysicalProcess){
 			title = title + "process";

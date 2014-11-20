@@ -1,9 +1,8 @@
 package semgen.annotation.dialog;
 
-import org.semanticweb.owlapi.model.*;
-
 import semgen.SemGen;
 import semgen.annotation.AnnotatorTab;
+import semgen.resource.SemGenError;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
 import semgen.resource.uicomponent.SemGenScrollPane;
@@ -44,9 +43,7 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 	public AnnotatorTab annotator;
 	private SemGenScrollPane scrollpane;
 	private JPanel genmodinfo = new JPanel();
-	public JPanel mainpanel = new JPanel(new BorderLayout());
 	public JButton addbutton = new JButton("Add annotation");
-	public Set<OWLAnnotation> modellevelanns = new HashSet<OWLAnnotation>();
 
 	private int initwidth = 700;
 	private int initheight = 655;
@@ -62,6 +59,8 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 		JPanel toppanel = new JPanel(new BorderLayout());
 		addbutton.addActionListener(this);
 		toppanel.add(addbutton, BorderLayout.WEST);
+		
+		JPanel mainpanel = new JPanel(new BorderLayout());
 		mainpanel.add(toppanel, BorderLayout.NORTH);
 
 		genmodinfo.setBorder(BorderFactory.createEmptyBorder(0, 12, 24, 24));
@@ -86,19 +85,16 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 	
 	
 	public class MetadataItem extends JPanel implements MouseListener, ActionListener{
-
 		private static final long serialVersionUID = 3245322304789828616L;
 		public JButton removebutton = new JButton();
-		public ModelLevelMetadataEditor ed;
 		public Annotation ann;
 		public Boolean editable;
 		public JComboBox<String> cb;
 		public JTextArea ta;
 		public SemGenScrollPane sgsp = new SemGenScrollPane(ta);
 		
-		public MetadataItem(String labeltext, String tatext, Annotation ann, ModelLevelMetadataEditor ed, Boolean editable){
+		public MetadataItem(String labeltext, String tatext, Annotation ann, Boolean editable){
 			this.ann = ann;
-			this.ed = ed;
 			this.editable = editable;
 			
 			JLabel label = new JLabel(labeltext);
@@ -109,9 +105,8 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 			this.add(removebutton);
 		}
 		
-		public MetadataItem(String tatext, Annotation ann, ModelLevelMetadataEditor ed, Boolean editable){
+		public MetadataItem(String tatext, Annotation ann, Boolean editable){
 			this.ann = ann;
-			this.ed = ed;
 			this.editable = editable;
 			
 			cb = new JComboBox<String>(SemGen.semsimlib.getListofMetaDataRelations());
@@ -155,7 +150,7 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 		public void actionPerformed(ActionEvent e) {
 			Object o = e.getSource();
 			if (o == removebutton) {
-				ed.genmodinfo.remove(this);
+				genmodinfo.remove(this);
 				genmodinfo.validate();
 				genmodinfo.repaint();
 			}
@@ -193,7 +188,7 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 				else{
 					label = ann.getValue().toString();
 				}
-				genmodinfo.add(new MetadataItem(ann.getRelation().getName(), label, ann, this, false));
+				genmodinfo.add(new MetadataItem(ann.getRelation().getName(), label, ann, false));
 			}
 			else{
 				String fragment = "?";
@@ -203,7 +198,7 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 					fragment = fragment.substring(fragment.lastIndexOf("/")+1,fragment.length());
 				}
 				if(ann.getValue()!=null){
-					genmodinfo.add(new MetadataItem(fragment, ann.getValue().toString(), ann, this, true));
+					genmodinfo.add(new MetadataItem(fragment, ann.getValue().toString(), ann, true));
 				}
 			}
 		}
@@ -218,7 +213,6 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 		if (propertyfired.equals("value")) {
 			String value = optionPane.getValue().toString();
 			if (value == "Apply") {
-				
 				// Test to make sure all annotations are complete
 				Component[] cmpnts = genmodinfo.getComponents();
 				for(int g=0; g<cmpnts.length; g++){
@@ -226,7 +220,7 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 						MetadataItem mi = (MetadataItem)cmpnts[g];
 						if(mi.editable){
 							if(mi.ta.getText()==null || mi.ta.getText().equals("")){
-								JOptionPane.showMessageDialog(this, "Please complete or remove all annotations first.", "Error", JOptionPane.ERROR_MESSAGE);
+								SemGenError.showError("Please complete or remove all annotations first.", "Error");
 								optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 								return;
 							}
@@ -264,7 +258,7 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 	public void actionPerformed(ActionEvent arg0) {
 		Object o = arg0.getSource();
 		if(o == addbutton){
-			MetadataItem mi = new MetadataItem("", null, this, true);
+			MetadataItem mi = new MetadataItem("", null, true);
 			genmodinfo.add(mi,0);
 			genmodinfo.validate();
 			genmodinfo.repaint();

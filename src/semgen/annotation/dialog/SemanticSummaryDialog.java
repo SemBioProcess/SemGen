@@ -28,7 +28,7 @@ public class SemanticSummaryDialog extends JDialog implements PropertyChangeList
 
 	private static final long serialVersionUID = -1850501792672929694L;
 	public JOptionPane optionPane;
-	public Object[] options = new Object[]{"OK"};
+	
 	public JPanel mainpanel = new JPanel();
 	public SemSimModel semsimmodel;
 	
@@ -45,6 +45,8 @@ public class SemanticSummaryDialog extends JDialog implements PropertyChangeList
 		Object[] array = { scroller };
 		
 		optionPane = new JOptionPane(array, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_OPTION, null);
+		
+		Object[] options = new Object[]{"OK"};
 		optionPane.setOptions(options);
 		optionPane.setInitialValue(options[0]);
 		setContentPane(optionPane);
@@ -130,7 +132,6 @@ public class SemanticSummaryDialog extends JDialog implements PropertyChangeList
 	public void propertyChange(PropertyChangeEvent arg0) {
 		String val = optionPane.getValue().toString();
 		if(val == "OK"){
-			optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 			dispose();
 		}
 	}

@@ -40,6 +40,7 @@ import semgen.extraction.RadialGraph.Clusterer;
 import semgen.extraction.RadialGraph.SemGenRadialGraphView;
 import semgen.resource.ComparatorByName;
 import semgen.resource.GenericThread;
+import semgen.resource.SemGenError;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
 import semgen.resource.SemGenTask;
@@ -136,7 +137,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(sourcefile, settings.doAutoAnnotate());
 		
 		if(ModelClassifier.classify(sourcefile)==ModelClassifier.CELLML_MODEL || semsimmodel.getFunctionalSubmodels().size()>0){
-			JOptionPane.showMessageDialog(null, "Sorry. Extraction of models with CellML-type components not yet supported.");
+			JOptionPane.showMessageDialog(this, "Sorry. Extraction of models with CellML-type components not yet supported.");
 			return false;
 		}
 		loadTab();
@@ -228,7 +229,6 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 			}
 		};
 	}
-
 	
 	// List physical processes
 	public Hashtable<PhysicalProcess, Set<DataStructure>> listprocesses() {
@@ -764,7 +764,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 						optionToEncode(extractedfile.getName());
 					}
 				} else {
-					JOptionPane.showMessageDialog(this,"Nothing to extract because no check boxes selected in extraction panels");
+					SemGenError.showError("Nothing to extract because no check boxes selected in extraction panels", "Extraction Error");
 				}
 			} catch (IOException | OWLException e1) {
 				e1.printStackTrace();
@@ -912,10 +912,11 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	}
 	
 	public class BatchClusterTask extends SemGenTask {
-        public BatchClusterTask(){}
-        @Override
-        public Void doInBackground() {
-        	progframe = new SemGenProgressBar("Performing clustering analysis...", false);
+        public BatchClusterTask(){
+	        	progframe = new SemGenProgressBar("Performing clustering analysis...", false);
+	    }
+	    @Override
+	    public Void doInBackground() {
         	try {
         		performClusteringAnalysis();
 			} catch (Exception e) {
@@ -923,40 +924,41 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 			}
             return null;
         }
-        
+	        
         public void performClusteringAnalysis() throws IOException {
-		// Make sure to ignore edges for state variables that are inputs to themselves
-		int statevars = 0;
-		for (Number edge : cd.mygraph.getEdges()) {
-			Pair<String> pair = cd.mygraph.getEndpoints(edge);
-			if (pair.getFirst().equals(pair.getSecond())) {
-				statevars++;
+			// Make sure to ignore edges for state variables that are inputs to themselves
+			int statevars = 0;
+			for (Number edge : cd.mygraph.getEdges()) {
+				Pair<String> pair = cd.mygraph.getEndpoints(edge);
+				if (pair.getFirst().equals(pair.getSecond())) {
+					statevars++;
+				}
 			}
-		}
-		float maxclusteringiterations = cd.mygraph.getEdgeCount() - statevars;
+			float maxclusteringiterations = cd.mygraph.getEdgeCount() - statevars;
+	
+			// Loop through all clustering levels
+			String moduletable = "";
+			for (int y = 1; y <= maxclusteringiterations; y++) {
+	
+				clusterwriter.println("\n-----Removing " + y + " edges-----");
+				System.out.println("-----Removing " + y + " edges-----");
+				String newmoduletable = cd.clusterAndRecolor(cd.layout, y, cd.similarColors, Clusterer.groupVertices.isSelected());
+				clusterwriter.println("-----Found " + cd.nummodules + " modules-----");
+				if (!newmoduletable.equals(moduletable)) {
+					moduletable = newmoduletable;
+					clusterwriter.println(moduletable);
+				} else {
+					clusterwriter.println("(no change)");
+				}
 
-		// Loop through all clustering levels
-		String moduletable = "";
-		for (int y = 1; y <= maxclusteringiterations; y++) {
-
-			clusterwriter.println("\n-----Removing " + y + " edges-----");
-			System.out.println("-----Removing " + y + " edges-----");
-			String newmoduletable = cd.clusterAndRecolor(cd.layout, y, cd.similarColors, Clusterer.groupVertices.isSelected());
-			clusterwriter.println("-----Found " + cd.nummodules + " modules-----");
-			if (!newmoduletable.equals(moduletable)) {
-				moduletable = newmoduletable;
-				clusterwriter.println(moduletable);
-			} else {
-				clusterwriter.println("(no change)");
+				progframe.bar.setValue(Math.round(100 * ((float)y / maxclusteringiterations)));
 			}
-
-			float fltmaxnum = maxclusteringiterations;
-
-			progframe.bar.setValue(Math.round(100 * ((float)y / fltmaxnum)));
-		}
-		clusterwriter.flush();
-		clusterwriter.close();
-		JOptionPane.showMessageDialog(null, "Finished clustering analysis");
+			clusterwriter.flush();
+			clusterwriter.close();
+        }
+        
+        public void endTask() {
+        	JOptionPane.showMessageDialog(null, "Finished clustering analysis");
         }
     }
 
@@ -991,7 +993,6 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	@Override
 	public void addObservertoWorkbench(Observer obs) {
 
-		
 	}
 
 

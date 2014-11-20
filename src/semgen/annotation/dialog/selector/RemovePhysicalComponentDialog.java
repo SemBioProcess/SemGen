@@ -8,7 +8,6 @@ import java.util.Set;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 
-import semgen.SemGenGUI;
 import semgen.annotation.AnnotatorTab;
 import semgen.annotation.componentdisplays.codewords.CodewordButton;
 import semsim.model.SemSimComponent;

@@ -72,7 +72,6 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 
 	public Map<String,SemSimComponent> listdataandsmcmap = new HashMap<String, SemSimComponent>();
 	public Object selecteditem;
-	public Boolean editable;
 	protected SemGenSettings settings;
 	
 	public SemSimComponentAnnotationPanel(AnnotationPanel anndia, SemGenSettings sets, Annotatable smc){
@@ -81,7 +80,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 		this.semsimmodel = anndia.semsimmodel;
 		this.setBackground(new Color(207, 215, 252));
 		
-		editable = anndialog.thebutton.editable;
+		Boolean editable = anndialog.thebutton.editable;
 		
 		combobox.setPreferredSize(new Dimension(350,30));
 		combobox.setMaximumSize(new Dimension(350,30));
@@ -211,7 +210,8 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 	}
 	
 	public void updateButtonVisibility(){
-		if(smc instanceof PhysicalProperty || smc instanceof DataStructure || smc instanceof Submodel) createlabel.setVisible(false);
+		if(smc instanceof PhysicalProperty || smc instanceof DataStructure || smc instanceof Submodel) 
+			createlabel.setVisible(false);
 		else createlabel.setVisible(true);
 		
 		if(smc instanceof CustomPhysicalEntity || smc instanceof CustomPhysicalProcess){
@@ -229,9 +229,9 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 			modifylabel.setVisible(false);
 			urlbutton.setVisible(false);
 		}
-		if(smc instanceof PhysicalProcess) searchlabel.setVisible(false);
+		if(smc instanceof PhysicalProcess) 
+			searchlabel.setVisible(false);
 	}
-	
 	
 	private void searchLabelClicked() {
 		String[] ontList = null;

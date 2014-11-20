@@ -40,7 +40,7 @@ public class ObjectPropertyEditor extends JPanel implements ActionListener, Prop
 	public SemSimModel model;
 	public SemSimRelation relation;
 	public Annotatable subject;
-	public JPanel headerpanel = new JPanel();
+
 	public JButton plusbutton = new JButton(SemGenIcon.plusicon);
 	public JButton minusbutton = new JButton(SemGenIcon.minusicon);
 	public JComponent listcomponent = new JList<String>();
@@ -62,7 +62,8 @@ public class ObjectPropertyEditor extends JPanel implements ActionListener, Prop
 
 		minusbutton.addActionListener(this);
 		minusbutton.setToolTipText("Remove selected reference term");
-
+		
+		JPanel headerpanel = new JPanel();
 		headerpanel.setOpaque(false);
 		headerpanel.add(headerlabel);
 		headerpanel.add(plusbutton);

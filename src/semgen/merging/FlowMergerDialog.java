@@ -205,13 +205,13 @@ public class FlowMergerDialog extends JDialog implements
 				}
 			}
 			if (!choicesmade.contains(false)) {
-				setVisible(false);
+				dispose();
 			} else {
 				optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 			}
 		}
 		if (value == "Cancel") {
-			setVisible(false);
+			dispose();
 		}
 	}
 }

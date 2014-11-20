@@ -79,7 +79,7 @@ public class ChalkboardCoder {
 					
 					// Get the inputs to the flow term
 					String verbID = Integer.toString(x);
-					String desc = null;
+					String desc;
 					if(prop.getPhysicalPropertyOf().hasRefersToAnnotation()){
 						desc = prop.getPhysicalPropertyOf().getFirstRefersToReferenceOntologyAnnotation().getValueDescription();
 					}
@@ -144,11 +144,10 @@ public class ChalkboardCoder {
 	}
 	
 	public static CustomPhysicalEntity collectNounData(PhysicalEntity ent, String verbID){
-		CustomPhysicalEntity noun = null;
+		CustomPhysicalEntity noun;
 		String compositename = ent.getName();
-		String nounID = null; 
 		if(!nounnamesandphysents.keySet().contains(compositename)){
-			nounID = Integer.toString(x);
+			String nounID = Integer.toString(x);
 			noun = new CustomPhysicalEntity(ent.getName(), ent.getName());
 			Element nounel = new Element("noun");
 			nounel.setAttribute("ID", nounID);

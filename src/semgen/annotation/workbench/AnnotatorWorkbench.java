@@ -20,7 +20,6 @@ import semgen.resource.CSVExporter;
 import semgen.resource.SemGenError;
 import semgen.resource.Workbench;
 import semgen.resource.file.LoadSemSimModel;
-import semgen.resource.file.SemGenOpenFileChooser;
 import semgen.resource.file.SemGenSaveFileChooser;
 import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
