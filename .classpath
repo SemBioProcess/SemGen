@@ -35,6 +35,8 @@
 	<classpathentry kind="lib" path="thirdParty/wstx-asl-3.2.9.jar"/>
 	<classpathentry kind="lib" path="thirdParty/xercesImpl-2.7.1.jar"/>
 	<classpathentry kind="lib" path="thirdParty/commons-lang3-3.3.2.jar"/>
+	<classpathentry kind="lib" path="thirdParty/gson-2.3.jar"/>
+	<classpathentry kind="lib" path="thirdParty/commons-io-2.4.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

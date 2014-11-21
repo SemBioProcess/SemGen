@@ -7,8 +7,10 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
 import java.awt.event.*;
 import java.io.File;
 import java.io.FileWriter;
@@ -22,6 +24,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
 import org.semanticweb.owlapi.model.IRI;
@@ -37,6 +40,7 @@ import semgen.FileFilter;
 import semgen.GenericThread;
 import semgen.ProgressFrame;
 import semgen.SemGenGUI;
+import semgen.visualizations.D3;
 import semsim.SemSimUtil;
 import semsim.extraction.Extractor;
 import semsim.model.SemSimModel;
@@ -121,7 +125,7 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 	public Clusterer cd;
 	public PrintWriter clusterwriter;
 
-	public ExtractorTab(final JTabbedPane pane, SemSimModel semsimmodel, File sourcefile) throws OWLException {
+	public ExtractorTab(final JTabbedPane pane, SemSimModel semsimmodel, File sourcefile) throws OWLException, IOException {
 		this.pane = pane;
 		this.setLayout(new BorderLayout());
 		this.semsimmodel = semsimmodel;
@@ -207,6 +211,9 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 		add(centersplitpane, BorderLayout.CENTER);
 		setVisible(true);
 		visualizeAllDataStructures(false);
+		
+		D3 d3 = new D3(semsimmodel);
+		d3.visualize(D3.VisualizationType.DirectedGraph);
 	}
 	
 	// List physical processes
