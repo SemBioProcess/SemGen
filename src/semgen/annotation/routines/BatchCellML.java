@@ -16,6 +16,7 @@ import org.jdom.input.SAXBuilder;
 
 import semgen.GlobalActions;
 import semgen.annotation.dialog.textminer.TextMinerDialog;
+import semgen.annotation.workbench.AnnotatorFactory;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.resource.file.SemGenOpenFileChooser;
 import semsim.SemSimConstants;
@@ -61,8 +62,9 @@ public class BatchCellML{
 				
 				try {
 					// Make this into a task
-					ann = new AnnotatorWorkbench();
-					ann.initialize(cellmlfile, autoannotate);
+					AnnotatorFactory factory = new AnnotatorFactory(autoannotate, cellmlfile);
+					factory.run();
+					factory.getWorkbench();
 					TextMinerDialog tmd = new TextMinerDialog();
 					
 					tmd.pubmedid = getModelIDAndPubMedIdFromCellMLModel(cellmlfile);

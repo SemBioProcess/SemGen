@@ -19,7 +19,6 @@ import semgen.SemGen;
 import semgen.resource.CSVExporter;
 import semgen.resource.SemGenError;
 import semgen.resource.Workbench;
-import semgen.resource.file.LoadSemSimModel;
 import semgen.resource.file.SemGenSaveFileChooser;
 import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
@@ -28,7 +27,7 @@ import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.ModelClassifier;
 import semsim.writing.CellMLwriter;
 
-public class AnnotatorWorkbench extends Observable implements Workbench, Observer {
+public class AnnotatorWorkbench extends Workbench implements Observer {
 	private SemSimModel semsimmodel;
 	protected File sourcefile; //File originally loaded at start of Annotation session (could be 
 							//in SBML, MML, CellML or SemSim format)
@@ -36,43 +35,21 @@ public class AnnotatorWorkbench extends Observable implements Workbench, Observe
 	private boolean modelsaved = true;
 	private int lastsavedas = -1;
 	
-	public AnnotatorWorkbench() {}
-	
-	public boolean initialize(File file, boolean autoannotate) {
+	public AnnotatorWorkbench(File file, SemSimModel model) {
+		semsimmodel = model;
 		sourcefile = file;
-		return loadFile(autoannotate);
-	}
-
-    private boolean loadFile(boolean autoannotate){
-    	System.out.println("Loading " + sourcefile.getName());
-		try{
-			if (!loadModel(autoannotate)) {
-				sourcefile=null;
-				return false;
-			}
-		}
-		catch(Exception e){e.printStackTrace();}
-			
-		modanns = new ModelAnnotations(semsimmodel);
-		modanns.addObserver(this);
-		return true;
-    }
-
-	
-	@Override
-	public boolean loadModel(boolean autoannotate) {
-		semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(sourcefile, autoannotate);
 		lastsavedas = semsimmodel.getSourceModelType();
 		
-		if(semsimmodel.getErrors().isEmpty()){
-			setModelSaved(isSemSimorCellMLModel());
-			
-			// Add unspecified physical model components for use during annotation
-			semsimmodel.addCustomPhysicalEntity(SemSimModel.unspecifiedName, "Non-specific entity for use as a placeholder during annotation");
-			semsimmodel.addCustomPhysicalProcess(SemSimModel.unspecifiedName, "Non-specific process for use as a placeholder during annotation");
-			return true;
-		}
-		return false; //Model has errors, abort
+	}
+	
+	public void initialize() {
+		modanns = new ModelAnnotations(semsimmodel);
+		modanns.addObserver(this);
+		// Add unspecified physical model components for use during annotation
+		semsimmodel.addCustomPhysicalEntity(SemSimModel.unspecifiedName, "Non-specific entity for use as a placeholder during annotation");
+		semsimmodel.addCustomPhysicalProcess(SemSimModel.unspecifiedName, "Non-specific process for use as a placeholder during annotation");
+
+		setModelSaved(isSemSimorCellMLModel());
 	}
 	
 	public void addObservertoModelAnnotator(Observer obs) {

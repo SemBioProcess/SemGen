@@ -2,41 +2,51 @@ package semgen.extraction;
 
 import java.io.File;
 
-import org.semanticweb.owlapi.model.OWLException;
-
-import semgen.GlobalActions;
-import semgen.SemGenSettings;
+import semgen.resource.SemGenError;
+import semgen.resource.WorkbenchFactory;
+import semgen.resource.file.LoadSemSimModel;
 import semgen.resource.file.SemGenOpenFileChooser;
+import semsim.model.SemSimModel;
+import semsim.reading.ModelClassifier;
 
-public class ExtractorFactory {
-	SemGenSettings settings;
-	GlobalActions globalactions;
-	public ExtractorFactory(SemGenSettings sets, GlobalActions gacts) {
-		settings = sets;
-		globalactions = gacts;
-	}
-	
-	public ExtractorTab makeTab() {
+public class ExtractorFactory extends WorkbenchFactory<ExtractorWorkbench> {
+	File sourcefile;
+	public ExtractorFactory() {
 		final SemGenOpenFileChooser sgc =  new SemGenOpenFileChooser("Extractor - Select source SemSim model",
 				new String[]{"owl"} );
-		File file = sgc.getSelectedFile();
-		if (file == null) return null;
+		sourcefile = sgc.getSelectedFile();
+		if (sourcefile == null) {
+			abort();
+		}
+		else if(ModelClassifier.classify(sourcefile)==ModelClassifier.CELLML_MODEL) {
+			isCellMLError();
+			abort();
+		}
+	}
+	
+	public ExtractorFactory(File file) {
+		sourcefile = file;
+	}
+	
+	protected boolean makeWorkbench() {	
+		System.out.println("Loading " + sourcefile.getName());
+				
+		SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(sourcefile, false);
 		
-		return CreateExtractorTab(sgc.getSelectedFile());
+		if(!semsimmodel.getErrors().isEmpty()){
+			return false;
+		}
+		
+		if(ModelClassifier.classify(sourcefile)==ModelClassifier.CELLML_MODEL || semsimmodel.getFunctionalSubmodels().size()>0){
+			isCellMLError();
+			return false;
+		}
+		
+		workbench = new ExtractorWorkbench(sourcefile, semsimmodel);
+		return true;
 	}	
 	
-	public ExtractorTab makeTab(File existing) {
-		return CreateExtractorTab(existing);
-	}
-
-	private ExtractorTab CreateExtractorTab(File file) {
-		ExtractorTab tab = null;
-		try {
-			tab = new ExtractorTab(file, settings, globalactions);
-		} catch (OWLException e) {
-			e.printStackTrace();
-		}
-		if (!tab.initialize()) return null;
-		return tab;
+	private void isCellMLError() {
+		SemGenError.showError("Sorry. Extraction of models with CellML-type components not yet supported.","");
 	}
 }

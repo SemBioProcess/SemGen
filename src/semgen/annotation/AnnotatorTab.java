@@ -94,21 +94,12 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	public AnnotatorTab(SemGenSettings sets, GlobalActions gacts, AnnotatorWorkbench bench) {
 		super(bench.getCurrentModelName(), SemGenIcon.annotatoricon, "Annotating " + bench.getCurrentModelName(), sets, gacts);
 		workbench = bench;
-	}
-
-	public boolean initialize() {
 		sourcefile = workbench.getFile();
 		semsimmodel = workbench.getSemSimModel();
-		String name = workbench.getCurrentModelName();
 		workbench.addObservertoModelAnnotator(this);
-		createTabTitleLabel(name,SemGenIcon.annotatoricon, "Annotating " + name);
-		
-		loadTab();	
-		NewAnnotatorAction();
-		return true;
 	}
 	
-	protected void loadTab() {
+	public void loadTab() {
 		toolbar = new AnnotatorToolBar(this, globalactions, workbench, settings );
 		
 		initwidth = settings.getAppWidth();
@@ -145,6 +136,8 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 
 		splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, westsplitpane, eastsplitpane);
 		splitpane.setOneTouchExpandable(true);
+		
+		NewAnnotatorAction();
 	}
 	
 	public void addObservertoWorkbench(Observer obs) {

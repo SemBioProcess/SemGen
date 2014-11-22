@@ -2,21 +2,26 @@ package semgen;
 
 import org.semanticweb.owlapi.model.OWLException;
 
-import semgen.annotation.AnnotatorFactory;
+import semgen.annotation.AnnotationTabFactory;
 import semgen.annotation.AnnotatorTab;
+import semgen.annotation.workbench.AnnotatorFactory;
 import semgen.extraction.ExtractorFactory;
+import semgen.extraction.ExtractorTabFactory;
 import semgen.menu.SemGenMenuBar;
-import semgen.merging.MergerTab;
+import semgen.merging.MergerFactory;
+import semgen.merging.MergerTabFactory;
 import semgen.resource.SemGenTask;
+import semgen.resource.Workbench;
+import semgen.resource.WorkbenchFactory;
 import semgen.resource.uicomponent.SemGenProgressBar;
 import semgen.resource.uicomponent.SemGenTab;
+import semgen.resource.uicomponent.TabFactory;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.HeadlessException;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -55,50 +60,33 @@ public class SemGenGUI extends JTabbedPane implements Observer {
 	
 	// METHODS
 	public void startNewAnnotatorTask(){
-		addTab(new MakeTab("New Annotator Tab") {
-			public void run() {
-				AnnotatorFactory factory = new AnnotatorFactory(settings, globalactions);
-				tab = factory.makeTab();
-			}
-		});
+		AnnotatorFactory factory = new AnnotatorFactory(settings.doAutoAnnotate());
+		AnnotationTabFactory tabfactory = new AnnotationTabFactory(settings, globalactions);
+		addTab(factory, tabfactory);
 	}
 	
 	public void startNewAnnotatorTask(final File existingfile){
-		addTab(new MakeTab("New Annotator Tab") {
-			public void run() {
-				AnnotatorFactory factory = new AnnotatorFactory(settings, globalactions);
-				tab = factory.makeTab(existingfile);
-			}
-		});
+		AnnotatorFactory factory = new AnnotatorFactory(settings.doAutoAnnotate(), existingfile);
+		AnnotationTabFactory tabfactory = new AnnotationTabFactory(settings, globalactions);
+		addTab(factory, tabfactory);
 	}
 	
 	public void startNewExtractorTask() {
-		addTab(new MakeTab("New Extractor Tab") {
-			public void run() {    	
-				ExtractorFactory factory = new ExtractorFactory(settings, globalactions);
-				tab = factory.makeTab();
-			}
-		});
+		ExtractorFactory factory = new ExtractorFactory();
+		ExtractorTabFactory tabfactory = new ExtractorTabFactory(settings, globalactions);
+		addTab(factory, tabfactory);
 	}
 	
 	public void startNewExtractorTask(final File existingfile){
-		addTab(new MakeTab("New Extractor Tab") {
-			public void run() {
-				ExtractorFactory factory = new ExtractorFactory(settings, globalactions);
-				tab = factory.makeTab(existingfile);
-				setMnemonicAt(0, KeyEvent.VK_1);
-			}
-		});
+		ExtractorFactory factory = new ExtractorFactory(existingfile);
+		ExtractorTabFactory tabfactory = new ExtractorTabFactory(settings, globalactions);
+		addTab(factory, tabfactory);
 	}
 	
 	public void startNewMergerTask(){
-		addTab(new MakeTab("New Merger Tab") {
-			public void run() {
-				MergerTab merger = new MergerTab(settings, globalactions);
-				tab = merger;
-				merger.PlusButtonAction();
-			}
-		});
+		MergerFactory factory = new MergerFactory();
+		MergerTabFactory tabfactory = new MergerTabFactory(settings, globalactions);
+		addTab(factory, tabfactory);
 	}
 
 	public Boolean isOntologyOpenForEditing(URI uritocheck) {
@@ -191,29 +179,38 @@ public class SemGenGUI extends JTabbedPane implements Observer {
 			startNewMergerTask();
 		}
 	}
-	public void addTab(MakeTab maker) {
-		AddTabTask task = new AddTabTask(maker);
+	public void addTab(WorkbenchFactory<? extends Workbench> workbenchmaker, TabFactory<? extends Workbench> tabmaker) {
+		if (!workbenchmaker.isValid()) return;
+		AddTabTask<? extends Workbench> task = new AddTabTask(workbenchmaker, tabmaker);
 		task.execute();
 	}
 	
-	private class AddTabTask extends SemGenTask {
-		MakeTab maker;
-		AddTabTask(MakeTab maker) {
-			this.maker = maker;
-			progframe = new SemGenProgressBar(maker.getProgress(), true);
+	private class AddTabTask<T extends Workbench> extends SemGenTask {
+		WorkbenchFactory<T> workbenchfactory;
+		TabFactory<T> tabfactory;
+		AddTabTask(WorkbenchFactory<T> maker, TabFactory<T> tabmaker) {
+			workbenchfactory = maker;
+			tabfactory = tabmaker;
+			progframe = new SemGenProgressBar(maker.getStatus(), true);
 		}
 		@Override
-		protected Void doInBackground() throws Exception {		
-			SwingUtilities.invokeAndWait(maker);
-
+		protected Void doInBackground() throws Exception {
+			while (workbenchfactory.isValid()) {
+				SwingUtilities.invokeAndWait(workbenchfactory);
+				break;
+			}
+			if (!workbenchfactory.isValid()) {
+				cancel(true);
+			}
 			return null;
 		}
 		
-		public void endTask() {
-			SemGenTab tab = maker.getTab();
+		public void endTask() {	
+			SemGenTab tab = tabfactory.makeTab(workbenchfactory.getWorkbench());
 			numtabs++;
 			addTab(tab.getName(), tab);
 			globalactions.setCurrentTab(tab);
+			tab.loadTab();
 			tab.addObservertoWorkbench(menu.filemenu);
 			setTabComponentAt(numtabs-1, tab.getTabLabel());
 			
@@ -224,22 +221,5 @@ public class SemGenGUI extends JTabbedPane implements Observer {
 			getComponentAt(numtabs - 1).validate();
 		}
 	}
-	
-	private abstract class MakeTab implements Runnable {
-		SemGenTab tab;
-		String progress;
-		public MakeTab(String prog) {
-			progress = prog;
-		}
-		protected SemGenTab getTab() {
-			return tab;
-		}
-		public String getProgress() {
-			return progress;
-		}
-		
-		public void setProgress(String prog) {
-			progress = prog;
-		}
-	}
+
 }

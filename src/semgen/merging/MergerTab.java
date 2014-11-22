@@ -88,8 +88,8 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 	public JButton loadingbutton = new JButton(SemGenIcon.blankloadingiconsmall);
 	public Set<String> initialidenticalinds = new HashSet<String>();
 	public Set<String> identicaldsnames = new HashSet<String>();
-
-	public MergerTab(SemGenSettings sets, GlobalActions globalacts) {
+	
+	public MergerTab(SemGenSettings sets, GlobalActions globalacts, MergerWorkbench bench) {
 		super("Merger", SemGenIcon.mergeicon, "Tab for Merging SemSim Models", sets, globalacts);
 		loadTab();
 	}

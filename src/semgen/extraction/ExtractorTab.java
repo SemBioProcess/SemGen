@@ -45,7 +45,6 @@ import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
 import semgen.resource.SemGenTask;
 import semgen.resource.file.FileFilter;
-import semgen.resource.file.LoadSemSimModel;
 import semgen.resource.file.SemGenFileChooser;
 import semgen.resource.file.SemGenOpenFileChooser;
 import semgen.resource.file.SemGenSaveFileChooser;
@@ -61,7 +60,6 @@ import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.PhysicalProperty;
 import semsim.model.physical.Submodel;
-import semsim.reading.ModelClassifier;
 import semsim.writing.MMLwriter;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
@@ -126,26 +124,18 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	public Clusterer cd;
 	public PrintWriter clusterwriter;
 	public ExtractorToolbar toolbar;
+	ExtractorWorkbench workbench;
 	
-	public ExtractorTab(File srcfile, SemGenSettings sets, GlobalActions gacts) throws OWLException {
-		super(srcfile.getName(), SemGenIcon.extractoricon, "Extracting from " + srcfile.getName(), sets, gacts);
+	public ExtractorTab(SemGenSettings sets, GlobalActions gacts, ExtractorWorkbench bench) {
+		super(bench.getCurrentModelName(), SemGenIcon.extractoricon, "Extracting from " + bench.getCurrentModelName(), sets, gacts);
 		settings = sets;
-		sourcefile = srcfile;
-	}
-	
-	public boolean initialize() {
-		semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(sourcefile, settings.doAutoAnnotate());
-		
-		if(ModelClassifier.classify(sourcefile)==ModelClassifier.CELLML_MODEL || semsimmodel.getFunctionalSubmodels().size()>0){
-			JOptionPane.showMessageDialog(this, "Sorry. Extraction of models with CellML-type components not yet supported.");
-			return false;
-		}
-		loadTab();
-		return true;
+		workbench = bench;
+		sourcefile = workbench.getSourceFile();
+		semsimmodel = workbench.getSourceModel();
 	}
 	
 	@Override
-	protected void loadTab() {
+	public void loadTab() {
 		this.setLayout(new BorderLayout());
 		vizsourcebutton.setFont(SemGenFont.defaultPlain());
 		vizsourcebutton.addActionListener(this);

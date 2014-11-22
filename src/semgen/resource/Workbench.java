@@ -1,19 +1,22 @@
 package semgen.resource;
 
 import java.io.File;
+import java.util.Observable;
 
-public interface Workbench {
-	public boolean loadModel(boolean autoannotate);
+public abstract class Workbench extends Observable{
+	public abstract void initialize();
 	
-	public boolean getModelSaved();
+	public boolean getModelSaved() {
+		return false;
+	}
 	
-	public void setModelSaved(boolean val);
+	public abstract void setModelSaved(boolean val);
 	
-	public String getCurrentModelName();
+	public abstract String getCurrentModelName();
 	
-	public String getModelSourceFile();
+	public abstract String getModelSourceFile();
 	
-	public File saveModel();
+	public abstract File saveModel();
 	
-	public File saveModelAs();
+	public abstract File saveModelAs();
 }

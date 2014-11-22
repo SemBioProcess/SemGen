@@ -25,21 +25,17 @@ public abstract class SemGenTab extends JPanel {
 
 	protected TabTitle tablabel = null;
 
-	public SemGenTab(SemGenSettings sets, GlobalActions acts){
-		settings = new SemGenSettings(sets);
-		globalactions=acts;
-	}
-	
 	public SemGenTab(String title, ImageIcon icon, String tooltip, SemGenSettings sets, GlobalActions acts){
 		createTabTitleLabel(title, icon, tooltip);
 		settings = new SemGenSettings(sets);
 		globalactions=acts;
 	}
+	
 	protected void createTabTitleLabel(String title, ImageIcon icon, String tooltip) {
 		tablabel = new TabTitle(this, title, icon, tooltip);	
 	}
 	
-	protected abstract void loadTab();
+	public abstract void loadTab();
 	
 	public TabTitle getTabLabel() {
 		return tablabel;

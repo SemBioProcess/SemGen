@@ -9,6 +9,7 @@ import org.jdom.JDOMException;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.GlobalActions;
+import semgen.annotation.workbench.AnnotatorFactory;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semsim.reading.ModelClassifier;
 
@@ -33,8 +34,11 @@ public class BatchSBML {
 				if(!outputfiles.contains(outfile.getName())){
 					if(ModelClassifier.classify(sbmlfiles[x]) == ModelClassifier.SBML_MODEL){
 						System.out.println("Processing " + sbmlfiles[x].getName());
-						AnnotatorWorkbench annotator = new AnnotatorWorkbench();
-						annotator.initialize(sbmlfiles[x], autoannotate);
+						AnnotatorFactory factory = new AnnotatorFactory(autoannotate, sbmlfiles[x]);
+						factory.run();
+						
+						AnnotatorWorkbench annotator = (AnnotatorWorkbench) factory.getWorkbench();
+	
 						annotator.saveModelAs();
 					}
 					else{
