@@ -1,14 +1,13 @@
 package semgen.resource;
 
-import java.util.Observable;
-import java.util.Observer;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
-import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 import semgen.resource.uicomponent.SemGenProgressBar;
 
-public abstract class SemGenTask extends SwingWorker<Void, Void> implements Observer {
+public abstract class SemGenTask extends SwingWorker<Void, Void> implements PropertyChangeListener {
 	protected SemGenProgressBar progframe = null;
 	
 	@Override
@@ -23,15 +22,20 @@ public abstract class SemGenTask extends SwingWorker<Void, Void> implements Obse
 
     public void endTask() {}
 
-    public void showProgressBar() {
-		 SwingUtilities.invokeLater(new Runnable() {
-		     public void run() {
-		        progframe.setVisible(true);
-		     }
-		  });
+    public void progressUpdated(String update) {
+    	firePropertyChange("status", new String(update), null);
     }
+    
 	@Override
-	public void update(Observable arg0, Object arg1) {
-		cancel(true);
+	public void propertyChange(PropertyChangeEvent evt) {
+		
+		if (evt.getPropertyName() == "status") {
+			progframe.updateMessage(evt.getNewValue().toString());
+		}
+		try {
+			Thread.sleep(1);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }

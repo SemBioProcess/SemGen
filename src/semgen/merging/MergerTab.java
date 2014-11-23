@@ -34,6 +34,7 @@ import JSim.util.Xcept;
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
 import semgen.encoding.Encoder;
+import semgen.merging.workbench.MergerWorkbench;
 import semgen.resource.GenericThread;
 import semgen.resource.SemGenError;
 import semgen.resource.SemGenFont;

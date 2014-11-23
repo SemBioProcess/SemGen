@@ -12,6 +12,7 @@ public class AnnotatorFactory extends WorkbenchFactory<AnnotatorWorkbench>{
 	boolean autoannotate = false;
 	
 	public AnnotatorFactory(boolean aannotate) {
+		super("Loading File");
 		autoannotate = aannotate;
 		SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select legacy code or SemSim model to annotate");
 		sourcefile = sgc.getSelectedFile();
@@ -20,11 +21,13 @@ public class AnnotatorFactory extends WorkbenchFactory<AnnotatorWorkbench>{
 	}
 	
 	public AnnotatorFactory(boolean autoannotate, File existing) {
+		super("Loading File");
 		sourcefile = existing;
 	}
 	
 	protected boolean makeWorkbench() {	
     	System.out.println("Loading " + sourcefile.getName());
+    	setStatus("Creating SemSimModel");
 		SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(sourcefile, autoannotate);
 		
 		if(!semsimmodel.getErrors().isEmpty()){

@@ -38,6 +38,7 @@ import semgen.SemGenSettings;
 import semgen.encoding.Encoder;
 import semgen.extraction.RadialGraph.Clusterer;
 import semgen.extraction.RadialGraph.SemGenRadialGraphView;
+import semgen.extraction.workbench.ExtractorWorkbench;
 import semgen.resource.ComparatorByName;
 import semgen.resource.GenericThread;
 import semgen.resource.SemGenError;

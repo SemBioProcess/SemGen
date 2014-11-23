@@ -1,4 +1,4 @@
-package semgen.extraction;
+package semgen.extraction.workbench;
 
 import java.io.File;
 
@@ -12,6 +12,7 @@ import semsim.reading.ModelClassifier;
 public class ExtractorFactory extends WorkbenchFactory<ExtractorWorkbench> {
 	File sourcefile;
 	public ExtractorFactory() {
+		super("Loading File");
 		final SemGenOpenFileChooser sgc =  new SemGenOpenFileChooser("Extractor - Select source SemSim model",
 				new String[]{"owl"} );
 		sourcefile = sgc.getSelectedFile();
@@ -25,12 +26,14 @@ public class ExtractorFactory extends WorkbenchFactory<ExtractorWorkbench> {
 	}
 	
 	public ExtractorFactory(File file) {
+		super("Loading File");
 		sourcefile = file;
 	}
 	
 	protected boolean makeWorkbench() {	
 		System.out.println("Loading " + sourcefile.getName());
-				
+		
+		setStatus("Creating SemSimModel");		
 		SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(sourcefile, false);
 		
 		if(!semsimmodel.getErrors().isEmpty()){

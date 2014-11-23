@@ -5,11 +5,11 @@ import org.semanticweb.owlapi.model.OWLException;
 import semgen.annotation.AnnotationTabFactory;
 import semgen.annotation.AnnotatorTab;
 import semgen.annotation.workbench.AnnotatorFactory;
-import semgen.extraction.ExtractorFactory;
 import semgen.extraction.ExtractorTabFactory;
+import semgen.extraction.workbench.ExtractorFactory;
 import semgen.menu.SemGenMenuBar;
-import semgen.merging.MergerFactory;
 import semgen.merging.MergerTabFactory;
+import semgen.merging.workbench.MergerFactory;
 import semgen.resource.SemGenTask;
 import semgen.resource.Workbench;
 import semgen.resource.WorkbenchFactory;
@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-public class SemGenGUI extends JTabbedPane implements Observer {
+public class SemGenGUI extends JTabbedPane implements Observer{
 	private static final long serialVersionUID = 3618439495848469800L;
 
 	private SemGenSettings settings;
@@ -221,5 +221,7 @@ public class SemGenGUI extends JTabbedPane implements Observer {
 			getComponentAt(numtabs - 1).validate();
 		}
 	}
+
+
 
 }

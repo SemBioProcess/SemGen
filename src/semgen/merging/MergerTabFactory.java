@@ -2,6 +2,7 @@ package semgen.merging;
 
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
+import semgen.merging.workbench.MergerWorkbench;
 import semgen.resource.uicomponent.TabFactory;
 
 public class MergerTabFactory extends TabFactory<MergerWorkbench> {

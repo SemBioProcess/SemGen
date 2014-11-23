@@ -1,4 +1,4 @@
-package semgen.merging;
+package semgen.merging.workbench;
 
 import semgen.resource.WorkbenchFactory;
 

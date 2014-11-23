@@ -29,7 +29,7 @@ public class SemGenProgressBar extends JFrame implements ActionListener {
 		setUndecorated(true);
 		createBar(msg, isindeterminant);
 		setLocationRelativeTo(location);
-		isAlwaysOnTop();
+		setAlwaysOnTop(true);
 		
 		requestFocusInWindow();
 		setVisible(true);		

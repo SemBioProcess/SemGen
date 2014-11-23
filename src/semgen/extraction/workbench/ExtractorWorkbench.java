@@ -1,4 +1,4 @@
-package semgen.extraction;
+package semgen.extraction.workbench;
 
 import java.io.File;
 
