@@ -188,7 +188,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		
 		if (o == annotateitemaddrefterm) {
 				new AddReferenceClassDialog(anntab, SemSimConstants.ALL_SEARCHABLE_ONTOLOGIES, 
-						new Object[]{"Add as entity","Add as process","Close"}, anntab.semsimmodel).packAndSetModality();
+						new Object[]{"Add as entity","Add as process","Close"}, anntab.semsimmodel);
 			} 
 		
 		if (o == annotateitemremoverefterm) {

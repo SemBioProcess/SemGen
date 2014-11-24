@@ -8,16 +8,14 @@ import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.WindowConstants;
-
 import semgen.resource.SemGenFont;
+import semgen.resource.uicomponent.SemGenDialog;
 
 
-public class PreferenceDialog extends JDialog implements PropertyChangeListener {
+public class PreferenceDialog extends SemGenDialog implements PropertyChangeListener {
 
 	private static final long serialVersionUID = 1L;
 	protected SemGenSettings settings;
@@ -25,21 +23,16 @@ public class PreferenceDialog extends JDialog implements PropertyChangeListener 
 	public ArrayList<PrefCheckBox> checklist = new ArrayList<PrefCheckBox>();
 	
 	public PreferenceDialog(SemGenSettings sets) {
-		settings = sets;
-		setTitle("Set SemGen Default Preferences");
-		
+		super("Set SemGen Default Preferences");
+		settings = sets;	
+
 		makePreferences();
 		drawCheckList();
 		
 		setContentPane(optionPane);
-		setModal(true);
 		
 		optionPane.getComponent(JOptionPane.OK_OPTION).setEnabled(false);
-		
-		this.pack();
-		this.setVisible(true);
-		setLocationRelativeTo(null);
-		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		showDialog();
 	}
 	
 	public void propertyChange(PropertyChangeEvent e) {

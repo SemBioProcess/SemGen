@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
 
-import javax.swing.JDialog;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
@@ -19,6 +18,7 @@ import org.semanticweb.owlapi.model.OWLException;
 import semgen.annotation.AnnotatorTab;
 import semgen.annotation.componentdisplays.codewords.CodewordButton;
 import semgen.annotation.dialog.referenceclass.ReferenceClassFinderPanel;
+import semgen.resource.uicomponent.SemGenDialog;
 import semgen.resource.uicomponent.SemGenScrollPane;
 import semsim.SemSimConstants;
 import semsim.model.annotation.Annotation;
@@ -26,7 +26,7 @@ import semsim.model.annotation.ReferenceOntologyAnnotation;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.writing.CaseInsensitiveComparator;
 
-public class AnnotationComponentReplacer extends JDialog implements
+public class AnnotationComponentReplacer extends SemGenDialog implements
 		PropertyChangeListener {
 
 	private static final long serialVersionUID = 5155214590420468140L;
@@ -38,6 +38,7 @@ public class AnnotationComponentReplacer extends JDialog implements
 	public JList<String> list= new JList<String>();
 
 	public AnnotationComponentReplacer(AnnotatorTab ann) throws OWLException {
+		super("Select a term to replace from the top list, then a term to replace it");
 		this.ann = ann;
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -56,13 +57,13 @@ public class AnnotationComponentReplacer extends JDialog implements
 		optionPane.setInitialValue(options[0]);
 
 		setContentPane(optionPane);
-
-		setTitle("Select a term to replace from the top list, then a term to replace it");
-		setModalityType(ModalityType.APPLICATION_MODAL);
-		pack();
-		setVisible(true);
 	}
+	
+	@Override
+	protected void showDialog() {
 
+	}
+	
 	public void propertyChange(PropertyChangeEvent arg0) {
 		String propertyfired = arg0.getPropertyName();
 		if (propertyfired.equals("value")) {

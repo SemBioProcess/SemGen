@@ -28,7 +28,6 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -46,6 +45,7 @@ import semgen.resource.GenericThread;
 import semgen.resource.SemGenError;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
+import semgen.resource.uicomponent.SemGenDialog;
 import semgen.resource.uicomponent.SemGenScrollPane;
 import semgen.resource.uicomponent.SemGenTextArea;
 import semsim.SemSimConstants;
@@ -54,7 +54,7 @@ import semsim.model.physical.ReferencePhysicalProcess;
 import semsim.webservices.BioPortalAnnotatorClient;
 import semsim.webservices.BioPortalConstants;
 
-public class TextMinerDialog extends JDialog implements PropertyChangeListener, ActionListener{
+public class TextMinerDialog extends SemGenDialog implements PropertyChangeListener, ActionListener{
 	private static final long serialVersionUID = -4832887891785870465L;
 	public JButton parsebutton = new JButton("Parse");
 	public JTextField pmarea = new JTextField();
@@ -72,7 +72,7 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 	protected Set<ReferencePhysicalProcess> collectedproc = new HashSet<ReferencePhysicalProcess>();
 
 	public TextMinerDialog() throws FileNotFoundException{		
-		this.setTitle("Parse text for ontology terms");
+		super("Parse text for ontology terms");
 		JLabel toplabel = new JLabel("Enter text to parse, or find a PubMed abstract by its ID, then hit \"Parse\" to identify ontology terms");
 		parsebutton.setMaximumSize(new Dimension(100,999999));
 		parsebutton.addActionListener(this);
@@ -139,9 +139,7 @@ public class TextMinerDialog extends JDialog implements PropertyChangeListener, 
 		pmarea.requestFocusInWindow();
 		
 		setContentPane(optionPane);
-		pack();
-		setModal(false);
-		setVisible(true);
+		showDialog();
 	}
 	
 	// Perform natural-language processing via BioPortal Annotator service to find ontology terms

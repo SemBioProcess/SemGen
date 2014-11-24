@@ -7,7 +7,6 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -15,6 +14,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTextPane;
 
 import semgen.resource.SemGenFont;
+import semgen.resource.uicomponent.SemGenDialog;
 import semgen.resource.uicomponent.SemGenScrollPane;
 import semsim.SemSimConstants;
 import semsim.model.SemSimModel;
@@ -24,7 +24,7 @@ import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.PhysicalProperty;
 
-public class SemanticSummaryDialog extends JDialog implements PropertyChangeListener{
+public class SemanticSummaryDialog extends SemGenDialog implements PropertyChangeListener{
 
 	private static final long serialVersionUID = -1850501792672929694L;
 	public JOptionPane optionPane;
@@ -33,8 +33,7 @@ public class SemanticSummaryDialog extends JDialog implements PropertyChangeList
 	public SemSimModel semsimmodel;
 	
 	public SemanticSummaryDialog(SemSimModel semsimmodel){
-		setVisible(false);
-		setTitle("Biological summary");
+		super("Biological summary");
 		this.semsimmodel = semsimmodel;
 		mainpanel.setLayout(new BoxLayout(mainpanel, BoxLayout.Y_AXIS));
 		setDataInUI();
@@ -51,10 +50,7 @@ public class SemanticSummaryDialog extends JDialog implements PropertyChangeList
 		optionPane.setInitialValue(options[0]);
 		setContentPane(optionPane);
 		optionPane.addPropertyChangeListener(this);
-		setModalityType(ModalityType.APPLICATION_MODAL);
-		pack();
-		setLocationRelativeTo(null);
-		setVisible(true);
+		showDialog();
 	}
 	
 	public void setDataInUI(){

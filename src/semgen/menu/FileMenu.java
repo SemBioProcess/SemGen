@@ -78,16 +78,11 @@ public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 			globalactions.quit();
 		}
 	}
-	
-		@Override
-		public void updateMenu() {
-			fileitemsave.setEnabled(!globalactions.getCurrentTab().isSaved());			
-		}
 
 		@Override
 		public void update(Observable o, Object arg) {
 			if (arg==GlobalActions.appactions.SAVED || arg==GlobalActions.appactions.TABCHANGED) {
-				updateMenu();
+				fileitemsave.setEnabled(!globalactions.getCurrentTab().isSaved());	
 			}
 		}	
 

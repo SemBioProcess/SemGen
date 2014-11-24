@@ -1,12 +1,8 @@
-XstartPosition; -8
-YstartPosition; -8
-startHeight; 1028
-startWidth; 1542
-startDirectory; C:\Users\thomp_000\Documents
+startDirectory; C:\Users\thomp_000\Documents\SemGen_Win64\examples
 autoAnnotate; true
 showImports; true
 displayMarkers; true
 organizeByPropertyType; true
-sortbyCompositeCompleteness; true
+sortbyCompositeCompleteness; false
 treeView; false
 helpURL; http://sbp.bhi.washington.edu/projects/semgen/semgenhelp

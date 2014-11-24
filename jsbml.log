@@ -1,2 +1,0 @@
-[22:08:35,027 ERROR RDFDefaultErrorHandler:40] - http://www.cellml.org/cellml/1.0#(line 2 column 82): {E202} Expecting XML start or end element(s). String data "This is the CellML 1.0 Guyton Model." not allowed. Maybe a striping error.
-[23:50:58,694 ERROR RDFDefaultErrorHandler:40] - http://www.cellml.org/cellml/1.0#(line 2 column 82): {E202} Expecting XML start or end element(s). String data "This is the CellML 1.0 Guyton Model." not allowed. Maybe a striping error.

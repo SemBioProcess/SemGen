@@ -8,7 +8,6 @@ import java.beans.PropertyChangeListener;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -19,6 +18,7 @@ import javax.swing.JTextField;
 import semgen.annotation.annotatorpane.AnnotationPanel;
 import semgen.annotation.annotatorpane.composites.ProcessParticipantEditor;
 import semgen.annotation.dialog.referenceclass.ObjectPropertyEditor;
+import semgen.resource.uicomponent.SemGenDialog;
 import semsim.SemSimConstants;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
@@ -27,7 +27,7 @@ import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 
 
-public class CustomPhysicalComponentEditor extends JDialog implements PropertyChangeListener {
+public class CustomPhysicalComponentEditor extends SemGenDialog implements PropertyChangeListener {
 	private static final long serialVersionUID = 1L;
 	
 	public SemSimModel model;
@@ -46,6 +46,7 @@ public class CustomPhysicalComponentEditor extends JDialog implements PropertyCh
 
 
 	public CustomPhysicalComponentEditor(AnnotationPanel anndia, PhysicalModelComponent pmc) {
+		super("");
 		this.anndia = anndia;
 		this.model = anndia.semsimmodel;
 		this.pmc = pmc;
@@ -105,9 +106,7 @@ public class CustomPhysicalComponentEditor extends JDialog implements PropertyCh
 		
 		setContentPane(optionPane);
 		setTitle(title);
-		setModalityType(ModalityType.APPLICATION_MODAL);
-		pack();
-		setVisible(true);
+		showDialog();
 	}
 
 	public void propertyChange(PropertyChangeEvent arg0) {

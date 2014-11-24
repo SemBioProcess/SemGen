@@ -8,15 +8,13 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.WindowConstants;
-
 import semgen.resource.file.SemGenOpenFileChooser;
+import semgen.resource.uicomponent.SemGenDialog;
 
-public class LegacyCodeChooser extends JDialog implements ActionListener,
+public class LegacyCodeChooser extends SemGenDialog implements ActionListener,
 		PropertyChangeListener {
 
 	private static final long serialVersionUID = 5097390254331353085L;
@@ -26,6 +24,7 @@ public class LegacyCodeChooser extends JDialog implements ActionListener,
 	private String urltoadd = "";
 	
 	public LegacyCodeChooser() {
+		super("Enter URL of legacy code or choose a local file");
 		JPanel srcmodpanel = new JPanel();
 		txtfld.setPreferredSize(new Dimension(250, 25));
 		locbutton.addActionListener(this);
@@ -40,13 +39,7 @@ public class LegacyCodeChooser extends JDialog implements ActionListener,
 		optionPane.setInitialValue(options[0]);
 
 		setContentPane(optionPane);
-
-		setTitle("Enter URL of legacy code or choose a local file");
-		setModalityType(ModalityType.APPLICATION_MODAL);
-		pack();
-		setLocationRelativeTo(null);
-		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		setVisible(true);
+		showDialog();
 	}
 
 	public void propertyChange(PropertyChangeEvent e) {

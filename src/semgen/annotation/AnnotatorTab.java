@@ -615,7 +615,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		
 		focusbutton = aob;
 		if (whichann == aob.humdeflabel) {
-			new HumanDefEditor(aob.ssc, anndialog, true);
+			new HumanDefEditor(aob.ssc, anndialog);
 		}
 		if(whichann == aob.singularannlabel){
 			anndialog.showSingularAnnotationEditor();

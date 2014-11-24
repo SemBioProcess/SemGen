@@ -38,8 +38,6 @@ public abstract class SemGenMenu extends JMenu implements ActionListener {
 		globalactions = gacts;
 	}
 	
-	public abstract void updateMenu();
-	
 	// Format menu items, assign shortcuts, action listeners
 	protected JMenuItem formatMenuItem(JMenuItem item, String text, Integer accelerator, Boolean enabled, Boolean addactionlistener){
 		item = new JMenuItem(text);

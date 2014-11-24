@@ -5,6 +5,7 @@ import semgen.annotation.AnnotatorTab;
 import semgen.resource.SemGenError;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
+import semgen.resource.uicomponent.SemGenDialog;
 import semgen.resource.uicomponent.SemGenScrollPane;
 import semsim.SemSimConstants;
 import semsim.model.annotation.Annotation;
@@ -28,14 +29,13 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 
-public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeListener, ActionListener {
+public class ModelLevelMetadataEditor extends SemGenDialog implements PropertyChangeListener, ActionListener {
 
 	private static final long serialVersionUID = 222072128470808990L;
 	private JOptionPane optionPane;
@@ -49,11 +49,9 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 	private int initheight = 655;
 
 	public ModelLevelMetadataEditor(AnnotatorTab annotator) {
-
-		this.setSize(initwidth, initheight);
-		this.setLocationRelativeTo(null);
-		this.setTitle("Edit model-level annotations");
-		this.setResizable(true);
+		super("Edit model-level annotations");
+		setSize(initwidth, initheight);
+		setResizable(true);
 		this.annotator = annotator;
 		
 		JPanel toppanel = new JPanel(new BorderLayout());
@@ -79,11 +77,9 @@ public class ModelLevelMetadataEditor extends JDialog implements PropertyChangeL
 		optionPane.setInitialValue(options[0]);
 
 		setContentPane(optionPane);
-		this.setModal(true);
-		this.setVisible(true);
+		showDialog();
 	}
-	
-	
+
 	public class MetadataItem extends JPanel implements MouseListener, ActionListener{
 		private static final long serialVersionUID = 3245322304789828616L;
 		public JButton removebutton = new JButton();

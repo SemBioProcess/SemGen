@@ -6,14 +6,15 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class ConversionFactorDialog extends JDialog implements
+import semgen.resource.uicomponent.SemGenDialog;
+
+public class ConversionFactorDialog extends SemGenDialog implements
 		PropertyChangeListener {
 
 	private static final long serialVersionUID = -3182047942231432822L;
@@ -27,6 +28,7 @@ public class ConversionFactorDialog extends JDialog implements
 
 	public ConversionFactorDialog(String cdwd2keep, String cdwd2discard,
 			String cdwd2keepunits, String cdwd2discardunits) {
+		super("Ensuring unitary balances");
 		this.cdwd2keep = cdwd2keep;
 		
 		JTextArea area = new JTextArea();
@@ -50,8 +52,7 @@ public class ConversionFactorDialog extends JDialog implements
 		conpanel.add(box);
 		conpanel.add(mantextfield);
 
-		setModal(true);
-		this.setTitle("Ensuring unitary balances");
+		
 
 		Object[] array = new Object[] { area, conpanel };
 		Object[] options = new Object[] { "OK", "Cancel" };
@@ -63,9 +64,7 @@ public class ConversionFactorDialog extends JDialog implements
 
 		setContentPane(optionPane);
 
-		pack();
-		setLocationRelativeTo(null);
-		setVisible(true);
+		showDialog();
 	}
 
 	public void propertyChange(PropertyChangeEvent e) {

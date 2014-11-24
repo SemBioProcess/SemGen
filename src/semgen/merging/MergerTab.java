@@ -92,7 +92,6 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 	
 	public MergerTab(SemGenSettings sets, GlobalActions globalacts, MergerWorkbench bench) {
 		super("Merger", SemGenIcon.mergeicon, "Tab for Merging SemSim Models", sets, globalacts);
-		loadTab();
 	}
 	
 	@Override

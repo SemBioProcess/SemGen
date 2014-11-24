@@ -6,16 +6,16 @@ import java.awt.Font;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import semgen.annotation.annotatorpane.AnnotationPanel;
+import semgen.resource.uicomponent.SemGenDialog;
 import semsim.model.SemSimComponent;
 
-public class HumanDefEditor extends JDialog implements PropertyChangeListener {
+public class HumanDefEditor extends SemGenDialog implements PropertyChangeListener {
 
 	private static final long serialVersionUID = -4040704987589247388L;
 	private JOptionPane optionPane;
@@ -23,16 +23,14 @@ public class HumanDefEditor extends JDialog implements PropertyChangeListener {
 	public SemSimComponent ssc;
 	public AnnotationPanel anndialog;
 
-	public HumanDefEditor(SemSimComponent ssc, AnnotationPanel dialog, Boolean isvisible) {
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+	public HumanDefEditor(SemSimComponent ssc, AnnotationPanel dialog) {
+		super("Enter free-text description");
 		this.ssc = ssc;
 		anndialog = dialog;
 
 		setPreferredSize(new Dimension(430, 250));
 		setMaximumSize(getPreferredSize());
 		setMinimumSize(getPreferredSize());
-		setLocationRelativeTo(null);
-		setTitle("Enter free-text description");
 		setResizable(false);
 
 		JLabel codewordlabel = new JLabel(ssc.getName());
@@ -58,9 +56,9 @@ public class HumanDefEditor extends JDialog implements PropertyChangeListener {
 		if(ssc.getDescription()!=null) presentval = ssc.getDescription();
 		defarea.setText(presentval);
 		defarea.requestFocusInWindow();
-		setVisible(isvisible);
+		showDialog();
 	}
-
+	
 	public final void propertyChange(PropertyChangeEvent e) {
 		String propertyfired = e.getPropertyName();
 		if (propertyfired.equals("value")) {

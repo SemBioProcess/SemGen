@@ -490,7 +490,7 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 		}
 		
 		if (arg0.getComponent() == humandefpane) {
-			new HumanDefEditor(smc, this, true);
+			new HumanDefEditor(smc, this);
 		}
 		
 		if(arg0.getComponent() == copyannsbutton){

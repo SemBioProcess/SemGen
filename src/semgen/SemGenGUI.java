@@ -221,7 +221,4 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 			getComponentAt(numtabs - 1).validate();
 		}
 	}
-
-
-
 }

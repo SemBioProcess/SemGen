@@ -16,17 +16,17 @@ import java.util.Set;
 
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import semgen.annotation.annotatorpane.AnnotationPanel;
+import semgen.resource.uicomponent.SemGenDialog;
 import semsim.model.SemSimComponent;
 import semsim.model.SemSimModel;
 import semsim.writing.CaseInsensitiveComparator;
 
-public class SemSimComponentSelectorDialog extends JDialog implements ActionListener {
+public class SemSimComponentSelectorDialog extends SemGenDialog implements ActionListener {
 	private static final long serialVersionUID = -1776906245210358895L;
 	public JPanel panel = new JPanel();
 	public JCheckBox markallbox = new JCheckBox("Mark all/none");
@@ -48,12 +48,12 @@ public class SemSimComponentSelectorDialog extends JDialog implements ActionList
 			Set<? extends SemSimComponent> sscstodisable,
 			Boolean withdescriptions,
 			String title) {
+		super(title);
 
 		this.selectableset = settolist;
 		this.preselectedset = preselectedset;
 		this.ssctoignore = ssctoignore;
 		this.sscstodisable = sscstodisable;
-		setTitle(title);
 	}
 	
 	
@@ -111,10 +111,7 @@ public class SemSimComponentSelectorDialog extends JDialog implements ActionList
 
 		setContentPane(optionPane);
 		
-		setModalityType(ModalityType.APPLICATION_MODAL);  // If put before pack() get null pointer error when hit OK, if here doesn't act modal
-		pack();
-		setLocationRelativeTo(anndia);
-		setVisible(true);
+		showDialog();
 	}
 
 	public void actionPerformed(ActionEvent e) {

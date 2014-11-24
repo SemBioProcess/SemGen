@@ -6,16 +6,16 @@ import java.beans.PropertyChangeListener;
 import java.net.URI;
 
 import javax.swing.BorderFactory;
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
 import semgen.annotation.AnnotatorTab;
 import semgen.annotation.componentdisplays.codewords.CodewordButton;
 import semgen.resource.SemGenFont;
+import semgen.resource.uicomponent.SemGenDialog;
 import semsim.Annotatable;
 
-public class AddReferenceClassDialog extends JDialog implements
+public class AddReferenceClassDialog extends SemGenDialog implements
 		PropertyChangeListener {
 
 	private static final long serialVersionUID = -3830623199860161812L;
@@ -25,8 +25,9 @@ public class AddReferenceClassDialog extends JDialog implements
 	public JTextArea utilarea = new JTextArea();
 
 	public AddReferenceClassDialog(AnnotatorTab ann, String[] ontList, Object[] options, Annotatable annotatable) {
+		super("Select reference concept");
 		this.annotator = ann;
-		setTitle("Select reference concept");
+		
 		refclasspanel = new ReferenceClassFinderPanel(ann, annotatable, ontList);
 
 		utilarea.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
@@ -44,33 +45,33 @@ public class AddReferenceClassDialog extends JDialog implements
 		optionPane.setOptions(options);
 		optionPane.setInitialValue(options[0]);
 		setContentPane(optionPane);
-	}
-	
-	public void packAndSetModality(){
-		setModalityType(ModalityType.APPLICATION_MODAL);
-		pack();
-		setVisible(true);
+		showDialog();
 	}
 	
 	public void propertyChange(PropertyChangeEvent arg0) {
-		String value = optionPane.getValue().toString();
-		String selectedname = (String) refclasspanel.resultslistright.getSelectedValue();
-		optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-		if (value == "Add as entity" && this.getFocusOwner() != refclasspanel.findbox) {
+		if (arg0.getPropertyName()=="value") {
+			String value = optionPane.getValue().toString();
+			if (value == "Close") {
+				this.dispose();
+				return;
+			}
+			
+			String selectedname = (String) refclasspanel.resultslistright.getSelectedValue();
+			String type = "";
+			optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+			if (value == "Add as entity" && this.getFocusOwner() != refclasspanel.findbox) {
+				type = " physical enitity";
+			}
+			else if(value == "Add as process" && this.getFocusOwner() != refclasspanel.findbox){
+				type =  " physical process";
+			}
+
 			annotator.semsimmodel.addReferencePhysicalEntity(URI.create(refclasspanel.resultsanduris.get(selectedname)), selectedname);
-			JOptionPane.showMessageDialog(this,"Added " + (String) refclasspanel.resultslistright.getSelectedValue() + " as reference physical enitity", "",
-					JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(this,
+						"Added " + (String) refclasspanel.resultslistright.getSelectedValue() + " as reference" + type,
+						"", JOptionPane.PLAIN_MESSAGE);
 			annotator.setModelSaved(false);
+			if(annotator.focusbutton instanceof CodewordButton) annotator.anndialog.compositepanel.refreshUI();
 		}
-		else if(value == "Add as process" && this.getFocusOwner() != refclasspanel.findbox){
-			annotator.semsimmodel.addReferencePhysicalProcess(URI.create(refclasspanel.resultsanduris.get(selectedname)), selectedname);
-			JOptionPane.showMessageDialog(this,"Added " + (String) refclasspanel.resultslistright.getSelectedValue() + " as reference physical process", "",
-					JOptionPane.PLAIN_MESSAGE);
-			annotator.setModelSaved(false);
-		}
-		else if (value == "Close") {
-			this.dispose();
-		}
-		if(annotator.focusbutton instanceof CodewordButton) annotator.anndialog.compositepanel.refreshUI();
 	}
 }

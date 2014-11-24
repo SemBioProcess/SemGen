@@ -23,16 +23,16 @@ public class ToolsMenu extends SemGenMenu implements ActionListener{
 		// Build the AnnotatorTab menu
 		getAccessibleContext().setAccessibleDescription("Select a new SemGen Tool");
 		
-		toolsitemannotate = formatMenuItem(toolsitemannotate, "New AnnotatorTab",KeyEvent.VK_A,true,true);
-		toolsitemannotate.setToolTipText("Open a new AnnotatorTab tool");
+		toolsitemannotate = formatMenuItem(toolsitemannotate, "New Annotator",KeyEvent.VK_A,true,true);
+		toolsitemannotate.setToolTipText("Open a new Annotator tool");
 		add(toolsitemannotate);
 		
 		toolsitemextract = formatMenuItem(toolsitemextract,"New Extractor",KeyEvent.VK_E,true,true);
 		toolsitemextract.setToolTipText("Open a new Extractor tool");
 		add(toolsitemextract);
 		
-		toolsitemmerge = formatMenuItem(toolsitemmerge,"New MergerTab",KeyEvent.VK_M,true,true);
-		toolsitemmerge.setToolTipText("Open a new MergerTab tool");
+		toolsitemmerge = formatMenuItem(toolsitemmerge,"New Merger",KeyEvent.VK_M,true,true);
+		toolsitemmerge.setToolTipText("Open a new Merger tool");
 		add(toolsitemmerge);
 		
 		toolsitemcode = formatMenuItem(toolsitemcode, "New code generator", KeyEvent.VK_G,true,true);
@@ -50,7 +50,7 @@ public class ToolsMenu extends SemGenMenu implements ActionListener{
 		if (o == toolsitemcode) {
 			new Encoder();
 		}
-//		
+		
 		if (o == toolsitemannotate) {
 			globalactions.NewAnnotatorTab();
 		}
@@ -58,12 +58,6 @@ public class ToolsMenu extends SemGenMenu implements ActionListener{
 		if (o == toolsitemextract) {
 			globalactions.NewExtractorTab();
 		}
-		
-	}
-
-	@Override
-	public void updateMenu() {
-		// TODO Auto-generated method stub
 		
 	}
 }

@@ -2,6 +2,7 @@ package semgen;
 
 import java.awt.Color;
 import java.awt.HeadlessException;
+import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
@@ -27,6 +28,7 @@ import semgen.menu.SemGenMenuBar;
 import semgen.resource.SemGenError;
 import semgen.resource.SemGenFont;
 import semgen.resource.file.SemGenOpenFileChooser;
+import semgen.resource.uicomponent.SemGenDialog;
 import semgen.resource.uicomponent.SemGenProgressBar;
 import semsim.SemSimLibrary;
 
@@ -52,7 +54,6 @@ public class SemGen extends JFrame implements Observer{
 	
 	/** Main method for running an instance of SemGen */
 	public static void main(String[] args) {
-		
 		try {
 			logfilewriter = new PrintWriter(new FileWriter(logfile));
 		} catch (IOException e4) {
@@ -89,21 +90,22 @@ public class SemGen extends JFrame implements Observer{
 	//Launch application
 	public SemGen() throws NoSuchMethodException, SecurityException {
 		super("OSXAdapter");
-		SemGenError.setFrame(this);
 		OSValidation();
 		
+		//Title and configure application
+		setTitle(":: S e m  G e n ::");
+		SemGenError.setFrame(this);
+		SemGenDialog.setFrame(this);
+		SemGenProgressBar.setLocation(this);
 		SemGenOpenFileChooser.currentdirectory = new File(settings.getStartDirectory());
 		// Need this for programmatic use of jsbatch
 		System.setProperty("jsim.home", "./jsimhome");
 		SemGenFont.defaultUIFont();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		settings.setAppSize(Toolkit.getDefaultToolkit().getScreenSize());
 		
-		setTitle(":: S e m  G e n ::");
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		
-		setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-
 		gacts.addObserver(this);
-		SemGenProgressBar.setLocation(this);
+		
 		SemGenMenuBar menubar = new SemGenMenuBar(settings, gacts);
 		contentpane = new SemGenGUI(settings, menubar, gacts);
 		setContentPane(contentpane);
@@ -118,6 +120,7 @@ public class SemGen extends JFrame implements Observer{
 		
 		new NewTaskDialog(gacts);
 	}
+	
 	//Check which OS SemGen is being run under
 	private void OSValidation() throws NoSuchMethodException, SecurityException {
 		int OS = 0;

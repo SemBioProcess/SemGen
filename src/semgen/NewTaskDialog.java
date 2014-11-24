@@ -7,15 +7,15 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import semgen.encoding.Encoder;
 import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
+import semgen.resource.uicomponent.SemGenDialog;
 
-public class NewTaskDialog extends JDialog implements ActionListener {
+public class NewTaskDialog extends SemGenDialog implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	public JButton annotatebutton = new JButton("Annotate a model",SemGenIcon.annotatoricon);
 	public JButton openmenuextractbutton = new JButton("Extract a model", SemGenIcon.extractoricon);
@@ -24,8 +24,8 @@ public class NewTaskDialog extends JDialog implements ActionListener {
 	private GlobalActions globalactions;
 	
 	public NewTaskDialog(GlobalActions gacts) {
+		super("OPEN: Select task");
 		globalactions = gacts;
-		setTitle("OPEN: Select task");
 		JPanel openpanel = new JPanel();
 		openpanel.setLayout(new BoxLayout(openpanel, BoxLayout.Y_AXIS));
 		openpanel.setAlignmentX(JPanel.CENTER_ALIGNMENT);
@@ -44,10 +44,7 @@ public class NewTaskDialog extends JDialog implements ActionListener {
 		JOptionPane selectopentype = new JOptionPane(openpanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_OPTION, null);
 		selectopentype.setOptions(new Object[]{});
 		setContentPane(selectopentype);
-		setModal(true);
-		pack();
-		setLocationRelativeTo(null);
-		setVisible(true);
+		showDialog();
 	}
 	
 	@Override

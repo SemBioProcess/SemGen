@@ -15,21 +15,22 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
+
 import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntology;
 
 import semgen.resource.SemGenIcon;
+import semgen.resource.uicomponent.SemGenDialog;
 import semgen.resource.uicomponent.SemGenScrollPane;
 import semsim.SemSimConstants;
 import semsim.owl.SemSimOWLFactory;
 
-public class FlowMergerDialog extends JDialog implements
+public class FlowMergerDialog extends SemGenDialog implements
 		PropertyChangeListener, ActionListener{
 
 	private static final long serialVersionUID = 7845342502406090947L;
@@ -42,6 +43,7 @@ public class FlowMergerDialog extends JDialog implements
 
 	public FlowMergerDialog(String disp, Set<String> flowdepsfromdiscarded,
 			OWLOntology discardedont, OWLOntology keptont) {
+		super("");
 		this.disp = disp;
 		this.keptont = keptont;
 
@@ -109,7 +111,6 @@ public class FlowMergerDialog extends JDialog implements
 				x.printStackTrace();
 			}
 		}
-		setModal(true);
 		this.setPreferredSize(new Dimension(550, 600));
 		this.setTitle("Possible altertions to "
 				+ SemSimOWLFactory.getIRIfragment(disp)
@@ -126,8 +127,7 @@ public class FlowMergerDialog extends JDialog implements
 
 		setContentPane(optionPane);
 
-		this.pack();
-		this.setVisible(true);
+		showDialog();
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -174,43 +174,42 @@ public class FlowMergerDialog extends JDialog implements
 	}
 
 	public void propertyChange(PropertyChangeEvent e) {
-		Set<String> setofadds = new HashSet<String>();
-		String value = optionPane.getValue().toString();
-		Set<Boolean> choicesmade = new HashSet<Boolean>();
-		if (value == "OK") {
-			Component[] components = mainpanel.getComponents();
-			for (int x = 0; x < components.length; x++) {
-				if (components[x] instanceof JPanel) {
-					JPanel cpanel = (JPanel) components[x];
-					Component[] innercomp = cpanel.getComponents();
-					String flowtomerge = "";
-					Boolean somethingselected = false;
-					for (int y = 0; y < innercomp.length; y++) {
-						if (innercomp[y] instanceof JButton) {
-							JButton cbutton = (JButton) innercomp[y];
-							flowtomerge = cbutton.getText();
-						}
-						if (innercomp[y] instanceof JRadioButton) {
-							JRadioButton button = (JRadioButton) innercomp[y];
-							if (button.isSelected()) {
-								somethingselected = true;
-								if (!button.getText().equals("Ignore")) {
-									setofadds.add(" " + button.getText() + " "
-											+ flowtomerge);
+		if (e.getPropertyName()=="value") {
+			Set<String> setofadds = new HashSet<String>();
+			String value = optionPane.getValue().toString();
+			Set<Boolean> choicesmade = new HashSet<Boolean>();
+			if (value == "OK") {
+				Component[] components = mainpanel.getComponents();
+				for (int x = 0; x < components.length; x++) {
+					if (components[x] instanceof JPanel) {
+						JPanel cpanel = (JPanel) components[x];
+						Component[] innercomp = cpanel.getComponents();
+						String flowtomerge = "";
+						Boolean somethingselected = false;
+						for (int y = 0; y < innercomp.length; y++) {
+							if (innercomp[y] instanceof JButton) {
+								JButton cbutton = (JButton) innercomp[y];
+								flowtomerge = cbutton.getText();
+							}
+							if (innercomp[y] instanceof JRadioButton) {
+								JRadioButton button = (JRadioButton) innercomp[y];
+								if (button.isSelected()) {
+									somethingselected = true;
+									if (!button.getText().equals("Ignore")) {
+										setofadds.add(" " + button.getText() + " "
+												+ flowtomerge);
+									}
 								}
 							}
 						}
+						choicesmade.add(somethingselected);
 					}
-					choicesmade.add(somethingselected);
+				}
+				if (choicesmade.contains(false)) {
+					optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+					return;
 				}
 			}
-			if (!choicesmade.contains(false)) {
-				dispose();
-			} else {
-				optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-			}
-		}
-		if (value == "Cancel") {
 			dispose();
 		}
 	}

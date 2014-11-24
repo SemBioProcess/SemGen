@@ -27,17 +27,11 @@ public class SemGenSettings extends Observable{
 	
 	public SemGenSettings() {
 		try {
-				startsettingstable = ResourcesManager.createHashtableFromFile("cfg/startSettings.txt");
+			startsettingstable = ResourcesManager.createHashtableFromFile("cfg/startSettings.txt");
 		} 
 		catch (FileNotFoundException e3) {
 				e3.printStackTrace();
 		}
-			
-			// Set the window position and size
-			xpos = Integer.parseInt(startsettingstable.get("XstartPosition")[0].trim());
-			ypos = Integer.parseInt(startsettingstable.get("YstartPosition")[0].trim());
-			width = Integer.parseInt(startsettingstable.get("startWidth")[0].trim());
-			height = Integer.parseInt(startsettingstable.get("startHeight")[0].trim());
 	}
 	
 	public SemGenSettings(SemGenSettings old) {
@@ -168,10 +162,6 @@ public class SemGenSettings extends Observable{
 		PrintWriter writer;
 		try {
 			writer = new PrintWriter(new FileWriter(new File("cfg/startSettings.txt")));
-			writer.println("XstartPosition; " + xpos);
-			writer.println("YstartPosition; " + ypos);
-			writer.println("startHeight; " + height);
-			writer.println("startWidth; " + width);
 			writer.println("startDirectory; " + SemGenOpenFileChooser.currentdirectory.getAbsolutePath());
 			writer.println("autoAnnotate; " + doAutoAnnotate().toString());
 			writer.println("showImports; " + showImports().toString());

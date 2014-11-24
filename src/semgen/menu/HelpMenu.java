@@ -55,6 +55,4 @@ public class HelpMenu extends SemGenMenu implements ActionListener {
 						+ "2010-2014\nMaxwell Lewis Neal\n", "About SemGen",
 						JOptionPane.PLAIN_MESSAGE);
 	}
-	@Override
-	public void updateMenu() {}
 }

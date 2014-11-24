@@ -25,17 +25,7 @@ public class CompositeAnnotationComponentSearchDialog extends AddReferenceClassD
 		pmcPanel = pmcpanel;
 		utilarea.setText("Current annotation: " + pmcPanel.combobox.getSelectedItem());
 		refclasspanel.ontologychooser.addActionListener(refclasspanel);
-		packAndSetModality();
 	}
-	
-	@Override
-	public void packAndSetModality(){
-		setModalityType(ModalityType.APPLICATION_MODAL);
-		pack();
-		setLocationRelativeTo(null);
-		setVisible(true);
-	}
-	
 	
 	public void propertyChange(PropertyChangeEvent arg0) {
 		String propertyfired = arg0.getPropertyName();

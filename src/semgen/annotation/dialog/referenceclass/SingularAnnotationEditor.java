@@ -27,14 +27,6 @@ public class SingularAnnotationEditor extends AddReferenceClassDialog {
 			if(x.hasRefersToAnnotation()) utilarea.setText("Old annotation: " + roa.getValueDescription() 
 					+ " (" + roa.getOntologyAbbreviation() + ")");
 		}
-		packAndSetModality();
-	}
-	
-	@Override
-	public void packAndSetModality(){
-		setModalityType(ModalityType.APPLICATION_MODAL);
-		pack();
-		setVisible(true);
 	}
 
 	public void addClassToOntology() {

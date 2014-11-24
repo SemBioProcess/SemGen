@@ -10,13 +10,14 @@ import java.io.File;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class IdenticalCodewordDialog extends JDialog implements PropertyChangeListener, ItemListener {
+import semgen.resource.uicomponent.SemGenDialog;
+
+public class IdenticalCodewordDialog extends SemGenDialog implements PropertyChangeListener, ItemListener {
 
 	private static final long serialVersionUID = 7836229234967611648L;
 	public JOptionPane optionPane;
@@ -26,6 +27,7 @@ public class IdenticalCodewordDialog extends JDialog implements PropertyChangeLi
 	public Boolean process = true;
 
 	public IdenticalCodewordDialog(String cdwd, File file1, File file2) {
+		super("");
 		String[] selections = new String[] { "Rename codeword in " + file2.getName(),
 				"Only keep " + cdwd + " from " + file1.getName(),
 				"Only keep " + cdwd + " from " + file2.getName()};
@@ -47,7 +49,7 @@ public class IdenticalCodewordDialog extends JDialog implements PropertyChangeLi
 		mainpanel.add(box, BorderLayout.CENTER);
 		mainpanel.add(mantextfield, BorderLayout.SOUTH);
 
-		setModal(true);
+		
 		this.setTitle("Duplicate codeword: " + cdwd);
 
 		Object[] array = new Object[] { mainpanel };
@@ -60,30 +62,28 @@ public class IdenticalCodewordDialog extends JDialog implements PropertyChangeLi
 
 		setContentPane(optionPane);
 
-		pack();
-		setVisible(true);
+		showDialog();
 	}
 
 	public void propertyChange(PropertyChangeEvent e) {
-		String value = optionPane.getValue().toString();
-		if (value == "OK") {
-			if (box.getSelectedIndex() == 0) {
-
-				if (!mantextfield.getText().equals("")
-						&& mantextfield.getText() != null) {
-					System.out.println(mantextfield.getText());
-					setVisible(false);
-				} else {
-					System.out.println("Please enter a new codeword name");
-				}
-			} else {
-				setVisible(false);
+		if (e.getPropertyName()=="value") {
+			String value = optionPane.getValue().toString();
+			if (value == "OK") {
+				if (box.getSelectedIndex() == 0) {	
+					if (!mantextfield.getText().equals("")
+							&& mantextfield.getText() != null) {
+						System.out.println(mantextfield.getText());
+					} else {
+						System.out.println("Please enter a new codeword name");
+						optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+						return;
+					}
+				} 
+			} else if (value == "Cancel") {
+				process = false;
 			}
-		} else if (value == "Cancel") {
-			process = false;
-			setVisible(false);
+			dispose();
 		}
-		optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 	}
 
 	public void itemStateChanged(ItemEvent arg0) {
