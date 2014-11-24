@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+	<meta charset="utf-8">
+	<script src="http://d3js.org/d3.v3.js"></script>
+	<style>
+
+		.dependencyWheel {
+		  font: 10px sans-serif;
+		}
+
+		path.link {
+		  fill: none;
+		  stroke: #666;
+		  stroke-width: 1.5px;
+		}
+
+		circle {
+		  stroke: #fff;
+		  stroke-width: 1.5px;
+		}
+
+		text {
+		  fill: #000;
+		  font: 10px sans-serif;
+		  pointer-events: none;
+		}
+
+	</style>
+	<body>
+	<script>
+		// %GRAPHJSON% will be replaced with the d3 representation of a SemSim model
+		var graph = %GRAPHJSON%
+
+		var color = d3.scale.category10();
+
+		var chart = d3.chart.dependencyWheel();
+
+		  d3.json('data/composer.json', function(composerjson) {
+			d3.json('data/composer.lock', function(composerlock) {
+			  var data = buildMatrixFromComposerJsonAndLock(composerjson, composerlock);
+			  d3.select('#chart_placeholder')
+				.datum(data)
+				.call(chart);
+			});
+		  });
+
+		  document.getElementById('composerRedraw').addEventListener('submit', function(e) {
+			e.preventDefault();
+			var composerjson = JSON.parse(document.getElementById('composerJson').value);
+			var composerlock = JSON.parse(document.getElementById('composerLock').value);
+			var data = buildMatrixFromComposerJsonAndLock(composerjson, composerlock);
+			d3.select('#chart_placeholder svg').remove();
+			d3.select('#chart_placeholder')
+			  .datum(data)
+			  .call(chart);
+		  }, false);
+
+	</script>
+	</body>
+</html>

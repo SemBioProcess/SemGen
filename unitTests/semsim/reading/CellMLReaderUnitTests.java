@@ -3,9 +3,6 @@ package semsim.reading;
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.util.Iterator;
-import java.util.Set;
-
 import org.junit.Test;
 
 import semsim.CollateralHelper;

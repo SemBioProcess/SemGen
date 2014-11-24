@@ -51,6 +51,7 @@ import semgen.resource.file.SemGenOpenFileChooser;
 import semgen.resource.file.SemGenSaveFileChooser;
 import semgen.resource.uicomponent.SemGenProgressBar;
 import semgen.resource.uicomponent.SemGenTab;
+import semgen.visualizations.D3;
 import semsim.SemSimUtil;
 import semsim.extraction.Extractor;
 import semsim.model.SemSimModel;
@@ -197,6 +198,13 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		add(centersplitpane, BorderLayout.CENTER);
 		setVisible(true);
 		visualizeAllDataStructures(false);
+		
+		D3 d3 = new D3(semsimmodel);
+		try {
+			d3.visualize(D3.VisualizationType.DirectedGraph);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void createToolbar() {
