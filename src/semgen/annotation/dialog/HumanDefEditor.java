@@ -12,7 +12,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import semgen.annotation.annotatorpane.AnnotationPanel;
-import semgen.resource.uicomponent.SemGenDialog;
+import semgen.utilities.uicomponent.SemGenDialog;
 import semsim.model.SemSimComponent;
 
 public class HumanDefEditor extends SemGenDialog implements PropertyChangeListener {

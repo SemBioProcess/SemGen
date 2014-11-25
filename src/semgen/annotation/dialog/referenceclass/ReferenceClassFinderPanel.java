@@ -31,11 +31,11 @@ import org.jdom.JDOMException;
 
 import semgen.SemGen;
 import semgen.annotation.AnnotatorTab;
-import semgen.resource.GenericThread;
-import semgen.resource.SemGenError;
-import semgen.resource.SemGenFont;
-import semgen.resource.SemGenIcon;
-import semgen.resource.uicomponent.ExternalURLButton;
+import semgen.utilities.GenericThread;
+import semgen.utilities.SemGenError;
+import semgen.utilities.SemGenFont;
+import semgen.utilities.SemGenIcon;
+import semgen.utilities.uicomponent.ExternalURLButton;
 import semsim.Annotatable;
 import semsim.SemSimConstants;
 import semsim.model.physical.PhysicalProperty;

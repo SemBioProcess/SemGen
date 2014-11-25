@@ -14,7 +14,7 @@ import semgen.GlobalActions;
 import semgen.NewTaskDialog;
 import semgen.PreferenceDialog;
 import semgen.SemGenSettings;
-import semgen.resource.uicomponent.SemGenMenu;
+import semgen.utilities.uicomponent.SemGenMenu;
 
 public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 	private static final long serialVersionUID = 1L;

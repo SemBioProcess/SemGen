@@ -30,10 +30,10 @@ import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter.HighlightPainter;
 
 import semgen.SemGenSettings;
-import semgen.resource.SemGenError;
-import semgen.resource.SemGenFont;
-import semgen.resource.uicomponent.SemGenProgressBar;
-import semgen.resource.uicomponent.SemGenTextArea;
+import semgen.utilities.SemGenError;
+import semgen.utilities.SemGenFont;
+import semgen.utilities.uicomponent.SemGenProgressBar;
+import semgen.utilities.uicomponent.SemGenTextArea;
 
 public class AnnotatorTabCodePanel extends SemGenTextArea {
 	private static final long serialVersionUID = 1L;

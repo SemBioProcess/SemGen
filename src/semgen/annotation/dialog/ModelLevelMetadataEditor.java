@@ -2,11 +2,11 @@ package semgen.annotation.dialog;
 
 import semgen.SemGen;
 import semgen.annotation.AnnotatorTab;
-import semgen.resource.SemGenError;
-import semgen.resource.SemGenFont;
-import semgen.resource.SemGenIcon;
-import semgen.resource.uicomponent.SemGenDialog;
-import semgen.resource.uicomponent.SemGenScrollPane;
+import semgen.utilities.SemGenError;
+import semgen.utilities.SemGenFont;
+import semgen.utilities.SemGenIcon;
+import semgen.utilities.uicomponent.SemGenDialog;
+import semgen.utilities.uicomponent.SemGenScrollPane;
 import semsim.SemSimConstants;
 import semsim.model.annotation.Annotation;
 

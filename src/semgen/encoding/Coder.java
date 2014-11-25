@@ -10,8 +10,8 @@ import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
 
 import semgen.SemGen;
-import semgen.resource.file.FileFilter;
-import semgen.resource.file.SemGenFileChooser;
+import semgen.utilities.file.FileFilter;
+import semgen.utilities.file.SemGenFileChooser;
 
 public class Coder {
 	public OWLOntology ontology;

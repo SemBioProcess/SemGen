@@ -11,8 +11,9 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import semgen.resource.SemGenFont;
-import semgen.resource.uicomponent.SemGenDialog;
+
+import semgen.utilities.SemGenFont;
+import semgen.utilities.uicomponent.SemGenDialog;
 
 
 public class PreferenceDialog extends SemGenDialog implements PropertyChangeListener {

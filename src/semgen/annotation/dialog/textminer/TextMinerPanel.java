@@ -7,8 +7,8 @@ import java.net.URI;
 
 import javax.swing.JPanel;
 
-import semgen.resource.uicomponent.ExternalURLButton;
-import semgen.resource.uicomponent.MoreInfoButton;
+import semgen.utilities.uicomponent.ExternalURLButton;
+import semgen.utilities.uicomponent.MoreInfoButton;
 
 public class TextMinerPanel extends JPanel{
 	/**

@@ -13,9 +13,9 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextPane;
 
-import semgen.resource.SemGenFont;
-import semgen.resource.uicomponent.SemGenDialog;
-import semgen.resource.uicomponent.SemGenScrollPane;
+import semgen.utilities.SemGenFont;
+import semgen.utilities.uicomponent.SemGenDialog;
+import semgen.utilities.uicomponent.SemGenScrollPane;
 import semsim.SemSimConstants;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.Annotation;

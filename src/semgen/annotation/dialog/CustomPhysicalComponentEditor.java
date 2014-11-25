@@ -18,7 +18,7 @@ import javax.swing.JTextField;
 import semgen.annotation.annotatorpane.AnnotationPanel;
 import semgen.annotation.annotatorpane.composites.ProcessParticipantEditor;
 import semgen.annotation.dialog.referenceclass.ObjectPropertyEditor;
-import semgen.resource.uicomponent.SemGenDialog;
+import semgen.utilities.uicomponent.SemGenDialog;
 import semsim.SemSimConstants;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.ReferenceOntologyAnnotation;

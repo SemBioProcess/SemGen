@@ -20,8 +20,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import semgen.annotation.dialog.selector.SemSimComponentSelectorDialog;
-import semgen.resource.SemGenIcon;
-import semgen.resource.uicomponent.SemGenScrollPane;
+import semgen.utilities.SemGenIcon;
+import semgen.utilities.uicomponent.SemGenScrollPane;
 import semsim.Annotatable;
 import semsim.SemSimConstants;
 import semsim.model.SemSimComponent;

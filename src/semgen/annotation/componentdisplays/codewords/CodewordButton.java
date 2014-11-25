@@ -9,7 +9,7 @@ import semgen.SemGenSettings;
 import semgen.annotation.AnnotatorTab;
 import semgen.annotation.annotatorpane.composites.PropertyMarker;
 import semgen.annotation.componentdisplays.AnnotationObjectButton;
-import semgen.resource.SemGenFont;
+import semgen.utilities.SemGenFont;
 import semsim.SemSimConstants;
 import semsim.model.computational.datastructures.DataStructure;
 

@@ -10,9 +10,9 @@ import javax.swing.JOptionPane;
 
 import semgen.SemGen;
 import semgen.SemGenSettings;
-import semgen.resource.BrowserLauncher;
-import semgen.resource.LogViewer;
-import semgen.resource.uicomponent.SemGenMenu;
+import semgen.utilities.BrowserLauncher;
+import semgen.utilities.LogViewer;
+import semgen.utilities.uicomponent.SemGenMenu;
 
 public class HelpMenu extends SemGenMenu implements ActionListener {
 	private static final long serialVersionUID = 1L;

@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import semgen.resource.uicomponent.SemGenDialog;
+import semgen.utilities.uicomponent.SemGenDialog;
 
 public class IdenticalCodewordDialog extends SemGenDialog implements PropertyChangeListener, ItemListener {
 

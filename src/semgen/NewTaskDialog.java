@@ -11,9 +11,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import semgen.encoding.Encoder;
-import semgen.resource.SemGenFont;
-import semgen.resource.SemGenIcon;
-import semgen.resource.uicomponent.SemGenDialog;
+import semgen.utilities.SemGenFont;
+import semgen.utilities.SemGenIcon;
+import semgen.utilities.uicomponent.SemGenDialog;
 
 public class NewTaskDialog extends SemGenDialog implements ActionListener {
 	private static final long serialVersionUID = 1L;

@@ -26,11 +26,11 @@ import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.SemGenGUI;
 import semgen.menu.SemGenMenuBar;
-import semgen.resource.SemGenError;
-import semgen.resource.SemGenFont;
-import semgen.resource.file.SemGenOpenFileChooser;
-import semgen.resource.uicomponent.SemGenDialog;
-import semgen.resource.uicomponent.SemGenProgressBar;
+import semgen.utilities.SemGenError;
+import semgen.utilities.SemGenFont;
+import semgen.utilities.file.SemGenOpenFileChooser;
+import semgen.utilities.uicomponent.SemGenDialog;
+import semgen.utilities.uicomponent.SemGenProgressBar;
 import semsim.SemSimLibrary;
 
 public class SemGen extends JFrame implements Observer{

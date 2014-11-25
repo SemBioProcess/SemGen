@@ -3,7 +3,7 @@ package semgen;
 import java.io.File;
 import java.util.Observable;
 
-import semgen.resource.uicomponent.SemGenTab;
+import semgen.utilities.uicomponent.SemGenTab;
 
 public class GlobalActions extends Observable {
 	public static enum appactions { QUIT, TABCHANGED, TABCLOSED, SAVED, 

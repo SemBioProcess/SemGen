@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Hashtable;
 import java.util.Observable;
 
-import semgen.resource.file.SemGenOpenFileChooser;
+import semgen.utilities.file.SemGenOpenFileChooser;
 import semsim.ResourcesManager;
 
 public class SemGenSettings extends Observable{

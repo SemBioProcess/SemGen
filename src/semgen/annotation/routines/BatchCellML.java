@@ -18,7 +18,7 @@ import semgen.GlobalActions;
 import semgen.annotation.dialog.textminer.TextMinerDialog;
 import semgen.annotation.workbench.AnnotatorFactory;
 import semgen.annotation.workbench.AnnotatorWorkbench;
-import semgen.resource.file.SemGenOpenFileChooser;
+import semgen.utilities.file.SemGenOpenFileChooser;
 import semsim.SemSimConstants;
 
 public class BatchCellML{

@@ -3,7 +3,7 @@ package semgen.annotation;
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
 import semgen.annotation.workbench.AnnotatorWorkbench;
-import semgen.resource.uicomponent.TabFactory;
+import semgen.utilities.uicomponent.TabFactory;
 
 public class AnnotationTabFactory extends TabFactory<AnnotatorWorkbench> {
 

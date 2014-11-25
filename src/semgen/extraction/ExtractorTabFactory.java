@@ -3,7 +3,7 @@ package semgen.extraction;
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
 import semgen.extraction.workbench.ExtractorWorkbench;
-import semgen.resource.uicomponent.TabFactory;
+import semgen.utilities.uicomponent.TabFactory;
 
 public class ExtractorTabFactory extends TabFactory<ExtractorWorkbench> {
 

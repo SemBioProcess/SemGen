@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 import semgen.SemGen;
 import semgen.SemGenSettings;
 import semgen.annotation.annotatorpane.AnnotationPanel;
-import semgen.resource.SemGenFont;
+import semgen.utilities.SemGenFont;
 import semsim.Annotatable;
 import semsim.SemSimConstants;
 import semsim.model.SemSimModel;

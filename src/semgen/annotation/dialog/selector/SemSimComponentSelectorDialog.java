@@ -21,7 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import semgen.annotation.annotatorpane.AnnotationPanel;
-import semgen.resource.uicomponent.SemGenDialog;
+import semgen.utilities.uicomponent.SemGenDialog;
 import semsim.model.SemSimComponent;
 import semsim.model.SemSimModel;
 import semsim.writing.CaseInsensitiveComparator;

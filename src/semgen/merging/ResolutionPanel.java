@@ -24,9 +24,9 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
-import semgen.resource.SemGenFont;
-import semgen.resource.SemGenIcon;
-import semgen.resource.uicomponent.SemGenScrollPane;
+import semgen.utilities.SemGenFont;
+import semgen.utilities.SemGenIcon;
+import semgen.utilities.uicomponent.SemGenScrollPane;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 

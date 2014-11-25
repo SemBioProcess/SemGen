@@ -16,10 +16,10 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import semgen.GlobalActions;
 import semgen.SemGen;
-import semgen.resource.CSVExporter;
-import semgen.resource.SemGenError;
-import semgen.resource.Workbench;
-import semgen.resource.file.SemGenSaveFileChooser;
+import semgen.utilities.CSVExporter;
+import semgen.utilities.SemGenError;
+import semgen.utilities.Workbench;
+import semgen.utilities.file.SemGenSaveFileChooser;
 import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.SemSimRelation;

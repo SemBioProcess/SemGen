@@ -2,7 +2,7 @@ package semgen.merging.workbench;
 
 import java.io.File;
 
-import semgen.resource.Workbench;
+import semgen.utilities.Workbench;
 
 public class MergerWorkbench extends Workbench {
 

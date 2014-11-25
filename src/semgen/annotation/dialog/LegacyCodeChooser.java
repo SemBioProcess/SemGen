@@ -11,8 +11,9 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import semgen.resource.file.SemGenOpenFileChooser;
-import semgen.resource.uicomponent.SemGenDialog;
+
+import semgen.utilities.file.SemGenOpenFileChooser;
+import semgen.utilities.uicomponent.SemGenDialog;
 
 public class LegacyCodeChooser extends SemGenDialog implements ActionListener,
 		PropertyChangeListener {

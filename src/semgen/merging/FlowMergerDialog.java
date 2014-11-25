@@ -24,9 +24,9 @@ import javax.swing.JTextArea;
 import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntology;
 
-import semgen.resource.SemGenIcon;
-import semgen.resource.uicomponent.SemGenDialog;
-import semgen.resource.uicomponent.SemGenScrollPane;
+import semgen.utilities.SemGenIcon;
+import semgen.utilities.uicomponent.SemGenDialog;
+import semgen.utilities.uicomponent.SemGenScrollPane;
 import semsim.SemSimConstants;
 import semsim.owl.SemSimOWLFactory;
 

@@ -5,10 +5,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JMenuItem;
+
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
 import semgen.encoding.Encoder;
-import semgen.resource.uicomponent.SemGenMenu;
+import semgen.utilities.uicomponent.SemGenMenu;
 
 public class ToolsMenu extends SemGenMenu implements ActionListener{
 	private static final long serialVersionUID = 1L;

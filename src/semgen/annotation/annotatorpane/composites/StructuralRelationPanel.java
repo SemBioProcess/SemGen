@@ -7,7 +7,7 @@ import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import semgen.resource.SemGenFont;
+import semgen.utilities.SemGenFont;
 import semsim.model.annotation.StructuralRelation;
 
 public class StructuralRelationPanel extends JPanel{

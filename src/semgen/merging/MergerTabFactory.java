@@ -3,7 +3,7 @@ package semgen.merging;
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
 import semgen.merging.workbench.MergerWorkbench;
-import semgen.resource.uicomponent.TabFactory;
+import semgen.utilities.uicomponent.TabFactory;
 
 public class MergerTabFactory extends TabFactory<MergerWorkbench> {
 

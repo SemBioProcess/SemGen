@@ -11,8 +11,8 @@ import javax.swing.JTextArea;
 
 import semgen.annotation.AnnotatorTab;
 import semgen.annotation.componentdisplays.codewords.CodewordButton;
-import semgen.resource.SemGenFont;
-import semgen.resource.uicomponent.SemGenDialog;
+import semgen.utilities.SemGenFont;
+import semgen.utilities.uicomponent.SemGenDialog;
 import semsim.Annotatable;
 
 public class AddReferenceClassDialog extends SemGenDialog implements

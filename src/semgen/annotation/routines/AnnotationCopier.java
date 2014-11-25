@@ -11,10 +11,10 @@ import javax.swing.JOptionPane;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.annotation.AnnotatorTab;
-import semgen.resource.SemGenTask;
-import semgen.resource.file.LoadSemSimModel;
-import semgen.resource.file.SemGenOpenFileChooser;
-import semgen.resource.uicomponent.SemGenProgressBar;
+import semgen.utilities.SemGenTask;
+import semgen.utilities.file.LoadSemSimModel;
+import semgen.utilities.file.SemGenOpenFileChooser;
+import semgen.utilities.uicomponent.SemGenProgressBar;
 import semsim.SemSimConstants;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.Annotation;

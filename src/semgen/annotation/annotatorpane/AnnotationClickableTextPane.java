@@ -12,7 +12,7 @@ import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
-import semgen.resource.SemGenFont;
+import semgen.utilities.SemGenFont;
 
 
 public class AnnotationClickableTextPane extends JTextPane {

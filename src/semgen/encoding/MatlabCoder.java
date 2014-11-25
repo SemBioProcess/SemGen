@@ -15,8 +15,8 @@ import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.SemGen;
-import semgen.resource.GenericThread;
-import semgen.resource.uicomponent.SemGenProgressBar;
+import semgen.utilities.GenericThread;
+import semgen.utilities.uicomponent.SemGenProgressBar;
 import semsim.SemSimConstants;
 import semsim.SemSimUtil;
 import semsim.owl.SemSimOWLFactory;

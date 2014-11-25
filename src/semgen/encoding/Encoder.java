@@ -4,12 +4,12 @@ import java.io.File;
 
 import javax.swing.JOptionPane;
 
-import semgen.resource.SemGenError;
-import semgen.resource.SemGenTask;
-import semgen.resource.file.LoadSemSimModel;
-import semgen.resource.file.SemGenOpenFileChooser;
-import semgen.resource.file.SemGenSaveFileChooser;
-import semgen.resource.uicomponent.SemGenProgressBar;
+import semgen.utilities.SemGenError;
+import semgen.utilities.SemGenTask;
+import semgen.utilities.file.LoadSemSimModel;
+import semgen.utilities.file.SemGenOpenFileChooser;
+import semgen.utilities.file.SemGenSaveFileChooser;
+import semgen.utilities.uicomponent.SemGenProgressBar;
 import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
 import semsim.writing.CellMLwriter;

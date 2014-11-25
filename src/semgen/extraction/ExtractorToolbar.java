@@ -5,8 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import semgen.SemGenSettings;
-import semgen.resource.SemGenIcon;
-import semgen.resource.uicomponent.SemGenTabToolbar;
+import semgen.utilities.SemGenIcon;
+import semgen.utilities.uicomponent.SemGenTabToolbar;
 
 public class ExtractorToolbar extends SemGenTabToolbar implements ActionListener {
 	private static final long serialVersionUID = 1L;

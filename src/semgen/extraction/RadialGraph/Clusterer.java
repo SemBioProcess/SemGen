@@ -56,9 +56,9 @@ import org.apache.commons.collections15.map.LazyMap;
 
 import semgen.extraction.ExtractorJCheckBox;
 import semgen.extraction.ExtractorTab;
-import semgen.resource.SemGenFont;
-import semgen.resource.uicomponent.SemGenScrollPane;
-import semgen.resource.uicomponent.SemGenTab;
+import semgen.utilities.SemGenFont;
+import semgen.utilities.uicomponent.SemGenScrollPane;
+import semgen.utilities.uicomponent.SemGenTab;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
