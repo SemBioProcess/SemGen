@@ -86,7 +86,6 @@ public class ReferenceClassFinderPanel extends JPanel implements
 	
 	// Set up the interface
 	public void setUpUI(){
-
 		setOpaque(false);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 

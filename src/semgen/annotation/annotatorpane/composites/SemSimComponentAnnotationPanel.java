@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,6 +51,7 @@ import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.PhysicalProperty;
+import semsim.model.physical.ReferencePhysicalEntity;
 import semsim.model.physical.Submodel;
 import semsim.writing.CaseInsensitiveComparator;
 
@@ -69,6 +71,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 	public ComponentPanelLabel modifylabel 
 	= new ComponentPanelLabel(SemGenIcon.modifyicon, "Edit custom term");
 	public ExternalURLButton urlbutton = new ExternalURLButton();
+	public CompositeAnnotationComponentSearchDialog srchdlg;
 
 	public Map<String,SemSimComponent> listdataandsmcmap = new HashMap<String, SemSimComponent>();
 	public Object selecteditem;
@@ -249,13 +252,90 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 			}
 			else if(smc instanceof PhysicalProcess)
 				ontList = new String[]{SemSimConstants.GENE_ONTOLOGY_FULLNAME};
-			new CompositeAnnotationComponentSearchDialog(this, ontList, new String[]{"Apply","Cancel"});
+			
+			srchdlg = new CompositeAnnotationComponentSearchDialog(this, ontList, new String[]{"Apply","Cancel"}) {
+				private static final long serialVersionUID = 1L;
+
+				public void propertyChange(PropertyChangeEvent arg0) {
+					String propertyfired = arg0.getPropertyName();
+					if (propertyfired.equals("value")) {
+						String value = optionPane.getValue().toString();
+						if(value == "Apply" && this.getFocusOwner() != refclasspanel.findbox){
+							// If something from list actually selected
+							if(refclasspanel.resultslistright.getSelectedValue()!=null){
+								String desc = (String) refclasspanel.resultslistright.getSelectedValue();
+								URI uri = URI.create(refclasspanel.resultsanduris.get(refclasspanel.resultslistright.getSelectedValue()));
+								
+								// If we're annotating a physical property...
+								if(smc instanceof PhysicalProperty){
+									if(SemGen.semsimlib.checkOPBpropertyValidity((PhysicalProperty) smc, uri)){
+										smc.removeAllReferenceAnnotations();
+										smc.addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, uri, desc);
+									}
+									else{
+										SemGenError.showInvalidOPBpropertyError();
+										optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+										return;
+									}
+								}
+								//Otherwise, if the reference term hasn't been added to the model yet...
+								else if(semsimmodel.getPhysicalModelComponentByReferenceURI(uri)==null){
+									if(smc instanceof PhysicalProcess){
+										smc = semsimmodel.addReferencePhysicalProcess(uri, desc);
+									}
+									else if(smc instanceof PhysicalEntity){
+										smc = semsimmodel.addReferencePhysicalEntity(uri, desc);
+										
+										// If we are using an FMA term, store the numerical version of the ID
+										String altID = null;
+										((ReferencePhysicalEntity)smc).getFirstRefersToReferenceOntologyAnnotation().setAltNumericalID(altID);
+									}
+								}
+								// Otherwise reuse existing annotation
+								else smc = semsimmodel.getPhysicalModelComponentByReferenceURI(uri);
+								
+								// Refresh the annotation based on the PhysicalModelComponents specified in the PhysicalModelComponentPanels
+								try {
+									anndialog.updateCompositeAnnotationFromUIComponents();
+								} catch (OWLException e) {
+									e.printStackTrace();
+								}
+								
+								anndialog.compositepanel.setAddButtonsEnabled();
+								
+								// Refresh all the comboboxes in the composite annotation interface
+								for(Component c : anndialog.compositepanel.getComponents()){
+									if(c instanceof SemSimComponentAnnotationPanel){
+										((SemSimComponentAnnotationPanel)c).refreshComboBoxItemsAndButtonVisibility();
+									}
+								}
+								// Refresh combobox items in singular annotation interface
+								anndialog.singularannpanel.refreshComboBoxItemsAndButtonVisibility();
+								
+								if(smc.hasRefersToAnnotation()) 
+									urlbutton.setTermURI(smc.getFirstRefersToReferenceOntologyAnnotation().getReferenceURI());
+								
+								if(refclasspanel.ontologychooser.getComponentCount()>2){
+								}
+								
+								// Refresh the combobox items for the Singular Annotation panel in the AnnotationDialog
+								anndialog.refreshSingularAnnotation();
+							}
+						}
+						else if (value == "Cancel") {
+							refclasspanel.querythread.stop();
+						}
+						dispose();
+					}
+				}	
+			};
+			
 		}
 		else{
 			anndialog.showSingularAnnotationEditor();
 		}
 	}
-	
+
 	private void createLabelClicked() {
 		Boolean proc = false;
 		String porestring = "entity";
@@ -335,7 +415,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 						ReferenceOntologyAnnotation otherann = selectedsmc.getFirstRefersToReferenceOntologyAnnotation();
 						
 						// Check if OPB property is valid
-						if(checkOPBpropertyValidity(otherann.getReferenceURI())){
+						if(SemGen.semsimlib.checkOPBpropertyValidity((PhysicalProperty) selectedsmc, otherann.getReferenceURI())){
 							applyReferenceOntologyAnnotation(otherann, true);
 						}
 						else{
@@ -394,22 +474,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 			refreshComboBoxItemsAndButtonVisibility();
 		}
 	}
-	
-	public boolean checkOPBpropertyValidity(URI OPBuri){
-		PhysicalProperty prop = (PhysicalProperty)smc;
-		if(prop.getPhysicalPropertyOf()!=null){
-			
-			// This conditional statement makes sure that physical processes are annotated with appropriate OPB terms
-			// It only limits physical entity properties to non-process properties. It does not limit based on whether
-			// the OPB term is for a constitutive property. Not sure if it should, yet.
-			if((prop.getPhysicalPropertyOf() instanceof PhysicalEntity || prop.getPhysicalPropertyOf() instanceof PhysicalProcess ) && 
-				(SemGen.semsimlib.OPBhasFlowProperty(OPBuri) || SemGen.semsimlib.OPBhasProcessProperty(OPBuri))) {
-				return false;
-			}
-		}
-		return true;
-	}
-	
+
 	public void removeComboBoxActionListeners(SemSimComponentAnnotationPanel pan){
 		ActionListener[] al = pan.combobox.getActionListeners();
 		for(int x=0;x<al.length;x++){

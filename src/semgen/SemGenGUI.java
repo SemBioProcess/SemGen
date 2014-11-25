@@ -115,26 +115,16 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 
 	public boolean quit() throws HeadlessException, OWLException {
 		Component[] desktopcomponents = getComponents();
-		Boolean quit = true;
-		Boolean contchecking = true;
 		for (int x = 0; x < desktopcomponents.length; x++) {
-			if (desktopcomponents[x] instanceof AnnotatorTab && contchecking) {
+			if (desktopcomponents[x] instanceof AnnotatorTab) {
 				AnnotatorTab temp = (AnnotatorTab) desktopcomponents[x];
 				if (!closeTabAction(temp)) {
-					contchecking = false;
-					quit = false;
+					return false;
 				}
 			}
 		}
-		if(quit){
-			try {
-				settings.storeSettings();
-				SemGen.semsimlib.storeCachedOntologyTerms();
-				System.exit(0);
-			} 
-			catch (URISyntaxException e) {e.printStackTrace();}
-		}
-		return quit;
+
+		return true;
 	}
 	
 	private class tabClickedListener extends MouseAdapter {

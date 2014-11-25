@@ -18,9 +18,11 @@ import semgen.resource.SemGenFont;
 import semgen.resource.SemGenIcon;
 import semgen.resource.uicomponent.SemGenSeparator;
 import semsim.Annotatable;
+import semsim.SemSimConstants;
 import semsim.model.Importable;
 import semsim.model.SemSimComponent;
 import semsim.model.SemSimModel;
+import semsim.model.annotation.ReferenceOntologyAnnotation;
 import semsim.model.annotation.StructuralRelation;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
@@ -33,6 +35,7 @@ import semsim.writing.CaseInsensitiveComparator;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ListIterator;
@@ -43,6 +46,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
+import java.beans.PropertyChangeEvent;
 
 import javax.swing.*;
 
@@ -364,16 +368,11 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 		text = title + ": " + text.substring(2);
 		pane.setCustomText(text);
 	}
-	
-	
 
 	public Boolean validateNewComponentName(String newname){
-		if(!newname.equals("") && !annotator.submodelbuttontable.containsKey(newname) &&
-			!annotator.codewordbuttontable.containsKey(newname) && !newname.contains("--"))
-			return true;
-		return false;
+		return (!newname.equals("") && !annotator.submodelbuttontable.containsKey(newname) &&
+			!annotator.codewordbuttontable.containsKey(newname) && !newname.contains("--"));
 	}
-	
 	
 	public void updateCompositeAnnotationFromUIComponents() throws OWLException{
 		annotator.setModelSaved(false);
@@ -417,10 +416,36 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 	}
 	
 	public void showSingularAnnotationEditor(){
-		new SingularAnnotationEditor(this, new Object[]{"Annotate","Close"});
+		new SingularAnnotationEditor(this, new Object[]{"Annotate","Close"}) { 
+			private static final long serialVersionUID = 1L;
+
+			public void propertyChange(PropertyChangeEvent arg0) {
+				String propertyfired = arg0.getPropertyName();
+				if (propertyfired.equals("value")) {
+					String value = optionPane.getValue().toString();
+
+					//	 If we're using this dialog to apply a non-composite annotation
+					if(value == "Annotate" && this.getFocusOwner() != refclasspanel.findbox){
+						addClassToOntology();
+						annotator.setModelSaved(false);
+					}
+					dispose();
+				}
+			}
+			
+			public void addClassToOntology() {
+				if (refclasspanel.resultslistright.getSelectedValue() != null) {
+					String selectedname = (String) refclasspanel.resultslistright.getSelectedValue();
+					String referenceuri = (String) refclasspanel.resultsanduris.get(selectedname);
+					selectedname = selectedname.replaceAll("\"", "");
+					ReferenceOntologyAnnotation ann = new ReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, URI.create(referenceuri), selectedname);
+					singularannpanel.applyReferenceOntologyAnnotation(ann, true);
+				}
+				singularannpanel.refreshComboBoxItemsAndButtonVisibility();
+			}
+		};
 	}	
-	
-	
+
 	public boolean SemSimComponentIsImported(SemSimComponent comp){
 		// If semsim component is imported, change message
 		boolean imported = false;

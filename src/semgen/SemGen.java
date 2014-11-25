@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Observable;
@@ -177,8 +178,16 @@ public class SemGen extends JFrame implements Observer{
 		});
 	}
 	//Quit - behavior defined in content frame
-	public boolean quit() throws HeadlessException, OWLException {
-		return contentpane.quit();
+	public void quit() throws HeadlessException, OWLException {
+		
+		if(contentpane.quit()){
+			try {
+				settings.storeSettings();
+				semsimlib.storeCachedOntologyTerms();
+				System.exit(0);
+			} 
+			catch (URISyntaxException e) {e.printStackTrace();}
+		}
 	}
 	
 	@Override
