@@ -7,39 +7,30 @@ import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import semgen.SemGenGUI;
+import semgen.utilities.uicomponent.SemGenDialog;
 
-public class IdenticalCodewordDialog extends JDialog implements PropertyChangeListener, ItemListener {
+public class IdenticalCodewordDialog extends SemGenDialog implements PropertyChangeListener, ItemListener {
 
 	private static final long serialVersionUID = 7836229234967611648L;
 	public JOptionPane optionPane;
-	public JTextField mantextfield;
-	public JTextArea area;
-	public JPanel mainpanel;
-	public String cdwd;
-	private File file1;
-	private File file2;
-	public JComboBox box;
-	public String[] selections;
-	public Boolean process;
+	public JTextField mantextfield = new JTextField();
+	public JTextArea area = new JTextArea();
+	public JComboBox<String> box;
+	public Boolean process = true;
 
 	public IdenticalCodewordDialog(String cdwd, File file1, File file2) {
-		process = true;
-		this.cdwd = cdwd;
-		this.file1 = file1;
-		this.file2 = file2;
-		selections = new String[] { "Rename codeword in " + file2.getName(),
+		super("");
+		String[] selections = new String[] { "Rename codeword in " + file2.getName(),
 				"Only keep " + cdwd + " from " + file1.getName(),
 				"Only keep " + cdwd + " from " + file2.getName()};
-		area = new JTextArea();
 		area.setEditable(false);
 
 		area.setBorder(BorderFactory.createEmptyBorder(0, 0, 7, 0));
@@ -50,17 +41,15 @@ public class IdenticalCodewordDialog extends JDialog implements PropertyChangeLi
 		area.setWrapStyleWord(true);
 		area.setOpaque(false);
 
-		box = new JComboBox(selections);
+		box = new JComboBox<String>(selections);
 		box.addItemListener(this);
-		mantextfield = new JTextField();
 		mantextfield.setForeground(Color.blue);
-		mainpanel = new JPanel();
-		mainpanel.setLayout(new BorderLayout());
+		JPanel mainpanel = new JPanel(new BorderLayout());
 		mainpanel.add(area, BorderLayout.NORTH);
 		mainpanel.add(box, BorderLayout.CENTER);
 		mainpanel.add(mantextfield, BorderLayout.SOUTH);
 
-		setModal(true);
+		
 		this.setTitle("Duplicate codeword: " + cdwd);
 
 		Object[] array = new Object[] { mainpanel };
@@ -73,38 +62,31 @@ public class IdenticalCodewordDialog extends JDialog implements PropertyChangeLi
 
 		setContentPane(optionPane);
 
-		pack();
-		setLocationRelativeTo(SemGenGUI.desktop);
-		setVisible(true);
+		showDialog();
 	}
 
 	public void propertyChange(PropertyChangeEvent e) {
-		String value = optionPane.getValue().toString();
-		if (value == "OK") {
-			if (box.getSelectedIndex() == 0) {
-
-				if (!mantextfield.getText().equals("")
-						&& mantextfield.getText() != null) {
-					System.out.println(mantextfield.getText());
-					setVisible(false);
-				} else {
-					System.out.println("Please enter a new codeword name");
-				}
-			} else {
-				setVisible(false);
+		if (e.getPropertyName()=="value") {
+			String value = optionPane.getValue().toString();
+			if (value == "OK") {
+				if (box.getSelectedIndex() == 0) {	
+					if (!mantextfield.getText().equals("")
+							&& mantextfield.getText() != null) {
+						System.out.println(mantextfield.getText());
+					} else {
+						System.out.println("Please enter a new codeword name");
+						optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+						return;
+					}
+				} 
+			} else if (value == "Cancel") {
+				process = false;
 			}
-		} else if (value == "Cancel") {
-			process = false;
-			setVisible(false);
+			dispose();
 		}
-		optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 	}
 
 	public void itemStateChanged(ItemEvent arg0) {
-		if (box.getSelectedIndex() > 0) {
-			mantextfield.setEnabled(false);
-		} else {
-			mantextfield.setEnabled(true);
-		}
+		mantextfield.setEnabled(!(box.getSelectedIndex() > 0));
 	}
 }

@@ -14,22 +14,19 @@ import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.semanticweb.owlapi.model.OWLException;
 
-import semgen.SemGenGUI;
-import semsim.SemSimConstants;
+import semgen.SemGen;
 import semsim.model.SemSimModel;
 import semsim.model.physical.CustomPhysicalEntity;
 import semsim.model.physical.CustomPhysicalProcess;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.PhysicalProperty;
-import semsim.owl.SemSimOWLFactory;
 
 public class ChalkboardCoder {
 
-	public static Set<PhysicalEntity> physicalents;
 	public static Hashtable<String,CustomPhysicalEntity> nounnamesandphysents;
-	public static int x;
-	public static Set<Element> nouncollection;
+	public static int x = 1;
+	public static Set<Element> nouncollection = new HashSet<Element>();
 	
 	public static void translate(SemSimModel semsimmodel, File outputfile) throws JDOMException, IOException, OWLException {
 		// Create top of CB xml file
@@ -45,20 +42,16 @@ public class ChalkboardCoder {
 		
 		root.addContent(nounlist);
 		root.addContent(verblist);
-				
-		nouncollection = new HashSet<Element>();
+
 		Set<Element> verbcollection = new HashSet<Element>();
 		
 		Set<CustomPhysicalProcess> setofverbobjects = new HashSet<CustomPhysicalProcess>();
 		
 		nounnamesandphysents = new Hashtable<String,CustomPhysicalEntity>();
-		
-		x = 1;
-		
-		physicalents = semsimmodel.getPhysicalEntities();
-		Set<String> allflowrates = SemSimOWLFactory.getAllSubclasses(SemGenGUI.OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00573", false);
-		SemSimOWLFactory.getAllSubclasses(SemGenGUI.OPB, SemSimConstants.OPB_NAMESPACE + "OPB00093", false);
-		SemSimOWLFactory.getAllSubclasses(SemGenGUI.OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00569", false);
+
+		Set<String> allflowrates = SemGen.semsimlib.getOPBsubclasses("OPB_00573");
+		SemGen.semsimlib.getOPBsubclasses("OPB00093");
+		SemGen.semsimlib.getOPBsubclasses("OPB_00569");
 
 		/* For each data structure
 		if has a property that is a flow, get entity-flow physiomap
@@ -86,7 +79,7 @@ public class ChalkboardCoder {
 					
 					// Get the inputs to the flow term
 					String verbID = Integer.toString(x);
-					String desc = null;
+					String desc;
 					if(prop.getPhysicalPropertyOf().hasRefersToAnnotation()){
 						desc = prop.getPhysicalPropertyOf().getFirstRefersToReferenceOntologyAnnotation().getValueDescription();
 					}
@@ -151,11 +144,10 @@ public class ChalkboardCoder {
 	}
 	
 	public static CustomPhysicalEntity collectNounData(PhysicalEntity ent, String verbID){
-		CustomPhysicalEntity noun = null;
+		CustomPhysicalEntity noun;
 		String compositename = ent.getName();
-		String nounID = null; 
 		if(!nounnamesandphysents.keySet().contains(compositename)){
-			nounID = Integer.toString(x);
+			String nounID = Integer.toString(x);
 			noun = new CustomPhysicalEntity(ent.getName(), ent.getName());
 			Element nounel = new Element("noun");
 			nounel.setAttribute("ID", nounID);

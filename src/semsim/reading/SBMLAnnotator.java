@@ -31,7 +31,7 @@ import semsim.model.SemSimModel;
 import semsim.model.annotation.Annotation;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
 import semsim.model.annotation.StructuralRelation;
-import semsim.model.computational.DataStructure;
+import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.CompositePhysicalEntity;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
@@ -199,7 +199,7 @@ public class SBMLAnnotator {
 						PhysicalEntity reac = speciesandphysents.get(speciesreact);
 						if(pmc instanceof PhysicalProcess){
 							PhysicalProcess pmcp = (PhysicalProcess)pmc;
-							pmcp.addSource(reac, rxn.getReactant(l).getStoichiometry());
+							pmcp.addSource(reac);
 						}
 					}
 				}
@@ -209,7 +209,7 @@ public class SBMLAnnotator {
 						PhysicalEntity prod = speciesandphysents.get(speciesprod);
 						if(pmc instanceof PhysicalProcess){
 							PhysicalProcess pmcp = (PhysicalProcess)pmc;
-							pmcp.addSink(prod, rxn.getProduct(l).getStoichiometry());
+							pmcp.addSink(prod);
 						}
 					}
 				}
@@ -219,7 +219,7 @@ public class SBMLAnnotator {
 						PhysicalEntity mod = speciesandphysents.get(speciesmod);
 						if(pmc instanceof PhysicalProcess){
 							PhysicalProcess pmcp = (PhysicalProcess)pmc;
-							pmcp.addMediator(mod, 1);
+							pmcp.addMediator(mod);
 						}
 					}
 				}
@@ -279,8 +279,6 @@ public class SBMLAnnotator {
 			}
 		}
 	}			
-			
-			
 		
 	private static Boolean setCompositeAnnotationForModelComponent(SBase modelcomp, Model sbmlmodel, SemSimModel semsimmodel, 
 			Hashtable<String,MIRIAMannotation> resourcesandanns, boolean isonline, Map<Compartment,PhysicalEntity> compsandphysents,
@@ -434,7 +432,6 @@ public class SBMLAnnotator {
 		return true;
 	}
 	
-	
 	private static void annotateSpecies(Species species, String cdwd, PhysicalEntity pe, Model sbmlmodel, SemSimModel semsimmodel, boolean isonline,
 			Map<Compartment,PhysicalEntity> compsandphysents, Map<Species,PhysicalEntity> speciesandphysents){
 		
@@ -472,8 +469,7 @@ public class SBMLAnnotator {
 	}
 	
 
-	public static void setFreeTextDefinitionsForDataStructuresAndSubmodels(SemSimModel themodel){
-		
+	public static void setFreeTextDefinitionsForDataStructuresAndSubmodels(SemSimModel themodel){		
 		for(DataStructure ds : themodel.getDataStructures()){
 			if(ds.getDescription()==null){
 				
@@ -515,9 +511,7 @@ public class SBMLAnnotator {
 			}
 		}
 	}
-	
-	
-	
+
 	private static MIRIAMannotation collectMiriamAnnotation(int qualifier, String resource, Hashtable<String,MIRIAMannotation> resourcesandanns, 
 			Hashtable<String, String[]> ontologytermsandnamescache){
 		MIRIAMannotation ma = null;

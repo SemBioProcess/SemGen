@@ -8,7 +8,9 @@
 package semgen.webservices.KEGG;
 
 public class PathwayElementRelation  implements java.io.Serializable {
-    private int element_id1;
+	private static final long serialVersionUID = 1L;
+
+	private int element_id1;
 
     private int element_id2;
 
@@ -114,7 +116,6 @@ public class PathwayElementRelation  implements java.io.Serializable {
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof PathwayElementRelation)) return false;
         PathwayElementRelation other = (PathwayElementRelation) obj;
-        if (obj == null) return false;
         if (this == obj) return true;
         if (__equalsCalc != null) {
             return (__equalsCalc == obj);
@@ -205,7 +206,7 @@ public class PathwayElementRelation  implements java.io.Serializable {
      */
     public static org.apache.axis.encoding.Serializer getSerializer(
            java.lang.String mechType, 
-           java.lang.Class _javaType,  
+           Class<?> _javaType,  
            javax.xml.namespace.QName _xmlType) {
         return 
           new  org.apache.axis.encoding.ser.BeanSerializer(
@@ -217,7 +218,7 @@ public class PathwayElementRelation  implements java.io.Serializable {
      */
     public static org.apache.axis.encoding.Deserializer getDeserializer(
            java.lang.String mechType, 
-           java.lang.Class _javaType,  
+           Class<?> _javaType,  
            javax.xml.namespace.QName _xmlType) {
         return 
           new  org.apache.axis.encoding.ser.BeanDeserializer(

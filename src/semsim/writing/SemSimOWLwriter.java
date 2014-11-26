@@ -5,7 +5,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 
@@ -29,25 +28,21 @@ import semsim.model.SemSimModel;
 import semsim.model.annotation.Annotation;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
 import semsim.model.annotation.StructuralRelation;
-import semsim.model.computational.MappableVariable;
-import semsim.model.computational.DataStructure;
 import semsim.model.computational.RelationalConstraint;
+import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.CompositePhysicalEntity;
 import semsim.model.physical.CustomPhysicalEntity;
 import semsim.model.physical.CustomPhysicalProcess;
 import semsim.model.physical.FunctionalSubmodel;
-import semsim.model.physical.MediatorParticipant;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
-import semsim.model.physical.ProcessParticipant;
 import semsim.model.physical.ReferencePhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.ReferencePhysicalProcess;
 import semsim.model.physical.PhysicalProperty;
-import semsim.model.physical.SinkParticipant;
-import semsim.model.physical.SourceParticipant;
 import semsim.model.physical.Submodel;
 import semsim.owl.SemSimOWLFactory;
 
@@ -57,12 +52,10 @@ public class SemSimOWLwriter {
 	public OWLOntologyManager manager;
 	protected OWLOntology ont;
 	public OWLDataFactory factory;
-	public Map<PhysicalModelComponent, URI> singularPMCsAndUrisForDataStructures = new HashMap<PhysicalModelComponent,URI>();
-	public Hashtable<PhysicalProperty,URI> propertiesandprocessuris = new Hashtable<PhysicalProperty,URI>(); 
+	private Map<PhysicalModelComponent, URI> singularPMCsAndUrisForDataStructures = new HashMap<PhysicalModelComponent,URI>();
 	public Map<CompositePhysicalEntity,URI> compositeEntitiesAndIndexes = new HashMap<CompositePhysicalEntity,URI>();
 	public Set<String> singularphysentinds;
 	public String base = SemSimConstants.SEMSIM_NAMESPACE;
-	protected SemSimConstants constants = new SemSimConstants();
 	private Set<DataStructure> localdss = new HashSet<DataStructure>();
 	
 	public OWLOntology createOWLOntologyFromModel(SemSimModel model) throws OWLException{
@@ -269,7 +262,6 @@ public class SemSimOWLwriter {
 										singularPMCsAndUrisForDataStructures.put(ent, uriforent);
 									}
 								}
-								propertiesandprocessuris.put(ds.getPhysicalProperty(), URI.create(uristring));
 							}
 							// Add the individual to the ontology if not already there, create it
 							if(!SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimConstants.PHYSICAL_MODEL_COMPONENT_CLASS_URI.toString()).contains(uristring)){
@@ -327,28 +319,22 @@ public class SemSimOWLwriter {
 		// Add source, sink and mediator info to model
 		for(PhysicalProcess proc : model.getPhysicalProcesses()){
 			if(singularPMCsAndUrisForDataStructures.containsKey(proc)){
-				for(SourceParticipant sourcep : proc.getSources()){
-					PhysicalEntity source = sourcep.getPhysicalEntity();
+				for(PhysicalEntity source : proc.getSources()){
 					
 					// Annotate the source with the multiplier (stoichiometry)
-					Set<OWLAnnotation> anns = makeMultiplierAnnotation(sourcep);
 					SemSimOWLFactory.setIndObjectPropertyWithAnnotations(ont, singularPMCsAndUrisForDataStructures.get(proc).toString(),
 							singularPMCsAndUrisForDataStructures.get(source).toString(), SemSimConstants.HAS_SOURCE_URI.toString(),
-							"", anns, null, manager);
+							"", null, null, manager);
 				}
-				for(SinkParticipant sinkp : proc.getSinks()){
-					PhysicalEntity sink = sinkp.getPhysicalEntity();
-					Set<OWLAnnotation> anns = makeMultiplierAnnotation(sinkp);
+				for(PhysicalEntity sink : proc.getSinks()){
 					SemSimOWLFactory.setIndObjectPropertyWithAnnotations(ont, singularPMCsAndUrisForDataStructures.get(proc).toString(),
 							singularPMCsAndUrisForDataStructures.get(sink).toString(), SemSimConstants.HAS_SINK_URI.toString(),
-							"", anns, null, manager);
+							"", null, null, manager);
 				}
-				for(MediatorParticipant mediatorp : proc.getMediators()){
-					PhysicalEntity mediator = mediatorp.getPhysicalEntity();
-					Set<OWLAnnotation> anns = makeMultiplierAnnotation(mediatorp);
+				for(PhysicalEntity mediator : proc.getMediators()){
 					SemSimOWLFactory.setIndObjectPropertyWithAnnotations(ont, singularPMCsAndUrisForDataStructures.get(proc).toString(),
 							singularPMCsAndUrisForDataStructures.get(mediator).toString(), SemSimConstants.HAS_MEDIATOR_URI.toString(),
-							"", anns, null, manager);
+							"", null, null, manager);
 				}
 			}
 		}
@@ -565,11 +551,7 @@ public class SemSimOWLwriter {
 				rel.getURI().toString(), SemSimConstants.INVERSE_STRUCTURAL_RELATIONS_MAP.get(rel.getURI()).toString(), manager);
 		return indexuri;
 	}
-	
-	
-	
-	
-	
+
 	private static URI makeURIForCompositeEntity(CompositePhysicalEntity cpe, String namespace){
 		String uristring = namespace;
 		for(int y=0; y<cpe.getArrayListOfEntities().size();y++){
@@ -698,15 +680,6 @@ public class SemSimOWLwriter {
 		if(description!=null){
 			SemSimOWLFactory.setRDFComment(ont, factory.getOWLNamedIndividual(IRI.create(uriforind)), description, manager);
 		}
-	}
-	
-	// Assert the multiplier on process participants
-	private Set<OWLAnnotation> makeMultiplierAnnotation(ProcessParticipant pp){
-		Set<OWLAnnotation> anns = new HashSet<OWLAnnotation>();
-		OWLLiteral lit = factory.getOWLLiteral(pp.getMultiplier());
-		OWLAnnotation anno = factory.getOWLAnnotation(factory.getOWLAnnotationProperty(IRI.create(SemSimConstants.HAS_MULTIPLIER_URI)), lit);
-		anns.add(anno);
-		return anns;
 	}
 	
 	// Assert a public interface annotation (for CellML-derived models)

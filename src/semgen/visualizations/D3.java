@@ -15,11 +15,10 @@ import java.util.Set;
 import org.apache.commons.io.IOUtils;
 
 import com.google.gson.Gson;
-
-import semgen.SemGenGUI;
+import semgen.SemGen;
 import semsim.model.SemSimModel;
-import semsim.model.computational.DataStructure;
-import semsim.model.computational.MappableVariable;
+import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.datastructures.MappableVariable;
 
 /**
  * Displays D3 visualizations of a SemSim model
@@ -226,7 +225,7 @@ public class D3 {
 				
 			// Create a the new node representing this data structure (variable)
 			Node node = new Node(dataStructure.getName(),
-					SemGenGUI.getPropertyType(dataStructure),
+					dataStructure.getPropertyType(SemGen.semsimlib),
 					this.nodes.size());
 			
 			// Add the new node to our list of nodes

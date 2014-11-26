@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import semsim.model.computational.Computation;
-import semsim.model.computational.DataStructure;
+import semsim.model.computational.datastructures.DataStructure;
 
 /**
  * Class created to represent CellML component constructs.
@@ -19,7 +19,6 @@ import semsim.model.computational.DataStructure;
  **/
 
 public class FunctionalSubmodel extends Submodel {
-	
 	private Map<String, Set<FunctionalSubmodel>> relationshipSubmodelMap = new HashMap<String, Set<FunctionalSubmodel>>();
 	private Computation computation;
 	

@@ -13,7 +13,6 @@ import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 public class SemSimRDFwriter {
 
 	public static void write(OWLOntology ont, File saveloc) throws OWLOntologyStorageException{
-//		RDFXMLOntologyFormat format = new RDFXMLOntologyFormat();
 		RDFOntologyFormat format = new RDFXMLOntologyFormat();
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
         manager.saveOntology(ont, format, IRI.create(saveloc));

@@ -7,10 +7,14 @@
 
 package semgen.webservices.KEGG;
 
-public class SSDBRelation  implements java.io.Serializable {
-    private java.lang.String genes_id1;
+import javax.xml.namespace.QName;
 
-    private java.lang.String genes_id2;
+public class SSDBRelation  implements java.io.Serializable {
+	private static final long serialVersionUID = -6624192570387515612L;
+
+	private String genes_id1;
+
+    private String genes_id2;
 
     private int sw_score;
 
@@ -32,9 +36,9 @@ public class SSDBRelation  implements java.io.Serializable {
 
     private boolean best_flag_2To1;
 
-    private java.lang.String definition1;
+    private String definition1;
 
-    private java.lang.String definition2;
+    private String definition2;
 
     private int length1;
 
@@ -44,8 +48,8 @@ public class SSDBRelation  implements java.io.Serializable {
     }
 
     public SSDBRelation(
-           java.lang.String genes_id1,
-           java.lang.String genes_id2,
+           String genes_id1,
+           String genes_id2,
            int sw_score,
            float bit_score,
            float identity,
@@ -56,8 +60,8 @@ public class SSDBRelation  implements java.io.Serializable {
            int end_position2,
            boolean best_flag_1To2,
            boolean best_flag_2To1,
-           java.lang.String definition1,
-           java.lang.String definition2,
+           String definition1,
+           String definition2,
            int length1,
            int length2) {
            this.genes_id1 = genes_id1;
@@ -84,7 +88,7 @@ public class SSDBRelation  implements java.io.Serializable {
      * 
      * @return genes_id1
      */
-    public java.lang.String getGenes_id1() {
+    public String getGenes_id1() {
         return genes_id1;
     }
 
@@ -94,7 +98,7 @@ public class SSDBRelation  implements java.io.Serializable {
      * 
      * @param genes_id1
      */
-    public void setGenes_id1(java.lang.String genes_id1) {
+    public void setGenes_id1(String genes_id1) {
         this.genes_id1 = genes_id1;
     }
 
@@ -104,7 +108,7 @@ public class SSDBRelation  implements java.io.Serializable {
      * 
      * @return genes_id2
      */
-    public java.lang.String getGenes_id2() {
+    public String getGenes_id2() {
         return genes_id2;
     }
 
@@ -114,7 +118,7 @@ public class SSDBRelation  implements java.io.Serializable {
      * 
      * @param genes_id2
      */
-    public void setGenes_id2(java.lang.String genes_id2) {
+    public void setGenes_id2(String genes_id2) {
         this.genes_id2 = genes_id2;
     }
 
@@ -324,7 +328,7 @@ public class SSDBRelation  implements java.io.Serializable {
      * 
      * @return definition1
      */
-    public java.lang.String getDefinition1() {
+    public String getDefinition1() {
         return definition1;
     }
 
@@ -334,7 +338,7 @@ public class SSDBRelation  implements java.io.Serializable {
      * 
      * @param definition1
      */
-    public void setDefinition1(java.lang.String definition1) {
+    public void setDefinition1(String definition1) {
         this.definition1 = definition1;
     }
 
@@ -344,7 +348,7 @@ public class SSDBRelation  implements java.io.Serializable {
      * 
      * @return definition2
      */
-    public java.lang.String getDefinition2() {
+    public String getDefinition2() {
         return definition2;
     }
 
@@ -354,7 +358,7 @@ public class SSDBRelation  implements java.io.Serializable {
      * 
      * @param definition2
      */
-    public void setDefinition2(java.lang.String definition2) {
+    public void setDefinition2(String definition2) {
         this.definition2 = definition2;
     }
 
@@ -398,11 +402,10 @@ public class SSDBRelation  implements java.io.Serializable {
         this.length2 = length2;
     }
 
-    private java.lang.Object __equalsCalc = null;
-    public synchronized boolean equals(java.lang.Object obj) {
+    private Object __equalsCalc = null;
+    public synchronized boolean equals(Object obj) {
         if (!(obj instanceof SSDBRelation)) return false;
         SSDBRelation other = (SSDBRelation) obj;
-        if (obj == null) return false;
         if (this == obj) return true;
         if (__equalsCalc != null) {
             return (__equalsCalc == obj);
@@ -478,101 +481,101 @@ public class SSDBRelation  implements java.io.Serializable {
         new org.apache.axis.description.TypeDesc(SSDBRelation.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("SOAP/KEGG", "SSDBRelation"));
+        typeDesc.setXmlType(new QName("SOAP/KEGG", "SSDBRelation"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("genes_id1");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "genes_id1"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setXmlName(new QName("", "genes_id1"));
+        elemField.setXmlType(new QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("genes_id2");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "genes_id2"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setXmlName(new QName("", "genes_id2"));
+        elemField.setXmlType(new QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("sw_score");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "sw_score"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+        elemField.setXmlName(new QName("", "sw_score"));
+        elemField.setXmlType(new QName("http://www.w3.org/2001/XMLSchema", "int"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("bit_score");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "bit_score"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "float"));
+        elemField.setXmlName(new QName("", "bit_score"));
+        elemField.setXmlType(new QName("http://www.w3.org/2001/XMLSchema", "float"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("identity");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "identity"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "float"));
+        elemField.setXmlName(new QName("", "identity"));
+        elemField.setXmlType(new QName("http://www.w3.org/2001/XMLSchema", "float"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("overlap");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "overlap"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+        elemField.setXmlName(new QName("", "overlap"));
+        elemField.setXmlType(new QName("http://www.w3.org/2001/XMLSchema", "int"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("start_position1");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "start_position1"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+        elemField.setXmlName(new QName("", "start_position1"));
+        elemField.setXmlType(new QName("http://www.w3.org/2001/XMLSchema", "int"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("end_position1");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "end_position1"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+        elemField.setXmlName(new QName("", "end_position1"));
+        elemField.setXmlType(new QName("http://www.w3.org/2001/XMLSchema", "int"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("start_position2");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "start_position2"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+        elemField.setXmlName(new QName("", "start_position2"));
+        elemField.setXmlType(new QName("http://www.w3.org/2001/XMLSchema", "int"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("end_position2");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "end_position2"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+        elemField.setXmlName(new QName("", "end_position2"));
+        elemField.setXmlType(new QName("http://www.w3.org/2001/XMLSchema", "int"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("best_flag_1To2");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "best_flag_1to2"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setXmlName(new QName("", "best_flag_1to2"));
+        elemField.setXmlType(new QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("best_flag_2To1");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "best_flag_2to1"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setXmlName(new QName("", "best_flag_2to1"));
+        elemField.setXmlType(new QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("definition1");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "definition1"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setXmlName(new QName("", "definition1"));
+        elemField.setXmlType(new QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("definition2");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "definition2"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setXmlName(new QName("", "definition2"));
+        elemField.setXmlType(new QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("length1");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "length1"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+        elemField.setXmlName(new QName("", "length1"));
+        elemField.setXmlType(new QName("http://www.w3.org/2001/XMLSchema", "int"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("length2");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "length2"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+        elemField.setXmlName(new QName("", "length2"));
+        elemField.setXmlType(new QName("http://www.w3.org/2001/XMLSchema", "int"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
     }
@@ -588,9 +591,9 @@ public class SSDBRelation  implements java.io.Serializable {
      * Get Custom Serializer
      */
     public static org.apache.axis.encoding.Serializer getSerializer(
-           java.lang.String mechType, 
-           java.lang.Class _javaType,  
-           javax.xml.namespace.QName _xmlType) {
+           String mechType, 
+           Class<?> _javaType,  
+           QName _xmlType) {
         return 
           new  org.apache.axis.encoding.ser.BeanSerializer(
             _javaType, _xmlType, typeDesc);
@@ -600,9 +603,9 @@ public class SSDBRelation  implements java.io.Serializable {
      * Get Custom Deserializer
      */
     public static org.apache.axis.encoding.Deserializer getDeserializer(
-           java.lang.String mechType, 
-           java.lang.Class _javaType,  
-           javax.xml.namespace.QName _xmlType) {
+           String mechType, 
+           Class<?> _javaType,  
+           QName _xmlType) {
         return 
           new  org.apache.axis.encoding.ser.BeanDeserializer(
             _javaType, _xmlType, typeDesc);

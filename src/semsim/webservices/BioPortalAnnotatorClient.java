@@ -35,7 +35,7 @@ public class BioPortalAnnotatorClient {
 	    public BioPortalAnnotatorClient(String text, Set<String> ontologyids, Hashtable<String,String[]> annotatorsettings) throws FileNotFoundException {
 	    	this.text = text;
 	    	
-	    	this.annotatorsettings = annotatorsettings;  //ResourcesManager.createHashtableFromFile("cfg/NCBOAnnotatorSettings.txt");
+	    	this.annotatorsettings = annotatorsettings; 
 			longestOnly = annotatorsettings.get("longestOnly")[0];
 			wholeWordOnly = annotatorsettings.get("wholeWordOnly")[0];
 			filterNumber = annotatorsettings.get("filterNumber")[0];

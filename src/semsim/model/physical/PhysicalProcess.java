@@ -5,73 +5,73 @@ import java.util.Set;
 
 public class PhysicalProcess extends PhysicalModelComponent{
 
-	private Set<SourceParticipant> sources = new HashSet<SourceParticipant>();
-	private Set<SinkParticipant> sinks = new HashSet<SinkParticipant>();;
-	private Set<MediatorParticipant> mediators = new HashSet<MediatorParticipant>();
+	private Set<PhysicalEntity> sources = new HashSet<PhysicalEntity>();
+	private Set<PhysicalEntity> sinks = new HashSet<PhysicalEntity>();;
+	private Set<PhysicalEntity> mediators = new HashSet<PhysicalEntity>();
 	
 	
-	public void addSource(PhysicalEntity entity, double cardinality){
-		sources.add(new SourceParticipant(entity, cardinality));
+	public void addSource(PhysicalEntity entity){
+		sources.add(entity);
 	}
 	
-	public void addSink(PhysicalEntity entity, double cardinality){
-		sinks.add(new SinkParticipant(entity, cardinality));
+	public void addSink(PhysicalEntity entity){
+		sinks.add(entity);
 	}
 	
-	public void addMediator(PhysicalEntity entity, double cardinality){
-		mediators.add(new MediatorParticipant(entity, cardinality));
+	public void addMediator(PhysicalEntity entity){
+		mediators.add(entity);
 	}
 	
 	public Set<PhysicalEntity> getSourcePhysicalEntities(){
 		Set<PhysicalEntity> ents = new HashSet<PhysicalEntity>();
-		for(SourceParticipant sp : getSources()){
-			ents.add(sp.getPhysicalEntity());
+		for(PhysicalEntity sp : getSources()){
+			ents.add(sp);
 		}
 		return ents;
 	}
 	
 	public Set<PhysicalEntity> getSinkPhysicalEntities(){
 		Set<PhysicalEntity> ents = new HashSet<PhysicalEntity>();
-		for(SinkParticipant sp : getSinks()){
-			ents.add(sp.getPhysicalEntity());
+		for(PhysicalEntity sp : getSinks()){
+			ents.add(sp);
 		}
 		return ents;
 	}
 	
 	public Set<PhysicalEntity> getMediatorPhysicalEntities(){
 		Set<PhysicalEntity> ents = new HashSet<PhysicalEntity>();
-		for(MediatorParticipant sp : getMediators()){
-			ents.add(sp.getPhysicalEntity());
+		for(PhysicalEntity sp : getMediators()){
+			ents.add(sp);
 		}
 		return ents;
 	}
 
-	public void setSources(Set<SourceParticipant> sources) {
+	public void setSources(Set<PhysicalEntity> sources) {
 		this.sources = sources;
 	}
 
-	public Set<SourceParticipant> getSources() {
+	public Set<PhysicalEntity> getSources() {
 		return sources;
 	}
 
-	public void setSinks(Set<SinkParticipant> sinks) {
+	public void setSinks(Set<PhysicalEntity> sinks) {
 		this.sinks = sinks;
 	}
 
-	public Set<SinkParticipant> getSinks() {
+	public Set<PhysicalEntity> getSinks() {
 		return sinks;
 	}
 
-	public void setMediators(Set<MediatorParticipant> mediators) {
+	public void setMediators(Set<PhysicalEntity> mediators) {
 		this.mediators = mediators;
 	}
 
-	public Set<MediatorParticipant> getMediators() {
+	public Set<PhysicalEntity> getMediators() {
 		return mediators;
 	}
 	
-	public Set<ProcessParticipant> getParticipants(){
-		Set<ProcessParticipant> allps = new HashSet<ProcessParticipant>();
+	public Set<PhysicalEntity> getParticipants(){
+		Set<PhysicalEntity> allps = new HashSet<PhysicalEntity>();
 		allps.addAll(getSources());
 		allps.addAll(getSinks());
 		allps.addAll(getMediators());

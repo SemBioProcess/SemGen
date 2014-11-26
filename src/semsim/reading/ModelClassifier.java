@@ -24,7 +24,9 @@ public class ModelClassifier {
 			if (file.toString().toLowerCase().endsWith(".mod")){
 				type = MML_MODEL;
 			}
-			else if (file.toString().endsWith(".owl")) type =  SEMSIM_MODEL;
+			else if (file.toString().endsWith(".owl")) {
+				type =  SEMSIM_MODEL;
+			}
 			else if(isCellMLmodel(file)){
 				type =  CELLML_MODEL;
 			}
@@ -36,14 +38,12 @@ public class ModelClassifier {
 				else
 					if(isCellMLmodel(file)) type =  CELLML_MODEL;
 			}
-			
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 		} 
 		return type;
 	}
-
 	
 	private static Boolean isValidSBML(File file){
 		System.out.println("Testing SBML validity");
@@ -52,13 +52,14 @@ public class ModelClassifier {
 			if (sbmldoc.getNumErrors()>0){
 			      System.err.println(file.getName() + " is not valid SBML");
 			      sbmldoc.printErrors();
-			      return false;
 			}
 			else {
 				return true;
 			}
 		}
-		catch(Exception e){e.printStackTrace();}
+		catch(Exception e){
+			e.printStackTrace();
+		}
 		return false;
 	}
 	
@@ -68,7 +69,9 @@ public class ModelClassifier {
 		try{
 			Document doc = builder.build(file);
 			String nsuri = doc.getRootElement().getNamespace().getURI();
-			if(nsuri.contains("http://www.cellml.org/cellml/")){return true;}
+			if(nsuri.contains("http://www.cellml.org/cellml/")){
+				return true;
+			}
 		}
 		catch(JDOMParseException e){
 			e.printStackTrace();

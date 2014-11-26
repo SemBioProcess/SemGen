@@ -10,13 +10,12 @@ import java.util.HashSet;
 import semsim.SemSimConstants;
 import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
-import semsim.model.computational.DataStructure;
-import semsim.model.computational.Decimal;
-import semsim.model.computational.MappableVariable;
 import semsim.model.computational.RelationalConstraint;
-import semsim.model.computational.SemSimInteger;
+import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.datastructures.Decimal;
+import semsim.model.computational.datastructures.MappableVariable;
+import semsim.model.computational.datastructures.SemSimInteger;
 import semsim.model.computational.units.UnitOfMeasurement;
-
 import JSim.aserver.ASModel;
 import JSim.aserver.ASServer;
 import JSim.data.NamedVal;

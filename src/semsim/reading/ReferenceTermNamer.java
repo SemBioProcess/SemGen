@@ -216,14 +216,9 @@ public class ReferenceTermNamer {
 				try {
 					name = getRDFLabelUsingUniProt(id);
 				} 
-				catch (IOException e) {e.printStackTrace();} 
-				catch (JDOMException e) {e.printStackTrace();}
-			}
-			else if(uristring.startsWith("urn:miriam:ensembl")){
-			}
-			else if(uristring.startsWith("urn:miriam:interpro")){
-			}
-			else if(uristring.startsWith(" ")){
+				catch (IOException | JDOMException e) {
+					e.printStackTrace();
+					} 
 			}
 		}
 		return name; 

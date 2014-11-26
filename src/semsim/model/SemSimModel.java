@@ -20,11 +20,11 @@ import semsim.model.annotation.ReferenceOntologyAnnotation;
 import semsim.model.annotation.SemSimRelation;
 import semsim.model.annotation.StructuralRelation;
 import semsim.model.computational.ComputationalModelComponent;
-import semsim.model.computational.DataStructure;
-import semsim.model.computational.Decimal;
-import semsim.model.computational.MMLchoice;
 import semsim.model.computational.RelationalConstraint;
-import semsim.model.computational.SemSimInteger;
+import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.datastructures.Decimal;
+import semsim.model.computational.datastructures.MMLchoice;
+import semsim.model.computational.datastructures.SemSimInteger;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.CompositePhysicalEntity;
 import semsim.model.physical.CustomPhysicalEntity;
@@ -94,7 +94,7 @@ public class SemSimModel extends SemSimComponent implements Cloneable, Annotatab
 	private static SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmssSSSZ");
 	private double semSimVersion = SemSimConstants.SEMSIM_VERSION;
 	private int sourceModelType;
-
+	public static String unspecifiedName = "*unspecified*";
 	
 	/**
 	 * Constructor without namespace
@@ -1105,6 +1105,26 @@ public class SemSimModel extends SemSimComponent implements Cloneable, Annotatab
 		return sourceModelType;
 	}
 	
+	public Set<DataStructure> getDataStructuresWithUnspecifiedAnnotations(){
+		Set<DataStructure> dsset = new HashSet<DataStructure>();
+		for(DataStructure ds : getDataStructures()){
+			if(ds.hasPhysicalProperty()){
+				if(ds.getPhysicalProperty().getPhysicalPropertyOf()!=null){
+					if(ds.getPhysicalProperty().getPhysicalPropertyOf().getName().equals(unspecifiedName)){
+						dsset.add(ds);
+					}
+					if(ds.getPhysicalProperty().getPhysicalPropertyOf() instanceof CompositePhysicalEntity){
+						for(PhysicalEntity pe : ((CompositePhysicalEntity)ds.getPhysicalProperty().getPhysicalPropertyOf()).getArrayListOfEntities()){
+							if(pe.getName().equals(unspecifiedName))
+								dsset.add(ds);
+						}
+					}
+				}
+			}
+			else System.out.println(ds.getName() + " didn't have a physical property");
+		}
+		return dsset;
+	}
 	
 	// Required by annotable interface:
 	/**
@@ -1222,4 +1242,6 @@ public class SemSimModel extends SemSimComponent implements Cloneable, Annotatab
 		annotations.addAll(newset);
 	}
 	// End of methods required by Annotatable interface
+	
+
 }

@@ -7,14 +7,18 @@
 
 package semgen.webservices.KEGG;
 
+import java.util.Vector;
+
+import javax.xml.namespace.QName;
+
 import org.apache.axis.soap.SOAPConstants;
 import org.apache.axis.utils.JavaUtils;
 
 public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGGPortType {
-    private java.util.Vector cachedSerClasses = new java.util.Vector();
-    private java.util.Vector cachedSerQNames = new java.util.Vector();
-    private java.util.Vector cachedSerFactories = new java.util.Vector();
-    private java.util.Vector cachedDeserFactories = new java.util.Vector();
+    private Vector cachedSerClasses = new Vector();
+    private Vector<QName> cachedSerQNames = new Vector<QName>();
+    private Vector cachedSerFactories = new Vector();
+    private Vector cachedDeserFactories = new Vector();
 
     static org.apache.axis.description.OperationDesc [] _operations;
 
@@ -35,112 +39,112 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("list_databases");
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfDefinition"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfDefinition"));
         oper.setReturnClass(Definition[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[0] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("list_organisms");
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfDefinition"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfDefinition"));
         oper.setReturnClass(Definition[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[1] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("list_pathways");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "org"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "org"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfDefinition"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfDefinition"));
         oper.setReturnClass(Definition[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[2] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("list_ko_classes");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "class_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "class_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfDefinition"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfDefinition"));
         oper.setReturnClass(Definition[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[3] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("binfo");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "db"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "db"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        oper.setReturnType(new QName("http://www.w3.org/2001/XMLSchema", "string"));
         oper.setReturnClass(java.lang.String.class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[4] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("bget");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "string"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "string"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        oper.setReturnType(new QName("http://www.w3.org/2001/XMLSchema", "string"));
         oper.setReturnClass(java.lang.String.class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[5] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("bfind");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "string"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "string"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        oper.setReturnType(new QName("http://www.w3.org/2001/XMLSchema", "string"));
         oper.setReturnClass(java.lang.String.class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[6] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("btit");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "string"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "string"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        oper.setReturnType(new QName("http://www.w3.org/2001/XMLSchema", "string"));
         oper.setReturnClass(java.lang.String.class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[7] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("bconv");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "string"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "string"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        oper.setReturnType(new QName("http://www.w3.org/2001/XMLSchema", "string"));
         oper.setReturnClass(java.lang.String.class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[8] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_linkdb_by_entry");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "entry_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "entry_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "db"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "db"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "offset"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "offset"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "limit"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "limit"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfLinkDBRelation"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfLinkDBRelation"));
         oper.setReturnClass(LinkDBRelation[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[9] = oper;
@@ -152,140 +156,140 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_best_neighbors_by_gene");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "genes_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "genes_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "offset"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "offset"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "limit"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "limit"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfSSDBRelation"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfSSDBRelation"));
         oper.setReturnClass(SSDBRelation[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[10] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_best_best_neighbors_by_gene");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "genes_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "genes_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "offset"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "offset"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "limit"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "limit"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfSSDBRelation"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfSSDBRelation"));
         oper.setReturnClass(SSDBRelation[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[11] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_reverse_best_neighbors_by_gene");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "genes_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "genes_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "offset"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "offset"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "limit"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "limit"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfSSDBRelation"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfSSDBRelation"));
         oper.setReturnClass(SSDBRelation[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[12] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_paralogs_by_gene");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "genes_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "genes_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "offset"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "offset"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "limit"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "limit"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfSSDBRelation"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfSSDBRelation"));
         oper.setReturnClass(SSDBRelation[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[13] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_motifs_by_gene");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "genes_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "genes_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "db"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "db"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfMotifResult"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfMotifResult"));
         oper.setReturnClass(MotifResult[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[14] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_genes_by_motifs");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "motif_id_list"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "motif_id_list"), org.apache.axis.description.ParameterDesc.IN, new QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "offset"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "offset"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "limit"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "limit"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfDefinition"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfDefinition"));
         oper.setReturnClass(Definition[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[15] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_ko_by_gene");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "genes_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "genes_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[16] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_ko_by_ko_class");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "class_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "class_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfDefinition"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfDefinition"));
         oper.setReturnClass(Definition[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[17] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_genes_by_ko");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "ko_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "ko_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "org"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "org"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfDefinition"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfDefinition"));
         oper.setReturnClass(Definition[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[18] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_genes_by_ko_class");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "class_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "class_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "org"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "org"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "offset"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "offset"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "limit"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "limit"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfDefinition"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfDefinition"));
         oper.setReturnClass(Definition[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[19] = oper;
@@ -297,138 +301,138 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_elements_by_pathway");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfPathwayElement"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfPathwayElement"));
         oper.setReturnClass(PathwayElement[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[20] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_element_relations_by_pathway");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfPathwayElementRelation"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfPathwayElementRelation"));
         oper.setReturnClass(PathwayElementRelation[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[21] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("color_pathway_by_elements");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "element_list"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfint"), int[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "element_list"), org.apache.axis.description.ParameterDesc.IN, new QName("SOAP/KEGG", "ArrayOfint"), int[].class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "fg_color_list"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "fg_color_list"), org.apache.axis.description.ParameterDesc.IN, new QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "bg_color_list"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "bg_color_list"), org.apache.axis.description.ParameterDesc.IN, new QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        oper.setReturnType(new QName("http://www.w3.org/2001/XMLSchema", "string"));
         oper.setReturnClass(java.lang.String.class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[22] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_html_of_colored_pathway_by_elements");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "element_list"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfint"), int[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "element_list"), org.apache.axis.description.ParameterDesc.IN, new QName("SOAP/KEGG", "ArrayOfint"), int[].class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "fg_color_list"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "fg_color_list"), org.apache.axis.description.ParameterDesc.IN, new QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "bg_color_list"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "bg_color_list"), org.apache.axis.description.ParameterDesc.IN, new QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        oper.setReturnType(new QName("http://www.w3.org/2001/XMLSchema", "string"));
         oper.setReturnClass(java.lang.String.class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[23] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("mark_pathway_by_objects");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "object_id_list"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "object_id_list"), org.apache.axis.description.ParameterDesc.IN, new QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        oper.setReturnType(new QName("http://www.w3.org/2001/XMLSchema", "string"));
         oper.setReturnClass(java.lang.String.class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[24] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("color_pathway_by_objects");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "object_id_list"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "object_id_list"), org.apache.axis.description.ParameterDesc.IN, new QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "fg_color_list"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "fg_color_list"), org.apache.axis.description.ParameterDesc.IN, new QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "bg_color_list"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "bg_color_list"), org.apache.axis.description.ParameterDesc.IN, new QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        oper.setReturnType(new QName("http://www.w3.org/2001/XMLSchema", "string"));
         oper.setReturnClass(java.lang.String.class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[25] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_html_of_marked_pathway_by_objects");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "object_id_list"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "object_id_list"), org.apache.axis.description.ParameterDesc.IN, new QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        oper.setReturnType(new QName("http://www.w3.org/2001/XMLSchema", "string"));
         oper.setReturnClass(java.lang.String.class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[26] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_html_of_colored_pathway_by_objects");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "object_id_list"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "object_id_list"), org.apache.axis.description.ParameterDesc.IN, new QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "fg_color_list"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "fg_color_list"), org.apache.axis.description.ParameterDesc.IN, new QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "bg_color_list"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "bg_color_list"), org.apache.axis.description.ParameterDesc.IN, new QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        oper.setReturnType(new QName("http://www.w3.org/2001/XMLSchema", "string"));
         oper.setReturnClass(java.lang.String.class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[27] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_genes_by_pathway");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[28] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_enzymes_by_pathway");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[29] = oper;
@@ -440,116 +444,116 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_reactions_by_pathway");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[30] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_pathways_by_genes");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "genes_id_list"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "genes_id_list"), org.apache.axis.description.ParameterDesc.IN, new QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[31] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_pathways_by_enzymes");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "enzyme_id_list"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "enzyme_id_list"), org.apache.axis.description.ParameterDesc.IN, new QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[32] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_pathways_by_reactions");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "reaction_id_list"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "reaction_id_list"), org.apache.axis.description.ParameterDesc.IN, new QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[33] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_linked_pathways");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[34] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_genes_by_enzyme");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "enzyme_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "enzyme_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "org"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "org"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[35] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_enzymes_by_gene");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "genes_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "genes_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[36] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_enzymes_by_reaction");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "reaction_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "reaction_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[37] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_reactions_by_enzyme");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "enzyme_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "enzyme_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[38] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_genes_by_organism");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "org"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "org"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "offset"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "offset"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "limit"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "limit"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[39] = oper;
@@ -561,110 +565,110 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_number_of_genes_by_organism");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "abbr"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "abbr"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+        oper.setReturnType(new QName("http://www.w3.org/2001/XMLSchema", "int"));
         oper.setReturnClass(int.class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[40] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_reactions_by_glycan");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "glycan_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "glycan_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[41] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_reactions_by_compound");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "compound_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "compound_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[42] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_enzymes_by_glycan");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "glycan_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "glycan_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[43] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_enzymes_by_compound");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "compound_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "compound_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[44] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_pathways_by_compounds");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "compound_id_list"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "compound_id_list"), org.apache.axis.description.ParameterDesc.IN, new QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[45] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_pathways_by_glycans");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "glycan_id_list"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "glycan_id_list"), org.apache.axis.description.ParameterDesc.IN, new QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[46] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_compounds_by_pathway");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[47] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_glycans_by_pathway");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[48] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_compounds_by_reaction");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "reaction_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "reaction_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[49] = oper;
@@ -676,114 +680,114 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_glycans_by_reaction");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "reaction_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "reaction_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[50] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_compounds_by_enzyme");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "enzyme_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "enzyme_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[51] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_glycans_by_enzyme");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "enzyme_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "enzyme_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[52] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("convert_mol_to_kcf");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "mol_text"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "mol_text"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        oper.setReturnType(new QName("http://www.w3.org/2001/XMLSchema", "string"));
         oper.setReturnClass(java.lang.String.class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[53] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_kos_by_pathway");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[54] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_pathways_by_kos");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "ko_id_list"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "ko_id_list"), org.apache.axis.description.ParameterDesc.IN, new QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "org"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "org"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[55] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("search_compounds_by_name");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "name"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "name"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[56] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("search_glycans_by_name");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "name"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "name"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[57] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("search_compounds_by_composition");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "composition"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "composition"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[58] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("search_compounds_by_mass");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "mass"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "float"), float.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "mass"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "float"), float.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "range"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "float"), float.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "range"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "float"), float.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[59] = oper;
@@ -795,136 +799,136 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("search_glycans_by_mass");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "mass"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "float"), float.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "mass"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "float"), float.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "range"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "float"), float.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "range"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "float"), float.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[60] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("search_glycans_by_composition");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "composition"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "composition"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[61] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("search_compounds_by_subcomp");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "mol"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "mol"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "offset"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "offset"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "limit"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "limit"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfStructureAlignment"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfStructureAlignment"));
         oper.setReturnClass(StructureAlignment[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[62] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("search_glycans_by_kcam");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "kcf"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "kcf"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "program"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "program"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "option"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "option"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "offset"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "offset"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "limit"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "limit"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfStructureAlignment"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfStructureAlignment"));
         oper.setReturnClass(StructureAlignment[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[63] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_linkdb_between_databases");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "from_db"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "from_db"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "to_db"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "to_db"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "offset"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "offset"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "limit"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "limit"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfLinkDBRelation"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfLinkDBRelation"));
         oper.setReturnClass(LinkDBRelation[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[64] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("search_drugs_by_name");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "name"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "name"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[65] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("search_drugs_by_composition");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "composition"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "composition"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[66] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("search_drugs_by_mass");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "mass"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "float"), float.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "mass"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "float"), float.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "range"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "float"), float.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "range"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "float"), float.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[67] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("search_drugs_by_subcomp");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "mol"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "mol"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "offset"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "offset"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "limit"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "limit"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "int"), int.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfStructureAlignment"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfStructureAlignment"));
         oper.setReturnClass(StructureAlignment[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[68] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_references_by_pathway");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfint"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfint"));
         oper.setReturnClass(int[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[69] = oper;
@@ -936,22 +940,22 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_drugs_by_pathway");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "pathway_id"), org.apache.axis.description.ParameterDesc.IN, new QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[70] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("get_pathways_by_drugs");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "drug_id_list"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new QName("", "drug_id_list"), org.apache.axis.description.ParameterDesc.IN, new QName("SOAP/KEGG", "ArrayOfstring"), java.lang.String[].class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring"));
+        oper.setReturnType(new QName("SOAP/KEGG", "ArrayOfstring"));
         oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "return"));
+        oper.setReturnQName(new QName("", "return"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[71] = oper;
@@ -974,159 +978,151 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
             super.service = service;
         }
         ((org.apache.axis.client.Service)super.service).setTypeMappingVersion("1.2");
-            java.lang.Class cls;
-            javax.xml.namespace.QName qName;
-            javax.xml.namespace.QName qName2;
-            java.lang.Class beansf = org.apache.axis.encoding.ser.BeanSerializerFactory.class;
-            java.lang.Class beandf = org.apache.axis.encoding.ser.BeanDeserializerFactory.class;
-            java.lang.Class enumsf = org.apache.axis.encoding.ser.EnumSerializerFactory.class;
-            java.lang.Class enumdf = org.apache.axis.encoding.ser.EnumDeserializerFactory.class;
-            java.lang.Class arraysf = org.apache.axis.encoding.ser.ArraySerializerFactory.class;
-            java.lang.Class arraydf = org.apache.axis.encoding.ser.ArrayDeserializerFactory.class;
-            java.lang.Class simplesf = org.apache.axis.encoding.ser.SimpleSerializerFactory.class;
-            java.lang.Class simpledf = org.apache.axis.encoding.ser.SimpleDeserializerFactory.class;
-            java.lang.Class simplelistsf = org.apache.axis.encoding.ser.SimpleListSerializerFactory.class;
-            java.lang.Class simplelistdf = org.apache.axis.encoding.ser.SimpleListDeserializerFactory.class;
-            qName = new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfDefinition");
+            Class cls;
+            QName qName;
+            QName qName2;
+            Class beansf = org.apache.axis.encoding.ser.BeanSerializerFactory.class;
+            Class beandf = org.apache.axis.encoding.ser.BeanDeserializerFactory.class;
+            qName = new QName("SOAP/KEGG", "ArrayOfDefinition");
             cachedSerQNames.add(qName);
             cls = Definition[].class;
             cachedSerClasses.add(cls);
-            qName = new javax.xml.namespace.QName("SOAP/KEGG", "Definition");
+            qName = new QName("SOAP/KEGG", "Definition");
             qName2 = null;
             cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
             cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
 
-            qName = new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfint");
+            qName = new QName("SOAP/KEGG", "ArrayOfint");
             cachedSerQNames.add(qName);
             cls = int[].class;
             cachedSerClasses.add(cls);
-            qName = new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int");
+            qName = new QName("http://www.w3.org/2001/XMLSchema", "int");
             qName2 = null;
             cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
             cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
 
-            qName = new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfLinkDBRelation");
+            qName = new QName("SOAP/KEGG", "ArrayOfLinkDBRelation");
             cachedSerQNames.add(qName);
             cls = LinkDBRelation[].class;
             cachedSerClasses.add(cls);
-            qName = new javax.xml.namespace.QName("SOAP/KEGG", "LinkDBRelation");
+            qName = new QName("SOAP/KEGG", "LinkDBRelation");
             qName2 = null;
             cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
             cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
 
-            qName = new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfMotifResult");
+            qName = new QName("SOAP/KEGG", "ArrayOfMotifResult");
             cachedSerQNames.add(qName);
             cls = MotifResult[].class;
             cachedSerClasses.add(cls);
-            qName = new javax.xml.namespace.QName("SOAP/KEGG", "MotifResult");
+            qName = new QName("SOAP/KEGG", "MotifResult");
             qName2 = null;
             cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
             cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
 
-            qName = new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfPathwayElement");
+            qName = new QName("SOAP/KEGG", "ArrayOfPathwayElement");
             cachedSerQNames.add(qName);
             cls = PathwayElement[].class;
             cachedSerClasses.add(cls);
-            qName = new javax.xml.namespace.QName("SOAP/KEGG", "PathwayElement");
+            qName = new QName("SOAP/KEGG", "PathwayElement");
             qName2 = null;
             cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
             cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
 
-            qName = new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfPathwayElementRelation");
+            qName = new QName("SOAP/KEGG", "ArrayOfPathwayElementRelation");
             cachedSerQNames.add(qName);
             cls = PathwayElementRelation[].class;
             cachedSerClasses.add(cls);
-            qName = new javax.xml.namespace.QName("SOAP/KEGG", "PathwayElementRelation");
+            qName = new QName("SOAP/KEGG", "PathwayElementRelation");
             qName2 = null;
             cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
             cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
 
-            qName = new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfSSDBRelation");
+            qName = new QName("SOAP/KEGG", "ArrayOfSSDBRelation");
             cachedSerQNames.add(qName);
             cls = SSDBRelation[].class;
             cachedSerClasses.add(cls);
-            qName = new javax.xml.namespace.QName("SOAP/KEGG", "SSDBRelation");
+            qName = new QName("SOAP/KEGG", "SSDBRelation");
             qName2 = null;
             cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
             cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
 
-            qName = new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfstring");
+            qName = new QName("SOAP/KEGG", "ArrayOfstring");
             cachedSerQNames.add(qName);
             cls = java.lang.String[].class;
             cachedSerClasses.add(cls);
-            qName = new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string");
+            qName = new QName("http://www.w3.org/2001/XMLSchema", "string");
             qName2 = null;
             cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
             cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
 
-            qName = new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfStructureAlignment");
+            qName = new QName("SOAP/KEGG", "ArrayOfStructureAlignment");
             cachedSerQNames.add(qName);
             cls = StructureAlignment[].class;
             cachedSerClasses.add(cls);
-            qName = new javax.xml.namespace.QName("SOAP/KEGG", "StructureAlignment");
+            qName = new QName("SOAP/KEGG", "StructureAlignment");
             qName2 = null;
             cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
             cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
 
-            qName = new javax.xml.namespace.QName("SOAP/KEGG", "ArrayOfSubtype");
+            qName = new QName("SOAP/KEGG", "ArrayOfSubtype");
             cachedSerQNames.add(qName);
             cls = Subtype[].class;
             cachedSerClasses.add(cls);
-            qName = new javax.xml.namespace.QName("SOAP/KEGG", "Subtype");
+            qName = new QName("SOAP/KEGG", "Subtype");
             qName2 = null;
             cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
             cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
 
-            qName = new javax.xml.namespace.QName("SOAP/KEGG", "Definition");
+            qName = new QName("SOAP/KEGG", "Definition");
             cachedSerQNames.add(qName);
             cls = Definition.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
-            qName = new javax.xml.namespace.QName("SOAP/KEGG", "LinkDBRelation");
+            qName = new QName("SOAP/KEGG", "LinkDBRelation");
             cachedSerQNames.add(qName);
             cls = LinkDBRelation.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
-            qName = new javax.xml.namespace.QName("SOAP/KEGG", "MotifResult");
+            qName = new QName("SOAP/KEGG", "MotifResult");
             cachedSerQNames.add(qName);
             cls = MotifResult.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
-            qName = new javax.xml.namespace.QName("SOAP/KEGG", "PathwayElement");
+            qName = new QName("SOAP/KEGG", "PathwayElement");
             cachedSerQNames.add(qName);
             cls = PathwayElement.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
-            qName = new javax.xml.namespace.QName("SOAP/KEGG", "PathwayElementRelation");
+            qName = new QName("SOAP/KEGG", "PathwayElementRelation");
             cachedSerQNames.add(qName);
             cls = PathwayElementRelation.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
-            qName = new javax.xml.namespace.QName("SOAP/KEGG", "SSDBRelation");
+            qName = new QName("SOAP/KEGG", "SSDBRelation");
             cachedSerQNames.add(qName);
             cls = SSDBRelation.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
-            qName = new javax.xml.namespace.QName("SOAP/KEGG", "StructureAlignment");
+            qName = new QName("SOAP/KEGG", "StructureAlignment");
             cachedSerQNames.add(qName);
             cls = StructureAlignment.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
-            qName = new javax.xml.namespace.QName("SOAP/KEGG", "Subtype");
+            qName = new QName("SOAP/KEGG", "Subtype");
             cachedSerQNames.add(qName);
             cls = Subtype.class;
             cachedSerClasses.add(cls);
@@ -1172,14 +1168,14 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
                     _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
                     _call.setEncodingStyle(org.apache.axis.Constants.URI_SOAP11_ENC);
                     for (int i = 0; i < cachedSerFactories.size(); ++i) {
-                        java.lang.Class cls = (java.lang.Class) cachedSerClasses.get(i);
-                        javax.xml.namespace.QName qName =
-                                (javax.xml.namespace.QName) cachedSerQNames.get(i);
+                        Class cls = (Class) cachedSerClasses.get(i);
+                        QName qName =
+                                (QName) cachedSerQNames.get(i);
                         java.lang.Object x = cachedSerFactories.get(i);
                         if (x instanceof Class) {
-                            java.lang.Class sf = (java.lang.Class)
+                            Class sf = (Class)
                                  cachedSerFactories.get(i);
-                            java.lang.Class df = (java.lang.Class)
+                            Class df = (Class)
                                  cachedDeserFactories.get(i);
                             _call.registerTypeMapping(cls, qName, sf, df, false);
                         }
@@ -1209,7 +1205,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#list_databases");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "list_databases"));
+        _call.setOperationName(new QName("SOAP/KEGG", "list_databases"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -1240,7 +1236,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#list_organisms");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "list_organisms"));
+        _call.setOperationName(new QName("SOAP/KEGG", "list_organisms"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -1271,7 +1267,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#list_pathways");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "list_pathways"));
+        _call.setOperationName(new QName("SOAP/KEGG", "list_pathways"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -1302,7 +1298,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#list_ko_classes");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "list_ko_classes"));
+        _call.setOperationName(new QName("SOAP/KEGG", "list_ko_classes"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -1333,7 +1329,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#binfo");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "binfo"));
+        _call.setOperationName(new QName("SOAP/KEGG", "binfo"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -1364,7 +1360,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#bget");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "bget"));
+        _call.setOperationName(new QName("SOAP/KEGG", "bget"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -1395,7 +1391,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#bfind");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "bfind"));
+        _call.setOperationName(new QName("SOAP/KEGG", "bfind"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -1426,7 +1422,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#btit");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "btit"));
+        _call.setOperationName(new QName("SOAP/KEGG", "btit"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -1457,7 +1453,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#bconv");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "bconv"));
+        _call.setOperationName(new QName("SOAP/KEGG", "bconv"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -1488,7 +1484,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_linkdb_by_entry");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_linkdb_by_entry"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_linkdb_by_entry"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -1519,7 +1515,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_best_neighbors_by_gene");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_best_neighbors_by_gene"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_best_neighbors_by_gene"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -1550,7 +1546,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_best_best_neighbors_by_gene");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_best_best_neighbors_by_gene"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_best_best_neighbors_by_gene"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -1581,7 +1577,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_reverse_best_neighbors_by_gene");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_reverse_best_neighbors_by_gene"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_reverse_best_neighbors_by_gene"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -1612,7 +1608,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_paralogs_by_gene");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_paralogs_by_gene"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_paralogs_by_gene"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -1643,7 +1639,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_motifs_by_gene");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_motifs_by_gene"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_motifs_by_gene"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -1674,7 +1670,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_genes_by_motifs");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_genes_by_motifs"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_genes_by_motifs"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -1705,7 +1701,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_ko_by_gene");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_ko_by_gene"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_ko_by_gene"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -1736,7 +1732,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_ko_by_ko_class");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_ko_by_ko_class"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_ko_by_ko_class"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -1767,7 +1763,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_genes_by_ko");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_genes_by_ko"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_genes_by_ko"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -1798,7 +1794,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_genes_by_ko_class");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_genes_by_ko_class"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_genes_by_ko_class"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -1829,7 +1825,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_elements_by_pathway");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_elements_by_pathway"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_elements_by_pathway"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -1860,7 +1856,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_element_relations_by_pathway");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_element_relations_by_pathway"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_element_relations_by_pathway"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -1891,7 +1887,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#color_pathway_by_elements");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "color_pathway_by_elements"));
+        _call.setOperationName(new QName("SOAP/KEGG", "color_pathway_by_elements"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -1922,7 +1918,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_html_of_colored_pathway_by_elements");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_html_of_colored_pathway_by_elements"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_html_of_colored_pathway_by_elements"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -1953,7 +1949,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#mark_pathway_by_objects");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "mark_pathway_by_objects"));
+        _call.setOperationName(new QName("SOAP/KEGG", "mark_pathway_by_objects"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -1984,7 +1980,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#color_pathway_by_objects");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "color_pathway_by_objects"));
+        _call.setOperationName(new QName("SOAP/KEGG", "color_pathway_by_objects"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2015,7 +2011,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_html_of_marked_pathway_by_objects");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_html_of_marked_pathway_by_objects"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_html_of_marked_pathway_by_objects"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2046,7 +2042,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_html_of_colored_pathway_by_objects");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_html_of_colored_pathway_by_objects"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_html_of_colored_pathway_by_objects"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2077,7 +2073,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_genes_by_pathway");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_genes_by_pathway"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_genes_by_pathway"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2108,7 +2104,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_enzymes_by_pathway");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_enzymes_by_pathway"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_enzymes_by_pathway"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2139,7 +2135,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_reactions_by_pathway");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_reactions_by_pathway"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_reactions_by_pathway"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2170,7 +2166,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_pathways_by_genes");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_pathways_by_genes"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_pathways_by_genes"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2201,7 +2197,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_pathways_by_enzymes");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_pathways_by_enzymes"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_pathways_by_enzymes"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2232,7 +2228,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_pathways_by_reactions");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_pathways_by_reactions"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_pathways_by_reactions"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2263,7 +2259,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_linked_pathways");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_linked_pathways"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_linked_pathways"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2294,7 +2290,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_genes_by_enzyme");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_genes_by_enzyme"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_genes_by_enzyme"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2325,7 +2321,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_enzymes_by_gene");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_enzymes_by_gene"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_enzymes_by_gene"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2356,7 +2352,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_enzymes_by_reaction");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_enzymes_by_reaction"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_enzymes_by_reaction"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2387,7 +2383,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_reactions_by_enzyme");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_reactions_by_enzyme"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_reactions_by_enzyme"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2418,7 +2414,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_genes_by_organism");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_genes_by_organism"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_genes_by_organism"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2449,7 +2445,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_number_of_genes_by_organism");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_number_of_genes_by_organism"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_number_of_genes_by_organism"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2480,7 +2476,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_reactions_by_glycan");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_reactions_by_glycan"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_reactions_by_glycan"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2511,7 +2507,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_reactions_by_compound");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_reactions_by_compound"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_reactions_by_compound"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2542,7 +2538,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_enzymes_by_glycan");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_enzymes_by_glycan"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_enzymes_by_glycan"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2573,7 +2569,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_enzymes_by_compound");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_enzymes_by_compound"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_enzymes_by_compound"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2604,7 +2600,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_pathways_by_compounds");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_pathways_by_compounds"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_pathways_by_compounds"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2635,7 +2631,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_pathways_by_glycans");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_pathways_by_glycans"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_pathways_by_glycans"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2666,7 +2662,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_compounds_by_pathway");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_compounds_by_pathway"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_compounds_by_pathway"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2697,7 +2693,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_glycans_by_pathway");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_glycans_by_pathway"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_glycans_by_pathway"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2728,7 +2724,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_compounds_by_reaction");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_compounds_by_reaction"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_compounds_by_reaction"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2759,7 +2755,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_glycans_by_reaction");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_glycans_by_reaction"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_glycans_by_reaction"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2790,7 +2786,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_compounds_by_enzyme");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_compounds_by_enzyme"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_compounds_by_enzyme"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2821,7 +2817,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_glycans_by_enzyme");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_glycans_by_enzyme"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_glycans_by_enzyme"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2852,7 +2848,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#convert_mol_to_kcf");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "convert_mol_to_kcf"));
+        _call.setOperationName(new QName("SOAP/KEGG", "convert_mol_to_kcf"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2883,7 +2879,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_kos_by_pathway");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_kos_by_pathway"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_kos_by_pathway"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2914,7 +2910,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_pathways_by_kos");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_pathways_by_kos"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_pathways_by_kos"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2945,7 +2941,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#search_compounds_by_name");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "search_compounds_by_name"));
+        _call.setOperationName(new QName("SOAP/KEGG", "search_compounds_by_name"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -2976,7 +2972,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#search_glycans_by_name");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "search_glycans_by_name"));
+        _call.setOperationName(new QName("SOAP/KEGG", "search_glycans_by_name"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -3007,7 +3003,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#search_compounds_by_composition");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "search_compounds_by_composition"));
+        _call.setOperationName(new QName("SOAP/KEGG", "search_compounds_by_composition"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -3038,7 +3034,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#search_compounds_by_mass");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "search_compounds_by_mass"));
+        _call.setOperationName(new QName("SOAP/KEGG", "search_compounds_by_mass"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -3069,7 +3065,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#search_glycans_by_mass");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "search_glycans_by_mass"));
+        _call.setOperationName(new QName("SOAP/KEGG", "search_glycans_by_mass"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -3100,7 +3096,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#search_glycans_by_composition");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "search_glycans_by_composition"));
+        _call.setOperationName(new QName("SOAP/KEGG", "search_glycans_by_composition"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -3131,7 +3127,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#search_compounds_by_subcomp");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "search_compounds_by_subcomp"));
+        _call.setOperationName(new QName("SOAP/KEGG", "search_compounds_by_subcomp"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -3162,7 +3158,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#search_glycans_by_kcam");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "search_glycans_by_kcam"));
+        _call.setOperationName(new QName("SOAP/KEGG", "search_glycans_by_kcam"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -3193,7 +3189,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_linkdb_between_databases");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_linkdb_between_databases"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_linkdb_between_databases"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -3224,7 +3220,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#search_drugs_by_name");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "search_drugs_by_name"));
+        _call.setOperationName(new QName("SOAP/KEGG", "search_drugs_by_name"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -3255,7 +3251,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#search_drugs_by_composition");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "search_drugs_by_composition"));
+        _call.setOperationName(new QName("SOAP/KEGG", "search_drugs_by_composition"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -3286,7 +3282,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#search_drugs_by_mass");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "search_drugs_by_mass"));
+        _call.setOperationName(new QName("SOAP/KEGG", "search_drugs_by_mass"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -3317,7 +3313,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#search_drugs_by_subcomp");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "search_drugs_by_subcomp"));
+        _call.setOperationName(new QName("SOAP/KEGG", "search_drugs_by_subcomp"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -3348,7 +3344,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_references_by_pathway");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_references_by_pathway"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_references_by_pathway"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -3379,7 +3375,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_drugs_by_pathway");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_drugs_by_pathway"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_drugs_by_pathway"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -3410,7 +3406,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements KEGG
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("SOAP/KEGG#get_pathways_by_drugs");
         _call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("SOAP/KEGG", "get_pathways_by_drugs"));
+        _call.setOperationName(new QName("SOAP/KEGG", "get_pathways_by_drugs"));
 
         setRequestHeaders(_call);
         setAttachments(_call);

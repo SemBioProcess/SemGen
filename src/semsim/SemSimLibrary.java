@@ -13,13 +13,18 @@ import java.util.Set;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
+import semgen.SemGen;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
-import semsim.model.computational.DataStructure;
+import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.physical.PhysicalEntity;
+import semsim.model.physical.PhysicalProcess;
+import semsim.model.physical.PhysicalProperty;
 import semsim.owl.SemSimOWLFactory;
 
 //Class for holding reference terms and data required for SemGen - intended to replace SemSimConstants class
@@ -115,12 +120,29 @@ public class SemSimLibrary {
 		}
 	}
 	
+	public OWLOntology getLoadedOntology(String onturi) throws OWLOntologyCreationException {
+		OWLOntology localont = SemSimOWLFactory.getOntologyIfPreviouslyLoaded(IRI.create(onturi), manager);
+		if (localont == null) {
+			localont = manager.loadOntologyFromOntologyDocument(IRI.create(onturi));
+		}
+		return localont;
+	}
+	
+	public Set<String> getOPBsubclasses(String parentclass) throws OWLException {
+		Set<String> subclassset = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + parentclass, false);
+		return subclassset;
+	}
+	
+	public OWLDataFactory makeOWLFactory() {
+		return manager.getOWLDataFactory() ;
+	}
+	
 	public boolean OPBhasProperty(String s) {
 		return OPBproperties.contains(s);
 	}
 	
 	public boolean OPBhasFlowProperty(ReferenceOntologyAnnotation roa) {
-		return OPBflowProperties.contains(roa);
+		return OPBflowProperties.contains(roa.getReferenceURI().toString());
 	}
 	
 	public boolean OPBhasFlowProperty(String s) {
@@ -128,23 +150,23 @@ public class SemSimLibrary {
 	}
 	
 	public boolean OPBhasFlowProperty(URI u) {
-		return OPBflowProperties.contains(u);
+		return OPBflowProperties.contains(u.toString());
 	}
 	
 	public boolean OPBhasForceProperty(ReferenceOntologyAnnotation roa) {
-		return OPBforceProperties.contains(roa);
+		return OPBforceProperties.contains(roa.getReferenceURI().toString());
 	}
 	
 	public boolean OPBhasAmountProperty(ReferenceOntologyAnnotation roa) {
-		return OPBamountProperties.contains(roa);
+		return OPBamountProperties.contains(roa.getReferenceURI().toString());
 	}
 	
 	public boolean OPBhasStateProperty(ReferenceOntologyAnnotation roa) {
-		return OPBstateProperties.contains(roa);
+		return OPBstateProperties.contains(roa.getReferenceURI().toString());
 	}
 	
 	public boolean OPBhasProcessProperty(ReferenceOntologyAnnotation roa) {
-		return OPBprocessProperties.contains(roa);
+		return OPBprocessProperties.contains(roa.getReferenceURI().toString());
 	}
 	
 	public boolean OPBhasProcessProperty(String s) {
@@ -152,6 +174,20 @@ public class SemSimLibrary {
 	}
 	
 	public boolean OPBhasProcessProperty(URI u) {
-		return OPBprocessProperties.contains(u);
+		return OPBprocessProperties.contains(u.toString());
+	}
+	
+	public boolean checkOPBpropertyValidity(PhysicalProperty prop, URI OPBuri){
+		if(prop.getPhysicalPropertyOf()!=null){
+			
+			// This conditional statement makes sure that physical processes are annotated with appropriate OPB terms
+			// It only limits physical entity properties to non-process properties. It does not limit based on whether
+			// the OPB term is for a constitutive property. Not sure if it should, yet.
+			if((prop.getPhysicalPropertyOf() instanceof PhysicalEntity || prop.getPhysicalPropertyOf() instanceof PhysicalProcess ) && 
+				(OPBhasFlowProperty(OPBuri) || OPBhasProcessProperty(OPBuri))) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

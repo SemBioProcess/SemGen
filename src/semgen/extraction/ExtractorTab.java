@@ -1,28 +1,20 @@
 package semgen.extraction;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-
-import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
 import java.awt.event.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Observer;
 import java.util.Set;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
@@ -35,17 +27,30 @@ import edu.uci.ics.jung.graph.SparseMultigraph;
 import prefuse.data.Graph;
 import prefuse.data.Node;
 import prefuse.data.Schema;
-import semgen.ComparatorByName;
-import semgen.FileFilter;
-import semgen.GenericThread;
-import semgen.ProgressFrame;
-import semgen.SemGenGUI;
+import semgen.GlobalActions;
+import semgen.SemGenSettings;
+import semgen.encoding.Encoder;
+import semgen.extraction.RadialGraph.Clusterer;
+import semgen.extraction.RadialGraph.SemGenRadialGraphView;
+import semgen.extraction.workbench.ExtractorWorkbench;
+import semgen.utilities.ComparatorByName;
+import semgen.utilities.GenericThread;
+import semgen.utilities.SemGenError;
+import semgen.utilities.SemGenFont;
+import semgen.utilities.SemGenIcon;
+import semgen.utilities.SemGenTask;
+import semgen.utilities.file.FileFilter;
+import semgen.utilities.file.SemGenFileChooser;
+import semgen.utilities.file.SemGenOpenFileChooser;
+import semgen.utilities.file.SemGenSaveFileChooser;
+import semgen.utilities.uicomponent.SemGenProgressBar;
+import semgen.utilities.uicomponent.SemGenTab;
 import semgen.visualizations.D3;
 import semsim.SemSimUtil;
 import semsim.extraction.Extractor;
 import semsim.model.SemSimModel;
-import semsim.model.computational.MappableVariable;
-import semsim.model.computational.DataStructure;
+import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
@@ -57,9 +62,20 @@ import edu.uci.ics.jung.graph.util.Pair;
 
 import java.awt.BorderLayout;
 
-public class ExtractorTab extends JPanel implements ActionListener, ItemListener {
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
+
+public class ExtractorTab extends SemGenTab implements ActionListener, ItemListener {
 
 	public static final long serialVersionUID = -5142058482154697778L;
+	SemGenSettings settings;
 	public SemSimModel semsimmodel;
 	public OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	public static final String LABEL = "codeword";
@@ -83,28 +99,22 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 	public static final String TOOLTIP = "tooltip";
 	public static final Schema TOOLTIP_SCHEMA = new Schema();
 	static {TOOLTIP_SCHEMA.addColumn(TOOLTIP, String.class, "");}
-	
-	public final JTabbedPane pane;
+
 	public static int leftpanewidth = 400;
 	public File sourcefile;
-	public JButton vizsourcebutton;
-	public JButton closebutton;
-	public JButton clusterbutton;
-	public JCheckBox extractionlevelchooserentities;
-	public JCheckBox includepartipantscheckbox;
-	public JCheckBox extractionlevelchooser2;
-	public JButton extractbutton;
-	public JPanel toppanel;
-	public JPanel leftpanel;
+	public JButton vizsourcebutton = new JButton("Show source model");
+	public JButton clusterbutton = new JButton("Cluster");
+	public JCheckBox extractionlevelchooserentities = new JCheckBox("More inclusive");
+	public JCheckBox includepartipantscheckbox = new JCheckBox("Include participants");
+	public JCheckBox extractionlevelchooser2 = new JCheckBox("Include full dependency chain");
+	public JButton extractbutton = new JButton("EXTRACT");
 	public ExtractorSelectionPanel processespanel;
 	public ExtractorSelectionPanel entitiespanel;
 	public ExtractorSelectionPanel submodelspanel;
 	public ExtractorSelectionPanel codewordspanel;
 	public ExtractorSelectionPanel clusterpanel;
-	public JPanel physiomappanel;
-	public JTabbedPane graphtabpane;
-	public JSplitPane centersplitpane;
-	public String base;
+	public JPanel physiomappanel = new JPanel();
+	public JTabbedPane graphtabpane = new JTabbedPane();
 	public SemSimModel extractedmodel;
 	public File extractedfile;
 	public SemGenRadialGraphView view;
@@ -112,65 +122,46 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 	public Graph physiomapgraph;
 	public SparseMultigraph<String, Number> junggraph;
 
-	public String initialfocusnodename;
 	public Map<DataStructure, Set<? extends DataStructure>> allpreserveddatastructures;
 	public Hashtable<PhysicalEntity, Set<DataStructure>> entsanddatastrs = new Hashtable<PhysicalEntity, Set<DataStructure>>();
-	public Hashtable<DataStructure, PhysicalEntity> datastrsandents = new Hashtable<DataStructure, PhysicalEntity>();
 	public Hashtable<PhysicalProcess, Set<DataStructure>> processesanddatastrs = new Hashtable<PhysicalProcess, Set<DataStructure>>();
-	public Hashtable<DataStructure, PhysicalProcess> datastrsandprocesses = new Hashtable<DataStructure, PhysicalProcess>();
 	public File autogendirectory;
-	private float maxclusteringiterations;
-	public ProgressFrame progframe;
 
 	public Clusterer cd;
 	public PrintWriter clusterwriter;
-
-	public ExtractorTab(final JTabbedPane pane, SemSimModel semsimmodel, File sourcefile) throws OWLException, IOException {
-		this.pane = pane;
+	public ExtractorToolbar toolbar;
+	ExtractorWorkbench workbench;
+	
+	public ExtractorTab(SemGenSettings sets, GlobalActions gacts, ExtractorWorkbench bench) {
+		super(bench.getCurrentModelName(), SemGenIcon.extractoricon, "Extracting from " + bench.getCurrentModelName(), sets, gacts);
+		settings = sets;
+		workbench = bench;
+		sourcefile = workbench.getSourceFile();
+		semsimmodel = workbench.getSourceModel();
+	}
+	
+	@Override
+	public void loadTab() {
 		this.setLayout(new BorderLayout());
-		this.semsimmodel = semsimmodel;
-		this.sourcefile = sourcefile;
-
-		base = semsimmodel.getNamespace();
-
-		toppanel = new JPanel(new BorderLayout());
-		toppanel.setOpaque(true);
-		vizsourcebutton = new JButton("Show source model");
-		vizsourcebutton.setFont(new Font("SansSerif", Font.PLAIN, SemGenGUI.defaultfontsize));
+		vizsourcebutton.setFont(SemGenFont.defaultPlain());
 		vizsourcebutton.addActionListener(this);
 
-		extractbutton = new JButton("EXTRACT");
 		extractbutton.setForeground(Color.blue);
-		extractbutton.setFont(new Font("SansSerif", Font.BOLD, SemGenGUI.defaultfontsize));
+		extractbutton.setFont(SemGenFont.defaultBold());
 		extractbutton.addActionListener(this);
-		closebutton = new JButton("Close tab");
-		closebutton.setForeground(Color.blue);
-		closebutton.setFont(new Font("SansSerif", Font.ITALIC, 11));
-		closebutton.setBorderPainted(false);
-		closebutton.setContentAreaFilled(false);
-		closebutton.setOpaque(false);
-		closebutton.addActionListener(this);
-		closebutton.addMouseListener(buttonMouseListener);
-		closebutton.setRolloverEnabled(true);
-		JPanel buttonpanel = new JPanel();
-		buttonpanel.add(closebutton);
 		
-		extractionlevelchooserentities = new JCheckBox("More inclusive");
-		extractionlevelchooserentities.setFont(new Font("SansSerif",Font.PLAIN, SemGenGUI.defaultfontsize-2));
+		extractionlevelchooserentities.setFont(SemGenFont.defaultPlain(-2));
 		extractionlevelchooserentities.setBorder(BorderFactory.createEmptyBorder(0,35,0,0));
 		extractionlevelchooserentities.addItemListener(this);
 		
-		includepartipantscheckbox = new JCheckBox("Include participants");
-		includepartipantscheckbox.setFont(new Font("SansSerif",Font.PLAIN, SemGenGUI.defaultfontsize-2));
+		includepartipantscheckbox.setFont(SemGenFont.defaultPlain(-2));
 		includepartipantscheckbox.setBorder(BorderFactory.createEmptyBorder(0,35,0,0));
 		includepartipantscheckbox.setSelected(true);
 		includepartipantscheckbox.addItemListener(this);
 
-		extractionlevelchooser2 = new JCheckBox("Include full dependency chain");
-		extractionlevelchooser2.setFont(new Font("SansSerif", Font.PLAIN,SemGenGUI.defaultfontsize - 2));
+		extractionlevelchooser2.setFont(SemGenFont.defaultPlain(-2));
 		extractionlevelchooser2.addItemListener(this);
 
-		clusterbutton = new JButton("Cluster");
 		clusterbutton.addActionListener(this);
 		
 		// List entities first because listprocesses needs data in entitiespanel
@@ -186,10 +177,12 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 		AlphabetizeCheckBoxes(entitiespanel);
 		AlphabetizeCheckBoxes(submodelspanel);
 		AlphabetizeCheckBoxes(codewordspanel);
-
-		leftpanel = new JPanel();
+		
+		createToolbar();
+		
+		JPanel leftpanel = new JPanel();
 		leftpanel.setLayout(new BoxLayout(leftpanel, BoxLayout.Y_AXIS));
-
+		leftpanel.add(toolbar);
 		leftpanel.add(processespanel.titlepanel);
 		leftpanel.add(processespanel.scroller);
 		leftpanel.add(entitiespanel.titlepanel);
@@ -200,20 +193,44 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 		leftpanel.add(codewordspanel.scroller);
 		leftpanel.add(clusterpanel.titlepanel);
 		leftpanel.add(clusterpanel.scroller);
-
-		graphtabpane = new JTabbedPane();
-		physiomappanel = new JPanel();
+		
 		JPanel rightpanel = new JPanel();
 		rightpanel.setLayout(new BoxLayout(rightpanel,BoxLayout.Y_AXIS));
 		rightpanel.add(graphtabpane);
-		centersplitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftpanel, rightpanel);
+		JSplitPane centersplitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftpanel, rightpanel);
 		centersplitpane.setOneTouchExpandable(true);
 		add(centersplitpane, BorderLayout.CENTER);
 		setVisible(true);
 		visualizeAllDataStructures(false);
 		
 		D3 d3 = new D3(semsimmodel);
-		d3.visualize(D3.VisualizationType.DirectedGraph);
+		try {
+			d3.visualize(D3.VisualizationType.DirectedGraph);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void createToolbar() {
+		toolbar = new ExtractorToolbar(settings) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Object o = arg0.getSource();
+				if (o == toolbar.extractoritembatchcluster) {
+						try {
+							batchCluster();
+						} catch (IOException e1) {e1.printStackTrace();}
+				}
+
+				if (o == toolbar.extractoritemopenann) {
+						try {
+							globalactions.NewAnnotatorTab(sourcefile);
+						} catch (Exception e1) {e1.printStackTrace();} 
+					}	
+			}
+		};
 	}
 	
 	// List physical processes
@@ -231,12 +248,6 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 			else
 				processesanddatastrs.get(proc).add(prop.getAssociatedDataStructure());
 		}
-		
-		for (PhysicalProcess proc : processesanddatastrs.keySet()) {
-			for (DataStructure datastr : processesanddatastrs.get(proc)) {
-				datastrsandprocesses.put(datastr, proc);
-			}
-		}
 		return processesanddatastrs;
 	}
 	
@@ -252,11 +263,6 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 				Set<DataStructure> cdwds = new HashSet<DataStructure>();
 				cdwds.add(prop.getAssociatedDataStructure());
 				entsanddatastrs.put(ent, cdwds);
-			}
-		}
-		for (PhysicalEntity ent : entsanddatastrs.keySet()) {
-			for (DataStructure datastr : entsanddatastrs.get(ent)) {
-				datastrsandents.put(datastr, ent);
 			}
 		}
 		return entsanddatastrs;
@@ -286,8 +292,6 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 
 	// returns the preserved data structures in the extract
 	public Map<DataStructure, Set<? extends DataStructure>> primeextraction() throws IOException, OWLException {
-		initialfocusnodename = null;
-		Boolean first = true;
 		allpreserveddatastructures = new HashMap<DataStructure, Set<? extends DataStructure>>(); 
 		Set<DataStructure> outputspreserveddatastructures = new HashSet<DataStructure>();
 
@@ -301,34 +305,18 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 				if (tempbox.isSelected()) {
 					for (DataStructure onedatastr : tempbox.associateddatastructures) {
 						// Need to reroute for components
-						Set<DataStructure> requiredinputs = onedatastr.getComputation().getInputs();
+						Set<DataStructure> requiredinputs = onedatastr.getComputationInputs();
 						allpreserveddatastructures.put(onedatastr, requiredinputs);						
 						
 						// Un-comment this block and comment out "includeInputsInExtraction", above, to make the extraction more limited
 						for(DataStructure oneinput : requiredinputs){
 							if(!allpreserveddatastructures.containsKey(oneinput))
 								allpreserveddatastructures.put(oneinput, new HashSet<DataStructure>());
-							else{}
 						}
 						
 						// If user wants to include the process participants
 						if (includepartipantscheckbox.isSelected()){
-							// Add data structures associated with the participants in the process
-							for(PhysicalEntity ent : ((PhysicalProcess)tempbox.pmc).getParticipantsAsPhysicalEntities()){
-								if(entitiespanel.termandcdwdstable.containsKey(ent)){
-									for(DataStructure entds : entitiespanel.termandcdwdstable.get(ent)){
-										// Maybe change so that if a cdwd that we're including is dependent on another that's
-										// a participant, make sure to include its inputs (all inputs?)
-										allpreserveddatastructures.put(entds, entds.getComputation().getInputs());
-//										// Add the entity's inputs, make them terminal
-										for(DataStructure oneentin : entds.getComputation().getInputs()){
-											if(!allpreserveddatastructures.containsKey(oneentin)){
-												allpreserveddatastructures.put(oneentin, new HashSet<DataStructure>());
-											}
-										}
-									}
-								}
-							}
+							includeProcessParticipants((PhysicalProcess)tempbox.pmc);
 						}
 						// Add the process data structure's inputs, make them terminal
 					}
@@ -343,13 +331,13 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 				if (tempbox.isSelected()) {
 					for (DataStructure onedatastr : tempbox.associateddatastructures) {
 						// Need to reroute for components
-						allpreserveddatastructures.put(onedatastr, onedatastr.getComputation().getInputs()); 
+						allpreserveddatastructures.put(onedatastr, onedatastr.getComputationInputs()); 
 						// If the more thorough extraction is used, trace the data structure's use in other equations and preserve their output data structures as well
 						if (this.extractionlevelchooserentities.isSelected()) 
 							includeInputsInExtraction(onedatastr);
 						else{
 							// Add the data structure's inputs, make them terminal
-							for(DataStructure onein : onedatastr.getComputation().getInputs()){
+							for(DataStructure onein : onedatastr.getComputationInputs()){
 								if(!allpreserveddatastructures.containsKey(onein)){
 									allpreserveddatastructures.put(onein, new HashSet<DataStructure>());
 								}
@@ -368,7 +356,7 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 					for (DataStructure onedatastr : tempbox.associateddatastructures) {
 						Set<DataStructure> requiredinputs = new HashSet<DataStructure>();
 						if(onedatastr.getComputation()!=null){
-							requiredinputs.addAll(onedatastr.getComputation().getInputs());
+							requiredinputs.addAll(onedatastr.getComputationInputs());
 						}
 						else if(onedatastr instanceof MappableVariable)
 							requiredinputs.addAll(((MappableVariable)onedatastr).getMappedTo());
@@ -382,7 +370,7 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 				}
 			}
 		}
-		
+		Boolean first = true;
 		// Collect the data structures to preserve from the codewords checkboxes
 		for (int x = 0; x < codewordspanel.checkboxpanel.getComponentCount(); x++) {
 			if (codewordspanel.checkboxpanel.getComponent(x) instanceof ExtractorJCheckBox) {
@@ -392,7 +380,7 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 						outputspreserveddatastructures.add(onedatastr);
 					}
 					if (first) {
-						initialfocusnodename = codewordspanel.checkboxpanel.getComponent(x).getName();
+						codewordspanel.checkboxpanel.getComponent(x).getName();
 						first = false;
 					}
 				}
@@ -403,15 +391,15 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 			// If the full dependency chain is requested
 			if (this.extractionlevelchooser2.isSelected()) {
 				for (DataStructure dstokeep : getDependencyChain(pds)) {
-					allpreserveddatastructures.put(dstokeep, dstokeep.getComputation().getInputs());
+					allpreserveddatastructures.put(dstokeep, dstokeep.getComputationInputs());
 				}
 			}
 			// If only the immediate inputs are requested
 			else {
-				Set<DataStructure> tempdsset = pds.getComputation().getInputs();
+				Set<DataStructure> tempdsset = pds.getComputationInputs();
 				allpreserveddatastructures.put(pds, tempdsset);
 				for (DataStructure oneinput : tempdsset) {
-					if (!allpreserveddatastructures.keySet().contains(oneinput)) {
+					if (!allpreserveddatastructures.containsKey(oneinput)) {
 						allpreserveddatastructures.put(oneinput, new HashSet<DataStructure>());
 					} else if (allpreserveddatastructures.get(oneinput).isEmpty()) {
 						System.out.println("Already added " + oneinput.getName() + ": leaving as is");
@@ -429,16 +417,16 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 					for (DataStructure onedatastr : tempbox.associateddatastructures) {
 						if (!allpreserveddatastructures.keySet().contains(onedatastr)) {
 							if(onedatastr.getComputation()!=null)
-								allpreserveddatastructures.put(onedatastr, onedatastr.getComputation().getInputs());
+								allpreserveddatastructures.put(onedatastr, onedatastr.getComputationInputs());
 						}
 						// If the data structure was added as an input but it should be an output, make it an output
 						else if (allpreserveddatastructures.get(onedatastr).isEmpty()) {
 							allpreserveddatastructures.remove(onedatastr);
-							allpreserveddatastructures.put(onedatastr, onedatastr.getComputation().getInputs());
+							allpreserveddatastructures.put(onedatastr, onedatastr.getComputationInputs());
 						}
 					}
 					for (DataStructure onedatastr : tempbox.associateddatastructures) {
-							moduleinputs.addAll(onedatastr.getComputation().getInputs());
+							moduleinputs.addAll(onedatastr.getComputationInputs());
 					}
 				}
 			}
@@ -446,20 +434,55 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 		for (DataStructure ds : moduleinputs) {
 			if (!allpreserveddatastructures.keySet().contains(ds)) allpreserveddatastructures.put(ds, new HashSet<DataStructure>());
 		}
-		
 		// Make sure all the state variable derivative terms are included, include their inputs
+		processStateVariables();
+		
+		return allpreserveddatastructures;
+	}
+	
+	public void includeProcessParticipants(PhysicalProcess pmc) {
+		// Add data structures associated with the participants in the process
+		for(PhysicalEntity ent : pmc.getParticipantsAsPhysicalEntities()){
+			if(entitiespanel.termandcdwdstable.containsKey(ent)){
+				for(DataStructure entds : entitiespanel.termandcdwdstable.get(ent)){
+					// Maybe change so that if a cdwd that we're including is dependent on another that's
+					// a participant, make sure to include its inputs (all inputs?)
+					allpreserveddatastructures.put(entds, entds.getComputationInputs());
+					// Add the entity's inputs, make them terminal
+					for(DataStructure oneentin : entds.getComputationInputs()){
+						if(!allpreserveddatastructures.containsKey(oneentin)){
+							allpreserveddatastructures.put(oneentin, new HashSet<DataStructure>());
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	public void includeInputsInExtraction(DataStructure onedatastr) throws OWLException{
+		for (DataStructure nextds : onedatastr.getComputationInputs()) {
+			allpreserveddatastructures.put(nextds, nextds.getComputationInputs());
+			for(DataStructure secondaryds : nextds.getComputationInputs()){
+				if (!allpreserveddatastructures.containsKey(secondaryds)) {
+					allpreserveddatastructures.put(secondaryds, new HashSet<DataStructure>());
+				}
+			}
+		}
+	}
+
+	public void processStateVariables() {
 		Map<DataStructure, Set<DataStructure>> tempmap = new HashMap<DataStructure, Set<DataStructure>>();
 		for(DataStructure ds : allpreserveddatastructures.keySet()){
 			if(ds.hasSolutionDomain()){
 				if(ds.hasStartValue() && !allpreserveddatastructures.get(ds).isEmpty()
 						&& semsimmodel.getDataStructure(ds.getName() + ":" + ds.getSolutionDomain().getName())!=null){
-					tempmap.put(ds, ds.getComputation().getInputs());
+					tempmap.put(ds, ds.getComputationInputs());
 					// Assumes that all inputs to the state variable are derivatives with respect to some solution domain
 					// This is the way the SemSim model is structured, but is different from what is in the XMML
-					for(DataStructure inds : ds.getComputation().getInputs()){
-						tempmap.put(inds, inds.getComputation().getInputs());
+					for(DataStructure inds : ds.getComputationInputs()){
+						tempmap.put(inds, inds.getComputationInputs());
 						// Preserve the inputs to the derivative term. If not already preserved, make them static inputs
-						for(DataStructure ininds : inds.getComputation().getInputs())
+						for(DataStructure ininds : inds.getComputationInputs())
 							if (!allpreserveddatastructures.keySet().contains(ininds))
 								tempmap.put(ininds, new HashSet<DataStructure>());
 					}
@@ -467,24 +490,8 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 			}
 		}
 		allpreserveddatastructures.putAll(tempmap);
-		return allpreserveddatastructures;
 	}
 	
-	
-	public void includeInputsInExtraction(DataStructure onedatastr) throws OWLException{
-		for (DataStructure nextds : onedatastr.getComputation().getInputs()) {
-			allpreserveddatastructures.put(nextds, nextds.getComputation().getInputs());
-			for(DataStructure secondaryds : nextds.getComputation().getInputs()){
-				if (!allpreserveddatastructures.keySet().contains(secondaryds)) {
-					allpreserveddatastructures.put(secondaryds, new HashSet<DataStructure>());
-				}
-			}
-		}
-	}
-	
-	
-	
-
 	public void optionToEncode(String filenamesuggestion) {
 		int x = JOptionPane.showConfirmDialog(this, "Finished extracting "
 				+ extractedfile.getName()
@@ -492,7 +499,7 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 				JOptionPane.YES_NO_OPTION);
 		if (x == JOptionPane.YES_OPTION) {
 			try {
-				SemGenGUI.startEncoding(extractedmodel, filenamesuggestion);
+				new Encoder(extractedmodel, filenamesuggestion);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -502,25 +509,19 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 	public Set<DataStructure> getDependencyChain(DataStructure startds){
 		// The hashtable contains the data structure URIs and whether the looping alogrithm here should collect 
 		// their inputs (true = collect)
-		Set<DataStructure> dsset = new HashSet<DataStructure>();
 		Hashtable<DataStructure, Boolean> table = new Hashtable<DataStructure, Boolean>();
-		Set<DataStructure> keys = new HashSet<DataStructure>();
-		Set<DataStructure> inputstoadd = new HashSet<DataStructure>();
 		table.put(startds, true);
 		DataStructure key = null;
-		DataStructure[] array = {};
 		Boolean cont = true;
 		while (cont) {
-			cont = false;
-			keys = table.keySet();
-			for (DataStructure onekey : keys) {
+			cont = false; //This aborts the loop immediately! What is the point of this????????????
+			for (DataStructure onekey : table.keySet()) {
 				key = onekey;
 				if ((Boolean) table.get(onekey) == true) {
 					cont = true;
-					inputstoadd = onekey.getComputation().getInputs();
-					for (DataStructure oneaddedinput : inputstoadd) {
-						if (!keys.contains(oneaddedinput)) {
-							table.put(oneaddedinput, !oneaddedinput.getComputation().getInputs().isEmpty());
+					for (DataStructure oneaddedinput : onekey.getComputationInputs()) {
+						if (!table.containsKey(oneaddedinput)) {
+							table.put(oneaddedinput, !oneaddedinput.getComputationInputs().isEmpty());
 						}
 					}
 					break;
@@ -529,23 +530,14 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 			table.remove(key);
 			table.put(key, false);
 		}
-		array = (DataStructure[]) table.keySet().toArray(array);
-		for (int y = 0; y < array.length; y++) {
-			dsset.add(array[y]);
-		}
+		Set<DataStructure> dsset = new HashSet<DataStructure>(table.keySet());
+		
 		return dsset;
 	}
 	
 	// Visualize a graph of the SemSim model
 	public void visualize(Map<DataStructure, Set<? extends DataStructure>> alldatastrs, Boolean clusteringonly) {
 		if (!alldatastrs.keySet().isEmpty()) {
-
-			Set<DataStructure> domaincodewords = new HashSet<DataStructure>();
-			for(DataStructure ds : semsimmodel.getSolutionDomains()){
-				domaincodewords.add(semsimmodel.getDataStructure(ds.getName() + ".min"));
-				domaincodewords.add(semsimmodel.getDataStructure(ds.getName() + ".max"));
-				domaincodewords.add(semsimmodel.getDataStructure(ds.getName() + ".delta"));
-			}
 
 			if (!clusteringonly) {
 				physiomappanel.removeAll();
@@ -584,10 +576,18 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 				while (nodeit.hasNext()) {
 					Node thenode = (Node) nodeit.next();
 					if (keptds.getName().equals(thenode.getString(LABEL))) {
-						add = false;
 						node = thenode;
+						add = false;
 					}
 				}
+				
+				Set<DataStructure> domaincodewords = new HashSet<DataStructure>();
+				for(DataStructure ds : semsimmodel.getSolutionDomains()){
+					domaincodewords.add(semsimmodel.getDataStructure(ds.getName() + ".min"));
+					domaincodewords.add(semsimmodel.getDataStructure(ds.getName() + ".max"));
+					domaincodewords.add(semsimmodel.getDataStructure(ds.getName() + ".delta"));
+				}
+
 				// If the data structure is part of a solution domain declaration and it is not used to compute any other terms, ignore it
 				if ((keptds.isSolutionDomain()
 					|| (domaincodewords.contains(keptds)) && keptds.getUsedToCompute().isEmpty()))
@@ -599,7 +599,7 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 					node.setBoolean(INPUT, (alldatastrs.get(keptds).isEmpty()));
 					boolean recievesInput = false;
 					if(keptds.getComputation()!=null)
-						recievesInput = !keptds.getComputation().getInputs().isEmpty();
+						recievesInput = !keptds.getComputationInputs().isEmpty();
 					else if(keptds instanceof MappableVariable)
 						recievesInput = !((MappableVariable)keptds).getMappedTo().isEmpty();
 					node.setBoolean(VAR2INPUT, (alldatastrs.get(keptds).isEmpty() && recievesInput));
@@ -611,7 +611,7 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 					//if(oneinput.isDeclared()){
 					Boolean otheradd = true;
 					Node othernode = null;
-					Iterator othernodeit = tempgraph.nodes();
+					Iterator<Node> othernodeit = tempgraph.nodes();
 					// check if the input has already been added to the graph
 					while (othernodeit.hasNext()) {
 						Node theothernode = (Node) othernodeit.next();
@@ -626,7 +626,7 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 						othernode.setBoolean(INPUT, (alldatastrs.get(oneinput).isEmpty()));
 						boolean recievesInput2 = false;
 						if(oneinput.getComputation()!=null)
-							recievesInput2 = !oneinput.getComputation().getInputs().isEmpty();
+							recievesInput2 = !oneinput.getComputationInputs().isEmpty();
 						else if(oneinput instanceof MappableVariable)
 							recievesInput2 = !((MappableVariable)oneinput).getMappedTo().isEmpty();
 						othernode.setBoolean(VAR2INPUT, (alldatastrs.get(oneinput).isEmpty() && recievesInput2));
@@ -636,7 +636,6 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 					tempgraph.addEdge(node, othernode);
 					junggraph.addEdge(edgenum, oneinput.getName(), keptds.getName(), EdgeType.UNDIRECTED);
 					edgenum++;
-					//}
 				}
 			}
 			
@@ -676,8 +675,7 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 
 			if (!clusteringonly) {
 				// display the graphs
-				view = new SemGenRadialGraphView(tempgraph, LABEL, semsimmodel);
-				PhysioMapRadialGraphView PMview = new PhysioMapRadialGraphView(physiomapgraph, LABEL, semsimmodel);
+				view = new SemGenRadialGraphView(settings, tempgraph, LABEL, semsimmodel);
 				int selectedview = graphtabpane.getSelectedIndex();
 				graphtabpane.removeAll();
 				graphtabpane.add("Computational network", view.demo(tempgraph, LABEL, this));
@@ -690,7 +688,7 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 		else{
 			tempgraph = new Graph(true);
 			tempgraph.getNodeTable().addColumns(LABEL_SCHEMA);
-			view = new SemGenRadialGraphView(tempgraph, LABEL, semsimmodel);
+			view = new SemGenRadialGraphView(settings, tempgraph, LABEL, semsimmodel);
 			graphtabpane.removeAll();
 			graphtabpane.add("Computational network", view.demo(tempgraph, LABEL, this));
 		}
@@ -698,12 +696,12 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 	
 	
 	String getToolTipForDataStructure(DataStructure ds) {
-		String tip = "<html>";
 		String code = "";
 		if(ds.getComputation()!=null)
 			code = ds.getComputation().getComputationalCode();
 		String units = "dimensionless";
 		if(ds.getUnit()!=null) units = ds.getUnit().getComputationalCode();
+		String tip = "<html>";
 		if(ds.getDescription()!=null)
 			tip = tip + ("<p><b>Description:</b> " + ds.getDescription() + "</p>");
 		if(ds.hasPhysicalProperty()){
@@ -718,7 +716,7 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 	public Node retrieveNodeByLabel(Graph g, String label){
 		Boolean otheradd = true;
 		Node othernode = null;
-		Iterator othernodeit = g.nodes();
+		Iterator<Node> othernodeit = g.nodes();
 		// check if the input has already been added to the graph
 		while (othernodeit.hasNext()) {
 			Node theothernode = (Node) othernodeit.next();
@@ -736,24 +734,20 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 
 	public void AlphabetizeCheckBoxes(JPanel panel) {
 		// First put all the check boxes in an array so they can be sorted
-		Component[] comparray = panel.getComponents();
-		Set<ExtractorJCheckBox> boxset = new HashSet<ExtractorJCheckBox>();
+		ArrayList<ExtractorJCheckBox> boxset = new ArrayList<ExtractorJCheckBox>();
 
-		for (int i = 0; i < comparray.length; i++) {
-			Component onecomp = comparray[i];
+		for (Component onecomp : Arrays.asList(panel.getComponents())) {
 			if (onecomp instanceof ExtractorJCheckBox) {
 				boxset.add((ExtractorJCheckBox) onecomp);
 				panel.remove(onecomp);
 			}
 		}
-		ExtractorJCheckBox[] boxarray = boxset.toArray(new ExtractorJCheckBox[] {});
+		Collections.sort(boxset, new ComparatorByName());
 		// Sort the array alphabetically using the custom Comparator
-		Comparator<Component> byVarName = new ComparatorByName();
-		Arrays.sort(boxarray, byVarName);
-
-		for (int x = 0; x < boxarray.length; x++) {
-			panel.add(boxarray[x]);
-			boxarray[x].setVisible(true);
+		
+		for (ExtractorJCheckBox box : boxset) {
+			panel.add(box);
+			box.setVisible(true);
 		}
 	}
 
@@ -763,34 +757,24 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 			try {
 				Map<DataStructure, Set<? extends DataStructure>> table = primeextraction();
 				if (table.size() != 0) {
-					extractedfile = SemGenGUI.SaveAsAction(SemGenGUI.desktop, null, new FileNameExtensionFilter[]{
-							SemGenGUI.cellmlfilter, SemGenGUI.owlfilter});
 					if (extractedfile != null) {
 						try {
 							extractedmodel = Extractor.extract(semsimmodel, table);
-						} catch (CloneNotSupportedException e1) {e1.printStackTrace();}
+						} catch (CloneNotSupportedException e1) {
+							e1.printStackTrace();
+						}
 						manager.saveOntology(extractedmodel.toOWLOntology(), new RDFXMLOntologyFormat(),IRI.create(extractedfile));
 						optionToEncode(extractedfile.getName());
 					}
 				} else {
-					JOptionPane.showMessageDialog(this,"Nothing to extract because no check boxes selected in extraction panels");
+					SemGenError.showError("Nothing to extract because no check boxes selected in extraction panels", "Extraction Error");
 				}
-			} catch (IOException e1) {
+			} catch (IOException | OWLException e1) {
 				e1.printStackTrace();
-			} catch (OWLException e2) {
-				e2.printStackTrace();
 			}
 		}
 
 		if (o == vizsourcebutton) visualizeAllDataStructures(false);
-
-		if (o == closebutton){
-			try {
-				SemGenGUI.closeTabAction(this);
-			} catch (HeadlessException e0) {
-				e0.printStackTrace();
-			}
-		}
 
 		// If user hits the "Cluster" button
 		if (o == clusterbutton) {
@@ -809,37 +793,11 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 		}
 	}
 
-	public void closeAction() {
-		
-	}
-
-	public final static MouseListener buttonMouseListener = new MouseAdapter() {
-		public void mouseEntered(MouseEvent e) {
-			Component component = e.getComponent();
-			if (component instanceof AbstractButton) {
-				AbstractButton button = (AbstractButton) component;
-				button.setBorderPainted(true);
-				button.setContentAreaFilled(true);
-				button.setOpaque(true);
-			}
-		}
-
-		public void mouseExited(MouseEvent e) {
-			Component component = e.getComponent();
-			if (component instanceof AbstractButton) {
-				AbstractButton button = (AbstractButton) component;
-				button.setBorderPainted(false);
-				button.setContentAreaFilled(false);
-				button.setOpaque(false);
-			}
-		}
-	};
-
 	public void visualizeAllDataStructures(Boolean clusteringonly) {
 		Hashtable<DataStructure, Set<? extends DataStructure>> alldatastrs = new Hashtable<DataStructure, Set<? extends DataStructure>>();
 		for(DataStructure ds : semsimmodel.getDataStructures()){
 			if(ds.getComputation()!=null)
-				alldatastrs.put(ds, ds.getComputation().getInputs());
+				alldatastrs.put(ds, ds.getComputationInputs());
 			else if(ds instanceof MappableVariable)
 				alldatastrs.put(ds, ((MappableVariable)ds).getMappedTo());
 		}
@@ -847,24 +805,19 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 	}
 	
 	public void atomicDecomposition() {
-		JFileChooser fc = new JFileChooser();
+		SemGenOpenFileChooser fc = new SemGenOpenFileChooser("Select directory for extracted models");
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		fc.setCurrentDirectory(SemGenGUI.currentdirectory);
-		fc.setDialogTitle("Select directory for extracted models");
-		int returnVal = fc.showOpenDialog(this);
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			File file = new File(fc.getSelectedFile().getAbsolutePath());
-			SemGenGUI.currentdirectory = fc.getCurrentDirectory();
-			if (file != null) {
-				autogendirectory = file;
-				progframe = new ProgressFrame("Performing decomposition", false, null);
-				GenericThread task = new GenericThread(this, "decompose");
-				task.start();
-			}
+
+		File file = new File(fc.getSelectedFile().getAbsolutePath());
+		if (file != null) {
+			autogendirectory = file;
+			GenericThread task = new GenericThread(this, "decompose");
+			task.start();
 		}
 	}
 
 	public void decompose() {
+		SemGenProgressBar progframe = new SemGenProgressBar("Performing decomposition", false, null);
 		Component[][] setofcomponentsinpanels = new Component[][]{
 				processespanel.checkboxpanel.getComponents(),
 				entitiespanel.checkboxpanel.getComponents(),
@@ -881,8 +834,6 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 			}
 		}
 		
-		// Go through the entities list and create one model for each physical entity
-		int num = 0;
 		for (int x = 0; x < setofcomponentsinpanels[1].length; x++) {
 			ExtractorJCheckBox ebox = (ExtractorJCheckBox) setofcomponentsinpanels[1][x];
 			if (x > 0) {
@@ -898,7 +849,6 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 				String out = null;
 					out = new MMLwriter().writeToString(extractedmodel);
 					SemSimUtil.writeStringToFile(out, coderfile);
-				num++;
 			} else {
 				System.out.println("ERROR in creating file during atomic decomposition");
 			}
@@ -911,7 +861,7 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 			ebox.setSelected(false);
 		}
 		JOptionPane.showMessageDialog(this, "Atomic decomposition completed");
-		progframe.setVisible(false);
+		progframe.dispose();
 	}
 
 	public void batchCluster() throws IOException {
@@ -920,29 +870,26 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 		cd.setVisible(false);
 
 		JFileChooser filec = new JFileChooser();
-		filec.setPreferredSize(SemGenGUI.filechooserdims);
+		filec.setPreferredSize(new Dimension(550,550));
 		Boolean saveok = false;
 		File batchclusterfile = null;
 		while (!saveok) {
-			filec.setCurrentDirectory(SemGenGUI.currentdirectory);
+			filec.setCurrentDirectory(SemGenFileChooser.currentdirectory);
 			filec.setDialogTitle("Choose location to save clustering results");
 			filec.addChoosableFileFilter(new FileFilter(new String[] { "txt" }));
-			int returnVal = filec.showSaveDialog(SemGenGUI.desktop);
+			int returnVal = filec.showSaveDialog(this);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				batchclusterfile = new File(filec.getSelectedFile().getAbsolutePath());
 				if (!batchclusterfile.getAbsolutePath().endsWith(".txt")
 						&& !batchclusterfile.getAbsolutePath().endsWith(".TXT")) {
 					batchclusterfile = new File(filec.getSelectedFile().getAbsolutePath() + ".txt");
-				} else {
 				}
 				if (batchclusterfile.exists()) {
-					int overwriteval = JOptionPane.showConfirmDialog(SemGenGUI.desktop, "Overwrite existing file?",
+					int overwriteval = JOptionPane.showConfirmDialog(this, "Overwrite existing file?",
 							batchclusterfile.getName() + " already exists",JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE);
 					if (overwriteval == JOptionPane.OK_OPTION) {
 						saveok = true;
-					} else {
-						saveok = false;
-					}
+					} 
 				} else {
 					saveok = true;
 				}
@@ -963,14 +910,16 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 			// Need task here
 			BatchClusterTask task = new BatchClusterTask();
 			task.execute();
-			SemGenGUI.progframe = new ProgressFrame("Performing clustering analysis...", false, task);
+			
 		}
 	}
 	
-	public class BatchClusterTask extends SwingWorker<Void, Void> {
-        public BatchClusterTask(){}
-        @Override
-        public Void doInBackground() {
+	public class BatchClusterTask extends SemGenTask {
+        public BatchClusterTask(){
+	        	progframe = new SemGenProgressBar("Performing clustering analysis...", false);
+	    }
+	    @Override
+	    public Void doInBackground() {
         	try {
         		performClusteringAnalysis();
 			} catch (Exception e) {
@@ -978,49 +927,43 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 			}
             return null;
         }
-        @Override
-        public void done() {
-        	SemGenGUI.progframe.setVisible(false);
+	        
+        public void performClusteringAnalysis() throws IOException {
+			// Make sure to ignore edges for state variables that are inputs to themselves
+			int statevars = 0;
+			for (Number edge : cd.mygraph.getEdges()) {
+				Pair<String> pair = cd.mygraph.getEndpoints(edge);
+				if (pair.getFirst().equals(pair.getSecond())) {
+					statevars++;
+				}
+			}
+			float maxclusteringiterations = cd.mygraph.getEdgeCount() - statevars;
+	
+			// Loop through all clustering levels
+			String moduletable = "";
+			for (int y = 1; y <= maxclusteringiterations; y++) {
+	
+				clusterwriter.println("\n-----Removing " + y + " edges-----");
+				System.out.println("-----Removing " + y + " edges-----");
+				String newmoduletable = cd.clusterAndRecolor(cd.layout, y, cd.similarColors, Clusterer.groupVertices.isSelected());
+				clusterwriter.println("-----Found " + cd.nummodules + " modules-----");
+				if (!newmoduletable.equals(moduletable)) {
+					moduletable = newmoduletable;
+					clusterwriter.println(moduletable);
+				} else {
+					clusterwriter.println("(no change)");
+				}
+
+				progframe.bar.setValue(Math.round(100 * ((float)y / maxclusteringiterations)));
+			}
+			clusterwriter.flush();
+			clusterwriter.close();
+        }
+        
+        public void endTask() {
+        	JOptionPane.showMessageDialog(null, "Finished clustering analysis");
         }
     }
-
-	public void performClusteringAnalysis() throws IOException {
-		// Make sure to ignore edges for state variables that are inputs to themselves
-		int statevars = 0;
-		for (Number edge : cd.mygraph.getEdges()) {
-			Pair<String> pair = cd.mygraph.getEndpoints(edge);
-			if (pair.getFirst().equals(pair.getSecond())) {
-				statevars++;
-			}
-		}
-		maxclusteringiterations = cd.mygraph.getEdgeCount() - statevars;
-
-		// Loop through all clustering levels
-		String moduletable = "";
-		for (int y = 1; y <= maxclusteringiterations; y++) {
-
-			clusterwriter.println("\n-----Removing " + y + " edges-----");
-			System.out.println("-----Removing " + y + " edges-----");
-			String newmoduletable = cd.clusterAndRecolor(cd.layout, y, cd.similarColors, Clusterer.groupVertices.isSelected());
-			clusterwriter.println("-----Found " + cd.nummodules + " modules-----");
-			if (!newmoduletable.equals(moduletable)) {
-				moduletable = newmoduletable;
-				clusterwriter.println(moduletable);
-			} else {
-				clusterwriter.println("(no change)");
-			}
-
-			float fltnum = y;
-			float fltmaxnum = maxclusteringiterations;
-
-			SemGenGUI.progframe.bar.setValue(Math.round(100 * (fltnum / fltmaxnum)));
-		}
-		clusterwriter.flush();
-		clusterwriter.close();
-		SemGenGUI.progframe.bar.setVisible(false);
-		JOptionPane.showMessageDialog(SemGenGUI.desktop, "Finished clustering analysis");
-	}
-
 
 	public void itemStateChanged(ItemEvent arg0) {
 		try {
@@ -1029,4 +972,31 @@ public class ExtractorTab extends JPanel implements ActionListener, ItemListener
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public boolean isSaved() {
+		return true;
+	}
+
+	@Override
+	public void requestSave() {}
+
+	@Override
+	public void requestSaveAs() {}
+	
+	public File saveExtraction() {
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("Choose location to save file", new String[]{"cellml","owl"});
+		if (filec.SaveAsAction()!=null) {
+			extractedfile = filec.getSelectedFile();
+			return extractedfile;
+		}
+		return null;
+	}
+
+	@Override
+	public void addObservertoWorkbench(Observer obs) {
+
+	}
+
+
 }

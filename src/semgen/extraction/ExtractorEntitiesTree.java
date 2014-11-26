@@ -8,10 +8,12 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
 import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeSelectionModel;
+
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -25,10 +27,8 @@ public class ExtractorEntitiesTree extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	public JTree tree;
-	public String result;
 	public File testfile;
-	public JTree testtree;
-	
+
 	public ExtractorEntitiesTree(File file) {
 
 		testfile = file;
@@ -58,30 +58,27 @@ public class ExtractorEntitiesTree extends JPanel {
 		Document doc = new Document();
 		try {
 			doc = builder.build(testfile);
-		} catch (JDOMException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (JDOMException | IOException e) {
 			e.printStackTrace();
 		}
 
 		Element root = doc.getRootElement();
 
-		// System.out.println(root.toString());
-		List rootchildren = root.getChildren();
-		Iterator iterator = rootchildren.iterator();
-		Namespace heirns = doc.getRootElement().getNamespace("hier");
+		List<?> rootchildren = root.getChildren();
+		Iterator<?> iterator = rootchildren.iterator();
+		doc.getRootElement().getNamespace("hier");
 		Namespace rdfns = doc.getRootElement().getNamespace("rdf");
-		Hashtable urisandparents = new Hashtable();
-		Hashtable uriswithmultparents = new Hashtable();
-		Hashtable uriswithsingleparents = new Hashtable();
+		Hashtable<String, Set<String>> urisandparents = new Hashtable<String, Set<String>>();
+		new Hashtable<Object, Object>();
+		new Hashtable<Object, Object>();
 		while (iterator.hasNext()) {
 			Element el = (Element) iterator.next();
 
 			String clsname = el.getAttributeValue("about", rdfns);
 			// Confusing: Parents for FMA classes, but children in query result
-			List children = el.getChildren();
-			Iterator childit = children.iterator();
-			Set<String> parentset = new HashSet();
+			List<?> children = el.getChildren();
+			Iterator<?> childit = children.iterator();
+			Set<String> parentset = new HashSet<String>();
 
 			while (childit.hasNext()) {
 				Element parentel = (Element) childit.next();
@@ -91,8 +88,8 @@ public class ExtractorEntitiesTree extends JPanel {
 			}
 			urisandparents.put(clsname, parentset);
 		}
-		Hashtable urisandnodes = new Hashtable();
-		Set<DefaultMutableTreeNode> nodeset = new HashSet();
+		Hashtable<String, DefaultMutableTreeNode> urisandnodes = new Hashtable<String, DefaultMutableTreeNode>();
+		new HashSet<DefaultMutableTreeNode>();
 		for (String child : (Set<String>) urisandparents.keySet()) {
 			Set<String> parents = (Set<String>) urisandparents.get(child);
 			for (String parent : parents) {
@@ -120,7 +117,7 @@ public class ExtractorEntitiesTree extends JPanel {
 					// copy over the parents of the node
 					// tempnode.setParent((DefaultMutableTreeNode)childnode.getParent());
 					// and copy over the children
-					Enumeration en = childnode.children();
+					Enumeration<?> en = childnode.children();
 					while (en.hasMoreElements()) {
 						DefaultMutableTreeNode onechild = (DefaultMutableTreeNode) en
 								.nextElement();
@@ -133,7 +130,7 @@ public class ExtractorEntitiesTree extends JPanel {
 			}
 		}
 
-		Set<DefaultMutableTreeNode> roots = new HashSet();
+		Set<DefaultMutableTreeNode> roots = new HashSet<DefaultMutableTreeNode>();
 		for (String key : (Set<String>) urisandnodes.keySet()) {
 			System.out.println("Looking at; " + key);
 			DefaultMutableTreeNode node = (DefaultMutableTreeNode) urisandnodes

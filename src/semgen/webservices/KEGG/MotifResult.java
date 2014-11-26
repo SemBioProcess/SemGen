@@ -8,7 +8,9 @@
 package semgen.webservices.KEGG;
 
 public class MotifResult  implements java.io.Serializable {
-    private java.lang.String motif_id;
+	private static final long serialVersionUID = 1L;
+
+	private java.lang.String motif_id;
 
     private java.lang.String definition;
 
@@ -186,7 +188,6 @@ public class MotifResult  implements java.io.Serializable {
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof MotifResult)) return false;
         MotifResult other = (MotifResult) obj;
-        if (obj == null) return false;
         if (this == obj) return true;
         if (__equalsCalc != null) {
             return (__equalsCalc == obj);
@@ -297,7 +298,7 @@ public class MotifResult  implements java.io.Serializable {
      */
     public static org.apache.axis.encoding.Serializer getSerializer(
            java.lang.String mechType, 
-           java.lang.Class _javaType,  
+           Class<?> _javaType,  
            javax.xml.namespace.QName _xmlType) {
         return 
           new  org.apache.axis.encoding.ser.BeanSerializer(
@@ -309,7 +310,7 @@ public class MotifResult  implements java.io.Serializable {
      */
     public static org.apache.axis.encoding.Deserializer getDeserializer(
            java.lang.String mechType, 
-           java.lang.Class _javaType,  
+           Class<?> _javaType,  
            javax.xml.namespace.QName _xmlType) {
         return 
           new  org.apache.axis.encoding.ser.BeanDeserializer(

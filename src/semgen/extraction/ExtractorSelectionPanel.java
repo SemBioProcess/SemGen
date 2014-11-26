@@ -3,7 +3,6 @@ package semgen.extraction;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -28,17 +27,18 @@ import javax.swing.JPanel;
 
 import org.semanticweb.owlapi.model.OWLException;
 
-import semgen.ComparatorByName;
-import semgen.SemGenGUI;
-import semgen.SemGenScrollPane;
+import semgen.utilities.ComparatorByName;
+import semgen.utilities.SemGenFont;
+import semgen.utilities.SemGenIcon;
+import semgen.utilities.uicomponent.SemGenScrollPane;
 import semsim.model.SemSimComponent;
-import semsim.model.computational.DataStructure;
+import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.Submodel;
 
 public class ExtractorSelectionPanel extends JPanel implements ActionListener, MouseListener {
 	private static final long serialVersionUID = -487389420876921191L;
-	public JLabel titlelabel;
+	public JLabel titlelabel = new JLabel();
 	public JCheckBox markallbox = new JCheckBox("");
 	public JPanel checkboxpanel = new JPanel();
 	public SemGenScrollPane scroller;
@@ -46,11 +46,11 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 	public Map<String, JCheckBox> termandcheckboxmap = new HashMap<String,JCheckBox>();
 	JPanel titlepanel = new JPanel();
 	public ExtractorTab extractor;
-	public JButton expandcontractbutton = new JButton(SemGenGUI.expendcontracticon);
+	public JButton expandcontractbutton = new JButton(SemGenIcon.expendcontracticon);
 
 	public ExtractorSelectionPanel(ExtractorTab extractor, String title, Hashtable<? extends SemSimComponent,Set<DataStructure>> table, JComponent addon){
 		this.extractor = extractor;
-		markallbox.setFont(new Font("SansSerif", Font.ITALIC, SemGenGUI.defaultfontsize-2));
+		markallbox.setFont(SemGenFont.defaultItalic(-2));
 		markallbox.setToolTipText("Select all/none");
 		termandcdwdstable = (Hashtable<? extends SemSimComponent, Set<DataStructure>>) table;
 		setBackground(Color.white);
@@ -69,10 +69,9 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 		expandcontractbutton.setContentAreaFilled(false);
 		expandcontractbutton.setAlignmentX(RIGHT_ALIGNMENT);
 		expandcontractbutton.setToolTipText("Expand/collapse panel");
-		
-		titlelabel = new JLabel();
+
 		titlelabel.addMouseListener(this);
-		titlelabel.setFont(new Font("SansSerif", Font.BOLD, SemGenGUI.defaultfontsize));
+		titlelabel.setFont(SemGenFont.defaultBold());
 		titlelabel.setForeground(Color.blue);
 		titlelabel.setBorder(BorderFactory.createEmptyBorder(0,5,0,5));
 		
@@ -98,7 +97,6 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 			((JComponent) c).setAlignmentX(LEFT_ALIGNMENT);
 		}
 	}
-	
 	
 	public int addCheckBoxes(Hashtable<? extends SemSimComponent,Set<DataStructure>> table) {
 		
@@ -126,7 +124,7 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 			checkbox.setSelected(false);
 			checkbox.addActionListener(this);
 			checkbox.addItemListener(extractor);
-			checkbox.setFont(new Font("SansSerif", Font.BOLD, SemGenGUI.defaultfontsize-1));
+			checkbox.setFont(SemGenFont.defaultBold(-1));
 			cbarray.add(checkbox);
 			termandcheckboxmap.put(checkboxtext, checkbox);
 		}
@@ -138,10 +136,7 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 		}
 		return sortedarray.length;
 	}
-	
-	
-	
-	
+
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if (o == markallbox) {
@@ -155,9 +150,7 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 			}
 			try {
 				extractor.visualize(extractor.primeextraction(), false);
-			} catch (OWLException e1) {
-				e1.printStackTrace();
-			} catch (IOException e1) {
+			} catch (OWLException | IOException e1) {
 				e1.printStackTrace();
 			}
 			// Add the item listener back
@@ -170,7 +163,6 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 		}
 	}
 
-
 	public void mouseClicked(MouseEvent arg0) {
 		if(arg0.getSource() == expandcontractbutton || (arg0.getClickCount()==2 && arg0.getSource()==titlelabel)){
 			scroller.setVisible(!scroller.isVisible());
@@ -178,7 +170,6 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 			extractor.validate();
 		}
 	}
-
 
 	public void mouseEntered(MouseEvent arg0) {
 		if(arg0.getSource() == expandcontractbutton){
@@ -193,7 +184,6 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 			expandcontractbutton.setContentAreaFilled(false);
 		}
 	}
-
 
 	public void mousePressed(MouseEvent arg0) {}
 

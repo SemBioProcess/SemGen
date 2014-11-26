@@ -8,11 +8,13 @@
 package semgen.webservices.KEGG;
 
 public class PathwayElement  implements java.io.Serializable {
-    private int element_id;
+	private static final long serialVersionUID = 1L;
 
-    private java.lang.String type;
+	private int element_id;
 
-    private java.lang.String[] names;
+    private String type;
+
+    private String[] names;
 
     private int[] components;
 
@@ -21,8 +23,8 @@ public class PathwayElement  implements java.io.Serializable {
 
     public PathwayElement(
            int element_id,
-           java.lang.String type,
-           java.lang.String[] names,
+           String type,
+           String[] names,
            int[] components) {
            this.element_id = element_id;
            this.type = type;
@@ -56,7 +58,7 @@ public class PathwayElement  implements java.io.Serializable {
      * 
      * @return type
      */
-    public java.lang.String getType() {
+    public String getType() {
         return type;
     }
 
@@ -66,7 +68,7 @@ public class PathwayElement  implements java.io.Serializable {
      * 
      * @param type
      */
-    public void setType(java.lang.String type) {
+    public void setType(String type) {
         this.type = type;
     }
 
@@ -76,7 +78,7 @@ public class PathwayElement  implements java.io.Serializable {
      * 
      * @return names
      */
-    public java.lang.String[] getNames() {
+    public String[] getNames() {
         return names;
     }
 
@@ -86,7 +88,7 @@ public class PathwayElement  implements java.io.Serializable {
      * 
      * @param names
      */
-    public void setNames(java.lang.String[] names) {
+    public void setNames(String[] names) {
         this.names = names;
     }
 
@@ -110,11 +112,10 @@ public class PathwayElement  implements java.io.Serializable {
         this.components = components;
     }
 
-    private java.lang.Object __equalsCalc = null;
-    public synchronized boolean equals(java.lang.Object obj) {
+    private Object __equalsCalc = null;
+    public synchronized boolean equals(Object obj) {
         if (!(obj instanceof PathwayElement)) return false;
         PathwayElement other = (PathwayElement) obj;
-        if (obj == null) return false;
         if (this == obj) return true;
         if (__equalsCalc != null) {
             return (__equalsCalc == obj);
@@ -151,7 +152,7 @@ public class PathwayElement  implements java.io.Serializable {
             for (int i=0;
                  i<java.lang.reflect.Array.getLength(getNames());
                  i++) {
-                java.lang.Object obj = java.lang.reflect.Array.get(getNames(), i);
+                Object obj = java.lang.reflect.Array.get(getNames(), i);
                 if (obj != null &&
                     !obj.getClass().isArray()) {
                     _hashCode += obj.hashCode();
@@ -162,7 +163,7 @@ public class PathwayElement  implements java.io.Serializable {
             for (int i=0;
                  i<java.lang.reflect.Array.getLength(getComponents());
                  i++) {
-                java.lang.Object obj = java.lang.reflect.Array.get(getComponents(), i);
+                Object obj = java.lang.reflect.Array.get(getComponents(), i);
                 if (obj != null &&
                     !obj.getClass().isArray()) {
                     _hashCode += obj.hashCode();
@@ -216,8 +217,8 @@ public class PathwayElement  implements java.io.Serializable {
      * Get Custom Serializer
      */
     public static org.apache.axis.encoding.Serializer getSerializer(
-           java.lang.String mechType, 
-           java.lang.Class _javaType,  
+           String mechType, 
+           Class<?> _javaType,  
            javax.xml.namespace.QName _xmlType) {
         return 
           new  org.apache.axis.encoding.ser.BeanSerializer(
@@ -228,8 +229,8 @@ public class PathwayElement  implements java.io.Serializable {
      * Get Custom Deserializer
      */
     public static org.apache.axis.encoding.Deserializer getDeserializer(
-           java.lang.String mechType, 
-           java.lang.Class _javaType,  
+           String mechType, 
+           Class<?> _javaType,  
            javax.xml.namespace.QName _xmlType) {
         return 
           new  org.apache.axis.encoding.ser.BeanDeserializer(

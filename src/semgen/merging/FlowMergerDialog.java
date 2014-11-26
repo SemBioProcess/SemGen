@@ -1,89 +1,53 @@
 package semgen.merging;
 
-
-
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Set;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
+
 import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntology;
 
-import semgen.SemGenGUI;
-import semgen.SemGenScrollPane;
+import semgen.utilities.SemGenIcon;
+import semgen.utilities.uicomponent.SemGenDialog;
+import semgen.utilities.uicomponent.SemGenScrollPane;
 import semsim.SemSimConstants;
 import semsim.owl.SemSimOWLFactory;
 
+public class FlowMergerDialog extends SemGenDialog implements
+		PropertyChangeListener, ActionListener{
 
-
-
-
-public class FlowMergerDialog extends JDialog implements
-		PropertyChangeListener, ActionListener, ItemListener {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 7845342502406090947L;
 	public JOptionPane optionPane;
-	public JTextField mantextfield;
-	public JTextArea area;
-	public JPanel mainpanel;
-	public JLabel displabel;
-	public String cdwd;
-	public String newcdwd;
-	public File file1;
-	public File file2;
-	public JComboBox box;
-	public String[] selections;
-	public Boolean process;
+	public JPanel mainpanel = new JPanel();
 	public String disp;
-	public Set<String> flowdepsfromdiscarded;
-	public OWLOntology discardedont;
 	public OWLOntology keptont;
-	public Hashtable<String, Set<String>> dispandsetofadds;
-	public Merger merger;
 	public SemGenScrollPane scrollpane;
-	public JButton questionbutton;
-
-	ImageIcon question = SemGenGUI.createImageIcon("icons/questionicon.gif");
+	public JButton questionbutton = new JButton(SemGenIcon.questionicon);
 
 	public FlowMergerDialog(String disp, Set<String> flowdepsfromdiscarded,
-			OWLOntology discardedont, OWLOntology keptont, Merger merger) {
-		// this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+			OWLOntology discardedont, OWLOntology keptont) {
+		super("");
 		this.disp = disp;
-		this.flowdepsfromdiscarded = flowdepsfromdiscarded;
-		this.discardedont = discardedont;
 		this.keptont = keptont;
-		this.merger = merger;
 
-		mainpanel = new JPanel();
 		mainpanel.setLayout(new BoxLayout(mainpanel, BoxLayout.Y_AXIS));
-		questionbutton = new JButton(question);
 		questionbutton.addActionListener(this);
 		questionbutton.setBorderPainted(false);
 		questionbutton.setContentAreaFilled(false);
@@ -96,7 +60,6 @@ public class FlowMergerDialog extends JDialog implements
 						.getIRIfragment(flowdep).replace(
 								"_dependency", ""));
 				flowbutton.setName(flowdep.replace("_dependency", ""));
-				// flowbutton.setBorderPainted(false);
 				flowbutton.setRolloverEnabled(true);
 				flowbutton.setForeground(Color.blue);
 				flowbutton.addActionListener(this);
@@ -148,7 +111,6 @@ public class FlowMergerDialog extends JDialog implements
 				x.printStackTrace();
 			}
 		}
-		setModal(true);
 		this.setPreferredSize(new Dimension(550, 600));
 		this.setTitle("Possible altertions to "
 				+ SemSimOWLFactory.getIRIfragment(disp)
@@ -165,9 +127,7 @@ public class FlowMergerDialog extends JDialog implements
 
 		setContentPane(optionPane);
 
-		this.pack();
-		this.setLocationRelativeTo(SemGenGUI.desktop);
-		this.setVisible(true);
+		showDialog();
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -176,7 +136,7 @@ public class FlowMergerDialog extends JDialog implements
 		if (o instanceof JButton && o != questionbutton) {
 			JButton button = (JButton) o;
 			// FIX ME!
-			String[] anns = null; //OWLMethods.getAllAnnotationsForCodeword(discardedont, button.getName());
+			String[] anns = { "" };
 			Object[] panestuff = new Object[] {
 					new JLabel("Composite annotation: " + anns[0]),
 					new JLabel("Singular annotation: " + anns[1]),
@@ -187,7 +147,7 @@ public class FlowMergerDialog extends JDialog implements
 		if (o == questionbutton) {
 			try {
 				// FIX ME!
-				String[] anns = null; //OWLMethods.getAllAnnotationsForCodeword(keptont, disp);
+				String[] anns = null;
 				JOptionPane.showMessageDialog(this,
 								"SemGen uses the semantics of model codewords to identify\n"
 										+ "conservation equations that may need to be extended to account for\n"
@@ -207,64 +167,50 @@ public class FlowMergerDialog extends JDialog implements
 										+ "  Human readable definition: "
 										+ anns[2] + "\n\n");
 
-			} catch (HeadlessException e1) {
-				e1.printStackTrace();
-			} catch (OWLException e1) {
+			} catch (HeadlessException  | OWLException e1) {
 				e1.printStackTrace();
 			}
 		}
-
 	}
 
 	public void propertyChange(PropertyChangeEvent e) {
-		Set<String> setofadds = new HashSet<String>();
-		dispandsetofadds = new Hashtable<String, Set<String>>();
-		String value = optionPane.getValue().toString();
-		Set<Boolean> choicesmade = new HashSet<Boolean>();
-		if (value == "OK") {
-			Component[] components = mainpanel.getComponents();
-			for (int x = 0; x < components.length; x++) {
-				if (components[x] instanceof JPanel) {
-					JPanel cpanel = (JPanel) components[x];
-					Component[] innercomp = cpanel.getComponents();
-					String flowtomerge = "";
-					Boolean somethingselected = false;
-					for (int y = 0; y < innercomp.length; y++) {
-						if (innercomp[y] instanceof JButton) {
-							JButton cbutton = (JButton) innercomp[y];
-							flowtomerge = cbutton.getText();
-						}
-						if (innercomp[y] instanceof JRadioButton) {
-							JRadioButton button = (JRadioButton) innercomp[y];
-							if (button.isSelected()) {
-								somethingselected = true;
-								if (!button.getText().equals("Ignore")) {
-									setofadds.add(" " + button.getText() + " "
-											+ flowtomerge);
+		if (e.getPropertyName()=="value") {
+			Set<String> setofadds = new HashSet<String>();
+			String value = optionPane.getValue().toString();
+			Set<Boolean> choicesmade = new HashSet<Boolean>();
+			if (value == "OK") {
+				Component[] components = mainpanel.getComponents();
+				for (int x = 0; x < components.length; x++) {
+					if (components[x] instanceof JPanel) {
+						JPanel cpanel = (JPanel) components[x];
+						Component[] innercomp = cpanel.getComponents();
+						String flowtomerge = "";
+						Boolean somethingselected = false;
+						for (int y = 0; y < innercomp.length; y++) {
+							if (innercomp[y] instanceof JButton) {
+								JButton cbutton = (JButton) innercomp[y];
+								flowtomerge = cbutton.getText();
+							}
+							if (innercomp[y] instanceof JRadioButton) {
+								JRadioButton button = (JRadioButton) innercomp[y];
+								if (button.isSelected()) {
+									somethingselected = true;
+									if (!button.getText().equals("Ignore")) {
+										setofadds.add(" " + button.getText() + " "
+												+ flowtomerge);
+									}
 								}
 							}
 						}
+						choicesmade.add(somethingselected);
 					}
-					choicesmade.add(somethingselected);
+				}
+				if (choicesmade.contains(false)) {
+					optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+					return;
 				}
 			}
-			if (!choicesmade.contains(false)) {
-				// optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-				if (setofadds.size() > 0) {
-					merger.dispandsetofadds.put(disp, setofadds);
-				}
-				setVisible(false);
-			} else {
-				optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-			}
+			dispose();
 		}
-		if (value == "Cancel") {
-			setVisible(false);
-			merger.contmerging = false;
-		}
-	}
-
-	public void itemStateChanged(ItemEvent arg0) {
-
 	}
 }
