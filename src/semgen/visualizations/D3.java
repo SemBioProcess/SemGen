@@ -154,8 +154,7 @@ public class D3 {
 	 */
 	public enum VisualizationType
 	{
-		DirectedGraph,
-		DependencyWheel
+		DirectedGraph
 	}
 	
 	/**
