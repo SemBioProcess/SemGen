@@ -23,6 +23,10 @@ import semsim.model.computational.datastructures.MappableVariable;
 /**
  * Displays D3 visualizations of a SemSim model
  * 
+ * To add a new visualization:
+ * 1) Create a new html template in the resources folder
+ * 2) Add an entry in for the template in _visualizationTemplates
+ * 
  * @author Ryan
  *
  */
@@ -48,7 +52,6 @@ public class D3 {
 	static {
 		Map<VisualizationType, String> visualizationTemplates = new Hashtable<VisualizationType, String>();
 		visualizationTemplates.put(VisualizationType.DirectedGraph, "/resources/d3DirectedEdgesTemplate.html");
-		visualizationTemplates.put(VisualizationType.DependencyWheel, "/resources/d3DependencyWheelTemplate.html");
 		
 		// Save an immutable map
 		_visualizationTemplates = Collections.unmodifiableMap(visualizationTemplates);
@@ -72,24 +75,34 @@ public class D3 {
 	 * @param visualizationType - type of d3 visualization
 	 * @throws IOException
 	 */
-	public void visualize(VisualizationType visualizationType) throws IOException
+	public boolean visualize(VisualizationType visualizationType)
 	{
-		// Load the html
-		String visualizationTemplateFilePath = _visualizationTemplates.get(visualizationType);
-		InputStream htmlInputStream = D3.class.getResourceAsStream(visualizationTemplateFilePath);
-		String html = IOUtils.toString(htmlInputStream);
+		try
+		{
+			// Load the html
+			String visualizationTemplateFilePath = _visualizationTemplates.get(visualizationType);
+			InputStream htmlInputStream = D3.class.getResourceAsStream(visualizationTemplateFilePath);
+			String html = IOUtils.toString(htmlInputStream);
+			
+			// Embed the SemSim model graph json in the html
+			html = html.replace(GraphJsonReplaceString, _graphJson);
+			
+			// Create a temporary html file containing the new html
+			File tempHtmlFile = File.createTempFile("d3visualization-" + visualizationType, ".html");
+			BufferedWriter bw = new BufferedWriter(new FileWriter(tempHtmlFile));
+		    bw.write(html);
+		    bw.close();
+			
+		    // Open the temp html file
+		    Desktop.getDesktop().browse(tempHtmlFile.toURI());
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+			return false;
+		}
 		
-		// Embed the SemSim model graph json in the html
-		html = html.replace(GraphJsonReplaceString, _graphJson);
-		
-		// Create a temporary html file containing the new html
-		File tempHtmlFile = File.createTempFile("d3visualization-" + visualizationType, ".html");
-		BufferedWriter bw = new BufferedWriter(new FileWriter(tempHtmlFile));
-	    bw.write(html);
-	    bw.close();
-		
-	    // Open the temp html file
-	    Desktop.getDesktop().browse(tempHtmlFile.toURI());
+		return true;
 	}
 	
 	/**
