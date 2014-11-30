@@ -646,7 +646,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		}
 	}
 	
-	public boolean checkFile(URI uri) {
+	public boolean fileURIMatches(URI uri) {
 		return (uri.toString().equals(sourcefile.toURI().toString()));
 	}
 

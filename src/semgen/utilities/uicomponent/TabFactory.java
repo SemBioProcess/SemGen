@@ -1,3 +1,8 @@
+/** 
+ * Abstract class for defining a tab factory. Extending classes are required to
+ * specify a class extending workbench.
+ * */
+
 package semgen.utilities.uicomponent;
 
 import semgen.GlobalActions;

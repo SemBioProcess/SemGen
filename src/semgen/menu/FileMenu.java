@@ -31,11 +31,11 @@ public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 		getAccessibleContext().setAccessibleDescription("Create new files, opening existing files, import raw model code, etc.");
 
 		// File menu items
-		fileitemnew = formatMenuItem(fileitemnew,"New",KeyEvent.VK_N,false,true);
+		fileitemnew = formatMenuItem(fileitemnew,"New",KeyEvent.VK_N,true,true);
 		add(fileitemnew);
 		fileitemclose = formatMenuItem(fileitemclose,"Close",KeyEvent.VK_W,true,true);
 		add(fileitemclose);
-		fileitemsave = formatMenuItem(fileitemsave,"Save",KeyEvent.VK_S,true,true);
+		fileitemsave = formatMenuItem(fileitemsave,"Save",KeyEvent.VK_S,false,true);
 		add(new JSeparator());
 		add(fileitemsave);
 		fileitemsaveas = formatMenuItem(fileitemsaveas,"Save As",null,true,true);

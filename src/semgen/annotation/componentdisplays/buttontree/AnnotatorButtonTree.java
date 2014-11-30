@@ -158,7 +158,8 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 	        	panel.add(label);
 	        	return panel;
 	        }
-	        else return new JLabel("???");
+	        else 
+	        	return new JLabel("???");
 	    }
 	}
 	
@@ -174,12 +175,10 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 	}
 	
 	public void valueChanged(TreeSelectionEvent arg0) {
-		
 	    DefaultMutableTreeNode node = (DefaultMutableTreeNode) this.getLastSelectedPathComponent();
 
-	    if (node == null)
-	    	//Nothing is selected.     
-	    return;
+	    if (node == null) //Nothing is selected.   
+	    	return;
 
 	    Object nodeObj = node.getUserObject();
 	    

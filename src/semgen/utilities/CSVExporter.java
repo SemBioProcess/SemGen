@@ -56,11 +56,11 @@ public class CSVExporter {
 		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("", new String[]{"csv"}); 
 		if (filec!=null) {
 			Scanner scanner = new Scanner(datatosave);
-			PrintWriter outfile;
 			try {
-				outfile = new PrintWriter(new FileWriter(new File(savelocation)));
+				PrintWriter outfile = new PrintWriter(new FileWriter(new File(savelocation)));
+				String nextline;
 				while (scanner.hasNextLine()) {
-					String nextline = scanner.nextLine();
+					nextline = scanner.nextLine();
 					outfile.println(nextline);
 				}
 				outfile.close();

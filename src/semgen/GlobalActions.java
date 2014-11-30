@@ -4,7 +4,11 @@ import java.io.File;
 import java.util.Observable;
 
 import semgen.utilities.uicomponent.SemGenTab;
-
+/**
+ * Class for notifying application level classes of requests and events 
+ * from elsewhere in SemGen. Contains methods for passing a file
+ * to classes outside of calling the object's ancestor hierarchy.
+ */
 public class GlobalActions extends Observable {
 	public static enum appactions { QUIT, TABCHANGED, TABCLOSED, SAVED, 
 		ANNOTATE, ANNOTATEEXISTING, EXTRACT, EXTRACTEXISTING, MERGE }
@@ -32,20 +36,15 @@ public class GlobalActions extends Observable {
 		notifyObservers(appactions.ANNOTATE);
 	}
 	
-	public void NewExtractorTab() {
-		setChanged();
-		notifyObservers(appactions.EXTRACT);
-	}
-
-	public void NewMergerTab() {
-		setChanged();
-		notifyObservers(appactions.MERGE);
-	}
-	
 	public void NewAnnotatorTab(File obj) {
 		seed = obj;
 		setChanged();
 		notifyObservers(appactions.ANNOTATEEXISTING);
+	}
+		
+	public void NewExtractorTab() {
+		setChanged();
+		notifyObservers(appactions.EXTRACT);
 	}
 	
 	public void NewExtractorTab(File obj) {
@@ -53,13 +52,21 @@ public class GlobalActions extends Observable {
 		setChanged();
 		notifyObservers(appactions.EXTRACTEXISTING);
 	}
-
+	
+	public void NewMergerTab() {
+		setChanged();
+		notifyObservers(appactions.MERGE);
+	}
+	
 	public void NewMergerTab(File obj) {
 		seed = obj;
 		setChanged();
 		notifyObservers(appactions.MERGE);
 	}
 
+	/** 
+	 * Retrieve the stored file and reset the pointer.
+	 */
 	public File getSeed() {
 		File file = seed;
 		seed = null;

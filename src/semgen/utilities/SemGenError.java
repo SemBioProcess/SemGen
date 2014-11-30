@@ -1,3 +1,7 @@
+/** 
+ * Class for commonly used error messages and a method for producing messages with consistent settings
+ */
+
 package semgen.utilities;
 
 import java.io.File;

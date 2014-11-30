@@ -15,7 +15,10 @@ import java.util.Observable;
 
 import semgen.utilities.file.SemGenOpenFileChooser;
 import semsim.ResourcesManager;
-
+/**
+ * Structure for storing and retrieving application settings during run time. A copy can
+ * be made for an object's private use.
+ */
 public class SemGenSettings extends Observable{
 	public static SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmssSSSZ");
 	public static SimpleDateFormat sdflog = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");

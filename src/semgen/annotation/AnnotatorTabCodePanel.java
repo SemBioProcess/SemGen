@@ -60,7 +60,6 @@ public class AnnotatorTabCodePanel extends SemGenTextArea {
 			if (modelloc.startsWith("http://")) {
 				SemGenProgressBar progframe = new SemGenProgressBar("Retrieving legacy code...", false);
 
-				Boolean online = true;
 				modelfile = new File(modelloc);
 	
 				URL url = new URL(modelloc);
@@ -68,6 +67,8 @@ public class AnnotatorTabCodePanel extends SemGenTextArea {
 				HttpURLConnection httpcon = (HttpURLConnection) url.openConnection();
 				httpcon.setReadTimeout(60000);
 				httpcon.setRequestMethod("HEAD");
+				
+				Boolean online = true;
 				try {
 					httpcon.getResponseCode();
 				} catch (Exception e) {
