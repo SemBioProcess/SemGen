@@ -12,10 +12,12 @@ import javax.swing.JOptionPane;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
 import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import semgen.GlobalActions;
 import semgen.SemGen;
+import semgen.annotation.routines.AnnotationCopier;
 import semgen.utilities.CSVExporter;
 import semgen.utilities.SemGenError;
 import semgen.utilities.Workbench;
@@ -178,10 +180,17 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		setModelSaved(false);
 	}
 	
+	public void importModelAnnotations() {
+		AnnotationCopier copier = new AnnotationCopier(semsimmodel);
+		if (copier.doCopy()) {
+			setChanged();
+			notifyObservers();
+		}
+	}
+	
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		setModelSaved(false);
 	}
-
 
 }

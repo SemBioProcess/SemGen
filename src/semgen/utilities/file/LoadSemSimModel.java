@@ -98,7 +98,7 @@ public class LoadSemSimModel {
 	}
 	
 	public static SemSimModel loadSemSimOWL(File file) throws Exception {
-		return new SemSimOWLreader().readFromFile(file);
+		return new SemSimOWLreader(file).readFromFile();
 	}
 	
 

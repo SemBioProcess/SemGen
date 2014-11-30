@@ -29,8 +29,7 @@ public class ReferenceTermNamer {
 	public static final String BioPortalSNOMEDCTnamespace = "http://purl.bioontology.org/ontology/SNOMEDCT/";
 	public static final String BioPortalECGontNamespace = "http://www.cvrgrid.org/files/ECGOntologyv1.owl#";
 	
-	public static Map<String,String[]> getNamesForOntologyTermsInModel(SemSimModel model, Map<String, String[]> map, boolean online){
-		
+	public static Map<String,String[]> getNamesForOntologyTermsInModel(SemSimModel model, Map<String, String[]> map, boolean online){	
 		Map<String,String[]> URInameMap = null;
 		if(map==null)
 			URInameMap = new HashMap<String,String[]>();
@@ -90,9 +89,7 @@ public class ReferenceTermNamer {
 		return URInameMap;
 	}
 	
-	
 	private static String getNameFromURI(URI uri) {
-		
 		String uristring= uri.toString();
 		String id = null;
 		if(uristring.startsWith("urn:miriam:")) id = uristring.substring(uristring.lastIndexOf(":")+1);

@@ -35,10 +35,12 @@ public class Extractor {
 	 */
 	public static SemSimModel extract(SemSimModel srcmodel, 
 			Map<DataStructure, Set<? extends DataStructure>> allinds2keep) throws CloneNotSupportedException {
-		DataStructure[] indarray = {};
-		indarray = (DataStructure[]) allinds2keep.keySet().toArray(indarray);
-
 		SemSimModel extractedmodel = new SemSimModel();
+		
+		// Copy over all the model-level information
+		for(Annotation modann : srcmodel.getAnnotations()){
+			extractedmodel.addAnnotation(modann.clone());
+		}
 		
 		for(DataStructure soldom : srcmodel.getSolutionDomains()){
 			extractedmodel.addDataStructure(soldom.clone());
@@ -56,24 +58,7 @@ public class Extractor {
 			}
 		}
 		
-		// if all codewords in a component (submodel) are being preserved, preserve the component, but not if 
-		// the component is what's being extracted
-		for(Submodel sub : srcmodel.getSubmodels()){
-			Set<DataStructure> dsset = sub.getAssociatedDataStructures();
-			if(allinds2keep.keySet().containsAll(dsset) && !dsset.isEmpty()){
-				Submodel newsub = extractedmodel.addSubmodel(sub.clone());
-				for(Submodel subsub : newsub.getSubmodels()){
-					if(!allinds2keep.keySet().containsAll(subsub.getAssociatedDataStructures())){
-						newsub.removeSubmodel(subsub);
-					}
-				}
-			}
-		}
-		
-		// Copy over all the model-level information
-		for(Annotation modann : srcmodel.getAnnotations()){
-			extractedmodel.addAnnotation(modann.clone());
-		}
+		extractSubModels(srcmodel, extractedmodel, allinds2keep);
 		
 		// Copy the physical entity and process info into the model-level entity and process sets
 		Set<PhysicalEntity> ents = new HashSet<PhysicalEntity>();
@@ -96,5 +81,22 @@ public class Extractor {
 		extractedmodel.setPhysicalProcesses(procs);
 		
 		return extractedmodel;
+	}
+	
+	// if all codewords in a component (submodel) are being preserved, preserve the component, but not if 
+	// the component is what's being extracted
+	private static void extractSubModels(SemSimModel srcmodel, SemSimModel extractedmodel,
+			Map<DataStructure, Set<? extends DataStructure>> allinds2keep) throws CloneNotSupportedException {
+		for(Submodel sub : srcmodel.getSubmodels()){
+			Set<DataStructure> dsset = sub.getAssociatedDataStructures();
+			if(allinds2keep.keySet().containsAll(dsset) && !dsset.isEmpty()){
+				Submodel newsub = extractedmodel.addSubmodel(sub.clone());
+				for(Submodel subsub : newsub.getSubmodels()){
+					if(!allinds2keep.keySet().containsAll(subsub.getAssociatedDataStructures())){
+						newsub.removeSubmodel(subsub);
+					}
+				}
+			}
+		}
 	}
 }

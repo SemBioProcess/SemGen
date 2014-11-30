@@ -682,6 +682,15 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			return;
+		}
+		if (!isSaved()) {
+			refreshAnnotatableElements();
+			try {
+				annotationObjectAction(focusbutton);
+			} catch (BadLocationException | IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

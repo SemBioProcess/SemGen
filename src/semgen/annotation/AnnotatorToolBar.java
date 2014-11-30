@@ -179,11 +179,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		}
 		
 		if (o == annotateitemcopy) {
-				try {
-					new AnnotationCopier(anntab);
-				} catch (OWLException | CloneNotSupportedException e1) {
-					e1.printStackTrace();
-				}
+			workbench.importModelAnnotations();
 		}
 		
 		if (o == annotateitemaddrefterm) {

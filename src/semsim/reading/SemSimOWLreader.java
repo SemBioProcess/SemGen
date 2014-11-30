@@ -20,7 +20,6 @@ import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotation;
 import org.semanticweb.owlapi.model.OWLAnnotationProperty;
-import org.semanticweb.owlapi.model.OWLAnonymousIndividual;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
@@ -32,6 +31,7 @@ import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import semsim.CellMLconstants;
@@ -60,17 +60,25 @@ public class SemSimOWLreader {
 	private SemSimModel semsimmodel;
 	private OWLDataFactory factory;
 	private Map<URI, PhysicalModelComponent> URIandPMCmap = new HashMap<URI, PhysicalModelComponent>();
-	private XMLOutputter xmloutputter = new XMLOutputter();
+	private OWLOntology ont;
+	private File srcfile;
 	
-	
-	public SemSimModel readFromFile(File file) throws OWLException, CloneNotSupportedException{
-		
+	public SemSimOWLreader(File file) {
+		srcfile = file;
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		factory = manager.getOWLDataFactory();
-		OWLOntology ont = manager.loadOntologyFromOntologyDocument(file);
-		
 		semsimmodel = new SemSimModel();
-		semsimmodel.setName(file.getName().substring(0, file.getName().lastIndexOf(".")));
+		semsimmodel.setName(srcfile.getName().substring(0, srcfile.getName().lastIndexOf(".")));
+		
+		try {
+			ont = manager.loadOntologyFromOntologyDocument(file);
+		} catch (OWLOntologyCreationException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public SemSimModel readFromFile() throws OWLException, CloneNotSupportedException{	
+		if (verifyModel()) return semsimmodel;
 		
 		// Get model-level annotations
 		for(OWLAnnotation ann : ont.getAnnotations()){
@@ -81,22 +89,9 @@ public class SemSimOWLreader {
 					
 					semsimmodel.addAnnotation(new Annotation(SemSimConstants.getRelationFromURI(propertyuri), val.getLiteral()));
 				}
-				else if(ann.getValue() instanceof IRI){}
-				else if(ann.getValue() instanceof OWLAnonymousIndividual){}
 			}
 		}
-		OWLClass topclass = factory.getOWLClass(IRI.create(SemSimConstants.SEMSIM_NAMESPACE + "SemSim_component"));
-		if(!ont.getClassesInSignature().contains(topclass)){
-			semsimmodel.addError("Source file does not appear to be a valid SemSim model");
-			return semsimmodel;
-		}
-		// Test if the model actually has data structures
-		if(SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimConstants.DATA_STRUCTURE_CLASS_URI.toString()).isEmpty()
-				&& SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimConstants.PHYSICAL_PROPERTY_CLASS_URI.toString()).isEmpty()){
-			semsimmodel.addError("No data structures or physical properties in model");
-			return semsimmodel;
-		}
-		
+	
 		// Get data structures and add them to model - Decimals, Integers, MMLchoice
 		for(String dsind : SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimConstants.DATA_STRUCTURE_CLASS_URI.toString())){
 			String name = SemSimOWLFactory.getURIdecodedFragmentFromIRI(dsind);
@@ -273,12 +268,6 @@ public class SemSimOWLreader {
 			// set the data structure's solution domain
 			String soldom = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, dsind, SemSimConstants.HAS_SOLUTION_DOMAIN_URI.toString());
 			semsimmodel.getDataStructure(name).setSolutionDomain(semsimmodel.getDataStructure(SemSimOWLFactory.getURIdecodedFragmentFromIRI(soldom)));
-			
-			// Also set the CellML-type mappings
-//			for(String mapds : SemSimOWLFactory.getIndObjectProperty(ont, dsind, SemSimConstants.MAPPED_TO_URI.toString())){
-//				MappableVariable mapvar = (MappableVariable) semsimmodel.getDataStructure(SemSimOWLFactory.getURIdecodedOWLEntityNameFromIRI(mapds));
-//				((MappableVariable)ds).addVariableMapping(mapvar);
-//			}
 		}
 		
 		// Collect the relational constraints
@@ -351,8 +340,7 @@ public class SemSimOWLreader {
 		URI[] customclasses = new URI[]{SemSimConstants.CUSTOM_PHYSICAL_ENTITY_CLASS_URI, SemSimConstants.CUSTOM_PHYSICAL_PROCESS_CLASS_URI};
 		
 		// For the two custom physical model classes...
-		for(URI customclassuri : customclasses){
-			
+		for(URI customclassuri : customclasses){			
 			// For each custom term in them...
 			for(String custstring : SemSimOWLFactory.getIndividualsAsStrings(ont, customclassuri.toString())){
 				OWLNamedIndividual custind = factory.getOWLNamedIndividual(IRI.create(custstring));
@@ -437,6 +425,7 @@ public class SemSimOWLreader {
 								
 								Element varmathml = CellMLreader.getMathMLforOutputVariable(localvarname, mathmllist);
 								if(varmathml!=null){
+									XMLOutputter xmloutputter = new XMLOutputter();
 									theds.getComputation().setMathML(xmloutputter.outputString(varmathml));
 									CellMLreader.whiteBoxFunctionalSubmodelEquations(varmathml, subname, semsimmodel, theds);
 								}
@@ -455,7 +444,7 @@ public class SemSimOWLreader {
 			else{
 				String referencename = getStringValueFromAnnotatedDataPropertyAxiom(ont, sub, SemSimConstants.IMPORTED_FROM_URI,
 						importval, SemSimConstants.REFERENCE_NAME_OF_IMPORT_URI);
-				sssubmodel = SemSimComponentImporter.importFunctionalSubmodel(file, semsimmodel, subname, referencename, importval);
+				sssubmodel = SemSimComponentImporter.importFunctionalSubmodel(srcfile, semsimmodel, subname, referencename, importval);
 			}
 			
 			// Store refersTo annotations, if present (accommodate older models that used nonCompositeAnnotationRefersTo)
@@ -498,6 +487,22 @@ public class SemSimOWLreader {
 		return semsimmodel;
 	}
 	
+	/**
+	 * Verify the model is a valid SemSimModel
+	 */
+	private boolean verifyModel() throws OWLException {
+		OWLClass topclass = factory.getOWLClass(IRI.create(SemSimConstants.SEMSIM_NAMESPACE + "SemSim_component"));
+		if(!ont.getClassesInSignature().contains(topclass)){
+			semsimmodel.addError("Source file does not appear to be a valid SemSim model");
+		}
+		
+		// Test if the model actually has data structures
+		if(SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimConstants.DATA_STRUCTURE_CLASS_URI.toString()).isEmpty()
+				&& SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimConstants.PHYSICAL_PROPERTY_CLASS_URI.toString()).isEmpty()){
+			semsimmodel.addError("No data structures or physical properties in model");
+		}
+		return (semsimmodel.getErrors().size() > 0);
+	}
 	
 	// Get the URI of the object of a triple that uses a structural relation as its predicate
 	private CompositePhysicalEntity getURIofObjectofPhysicalEntityStructuralRelation(OWLOntology ont, CompositePhysicalEntity cpe, 
@@ -605,7 +610,6 @@ public class SemSimOWLreader {
 		return vals;
 	}
 	
-	
 	// Get the exponent for a unit factor
 	private double getUnitFactorExponent(OWLOntology ont, String derivunit, String prop, String baseunit){
 		double val = 1.0;
@@ -665,4 +669,5 @@ public class SemSimOWLreader {
 		}
 		return val;
 	}
+
 }

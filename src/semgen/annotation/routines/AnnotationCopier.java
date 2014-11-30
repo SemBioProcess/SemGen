@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.semanticweb.owlapi.model.OWLException;
-
 import semgen.annotation.AnnotatorTab;
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenTask;
@@ -28,14 +26,39 @@ import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.Submodel;
 
 public class AnnotationCopier {
+	private SemSimModel targetmod, sourcemod;
+	private boolean valid = true;
 
-	private AnnotatorTab targetann;
-	private SemSimModel sourcemod;
-
-	public AnnotationCopier(AnnotatorTab targetann) throws OWLException, CloneNotSupportedException {
-		this.targetann = targetann;
-		CopierTask task = new CopierTask();
-		task.execute();
+	public AnnotationCopier(SemSimModel target)  {
+		targetmod = target;
+		chooseSourceModel();
+	}
+	
+	private void chooseSourceModel(){
+		SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select SemSim model containing annotations");
+		File sourcefile = sgc.getSelectedFile();
+		if (sourcefile == null) {
+			valid = false;
+			return;
+		}
+		
+		sourcemod = LoadSemSimModel.loadSemSimModelFromFile(sourcefile, false);
+		if (sourcemod.getNumErrors() != 0) {
+			for(String err : sourcemod.getErrors()){
+				System.err.println(err);
+			}
+			SemGenError.showError("There were errors associated with the selected model. Not copying.", "Copy Model Failed");
+			valid=false;
+		}
+	}
+	
+	public boolean doCopy() {
+		if (isValid()) {
+			CopierTask task = new CopierTask();
+			task.execute();
+			return task.changesMade();
+		}
+		return false;
 	}
 	
 	public static Set<MappableVariable> copyAllAnnotationsToMappedVariables(AnnotatorTab ann, MappableVariable ds){
@@ -45,8 +68,8 @@ public class AnnotationCopier {
 			System.out.println("Copying to " + otherds.getName());
 			if(!otherds.isImportedViaSubmodel()){
 				ann.setModelSaved(false);
-				ds.copyDescription(otherds);
-				copySingularAnnotations(ds, otherds);
+				otherds.copyDescription(ds);
+				otherds.copySingularAnnotations(ds);
 				copyCompositeAnnotation(ann.semsimmodel, ann.semsimmodel, ds, otherds);
 			}
 		}
@@ -55,46 +78,32 @@ public class AnnotationCopier {
 	
 	// Copy all annotations
 	class CopierTask extends SemGenTask {
-		public File sourcefile;
+		private boolean changed = false;
+		
 		public CopierTask(){
-			SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select SemSim model containing annotations");
-			sourcefile = sgc.getSelectedFile();
+			progframe = new SemGenProgressBar("Loading model...",true);
 		}
 		@Override
 		protected Void doInBackground() throws Exception {
-			if (sourcefile==null) return null;
-			progframe = new SemGenProgressBar("Loading model...",true);
-			sourcemod = LoadSemSimModel.loadSemSimModelFromFile(sourcefile, false);
+			progframe.updateMessage("Copying...");
+			for(DataStructure ds : targetmod.getDataStructures()){
+				if(sourcemod.containsDataStructure(ds.getName())){
+					changed = true;
+					DataStructure srcds = sourcemod.getDataStructure(ds.getName());
+					
+					ds.copyDescription(srcds);
+					ds.copySingularAnnotations(srcds);
+					copyCompositeAnnotation(targetmod, sourcemod, srcds, ds);
+					
+				} // otherwise no matching data structure found in source model
+			} // end of data structure loop
+			if (copySubmodels(targetmod)) changed = true;
 			
-			if (sourcemod.getNumErrors() == 0) {
-				progframe.updateMessage("Copying...");
-				SemSimModel targetmod = targetann.semsimmodel;
-				boolean changemadetodatastructures = false;
-				for(DataStructure ds : targetmod.getDataStructures()){
-					if(sourcemod.containsDataStructure(ds.getName())){
-						changemadetodatastructures = true;
-						DataStructure srcds = sourcemod.getDataStructure(ds.getName());
-						
-						ds.copyDescription(srcds);
-						copySingularAnnotations(srcds, ds);
-						copyCompositeAnnotation(targetmod, sourcemod, srcds, ds);
-						
-					} // otherwise no matching data structure found in source model
-				} // end of data structure loop
-				boolean changemadetosubmodels = copySubmodels(targetmod);
-				targetann.setModelSaved(!(changemadetodatastructures || changemadetosubmodels));
-				targetann.refreshAnnotatableElements();
-				
-				targetann.annotationObjectAction(targetann.focusbutton);
-			}
-			else{
-				for(String err : sourcemod.getErrors()){
-					System.err.println(err);
-				}
-				SemGenError.showError("There were errors associated with the selected model. Not copying.", "Copy Model Failed");
-				
-			}
 			return null;
+		}
+		
+		public boolean changesMade() {
+			return changed;
 		}
 	}
 	
@@ -198,13 +207,6 @@ public class AnnotationCopier {
 		return changemadetosubmodels;
 	}
 	
-	public static void copySingularAnnotations(DataStructure srcds, DataStructure ds){
-		ds.removeAllReferenceAnnotations();
-		for(ReferenceOntologyAnnotation ann : srcds.getAllReferenceOntologyAnnotations()){
-			ds.addReferenceOntologyAnnotation(ann.getRelation(), ann.getReferenceURI(), ann.getValueDescription());
-		}
-	}
-	
 	public static void copyCompositeAnnotation(SemSimModel targetmod, SemSimModel sourcemod, DataStructure srcds, DataStructure ds) {		
 		if(srcds.getPhysicalProperty().hasRefersToAnnotation()){
 			ds.getPhysicalProperty().removeAllReferenceAnnotations();
@@ -249,5 +251,8 @@ public class AnnotationCopier {
 	    return returnset;
 	}
 	
+	public boolean isValid() {
+		return valid;
+	}
 	
 }

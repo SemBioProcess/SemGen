@@ -363,4 +363,11 @@ public class DataStructure extends ComputationalModelComponent implements Annota
 		}
 		else return SemSimConstants.UNKNOWN_PROPERTY_TYPE;
 	}
+	
+	public void copySingularAnnotations(DataStructure srcds){
+		removeAllReferenceAnnotations();
+		for(ReferenceOntologyAnnotation ann : srcds.getAllReferenceOntologyAnnotations()){
+			addReferenceOntologyAnnotation(ann.getRelation(), ann.getReferenceURI(), ann.getValueDescription());
+		}
+	}
 }
