@@ -1,3 +1,8 @@
+/** 
+ * Extends SwingWorker by automatically providing a SemGen Progress Bar
+ * and adding some methods for using it.
+ */
+
 package semgen.utilities;
 
 import java.beans.PropertyChangeEvent;

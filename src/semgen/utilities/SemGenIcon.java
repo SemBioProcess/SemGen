@@ -1,3 +1,7 @@
+/** 
+ * Class for creating all icons used by SemGen
+ * */
+
 package semgen.utilities;
 
 import javax.swing.ImageIcon;
@@ -39,7 +43,7 @@ public class SemGenIcon {
 	public static final ImageIcon annotatemodelicon = createImageIcon("icons/annotatemodel.gif");
 	
 	/** Returns an ImageIcon, or null if the path was invalid. */
-	public static ImageIcon createImageIcon(String path) {
+	private static ImageIcon createImageIcon(String path) {
 		java.net.URL imgURL = SemGenGUI.class.getResource(path);
 		if (imgURL == null) {
 			System.err.println("Couldn't find file: " + path);

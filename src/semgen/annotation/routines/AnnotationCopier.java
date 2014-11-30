@@ -6,11 +6,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.swing.JOptionPane;
-
 import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.annotation.AnnotatorTab;
+import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenTask;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.file.SemGenOpenFileChooser;
@@ -92,7 +91,7 @@ public class AnnotationCopier {
 				for(String err : sourcemod.getErrors()){
 					System.err.println(err);
 				}
-				JOptionPane.showMessageDialog(null, "There were errors associated with the selected model. Not copying.");
+				SemGenError.showError("There were errors associated with the selected model. Not copying.", "Copy Model Failed");
 				
 			}
 			return null;
@@ -206,8 +205,7 @@ public class AnnotationCopier {
 		}
 	}
 	
-	public static void copyCompositeAnnotation(SemSimModel targetmod, SemSimModel sourcemod, DataStructure srcds, DataStructure ds) {
-		
+	public static void copyCompositeAnnotation(SemSimModel targetmod, SemSimModel sourcemod, DataStructure srcds, DataStructure ds) {		
 		if(srcds.getPhysicalProperty().hasRefersToAnnotation()){
 			ds.getPhysicalProperty().removeAllReferenceAnnotations();
 			ReferenceOntologyAnnotation roa = srcds.getPhysicalProperty().getFirstRefersToReferenceOntologyAnnotation();
@@ -233,8 +231,7 @@ public class AnnotationCopier {
 		}
 	}
 	
-	public static Set<MappableVariable> getAllMappedVariables(MappableVariable rootds, MappableVariable ds, Set<MappableVariable> runningset){
-		
+	public static Set<MappableVariable> getAllMappedVariables(MappableVariable rootds, MappableVariable ds, Set<MappableVariable> runningset){		
 		Set<MappableVariable> allmappedvars  = new HashSet<MappableVariable>();
 		allmappedvars.addAll(ds.getMappedTo());
 		allmappedvars.addAll(ds.getMappedFrom());

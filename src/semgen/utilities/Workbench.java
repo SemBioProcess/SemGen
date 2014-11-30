@@ -1,3 +1,9 @@
+/**
+ * A Workbench in SemGen is a class where all operations dealing with a SemSim model are performed.
+ * Rather then directly acting on a model, a task uses a workbench and its helper classes as an 
+ * intermediary. 
+ */
+
 package semgen.utilities;
 
 import java.io.File;
@@ -10,13 +16,15 @@ public abstract class Workbench extends Observable{
 		return false;
 	}
 	
-	public abstract void setModelSaved(boolean val);
+	public abstract File saveModel();
+	
+	public abstract File saveModelAs();
+	
+	public abstract void setModelSaved(boolean val);	
 	
 	public abstract String getCurrentModelName();
 	
 	public abstract String getModelSourceFile();
 	
-	public abstract File saveModel();
-	
-	public abstract File saveModelAs();
+
 }

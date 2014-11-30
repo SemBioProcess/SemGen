@@ -1,6 +1,10 @@
+/**
+ * This factory produces annotator workbenches.
+ */
 package semgen.annotation.workbench;
 
 import java.io.File;
+import java.net.URI;
 
 import semgen.utilities.WorkbenchFactory;
 import semgen.utilities.file.LoadSemSimModel;
@@ -39,4 +43,8 @@ public class AnnotatorFactory extends WorkbenchFactory<AnnotatorWorkbench>{
 		
 		return true;
 	}	
+	
+	public URI getFileURI() {
+		return sourcefile.toURI();
+	}
 }

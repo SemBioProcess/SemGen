@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.net.URI;
 import java.util.Observer;
 
 import javax.swing.BorderFactory;
@@ -71,6 +72,10 @@ public abstract class SemGenTab extends JPanel {
 	abstract public void requestSaveAs();
 	
 	abstract public void addObservertoWorkbench(Observer obs);
+	
+	public boolean fileURIMatches(URI uri) {
+		return false;
+	}
 	
 	public class TabTitle extends JPanel implements MouseListener {
 		private static final long serialVersionUID = 1L;

@@ -1,3 +1,9 @@
+/** 
+ * Abstract class for defining a workbench factory. Extending classes are required to
+ * specify a class extending workbench.
+ * */
+
+
 package semgen.utilities;
 
 import java.beans.PropertyChangeListener;
@@ -32,12 +38,6 @@ public abstract class WorkbenchFactory<T extends Workbench>  implements Runnable
 		return status;
 	}
 	
-	public boolean isValid() {
-		return cont;
-	}
-	protected void abort() {
-		cont = false;
-	}
 	
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
        pcs.addPropertyChangeListener(listener);
@@ -52,4 +52,16 @@ public abstract class WorkbenchFactory<T extends Workbench>  implements Runnable
         status = newValue;
         pcs.firePropertyChange("status", oldValue, newValue);
     }
+    
+    public boolean isValid() {
+		return cont;
+	}
+	
+	/** 
+	 * Stop signal for while loop
+	 */
+	protected void abort() {
+		cont = false;
+	}
+	
 }

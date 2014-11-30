@@ -61,7 +61,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
 
 public class MergerTab extends SemGenTab implements ActionListener, MouseListener {
 
@@ -274,7 +273,7 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 			else{
 				FileToMergeLabel templabel = new FileToMergeLabel(file.getAbsolutePath());
 				templabel.addMouseListener(this);
-				templabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
+				templabel.setFont(SemGenFont.defaultPlain());
 				if (filelistpanel.getComponentCount() == 0) templabel.setForeground(Color.blue);
 				else if (filelistpanel.getComponentCount() == 1) templabel.setForeground(Color.red);
 				filelistpanel.add(templabel);
