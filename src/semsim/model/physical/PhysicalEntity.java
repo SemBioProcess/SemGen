@@ -1,5 +1,10 @@
 package semsim.model.physical;
 
-public class PhysicalEntity extends PhysicalModelComponent{
+public abstract class PhysicalEntity extends PhysicalModelComponent{
+
+	@Override
+	public String getComponentTypeasString() {
+		return "entity";
+	}
 
 }

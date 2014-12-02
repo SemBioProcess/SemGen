@@ -1,6 +1,7 @@
-package semsim.model.physical;
+package semsim.model.physical.object;
 
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.physical.PhysicalModelComponent;
 
 public class PhysicalProperty extends PhysicalModelComponent{
 	
@@ -22,5 +23,10 @@ public class PhysicalProperty extends PhysicalModelComponent{
 
 	public PhysicalModelComponent getPhysicalPropertyOf() {
 		return physicalPropertyOf;
+	}
+
+	@Override
+	public String getComponentTypeasString() {
+		return "property";
 	}
 }

@@ -1,8 +1,9 @@
-package semsim.model.physical;
+package semsim.model.physical.object;
 
 import java.net.URI;
 
 import semsim.SemSimConstants;
+import semsim.model.physical.PhysicalEntity;
 
 public class ReferencePhysicalEntity extends PhysicalEntity{
 	

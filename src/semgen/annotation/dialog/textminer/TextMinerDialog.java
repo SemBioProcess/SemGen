@@ -49,8 +49,8 @@ import semgen.utilities.uicomponent.SemGenDialog;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semgen.utilities.uicomponent.SemGenTextArea;
 import semsim.SemSimConstants;
-import semsim.model.physical.ReferencePhysicalEntity;
-import semsim.model.physical.ReferencePhysicalProcess;
+import semsim.model.physical.object.ReferencePhysicalEntity;
+import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.webservices.BioPortalAnnotatorClient;
 import semsim.webservices.BioPortalConstants;
 

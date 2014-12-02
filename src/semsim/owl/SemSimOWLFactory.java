@@ -49,8 +49,8 @@ import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 import semsim.SemSimConstants;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.physical.PhysicalProperty;
 import semsim.model.physical.Submodel;
+import semsim.model.physical.object.PhysicalProperty;
 
 import java.util.Map;
 import java.util.Set;
@@ -166,17 +166,16 @@ public class SemSimOWLFactory {
 	}
 	
 	public static void setIndObjectPropertyWithAnnotations(OWLOntology ont, String subject,
-			String object, String rel, String invrel, Set<OWLAnnotation> annsforrel,
-			Set<OWLAnnotation> annsforinvrel, OWLOntologyManager manager)
-			throws OWLException{
-			AddAxiom addAxiom = new AddAxiom(ont, createIndObjectPropertyAxiom(ont, subject, object, rel, annsforrel, manager));
-			manager.applyChange(addAxiom);
-			OWLAxiom invaxiom = createIndObjectPropertyAxiom(ont, object, subject, invrel, annsforinvrel, manager);
-			
-			if(!invrel.equals("") && invrel!=null){
-				AddAxiom addinvAxiom = new AddAxiom(ont, invaxiom);
-				manager.applyChange(addinvAxiom);
-			}
+		String object, String rel, String invrel, Set<OWLAnnotation> annsforrel, OWLOntologyManager manager)
+		throws OWLException{
+		AddAxiom addAxiom = new AddAxiom(ont, createIndObjectPropertyAxiom(ont, subject, object, rel, annsforrel, manager));
+		manager.applyChange(addAxiom);
+		OWLAxiom invaxiom = createIndObjectPropertyAxiom(ont, object, subject, invrel, null, manager);
+		
+		if(!invrel.equals("") && invrel!=null){
+			AddAxiom addinvAxiom = new AddAxiom(ont, invaxiom);
+			manager.applyChange(addinvAxiom);
+		}
 	}
 
 	public static OWLAxiom createIndDatatypePropertyAxiom(OWLOntology ont, String subject, String rel,
@@ -295,31 +294,29 @@ public class SemSimOWLFactory {
 	
 	// CHECK WHETHER AN INDIVIDUAL WITH A GIVEN IRI IS IN AN ONTOLOGY
 	public static boolean indExistsInClass(String indtocheck, String parent, OWLOntology ontology) throws OWLException {
-		boolean indpresent = false;
 		OWLClass parentclass = factory.getOWLClass(IRI.create(parent));
 		Set<OWLIndividual> inds = parentclass.getIndividuals(ontology);
 		for (OWLIndividual ind : inds) {
 			if (ind.asOWLNamedIndividual().getIRI().toString().equals(indtocheck)) {
-				indpresent = true;
+				return true;
 			}
 		}
-		return indpresent;
+		return false;
 	}
 
 	// CHECK WHETHER AN INDIVIDUAL WITH A GIVEN IRI IS IN AN ONTOLOGY
 	public static boolean indExistsInTree(String indtocheck, String parent, OWLOntology ontology) throws OWLException {
-		boolean indpresent = false;
 		Set<String> allsubclasses = SemSimOWLFactory.getAllSubclasses(ontology, parent, true);
 		for (String oneclass : allsubclasses) {
 			OWLClass oneowlclass = factory.getOWLClass(IRI.create(oneclass));
 			Set<OWLIndividual> inds = oneowlclass.getIndividuals(ontology);
 			for (OWLIndividual ind : inds) {
 				if (ind.asOWLNamedIndividual().getIRI().toString().equals(indtocheck)) {
-					indpresent = true;
+					return true;
 				}
 			}
 		}
-		return indpresent;
+		return false;
 	}
 
 	public static Hashtable<String,String> getReferencedIRIs(OWLOntology ontology,String parent) throws OWLException {
@@ -409,7 +406,7 @@ public class SemSimOWLFactory {
 	}
 
 	public static void replaceRDFcomment(String oldannotation, String newannotation, String uri, OWLOntology ontology, 
-			OWLOntologyManager manager) {
+		OWLOntologyManager manager) {
 		try {
 			OWLAnnotation targetann = null;
 			OWLNamedIndividual _real = factory.getOWLNamedIndividual(IRI.create(uri));
@@ -499,43 +496,35 @@ public class SemSimOWLFactory {
 	}
 
 	public static String getIRIfragment(String uri) {
-		String result = "";
+		String result = uri;
 		if (!uri.equals("")) {
 			if (uri.contains("#")) 
 				result = uri.substring(uri.lastIndexOf("#") + 1, uri.length());
+			else if (uri.contains("/"))
+				result = uri.substring(uri.lastIndexOf("/") + 1, uri.length());
 			else if (uri.startsWith("http://identifiers.org"))
 				result = uri.substring(uri.lastIndexOf("/") + 1, uri.length());
 			else if (uri.startsWith("urn:miriam:"))
 				result = uri.substring(uri.lastIndexOf(":") + 1, uri.length());
-			else if (uri.contains("/"))
-				result = uri.substring(uri.lastIndexOf("/") + 1, uri.length());
-			else
-				result = uri;
 		}
 		return result;
 	}
 	
-	
 	public static String getURIdecodedFragmentFromIRI(String uri){
 		return URIdecoding(getIRIfragment(uri));
 	}
-
 	
 	public static String getNamespaceFromIRI(String uri) {
 		if (uri.contains("#")) {
 			return uri.substring(0, uri.indexOf("#") + 1);
 		} 
-		else {
-			if (uri.startsWith("http://purl.obolibrary.org/obo/")) { // To deal with CHEBI and Mouse Adult Gross Anatomy Ontology
-				return uri.substring(0, uri.lastIndexOf("_"));
-			} 
-			else if(uri.startsWith("urn:miriam:")){
-				return uri.substring(0, uri.lastIndexOf(":") + 1);
-			}
-			else {
-				return uri.substring(0, uri.lastIndexOf("/") + 1);
-			}
+		if (uri.startsWith("http://purl.obolibrary.org/obo/")) { // To deal with CHEBI and Mouse Adult Gross Anatomy Ontology
+			return uri.substring(0, uri.lastIndexOf("_"));
+		} 
+		if(uri.startsWith("urn:miriam:")){
+			return uri.substring(0, uri.lastIndexOf(":") + 1);
 		}
+		return uri.substring(0, uri.lastIndexOf("/") + 1);
 	}
 
 	// REPLACING SPECIAL CHARACTERS THAT SHOULDN'T BE USED IN A IRI

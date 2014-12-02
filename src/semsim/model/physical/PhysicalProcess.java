@@ -3,12 +3,10 @@ package semsim.model.physical;
 import java.util.HashSet;
 import java.util.Set;
 
-public class PhysicalProcess extends PhysicalModelComponent{
-
+public abstract class PhysicalProcess extends PhysicalModelComponent{
 	private Set<PhysicalEntity> sources = new HashSet<PhysicalEntity>();
 	private Set<PhysicalEntity> sinks = new HashSet<PhysicalEntity>();;
-	private Set<PhysicalEntity> mediators = new HashSet<PhysicalEntity>();
-	
+	private Set<PhysicalEntity> mediators = new HashSet<PhysicalEntity>();	
 	
 	public void addSource(PhysicalEntity entity){
 		sources.add(entity);
@@ -85,5 +83,10 @@ public class PhysicalProcess extends PhysicalModelComponent{
 		allpents.addAll(getSinkPhysicalEntities());
 		allpents.addAll(getMediatorPhysicalEntities());
 		return allpents;
+	}
+
+	@Override
+	public String getComponentTypeasString() {
+		return "process";
 	}
 }

@@ -3,7 +3,7 @@ package semsim.model;
 /**
  * A SemSim model element. A {@link SemSimModel} extends this class as well.
  */
-public class SemSimComponent {
+public abstract class SemSimComponent {
 	
 	private String name = new String("");
 	private String description = new String("");
@@ -43,7 +43,7 @@ public class SemSimComponent {
 
 	public void copyDescription(SemSimComponent srcds){
 		// Copy free-text description
-		setDescription(srcds.getDescription());
+		setDescription(new String(srcds.getDescription()));
 	}
 	
 	/**

@@ -44,15 +44,15 @@ import semsim.model.SemSimComponent;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
-import semsim.model.physical.CompositePhysicalEntity;
-import semsim.model.physical.CustomPhysicalEntity;
-import semsim.model.physical.CustomPhysicalProcess;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
-import semsim.model.physical.PhysicalProperty;
-import semsim.model.physical.ReferencePhysicalEntity;
 import semsim.model.physical.Submodel;
+import semsim.model.physical.object.CompositePhysicalEntity;
+import semsim.model.physical.object.CustomPhysicalEntity;
+import semsim.model.physical.object.CustomPhysicalProcess;
+import semsim.model.physical.object.PhysicalProperty;
+import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.writing.CaseInsensitiveComparator;
 
 public class SemSimComponentAnnotationPanel extends JPanel implements ActionListener{

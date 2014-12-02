@@ -10,5 +10,5 @@ import semsim.model.SemSimComponent;
  * i.e. the "real world" phenomena that the model simulates
  * (PhysicalEntities, PhysicalProcesses, etc.).
  */
-public class ComputationalModelComponent extends SemSimComponent{
+public abstract class ComputationalModelComponent extends SemSimComponent{
 }

@@ -30,7 +30,7 @@ import semsim.model.computational.datastructures.Decimal;
 import semsim.model.computational.datastructures.MMLchoice;
 import semsim.model.computational.datastructures.SemSimInteger;
 import semsim.model.computational.units.UnitOfMeasurement;
-import semsim.model.physical.PhysicalProperty;
+import semsim.model.physical.object.PhysicalProperty;
 
 public class MMLreader2 extends MMLreader {
 	

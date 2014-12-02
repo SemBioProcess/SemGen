@@ -23,13 +23,10 @@ import semsim.owl.SemSimOWLFactory;
 
 
 public class BioPortalSearcher {
-	public String currentonturistring;
 	public Hashtable<String,String> rdflabelsanduris = new Hashtable<String,String>();
 	public Hashtable<String,String> classnamesandshortconceptids = new Hashtable<String,String>();
 	
 	public void search(String text, String bioportalID, int exactmatch) throws IOException, JDOMException{
-		SAXBuilder builder = new SAXBuilder();
-		Document doc = null;
 		text = text.replace(" ", "+");
 		
 		boolean exactmatchbool = false;
@@ -46,7 +43,7 @@ public class BioPortalSearcher {
 		yc.setRequestProperty("Accept", "application/xml");
 		yc.setReadTimeout(60000); // Timeout after a minute
 		BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-		doc = builder.build(in);
+		Document doc = new SAXBuilder().build(in);
 		in.close();
 
 		// Process XML results from BioPortal REST service
@@ -75,7 +72,6 @@ public class BioPortalSearcher {
 	    System.out.println("HERE2");
 
 		try {
-
 			System.out.println("Looking up " + id);
 			URL url = new URL(
 					"http://data.bioontology.org/ontologies/" + bioportalontID + "/classes/" + id);
@@ -90,16 +86,14 @@ public class BioPortalSearcher {
 	        conn.setRequestProperty("Accept", "application/json");
 			conn.setReadTimeout(60000); // Timeout after a minute
 
-	        rd = new BufferedReader(
-	                new InputStreamReader(conn.getInputStream()));
+	        rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 	        while ((line = rd.readLine()) != null) {
 	            result += line;
 	        }
 	        rd.close();
 	        
 	        // process resulting input stream
-	        JsonNode root = null;
-            root = SemSimConstants.JSON_OBJECT_MAPPER.readTree(result);
+            JsonNode root = SemSimConstants.JSON_OBJECT_MAPPER.readTree(result);
             JsonNode labelnode = root.get("prefLabel");
             if(labelnode!=null)
             	label = labelnode.textValue();

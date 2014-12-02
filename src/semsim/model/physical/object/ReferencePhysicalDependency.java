@@ -1,4 +1,4 @@
-package semsim.model.physical;
+package semsim.model.physical.object;
 
 import java.net.URI;
 

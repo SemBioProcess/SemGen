@@ -7,8 +7,7 @@ import semsim.model.SemSimComponent;
 /** SemSimRelations describe the relationship that an annotated SemSimComponent
  * has with an annotation value. Examples include SemSimConstants.REFERS_TO_RELATION
  * and SemSimConstants.PART_OF_RELATION */
-public class SemSimRelation extends SemSimComponent{
-	
+public class SemSimRelation extends SemSimComponent{	
 	private URI uri;
 	
 	/** Class constructor (generally you'd want to use the relations in SemSimConstants,
@@ -16,7 +15,7 @@ public class SemSimRelation extends SemSimComponent{
 	 * @param description A free-text description of the relation
 	 * @param relationURI A URI for the relation */
 	public SemSimRelation(String description, URI relationURI) {
-		String name = null;
+		String name;
 		if(relationURI.getFragment()==null){
 			name = relationURI.toString();
 			name = name.substring(name.lastIndexOf("/")+1, name.length());

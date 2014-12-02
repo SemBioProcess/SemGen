@@ -26,18 +26,18 @@ import semsim.model.computational.datastructures.Decimal;
 import semsim.model.computational.datastructures.MMLchoice;
 import semsim.model.computational.datastructures.SemSimInteger;
 import semsim.model.computational.units.UnitOfMeasurement;
-import semsim.model.physical.CompositePhysicalEntity;
-import semsim.model.physical.CustomPhysicalEntity;
-import semsim.model.physical.CustomPhysicalProcess;
-import semsim.model.physical.FunctionalSubmodel;
-import semsim.model.physical.PhysicalDependency;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
-import semsim.model.physical.ReferencePhysicalEntity;
-import semsim.model.physical.ReferencePhysicalProcess;
-import semsim.model.physical.PhysicalProperty;
 import semsim.model.physical.Submodel;
+import semsim.model.physical.object.CompositePhysicalEntity;
+import semsim.model.physical.object.CustomPhysicalEntity;
+import semsim.model.physical.object.CustomPhysicalProcess;
+import semsim.model.physical.object.FunctionalSubmodel;
+import semsim.model.physical.object.PhysicalDependency;
+import semsim.model.physical.object.PhysicalProperty;
+import semsim.model.physical.object.ReferencePhysicalEntity;
+import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.writing.CellMLwriter;
 import semsim.writing.SemSimOWLwriter;
 
@@ -866,7 +866,7 @@ public class SemSimModel extends SemSimComponent implements Cloneable, Annotatab
 	 * @throws OWLException
 	 */
 	public OWLOntology toOWLOntology() throws OWLException{
-		return new SemSimOWLwriter().createOWLOntologyFromModel(this);
+		return new SemSimOWLwriter(this).createOWLOntologyFromModel();
 	}
 	
 	
@@ -876,7 +876,7 @@ public class SemSimModel extends SemSimComponent implements Cloneable, Annotatab
 	 * @throws OWLException
 	 */
 	public void writeSemSimOWLFile(File destination) throws OWLException{
-		new SemSimOWLwriter().writeToFile(this, destination);
+		new SemSimOWLwriter(this).writeToFile(destination);
 	}
 	
 	
@@ -886,7 +886,7 @@ public class SemSimModel extends SemSimComponent implements Cloneable, Annotatab
 	 * @throws OWLException
 	 */
 	public void writeSemSimOWLFile(URI uri) throws OWLException{
-		new SemSimOWLwriter().writeToFile(this, uri);
+		new SemSimOWLwriter(this).writeToFile(uri);
 	}
 	
 	

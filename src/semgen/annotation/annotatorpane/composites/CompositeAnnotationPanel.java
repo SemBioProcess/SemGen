@@ -24,10 +24,10 @@ import semsim.SemSimConstants;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.StructuralRelation;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.physical.CompositePhysicalEntity;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
+import semsim.model.physical.object.CompositePhysicalEntity;
 
 public class CompositeAnnotationPanel extends Box implements ActionListener{
 	private static final long serialVersionUID = -3955122899870904199L;

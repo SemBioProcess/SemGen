@@ -8,7 +8,7 @@ import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
-import semsim.model.physical.FunctionalSubmodel;
+import semsim.model.physical.object.FunctionalSubmodel;
 
 public class SemSimComponentImporter {
 /**

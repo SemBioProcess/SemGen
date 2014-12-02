@@ -4,14 +4,10 @@ package semsim;
 import java.net.URI;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.Set;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import semsim.model.SemSimComponent;
 import semsim.model.annotation.SemSimRelation;
 import semsim.model.annotation.StructuralRelation;
 import semsim.model.computational.Computation;
@@ -22,13 +18,13 @@ import semsim.model.computational.datastructures.MMLchoice;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.datastructures.SemSimInteger;
 import semsim.model.computational.units.UnitOfMeasurement;
-import semsim.model.physical.CompositePhysicalEntity;
-import semsim.model.physical.CustomPhysicalEntity;
-import semsim.model.physical.CustomPhysicalProcess;
-import semsim.model.physical.PhysicalDependency;
-import semsim.model.physical.PhysicalProperty;
-import semsim.model.physical.ReferencePhysicalEntity;
-import semsim.model.physical.ReferencePhysicalProcess;
+import semsim.model.physical.object.CompositePhysicalEntity;
+import semsim.model.physical.object.CustomPhysicalEntity;
+import semsim.model.physical.object.CustomPhysicalProcess;
+import semsim.model.physical.object.PhysicalDependency;
+import semsim.model.physical.object.PhysicalProperty;
+import semsim.model.physical.object.ReferencePhysicalEntity;
+import semsim.model.physical.object.ReferencePhysicalProcess;
 
 /**
  * A set of constants for working with SemSim models
@@ -89,7 +85,6 @@ public class SemSimConstants {
 	};
 	
 	// URIs
-	public static final URI SEMSIM_COMPONENT_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "SemSim_component");
 	public static final URI COMPUTATION_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Computation");
 	public static final URI RELATIONAL_CONSTRAINT_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Relational_constraint");
 	public static final URI DATA_STRUCTURE_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Data_structure");
@@ -145,7 +140,6 @@ public class SemSimConstants {
 	public static final URI REFERENCE_NAME_OF_IMPORT_URI = URI.create(SEMSIM_NAMESPACE + "referenceNameOfImport");
 	public static final URI LEGACY_CODE_LOCATION_URI = URI.create(SEMSIM_NAMESPACE + "legacyCodeURI");
 	public static final URI SEMSIM_VERSION_URI = URI.create(SEMSIM_NAMESPACE + "SemSimVersion");
-	public static final URI HAS_CUSTOM_DECLARATION_URI = URI.create(SEMSIM_NAMESPACE + "hasCustomDeclaration");
 	public static final URI HAS_UNIT_URI = URI.create(SEMSIM_NAMESPACE + "hasUnit");
 	public static final URI UNIT_FOR_URI = URI.create(SEMSIM_NAMESPACE + "unitFor");
 	public static final URI HAS_ASSOCIATED_DATA_STRUCTURE_URI = URI.create(SEMSIM_NAMESPACE + "hasAssociatedDataStructure");
@@ -155,7 +149,6 @@ public class SemSimConstants {
 	public static final URI HAS_PART_URI = URI.create(RO_NAMESPACE + "has_part");
 	public static final URI CONTAINED_IN_URI = URI.create(RO_NAMESPACE + "contained_in");
 	public static final URI CONTAINS_URI = URI.create(RO_NAMESPACE + "contains");
-	public static final URI AdjacentToURI = URI.create(SEMSIM_NAMESPACE + "adjacentTo");
 	public static final URI HAS_INDEX_ENTITY_URI = URI.create(SEMSIM_NAMESPACE + "hasIndexEntity");
 	public static final URI INDEX_ENTITY_FOR_URI = URI.create(SEMSIM_NAMESPACE + "isIndexEntityFor");
 	public static final URI INCLUDES_SUBMODEL_URI = URI.create(SEMSIM_NAMESPACE + "includesSubmodel");
@@ -223,7 +216,6 @@ public class SemSimConstants {
 	public static final SemSimRelation HAS_MATHML_RELATION = new SemSimRelation("MathML for computation", HAS_MATHML_URI);
 	public static final SemSimRelation HAS_COMPUTATIONAL_COMPONENT_RELATION = new SemSimRelation("physical property has a data structure as a computational component", HAS_COMPUTATATIONAL_COMPONENT_URI);
 
-	public static final SemSimRelation CUSTOM_DECLARATION_RELATION = new SemSimRelation("unit has custom declaration in simulation code", HAS_CUSTOM_DECLARATION_URI);
 	public static final SemSimRelation IMPORTED_FROM_RELATION = new SemSimRelation("a unit or submodel is imported from a local file or remote location", IMPORTED_FROM_URI);
 	public static final SemSimRelation IS_OUTPUT_FOR_RELATION = new SemSimRelation("data structure is output for computation", IS_OUTPUT_FOR_URI);
 	public static final SemSimRelation IS_INPUT_FOR_RELATION = new SemSimRelation("data structure is input for computation", IS_INPUT_FOR_URI);
@@ -235,7 +227,6 @@ public class SemSimConstants {
 	public static final SemSimRelation HAS_SOLUTION_DOMAIN_RELATION = new SemSimRelation("data structure solved within solution domain", HAS_SOLUTION_DOMAIN_URI);
 	public static final SemSimRelation IS_COMPUTATIONAL_COMPONENT_FOR_RELATION = new SemSimRelation("data structure is computational component for some property", IS_COMPUTATIONAL_COMPONENT_FOR_URI);
 	public static final SemSimRelation HAS_START_VALUE_RELATION = new SemSimRelation("data structure has initial value", HAS_START_VALUE_URI);
-	public static final SemSimRelation HasInputRelation = new SemSimRelation("computation has data structure as input", HAS_INPUT_URI);
 	public static final SemSimRelation HAS_OUTPUT_RELATION = new SemSimRelation("computation has data structure as output", HAS_OUTPUT_URI);
 	public static final SemSimRelation HAS_UNIT_RELATION = new SemSimRelation("physical property has physical units", HAS_UNIT_URI);
 	public static final SemSimRelation HAS_UNIT_FACTOR_RELATION = new SemSimRelation("a unit is derived from some other unit", HAS_UNIT_FACTOR_URI);
@@ -248,14 +239,9 @@ public class SemSimConstants {
 	public static final StructuralRelation HAS_PART_RELATION = new StructuralRelation("physical entity has part other physical entity", HAS_PART_URI);
 	public static final StructuralRelation CONTAINED_IN_RELATION = new StructuralRelation("physical entity is contained in another physical entity", CONTAINED_IN_URI);
 	public static final StructuralRelation CONTAINS_RELATION = new StructuralRelation("physical entity contains another physical entity", CONTAINS_URI);
-	public static final StructuralRelation AdjacentToRelation = new StructuralRelation("physical entity is adjacent to another physical entity", AdjacentToURI);
 	public static final SemSimRelation HAS_SOURCE_RELATION = new SemSimRelation("physical process has thermodynamic source entity", HAS_SOURCE_URI);
 	public static final SemSimRelation HAS_SINK_RELATION = new SemSimRelation("physical process has thermodynamic sink entity", HAS_SINK_URI);
 	public static final SemSimRelation HAS_MEDIATOR_RELATION = new SemSimRelation("physical process has thermodynamic mediator entity", HAS_MEDIATOR_URI);
-	public static final SemSimRelation HAS_SOURCE_PARTICPANT_RELATION = new SemSimRelation("physical process has thermodynamic source participant", HAS_SOURCE_PARTICIPANT_URI);
-	public static final SemSimRelation HAS_SINK_PARTICIPANT_RELATION = new SemSimRelation("physical process has thermodynamic sink participant", HAS_SINK_PARTICIPANT_URI);
-	public static final SemSimRelation HAS_MEDIATOR_PARTICIPANT_RELATION = new SemSimRelation("physical process has thermodynamic mediator participant", HAS_MEDIATOR_PARTICIPANT_URI);
-	public static final SemSimRelation HAS_PHYSICAL_ENTITY_REFERENCE_RELATION = new SemSimRelation("process participant has physical entity reference", HAS_PHYSICAL_ENTITY_REFERENCE_URI);
 	public static final SemSimRelation INCLUDES_SUBMODEL_RELATION = new SemSimRelation("a submodel encompasses another submodel", INCLUDES_SUBMODEL_URI);
 	public static final SemSimRelation COMPUTATIONAL_REPRESENTATION_OF_RELATION = new SemSimRelation("a data structure or submodel represents something from the real world", COMPUTATIONAL_REPRESENTATION_OF_URI);
 	public static final SemSimRelation PROCESS_PARTICIPANT_MULTIPLIER_RELATION = new SemSimRelation("process participant has multiplier value (for stoichiometry, etc.)", HAS_MULTIPLIER_URI);
@@ -265,7 +251,6 @@ public class SemSimConstants {
 	public static final SemSimRelation UNIT_FACTOR_EXPONENT_RELATION = new SemSimRelation("the exponent applied to a unit factor", UNIT_FACTOR_EXPONENT_URI);
 	public static final SemSimRelation UNIT_FACTOR_FOR_RELATION = new SemSimRelation("a unit is used to derive another unit", UNIT_FACTOR_FOR_URI);
 	public static final SemSimRelation UNIT_FACTOR_PREFIX_RELATION = new SemSimRelation("the prefix applied to a unit factor", UNIT_FACTOR_PREFIX_URI);
-
 
 	public static final SemSimRelation HAS_NAME_RELATION = new SemSimRelation("semsim component has name", HAS_NAME_URI);
 	public static final SemSimRelation KEY_TERM_RELATION = new SemSimRelation("semsim model represents", KEY_TERM_URI);
@@ -278,7 +263,6 @@ public class SemSimConstants {
 	public static final SemSimRelation ANNOTATOR_CONTACT_INFO_RELATION = new SemSimRelation("who to contact about the annotations in the model", ANNOTATOR_CONTACT_INFO_URI);
 	public static final SemSimRelation MODEL_ID_RELATION = new SemSimRelation("the ID of the model from which the SemSim model was generated", MODEL_ID_URI);
 	public static final SemSimRelation MODEL_NAME_RELATION = new SemSimRelation("a human-readable name for the model", MODEL_NAME_URI);
-
 	
 	public static final String BIOPORTAL_API_KEY = "c4192e4b-88a8-4002-ad08-b4636c88df1a";
 	
@@ -287,17 +271,13 @@ public class SemSimConstants {
 	public static final int UNKNOWN_PROPERTY_TYPE = 0;
 	public static final int PROPERTY_OF_PHYSICAL_ENTITY = 1;
 	public static final int PROPERTY_OF_PHYSICAL_PROCESS = 2;
-	
-	public static final int NOT_ONLINE_ERROR = 0;
-	public static final int IO_ERROR = 2;
-	
+
 	public static final Map<String, String> ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP;
 	public static final Map<String, String> ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP;
 	public static final Map<Class<?>, URI> SEMSIM_BASE_CLASSES_AND_URIS;
 	public static final Map<URI, SemSimRelation> URIS_AND_SEMSIM_RELATIONS;
 	public static final Map<URI,URI> INVERSE_STRUCTURAL_RELATIONS_MAP;
 	public static final Map<String, Boolean> JSIM_UNITS_AND_PREFIXABLE_MAP;
-	public static final Set<String> JSIM_PREFIXES;
 	public static final Map<Integer, SemSimRelation> BIOLOGICAL_QUALIFIER_TYPES_AND_RELATIONS;
 	public static final Map<Integer, SemSimRelation> MODEL_QUALIFIER_TYPES_AND_RELATIONS;
 	
@@ -306,7 +286,6 @@ public class SemSimConstants {
 	static{
 		// SemSimBaseClassesAndURIs Map
         Map<Class<?>, URI> aMap = new HashMap<Class<?>,URI>();
-        aMap.put(SemSimComponent.class, SEMSIM_COMPONENT_CLASS_URI);
         aMap.put(Computation.class, COMPUTATION_CLASS_URI);
         aMap.put(RelationalConstraint.class, RELATIONAL_CONSTRAINT_CLASS_URI);
         aMap.put(DataStructure.class, DATA_STRUCTURE_CLASS_URI);
@@ -335,7 +314,6 @@ public class SemSimConstants {
 		aMap0.put(REFERS_TO_URI, REFERS_TO_RELATION);
 		aMap0.put(LEGACY_CODE_LOCATION_URI, LEGACY_CODE_LOCATION_RELATION);
 		aMap0.put(SEMSIM_VERSION_URI, SEMSIM_VERSION_RELATION);
-		aMap0.put(HAS_CUSTOM_DECLARATION_URI, CUSTOM_DECLARATION_RELATION);
 		aMap0.put(HAS_UNIT_URI, HAS_UNIT_RELATION);
 		aMap0.put(UNIT_FOR_URI, UNIT_FOR_RELATION);
 		aMap0.put(HAS_ASSOCIATED_DATA_STRUCTURE_URI, HAS_ASSOCIATED_DATA_STRUCTURE_RELATION);
@@ -608,31 +586,6 @@ public class SemSimConstants {
 		aMap3.put("gray", true);
 		aMap3.put("sievert", true);
 		JSIM_UNITS_AND_PREFIXABLE_MAP = Collections.unmodifiableMap(aMap3);
-		
-		// JsimPrefixes Map
-		Set<String> aSet = new HashSet<String>();
-		aSet.add("yotta"); 
-		aSet.add("zetta"); 
-		aSet.add("exa"); 
-		aSet.add("peta"); 
-		aSet.add("tera"); 
-		aSet.add("giga"); 
-		aSet.add("mega"); 
-		aSet.add("kilo"); 
-		aSet.add("hecto"); 
-		aSet.add("deka"); 
-		aSet.add("deca"); 
-		aSet.add("deci"); 
-		aSet.add("centi"); 
-		aSet.add("milli"); 
-		aSet.add("micro"); 
-		aSet.add("nano"); 
-		aSet.add("pico"); 
-		aSet.add("femto"); 
-		aSet.add("atto"); 
-		aSet.add("zepto"); 
-		aSet.add("yocto");
-		JSIM_PREFIXES = Collections.unmodifiableSet(aSet);
 		
 		// BiologicalQualifierTypesAndRelations Map
 		Map<Integer, SemSimRelation> aMap4 = new HashMap<Integer, SemSimRelation>();

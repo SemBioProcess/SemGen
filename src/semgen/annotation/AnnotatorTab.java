@@ -26,8 +26,8 @@ import semsim.model.Importable;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
-import semsim.model.physical.FunctionalSubmodel;
 import semsim.model.physical.Submodel;
+import semsim.model.physical.object.FunctionalSubmodel;
 
 import java.net.URI;
 import java.awt.*;
@@ -82,12 +82,11 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	public JButton removesubmodelbutton = new JButton(SemGenIcon.minusicon);
 	private AnnotatorToolBar toolbar;
 	
-	public int numcomponents;
 	public static int initwidth;
 	public static int initheight;
 	public String ontspref;
 	
-	AnnotatorWorkbench workbench;
+	private AnnotatorWorkbench workbench;
 
 	public SemSimModel semsimmodel;
 
@@ -377,7 +376,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	public void AlphabetizeAndSetSubmodels(){
 		int numsubshowing = updateSubmodelButtonTable();
 		submodelpanel.removeAll();
-		numcomponents = semsimmodel.getSubmodels().size();
+		int numcomponents = semsimmodel.getSubmodels().size();
 		
 		// First put all the codeword buttons in an array so they can be sorted
 		addPanelTitle("Sub-models ", numcomponents, numsubshowing, submodelscrollpane, "No sub-models found");

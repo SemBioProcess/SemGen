@@ -34,8 +34,8 @@ import semsim.model.SemSimComponent;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
-import semsim.model.physical.FunctionalSubmodel;
 import semsim.model.physical.Submodel;
+import semsim.model.physical.object.FunctionalSubmodel;
 import semsim.writing.CaseInsensitiveComparator;
 
 public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{

@@ -111,4 +111,9 @@ public class Submodel extends PhysicalModelComponent implements Cloneable, Impor
 	public void setParentImport(Importable parent) {
 		this.parentImport = parent;
 	}
+
+	@Override
+	public String getComponentTypeasString() {
+		return "submodel";
+	}
 }

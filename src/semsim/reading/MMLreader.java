@@ -31,7 +31,6 @@ public class MMLreader {
 	}
 	
 	public SemSimModel readFromFile(File file) throws JDOMException, IOException, Xcept, InterruptedException, OWLException {
-		
 		String fname = file.getName();
 		if (fname.endsWith(".mod")) srcType = ASModel.TEXT_MML;
 	    if (fname.endsWith(".xml")) srcType = ASModel.TEXT_XML;
@@ -42,7 +41,6 @@ public class MMLreader {
 		
 		semsimmodel = new SemSimModel();
 	    String srcText = UtilIO.readText(file);
-	    int destType = ASModel.TEXT_XMML;
 	    
 	    // create server
 	    NamedVal.NList soptions = new NamedVal.NList();
@@ -52,17 +50,15 @@ public class MMLreader {
 	
 	    // translate
 	    String xmlstring = null;
-	    try {xmlstring = server.translateModelText(srcType, destType, srcText, options);} 
+	    try {xmlstring = server.translateModelText(srcType, ASModel.TEXT_XMML, srcText, options);} 
 	    catch (Exception e) {
 	    	semsimmodel.addError("XMML parsing error - could not compile " + file.getName());
 	    	e.printStackTrace();
 	    	return semsimmodel;
 	    }
 	    
-		SAXBuilder builder = new SAXBuilder();
-		doc = new Document();
 		InputStream is = new ByteArrayInputStream(xmlstring.getBytes("UTF-8"));
-		doc = builder.build(is);
+		doc = new SAXBuilder().build(is);
 		
 		if(doc.hasRootElement()){
 			// If it's XMML version 2

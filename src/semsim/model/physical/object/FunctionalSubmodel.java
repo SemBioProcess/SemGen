@@ -1,4 +1,4 @@
-package semsim.model.physical;
+package semsim.model.physical.object;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,6 +6,7 @@ import java.util.Set;
 
 import semsim.model.computational.Computation;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.physical.Submodel;
 
 /**
  * Class created to represent CellML component constructs.

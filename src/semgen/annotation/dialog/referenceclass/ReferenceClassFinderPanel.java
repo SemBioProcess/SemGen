@@ -38,7 +38,7 @@ import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.ExternalURLButton;
 import semsim.Annotatable;
 import semsim.SemSimConstants;
-import semsim.model.physical.PhysicalProperty;
+import semsim.model.physical.object.PhysicalProperty;
 import semsim.webservices.BioPortalConstants;
 import semsim.webservices.BioPortalSearcher;
 import semsim.webservices.UniProtSearcher;

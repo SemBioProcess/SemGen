@@ -1,4 +1,6 @@
-package semsim.model.physical;
+package semsim.model.physical.object;
+
+import semsim.model.physical.PhysicalEntity;
 
 
 public class CustomPhysicalEntity extends PhysicalEntity{

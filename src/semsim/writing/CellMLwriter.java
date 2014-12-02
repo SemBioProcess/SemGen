@@ -41,9 +41,9 @@ import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
-import semsim.model.physical.FunctionalSubmodel;
-import semsim.model.physical.PhysicalProperty;
 import semsim.model.physical.Submodel;
+import semsim.model.physical.object.FunctionalSubmodel;
+import semsim.model.physical.object.PhysicalProperty;
 import semsim.owl.SemSimOWLFactory;
 
 public class CellMLwriter implements Writer{
@@ -71,7 +71,7 @@ public class CellMLwriter implements Writer{
 				}
 			}
 			
-			rdfblock = new CellMLbioRDFblock(semsimmodel, rdfstring, mainNS.getURI().toString());
+			rdfblock = new CellMLbioRDFblock(semsimmodel.getNamespace(), rdfstring, mainNS.getURI().toString());
 			
 			// Create root element
 			root = new Element("model",mainNS);
@@ -399,8 +399,7 @@ public class CellMLwriter implements Writer{
 	public Content makeXMLContentFromString(String xml){
 		try {
 			InputStream stream = new ByteArrayInputStream(xml.getBytes("UTF-8"));
-			Document aDoc;
-			aDoc = new SAXBuilder().build(stream);
+			Document aDoc = new SAXBuilder().build(stream);
 			return aDoc.getRootElement().detach();
 		} catch (JDOMException | IOException e) {
 			e.printStackTrace();

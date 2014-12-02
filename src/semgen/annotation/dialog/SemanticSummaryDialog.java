@@ -19,10 +19,10 @@ import semgen.utilities.uicomponent.SemGenScrollPane;
 import semsim.SemSimConstants;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.Annotation;
-import semsim.model.physical.CompositePhysicalEntity;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
-import semsim.model.physical.PhysicalProperty;
+import semsim.model.physical.object.CompositePhysicalEntity;
+import semsim.model.physical.object.PhysicalProperty;
 
 public class SemanticSummaryDialog extends SemGenDialog implements PropertyChangeListener{
 

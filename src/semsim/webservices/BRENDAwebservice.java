@@ -10,9 +10,8 @@ public class BRENDAwebservice {
 	
 	public static ArrayList<String> getGOxrefsFromID(String eznum){
 		ArrayList<String> GOxrefs = new ArrayList<String>();
-		ArrayList<String> recnames;
 		try {
-			recnames = getRecommendedNameAndGOxrefFromID(eznum);
+			ArrayList<String> recnames = getRecommendedNameAndGOxrefFromID(eznum);
 			for(String recname : recnames){
 				GOxrefs.add(recname.substring(recname.lastIndexOf("*")+1,recname.lastIndexOf("#")));
 			}
@@ -42,11 +41,10 @@ public class BRENDAwebservice {
 		Service service = new Service();
 		System.out.println("WHAT5: ");
 
-		Call call;
 		try {
 			System.out.println("WHAT4: ");
 
-			call = (Call) service.createCall();
+			Call call = (Call) service.createCall();
 			System.out.println("WHAT3: ");
 
 			String endpoint = "http://www.brenda-enzymes.org/soap2//brenda_server.php";

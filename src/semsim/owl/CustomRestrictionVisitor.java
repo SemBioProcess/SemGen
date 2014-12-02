@@ -23,8 +23,6 @@ import java.util.Hashtable;
  * restricted
  */
 public class CustomRestrictionVisitor extends OWLClassExpressionVisitorAdapter {
-
-	private boolean processInherited = true;
 	private Set<OWLClass> processedClasses;
 	public Hashtable<OWLDataPropertyExpression, OWLLiteral> restrictedDataPropertiesTable;
 	public Hashtable<OWLObjectPropertyExpression, OWLIndividual> restrictedValueObjectPropertiesTable;
@@ -79,15 +77,14 @@ public class CustomRestrictionVisitor extends OWLClassExpressionVisitorAdapter {
 	}
 
 	public void visit(OWLClass desc) {
-		if (processInherited && !processedClasses.contains(desc)) {
+		if (!processedClasses.contains(desc)) {
 			// If we are processing inherited restrictions then
 			// we recursively visit named supers. Note that we
 			// need to keep track of the classes that we have processed
 			// so that we don't get caught out by cycles in the taxonomy
 			processedClasses.add(desc);
 			for (OWLOntology ont : onts) {
-				for (OWLSubClassOfAxiom ax : ont
-						.getSubClassAxiomsForSubClass(desc)) {
+				for (OWLSubClassOfAxiom ax : ont.getSubClassAxiomsForSubClass(desc)) {
 					ax.getSuperClass().accept(this);
 				}
 			}
@@ -102,11 +99,8 @@ public class CustomRestrictionVisitor extends OWLClassExpressionVisitorAdapter {
 		// This method gets called when a description (OWLDescription) is an
 		// existential (someValuesFrom) restriction and it asks us to visit it
 		Set<String> fillerset = new HashSet<String>();
-		Set<String> test = (Set<String>) restrictedSomeObjectPropertiesTable
-				.get(desc.getProperty());
-		if (test != null) {
-			fillerset = (Set<String>) restrictedSomeObjectPropertiesTable
-					.get(desc.getProperty());
+		if (restrictedSomeObjectPropertiesTable.containsKey(desc.getProperty())) {
+			fillerset = restrictedSomeObjectPropertiesTable.get(desc.getProperty());
 		}
 		fillerset.add(desc.getFiller().asOWLClass().getIRI().toString());
 		restrictedSomeObjectPropertiesTable.put(desc.getProperty(), fillerset);

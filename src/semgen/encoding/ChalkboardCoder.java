@@ -16,11 +16,11 @@ import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.SemGen;
 import semsim.model.SemSimModel;
-import semsim.model.physical.CustomPhysicalEntity;
-import semsim.model.physical.CustomPhysicalProcess;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
-import semsim.model.physical.PhysicalProperty;
+import semsim.model.physical.object.CustomPhysicalEntity;
+import semsim.model.physical.object.CustomPhysicalProcess;
+import semsim.model.physical.object.PhysicalProperty;
 
 public class ChalkboardCoder {
 
@@ -85,7 +85,6 @@ public class ChalkboardCoder {
 					}
 					else desc = processname;
 					CustomPhysicalProcess verbobject = new CustomPhysicalProcess(processname, desc);
-					verbobject.ID = Integer.toString(x);
 					setofverbobjects.add(verbobject);
 					x++;
 					

@@ -29,7 +29,7 @@ import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.Submodel;
-import semsim.model.physical.FunctionalSubmodel;
+import semsim.model.physical.object.FunctionalSubmodel;
 import semsim.owl.SemSimOWLFactory;
 import semsim.writing.CaseInsensitiveComparator;
 

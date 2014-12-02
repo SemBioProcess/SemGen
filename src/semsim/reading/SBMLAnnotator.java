@@ -32,11 +32,11 @@ import semsim.model.annotation.Annotation;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
 import semsim.model.annotation.StructuralRelation;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.physical.CompositePhysicalEntity;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.Submodel;
+import semsim.model.physical.object.CompositePhysicalEntity;
 
 public class SBMLAnnotator {
 
@@ -130,7 +130,7 @@ public class SBMLAnnotator {
 						String resource = cvterm.getResourceURI(r);
 						hasusableann = ((cvterm.getBiologicalQualifierType()==libsbmlConstants.BQB_IS) || 
 								(cvterm.getBiologicalQualifierType()==libsbmlConstants.BQB_IS_VERSION_OF));
-						MIRIAMannotation ma = getMiriamAnnotation(cvterm.getBiologicalQualifierType(), resource, ontologytermsandnamescache);
+						MIRIAMannotation ma = getMiriamAnnotation(resource, ontologytermsandnamescache);
 						if(ma!=null && !entcreated){
 							if(ma.fulluri!=null && semsimmodel.containsDataStructure(xxx(comp.getId()))){
 								
@@ -286,7 +286,6 @@ public class SBMLAnnotator {
 		
 		// If we're annotating a chemical species
 		if(modelcomp instanceof Species){
-			PhysicalEntity speciesent = null;
 			Boolean hasisannotation = false;
 
 			Species species = (Species)modelcomp;
@@ -296,19 +295,19 @@ public class SBMLAnnotator {
 				CVTerm cvterm = species.getCVTerm(h);
 				if(cvterm.getBiologicalQualifierType()==libsbmlConstants.BQB_IS_VERSION_OF){
 					for(int r=0; r<cvterm.getNumResources(); r++){
-						MIRIAMannotation ma = collectMiriamAnnotation(cvterm.getBiologicalQualifierType(), cvterm.getResourceURI(r),
+						MIRIAMannotation ma = collectMiriamAnnotation(cvterm.getResourceURI(r),
 								resourcesandanns, ontologytermsandnamescache);
 						if(ma.fulluri!=null) isversionofmas.add(ma);
 					}
 				}
 			}
-			
+			PhysicalEntity speciesent = null;
 			for(int h=0;h<species.getNumCVTerms();h++){
 				CVTerm cvterm = species.getCVTerm(h);
 				if(cvterm.getBiologicalQualifierType()==libsbmlConstants.BQB_IS){ 
 					for(int r=0; r<cvterm.getNumResources(); r++){
 						
-						MIRIAMannotation ma = collectMiriamAnnotation(cvterm.getBiologicalQualifierType(), cvterm.getResourceURI(r),
+						MIRIAMannotation ma = collectMiriamAnnotation(cvterm.getResourceURI(r),
 								resourcesandanns, ontologytermsandnamescache);
 		
 						// If we have a context for the annotation and a human-readable name, create a new reference physical entity
@@ -358,20 +357,18 @@ public class SBMLAnnotator {
 		// If the SBML element is a reaction
 		else if(modelcomp instanceof Reaction){
 			Reaction rxn = (Reaction)modelcomp;
-			PhysicalProcess pproc = null;
-			Boolean gotisannotation = false;
-			Boolean gotisversionofannotation = false;
-			
+			Boolean gotisversionofannotation = false;	
 			// If we are applying annotations
 			Set<MIRIAMannotation> isversionofmas = new HashSet<MIRIAMannotation>();
-			boolean hasusableisann = false;
+			
 			boolean hasusableisversionofann = false;
+			
 			for(int h=0;h<rxn.getNumCVTerms();h++){
 				CVTerm cvterm = rxn.getCVTerm(h);
 				if(cvterm.getBiologicalQualifierType()==libsbmlConstants.BQB_IS_VERSION_OF){
 					hasusableisversionofann = true;
 					for(int r=0; r<cvterm.getNumResources(); r++){
-						MIRIAMannotation ma = collectMiriamAnnotation(cvterm.getBiologicalQualifierType(), cvterm.getResourceURI(r),
+						MIRIAMannotation ma = collectMiriamAnnotation(cvterm.getResourceURI(r),
 								resourcesandanns, ontologytermsandnamescache);
 						if(ma.fulluri!=null){
 							isversionofmas.add(ma);
@@ -381,6 +378,9 @@ public class SBMLAnnotator {
 				}
 			}
 			
+			PhysicalProcess pproc = null;
+			boolean hasusableisann = false;
+			Boolean gotisannotation = false;
 			for(int h=0;h<rxn.getNumCVTerms();h++){
 				CVTerm cvterm = rxn.getCVTerm(h);
 				if(cvterm.getBiologicalQualifierType()==libsbmlConstants.BQB_IS){ // 
@@ -388,7 +388,7 @@ public class SBMLAnnotator {
 
 					for(int r=0; r<cvterm.getNumResources(); r++){
 
-						MIRIAMannotation ma = collectMiriamAnnotation(cvterm.getBiologicalQualifierType(), cvterm.getResourceURI(r),
+						MIRIAMannotation ma = collectMiriamAnnotation(cvterm.getResourceURI(r),
 								resourcesandanns, ontologytermsandnamescache);
 						// If we have a context for the annotation and a human-readable name
 						if(ma.fulluri!=null){
@@ -435,6 +435,9 @@ public class SBMLAnnotator {
 	private static void annotateSpecies(Species species, String cdwd, PhysicalEntity pe, Model sbmlmodel, SemSimModel semsimmodel, boolean isonline,
 			Map<Compartment,PhysicalEntity> compsandphysents, Map<Species,PhysicalEntity> speciesandphysents){
 		
+		// Exit routine if we're not online
+		if(!isonline) return;
+		
 		DataStructure ds = semsimmodel.getDataStructure(cdwd);
 		ReferenceOntologyAnnotation propann = null;
 		if(!species.getHasOnlySubstanceUnits()){
@@ -444,9 +447,6 @@ public class SBMLAnnotator {
 			propann = new ReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, URI.create(SemSimConstants.OPB_NAMESPACE + "OPB_00425"), "Chemical molar amount");
 		}
 		ds.getPhysicalProperty().addAnnotation(propann);
-		
-		// Exit routine if we're not online
-		if(!isonline) return;
 
 		ArrayList<PhysicalEntity> entlist = new ArrayList<PhysicalEntity>();
 		ArrayList<StructuralRelation> relationlist = new ArrayList<StructuralRelation>();
@@ -454,13 +454,12 @@ public class SBMLAnnotator {
 		// Add the physical entity annotation components, if there is an annotated compartment for the species, add it, too
 		Compartment cmptmnt = sbmlmodel.getCompartment(species.getCompartment());
 		PhysicalEntity compent = compsandphysents.get(cmptmnt);  
-		CompositePhysicalEntity propertytarget = null;
 		
 		// set the composite entity annotation
 		entlist.add(pe);
 		entlist.add(compent);
 		relationlist.add(SemSimConstants.PART_OF_RELATION);
-		propertytarget = semsimmodel.addCompositePhysicalEntity(entlist, relationlist);
+		CompositePhysicalEntity propertytarget = semsimmodel.addCompositePhysicalEntity(entlist, relationlist);
 		
 		ds.getPhysicalProperty().setPhysicalPropertyOf(propertytarget);
 
@@ -512,16 +511,16 @@ public class SBMLAnnotator {
 		}
 	}
 
-	private static MIRIAMannotation collectMiriamAnnotation(int qualifier, String resource, Hashtable<String,MIRIAMannotation> resourcesandanns, 
+	private static MIRIAMannotation collectMiriamAnnotation(String resource, Hashtable<String,MIRIAMannotation> resourcesandanns, 
 			Hashtable<String, String[]> ontologytermsandnamescache){
-		MIRIAMannotation ma = null;
-		if(resourcesandanns.containsKey(resource)) ma = resourcesandanns.get(resource);
-		else ma = getMiriamAnnotation(qualifier, resource, ontologytermsandnamescache);
-		return ma;
+		if(resourcesandanns.containsKey(resource)) {
+			return resourcesandanns.get(resource);
+		}
+		return getMiriamAnnotation(resource, ontologytermsandnamescache);
 	}
 		
 	
-	private static MIRIAMannotation getMiriamAnnotation(int qualifier, String resource, 
+	private static MIRIAMannotation getMiriamAnnotation(String resource, 
 			Hashtable<String, String[]> ontologytermsandnamescache){
 				
 		String rdflabel = null;
@@ -529,8 +528,7 @@ public class SBMLAnnotator {
 		if(ontologytermsandnamescache.containsKey(resource))
 			rdflabel = ontologytermsandnamescache.get(resource)[0];
 		
-		MIRIAMannotation ma = new MIRIAMannotation(qualifier, resource, rdflabel);
-		return ma;
+		return new MIRIAMannotation(resource, rdflabel);
 	}
 	
 	// This compensates for JSim's renaming of species, reaction & compartment names that start with the character "_" 

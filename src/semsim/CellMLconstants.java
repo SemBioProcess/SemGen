@@ -1,7 +1,6 @@
 package semsim;
 
 
-import java.net.URI;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,9 +20,7 @@ public class CellMLconstants {
 	public static Namespace dctermsNS = Namespace.getNamespace("dcterms", SemSimConstants.DCTERMS_NAMESPACE);
 	public static Namespace semsimNS = Namespace.getNamespace("semsim", SemSimConstants.SEMSIM_NAMESPACE);
 	public static Set<String> CellML_UNIT_DICTIONARY;
-	
-	public static URI CELLML_CONTAINS_URI = URI.create(SemSimConstants.SEMSIM_NAMESPACE + "cellMLcontains");
-	
+		
 	static{
 		Set<String> aSet = new HashSet<String>();
 		aSet.add("ampere");

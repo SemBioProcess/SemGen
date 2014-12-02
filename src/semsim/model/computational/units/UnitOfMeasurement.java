@@ -93,9 +93,7 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 		if(!getReferenceOntologyAnnotations(SemSimConstants.REFERS_TO_RELATION).isEmpty()){
 			return getReferenceOntologyAnnotations(SemSimConstants.REFERS_TO_RELATION).toArray(new ReferenceOntologyAnnotation[]{})[0];
 		}
-		else{
-			return null;
-		}
+		return null;
 	}
 	
 	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotationByURI(URI uri){

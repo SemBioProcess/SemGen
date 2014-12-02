@@ -16,14 +16,13 @@ import semsim.model.computational.ComputationalModelComponent;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
-import semsim.model.physical.PhysicalProperty;
+import semsim.model.physical.object.PhysicalProperty;
 
 /**
  * This class represents a named element in a simulation model that
  * is assigned some computational value during simulation.
  */
-public class DataStructure extends ComputationalModelComponent implements Annotatable, Cloneable{
-	
+public abstract class DataStructure extends ComputationalModelComponent implements Annotatable, Cloneable{	
 	private Computation computation;
 	private PhysicalProperty physicalProperty;
 	private DataStructure solutionDomain;
@@ -333,9 +332,7 @@ public class DataStructure extends ComputationalModelComponent implements Annota
 		return isImported;
 	}
 	
-	public boolean isReal() {
-		return false;
-	}
+	public abstract boolean isReal();
 	
 	public int getPropertyType(SemSimLibrary lib){
 		if(hasPhysicalProperty()){
