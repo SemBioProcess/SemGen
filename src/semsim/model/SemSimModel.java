@@ -75,7 +75,10 @@ import semsim.writing.SemSimOWLwriter;
  * model aspect.
  */
 
-public class SemSimModel extends SemSimComponent implements Cloneable, Annotatable{
+public class SemSimModel implements Cloneable, Annotatable{
+	
+	private String name;
+	private String description;
 	
 	// Computational model components
 	private Set<DataStructure> dataStructures = new HashSet<DataStructure>();
@@ -111,6 +114,43 @@ public class SemSimModel extends SemSimComponent implements Cloneable, Annotatab
 		setNamespace(namespace);
 	}
 	
+	
+	/**
+	 * Get the component's free-text description
+	 */
+	public String getDescription() {
+		return description;
+	}
+	
+	/**
+	 * Get the component's name
+	 */
+	public String getName(){
+		return name;
+	}
+	
+	/**
+	 * Set the component's name
+	 * 
+	 * @param name The name to apply
+	 */
+	public void setName(String name){
+		this.name = name;
+	}
+	
+	/**
+	 * Set the component's free-text description
+	 * 
+	 * @param description The free-text description
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void copyDescription(SemSimComponent srcds){
+		// Copy free-text description
+		setDescription(new String(srcds.getDescription()));
+	}
 	
 	/**
 	 * Add a {@link DataStructure} to the model. DataStructure is not added to model 
@@ -1241,7 +1281,6 @@ public class SemSimModel extends SemSimComponent implements Cloneable, Annotatab
 		annotations.clear();
 		annotations.addAll(newset);
 	}
-	// End of methods required by Annotatable interface
-	
+	// End of methods required by Annotatable interface	
 
 }

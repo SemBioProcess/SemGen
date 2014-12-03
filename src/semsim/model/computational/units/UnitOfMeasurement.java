@@ -203,4 +203,9 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 	public String getUnitType() {
 		return unitType;
 	}
+	
+	@Override
+	public URI getSemSimClassURI() {
+		return SemSimConstants.UNITS_CLASS_URI;
+	}
 }

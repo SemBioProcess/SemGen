@@ -1,5 +1,8 @@
 package semsim.model.physical.object;
 
+import java.net.URI;
+
+import semsim.SemSimConstants;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalModelComponent;
 
@@ -28,5 +31,10 @@ public class PhysicalProperty extends PhysicalModelComponent{
 	@Override
 	public String getComponentTypeasString() {
 		return "property";
+	}
+	
+	@Override
+	public URI getSemSimClassURI() {
+		return SemSimConstants.PHYSICAL_PROPERTY_CLASS_URI;
 	}
 }

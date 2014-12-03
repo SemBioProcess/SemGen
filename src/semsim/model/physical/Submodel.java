@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 
+import semsim.SemSimConstants;
 import semsim.model.Importable;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
 import semsim.model.annotation.SemSimRelation;
@@ -115,5 +116,10 @@ public class Submodel extends PhysicalModelComponent implements Cloneable, Impor
 	@Override
 	public String getComponentTypeasString() {
 		return "submodel";
+	}
+	
+	@Override
+	public URI getSemSimClassURI() {
+		return SemSimConstants.SUBMODEL_CLASS_URI;
 	}
 }

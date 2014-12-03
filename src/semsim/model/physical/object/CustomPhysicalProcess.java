@@ -1,8 +1,10 @@
 package semsim.model.physical.object;
 
+import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 
+import semsim.SemSimConstants;
 import semsim.model.physical.PhysicalProcess;
 
 public class CustomPhysicalProcess extends PhysicalProcess{
@@ -13,5 +15,10 @@ public class CustomPhysicalProcess extends PhysicalProcess{
 	public CustomPhysicalProcess(String name, String description){
 		setName(name);
 		setDescription(description);
+	}
+	
+	@Override
+	public URI getSemSimClassURI() {
+		return SemSimConstants.CUSTOM_PHYSICAL_PROCESS_CLASS_URI;
 	}
 }

@@ -1,5 +1,7 @@
 package semsim.model;
 
+import java.net.URI;
+
 /**
  * A SemSim model element. A {@link SemSimModel} extends this class as well.
  */
@@ -67,4 +69,6 @@ public abstract class SemSimComponent {
 	public String getMetadataID() {
 		return metadataID;
 	}
+	
+	public abstract URI getSemSimClassURI();
 }

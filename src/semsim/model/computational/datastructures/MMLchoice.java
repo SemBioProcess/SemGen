@@ -1,5 +1,8 @@
 package semsim.model.computational.datastructures;
 
+import java.net.URI;
+
+import semsim.SemSimConstants;
 import semsim.model.computational.Computation;
 
 /** This class maps to the JSim-specific data structure called a "choice" 
@@ -19,5 +22,10 @@ public class MMLchoice extends DataStructure {
 	
 	public boolean isReal() {
 		return true;
+	}
+	
+	@Override
+	public URI getSemSimClassURI() {
+		return SemSimConstants.MML_CHOICE_CLASS_URI;
 	}
 }

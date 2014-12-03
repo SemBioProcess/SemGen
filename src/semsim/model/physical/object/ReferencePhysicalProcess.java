@@ -11,4 +11,9 @@ public class ReferencePhysicalProcess extends PhysicalProcess{
 		addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, uri, description);
 		setName(description);
 	}
+	
+	@Override
+	public URI getSemSimClassURI() {
+		return SemSimConstants.REFERENCE_PHYSICAL_ENTITY_CLASS_URI;
+	}
 }

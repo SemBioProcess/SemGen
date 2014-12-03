@@ -228,11 +228,8 @@ public class SemSimOWLwriter {
 						((MappableVariable)ds).getCellMLinitialValue(), manager);
 				
 				// Set the interface values
-				String pubint = null;
-				String privint = null;
-				
-				pubint = ((MappableVariable)ds).getPublicInterfaceValue();
-				privint = ((MappableVariable)ds).getPrivateInterfaceValue();
+				String pubint = ((MappableVariable)ds).getPublicInterfaceValue();
+				String privint = ((MappableVariable)ds).getPrivateInterfaceValue();
 				
 				if(pubint!=null) SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimConstants.CELLML_COMPONENT_PUBLIC_INTERFACE_URI.toString(),
 						pubint, manager);

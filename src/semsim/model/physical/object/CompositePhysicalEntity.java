@@ -1,7 +1,9 @@
 package semsim.model.physical.object;
 
+import java.net.URI;
 import java.util.ArrayList;
 
+import semsim.SemSimConstants;
 import semsim.model.annotation.StructuralRelation;
 import semsim.model.physical.PhysicalEntity;
 
@@ -80,5 +82,10 @@ public class CompositePhysicalEntity extends PhysicalEntity implements Comparabl
 		else{
 			return 1;
 		}
+	}
+
+	@Override
+	public URI getSemSimClassURI() {
+		return SemSimConstants.COMPOSITE_PHYSICAL_ENTITY_CLASS_URI;
 	}
 }

@@ -3,7 +3,8 @@ package semgen.annotation.componentdisplays.buttontree;
 import java.awt.Component;
 import java.awt.Graphics2D;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -163,14 +164,12 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 	    }
 	}
 	
-	public String[] getSortedNamesOfSemSimComponents(Set<? extends SemSimComponent> set){
-		String[] ar = new String[set.size()];
-		int i = 0;
+	public ArrayList<String> getSortedNamesOfSemSimComponents(Set<? extends SemSimComponent> set){
+		ArrayList<String> ar = new ArrayList<String>();
 		for(SemSimComponent ssc : set ){
-			ar[i] = ssc.getName();
-			i++;
+			ar.add(ssc.getName());
 		}
-		Arrays.sort(ar, new CaseInsensitiveComparator());
+		Collections.sort(ar, new CaseInsensitiveComparator());
 		return ar;
 	}
 	

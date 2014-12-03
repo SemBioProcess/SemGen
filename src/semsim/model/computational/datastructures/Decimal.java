@@ -1,5 +1,8 @@
 package semsim.model.computational.datastructures;
 
+import java.net.URI;
+
+import semsim.SemSimConstants;
 import semsim.model.computational.Computation;
 
 /** A {@link DataStructure} that is assigned a decimal value during simulation.*/
@@ -23,5 +26,10 @@ public class Decimal extends DataStructure{
 	
 	public boolean isReal() {
 		return true;
+	}
+	
+	@Override
+	public URI getSemSimClassURI() {
+		return SemSimConstants.DECIMAL_CLASS_URI;
 	}
 }
