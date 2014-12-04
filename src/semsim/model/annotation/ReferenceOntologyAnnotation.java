@@ -9,7 +9,6 @@ import semsim.owl.SemSimOWLFactory;
  * from a reference ontology or other controlled knowledge base.
  */
 public class ReferenceOntologyAnnotation extends Annotation{
-	
 	private String bioPortalOntologyID;
 	private String bioPortalOntologyVersionID;
 	private String ontologyName;

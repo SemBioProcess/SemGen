@@ -155,9 +155,8 @@ public class SemSimOWLwriter {
 			OWLNamedIndividual dsind = factory.getOWLNamedIndividual(IRI.create(dsuri));
 			// Set the RDF:comment (the free text definition of the data structure)
 			SemSimOWLFactory.setRDFComment(ont, dsind, ds.getDescription(), manager);
-			
-			String parent = SemSimConstants.SEMSIM_BASE_CLASSES_AND_URIS.get(ds.getClass()).toString();
-			OWLClass parentclass = factory.getOWLClass(IRI.create(parent));
+
+			OWLClass parentclass = factory.getOWLClass(IRI.create(ds.getSemSimClassURI()));
 			SemSimOWLFactory.createSemSimIndividual(ont, dsuri, parentclass, "", manager);
 			
 			// If there is a singular annotation on the DataStructure, write it. Use reference annotation label as
@@ -469,9 +468,7 @@ public class SemSimOWLwriter {
 			for(ReferenceOntologyAnnotation ref : pmc.getReferenceOntologyAnnotations(SemSimConstants.BQB_IS_VERSION_OF_RELATION)){
 				OWLClass refclass = factory.getOWLClass(IRI.create(ref.getReferenceURI()));
 				if(!ont.getClassesInSignature().contains(refclass)){
-					String parent = "";
-					if(pmc instanceof PhysicalEntity) parent = SemSimConstants.REFERENCE_PHYSICAL_ENTITY_CLASS_URI.toString();
-					if(pmc instanceof PhysicalProcess) parent = SemSimConstants.REFERENCE_PHYSICAL_PROCESS_CLASS_URI.toString();
+					String parent = pmc.getSemSimClassURI().toString();
 					SemSimOWLFactory.addClass(ont, ref.getReferenceURI().toString(), new String[]{parent}, manager);
 					SemSimOWLFactory.setRDFLabel(ont, refclass, ref.getValueDescription(), manager);
 				}
@@ -590,7 +587,6 @@ public class SemSimOWLwriter {
 		return URI.create(uristring);
 	}
 	
-	
 	private String logSingularPhysicalComponentAndGetURIasString(PhysicalModelComponent pmc, String namespace) throws OWLException{
 		String uristring = null;
 		if(singularPMCsAndUrisForDataStructures.containsKey(pmc)){
@@ -641,18 +637,15 @@ public class SemSimOWLwriter {
 	
 	
 	private void createPhysicalModelIndividual(PhysicalModelComponent pmc, String uriforind) throws OWLException{
-		String physicaltype = null;
+		String physicaltype = pmc.getComponentTypeasString();
 		String parenturistring = null;
 		if(pmc instanceof PhysicalProperty){
-			physicaltype = "property";
 			parenturistring = SemSimConstants.PHYSICAL_PROPERTY_CLASS_URI.toString();
 		}
 		else if(pmc instanceof ReferencePhysicalEntity || pmc instanceof CustomPhysicalEntity){
-			physicaltype = "entity";
 			parenturistring = SemSimConstants.PHYSICAL_ENTITY_CLASS_URI.toString();
 		}
 		else if(pmc instanceof ReferencePhysicalProcess || pmc instanceof CustomPhysicalProcess){
-			physicaltype = "process";
 			parenturistring = SemSimConstants.PHYSICAL_PROCESS_CLASS_URI.toString();
 		}
 		
@@ -678,13 +671,12 @@ public class SemSimOWLwriter {
 			SemSimOWLFactory.setIndDatatypeProperty(ont, uriforind, base + "refersTo", firstann.getReferenceURI().toString(), manager);
 		}
 		// Otherwise it's a custom entity, custom process or unspecified property
-		else if(pmc instanceof PhysicalProperty || !(pmc instanceof CompositePhysicalEntity)){
+		else if(pmc instanceof PhysicalProperty){
 			if(pmc instanceof PhysicalProperty) parenturistring = SemSimConstants.PHYSICAL_PROPERTY_CLASS_URI.toString();
 			else{
 				parenturistring = SemSimOWLFactory.getNamespaceFromIRI(uriforind) + SemSimOWLFactory.URIencoding(pmc.getName());
 				if(!allphysmodclasses.contains(parenturistring)){
-					if(pmc instanceof CustomPhysicalEntity) parenturistring = SemSimConstants.CUSTOM_PHYSICAL_ENTITY_CLASS_URI.toString();
-					else if(pmc instanceof CustomPhysicalProcess) parenturistring = SemSimConstants.CUSTOM_PHYSICAL_PROCESS_CLASS_URI.toString();
+					pmc.getSemSimClassURI().toString();
 				}
 				label = pmc.getName();
 				description = pmc.getDescription();

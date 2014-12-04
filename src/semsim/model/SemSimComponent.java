@@ -2,51 +2,14 @@ package semsim.model;
 
 import java.net.URI;
 
+import semsim.SemSimObject;
+
 /**
- * A SemSim model element. A {@link SemSimModel} extends this class as well.
+ * A SemSimComponent is a representation of a mathematical or physical element
  */
-public abstract class SemSimComponent {
+public abstract class SemSimComponent extends SemSimObject {
 	
-	private String name = new String("");
-	private String description = new String("");
 	private String metadataID = new String("");
-
-	/**
-	 * Get the component's free-text description
-	 */
-	public String getDescription() {
-		return description;
-	}
-	
-	/**
-	 * Get the component's name
-	 */
-	public String getName(){
-		return name;
-	}
-	
-	/**
-	 * Set the component's name
-	 * 
-	 * @param name The name to apply
-	 */
-	public void setName(String name){
-		this.name = name;
-	}
-	
-	/**
-	 * Set the component's free-text description
-	 * 
-	 * @param description The free-text description
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public void copyDescription(SemSimComponent srcds){
-		// Copy free-text description
-		setDescription(new String(srcds.getDescription()));
-	}
 	
 	/**
 	 * Set the component's metadata ID. These ID's are often used
@@ -69,6 +32,4 @@ public abstract class SemSimComponent {
 	public String getMetadataID() {
 		return metadataID;
 	}
-	
-	public abstract URI getSemSimClassURI();
 }

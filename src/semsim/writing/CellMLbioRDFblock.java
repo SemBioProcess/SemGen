@@ -268,8 +268,7 @@ public class CellMLbioRDFblock {
 			return res;
 		}
 	}
-	
-	
+
 	private Resource getReferenceResourceFromURI(URI uri){
 		Resource refres = null;
 		if(refURIsandresources.containsKey(uri))
@@ -281,9 +280,7 @@ public class CellMLbioRDFblock {
 		}
 		return refres;
 	}
-	
-	
-	
+
 	private void annotateReferenceOrCustomResource(PhysicalModelComponent pmc, Resource res){
 		ReferenceOntologyAnnotation ann = null;
 		Resource refres = null;

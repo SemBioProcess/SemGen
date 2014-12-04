@@ -86,6 +86,7 @@ public class SemSimConstants {
 	
 	// URIs
 	public static final URI COMPUTATION_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Computation");
+	public static final URI SEMSIM_MODEL_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "SemSim_Model");
 	public static final URI RELATIONAL_CONSTRAINT_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Relational_constraint");
 	public static final URI DATA_STRUCTURE_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Data_structure");
 	public static final URI DECIMAL_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Decimal");
@@ -209,7 +210,6 @@ public class SemSimConstants {
 	public static final SemSimRelation MAPPED_TO_RELATION = new SemSimRelation("Data structure value passed to another data structure", MAPPED_TO_URI);
 	public static final SemSimRelation CELLML_COMPONENT_SUBSUMPTION_TYPE_RELATION = new SemSimRelation("The type of relation between a parent and child component (either containment, encapsulation or a custom term)", CELLML_COMPONENT_SUBSUMPTION_TYPE_URI);
 	
-	
 	public static final SemSimRelation REFERS_TO_RELATION = new SemSimRelation("Refers to ontology term", REFERS_TO_URI);
 	public static final SemSimRelation LEGACY_CODE_LOCATION_RELATION = new SemSimRelation("Location of original simulation code", LEGACY_CODE_LOCATION_URI);
 	public static final SemSimRelation SEMSIM_VERSION_RELATION = new SemSimRelation("Version of SemSim used to create model", SEMSIM_VERSION_URI);
@@ -244,7 +244,6 @@ public class SemSimConstants {
 	public static final SemSimRelation HAS_MEDIATOR_RELATION = new SemSimRelation("physical process has thermodynamic mediator entity", HAS_MEDIATOR_URI);
 	public static final SemSimRelation INCLUDES_SUBMODEL_RELATION = new SemSimRelation("a submodel encompasses another submodel", INCLUDES_SUBMODEL_URI);
 	public static final SemSimRelation COMPUTATIONAL_REPRESENTATION_OF_RELATION = new SemSimRelation("a data structure or submodel represents something from the real world", COMPUTATIONAL_REPRESENTATION_OF_URI);
-	public static final SemSimRelation PROCESS_PARTICIPANT_MULTIPLIER_RELATION = new SemSimRelation("process participant has multiplier value (for stoichiometry, etc.)", HAS_MULTIPLIER_URI);
 	
 	public static final SemSimRelation HAS_INDEX_ENTITY_RELATION = new SemSimRelation("composite physical entity has index entity", HAS_INDEX_ENTITY_URI);
 	public static final SemSimRelation INDEX_ENtity_FOR_RELATION = new SemSimRelation("physical entity is index for composite physical entity", INDEX_ENTITY_FOR_URI);
@@ -277,7 +276,6 @@ public class SemSimConstants {
 	public static final Map<Class<?>, URI> SEMSIM_BASE_CLASSES_AND_URIS;
 	public static final Map<URI, SemSimRelation> URIS_AND_SEMSIM_RELATIONS;
 	public static final Map<URI,URI> INVERSE_STRUCTURAL_RELATIONS_MAP;
-	public static final Map<String, Boolean> JSIM_UNITS_AND_PREFIXABLE_MAP;
 	public static final Map<Integer, SemSimRelation> BIOLOGICAL_QUALIFIER_TYPES_AND_RELATIONS;
 	public static final Map<Integer, SemSimRelation> MODEL_QUALIFIER_TYPES_AND_RELATIONS;
 	
@@ -371,7 +369,6 @@ public class SemSimConstants {
 		aMap0.put(CELLML_COMPONENT_PUBLIC_INTERFACE_URI, CELLML_COMPONENT_PUBLIC_INTERFACE_RELATION);
 		aMap0.put(CELLML_DOCUMENTATION_URI, CELLML_DOCUMENTATION_RELATION);
 		aMap0.put(CELLML_RDF_MARKUP_URI, CELLML_RDF_MARKUP_RELATION);
-		aMap0.put(HAS_MULTIPLIER_URI, PROCESS_PARTICIPANT_MULTIPLIER_RELATION);
 		URIS_AND_SEMSIM_RELATIONS = Collections.unmodifiableMap(aMap0);
 		
 		// Namespaces and Ontology Names Map
@@ -468,124 +465,6 @@ public class SemSimConstants {
 		aMap2.put(PART_OF_URI, HAS_PART_URI);
 		aMap2.put(CONTAINED_IN_URI, CONTAINS_URI);
 		INVERSE_STRUCTURAL_RELATIONS_MAP = Collections.unmodifiableMap(aMap2);
-		
-		// JSimUnitsAndPrefixable
-		Map<String, Boolean> aMap3 = new HashMap<String, Boolean>();
-		
-		aMap3.put("kg", false);		
-		aMap3.put("m", false);
-		aMap3.put("sec", true);
-		aMap3.put("amp", true);
-		aMap3.put("degK", false);
-		aMap3.put("mol", true);
-		aMap3.put("candela", true);
-		aMap3.put("steradian", true);
-		aMap3.put("scalar", false);
-		aMap3.put("percent", false);
-		aMap3.put("mole", true);
-		aMap3.put("mmol", false);
-		aMap3.put("umol", false);
-		aMap3.put("nmol", false);
-		aMap3.put("pmol", false);
-		aMap3.put("meter", true);
-		aMap3.put("metre", true);
-		aMap3.put("mm", false);
-		aMap3.put("cm", false);
-		aMap3.put("km", false);
-		aMap3.put("micron", false);	
-		aMap3.put("um", false);
-		aMap3.put("nm", false);
-		aMap3.put("angstrom", true);
-		aMap3.put("inch", false);
-		aMap3.put("foot", false);
-		aMap3.put("yard", false);
-		aMap3.put("mile", false);
-		aMap3.put("gram", true);
-		aMap3.put("g", false);
-		aMap3.put("mg", false);
-		aMap3.put("ug", false);
-		aMap3.put("amu", false);
-		aMap3.put("dalton", false);
-		aMap3.put("da", false);
-		aMap3.put("second", false);
-		aMap3.put("s", false);
-		aMap3.put("min", false);
-		aMap3.put("hour", false);
-		aMap3.put("hr", false);
-		aMap3.put("ms", false);
-		aMap3.put("msec", false);
-		aMap3.put("usec", false);
-		aMap3.put("hz", false);
-		aMap3.put("hertz", true);
-		aMap3.put("ml", false);
-		aMap3.put("liter", true);
-		aMap3.put("litre", true);
-		aMap3.put("L", false);
-		aMap3.put("dL", false);
-		aMap3.put("mL", false);
-		aMap3.put("uL", false);
-		aMap3.put("N", true);
-		aMap3.put("newton", true);
-		aMap3.put("dyn", false);
-		aMap3.put("dyne", true);
-		aMap3.put("pa", false);
-		aMap3.put("pascal", true);
-		aMap3.put("atm", false);
-		aMap3.put("mmHg", false);
-		aMap3.put("torr", true);
-		aMap3.put("cmH2O", false);
-		aMap3.put("bar", false);
-		aMap3.put("erg", true);
-		aMap3.put("joule", true);
-		aMap3.put("J", false);
-		aMap3.put("cal", true);
-		aMap3.put("calorie", true); 
-		aMap3.put("watt", true);
-		aMap3.put("poise", true);
-		aMap3.put("p", false);
-		aMap3.put("cp", false);
-		aMap3.put("P", false);
-		aMap3.put("cP", false);
-		aMap3.put("degR", false);
-		aMap3.put("K", false);
-		aMap3.put("kelvin", true);
-		aMap3.put("A", true);
-		aMap3.put("mA", false);
-		aMap3.put("uA", false);
-		aMap3.put("ampere", true);
-		aMap3.put("coulomb", true);
-		aMap3.put("faraday", true);
-		aMap3.put("volt", true);
-		aMap3.put("mV", false);
-		aMap3.put("ohm", false);
-		aMap3.put("mho", false);
-		aMap3.put("mmho", false);
-		aMap3.put("siemens", true);
-		aMap3.put("mS", false);
-		aMap3.put("uS", false);
-		aMap3.put("farad", true);
-		aMap3.put("uF", false);
-		aMap3.put("weber", true);	
-		aMap3.put("tesla", true);
-		aMap3.put("henry", true);
-		aMap3.put("gauss", true);
-		aMap3.put("mu0", false);
-		aMap3.put("oersted", true);
-		aMap3.put("gilbert", true);
-		aMap3.put("molar", true);
-		aMap3.put("Molar", true);
-		aMap3.put("M", false);
-		aMap3.put("mM", false);	
-		aMap3.put("uM", false);	
-		aMap3.put("nM", false);	
-		aMap3.put("pM", false);
-		aMap3.put("katal", true);
-		aMap3.put("lumen", true);
-		aMap3.put("lux", true);
-		aMap3.put("becquerel", true);
-		aMap3.put("gray", true);
-		aMap3.put("sievert", true);
-		JSIM_UNITS_AND_PREFIXABLE_MAP = Collections.unmodifiableMap(aMap3);
 		
 		// BiologicalQualifierTypesAndRelations Map
 		Map<Integer, SemSimRelation> aMap4 = new HashMap<Integer, SemSimRelation>();

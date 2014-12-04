@@ -4,6 +4,7 @@ import java.io.File;
 
 import javax.swing.JOptionPane;
 
+import semgen.SemGen;
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenTask;
 import semgen.utilities.file.LoadSemSimModel;
@@ -50,7 +51,7 @@ public class Encoder {
 		
 		if(selection == optionsarray[1]){
 			fc.addFilters(new String[]{"mml"});
-			outwriter = new MMLwriter();
+			outwriter = new MMLwriter(SemGen.semsimlib);
 		}
 		
 		CoderTask task;

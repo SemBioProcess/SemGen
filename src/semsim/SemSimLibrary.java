@@ -34,11 +34,10 @@ public class SemSimLibrary {
 	
 	private Hashtable<String, String[]> OPBClassesForUnitsTable = new Hashtable<String, String[]>();
 	private Hashtable<String, String[]> compositeAnnRelationsTableLR = new Hashtable<String, String[]>();
-	private Hashtable<String, String[]> compositeAnnRelationsTableRL = new Hashtable<String, String[]>();
 	private Hashtable<String, String[]> metadataRelationsTable = new Hashtable<String, String[]>();
 	private Hashtable<String, String[]> ontologyTermsAndNamesCache = new Hashtable<String,String[]>();
 	private Hashtable<String, String[]> jsimUnitsTable;
-	private Hashtable<String, String[]> jsimUnitPrefixesTable;
+	private Set<String> jsimUnitPrefixesTable;
 	
 	private static Set<String> OPBproperties = new HashSet<String>();
 	private static Set<String> OPBflowProperties = new HashSet<String>();
@@ -54,12 +53,11 @@ public class SemSimLibrary {
 	
 	private void loadLibrary() {
 		try {
-			compositeAnnRelationsTableLR = ResourcesManager.createHashtableFromFile("cfg/structuralRelationsLR.txt");
-			compositeAnnRelationsTableRL = ResourcesManager.createHashtableFromFile("cfg/structuralRelationsRL.txt");
+			compositeAnnRelationsTableLR = ResourcesManager.createHashtableFromFile("cfg/structuralRelations.txt");
 			metadataRelationsTable = ResourcesManager.createHashtableFromFile("cfg/metadataRelations.txt");
 			ontologyTermsAndNamesCache = ResourcesManager.createHashtableFromFile("cfg/ontologyTermsAndNamesCache.txt");
 			jsimUnitsTable = ResourcesManager.createHashtableFromFile("cfg/jsimUnits");
-			jsimUnitPrefixesTable = ResourcesManager.createHashtableFromFile("cfg/jsimUnitPrefixes");
+			jsimUnitPrefixesTable = ResourcesManager.createSetFromFile("cfg/jsimUnitPrefixes");
 			OPBClassesForUnitsTable = ResourcesManager.createHashtableFromFile("cfg/OPBClassesForUnits.txt");
 		} catch (FileNotFoundException e3) {e3.printStackTrace();}	
 		
@@ -85,6 +83,18 @@ public class SemSimLibrary {
 	
 	public String[] getOPBUnitRefTerm(String unit) {
 		return OPBClassesForUnitsTable.get(unit);
+	}
+	
+	public boolean isJSimUnitPrefixable(String unit) {
+		return (jsimUnitsTable.get(unit)[0]).equals("true");
+	}
+	
+	public boolean jsimHasUnit(String unit) {
+		return jsimUnitsTable.containsKey(unit);
+	}
+	
+	public Set<String> getUnitPrefixes() {
+		return jsimUnitPrefixesTable;
 	}
 	
 	public Hashtable<String, String[]> getOntTermsandNamesCache() {

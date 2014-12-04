@@ -15,6 +15,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 
 import semsim.Annotatable;
 import semsim.SemSimConstants;
+import semsim.SemSimObject;
 import semsim.model.annotation.Annotation;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
 import semsim.model.annotation.SemSimRelation;
@@ -75,11 +76,7 @@ import semsim.writing.SemSimOWLwriter;
  * model aspect.
  */
 
-public class SemSimModel implements Cloneable, Annotatable{
-	
-	private String name;
-	private String description;
-	
+public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 	// Computational model components
 	private Set<DataStructure> dataStructures = new HashSet<DataStructure>();
 	private Set<RelationalConstraint> relationalConstraints = new HashSet<RelationalConstraint>(); 
@@ -112,44 +109,6 @@ public class SemSimModel implements Cloneable, Annotatable{
 	 */
 	public SemSimModel(String namespace){
 		setNamespace(namespace);
-	}
-	
-	
-	/**
-	 * Get the component's free-text description
-	 */
-	public String getDescription() {
-		return description;
-	}
-	
-	/**
-	 * Get the component's name
-	 */
-	public String getName(){
-		return name;
-	}
-	
-	/**
-	 * Set the component's name
-	 * 
-	 * @param name The name to apply
-	 */
-	public void setName(String name){
-		this.name = name;
-	}
-	
-	/**
-	 * Set the component's free-text description
-	 * 
-	 * @param description The free-text description
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public void copyDescription(SemSimComponent srcds){
-		// Copy free-text description
-		setDescription(new String(srcds.getDescription()));
 	}
 	
 	/**
@@ -1283,4 +1242,9 @@ public class SemSimModel implements Cloneable, Annotatable{
 	}
 	// End of methods required by Annotatable interface	
 
+
+	@Override
+	public URI getSemSimClassURI() {
+		return SemSimConstants.SEMSIM_MODEL_CLASS_URI;
+	}
 }

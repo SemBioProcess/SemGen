@@ -2,7 +2,6 @@ package semsim.model.annotation;
 
 import java.net.URI;
 
-import semsim.SemSimConstants;
 import semsim.model.SemSimComponent;
 
 /** SemSimRelations describe the relationship that an annotated SemSimComponent

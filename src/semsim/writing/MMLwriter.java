@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.HashSet;
 
 import semsim.SemSimConstants;
+import semsim.SemSimLibrary;
 import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
 import semsim.model.computational.RelationalConstraint;
@@ -22,7 +23,11 @@ import JSim.data.NamedVal;
 import JSim.util.UtilIO;
 import JSim.util.Xcept;
 
-public class MMLwriter implements Writer{
+public class MMLwriter implements Writer {
+	SemSimLibrary sslib;
+	public MMLwriter(SemSimLibrary lib) {
+		sslib = lib;
+	}
 	
 	public String writeToString(SemSimModel model){	
 		String output = "";
@@ -84,16 +89,15 @@ public class MMLwriter implements Writer{
 			// If going from a CellML file with units not recognized by JSim, declare them in the output
 			else{
 				Boolean testprefixed = false;
-				for(String prefix : SemSimConstants.JSIM_UNITS_AND_PREFIXABLE_MAP.keySet()){
+				for(String prefix : sslib.getUnitPrefixes()) {
 					
 					if(unit.getComputationalCode().startsWith(prefix)){
 						String minusprefix = code.replaceFirst(prefix, "");
-						if(SemSimConstants.JSIM_UNITS_AND_PREFIXABLE_MAP.containsKey(minusprefix))
-						{testprefixed = true;}
+						testprefixed = sslib.jsimHasUnit(minusprefix);
 					}
 				}
 
-				if(!SemSimConstants.JSIM_UNITS_AND_PREFIXABLE_MAP.containsKey(code) && !code.equals("") && !testprefixed
+				if(!sslib.jsimHasUnit(code) && !code.equals("") && !testprefixed
 						&& !code.equals("dimensionless") && !code.contains("*") && !code.contains("/") && !code.contains("^")){
 					output = output.concat("unit " + code + " = dimensionless;\n");  // Hack until units stuff w/Jsim gets sorted
 				}
