@@ -3,7 +3,7 @@ package semgen.annotation.workbench;
 import java.util.Observable;
 import java.util.Set;
 
-import semgen.annotation.dialog.LegacyCodeChooser;
+import semgen.annotation.dialog.modelanns.LegacyCodeChooser;
 import semsim.SemSimConstants;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.Annotation;

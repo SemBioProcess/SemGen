@@ -23,26 +23,17 @@ import java.util.Hashtable;
  * restricted
  */
 public class CustomRestrictionVisitor extends OWLClassExpressionVisitorAdapter {
-	private Set<OWLClass> processedClasses;
-	public Hashtable<OWLDataPropertyExpression, OWLLiteral> restrictedDataPropertiesTable;
-	public Hashtable<OWLObjectPropertyExpression, OWLIndividual> restrictedValueObjectPropertiesTable;
-	public Hashtable<OWLObjectPropertyExpression, Set<String>> restrictedAllObjectPropertiesTable;
-	public Hashtable<OWLObjectPropertyExpression, Set<String>> restrictedSomeObjectPropertiesTable;
-	public Hashtable<OWLObjectPropertyExpression, String> restrictedExactCardinalityObjectPropertiesTable;
-	public Set<OWLDataPropertyExpression> restrictedDataProperties;
-	public Set<OWLObjectPropertyExpression> restrictedObjectProperties;
+	private Set<OWLClass> processedClasses = new HashSet<OWLClass>();
+	public Hashtable<OWLDataPropertyExpression, OWLLiteral> restrictedDataPropertiesTable = new Hashtable<OWLDataPropertyExpression, OWLLiteral>();;
+	public Hashtable<OWLObjectPropertyExpression, OWLIndividual> restrictedValueObjectPropertiesTable = new Hashtable<OWLObjectPropertyExpression, OWLIndividual>();
+	public Hashtable<OWLObjectPropertyExpression, Set<String>> restrictedAllObjectPropertiesTable = new Hashtable<OWLObjectPropertyExpression, Set<String>>();
+	public Hashtable<OWLObjectPropertyExpression, Set<String>> restrictedSomeObjectPropertiesTable = new Hashtable<OWLObjectPropertyExpression, Set<String>>();
+	public Hashtable<OWLObjectPropertyExpression, String> restrictedExactCardinalityObjectPropertiesTable = new Hashtable<OWLObjectPropertyExpression, String>();
+	public Set<OWLDataPropertyExpression> restrictedDataProperties = new HashSet<OWLDataPropertyExpression>();
+	public Set<OWLObjectPropertyExpression> restrictedObjectProperties = new HashSet<OWLObjectPropertyExpression>();
 	private Set<OWLOntology> onts;
 
 	public CustomRestrictionVisitor(Set<OWLOntology> onts) {
-		restrictedDataProperties = new HashSet<OWLDataPropertyExpression>();
-		restrictedDataPropertiesTable = new Hashtable<OWLDataPropertyExpression, OWLLiteral>();
-		restrictedObjectProperties = new HashSet<OWLObjectPropertyExpression>();
-		restrictedValueObjectPropertiesTable = new Hashtable<OWLObjectPropertyExpression, OWLIndividual>();
-		restrictedAllObjectPropertiesTable = new Hashtable<OWLObjectPropertyExpression, Set<String>>();
-		restrictedSomeObjectPropertiesTable = new Hashtable<OWLObjectPropertyExpression, Set<String>>();
-		restrictedExactCardinalityObjectPropertiesTable = new Hashtable<OWLObjectPropertyExpression, String>();
-
-		processedClasses = new HashSet<OWLClass>();
 		this.onts = onts;
 	}
 

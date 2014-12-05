@@ -426,7 +426,6 @@ public class SemSimOWLreader {
 		
 		for(String sub : subset){
 			String subname = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, sub, SemSimConstants.HAS_NAME_URI.toString());
-			String componentmathml = null;
 			
 			boolean hascomputation = !SemSimOWLFactory.getIndObjectProperty(ont, sub, SemSimConstants.HAS_COMPUTATATIONAL_COMPONENT_URI.toString()).isEmpty();
 			
@@ -440,7 +439,7 @@ public class SemSimOWLreader {
 			// If submodel IS NOT imported
 			if(importval.equals("") || importval==null){
 				sssubmodel = (hascomputation) ? new FunctionalSubmodel(subname, subname, null, null) : new Submodel(subname);
-				
+				String componentmathml = null;
 				// If computation associated with submodel, store mathml
 				if(sssubmodel instanceof FunctionalSubmodel){
 					String comp = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, sub, SemSimConstants.HAS_COMPUTATATIONAL_COMPONENT_URI.toString());
@@ -642,8 +641,6 @@ public class SemSimOWLreader {
 	}
 	
 	// Get the exponent for a unit factor
-
-
 	private double getUnitFactorExponent(OWLOntology ont, String derivunit, String prop, String baseunit){
 		double val = 1.0;
 		OWLIndividual derivind = factory.getOWLNamedIndividual(IRI.create(derivunit));

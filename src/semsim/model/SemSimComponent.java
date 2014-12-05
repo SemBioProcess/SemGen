@@ -1,7 +1,5 @@
 package semsim.model;
 
-import java.net.URI;
-
 import semsim.SemSimObject;
 
 /**

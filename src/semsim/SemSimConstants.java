@@ -10,21 +10,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import semsim.model.annotation.SemSimRelation;
 import semsim.model.annotation.StructuralRelation;
-import semsim.model.computational.Computation;
-import semsim.model.computational.RelationalConstraint;
-import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.computational.datastructures.Decimal;
-import semsim.model.computational.datastructures.MMLchoice;
-import semsim.model.computational.datastructures.MappableVariable;
-import semsim.model.computational.datastructures.SemSimInteger;
-import semsim.model.computational.units.UnitOfMeasurement;
-import semsim.model.physical.object.CompositePhysicalEntity;
-import semsim.model.physical.object.CustomPhysicalEntity;
-import semsim.model.physical.object.CustomPhysicalProcess;
-import semsim.model.physical.object.PhysicalDependency;
-import semsim.model.physical.object.PhysicalProperty;
-import semsim.model.physical.object.ReferencePhysicalEntity;
-import semsim.model.physical.object.ReferencePhysicalProcess;
 
 /**
  * A set of constants for working with SemSim models
@@ -273,7 +258,6 @@ public class SemSimConstants {
 
 	public static final Map<String, String> ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP;
 	public static final Map<String, String> ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP;
-	public static final Map<Class<?>, URI> SEMSIM_BASE_CLASSES_AND_URIS;
 	public static final Map<URI, SemSimRelation> URIS_AND_SEMSIM_RELATIONS;
 	public static final Map<URI,URI> INVERSE_STRUCTURAL_RELATIONS_MAP;
 	public static final Map<Integer, SemSimRelation> BIOLOGICAL_QUALIFIER_TYPES_AND_RELATIONS;
@@ -281,27 +265,7 @@ public class SemSimConstants {
 	
 	public static final ObjectMapper JSON_OBJECT_MAPPER = new ObjectMapper();
 	
-	static{
-		// SemSimBaseClassesAndURIs Map
-        Map<Class<?>, URI> aMap = new HashMap<Class<?>,URI>();
-        aMap.put(Computation.class, COMPUTATION_CLASS_URI);
-        aMap.put(RelationalConstraint.class, RELATIONAL_CONSTRAINT_CLASS_URI);
-        aMap.put(DataStructure.class, DATA_STRUCTURE_CLASS_URI);
-        aMap.put(Decimal.class, DECIMAL_CLASS_URI);
-        aMap.put(MappableVariable.class, DECIMAL_CLASS_URI);
-        aMap.put(SemSimInteger.class, SEMSIM_INTEGER_CLASS_URI);
-        aMap.put(MMLchoice.class, MML_CHOICE_CLASS_URI);
-        aMap.put(Annotatable.class, PHYSICAL_MODEL_COMPONENT_CLASS_URI);
-        aMap.put(CompositePhysicalEntity.class, COMPOSITE_PHYSICAL_ENTITY_CLASS_URI);
-        aMap.put(UnitOfMeasurement.class, UNITS_CLASS_URI);
-        aMap.put(PhysicalProperty.class, PHYSICAL_PROPERTY_CLASS_URI);
-        aMap.put(ReferencePhysicalEntity.class, REFERENCE_PHYSICAL_ENTITY_CLASS_URI);
-        aMap.put(ReferencePhysicalProcess.class, REFERENCE_PHYSICAL_PROCESS_CLASS_URI);
-        aMap.put(PhysicalDependency.class, PHYSICAL_DEPENDENCY_CLASS_URI);
-        aMap.put(CustomPhysicalEntity.class, CUSTOM_PHYSICAL_ENTITY_CLASS_URI);
-        aMap.put(CustomPhysicalProcess.class, CUSTOM_PHYSICAL_PROCESS_CLASS_URI);
-        SEMSIM_BASE_CLASSES_AND_URIS = Collections.unmodifiableMap(aMap);
-        
+	static{       
         // URIsAndSemSimRelations Map
         Map<URI,SemSimRelation> aMap0 = new HashMap<URI,SemSimRelation>();
 		aMap0.put(CELLML_COMPONENT_SUBSUMPTION_TYPE_URI, CELLML_COMPONENT_SUBSUMPTION_TYPE_RELATION);

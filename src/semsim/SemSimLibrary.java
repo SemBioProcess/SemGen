@@ -33,7 +33,7 @@ public class SemSimLibrary {
 	public OWLOntology OPB;
 	
 	private Hashtable<String, String[]> OPBClassesForUnitsTable = new Hashtable<String, String[]>();
-	private Hashtable<String, String[]> compositeAnnRelationsTableLR = new Hashtable<String, String[]>();
+	private Hashtable<String, String[]> compositeAnnRelationsTable = new Hashtable<String, String[]>();
 	private Hashtable<String, String[]> metadataRelationsTable = new Hashtable<String, String[]>();
 	private Hashtable<String, String[]> ontologyTermsAndNamesCache = new Hashtable<String,String[]>();
 	private Hashtable<String, String[]> jsimUnitsTable;
@@ -53,7 +53,7 @@ public class SemSimLibrary {
 	
 	private void loadLibrary() {
 		try {
-			compositeAnnRelationsTableLR = ResourcesManager.createHashtableFromFile("cfg/structuralRelations.txt");
+			compositeAnnRelationsTable = ResourcesManager.createHashtableFromFile("cfg/structuralRelations.txt");
 			metadataRelationsTable = ResourcesManager.createHashtableFromFile("cfg/metadataRelations.txt");
 			ontologyTermsAndNamesCache = ResourcesManager.createHashtableFromFile("cfg/ontologyTermsAndNamesCache.txt");
 			jsimUnitsTable = ResourcesManager.createHashtableFromFile("cfg/jsimUnits");

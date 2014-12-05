@@ -476,7 +476,7 @@ public class SemSimOWLwriter {
 					SemSimOWLFactory.subclassIndividual(ont, singularPMCsAndUrisForDataStructures.get(pmc).toString(), ref.getReferenceURI().toString(), manager);
 				}
 				else{
-					for(String custind : SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimConstants.SEMSIM_BASE_CLASSES_AND_URIS.get(pmc.getClass()).toString())){
+					for(String custind : SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, pmc.getSemSimClassURI().toString())){
 						OWLNamedIndividual theind = factory.getOWLNamedIndividual(IRI.create(custind));
 						if(SemSimOWLFactory.getRDFLabels(ont, theind)[0].equals(pmc.getName())){
 							SemSimOWLFactory.subclassIndividual(ont, custind, ref.getReferenceURI().toString(), manager);

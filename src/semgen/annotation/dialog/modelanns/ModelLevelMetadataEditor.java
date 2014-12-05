@@ -1,4 +1,4 @@
-package semgen.annotation.dialog;
+package semgen.annotation.dialog.modelanns;
 
 import semgen.SemGen;
 import semgen.annotation.AnnotatorTab;
