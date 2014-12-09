@@ -19,8 +19,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -64,7 +64,7 @@ public class ModelLevelMetadataEditor extends SemGenDialog implements PropertyCh
 		genmodinfo.setBorder(BorderFactory.createEmptyBorder(0, 12, 24, 24));
 		genmodinfo.setLayout(new BoxLayout(genmodinfo, BoxLayout.Y_AXIS));
 		getModelLevelAnnotations();
-				
+		
 		scrollpane = new SemGenScrollPane(genmodinfo);
 		scrollpane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollpane.getVerticalScrollBar().setUnitIncrement(12);
@@ -80,99 +80,6 @@ public class ModelLevelMetadataEditor extends SemGenDialog implements PropertyCh
 		showDialog();
 	}
 
-	public class MetadataItem extends JPanel implements MouseListener, ActionListener{
-		private static final long serialVersionUID = 3245322304789828616L;
-		public JButton removebutton = new JButton();
-		public Annotation ann;
-		public Boolean editable;
-		public JComboBox<String> cb;
-		public JTextArea ta;
-		public SemGenScrollPane sgsp = new SemGenScrollPane(ta);
-		
-		public MetadataItem(String labeltext, String tatext, Annotation ann, Boolean editable){
-			this.ann = ann;
-			this.editable = editable;
-			
-			JLabel label = new JLabel(labeltext);
-			ta = new JTextArea(tatext);
-			Format(label, ta, removebutton, editable);
-			this.add(label);
-			this.add(sgsp);
-			this.add(removebutton);
-		}
-		
-		public MetadataItem(String tatext, Annotation ann, Boolean editable){
-			this.ann = ann;
-			this.editable = editable;
-			
-			cb = new JComboBox<String>(SemGen.semsimlib.getListofMetaDataRelations());
-			cb.setSelectedItem(cb.getItemAt(0));
-			
-			ta = new JTextArea(tatext);
-			JLabel label = new JLabel();
-			Format(label, ta, removebutton, editable);
-			this.add(cb);
-			this.add(sgsp);
-			this.add(removebutton);
-		}
-		
-		private void Format(JLabel label, JTextArea area, JButton removebutton, Boolean editable) {
-			label.setFont(SemGenFont.defaultItalic());
-			label.setBorder(BorderFactory.createEmptyBorder(15, 0, 5, 8));
-			label.setAlignmentX(Component.LEFT_ALIGNMENT);
-			
-			area.setEditable(editable);
-			area.setAlignmentX(Component.LEFT_ALIGNMENT);
-			area.setFont(SemGenFont.defaultPlain());
-			area.setForeground(Color.blue);
-			area.setLineWrap(true);
-			area.setWrapStyleWord(true);
-			if(!editable){area.setBackground(Color.lightGray);}
-
-			sgsp.setMaximumSize(new Dimension(300, 300));
-			if(area.getText().length()<45){sgsp.setPreferredSize(new Dimension(300, 35));}
-			else{sgsp.setPreferredSize(new Dimension(300, 100));}
-			removebutton.setBackground(this.getBackground());
-			removebutton.addMouseListener(this);
-			removebutton.addActionListener(this);
-			removebutton.setOpaque(false);
-			removebutton.setBorderPainted(false);
-			removebutton.setContentAreaFilled(false);
-			removebutton.setIcon(SemGenIcon.eraseicon);
-			removebutton.setEnabled(editable);
-		}
-		
-		
-		public void actionPerformed(ActionEvent e) {
-			Object o = e.getSource();
-			if (o == removebutton) {
-				genmodinfo.remove(this);
-				genmodinfo.validate();
-				genmodinfo.repaint();
-			}
-		}
-		public void mouseClicked(MouseEvent arg0) {
-		}
-		public void mouseEntered(MouseEvent arg0) {
-			Component component = arg0.getComponent();
-			if (component == removebutton) {
-				removebutton.setBorderPainted(true);
-				removebutton.setContentAreaFilled(true);
-			}
-		}
-		public void mouseExited(MouseEvent arg0) {
-			Component component = arg0.getComponent();
-			if (component == removebutton) {
-				removebutton.setBorderPainted(false);
-				removebutton.setContentAreaFilled(false);
-			}
-		}
-		public void mousePressed(MouseEvent arg0) {}
-		public void mouseReleased(MouseEvent arg0) {}
-	}
-	// End of MetadataItem class
-
-	
 	// Retrieve the model-level annotations
 	public Set<Annotation> getModelLevelAnnotations(){
 		for(Annotation ann : annotator.semsimmodel.getAnnotations()){
@@ -201,7 +108,19 @@ public class ModelLevelMetadataEditor extends SemGenDialog implements PropertyCh
 		genmodinfo.add(Box.createGlue());
 		return annotator.semsimmodel.getAnnotations();
 	}
-
+	
+	public void actionPerformed(ActionEvent arg0) {
+		Object o = arg0.getSource();
+		if(o == addbutton){
+			MetadataItem mi = new MetadataItem("", null, true);
+			genmodinfo.add(mi,0);
+			genmodinfo.validate();
+			genmodinfo.repaint();
+			scrollpane.validate();
+			scrollpane.repaint();
+			scrollpane.scrollToComponent(mi);
+		}
+	}
 	
 	public final void propertyChange(PropertyChangeEvent e) {
 		// Set the model-level annotations
@@ -250,17 +169,85 @@ public class ModelLevelMetadataEditor extends SemGenDialog implements PropertyCh
 			dispose();
 		}
 	}
+	
+	public class MetadataItem extends JPanel implements ActionListener{
+		private static final long serialVersionUID = 3245322304789828616L;
+		public JButton removebutton = new JButton(SemGenIcon.eraseicon);
+		private JLabel label = new JLabel();
+		public Annotation ann;
+		public Boolean editable;
+		private JComboBox<String> cb;
+		public JTextArea ta = new JTextArea();
+		public SemGenScrollPane sgsp = new SemGenScrollPane(ta);
+		
+		public MetadataItem(String labeltext, String tatext, Annotation ann, Boolean editable){
+			this.ann = ann;
+			this.editable = editable;
+			
+			label.setText(labeltext);
+			ta.setText(tatext);
+			makeUI(editable);
+		}
+		
+		public MetadataItem(String tatext, Annotation ann, Boolean editable){
+			this.ann = ann;
+			this.editable = editable;
+			
+			cb = new JComboBox<String>(SemGen.semsimlib.getListofMetaDataRelations());
+			cb.setSelectedItem(cb.getItemAt(0));
+			
+			ta.setText(tatext);
+			makeUI(editable);
+		}
+		
+		private void makeUI(Boolean editable) {
+			label.setFont(SemGenFont.defaultItalic());
+			label.setBorder(BorderFactory.createEmptyBorder(15, 0, 5, 8));
+			label.setAlignmentX(Component.LEFT_ALIGNMENT);
+			
+			ta.setEditable(editable);
+			ta.setAlignmentX(Component.LEFT_ALIGNMENT);
+			ta.setFont(SemGenFont.defaultPlain());
+			ta.setForeground(Color.blue);
+			ta.setLineWrap(true);
+			ta.setWrapStyleWord(true);
+			if(!editable){ta.setBackground(Color.lightGray);}
 
-	public void actionPerformed(ActionEvent arg0) {
-		Object o = arg0.getSource();
-		if(o == addbutton){
-			MetadataItem mi = new MetadataItem("", null, true);
-			genmodinfo.add(mi,0);
-			genmodinfo.validate();
-			genmodinfo.repaint();
-			scrollpane.validate();
-			scrollpane.repaint();
-			scrollpane.scrollToComponent(mi);
+			sgsp.setMaximumSize(new Dimension(300, 300));
+			if(ta.getText().length()<45){sgsp.setPreferredSize(new Dimension(300, 35));}
+			else{sgsp.setPreferredSize(new Dimension(300, 100));}
+			removebutton.setBackground(this.getBackground());
+			removebutton.addMouseListener(new removeBtnMouse());
+			removebutton.addActionListener(this);
+			removebutton.setOpaque(false);
+			removebutton.setBorderPainted(false);
+			removebutton.setContentAreaFilled(false);
+			removebutton.setEnabled(editable);
+			
+			this.add(label);
+			this.add(sgsp);
+			this.add(removebutton);
+		}
+		
+		public void actionPerformed(ActionEvent e) {
+			Object o = e.getSource();
+			if (o == removebutton) {
+				genmodinfo.remove(this);
+				genmodinfo.validate();
+				genmodinfo.repaint();
+			}
+		}
+		
+		class removeBtnMouse extends MouseAdapter {	
+			public void mouseEntered(MouseEvent arg0) {
+				removebutton.setBorderPainted(true);
+				removebutton.setContentAreaFilled(true);
+			}
+			public void mouseExited(MouseEvent arg0) {
+				removebutton.setBorderPainted(false);
+				removebutton.setContentAreaFilled(false);
+			}
 		}
 	}
+	// End of MetadataItem class
 }
