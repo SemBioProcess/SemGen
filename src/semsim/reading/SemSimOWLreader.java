@@ -56,7 +56,7 @@ import semsim.model.physical.object.FunctionalSubmodel;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.owl.SemSimOWLFactory;
 
-public class SemSimOWLreader {
+public class SemSimOWLreader extends BioModelReader {
 	private SemSimModel semsimmodel;
 	private OWLDataFactory factory;
 	private Map<URI, PhysicalModelComponent> URIandPMCmap = new HashMap<URI, PhysicalModelComponent>();
@@ -487,7 +487,8 @@ public class SemSimOWLreader {
 			else{
 				String referencename = getStringValueFromAnnotatedDataPropertyAxiom(ont, sub, SemSimConstants.IMPORTED_FROM_URI,
 						importval, SemSimConstants.REFERENCE_NAME_OF_IMPORT_URI);
-				sssubmodel = SemSimComponentImporter.importFunctionalSubmodel(srcfile, semsimmodel, subname, referencename, importval);
+				sssubmodel = 
+						SemSimComponentImporter.importFunctionalSubmodel(srcfile, semsimmodel, subname, referencename, importval, sslib);
 			}
 			
 			// Store refersTo annotations, if present (accommodate older models that used nonCompositeAnnotationRefersTo)

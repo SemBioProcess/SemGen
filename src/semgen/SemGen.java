@@ -36,7 +36,9 @@ import semgen.utilities.SemGenFont;
 import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.utilities.uicomponent.SemGenDialog;
 import semgen.utilities.uicomponent.SemGenProgressBar;
+import semsim.ErrorLog;
 import semsim.SemSimLibrary;
+import semsim.reading.BioModelReader;
 
 public class SemGen extends JFrame implements Observer{
 	private static final long serialVersionUID = 1L;
@@ -72,12 +74,18 @@ public class SemGen extends JFrame implements Observer{
 		
 		System.out.print("Loading SemGen...");
 		logfilewriter.println("Loading SemGen");
+		configureSemSim();
 		
 		 SwingUtilities.invokeLater(new Runnable() {
 		     public void run() {
 		        createAndShowGUI();
 		     }
 		  });
+	}
+	
+	private static void configureSemSim() {
+		BioModelReader.pointtoSemSimLibrary(semsimlib);
+		ErrorLog.setLogFile(logfilewriter);
 	}
 	
 	/**Set the user interface look and feel to the Nimbus Swing layout and create the frame*/

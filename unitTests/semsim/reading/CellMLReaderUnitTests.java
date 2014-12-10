@@ -3,15 +3,21 @@ package semsim.reading;
 import static org.junit.Assert.*;
 
 import java.io.File;
+
 import org.junit.Test;
 
 import semsim.CollateralHelper;
 import semsim.SemSimConstants;
+import semsim.SemSimLibrary;
 import semsim.model.SemSimModel;
 import semsim.model.annotation.Annotation;
 
 public class CellMLReaderUnitTests {
-
+	SemSimLibrary sslib;
+	
+	public CellMLReaderUnitTests(SemSimLibrary lib) {
+		sslib = lib;
+	}
 	@Test
 	public void readFromFile_readValidFile_VerifyNonNullModelReturned() {
 		// Arrange

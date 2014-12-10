@@ -1,15 +1,22 @@
 package semgen.utilities.file;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
+import org.jdom.Document;
+import org.jdom.JDOMException;
+import org.semanticweb.owlapi.model.OWLException;
+
+import JSim.util.Xcept;
 import semgen.SemGen;
 import semgen.annotation.routines.AutoAnnotate;
 import semgen.utilities.SemGenError;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semsim.model.SemSimModel;
 import semsim.reading.CellMLreader;
+import semsim.reading.MMLParser;
 import semsim.reading.MMLreader;
 import semsim.reading.ModelClassifier;
 import semsim.reading.ReferenceTermNamer;
@@ -22,39 +29,37 @@ public class LoadSemSimModel {
 	public static SemSimModel loadSemSimModelFromFile(File file, boolean autoannotate) {
 		SemSimModel semsimmodel = null;
 		int modeltype = ModelClassifier.classify(file);
-
-		String JSimBuildDir = "./jsimhome";
 		try {
 			switch (modeltype){
 			
 			case ModelClassifier.MML_MODEL:
-					semsimmodel = new MMLreader(JSimBuildDir).readFromFile(file);
-					if(semsimmodel.getErrors().isEmpty() && autoannotate)
-						semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
+				semsimmodel = createModel(file);
+				if((semsimmodel==null) || semsimmodel.getErrors().isEmpty() && autoannotate)
+					semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
 				break;
 					
-		case ModelClassifier.SBML_MODEL:// MML
-					semsimmodel = new MMLreader(JSimBuildDir).readFromFile(file);
-					if(semsimmodel.getErrors().isEmpty() && autoannotate){
-						// If it's an SBML model and we should auto-annotate
-						semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
-						SemGenProgressBar progframe = new SemGenProgressBar("Annotating with web services...",true);
-						boolean online = WebserviceTester.testBioPortalWebservice("Annotation via web services failed.");
-						if(!online) 
-							SemGenError.showWebConnectionError("BioPortal search service");
-						
-						SBMLAnnotator.annotate(file, semsimmodel, online, SemGen.semsimlib.getOntTermsandNamesCache());
-						ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel, SemGen.semsimlib.getOntTermsandNamesCache(), online);
-						SBMLAnnotator.setFreeTextDefinitionsForDataStructuresAndSubmodels(semsimmodel);
-						progframe.dispose();
-					}
+			case ModelClassifier.SBML_MODEL:// MML
+				semsimmodel = createModel(file);
+				
+				if((semsimmodel==null) || semsimmodel.getErrors().isEmpty() && autoannotate){
+					// If it's an SBML model and we should auto-annotate
+					semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
+					SemGenProgressBar progframe = new SemGenProgressBar("Annotating with web services...",true);
+					boolean online = WebserviceTester.testBioPortalWebservice("Annotation via web services failed.");
+					if(!online) 
+						SemGenError.showWebConnectionError("BioPortal search service");
+					
+					SBMLAnnotator.annotate(file, semsimmodel, online, SemGen.semsimlib.getOntTermsandNamesCache());
+					ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel, SemGen.semsimlib.getOntTermsandNamesCache(), online);
+					SBMLAnnotator.setFreeTextDefinitionsForDataStructuresAndSubmodels(semsimmodel);
+					progframe.dispose();
+				}
 				break;
 				
 			case ModelClassifier.CELLML_MODEL:
 				semsimmodel = new CellMLreader().readFromFile(file);
 				if(semsimmodel.getErrors().isEmpty()){
 					if(autoannotate){
-						
 						final SemGenProgressBar progframe = new SemGenProgressBar("Annotating " + file.getName() + " with web services...",true);
 						Boolean online = true;
 						
@@ -62,11 +67,10 @@ public class LoadSemSimModel {
 							if(!online) SemGenError.showWebConnectionError("BioPortal search service");
 
 						
-					ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel,  SemGen.semsimlib.getOntTermsandNamesCache(), online);
-					semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
-					
-					progframe.dispose();
-					
+						ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel,  SemGen.semsimlib.getOntTermsandNamesCache(), online);
+						semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
+						
+						progframe.dispose();
 					}
 				}
 				break;
@@ -100,6 +104,13 @@ public class LoadSemSimModel {
 	public static SemSimModel loadSemSimOWL(File file) throws Exception {
 		return new SemSimOWLreader(file).readFromFile();
 	}
-	
 
+	
+	private static SemSimModel createModel(File file) throws Xcept, IOException, InterruptedException, OWLException, JDOMException {
+		Document doc = new MMLParser().readFromFile(file);
+		if (SemGenError.showSemSimErrors()) return null;
+		
+		MMLreader xmml2 = new MMLreader(doc);		
+		return xmml2.readFromFile(file);
+	}
 }

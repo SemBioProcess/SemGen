@@ -28,6 +28,8 @@ import semsim.owl.SemSimOWLFactory;
 
 //Class for holding reference terms and data required for SemGen - intended to replace SemSimConstants class
 public class SemSimLibrary {
+	public static final double SEMSIM_VERSION = 0.9;
+	
 	public static File ontologyTermsAndNamesCacheFile = new File("cfg/ontologyTermsAndNamesCache.txt");
 	private OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	public OWLOntology OPB;
@@ -198,5 +200,12 @@ public class SemSimLibrary {
 			}
 		}
 		return true;
+	}
+	
+	/**
+	 * @return The version of the SemSim API used to generate the model.
+	 */
+	public double getSemSimVersion() {
+		return SEMSIM_VERSION;
 	}
 }

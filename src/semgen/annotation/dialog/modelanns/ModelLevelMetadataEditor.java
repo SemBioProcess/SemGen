@@ -36,7 +36,6 @@ import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 
 public class ModelLevelMetadataEditor extends SemGenDialog implements PropertyChangeListener, ActionListener {
-
 	private static final long serialVersionUID = 222072128470808990L;
 	private JOptionPane optionPane;
 	private Object[] options;

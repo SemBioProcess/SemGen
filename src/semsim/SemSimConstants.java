@@ -249,9 +249,7 @@ public class SemSimConstants {
 	public static final SemSimRelation MODEL_NAME_RELATION = new SemSimRelation("a human-readable name for the model", MODEL_NAME_URI);
 	
 	public static final String BIOPORTAL_API_KEY = "c4192e4b-88a8-4002-ad08-b4636c88df1a";
-	
-	public static final double SEMSIM_VERSION = 0.1;
-	
+
 	public static final int UNKNOWN_PROPERTY_TYPE = 0;
 	public static final int PROPERTY_OF_PHYSICAL_ENTITY = 1;
 	public static final int PROPERTY_OF_PHYSICAL_PROCESS = 2;

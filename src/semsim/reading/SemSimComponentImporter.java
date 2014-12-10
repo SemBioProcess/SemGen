@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.semanticweb.owlapi.model.OWLException;
 
+import semsim.SemSimLibrary;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.units.UnitFactor;
@@ -19,7 +20,7 @@ public class SemSimComponentImporter {
  */
 
 	public static FunctionalSubmodel importFunctionalSubmodel(File receivingmodelfile, SemSimModel receivingmodel,
-			String localcompname, String origcompname, String hrefValue){
+			String localcompname, String origcompname, String hrefValue, SemSimLibrary sslib){
 		
 		String supplyingmodelfilepath = getPathToSupplyingModel(receivingmodelfile, receivingmodel, hrefValue);
 		if(supplyingmodelfilepath==null){

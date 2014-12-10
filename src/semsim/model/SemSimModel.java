@@ -92,7 +92,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 	private String namespace;
 	private Set<Annotation> annotations = new HashSet<Annotation>();
 	private static SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmssSSSZ");
-	private double semSimVersion = SemSimConstants.SEMSIM_VERSION;
+
 	private int sourceModelType;
 	public static String unspecifiedName = "*unspecified*";
 	
@@ -779,15 +779,6 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 		}
 		return null;
 	}
-
-	
-	/**
-	 * @return The version of the SemSim API used to generate the model.
-	 */
-	public double getSemSimVersion() {
-		return semSimVersion;
-	}
-	
 	
 	/**
 	 * @param name The name of a {@link Submodel} to retrieve

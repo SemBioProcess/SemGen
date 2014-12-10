@@ -50,8 +50,7 @@ import semsim.model.physical.object.PhysicalProperty;
 import semsim.owl.SemSimOWLFactory;
 import semsim.writing.CellMLbioRDFblock;
 
-public class CellMLreader {
-
+public class CellMLreader extends BioModelReader {
 	private Namespace mainNS;
 	private SemSimModel semsimmodel;
 	private CellMLbioRDFblock rdfblock;
@@ -59,11 +58,9 @@ public class CellMLreader {
 	private Element rdfblockelement;
 	private Map<String, PhysicalModelComponent> URIandPMCmap = new HashMap<String, PhysicalModelComponent>();
 	private String unnamedstring = "[unnamed!]";
-
 	private XMLOutputter xmloutputter = new XMLOutputter();
-
+	
 	public SemSimModel readFromFile(File file) {
-		
 		String modelname = file.getName().substring(0, file.getName().indexOf("."));
 		semsimmodel = new SemSimModel();
 		semsimmodel.setName(modelname);
@@ -86,7 +83,7 @@ public class CellMLreader {
 
 		// Add model-level metadata
 		semsimmodel.addAnnotation(new Annotation(SemSimConstants.LEGACY_CODE_LOCATION_RELATION, file.getAbsolutePath()));
-		semsimmodel.addAnnotation(new Annotation(SemSimConstants.SEMSIM_VERSION_RELATION, Double.toString(SemSimConstants.SEMSIM_VERSION)));
+		semsimmodel.addAnnotation(new Annotation(SemSimConstants.SEMSIM_VERSION_RELATION, Double.toString(sslib.getSemSimVersion())));
 
 		// Get the namespace that indicates if it is a CellML 1.0 or 1.1 model
 		mainNS = doc.getRootElement().getNamespace();
@@ -128,7 +125,8 @@ public class CellMLreader {
 				Element importedcompel = (Element) importedcompsit.next();
 				String localcompname = importedcompel.getAttributeValue("name");
 				String origcompname = importedcompel.getAttributeValue("component_ref");
-				FunctionalSubmodel instantiatedsubmodel = SemSimComponentImporter.importFunctionalSubmodel(file, semsimmodel, localcompname, origcompname, hrefValue);
+				FunctionalSubmodel instantiatedsubmodel = 
+						SemSimComponentImporter.importFunctionalSubmodel(file, semsimmodel, localcompname, origcompname, hrefValue, sslib);
 				String metadataid = importedcompel.getAttributeValue("id", CellMLconstants.cmetaNS);
 				instantiatedsubmodel.setMetadataID(metadataid);
 

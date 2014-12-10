@@ -138,7 +138,7 @@ public class SemSimUtil {
 				pwriter.close();
 			} catch (IOException e) {
 				e.printStackTrace();
-			}			
+			}
 		}
 	}
 	
