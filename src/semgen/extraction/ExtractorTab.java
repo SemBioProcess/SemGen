@@ -28,7 +28,6 @@ import prefuse.data.Graph;
 import prefuse.data.Node;
 import prefuse.data.Schema;
 import semgen.GlobalActions;
-import semgen.SemGen;
 import semgen.SemGenSettings;
 import semgen.encoding.Encoder;
 import semgen.extraction.RadialGraph.Clusterer;
@@ -850,7 +849,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 				mmldir.mkdir();
 				File coderfile = new File(mmldir.getAbsolutePath() + "/" + extractedfile.getName() + ".mod");
 				String out = null;
-					out = new MMLwriter(SemGen.semsimlib).writeToString(extractedmodel);
+					out = new MMLwriter(extractedmodel).writeToString();
 					SemSimUtil.writeStringToFile(out, coderfile);
 			} else {
 				System.out.println("ERROR in creating file during atomic decomposition");

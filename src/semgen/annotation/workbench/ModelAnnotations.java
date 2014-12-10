@@ -5,9 +5,9 @@ import java.util.Set;
 
 import semgen.annotation.dialog.modelanns.LegacyCodeChooser;
 import semsim.SemSimConstants;
+import semsim.annotation.Annotation;
+import semsim.annotation.SemSimRelation;
 import semsim.model.SemSimModel;
-import semsim.model.annotation.Annotation;
-import semsim.model.annotation.SemSimRelation;
 
 public class ModelAnnotations extends Observable {
 	Set<Annotation> annotations;

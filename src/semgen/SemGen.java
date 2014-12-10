@@ -39,6 +39,7 @@ import semgen.utilities.uicomponent.SemGenProgressBar;
 import semsim.ErrorLog;
 import semsim.SemSimLibrary;
 import semsim.reading.BioModelReader;
+import semsim.writing.BioModelWriter;
 
 public class SemGen extends JFrame implements Observer{
 	private static final long serialVersionUID = 1L;
@@ -85,6 +86,7 @@ public class SemGen extends JFrame implements Observer{
 	
 	private static void configureSemSim() {
 		BioModelReader.pointtoSemSimLibrary(semsimlib);
+		BioModelWriter.pointtoSemSimLibrary(semsimlib);
 		ErrorLog.setLogFile(logfilewriter);
 	}
 	

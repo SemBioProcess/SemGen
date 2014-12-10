@@ -19,7 +19,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
-import semsim.model.annotation.ReferenceOntologyAnnotation;
+import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
@@ -34,12 +34,14 @@ public class SemSimLibrary {
 	private OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	public OWLOntology OPB;
 	
-	private Hashtable<String, String[]> OPBClassesForUnitsTable = new Hashtable<String, String[]>();
-	private Hashtable<String, String[]> compositeAnnRelationsTable = new Hashtable<String, String[]>();
-	private Hashtable<String, String[]> metadataRelationsTable = new Hashtable<String, String[]>();
-	private Hashtable<String, String[]> ontologyTermsAndNamesCache = new Hashtable<String,String[]>();
+	private Hashtable<String, String[]> OPBClassesForUnitsTable;
+	private Hashtable<String, String[]> compositeAnnRelationsTable;
+	private Hashtable<String, String[]> metadataRelationsTable;
+	private Hashtable<String, String[]> ontologyTermsAndNamesCache;
 	private Hashtable<String, String[]> jsimUnitsTable;
+	
 	private Set<String> jsimUnitPrefixesTable;
+	private Set<String> cellMLUnitsTable;
 	
 	private static Set<String> OPBproperties = new HashSet<String>();
 	private static Set<String> OPBflowProperties = new HashSet<String>();
@@ -59,9 +61,13 @@ public class SemSimLibrary {
 			metadataRelationsTable = ResourcesManager.createHashtableFromFile("cfg/metadataRelations.txt");
 			ontologyTermsAndNamesCache = ResourcesManager.createHashtableFromFile("cfg/ontologyTermsAndNamesCache.txt");
 			jsimUnitsTable = ResourcesManager.createHashtableFromFile("cfg/jsimUnits");
-			jsimUnitPrefixesTable = ResourcesManager.createSetFromFile("cfg/jsimUnitPrefixes");
+			
 			OPBClassesForUnitsTable = ResourcesManager.createHashtableFromFile("cfg/OPBClassesForUnits.txt");
-		} catch (FileNotFoundException e3) {e3.printStackTrace();}	
+			jsimUnitPrefixesTable = ResourcesManager.createSetFromFile("cfg/jsimUnitPrefixes");
+			cellMLUnitsTable = ResourcesManager.createSetFromFile("cfg/CellMLUnits.txt");
+		} catch (FileNotFoundException e3) {
+			e3.printStackTrace();
+		}
 		
 
 		// Load the local copy of the OPB and the SemSim base ontology, and other config files into memory
@@ -200,6 +206,10 @@ public class SemSimLibrary {
 			}
 		}
 		return true;
+	}
+	
+	public boolean isCellMLBaseUnit(String unit) {
+		return cellMLUnitsTable.contains(unit);
 	}
 	
 	/**

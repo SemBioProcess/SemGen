@@ -8,7 +8,7 @@ import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenDialog;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semsim.SemSimConstants;
-import semsim.model.annotation.Annotation;
+import semsim.annotation.Annotation;
 
 import java.net.URI;
 import java.util.HashSet;

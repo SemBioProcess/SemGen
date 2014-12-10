@@ -21,8 +21,8 @@ import org.semanticweb.owlapi.model.OWLException;
 
 import JSim.util.Xcept;
 import semsim.SemSimConstants;
+import semsim.annotation.Annotation;
 import semsim.model.SemSimModel;
-import semsim.model.annotation.Annotation;
 import semsim.model.computational.Computation;
 import semsim.model.computational.RelationalConstraint;
 import semsim.model.computational.datastructures.DataStructure;
@@ -33,7 +33,6 @@ import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.object.PhysicalProperty;
 
 public class MMLreader extends BioModelReader {
-	protected SemSimModel semsimmodel;
 	private Hashtable<String,String> discretevarsandconstraints = new Hashtable<String,String>();
 	private Hashtable<String,String> discretevarsandmathml = new Hashtable<String,String>();
 	private Hashtable<String,String[]> discretevarsandeventtriggerinputs = new Hashtable<String,String[]>();
@@ -43,14 +42,13 @@ public class MMLreader extends BioModelReader {
 	private Set<Element> toolset = new HashSet<Element>(); 
 	protected Document doc;
 	
-	public MMLreader(Document doc) throws Xcept {
+	public MMLreader(File file, Document doc) throws Xcept {
+		super(file);
 		this.doc = doc;
-		this.semsimmodel = new SemSimModel();
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public SemSimModel readFromFile(File file) throws IOException, InterruptedException, OWLException {
-
+	public SemSimModel readFromFile() throws IOException, InterruptedException, OWLException {
 		int numdomains = 0;
 		// Collect all tools into a set
 		Iterator toolit = doc.getRootElement().getChild("toolList").getChildren().iterator();
@@ -148,9 +146,8 @@ public class MMLreader extends BioModelReader {
 				ds.setPhysicalProperty(new PhysicalProperty()); // If units, instantiate property
 			
 				// Store the units attribute value
-				String unitname = "";
 				if (varchild.getAttributeValue("unitID") != null) {
-					unitname = varchild.getAttributeValue("unitID");
+					String unitname = varchild.getAttributeValue("unitID");
 					if(semsimmodel.containsUnit(unitname)) ds.setUnit(semsimmodel.getUnit(unitname));
 					else{
 						UnitOfMeasurement uom = new UnitOfMeasurement(unitname);
@@ -306,7 +303,7 @@ public class MMLreader extends BioModelReader {
 		} // End of variable iterator
 		
 		// Set the custom units
-		setCustomUnits(file);
+		setCustomUnits(srcfile);
 		
 		// find the hasInput properties for the computations and hasRolePlayer properties for the dependencies
 		for (Element tool : toolset) {
@@ -361,12 +358,12 @@ public class MMLreader extends BioModelReader {
 		}
 				
 		// Add the model-level annotations
-		semsimmodel.addAnnotation(new Annotation(SemSimConstants.LEGACY_CODE_LOCATION_RELATION, file.getAbsolutePath()));
+		semsimmodel.addAnnotation(new Annotation(SemSimConstants.LEGACY_CODE_LOCATION_RELATION, srcfile.getAbsolutePath()));
 		semsimmodel.addAnnotation(new Annotation(SemSimConstants.SEMSIM_VERSION_RELATION, Double.toString(sslib.getSemSimVersion())));
 
 		// If jsbatch couldn't parse the model code into an xmml file, log the error
 		if(semsimmodel.getDataStructures().isEmpty() && semsimmodel.getPhysicalModelComponents().isEmpty()){
-			semsimmodel.addError(file.getName() + " model appears to be empty.");
+			semsimmodel.addError(srcfile.getName() + " model appears to be empty.");
 		}
 		return semsimmodel;
 	}
@@ -383,8 +380,7 @@ public class MMLreader extends BioModelReader {
 		// Can this be rewritten using XMML2?
 		while (scnr.hasNextLine()) {
 			String nextline = scnr.nextLine();
-			String nextlinemod = "";
-			nextlinemod = nextline.replace(" ", "");
+			String nextlinemod = nextline.replace(" ", "");
 			nextlinemod = nextlinemod.replace("\t", "");
 			if (nextlinemod.startsWith("unit") && nextlinemod.contains("=")) {
 				String unitname = nextlinemod.substring(nextlinemod.indexOf("unit") + 4,nextlinemod.indexOf("="));
@@ -483,7 +479,7 @@ public class MMLreader extends BioModelReader {
 				}
 			}
 		}
-		String[] inputsarray = (String[]) inputs.toArray(new String[] {});
+		String[] inputsarray = inputs.toArray(new String[] {});
 		return inputsarray;
 	}
 }

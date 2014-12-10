@@ -1,4 +1,4 @@
-package semsim.model.annotation;
+package semsim.annotation;
 
 import java.net.URI;
 import semsim.SemSimConstants;

@@ -1,4 +1,4 @@
-package semsim.model.annotation;
+package semsim.annotation;
 
 import org.apache.commons.lang3.builder.*;
 

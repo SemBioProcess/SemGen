@@ -30,11 +30,11 @@ import com.hp.hpl.jena.rdf.model.Statement;
 
 import semsim.CellMLconstants;
 import semsim.SemSimConstants;
+import semsim.annotation.Annotation;
+import semsim.annotation.ReferenceOntologyAnnotation;
+import semsim.annotation.StructuralRelation;
 import semsim.model.SemSimComponent;
 import semsim.model.SemSimModel;
-import semsim.model.annotation.Annotation;
-import semsim.model.annotation.ReferenceOntologyAnnotation;
-import semsim.model.annotation.StructuralRelation;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
@@ -52,7 +52,6 @@ import semsim.writing.CellMLbioRDFblock;
 
 public class CellMLreader extends BioModelReader {
 	private Namespace mainNS;
-	private SemSimModel semsimmodel;
 	private CellMLbioRDFblock rdfblock;
 	private String rdfstring;
 	private Element rdfblockelement;
@@ -60,9 +59,12 @@ public class CellMLreader extends BioModelReader {
 	private String unnamedstring = "[unnamed!]";
 	private XMLOutputter xmloutputter = new XMLOutputter();
 	
-	public SemSimModel readFromFile(File file) {
-		String modelname = file.getName().substring(0, file.getName().indexOf("."));
-		semsimmodel = new SemSimModel();
+	public CellMLreader(File file) {
+		super(file);
+	}
+	
+	public SemSimModel readFromFile() {
+		String modelname = srcfile.getName().substring(0, srcfile.getName().indexOf("."));
 		semsimmodel.setName(modelname);
 		
 		xmloutputter.setFormat(Format.getPrettyFormat());
@@ -70,7 +72,7 @@ public class CellMLreader extends BioModelReader {
 		SAXBuilder builder = new SAXBuilder();
 		Document doc = null;
 		try {
-			doc = builder.build(file);
+			doc = builder.build(srcfile);
 		} catch (JDOMException | IOException e) {
 			e.printStackTrace();
 			semsimmodel.addError(e.getLocalizedMessage());
@@ -82,7 +84,7 @@ public class CellMLreader extends BioModelReader {
 		}
 
 		// Add model-level metadata
-		semsimmodel.addAnnotation(new Annotation(SemSimConstants.LEGACY_CODE_LOCATION_RELATION, file.getAbsolutePath()));
+		semsimmodel.addAnnotation(new Annotation(SemSimConstants.LEGACY_CODE_LOCATION_RELATION, srcfile.getAbsolutePath()));
 		semsimmodel.addAnnotation(new Annotation(SemSimConstants.SEMSIM_VERSION_RELATION, Double.toString(sslib.getSemSimVersion())));
 
 		// Get the namespace that indicates if it is a CellML 1.0 or 1.1 model
@@ -126,7 +128,7 @@ public class CellMLreader extends BioModelReader {
 				String localcompname = importedcompel.getAttributeValue("name");
 				String origcompname = importedcompel.getAttributeValue("component_ref");
 				FunctionalSubmodel instantiatedsubmodel = 
-						SemSimComponentImporter.importFunctionalSubmodel(file, semsimmodel, localcompname, origcompname, hrefValue, sslib);
+						SemSimComponentImporter.importFunctionalSubmodel(srcfile, semsimmodel, localcompname, origcompname, hrefValue, sslib);
 				String metadataid = importedcompel.getAttributeValue("id", CellMLconstants.cmetaNS);
 				instantiatedsubmodel.setMetadataID(metadataid);
 
@@ -144,7 +146,7 @@ public class CellMLreader extends BioModelReader {
 			UnitOfMeasurement uom = new UnitOfMeasurement(unitname);
 			semsimmodel.addUnit(uom);
 			String isbaseunitval = unit.getAttributeValue("base_units");
-			if(isbaseunitval!=null || CellMLconstants.CellML_UNIT_DICTIONARY.contains(unitname)){
+			if(isbaseunitval!=null || sslib.isCellMLBaseUnit(unitname)){
 				uom.setFundamental(true);
 			}
 			else{

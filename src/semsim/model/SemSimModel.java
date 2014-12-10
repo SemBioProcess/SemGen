@@ -16,10 +16,10 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import semsim.Annotatable;
 import semsim.SemSimConstants;
 import semsim.SemSimObject;
-import semsim.model.annotation.Annotation;
-import semsim.model.annotation.ReferenceOntologyAnnotation;
-import semsim.model.annotation.SemSimRelation;
-import semsim.model.annotation.StructuralRelation;
+import semsim.annotation.Annotation;
+import semsim.annotation.ReferenceOntologyAnnotation;
+import semsim.annotation.SemSimRelation;
+import semsim.annotation.StructuralRelation;
 import semsim.model.computational.ComputationalModelComponent;
 import semsim.model.computational.RelationalConstraint;
 import semsim.model.computational.datastructures.DataStructure;
@@ -39,7 +39,6 @@ import semsim.model.physical.object.PhysicalDependency;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
-import semsim.writing.CellMLwriter;
 import semsim.writing.SemSimOWLwriter;
 
 /**
@@ -878,20 +877,6 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 	public void writeSemSimOWLFile(URI uri) throws OWLException{
 		new SemSimOWLwriter(this).writeToFile(uri);
 	}
-	
-	
-	/**
-	 * Output the model as a CellML file
-	 * @param destination The output location
-	 */
-	public void writeCellMLFile(File destination){
-		new CellMLwriter().writeToFile(this, destination);
-	}
-	
-//	public File writePhysioMap(File file) throws IOException, OWLException{
-//		return PhysioMapWriter.translate(this, file);
-//	}
-
 
 	/**
 	 * @return A new SemSim model namespace from the current date and time

@@ -17,8 +17,7 @@ import JSim.util.UtilIO;
 import JSim.util.Xcept;
 import semsim.ErrorLog;
 
-public class MMLParser extends BioModelReader {
-
+public class MMLParser {
 	public int srcType = -1;
 
 	protected Document doc;
@@ -58,12 +57,8 @@ public class MMLParser extends BioModelReader {
 		doc = new SAXBuilder().build(is);
 		
 		if(doc.hasRootElement()){
-			// If it's XMML version 2
-			if(doc.getRootElement().getChild("model")!=null){
-				
-			}
-			// otherwise use XMML version 1 parser
-			else{
+			// If it's not XMML version 2
+			if(doc.getRootElement().getChild("model")==null){
 				ErrorLog.addError("XMML did not have a root element named 'model' - please use JSim version 2.05 or higher", true);
 			}
 		}

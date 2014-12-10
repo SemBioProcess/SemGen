@@ -9,9 +9,9 @@ import org.jdom.JDOMException;
 
 import semsim.Annotatable;
 import semsim.SemSimConstants;
+import semsim.annotation.Annotation;
+import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.model.SemSimComponent;
-import semsim.model.annotation.Annotation;
-import semsim.model.annotation.ReferenceOntologyAnnotation;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;

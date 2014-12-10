@@ -4,8 +4,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import semsim.annotation.Annotation;
 import semsim.model.SemSimModel;
-import semsim.model.annotation.Annotation;
 import semsim.model.computational.Computation;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;

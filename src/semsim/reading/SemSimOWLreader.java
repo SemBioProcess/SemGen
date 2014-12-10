@@ -36,9 +36,9 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import semsim.CellMLconstants;
 import semsim.SemSimConstants;
+import semsim.annotation.Annotation;
+import semsim.annotation.StructuralRelation;
 import semsim.model.SemSimModel;
-import semsim.model.annotation.Annotation;
-import semsim.model.annotation.StructuralRelation;
 import semsim.model.computational.RelationalConstraint;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.Decimal;
@@ -57,17 +57,14 @@ import semsim.model.physical.object.PhysicalProperty;
 import semsim.owl.SemSimOWLFactory;
 
 public class SemSimOWLreader extends BioModelReader {
-	private SemSimModel semsimmodel;
 	private OWLDataFactory factory;
 	private Map<URI, PhysicalModelComponent> URIandPMCmap = new HashMap<URI, PhysicalModelComponent>();
 	private OWLOntology ont;
-	private File srcfile;
-	
+
 	public SemSimOWLreader(File file) {
-		srcfile = file;
+		super(file);
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		factory = manager.getOWLDataFactory();
-		semsimmodel = new SemSimModel();
 		semsimmodel.setName(srcfile.getName().substring(0, srcfile.getName().lastIndexOf(".")));
 		
 		try {

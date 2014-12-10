@@ -25,7 +25,7 @@ import semsim.model.physical.object.PhysicalProperty;
 public class ChalkboardCoder {
 
 	public static Hashtable<String,CustomPhysicalEntity> nounnamesandphysents;
-	public static int x = 1;
+	private static int x = 1;
 	public static Set<Element> nouncollection = new HashSet<Element>();
 	
 	public static void translate(SemSimModel semsimmodel, File outputfile) throws JDOMException, IOException, OWLException {

@@ -20,8 +20,8 @@ import com.hp.hpl.jena.rdf.model.Statement;
 
 import semsim.SemSimConstants;
 import semsim.SemSimUtil;
-import semsim.model.annotation.ReferenceOntologyAnnotation;
-import semsim.model.annotation.StructuralRelation;
+import semsim.annotation.ReferenceOntologyAnnotation;
+import semsim.annotation.StructuralRelation;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;

@@ -47,18 +47,9 @@ public class FunctionalSubmodel extends Submodel {
 		}
 		computation = new Computation();
 	}
-	
-	
-	public void setRelationshipSubmodelMap(Map<String, Set<FunctionalSubmodel>> relationshipSubmodelMap) {
-		this.relationshipSubmodelMap = relationshipSubmodelMap;
-	}
 
 	public Map<String, Set<FunctionalSubmodel>> getRelationshipSubmodelMap() {
 		return relationshipSubmodelMap;
-	}
-
-	public void setComputation(Computation computation) {
-		this.computation = computation;
 	}
 
 	public Computation getComputation() {

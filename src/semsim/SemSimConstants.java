@@ -6,10 +6,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import semsim.model.annotation.SemSimRelation;
-import semsim.model.annotation.StructuralRelation;
+import semsim.annotation.SemSimRelation;
+import semsim.annotation.StructuralRelation;
 
 /**
  * A set of constants for working with SemSim models

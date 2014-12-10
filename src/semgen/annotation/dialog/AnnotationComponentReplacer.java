@@ -21,8 +21,8 @@ import semgen.annotation.dialog.referenceclass.ReferenceClassFinderPanel;
 import semgen.utilities.uicomponent.SemGenDialog;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semsim.SemSimConstants;
-import semsim.model.annotation.Annotation;
-import semsim.model.annotation.ReferenceOntologyAnnotation;
+import semsim.annotation.Annotation;
+import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.writing.CaseInsensitiveComparator;
 

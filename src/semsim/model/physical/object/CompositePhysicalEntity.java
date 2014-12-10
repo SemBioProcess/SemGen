@@ -4,7 +4,7 @@ import java.net.URI;
 import java.util.ArrayList;
 
 import semsim.SemSimConstants;
-import semsim.model.annotation.StructuralRelation;
+import semsim.annotation.StructuralRelation;
 import semsim.model.physical.PhysicalEntity;
 
 public class CompositePhysicalEntity extends PhysicalEntity implements Comparable<CompositePhysicalEntity>{
@@ -79,9 +79,7 @@ public class CompositePhysicalEntity extends PhysicalEntity implements Comparabl
 			return 0;
 		}
 		// Else the arrays were different sizes
-		else{
-			return 1;
-		}
+		return 1;
 	}
 
 	@Override

@@ -25,9 +25,9 @@ import semgen.annotation.dialog.selector.SemSimComponentSelectorDialog;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semsim.SemSimConstants;
+import semsim.annotation.SemSimRelation;
 import semsim.model.SemSimComponent;
 import semsim.model.SemSimModel;
-import semsim.model.annotation.SemSimRelation;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 

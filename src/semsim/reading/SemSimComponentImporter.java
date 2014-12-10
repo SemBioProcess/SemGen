@@ -45,7 +45,7 @@ public class SemSimComponentImporter {
 		}
 		else if(modeltype == ModelClassifier.CELLML_MODEL){
 			try {
-				importedmodel = new CellMLreader().readFromFile(importedmodelfile);
+				importedmodel = new CellMLreader(importedmodelfile).readFromFile();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

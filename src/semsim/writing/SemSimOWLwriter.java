@@ -24,11 +24,11 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import semsim.SemSimConstants;
 import semsim.SemSimUtil;
+import semsim.annotation.Annotation;
+import semsim.annotation.ReferenceOntologyAnnotation;
+import semsim.annotation.StructuralRelation;
 import semsim.model.Importable;
 import semsim.model.SemSimModel;
-import semsim.model.annotation.Annotation;
-import semsim.model.annotation.ReferenceOntologyAnnotation;
-import semsim.model.annotation.StructuralRelation;
 import semsim.model.computational.RelationalConstraint;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
@@ -47,7 +47,7 @@ import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.owl.SemSimOWLFactory;
 
-public class SemSimOWLwriter {
+public class SemSimOWLwriter extends BioModelWriter {
 	protected SemSimModel model;
 	public OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	protected OWLOntology ont;
@@ -58,7 +58,7 @@ public class SemSimOWLwriter {
 	private Set<DataStructure> localdss = new HashSet<DataStructure>();
 	
 	public SemSimOWLwriter(SemSimModel model) throws OWLOntologyCreationException {
-		this.model = model;
+		super(model);
 		namespace = model.getNamespace();
 		
 		// Create a blank semsim ontology with just the base classes

@@ -6,19 +6,18 @@ import java.util.Set;
 
 import semsim.Annotatable;
 import semsim.SemSimConstants;
+import semsim.annotation.Annotation;
+import semsim.annotation.ReferenceOntologyAnnotation;
+import semsim.annotation.SemSimRelation;
 import semsim.model.Importable;
-import semsim.model.annotation.Annotation;
-import semsim.model.annotation.ReferenceOntologyAnnotation;
-import semsim.model.annotation.SemSimRelation;
 import semsim.model.computational.ComputationalModelComponent;
 
 
-public class UnitOfMeasurement extends ComputationalModelComponent implements Annotatable, Importable, Cloneable{
+public class UnitOfMeasurement extends ComputationalModelComponent implements Annotatable, Importable{
 	private Set<Annotation> annotations = new HashSet<Annotation>();
 	private String computationalCode;
 	private String customDeclaration;
 	private boolean isFundamental = false;
-	private double multiplier = 1.0;
 	private Set<UnitFactor> unitFactors = new HashSet<UnitFactor>();
 	
 	private boolean isImported = false;
@@ -140,14 +139,6 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 		return unitFactors;
 	}
 
-	public void setMultiplier(double multiplier) {
-		this.multiplier = multiplier;
-	}
-
-	public double getMultiplier() {
-		return multiplier;
-	}
-
 	// For Importable interface
 	public void setImported(boolean isImported) {
 		this.isImported = isImported;
@@ -190,10 +181,6 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 
 	public void setParentImport(Importable parent) {
 		this.parentImport = parent;
-	}
-	
-	public UnitOfMeasurement clone() throws CloneNotSupportedException {
-        return (UnitOfMeasurement) super.clone();
 	}
 
 	public void setUnitType(String unitType) {

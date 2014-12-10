@@ -57,7 +57,7 @@ public class LoadSemSimModel {
 				break;
 				
 			case ModelClassifier.CELLML_MODEL:
-				semsimmodel = new CellMLreader().readFromFile(file);
+				semsimmodel = new CellMLreader(file).readFromFile();
 				if(semsimmodel.getErrors().isEmpty()){
 					if(autoannotate){
 						final SemGenProgressBar progframe = new SemGenProgressBar("Annotating " + file.getName() + " with web services...",true);
@@ -110,7 +110,7 @@ public class LoadSemSimModel {
 		Document doc = new MMLParser().readFromFile(file);
 		if (SemGenError.showSemSimErrors()) return null;
 		
-		MMLreader xmml2 = new MMLreader(doc);		
-		return xmml2.readFromFile(file);
+		MMLreader xmml2 = new MMLreader(file, doc);		
+		return xmml2.readFromFile();
 	}
 }

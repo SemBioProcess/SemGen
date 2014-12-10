@@ -1,10 +1,5 @@
 package semsim;
 
-
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.jdom.Namespace;
 
 public class CellMLconstants {
@@ -19,44 +14,4 @@ public class CellMLconstants {
 	public static Namespace rdfNS = Namespace.getNamespace("rdf", SemSimConstants.RDF_NAMESPACE);
 	public static Namespace dctermsNS = Namespace.getNamespace("dcterms", SemSimConstants.DCTERMS_NAMESPACE);
 	public static Namespace semsimNS = Namespace.getNamespace("semsim", SemSimConstants.SEMSIM_NAMESPACE);
-	public static Set<String> CellML_UNIT_DICTIONARY;
-		
-	static{
-		Set<String> aSet = new HashSet<String>();
-		aSet.add("ampere");
-		aSet.add("farad");
-		aSet.add("katal");
-		aSet.add("lux");
-		aSet.add("pascal");
-		aSet.add("tesla");
-		aSet.add("becquerel");
-		aSet.add("gram");
-		aSet.add("kelvin");
-		aSet.add("meter");
-		aSet.add("radian");
-		aSet.add("volt");
-		aSet.add("candela");
-		aSet.add("gray");
-		aSet.add("kilogram");
-		aSet.add("metre");
-		aSet.add("second");
-		aSet.add("watt");
-		aSet.add("celsius");
-		aSet.add("henry");
-		aSet.add("liter");
-		aSet.add("mole");
-		aSet.add("coulomb");	
-		aSet.add("hertz");
-		aSet.add("litre");
-		aSet.add("newton");
-		aSet.add("sievert");
-		aSet.add("siemens");	
-		aSet.add("weber");
-		aSet.add("dimensionless");	
-		aSet.add("joule");
-		aSet.add("lumen");
-		aSet.add("ohm");
-		aSet.add("steradian");
-	    CellML_UNIT_DICTIONARY = Collections.unmodifiableSet(aSet);
-	}
 }

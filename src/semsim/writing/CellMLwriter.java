@@ -33,10 +33,10 @@ import semsim.Annotatable;
 import semsim.CellMLconstants;
 import semsim.SemSimConstants;
 import semsim.SemSimUtil;
+import semsim.annotation.Annotation;
 import semsim.model.Importable;
 import semsim.model.SemSimComponent;
 import semsim.model.SemSimModel;
-import semsim.model.annotation.Annotation;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
@@ -46,20 +46,20 @@ import semsim.model.physical.object.FunctionalSubmodel;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.owl.SemSimOWLFactory;
 
-public class CellMLwriter implements Writer{
-	
-	private SemSimModel semsimmodel;
+public class CellMLwriter extends BioModelWriter {
 	private Namespace mainNS;
 	private Set<String> metadataids = new HashSet<String>();
 	private CellMLbioRDFblock rdfblock;
 	private Set<DataStructure> looseDataStructures = new HashSet<DataStructure>();
 	private Element root;
 	
-	public String writeToString(SemSimModel model){
+	public CellMLwriter(SemSimModel model) {
+		super(model);
+	}
+	
+	public String writeToString(){
 		Document doc = null;
-		try{
-			this.semsimmodel = model;
-			
+		try{	
 			mainNS = CellMLconstants.cellml1_1NS;
 			metadataids.addAll(semsimmodel.getMetadataIDcomponentMap().keySet());
 			
@@ -151,7 +151,7 @@ public class CellMLwriter implements Writer{
 	
 			// Declare the units
 			for(UnitOfMeasurement uom : semsimmodel.getUnits()){
-				if(!CellMLconstants.CellML_UNIT_DICTIONARY.contains(uom.getName()) && !uom.isImported()){
+				if(!sslib.isCellMLBaseUnit(uom.getName()) && !uom.isImported()){
 					Element unitel = new Element("units", mainNS);
 					unitel.setAttribute("name", uom.getName());
 					if(uom.isFundamental()) unitel.setAttribute("base_units", "yes");
@@ -388,12 +388,12 @@ public class CellMLwriter implements Writer{
 		}
 	}
 	
-	public void writeToFile(SemSimModel model, File destination){
-		SemSimUtil.writeStringToFile(writeToString(model), destination);
+	public void writeToFile(File destination){
+		SemSimUtil.writeStringToFile(writeToString(), destination);
 	}
 	
-	public void writeToFile(SemSimModel model, URI destination){
-		SemSimUtil.writeStringToFile(writeToString(model), new File(destination));
+	public void writeToFile(URI destination){
+		SemSimUtil.writeStringToFile(writeToString(), new File(destination));
 	}
 	
 	public Content makeXMLContentFromString(String xml){

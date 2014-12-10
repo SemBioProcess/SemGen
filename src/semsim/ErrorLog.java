@@ -2,10 +2,11 @@ package semsim;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 import java.util.Queue;
 
 public class ErrorLog {
-	private static Queue<String> errorqueue;
+	private static Queue<String> errorqueue = new PriorityQueue<String>();
 	private static PrintWriter logfilewriter;
 	
 	public static void addError(String e, boolean addtolog) {
