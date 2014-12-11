@@ -10,6 +10,29 @@ var t=x.length;if(t){x.sort(c);for(var e,r=1,u=x[0],i=[u];t>r;++r)e=x[r],l(e[0],
 	<!-- d3.v3.min.js END -->
 	</script>
 	<style>
+		body {
+			font-family: sans-serif;
+		}
+	
+		.legend {
+			position: fixed;
+			top: 0;
+			right: 0;
+			padding: 20px;
+			margin: 0;
+			list-style: none;
+			font-size: 14px;
+		}
+		
+		.legend li { 
+			padding-left: 1em; 
+			text-indent: -.7em;
+		}
+
+		.legend li:before {
+			content: "• ";
+			font-size: 25px;
+		}
 
 		path.link {
 		  fill: none;
@@ -24,9 +47,8 @@ var t=x.length;if(t){x.sort(c);for(var e,r=1,u=x[0],i=[u];t>r;++r)e=x[r],l(e[0],
 
 		text {
 		  fill: #000;
-		  font: 10px sans-serif;
+		  font-size: 10px;
 		  pointer-events: none;
-		  font-size: 14px;
 		}
 		
 		.node .backgroundColor {
@@ -38,12 +60,26 @@ var t=x.length;if(t){x.sort(c);for(var e,r=1,u=x[0],i=[u];t>r;++r)e=x[r],l(e[0],
 	<body>
 	<script>
 		// %.GRAPHJSON.% will be replaced with the d3 representation of a SemSim model
-		var graph = %GRAPHJSON%
+		var graph = %GRAPHJSON%;
 		
 		var nodes = graph.nodes;
 		var links = graph.links;
-
 		var color = d3.scale.category10();
+
+		// Build the legend
+		var legend = document.createElement("ul");
+		legend.className = "legend";
+		document.body.appendChild(legend);
+		for(group in graph.groups)
+		{
+			var className = "legendItem" + group;
+			legend.innerHTML +=
+				"<li class='" + className + "'>" +
+					graph.groups[group]	+																// Group name
+					"<style> ." + className + ":before { color: " + color(group) + "; } </style>" +		// Group color
+				"</li>";
+		}
+
 		var width = 1000,
 			height = 1000;
 
