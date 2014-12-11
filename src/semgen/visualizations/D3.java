@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
@@ -15,7 +17,9 @@ import java.util.Set;
 import org.apache.commons.io.IOUtils;
 
 import com.google.gson.Gson;
+
 import semgen.SemGen;
+import semsim.PropertyType;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
@@ -119,9 +123,25 @@ public class D3 {
 		// out with nodes and links before we turn it to json.
 		Graph d3Graph = new Graph();
 		
+		// Get solution domain declarations
+		Set<DataStructure> domaincodewords = new HashSet<DataStructure>();
+		for(DataStructure ds : semSimModel.getSolutionDomains()){
+			domaincodewords.add(semSimModel.getDataStructure(ds.getName() + ".min"));
+			domaincodewords.add(semSimModel.getDataStructure(ds.getName() + ".max"));
+			domaincodewords.add(semSimModel.getDataStructure(ds.getName() + ".delta"));
+		}
+		
 		// Loop over all of the data structures (variables) and insert relationships into
 		// the d3 graph
 		for(DataStructure dataStructure : semSimModel.getDataStructures()){
+			// If the data structure is part of a solution domain declaration or
+			// it is not used to compute any other terms, ignore it.
+			if(dataStructure.isSolutionDomain() ||
+				domaincodewords.contains(dataStructure) && dataStructure.getUsedToCompute().isEmpty())
+			{
+				continue;
+			}
+			
 			// Are there inputs?
 			Set<? extends DataStructure> inputs = null;
 			if(dataStructure.getComputation()!=null)
@@ -207,6 +227,7 @@ public class D3 {
 	private class Graph {
 		public ArrayList<Node> nodes;
 		public ArrayList<Link> links;
+		public Map<Integer, String> groups;
 		
 		private transient Map<String, Node> _nodeCache;
 		
@@ -216,6 +237,7 @@ public class D3 {
 			links = new ArrayList<Link>();
 			
 			_nodeCache = new Hashtable<String, Node>();
+			groups = new HashMap<Integer, String>();
 		}
 		
 		/**
@@ -235,9 +257,13 @@ public class D3 {
 			if(_nodeCache.containsKey(name))
 				return _nodeCache.get(name);
 				
+			PropertyType type = dataStructure.getPropertyType(SemGen.semsimlib);
+			if(!groups.containsKey(type.getIndex()))
+				groups.put(type.getIndex(), type.toString());
+			
 			// Create a the new node representing this data structure (variable)
 			Node node = new Node(dataStructure.getName(),
-					dataStructure.getPropertyType(SemGen.semsimlib),
+					type.getIndex(),
 					this.nodes.size());
 			
 			// Add the new node to our list of nodes

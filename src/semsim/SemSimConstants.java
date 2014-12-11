@@ -284,10 +284,6 @@ public class SemSimConstants {
 	
 	public static final double SEMSIM_VERSION = 0.1;
 	
-	public static final int UNKNOWN_PROPERTY_TYPE = 0;
-	public static final int PROPERTY_OF_PHYSICAL_ENTITY = 1;
-	public static final int PROPERTY_OF_PHYSICAL_PROCESS = 2;
-	
 	public static final int NOT_ONLINE_ERROR = 0;
 	public static final int IO_ERROR = 2;
 	
