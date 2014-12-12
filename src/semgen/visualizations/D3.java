@@ -1,21 +1,21 @@
 package semgen.visualizations;
 
 import java.awt.Desktop;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.io.IOUtils;
-
+import org.apache.commons.io.FileUtils;
 import com.google.gson.Gson;
 
 import semgen.SemGen;
@@ -36,30 +36,11 @@ import semsim.model.computational.datastructures.MappableVariable;
  */
 public class D3 {
 
-	// This string is used to insert graph json into html.
-	// The template html files that define the d3 graphs contain this string.
-	// When we load the template files we replace this string with the json representation of the SemSim model
-	//
-	// Note: Paths to the template files are contained in _visualizationTemplates.
-	// Take a look at one of the files and search for %GRAPHJSON% to see how its used 
-	private static final String GraphJsonReplaceString = "%GRAPHJSON%";
-	
-	// Maps a visualization type to a template file
-	private static final Map<VisualizationType, String> _visualizationTemplates;
+	// D3 resource directory
+	private final static String D3ResourceDirectory = "/resources/d3/";
 	
 	// Json representation of the semsim model
 	private String _graphJson;
-	
-	/**
-	 * Initialize the visualization template map
-	 */
-	static {
-		Map<VisualizationType, String> visualizationTemplates = new Hashtable<VisualizationType, String>();
-		visualizationTemplates.put(VisualizationType.DirectedGraph, "/resources/d3DirectedEdgesTemplate.html");
-		
-		// Save an immutable map
-		_visualizationTemplates = Collections.unmodifiableMap(visualizationTemplates);
-	}
 	
 	public D3(SemSimModel semSimModel)
 	{
@@ -77,30 +58,29 @@ public class D3 {
 	 * 4) Opens the temporary html file
 	 * 
 	 * @param visualizationType - type of d3 visualization
+	 * @throws URISyntaxException 
 	 * @throws IOException
 	 */
-	public boolean visualize(VisualizationType visualizationType)
+	public boolean visualize()
 	{
 		try
 		{
-			// Load the html
-			String visualizationTemplateFilePath = _visualizationTemplates.get(visualizationType);
-			InputStream htmlInputStream = D3.class.getResourceAsStream(visualizationTemplateFilePath);
-			String html = IOUtils.toString(htmlInputStream);
+			// Copy the d3 directory to a temp directory
+			File tempDir = Files.createTempDirectory("semgen-d3-" + Long.toString(System.nanoTime())).toFile();
+			File d3Dir = new File(D3.class.getResource(D3ResourceDirectory).toURI());
+			FileUtils.copyDirectory(d3Dir, tempDir);
 			
-			// Embed the SemSim model graph json in the html
-			html = html.replace(GraphJsonReplaceString, _graphJson);
-			
-			// Create a temporary html file containing the new html
-			File tempHtmlFile = File.createTempFile("d3visualization-" + visualizationType, ".html");
-			BufferedWriter bw = new BufferedWriter(new FileWriter(tempHtmlFile));
-		    bw.write(html);
-		    bw.close();
-			
-		    // Open the temp html file
-		    Desktop.getDesktop().browse(tempHtmlFile.toURI());
+			// Replace the contents of graphData.json with the semsim model's json
+			File graphData = new File(tempDir, "/js/graphData.js");
+			FileWriter graphDataWriter = new FileWriter(graphData, false);
+			graphDataWriter.write("var graph = " + _graphJson);
+			graphDataWriter.close();
+
+		    // Open main.html
+			File mainHtml = new File(tempDir, "/main.html");
+		    Desktop.getDesktop().browse(mainHtml.toURI());
 		}
-		catch(IOException e)
+		catch(IOException | URISyntaxException e)
 		{
 			e.printStackTrace();
 			return false;
@@ -164,17 +144,6 @@ public class D3 {
 		Gson gson = new Gson();
 		String d3MapJson = gson.toJson(d3Graph);
 		return d3MapJson;
-	}
-	
-	/**
-	 * Type of d3 visualization
-	 * 
-	 * @author Ryan
-	 *
-	 */
-	public enum VisualizationType
-	{
-		DirectedGraph
 	}
 	
 	/**

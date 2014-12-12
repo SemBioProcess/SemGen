@@ -1,0 +1,52 @@
+.menuBox {
+	position: fixed;
+	top: 0;
+	border: 1px solid grey;
+	padding: 10px;
+	margin: 10px;
+	opacity: .1;
+}
+
+.menuBox:hover {
+	opacity: 1;
+}
+
+.menuBox ul {
+	padding: 0;
+	margin: 0 0 0 20px;
+	list-style: none;
+	font-size: 14px;
+}
+
+.menuBox.legendContainer {
+	right: 0;
+}
+
+.legend li { 
+	padding-left: 1em; 
+	text-indent: -.7em;
+}
+
+.legend li:before {
+	content: "• ";
+	font-size: 25px;
+}
+
+.graphTypes li {
+	border: 1px solid grey;
+	margin-top: 10px;
+	padding: 10px;
+}
+
+.graphTypes li:hover {
+	cursor: pointer;
+	background-color: #8b9dc3;
+}
+
+.graphTypes li.selected {
+	background-color: #dfe3ee;
+}
+
+.graphFrame {
+	display: none; // Hide the frames by default
+}

@@ -204,7 +204,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		visualizeAllDataStructures(false);
 		
 		D3 d3 = new D3(semsimmodel);
-		d3.visualize(D3.VisualizationType.DirectedGraph);
+		d3.visualize();
 	}
 	
 	public void createToolbar() {
