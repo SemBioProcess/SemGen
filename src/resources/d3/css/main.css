@@ -1,10 +1,21 @@
+html, body, iframe {
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+iframe {
+	display: block;
+}
+
 .menuBox {
 	position: fixed;
 	top: 0;
 	border: 1px solid grey;
 	padding: 10px;
 	margin: 10px;
-	opacity: .1;
+	opacity: .2;
 }
 
 .menuBox:hover {
@@ -15,7 +26,7 @@
 	padding: 0;
 	margin: 0 0 0 20px;
 	list-style: none;
-	font-size: 14px;
+	font-size: 20px;
 }
 
 .menuBox.legendContainer {
