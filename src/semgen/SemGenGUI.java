@@ -70,9 +70,11 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 	
 	public void startNewAnnotatorTask(){
 		AnnotatorFactory factory = new AnnotatorFactory(settings.doAutoAnnotate());
-		if (isOntologyOpenForEditing(factory.getFileURI())) return;
-		AnnotationTabFactory tabfactory = new AnnotationTabFactory(settings, globalactions);
-		addTab(factory, tabfactory);
+		if (factory.isValid()) {
+			if (isOntologyOpenForEditing(factory.getFileURI())) return;
+			AnnotationTabFactory tabfactory = new AnnotationTabFactory(settings, globalactions);
+			addTab(factory, tabfactory);
+		}
 	}
 	
 	public void startNewAnnotatorTask(final File existingfile){
