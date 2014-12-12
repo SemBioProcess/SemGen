@@ -6,15 +6,18 @@ import java.util.Set;
 import semgen.annotation.dialog.modelanns.LegacyCodeChooser;
 import semsim.SemSimConstants;
 import semsim.annotation.Annotation;
+import semsim.annotation.CurationalMetadata;
 import semsim.annotation.SemSimRelation;
 import semsim.model.SemSimModel;
 
-public class ModelAnnotations extends Observable {
+public class ModelAnnotationsBench extends Observable {
+	CurationalMetadata metadata;	
 	Set<Annotation> annotations;
 	public static enum ModelChangeEnum {SOURCECHANGED};
 	
-	public ModelAnnotations(SemSimModel ssm) {
+	public ModelAnnotationsBench(SemSimModel ssm) {
 		annotations = ssm.getAnnotations();
+		metadata = ssm.getCurationalMetadata();
 	}
 	
 	public void addModelAnnotation(SemSimRelation rel, String ann) {

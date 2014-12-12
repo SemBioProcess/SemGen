@@ -17,6 +17,8 @@ import semsim.Annotatable;
 import semsim.SemSimConstants;
 import semsim.SemSimObject;
 import semsim.annotation.Annotation;
+import semsim.annotation.CurationalMetadata;
+import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.SemSimRelation;
 import semsim.annotation.StructuralRelation;
@@ -76,6 +78,9 @@ import semsim.writing.SemSimOWLwriter;
  */
 
 public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
+	private CurationalMetadata metadata = new CurationalMetadata();
+	private double semsimversion;
+	
 	// Computational model components
 	private Set<DataStructure> dataStructures = new HashSet<DataStructure>();
 	private Set<RelationalConstraint> relationalConstraints = new HashSet<RelationalConstraint>(); 
@@ -102,12 +107,15 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 		setNamespace(generateNamespaceFromDateAndTime());
 	}
 	
-	
 	/**
 	 * Constructor with namespace
 	 */
 	public SemSimModel(String namespace){
 		setNamespace(namespace);
+	}
+	
+	public CurationalMetadata getCurationalMetadata() {
+		return metadata;
 	}
 	
 	/**
@@ -1218,7 +1226,15 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 	}
 	// End of methods required by Annotatable interface	
 
-
+	@Override
+	public String getDescription() {
+		return metadata.getAnnotationValue(Metadata.description);
+	}
+	@Override
+	public void setDescription(String value) {
+		metadata.setAnnotationValue(Metadata.description, value);
+	}
+	
 	@Override
 	public URI getSemSimClassURI() {
 		return SemSimConstants.SEMSIM_MODEL_CLASS_URI;

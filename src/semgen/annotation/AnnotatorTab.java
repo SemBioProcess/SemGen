@@ -14,7 +14,7 @@ import semgen.annotation.componentdisplays.codewords.CodewordButton;
 import semgen.annotation.componentdisplays.submodels.SubmodelButton;
 import semgen.annotation.dialog.HumanDefEditor;
 import semgen.annotation.workbench.AnnotatorWorkbench;
-import semgen.annotation.workbench.ModelAnnotations;
+import semgen.annotation.workbench.ModelAnnotationsBench;
 import semgen.utilities.ComparatorByName;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
@@ -63,6 +63,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	private JSplitPane splitpane;
 	private JSplitPane eastsplitpane;
 	public JSplitPane westsplitpane;
+	public JSplitPane swsplitpane;
 	public SemGenScrollPane submodelscrollpane;
 	public SemGenScrollPane codewordscrollpane;
 	public SemGenScrollPane dialogscrollpane = new SemGenScrollPane();
@@ -74,9 +75,10 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	public AnnotationObjectButton focusbutton;
 	public Hashtable<String, CodewordButton> codewordbuttontable = new Hashtable<String, CodewordButton>();
 	public Hashtable<String, SubmodelButton> submodelbuttontable = new Hashtable<String, SubmodelButton>();
-
+	
 	public JPanel codewordpanel = new JPanel();
 	public JPanel submodelpanel = new JPanel();
+	public ModelAnnotationsView modelannspane;
 	public AnnotatorTabCodePanel codearea = new AnnotatorTabCodePanel();
 	public JButton addsubmodelbutton = new JButton(SemGenIcon.plusicon);
 	public JButton removesubmodelbutton = new JButton(SemGenIcon.minusicon);
@@ -106,6 +108,8 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		setOpaque(false);
 		setLayout(new BorderLayout());
 
+		modelannspane = new ModelAnnotationsView(workbench, settings);
+		
 		codewordpanel.setBackground(Color.white);
 		codewordpanel.setLayout(new BoxLayout(codewordpanel, BoxLayout.Y_AXIS));
 		
@@ -126,10 +130,13 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		// Override up and down key functions so user can use arrows to move between codewords
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "none");
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "none");
-
-		westsplitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, codewordscrollpane, submodelscrollpane);
-		westsplitpane.setOneTouchExpandable(true);
 		
+		swsplitpane  = new JSplitPane(JSplitPane.VERTICAL_SPLIT, codewordscrollpane, submodelscrollpane);
+		swsplitpane.setOneTouchExpandable(true);
+		
+		westsplitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, modelannspane, swsplitpane); 
+		westsplitpane.setOneTouchExpandable(true);
+
 		eastsplitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, dialogscrollpane, legacycodescrollpane);
 		eastsplitpane.setOneTouchExpandable(true);
 
@@ -181,7 +188,14 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		SemGenProgressBar progframe = new SemGenProgressBar("Sorting codewords...", true);
 		
 		refreshAnnotatableElements();
-		showAnnotaterPanes();
+
+		add(toolbar, BorderLayout.NORTH);
+		add(splitpane, BorderLayout.CENTER);
+		setVisible(true);
+		
+		eastsplitpane.setDividerLocation((int)(initheight-150)/2);
+		swsplitpane.setDividerLocation((int)(initheight-150)/2);
+		westsplitpane.setDividerLocation((int)(initheight-150)/6);
 		
 		codewordscrollpane.scrollToTop();
 		submodelscrollpane.scrollToTop();
@@ -461,18 +475,6 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		codearea.removeAllHighlights();
 	}
 
-	public void showAnnotaterPanes(){
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-		   public void run() { 
-			  add(toolbar, BorderLayout.NORTH);
-			  add(splitpane, BorderLayout.CENTER);
-			  setVisible(true);
-			  eastsplitpane.setDividerLocation((int)(initheight-150)/2);
-			  westsplitpane.setDividerLocation((int)(initheight-150)/2);
-		   }
-		});
-	}
-
 	public void addNewSubmodelButton() throws OWLException {
 		String newname = JOptionPane.showInputDialog(this,"Enter a name for the new sub-model");
 		if(newname !=null && !newname.equals("")){
@@ -675,7 +677,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		if (arg1 == ModelAnnotations.ModelChangeEnum.SOURCECHANGED) {
+		if (arg1 == ModelAnnotationsBench.ModelChangeEnum.SOURCECHANGED) {
 			try {
 				codearea.setCodeView(workbench.getModelSourceFile());
 			} catch (IOException e) {

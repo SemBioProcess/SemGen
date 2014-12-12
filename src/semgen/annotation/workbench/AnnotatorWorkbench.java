@@ -32,7 +32,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	private SemSimModel semsimmodel;
 	protected File sourcefile; //File originally loaded at start of Annotation session (could be 
 							//in SBML, MML, CellML or SemSim format)
-	private ModelAnnotations modanns;
+	private ModelAnnotationsBench modanns;
 	private boolean modelsaved = true;
 	private int lastsavedas = -1;
 	
@@ -44,7 +44,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	}
 	
 	public void initialize() {
-		modanns = new ModelAnnotations(semsimmodel);
+		modanns = new ModelAnnotationsBench(semsimmodel);
 		modanns.addObserver(this);
 		// Add unspecified physical model components for use during annotation
 		semsimmodel.addCustomPhysicalEntity(SemSimModel.unspecifiedName, "Non-specific entity for use as a placeholder during annotation");
@@ -185,6 +185,10 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 			setChanged();
 			notifyObservers();
 		}
+	}
+	
+	public ModelAnnotationsBench getModelAnnotationsWorkbench() {
+		return modanns;
 	}
 	
 	@Override
