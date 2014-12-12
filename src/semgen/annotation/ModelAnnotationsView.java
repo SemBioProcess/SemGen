@@ -1,13 +1,19 @@
 package semgen.annotation;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.TitledBorder;
+
+import org.openjena.atlas.lib.Pair;
 
 import semgen.SemGenSettings;
 import semgen.annotation.workbench.AnnotatorWorkbench;
@@ -25,14 +31,22 @@ public class ModelAnnotationsView extends JPanel implements Observer {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		modannbench = wb.getModelAnnotationsWorkbench();
 		settings = sets;
-		JLabel title = new JLabel(wb.getCurrentModelName());
-		title.setFont(SemGenFont.defaultBold(2));
-		add(title);
+		setBorder(BorderFactory.createTitledBorder(
+				BorderFactory.createEtchedBorder(), wb.getCurrentModelName(), 
+				TitledBorder.LEFT, 
+				TitledBorder.TOP, 
+				SemGenFont.defaultBold(2)
+				));
+		
+		drawList();
 	}
 	
 	public void drawList() {
-		
-		//metadataarray.add(new MetadatawithCheck("Description", modannbench));
+		for (Pair<String, Boolean> pair : modannbench.getModelAnnotationFilledPairs()) {
+			MetadatawithCheck box = new MetadatawithCheck(pair.getLeft(), pair.getRight());
+			metadataarray.add(box);
+			add(box, Component.LEFT_ALIGNMENT);
+		}
 	}
 	
 	@Override
@@ -49,10 +63,15 @@ public class ModelAnnotationsView extends JPanel implements Observer {
 		private static final long serialVersionUID = 1L;
 		JLabel indicator = new JLabel();
 		
-		MetadatawithCheck(String label, boolean check) {
-			add(new JLabel(label),BorderLayout.WEST);
+		MetadatawithCheck(String label, Boolean check) {
+			JLabel text = new JLabel(label);
+			text.setAlignmentX(LEFT_ALIGNMENT);
+			add(Box.createGlue(), BorderLayout.EAST);
+			add(text ,BorderLayout.CENTER);
+			setIndicator(check);
 			indicator.setSize(12, 12);
 			add(indicator,BorderLayout.WEST);
+			validate();
 		}
 		
 		public void setIndicator(boolean checkmark) {

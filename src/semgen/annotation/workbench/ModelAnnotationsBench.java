@@ -1,12 +1,16 @@
 package semgen.annotation.workbench;
 
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Set;
+
+import org.openjena.atlas.lib.Pair;
 
 import semgen.annotation.dialog.modelanns.LegacyCodeChooser;
 import semsim.SemSimConstants;
 import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata;
+import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.annotation.SemSimRelation;
 import semsim.model.SemSimModel;
 
@@ -36,5 +40,15 @@ public class ModelAnnotationsBench extends Observable {
 		if (loc != null && !loc.equals("")) {
 			setModelSourceFile(loc);
 		}
+	}
+	
+	public ArrayList<Pair<String, Boolean>> getModelAnnotationFilledPairs() {
+		ArrayList<Pair<String, Boolean>> list = new ArrayList<Pair<String, Boolean>>();
+		
+		for (Metadata m : Metadata.values()) {
+			list.add(new Pair<String, Boolean>(metadata.getAnnotationName(m), metadata.hasAnnotationValue(m)));
+		}
+		
+		return list;
 	}
 }
