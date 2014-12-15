@@ -20,6 +20,7 @@ import com.hp.hpl.jena.rdf.model.Statement;
 
 import semsim.SemSimConstants;
 import semsim.SemSimUtil;
+import semsim.annotation.CurationalMetadata;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.StructuralRelation;
 import semsim.model.computational.datastructures.DataStructure;
@@ -51,7 +52,7 @@ public class CellMLbioRDFblock {
 	public static Property containedin = ResourceFactory.createProperty(SemSimConstants.CONTAINED_IN_URI.toString());
 	public static Property compcomponentfor = ResourceFactory.createProperty(SemSimConstants.IS_COMPUTATIONAL_COMPONENT_FOR_URI.toString());
 	public static Property hasname = ResourceFactory.createProperty(SemSimConstants.HAS_NAME_URI.toString());
-	public static Property description = ResourceFactory.createProperty(SemSimConstants.DCTERMS_NAMESPACE + "description");
+	public static Property description = ResourceFactory.createProperty(CurationalMetadata.DCTERMS_NAMESPACE + "description");
 
 	public Model rdf = ModelFactory.createDefaultModel();
 	

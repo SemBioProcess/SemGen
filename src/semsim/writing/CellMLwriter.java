@@ -34,6 +34,7 @@ import semsim.CellMLconstants;
 import semsim.SemSimConstants;
 import semsim.SemSimUtil;
 import semsim.annotation.Annotation;
+import semsim.annotation.CurationalMetadata;
 import semsim.model.Importable;
 import semsim.model.SemSimComponent;
 import semsim.model.SemSimModel;
@@ -458,7 +459,7 @@ public class CellMLwriter extends BioModelWriter {
 				
 				rdfblock.rdf.setNsPrefix("semsim", SemSimConstants.SEMSIM_NAMESPACE);
 				rdfblock.rdf.setNsPrefix("bqbiol", SemSimConstants.BQB_NAMESPACE);
-				rdfblock.rdf.setNsPrefix("dcterms", SemSimConstants.DCTERMS_NAMESPACE);
+				rdfblock.rdf.setNsPrefix("dcterms", CurationalMetadata.DCTERMS_NAMESPACE);
 				
 				Resource ares = rdfblock.rdf.createResource("#" + metaid);
 				
@@ -477,11 +478,11 @@ public class CellMLwriter extends BioModelWriter {
 				
 				// Add free-text description, if present
 				if(freetext!=null){
-					Property ftprop = ResourceFactory.createProperty(SemSimConstants.DCTERMS_NAMESPACE + "description");
+					Property ftprop = ResourceFactory.createProperty(CurationalMetadata.DCTERMS_NAMESPACE + "description");
 					Statement st = localrdf.createStatement(ares, ftprop, freetext);
 					if(!localrdf.contains(st)){
 						localrdf.add(st);
-						localrdf.setNsPrefix("dcterms", SemSimConstants.DCTERMS_NAMESPACE);
+						localrdf.setNsPrefix("dcterms", CurationalMetadata.DCTERMS_NAMESPACE);
 					}
 				}
 				

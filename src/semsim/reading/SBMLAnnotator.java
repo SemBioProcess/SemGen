@@ -30,6 +30,7 @@ import semsim.SemSimConstants;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.StructuralRelation;
+import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
@@ -64,10 +65,8 @@ public class SBMLAnnotator {
 			notes = notes.replace("<notes>", "");
 			notes = notes.replace("</notes>", "");
 			semsimmodel.addAnnotation(new Annotation(SemSimConstants.HAS_NOTES_RELATION, notes));
-			if(sbmlmodel.getName()!=null)
-				semsimmodel.addAnnotation(new Annotation(SemSimConstants.MODEL_NAME_RELATION, sbmlmodel.getName()));
-			if(sbmlmodel.getId()!=null)
-				semsimmodel.addAnnotation(new Annotation(SemSimConstants.MODEL_ID_RELATION, sbmlmodel.getId()));
+			if(sbmlmodel.getName()!=null)semsimmodel.setModelAnnotation(Metadata.fullname, sbmlmodel.getName());
+			if(sbmlmodel.getId()!=null) semsimmodel.setModelAnnotation(Metadata.sourcemodelid, sbmlmodel.getId());
 
 			// Get dc terms
 			

@@ -51,7 +51,6 @@ public class SemSimConstants {
 	public static final String BQB_NAMESPACE = "http://biomodels.net/biology-qualifiers/";
 	public static final String BQM_NAMESPACE = "http://biomodels.net/model-qualifiers/";
 	public static final String RDF_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
-	public static final String DCTERMS_NAMESPACE = "http://purl.org/dc/terms/";
 	
 	// Groups of ontologies
 	public static final String[] ALL_SEARCHABLE_ONTOLOGIES = new String[]{
@@ -146,13 +145,7 @@ public class SemSimConstants {
 	public static final URI UNIT_FACTOR_PREFIX_URI = URI.create(SEMSIM_NAMESPACE + "hasUnitFactorPrefix");
 	
 	// Model-level relations
-	public static final URI MODEL_DESCRIPTION_URI = URI.create(SEMSIM_NAMESPACE + "ModelDescription");
-	public static final URI REFERENCE_PUBLICATION_PUBMED_ID_URI = URI.create(SEMSIM_NAMESPACE + "PubMedIDofReferencePublication");
-	public static final URI REFERENCE_PUBLICATION_ABSTRACT_TEXT_URI = URI.create(SEMSIM_NAMESPACE + "ReferencePublicationAbstractText");
-	public static final URI REFERENCE_PUBLICATION_CITATION_URI = URI.create(SEMSIM_NAMESPACE + "ReferencePublicationCitation");
-	public static final URI ANNOTATOR_CONTACT_INFO_URI = URI.create(SEMSIM_NAMESPACE + "AnnotatorContactInfo");
-	public static final URI MODEL_ID_URI = URI.create(SEMSIM_NAMESPACE + "modelId");
-	public static final URI MODEL_NAME_URI = URI.create(SEMSIM_NAMESPACE + "modelName");
+
 	
 	public static final URI BQB_HAS_PART_URI = URI.create(BQB_NAMESPACE + "hasPart");
 	public static final URI BQB_IS_PART_OF_URI = URI.create(BQB_NAMESPACE + "isPartOf");
@@ -240,14 +233,7 @@ public class SemSimConstants {
 	public static final SemSimRelation HAS_NAME_RELATION = new SemSimRelation("semsim component has name", HAS_NAME_URI);
 	public static final SemSimRelation KEY_TERM_RELATION = new SemSimRelation("semsim model represents", KEY_TERM_URI);
 	
-	// Model-level relations
-	public static final SemSimRelation REFERENCE_PUBLICATION_PUBMED_ID_RELATION = new SemSimRelation("the PubMed ID of the model's reference publication", REFERENCE_PUBLICATION_PUBMED_ID_URI);
-	public static final SemSimRelation REFERENCE_PUBLICATION_ABSTRACT_TEXT_RELATION = new SemSimRelation("the abstract text of the model's reference publication", REFERENCE_PUBLICATION_ABSTRACT_TEXT_URI);
-	public static final SemSimRelation MODEL_DESCRIPTION_RELATION = new SemSimRelation("a free-text description of the model", MODEL_DESCRIPTION_URI);
-	public static final SemSimRelation REFERENCE_PUBLICATION_CITATION_RELATION = new SemSimRelation("the citation for the reference publication", REFERENCE_PUBLICATION_CITATION_URI);
-	public static final SemSimRelation ANNOTATOR_CONTACT_INFO_RELATION = new SemSimRelation("who to contact about the annotations in the model", ANNOTATOR_CONTACT_INFO_URI);
-	public static final SemSimRelation MODEL_ID_RELATION = new SemSimRelation("the ID of the model from which the SemSim model was generated", MODEL_ID_URI);
-	public static final SemSimRelation MODEL_NAME_RELATION = new SemSimRelation("a human-readable name for the model", MODEL_NAME_URI);
+
 	
 	public static final String BIOPORTAL_API_KEY = "c4192e4b-88a8-4002-ad08-b4636c88df1a";
 
@@ -313,13 +299,6 @@ public class SemSimConstants {
 		aMap0.put(UNIT_FACTOR_FOR_URI, UNIT_FACTOR_FOR_RELATION);
 		aMap0.put(UNIT_FACTOR_PREFIX_URI, UNIT_FACTOR_PREFIX_RELATION);
 		// Model-level stuff
-		aMap0.put(REFERENCE_PUBLICATION_PUBMED_ID_URI, REFERENCE_PUBLICATION_PUBMED_ID_RELATION);
-		aMap0.put(REFERENCE_PUBLICATION_ABSTRACT_TEXT_URI, REFERENCE_PUBLICATION_ABSTRACT_TEXT_RELATION);
-		aMap0.put(REFERENCE_PUBLICATION_CITATION_URI, REFERENCE_PUBLICATION_CITATION_RELATION);
-		aMap0.put(ANNOTATOR_CONTACT_INFO_URI, ANNOTATOR_CONTACT_INFO_RELATION);
-		aMap0.put(MODEL_DESCRIPTION_URI, MODEL_DESCRIPTION_RELATION);
-		aMap0.put(MODEL_ID_URI, MODEL_ID_RELATION);
-		aMap0.put(MODEL_NAME_URI, MODEL_NAME_RELATION);
 		aMap0.put(BQB_HAS_PART_URI, BQB_HAS_PART_RELATION);
 		aMap0.put(BQB_IS_PART_OF_URI, BQB_IS_PART_OF_RELATION);
 		aMap0.put(BQB_IS_URI, BQB_IS_RELATION);

@@ -82,7 +82,7 @@ public class BatchCellML{
 					}
 					// If we DO have a proper pubmed ID
 					else{
-						ann.addModelAnnotation(SemSimConstants.REFERENCE_PUBLICATION_PUBMED_ID_RELATION, tmd.pubmedid);
+						//ann.addModelAnnotation(SemSimConstants.REFERENCE_PUBLICATION_PUBMED_ID_RELATION, tmd.pubmedid);
 						// If ID is same as last model, use it
 						if(tmd.pubmedid.equals(lastpubmedid)){
 							tmd.inputtextarea.setText(lastabstract);
@@ -93,7 +93,7 @@ public class BatchCellML{
 						
 						// If there's a pubmed id AND abstract text
 						if(!tmd.inputtextarea.getText().equals("")){
-							ann.addModelAnnotation(SemSimConstants.REFERENCE_PUBLICATION_ABSTRACT_TEXT_RELATION, tmd.inputtextarea.getText());
+							//ann.addModelAnnotation(SemSimConstants.REFERENCE_PUBLICATION_ABSTRACT_TEXT_RELATION, tmd.inputtextarea.getText());
 						}
 						// If there's a pubmed id but no abstract, do a scrape of the <para> tags in the cellml file
 						else{
@@ -131,8 +131,8 @@ public class BatchCellML{
 				String id = doc.getRootElement().getAttribute("id",cmetans).getValue();
 				System.out.println("ID: " + id);
 				//System.out.println(ann.manager.toString());
-				ann.addModelAnnotation(SemSimConstants.MODEL_ID_RELATION, id);
-				ann.addModelAnnotation(SemSimConstants.MODEL_NAME_RELATION, name);
+				//ann.addModelAnnotation(SemSimConstants.MODEL_ID_RELATION, id);
+				//ann.addModelAnnotation(SemSimConstants.MODEL_NAME_RELATION, name);
 				
 				// Try to get pubmed ID from RDF tags
 				if(doc.getRootElement().getChild("RDF",rdfns).getChildren("Description", rdfns)!=null){

@@ -31,6 +31,8 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import semsim.CellMLconstants;
 import semsim.SemSimConstants;
 import semsim.annotation.Annotation;
+import semsim.annotation.CurationalMetadata;
+import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.StructuralRelation;
 import semsim.model.SemSimComponent;
@@ -451,10 +453,8 @@ public class CellMLreader extends BioModelReader {
 		if(doc.getRootElement()!=null){
 			String name = doc.getRootElement().getAttributeValue("name");
 			String id = doc.getRootElement().getAttributeValue("id", CellMLconstants.cmetaNS);
-			if(name!=null && !name.equals(""))
-				semsimmodel.addAnnotation(new Annotation(SemSimConstants.MODEL_NAME_RELATION, id));
-			if(id!=null && !id.equals(""))
-				semsimmodel.addAnnotation(new Annotation(SemSimConstants.MODEL_ID_RELATION, id));
+			if(name!=null && !name.equals("")) semsimmodel.setModelAnnotation(Metadata.fullname, id);
+			if(id!=null && !id.equals("")) semsimmodel.setModelAnnotation(Metadata.sourcemodelid, id);
 			
 			// Try to get pubmed ID from RDF tags
 			if(doc.getRootElement().getChild("RDF", CellMLconstants.rdfNS)!=null){
@@ -513,7 +513,7 @@ public class CellMLreader extends BioModelReader {
 			// end documentation processing
 		}
 		if(ab!=null && !ab.equals(""))
-			semsimmodel.addAnnotation(new Annotation(SemSimConstants.REFERENCE_PUBLICATION_PUBMED_ID_RELATION, ab));
+			semsimmodel.addAnnotation(new Annotation(CurationalMetadata.REFERENCE_PUBLICATION_PUBMED_ID_RELATION, ab));
 	}
 	
 	

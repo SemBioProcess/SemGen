@@ -10,6 +10,7 @@ import semsim.CollateralHelper;
 import semsim.SemSimConstants;
 import semsim.SemSimLibrary;
 import semsim.annotation.Annotation;
+import semsim.annotation.CurationalMetadata;
 import semsim.model.SemSimModel;
 
 public class CellMLReaderUnitTests {
@@ -43,7 +44,7 @@ public class CellMLReaderUnitTests {
 		// Assert
 		
 		// Look for the pubmed id
-		Annotation expectedAnnotation = new Annotation(SemSimConstants.REFERENCE_PUBLICATION_PUBMED_ID_RELATION, "11865019");
+		Annotation expectedAnnotation = new Annotation(CurationalMetadata.REFERENCE_PUBLICATION_PUBMED_ID_RELATION, "11865019");
 		assertTrue("Verify the expected annotation is present", model.getAnnotations().contains(expectedAnnotation));
 	}
 }

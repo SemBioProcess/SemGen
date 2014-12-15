@@ -1136,6 +1136,13 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 		annotations.add(ann);
 	}
 	
+	/**
+	 * Add a SemSim {@link Annotation} to this object
+	 * @param ann The {@link Annotation} to add
+	 */
+	public void setModelAnnotation(Metadata metaID, String value) {
+		metadata.setAnnotationValue(metaID, value);
+	}
 	
 	/**
 	 * Add a SemSim {@link ReferenceOntologyAnnotation} to an object
@@ -1176,9 +1183,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 	public ReferenceOntologyAnnotation getFirstRefersToReferenceOntologyAnnotation(){
 		if(!getReferenceOntologyAnnotations(SemSimConstants.REFERS_TO_RELATION).isEmpty())
 			return getReferenceOntologyAnnotations(SemSimConstants.REFERS_TO_RELATION).toArray(new ReferenceOntologyAnnotation[]{})[0];
-		else{
-			return null;
-		}
+		return null;
 	}
 	
 	
@@ -1238,5 +1243,13 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 	@Override
 	public URI getSemSimClassURI() {
 		return SemSimConstants.SEMSIM_MODEL_CLASS_URI;
+	}
+
+	public double getSemsimversion() {
+		return semsimversion;
+	}
+
+	public void setSemsimversion(double semsimversion) {
+		this.semsimversion = semsimversion;
 	}
 }
