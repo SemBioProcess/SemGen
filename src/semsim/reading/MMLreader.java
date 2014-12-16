@@ -20,8 +20,6 @@ import org.jdom.output.XMLOutputter;
 import org.semanticweb.owlapi.model.OWLException;
 
 import JSim.util.Xcept;
-import semsim.SemSimConstants;
-import semsim.annotation.Annotation;
 import semsim.model.SemSimModel;
 import semsim.model.computational.Computation;
 import semsim.model.computational.RelationalConstraint;
@@ -358,16 +356,15 @@ public class MMLreader extends BioModelReader {
 		}
 				
 		// Add the model-level annotations
-		semsimmodel.addAnnotation(new Annotation(SemSimConstants.LEGACY_CODE_LOCATION_RELATION, srcfile.getAbsolutePath()));
-		semsimmodel.addAnnotation(new Annotation(SemSimConstants.SEMSIM_VERSION_RELATION, Double.toString(sslib.getSemSimVersion())));
-
+		semsimmodel.setSourcefilelocation(srcfile.getAbsolutePath());
+		semsimmodel.setSemsimversion(sslib.getSemSimVersion());
+		
 		// If jsbatch couldn't parse the model code into an xmml file, log the error
 		if(semsimmodel.getDataStructures().isEmpty() && semsimmodel.getPhysicalModelComponents().isEmpty()){
 			semsimmodel.addError(srcfile.getName() + " model appears to be empty.");
 		}
 		return semsimmodel;
 	}
-
 	
 	private void setCustomUnits(File file) throws FileNotFoundException, OWLException {
 		Map<String,String> unitnamesandcustomdeclarations = new HashMap<String,String>();

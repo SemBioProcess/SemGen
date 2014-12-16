@@ -86,9 +86,9 @@ public class CellMLreader extends BioModelReader {
 		}
 
 		// Add model-level metadata
-		semsimmodel.addAnnotation(new Annotation(SemSimConstants.LEGACY_CODE_LOCATION_RELATION, srcfile.getAbsolutePath()));
-		semsimmodel.addAnnotation(new Annotation(SemSimConstants.SEMSIM_VERSION_RELATION, Double.toString(sslib.getSemSimVersion())));
-
+		semsimmodel.setSourcefilelocation(srcfile.getAbsolutePath());
+		semsimmodel.setSemsimversion(sslib.getSemSimVersion());
+		
 		// Get the namespace that indicates if it is a CellML 1.0 or 1.1 model
 		mainNS = doc.getRootElement().getNamespace();
 		

@@ -123,6 +123,10 @@ public class CurationalMetadata {
 	public boolean isItemValueEqualto(Metadata item, String value) {
 		return item.equals(value);
 	}
+	
+	public SemSimRelation getRelation(Metadata item) {
+		return item.getRelation();
+	}
 }
 
 

@@ -82,7 +82,7 @@ public class ModelLevelMetadataEditor extends SemGenDialog implements PropertyCh
 	// Retrieve the model-level annotations
 	public Set<Annotation> getModelLevelAnnotations(){
 		for(Annotation ann : annotator.semsimmodel.getAnnotations()){
-			if(ann.getRelation()==SemSimConstants.KEY_TERM_RELATION || ann.getRelation()==SemSimConstants.SEMSIM_VERSION_RELATION){
+			if(ann.getRelation()==SemSimConstants.KEY_TERM_RELATION){
 				String label = null;
 				if(ann.getValueDescription()!=null){
 					label = ann.getValueDescription();

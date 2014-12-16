@@ -98,6 +98,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 	private static SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmssSSSZ");
 
 	private int sourceModelType;
+	private String sourcefilelocation;
 	public static String unspecifiedName = "*unspecified*";
 	
 	/**
@@ -969,17 +970,17 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 		return deps;
 	}
 	
-	
 	/**
 	 * @return The location of the raw computer source code associated with this model.
 	 */
-	public String getLegacyCodeLocation() {
-		for(Annotation ann : getAnnotations()){
-			if(ann.getRelation()==SemSimConstants.LEGACY_CODE_LOCATION_RELATION) return (String) ann.getValue();
-		}
-		return null;
-	}
 	
+	public String getLegacyCodeLocation() {
+		return sourcefilelocation;
+	}
+
+	public void setSourcefilelocation(String sourcefilelocation) {
+		this.sourcefilelocation = sourcefilelocation;
+	}
 	
 	/**
 	 * Set the errors associated with the model.
@@ -1240,11 +1241,6 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 		metadata.setAnnotationValue(Metadata.description, value);
 	}
 	
-	@Override
-	public URI getSemSimClassURI() {
-		return SemSimConstants.SEMSIM_MODEL_CLASS_URI;
-	}
-
 	public double getSemsimversion() {
 		return semsimversion;
 	}
@@ -1252,4 +1248,16 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 	public void setSemsimversion(double semsimversion) {
 		this.semsimversion = semsimversion;
 	}
+	
+	public void setSemsimversion(String semsimversion) {
+		this.semsimversion = Double.valueOf(semsimversion);
+	}
+	@Override
+	public URI getSemSimClassURI() {
+		return SemSimConstants.SEMSIM_MODEL_CLASS_URI;
+	}
+
+
+
+
 }

@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
+import org.semanticweb.owlapi.model.IRI;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import semsim.annotation.SemSimRelation;
@@ -124,8 +126,7 @@ public class SemSimConstants {
 	public static final URI METADATA_ID_URI = URI.create(SEMSIM_NAMESPACE + "metadataID");
 	public static final URI REFERS_TO_URI = URI.create(SEMSIM_NAMESPACE + "refersTo");
 	public static final URI REFERENCE_NAME_OF_IMPORT_URI = URI.create(SEMSIM_NAMESPACE + "referenceNameOfImport");
-	public static final URI LEGACY_CODE_LOCATION_URI = URI.create(SEMSIM_NAMESPACE + "legacyCodeURI");
-	public static final URI SEMSIM_VERSION_URI = URI.create(SEMSIM_NAMESPACE + "SemSimVersion");
+
 	public static final URI HAS_UNIT_URI = URI.create(SEMSIM_NAMESPACE + "hasUnit");
 	public static final URI UNIT_FOR_URI = URI.create(SEMSIM_NAMESPACE + "unitFor");
 	public static final URI HAS_ASSOCIATED_DATA_STRUCTURE_URI = URI.create(SEMSIM_NAMESPACE + "hasAssociatedDataStructure");
@@ -144,9 +145,7 @@ public class SemSimConstants {
 	public static final URI UNIT_FACTOR_FOR_URI = URI.create(SEMSIM_NAMESPACE + "unitFactorFor");
 	public static final URI UNIT_FACTOR_PREFIX_URI = URI.create(SEMSIM_NAMESPACE + "hasUnitFactorPrefix");
 	
-	// Model-level relations
-
-	
+	// Model-level relations	
 	public static final URI BQB_HAS_PART_URI = URI.create(BQB_NAMESPACE + "hasPart");
 	public static final URI BQB_IS_PART_OF_URI = URI.create(BQB_NAMESPACE + "isPartOf");
 	public static final URI BQB_IS_URI = URI.create(BQB_NAMESPACE + "is");
@@ -162,10 +161,11 @@ public class SemSimConstants {
 	public static final URI CELLML_COMPONENT_PUBLIC_INTERFACE_URI = URI.create(SEMSIM_NAMESPACE + "hasCellMLpublicInterface");
 	public static final URI CELLML_DOCUMENTATION_URI = URI.create(SEMSIM_NAMESPACE + "hasCellMLdocumentation");
 	public static final URI CELLML_RDF_MARKUP_URI = URI.create(SEMSIM_NAMESPACE + "hasCellMLrdfMarkup");
-	
 	public static final URI HAS_NAME_URI = URI.create(SEMSIM_NAMESPACE + "name");
 	public static final URI KEY_TERM_URI = URI.create(SEMSIM_NAMESPACE + "keyTerm");
 	
+	public static final IRI LEGACY_CODE_LOCATION_IRI = IRI.create(SEMSIM_NAMESPACE + "legacyCodeURI");
+	public static final IRI SEMSIM_VERSION_IRI = IRI.create(SEMSIM_NAMESPACE + "SemSimVersion");
 	
 	// Relations
 	public static final SemSimRelation BQB_HAS_PART_RELATION = new SemSimRelation("The biological entity represented by the model element includes the subject of the referenced resource, either physically or logically", BQB_HAS_PART_URI);
@@ -190,8 +190,6 @@ public class SemSimConstants {
 	public static final SemSimRelation CELLML_COMPONENT_SUBSUMPTION_TYPE_RELATION = new SemSimRelation("The type of relation between a parent and child component (either containment, encapsulation or a custom term)", CELLML_COMPONENT_SUBSUMPTION_TYPE_URI);
 	
 	public static final SemSimRelation REFERS_TO_RELATION = new SemSimRelation("Refers to ontology term", REFERS_TO_URI);
-	public static final SemSimRelation LEGACY_CODE_LOCATION_RELATION = new SemSimRelation("Location of original simulation code", LEGACY_CODE_LOCATION_URI);
-	public static final SemSimRelation SEMSIM_VERSION_RELATION = new SemSimRelation("Version of SemSim used to create model", SEMSIM_VERSION_URI);
 	public static final SemSimRelation HAS_MATHML_RELATION = new SemSimRelation("MathML for computation", HAS_MATHML_URI);
 	public static final SemSimRelation HAS_COMPUTATIONAL_COMPONENT_RELATION = new SemSimRelation("physical property has a data structure as a computational component", HAS_COMPUTATATIONAL_COMPONENT_URI);
 
@@ -259,8 +257,6 @@ public class SemSimConstants {
 		aMap0.put(MAPPED_FROM_URI, MAPPED_FROM_RELATION);
 		aMap0.put(MAPPED_TO_URI, MAPPED_TO_RELATION);
 		aMap0.put(REFERS_TO_URI, REFERS_TO_RELATION);
-		aMap0.put(LEGACY_CODE_LOCATION_URI, LEGACY_CODE_LOCATION_RELATION);
-		aMap0.put(SEMSIM_VERSION_URI, SEMSIM_VERSION_RELATION);
 		aMap0.put(HAS_UNIT_URI, HAS_UNIT_RELATION);
 		aMap0.put(UNIT_FOR_URI, UNIT_FOR_RELATION);
 		aMap0.put(HAS_ASSOCIATED_DATA_STRUCTURE_URI, HAS_ASSOCIATED_DATA_STRUCTURE_RELATION);

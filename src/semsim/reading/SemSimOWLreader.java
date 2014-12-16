@@ -112,11 +112,19 @@ public class SemSimOWLreader extends BioModelReader {
 	private void collectModelAnnotations() {
 		// Get model-level annotations
 		Set<OWLAnnotation> anns = ont.getAnnotations();
-		for (OWLAnnotation ann : anns) {
-			
+		Set<OWLAnnotation> annstoremove = new HashSet<OWLAnnotation>();
+		for (OWLAnnotation named : anns) {
+			if (named.getProperty().getIRI().equals(SemSimConstants.SEMSIM_VERSION_IRI)) {
+				semsimmodel.setSemsimversion(((OWLLiteral)named.getValue()).getLiteral());
+				annstoremove.add(named);
+			};
+			if (named.getProperty().getIRI().equals(SemSimConstants.LEGACY_CODE_LOCATION_IRI)) {
+				semsimmodel.setSourcefilelocation(((OWLLiteral)named.getValue()).getLiteral());
+				annstoremove.add(named);
+			};
 		}
-		
-		for(OWLAnnotation ann : ont.getAnnotations()){
+		anns.removeAll(annstoremove);
+		for(OWLAnnotation ann : anns){
 			URI propertyuri = ann.getProperty().getIRI().toURI();
 			if(SemSimConstants.URIS_AND_SEMSIM_RELATIONS.containsKey(propertyuri)){
 				if(ann.getValue() instanceof OWLLiteral){
