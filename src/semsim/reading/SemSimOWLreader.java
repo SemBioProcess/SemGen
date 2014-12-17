@@ -36,6 +36,7 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import semsim.CellMLconstants;
 import semsim.SemSimConstants;
+import semsim.SemSimLibrary;
 import semsim.annotation.Annotation;
 import semsim.annotation.StructuralRelation;
 import semsim.model.SemSimModel;
@@ -114,11 +115,11 @@ public class SemSimOWLreader extends BioModelReader {
 		Set<OWLAnnotation> anns = ont.getAnnotations();
 		Set<OWLAnnotation> annstoremove = new HashSet<OWLAnnotation>();
 		for (OWLAnnotation named : anns) {
-			if (named.getProperty().getIRI().equals(SemSimConstants.SEMSIM_VERSION_IRI)) {
+			if (named.getProperty().getIRI().equals(SemSimLibrary.SEMSIM_VERSION_IRI)) {
 				semsimmodel.setSemsimversion(((OWLLiteral)named.getValue()).getLiteral());
 				annstoremove.add(named);
 			};
-			if (named.getProperty().getIRI().equals(SemSimConstants.LEGACY_CODE_LOCATION_IRI)) {
+			if (named.getProperty().getIRI().equals(SemSimModel.LEGACY_CODE_LOCATION_IRI)) {
 				semsimmodel.setSourcefilelocation(((OWLLiteral)named.getValue()).getLiteral());
 				annstoremove.add(named);
 			};

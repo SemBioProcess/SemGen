@@ -455,6 +455,12 @@ public class SemSimOWLFactory {
 		manager.applyChange(new AddOntologyAnnotation(ont, anno));
 	}
 
+	public static void addOntologyAnnotation(OWLOntology ont, IRI property, String val, OWLOntologyManager manager){
+		OWLLiteral lit = factory.getOWLLiteral(val,"en");
+		OWLAnnotation anno = factory.getOWLAnnotation(factory.getOWLAnnotationProperty(property), lit);
+		manager.applyChange(new AddOntologyAnnotation(ont, anno));
+	}
+	
 	public static Set<String> getAllSubclasses(OWLOntology ont, String parent, Boolean includeparent) throws OWLException{
 		// traverse all nodes that belong to the parent
 		Set<String> nodes  = new HashSet<String>();

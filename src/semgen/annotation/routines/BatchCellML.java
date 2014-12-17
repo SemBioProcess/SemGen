@@ -20,6 +20,7 @@ import semgen.annotation.workbench.AnnotatorFactory;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.utilities.file.SemGenOpenFileChooser;
 import semsim.SemSimConstants;
+import semsim.annotation.CurationalMetadata;
 
 public class BatchCellML{
 	public AnnotatorWorkbench ann;
@@ -82,7 +83,7 @@ public class BatchCellML{
 					}
 					// If we DO have a proper pubmed ID
 					else{
-						//ann.addModelAnnotation(SemSimConstants.REFERENCE_PUBLICATION_PUBMED_ID_RELATION, tmd.pubmedid);
+						ann.addModelAnnotation(CurationalMetadata.REFERENCE_PUBLICATION_PUBMED_ID_RELATION, tmd.pubmedid);
 						// If ID is same as last model, use it
 						if(tmd.pubmedid.equals(lastpubmedid)){
 							tmd.inputtextarea.setText(lastabstract);
@@ -93,7 +94,7 @@ public class BatchCellML{
 						
 						// If there's a pubmed id AND abstract text
 						if(!tmd.inputtextarea.getText().equals("")){
-							//ann.addModelAnnotation(SemSimConstants.REFERENCE_PUBLICATION_ABSTRACT_TEXT_RELATION, tmd.inputtextarea.getText());
+							ann.addModelAnnotation(CurationalMetadata.REFERENCE_PUBLICATION_ABSTRACT_TEXT_RELATION, tmd.inputtextarea.getText());
 						}
 						// If there's a pubmed id but no abstract, do a scrape of the <para> tags in the cellml file
 						else{

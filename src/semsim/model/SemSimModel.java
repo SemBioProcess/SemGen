@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntology;
 
@@ -78,6 +79,7 @@ import semsim.writing.SemSimOWLwriter;
  */
 
 public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
+	public static final IRI LEGACY_CODE_LOCATION_IRI = IRI.create(SemSimConstants.SEMSIM_NAMESPACE + "legacyCodeURI");
 	private CurationalMetadata metadata = new CurationalMetadata();
 	private double semsimversion;
 	

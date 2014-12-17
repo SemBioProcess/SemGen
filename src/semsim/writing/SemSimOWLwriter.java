@@ -23,6 +23,7 @@ import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import semsim.SemSimConstants;
+import semsim.SemSimLibrary;
 import semsim.SemSimUtil;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
@@ -488,11 +489,12 @@ public class SemSimOWLwriter extends BioModelWriter {
 	}
 	
 	private void addModelAnnotations() throws OWLException {
+		SemSimOWLFactory.addOntologyAnnotation(ont, SemSimLibrary.SEMSIM_VERSION_IRI, Double.toString(SemSimLibrary.SEMSIM_VERSION), manager);
+		SemSimOWLFactory.addOntologyAnnotation(ont, SemSimLibrary.SEMSIM_VERSION_IRI, model.getLegacyCodeLocation(), manager);
+		
 		for(Annotation ann : model.getAnnotations()){
-			if(ann.getValue() instanceof String){
 				String str = (String)ann.getValue();
 				SemSimOWLFactory.addOntologyAnnotation(ont, ann.getRelation().getURI().toString(), str, "en", manager);
-			}
 		}
 	}
 	

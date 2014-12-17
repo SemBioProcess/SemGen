@@ -163,10 +163,7 @@ public class SemSimConstants {
 	public static final URI CELLML_RDF_MARKUP_URI = URI.create(SEMSIM_NAMESPACE + "hasCellMLrdfMarkup");
 	public static final URI HAS_NAME_URI = URI.create(SEMSIM_NAMESPACE + "name");
 	public static final URI KEY_TERM_URI = URI.create(SEMSIM_NAMESPACE + "keyTerm");
-	
-	public static final IRI LEGACY_CODE_LOCATION_IRI = IRI.create(SEMSIM_NAMESPACE + "legacyCodeURI");
-	public static final IRI SEMSIM_VERSION_IRI = IRI.create(SEMSIM_NAMESPACE + "SemSimVersion");
-	
+
 	// Relations
 	public static final SemSimRelation BQB_HAS_PART_RELATION = new SemSimRelation("The biological entity represented by the model element includes the subject of the referenced resource, either physically or logically", BQB_HAS_PART_URI);
 	public static final SemSimRelation BQB_IS_RELATION = new SemSimRelation("The biological entity represented by the model element has identity with the subject of the referenced resource", BQB_IS_URI);
@@ -230,8 +227,6 @@ public class SemSimConstants {
 
 	public static final SemSimRelation HAS_NAME_RELATION = new SemSimRelation("semsim component has name", HAS_NAME_URI);
 	public static final SemSimRelation KEY_TERM_RELATION = new SemSimRelation("semsim model represents", KEY_TERM_URI);
-	
-
 	
 	public static final String BIOPORTAL_API_KEY = "c4192e4b-88a8-4002-ad08-b4636c88df1a";
 
