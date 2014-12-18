@@ -264,7 +264,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	public void refreshAnnotatableElements(){
 		int divLoc = splitpane.getDividerLocation();
 		if(divLoc==-1)
-			divLoc = (int)(settings.getAppWidth())/3;
+			divLoc = (int)(settings.getAppWidth())/4;
 		
 		// If the "Tree view" menu item is selected...
 		if(settings.useTreeView()){

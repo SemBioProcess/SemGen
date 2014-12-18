@@ -16,7 +16,6 @@ import semgen.GlobalActions;
 import semgen.SemGenSettings;
 import semgen.annotation.componentdisplays.codewords.CodewordButton;
 import semgen.annotation.dialog.AnnotationComponentReplacer;
-import semgen.annotation.dialog.modelanns.ModelLevelMetadataEditor;
 import semgen.annotation.dialog.referenceclass.AddReferenceClassDialog;
 import semgen.annotation.dialog.selector.RemovePhysicalComponentDialog;
 import semgen.annotation.workbench.AnnotatorWorkbench;
@@ -37,7 +36,6 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 	private AnnotatorWorkbench workbench;
 	private SemGenToolbarButton annotateitemchangesourcemodelcode = new SemGenToolbarButton(SemGenIcon.setsourceicon);
 	private SemGenToolbarButton annotateitemcopy = new SemGenToolbarButton(SemGenIcon.importicon);
-	private SemGenToolbarButton annotateitemeditmodelanns = new SemGenToolbarButton(SemGenIcon.annotatemodelicon);
 	private SemGenToolbarButton annotateitemexportcsv = new SemGenToolbarButton(SemGenIcon.exporticon);
 	private SemGenToolbarButton annotateitemshowmarkers;
 	private JButton annotateitemshowimports = new JButton("Show imports");
@@ -81,9 +79,6 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		annotateitemexportcsv.setToolTipText("Create a .csv file that tabulates model codeword annotations for use in spreadsheets, manuscript preparation, etc.");
 		annotateitemexportcsv.addActionListener(this);
 
-		annotateitemeditmodelanns.setToolTipText("Edit metadata for this SemSim model");
-		annotateitemeditmodelanns.addActionListener(this);
-		
 		annotateitemaddrefterm.addActionListener(this);
 		annotateitemaddrefterm.setToolTipText("Add a reference ontology term to use for annotating this model");
 		
@@ -105,7 +100,6 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		add(sortselector);
 		addSeparator();
 		
-		add(annotateitemeditmodelanns);
 		add(annotateitemchangesourcemodelcode);
 		add(annotateitemcopy);
 		add(annotateitemexportcsv);
@@ -171,10 +165,6 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 
 		if(o == annotateitemexportcsv){
 				workbench.exportCSV(); 
-		}
-		
-		if(o == annotateitemeditmodelanns){
-				new ModelLevelMetadataEditor(anntab);
 		}
 		
 		if (o == annotateitemcopy) {

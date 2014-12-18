@@ -124,7 +124,10 @@ public class SemSimOWLreader extends BioModelReader {
 				annstoremove.add(named);
 			};
 		}
+		semsimmodel.getCurationalMetadata().setCurationalMetadata(anns, annstoremove);
 		anns.removeAll(annstoremove);
+		
+		//Add remaining annotations
 		for(OWLAnnotation ann : anns){
 			URI propertyuri = ann.getProperty().getIRI().toURI();
 			if(SemSimConstants.URIS_AND_SEMSIM_RELATIONS.containsKey(propertyuri)){

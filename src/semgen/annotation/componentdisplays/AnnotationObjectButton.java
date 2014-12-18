@@ -45,16 +45,13 @@ public abstract class AnnotationObjectButton extends JPanel implements MouseList
 		settings = sets;
 		this.annotater = ann;
 		this.ssc = ssc;
-		this.setLayout(new BorderLayout());
+		this.setLayout(new BorderLayout(0, 0));
 		this.companntext = companntext;
 		
 		this.editable = editable;
 		this.setFocusable(true);
 		this.addKeyListener(ann);
 		this.setMaximumSize(new Dimension(999999, maxHeight));
-		
-		((BorderLayout)this.getLayout()).setVgap(0);
-		((BorderLayout)this.getLayout()).setHgap(0);
 
 		namelabel.setFont(SemGenFont.defaultPlain());
 		namelabel.setOpaque(false);

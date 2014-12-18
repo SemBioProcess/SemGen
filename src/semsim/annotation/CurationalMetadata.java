@@ -2,6 +2,10 @@ package semsim.annotation;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Set;
+
+import org.semanticweb.owlapi.model.OWLAnnotation;
+import org.semanticweb.owlapi.model.OWLLiteral;
 
 import semsim.SemSimConstants;
 
@@ -71,7 +75,7 @@ public class CurationalMetadata {
 		public String toString() {
 		   return text;
 		}
-		 
+		
 		private void setValue(String val) {
 			value = val;
 		 }
@@ -81,9 +85,6 @@ public class CurationalMetadata {
 		 private boolean hasValue() {
 			 return !value.isEmpty();
 		 }
-		 private SemSimRelation getRelation() {
-			return relation; 
-		 }
 		 
 		 public Annotation getAsAnnotation() {
 			 return new Annotation(relation, value);
@@ -92,9 +93,11 @@ public class CurationalMetadata {
 		 private boolean equals(String valuetomatch) {
 			 return value.equals(valuetomatch);
 		 }
+		 
+		 private URI getURI() {
+			 return relation.getURI();
+		 }
 	}
-	
-
 	
 	public String getAnnotationName(Metadata item) {
 		return item.toString();
@@ -112,21 +115,26 @@ public class CurationalMetadata {
 		return item.hasValue();
 	}
 	
-	public ArrayList<Annotation> createAnnotations() {
-		ArrayList<Annotation> list = new ArrayList<Annotation>();
-		
-		
-		
+	public ArrayList<Annotation> getAnnotationList() {
+		ArrayList<Annotation> list = new  ArrayList<Annotation>();
+		for (Metadata m : Metadata.values()) {
+			list.add(m.getAsAnnotation());
+		}
 		return list;
 	}
 	
 	public boolean isItemValueEqualto(Metadata item, String value) {
 		return item.equals(value);
 	}
-	
-	public SemSimRelation getRelation(Metadata item) {
-		return item.getRelation();
+
+	public void setCurationalMetadata(Set<OWLAnnotation> list, Set<OWLAnnotation> removelist) {
+		for (Metadata m : Metadata.values()) {
+			for (OWLAnnotation a : list) {
+				if (m.getURI().equals(a.getProperty().getIRI().toURI())) {
+					setAnnotationValue(m, ((OWLLiteral)a.getValue()).getLiteral());
+					removelist.add(a);
+				}
+			}
+		}
 	}
 }
-
-

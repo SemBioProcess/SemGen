@@ -15,7 +15,8 @@ import semsim.model.SemSimModel;
 
 public class ModelAnnotationsBench extends Observable {
 	SemSimModel model;
-	CurationalMetadata metadata;	
+	CurationalMetadata metadata;
+	ArrayList<Metadata> metadatalist = new ArrayList<Metadata>();
 	Set<Annotation> annotations;
 	
 	public static enum ModelChangeEnum {SOURCECHANGED};
@@ -23,7 +24,14 @@ public class ModelAnnotationsBench extends Observable {
 	public ModelAnnotationsBench(SemSimModel ssm) {
 		model = ssm;
 		annotations = ssm.getAnnotations();
+		for (Metadata m : Metadata.values()) {
+			metadatalist.add(m);
+		}
 		metadata = ssm.getCurationalMetadata();
+	}
+	
+	public String getFullModelName() {
+		return metadata.getAnnotationValue(Metadata.fullname);
 	}
 	
 	public void addModelAnnotation(SemSimRelation rel, String ann) {
@@ -47,7 +55,7 @@ public class ModelAnnotationsBench extends Observable {
 	public ArrayList<Pair<String, Boolean>> getModelAnnotationFilledPairs() {
 		ArrayList<Pair<String, Boolean>> list = new ArrayList<Pair<String, Boolean>>();
 		
-		for (Metadata m : Metadata.values()) {
+		for (Metadata m : metadatalist) {
 			list.add(new Pair<String, Boolean>(metadata.getAnnotationName(m), metadata.hasAnnotationValue(m)));
 		}
 		

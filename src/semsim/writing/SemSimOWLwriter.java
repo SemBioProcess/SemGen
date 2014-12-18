@@ -49,7 +49,6 @@ import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.owl.SemSimOWLFactory;
 
 public class SemSimOWLwriter extends BioModelWriter {
-	protected SemSimModel model;
 	public OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	protected OWLOntology ont;
 	public OWLDataFactory factory = manager.getOWLDataFactory();
@@ -99,9 +98,9 @@ public class SemSimOWLwriter extends BioModelWriter {
  *  Exclude those that are imports of imports
 */	
 	private void getLocalDataStuctures() throws OWLException {
-		localdss.addAll(model.getDataStructures());
+		localdss.addAll(semsimmodel.getDataStructures());
 		
-		for(Submodel sub : model.getSubmodels()){
+		for(Submodel sub : semsimmodel.getSubmodels()){
 			if(sub instanceof FunctionalSubmodel){
 				FunctionalSubmodel fsub = (FunctionalSubmodel)sub;
 				if(fsub.isImported() && fsub.getParentImport()!=null){
@@ -127,7 +126,7 @@ public class SemSimOWLwriter extends BioModelWriter {
 		}
 		
 		for(UnitOfMeasurement uom : unitstoadd){
-			String unituri = model.getNamespace() + "UNIT_" + SemSimOWLFactory.URIencoding(uom.getName());
+			String unituri = semsimmodel.getNamespace() + "UNIT_" + SemSimOWLFactory.URIencoding(uom.getName());
 			SemSimOWLFactory.createSemSimIndividual(ont, unituri, factory.getOWLClass(IRI.create(SemSimConstants.UNITS_CLASS_URI.toString())), "", manager);
 			SemSimOWLFactory.setIndDatatypeProperty(ont, unituri,
 					SemSimConstants.HAS_COMPUTATIONAL_CODE_URI.toString(), uom.getComputationalCode(), manager);
@@ -142,7 +141,7 @@ public class SemSimOWLwriter extends BioModelWriter {
 						makeAnnotationsForImport(uom), manager);
 			
 			for(UnitFactor factor : uom.getUnitFactors()){
-				String factoruri = model.getNamespace() + "UNIT_" + SemSimOWLFactory.URIencoding(factor.getBaseUnit().getName());
+				String factoruri = semsimmodel.getNamespace() + "UNIT_" + SemSimOWLFactory.URIencoding(factor.getBaseUnit().getName());
 				SemSimOWLFactory.setIndObjectPropertyWithAnnotations(ont, unituri, factoruri,
 						SemSimConstants.HAS_UNIT_FACTOR_URI.toString(), SemSimConstants.UNIT_FACTOR_FOR_URI.toString(), 
 						makeUnitFactorAnnotations(factor), manager);
@@ -171,7 +170,7 @@ public class SemSimOWLwriter extends BioModelWriter {
 			// Classify the physical property under the first (and should be ONLY) reference ontology class
 			// that it is annotated against
 			if(ds.getPhysicalProperty()!=null){
-				URI propertyuri = SemSimOWLFactory.getURIforPhysicalProperty(model, ds.getPhysicalProperty());
+				URI propertyuri = SemSimOWLFactory.getURIforPhysicalProperty(semsimmodel, ds.getPhysicalProperty());
 				createPhysicalModelIndividual(ds.getPhysicalProperty(), propertyuri.toString());
 				// Log the physical property and its URI
 				singularPMCsAndUrisForDataStructures.put(ds.getPhysicalProperty(), propertyuri);
@@ -260,7 +259,7 @@ public class SemSimOWLwriter extends BioModelWriter {
 							// Need to make sure that each process gets its own physical property individual, even
 							// if some are annotated as being the exact same process
 							if(singularPMCsAndUrisForDataStructures.containsKey(pmc)){
-								uristring = makeURIforPhysicalModelComponent(model.getNamespace(), pmc, 
+								uristring = makeURIforPhysicalModelComponent(semsimmodel.getNamespace(), pmc, 
 										SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimConstants.PHYSICAL_MODEL_COMPONENT_CLASS_URI.toString())).toString();
 							}
 							else{
@@ -292,7 +291,7 @@ public class SemSimOWLwriter extends BioModelWriter {
 							createPhysicalModelIndividual(pmc, uristring);
 						}
 						// Connect the new individual to its property
-						SemSimOWLFactory.setIndObjectProperty(ont, SemSimOWLFactory.getURIforPhysicalProperty(model, ds.getPhysicalProperty()).toString(), uristring, 
+						SemSimOWLFactory.setIndObjectProperty(ont, SemSimOWLFactory.getURIforPhysicalProperty(semsimmodel, ds.getPhysicalProperty()).toString(), uristring, 
 								SemSimConstants.PHYSICAL_PROPERTY_OF_URI.toString(), SemSimConstants.HAS_PHYSICAL_PROPERTY_URI.toString(), manager);
 					}
 				}
@@ -302,7 +301,7 @@ public class SemSimOWLwriter extends BioModelWriter {
 			if(ds.hasUnits()){
 				if(ds.getUnit().getParentImport()==null){
 					UnitOfMeasurement uom = ds.getUnit();
-					String unituri = model.getNamespace() + "UNIT_" + SemSimOWLFactory.URIencoding(uom.getName());
+					String unituri = semsimmodel.getNamespace() + "UNIT_" + SemSimOWLFactory.URIencoding(uom.getName());
 					SemSimOWLFactory.setIndObjectProperty(ont, dsuri, unituri, SemSimConstants.HAS_UNIT_URI.toString(),
 							SemSimConstants.UNIT_FOR_URI.toString(), manager);
 				}
@@ -314,7 +313,7 @@ public class SemSimOWLwriter extends BioModelWriter {
 	private void setRelations() throws OWLException {
 		int r = 0;
 		OWLClass relparent = factory.getOWLClass(IRI.create(SemSimConstants.RELATIONAL_CONSTRAINT_CLASS_URI));
-		for(RelationalConstraint rel : model.getRelationalConstraints()){
+		for(RelationalConstraint rel : semsimmodel.getRelationalConstraints()){
 			String relind = namespace + "relationalConstraint_" + r;
 			SemSimOWLFactory.createSemSimIndividual(ont, relind, relparent, "", manager);
 			SemSimOWLFactory.setIndDatatypeProperty(ont, relind, SemSimConstants.HAS_COMPUTATIONAL_CODE_URI.toString(), rel.getComputationalCode(), manager);
@@ -324,8 +323,8 @@ public class SemSimOWLwriter extends BioModelWriter {
 	}
 	
 	private void addCompositeAnnotations() throws OWLException {
-		for(PhysicalProperty prop : model.getPropertyAndCompositePhysicalEntityMap().keySet()){
-			CompositePhysicalEntity cpe =  model.getPropertyAndCompositePhysicalEntityMap().get(prop);
+		for(PhysicalProperty prop : semsimmodel.getPropertyAndCompositePhysicalEntityMap().keySet()){
+			CompositePhysicalEntity cpe =  semsimmodel.getPropertyAndCompositePhysicalEntityMap().get(prop);
 			URI indexuri = processCompositePhysicalEntity(cpe, namespace);
 			
 			// Associate the CompositePhysicalEntity with its index uri in the ontology 
@@ -334,14 +333,14 @@ public class SemSimOWLwriter extends BioModelWriter {
 			}
 
 			// Connect physical property to the index physical entity for the composite entity
-			SemSimOWLFactory.setIndObjectProperty(ont, SemSimOWLFactory.getURIforPhysicalProperty(model, prop).toString(),
+			SemSimOWLFactory.setIndObjectProperty(ont, SemSimOWLFactory.getURIforPhysicalProperty(semsimmodel, prop).toString(),
 					indexuri.toString(), SemSimConstants.PHYSICAL_PROPERTY_OF_URI.toString(), SemSimConstants.HAS_PHYSICAL_PROPERTY_URI.toString(), manager);
 		}
 	}
 
 	/** Add source, sink and mediator info to model */
 	private void setProcessParticipants() throws OWLException {
-		for(PhysicalProcess proc : model.getPhysicalProcesses()){
+		for(PhysicalProcess proc : semsimmodel.getPhysicalProcesses()){
 			if(singularPMCsAndUrisForDataStructures.containsKey(proc)){
 				for(PhysicalEntity source : proc.getSources()){		
 					SemSimOWLFactory.setIndObjectPropertyWithAnnotations(ont, singularPMCsAndUrisForDataStructures.get(proc).toString(),
@@ -366,7 +365,7 @@ public class SemSimOWLwriter extends BioModelWriter {
 		// Process submodels
 		Set<Subsumption> cellmlsubsumptions = new HashSet<Subsumption>();
 		
-		for(Submodel sub : model.getSubmodels()){
+		for(Submodel sub : semsimmodel.getSubmodels()){
 			Boolean toplevelimport = false;
 			Boolean sublevelimport = false;
 			if(sub instanceof FunctionalSubmodel){
@@ -463,8 +462,8 @@ public class SemSimOWLwriter extends BioModelWriter {
 	 */
 	private void addPhysicalComponentAnnotations() throws OWLException {	
 		Set<PhysicalModelComponent> custs = new HashSet<PhysicalModelComponent>();
-		custs.addAll(model.getCustomPhysicalEntities());
-		custs.addAll(model.getCustomPhysicalProcesses());
+		custs.addAll(semsimmodel.getCustomPhysicalEntities());
+		custs.addAll(semsimmodel.getCustomPhysicalProcesses());
 		for(PhysicalModelComponent pmc : custs){
 			for(ReferenceOntologyAnnotation ref : pmc.getReferenceOntologyAnnotations(SemSimConstants.BQB_IS_VERSION_OF_RELATION)){
 				OWLClass refclass = factory.getOWLClass(IRI.create(ref.getReferenceURI()));
@@ -490,9 +489,11 @@ public class SemSimOWLwriter extends BioModelWriter {
 	
 	private void addModelAnnotations() throws OWLException {
 		SemSimOWLFactory.addOntologyAnnotation(ont, SemSimLibrary.SEMSIM_VERSION_IRI, Double.toString(SemSimLibrary.SEMSIM_VERSION), manager);
-		SemSimOWLFactory.addOntologyAnnotation(ont, SemSimLibrary.SEMSIM_VERSION_IRI, model.getLegacyCodeLocation(), manager);
+		SemSimOWLFactory.addOntologyAnnotation(ont, SemSimModel.LEGACY_CODE_LOCATION_IRI, semsimmodel.getLegacyCodeLocation(), manager);
 		
-		for(Annotation ann : model.getAnnotations()){
+		ArrayList<Annotation> anns = semsimmodel.getCurationalMetadata().getAnnotationList();
+		anns.addAll(semsimmodel.getAnnotations());
+		for(Annotation ann : anns){
 				String str = (String)ann.getValue();
 				SemSimOWLFactory.addOntologyAnnotation(ont, ann.getRelation().getURI().toString(), str, "en", manager);
 		}
@@ -627,7 +628,7 @@ public class SemSimOWLwriter extends BioModelWriter {
 		}
 		else uri = URI.create(uritrunk + SemSimOWLFactory.URIencoding(pmc.getName()));
 		
-		if(model.getDataStructure(pmc.getName())!=null){
+		if(semsimmodel.getDataStructure(pmc.getName())!=null){
 			try {
 				uri = URI.create(SemSimOWLFactory.generateUniqueIRIwithNumber(uri.toString() + "_",
 						SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimConstants.DATA_STRUCTURE_CLASS_URI.toString())));
