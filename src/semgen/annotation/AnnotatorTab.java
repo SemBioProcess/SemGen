@@ -8,6 +8,7 @@ import semgen.GlobalActions;
 import semgen.SemGen;
 import semgen.SemGenSettings;
 import semgen.annotation.annotatorpane.AnnotationPanel;
+import semgen.annotation.annotatorpane.ModelAnnotationPanel;
 import semgen.annotation.componentdisplays.AnnotationObjectButton;
 import semgen.annotation.componentdisplays.buttontree.AnnotatorButtonTree;
 import semgen.annotation.componentdisplays.codewords.CodewordButton;
@@ -59,38 +60,37 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	private static final long serialVersionUID = -5360722647774877228L;
 	public OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	public File sourcefile; //File originally loaded at start of Annotation session (could be in SBML, MML, CellML or SemSim format)
+	private AnnotatorWorkbench workbench;
 	
+	public static int initwidth;
+	public static int initheight;
+	public String ontspref;
+
+	public SemSimModel semsimmodel;
+	public Hashtable<String, CodewordButton> codewordbuttontable = new Hashtable<String, CodewordButton>();
+	public Hashtable<String, SubmodelButton> submodelbuttontable = new Hashtable<String, SubmodelButton>();
+	
+	private AnnotatorToolBar toolbar;
 	private JSplitPane splitpane;
 	private JSplitPane eastsplitpane;
 	public JSplitPane westsplitpane;
 	public JSplitPane swsplitpane;
 	public SemGenScrollPane submodelscrollpane;
 	public SemGenScrollPane codewordscrollpane;
-	public SemGenScrollPane dialogscrollpane = new SemGenScrollPane();
+	public SemGenScrollPane annotatorscrollpane = new SemGenScrollPane();
 	private SemGenScrollPane treeviewscrollpane = new SemGenScrollPane();
+
+	public AnnotationPanel annotatorpane;
+	private ModelAnnotationPanel modelmetadataeditor;
 	
 	public AnnotatorButtonTree tree;
-
-	public AnnotationPanel anndialog;
-	public AnnotationObjectButton focusbutton;
-	public Hashtable<String, CodewordButton> codewordbuttontable = new Hashtable<String, CodewordButton>();
-	public Hashtable<String, SubmodelButton> submodelbuttontable = new Hashtable<String, SubmodelButton>();
-	
 	public JPanel codewordpanel = new JPanel();
 	public JPanel submodelpanel = new JPanel();
 	public ModelAnnotationsView modelannspane;
 	public AnnotatorTabCodePanel codearea = new AnnotatorTabCodePanel();
+	public AnnotationObjectButton focusbutton;
 	public JButton addsubmodelbutton = new JButton(SemGenIcon.plusicon);
 	public JButton removesubmodelbutton = new JButton(SemGenIcon.minusicon);
-	private AnnotatorToolBar toolbar;
-	
-	public static int initwidth;
-	public static int initheight;
-	public String ontspref;
-	
-	private AnnotatorWorkbench workbench;
-
-	public SemSimModel semsimmodel;
 
 	public AnnotatorTab(SemGenSettings sets, GlobalActions gacts, AnnotatorWorkbench bench) {
 		super(bench.getCurrentModelName(), SemGenIcon.annotatoricon, "Annotating " + bench.getCurrentModelName(), sets, gacts);
@@ -107,8 +107,9 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		initheight = settings.getAppHeight();
 		setOpaque(false);
 		setLayout(new BorderLayout());
-
+		
 		modelannspane = new ModelAnnotationsView(workbench, settings);
+		modelmetadataeditor = new ModelAnnotationPanel(workbench);
 		
 		codewordpanel.setBackground(Color.white);
 		codewordpanel.setLayout(new BoxLayout(codewordpanel, BoxLayout.Y_AXIS));
@@ -122,8 +123,8 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		SemGenScrollPane legacycodescrollpane = new SemGenScrollPane();
 		legacycodescrollpane.getViewport().add(codearea);
 		
-		dialogscrollpane.setBackground(SemGenSettings.lightblue);
-		dialogscrollpane.getViewport().setBackground(SemGenSettings.lightblue);
+		annotatorscrollpane.setBackground(SemGenSettings.lightblue);
+		annotatorscrollpane.getViewport().setBackground(SemGenSettings.lightblue);
 		
 		codewordscrollpane = new SemGenScrollPane(codewordpanel);
 		InputMap im = codewordscrollpane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
@@ -137,7 +138,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		westsplitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, modelannspane, swsplitpane); 
 		westsplitpane.setOneTouchExpandable(true);
 
-		eastsplitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, dialogscrollpane, legacycodescrollpane);
+		eastsplitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, annotatorscrollpane, legacycodescrollpane);
 		eastsplitpane.setOneTouchExpandable(true);
 
 		splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, westsplitpane, eastsplitpane);
@@ -239,25 +240,29 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		} 
 	}
 
-	public AnnotationPanel annotationObjectAction(AnnotationObjectButton aob) throws BadLocationException, IOException {
+	public void annotationObjectAction(AnnotationObjectButton aob) throws BadLocationException, IOException {
 		if(focusbutton!=null){
 			focusbutton.setBackground(Color.white);
 		}
 		aob.setBackground(SemGenSettings.lightblue);
 		focusbutton = aob;
 
-		dialogscrollpane.getViewport().removeAll();
-		anndialog = new AnnotationPanel(this, settings, aob, globalactions);
-		dialogscrollpane.getViewport().add(anndialog);
+		annotatorscrollpane.getViewport().removeAll();
+		annotatorpane = new AnnotationPanel(this, settings, aob, globalactions);
+		annotatorscrollpane.getViewport().add(annotatorpane);
 		
 		// Highlight occurrences of codeword in legacy code
 		
 		codearea.setCodeword(getLookupNameForAnnotationObjectButton(aob));
 		codearea.HighlightOccurances(true);
 
-		dialogscrollpane.scrollToTop();
-
-		return anndialog;
+		annotatorscrollpane.scrollToTop();
+	}
+	
+	public void showModelAnnotator() {
+		annotatorscrollpane.getViewport().removeAll();
+		
+		annotatorscrollpane.getViewport().add(modelmetadataeditor);
 	}
 	
 	// Refresh the display of codewords and submodels based on the view options selected in the Annotate menu
@@ -462,13 +467,13 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	}
 	
 	public void showSelectAnnotationObjectMessage(){
-		dialogscrollpane.getViewport().removeAll();
+		annotatorscrollpane.getViewport().removeAll();
 		JPanel panel = new JPanel(new BorderLayout());
 		JLabel label = new JLabel("Select a codeword or submodel to view annotations");
 		label.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 0));
 		panel.add(label, BorderLayout.CENTER);
-		dialogscrollpane.getViewport().add(panel);
-		dialogscrollpane.scrollToTop();
+		annotatorscrollpane.getViewport().add(panel);
+		annotatorscrollpane.scrollToTop();
 		if(focusbutton!=null){
 			focusbutton.setBackground(Color.white);
 		}
@@ -506,7 +511,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 			else if(codewordpanel.getComponent(0) instanceof CodewordButton)
 				annotationObjectAction((AnnotationObjectButton) codewordpanel.getComponent(0));
 			else
-				dialogscrollpane.getViewport().add(new JLabel("No codewords or sub-models to annotate"));
+				annotatorscrollpane.getViewport().add(new JLabel("No codewords or sub-models to annotate"));
 		} 
 		catch (BadLocationException e) {
 			e.printStackTrace();}
@@ -616,10 +621,10 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		
 		focusbutton = aob;
 		if (whichann == aob.humdeflabel) {
-			new HumanDefEditor(aob.ssc, anndialog);
+			new HumanDefEditor(aob.ssc, annotatorpane);
 		}
 		if(whichann == aob.singularannlabel){
-			anndialog.showSingularAnnotationEditor();
+			annotatorpane.showSingularAnnotationEditor();
 		}
 	}
 
@@ -664,7 +669,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	public void requestSave() {
 		workbench.saveModel();
 	}
-
+	
 	@Override
 	public void requestSaveAs() {
 		setCursor(new Cursor(Cursor.WAIT_CURSOR));
@@ -674,7 +679,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		}
 		setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
-
+	
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		if (arg1 == ModelAnnotationsBench.ModelChangeEnum.SOURCECHANGED) {
@@ -685,6 +690,9 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 			}
 			return;
 		}
+		if (arg1 == ModelAnnotationsBench.ModelChangeEnum.METADATASELECTED) {
+			showModelAnnotator();
+		}
 		if (!isSaved()) {
 			refreshAnnotatableElements();
 			try {
@@ -694,6 +702,4 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 			}
 		}
 	}
-	
-
 }

@@ -43,7 +43,7 @@ public class RemovePhysicalComponentDialog extends SemSimComponentSelectorDialog
 						JOptionPane.YES_NO_OPTION);
 				if(JOptionPane.YES_OPTION == choice){
 					removeComponentFromModel();
-					if(annotator.focusbutton instanceof CodewordButton) annotator.anndialog.compositepanel.refreshUI();
+					if(annotator.focusbutton instanceof CodewordButton) annotator.annotatorpane.compositepanel.refreshUI();
 				}
 			}
 			dispose();

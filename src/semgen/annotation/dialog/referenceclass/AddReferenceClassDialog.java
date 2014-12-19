@@ -71,7 +71,7 @@ public class AddReferenceClassDialog extends SemGenDialog implements
 						"Added " + (String) refclasspanel.resultslistright.getSelectedValue() + " as reference" + type,
 						"", JOptionPane.PLAIN_MESSAGE);
 			annotator.setModelSaved(false);
-			if(annotator.focusbutton instanceof CodewordButton) annotator.anndialog.compositepanel.refreshUI();
+			if(annotator.focusbutton instanceof CodewordButton) annotator.annotatorpane.compositepanel.refreshUI();
 		}
 	}
 }

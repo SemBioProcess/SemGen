@@ -236,7 +236,7 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 		add(Box.createVerticalGlue(), BorderLayout.SOUTH);
 		
 		setVisible(true);
-		ann.dialogscrollpane.scrollToLeft();
+		ann.annotatorscrollpane.scrollToLeft();
 		this.validate();
 		this.repaint();
 	}
@@ -300,7 +300,7 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 			nestedsubmodelpane.setCustomText(editcomptext);
 			nestedsubmodelpane.setForeground(Color.gray);
 		}
-		annotator.dialogscrollpane.scrollToLeft();
+		annotator.annotatorscrollpane.scrollToLeft();
 	}
 	
 	public void refreshCompositeAnnotation(){

@@ -13,7 +13,6 @@ import java.util.Observer;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
@@ -29,17 +28,17 @@ import semgen.utilities.uicomponent.SemGenScrollPane;
 
 public class ModelAnnotationsView extends SemGenScrollPane implements Observer {
 	private static final long serialVersionUID = 1L;
-	ModelAnnotationsBench modannbench;
+	ModelAnnotationsBench metadatabench;
 	SemGenSettings settings;
 	ArrayList<MetadataBox> metadataarray = new ArrayList<MetadataBox>();
 	JPanel viewport = new JPanel();
 	
 	ModelAnnotationsView(AnnotatorWorkbench wb, SemGenSettings sets) {
 		viewport.setLayout(new BoxLayout(viewport, BoxLayout.Y_AXIS));
-		modannbench = wb.getModelAnnotationsWorkbench();
+		metadatabench = wb.getModelAnnotationsWorkbench();
 		settings = sets;
 		
-		String name = modannbench.getFullModelName();
+		String name = metadatabench.getFullModelName();
 		if (name.isEmpty()) name = wb.getCurrentModelName();
 		setBorder(BorderFactory.createTitledBorder(
 				BorderFactory.createEtchedBorder(), name, 
@@ -57,7 +56,7 @@ public class ModelAnnotationsView extends SemGenScrollPane implements Observer {
 	}
 	
 	private void drawList() {
-		for (Pair<String, Boolean> pair : modannbench.getModelAnnotationFilledPairs()) {
+		for (Pair<String, Boolean> pair : metadatabench.getModelAnnotationFilledPairs()) {
 			MetadatawithCheck box = new MetadatawithCheck(pair.getLeft(), pair.getRight());
 			metadataarray.add(box);
 			viewport.add(box, Component.LEFT_ALIGNMENT);
@@ -68,7 +67,10 @@ public class ModelAnnotationsView extends SemGenScrollPane implements Observer {
 	
 	@Override
 	public void update(Observable arg0, Object arg1) {
-
+		if (arg1 == ModelAnnotationsBench.ModelChangeEnum.METADATACHANGED) {
+			int index = metadatabench.getFocusIndex();
+			metadataarray.get(index).setIndicator(metadatabench.focusHasValue());
+		}
 	}
        
 	abstract class MetadataBox extends JPanel {
@@ -79,24 +81,7 @@ public class ModelAnnotationsView extends SemGenScrollPane implements Observer {
 			this.addMouseListener(new MouseMetadataAdapter(this));
 		}
 		
-		class MouseMetadataAdapter extends MouseAdapter {
-			JComponent target;
-			MouseMetadataAdapter(JComponent targ) {
-				target = targ;
-			}
-			
-			public void mouseEntered(MouseEvent e) {
-				target.setOpaque(true);
-				target.setBackground(new Color(255,231,186));
-				target.setCursor(new Cursor(Cursor.HAND_CURSOR));
-			}
-
-			public void mouseExited(MouseEvent e) {
-				target.setOpaque(false);
-				target.setBackground(null);
-				target.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-			}
-		};
+		public abstract void setIndicator(boolean status);
 	};
 	
 	class MetadatawithCheck extends MetadataBox {
@@ -123,4 +108,27 @@ public class ModelAnnotationsView extends SemGenScrollPane implements Observer {
 		
 		
 	};
+	
+	class MouseMetadataAdapter extends MouseAdapter {
+		MetadataBox target;
+			MouseMetadataAdapter(MetadataBox targ) {
+				target = targ;
+			}
+			
+			public void mouseClicked(MouseEvent e) {
+				metadatabench.notifyOberserversofMetadataSelection(metadataarray.indexOf(target));
+			}
+			
+			public void mouseEntered(MouseEvent e) {
+				target.setOpaque(true);
+				target.setBackground(new Color(255,231,186));
+				target.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			}
+
+			public void mouseExited(MouseEvent e) {
+				target.setOpaque(false);
+				target.setBackground(null);
+				target.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+		};
 }

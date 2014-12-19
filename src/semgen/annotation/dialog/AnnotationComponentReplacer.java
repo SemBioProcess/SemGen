@@ -91,7 +91,7 @@ public class AnnotationComponentReplacer extends SemGenDialog implements
 				JOptionPane.showMessageDialog(this, "Finished replacement");
 				refreshListData();
 				ann.setModelSaved(false);
-				if(ann.focusbutton instanceof CodewordButton) ann.anndialog.compositepanel.refreshUI();
+				if(ann.focusbutton instanceof CodewordButton) ann.annotatorpane.compositepanel.refreshUI();
 				optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 			} else if (value.equals("Close")) {
 				dispose();

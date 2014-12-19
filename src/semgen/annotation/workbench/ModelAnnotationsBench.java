@@ -18,8 +18,9 @@ public class ModelAnnotationsBench extends Observable {
 	CurationalMetadata metadata;
 	ArrayList<Metadata> metadatalist = new ArrayList<Metadata>();
 	Set<Annotation> annotations;
-	
-	public static enum ModelChangeEnum {SOURCECHANGED};
+	int focusindex = -1;
+		
+	public static enum ModelChangeEnum {SOURCECHANGED, METADATACHANGED, METADATASELECTED};
 	
 	public ModelAnnotationsBench(SemSimModel ssm) {
 		model = ssm;
@@ -52,6 +53,32 @@ public class ModelAnnotationsBench extends Observable {
 		}
 	}
 	
+	public ArrayList<String[]> getAllMetadataInformation() {
+		ArrayList<String[]> list = new ArrayList<String[]>();
+		for (Metadata mdata : metadatalist) {
+			list.add(new String[]{
+					metadata.getAnnotationName(mdata),
+					metadata.getAnnotationValue(mdata)
+					});
+		}
+		
+		return list;
+	}
+	
+	public String getMetadataNamebyIndex(int index) {
+		return metadata.getAnnotationName(metadatalist.get(index));
+	}
+	
+	public String getMetadataValuebyIndex(int index) {
+		return metadata.getAnnotationValue(metadatalist.get(index));
+	}
+	
+	public void setMetadataValuebyIndex(int index, String value) {
+		metadata.setAnnotationValue(metadatalist.get(index), value);
+		setChanged();
+		notifyObservers(ModelChangeEnum.METADATACHANGED);
+	}
+	
 	public ArrayList<Pair<String, Boolean>> getModelAnnotationFilledPairs() {
 		ArrayList<Pair<String, Boolean>> list = new ArrayList<Pair<String, Boolean>>();
 		
@@ -60,5 +87,19 @@ public class ModelAnnotationsBench extends Observable {
 		}
 		
 		return list;
+	}
+	
+	public void notifyOberserversofMetadataSelection(int index) {
+		focusindex = index;
+		setChanged();
+		notifyObservers(ModelChangeEnum.METADATASELECTED);
+	}
+	
+	public int getFocusIndex() {
+		return focusindex;
+	}
+	
+	public boolean focusHasValue() {
+		return metadata.hasAnnotationValue(metadatalist.get(focusindex));
 	}
 }
