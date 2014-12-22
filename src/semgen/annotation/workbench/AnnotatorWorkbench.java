@@ -17,6 +17,7 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import semgen.GlobalActions;
 import semgen.SemGen;
 import semgen.annotation.routines.AnnotationCopier;
+import semgen.annotation.workbench.ModelAnnotationsBench.ModelChangeEnum;
 import semgen.utilities.CSVExporter;
 import semgen.utilities.SemGenError;
 import semgen.utilities.Workbench;
@@ -124,7 +125,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 
 	@Override
 	public File saveModelAs() {
-		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("Choose location to save file", new String[]{"cellml","owl"});
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("Choose location to save file", new String[]{"owl"});
 		if (filec.SaveAsAction()!=null) {
 			sourcefile = filec.getSelectedFile();
 			lastsavedas = filec.getFileType();
@@ -193,7 +194,9 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		setModelSaved(false);
+		if (arg1!=ModelChangeEnum.METADATASELECTED) {
+			setModelSaved(false);
+		}
 	}
 
 }

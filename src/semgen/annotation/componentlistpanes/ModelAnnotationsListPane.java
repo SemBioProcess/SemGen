@@ -1,4 +1,4 @@
-package semgen.annotation;
+package semgen.annotation.componentlistpanes;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -26,32 +26,39 @@ import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 
-public class ModelAnnotationsView extends SemGenScrollPane implements Observer {
+public class ModelAnnotationsListPane extends SemGenScrollPane implements Observer {
 	private static final long serialVersionUID = 1L;
 	ModelAnnotationsBench metadatabench;
 	SemGenSettings settings;
 	ArrayList<MetadataBox> metadataarray = new ArrayList<MetadataBox>();
 	JPanel viewport = new JPanel();
 	
-	ModelAnnotationsView(AnnotatorWorkbench wb, SemGenSettings sets) {
+	public ModelAnnotationsListPane(AnnotatorWorkbench wb, SemGenSettings sets) {
 		viewport.setLayout(new BoxLayout(viewport, BoxLayout.Y_AXIS));
 		metadatabench = wb.getModelAnnotationsWorkbench();
+		wb.addObservertoModelAnnotator(this);
 		settings = sets;
 		
 		String name = metadatabench.getFullModelName();
 		if (name.isEmpty()) name = wb.getCurrentModelName();
+		createBorder(name);
+		createUI();
+	}
+	
+	private void createBorder(String name) {
+		
 		setBorder(BorderFactory.createTitledBorder(
 				BorderFactory.createEtchedBorder(), name, 
 				TitledBorder.LEFT, 
 				TitledBorder.TOP, 
 				SemGenFont.defaultBold(2)
 				));
-		createUI();
 	}
 	
 	private void createUI() {
 		viewport.setBackground(Color.white);
 		drawList();
+		
 		setViewportView(viewport);	
 	}
 	
@@ -60,8 +67,9 @@ public class ModelAnnotationsView extends SemGenScrollPane implements Observer {
 			MetadatawithCheck box = new MetadatawithCheck(pair.getLeft(), pair.getRight());
 			metadataarray.add(box);
 			viewport.add(box, Component.LEFT_ALIGNMENT);
+			viewport.add(Box.createGlue());
 		}
-		viewport.add(Box.createGlue());
+
 		validate();
 	}
 	
@@ -69,10 +77,11 @@ public class ModelAnnotationsView extends SemGenScrollPane implements Observer {
 	public void update(Observable arg0, Object arg1) {
 		if (arg1 == ModelAnnotationsBench.ModelChangeEnum.METADATACHANGED) {
 			int index = metadatabench.getFocusIndex();
+			if (index==0) createBorder(metadatabench.getFullModelName());
 			metadataarray.get(index).setIndicator(metadatabench.focusHasValue());
 		}
 	}
-       
+     
 	abstract class MetadataBox extends JPanel {
 		private static final long serialVersionUID = 1L;
 		MetadataBox() {
@@ -105,8 +114,6 @@ public class ModelAnnotationsView extends SemGenScrollPane implements Observer {
 			if (checkmark) indicator.setIcon(SemGenIcon.onicon);
 			else indicator.setIcon(SemGenIcon.officon);
 		}
-		
-		
 	};
 	
 	class MouseMetadataAdapter extends MouseAdapter {

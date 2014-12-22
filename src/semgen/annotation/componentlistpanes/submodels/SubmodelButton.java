@@ -1,10 +1,10 @@
-package semgen.annotation.componentdisplays.submodels;
+package semgen.annotation.componentlistpanes.submodels;
 
 import java.awt.Dimension;
 
 import semgen.SemGenSettings;
 import semgen.annotation.AnnotatorTab;
-import semgen.annotation.componentdisplays.AnnotationObjectButton;
+import semgen.annotation.componentlistpanes.AnnotationObjectButton;
 import semgen.utilities.SemGenFont;
 import semsim.model.physical.Submodel;
 

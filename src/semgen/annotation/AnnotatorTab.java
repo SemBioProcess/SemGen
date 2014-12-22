@@ -8,18 +8,18 @@ import semgen.GlobalActions;
 import semgen.SemGen;
 import semgen.SemGenSettings;
 import semgen.annotation.annotatorpane.AnnotationPanel;
-import semgen.annotation.annotatorpane.ModelAnnotationPanel;
-import semgen.annotation.componentdisplays.AnnotationObjectButton;
-import semgen.annotation.componentdisplays.buttontree.AnnotatorButtonTree;
-import semgen.annotation.componentdisplays.codewords.CodewordButton;
-import semgen.annotation.componentdisplays.submodels.SubmodelButton;
+import semgen.annotation.annotatorpane.ModelAnnotationEditor;
+import semgen.annotation.componentlistpanes.AnnotationObjectButton;
+import semgen.annotation.componentlistpanes.ModelAnnotationsListPane;
+import semgen.annotation.componentlistpanes.buttontree.AnnotatorButtonTree;
+import semgen.annotation.componentlistpanes.codewords.CodewordButton;
+import semgen.annotation.componentlistpanes.submodels.SubmodelButton;
 import semgen.annotation.dialog.HumanDefEditor;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.ModelAnnotationsBench;
 import semgen.utilities.ComparatorByName;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
-import semgen.utilities.uicomponent.SemGenProgressBar;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semgen.utilities.uicomponent.SemGenTab;
 import semsim.SemSimConstants;
@@ -81,12 +81,11 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	private SemGenScrollPane treeviewscrollpane = new SemGenScrollPane();
 
 	public AnnotationPanel annotatorpane;
-	private ModelAnnotationPanel modelmetadataeditor;
 	
 	public AnnotatorButtonTree tree;
 	public JPanel codewordpanel = new JPanel();
 	public JPanel submodelpanel = new JPanel();
-	public ModelAnnotationsView modelannspane;
+	public ModelAnnotationsListPane modelannspane;
 	public AnnotatorTabCodePanel codearea = new AnnotatorTabCodePanel();
 	public AnnotationObjectButton focusbutton;
 	public JButton addsubmodelbutton = new JButton(SemGenIcon.plusicon);
@@ -108,8 +107,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		setOpaque(false);
 		setLayout(new BorderLayout());
 		
-		modelannspane = new ModelAnnotationsView(workbench, settings);
-		modelmetadataeditor = new ModelAnnotationPanel(workbench);
+		modelannspane = new ModelAnnotationsListPane(workbench, settings);
 		
 		codewordpanel.setBackground(Color.white);
 		codewordpanel.setLayout(new BoxLayout(codewordpanel, BoxLayout.Y_AXIS));
@@ -185,8 +183,6 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-	
-		SemGenProgressBar progframe = new SemGenProgressBar("Sorting codewords...", true);
 		
 		refreshAnnotatableElements();
 
@@ -227,7 +223,6 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 			} catch (BadLocationException | IOException e) {
 				e.printStackTrace();
 			} 
-		progframe.dispose();
 		return semsimmodel;
 	}
 
@@ -249,7 +244,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 
 		annotatorscrollpane.getViewport().removeAll();
 		annotatorpane = new AnnotationPanel(this, settings, aob, globalactions);
-		annotatorscrollpane.getViewport().add(annotatorpane);
+		annotatorscrollpane.setViewportView(annotatorpane);
 		
 		// Highlight occurrences of codeword in legacy code
 		
@@ -260,9 +255,8 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	}
 	
 	public void showModelAnnotator() {
-		annotatorscrollpane.getViewport().removeAll();
-		
-		annotatorscrollpane.getViewport().add(modelmetadataeditor);
+		ModelAnnotationEditor modelmetadataeditor = new ModelAnnotationEditor(workbench);
+		annotatorscrollpane.setViewportView(modelmetadataeditor);
 	}
 	
 	// Refresh the display of codewords and submodels based on the view options selected in the Annotate menu
@@ -562,7 +556,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		JPanel panel = codewordpanel;
 		if(focusbutton instanceof SubmodelButton){
 			panel = submodelpanel;
-			}
+		}
 		
 		// Up arrow key
 		if (id == 38) {
@@ -695,11 +689,11 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		}
 		if (!isSaved()) {
 			refreshAnnotatableElements();
-			try {
-				annotationObjectAction(focusbutton);
-			} catch (BadLocationException | IOException e) {
-				e.printStackTrace();
-			}
+//			try {
+//				annotationObjectAction(focusbutton);
+//			} catch (BadLocationException | IOException e) {
+//				e.printStackTrace();
+//			}
 		}
 	}
 }
