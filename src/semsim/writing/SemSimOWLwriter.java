@@ -48,7 +48,7 @@ import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.owl.SemSimOWLFactory;
 
-public class SemSimOWLwriter extends BioModelWriter {
+public class SemSimOWLwriter extends ModelWriter {
 	public OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	protected OWLOntology ont;
 	public OWLDataFactory factory = manager.getOWLDataFactory();
@@ -342,20 +342,23 @@ public class SemSimOWLwriter extends BioModelWriter {
 	private void setProcessParticipants() throws OWLException {
 		for(PhysicalProcess proc : semsimmodel.getPhysicalProcesses()){
 			if(singularPMCsAndUrisForDataStructures.containsKey(proc)){
-				for(PhysicalEntity source : proc.getSources()){		
+				for(PhysicalEntity source : proc.getSourcePhysicalEntities()){	
+					Set<OWLAnnotation> anns = makeMultiplierAnnotation(source, proc.getSourceStoichiometry(source));
 					SemSimOWLFactory.setIndObjectPropertyWithAnnotations(ont, singularPMCsAndUrisForDataStructures.get(proc).toString(),
 							singularPMCsAndUrisForDataStructures.get(source).toString(), SemSimConstants.HAS_SOURCE_URI.toString(),
-							"", null, manager);
+							"", anns, manager);
 				}
-				for(PhysicalEntity sink : proc.getSinks()){
+				for(PhysicalEntity sink : proc.getSinkPhysicalEntities()){
+					Set<OWLAnnotation> anns = makeMultiplierAnnotation(sink, proc.getSourceStoichiometry(sink));
 					SemSimOWLFactory.setIndObjectPropertyWithAnnotations(ont, singularPMCsAndUrisForDataStructures.get(proc).toString(),
 							singularPMCsAndUrisForDataStructures.get(sink).toString(), SemSimConstants.HAS_SINK_URI.toString(),
-							"", null, manager);
+							"", anns, manager);
 				}
-				for(PhysicalEntity mediator : proc.getMediators()){
+				for(PhysicalEntity mediator : proc.getMediatorPhysicalEntities()){
+					Set<OWLAnnotation> anns = makeMultiplierAnnotation(mediator, proc.getSourceStoichiometry(mediator));
 					SemSimOWLFactory.setIndObjectPropertyWithAnnotations(ont, singularPMCsAndUrisForDataStructures.get(proc).toString(),
 							singularPMCsAndUrisForDataStructures.get(mediator).toString(), SemSimConstants.HAS_MEDIATOR_URI.toString(),
-							"", null, manager);
+							"", anns, manager);
 				}
 			}
 		}
@@ -692,6 +695,15 @@ public class SemSimOWLwriter extends BioModelWriter {
 		if(description!=null){
 			SemSimOWLFactory.setRDFComment(ont, factory.getOWLNamedIndividual(IRI.create(uriforind)), description, manager);
 		}
+	}
+	
+	// Assert the multiplier on process participants
+	private Set<OWLAnnotation> makeMultiplierAnnotation(PhysicalEntity pp, Integer stoich){
+		Set<OWLAnnotation> anns = new HashSet<OWLAnnotation>();
+		OWLLiteral lit = factory.getOWLLiteral(stoich);
+		OWLAnnotation anno = factory.getOWLAnnotation(factory.getOWLAnnotationProperty(IRI.create(SemSimConstants.HAS_MULTIPLIER_URI)), lit);
+		anns.add(anno);
+		return anns;
 	}
 	
 	// Assert a public interface annotation (for CellML-derived models)

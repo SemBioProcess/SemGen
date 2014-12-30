@@ -21,6 +21,7 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
+import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.NodeIterator;
 import com.hp.hpl.jena.rdf.model.Property;
@@ -52,7 +53,7 @@ import semsim.model.physical.object.PhysicalProperty;
 import semsim.owl.SemSimOWLFactory;
 import semsim.writing.CellMLbioRDFblock;
 
-public class CellMLreader extends BioModelReader {
+public class CellMLreader extends ModelReader {
 	private Namespace mainNS;
 	private CellMLbioRDFblock rdfblock;
 	private String rdfstring;
@@ -670,8 +671,8 @@ public class CellMLreader extends BioModelReader {
 						Resource sourceres = (Resource) sourceit.next();
 						Resource physentres = sourceres.getPropertyResourceValue(CellMLbioRDFblock.hasphysicalentityreference);
 						PhysicalModelComponent sourcepmc = getPMCfromRDFresourceAndAnnotate(physentres);
-						sourceres.getProperty(CellMLbioRDFblock.hasmultiplier).getObject().asLiteral();
-						process.addSource((PhysicalEntity) sourcepmc);
+						Literal multiplier = sourceres.getProperty(CellMLbioRDFblock.hasmultiplier).getObject().asLiteral();
+						process.addSource((PhysicalEntity) sourcepmc, multiplier.getInt());
 					}
 					// Read in the sink participants
 					NodeIterator sinkit = rdfblock.rdf.listObjectsOfProperty(propertyofres, CellMLbioRDFblock.hassinkparticipant);
@@ -679,8 +680,8 @@ public class CellMLreader extends BioModelReader {
 						Resource sinkres = (Resource) sinkit.next();
 						Resource physentres = sinkres.getPropertyResourceValue(CellMLbioRDFblock.hasphysicalentityreference);
 						PhysicalModelComponent sinkpmc = getPMCfromRDFresourceAndAnnotate(physentres);
-						sinkres.getProperty(CellMLbioRDFblock.hasmultiplier).getObject().asLiteral();
-						process.addSink((PhysicalEntity) sinkpmc);
+						Literal multiplier = sinkres.getProperty(CellMLbioRDFblock.hasmultiplier).getObject().asLiteral();
+						process.addSink((PhysicalEntity) sinkpmc, multiplier.getInt());
 					}
 					// Read in the mediator participants
 					NodeIterator mediatorit = rdfblock.rdf.listObjectsOfProperty(propertyofres, CellMLbioRDFblock.hasmediatorparticipant);
@@ -688,8 +689,8 @@ public class CellMLreader extends BioModelReader {
 						Resource mediatorres = (Resource) mediatorit.next();
 						Resource physentres = mediatorres.getPropertyResourceValue(CellMLbioRDFblock.hasphysicalentityreference);
 						PhysicalModelComponent mediatorpmc = getPMCfromRDFresourceAndAnnotate(physentres);
-						mediatorres.getProperty(CellMLbioRDFblock.hasmultiplier).getObject().asLiteral();
-						process.addMediator((PhysicalEntity) mediatorpmc);
+						Literal multiplier = mediatorres.getProperty(CellMLbioRDFblock.hasmultiplier).getObject().asLiteral();
+						process.addMediator((PhysicalEntity) mediatorpmc, multiplier.getInt());
 					}
 				}
 			}

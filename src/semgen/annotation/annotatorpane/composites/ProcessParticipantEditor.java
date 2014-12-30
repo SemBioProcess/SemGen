@@ -22,6 +22,7 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
 import semgen.annotation.dialog.selector.SemSimComponentSelectorDialog;
+import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semsim.SemSimConstants;
@@ -77,9 +78,9 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 	
 	public void setTableData(){
 		Set<PhysicalEntity> participants = new HashSet<PhysicalEntity>();
-		if(relation == SemSimConstants.HAS_SOURCE_RELATION) participants.addAll(process.getSources());
-		else if(relation == SemSimConstants.HAS_SINK_RELATION) participants.addAll(process.getSinks());
-		else if(relation == SemSimConstants.HAS_MEDIATOR_RELATION) participants.addAll(process.getMediators());
+		if(relation == SemSimConstants.HAS_SOURCE_RELATION) participants.addAll(process.getSourcePhysicalEntities());
+		else if(relation == SemSimConstants.HAS_SINK_RELATION) participants.addAll(process.getSinkPhysicalEntities());
+		else if(relation == SemSimConstants.HAS_MEDIATOR_RELATION) participants.addAll(process.getMediatorPhysicalEntities());
 		
 		ArrayList<PhysicalEntity> temp = new ArrayList<PhysicalEntity>();
 		for(PhysicalEntity pp : participants){
@@ -92,7 +93,7 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 	
 	public class ProcessParticipantTableModel extends AbstractTableModel{
 		private static final long serialVersionUID = 1L;
-		private String[] columnNames = new String[]{"Physical entity"};
+		private String[] columnNames = new String[]{"Physical entity", "Multiplier"};
 		public ArrayList<PhysicalEntity> data = new ArrayList<PhysicalEntity>();
 		
 		public ProcessParticipantTableModel(ArrayList<PhysicalEntity> data){
@@ -114,7 +115,7 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			PhysicalEntity pp = data.get(rowIndex);
 			if(columnIndex==0) return pp.getName();
-			else return null;
+			else return process.getStoichiometry(pp);
 		}
 		
 		@Override
@@ -140,6 +141,18 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 			if(col==0){
 				data.set(row, (PhysicalEntity)value);
 			}
+			else if(col==1){
+				int val = 1;
+				try{
+					val = Integer.parseInt((String)value);
+				}
+				catch(NumberFormatException ex){
+					SemGenError.showError("Multiplier not a valid number.", "Invalid Number");
+					return;
+				}
+
+				process.setStoichiometry(data.get(row), val);
+			}
 		    fireTableCellUpdated(row, col);
 		}
 	}
@@ -159,7 +172,9 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 		if (o == minusbutton) {
 			tablemod.removeRows(table.getSelectedRows());
 		}
-	}
+		
+
+	};
 
 	public void propertyChange(PropertyChangeEvent e) {
 		String propertyfired = e.getPropertyName();
@@ -171,7 +186,6 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 					if(c instanceof JCheckBox){
 						JCheckBox box = (JCheckBox)c;
 						if(box.isSelected()){
-							;
 							tablemod.addRow(new Object[]{(PhysicalEntity)sscsd.nameobjectmap.get(box.getText())});
 						}
 					}

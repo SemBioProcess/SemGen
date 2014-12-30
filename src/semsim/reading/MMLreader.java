@@ -30,7 +30,7 @@ import semsim.model.computational.datastructures.SemSimInteger;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.object.PhysicalProperty;
 
-public class MMLreader extends BioModelReader {
+public class MMLreader extends ModelReader {
 	private Hashtable<String,String> discretevarsandconstraints = new Hashtable<String,String>();
 	private Hashtable<String,String> discretevarsandmathml = new Hashtable<String,String>();
 	private Hashtable<String,String[]> discretevarsandeventtriggerinputs = new Hashtable<String,String[]>();

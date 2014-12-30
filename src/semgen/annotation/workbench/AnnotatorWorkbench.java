@@ -40,8 +40,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	public AnnotatorWorkbench(File file, SemSimModel model) {
 		semsimmodel = model;
 		sourcefile = file;
-		lastsavedas = semsimmodel.getSourceModelType();
-		
+		lastsavedas = semsimmodel.getSourceModelType();	
 	}
 	
 	public void initialize() {

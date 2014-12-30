@@ -57,7 +57,7 @@ import semsim.model.physical.object.FunctionalSubmodel;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.owl.SemSimOWLFactory;
 
-public class SemSimOWLreader extends BioModelReader {
+public class SemSimOWLreader extends ModelReader {
 	private OWLDataFactory factory;
 	private Map<URI, PhysicalModelComponent> URIandPMCmap = new HashMap<URI, PhysicalModelComponent>();
 	private OWLOntology ont;
@@ -372,17 +372,23 @@ public class SemSimOWLreader extends BioModelReader {
 							// Enter source information
 							for(String src : srcs){
 								PhysicalEntity srcent = getPhysicalEntityFromURI(ont, URI.create(src));
-								pproc.addSource(srcent);
+								int m = getMultiplierForProcessParticipant(ont, processind, 
+										SemSimConstants.HAS_SINK_URI.toString(), src);
+								pproc.addSource(srcent, m);
 							}
 							// Enter sink info
 							for(String sink : sinks){
 								PhysicalEntity sinkent = getPhysicalEntityFromURI(ont, URI.create(sink));
-								pproc.addSink(sinkent);
+								int m = getMultiplierForProcessParticipant(ont, processind, 
+										SemSimConstants.HAS_SINK_URI.toString(), sink);
+								pproc.addSink(sinkent, m);
 							}
 							// Enter mediator info
 							for(String med : mediators){
 								PhysicalEntity medent = getPhysicalEntityFromURI(ont, URI.create(med));
-								pproc.addMediator(medent);
+								int m = getMultiplierForProcessParticipant(ont, processind, 
+										SemSimConstants.HAS_SINK_URI.toString(), med);
+								pproc.addMediator(medent, m);
 							}
 							URIandPMCmap.put(URI.create(processind), pproc);
 						}
@@ -630,6 +636,26 @@ public class SemSimOWLreader extends BioModelReader {
 			URIandPMCmap.put(uri, ent);
 		}
 		return ent;
+	}
+	
+	// Get the multiplier for a process participant
+	private int getMultiplierForProcessParticipant(OWLOntology ont, String process, String prop, String ent){
+		int val = 1;
+		OWLIndividual procind = factory.getOWLNamedIndividual(IRI.create(process));
+		OWLIndividual entind = factory.getOWLNamedIndividual(IRI.create(ent));
+		OWLObjectProperty owlprop = factory.getOWLObjectProperty(IRI.create(prop));
+		OWLAxiom axiom = factory.getOWLObjectPropertyAssertionAxiom(owlprop, procind, entind);
+		
+		OWLAnnotationProperty annprop = factory.getOWLAnnotationProperty(IRI.create(SemSimConstants.HAS_MULTIPLIER_URI));
+		for(OWLAxiom ax : ont.getAxioms(procind)){
+			if(ax.equalsIgnoreAnnotations(axiom)){
+				if(!ax.getAnnotations(annprop).isEmpty()){
+					OWLLiteral litval = (OWLLiteral) ax.getAnnotations(annprop).toArray(new OWLAnnotation[]{})[0].getValue();
+					val = (int)litval.parseDouble();
+				}
+			}
+		}
+		return val;
 	}
 	
 	// Get the relationship for a submodel subsumption

@@ -47,7 +47,7 @@ import semsim.model.physical.object.FunctionalSubmodel;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.owl.SemSimOWLFactory;
 
-public class CellMLwriter extends BioModelWriter {
+public class CellMLwriter extends ModelWriter {
 	private Namespace mainNS;
 	private Set<String> metadataids = new HashSet<String>();
 	private CellMLbioRDFblock rdfblock;

@@ -86,7 +86,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	public JPanel codewordpanel = new JPanel();
 	public JPanel submodelpanel = new JPanel();
 	public ModelAnnotationsListPane modelannspane;
-	public AnnotatorTabCodePanel codearea = new AnnotatorTabCodePanel();
+	public AnnotatorTabCodePanel codearea;
 	public AnnotationObjectButton focusbutton;
 	public JButton addsubmodelbutton = new JButton(SemGenIcon.plusicon);
 	public JButton removesubmodelbutton = new JButton(SemGenIcon.minusicon);
@@ -107,6 +107,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		setOpaque(false);
 		setLayout(new BorderLayout());
 		
+		codearea = new AnnotatorTabCodePanel(workbench);
 		modelannspane = new ModelAnnotationsListPane(workbench, settings);
 		
 		codewordpanel.setBackground(Color.white);
@@ -144,7 +145,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		
 		NewAnnotatorAction();
 	}
-	
+	//Required to add the application menu as an observer
 	public void addObservertoWorkbench(Observer obs) {
 		workbench.addObserver(obs);
 	}
@@ -177,13 +178,6 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	
 	public SemSimModel NewAnnotatorAction(){
 		SemGen.logfilewriter.println("Started new annotater");
-		
-		try {
-			codearea.setCodeView(workbench.getModelSourceFile());
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		
 		refreshAnnotatableElements();
 
 		add(toolbar, BorderLayout.NORTH);
@@ -247,7 +241,6 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		annotatorscrollpane.setViewportView(annotatorpane);
 		
 		// Highlight occurrences of codeword in legacy code
-		
 		codearea.setCodeword(getLookupNameForAnnotationObjectButton(aob));
 		codearea.HighlightOccurances(true);
 
@@ -450,7 +443,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 					if(!editable) numdisplayed--;
 				}
 				SubmodelButton sb = new SubmodelButton(this, settings, sub,
-					false, null, sub.hasRefersToAnnotation(), (sub.getDescription()!=null), editable);
+					sub.hasRefersToAnnotation(), (sub.getDescription()!=null), editable);
 				submodelbuttontable.put(sub.getName(), sb);
 			}
 			else if(!submodelbuttontable.get(sub.getName()).editable){
@@ -676,24 +669,11 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		if (arg1 == ModelAnnotationsBench.ModelChangeEnum.SOURCECHANGED) {
-			try {
-				codearea.setCodeView(workbench.getModelSourceFile());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return;
-		}
 		if (arg1 == ModelAnnotationsBench.ModelChangeEnum.METADATASELECTED) {
 			showModelAnnotator();
 		}
 		if (!isSaved()) {
 			refreshAnnotatableElements();
-//			try {
-//				annotationObjectAction(focusbutton);
-//			} catch (BadLocationException | IOException e) {
-//				e.printStackTrace();
-//			}
 		}
 	}
 }

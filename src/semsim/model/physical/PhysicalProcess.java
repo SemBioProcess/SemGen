@@ -1,28 +1,29 @@
 package semsim.model.physical;
 
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Set;
 
 public abstract class PhysicalProcess extends PhysicalModelComponent{
-	private Set<PhysicalEntity> sources = new HashSet<PhysicalEntity>();
-	private Set<PhysicalEntity> sinks = new HashSet<PhysicalEntity>();;
-	private Set<PhysicalEntity> mediators = new HashSet<PhysicalEntity>();	
+	private LinkedHashMap<PhysicalEntity, Integer> sources = new LinkedHashMap<PhysicalEntity, Integer>();
+	private LinkedHashMap<PhysicalEntity, Integer> sinks = new LinkedHashMap<PhysicalEntity, Integer>();
+	private LinkedHashMap<PhysicalEntity, Integer> mediators = new LinkedHashMap<PhysicalEntity, Integer>();	
 	
-	public void addSource(PhysicalEntity entity){
-		sources.add(entity);
+	public void addSource(PhysicalEntity entity, Integer stoichiometry){
+		sources.put(entity, stoichiometry);
 	}
 	
-	public void addSink(PhysicalEntity entity){
-		sinks.add(entity);
+	public void addSink(PhysicalEntity entity, Integer stoichiometry){
+		sinks.put(entity, stoichiometry);
 	}
 	
-	public void addMediator(PhysicalEntity entity){
-		mediators.add(entity);
+	public void addMediator(PhysicalEntity entity, Integer stoichiometry){
+		mediators.put(entity, stoichiometry);
 	}
 	
 	public Set<PhysicalEntity> getSourcePhysicalEntities(){
 		Set<PhysicalEntity> ents = new HashSet<PhysicalEntity>();
-		for(PhysicalEntity sp : getSources()){
+		for(PhysicalEntity sp : getSources().keySet()){
 			ents.add(sp);
 		}
 		return ents;
@@ -30,7 +31,7 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 	
 	public Set<PhysicalEntity> getSinkPhysicalEntities(){
 		Set<PhysicalEntity> ents = new HashSet<PhysicalEntity>();
-		for(PhysicalEntity sp : getSinks()){
+		for(PhysicalEntity sp : getSinks().keySet()){
 			ents.add(sp);
 		}
 		return ents;
@@ -38,41 +39,61 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 	
 	public Set<PhysicalEntity> getMediatorPhysicalEntities(){
 		Set<PhysicalEntity> ents = new HashSet<PhysicalEntity>();
-		for(PhysicalEntity sp : getMediators()){
+		for(PhysicalEntity sp : getMediators().keySet()){
 			ents.add(sp);
 		}
 		return ents;
 	}
 
-	public void setSources(Set<PhysicalEntity> sources) {
+	public void setSources(LinkedHashMap<PhysicalEntity, Integer> sources) {
 		this.sources = sources;
 	}
 
-	public Set<PhysicalEntity> getSources() {
+	public LinkedHashMap<PhysicalEntity, Integer> getSources() {
 		return sources;
 	}
 
-	public void setSinks(Set<PhysicalEntity> sinks) {
+	public void setSinks(LinkedHashMap<PhysicalEntity, Integer> sinks) {
 		this.sinks = sinks;
 	}
 
-	public Set<PhysicalEntity> getSinks() {
+	public LinkedHashMap<PhysicalEntity, Integer> getSinks() {
 		return sinks;
 	}
 
-	public void setMediators(Set<PhysicalEntity> mediators) {
+	public void setMediators(LinkedHashMap<PhysicalEntity, Integer> mediators) {
 		this.mediators = mediators;
 	}
 
-	public Set<PhysicalEntity> getMediators() {
+	public LinkedHashMap<PhysicalEntity, Integer> getMediators() {
 		return mediators;
 	}
 	
-	public Set<PhysicalEntity> getParticipants(){
-		Set<PhysicalEntity> allps = new HashSet<PhysicalEntity>();
-		allps.addAll(getSources());
-		allps.addAll(getSinks());
-		allps.addAll(getMediators());
+	public Integer getStoichiometry(PhysicalEntity entity) {
+		return getParticipants().get(entity);
+	}
+	
+	public Integer getSourceStoichiometry(PhysicalEntity entity) {
+		return sources.get(entity);
+	}
+	
+	public Integer getSinkStoichiometry(PhysicalEntity entity) {
+		return sinks.get(entity);
+	}
+	
+	public Integer getMediatorStoichiometry(PhysicalEntity entity) {
+		return mediators.get(entity);
+	}
+	
+	public void setStoichiometry(PhysicalEntity entity, Integer stoich) {
+		getParticipants().put(entity,stoich);
+	}
+	
+	public LinkedHashMap<PhysicalEntity, Integer>getParticipants(){
+		LinkedHashMap<PhysicalEntity, Integer> allps = new LinkedHashMap<PhysicalEntity, Integer>();
+		allps.putAll(getSources());
+		allps.putAll(getSinks());
+		allps.putAll(getMediators());
 		return allps;
 	}
 	

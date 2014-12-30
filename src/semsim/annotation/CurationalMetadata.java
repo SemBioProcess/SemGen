@@ -83,6 +83,7 @@ public class CurationalMetadata {
 			 return value;
 		 }
 		 private boolean hasValue() {
+			 if (value == null) return false;
 			 return !value.isEmpty();
 		 }
 		 

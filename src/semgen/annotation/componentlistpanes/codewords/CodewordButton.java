@@ -2,7 +2,6 @@ package semgen.annotation.componentlistpanes.codewords;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.event.*;
 
 import semgen.SemGen;
 import semgen.SemGenSettings;
@@ -13,7 +12,7 @@ import semgen.utilities.SemGenFont;
 import semsim.SemSimConstants;
 import semsim.model.computational.datastructures.DataStructure;
 
-public class CodewordButton extends AnnotationObjectButton implements MouseListener {
+public class CodewordButton extends AnnotationObjectButton {
 	private static final long serialVersionUID = -7555259367118052593L;
 	
 	public enum cwCompletion {noAnnotations, hasPhysProp, hasPhysEnt, hasAll}
@@ -21,12 +20,19 @@ public class CodewordButton extends AnnotationObjectButton implements MouseListe
 	public Color entityblack = Color.black;
 	public Color processgreen = new Color(50,205,50);
 	public DataStructure ds;
-
+	
 	public CodewordButton(AnnotatorTab ann, SemGenSettings sets, DataStructure ssc, boolean compannfilled,
 			String companntext, boolean noncompannfilled, boolean humdeffilled,
 			boolean editable) {
-		super(ann, sets, ssc, compannfilled, companntext, noncompannfilled, humdeffilled, editable);
+		super(ann, sets, ssc, noncompannfilled, humdeffilled, editable);
 		ds = ssc;
+		
+		if (compannfilled) {
+			annotationAdded(compannlabel, true);
+			compannlabel.setText(companntext);
+		}
+		
+		else {annotationNotAdded(compannlabel);}
 		namelabel.setFont(SemGenFont.defaultItalic());
 		refreshAllCodes();
 	}
@@ -65,7 +71,7 @@ public class CodewordButton extends AnnotationObjectButton implements MouseListe
 			tooltip = "<html>Codeword identified as a property of a <i>constitutive</i> relation.</htm>";
 		}
 		propoflabel = new PropertyMarker(col, tooltip);
-		propoflabel.addMouseListener(this);
+		propoflabel.addMouseListener(new AOBMouseListener(propoflabel));
 		indicatorssuperpanel.add(propoflabel, BorderLayout.EAST);
 		validate();
 		propoflabel.setVisible(settings.useDisplayMarkers());

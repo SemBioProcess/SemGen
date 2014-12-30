@@ -130,17 +130,17 @@ public class AnnotationCopier {
 		else if(pmc instanceof PhysicalProcess){
 			pmccopy = copySingularPhysicalModelComponent(targetmod, pmc);
 			PhysicalProcess srcprocess = (PhysicalProcess)pmc;
-			for(PhysicalEntity source : srcprocess.getSources()){
+			for(PhysicalEntity source : srcprocess.getSourcePhysicalEntities()){
 				PhysicalEntity sourceentcopy = (PhysicalEntity) copyPhysicalModelComponent(targetmod, source);
-				((PhysicalProcess) pmccopy).addSource(sourceentcopy);
+				((PhysicalProcess) pmccopy).addSource(sourceentcopy, srcprocess.getSinkStoichiometry(source));
 			}
-			for(PhysicalEntity sink : srcprocess.getSinks()){
+			for(PhysicalEntity sink : srcprocess.getSinkPhysicalEntities()){
 				PhysicalEntity sinkentcopy = (PhysicalEntity) copyPhysicalModelComponent(targetmod, sink);
-				((PhysicalProcess) pmccopy).addSink(sinkentcopy);
+				((PhysicalProcess) pmccopy).addSink(sinkentcopy, srcprocess.getSinkStoichiometry(sink));
 			}
-			for(PhysicalEntity med : srcprocess.getMediators()){
+			for(PhysicalEntity med : srcprocess.getMediatorPhysicalEntities()){
 				PhysicalEntity medentcopy = (PhysicalEntity) copyPhysicalModelComponent(targetmod, med);
-				((PhysicalProcess) pmccopy).addMediator(medentcopy);
+				((PhysicalProcess) pmccopy).addMediator(medentcopy, srcprocess.getSinkStoichiometry(med));
 			}
 		}
 		return pmccopy;

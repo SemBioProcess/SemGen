@@ -40,7 +40,7 @@ public class ModelAnnotationsListPane extends SemGenScrollPane implements Observ
 		settings = sets;
 		
 		String name = metadatabench.getFullModelName();
-		if (name.isEmpty()) name = wb.getCurrentModelName();
+		if (name==null || name.isEmpty()) name = wb.getCurrentModelName();
 		createBorder(name);
 		createUI();
 	}

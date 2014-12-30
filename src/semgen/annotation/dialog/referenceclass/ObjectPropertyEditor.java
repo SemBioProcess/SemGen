@@ -85,17 +85,17 @@ public class ObjectPropertyEditor extends JPanel implements ActionListener, Prop
 			
 			else{
 				if(relation == SemSimConstants.HAS_SOURCE_RELATION){
-					for(PhysicalEntity sp : ((PhysicalProcess)subject).getSources()){
+					for(PhysicalEntity sp : ((PhysicalProcess)subject).getSourcePhysicalEntities()){
 						namesandobjects.put(sp.getName(), sp);
 					}
 				}
 				else if(relation == SemSimConstants.HAS_SINK_RELATION){
-					for(PhysicalEntity sp : ((PhysicalProcess)subject).getSinks()){
+					for(PhysicalEntity sp : ((PhysicalProcess)subject).getSinkPhysicalEntities()){
 						namesandobjects.put(sp.getName(), sp);
 					}
 				}
 				else if(relation == SemSimConstants.HAS_MEDIATOR_RELATION){
-					for(PhysicalEntity mp : ((PhysicalProcess)subject).getMediators()){
+					for(PhysicalEntity mp : ((PhysicalProcess)subject).getMediatorPhysicalEntities()){
 						namesandobjects.put(mp.getName(), mp);
 					}
 				}

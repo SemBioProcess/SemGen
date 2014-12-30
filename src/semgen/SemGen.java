@@ -38,8 +38,8 @@ import semgen.utilities.uicomponent.SemGenDialog;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semsim.ErrorLog;
 import semsim.SemSimLibrary;
-import semsim.reading.BioModelReader;
-import semsim.writing.BioModelWriter;
+import semsim.reading.ModelReader;
+import semsim.writing.ModelWriter;
 
 public class SemGen extends JFrame implements Observer{
 	private static final long serialVersionUID = 1L;
@@ -85,8 +85,8 @@ public class SemGen extends JFrame implements Observer{
 	}
 	
 	private static void configureSemSim() {
-		BioModelReader.pointtoSemSimLibrary(semsimlib);
-		BioModelWriter.pointtoSemSimLibrary(semsimlib);
+		ModelReader.pointtoSemSimLibrary(semsimlib);
+		ModelWriter.pointtoSemSimLibrary(semsimlib);
 		ErrorLog.setLogFile(logfilewriter);
 	}
 	
@@ -202,6 +202,8 @@ public class SemGen extends JFrame implements Observer{
 			}
 		});
 	}
+
+	
 	/** Quit - verify that it is OK to quit and store the user's current preferences
 	 * and any local ontology terms if it yes
 	 * */

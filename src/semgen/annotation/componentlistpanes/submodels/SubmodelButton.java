@@ -15,9 +15,9 @@ public class SubmodelButton extends AnnotationObjectButton{
 	 */
 	private static final long serialVersionUID = 1L;
 	public Submodel sub;
-	public SubmodelButton(AnnotatorTab ann, SemGenSettings sets, Submodel ssc, boolean compannfilled, String companntext, boolean noncompannfilled,
+	public SubmodelButton(AnnotatorTab ann, SemGenSettings sets, Submodel ssc, boolean noncompannfilled,
 			boolean humdeffilled, boolean editable) {
-		super(ann, sets, ssc, compannfilled, companntext, noncompannfilled, humdeffilled, editable);
+		super(ann, sets, ssc, noncompannfilled, humdeffilled, editable);
 		sub = ssc;
 		compannlabel.setVisible(false);
 		namelabel.setFont(SemGenFont.defaultBold());

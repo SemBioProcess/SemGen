@@ -4,9 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -21,13 +20,13 @@ import semgen.utilities.SemGenFont;
 import semsim.Annotatable;
 import semsim.model.SemSimComponent;
 
-public abstract class AnnotationObjectButton extends JPanel implements MouseListener{
+public abstract class AnnotationObjectButton extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	public AnnotatorTab annotater;
 	protected SemGenSettings settings;
 	public SemSimComponent ssc;
-	public String companntext;
+
 
 	public Boolean editable;
 	public JLabel namelabel = new JLabel();
@@ -40,13 +39,13 @@ public abstract class AnnotationObjectButton extends JPanel implements MouseList
 	public int maxHeight = 35;
 	public int ipph = 18;
 	
-	public AnnotationObjectButton(AnnotatorTab ann, SemGenSettings sets, SemSimComponent ssc, boolean compannfilled, String companntext, 
+	public AnnotationObjectButton(AnnotatorTab ann, SemGenSettings sets, SemSimComponent ssc,  
 			boolean noncompannfilled, boolean humdeffilled, boolean editable) {
 		settings = sets;
 		this.annotater = ann;
 		this.ssc = ssc;
 		this.setLayout(new BorderLayout(0, 0));
-		this.companntext = companntext;
+
 		
 		this.editable = editable;
 		this.setFocusable(true);
@@ -57,7 +56,7 @@ public abstract class AnnotationObjectButton extends JPanel implements MouseList
 		namelabel.setOpaque(false);
 		namelabel.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 10));
 		namelabel.setBackground(new Color(0,0,0,0));
-		namelabel.addMouseListener(this);
+		namelabel.addMouseListener(new AOBMouseListener(namelabel));
 		
 		setIdentifyingData(ssc.getName());
 		
@@ -88,17 +87,13 @@ public abstract class AnnotationObjectButton extends JPanel implements MouseList
 		humdeflabel.setFont(SemGenFont.Plain("Serif", -3));
 		
 		if(editable){
-			compannlabel.addMouseListener(this);
-			singularannlabel.addMouseListener(this);
-			humdeflabel.addMouseListener(this);
+			compannlabel.addMouseListener(new AOBMouseListener(compannlabel));
+			singularannlabel.addMouseListener(new AOBMouseListener(singularannlabel));
+			humdeflabel.addMouseListener(new AOBMouseListener(humdeflabel));
 		}
 		else namelabel.setForeground(Color.gray);
 
-		if (compannfilled) {
-			annotationAdded(compannlabel, true);
-			compannlabel.setText(companntext);
-		} 
-		else {annotationNotAdded(compannlabel);}
+
 		
 		if (noncompannfilled) {annotationAdded(singularannlabel, false);} 
 		else {annotationNotAdded(singularannlabel);}
@@ -145,7 +140,6 @@ public abstract class AnnotationObjectButton extends JPanel implements MouseList
 			annotationAdded(singularannlabel, false);
 		}
 		else annotationNotAdded(singularannlabel);
-		
 	}
 	
 	public void refreshFreeTextCode(){
@@ -172,38 +166,36 @@ public abstract class AnnotationObjectButton extends JPanel implements MouseList
 		validate();
 	}
 	
-	public void mouseEntered(MouseEvent e) {
-		if (e.getComponent() instanceof JLabel && e.getComponent()!=compannlabel) {
-			JLabel label = (JLabel) e.getComponent();
-			if(label!=propoflabel){
+	private void requestAnnotatorFocus(JLabel label) {
+		requestFocusInWindow();
+		annotater.changeButtonFocus(this, label);
+		annotater.focusbutton = this;
+	}
+	
+	protected class AOBMouseListener extends MouseAdapter {
+		JLabel label;
+		public AOBMouseListener(JLabel target){
+			label = target;
+		}
+		
+		public void mouseEntered(MouseEvent e) {
+			if (label!=compannlabel && label!=propoflabel){
 				label.setOpaque(true);
 				label.setBackground(new Color(255,231,186));
 				label.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			}
 		}
-	}
 
-	public void mouseExited(MouseEvent e) {
-		if (e.getComponent() instanceof JLabel) {
-			JLabel label = (JLabel) e.getComponent();
+		public void mouseExited(MouseEvent e) {
 			if(label!=propoflabel){
 				label.setOpaque(false);
 				label.setBackground(null);
 				label.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			}
 		}
-	}
 
-	public void mousePressed(MouseEvent e) {
-		if(e.getComponent() instanceof JLabel){
-			JLabel label = (JLabel) e.getComponent();
-			requestFocusInWindow();
-			annotater.changeButtonFocus(this, label);
-			annotater.focusbutton = this;
+		public void mousePressed(MouseEvent e) {
+			requestAnnotatorFocus(label);
 		}
 	}
-	
-	public void mouseClicked(MouseEvent e) {}
-	public void mouseReleased(MouseEvent e) {}
-
 }

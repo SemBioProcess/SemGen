@@ -312,7 +312,7 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 		String comment = smc.getDescription();
 
 		// Get the human readable definition for the codeword
-		if (!comment.equals("") && comment!=null) {
+		if (comment!="" && comment!=null) {
 			humandefpane.setCustomText(comment);
 			humandefpane.setForeground(Color.blue);
 			// Refresh the indicator icons next to the codeword in the bottom left of the Annotator

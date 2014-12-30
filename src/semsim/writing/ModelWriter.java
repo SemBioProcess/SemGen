@@ -8,12 +8,12 @@ import org.semanticweb.owlapi.model.OWLException;
 import semsim.SemSimLibrary;
 import semsim.model.SemSimModel;
 
-public abstract class BioModelWriter {
+public abstract class ModelWriter {
 	protected static SemSimLibrary sslib;
 	protected SemSimModel semsimmodel;
 	protected File srcfile;
 	
-	BioModelWriter(SemSimModel model) {
+	ModelWriter(SemSimModel model) {
 		semsimmodel = model;
 	}
 	

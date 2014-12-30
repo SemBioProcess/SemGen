@@ -113,15 +113,15 @@ public class CellMLbioRDFblock {
 							if(!rdf.contains(st)) rdf.add(st);
 							
 							// Set the sources
-							for(PhysicalEntity source : process.getSources()){
+							for(PhysicalEntity source : process.getSourcePhysicalEntities()){
 								setProcessParticipationRDFstatements(processres, source, hassourceparticipant);
 							}
 							// Set the sinks
-							for(PhysicalEntity sink : process.getSinks()){
+							for(PhysicalEntity sink : process.getSinkPhysicalEntities()){
 								setProcessParticipationRDFstatements(processres, sink, hassinkparticipant);
 							}
 							// Set the mediators
-							for(PhysicalEntity mediator : process.getMediators()){
+							for(PhysicalEntity mediator : process.getMediatorPhysicalEntities()){
 								setProcessParticipationRDFstatements(processres, mediator, hasmediatorparticipant);
 							}
 						}

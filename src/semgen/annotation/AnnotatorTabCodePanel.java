@@ -18,6 +18,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,12 +32,14 @@ import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter.HighlightPainter;
 
 import semgen.SemGenSettings;
+import semgen.annotation.workbench.AnnotatorWorkbench;
+import semgen.annotation.workbench.ModelAnnotationsBench;
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semgen.utilities.uicomponent.SemGenTextArea;
 
-public class AnnotatorTabCodePanel extends SemGenTextArea {
+public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 	private static final long serialVersionUID = 1L;
 	private int currentindexforcaret;
 	private HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(SemGenSettings.lightblue);
@@ -43,12 +47,21 @@ public class AnnotatorTabCodePanel extends SemGenTextArea {
 	private ArrayList<Integer> indexesOfHighlightedTerms;
 	private String codeword = "";
 	private CodePopUp popup = new CodePopUp();
+	private AnnotatorWorkbench workbench;
 
-	public AnnotatorTabCodePanel() {
+	public AnnotatorTabCodePanel(AnnotatorWorkbench bench) {
+		workbench = bench;
+		workbench.addObservertoModelAnnotator(this);
 		setFont(SemGenFont.Bold("Monospaced"));
 		setMargin(new Insets(5, 15, 5, 5));
 		setForeground(Color.black);
 		addMouseListener(new PopupListener());
+		
+		try {
+			setCodeView(workbench.getModelSourceFile());
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 	}
 	
 	public void setCodeView(String modelloc) throws IOException {
@@ -251,4 +264,16 @@ public class AnnotatorTabCodePanel extends SemGenTextArea {
 		        }
 		    }
 		}
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		if (arg1 == ModelAnnotationsBench.ModelChangeEnum.SOURCECHANGED) {
+			try {
+				setCodeView(workbench.getModelSourceFile());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return;
+		}
+	}
 }

@@ -144,16 +144,16 @@ public class CustomPhysicalComponentEditor extends SemGenDialog implements Prope
 						  hasmediatoreditor.table.getCellEditor().stopCellEditing();
 					
 					((PhysicalProcess)pmc).getSources().clear();
-					for(PhysicalEntity pp : hassourceeditor.tablemod.data){
-						((PhysicalProcess)pmc).addSource(pp);
+					for(PhysicalEntity pe : hassourceeditor.tablemod.data){
+						((PhysicalProcess)pmc).addSource(pe, ((PhysicalProcess)pmc).getSourceStoichiometry(pe));
 					}
 					((PhysicalProcess)pmc).getSinks().clear();
-					for(PhysicalEntity pp : hassinkeditor.tablemod.data){
-						((PhysicalProcess)pmc).addSink(pp);
+					for(PhysicalEntity pe : hassinkeditor.tablemod.data){
+						((PhysicalProcess)pmc).addSink(pe, ((PhysicalProcess)pmc).getSinkStoichiometry(pe));
 					}
 					((PhysicalProcess)pmc).getMediators().clear();
-					for(PhysicalEntity pp : hasmediatoreditor.tablemod.data){
-						((PhysicalProcess)pmc).addMediator(pp);
+					for(PhysicalEntity pe : hasmediatoreditor.tablemod.data){
+						((PhysicalProcess)pmc).addMediator(pe, ((PhysicalProcess)pmc).getMediatorStoichiometry(pe));
 					}
 				}
 				anndia.refreshCompositeAnnotation();

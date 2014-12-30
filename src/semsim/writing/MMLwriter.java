@@ -22,7 +22,7 @@ import JSim.data.NamedVal;
 import JSim.util.UtilIO;
 import JSim.util.Xcept;
 
-public class MMLwriter extends BioModelWriter{ 
+public class MMLwriter extends ModelWriter{ 
 
 	public MMLwriter(SemSimModel model) {
 		super(model);

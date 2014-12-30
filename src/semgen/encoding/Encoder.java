@@ -13,7 +13,7 @@ import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semsim.model.SemSimModel;
-import semsim.writing.BioModelWriter;
+import semsim.writing.ModelWriter;
 import semsim.writing.CellMLwriter;
 import semsim.writing.MMLwriter;
 
@@ -55,7 +55,7 @@ public class Encoder {
 		
 		Object selection = JOptionPane.showInputDialog(null, "Select output format", "SemGen coder", JOptionPane.PLAIN_MESSAGE, null, optionsarray, "CellML");
 		
-		BioModelWriter outwriter = null;
+		ModelWriter outwriter = null;
 		SemGenSaveFileChooser fc = new SemGenSaveFileChooser("Choose Destination");
 		if(selection == optionsarray[0]){
 			fc.addFilters(new String[]{"cellml"});
@@ -76,10 +76,10 @@ public class Encoder {
 	}
 	
 	public class CoderTask extends SemGenTask {
-			private BioModelWriter writer;
+			private ModelWriter writer;
 			private File output;
 	        
-			public CoderTask(BioModelWriter writer, File dest){
+			public CoderTask(ModelWriter writer, File dest){
 	        	this.writer = writer;
 	        	output = dest;
 			}
