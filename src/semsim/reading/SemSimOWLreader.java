@@ -651,7 +651,7 @@ public class SemSimOWLreader extends ModelReader {
 			if(ax.equalsIgnoreAnnotations(axiom)){
 				if(!ax.getAnnotations(annprop).isEmpty()){
 					OWLLiteral litval = (OWLLiteral) ax.getAnnotations(annprop).toArray(new OWLAnnotation[]{})[0].getValue();
-					val = (int)litval.parseDouble();
+					val = litval.parseInteger();
 				}
 			}
 		}

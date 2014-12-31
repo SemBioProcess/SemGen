@@ -15,6 +15,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import semgen.annotation.annotatorpane.AnnotationPanel;
 import semgen.annotation.annotatorpane.composites.ProcessParticipantEditor;
 import semgen.annotation.dialog.referenceclass.ObjectPropertyEditor;
@@ -110,61 +112,61 @@ public class CustomPhysicalComponentEditor extends SemGenDialog implements Prope
 	}
 
 	public void propertyChange(PropertyChangeEvent arg0) {
-		String value = optionPane.getValue().toString();
-
-		if(value == "OK"){
-			if(mantextfield.getText()!=null && !mantextfield.getText().equals("")){
-				pmc.setName(mantextfield.getText());
-				if(descriptionarea.getText()!=null) pmc.setDescription(descriptionarea.getText());
-				else pmc.setDescription(pmc.getName());
-				
-				pmc.removeAllReferenceAnnotations();
-				ObjectPropertyEditor[] refanneds = new ObjectPropertyEditor[]{versionofeditor}; 
-				
-				// Iterate through the object property editors shared by physical entities and processes and add the annotations
-				for(ObjectPropertyEditor ed : refanneds){
-					for(String pmcname : ed.namesandobjects.keySet()){
-						PhysicalModelComponent refpmc = (PhysicalModelComponent)ed.namesandobjects.get(pmcname);
-						System.out.println(refpmc);
-						System.out.println(refpmc.getName());
-						System.out.println(refpmc.getFirstRefersToReferenceOntologyAnnotation());
-						ReferenceOntologyAnnotation roa = refpmc.getFirstRefersToReferenceOntologyAnnotation();
-						pmc.addReferenceOntologyAnnotation(ed.relation, roa.getReferenceURI(), roa.getValueDescription());
-					}
-				}
-
-				// Deal with process-specific data (sources, sinks and mediators not added as annotations to SemSimModel:
-				// they are proeprties of the PhysicalProcess class
-				if(pmc instanceof PhysicalProcess){
-					if(hassourceeditor.table.isEditing())
-						  hassourceeditor.table.getCellEditor().stopCellEditing();
-					if(hassinkeditor.table.isEditing())
-						  hassinkeditor.table.getCellEditor().stopCellEditing();
-					if(hasmediatoreditor.table.isEditing())
-						  hasmediatoreditor.table.getCellEditor().stopCellEditing();
+		String propertyfired = arg0.getPropertyName();
+		if (propertyfired.equals("value")) {
+			String value = optionPane.getValue().toString();
+	
+			if(value == "OK"){
+				if(mantextfield.getText()!=null && !mantextfield.getText().equals("")){
+					pmc.setName(mantextfield.getText());
+					if(descriptionarea.getText()!=null) pmc.setDescription(descriptionarea.getText());
+					else pmc.setDescription(pmc.getName());
 					
-					((PhysicalProcess)pmc).getSources().clear();
-					for(PhysicalEntity pe : hassourceeditor.tablemod.data){
-						((PhysicalProcess)pmc).addSource(pe, ((PhysicalProcess)pmc).getSourceStoichiometry(pe));
+					pmc.removeAllReferenceAnnotations();
+					ObjectPropertyEditor[] refanneds = new ObjectPropertyEditor[]{versionofeditor}; 
+					
+					// Iterate through the object property editors shared by physical entities and processes and add the annotations
+					for(ObjectPropertyEditor ed : refanneds){
+						for(String pmcname : ed.namesandobjects.keySet()){
+							PhysicalModelComponent refpmc = (PhysicalModelComponent)ed.namesandobjects.get(pmcname);
+							System.out.println(refpmc);
+							System.out.println(refpmc.getName());
+							System.out.println(refpmc.getFirstRefersToReferenceOntologyAnnotation());
+							ReferenceOntologyAnnotation roa = refpmc.getFirstRefersToReferenceOntologyAnnotation();
+							pmc.addReferenceOntologyAnnotation(ed.relation, roa.getReferenceURI(), roa.getValueDescription());
+						}
 					}
-					((PhysicalProcess)pmc).getSinks().clear();
-					for(PhysicalEntity pe : hassinkeditor.tablemod.data){
-						((PhysicalProcess)pmc).addSink(pe, ((PhysicalProcess)pmc).getSinkStoichiometry(pe));
+	
+					// Deal with process-specific data (sources, sinks and mediators not added as annotations to SemSimModel:
+					// they are proeprties of the PhysicalProcess class
+					if(pmc instanceof PhysicalProcess){
+						if(hassourceeditor.table.isEditing())
+							  hassourceeditor.table.getCellEditor().stopCellEditing();
+						if(hassinkeditor.table.isEditing())
+							  hassinkeditor.table.getCellEditor().stopCellEditing();
+						if(hasmediatoreditor.table.isEditing())
+							  hasmediatoreditor.table.getCellEditor().stopCellEditing();
+						
+						((PhysicalProcess)pmc).getSources().clear();
+						for(Pair<PhysicalEntity, Integer> pe : hassourceeditor.getTableData()){
+							((PhysicalProcess)pmc).addSource(pe.getLeft(), pe.getRight());
+						}
+						((PhysicalProcess)pmc).getSinks().clear();
+						for(Pair<PhysicalEntity, Integer> pe : hassinkeditor.getTableData()){
+							((PhysicalProcess)pmc).addSink(pe.getLeft(), pe.getRight());
+						}
+						((PhysicalProcess)pmc).getMediators().clear();
+						for(Pair<PhysicalEntity, Integer> pe : hasmediatoreditor.getTableData()){
+							((PhysicalProcess)pmc).addMediator(pe.getLeft(), pe.getRight());
+						}
 					}
-					((PhysicalProcess)pmc).getMediators().clear();
-					for(PhysicalEntity pe : hasmediatoreditor.tablemod.data){
-						((PhysicalProcess)pmc).addMediator(pe, ((PhysicalProcess)pmc).getMediatorStoichiometry(pe));
-					}
+					anndia.refreshCompositeAnnotation();
+					anndia.annotator.setModelSaved(false);
 				}
-				anndia.refreshCompositeAnnotation();
-				anndia.annotator.setModelSaved(false);
-				dispose();
+				else{
+					JOptionPane.showMessageDialog(this, "Please enter a name.");
+				}
 			}
-			else{
-				JOptionPane.showMessageDialog(this, "Please enter a name.");
-			}
-		}
-		else if(value == "Cancel"){
 			dispose();
 		}
 	}

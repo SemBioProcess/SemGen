@@ -110,7 +110,6 @@ public class SemSimOWLwriter extends ModelWriter {
 		}
 	}
 	
-
 	private void addUnits() throws OWLException {
 		// First add the units. Only include those that are used in local data structures, or those they are mapped from
 		Set<UnitOfMeasurement> unitstoadd = new HashSet<UnitOfMeasurement>();
@@ -268,10 +267,7 @@ public class SemSimOWLwriter extends ModelWriter {
 
 								// Make sure to log all the participating entities - some may not be directly associated
 								// with a data structure but only used to define the process
-								Set<PhysicalEntity> participants = new HashSet<PhysicalEntity>();
-								participants.addAll(((PhysicalProcess)pmc).getSourcePhysicalEntities());
-								participants.addAll(((PhysicalProcess)pmc).getSinkPhysicalEntities());
-								participants.addAll(((PhysicalProcess)pmc).getMediatorPhysicalEntities());
+								Set<PhysicalEntity> participants = ((PhysicalProcess)pmc).getParticipants();
 
 								for(PhysicalEntity ent : participants){
 									URI uriforent = null;
@@ -349,13 +345,13 @@ public class SemSimOWLwriter extends ModelWriter {
 							"", anns, manager);
 				}
 				for(PhysicalEntity sink : proc.getSinkPhysicalEntities()){
-					Set<OWLAnnotation> anns = makeMultiplierAnnotation(sink, proc.getSourceStoichiometry(sink));
+					Set<OWLAnnotation> anns = makeMultiplierAnnotation(sink, proc.getSinkStoichiometry(sink));
 					SemSimOWLFactory.setIndObjectPropertyWithAnnotations(ont, singularPMCsAndUrisForDataStructures.get(proc).toString(),
 							singularPMCsAndUrisForDataStructures.get(sink).toString(), SemSimConstants.HAS_SINK_URI.toString(),
 							"", anns, manager);
 				}
 				for(PhysicalEntity mediator : proc.getMediatorPhysicalEntities()){
-					Set<OWLAnnotation> anns = makeMultiplierAnnotation(mediator, proc.getSourceStoichiometry(mediator));
+					Set<OWLAnnotation> anns = makeMultiplierAnnotation(mediator, proc.getMediatorStoichiometry(mediator));
 					SemSimOWLFactory.setIndObjectPropertyWithAnnotations(ont, singularPMCsAndUrisForDataStructures.get(proc).toString(),
 							singularPMCsAndUrisForDataStructures.get(mediator).toString(), SemSimConstants.HAS_MEDIATOR_URI.toString(),
 							"", anns, manager);
@@ -615,7 +611,6 @@ public class SemSimOWLwriter extends ModelWriter {
 		return uristring;
 	}
 	
-	
 	private URI makeURIforPhysicalModelComponent(String namespace, PhysicalModelComponent pmc, Set<String> existinguris){
 		String uritrunk = namespace;
 		URI uri = null;
@@ -640,7 +635,6 @@ public class SemSimOWLwriter extends ModelWriter {
 		}
 		return uri;
 	}
-	
 	
 	private void createPhysicalModelIndividual(PhysicalModelComponent pmc, String uriforind) throws OWLException{
 		String physicaltype = pmc.getComponentTypeasString();
@@ -677,12 +671,12 @@ public class SemSimOWLwriter extends ModelWriter {
 			SemSimOWLFactory.setIndDatatypeProperty(ont, uriforind, base + "refersTo", firstann.getReferenceURI().toString(), manager);
 		}
 		// Otherwise it's a custom entity, custom process or unspecified property
-		else if(pmc instanceof PhysicalProperty){
+		else if (!(pmc instanceof CompositePhysicalEntity)){
 			if(pmc instanceof PhysicalProperty) parenturistring = SemSimConstants.PHYSICAL_PROPERTY_CLASS_URI.toString();
 			else{
 				parenturistring = SemSimOWLFactory.getNamespaceFromIRI(uriforind) + SemSimOWLFactory.URIencoding(pmc.getName());
 				if(!allphysmodclasses.contains(parenturistring)){
-					pmc.getSemSimClassURI().toString();
+					parenturistring = pmc.getSemSimClassURI().toString();
 				}
 				label = pmc.getName();
 				description = pmc.getDescription();

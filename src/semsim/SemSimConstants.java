@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
-import org.semanticweb.owlapi.model.IRI;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import semsim.annotation.SemSimRelation;

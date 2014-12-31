@@ -444,7 +444,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	
 	public void includeProcessParticipants(PhysicalProcess pmc) {
 		// Add data structures associated with the participants in the process
-		for(PhysicalEntity ent : pmc.getParticipantsAsPhysicalEntities()){
+		for(PhysicalEntity ent : pmc.getParticipants()){
 			if(entitiespanel.termandcdwdstable.containsKey(ent)){
 				for(DataStructure entds : entitiespanel.termandcdwdstable.get(ent)){
 					// Maybe change so that if a cdwd that we're including is dependent on another that's

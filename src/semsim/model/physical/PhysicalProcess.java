@@ -22,27 +22,15 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 	}
 	
 	public Set<PhysicalEntity> getSourcePhysicalEntities(){
-		Set<PhysicalEntity> ents = new HashSet<PhysicalEntity>();
-		for(PhysicalEntity sp : getSources().keySet()){
-			ents.add(sp);
-		}
-		return ents;
+		return sources.keySet();
 	}
 	
 	public Set<PhysicalEntity> getSinkPhysicalEntities(){
-		Set<PhysicalEntity> ents = new HashSet<PhysicalEntity>();
-		for(PhysicalEntity sp : getSinks().keySet()){
-			ents.add(sp);
-		}
-		return ents;
+		return sinks.keySet();
 	}
 	
 	public Set<PhysicalEntity> getMediatorPhysicalEntities(){
-		Set<PhysicalEntity> ents = new HashSet<PhysicalEntity>();
-		for(PhysicalEntity sp : getMediators().keySet()){
-			ents.add(sp);
-		}
-		return ents;
+		return mediators.keySet();
 	}
 
 	public void setSources(LinkedHashMap<PhysicalEntity, Integer> sources) {
@@ -70,7 +58,7 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 	}
 	
 	public Integer getStoichiometry(PhysicalEntity entity) {
-		return getParticipants().get(entity);
+		return getParticipantswithMultipliers().get(entity);
 	}
 	
 	public Integer getSourceStoichiometry(PhysicalEntity entity) {
@@ -86,10 +74,10 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 	}
 	
 	public void setStoichiometry(PhysicalEntity entity, Integer stoich) {
-		getParticipants().put(entity,stoich);
+		getParticipantswithMultipliers().put(entity,stoich);
 	}
 	
-	public LinkedHashMap<PhysicalEntity, Integer>getParticipants(){
+	public LinkedHashMap<PhysicalEntity, Integer> getParticipantswithMultipliers(){
 		LinkedHashMap<PhysicalEntity, Integer> allps = new LinkedHashMap<PhysicalEntity, Integer>();
 		allps.putAll(getSources());
 		allps.putAll(getSinks());
@@ -98,7 +86,7 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 	}
 	
 	// Get all sources, sinks and mediators as PhysicalEntities
-	public Set<PhysicalEntity> getParticipantsAsPhysicalEntities(){
+	public Set<PhysicalEntity> getParticipants(){
 		Set<PhysicalEntity> allpents = new HashSet<PhysicalEntity>();
 		allpents.addAll(getSourcePhysicalEntities());
 		allpents.addAll(getSinkPhysicalEntities());
