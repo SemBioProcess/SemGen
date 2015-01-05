@@ -232,7 +232,6 @@ public class CellMLbioRDFblock {
 		return indexuri;
 	}
 	
-	
 	public static String getRDFAsString(Model rdf){
 		String syntax = "RDF/XML-ABBREV"; 
 		StringWriter out = new StringWriter();
@@ -300,8 +299,7 @@ public class CellMLbioRDFblock {
 		
 		// If the physical model component has either an "is" or "is version of" annotation, 
 		// add the annotation statement to the RDF block
-		if(ann!=null){
-			
+		if(ann!=null){	
 			refres = getReferenceResourceFromURI(ann.getReferenceURI());
 			
 			Property refprop = 

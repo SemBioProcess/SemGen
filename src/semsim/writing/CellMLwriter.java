@@ -442,9 +442,9 @@ public class CellMLwriter extends ModelWriter {
 				}
 			}
 			
-			if(a.hasRefersToAnnotation() || (freetext!=null && !freetext.isEmpty()) || hasphysprop){
+			if(a.hasRefersToAnnotation() || !freetext.equals("") || hasphysprop){
 				// Create metadata ID for the model element, cache locally
-				if(metaid==null){
+				if(metaid.isEmpty()){
 					metaid = idprefix + 0;
 					int n = 0;
 					while(metadataids.contains(metaid)){
@@ -477,7 +477,7 @@ public class CellMLwriter extends ModelWriter {
 				}
 				
 				// Add free-text description, if present
-				if(freetext!=null){
+				if(!freetext.equals("")){
 					Property ftprop = ResourceFactory.createProperty(CurationalMetadata.DCTERMS_NAMESPACE + "description");
 					Statement st = localrdf.createStatement(ares, ftprop, freetext);
 					if(!localrdf.contains(st)){
@@ -511,7 +511,6 @@ public class CellMLwriter extends ModelWriter {
 			}
 		}
 	}
-	
 	
 	protected static URI formatAsIdentifiersDotOrgURI(URI uri){
 		URI newuri = null;

@@ -9,6 +9,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -19,8 +21,9 @@ import javax.swing.JTextField;
 import semgen.SemGenSettings;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.ModelAnnotationsBench;
+import semgen.annotation.workbench.ModelAnnotationsBench.ModelChangeEnum;
 
-public class ModelAnnotationEditor extends JPanel {
+public class ModelAnnotationEditor extends JPanel implements Observer {
 	private static final long serialVersionUID = 1L;
 
 	ArrayList<ModelAnnPanel> annpanels = new ArrayList<ModelAnnPanel>();
@@ -29,6 +32,7 @@ public class ModelAnnotationEditor extends JPanel {
 	public ModelAnnotationEditor(AnnotatorWorkbench wb) {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		metadatabench = wb.getModelAnnotationsWorkbench();
+		metadatabench.addObserver(this);
 		
 		setBackground(SemGenSettings.lightblue);
 		drawAnnotationList();
@@ -45,19 +49,26 @@ public class ModelAnnotationEditor extends JPanel {
 		}
 		
 		validate();
-		annpanels.get(metadatabench.getFocusIndex()).giveFocus();
+		focusOnSelection();
 	}
 	
 	private void setMetadataValue(AnnTextPanel panel, String value) {
 		metadatabench.setMetadataValuebyIndex(annpanels.indexOf(panel), value);
 	}
 	
-	public void focusOnSelection() {
+	private void focusOnSelection() {
 		giveFocus(metadatabench.getFocusIndex());
 	}
 	
-	public void giveFocus(int index) {
+	private void giveFocus(int index) {
 		annpanels.get(index).giveFocus();
+	}
+	
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		if (arg1 == ModelChangeEnum.METADATASELECTED) {
+			focusOnSelection();
+		}
 	}
 	
 	private abstract class ModelAnnPanel extends JPanel {
@@ -65,6 +76,7 @@ public class ModelAnnotationEditor extends JPanel {
 		protected boolean wasedited = false;
 		
 		protected ModelAnnPanel(String title) {
+			setBackground(SemGenSettings.lightblue);
 			addMouseListener(new MAPMouseAdapter());
 			addKeyListener(new MAPKeyboardListener());
 			setLayout(new BorderLayout(0,0));
@@ -74,6 +86,10 @@ public class ModelAnnotationEditor extends JPanel {
 		}
 		public abstract void giveFocus();
 		public abstract void removeFocus();
+		
+		protected int getPanelIndex() {
+			return annpanels.indexOf(this);
+		}
 		
 		protected class MAPMouseAdapter extends MouseAdapter{
 			@Override
@@ -95,7 +111,6 @@ public class ModelAnnotationEditor extends JPanel {
 		}
 		
 		protected class MAPKeyboardListener implements KeyListener {
-
 			@Override
 			public void keyPressed(KeyEvent arg0) {
 
@@ -110,7 +125,6 @@ public class ModelAnnotationEditor extends JPanel {
 			public void keyTyped(KeyEvent arg0) {
 				wasedited = true;
 			}
-			
 		}
 	}
 	

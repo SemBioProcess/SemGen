@@ -111,8 +111,8 @@ public class ModelAnnotationsListPane extends SemGenScrollPane implements Observ
 		}
 		
 		public void setIndicator(boolean checkmark) {
-			if (checkmark) indicator.setIcon(SemGenIcon.onicon);
-			else indicator.setIcon(SemGenIcon.officon);
+			if (checkmark) indicator.setIcon(SemGenIcon.checkmarkicon);
+			else indicator.setIcon(SemGenIcon.eraseiconsmall);
 		}
 	};
 	

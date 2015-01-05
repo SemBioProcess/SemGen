@@ -2,9 +2,6 @@ package semsim;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.URI;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -31,14 +28,13 @@ public class SemSimLibrary {
 	public static final double SEMSIM_VERSION = 0.2;
 	public static final IRI SEMSIM_VERSION_IRI = IRI.create(SemSimConstants.SEMSIM_NAMESPACE + "SemSimVersion");
 	
-	private static File ontologyTermsAndNamesCacheFile = new File("cfg/ontologyTermsAndNamesCache.txt");
+
 	private OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	public OWLOntology OPB;
 	
 	private Hashtable<String, String[]> OPBClassesForUnitsTable;
 	private Hashtable<String, String[]> compositeAnnRelationsTable;
 	private Hashtable<String, String[]> metadataRelationsTable;
-	private Hashtable<String, String[]> ontologyTermsAndNamesCache;
 	private Hashtable<String, String[]> jsimUnitsTable;
 	
 	private Set<String> jsimUnitPrefixesTable;
@@ -60,7 +56,6 @@ public class SemSimLibrary {
 		try {
 			compositeAnnRelationsTable = ResourcesManager.createHashtableFromFile("cfg/structuralRelations.txt");
 			metadataRelationsTable = ResourcesManager.createHashtableFromFile("cfg/metadataRelations.txt");
-			ontologyTermsAndNamesCache = ResourcesManager.createHashtableFromFile("cfg/ontologyTermsAndNamesCache.txt");
 			jsimUnitsTable = ResourcesManager.createHashtableFromFile("cfg/jsimUnits");
 			
 			OPBClassesForUnitsTable = ResourcesManager.createHashtableFromFile("cfg/OPBClassesForUnits.txt");
@@ -106,9 +101,7 @@ public class SemSimLibrary {
 		return jsimUnitPrefixesTable;
 	}
 	
-	public Hashtable<String, String[]> getOntTermsandNamesCache() {
-		return ontologyTermsAndNamesCache;
-	}
+
 	
 	public String[] getListofMetaDataRelations() {
 		return metadataRelationsTable.keySet().toArray(new String[]{});
@@ -123,19 +116,6 @@ public class SemSimLibrary {
 			roa = new ReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, cls.getIRI().toURI(), OPBpropname);
 		}
 		return roa;
-	}
-	
-	public void storeCachedOntologyTerms(){
-		try {
-			PrintWriter writer = new PrintWriter(new FileWriter(ontologyTermsAndNamesCacheFile));
-			for(String key : ontologyTermsAndNamesCache.keySet()){
-				writer.println(key + "; " + ontologyTermsAndNamesCache.get(key)[0]);
-			}
-			writer.flush();
-			writer.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public OWLOntology getLoadedOntology(String onturi) throws OWLOntologyCreationException {

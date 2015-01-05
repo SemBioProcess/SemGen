@@ -263,7 +263,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 			toolbar.enableSort(false);
 			updateCodewordButtonTable();
 			updateSubmodelButtonTable();
-			splitpane.setTopComponent(treeviewscrollpane);
+			westsplitpane.setBottomComponent(treeviewscrollpane);
 			tree = new AnnotatorButtonTree(this, settings, new DefaultMutableTreeNode(semsimmodel));
 			treeviewscrollpane.getViewport().removeAll();
 			treeviewscrollpane.getViewport().add(tree);
@@ -277,7 +277,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		}
 		else{
 			toolbar.enableSort(true);
-			splitpane.setTopComponent(westsplitpane);
+			westsplitpane.setBottomComponent(swsplitpane);
 			AlphabetizeAndSetCodewords();
 			AlphabetizeAndSetSubmodels();
 			if(focusbutton!=null){

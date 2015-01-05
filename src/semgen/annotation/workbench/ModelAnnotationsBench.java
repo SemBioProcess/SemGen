@@ -99,6 +99,10 @@ public class ModelAnnotationsBench extends Observable {
 		return focusindex;
 	}
 	
+	public boolean hasFocus() {
+		return focusindex != -1;
+	}
+	
 	public boolean focusHasValue() {
 		return metadata.hasAnnotationValue(metadatalist.get(focusindex));
 	}

@@ -119,7 +119,9 @@ public class CurationalMetadata {
 	public ArrayList<Annotation> getAnnotationList() {
 		ArrayList<Annotation> list = new  ArrayList<Annotation>();
 		for (Metadata m : Metadata.values()) {
-			list.add(m.getAsAnnotation());
+			if (m.hasValue()) {
+				list.add(m.getAsAnnotation());
+			}
 		}
 		return list;
 	}

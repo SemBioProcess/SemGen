@@ -49,8 +49,8 @@ public class LoadSemSimModel {
 					if(!online) 
 						SemGenError.showWebConnectionError("BioPortal search service");
 					
-					SBMLAnnotator.annotate(file, semsimmodel, online, SemGen.semsimlib.getOntTermsandNamesCache());
-					ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel, SemGen.semsimlib.getOntTermsandNamesCache(), online);
+					SBMLAnnotator.annotate(file, semsimmodel, online, SemGen.termcache.getOntTermsandNamesCache());
+					ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel, SemGen.termcache.getOntTermsandNamesCache(), online);
 					SBMLAnnotator.setFreeTextDefinitionsForDataStructuresAndSubmodels(semsimmodel);
 					progframe.dispose();
 				}
@@ -67,7 +67,7 @@ public class LoadSemSimModel {
 							if(!online) SemGenError.showWebConnectionError("BioPortal search service");
 
 						
-						ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel,  SemGen.semsimlib.getOntTermsandNamesCache(), online);
+						ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel,  SemGen.termcache.getOntTermsandNamesCache(), online);
 						semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
 						
 						progframe.dispose();

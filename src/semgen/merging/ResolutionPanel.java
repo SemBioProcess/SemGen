@@ -24,30 +24,32 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
+import semgen.merging.workbench.MergerWorkbench;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 
-
 public class ResolutionPanel extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = -618244272904338963L;
 
-	public SemSimModel semsimmodel1;
-	public SemSimModel semsimmodel2;
+	private MergerWorkbench workbench;
+	private SemSimModel semsimmodel1;
+	private SemSimModel semsimmodel2;
 	public DataStructure ds1;
 	public DataStructure ds2;
 	public JRadioButton rb1;
 	public JRadioButton rb2;
 	public JRadioButton rb3 = new JRadioButton("Ignore equivalency");
-	public JButton questionbutton = new JButton(SemGenIcon.questionicon);
+	private JButton questionbutton = new JButton(SemGenIcon.questionicon);
 
-	public ResolutionPanel(DataStructure ds1, DataStructure ds2,
+	public ResolutionPanel(MergerWorkbench bench, DataStructure ds1, DataStructure ds2,
 			SemSimModel semsimmodel1, SemSimModel semsimmodel2,
 			String matchdescription, Boolean manualmapping) {
 
+		workbench = bench;
 		this.ds1 = ds1;
 		this.ds2 = ds2;
 		this.semsimmodel1 = semsimmodel1;
@@ -88,7 +90,6 @@ public class ResolutionPanel extends JPanel implements ActionListener {
 		annotationpanel.add(annotationsubpanel, BorderLayout.WEST);
 		annotationpanel.add(Box.createGlue(), BorderLayout.EAST);
 
-		
 		rb1 = new JRadioButton("Use " + ds1.getName() + " (" + semsimmodel1.getName() + ")");
 		rb1.setForeground(Color.blue);
 		rb1.setBackground(Color.white);

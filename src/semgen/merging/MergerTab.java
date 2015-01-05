@@ -65,32 +65,35 @@ import java.awt.Dimension;
 public class MergerTab extends SemGenTab implements ActionListener, MouseListener {
 
 	private static final long serialVersionUID = -1383642730474574843L;
-	public OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-	public File file1;
-	public File file2;
-	public File mergedfile;
-	public SemSimModel semsimmodel1;
-	public SemSimModel semsimmodel2;
+	private OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+	private File file1;
+	private File file2;
+	private File mergedfile;
+	private SemSimModel semsimmodel1;
+	private SemSimModel semsimmodel2;
 
-	public int dividerlocation = 350;
-	public JPanel filelistpanel = new JPanel();
-	public JButton plusbutton = new JButton(SemGenIcon.plusicon);
-	public JButton minusbutton = new JButton(SemGenIcon.minusicon);
+	private int dividerlocation = 350;
+	private JPanel filelistpanel = new JPanel();
+	private JButton plusbutton = new JButton(SemGenIcon.plusicon);
+	private JButton minusbutton = new JButton(SemGenIcon.minusicon);
 
-	public JPanel resolvepanel = new JPanel();
-	public SemGenScrollPane resolvescroller;
-	public JButton mergebutton = new JButton("MERGE");
+	private JPanel resolvepanel = new JPanel();
+	private SemGenScrollPane resolvescroller;
+	private JButton mergebutton = new JButton("MERGE");
 
-	public JSplitPane resmapsplitpane;
-	public MappingPanel mappingpanelleft = new MappingPanel("[ ]");
-	public MappingPanel mappingpanelright = new MappingPanel("[ ]");
-	public JButton addmanualmappingbutton = new JButton("Add manual mapping");
-	public JButton loadingbutton = new JButton(SemGenIcon.blankloadingiconsmall);
-	public Set<String> initialidenticalinds = new HashSet<String>();
-	public Set<String> identicaldsnames = new HashSet<String>();
+	private JSplitPane resmapsplitpane;
+	private MappingPanel mappingpanelleft = new MappingPanel("[ ]");
+	private MappingPanel mappingpanelright = new MappingPanel("[ ]");
+	private JButton addmanualmappingbutton = new JButton("Add manual mapping");
+	private JButton loadingbutton = new JButton(SemGenIcon.blankloadingiconsmall);
+	private Set<String> initialidenticalinds = new HashSet<String>();
+	private Set<String> identicaldsnames = new HashSet<String>();
+	private MergerWorkbench workbench;
 	
 	public MergerTab(SemGenSettings sets, GlobalActions globalacts, MergerWorkbench bench) {
 		super("Merger", SemGenIcon.mergeicon, "Tab for Merging SemSim Models", sets, globalacts);
+		
+		workbench = bench;
 	}
 	
 	@Override
@@ -220,7 +223,7 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 
 				if (!codewordsAlreadyMapped(cdwd1, cdwd2, true)) {
 					if(resolvepanel.getComponentCount()!=0) resolvepanel.add(new JSeparator());
-					ResolutionPanel newrespanel = new ResolutionPanel(semsimmodel1.getDataStructure(cdwd1),
+					ResolutionPanel newrespanel = new ResolutionPanel(workbench, semsimmodel1.getDataStructure(cdwd1),
 							semsimmodel2.getDataStructure(cdwd2),
 							semsimmodel1, semsimmodel2, "(manual mapping)", true);
 					resolvepanel.add(newrespanel);
@@ -419,7 +422,7 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 					}
 				}
 				if(match){
-					resolvepanel.add(new ResolutionPanel(ds1, ds2,
+					resolvepanel.add(new ResolutionPanel(workbench, ds1, ds2,
 							semsimmodel1, semsimmodel2, "(exact semantic match)", false));
 					resolvepanel.add(new JSeparator());
 					resolvepanel.validate();
@@ -488,7 +491,7 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 		DataStructure soldom1 = ssm1clone.getSolutionDomains().toArray(new DataStructure[]{})[0];
 		DataStructure soldom2 = ssm2clone.getSolutionDomains().toArray(new DataStructure[]{})[0];
 		
-		resolutionpanels[resolutionpanels.length-1] = new ResolutionPanel(soldom1, soldom2, ssm1clone, ssm2clone, 
+		resolutionpanels[resolutionpanels.length-1] = new ResolutionPanel(workbench, soldom1, soldom2, ssm1clone, ssm2clone, 
 				"automated solution domain mapping", false);
 		
 		SemSimModel modelfordiscardedds = null;
