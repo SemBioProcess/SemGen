@@ -54,8 +54,8 @@ import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
-import semsim.model.physical.PhysicalProperty;
 import semsim.model.physical.Submodel;
+import semsim.model.physical.object.PhysicalProperty;
 import semsim.writing.MMLwriter;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
@@ -101,7 +101,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	static {TOOLTIP_SCHEMA.addColumn(TOOLTIP, String.class, "");}
 
 	public static int leftpanewidth = 400;
-	public File sourcefile;
+	
 	public JButton vizsourcebutton = new JButton("Show source model");
 	public JButton clusterbutton = new JButton("Cluster");
 	public JCheckBox extractionlevelchooserentities = new JCheckBox("More inclusive");
@@ -115,8 +115,12 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	public ExtractorSelectionPanel clusterpanel;
 	public JPanel physiomappanel = new JPanel();
 	public JTabbedPane graphtabpane = new JTabbedPane();
-	public SemSimModel extractedmodel;
+	
+	public File sourcefile;
 	public File extractedfile;
+	public File autogendirectory;
+	public SemSimModel extractedmodel;
+	
 	public SemGenRadialGraphView view;
 	public Graph tempgraph;
 	public Graph physiomapgraph;
@@ -125,12 +129,10 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	public Map<DataStructure, Set<? extends DataStructure>> allpreserveddatastructures;
 	public Hashtable<PhysicalEntity, Set<DataStructure>> entsanddatastrs = new Hashtable<PhysicalEntity, Set<DataStructure>>();
 	public Hashtable<PhysicalProcess, Set<DataStructure>> processesanddatastrs = new Hashtable<PhysicalProcess, Set<DataStructure>>();
-	public File autogendirectory;
-
 	public Clusterer cd;
 	public PrintWriter clusterwriter;
 	public ExtractorToolbar toolbar;
-	ExtractorWorkbench workbench;
+	private ExtractorWorkbench workbench;
 	
 	public ExtractorTab(SemGenSettings sets, GlobalActions gacts, ExtractorWorkbench bench) {
 		super(bench.getCurrentModelName(), SemGenIcon.extractoricon, "Extracting from " + bench.getCurrentModelName(), sets, gacts);
@@ -442,7 +444,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	
 	public void includeProcessParticipants(PhysicalProcess pmc) {
 		// Add data structures associated with the participants in the process
-		for(PhysicalEntity ent : pmc.getParticipantsAsPhysicalEntities()){
+		for(PhysicalEntity ent : pmc.getParticipants()){
 			if(entitiespanel.termandcdwdstable.containsKey(ent)){
 				for(DataStructure entds : entitiespanel.termandcdwdstable.get(ent)){
 					// Maybe change so that if a cdwd that we're including is dependent on another that's
@@ -847,7 +849,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 				mmldir.mkdir();
 				File coderfile = new File(mmldir.getAbsolutePath() + "/" + extractedfile.getName() + ".mod");
 				String out = null;
-					out = new MMLwriter().writeToString(extractedmodel);
+					out = new MMLwriter(extractedmodel).writeToString();
 					SemSimUtil.writeStringToFile(out, coderfile);
 			} else {
 				System.out.println("ERROR in creating file during atomic decomposition");

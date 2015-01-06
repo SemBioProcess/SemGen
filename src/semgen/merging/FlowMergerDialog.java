@@ -38,7 +38,6 @@ public class FlowMergerDialog extends SemGenDialog implements
 	public JPanel mainpanel = new JPanel();
 	public String disp;
 	public OWLOntology keptont;
-	public SemGenScrollPane scrollpane;
 	public JButton questionbutton = new JButton(SemGenIcon.questionicon);
 
 	public FlowMergerDialog(String disp, Set<String> flowdepsfromdiscarded,
@@ -52,7 +51,8 @@ public class FlowMergerDialog extends SemGenDialog implements
 		questionbutton.setBorderPainted(false);
 		questionbutton.setContentAreaFilled(false);
 		questionbutton.setMaximumSize(new Dimension(30, 30));
-
+		SemGenScrollPane scrollpane = null;
+		
 		for (String flowdep : flowdepsfromdiscarded) {
 
 			try {

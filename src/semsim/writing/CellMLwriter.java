@@ -33,33 +33,34 @@ import semsim.Annotatable;
 import semsim.CellMLconstants;
 import semsim.SemSimConstants;
 import semsim.SemSimUtil;
+import semsim.annotation.Annotation;
+import semsim.annotation.CurationalMetadata;
 import semsim.model.Importable;
 import semsim.model.SemSimComponent;
 import semsim.model.SemSimModel;
-import semsim.model.annotation.Annotation;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
-import semsim.model.physical.FunctionalSubmodel;
-import semsim.model.physical.PhysicalProperty;
 import semsim.model.physical.Submodel;
+import semsim.model.physical.object.FunctionalSubmodel;
+import semsim.model.physical.object.PhysicalProperty;
 import semsim.owl.SemSimOWLFactory;
 
-public class CellMLwriter implements Writer{
-	
-	private SemSimModel semsimmodel;
+public class CellMLwriter extends ModelWriter {
 	private Namespace mainNS;
 	private Set<String> metadataids = new HashSet<String>();
 	private CellMLbioRDFblock rdfblock;
 	private Set<DataStructure> looseDataStructures = new HashSet<DataStructure>();
 	private Element root;
 	
-	public String writeToString(SemSimModel model){
+	public CellMLwriter(SemSimModel model) {
+		super(model);
+	}
+	
+	public String writeToString(){
 		Document doc = null;
-		try{
-			this.semsimmodel = model;
-			
+		try{	
 			mainNS = CellMLconstants.cellml1_1NS;
 			metadataids.addAll(semsimmodel.getMetadataIDcomponentMap().keySet());
 			
@@ -71,7 +72,7 @@ public class CellMLwriter implements Writer{
 				}
 			}
 			
-			rdfblock = new CellMLbioRDFblock(semsimmodel, rdfstring, mainNS.getURI().toString());
+			rdfblock = new CellMLbioRDFblock(semsimmodel.getNamespace(), rdfstring, mainNS.getURI().toString());
 			
 			// Create root element
 			root = new Element("model",mainNS);
@@ -151,7 +152,7 @@ public class CellMLwriter implements Writer{
 	
 			// Declare the units
 			for(UnitOfMeasurement uom : semsimmodel.getUnits()){
-				if(!CellMLconstants.CellML_UNIT_DICTIONARY.contains(uom.getName()) && !uom.isImported()){
+				if(!sslib.isCellMLBaseUnit(uom.getName()) && !uom.isImported()){
 					Element unitel = new Element("units", mainNS);
 					unitel.setAttribute("name", uom.getName());
 					if(uom.isFundamental()) unitel.setAttribute("base_units", "yes");
@@ -388,19 +389,18 @@ public class CellMLwriter implements Writer{
 		}
 	}
 	
-	public void writeToFile(SemSimModel model, File destination){
-		SemSimUtil.writeStringToFile(writeToString(model), destination);
+	public void writeToFile(File destination){
+		SemSimUtil.writeStringToFile(writeToString(), destination);
 	}
 	
-	public void writeToFile(SemSimModel model, URI destination){
-		SemSimUtil.writeStringToFile(writeToString(model), new File(destination));
+	public void writeToFile(URI destination){
+		SemSimUtil.writeStringToFile(writeToString(), new File(destination));
 	}
 	
 	public Content makeXMLContentFromString(String xml){
 		try {
 			InputStream stream = new ByteArrayInputStream(xml.getBytes("UTF-8"));
-			Document aDoc;
-			aDoc = new SAXBuilder().build(stream);
+			Document aDoc = new SAXBuilder().build(stream);
 			return aDoc.getRootElement().detach();
 		} catch (JDOMException | IOException e) {
 			e.printStackTrace();
@@ -442,9 +442,9 @@ public class CellMLwriter implements Writer{
 				}
 			}
 			
-			if(a.hasRefersToAnnotation() || (freetext!=null && !freetext.isEmpty()) || hasphysprop){
+			if(a.hasRefersToAnnotation() || !freetext.equals("") || hasphysprop){
 				// Create metadata ID for the model element, cache locally
-				if(metaid==null){
+				if(metaid.isEmpty()){
 					metaid = idprefix + 0;
 					int n = 0;
 					while(metadataids.contains(metaid)){
@@ -459,7 +459,7 @@ public class CellMLwriter implements Writer{
 				
 				rdfblock.rdf.setNsPrefix("semsim", SemSimConstants.SEMSIM_NAMESPACE);
 				rdfblock.rdf.setNsPrefix("bqbiol", SemSimConstants.BQB_NAMESPACE);
-				rdfblock.rdf.setNsPrefix("dcterms", SemSimConstants.DCTERMS_NAMESPACE);
+				rdfblock.rdf.setNsPrefix("dcterms", CurationalMetadata.DCTERMS_NAMESPACE);
 				
 				Resource ares = rdfblock.rdf.createResource("#" + metaid);
 				
@@ -477,12 +477,12 @@ public class CellMLwriter implements Writer{
 				}
 				
 				// Add free-text description, if present
-				if(freetext!=null){
-					Property ftprop = ResourceFactory.createProperty(SemSimConstants.DCTERMS_NAMESPACE + "description");
+				if(!freetext.equals("")){
+					Property ftprop = ResourceFactory.createProperty(CurationalMetadata.DCTERMS_NAMESPACE + "description");
 					Statement st = localrdf.createStatement(ares, ftprop, freetext);
 					if(!localrdf.contains(st)){
 						localrdf.add(st);
-						localrdf.setNsPrefix("dcterms", SemSimConstants.DCTERMS_NAMESPACE);
+						localrdf.setNsPrefix("dcterms", CurationalMetadata.DCTERMS_NAMESPACE);
 					}
 				}
 				
@@ -511,7 +511,6 @@ public class CellMLwriter implements Writer{
 			}
 		}
 	}
-	
 	
 	protected static URI formatAsIdentifiersDotOrgURI(URI uri){
 		URI newuri = null;

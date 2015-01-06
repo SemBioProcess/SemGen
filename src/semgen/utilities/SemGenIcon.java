@@ -41,6 +41,7 @@ public class SemGenIcon {
 	public static final ImageIcon onicon = createImageIcon("icons/onicon.gif");
 	public static final ImageIcon officon = createImageIcon("icons/officon.gif");
 	public static final ImageIcon annotatemodelicon = createImageIcon("icons/annotatemodel.gif");
+	public static final ImageIcon checkmarkicon = createImageIcon("icons/passed.png");
 	
 	/** Returns an ImageIcon, or null if the path was invalid. */
 	private static ImageIcon createImageIcon(String path) {

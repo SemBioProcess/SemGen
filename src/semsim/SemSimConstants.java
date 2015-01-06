@@ -4,31 +4,13 @@ package semsim;
 import java.net.URI;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.Set;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import semsim.model.SemSimComponent;
-import semsim.model.annotation.SemSimRelation;
-import semsim.model.annotation.StructuralRelation;
-import semsim.model.computational.Computation;
-import semsim.model.computational.RelationalConstraint;
-import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.computational.datastructures.Decimal;
-import semsim.model.computational.datastructures.MMLchoice;
-import semsim.model.computational.datastructures.MappableVariable;
-import semsim.model.computational.datastructures.SemSimInteger;
-import semsim.model.computational.units.UnitOfMeasurement;
-import semsim.model.physical.CompositePhysicalEntity;
-import semsim.model.physical.CustomPhysicalEntity;
-import semsim.model.physical.CustomPhysicalProcess;
-import semsim.model.physical.PhysicalDependency;
-import semsim.model.physical.PhysicalProperty;
-import semsim.model.physical.ReferencePhysicalEntity;
-import semsim.model.physical.ReferencePhysicalProcess;
+import semsim.annotation.SemSimRelation;
+import semsim.annotation.StructuralRelation;
 
 /**
  * A set of constants for working with SemSim models
@@ -69,7 +51,6 @@ public class SemSimConstants {
 	public static final String BQB_NAMESPACE = "http://biomodels.net/biology-qualifiers/";
 	public static final String BQM_NAMESPACE = "http://biomodels.net/model-qualifiers/";
 	public static final String RDF_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
-	public static final String DCTERMS_NAMESPACE = "http://purl.org/dc/terms/";
 	
 	// Groups of ontologies
 	public static final String[] ALL_SEARCHABLE_ONTOLOGIES = new String[]{
@@ -89,8 +70,8 @@ public class SemSimConstants {
 	};
 	
 	// URIs
-	public static final URI SEMSIM_COMPONENT_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "SemSim_component");
 	public static final URI COMPUTATION_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Computation");
+	public static final URI SEMSIM_MODEL_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "SemSim_Model");
 	public static final URI RELATIONAL_CONSTRAINT_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Relational_constraint");
 	public static final URI DATA_STRUCTURE_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Data_structure");
 	public static final URI DECIMAL_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Decimal");
@@ -143,9 +124,7 @@ public class SemSimConstants {
 	public static final URI METADATA_ID_URI = URI.create(SEMSIM_NAMESPACE + "metadataID");
 	public static final URI REFERS_TO_URI = URI.create(SEMSIM_NAMESPACE + "refersTo");
 	public static final URI REFERENCE_NAME_OF_IMPORT_URI = URI.create(SEMSIM_NAMESPACE + "referenceNameOfImport");
-	public static final URI LEGACY_CODE_LOCATION_URI = URI.create(SEMSIM_NAMESPACE + "legacyCodeURI");
-	public static final URI SEMSIM_VERSION_URI = URI.create(SEMSIM_NAMESPACE + "SemSimVersion");
-	public static final URI HAS_CUSTOM_DECLARATION_URI = URI.create(SEMSIM_NAMESPACE + "hasCustomDeclaration");
+
 	public static final URI HAS_UNIT_URI = URI.create(SEMSIM_NAMESPACE + "hasUnit");
 	public static final URI UNIT_FOR_URI = URI.create(SEMSIM_NAMESPACE + "unitFor");
 	public static final URI HAS_ASSOCIATED_DATA_STRUCTURE_URI = URI.create(SEMSIM_NAMESPACE + "hasAssociatedDataStructure");
@@ -155,7 +134,6 @@ public class SemSimConstants {
 	public static final URI HAS_PART_URI = URI.create(RO_NAMESPACE + "has_part");
 	public static final URI CONTAINED_IN_URI = URI.create(RO_NAMESPACE + "contained_in");
 	public static final URI CONTAINS_URI = URI.create(RO_NAMESPACE + "contains");
-	public static final URI AdjacentToURI = URI.create(SEMSIM_NAMESPACE + "adjacentTo");
 	public static final URI HAS_INDEX_ENTITY_URI = URI.create(SEMSIM_NAMESPACE + "hasIndexEntity");
 	public static final URI INDEX_ENTITY_FOR_URI = URI.create(SEMSIM_NAMESPACE + "isIndexEntityFor");
 	public static final URI INCLUDES_SUBMODEL_URI = URI.create(SEMSIM_NAMESPACE + "includesSubmodel");
@@ -165,15 +143,7 @@ public class SemSimConstants {
 	public static final URI UNIT_FACTOR_FOR_URI = URI.create(SEMSIM_NAMESPACE + "unitFactorFor");
 	public static final URI UNIT_FACTOR_PREFIX_URI = URI.create(SEMSIM_NAMESPACE + "hasUnitFactorPrefix");
 	
-	// Model-level relations
-	public static final URI MODEL_DESCRIPTION_URI = URI.create(SEMSIM_NAMESPACE + "ModelDescription");
-	public static final URI REFERENCE_PUBLICATION_PUBMED_ID_URI = URI.create(SEMSIM_NAMESPACE + "PubMedIDofReferencePublication");
-	public static final URI REFERENCE_PUBLICATION_ABSTRACT_TEXT_URI = URI.create(SEMSIM_NAMESPACE + "ReferencePublicationAbstractText");
-	public static final URI REFERENCE_PUBLICATION_CITATION_URI = URI.create(SEMSIM_NAMESPACE + "ReferencePublicationCitation");
-	public static final URI ANNOTATOR_CONTACT_INFO_URI = URI.create(SEMSIM_NAMESPACE + "AnnotatorContactInfo");
-	public static final URI MODEL_ID_URI = URI.create(SEMSIM_NAMESPACE + "modelId");
-	public static final URI MODEL_NAME_URI = URI.create(SEMSIM_NAMESPACE + "modelName");
-	
+	// Model-level relations	
 	public static final URI BQB_HAS_PART_URI = URI.create(BQB_NAMESPACE + "hasPart");
 	public static final URI BQB_IS_PART_OF_URI = URI.create(BQB_NAMESPACE + "isPartOf");
 	public static final URI BQB_IS_URI = URI.create(BQB_NAMESPACE + "is");
@@ -189,11 +159,9 @@ public class SemSimConstants {
 	public static final URI CELLML_COMPONENT_PUBLIC_INTERFACE_URI = URI.create(SEMSIM_NAMESPACE + "hasCellMLpublicInterface");
 	public static final URI CELLML_DOCUMENTATION_URI = URI.create(SEMSIM_NAMESPACE + "hasCellMLdocumentation");
 	public static final URI CELLML_RDF_MARKUP_URI = URI.create(SEMSIM_NAMESPACE + "hasCellMLrdfMarkup");
-	
 	public static final URI HAS_NAME_URI = URI.create(SEMSIM_NAMESPACE + "name");
 	public static final URI KEY_TERM_URI = URI.create(SEMSIM_NAMESPACE + "keyTerm");
-	
-	
+
 	// Relations
 	public static final SemSimRelation BQB_HAS_PART_RELATION = new SemSimRelation("The biological entity represented by the model element includes the subject of the referenced resource, either physically or logically", BQB_HAS_PART_URI);
 	public static final SemSimRelation BQB_IS_RELATION = new SemSimRelation("The biological entity represented by the model element has identity with the subject of the referenced resource", BQB_IS_URI);
@@ -216,14 +184,10 @@ public class SemSimConstants {
 	public static final SemSimRelation MAPPED_TO_RELATION = new SemSimRelation("Data structure value passed to another data structure", MAPPED_TO_URI);
 	public static final SemSimRelation CELLML_COMPONENT_SUBSUMPTION_TYPE_RELATION = new SemSimRelation("The type of relation between a parent and child component (either containment, encapsulation or a custom term)", CELLML_COMPONENT_SUBSUMPTION_TYPE_URI);
 	
-	
 	public static final SemSimRelation REFERS_TO_RELATION = new SemSimRelation("Refers to ontology term", REFERS_TO_URI);
-	public static final SemSimRelation LEGACY_CODE_LOCATION_RELATION = new SemSimRelation("Location of original simulation code", LEGACY_CODE_LOCATION_URI);
-	public static final SemSimRelation SEMSIM_VERSION_RELATION = new SemSimRelation("Version of SemSim used to create model", SEMSIM_VERSION_URI);
 	public static final SemSimRelation HAS_MATHML_RELATION = new SemSimRelation("MathML for computation", HAS_MATHML_URI);
 	public static final SemSimRelation HAS_COMPUTATIONAL_COMPONENT_RELATION = new SemSimRelation("physical property has a data structure as a computational component", HAS_COMPUTATATIONAL_COMPONENT_URI);
 
-	public static final SemSimRelation CUSTOM_DECLARATION_RELATION = new SemSimRelation("unit has custom declaration in simulation code", HAS_CUSTOM_DECLARATION_URI);
 	public static final SemSimRelation IMPORTED_FROM_RELATION = new SemSimRelation("a unit or submodel is imported from a local file or remote location", IMPORTED_FROM_URI);
 	public static final SemSimRelation IS_OUTPUT_FOR_RELATION = new SemSimRelation("data structure is output for computation", IS_OUTPUT_FOR_URI);
 	public static final SemSimRelation IS_INPUT_FOR_RELATION = new SemSimRelation("data structure is input for computation", IS_INPUT_FOR_URI);
@@ -235,7 +199,6 @@ public class SemSimConstants {
 	public static final SemSimRelation HAS_SOLUTION_DOMAIN_RELATION = new SemSimRelation("data structure solved within solution domain", HAS_SOLUTION_DOMAIN_URI);
 	public static final SemSimRelation IS_COMPUTATIONAL_COMPONENT_FOR_RELATION = new SemSimRelation("data structure is computational component for some property", IS_COMPUTATIONAL_COMPONENT_FOR_URI);
 	public static final SemSimRelation HAS_START_VALUE_RELATION = new SemSimRelation("data structure has initial value", HAS_START_VALUE_URI);
-	public static final SemSimRelation HasInputRelation = new SemSimRelation("computation has data structure as input", HAS_INPUT_URI);
 	public static final SemSimRelation HAS_OUTPUT_RELATION = new SemSimRelation("computation has data structure as output", HAS_OUTPUT_URI);
 	public static final SemSimRelation HAS_UNIT_RELATION = new SemSimRelation("physical property has physical units", HAS_UNIT_URI);
 	public static final SemSimRelation HAS_UNIT_FACTOR_RELATION = new SemSimRelation("a unit is derived from some other unit", HAS_UNIT_FACTOR_URI);
@@ -248,17 +211,11 @@ public class SemSimConstants {
 	public static final StructuralRelation HAS_PART_RELATION = new StructuralRelation("physical entity has part other physical entity", HAS_PART_URI);
 	public static final StructuralRelation CONTAINED_IN_RELATION = new StructuralRelation("physical entity is contained in another physical entity", CONTAINED_IN_URI);
 	public static final StructuralRelation CONTAINS_RELATION = new StructuralRelation("physical entity contains another physical entity", CONTAINS_URI);
-	public static final StructuralRelation AdjacentToRelation = new StructuralRelation("physical entity is adjacent to another physical entity", AdjacentToURI);
 	public static final SemSimRelation HAS_SOURCE_RELATION = new SemSimRelation("physical process has thermodynamic source entity", HAS_SOURCE_URI);
 	public static final SemSimRelation HAS_SINK_RELATION = new SemSimRelation("physical process has thermodynamic sink entity", HAS_SINK_URI);
 	public static final SemSimRelation HAS_MEDIATOR_RELATION = new SemSimRelation("physical process has thermodynamic mediator entity", HAS_MEDIATOR_URI);
-	public static final SemSimRelation HAS_SOURCE_PARTICPANT_RELATION = new SemSimRelation("physical process has thermodynamic source participant", HAS_SOURCE_PARTICIPANT_URI);
-	public static final SemSimRelation HAS_SINK_PARTICIPANT_RELATION = new SemSimRelation("physical process has thermodynamic sink participant", HAS_SINK_PARTICIPANT_URI);
-	public static final SemSimRelation HAS_MEDIATOR_PARTICIPANT_RELATION = new SemSimRelation("physical process has thermodynamic mediator participant", HAS_MEDIATOR_PARTICIPANT_URI);
-	public static final SemSimRelation HAS_PHYSICAL_ENTITY_REFERENCE_RELATION = new SemSimRelation("process participant has physical entity reference", HAS_PHYSICAL_ENTITY_REFERENCE_URI);
 	public static final SemSimRelation INCLUDES_SUBMODEL_RELATION = new SemSimRelation("a submodel encompasses another submodel", INCLUDES_SUBMODEL_URI);
 	public static final SemSimRelation COMPUTATIONAL_REPRESENTATION_OF_RELATION = new SemSimRelation("a data structure or submodel represents something from the real world", COMPUTATIONAL_REPRESENTATION_OF_URI);
-	public static final SemSimRelation PROCESS_PARTICIPANT_MULTIPLIER_RELATION = new SemSimRelation("process participant has multiplier value (for stoichiometry, etc.)", HAS_MULTIPLIER_URI);
 	
 	public static final SemSimRelation HAS_INDEX_ENTITY_RELATION = new SemSimRelation("composite physical entity has index entity", HAS_INDEX_ENTITY_URI);
 	public static final SemSimRelation INDEX_ENtity_FOR_RELATION = new SemSimRelation("physical entity is index for composite physical entity", INDEX_ENTITY_FOR_URI);
@@ -266,65 +223,25 @@ public class SemSimConstants {
 	public static final SemSimRelation UNIT_FACTOR_FOR_RELATION = new SemSimRelation("a unit is used to derive another unit", UNIT_FACTOR_FOR_URI);
 	public static final SemSimRelation UNIT_FACTOR_PREFIX_RELATION = new SemSimRelation("the prefix applied to a unit factor", UNIT_FACTOR_PREFIX_URI);
 
-
 	public static final SemSimRelation HAS_NAME_RELATION = new SemSimRelation("semsim component has name", HAS_NAME_URI);
 	public static final SemSimRelation KEY_TERM_RELATION = new SemSimRelation("semsim model represents", KEY_TERM_URI);
 	
-	// Model-level relations
-	public static final SemSimRelation REFERENCE_PUBLICATION_PUBMED_ID_RELATION = new SemSimRelation("the PubMed ID of the model's reference publication", REFERENCE_PUBLICATION_PUBMED_ID_URI);
-	public static final SemSimRelation REFERENCE_PUBLICATION_ABSTRACT_TEXT_RELATION = new SemSimRelation("the abstract text of the model's reference publication", REFERENCE_PUBLICATION_ABSTRACT_TEXT_URI);
-	public static final SemSimRelation MODEL_DESCRIPTION_RELATION = new SemSimRelation("a free-text description of the model", MODEL_DESCRIPTION_URI);
-	public static final SemSimRelation REFERENCE_PUBLICATION_CITATION_RELATION = new SemSimRelation("the citation for the reference publication", REFERENCE_PUBLICATION_CITATION_URI);
-	public static final SemSimRelation ANNOTATOR_CONTACT_INFO_RELATION = new SemSimRelation("who to contact about the annotations in the model", ANNOTATOR_CONTACT_INFO_URI);
-	public static final SemSimRelation MODEL_ID_RELATION = new SemSimRelation("the ID of the model from which the SemSim model was generated", MODEL_ID_URI);
-	public static final SemSimRelation MODEL_NAME_RELATION = new SemSimRelation("a human-readable name for the model", MODEL_NAME_URI);
-
-	
 	public static final String BIOPORTAL_API_KEY = "c4192e4b-88a8-4002-ad08-b4636c88df1a";
-	
-	public static final double SEMSIM_VERSION = 0.1;
-	
+
 	public static final int UNKNOWN_PROPERTY_TYPE = 0;
 	public static final int PROPERTY_OF_PHYSICAL_ENTITY = 1;
 	public static final int PROPERTY_OF_PHYSICAL_PROCESS = 2;
-	
-	public static final int NOT_ONLINE_ERROR = 0;
-	public static final int IO_ERROR = 2;
-	
+
 	public static final Map<String, String> ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP;
 	public static final Map<String, String> ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP;
-	public static final Map<Class<?>, URI> SEMSIM_BASE_CLASSES_AND_URIS;
 	public static final Map<URI, SemSimRelation> URIS_AND_SEMSIM_RELATIONS;
 	public static final Map<URI,URI> INVERSE_STRUCTURAL_RELATIONS_MAP;
-	public static final Map<String, Boolean> JSIM_UNITS_AND_PREFIXABLE_MAP;
-	public static final Set<String> JSIM_PREFIXES;
 	public static final Map<Integer, SemSimRelation> BIOLOGICAL_QUALIFIER_TYPES_AND_RELATIONS;
 	public static final Map<Integer, SemSimRelation> MODEL_QUALIFIER_TYPES_AND_RELATIONS;
 	
 	public static final ObjectMapper JSON_OBJECT_MAPPER = new ObjectMapper();
 	
-	static{
-		// SemSimBaseClassesAndURIs Map
-        Map<Class<?>, URI> aMap = new HashMap<Class<?>,URI>();
-        aMap.put(SemSimComponent.class, SEMSIM_COMPONENT_CLASS_URI);
-        aMap.put(Computation.class, COMPUTATION_CLASS_URI);
-        aMap.put(RelationalConstraint.class, RELATIONAL_CONSTRAINT_CLASS_URI);
-        aMap.put(DataStructure.class, DATA_STRUCTURE_CLASS_URI);
-        aMap.put(Decimal.class, DECIMAL_CLASS_URI);
-        aMap.put(MappableVariable.class, DECIMAL_CLASS_URI);
-        aMap.put(SemSimInteger.class, SEMSIM_INTEGER_CLASS_URI);
-        aMap.put(MMLchoice.class, MML_CHOICE_CLASS_URI);
-        aMap.put(Annotatable.class, PHYSICAL_MODEL_COMPONENT_CLASS_URI);
-        aMap.put(CompositePhysicalEntity.class, COMPOSITE_PHYSICAL_ENTITY_CLASS_URI);
-        aMap.put(UnitOfMeasurement.class, UNITS_CLASS_URI);
-        aMap.put(PhysicalProperty.class, PHYSICAL_PROPERTY_CLASS_URI);
-        aMap.put(ReferencePhysicalEntity.class, REFERENCE_PHYSICAL_ENTITY_CLASS_URI);
-        aMap.put(ReferencePhysicalProcess.class, REFERENCE_PHYSICAL_PROCESS_CLASS_URI);
-        aMap.put(PhysicalDependency.class, PHYSICAL_DEPENDENCY_CLASS_URI);
-        aMap.put(CustomPhysicalEntity.class, CUSTOM_PHYSICAL_ENTITY_CLASS_URI);
-        aMap.put(CustomPhysicalProcess.class, CUSTOM_PHYSICAL_PROCESS_CLASS_URI);
-        SEMSIM_BASE_CLASSES_AND_URIS = Collections.unmodifiableMap(aMap);
-        
+	static{       
         // URIsAndSemSimRelations Map
         Map<URI,SemSimRelation> aMap0 = new HashMap<URI,SemSimRelation>();
 		aMap0.put(CELLML_COMPONENT_SUBSUMPTION_TYPE_URI, CELLML_COMPONENT_SUBSUMPTION_TYPE_RELATION);
@@ -333,9 +250,6 @@ public class SemSimConstants {
 		aMap0.put(MAPPED_FROM_URI, MAPPED_FROM_RELATION);
 		aMap0.put(MAPPED_TO_URI, MAPPED_TO_RELATION);
 		aMap0.put(REFERS_TO_URI, REFERS_TO_RELATION);
-		aMap0.put(LEGACY_CODE_LOCATION_URI, LEGACY_CODE_LOCATION_RELATION);
-		aMap0.put(SEMSIM_VERSION_URI, SEMSIM_VERSION_RELATION);
-		aMap0.put(HAS_CUSTOM_DECLARATION_URI, CUSTOM_DECLARATION_RELATION);
 		aMap0.put(HAS_UNIT_URI, HAS_UNIT_RELATION);
 		aMap0.put(UNIT_FOR_URI, UNIT_FOR_RELATION);
 		aMap0.put(HAS_ASSOCIATED_DATA_STRUCTURE_URI, HAS_ASSOCIATED_DATA_STRUCTURE_RELATION);
@@ -374,13 +288,6 @@ public class SemSimConstants {
 		aMap0.put(UNIT_FACTOR_FOR_URI, UNIT_FACTOR_FOR_RELATION);
 		aMap0.put(UNIT_FACTOR_PREFIX_URI, UNIT_FACTOR_PREFIX_RELATION);
 		// Model-level stuff
-		aMap0.put(REFERENCE_PUBLICATION_PUBMED_ID_URI, REFERENCE_PUBLICATION_PUBMED_ID_RELATION);
-		aMap0.put(REFERENCE_PUBLICATION_ABSTRACT_TEXT_URI, REFERENCE_PUBLICATION_ABSTRACT_TEXT_RELATION);
-		aMap0.put(REFERENCE_PUBLICATION_CITATION_URI, REFERENCE_PUBLICATION_CITATION_RELATION);
-		aMap0.put(ANNOTATOR_CONTACT_INFO_URI, ANNOTATOR_CONTACT_INFO_RELATION);
-		aMap0.put(MODEL_DESCRIPTION_URI, MODEL_DESCRIPTION_RELATION);
-		aMap0.put(MODEL_ID_URI, MODEL_ID_RELATION);
-		aMap0.put(MODEL_NAME_URI, MODEL_NAME_RELATION);
 		aMap0.put(BQB_HAS_PART_URI, BQB_HAS_PART_RELATION);
 		aMap0.put(BQB_IS_PART_OF_URI, BQB_IS_PART_OF_RELATION);
 		aMap0.put(BQB_IS_URI, BQB_IS_RELATION);
@@ -393,7 +300,6 @@ public class SemSimConstants {
 		aMap0.put(CELLML_COMPONENT_PUBLIC_INTERFACE_URI, CELLML_COMPONENT_PUBLIC_INTERFACE_RELATION);
 		aMap0.put(CELLML_DOCUMENTATION_URI, CELLML_DOCUMENTATION_RELATION);
 		aMap0.put(CELLML_RDF_MARKUP_URI, CELLML_RDF_MARKUP_RELATION);
-		aMap0.put(HAS_MULTIPLIER_URI, PROCESS_PARTICIPANT_MULTIPLIER_RELATION);
 		URIS_AND_SEMSIM_RELATIONS = Collections.unmodifiableMap(aMap0);
 		
 		// Namespaces and Ontology Names Map
@@ -490,149 +396,6 @@ public class SemSimConstants {
 		aMap2.put(PART_OF_URI, HAS_PART_URI);
 		aMap2.put(CONTAINED_IN_URI, CONTAINS_URI);
 		INVERSE_STRUCTURAL_RELATIONS_MAP = Collections.unmodifiableMap(aMap2);
-		
-		// JSimUnitsAndPrefixable
-		Map<String, Boolean> aMap3 = new HashMap<String, Boolean>();
-		
-		aMap3.put("kg", false);		
-		aMap3.put("m", false);
-		aMap3.put("sec", true);
-		aMap3.put("amp", true);
-		aMap3.put("degK", false);
-		aMap3.put("mol", true);
-		aMap3.put("candela", true);
-		aMap3.put("steradian", true);
-		aMap3.put("scalar", false);
-		aMap3.put("percent", false);
-		aMap3.put("mole", true);
-		aMap3.put("mmol", false);
-		aMap3.put("umol", false);
-		aMap3.put("nmol", false);
-		aMap3.put("pmol", false);
-		aMap3.put("meter", true);
-		aMap3.put("metre", true);
-		aMap3.put("mm", false);
-		aMap3.put("cm", false);
-		aMap3.put("km", false);
-		aMap3.put("micron", false);	
-		aMap3.put("um", false);
-		aMap3.put("nm", false);
-		aMap3.put("angstrom", true);
-		aMap3.put("inch", false);
-		aMap3.put("foot", false);
-		aMap3.put("yard", false);
-		aMap3.put("mile", false);
-		aMap3.put("gram", true);
-		aMap3.put("g", false);
-		aMap3.put("mg", false);
-		aMap3.put("ug", false);
-		aMap3.put("amu", false);
-		aMap3.put("dalton", false);
-		aMap3.put("da", false);
-		aMap3.put("second", false);
-		aMap3.put("s", false);
-		aMap3.put("min", false);
-		aMap3.put("hour", false);
-		aMap3.put("hr", false);
-		aMap3.put("ms", false);
-		aMap3.put("msec", false);
-		aMap3.put("usec", false);
-		aMap3.put("hz", false);
-		aMap3.put("hertz", true);
-		aMap3.put("ml", false);
-		aMap3.put("liter", true);
-		aMap3.put("litre", true);
-		aMap3.put("L", false);
-		aMap3.put("dL", false);
-		aMap3.put("mL", false);
-		aMap3.put("uL", false);
-		aMap3.put("N", true);
-		aMap3.put("newton", true);
-		aMap3.put("dyn", false);
-		aMap3.put("dyne", true);
-		aMap3.put("pa", false);
-		aMap3.put("pascal", true);
-		aMap3.put("atm", false);
-		aMap3.put("mmHg", false);
-		aMap3.put("torr", true);
-		aMap3.put("cmH2O", false);
-		aMap3.put("bar", false);
-		aMap3.put("erg", true);
-		aMap3.put("joule", true);
-		aMap3.put("J", false);
-		aMap3.put("cal", true);
-		aMap3.put("calorie", true); 
-		aMap3.put("watt", true);
-		aMap3.put("poise", true);
-		aMap3.put("p", false);
-		aMap3.put("cp", false);
-		aMap3.put("P", false);
-		aMap3.put("cP", false);
-		aMap3.put("degR", false);
-		aMap3.put("K", false);
-		aMap3.put("kelvin", true);
-		aMap3.put("A", true);
-		aMap3.put("mA", false);
-		aMap3.put("uA", false);
-		aMap3.put("ampere", true);
-		aMap3.put("coulomb", true);
-		aMap3.put("faraday", true);
-		aMap3.put("volt", true);
-		aMap3.put("mV", false);
-		aMap3.put("ohm", false);
-		aMap3.put("mho", false);
-		aMap3.put("mmho", false);
-		aMap3.put("siemens", true);
-		aMap3.put("mS", false);
-		aMap3.put("uS", false);
-		aMap3.put("farad", true);
-		aMap3.put("uF", false);
-		aMap3.put("weber", true);	
-		aMap3.put("tesla", true);
-		aMap3.put("henry", true);
-		aMap3.put("gauss", true);
-		aMap3.put("mu0", false);
-		aMap3.put("oersted", true);
-		aMap3.put("gilbert", true);
-		aMap3.put("molar", true);
-		aMap3.put("Molar", true);
-		aMap3.put("M", false);
-		aMap3.put("mM", false);	
-		aMap3.put("uM", false);	
-		aMap3.put("nM", false);	
-		aMap3.put("pM", false);
-		aMap3.put("katal", true);
-		aMap3.put("lumen", true);
-		aMap3.put("lux", true);
-		aMap3.put("becquerel", true);
-		aMap3.put("gray", true);
-		aMap3.put("sievert", true);
-		JSIM_UNITS_AND_PREFIXABLE_MAP = Collections.unmodifiableMap(aMap3);
-		
-		// JsimPrefixes Map
-		Set<String> aSet = new HashSet<String>();
-		aSet.add("yotta"); 
-		aSet.add("zetta"); 
-		aSet.add("exa"); 
-		aSet.add("peta"); 
-		aSet.add("tera"); 
-		aSet.add("giga"); 
-		aSet.add("mega"); 
-		aSet.add("kilo"); 
-		aSet.add("hecto"); 
-		aSet.add("deka"); 
-		aSet.add("deca"); 
-		aSet.add("deci"); 
-		aSet.add("centi"); 
-		aSet.add("milli"); 
-		aSet.add("micro"); 
-		aSet.add("nano"); 
-		aSet.add("pico"); 
-		aSet.add("femto"); 
-		aSet.add("atto"); 
-		aSet.add("zepto"); 
-		aSet.add("yocto");
-		JSIM_PREFIXES = Collections.unmodifiableSet(aSet);
 		
 		// BiologicalQualifierTypesAndRelations Map
 		Map<Integer, SemSimRelation> aMap4 = new HashMap<Integer, SemSimRelation>();

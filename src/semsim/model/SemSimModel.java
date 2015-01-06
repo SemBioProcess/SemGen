@@ -10,15 +10,19 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntology;
 
 import semsim.Annotatable;
 import semsim.SemSimConstants;
-import semsim.model.annotation.Annotation;
-import semsim.model.annotation.ReferenceOntologyAnnotation;
-import semsim.model.annotation.SemSimRelation;
-import semsim.model.annotation.StructuralRelation;
+import semsim.SemSimObject;
+import semsim.annotation.Annotation;
+import semsim.annotation.CurationalMetadata;
+import semsim.annotation.CurationalMetadata.Metadata;
+import semsim.annotation.ReferenceOntologyAnnotation;
+import semsim.annotation.SemSimRelation;
+import semsim.annotation.StructuralRelation;
 import semsim.model.computational.ComputationalModelComponent;
 import semsim.model.computational.RelationalConstraint;
 import semsim.model.computational.datastructures.DataStructure;
@@ -26,19 +30,18 @@ import semsim.model.computational.datastructures.Decimal;
 import semsim.model.computational.datastructures.MMLchoice;
 import semsim.model.computational.datastructures.SemSimInteger;
 import semsim.model.computational.units.UnitOfMeasurement;
-import semsim.model.physical.CompositePhysicalEntity;
-import semsim.model.physical.CustomPhysicalEntity;
-import semsim.model.physical.CustomPhysicalProcess;
-import semsim.model.physical.FunctionalSubmodel;
-import semsim.model.physical.PhysicalDependency;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
-import semsim.model.physical.ReferencePhysicalEntity;
-import semsim.model.physical.ReferencePhysicalProcess;
-import semsim.model.physical.PhysicalProperty;
 import semsim.model.physical.Submodel;
-import semsim.writing.CellMLwriter;
+import semsim.model.physical.object.CompositePhysicalEntity;
+import semsim.model.physical.object.CustomPhysicalEntity;
+import semsim.model.physical.object.CustomPhysicalProcess;
+import semsim.model.physical.object.FunctionalSubmodel;
+import semsim.model.physical.object.PhysicalDependency;
+import semsim.model.physical.object.PhysicalProperty;
+import semsim.model.physical.object.ReferencePhysicalEntity;
+import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.writing.SemSimOWLwriter;
 
 /**
@@ -75,7 +78,10 @@ import semsim.writing.SemSimOWLwriter;
  * model aspect.
  */
 
-public class SemSimModel extends SemSimComponent implements Cloneable, Annotatable{
+public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
+	public static final IRI LEGACY_CODE_LOCATION_IRI = IRI.create(SemSimConstants.SEMSIM_NAMESPACE + "legacyCodeURI");
+	private CurationalMetadata metadata = new CurationalMetadata();
+	private double semsimversion;
 	
 	// Computational model components
 	private Set<DataStructure> dataStructures = new HashSet<DataStructure>();
@@ -92,8 +98,9 @@ public class SemSimModel extends SemSimComponent implements Cloneable, Annotatab
 	private String namespace;
 	private Set<Annotation> annotations = new HashSet<Annotation>();
 	private static SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmssSSSZ");
-	private double semSimVersion = SemSimConstants.SEMSIM_VERSION;
+
 	private int sourceModelType;
+	private String sourcefilelocation;
 	public static String unspecifiedName = "*unspecified*";
 	
 	/**
@@ -103,7 +110,6 @@ public class SemSimModel extends SemSimComponent implements Cloneable, Annotatab
 		setNamespace(generateNamespaceFromDateAndTime());
 	}
 	
-	
 	/**
 	 * Constructor with namespace
 	 */
@@ -111,6 +117,9 @@ public class SemSimModel extends SemSimComponent implements Cloneable, Annotatab
 		setNamespace(namespace);
 	}
 	
+	public CurationalMetadata getCurationalMetadata() {
+		return metadata;
+	}
 	
 	/**
 	 * Add a {@link DataStructure} to the model. DataStructure is not added to model 
@@ -780,15 +789,6 @@ public class SemSimModel extends SemSimComponent implements Cloneable, Annotatab
 		}
 		return null;
 	}
-
-	
-	/**
-	 * @return The version of the SemSim API used to generate the model.
-	 */
-	public double getSemSimVersion() {
-		return semSimVersion;
-	}
-	
 	
 	/**
 	 * @param name The name of a {@link Submodel} to retrieve
@@ -866,7 +866,7 @@ public class SemSimModel extends SemSimComponent implements Cloneable, Annotatab
 	 * @throws OWLException
 	 */
 	public OWLOntology toOWLOntology() throws OWLException{
-		return new SemSimOWLwriter().createOWLOntologyFromModel(this);
+		return new SemSimOWLwriter(this).createOWLOntologyFromModel();
 	}
 	
 	
@@ -876,7 +876,7 @@ public class SemSimModel extends SemSimComponent implements Cloneable, Annotatab
 	 * @throws OWLException
 	 */
 	public void writeSemSimOWLFile(File destination) throws OWLException{
-		new SemSimOWLwriter().writeToFile(this, destination);
+		new SemSimOWLwriter(this).writeToFile(destination);
 	}
 	
 	
@@ -886,22 +886,8 @@ public class SemSimModel extends SemSimComponent implements Cloneable, Annotatab
 	 * @throws OWLException
 	 */
 	public void writeSemSimOWLFile(URI uri) throws OWLException{
-		new SemSimOWLwriter().writeToFile(this, uri);
+		new SemSimOWLwriter(this).writeToFile(uri);
 	}
-	
-	
-	/**
-	 * Output the model as a CellML file
-	 * @param destination The output location
-	 */
-	public void writeCellMLFile(File destination){
-		new CellMLwriter().writeToFile(this, destination);
-	}
-	
-//	public File writePhysioMap(File file) throws IOException, OWLException{
-//		return PhysioMapWriter.translate(this, file);
-//	}
-
 
 	/**
 	 * @return A new SemSim model namespace from the current date and time
@@ -986,17 +972,17 @@ public class SemSimModel extends SemSimComponent implements Cloneable, Annotatab
 		return deps;
 	}
 	
-	
 	/**
 	 * @return The location of the raw computer source code associated with this model.
 	 */
-	public String getLegacyCodeLocation() {
-		for(Annotation ann : getAnnotations()){
-			if(ann.getRelation()==SemSimConstants.LEGACY_CODE_LOCATION_RELATION) return (String) ann.getValue();
-		}
-		return null;
-	}
 	
+	public String getLegacyCodeLocation() {
+		return sourcefilelocation;
+	}
+
+	public void setSourcefilelocation(String sourcefilelocation) {
+		this.sourcefilelocation = sourcefilelocation;
+	}
 	
 	/**
 	 * Set the errors associated with the model.
@@ -1153,6 +1139,13 @@ public class SemSimModel extends SemSimComponent implements Cloneable, Annotatab
 		annotations.add(ann);
 	}
 	
+	/**
+	 * Add a SemSim {@link Annotation} to this object
+	 * @param ann The {@link Annotation} to add
+	 */
+	public void setModelAnnotation(Metadata metaID, String value) {
+		metadata.setAnnotationValue(metaID, value);
+	}
 	
 	/**
 	 * Add a SemSim {@link ReferenceOntologyAnnotation} to an object
@@ -1193,9 +1186,7 @@ public class SemSimModel extends SemSimComponent implements Cloneable, Annotatab
 	public ReferenceOntologyAnnotation getFirstRefersToReferenceOntologyAnnotation(){
 		if(!getReferenceOntologyAnnotations(SemSimConstants.REFERS_TO_RELATION).isEmpty())
 			return getReferenceOntologyAnnotations(SemSimConstants.REFERS_TO_RELATION).toArray(new ReferenceOntologyAnnotation[]{})[0];
-		else{
-			return null;
-		}
+		return null;
 	}
 	
 	
@@ -1241,7 +1232,34 @@ public class SemSimModel extends SemSimComponent implements Cloneable, Annotatab
 		annotations.clear();
 		annotations.addAll(newset);
 	}
-	// End of methods required by Annotatable interface
+	// End of methods required by Annotatable interface	
+
+	@Override
+	public String getDescription() {
+		return metadata.getAnnotationValue(Metadata.description);
+	}
+	@Override
+	public void setDescription(String value) {
+		metadata.setAnnotationValue(Metadata.description, value);
+	}
 	
+	public double getSemsimversion() {
+		return semsimversion;
+	}
+
+	public void setSemsimversion(double semsimversion) {
+		this.semsimversion = semsimversion;
+	}
+	
+	public void setSemsimversion(String semsimversion) {
+		this.semsimversion = Double.valueOf(semsimversion);
+	}
+	@Override
+	public URI getSemSimClassURI() {
+		return SemSimConstants.SEMSIM_MODEL_CLASS_URI;
+	}
+
+
+
 
 }

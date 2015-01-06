@@ -9,12 +9,12 @@ import org.jdom.JDOMException;
 
 import semsim.Annotatable;
 import semsim.SemSimConstants;
+import semsim.annotation.Annotation;
+import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.model.SemSimComponent;
-import semsim.model.annotation.Annotation;
-import semsim.model.annotation.ReferenceOntologyAnnotation;
-import semsim.model.physical.CompositePhysicalEntity;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
+import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.SemSimModel;
 import semsim.owl.SemSimOWLFactory;
 import semsim.webservices.BioPortalConstants;
@@ -29,8 +29,7 @@ public class ReferenceTermNamer {
 	public static final String BioPortalSNOMEDCTnamespace = "http://purl.bioontology.org/ontology/SNOMEDCT/";
 	public static final String BioPortalECGontNamespace = "http://www.cvrgrid.org/files/ECGOntologyv1.owl#";
 	
-	public static Map<String,String[]> getNamesForOntologyTermsInModel(SemSimModel model, Map<String, String[]> map, boolean online){
-		
+	public static Map<String,String[]> getNamesForOntologyTermsInModel(SemSimModel model, Map<String, String[]> map, boolean online){	
 		Map<String,String[]> URInameMap = null;
 		if(map==null)
 			URInameMap = new HashMap<String,String[]>();
@@ -90,9 +89,7 @@ public class ReferenceTermNamer {
 		return URInameMap;
 	}
 	
-	
 	private static String getNameFromURI(URI uri) {
-		
 		String uristring= uri.toString();
 		String id = null;
 		if(uristring.startsWith("urn:miriam:")) id = uristring.substring(uristring.lastIndexOf(":")+1);

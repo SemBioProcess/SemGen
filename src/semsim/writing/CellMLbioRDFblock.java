@@ -20,24 +20,23 @@ import com.hp.hpl.jena.rdf.model.Statement;
 
 import semsim.SemSimConstants;
 import semsim.SemSimUtil;
-import semsim.model.SemSimModel;
-import semsim.model.annotation.ReferenceOntologyAnnotation;
-import semsim.model.annotation.StructuralRelation;
+import semsim.annotation.CurationalMetadata;
+import semsim.annotation.ReferenceOntologyAnnotation;
+import semsim.annotation.StructuralRelation;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.physical.CompositePhysicalEntity;
-import semsim.model.physical.CustomPhysicalEntity;
-import semsim.model.physical.CustomPhysicalProcess;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
-import semsim.model.physical.PhysicalProperty;
+import semsim.model.physical.object.CompositePhysicalEntity;
+import semsim.model.physical.object.CustomPhysicalEntity;
+import semsim.model.physical.object.CustomPhysicalProcess;
+import semsim.model.physical.object.PhysicalProperty;
 
 public class CellMLbioRDFblock {
-		
-	public Set<PhysicalModelComponent> pmcswithproperties;
-	public Map<PhysicalModelComponent, URI> pmcsandresourceURIs; // For CompositePhysicalEntities, this relates a CPE with it's index entity Resource
-	public Map<URI, Resource> refURIsandresources;
-	public Set<String> localids = new HashSet<String>();
+	// For CompositePhysicalEntities, this relates a CPE with it's index entity Resource
+	private Map<PhysicalModelComponent, URI> pmcsandresourceURIs = new HashMap<PhysicalModelComponent,URI>(); 
+	private Map<URI, Resource> refURIsandresources = new HashMap<URI,Resource>();
+	private Set<String> localids = new HashSet<String>();
 	public String modelns;
 	
 	public static Property hassourceparticipant = ResourceFactory.createProperty(SemSimConstants.HAS_SOURCE_PARTICIPANT_URI.toString());
@@ -53,26 +52,16 @@ public class CellMLbioRDFblock {
 	public static Property containedin = ResourceFactory.createProperty(SemSimConstants.CONTAINED_IN_URI.toString());
 	public static Property compcomponentfor = ResourceFactory.createProperty(SemSimConstants.IS_COMPUTATIONAL_COMPONENT_FOR_URI.toString());
 	public static Property hasname = ResourceFactory.createProperty(SemSimConstants.HAS_NAME_URI.toString());
-	public static Property description = ResourceFactory.createProperty(SemSimConstants.DCTERMS_NAMESPACE + "description");
+	public static Property description = ResourceFactory.createProperty(CurationalMetadata.DCTERMS_NAMESPACE + "description");
+
+	public Model rdf = ModelFactory.createDefaultModel();
 	
-	public SemSimModel semsimmodel;
-	public Model rdf;
-	
-	public CellMLbioRDFblock(SemSimModel model, String rdfasstring, String baseNamespace){
-		
-		pmcsandresourceURIs = new HashMap<PhysicalModelComponent,URI>();
-		refURIsandresources = new HashMap<URI,Resource>();
-		pmcswithproperties = new HashSet<PhysicalModelComponent>();
-		rdf = ModelFactory.createDefaultModel();
-		
-		this.modelns = model.getNamespace();
-		semsimmodel = model;
+	public CellMLbioRDFblock(String namespace, String rdfasstring, String baseNamespace){	
+		this.modelns = namespace;
 		
 		if(rdfasstring!=null){
-			String otherrdf = rdfasstring;
-
 			try {
-				InputStream stream = new ByteArrayInputStream(otherrdf.getBytes("UTF-8"));
+				InputStream stream = new ByteArrayInputStream(rdfasstring.getBytes("UTF-8"));
 					rdf.read(stream, baseNamespace, null);
 			} 
 			catch (UnsupportedEncodingException e) {
@@ -81,9 +70,7 @@ public class CellMLbioRDFblock {
 		}
 	}
 	
-	
-	protected void addCompositeAnnotationMetadataForVariable(DataStructure ds){
-		
+	protected void addCompositeAnnotationMetadataForVariable(DataStructure ds){		
 		// Collect physical model components with properties
 		if(!ds.isImportedViaSubmodel()){
 			
@@ -126,15 +113,15 @@ public class CellMLbioRDFblock {
 							if(!rdf.contains(st)) rdf.add(st);
 							
 							// Set the sources
-							for(PhysicalEntity source : process.getSources()){
+							for(PhysicalEntity source : process.getSourcePhysicalEntities()){
 								setProcessParticipationRDFstatements(processres, source, hassourceparticipant);
 							}
 							// Set the sinks
-							for(PhysicalEntity sink : process.getSinks()){
+							for(PhysicalEntity sink : process.getSinkPhysicalEntities()){
 								setProcessParticipationRDFstatements(processres, sink, hassinkparticipant);
 							}
 							// Set the mediators
-							for(PhysicalEntity mediator : process.getMediators()){
+							for(PhysicalEntity mediator : process.getMediatorPhysicalEntities()){
 								setProcessParticipationRDFstatements(processres, mediator, hasmediatorparticipant);
 							}
 						}
@@ -199,11 +186,11 @@ public class CellMLbioRDFblock {
 		// Truncate the composite by one entity
 		ArrayList<PhysicalEntity> nextents = new ArrayList<PhysicalEntity>();
 		ArrayList<StructuralRelation> nextrels = new ArrayList<StructuralRelation>();
-		
-		for(int u=1; u<cpe.getArrayListOfEntities().size(); u++){
+		int u;
+		for(u = 1; u<cpe.getArrayListOfEntities().size(); u++){
 			nextents.add(cpe.getArrayListOfEntities().get(u));
 		}
-		for(int u=1; u<cpe.getArrayListOfStructuralRelations().size(); u++){
+		for(u = 1; u<cpe.getArrayListOfStructuralRelations().size(); u++){
 			nextrels.add(cpe.getArrayListOfStructuralRelations().get(u));
 		}
 		CompositePhysicalEntity nextcpe = new CompositePhysicalEntity(nextents, nextrels);
@@ -245,7 +232,6 @@ public class CellMLbioRDFblock {
 		return indexuri;
 	}
 	
-	
 	public static String getRDFAsString(Model rdf){
 		String syntax = "RDF/XML-ABBREV"; 
 		StringWriter out = new StringWriter();
@@ -260,15 +246,11 @@ public class CellMLbioRDFblock {
 		else{
 			System.out.println(pmc.getName());
 	
-			String resname = modelns;
+			String resname = modelns;	
+			String typeprefix = pmc.getComponentTypeasString();
 			
-			String typeprefix = "unknown";
-			if(pmc instanceof PhysicalProperty)
-				typeprefix = "property";
-			else if(pmc instanceof PhysicalProcess)
-				typeprefix = "process";
-			else if(pmc instanceof PhysicalEntity)
-				typeprefix = "entity";
+			if (typeprefix.matches("submodel") || typeprefix.matches("dependency"))
+				typeprefix = "unknown";
 			
 			int idnum = 0;
 			while(localids.contains(resname + typeprefix + "_" + idnum)){
@@ -286,8 +268,7 @@ public class CellMLbioRDFblock {
 			return res;
 		}
 	}
-	
-	
+
 	private Resource getReferenceResourceFromURI(URI uri){
 		Resource refres = null;
 		if(refURIsandresources.containsKey(uri))
@@ -299,9 +280,7 @@ public class CellMLbioRDFblock {
 		}
 		return refres;
 	}
-	
-	
-	
+
 	private void annotateReferenceOrCustomResource(PhysicalModelComponent pmc, Resource res){
 		ReferenceOntologyAnnotation ann = null;
 		Resource refres = null;
@@ -320,8 +299,7 @@ public class CellMLbioRDFblock {
 		
 		// If the physical model component has either an "is" or "is version of" annotation, 
 		// add the annotation statement to the RDF block
-		if(ann!=null){
-			
+		if(ann!=null){	
 			refres = getReferenceResourceFromURI(ann.getReferenceURI());
 			
 			Property refprop = 

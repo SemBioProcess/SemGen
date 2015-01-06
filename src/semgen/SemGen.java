@@ -7,7 +7,6 @@ package semgen;
 
 import java.awt.Color;
 import java.awt.HeadlessException;
-import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
@@ -31,12 +30,16 @@ import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.SemGenGUI;
 import semgen.menu.SemGenMenuBar;
+import semgen.utilities.OntologyCache;
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.utilities.uicomponent.SemGenDialog;
 import semgen.utilities.uicomponent.SemGenProgressBar;
+import semsim.ErrorLog;
 import semsim.SemSimLibrary;
+import semsim.reading.ModelReader;
+import semsim.writing.ModelWriter;
 
 public class SemGen extends JFrame implements Observer{
 	private static final long serialVersionUID = 1L;
@@ -45,6 +48,7 @@ public class SemGen extends JFrame implements Observer{
 	public static PrintWriter logfilewriter;
 	public static File tempdir = new File(System.getProperty("java.io.tmpdir"));
 	public static final String logfileloc = tempdir.getAbsolutePath() + "/SemGen_log.txt";
+	public static OntologyCache termcache = new OntologyCache();
 	private final static File logfile = new File(logfileloc);
 	
 	private final static int WINDOWS=1;
@@ -72,6 +76,7 @@ public class SemGen extends JFrame implements Observer{
 		
 		System.out.print("Loading SemGen...");
 		logfilewriter.println("Loading SemGen");
+		configureSemSim();
 		
 		 SwingUtilities.invokeLater(new Runnable() {
 		     public void run() {
@@ -80,6 +85,12 @@ public class SemGen extends JFrame implements Observer{
 		  });
 	}
 	
+	private static void configureSemSim() {
+		ModelReader.pointtoSemSimLibrary(semsimlib);
+		ModelWriter.pointtoSemSimLibrary(semsimlib);
+		ErrorLog.setLogFile(logfilewriter);
+	}
+
 	/**Set the user interface look and feel to the Nimbus Swing layout and create the frame*/
 	public static void createAndShowGUI() {
 		try {
@@ -117,8 +128,6 @@ public class SemGen extends JFrame implements Observer{
 		//Create an instance of SemGen's default font and load it into memory
 		SemGenFont.defaultUIFont();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//Maximize screen
-		settings.setAppSize(Toolkit.getDefaultToolkit().getScreenSize());
 		gacts.addObserver(this);
 		 
 		SemGenMenuBar menubar = new SemGenMenuBar(settings, gacts);
@@ -130,6 +139,9 @@ public class SemGen extends JFrame implements Observer{
 		addListeners();
 		this.pack();
 		
+		//Maximize screen
+		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
+		settings.setAppSize(getSize());
 		System.out.println("Loaded.");
 		logfilewriter.println("Session started on: " + sdflog.format(datenow) + "\n");
 		
@@ -192,6 +204,7 @@ public class SemGen extends JFrame implements Observer{
 			}
 		});
 	}
+
 	/** Quit - verify that it is OK to quit and store the user's current preferences
 	 * and any local ontology terms if it yes
 	 * */
@@ -200,7 +213,7 @@ public class SemGen extends JFrame implements Observer{
 		if(contentpane.quit()){
 			try {
 				settings.storeSettings();
-				semsimlib.storeCachedOntologyTerms();
+				termcache.storeCachedOntologyTerms();
 				System.exit(0);
 			} 
 			catch (URISyntaxException e) {e.printStackTrace();}

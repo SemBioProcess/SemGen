@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import semgen.utilities.SemGenFont;
-import semsim.model.annotation.StructuralRelation;
+import semsim.annotation.StructuralRelation;
 
 public class StructuralRelationPanel extends JPanel{
 	private static final long serialVersionUID = 4319031091828000135L;

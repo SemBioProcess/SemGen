@@ -5,11 +5,13 @@
 package semgen.utilities;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import semsim.ErrorLog;
 import semsim.model.computational.datastructures.DataStructure;
 
 public class SemGenError {
@@ -45,5 +47,19 @@ public class SemGenError {
 	public static void showInvalidOPBpropertyError(){
 		JOptionPane.showMessageDialog(parent, "That physical property is not valid for the physical entity\n or process specified in this composite annotation.",
 				"Invalid annotation", JOptionPane.ERROR_MESSAGE);
+	}
+	
+	public static boolean showSemSimErrors() {
+		if (ErrorLog.hasErrors()) {
+			String message = "";	
+			ArrayList<String> errors = ErrorLog.getAllErrorsandFlush();
+			for (String e : errors) {
+				message += e;
+			}
+			JOptionPane.showMessageDialog(parent, message,
+				"SemSim Error", JOptionPane.ERROR_MESSAGE);
+			return true;
+		}
+		return false;
 	}
 }

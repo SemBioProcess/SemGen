@@ -5,8 +5,8 @@ import java.util.Set;
 
 import semgen.SemGen;
 import semsim.SemSimConstants;
+import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.model.SemSimModel;
-import semsim.model.annotation.ReferenceOntologyAnnotation;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 
@@ -42,7 +42,10 @@ public class AutoAnnotate {
 		Set<DataStructure> confirmedamounts = new HashSet<DataStructure>();
 		for(DataStructure camount : candidateamounts){
 			Boolean hasinitval = camount.hasStartValue();
-			if((camount instanceof MappableVariable)) hasinitval = (((MappableVariable)camount).getCellMLinitialValue()!=null);
+			if((camount instanceof MappableVariable)) {
+				hasinitval = (((MappableVariable)camount).getCellMLinitialValue()!=null);
+			}
+			
 			if(hasinitval && !camount.isDiscrete() 
 					&& !camount.getPhysicalProperty().hasRefersToAnnotation()){
 				ReferenceOntologyAnnotation roa = SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(camount);
@@ -72,7 +75,10 @@ public class AutoAnnotate {
 			// If the candidate force is solved using a confirmed amount, annotate it
 			if(cforce.getComputation()!=null){
 				for(DataStructure cforceinput : cforce.getComputation().getInputs()){
-					if(confirmedamounts.contains(cforceinput)){ annotate=true; break;}
+					if(confirmedamounts.contains(cforceinput)){ 
+						annotate=true; 
+						break;
+					}
 				}
 			}
 			// If already decided to annotate, or the candidate is solved with an ODE and it's not a discrete variable, annotate it

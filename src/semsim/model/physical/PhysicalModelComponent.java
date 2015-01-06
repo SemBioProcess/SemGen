@@ -6,12 +6,12 @@ import java.util.Set;
 
 import semsim.Annotatable;
 import semsim.SemSimConstants;
+import semsim.annotation.Annotation;
+import semsim.annotation.ReferenceOntologyAnnotation;
+import semsim.annotation.SemSimRelation;
 import semsim.model.SemSimComponent;
-import semsim.model.annotation.Annotation;
-import semsim.model.annotation.ReferenceOntologyAnnotation;
-import semsim.model.annotation.SemSimRelation;
 
-public class PhysicalModelComponent extends SemSimComponent implements Annotatable, Cloneable{
+public abstract class PhysicalModelComponent extends SemSimComponent implements Annotatable, Cloneable{
 	private Set<Annotation> annotations = new HashSet<Annotation>();
 
 	
@@ -85,4 +85,6 @@ public class PhysicalModelComponent extends SemSimComponent implements Annotatab
 	public PhysicalModelComponent clone() throws CloneNotSupportedException {
         return (PhysicalModelComponent) super.clone();
 	}
+	
+	public abstract String getComponentTypeasString();
 }

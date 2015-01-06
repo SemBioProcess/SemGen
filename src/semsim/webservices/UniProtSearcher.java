@@ -50,10 +50,8 @@ public class UniProtSearcher {
 	public static String getPreferredNameForID(String ID) throws IOException, JDOMException{
 		String name = null;
 		URL url = new URL("http://www.uniprot.org/uniprot/" + ID + ".xml");
-		Document doc = null;
 		BufferedReader in = new BufferedReader(new InputStreamReader(getInputStreamFromURL(url)));
-		SAXBuilder builder = new SAXBuilder();
-		doc = builder.build(in);
+		Document doc = new SAXBuilder().build(in);
 		in.close();
 		
 		// Process XML results from REST service

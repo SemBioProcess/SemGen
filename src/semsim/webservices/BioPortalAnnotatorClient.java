@@ -14,7 +14,6 @@ import org.apache.commons.httpclient.params.HttpMethodParams;
 public class BioPortalAnnotatorClient { 
 	
 	// NCBO annotator settings
-	public Set<String> ontologyids;
 	public String longestOnly;
 	public String wholeWordOnly;
 	public String filterNumber;
@@ -27,7 +26,6 @@ public class BioPortalAnnotatorClient {
 	public String isVirtualOntologyId; 
 	public String levelMax;
 	public String mappingTypes;
-	public Hashtable<String,String[]> annotatorsettings = new Hashtable<String,String[]>();
 	
 		/* NEEDS TO BE REWRITTEN FOR NEW BIOPORTAL REST SERVICES */
 		public static final String annotatorUrl = "http://rest.bioontology.org/obs/annotator";
@@ -35,7 +33,6 @@ public class BioPortalAnnotatorClient {
 	    public BioPortalAnnotatorClient(String text, Set<String> ontologyids, Hashtable<String,String[]> annotatorsettings) throws FileNotFoundException {
 	    	this.text = text;
 	    	
-	    	this.annotatorsettings = annotatorsettings; 
 			longestOnly = annotatorsettings.get("longestOnly")[0];
 			wholeWordOnly = annotatorsettings.get("wholeWordOnly")[0];
 			filterNumber = annotatorsettings.get("filterNumber")[0];

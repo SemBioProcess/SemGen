@@ -10,23 +10,40 @@ import java.util.Set;
 
 public class ResourcesManager {
 	
-	public static Hashtable<String, String[]> createHashtableFromFile(String path) throws FileNotFoundException {
+	public static Set<String> createSetFromFile(String path) throws FileNotFoundException {
 		Scanner unitsfilescanner = new Scanner(new File(path));
 		
 		if (unitsfilescanner.hasNext()) {
+			Set<String> stringlist = new HashSet<String>();
+			
+			String nextline = "";
+			while (unitsfilescanner.hasNext()) {
+				nextline = unitsfilescanner.nextLine();
+				nextline.trim();
+				if (nextline.startsWith("#")) { //Allow commenting with hashtag
+					continue;
+				}
+				stringlist.add(nextline);
+			}
+			unitsfilescanner.close();
+			return stringlist;
+		}
+		unitsfilescanner.close();
+		return null;
+	}
+	
+	public static Hashtable<String, String[]> createHashtableFromFile(String path) throws FileNotFoundException {
+			Set<String> buffer = createSetFromFile(path);
+			if (buffer == null) return null;
+			
 			Hashtable<String, String[]> table = new Hashtable<String, String[]>();
 			Set<String> values = new HashSet<String>();
 			int semiseparatorindex = 0;
 			int commaseparatorindex = 0;
-			String nextline = "";
 			String key = "";
-			while (unitsfilescanner.hasNext()) {
+			for (String nextline : buffer) {
 				values.clear();
-				nextline = unitsfilescanner.nextLine();
-				nextline.trim();
-				if (nextline.startsWith("#")) { //Allow commenting with hashtag
-					break;
-				}
+
 				semiseparatorindex = nextline.indexOf(";");
 				key = nextline.substring(0, semiseparatorindex);
 				Boolean repeat = true;
@@ -50,11 +67,7 @@ public class ResourcesManager {
 				}
 				table.put(key, (String[]) values.toArray(new String[] {}));
 			}
-			unitsfilescanner.close();
 			return table;
-		}		 
-		unitsfilescanner.close();
-		return null;
 	}
 }
 
