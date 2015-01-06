@@ -3,12 +3,13 @@ package semgen.merging;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
 
@@ -19,7 +20,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
 
@@ -34,13 +34,14 @@ import JSim.util.Xcept;
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
 import semgen.encoding.Encoder;
+import semgen.merging.filepane.ModelList;
 import semgen.merging.workbench.MergerWorkbench;
+import semgen.merging.workbench.MergerWorkbench.MergeEvent;
 import semgen.utilities.GenericThread;
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.SemGenTask;
-import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.utilities.uicomponent.SemGenProgressBar;
@@ -54,7 +55,6 @@ import semsim.model.physical.Submodel;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.owl.SemSimOWLFactory;
-import semsim.reading.ModelClassifier;
 import semsim.writing.CaseInsensitiveComparator;
 
 import java.awt.BorderLayout;
@@ -62,18 +62,13 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 
-public class MergerTab extends SemGenTab implements ActionListener, MouseListener {
+public class MergerTab extends SemGenTab implements ActionListener, Observer {
 
 	private static final long serialVersionUID = -1383642730474574843L;
 	private OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-	private File file1;
-	private File file2;
 	private File mergedfile;
-	private SemSimModel semsimmodel1;
-	private SemSimModel semsimmodel2;
 
 	private int dividerlocation = 350;
-	private JPanel filelistpanel = new JPanel();
 	private JButton plusbutton = new JButton(SemGenIcon.plusicon);
 	private JButton minusbutton = new JButton(SemGenIcon.minusicon);
 
@@ -94,76 +89,74 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 		super("Merger", SemGenIcon.mergeicon, "Tab for Merging SemSim Models", sets, globalacts);
 		
 		workbench = bench;
+		workbench.addObserver(this);
 	}
 	
 	@Override
 	public void loadTab() {
-	this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-	JLabel filelisttitle = new JLabel("Models to merge");
-	filelisttitle.setBorder(BorderFactory.createEmptyBorder(0,0,0,10));
-
-	plusbutton.addActionListener(this);
-	minusbutton.addActionListener(this);
-
-	loadingbutton.setBorderPainted(false);
-	loadingbutton.setContentAreaFilled(false);
+		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 	
-	JPanel plusminuspanel = new JPanel();
-	plusminuspanel.setLayout(new BoxLayout(plusminuspanel, BoxLayout.X_AXIS));
-	plusminuspanel.add(filelisttitle);
-	plusminuspanel.add(plusbutton);
-	plusminuspanel.add(minusbutton);
+		JLabel filelisttitle = new JLabel("Models to merge");
+		filelisttitle.setBorder(BorderFactory.createEmptyBorder(0,0,0,10));
 	
-	JPanel filelistheader = new JPanel();
-	filelistheader.add(plusminuspanel);
-
-	filelistpanel.setBackground(Color.white);
-	filelistpanel.setLayout(new BoxLayout(filelistpanel, BoxLayout.Y_AXIS));
-
-	JScrollPane filelistscroller = new JScrollPane(filelistpanel);
-
-	mergebutton.setFont(SemGenFont.defaultBold());
-	mergebutton.setForeground(Color.blue);
-	mergebutton.addActionListener(this);
+		plusbutton.addActionListener(this);
+		minusbutton.addActionListener(this);
 	
-	JPanel mergebuttonpanel = new JPanel();
-	mergebuttonpanel.add(mergebutton);
+		loadingbutton.setBorderPainted(false);
+		loadingbutton.setContentAreaFilled(false);
+		
+		JPanel plusminuspanel = new JPanel();
+		plusminuspanel.setLayout(new BoxLayout(plusminuspanel, BoxLayout.X_AXIS));
+		plusminuspanel.add(filelisttitle);
+		plusminuspanel.add(plusbutton);
+		plusminuspanel.add(minusbutton);
+		
+		JPanel filelistheader = new JPanel();
+		filelistheader.add(plusminuspanel);
 	
-	JPanel filelistpanel = new JPanel(new BorderLayout());
-	filelistpanel.add(filelistheader, BorderLayout.WEST);
-	filelistpanel.add(filelistscroller, BorderLayout.CENTER);
-	filelistpanel.add(mergebuttonpanel, BorderLayout.EAST);
-	filelistpanel.setAlignmentX(LEFT_ALIGNMENT);
-	filelistpanel.setPreferredSize(new Dimension(settings.getAppWidth() - 200, 60));
-	filelistpanel.setMaximumSize(new Dimension(99999, 175));
+		mergebutton.setFont(SemGenFont.defaultBold());
+		mergebutton.setForeground(Color.blue);
+		mergebutton.addActionListener(this);
+		mergebutton.setEnabled(false);
+		
+		JPanel mergebuttonpanel = new JPanel();
+		mergebuttonpanel.add(mergebutton);
+		
+		JPanel filepane = new JPanel(new BorderLayout());
+		filepane.add(filelistheader, BorderLayout.WEST);
+		filepane.add(new ModelList(workbench), BorderLayout.CENTER);
+		filepane.add(mergebuttonpanel, BorderLayout.EAST);
+		filepane.setAlignmentX(LEFT_ALIGNMENT);
+		filepane.setPreferredSize(new Dimension(settings.getAppWidth() - 200, 60));
+		filepane.setMaximumSize(new Dimension(99999, 175));
+		
+		resolvepanel.setLayout(new BoxLayout(resolvepanel, BoxLayout.Y_AXIS));
+		resolvepanel.setBackground(Color.white);
+		resolvescroller = new SemGenScrollPane(resolvepanel);
+		resolvescroller.setBorder(BorderFactory.createTitledBorder("Resolution points between models"));
+		resolvescroller.setAlignmentX(LEFT_ALIGNMENT);
 	
-	resolvepanel.setLayout(new BoxLayout(resolvepanel, BoxLayout.Y_AXIS));
-	resolvepanel.setBackground(Color.white);
-	resolvescroller = new SemGenScrollPane(resolvepanel);
-	resolvescroller.setBorder(BorderFactory.createTitledBorder("Resolution points between models"));
-	resolvescroller.setAlignmentX(LEFT_ALIGNMENT);
-
-	JSplitPane mappingsplitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mappingpanelleft, mappingpanelright);
-	mappingsplitpane.setOneTouchExpandable(true);
-	mappingsplitpane.setAlignmentX(LEFT_ALIGNMENT);
-	mappingsplitpane.setDividerLocation((settings.getAppWidth() - 20) / 2);
-
-	resmapsplitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, resolvescroller, mappingsplitpane);
-	resmapsplitpane.setOneTouchExpandable(true);
-	resmapsplitpane.setDividerLocation(dividerlocation);
-
-	addmanualmappingbutton.addActionListener(this);
+		JSplitPane mappingsplitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mappingpanelleft, mappingpanelright);
+		mappingsplitpane.setOneTouchExpandable(true);
+		mappingsplitpane.setAlignmentX(LEFT_ALIGNMENT);
+		mappingsplitpane.setDividerLocation((settings.getAppWidth() - 20) / 2);
 	
-	JPanel mappingbuttonpanel = new JPanel();
-	mappingbuttonpanel.setAlignmentX(LEFT_ALIGNMENT);
-	mappingbuttonpanel.add(addmanualmappingbutton);
-
-	this.add(filelistpanel);
-	this.add(resmapsplitpane);
-	this.add(mappingbuttonpanel);
-	this.add(Box.createGlue());
-	this.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));}
+		resmapsplitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, resolvescroller, mappingsplitpane);
+		resmapsplitpane.setOneTouchExpandable(true);
+		resmapsplitpane.setDividerLocation(dividerlocation);
+	
+		addmanualmappingbutton.addActionListener(this);
+		
+		JPanel mappingbuttonpanel = new JPanel();
+		mappingbuttonpanel.setAlignmentX(LEFT_ALIGNMENT);
+		mappingbuttonpanel.add(addmanualmappingbutton);
+	
+		this.add(filepane);
+		this.add(resmapsplitpane);
+		this.add(mappingbuttonpanel);
+		this.add(Box.createGlue());
+		this.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
+	}
 	
 	public void actionPerformed(ActionEvent arg0) {
 		Object o = arg0.getSource();
@@ -172,45 +165,19 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 			PlusButtonAction();
 
 		if (o == minusbutton) {
-			Boolean cont = false;
-			for (Component comp : filelistpanel.getComponents()) {
-				if (comp instanceof FileToMergeLabel) {
-					FileToMergeLabel ftml = (FileToMergeLabel) comp;
-					if (ftml.selected) {
-						filelistpanel.remove(comp);
-						cont = true;
-					}
-				}
-			}
-			if(cont){
-				filelistpanel.validate();
-				if (filelistpanel.getComponents().length > 0) {
-					filelistpanel.getComponent(0).setForeground(Color.blue);
-					if (filelistpanel.getComponents().length > 1) {
-						filelistpanel.getComponent(1).setForeground(Color.red);
-						GenericThread primethread = new GenericThread(this, "primeForMergingStep");
-						loadingbutton.setIcon(SemGenIcon.loadingiconsmall);
-						primethread.start();
-					}
-				}
-				filelistpanel.repaint();
-				filelistpanel.validate();
-			}
+			workbench.removeSelectedModel();
+			
 		}
 
 		if (o == mergebutton) {
-			File file = null;
-			if (filelistpanel.getComponents().length == 2) {
-				file = saveMerge();
+			File file = saveMerge();
 				if (file!=null) {
 					mergedfile = file;
 					addmanualmappingbutton.setEnabled(false);
 					
 					MergeTask task = new MergeTask();
 					task.execute();
-					
 				}
-			}
 		}
 
 		if (o == addmanualmappingbutton) {
@@ -223,9 +190,9 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 
 				if (!codewordsAlreadyMapped(cdwd1, cdwd2, true)) {
 					if(resolvepanel.getComponentCount()!=0) resolvepanel.add(new JSeparator());
-					ResolutionPanel newrespanel = new ResolutionPanel(workbench, semsimmodel1.getDataStructure(cdwd1),
-							semsimmodel2.getDataStructure(cdwd2),
-							semsimmodel1, semsimmodel2, "(manual mapping)", true);
+					ResolutionPanel newrespanel = new ResolutionPanel(workbench, workbench.getModel(0).getDataStructure(cdwd1),
+							workbench.getModel(1).getDataStructure(cdwd2),
+							workbench.getModel(0), workbench.getModel(1), "(manual mapping)", true);
 					resolvepanel.add(newrespanel);
 					resolvepanel.repaint();
 					resolvepanel.validate();
@@ -239,26 +206,26 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 	}
 
 	public void PlusButtonAction(){
-			startAdditionOfModels();
-	}
-
-	public void startAdditionOfModels(){
-		AddModelsToMergeTask task = new AddModelsToMergeTask();
-		task.execute();
+		Set<File> files = new HashSet<File>();
+		new SemGenOpenFileChooser(files, "Select SemSim models to merge",
+        			new String[]{"owl", "xml", "sbml", "mod"});
+		
+		if (files.size() == 0) return;
+		
+		AddModelsToMergeTask task = new AddModelsToMergeTask(files);
+		task.execute(); 
 	}
 	
 	private class AddModelsToMergeTask extends SemGenTask {
-		public Set<File> files = new HashSet<File>();
-        public AddModelsToMergeTask(){
-        	new SemGenOpenFileChooser(files, "Select SemSim models to merge",
-        			new String[]{"owl", "xml", "sbml", "cellml", "mod"});
+		public Set<File> files;
+        public AddModelsToMergeTask(Set<File> filestoload){
+        	files = filestoload;
+        	progframe = new SemGenProgressBar("Loading models...", true);
         }
         @Override
         public Void doInBackground() {
-        	progframe = new SemGenProgressBar("Loading models...", true);
-        	if (files.size() == 0) endTask();
         	try {
-				addModelsToMerge(files);
+				cancel(!workbench.addModels(files, settings.doAutoAnnotate()));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -266,28 +233,23 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
         }
     }
 
-	private void addModelsToMerge(Set<File> files) {
-		initialidenticalinds = new HashSet<String>();
-		identicaldsnames = new HashSet<String>();
-		for (File file : files) {
-			if(ModelClassifier.classify(file)==ModelClassifier.CELLML_MODEL){
-				SemGenError.showFunctionalSubmodelError(file);
-			}
-			else{
-				FileToMergeLabel templabel = new FileToMergeLabel(file.getAbsolutePath());
-				templabel.addMouseListener(this);
-				templabel.setFont(SemGenFont.defaultPlain());
-				if (filelistpanel.getComponentCount() == 0) templabel.setForeground(Color.blue);
-				else if (filelistpanel.getComponentCount() == 1) templabel.setForeground(Color.red);
-				filelistpanel.add(templabel);
-			}
+	public void primeForMerging() {
+		initialidenticalinds.clear();
+		identicaldsnames.clear();
+		
+		populateMappingPanel(workbench.getModel(0).getName(), workbench.getModel(0), mappingpanelleft, Color.blue);
+		if(workbench.hasMultipleModels()) {
+			populateMappingPanel(workbench.getModel(1).getName(), workbench.getModel(1), mappingpanelright, Color.red);
+			identicaldsnames = identifyIdenticalCodewords();
+			initialidenticalinds.addAll(identicaldsnames);
+			identifyExactSemanticOverlap();
+			resmapsplitpane.setDividerLocation(dividerlocation);
+			loadingbutton.setIcon(SemGenIcon.blankloadingiconsmall);
+			mergebutton.setEnabled(true);
 		}
-		if(filelistpanel.getComponentCount() > 1) 
-			primeForMergingStep();
-		validate();
-		repaint();
+		else mergebutton.setEnabled(false);
 	}
-	
+		
 	public class MergeTask extends SemGenTask {
 		public MergeTask(){
 			progframe = new SemGenProgressBar("Merging...", true);
@@ -305,32 +267,6 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
         public void endTask() {
 			addmanualmappingbutton.setEnabled(true);
         }
-	}
-
-	public void primeForMergingStep() {
-		mergebutton.setEnabled(true);
-		Component[] filecomponents = filelistpanel.getComponents();
-		if (filecomponents.length > 1) {
-			refreshModelsToMerge();
-			
-			// If either of the models have errors, quit
-			for(SemSimModel model : refreshModelsToMerge()){
-				if(!model.getErrors().isEmpty()){
-					JOptionPane.showMessageDialog(this, "Model " + model.getName() + " has errors.",
-							"Failed to analyze.", JOptionPane.ERROR_MESSAGE);
-					mergebutton.setEnabled(false);
-					return;
-				}
-			}
-		}
-		
-		populateMappingPanel(file1.getName(), semsimmodel1, mappingpanelleft, Color.blue);
-		populateMappingPanel(file2.getName(), semsimmodel2, mappingpanelright, Color.red);
-		identicaldsnames = identifyIdenticalCodewords();
-		initialidenticalinds.addAll(identicaldsnames);
-		identifyExactSemanticOverlap();
-		resmapsplitpane.setDividerLocation(dividerlocation);
-		loadingbutton.setIcon(SemGenIcon.blankloadingiconsmall);
 	}
 
 	public void populateMappingPanel(String filename, SemSimModel model, MappingPanel mappingpanel, Color color) {
@@ -361,8 +297,8 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 
 	public Set<String> identifyIdenticalCodewords() {
 		Set<String> matchedcdwds = new HashSet<String>();
-		for (DataStructure ds : semsimmodel1.getDataStructures()) {
-			if (semsimmodel2.containsDataStructure(ds.getName()))
+		for (DataStructure ds : workbench.getModel(0).getDataStructures()) {
+			if (workbench.getModel(1).containsDataStructure(ds.getName()))
 				matchedcdwds.add(ds.getName());
 		}
 		return matchedcdwds;
@@ -374,8 +310,8 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 
 		SemGenProgressBar progframe = new SemGenProgressBar("Comparing models...", true);
 		// Only include the annotated data structures in the resolution process
-		for(DataStructure ds1 : semsimmodel1.getDataStructures()){
-			for(DataStructure ds2 : semsimmodel2.getDataStructures()){
+		for(DataStructure ds1 : workbench.getModel(0).getDataStructures()){
+			for(DataStructure ds2 : workbench.getModel(1).getDataStructures()){
 				Boolean match = false;
 				
 				// Test singular annotations
@@ -423,7 +359,7 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 				}
 				if(match){
 					resolvepanel.add(new ResolutionPanel(workbench, ds1, ds2,
-							semsimmodel1, semsimmodel2, "(exact semantic match)", false));
+							workbench.getModel(0), workbench.getModel(1), "(exact semantic match)", false));
 					resolvepanel.add(new JSeparator());
 					resolvepanel.validate();
 					resolvepanel.repaint();
@@ -480,8 +416,8 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 	}
 
 	public void merge() throws IOException, CloneNotSupportedException, OWLException, InterruptedException, JDOMException, Xcept {
-		SemSimModel ssm1clone = semsimmodel1.clone();
-		SemSimModel ssm2clone = semsimmodel2.clone();
+		SemSimModel ssm1clone = workbench.getModel(0).clone();
+		SemSimModel ssm2clone = workbench.getModel(1).clone();
 
 		// First collect all the data structures that aren't going to be used in the resulting merged model
 		// Include a mapping between the solution domains
@@ -577,7 +513,7 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 			Boolean cont = true;
 			while(cont){
 				String newdsname = JOptionPane.showInputDialog(this, "Both models contain codeword " + dsname + ".\n" +
-						"Enter new name for use in " + file1.getName() + " equations.\nNo special characters, no spaces.", "Duplicate codeword", JOptionPane.OK_OPTION);
+						"Enter new name for use in " + workbench.getModel(0).getName() + " equations.\nNo special characters, no spaces.", "Duplicate codeword", JOptionPane.OK_OPTION);
 				if(newdsname!=null && !newdsname.equals("") && !newdsname.equals(dsname)){
 					ssm1clone.getDataStructure(dsname).setName(newdsname);
 					Boolean derivreplace = false;
@@ -660,7 +596,7 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 		mergedmodel.setNamespace(mergedmodel.generateNamespaceFromDateAndTime());
 		manager.saveOntology(mergedmodel.toOWLOntology(), new RDFXMLOntologyFormat(), IRI.create(mergedfile));
 		optionToEncode(mergedmodel);
-		refreshModelsToMerge();
+		workbench.reloadAllModels(settings.doAutoAnnotate());
 	}
 
 	public void optionToEncode(SemSimModel model) throws IOException, OWLException {
@@ -672,52 +608,6 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 			new Encoder(model, mergedfile.getName().substring(0, mergedfile.getName().lastIndexOf(".")));
 		}
 	}
-	
-	public Set<SemSimModel> refreshModelsToMerge() {	
-		FileToMergeLabel label1 = (FileToMergeLabel) filelistpanel.getComponent(0);
-		FileToMergeLabel label2 = (FileToMergeLabel) filelistpanel.getComponent(1);
-		file1 = new File(label1.getText());
-		file2 = new File(label2.getText());
-		
-		semsimmodel1 = LoadSemSimModel.loadSemSimModelFromFile(file1, settings.doAutoAnnotate());
-		
-		if(semsimmodel1.getFunctionalSubmodels().size()>0) SemGenError.showFunctionalSubmodelError(file1);
-		
-		semsimmodel2 = LoadSemSimModel.loadSemSimModelFromFile(file2, settings.doAutoAnnotate());
-		
-		if(semsimmodel2.getFunctionalSubmodels().size()>0) 
-			SemGenError.showFunctionalSubmodelError(file1);
-		
-		Set<SemSimModel> models = new HashSet<SemSimModel>();
-		models.add(semsimmodel1);
-		models.add(semsimmodel2);
-		return models;
-	}
-
-	public void mouseEntered(MouseEvent arg0) {}
-
-	public void mouseExited(MouseEvent arg0) {}
-
-	public void mousePressed(MouseEvent arg0) {
-		if (arg0.getSource() instanceof FileToMergeLabel
-				&& arg0.getClickCount() > 0) {
-			FileToMergeLabel ftml = (FileToMergeLabel) arg0.getSource();
-			arg0.consume();
-			ftml.setSelected(true);
-
-			for (Component comp : filelistpanel.getComponents()) {
-				if (comp instanceof FileToMergeLabel) {
-					FileToMergeLabel otherftml = (FileToMergeLabel) comp;
-					otherftml.setSelected(!otherftml.filepath.equals(ftml.filepath));
-				}
-			}
-		}
-		filelistpanel.validate();
-		filelistpanel.repaint();
-	}
-	
-	public void mouseClicked(MouseEvent arg0) {}
-	public void mouseReleased(MouseEvent arg0) {}
 
 	@Override
 	public boolean isSaved() {
@@ -749,7 +639,24 @@ public class MergerTab extends SemGenTab implements ActionListener, MouseListene
 
 	@Override
 	public void addObservertoWorkbench(Observer obs) {
-		// TODO Auto-generated method stub
-		
+
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		if (arg == MergeEvent.functionalsubmodelerr) {
+			SemGenError.showFunctionalSubmodelError(((MergeEvent)arg).getMessage());
+		}
+		if (arg == MergeEvent.threemodelerror) {
+			SemGenError.showError("Currently, SemGen can only merge two models at a time.", "Too many models");
+		}	
+		if (arg == MergeEvent.modelerrors) {
+			JOptionPane.showMessageDialog(this, "Model " + ((MergeEvent)arg).getMessage() + " has errors.",
+					"Failed to analyze.", JOptionPane.ERROR_MESSAGE);
+			mergebutton.setEnabled(false);
+		}
+		if (arg == MergeEvent.modellistupdated) {
+			primeForMerging();
+		}
 	}
 }
