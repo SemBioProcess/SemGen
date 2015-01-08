@@ -7,12 +7,13 @@ package semgen.utilities;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.List;
 
 import javax.swing.SwingWorker;
 
 import semgen.utilities.uicomponent.SemGenProgressBar;
 
-public abstract class SemGenTask extends SwingWorker<Void, Void> implements PropertyChangeListener {
+public abstract class SemGenTask extends SwingWorker<Void, String> implements PropertyChangeListener {
 	protected SemGenProgressBar progframe = null;
 	
 	@Override
@@ -27,20 +28,19 @@ public abstract class SemGenTask extends SwingWorker<Void, Void> implements Prop
 
     public void endTask() {}
 
-    public void progressUpdated(String update) {
+    public void progressUpdated(String update) {    	
     	firePropertyChange("status", new String(update), null);
+    }
+    
+    @Override
+    protected void process(List<String> chunks) {
+		progframe.updateMessage(chunks.get(0));
     }
     
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		
-		if (evt.getPropertyName() == "status") {
-			progframe.updateMessage(evt.getNewValue().toString());
-		}
-		try {
-			Thread.sleep(1);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		if (!isDone()) {
+			publish(evt.getNewValue().toString());
 		}
 	}
 }

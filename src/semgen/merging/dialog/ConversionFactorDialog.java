@@ -1,4 +1,4 @@
-package semgen.merging;
+package semgen.merging.dialog;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -18,10 +18,10 @@ public class ConversionFactorDialog extends SemGenDialog implements
 		PropertyChangeListener {
 
 	private static final long serialVersionUID = -3182047942231432822L;
-	public JOptionPane optionPane;
-	public JTextField mantextfield = new JTextField();
-	public String cdwd2keep;
-	public JComboBox<String> box = new JComboBox<String>(new String[] { "*", "/" });;
+	private JOptionPane optionPane;
+	private JTextField mantextfield = new JTextField();
+	private String cdwd2keep;
+	private JComboBox<String> box = new JComboBox<String>(new String[] { "*", "/" });;
 	public Boolean process = true;
 	public String cdwdAndConversionFactor;
 	public double conversionfactor;
@@ -52,8 +52,6 @@ public class ConversionFactorDialog extends SemGenDialog implements
 		conpanel.add(box);
 		conpanel.add(mantextfield);
 
-		
-
 		Object[] array = new Object[] { area, conpanel };
 		Object[] options = new Object[] { "OK", "Cancel" };
 		optionPane = new JOptionPane(array, JOptionPane.PLAIN_MESSAGE,
@@ -68,31 +66,34 @@ public class ConversionFactorDialog extends SemGenDialog implements
 	}
 
 	public void propertyChange(PropertyChangeEvent e) {
-		String value = optionPane.getValue().toString();
-		if (value == "OK") {
-			Boolean oktoproceed = true;
-			try{
-				conversionfactor = Double.parseDouble(mantextfield.getText());
-			}
-			catch(NumberFormatException ex){oktoproceed = false;}
-			if (!mantextfield.getText().equals("")
-					&& mantextfield.getText() != null
-					&& oktoproceed) {
-				cdwdAndConversionFactor = "(" + cdwd2keep + box.getSelectedItem() + mantextfield.getText() + ")";
-				if (mantextfield.getText().equals("1")) {
-					cdwdAndConversionFactor = cdwd2keep;
-					process = true;
+		if (e.getPropertyName()=="value") {
+			String value = optionPane.getValue().toString();
+			if (value == "OK") {
+				Boolean oktoproceed = true;
+				try{
+					conversionfactor = Double.parseDouble(mantextfield.getText());
 				}
-				setVisible(false);
+				catch(NumberFormatException ex){oktoproceed = false;}
+				if (!mantextfield.getText().equals("")
+						&& mantextfield.getText() != null
+						&& oktoproceed) {
+					cdwdAndConversionFactor = "(" + cdwd2keep + box.getSelectedItem() + mantextfield.getText() + ")";
+					if (mantextfield.getText().equals("1")) {
+						cdwdAndConversionFactor = cdwd2keep;
+						process = true;
+					}
+				} 
+				else {
+					optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+					JOptionPane.showMessageDialog(this, "Please enter a valid conversion factor");
+					return;
+				}
 			} 
-			else {
-				JOptionPane.showMessageDialog(this, "Please enter a valid conversion factor");
+			else if (value == "Cancel") {
+				process = false;;
 			}
-		} 
-		else if (value == "Cancel") {
-			process = false;
-			setVisible(false);
+			dispose();
 		}
-		optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+		
 	}
 }

@@ -123,6 +123,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		SemGenTab tab = null;
 		AddTabTask(WorkbenchFactory<T> maker, TabFactory<T> tabmaker) {
 			workbenchfactory = maker;
+			workbenchfactory.addPropertyChangeListener(this);
 			tabfactory = tabmaker;
 			progframe = new SemGenProgressBar(maker.getStatus(), true);
 		}
@@ -130,7 +131,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		@Override
 		protected Void doInBackground() throws Exception {
 			while (workbenchfactory.isValid()) {
-				SwingUtilities.invokeAndWait(workbenchfactory);
+				workbenchfactory.run();
 				break;
 			}
 			if (!workbenchfactory.isValid()) {

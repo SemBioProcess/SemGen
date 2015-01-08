@@ -90,7 +90,7 @@ public class SemGen extends JFrame implements Observer{
 		ModelWriter.pointtoSemSimLibrary(semsimlib);
 		ErrorLog.setLogFile(logfilewriter);
 	}
-	
+
 	/**Set the user interface look and feel to the Nimbus Swing layout and create the frame*/
 	public static void createAndShowGUI() {
 		try {
@@ -120,7 +120,6 @@ public class SemGen extends JFrame implements Observer{
 		//of the main frame
 		SemGenError.setFrame(this);
 		SemGenDialog.setFrame(this);
-		SemGenProgressBar.setLocation(this);
 		
 		SemGenOpenFileChooser.currentdirectory = new File(settings.getStartDirectory());
 		// Need this for programmatic use of jsbatch
@@ -128,7 +127,6 @@ public class SemGen extends JFrame implements Observer{
 		//Create an instance of SemGen's default font and load it into memory
 		SemGenFont.defaultUIFont();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 		gacts.addObserver(this);
 		 
 		SemGenMenuBar menubar = new SemGenMenuBar(settings, gacts);
@@ -206,7 +204,6 @@ public class SemGen extends JFrame implements Observer{
 		});
 	}
 
-	
 	/** Quit - verify that it is OK to quit and store the user's current preferences
 	 * and any local ontology terms if it yes
 	 * */

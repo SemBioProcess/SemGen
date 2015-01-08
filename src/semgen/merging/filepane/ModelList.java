@@ -51,8 +51,7 @@ public class ModelList extends SemGenScrollPane implements Observer {
 			validate();
 		}
 	}
-	
-	
+
 	public class ModelListRenderer extends JLabel implements ListCellRenderer<String>{
 		private static final long serialVersionUID = 1L;
 
@@ -67,7 +66,7 @@ public class ModelList extends SemGenScrollPane implements Observer {
 			Color col = Color.white;
 			setFont(SemGenFont.defaultPlain());
 			if (isSelected) col = selectioncol;
-			else if (index == 0) setForeground(Color.blue);
+			if (index == 0) setForeground(Color.blue);
 			else if (index == 1) setForeground(Color.red);
 			setBackground(col);
 			setText(value.toString());

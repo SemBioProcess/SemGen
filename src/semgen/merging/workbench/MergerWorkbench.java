@@ -2,6 +2,7 @@ package semgen.merging.workbench;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 import semgen.utilities.Workbench;
@@ -10,7 +11,9 @@ import semsim.model.SemSimModel;
 import semsim.reading.ModelClassifier;
 
 public class MergerWorkbench extends Workbench {
-	ArrayList<SemSimModel> loadedmodels = new ArrayList<SemSimModel>();	
+	ArrayList<SemSimModel> loadedmodels = new ArrayList<SemSimModel>();
+	ModelMapping modelmap = null;
+	
 	int selection = -1;
 	
 	public enum MergeEvent {
@@ -53,6 +56,9 @@ public class MergerWorkbench extends Workbench {
 		}
 		
 		return modeltoload;
+	}
+	public int getNumberofStagedModels() {
+		return loadedmodels.size();
 	}
 	
 	public boolean addModels(Set<File> files, boolean autoannotate) {
@@ -99,6 +105,14 @@ public class MergerWorkbench extends Workbench {
 	
 	public boolean hasMultipleModels() {
 		return (loadedmodels.size() > 1);
+	}
+	
+	public void mapModels() {
+		SemanticComparator comparator = new SemanticComparator(loadedmodels.get(0), loadedmodels.get(1));
+		modelmap = new ModelMapping(0, 1);
+		modelmap.setidentifyIdenticalCodewords();
+		modelmap.setIdenticalNames(commonnames)
+		initialidenticalinds.addAll(identicaldsnames);
 	}
 	
 	public boolean validateModels() {
@@ -169,6 +183,33 @@ public class MergerWorkbench extends Workbench {
 		selection = -1;
 		setChanged();
 		notifyObservers(MergeEvent.modellistupdated);
+	}
+	
+	private class ModelMapping {
+		int index1, index2;
+		private Set<String> initialidenticalinds = new HashSet<String>();
+		private Set<String> identicaldsnames = new HashSet<String>();
+		
+		ModelMapping(int ind1, int ind2) {
+			index1 = ind1;
+			index2 = ind2;
+		}
+		
+		public void setIdenticalNames(Set<String> commonnames) {
+			identicaldsnames = commonnames;
+		}
+		
+		public void setIdenticalIndviduals(Set<String> commoninds) {
+			initialidenticalinds = commoninds;
+		}
+		
+		public Set<String> getIdenticalNames() {
+			return identicaldsnames;
+		}
+		
+		public Set<String> getIdenticalIndividuals() {
+			return initialidenticalinds;
+		}
 	}
 	
 }

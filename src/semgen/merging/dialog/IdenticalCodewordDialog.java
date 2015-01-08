@@ -1,4 +1,4 @@
-package semgen.merging;
+package semgen.merging.dialog;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -6,7 +6,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
@@ -18,19 +17,17 @@ import javax.swing.JTextField;
 import semgen.utilities.uicomponent.SemGenDialog;
 
 public class IdenticalCodewordDialog extends SemGenDialog implements PropertyChangeListener, ItemListener {
-
 	private static final long serialVersionUID = 7836229234967611648L;
-	public JOptionPane optionPane;
-	public JTextField mantextfield = new JTextField();
-	public JTextArea area = new JTextArea();
-	public JComboBox<String> box;
-	public Boolean process = true;
+	private JOptionPane optionPane;
+	private JTextField mantextfield = new JTextField();
+	private JTextArea area = new JTextArea();
+	private JComboBox<String> box;
 
-	public IdenticalCodewordDialog(String cdwd, File file1, File file2) {
+	public IdenticalCodewordDialog(String cdwd, String file1, String file2) {
 		super("");
-		String[] selections = new String[] { "Rename codeword in " + file2.getName(),
-				"Only keep " + cdwd + " from " + file1.getName(),
-				"Only keep " + cdwd + " from " + file2.getName()};
+		String[] selections = new String[] { "Rename codeword in " + file2,
+				"Only keep " + cdwd + " from " + file1,
+				"Only keep " + cdwd + " from " + file2};
 		area.setEditable(false);
 
 		area.setBorder(BorderFactory.createEmptyBorder(0, 0, 7, 0));
@@ -49,7 +46,6 @@ public class IdenticalCodewordDialog extends SemGenDialog implements PropertyCha
 		mainpanel.add(box, BorderLayout.CENTER);
 		mainpanel.add(mantextfield, BorderLayout.SOUTH);
 
-		
 		this.setTitle("Duplicate codeword: " + cdwd);
 
 		Object[] array = new Object[] { mainpanel };
@@ -79,8 +75,6 @@ public class IdenticalCodewordDialog extends SemGenDialog implements PropertyCha
 						return;
 					}
 				} 
-			} else if (value == "Cancel") {
-				process = false;
 			}
 			dispose();
 		}

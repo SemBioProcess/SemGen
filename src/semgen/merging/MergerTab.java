@@ -3,11 +3,10 @@ package semgen.merging;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Observable;
 import java.util.Observer;
@@ -34,10 +33,10 @@ import JSim.util.Xcept;
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
 import semgen.encoding.Encoder;
+import semgen.merging.dialog.ConversionFactorDialog;
 import semgen.merging.filepane.ModelList;
 import semgen.merging.workbench.MergerWorkbench;
 import semgen.merging.workbench.MergerWorkbench.MergeEvent;
-import semgen.utilities.GenericThread;
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
@@ -81,8 +80,7 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 	private MappingPanel mappingpanelright = new MappingPanel("[ ]");
 	private JButton addmanualmappingbutton = new JButton("Add manual mapping");
 	private JButton loadingbutton = new JButton(SemGenIcon.blankloadingiconsmall);
-	private Set<String> initialidenticalinds = new HashSet<String>();
-	private Set<String> identicaldsnames = new HashSet<String>();
+	
 	private MergerWorkbench workbench;
 	
 	public MergerTab(SemGenSettings sets, GlobalActions globalacts, MergerWorkbench bench) {
@@ -166,7 +164,6 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 
 		if (o == minusbutton) {
 			workbench.removeSelectedModel();
-			
 		}
 
 		if (o == mergebutton) {
@@ -211,7 +208,10 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
         			new String[]{"owl", "xml", "sbml", "mod"});
 		
 		if (files.size() == 0) return;
-		
+		if (files.size()+workbench.getNumberofStagedModels() > 2) {
+			SemGenError.showError("Currently, SemGen can only merge two models at a time.", "Too many models");
+			return;
+		}
 		AddModelsToMergeTask task = new AddModelsToMergeTask(files);
 		task.execute(); 
 	}
@@ -234,15 +234,16 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
     }
 
 	public void primeForMerging() {
-		initialidenticalinds.clear();
-		identicaldsnames.clear();
-		
-		populateMappingPanel(workbench.getModel(0).getName(), workbench.getModel(0), mappingpanelleft, Color.blue);
+				populateMappingPanel(workbench.getModel(0).getName(), workbench.getModel(0), mappingpanelleft, Color.blue);
 		if(workbench.hasMultipleModels()) {
 			populateMappingPanel(workbench.getModel(1).getName(), workbench.getModel(1), mappingpanelright, Color.red);
 			identicaldsnames = identifyIdenticalCodewords();
 			initialidenticalinds.addAll(identicaldsnames);
+			resolvepanel.removeAll();
+			resolvepanel.validate();
+			SemGenProgressBar progframe = new SemGenProgressBar("Comparing models...", true);
 			identifyExactSemanticOverlap();
+			progframe.dispose();
 			resmapsplitpane.setDividerLocation(dividerlocation);
 			loadingbutton.setIcon(SemGenIcon.blankloadingiconsmall);
 			mergebutton.setEnabled(true);
@@ -270,8 +271,8 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 	}
 
 	public void populateMappingPanel(String filename, SemSimModel model, MappingPanel mappingpanel, Color color) {
-		Set<String> descannset = new HashSet<String>();
-		Set<String> nodescannset = new HashSet<String>();
+		ArrayList<String> descannset = new ArrayList<String>();
+		ArrayList<String> nodescannset = new ArrayList<String>();
 		for (DataStructure datastr : model.getDataStructures()) {
 			String desc = "(" + datastr.getName() + ")";
 			if(datastr.getDescription()!=null){
@@ -280,117 +281,17 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 			}
 			else nodescannset.add(desc);
 		}
+		Collections.sort(descannset, new CaseInsensitiveComparator());
+		Collections.sort(nodescannset, new CaseInsensitiveComparator());
 		
-		String[] descannarray = (String[]) descannset.toArray(new String[] {});
-		String[] nodescannarray = (String[]) nodescannset.toArray(new String[] {});
-		Arrays.sort(descannarray,new CaseInsensitiveComparator());
-		Arrays.sort(nodescannarray,new CaseInsensitiveComparator());
-		String[] comboarray = new String[descannarray.length + nodescannarray.length];
+		String[] comboarray = new String[descannset.size() + nodescannset.size()];
 		for(int i=0; i<comboarray.length; i++){
-			if(i<descannarray.length) comboarray[i] = descannarray[i];
-			else comboarray[i] = nodescannarray[i-descannarray.length];
+			if(i<descannset.size()) comboarray[i] = descannset.get(i);
+			else comboarray[i] = nodescannset.get(i-descannset.size());
 		}
 		mappingpanel.scrollercontent.setForeground(color);
 		mappingpanel.scrollercontent.setListData(comboarray);
 		mappingpanel.setTitle(filename);
-	}
-
-	public Set<String> identifyIdenticalCodewords() {
-		Set<String> matchedcdwds = new HashSet<String>();
-		for (DataStructure ds : workbench.getModel(0).getDataStructures()) {
-			if (workbench.getModel(1).containsDataStructure(ds.getName()))
-				matchedcdwds.add(ds.getName());
-		}
-		return matchedcdwds;
-	}
-
-	public void identifyExactSemanticOverlap() {
-		resolvepanel.removeAll();
-		resolvepanel.validate();
-
-		SemGenProgressBar progframe = new SemGenProgressBar("Comparing models...", true);
-		// Only include the annotated data structures in the resolution process
-		for(DataStructure ds1 : workbench.getModel(0).getDataStructures()){
-			for(DataStructure ds2 : workbench.getModel(1).getDataStructures()){
-				Boolean match = false;
-				
-				// Test singular annotations
-				if(ds1.hasRefersToAnnotation() && ds2.hasRefersToAnnotation()) {
-					match = testNonCompositeAnnotations(ds1.getFirstRefersToReferenceOntologyAnnotation(),
-							ds2.getFirstRefersToReferenceOntologyAnnotation());
-				}
-				
-				// If the physical properties are not null
-				if(!match && ds1.getPhysicalProperty()!=null && ds2.getPhysicalProperty()!=null){
-					// And they are properties of a specified physical model component
-					if(ds1.getPhysicalProperty().getPhysicalPropertyOf()!=null && ds2.getPhysicalProperty().getPhysicalPropertyOf()!=null){
-						PhysicalProperty prop1 = ds1.getPhysicalProperty();
-						PhysicalProperty prop2 = ds2.getPhysicalProperty();
-						
-						// and they are annotated against reference ontologies
-						if(prop1.hasRefersToAnnotation() && prop2.hasRefersToAnnotation()){
-							// and the annotations match
-							if(prop1.getFirstRefersToReferenceOntologyAnnotation().getReferenceURI().toString().equals(prop2.getFirstRefersToReferenceOntologyAnnotation().getReferenceURI().toString())){
-								
-								// and they are properties of the same kind of physical model component
-								if(prop1.getPhysicalPropertyOf().getClass() == prop2.getPhysicalPropertyOf().getClass()){
-									
-									// if they are properties of a composite physical entity
-									if(prop1.getPhysicalPropertyOf() instanceof CompositePhysicalEntity){
-										CompositePhysicalEntity cpe1 = (CompositePhysicalEntity)prop1.getPhysicalPropertyOf();
-										CompositePhysicalEntity cpe2 = (CompositePhysicalEntity)prop2.getPhysicalPropertyOf();
-										match = testCompositePhysicalEntityEquivalency(cpe1, cpe2);
-									}
-									// if they are properties of a physical process or singular physical entity
-									else{
-										// and if they are both annotated against reference ontology terms
-										if(prop1.getPhysicalPropertyOf().hasRefersToAnnotation() && prop2.getPhysicalPropertyOf().hasRefersToAnnotation()){
-											// and if the annotations match
-											if(prop1.getPhysicalPropertyOf().getFirstRefersToReferenceOntologyAnnotation().getReferenceURI().toString().equals(
-													prop2.getPhysicalPropertyOf().getFirstRefersToReferenceOntologyAnnotation().getReferenceURI().toString())){
-												match = true;
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-				if(match){
-					resolvepanel.add(new ResolutionPanel(workbench, ds1, ds2,
-							workbench.getModel(0), workbench.getModel(1), "(exact semantic match)", false));
-					resolvepanel.add(new JSeparator());
-					resolvepanel.validate();
-					resolvepanel.repaint();
-				}
-			} // end of iteration through model2 data structures
-		} // end of iteration through model1 data structures
-		if (resolvepanel.getComponents().length==0) {
-			SemGenError.showError("SemGen did not find any semantic equivalencies between the models", "Merger message");
-		}
-		else resolvepanel.remove(resolvepanel.getComponentCount()-1); // remove last JSeparator
-		progframe.dispose();
-	}
-
-	public Boolean testNonCompositeAnnotations(ReferenceOntologyAnnotation ann1, ReferenceOntologyAnnotation ann2){
-		return (ann1.getReferenceURI().toString().equals(ann2.getReferenceURI().toString()));
-	}
-	
-	public Boolean testCompositePhysicalEntityEquivalency(CompositePhysicalEntity cpe1, CompositePhysicalEntity cpe2){
-		if(cpe1.getArrayListOfEntities().size()!=cpe2.getArrayListOfEntities().size())
-			return false;
-		for(int i=0; i<cpe1.getArrayListOfEntities().size(); i++){
-			if(cpe1.getArrayListOfEntities().get(i).hasRefersToAnnotation() && cpe2.getArrayListOfEntities().get(i).hasRefersToAnnotation()){
-				if(!cpe1.getArrayListOfEntities().get(i).getFirstRefersToReferenceOntologyAnnotation().getReferenceURI().toString().equals( 
-					cpe2.getArrayListOfEntities().get(i).getFirstRefersToReferenceOntologyAnnotation().getReferenceURI().toString())){
-
-					return false;
-				}
-			}
-			else return false;
-		}
-		return true;
 	}
 
 	public Boolean codewordsAlreadyMapped(String cdwd1uri, String cdwd2uri,
@@ -611,20 +512,17 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 
 	@Override
 	public boolean isSaved() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public void requestSave() {
-		// TODO Auto-generated method stub
-		
+				
 	}
 
 	@Override
 	public void requestSaveAs() {
-		// TODO Auto-generated method stub
-		
+				
 	}
 	
 	public File saveMerge() {
@@ -639,7 +537,7 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 
 	@Override
 	public void addObservertoWorkbench(Observer obs) {
-
+		workbench.addObserver(obs);
 	}
 
 	@Override
