@@ -22,6 +22,7 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import semgen.SemGen;
 import semsim.model.annotation.ReferenceOntologyAnnotation;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.units.UnitFactor;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.PhysicalProperty;
@@ -40,6 +41,8 @@ public class SemSimLibrary {
 	private Hashtable<String, String[]> ontologyTermsAndNamesCache = new Hashtable<String,String[]>();
 	private Hashtable<String, String[]> jsimUnitsTable;
 	private Hashtable<String, String[]> jsimUnitPrefixesTable;
+	
+	private Hashtable<Hashtable<String, Double>, String[]> OPBClassesForBaseUnitsTable = new Hashtable<Hashtable<String, Double>, String[]>(); // Similar to OPBClassesForUnitsTable, but instead maps Hashtable of {baseunit:exponent} to OPB class.
 	
 	private static Set<String> OPBproperties = new HashSet<String>();
 	private static Set<String> OPBflowProperties = new HashSet<String>();
@@ -88,6 +91,141 @@ public class SemSimLibrary {
 		return OPBClassesForUnitsTable.get(unit);
 	}
 	
+	// Method for getting OPB classes based on base units
+	public String[] getOPBBaseUnitRefTerms(DataStructure ds) {
+		// For each ds, store its base units in Hashtable as baseunitname:exponent
+		Hashtable<String, Double> baseUnits = new Hashtable<String, Double>();
+		
+		for(UnitFactor factor : ds.getUnit().getUnitFactors()){
+			String baseunitname = factor.getBaseUnit().getName();
+			Double exponent = factor.getExponent();
+			baseUnits.put(baseunitname, exponent);
+		}
+		
+		// Mapping table is embedded here for now, but should be separated out into a file soon.
+		
+		// Frequently occurring unit combinations. 
+		Hashtable<String, Double> volt = new Hashtable<String, Double>() {{
+			put("volt", 1.0);
+		}};
+		Hashtable<String, Double> chemicalconcentration = new Hashtable<String, Double>() {{
+			put("mole", 1.0);
+			put("litre", -1.0);
+		}};
+		Hashtable<String, Double> chemicalconcentration1 = new Hashtable<String, Double>() {{
+			put("mole", 1.0);
+			put("metre", -3.0);
+		}};
+		Hashtable<String, Double> flux = new Hashtable<String, Double>() {{
+			put("mole", 1.0);
+			put("litre", -1.0);
+			put("second", -1.0);
+		}};
+		Hashtable<String, Double> area = new Hashtable<String, Double>() {{
+			put("metre", 2.0);
+		}};
+		Hashtable<String, Double> area1 = new Hashtable<String, Double>() {{
+			put("meter", 2.0);
+		}};
+		Hashtable<String, Double> current = new Hashtable<String, Double>() {{
+			put("ampere", 1.0);
+		}};
+		Hashtable<String, Double> currentdensity = new Hashtable<String, Double>() {{
+			put("ampere", 1.0);
+			put("metre", -2.0);
+		}};
+		Hashtable<String, Double> volume = new Hashtable<String, Double>() {{
+			put("litre", 1.0);
+		}};
+		Hashtable<String, Double> volume1 = new Hashtable<String, Double>() {{
+			put("metre", 3.0);
+		}};
+		Hashtable<String, Double> flow = new Hashtable<String, Double>() {{
+			put("litre", 1.0);
+			put("second", -1.0);
+		}};
+		Hashtable<String, Double> pressure = new Hashtable<String, Double>() {{
+			put("newton", 1.0);
+			put("metre", -2.0);
+		}};
+		Hashtable<String, Double> pressure1 = new Hashtable<String, Double>() {{
+			put("pascal", 1.0);
+		}};
+		Hashtable<String, Double> amount = new Hashtable<String, Double>() {{
+			put("mole", 1.0);
+		}};
+		Hashtable<String, Double> mass = new Hashtable<String, Double>() {{
+			put("kilogram", 1.0);
+		}};
+		Hashtable<String, Double> mass1 = new Hashtable<String, Double>() {{
+			put("gram", 1.0);
+		}};
+		Hashtable<String, Double> temperature = new Hashtable<String, Double>() {{
+			put("celsius", 1.0);
+		}};
+		Hashtable<String, Double> temperature1 = new Hashtable<String, Double>() {{
+			put("kelvin", 1.0);
+		}};
+		Hashtable<String, Double> charge = new Hashtable<String, Double>() {{
+			put("coulomb", 1.0);
+		}};
+		Hashtable<String, Double> frequency = new Hashtable<String, Double>() {{
+			put("hertz", 1.0);
+		}};
+		Hashtable<String, Double> length = new Hashtable<String, Double>() {{
+			put("metre", 1.0);
+		}};
+		Hashtable<String, Double> length1 = new Hashtable<String, Double>() {{
+			put("meter", 1.0);
+		}};
+		
+		// OPB classes
+		String[] opb_electricalpotential = {"OPB_00506"};
+		String[] opb_chemicalconcentration = {"OPB_00340"};
+		String[] opb_flux = {"OPB_00593"};
+		String[] opb_area = {"OPB_00295"};
+		String[] opb_volume = {"OPB_00154"};
+		String[] opb_current = {"OPB_00318"};
+		String[] opb_flow = {"OPB_00299"};
+		String[] opb_pressure = {"OPB_00509"};
+		String[] opb_amount = {"OPB_00425"};
+		String[] opb_mass = {"OPB_01319"};
+		String[] opb_temperature = {"OPB_00165"};
+		String[] opb_charge = {"OPB_00411"};
+		String[] opb_frequency = {"OPB_00045"};
+		String[] opb_length = {"OPB_00451"};
+		
+		// Hashtable of Hashtables of base unit combinations and their corresponding OPB classes
+		OPBClassesForBaseUnitsTable.put(volt, opb_electricalpotential);
+		OPBClassesForBaseUnitsTable.put(chemicalconcentration, opb_chemicalconcentration);
+		OPBClassesForBaseUnitsTable.put(chemicalconcentration1, opb_chemicalconcentration);
+		OPBClassesForBaseUnitsTable.put(flux, opb_flux);
+		OPBClassesForBaseUnitsTable.put(area, opb_area);
+		OPBClassesForBaseUnitsTable.put(area1, opb_area);
+		OPBClassesForBaseUnitsTable.put(current, opb_current);
+		OPBClassesForBaseUnitsTable.put(currentdensity, opb_current);
+		OPBClassesForBaseUnitsTable.put(volume, opb_volume);
+		OPBClassesForBaseUnitsTable.put(volume1, opb_volume);
+		OPBClassesForBaseUnitsTable.put(flow, opb_flow);
+		OPBClassesForBaseUnitsTable.put(pressure, opb_pressure);
+		OPBClassesForBaseUnitsTable.put(pressure1, opb_pressure);
+		OPBClassesForBaseUnitsTable.put(amount, opb_amount);
+		OPBClassesForBaseUnitsTable.put(mass, opb_mass);
+		OPBClassesForBaseUnitsTable.put(mass1, opb_mass);
+		OPBClassesForBaseUnitsTable.put(temperature, opb_temperature);
+		OPBClassesForBaseUnitsTable.put(temperature1, opb_temperature);
+		OPBClassesForBaseUnitsTable.put(charge, opb_charge);
+		OPBClassesForBaseUnitsTable.put(frequency, opb_frequency);
+		OPBClassesForBaseUnitsTable.put(length, opb_length);
+		OPBClassesForBaseUnitsTable.put(length1, opb_length);
+		
+		if(OPBClassesForBaseUnitsTable.containsKey(baseUnits)){
+			System.out.println(ds.getName() + " FROM BASE UNITS"); // For testing purposes. To be deleted later.
+			return OPBClassesForBaseUnitsTable.get(baseUnits);
+		}
+		return null;
+	}
+	
 	public Hashtable<String, String[]> getOntTermsandNamesCache() {
 		return ontologyTermsAndNamesCache;
 	}
@@ -99,6 +237,10 @@ public class SemSimLibrary {
 	public ReferenceOntologyAnnotation getOPBAnnotationFromPhysicalUnit(DataStructure ds){
 		ReferenceOntologyAnnotation roa = null;
 		String[] candidateOPBclasses = getOPBUnitRefTerm(ds.getUnit().getName());
+		// If there is no OPB class, checkbase units.
+		if (candidateOPBclasses == null) {
+			candidateOPBclasses = getOPBBaseUnitRefTerms(ds);
+		}
 		if (candidateOPBclasses != null && candidateOPBclasses.length == 1) {
 			OWLClass cls = SemSimOWLFactory.factory.getOWLClass(IRI.create(SemSimConstants.OPB_NAMESPACE + candidateOPBclasses[0]));
 			String OPBpropname = SemSimOWLFactory.getRDFLabels(OPB, cls)[0];
