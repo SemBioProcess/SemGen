@@ -1,12 +1,11 @@
 package semgen.merging.workbench;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.swing.JSeparator;
+import org.apache.commons.lang3.tuple.Pair;
 
-import semgen.merging.ResolutionPanel;
-import semgen.utilities.SemGenError;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
@@ -29,7 +28,8 @@ public class SemanticComparator {
 		return matchedcdwds;
 	}
 	
-	public void identifyExactSemanticOverlap() {
+	public ArrayList<Pair<DataStructure, DataStructure>> identifyExactSemanticOverlap() {
+		ArrayList<Pair<DataStructure, DataStructure>> dsmatchlist = new ArrayList<Pair<DataStructure, DataStructure>>();
 		// Only include the annotated data structures in the resolution process
 		for(DataStructure ds1 : model1.getDataStructures()){
 			for(DataStructure ds2 : model2.getDataStructures()){
@@ -79,18 +79,11 @@ public class SemanticComparator {
 					}
 				}
 				if(match){
-					resolvepanel.add(new ResolutionPanel(workbench, ds1, ds2,
-							workbench.getModel(0), workbench.getModel(1), "(exact semantic match)", false));
-					resolvepanel.add(new JSeparator());
-					resolvepanel.validate();
-					resolvepanel.repaint();
+					dsmatchlist.add(Pair.of(ds1, ds2));
 				}
 			} // end of iteration through model2 data structures
 		} // end of iteration through model1 data structures
-		if (resolvepanel.getComponents().length==0) {
-			SemGenError.showError("SemGen did not find any semantic equivalencies between the models", "Merger message");
-		}
-		else resolvepanel.remove(resolvepanel.getComponentCount()-1); // remove last JSeparator
+		return dsmatchlist;
 	}
 	
 	public Boolean testNonCompositeAnnotations(ReferenceOntologyAnnotation ann1, ReferenceOntologyAnnotation ann2){

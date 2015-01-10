@@ -16,9 +16,6 @@ import semgen.utilities.uicomponent.SemGenProgressBar;
 public abstract class SemGenTask extends SwingWorker<Void, String> implements PropertyChangeListener {
 	protected SemGenProgressBar progframe = null;
 	
-	@Override
-	protected abstract Void doInBackground() throws Exception;
-	
     @Override
     public void done() {
     	if (progframe!=null) progframe.dispose();

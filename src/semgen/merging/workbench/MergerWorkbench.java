@@ -2,22 +2,38 @@ package semgen.merging.workbench;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Set;
 
+import org.apache.commons.lang3.tuple.Pair;
+import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
+import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLException;
+import org.semanticweb.owlapi.model.OWLOntologyManager;
+
+import semgen.encoding.Encoder;
+import semgen.merging.workbench.ModelOverlapMap.ResolutionChoice;
+import semgen.merging.workbench.ModelOverlapMap.maptype;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.LoadSemSimModel;
+import semgen.utilities.uicomponent.SemGenProgressBar;
 import semsim.model.SemSimModel;
+import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.ModelClassifier;
 
 public class MergerWorkbench extends Workbench {
 	ArrayList<SemSimModel> loadedmodels = new ArrayList<SemSimModel>();
-	ModelMapping modelmap = null;
+	private ArrayList<File> filepathlist = new ArrayList<File>();
+	private int modelselection = -1;
 	
-	int selection = -1;
+	private ModelOverlapMap overlapmap = null;
 	
+	private SemSimModel mergedmodel;
+
 	public enum MergeEvent {
-		functionalsubmodelerr, threemodelerror, modellistupdated, modelerrors;
+		functionalsubmodelerr, threemodelerror, modellistupdated, modelerrors,
+		mapfocuschanged, mappingadded, mergecompleted;
 		
 		String message = null;
 		
@@ -37,16 +53,10 @@ public class MergerWorkbench extends Workbench {
 			message = msg;
 		}
 	}
+
 	
 	@Override
-	public void initialize() {
-
-	}
-
-	private SemSimModel loadModel(String filepath, boolean autoannotate) {
-		File file = new File(filepath);
-		return loadModel(file, autoannotate);
-	}
+	public void initialize() {}
 	
 	private SemSimModel loadModel(File file, boolean autoannotate) {
 		SemSimModel modeltoload = LoadSemSimModel.loadSemSimModelFromFile(file, autoannotate);
@@ -74,14 +84,20 @@ public class MergerWorkbench extends Workbench {
 				continue;
 			} 
 			loadedmodels.add(loadModel(file, autoannotate));
+			filepathlist.add(file);
+			
 		}
 
 		notifyModelListUpdated();
 		return true;
 	}
 	
+	public Pair<DataStructureDescriptor,DataStructureDescriptor> getDSDescriptors(int index) {
+		return overlapmap.getDSPairDescriptors(index);
+	}
+	
 	public void reloadModel(int index, boolean autoannotate) {
-		String path = loadedmodels.get(index).getLegacyCodeLocation();
+		File path = filepathlist.get(index);
 		loadedmodels.set(index, loadModel(path, autoannotate));
 	}
 	
@@ -93,8 +109,9 @@ public class MergerWorkbench extends Workbench {
 	}
 	
 	public void removeSelectedModel() {
-		if (selection == -1) return;
-		loadedmodels.remove(selection);
+		if (modelselection == -1) return;
+		loadedmodels.remove(modelselection);
+		filepathlist.remove(modelselection);
 		notifyModelListUpdated();
 	}
 	
@@ -105,14 +122,6 @@ public class MergerWorkbench extends Workbench {
 	
 	public boolean hasMultipleModels() {
 		return (loadedmodels.size() > 1);
-	}
-	
-	public void mapModels() {
-		SemanticComparator comparator = new SemanticComparator(loadedmodels.get(0), loadedmodels.get(1));
-		modelmap = new ModelMapping(0, 1);
-		modelmap.setidentifyIdenticalCodewords();
-		modelmap.setIdenticalNames(commonnames)
-		initialidenticalinds.addAll(identicaldsnames);
 	}
 	
 	public boolean validateModels() {
@@ -128,6 +137,35 @@ public class MergerWorkbench extends Workbench {
 		return true;
 	}
 	
+	public void mapModels() {
+		SemanticComparator comparator = new SemanticComparator(loadedmodels.get(0), loadedmodels.get(1));
+		overlapmap = new ModelOverlapMap(0, 1, comparator);
+		setChanged();
+		notifyObservers(MergeEvent.mapfocuschanged);
+	}
+	
+	public HashMap<String, String> createIdenticalNameMap() {
+		HashMap<String, String> identicalmap = new HashMap<String,String>();
+		for (String name : overlapmap.getIdenticalNames()) {
+				identicalmap.put(name, "");
+		}
+		return identicalmap;
+	}
+	
+	public Pair<String, String> getMapPairNames(int index) {
+		return overlapmap.getDataStructurePairNames(index);
+	}
+	
+	public String getMapPairType(int index) {
+		return overlapmap.getMappingType(index);
+	}
+	
+	public Pair<String, String> getOverlapMapModelNames() {
+		Pair<Integer, Integer> indicies = overlapmap.getModelIndicies();
+		return Pair.of(loadedmodels.get(indicies.getLeft()).getName(), 
+				loadedmodels.get(indicies.getRight()).getName());
+	}
+	
 	public ArrayList<String> getModelNames() {
 		ArrayList<String> names = new ArrayList<String>();
 		for (SemSimModel model : loadedmodels) {
@@ -136,8 +174,69 @@ public class MergerWorkbench extends Workbench {
 		return names;
 	}
 	
+	public void addSemanticCodewordMapping(String cdwd1, String cdwd2) {
+		addCodewordMapping(cdwd1, cdwd2, maptype.exactsemaoverlap);
+	}
+	
+	public boolean addManualCodewordMapping(String cdwd1, String cdwd2) {
+		if (codewordMappingExists(cdwd1, cdwd2)) return false;
+		addCodewordMapping(cdwd1, cdwd2, maptype.manualmapping);
+		return true;
+	}
+	public int getMappingCount() {
+		return overlapmap.getMappingCount();
+	}
+	
+	public boolean hasSemanticOverlap() {
+		return (overlapmap.getMappingCount()>0);
+	}
+	
+	private void addCodewordMapping(String cdwd1, String cdwd2, maptype maptype) {
+		Pair<Integer, Integer> minds = overlapmap.getModelIndicies();
+		DataStructure ds1 = loadedmodels.get(minds.getLeft()).getDataStructure(cdwd1);
+		DataStructure ds2 = loadedmodels.get(minds.getRight()).getDataStructure(cdwd2);
+		
+		overlapmap.addDataStructureMapping(ds1, ds2, maptype);
+	}
+	
+	public boolean codewordMappingExists(String cdwd1uri, String cdwd2uri) {
+		return overlapmap.codewordsAlreadyMapped(cdwd1uri, cdwd2uri);
+	}
+	
 	public void setSelection(int index) {
-		selection = index;
+		modelselection = index;
+	}
+	
+	private Pair<SemSimModel, SemSimModel> getModelOverlapMapModels(ModelOverlapMap map) {
+		Pair<Integer, Integer> indexpair = map.getModelIndicies();
+		return Pair.of(loadedmodels.get(indexpair.getLeft()),loadedmodels.get(indexpair.getLeft()));
+	}
+	
+	public String executeMerge(HashMap<String,String> namemap, SemGenProgressBar bar) {
+		Pair<SemSimModel, SemSimModel> models = getModelOverlapMapModels(overlapmap);
+
+		if(models.getLeft().getSolutionDomains().size()<=1 && models.getRight().getSolutionDomains().size()<=1){
+			return "One of the models to be merged has multiple solution domains.";
+		}
+		
+		MergerTask task = new MergerTask(models, overlapmap, namemap, bar) {
+			public void endTask() {
+				setChanged();
+				notifyObservers(MergeEvent.mergecompleted);
+			}
+		};
+		task.execute();
+		mergedmodel = task.getMergedModel();
+		return null;
+	}
+	
+	public void saveMergedModel(File file) {
+		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+		try {
+			manager.saveOntology(mergedmodel.toOWLOntology(), new RDFXMLOntologyFormat(), IRI.create(file.getAbsolutePath()));
+		} catch (OWLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
@@ -152,19 +251,20 @@ public class MergerWorkbench extends Workbench {
 
 	@Override
 	public String getCurrentModelName() {
-		if (selection == -1) return null;
-		return loadedmodels.get(selection).getName();
+		if (modelselection == -1) return null;
+		return loadedmodels.get(modelselection).getName();
 	}
 
 	@Override
 	public String getModelSourceFile() {
-		if (selection == -1) return null;
-		return loadedmodels.get(selection).getLegacyCodeLocation();
+		if (modelselection == -1) return null;
+		return loadedmodels.get(modelselection).getLegacyCodeLocation();
 	}
 
 	@Override
 	public File saveModel() {
 		return null;
+
 	}
 
 	@Override
@@ -172,6 +272,10 @@ public class MergerWorkbench extends Workbench {
 		return null;
 	}
 
+	public void applyCodewordSelections(ArrayList<ResolutionChoice> choices) {
+		overlapmap.setUserSelections(choices);
+	}
+	
 	private void CellMLModelError(String name) {
 		MergeEvent.functionalsubmodelerr.setMessage(name);
 		setChanged();
@@ -180,36 +284,18 @@ public class MergerWorkbench extends Workbench {
 	}
 	
 	private void notifyModelListUpdated() {
-		selection = -1;
+		modelselection = -1;
 		setChanged();
 		notifyObservers(MergeEvent.modellistupdated);
 	}
 	
-	private class ModelMapping {
-		int index1, index2;
-		private Set<String> initialidenticalinds = new HashSet<String>();
-		private Set<String> identicaldsnames = new HashSet<String>();
-		
-		ModelMapping(int ind1, int ind2) {
-			index1 = ind1;
-			index2 = ind2;
-		}
-		
-		public void setIdenticalNames(Set<String> commonnames) {
-			identicaldsnames = commonnames;
-		}
-		
-		public void setIdenticalIndviduals(Set<String> commoninds) {
-			initialidenticalinds = commoninds;
-		}
-		
-		public Set<String> getIdenticalNames() {
-			return identicaldsnames;
-		}
-		
-		public Set<String> getIdenticalIndividuals() {
-			return initialidenticalinds;
-		}
+	public String getMergedModelName() {
+		return mergedmodel.getName();
 	}
+	
+	public void encodeMergedModel(String filepath) {
+		new Encoder(mergedmodel, filepath.substring(0, filepath.lastIndexOf(".")));
+	}
+	
 	
 }

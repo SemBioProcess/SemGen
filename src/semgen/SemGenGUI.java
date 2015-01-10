@@ -12,7 +12,7 @@ import semgen.extraction.ExtractorTabFactory;
 import semgen.extraction.workbench.ExtractorFactory;
 import semgen.menu.SemGenMenuBar;
 import semgen.merging.MergerTabFactory;
-import semgen.merging.workbench.MergerFactory;
+import semgen.merging.workbench.MergerWorkbenchFactory;
 import semgen.utilities.SemGenTask;
 import semgen.utilities.Workbench;
 import semgen.utilities.WorkbenchFactory;
@@ -99,7 +99,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 	}
 	
 	public void startNewMergerTask(){
-		MergerFactory factory = new MergerFactory();
+		MergerWorkbenchFactory factory = new MergerWorkbenchFactory();
 		MergerTabFactory tabfactory = new MergerTabFactory(settings, globalactions);
 		addTab(factory, tabfactory);
 	}
