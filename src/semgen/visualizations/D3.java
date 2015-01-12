@@ -1,13 +1,8 @@
 package semgen.visualizations;
 
-import java.awt.Desktop;
-import java.io.File;
-import java.io.FileWriter;
+import java.awt.BorderLayout;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,7 +10,13 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.io.FileUtils;
+import javax.swing.JPanel;
+
+import chrriis.common.WebServer;
+import chrriis.dj.nativeswing.swtimpl.NativeInterface;
+import chrriis.dj.nativeswing.swtimpl.components.WebBrowserAdapter;
+import chrriis.dj.nativeswing.swtimpl.components.WebBrowserEvent;
+
 import com.google.gson.Gson;
 
 import semgen.SemGen;
@@ -36,8 +37,8 @@ import semsim.model.computational.datastructures.MappableVariable;
  */
 public class D3 {
 
-	// D3 resource directory
-	private final static String D3ResourceDirectory = "/resources/d3/";
+	// D3 main html file
+	private final static String D3MainHtml = "/resources/d3/main.html";
 	
 	// Json representation of the semsim model
 	private String _graphJson;
@@ -61,32 +62,41 @@ public class D3 {
 	 * @throws URISyntaxException 
 	 * @throws IOException
 	 */
-	public boolean visualize()
+	public JPanel visualize()
 	{
-		try
-		{
-			// Copy the d3 directory to a temp directory
-			File tempDir = Files.createTempDirectory("semgen-d3-" + Long.toString(System.nanoTime())).toFile();
-			File d3Dir = new File(D3.class.getResource(D3ResourceDirectory).toURI());
-			FileUtils.copyDirectory(d3Dir, tempDir);
-			
-			// Replace the contents of graphData.json with the semsim model's json
-			File graphData = new File(tempDir, "/js/graphData.js");
-			FileWriter graphDataWriter = new FileWriter(graphData, false);
-			graphDataWriter.write("var graph = " + _graphJson);
-			graphDataWriter.close();
-
-		    // Open main.html
-			File mainHtml = new File(tempDir, "/main.html");
-		    Desktop.getDesktop().browse(mainHtml.toURI());
-		}
-		catch(IOException | URISyntaxException e)
-		{
-			e.printStackTrace();
-			return false;
-		}
+		System.out.println("Loading d3 graph");
 		
-		return true;
+		NativeInterface.open();
+		
+		// Embed the browser in a java panel
+		JPanel webBrowserPanel = new JPanel(new BorderLayout());
+		CommunicatingWebBrowser<D3WebBrowserCommandSender> webBrowser = new CommunicatingWebBrowser<D3WebBrowserCommandSender>(D3WebBrowserCommandSender.class);
+	    webBrowser.setMenuBarVisible(false);
+        webBrowser.setBarsVisible(false);
+        webBrowser.setFocusable(false);
+	    webBrowser.navigate(WebServer.getDefaultWebServer().getClassPathResourceURL(getClass().getName(), D3MainHtml));
+	    webBrowserPanel.add(webBrowser, BorderLayout.CENTER);
+	    
+	    // Used to send commands to javascript
+	    final D3WebBrowserCommandSender commandSender = webBrowser.getCommandSender();
+	    
+	    // When the page is loaded send the graph json to the browser
+	    webBrowser.addWebBrowserListener(new WebBrowserAdapter() {
+
+	    	@Override
+			public void loadingProgressChanged(WebBrowserEvent e) {
+	    		if(e.getWebBrowser().getLoadingProgress() == 100)
+	    		{
+	    			// Send the json to javascript
+	    			commandSender.loadGraph(D3.this._graphJson);
+	    			e.getWebBrowser().removeWebBrowserListener(this);
+	    		}
+	    	}
+		});
+
+	    System.out.println("D3 graph loaded.");
+	    
+	    return webBrowserPanel;
 	}
 	
 	/**
@@ -153,7 +163,9 @@ public class D3 {
 	 *
 	 */
 	private class Node {
+		@SuppressWarnings("unused")
 		public int group;
+		
 		public String name;
 		
 		private transient int _nodeIndex;
@@ -175,8 +187,13 @@ public class D3 {
 	 *
 	 */
 	private class Link {
+		@SuppressWarnings("unused")
 		public int source;
+		
+		@SuppressWarnings("unused")
 		public int target;
+		
+		@SuppressWarnings("unused")
 		public int value;
 		
 		public Link(int source, int target)

@@ -1,24 +1,26 @@
 $(window).load(function load() {
-	// Listen for clicks on the graph type buttons
-	$(".graphTypes>li").click(showGraph);
+	javaCommandReciever.onLoadGraph(function (data) {
+		// Listen for clicks on the graph type buttons
+		$(".graphTypes>li").click(showGraph);
 
-	var color = d3.scale.category10();
-	
-	// Build the legend
-	var legend = $(".legend")[0];
-	var groupsWithColors = {};
-	for(group in graph.groups)
-	{
-		var className = "legendItem" + group;
-		legend.innerHTML +=
-			"<li class='" + className + "'>" +
-				graph.groups[group]	+																// Group name
-				"<style> ." + className + ":before { color: " + color(group) + "; } </style>" +		// Group color
-			"</li>";
-	}
-	
-	// Simulate a click on the default graph button so the default graph shows
-	$(".defaultGraphButton").click();
+		var color = d3.scale.category10();
+		
+		// Build the legend
+		var legend = $(".legend")[0];
+		var groupsWithColors = {};
+		for(group in graph.groups)
+		{
+			var className = "legendItem" + group;
+			legend.innerHTML +=
+				"<li class='" + className + "'>" +
+					graph.groups[group]	+																// Group name
+					"<style> ." + className + ":before { color: " + color(group) + "; } </style>" +		// Group color
+				"</li>";
+		}
+		
+		// Simulate a click on the default graph button so the default graph shows
+		$(".defaultGraphButton").click();
+	});
 });
 
 function showGraph() {
