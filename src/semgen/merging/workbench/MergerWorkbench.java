@@ -3,6 +3,7 @@ package semgen.merging.workbench;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -13,7 +14,7 @@ import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import semgen.encoding.Encoder;
-import semgen.merging.workbench.ModelOverlapMap.ResolutionChoice;
+import semgen.merging.workbench.Merger.ResolutionChoice;
 import semgen.merging.workbench.ModelOverlapMap.maptype;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.LoadSemSimModel;
@@ -144,10 +145,18 @@ public class MergerWorkbench extends Workbench {
 		notifyObservers(MergeEvent.mapfocuschanged);
 	}
 	
-	public HashMap<String, String> createIdenticalNameMap() {
+	public HashMap<String, String> createIdenticalNameMap(ArrayList<ResolutionChoice> choicelist) {
 		HashMap<String, String> identicalmap = new HashMap<String,String>();
+		Set<String> identolnames = new HashSet<String>();
+		for (int i=0; i<choicelist.size(); i++) {	
+			if (!choicelist.get(i).equals(ResolutionChoice.ignore)) {
+				identolnames.add(overlapmap.getDataStructurePairNames(i).getLeft());
+			}
+		}
 		for (String name : overlapmap.getIdenticalNames()) {
+			if (!identolnames.contains(name)) {
 				identicalmap.put(name, "");
+			}
 		}
 		return identicalmap;
 	}
@@ -209,31 +218,33 @@ public class MergerWorkbench extends Workbench {
 	
 	private Pair<SemSimModel, SemSimModel> getModelOverlapMapModels(ModelOverlapMap map) {
 		Pair<Integer, Integer> indexpair = map.getModelIndicies();
-		return Pair.of(loadedmodels.get(indexpair.getLeft()),loadedmodels.get(indexpair.getLeft()));
+		return Pair.of(loadedmodels.get(indexpair.getLeft()),loadedmodels.get(indexpair.getRight()));
 	}
 	
-	public String executeMerge(HashMap<String,String> namemap, SemGenProgressBar bar) {
+	public String executeMerge(HashMap<String,String> namemap, ArrayList<ResolutionChoice> choices, 
+			SemGenProgressBar bar) {
 		Pair<SemSimModel, SemSimModel> models = getModelOverlapMapModels(overlapmap);
 
-		if(models.getLeft().getSolutionDomains().size()<=1 && models.getRight().getSolutionDomains().size()<=1){
+		if(models.getLeft().getSolutionDomains().size()>1 || models.getRight().getSolutionDomains().size()>1){
 			return "One of the models to be merged has multiple solution domains.";
 		}
 		
-		MergerTask task = new MergerTask(models, overlapmap, namemap, bar) {
+		MergerTask task = new MergerTask(models, overlapmap, namemap, choices, bar) {
 			public void endTask() {
+				mergedmodel = getMergedModel();
 				setChanged();
 				notifyObservers(MergeEvent.mergecompleted);
 			}
 		};
 		task.execute();
-		mergedmodel = task.getMergedModel();
+		
 		return null;
 	}
 	
 	public void saveMergedModel(File file) {
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		try {
-			manager.saveOntology(mergedmodel.toOWLOntology(), new RDFXMLOntologyFormat(), IRI.create(file.getAbsolutePath()));
+			manager.saveOntology(mergedmodel.toOWLOntology(), new RDFXMLOntologyFormat(), IRI.create(file.toURI()));
 		} catch (OWLException e) {
 			e.printStackTrace();
 		}
@@ -270,10 +281,6 @@ public class MergerWorkbench extends Workbench {
 	@Override
 	public File saveModelAs() {
 		return null;
-	}
-
-	public void applyCodewordSelections(ArrayList<ResolutionChoice> choices) {
-		overlapmap.setUserSelections(choices);
 	}
 	
 	private void CellMLModelError(String name) {

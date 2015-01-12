@@ -19,7 +19,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import semgen.merging.workbench.DataStructureDescriptor;
 import semgen.merging.workbench.DataStructureDescriptor.Descriptor;
-import semgen.merging.workbench.ModelOverlapMap.ResolutionChoice;
+import semgen.merging.workbench.Merger.ResolutionChoice;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 

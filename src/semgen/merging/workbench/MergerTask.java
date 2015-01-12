@@ -1,9 +1,11 @@
 package semgen.merging.workbench;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import semgen.merging.workbench.Merger.ResolutionChoice;
 import semgen.utilities.SemGenTask;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semsim.SemSimUtil;
@@ -13,17 +15,20 @@ public class MergerTask extends SemGenTask {
 	private SemSimModel ssm1clone, ssm2clone, mergedmodel;
 	private ModelOverlapMap overlapmap;
 	private HashMap<String, String> cwnamemap;
+	ArrayList<ResolutionChoice> choicelist;
 	
 	MergerTask(Pair<SemSimModel, SemSimModel> modelpair,
-			ModelOverlapMap modelmap,HashMap<String, String> namemap, SemGenProgressBar bar) {
+			ModelOverlapMap modelmap,HashMap<String, String> namemap, ArrayList<ResolutionChoice> choices, 
+			SemGenProgressBar bar) {
 		overlapmap = modelmap;
 		try {
 			ssm1clone = modelpair.getLeft().clone();
 			ssm2clone = modelpair.getRight().clone();
-			cwnamemap = namemap;
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}
+		cwnamemap = namemap;
+		choicelist = choices;
 		progframe = bar;
 	}
 	
@@ -31,7 +36,7 @@ public class MergerTask extends SemGenTask {
     public Void doInBackground() {	
     	try {
     		resolveSyntacticOverlap();
-			Merger merger = new Merger(ssm1clone, ssm2clone, overlapmap);
+			Merger merger = new Merger(ssm1clone, ssm2clone, overlapmap, choicelist);
 			mergedmodel = merger.merge();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -42,7 +47,7 @@ public class MergerTask extends SemGenTask {
 	// Why isn't this working for Pandit-Hinch merge?
 	// Prompt the user to resolve the points of SYNTACTIC overlap (same codeword names)
 	private void resolveSyntacticOverlap() {
-		for (String dsname : overlapmap.getIdenticalNames()) {
+		for (String dsname : cwnamemap.keySet()) {
 			String newdsname = cwnamemap.get(dsname);
 			ssm1clone.getDataStructure(dsname).setName(newdsname);
 			Boolean derivreplace = false;

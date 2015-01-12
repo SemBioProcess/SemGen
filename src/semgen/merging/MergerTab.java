@@ -29,6 +29,7 @@ import semgen.SemGenSettings;
 import semgen.merging.filepane.ModelList;
 import semgen.merging.resolutionpane.ResolutionPane;
 import semgen.merging.workbench.MergerWorkbench;
+import semgen.merging.workbench.Merger.ResolutionChoice;
 import semgen.merging.workbench.MergerWorkbench.MergeEvent;
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
@@ -173,15 +174,16 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 	}
 	
 	public void mergeButtonAction() {
-		if (respane.pollResolutionList()) {
+		ArrayList<ResolutionChoice> choicelist = respane.pollResolutionList();
+		if (choicelist != null) {
 				addmanualmappingbutton.setEnabled(false);
-				HashMap<String, String> cwnamemap = workbench.createIdenticalNameMap();
+				HashMap<String, String> cwnamemap = workbench.createIdenticalNameMap(choicelist);
 				for (String name : cwnamemap.keySet()) {
 					String newname = changeCodeWordNameDialog(name);
 					cwnamemap.put(name, newname);
 				}
 				SemGenProgressBar progframe = new SemGenProgressBar("Merging...", true);
-				String error = workbench.executeMerge(cwnamemap, progframe);
+				String error = workbench.executeMerge(cwnamemap, choicelist, progframe);
 				if (error!=null){
 					SemGenError.showError(
 							"ERROR: " + error, "Merge Failed");
@@ -192,7 +194,6 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 			return;
 		}
 	}
-
 	
 	public void PlusButtonAction(){
 		Set<File> files = new HashSet<File>();
@@ -309,7 +310,7 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 	
 	public File saveMerge() {
 		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("Choose location to save file", 
-				new String[]{"cellml","owl"});
+				new String[]{"owl"});
 		
 		if (filec.SaveAsAction()!=null) {
 			return filec.getSelectedFile();

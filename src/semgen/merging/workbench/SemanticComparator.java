@@ -21,9 +21,19 @@ public class SemanticComparator {
 	
 	public Set<String> identifyIdenticalCodewords() {
 		Set<String> matchedcdwds = new HashSet<String>();
+		String slndomainname = null; 
 		for (DataStructure ds : model1.getDataStructures()) {
 			if (model2.containsDataStructure(ds.getName()))
 				matchedcdwds.add(ds.getName());
+			if (ds.isSolutionDomain()) {
+				slndomainname = ds.getName();
+			}
+		}
+		if (slndomainname != null) {
+			matchedcdwds.remove(slndomainname);
+			matchedcdwds.remove(slndomainname + ".min");
+			matchedcdwds.remove(slndomainname + ".max");
+			matchedcdwds.remove(slndomainname + ".delta");
 		}
 		return matchedcdwds;
 	}

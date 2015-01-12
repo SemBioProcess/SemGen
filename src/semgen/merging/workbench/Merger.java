@@ -1,11 +1,13 @@
 package semgen.merging.workbench;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import org.apache.commons.lang3.tuple.Pair;
 import org.jdom.JDOMException;
 import org.semanticweb.owlapi.model.OWLException;
+
 import semgen.merging.dialog.ConversionFactorDialog;
-import semgen.merging.workbench.ModelOverlapMap.ResolutionChoice;
 import semgen.merging.workbench.ModelOverlapMap.maptype;
 import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
@@ -17,11 +19,17 @@ public class Merger {
 	private SemSimModel ssm1clone, ssm2clone;
 	private ModelOverlapMap overlapmap;
 	protected String error;
+	private ArrayList<ResolutionChoice> choicelist;
 	
-	public Merger(SemSimModel model1, SemSimModel model2, ModelOverlapMap modelmap) {
+	public static enum ResolutionChoice {
+		noselection, first, second, ignore; 
+	}
+	
+	public Merger(SemSimModel model1, SemSimModel model2, ModelOverlapMap modelmap, ArrayList<ResolutionChoice> choices) {
 		ssm1clone = model1;
 		ssm2clone = model2;
 		overlapmap = modelmap;
+		choicelist = choices;
 	}
 	
 	public SemSimModel merge() throws IOException, CloneNotSupportedException, OWLException, InterruptedException, JDOMException, Xcept {
@@ -31,19 +39,19 @@ public class Merger {
 		DataStructure soldom1 = ssm1clone.getSolutionDomains().toArray(new DataStructure[]{})[0];
 		DataStructure soldom2 = ssm2clone.getSolutionDomains().toArray(new DataStructure[]{})[0];
 		overlapmap.addDataStructureMapping(soldom1, soldom2, maptype.automapping);
+		choicelist.add(ResolutionChoice.first);
 		
 		SemSimModel modelfordiscardedds = null;
 		int i = 0;
+		DataStructure discardedds = null;
+		DataStructure keptds = null;
 		for (Pair<DataStructure, DataStructure> dsp : overlapmap.getDataStructurePairs()) {
-			DataStructure discardedds = null;
-			DataStructure keptds = null;
-			if (overlapmap.getResolution(i).equals(ResolutionChoice.first) || 
-					dsp.getLeft().isSolutionDomain()){
+			if (choicelist.get(i).equals(ResolutionChoice.first)) {
 				discardedds = dsp.getRight();
 				keptds = dsp.getLeft();
 				modelfordiscardedds = ssm2clone;
 			}
-			else if(overlapmap.getResolution(i).equals(ResolutionChoice.second)){
+			else if(choicelist.get(i).equals(ResolutionChoice.second)){
 				discardedds = dsp.getLeft();
 				keptds = dsp.getRight();
 				modelfordiscardedds = ssm1clone;
@@ -51,58 +59,8 @@ public class Merger {
 			
 			// If "ignore equivalency" is not selected"
 			if(keptds!=null && discardedds !=null){	
-				// If we need to add in a unit conversion factor
-				String replacementtext = keptds.getName();
-				Boolean cancelmerge = false;
-				double conversionfactor = 1;
-				if(keptds.hasUnits() && discardedds.hasUnits()){
-					if (!keptds.getUnit().getComputationalCode().equals(discardedds.getUnit().getComputationalCode())){
-						ConversionFactorDialog condia = new ConversionFactorDialog(
-								keptds.getName(), discardedds.getName(), keptds.getUnit().getComputationalCode(),
-								discardedds.getUnit().getComputationalCode());
-						replacementtext = condia.cdwdAndConversionFactor;
-						conversionfactor = condia.conversionfactor;
-						cancelmerge = !condia.process;
-					}
-				}
-				
-				if(cancelmerge) return null;
-				
-				// if the two terms have different names, or a conversion factor is required
-				if(!discardedds.getName().equals(keptds.getName()) || conversionfactor!=1){
-					SemSimUtil.replaceCodewordInAllEquations(discardedds, keptds, modelfordiscardedds, discardedds.getName(), replacementtext, conversionfactor);
-				}
-				// What to do about sol doms that have different units?
-				
-				if(discardedds.isSolutionDomain()){
-				  // Re-set the solution domain designations for all DataStructures in model 2
-					for(DataStructure nsdds : ssm2clone.getDataStructures()){
-						if(nsdds.hasSolutionDomain())
-							nsdds.setSolutionDomain(soldom1);
-					}
-					// Remove .min, .max, .delta solution domain DataStructures
-					modelfordiscardedds.removeDataStructure(discardedds.getName() + ".min");
-					modelfordiscardedds.removeDataStructure(discardedds.getName() + ".max");
-					modelfordiscardedds.removeDataStructure(discardedds.getName() + ".delta");
-					overlapmap.getIdenticalNames().remove(discardedds.getName() + ".min");
-					overlapmap.getIdenticalNames().remove(discardedds.getName() + ".max");
-					overlapmap.getIdenticalNames().remove(discardedds.getName() + ".delta");
-				}
-				
-				// Remove the discarded Data Structure
-				modelfordiscardedds.removeDataStructure(discardedds.getName());
-				
-				// If we are removing a state variable, remove its derivative, if present
-				if(discardedds.hasSolutionDomain()){
-					if(modelfordiscardedds.containsDataStructure(discardedds.getName() + ":" + discardedds.getSolutionDomain().getName())){
-						modelfordiscardedds.removeDataStructure(discardedds.getName() + ":" + discardedds.getSolutionDomain().getName());
-					}
-				}
-				
-				// If the semantic resolution took care of a syntactic resolution
-				if(!overlapmap.getResolution(i).equals(ResolutionChoice.ignore)){
-					overlapmap.getIdenticalNames().remove(discardedds.getName());
-				}
+				if (!replaceCodeWords(keptds, discardedds, modelfordiscardedds, soldom1, i)) 
+					return null;
 			}
 			i++;
 		}
@@ -151,4 +109,59 @@ public class Merger {
 		
 		return mergedmodel;
 	}
+	
+	private boolean replaceCodeWords(DataStructure keptds, DataStructure discardedds, 
+			SemSimModel modelfordiscardedds, DataStructure soldom1, int index) {
+		// If we need to add in a unit conversion factor
+		String replacementtext = keptds.getName();
+		Boolean cancelmerge = false;
+		double conversionfactor = 1;
+		if(keptds.hasUnits() && discardedds.hasUnits()){
+			if (!keptds.getUnit().getComputationalCode().equals(discardedds.getUnit().getComputationalCode())){
+				ConversionFactorDialog condia = new ConversionFactorDialog(
+						keptds.getName(), discardedds.getName(), keptds.getUnit().getComputationalCode(),
+						discardedds.getUnit().getComputationalCode());
+				replacementtext = condia.cdwdAndConversionFactor;
+				conversionfactor = condia.conversionfactor;
+				cancelmerge = !condia.process;
+			}
+		}
+		
+		if(cancelmerge) return false;
+		
+		// if the two terms have different names, or a conversion factor is required
+		if(!discardedds.getName().equals(keptds.getName()) || conversionfactor!=1){
+			SemSimUtil.replaceCodewordInAllEquations(discardedds, keptds, modelfordiscardedds, discardedds.getName(), replacementtext, conversionfactor);
+		}
+		// What to do about sol doms that have different units?
+		
+		if(discardedds.isSolutionDomain()){
+		  // Re-set the solution domain designations for all DataStructures in model 2
+			for(DataStructure nsdds : ssm2clone.getDataStructures()){
+				if(nsdds.hasSolutionDomain())
+					nsdds.setSolutionDomain(soldom1);
+			}
+			// Remove .min, .max, .delta solution domain DataStructures
+			modelfordiscardedds.removeDataStructure(discardedds.getName() + ".min");
+			modelfordiscardedds.removeDataStructure(discardedds.getName() + ".max");
+			modelfordiscardedds.removeDataStructure(discardedds.getName() + ".delta");
+		}
+		
+		// Remove the discarded Data Structure
+		modelfordiscardedds.removeDataStructure(discardedds.getName());
+		
+		// If we are removing a state variable, remove its derivative, if present
+		if(discardedds.hasSolutionDomain()){
+			if(modelfordiscardedds.containsDataStructure(discardedds.getName() + ":" + discardedds.getSolutionDomain().getName())){
+				modelfordiscardedds.removeDataStructure(discardedds.getName() + ":" + discardedds.getSolutionDomain().getName());
+			}
+		}
+		
+		// If the semantic resolution took care of a syntactic resolution
+		if(!choicelist.get(index).equals(ResolutionChoice.ignore)){
+			overlapmap.getIdenticalNames().remove(discardedds.getName());
+		}
+		return true;
+	}
+	
 }

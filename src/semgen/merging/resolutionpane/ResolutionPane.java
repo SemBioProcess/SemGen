@@ -19,9 +19,9 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import semgen.merging.ResolutionPanel;
 import semgen.merging.workbench.DataStructureDescriptor;
+import semgen.merging.workbench.Merger.ResolutionChoice;
 import semgen.merging.workbench.MergerWorkbench;
 import semgen.merging.workbench.MergerWorkbench.MergeEvent;
-import semgen.merging.workbench.ModelOverlapMap.ResolutionChoice;
 import semgen.utilities.SemGenError;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 
@@ -47,7 +47,6 @@ public class ResolutionPane extends JPanel implements Observer, ActionListener {
 		
 		for (int i = 0; i < workbench.getMappingCount(); i++) {
 			addMapping(i);
-			add(new JSeparator());
 		}
 		
 		validate();
@@ -62,6 +61,7 @@ public class ResolutionPane extends JPanel implements Observer, ActionListener {
 				workbench.getMapPairType(index));
 		
 		resbtn.addMouseListener(new ResPaneMouse(resbtn));
+		resolvelist.add(resbtn);
 		add(resbtn);
 	}
 	
@@ -88,14 +88,13 @@ public class ResolutionPane extends JPanel implements Observer, ActionListener {
 		}
 	}
 	
-	public boolean pollResolutionList() {
+	public ArrayList<ResolutionChoice>  pollResolutionList() {
 		ArrayList<ResolutionChoice> choicelist = new ArrayList<ResolutionChoice>();
 		for (ResolutionPanel panel : resolvelist) {
-			if (panel.getSelection().equals(ResolutionChoice.noselection)) return false;
+			if (panel.getSelection().equals(ResolutionChoice.noselection)) return null;
 			choicelist.add(panel.getSelection());
 		}
-		workbench.applyCodewordSelections(choicelist);
-		return true;
+		return choicelist;
 	}
 	
 	class ResPaneMouse extends MouseAdapter {

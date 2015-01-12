@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
+
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.owl.SemSimOWLFactory;
 
@@ -11,12 +12,9 @@ public class ModelOverlapMap {
 	Pair<Integer, Integer> modelindicies;
 	private Set<String> identicaldsnames;
 	private ArrayList<Pair<DataStructure, DataStructure>> dsmap = new ArrayList<Pair<DataStructure, DataStructure>>();
-	private ArrayList<ResolutionChoice> choicelist;
+
 	private ArrayList<maptype> maptypelist = new ArrayList<maptype>();	
 	
-	public static enum ResolutionChoice {
-		noselection, first, second, ignore; 
-	}
 	protected static enum maptype {
 		exactsemaoverlap("(exact semantic match)"), 
 		manualmapping("(manual mapping)"),
@@ -32,11 +30,12 @@ public class ModelOverlapMap {
 
 	public ModelOverlapMap(int ind1, int ind2, SemanticComparator comparator) {
 		modelindicies = Pair.of(ind1, ind2);
-		identicaldsnames = comparator.identifyIdenticalCodewords();
 		for (Pair<DataStructure, DataStructure> dspair : comparator.identifyExactSemanticOverlap()) {
 			addDataStructureMapping(dspair.getLeft(), dspair.getRight(), maptype.exactsemaoverlap);
 		}
+		identicaldsnames = comparator.identifyIdenticalCodewords();
 	}
+	
 	
 	public String getMappingType(int index) {
 		return maptypelist.get(index).getLabel();
@@ -97,13 +96,5 @@ public class ModelOverlapMap {
 	
 	public ArrayList<Pair<DataStructure, DataStructure>> getDataStructurePairs() {
 		return dsmap;
-	}
-	
-	public void setUserSelections(ArrayList<ResolutionChoice> choices) {
-		choicelist = choices;
-	}
-	
-	public ResolutionChoice getResolution(int index) {
-		return choicelist.get(index);
 	}
 }
