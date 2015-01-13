@@ -120,7 +120,6 @@ public class SemGen extends JFrame implements Observer{
 		//of the main frame
 		SemGenError.setFrame(this);
 		SemGenDialog.setFrame(this);
-		SemGenProgressBar.setLocation(this);
 		
 		SemGenOpenFileChooser.currentdirectory = new File(settings.getStartDirectory());
 		// Need this for programmatic use of jsbatch
