@@ -22,10 +22,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
+import semgen.merging.dialog.ConversionFactorDialog;
 import semgen.merging.filepane.ModelList;
 import semgen.merging.resolutionpane.ResolutionPane;
 import semgen.merging.workbench.MergerWorkbench;
@@ -182,8 +184,23 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 					String newname = changeCodeWordNameDialog(name);
 					cwnamemap.put(name, newname);
 				}
+				ArrayList<Boolean> unitoverlaps = workbench.getUnitOverlaps();
+				ArrayList<Pair<Double,String>> conversionlist = new ArrayList<Pair<Double,String>>(); 
+				for (int i=0; i<unitoverlaps.size(); i++) {
+					if (!unitoverlaps.get(i)) {
+						ResolutionChoice choice = choicelist.get(i);
+						if (!choice.equals(ResolutionChoice.ignore)) {
+							//Prompt user for conversion factors, selection cancel returns 0 and cancels the merge
+							ConversionFactorDialog condia = new ConversionFactorDialog(workbench.getDSDescriptors(i), choice.equals(ResolutionChoice.first));
+							if (condia.getConversionFactor().equals(0.0)) return;
+							conversionlist.add(condia.getConversionFactor());
+							continue;
+						}
+					}
+					conversionlist.add(Pair.of(1.0, "*"));
+				}
 				SemGenProgressBar progframe = new SemGenProgressBar("Merging...", true);
-				String error = workbench.executeMerge(cwnamemap, choicelist, progframe);
+				String error = workbench.executeMerge(cwnamemap, choicelist, conversionlist, progframe);
 				if (error!=null){
 					SemGenError.showError(
 							"ERROR: " + error, "Merge Failed");
@@ -193,6 +210,7 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 			JOptionPane.showMessageDialog(this, "Some codeword overlaps are unresolved.");
 			return;
 		}
+		
 	}
 	
 	public void PlusButtonAction(){
@@ -242,17 +260,6 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 		else mergebutton.setEnabled(false);
 	}
 
-
-	public void optionToEncode(String filepath) throws IOException, OWLException {
-		int x = JOptionPane.showConfirmDialog(this, "Finished merging "
-				+ workbench.getMergedModelName()
-				+ "\nGenerate simulation code from merged model?", "",
-				JOptionPane.YES_NO_OPTION);
-		if (x == JOptionPane.YES_OPTION) {
-			workbench.encodeMergedModel(filepath);
-		}
-	}
-
 	public String changeCodeWordNameDialog(String dsname) {
 		String newdsname = null;
 		while(true){
@@ -267,6 +274,16 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 			}
 		}
 		return newdsname;
+	}
+	
+	public void optionToEncode(String filepath) throws IOException, OWLException {
+		int x = JOptionPane.showConfirmDialog(this, "Finished merging "
+				+ workbench.getMergedModelName()
+				+ "\nGenerate simulation code from merged model?", "",
+				JOptionPane.YES_NO_OPTION);
+		if (x == JOptionPane.YES_OPTION) {
+			workbench.encodeMergedModel(filepath);
+		}
 	}
 	
 	public void populateMappingPanel(String filename, SemSimModel model, MappingPanel mappingpanel, Color color) {

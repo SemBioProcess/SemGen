@@ -12,6 +12,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import org.apache.commons.lang3.tuple.Pair;
+
+import semgen.merging.workbench.DataStructureDescriptor;
+import semgen.merging.workbench.DataStructureDescriptor.Descriptor;
 import semgen.utilities.uicomponent.SemGenDialog;
 
 public class ConversionFactorDialog extends SemGenDialog implements
@@ -20,16 +24,25 @@ public class ConversionFactorDialog extends SemGenDialog implements
 	private static final long serialVersionUID = -3182047942231432822L;
 	private JOptionPane optionPane;
 	private JTextField mantextfield = new JTextField();
-	private String cdwd2keep;
-	private JComboBox<String> box = new JComboBox<String>(new String[] { "*", "/" });;
-	public Boolean process = true;
-	public String cdwdAndConversionFactor;
-	public double conversionfactor;
+	private JComboBox<String> box = new JComboBox<String>(new String[] { "*", "/" });
+	private Pair<Double, String> conversionfactor;
 
-	public ConversionFactorDialog(String cdwd2keep, String cdwd2discard,
-			String cdwd2keepunits, String cdwd2discardunits) {
-		super("Ensuring unitary balances");
-		this.cdwd2keep = cdwd2keep;
+	public ConversionFactorDialog(Pair<DataStructureDescriptor, DataStructureDescriptor> descs, 
+			boolean keepleft) {
+		super("Unit Conflict");
+		String cdwd2keep, cdwd2keepunits, cdwd2discard, cdwd2discardunits;
+		if (keepleft) {
+			cdwd2keep = descs.getLeft().getDescriptorValue(Descriptor.name);
+			cdwd2keepunits = descs.getLeft().getDescriptorValue(Descriptor.computationalcode);
+			cdwd2discard = descs.getRight().getDescriptorValue(Descriptor.name);
+			cdwd2discardunits = descs.getRight().getDescriptorValue(Descriptor.computationalcode);
+		}
+		else {
+			cdwd2keep = descs.getRight().getDescriptorValue(Descriptor.name);
+			cdwd2keepunits = descs.getRight().getDescriptorValue(Descriptor.computationalcode);
+			cdwd2discard = descs.getLeft().getDescriptorValue(Descriptor.name);
+			cdwd2discardunits = descs.getLeft().getDescriptorValue(Descriptor.computationalcode);
+		}
 		
 		JTextArea area = new JTextArea();
 		area.setOpaque(false);
@@ -68,32 +81,34 @@ public class ConversionFactorDialog extends SemGenDialog implements
 	public void propertyChange(PropertyChangeEvent e) {
 		if (e.getPropertyName()=="value") {
 			String value = optionPane.getValue().toString();
+			Double conversion = 0.0;
 			if (value == "OK") {
-				Boolean oktoproceed = true;
-				try{
-					conversionfactor = Double.parseDouble(mantextfield.getText());
-				}
-				catch(NumberFormatException ex){oktoproceed = false;}
-				if (!mantextfield.getText().equals("")
-						&& mantextfield.getText() != null
-						&& oktoproceed) {
-					cdwdAndConversionFactor = "(" + cdwd2keep + box.getSelectedItem() + mantextfield.getText() + ")";
-					if (mantextfield.getText().equals("1")) {
-						cdwdAndConversionFactor = cdwd2keep;
-						process = true;
+				
+				boolean proceed = true;
+				if(!mantextfield.getText().equals("")) {
+					try {
+						conversion = Double.valueOf(mantextfield.getText());
+						proceed = (!Double.isNaN(conversion) &&  conversion != 0.0);
 					}
-				} 
-				else {
+					catch(NumberFormatException ex){
+						proceed = false;
+					}
+				} 	
+				if (!proceed) {
 					optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-					JOptionPane.showMessageDialog(this, "Please enter a valid conversion factor");
-					return;
+						JOptionPane.showMessageDialog(this, "Please enter a valid nonzero conversion factor");
+						return;
 				}
 			} 
 			else if (value == "Cancel") {
-				process = false;;
+				conversion = 0.0;
 			}
+			conversionfactor = Pair.of(conversion, box.getSelectedItem().toString());
 			dispose();
 		}
-		
+	}
+	
+	public Pair<Double, String> getConversionFactor() {
+		return conversionfactor;
 	}
 }

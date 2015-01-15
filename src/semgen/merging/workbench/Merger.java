@@ -7,7 +7,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jdom.JDOMException;
 import org.semanticweb.owlapi.model.OWLException;
 
-import semgen.merging.dialog.ConversionFactorDialog;
 import semgen.merging.workbench.ModelOverlapMap.maptype;
 import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
@@ -20,16 +19,19 @@ public class Merger {
 	private ModelOverlapMap overlapmap;
 	protected String error;
 	private ArrayList<ResolutionChoice> choicelist;
+	ArrayList<Pair<Double,String>> conversionfactors;
 	
 	public static enum ResolutionChoice {
 		noselection, first, second, ignore; 
 	}
 	
-	public Merger(SemSimModel model1, SemSimModel model2, ModelOverlapMap modelmap, ArrayList<ResolutionChoice> choices) {
+	public Merger(SemSimModel model1, SemSimModel model2, ModelOverlapMap modelmap, 
+			ArrayList<ResolutionChoice> choices, ArrayList<Pair<Double,String>> conversions) {
 		ssm1clone = model1;
 		ssm2clone = model2;
 		overlapmap = modelmap;
 		choicelist = choices;
+		conversionfactors = conversions;
 	}
 	
 	public SemSimModel merge() throws IOException, CloneNotSupportedException, OWLException, InterruptedException, JDOMException, Xcept {
@@ -114,24 +116,13 @@ public class Merger {
 			SemSimModel modelfordiscardedds, DataStructure soldom1, int index) {
 		// If we need to add in a unit conversion factor
 		String replacementtext = keptds.getName();
-		Boolean cancelmerge = false;
-		double conversionfactor = 1;
-		if(keptds.hasUnits() && discardedds.hasUnits()){
-			if (!keptds.getUnit().getComputationalCode().equals(discardedds.getUnit().getComputationalCode())){
-				ConversionFactorDialog condia = new ConversionFactorDialog(
-						keptds.getName(), discardedds.getName(), keptds.getUnit().getComputationalCode(),
-						discardedds.getUnit().getComputationalCode());
-				replacementtext = condia.cdwdAndConversionFactor;
-				conversionfactor = condia.conversionfactor;
-				cancelmerge = !condia.process;
-			}
-		}
 		
-		if(cancelmerge) return false;
-		
+		Pair<Double, String> conversionfactor = conversionfactors.get(index);
 		// if the two terms have different names, or a conversion factor is required
-		if(!discardedds.getName().equals(keptds.getName()) || conversionfactor!=1){
-			SemSimUtil.replaceCodewordInAllEquations(discardedds, keptds, modelfordiscardedds, discardedds.getName(), replacementtext, conversionfactor);
+		if(!discardedds.getName().equals(keptds.getName()) || conversionfactor.getLeft()!=1){
+			replacementtext = "(" + keptds.getName() + conversionfactor.getRight() + String.valueOf(conversionfactor.getLeft()) + ")";
+			SemSimUtil.replaceCodewordInAllEquations(discardedds, keptds, modelfordiscardedds, 
+					discardedds.getName(), replacementtext, conversionfactor.getLeft());
 		}
 		// What to do about sol doms that have different units?
 		

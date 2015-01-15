@@ -97,4 +97,20 @@ public class ModelOverlapMap {
 	public ArrayList<Pair<DataStructure, DataStructure>> getDataStructurePairs() {
 		return dsmap;
 	}
+	
+	//Compare units of all Data Structures in the overlap map. Determine if terms are equivalent
+	// for each. Return a list of comparisons
+	public ArrayList<Boolean> compareDataStructureUnits() {
+		ArrayList<Boolean> unitmatchlist = new ArrayList<Boolean>();
+		for (Pair<DataStructure, DataStructure> dsp : dsmap) {
+			if(dsp.getLeft().hasUnits() && dsp.getRight().hasUnits()){
+				if (!dsp.getLeft().getUnit().getComputationalCode().equals(dsp.getRight().getUnit().getComputationalCode())){
+					unitmatchlist.add(false);
+					continue;
+				}
+			}
+			unitmatchlist.add(true);
+		}
+		return unitmatchlist;
+	}
 }

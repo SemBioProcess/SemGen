@@ -15,11 +15,12 @@ public class MergerTask extends SemGenTask {
 	private SemSimModel ssm1clone, ssm2clone, mergedmodel;
 	private ModelOverlapMap overlapmap;
 	private HashMap<String, String> cwnamemap;
-	ArrayList<ResolutionChoice> choicelist;
+	private ArrayList<ResolutionChoice> choicelist;
+	private ArrayList<Pair<Double,String>> conversionfactors;
 	
 	MergerTask(Pair<SemSimModel, SemSimModel> modelpair,
 			ModelOverlapMap modelmap,HashMap<String, String> namemap, ArrayList<ResolutionChoice> choices, 
-			SemGenProgressBar bar) {
+			ArrayList<Pair<Double,String>> conversions, SemGenProgressBar bar) {
 		overlapmap = modelmap;
 		try {
 			ssm1clone = modelpair.getLeft().clone();
@@ -29,6 +30,7 @@ public class MergerTask extends SemGenTask {
 		}
 		cwnamemap = namemap;
 		choicelist = choices;
+		conversionfactors = conversions;
 		progframe = bar;
 	}
 	
@@ -36,7 +38,7 @@ public class MergerTask extends SemGenTask {
     public Void doInBackground() {	
     	try {
     		resolveSyntacticOverlap();
-			Merger merger = new Merger(ssm1clone, ssm2clone, overlapmap, choicelist);
+			Merger merger = new Merger(ssm1clone, ssm2clone, overlapmap, choicelist, conversionfactors);
 			mergedmodel = merger.merge();
 		} catch (Exception e) {
 			e.printStackTrace();

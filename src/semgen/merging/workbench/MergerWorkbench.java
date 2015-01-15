@@ -221,15 +221,19 @@ public class MergerWorkbench extends Workbench {
 		return Pair.of(loadedmodels.get(indexpair.getLeft()),loadedmodels.get(indexpair.getRight()));
 	}
 	
+	public ArrayList<Boolean> getUnitOverlaps() {
+		return overlapmap.compareDataStructureUnits();
+	}
+	
 	public String executeMerge(HashMap<String,String> namemap, ArrayList<ResolutionChoice> choices, 
-			SemGenProgressBar bar) {
+			ArrayList<Pair<Double,String>> conversions, SemGenProgressBar bar) {
 		Pair<SemSimModel, SemSimModel> models = getModelOverlapMapModels(overlapmap);
 
 		if(models.getLeft().getSolutionDomains().size()>1 || models.getRight().getSolutionDomains().size()>1){
 			return "One of the models to be merged has multiple solution domains.";
 		}
 		
-		MergerTask task = new MergerTask(models, overlapmap, namemap, choices, bar) {
+		MergerTask task = new MergerTask(models, overlapmap, namemap, choices, conversions, bar) {
 			public void endTask() {
 				mergedmodel = getMergedModel();
 				setChanged();
