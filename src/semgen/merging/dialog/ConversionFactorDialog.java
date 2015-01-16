@@ -33,15 +33,15 @@ public class ConversionFactorDialog extends SemGenDialog implements
 		String cdwd2keep, cdwd2keepunits, cdwd2discard, cdwd2discardunits;
 		if (keepleft) {
 			cdwd2keep = descs.getLeft().getDescriptorValue(Descriptor.name);
-			cdwd2keepunits = descs.getLeft().getDescriptorValue(Descriptor.computationalcode);
+			cdwd2keepunits = descs.getLeft().getDescriptorValue(Descriptor.units);
 			cdwd2discard = descs.getRight().getDescriptorValue(Descriptor.name);
-			cdwd2discardunits = descs.getRight().getDescriptorValue(Descriptor.computationalcode);
+			cdwd2discardunits = descs.getRight().getDescriptorValue(Descriptor.units);
 		}
 		else {
 			cdwd2keep = descs.getRight().getDescriptorValue(Descriptor.name);
-			cdwd2keepunits = descs.getRight().getDescriptorValue(Descriptor.computationalcode);
+			cdwd2keepunits = descs.getRight().getDescriptorValue(Descriptor.units);
 			cdwd2discard = descs.getLeft().getDescriptorValue(Descriptor.name);
-			cdwd2discardunits = descs.getLeft().getDescriptorValue(Descriptor.computationalcode);
+			cdwd2discardunits = descs.getLeft().getDescriptorValue(Descriptor.units);
 		}
 		
 		JTextArea area = new JTextArea();

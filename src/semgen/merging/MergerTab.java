@@ -141,6 +141,8 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 		this.add(mappingbuttonpanel);
 		this.add(Box.createGlue());
 		this.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
+		
+		PlusButtonAction();
 	}
 	
 	public void actionPerformed(ActionEvent arg0) {
@@ -177,8 +179,10 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 	
 	public void mergeButtonAction() {
 		ArrayList<ResolutionChoice> choicelist = respane.pollResolutionList();
+		
 		if (choicelist != null) {
 				addmanualmappingbutton.setEnabled(false);
+				choicelist.add(0, ResolutionChoice.first); //add for solution domains
 				HashMap<String, String> cwnamemap = workbench.createIdenticalNameMap(choicelist);
 				for (String name : cwnamemap.keySet()) {
 					String newname = changeCodeWordNameDialog(name);
@@ -192,7 +196,7 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 						if (!choice.equals(ResolutionChoice.ignore)) {
 							//Prompt user for conversion factors, selection cancel returns 0 and cancels the merge
 							ConversionFactorDialog condia = new ConversionFactorDialog(workbench.getDSDescriptors(i), choice.equals(ResolutionChoice.first));
-							if (condia.getConversionFactor().equals(0.0)) return;
+							if (condia.getConversionFactor().getLeft().equals(0.0)) return;
 							conversionlist.add(condia.getConversionFactor());
 							continue;
 						}
@@ -210,7 +214,6 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 			JOptionPane.showMessageDialog(this, "Some codeword overlaps are unresolved.");
 			return;
 		}
-		
 	}
 	
 	public void PlusButtonAction(){
@@ -362,7 +365,6 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 				file = saveMerge();
 			}
 			workbench.saveMergedModel(file);
-	    	workbench.reloadAllModels(settings.doAutoAnnotate());
 			addmanualmappingbutton.setEnabled(true);
 			try {
 				optionToEncode(file.getAbsolutePath());

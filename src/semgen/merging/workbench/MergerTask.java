@@ -37,6 +37,7 @@ public class MergerTask extends SemGenTask {
     @Override
     public Void doInBackground() {	
     	try {
+    		removeDomainBounds(overlapmap.getSolutionDomain().getName());
     		resolveSyntacticOverlap();
 			Merger merger = new Merger(ssm1clone, ssm2clone, overlapmap, choicelist, conversionfactors);
 			mergedmodel = merger.merge();
@@ -76,6 +77,13 @@ public class MergerTask extends SemGenTask {
 		}
 	}
     
+	private void removeDomainBounds(String name) {
+		// Remove .min, .max, .delta solution domain DataStructures
+		ssm2clone.removeDataStructure(name + ".min");
+		ssm2clone.removeDataStructure(name + ".max");
+		ssm2clone.removeDataStructure(name + ".delta");
+	}
+	
     public SemSimModel getMergedModel() {
     	return mergedmodel;
     }

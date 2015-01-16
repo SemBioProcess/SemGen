@@ -7,7 +7,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jdom.JDOMException;
 import org.semanticweb.owlapi.model.OWLException;
 
-import semgen.merging.workbench.ModelOverlapMap.maptype;
 import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
@@ -36,17 +35,13 @@ public class Merger {
 	
 	public SemSimModel merge() throws IOException, CloneNotSupportedException, OWLException, InterruptedException, JDOMException, Xcept {
 		// First collect all the data structures that aren't going to be used in the resulting merged model
-		// Include a mapping between the solution domains
-		
-		DataStructure soldom1 = ssm1clone.getSolutionDomains().toArray(new DataStructure[]{})[0];
-		DataStructure soldom2 = ssm2clone.getSolutionDomains().toArray(new DataStructure[]{})[0];
-		overlapmap.addDataStructureMapping(soldom1, soldom2, maptype.automapping);
-		choicelist.add(ResolutionChoice.first);
 		
 		SemSimModel modelfordiscardedds = null;
 		int i = 0;
 		DataStructure discardedds = null;
 		DataStructure keptds = null;
+		DataStructure soldom1 = ssm1clone.getSolutionDomains().toArray(new DataStructure[]{})[0];
+
 		for (Pair<DataStructure, DataStructure> dsp : overlapmap.getDataStructurePairs()) {
 			if (choicelist.get(i).equals(ResolutionChoice.first)) {
 				discardedds = dsp.getRight();
@@ -66,7 +61,7 @@ public class Merger {
 			}
 			i++;
 		}
-		
+	
 		// What if both models have a custom phys component with the same name?
 		SemSimModel mergedmodel = ssm1clone;
 		
@@ -132,10 +127,6 @@ public class Merger {
 				if(nsdds.hasSolutionDomain())
 					nsdds.setSolutionDomain(soldom1);
 			}
-			// Remove .min, .max, .delta solution domain DataStructures
-			modelfordiscardedds.removeDataStructure(discardedds.getName() + ".min");
-			modelfordiscardedds.removeDataStructure(discardedds.getName() + ".max");
-			modelfordiscardedds.removeDataStructure(discardedds.getName() + ".delta");
 		}
 		
 		// Remove the discarded Data Structure

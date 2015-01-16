@@ -1,4 +1,4 @@
-package semgen.merging;
+package semgen.merging.resolutionpane;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -30,7 +31,7 @@ public class ResolutionPanel extends JPanel {
 	private JButton questionbutton = new JButton(SemGenIcon.questionicon);
 	private ResolutionChoice selection = ResolutionChoice.noselection;
 
-	public ResolutionPanel(ActionListener listener, DataStructureDescriptor ds1, 
+	public ResolutionPanel(DataStructureDescriptor ds1, 
 			DataStructureDescriptor ds2, 
 			Pair<String, String> modnames, String matchdescription) {
 		this.setLayout(new BorderLayout());
@@ -90,7 +91,7 @@ public class ResolutionPanel extends JPanel {
 		formatButton(rb3, null, ResolutionChoice.ignore);
 		rb3.setToolTipText("Preserve both codewords and their equations in the merged model");
 		
-		questionbutton.addActionListener(listener);
+
 		questionbutton.setBorderPainted(false);
 		questionbutton.setContentAreaFilled(false);
 		questionbutton.setMaximumSize(new Dimension(20, 20));
@@ -131,5 +132,9 @@ public class ResolutionPanel extends JPanel {
 	
 	public ResolutionChoice getSelection() {
 		return selection;
+	}
+	
+	public void addMouseListener(MouseListener listener) {
+		questionbutton.addMouseListener(listener);
 	}
 }

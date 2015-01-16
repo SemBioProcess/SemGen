@@ -1,29 +1,23 @@
 package semgen.merging.workbench;
 
+import java.util.HashMap;
 import java.util.Set;
 
 import semsim.model.computational.datastructures.DataStructure;
 
 public class DataStructureDescriptor {
 	public enum Descriptor {
-		name, description, computationalcode, inputs, inputfor;
-		private String attributevalue;	
-		
-		Descriptor() {} 
-			
-		protected String getDescriptor() {
-			return attributevalue;
-		}
-		
-		protected void setDescriptor(String value) {
-			attributevalue = value;
-		}
+		name, description, units, computationalcode, inputs, inputfor;
 	}
 	
+	private HashMap<Descriptor, String> descriptormap = new HashMap<Descriptor, String>();
+	
 	public DataStructureDescriptor(DataStructure ds) {
-		Descriptor.name.setDescriptor(ds.getName());
-		Descriptor.description.setDescriptor(ds.getDescription());
-		Descriptor.computationalcode.setDescriptor(ds.getComputation().getComputationalCode());
+		descriptormap.put(Descriptor.name, ds.getName());
+		descriptormap.put(Descriptor.description, ds.getDescription());
+		descriptormap.put(Descriptor.units, ds.getUnit().getComputationalCode());
+		descriptormap.put(Descriptor.computationalcode, ds.getComputation().getComputationalCode());
+		
 		makeStringListFromSet(Descriptor.inputs, ds.getComputationInputs(), true);
 		makeStringListFromSet(Descriptor.inputfor, ds.getUsedToCompute(), false);
 	}
@@ -46,11 +40,11 @@ public class DataStructureDescriptor {
 				stringlist = "  nothing";
 			}
 		}
-		desc.setDescriptor(stringlist);
+		descriptormap.put(desc, stringlist);
 	}
 	
 	public String getDescriptorValue(Descriptor desc) {
-		return desc.getDescriptor();
+		return descriptormap.get(desc);
 	}
 }
 	

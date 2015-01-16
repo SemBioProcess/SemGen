@@ -30,7 +30,11 @@ public class ModelOverlapMap {
 
 	public ModelOverlapMap(int ind1, int ind2, SemanticComparator comparator) {
 		modelindicies = Pair.of(ind1, ind2);
-		for (Pair<DataStructure, DataStructure> dspair : comparator.identifyExactSemanticOverlap()) {
+		ArrayList<Pair<DataStructure, DataStructure>> equivlist = comparator.identifyExactSemanticOverlap();
+		addDataStructureMapping(equivlist.get(0).getLeft(), equivlist.get(0).getRight(), maptype.automapping);
+		Pair<DataStructure, DataStructure> dspair;
+		for (int i=1; i<equivlist.size(); i++ ) {
+			dspair = equivlist.get(i);
 			addDataStructureMapping(dspair.getLeft(), dspair.getRight(), maptype.exactsemaoverlap);
 		}
 		identicaldsnames = comparator.identifyIdenticalCodewords();
@@ -89,8 +93,10 @@ public class ModelOverlapMap {
 	}
 	
 	public Pair<DataStructureDescriptor,DataStructureDescriptor> getDSPairDescriptors(int index) {
-		DataStructureDescriptor dsd1 = new DataStructureDescriptor(dsmap.get(index).getLeft());
-		DataStructureDescriptor dsd2 = new DataStructureDescriptor(dsmap.get(index).getLeft());
+		DataStructure ds1 = dsmap.get(index).getLeft();
+		DataStructure ds2 = dsmap.get(index).getRight();
+		DataStructureDescriptor dsd1 = new DataStructureDescriptor(ds1);
+		DataStructureDescriptor dsd2 = new DataStructureDescriptor(ds2);
 		return Pair.of(dsd1, dsd2);
 	}
 	
@@ -112,5 +118,9 @@ public class ModelOverlapMap {
 			unitmatchlist.add(true);
 		}
 		return unitmatchlist;
+	}
+	
+	public DataStructure getSolutionDomain() {
+		return dsmap.get(0).getLeft();
 	}
 }
