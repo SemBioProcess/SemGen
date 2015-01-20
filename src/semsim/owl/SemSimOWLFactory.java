@@ -25,6 +25,8 @@ import org.semanticweb.owlapi.model.OWLAnnotationSubject;
 import org.semanticweb.owlapi.model.OWLAnnotationValue;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClassExpression;
+import org.semanticweb.owlapi.model.OWLDataHasValue;
+import org.semanticweb.owlapi.model.OWLDataPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLDataRange;
 import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLDataPropertyExpression;
@@ -91,7 +93,7 @@ public class SemSimOWLFactory {
 	
 	// METHODS ON CLASSES
 
-	// ADD EXTERNAL CLASS
+	// Add external class
 	public static void addExternalReferenceClass(OWLOntology destinationont,
 			String clsuri, String physicaltype, String humreadname, OWLOntologyManager manager) {
 		String parentname = SemSimConstants.SEMSIM_NAMESPACE + "Reference_physical_" + physicaltype;
@@ -121,6 +123,25 @@ public class SemSimOWLFactory {
 		}
 	}
 
+	// Remove an object property value for one class (uses hasValue relation)
+		public static void removeClsDataValueRestriction(OWLOntology ont, String clsname, String propname, OWLOntologyManager manager)
+				throws OWLException {
+			OWLClass cls = factory.getOWLClass(IRI.create(clsname));
+			OWLDataPropertyExpression prop = factory.getOWLDataProperty(IRI.create(propname));
+			Set<OWLClassExpression> descs = cls.getSuperClasses(ont);
+			for (OWLClassExpression desc : descs) {
+				if (desc instanceof OWLDataHasValue) {
+					OWLDataHasValue allrest = (OWLDataHasValue) desc;
+					if (allrest.getProperty().asOWLDataProperty().getIRI().toString().equals(prop.asOWLDataProperty().getIRI().toString())) {
+						OWLSubClassOfAxiom axiom = factory.getOWLSubClassOfAxiom(cls, desc);
+						RemoveAxiom removeax = new RemoveAxiom(ont, axiom);
+						manager.applyChange(removeax);
+					}
+				}
+			}
+		}
+		
+		
 	// METHODS ON INDIVIDUALS
 	
 	public static void createSemSimIndividual(OWLOntology ont, String indname, OWLClass parent, String suffix, OWLOntologyManager manager){
@@ -132,6 +153,31 @@ public class SemSimOWLFactory {
 		}
 	}
 	
+	
+	// Create individuals within one parent class
+	public static void createSemSimIndividuals(OWLOntology ont, String[] indnames, String parentclassname, String suffix, OWLOntologyManager manager) throws OWLException {
+		OWLClass parent = factory.getOWLClass(IRI.create(parentclassname));
+		for (int i = 0; i < indnames.length; i++) {
+			createSemSimIndividual(ont, indnames[i], parent, suffix, manager);
+		}
+	}
+
+	// Create individuals under different parent classes
+	public static void createSemSimIndividuals(OWLOntology ont, Hashtable<String,String[]> indandparents, String suffix, OWLOntologyManager manager)
+			throws OWLException {
+
+		String[] keyset = new String[indandparents.size()];
+		String[] parentname = new String[] {};
+		keyset = (String[]) indandparents.keySet().toArray(keyset);
+		for (int i = 0; i < keyset.length; i++) {
+			parentname = (String[]) indandparents.get(keyset[i]);
+			OWLClass parent = factory.getOWLClass(IRI.create(parentname[0]));
+			createSemSimIndividual(ont, keyset[i], parent, suffix, manager);
+		}
+	}
+
+	
+	
 	public static void subclassIndividual(OWLOntology ont, String ind, String parent, OWLOntologyManager manager){
 		OWLClass refclass = factory.getOWLClass(IRI.create(parent));
 		OWLIndividual pmcind = factory.getOWLNamedIndividual(IRI.create(ind));
@@ -140,7 +186,7 @@ public class SemSimOWLFactory {
 		manager.applyChange(addAxiom);
 	}
 
-	// SET AN OBJECT PROPERTY FOR ONE INDIVIDUAL
+	// Set an object property for one individual
 	public static void setIndObjectProperty(OWLOntology ont, String subject, String object, String rel, String invrel, OWLOntologyManager manager)
 			throws OWLException {
 
@@ -214,7 +260,7 @@ public class SemSimOWLFactory {
 		manager.applyChange(addAxiom);
 	}
 
-	// RETRIEVE THE DATATYPE PROPERTY VALUES FOR ONE INDIVIDUAL (RETURNS A SET)
+	// Retrieve the datatype property values for one individual (returns a set)
 	public static Set<String> getIndDatatypeProperty(OWLOntology ont, String indname, String propname) throws OWLException {
 		Set<String> values = new HashSet<String>();
 		OWLIndividual ind = factory.getOWLNamedIndividual(IRI.create(indname));
@@ -233,8 +279,7 @@ public class SemSimOWLFactory {
 		return values;
 	}
 
-	// // RETRIEVE A FUNCTIONAL DATATYPE PROPERTY VALUE FOR ONE INDIVIDUAL
-	// (RETURNS A SINGLE STRING)
+	// // Retrieve a functional datatype property value for one individuals (returns a single string)
 	public static String getFunctionalIndDatatypeProperty(OWLOntology ont, String indname, String propname) throws OWLException {
 		// The hashtable keys are individual IRIs, values are relations (as IRIs)
 		Set<String> values = SemSimOWLFactory.getIndDatatypeProperty(ont, indname, propname);
@@ -243,7 +288,7 @@ public class SemSimOWLFactory {
 		return (valuearray.length == 1)  ? valuearray[0] : "";
 	}
 
-	// RETRIEVE THE VALUES OF AN OBJECT PROPERTY FOR ONE INDIVIDUAL
+	// Retrieve the values of an object property for one individual
 	public static Set<String> getIndObjectProperty(OWLOntology ont, String indname, String propname) throws OWLException {
 		Set<String> values = new HashSet<String>();
 		OWLIndividual ind = factory.getOWLNamedIndividual(IRI.create(indname));
@@ -261,9 +306,8 @@ public class SemSimOWLFactory {
 		return values;
 	}
 	
-	// RETRIEVE THE VALUE OF AN OBJECT PROPERTY FOR ONE INDIVIDUAL
-	public static String getFunctionalIndObjectProperty(OWLOntology ont,
-			String indname, String propname) throws OWLException {
+	// Retrieve the value of an object property for one individual
+	public static String getFunctionalIndObjectProperty(OWLOntology ont, String indname, String propname) throws OWLException {
 		String value = "";
 		Set<String> values = getIndObjectProperty(ont, indname, propname);
 		if(!values.isEmpty()){
@@ -271,6 +315,23 @@ public class SemSimOWLFactory {
 		}
 		return value;
 	}
+	
+	
+	// Remove a datatype property value for one individual
+	public static void removeIndDatatypeProperty(OWLOntology ont, String indname, String propname, OWLOntologyManager manager)
+			throws OWLException {
+		OWLIndividual ind = factory.getOWLNamedIndividual(IRI.create(indname));
+		Set<OWLAxiom> refaxs = ind.asOWLNamedIndividual().getReferencingAxioms(ont);
+		for(OWLAxiom refax : refaxs){
+			if(refax instanceof OWLDataPropertyAssertionAxiom){
+				OWLDataPropertyAssertionAxiom axiom = (OWLDataPropertyAssertionAxiom)refax;
+				if(axiom.getProperty().asOWLDataProperty().getIRI().toString().equals(propname)){
+					manager.applyChange(new RemoveAxiom(ont, axiom));
+				}
+			}
+		}
+	}
+	
 
 	public static Set<String> getIndividualsAsStrings(OWLOntology ont, String parentclass) {
 		Set<String> indstrings = new HashSet<String>();
@@ -292,7 +353,7 @@ public class SemSimOWLFactory {
 		return indstrings;
 	}
 	
-	// CHECK WHETHER AN INDIVIDUAL WITH A GIVEN IRI IS IN AN ONTOLOGY
+	// Check whether an individual with a given IRI is in an ontology
 	public static boolean indExistsInClass(String indtocheck, String parent, OWLOntology ontology) throws OWLException {
 		OWLClass parentclass = factory.getOWLClass(IRI.create(parent));
 		Set<OWLIndividual> inds = parentclass.getIndividuals(ontology);
@@ -304,7 +365,7 @@ public class SemSimOWLFactory {
 		return false;
 	}
 
-	// CHECK WHETHER AN INDIVIDUAL WITH A GIVEN IRI IS IN AN ONTOLOGY
+	// Check whether an individual with a given IRI is in an ontology
 	public static boolean indExistsInTree(String indtocheck, String parent, OWLOntology ontology) throws OWLException {
 		Set<String> allsubclasses = SemSimOWLFactory.getAllSubclasses(ontology, parent, true);
 		for (String oneclass : allsubclasses) {
@@ -533,7 +594,7 @@ public class SemSimOWLFactory {
 		return uri.substring(0, uri.lastIndexOf("/") + 1);
 	}
 
-	// REPLACING SPECIAL CHARACTERS THAT SHOULDN'T BE USED IN A IRI
+	// Replac special characters that shouldn't be used in an IRI
 	public static String URIencoding(String word) {
 		String result = word;
 		result = result.replace(" ", "_");
