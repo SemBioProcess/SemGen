@@ -2,6 +2,7 @@ package semsim.annotation;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Set;
 
 import org.semanticweb.owlapi.model.OWLAnnotation;
@@ -49,6 +50,14 @@ public class CurationalMetadata {
 	public static final SemSimRelation SBML_URL_RELATION = new SemSimRelation("the URL for the SBML version of the model", SBML_URL_URI);
 	public static final SemSimRelation JSIM_URL_RELATION = new SemSimRelation("the URL for the JSim version of the model", JSIM_URL_URI);
 	
+	private LinkedHashMap<Metadata, String> curationmap = new LinkedHashMap<Metadata, String>();
+	
+	public CurationalMetadata() {
+		for (Metadata m : Metadata.values()) {
+			curationmap.put(m, "");
+		}
+	}
+	
 	public enum Metadata {
 		fullname("Full Name", MODEL_NAME_RELATION),
 		description("Description", MODEL_DESCRIPTION_RELATION),
@@ -64,7 +73,6 @@ public class CurationalMetadata {
 		
 		private final String text;
 		private final SemSimRelation relation;
-		private String value = "";
 	
 		private Metadata(final String text, SemSimRelation rel) {
 		   this.text = text;
@@ -75,24 +83,9 @@ public class CurationalMetadata {
 		public String toString() {
 		   return text;
 		}
-		
-		private void setValue(String val) {
-			value = val;
-		 }
-		 private String getValue() {
-			 return value;
-		 }
-		 private boolean hasValue() {
-			 if (value == null) return false;
-			 return !value.isEmpty();
-		 }
-		 
-		 public Annotation getAsAnnotation() {
-			 return new Annotation(relation, value);
-		 }
-		 
-		 private boolean equals(String valuetomatch) {
-			 return value.equals(valuetomatch);
+			 
+		 protected SemSimRelation getRelation() {
+			 return relation;
 		 }
 		 
 		 private URI getURI() {
@@ -105,29 +98,33 @@ public class CurationalMetadata {
 	}
 	
 	public String getAnnotationValue(Metadata item) {
-		return item.getValue();
+		return curationmap.get(item);
 	}
 	
 	public void setAnnotationValue(Metadata item, String value) {
-		 item.setValue(value);
+		curationmap.put(item, value);
 	}
 	
 	public boolean hasAnnotationValue(Metadata item) {
-		return item.hasValue();
+		return !curationmap.get(item).isEmpty();
 	}
+	
+	 public Annotation getAsAnnotation(Metadata item) {
+		 return new Annotation(item.getRelation(), curationmap.get(item));
+	 }
 	
 	public ArrayList<Annotation> getAnnotationList() {
 		ArrayList<Annotation> list = new  ArrayList<Annotation>();
 		for (Metadata m : Metadata.values()) {
-			if (m.hasValue()) {
-				list.add(m.getAsAnnotation());
+			if (hasAnnotationValue(m)) {
+				list.add(getAsAnnotation(m));
 			}
 		}
 		return list;
 	}
 	
 	public boolean isItemValueEqualto(Metadata item, String value) {
-		return item.equals(value);
+		return curationmap.get(item).equals(value);
 	}
 
 	public void setCurationalMetadata(Set<OWLAnnotation> list, Set<OWLAnnotation> removelist) {
