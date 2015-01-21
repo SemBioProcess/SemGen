@@ -221,16 +221,15 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 	}
 	
 	private void manualMappingButtonAction() {
-		if (!mappingpanelleft.scrollercontent.isSelectionEmpty()
-					&& !mappingpanelright.scrollercontent.isSelectionEmpty()) {
-				String cdwd1 = (String) mappingpanelleft.scrollercontent.getSelectedValue();
-				String cdwd2 = (String) mappingpanelright.scrollercontent.getSelectedValue();
-				cdwd1 = cdwd1.substring(cdwd1.lastIndexOf("(") + 1, cdwd1.lastIndexOf(")"));
-				cdwd2 = cdwd2.substring(cdwd2.lastIndexOf("(") + 1, cdwd2.lastIndexOf(")"));
-
-				if (workbench.addManualCodewordMapping(cdwd1, cdwd2)) {
-					JOptionPane.showMessageDialog(this, cdwd1
-								+ " and " + cdwd2 + " are already mapped");
+		if ((mappingpanelleft.getSelectionIndex()!=-1)
+					&& (mappingpanelright.getSelectionIndex()!=-1)) {
+				Pair<String, String> names = workbench.addManualCodewordMapping(
+						mappingpanelleft.getSelectionIndex(), 
+						mappingpanelright.getSelectionIndex());
+			
+				if (names!=null) {
+					JOptionPane.showMessageDialog(this, 
+							names.getLeft() + " and " + names.getRight() + " are already mapped");
 				}
 			} else {
 				SemGenError.showError("Please select a codeword from both component models","");
@@ -255,6 +254,7 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
     }
 
 	public void primeForMerging() {
+		if (workbench.getNumberofStagedModels() == 0) return;
 		mappingpanelleft.populatePanel(0);
 		if(workbench.hasMultipleModels()) {
 			mappingpanelright.populatePanel(1);

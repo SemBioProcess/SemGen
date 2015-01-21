@@ -67,6 +67,13 @@ public class ModelOverlapMap {
 		return Pair.of(dspair.getLeft().getName(), dspair.getRight().getName());
 	}
 	
+	public Boolean dataStructuresAlreadyMapped(DataStructure ds1, DataStructure ds2) {
+		for (Pair<DataStructure, DataStructure> dspair : dsmap) {
+			if (dspair.getLeft().equals(ds1) || dspair.getRight().equals(ds2)) return true;
+		}
+		return false;
+	}
+	
 	public Boolean codewordsAlreadyMapped(String cdwd1uri, String cdwd2uri) {
 		String cdwd1 = SemSimOWLFactory.getIRIfragment(cdwd1uri);
 		String cdwd2 = SemSimOWLFactory.getIRIfragment(cdwd2uri);

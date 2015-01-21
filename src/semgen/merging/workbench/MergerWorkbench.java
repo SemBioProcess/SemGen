@@ -193,11 +193,17 @@ public class MergerWorkbench extends Workbench {
 		addCodewordMapping(cdwd1, cdwd2, maptype.exactsemaoverlap);
 	}
 	
-	public boolean addManualCodewordMapping(String cdwd1, String cdwd2) {
-		if (codewordMappingExists(cdwd1, cdwd2)) return false;
-		addCodewordMapping(cdwd1, cdwd2, maptype.manualmapping);
-		return true;
+	public Pair<String,String> addManualCodewordMapping(int cdwd1, int cdwd2) {
+		Pair<Integer, Integer> minds = overlapmap.getModelIndicies();
+		DataStructure ds1 = dsnamelist.get(minds.getLeft()).get(cdwd1);
+		DataStructure ds2 = dsnamelist.get(minds.getRight()).get(cdwd2);
+				
+		if (codewordMappingExists(ds1, ds2)) return Pair.of(ds1.getName(),ds2.getName());
+		addCodewordMapping(ds1, ds2
+				, maptype.manualmapping);
+		return null;
 	}
+	
 	public int getMappingCount() {
 		return overlapmap.getMappingCount();
 	}
@@ -212,6 +218,14 @@ public class MergerWorkbench extends Workbench {
 		DataStructure ds2 = loadedmodels.get(minds.getRight()).getDataStructure(cdwd2);
 		
 		overlapmap.addDataStructureMapping(ds1, ds2, maptype);
+	}
+	
+	private void addCodewordMapping(DataStructure ds1, DataStructure ds2, maptype maptype) {
+		overlapmap.addDataStructureMapping(ds1, ds2, maptype);
+	}
+	
+	private boolean codewordMappingExists(DataStructure ds1, DataStructure ds2) {
+		return overlapmap.dataStructuresAlreadyMapped(ds1, ds2);
 	}
 	
 	public boolean codewordMappingExists(String cdwd1uri, String cdwd2uri) {

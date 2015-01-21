@@ -60,6 +60,10 @@ public class MappingPanel extends JPanel implements Observer {
 		title.setText("[ ]");
 	}
 	
+	public int getSelectionIndex() {
+		return scrollercontent.getSelectedIndex();
+	}
+	
 	@Override
 	public void update(Observable arg0, Object arg1) {
 
