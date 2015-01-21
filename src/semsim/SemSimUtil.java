@@ -6,9 +6,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,6 +19,7 @@ import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.object.CompositePhysicalEntity;
+import semsim.writing.CaseInsensitiveComparator;
 
 /**
  * A collection of utility methods for working with SemSim models
@@ -159,4 +163,15 @@ public class SemSimUtil {
 		if(cpe == null) System.out.println("Next cpe was null");
 		return cpe;
 	}	
+	
+	/* 
+	 * Take collection of DataStructures and return an ArrayList sorted alphabetically
+	 * */
+	public static ArrayList<DataStructure> alphebetizeSemSimObjects(Collection<DataStructure>  collection) {
+		TreeMap<String, DataStructure> dsnamemap = new TreeMap<String, DataStructure>(new CaseInsensitiveComparator());
+		for (DataStructure ds : collection) {
+			dsnamemap.put(ds.getName(), ds);
+		}
+		return new ArrayList<DataStructure>(dsnamemap.values());
+	}
 }

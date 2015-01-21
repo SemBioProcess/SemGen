@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Observable;
@@ -42,10 +41,6 @@ import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semgen.utilities.uicomponent.SemGenTab;
-import semsim.model.SemSimModel;
-import semsim.model.computational.datastructures.DataStructure;
-import semsim.writing.CaseInsensitiveComparator;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -63,11 +58,9 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 	private JButton mergebutton = new JButton("MERGE");
 
 	private JSplitPane resmapsplitpane;
-	private MappingPanel mappingpanelleft = new MappingPanel("[ ]");
-	private MappingPanel mappingpanelright = new MappingPanel("[ ]");
 	private JButton addmanualmappingbutton = new JButton("Add manual mapping");
 	private JButton loadingbutton = new JButton(SemGenIcon.blankloadingiconsmall);
-	
+	private MappingPanel mappingpanelleft, mappingpanelright; 
 	private MergerWorkbench workbench;
 	
 	public MergerTab(SemGenSettings sets, GlobalActions globalacts, MergerWorkbench bench) {
@@ -121,6 +114,9 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 		resolvescroller.setBorder(BorderFactory.createTitledBorder("Resolution points between models"));
 		resolvescroller.setAlignmentX(LEFT_ALIGNMENT);
 	
+		mappingpanelleft = new MappingPanel(workbench);
+		mappingpanelright = new MappingPanel(workbench);
+		
 		JSplitPane mappingsplitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mappingpanelleft, mappingpanelright);
 		mappingsplitpane.setOneTouchExpandable(true);
 		mappingsplitpane.setAlignmentX(LEFT_ALIGNMENT);
@@ -142,17 +138,17 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 		this.add(Box.createGlue());
 		this.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
 		
-		PlusButtonAction();
+		plusButtonAction();
 	}
 	
 	public void actionPerformed(ActionEvent arg0) {
 		Object o = arg0.getSource();
 		
 		if (o == plusbutton)
-			PlusButtonAction();
+			plusButtonAction();
 
 		if (o == minusbutton) {
-			workbench.removeSelectedModel();
+			minusButtonAction();
 		}
 
 		if (o == mergebutton) {
@@ -160,24 +156,11 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 		}
 
 		if (o == addmanualmappingbutton) {
-			if (!mappingpanelleft.scrollercontent.isSelectionEmpty()
-					&& !mappingpanelright.scrollercontent.isSelectionEmpty()) {
-				String cdwd1 = (String) mappingpanelleft.scrollercontent.getSelectedValue();
-				String cdwd2 = (String) mappingpanelright.scrollercontent.getSelectedValue();
-				cdwd1 = cdwd1.substring(cdwd1.lastIndexOf("(") + 1, cdwd1.lastIndexOf(")"));
-				cdwd2 = cdwd2.substring(cdwd2.lastIndexOf("(") + 1, cdwd2.lastIndexOf(")"));
-
-				if (workbench.addManualCodewordMapping(cdwd1, cdwd2)) {
-					JOptionPane.showMessageDialog(this, cdwd1
-								+ " and " + cdwd2 + " are already mapped");
-				}
-			} else {
-				SemGenError.showError("Please select a codeword from both component models","");
-			}
+			manualMappingButtonAction();
 		}
 	}
 	
-	public void mergeButtonAction() {
+	private void mergeButtonAction() {
 		ArrayList<ResolutionChoice> choicelist = respane.pollResolutionList();
 		
 		if (choicelist != null) {
@@ -216,7 +199,7 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 		}
 	}
 	
-	public void PlusButtonAction(){
+	private void plusButtonAction(){
 		Set<File> files = new HashSet<File>();
 		new SemGenOpenFileChooser(files, "Select SemSim models to merge",
         			new String[]{"owl", "xml", "sbml", "mod"});
@@ -228,6 +211,30 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 		}
 		AddModelsToMergeTask task = new AddModelsToMergeTask(files);
 		task.execute(); 
+	}
+
+	private void minusButtonAction() {
+		workbench.removeSelectedModel();
+		mappingpanelleft.clearPanel();
+		mappingpanelright.clearPanel();
+		primeForMerging();
+	}
+	
+	private void manualMappingButtonAction() {
+		if (!mappingpanelleft.scrollercontent.isSelectionEmpty()
+					&& !mappingpanelright.scrollercontent.isSelectionEmpty()) {
+				String cdwd1 = (String) mappingpanelleft.scrollercontent.getSelectedValue();
+				String cdwd2 = (String) mappingpanelright.scrollercontent.getSelectedValue();
+				cdwd1 = cdwd1.substring(cdwd1.lastIndexOf("(") + 1, cdwd1.lastIndexOf(")"));
+				cdwd2 = cdwd2.substring(cdwd2.lastIndexOf("(") + 1, cdwd2.lastIndexOf(")"));
+
+				if (workbench.addManualCodewordMapping(cdwd1, cdwd2)) {
+					JOptionPane.showMessageDialog(this, cdwd1
+								+ " and " + cdwd2 + " are already mapped");
+				}
+			} else {
+				SemGenError.showError("Please select a codeword from both component models","");
+			}
 	}
 	
 	private class AddModelsToMergeTask extends SemGenTask {
@@ -248,19 +255,19 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
     }
 
 	public void primeForMerging() {
-		populateMappingPanel(workbench.getModel(0).getName(), workbench.getModel(0), mappingpanelleft, Color.blue);
+		mappingpanelleft.populatePanel(0);
 		if(workbench.hasMultipleModels()) {
-			populateMappingPanel(workbench.getModel(1).getName(), workbench.getModel(1), mappingpanelright, Color.red);
+			mappingpanelright.populatePanel(1);
 
 			SemGenProgressBar progframe = new SemGenProgressBar("Comparing models...", true);
 			workbench.mapModels();
 			progframe.dispose();
-			
-			resmapsplitpane.setDividerLocation(dividerlocation);
 			loadingbutton.setIcon(SemGenIcon.blankloadingiconsmall);
 			mergebutton.setEnabled(true);
 		}
 		else mergebutton.setEnabled(false);
+		
+		resmapsplitpane.setDividerLocation(dividerlocation);
 	}
 
 	public String changeCodeWordNameDialog(String dsname) {
@@ -287,30 +294,6 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 		if (x == JOptionPane.YES_OPTION) {
 			workbench.encodeMergedModel(filepath);
 		}
-	}
-	
-	public void populateMappingPanel(String filename, SemSimModel model, MappingPanel mappingpanel, Color color) {
-		ArrayList<String> descannset = new ArrayList<String>();
-		ArrayList<String> nodescannset = new ArrayList<String>();
-		for (DataStructure datastr : model.getDataStructures()) {
-			String desc = "(" + datastr.getName() + ")";
-			if(datastr.getDescription()!=null){
-				desc = datastr.getDescription() + " " + desc;
-				descannset.add(desc);
-			}
-			else nodescannset.add(desc);
-		}
-		Collections.sort(descannset, new CaseInsensitiveComparator());
-		Collections.sort(nodescannset, new CaseInsensitiveComparator());
-		
-		String[] comboarray = new String[descannset.size() + nodescannset.size()];
-		for(int i=0; i<comboarray.length; i++){
-			if(i<descannset.size()) comboarray[i] = descannset.get(i);
-			else comboarray[i] = nodescannset.get(i-descannset.size());
-		}
-		mappingpanel.scrollercontent.setForeground(color);
-		mappingpanel.scrollercontent.setListData(comboarray);
-		mappingpanel.setTitle(filename);
 	}
 
 	@Override

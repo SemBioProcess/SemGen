@@ -2,6 +2,7 @@ package semgen.merging.workbench;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,19 +20,19 @@ import semgen.merging.workbench.ModelOverlapMap.maptype;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.uicomponent.SemGenProgressBar;
+import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.ModelClassifier;
 
 public class MergerWorkbench extends Workbench {
-	ArrayList<SemSimModel> loadedmodels = new ArrayList<SemSimModel>();
-	private ArrayList<File> filepathlist = new ArrayList<File>();
 	private int modelselection = -1;
-	
 	private ModelOverlapMap overlapmap = null;
-	
+	private ArrayList<SemSimModel> loadedmodels = new ArrayList<SemSimModel>();
 	private SemSimModel mergedmodel;
-
+	private ArrayList<File> filepathlist = new ArrayList<File>();
+	private ArrayList<ArrayList<DataStructure>> dsnamelist = new ArrayList<ArrayList<DataStructure>>();
+	
 	public enum MergeEvent {
 		functionalsubmodelerr, threemodelerror, modellistupdated, modelerrors,
 		mapfocuschanged, mappingadded, mergecompleted;
@@ -55,7 +56,6 @@ public class MergerWorkbench extends Workbench {
 		}
 	}
 
-	
 	@Override
 	public void initialize() {}
 	
@@ -79,18 +79,24 @@ public class MergerWorkbench extends Workbench {
 			return false;
 		}
 		
+		SemSimModel model;
 		for (File file : files) {
 			if (ModelClassifier.classify(file)==ModelClassifier.CELLML_MODEL) {
 				CellMLModelError(file.getName());
 				continue;
-			} 
-			loadedmodels.add(loadModel(file, autoannotate));
+			}
+			model = loadModel(file, autoannotate);
+			loadedmodels.add(model);
 			filepathlist.add(file);
-			
+			addDSNameList(model.getDataStructures());
 		}
 
 		notifyModelListUpdated();
 		return true;
+	}
+	
+	private void addDSNameList(Collection<DataStructure> dslist) {
+		dsnamelist.add(SemSimUtil.alphebetizeSemSimObjects(dslist));
 	}
 	
 	public Pair<DataStructureDescriptor,DataStructureDescriptor> getDSDescriptors(int index) {
@@ -308,5 +314,20 @@ public class MergerWorkbench extends Workbench {
 		new Encoder(mergedmodel, filepath.substring(0, filepath.lastIndexOf(".")));
 	}
 	
+	public String getModelName(int index) {
+		return loadedmodels.get(index).getName();
+	}
 	
+	//Get all Data Structure names and add descriptions if available.
+	public ArrayList<String> getDSNamesandDescriptions(int index) {
+		ArrayList<String> namelist = new ArrayList<String>();
+		for (DataStructure ds : dsnamelist.get(index)) {
+			String desc = "(" + ds.getName() + ")";
+			if(ds.getDescription()!=null){
+				desc = ds.getDescription() + " " + desc;
+			}
+			namelist.add(desc);
+		}
+		return namelist;
+	}
 }
