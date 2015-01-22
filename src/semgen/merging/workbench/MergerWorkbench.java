@@ -201,6 +201,8 @@ public class MergerWorkbench extends Workbench {
 		if (codewordMappingExists(ds1, ds2)) return Pair.of(ds1.getName(),ds2.getName());
 		addCodewordMapping(ds1, ds2
 				, maptype.manualmapping);
+		setChanged();
+		notifyObservers(MergeEvent.mappingadded);
 		return null;
 	}
 	

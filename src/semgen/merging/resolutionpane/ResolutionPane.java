@@ -65,7 +65,7 @@ public class ResolutionPane extends JPanel implements Observer {
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		if (arg1 == MergeEvent.mappingadded) {
-			addMapping(workbench.getMappingCount());
+			addMapping(workbench.getMappingCount()-1);
 			validate();
 			repaint();
 		}

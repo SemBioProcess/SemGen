@@ -5,19 +5,19 @@ import java.util.LinkedHashMap;
 import java.util.Set;
 
 public abstract class PhysicalProcess extends PhysicalModelComponent{
-	private LinkedHashMap<PhysicalEntity, Integer> sources = new LinkedHashMap<PhysicalEntity, Integer>();
-	private LinkedHashMap<PhysicalEntity, Integer> sinks = new LinkedHashMap<PhysicalEntity, Integer>();
-	private LinkedHashMap<PhysicalEntity, Integer> mediators = new LinkedHashMap<PhysicalEntity, Integer>();	
+	private LinkedHashMap<PhysicalEntity, Double> sources = new LinkedHashMap<PhysicalEntity, Double>();
+	private LinkedHashMap<PhysicalEntity, Double> sinks = new LinkedHashMap<PhysicalEntity, Double>();
+	private LinkedHashMap<PhysicalEntity, Double> mediators = new LinkedHashMap<PhysicalEntity, Double>();	
 	
-	public void addSource(PhysicalEntity entity, Integer stoichiometry){
+	public void addSource(PhysicalEntity entity, Double stoichiometry){
 		sources.put(entity, stoichiometry);
 	}
 	
-	public void addSink(PhysicalEntity entity, Integer stoichiometry){
+	public void addSink(PhysicalEntity entity, Double stoichiometry){
 		sinks.put(entity, stoichiometry);
 	}
 	
-	public void addMediator(PhysicalEntity entity, Integer stoichiometry){
+	public void addMediator(PhysicalEntity entity, Double stoichiometry){
 		mediators.put(entity, stoichiometry);
 	}
 	
@@ -33,52 +33,52 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 		return mediators.keySet();
 	}
 
-	public void setSources(LinkedHashMap<PhysicalEntity, Integer> sources) {
+	public void setSources(LinkedHashMap<PhysicalEntity, Double> sources) {
 		this.sources = sources;
 	}
 
-	public LinkedHashMap<PhysicalEntity, Integer> getSources() {
+	public LinkedHashMap<PhysicalEntity, Double> getSources() {
 		return sources;
 	}
 
-	public void setSinks(LinkedHashMap<PhysicalEntity, Integer> sinks) {
+	public void setSinks(LinkedHashMap<PhysicalEntity, Double> sinks) {
 		this.sinks = sinks;
 	}
 
-	public LinkedHashMap<PhysicalEntity, Integer> getSinks() {
+	public LinkedHashMap<PhysicalEntity, Double> getSinks() {
 		return sinks;
 	}
 
-	public void setMediators(LinkedHashMap<PhysicalEntity, Integer> mediators) {
+	public void setMediators(LinkedHashMap<PhysicalEntity, Double> mediators) {
 		this.mediators = mediators;
 	}
 
-	public LinkedHashMap<PhysicalEntity, Integer> getMediators() {
+	public LinkedHashMap<PhysicalEntity, Double> getMediators() {
 		return mediators;
 	}
 	
-	public Integer getStoichiometry(PhysicalEntity entity) {
+	public Double getStoichiometry(PhysicalEntity entity) {
 		return getParticipantswithMultipliers().get(entity);
 	}
 	
-	public Integer getSourceStoichiometry(PhysicalEntity entity) {
+	public Double getSourceStoichiometry(PhysicalEntity entity) {
 		return sources.get(entity);
 	}
 	
-	public Integer getSinkStoichiometry(PhysicalEntity entity) {
+	public Double getSinkStoichiometry(PhysicalEntity entity) {
 		return sinks.get(entity);
 	}
 	
-	public Integer getMediatorStoichiometry(PhysicalEntity entity) {
+	public Double getMediatorStoichiometry(PhysicalEntity entity) {
 		return mediators.get(entity);
 	}
 	
-	public void setStoichiometry(PhysicalEntity entity, Integer stoich) {
+	public void setStoichiometry(PhysicalEntity entity, Double stoich) {
 		getParticipantswithMultipliers().put(entity,stoich);
 	}
 	
-	public LinkedHashMap<PhysicalEntity, Integer> getParticipantswithMultipliers(){
-		LinkedHashMap<PhysicalEntity, Integer> allps = new LinkedHashMap<PhysicalEntity, Integer>();
+	public LinkedHashMap<PhysicalEntity, Double> getParticipantswithMultipliers(){
+		LinkedHashMap<PhysicalEntity, Double> allps = new LinkedHashMap<PhysicalEntity, Double>();
 		allps.putAll(getSources());
 		allps.putAll(getSinks());
 		allps.putAll(getMediators());

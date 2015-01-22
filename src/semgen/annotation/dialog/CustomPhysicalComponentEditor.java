@@ -148,15 +148,15 @@ public class CustomPhysicalComponentEditor extends SemGenDialog implements Prope
 							  hasmediatoreditor.table.getCellEditor().stopCellEditing();
 						
 						((PhysicalProcess)pmc).getSources().clear();
-						for(Pair<PhysicalEntity, Integer> pe : hassourceeditor.getTableData()){
+						for(Pair<PhysicalEntity, Double> pe : hassourceeditor.getTableData()){
 							((PhysicalProcess)pmc).addSource(pe.getLeft(), pe.getRight());
 						}
 						((PhysicalProcess)pmc).getSinks().clear();
-						for(Pair<PhysicalEntity, Integer> pe : hassinkeditor.getTableData()){
+						for(Pair<PhysicalEntity, Double> pe : hassinkeditor.getTableData()){
 							((PhysicalProcess)pmc).addSink(pe.getLeft(), pe.getRight());
 						}
 						((PhysicalProcess)pmc).getMediators().clear();
-						for(Pair<PhysicalEntity, Integer> pe : hasmediatoreditor.getTableData()){
+						for(Pair<PhysicalEntity, Double> pe : hasmediatoreditor.getTableData()){
 							((PhysicalProcess)pmc).addMediator(pe.getLeft(), pe.getRight());
 						}
 					}

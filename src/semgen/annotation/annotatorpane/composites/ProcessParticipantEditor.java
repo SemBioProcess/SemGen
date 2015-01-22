@@ -74,7 +74,7 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 		add(scroller, BorderLayout.SOUTH);
 	}
 	
-	public ArrayList<Pair<PhysicalEntity, Integer>> getTableData() {
+	public ArrayList<Pair<PhysicalEntity, Double>> getTableData() {
 		return tablemod.getAllRows();
 	}
 	
@@ -121,8 +121,8 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 			if(columnIndex==0) return pe.getName();
 			else return data.get(rowIndex).getMultiplier();
 		}
-		private ArrayList<Pair<PhysicalEntity, Integer>> getAllRows() {
-			ArrayList<Pair<PhysicalEntity, Integer>> tabledata = new ArrayList<Pair<PhysicalEntity, Integer>>();
+		private ArrayList<Pair<PhysicalEntity, Double>> getAllRows() {
+			ArrayList<Pair<PhysicalEntity, Double>> tabledata = new ArrayList<Pair<PhysicalEntity, Double>>();
 			for (ParticipantRow row : data) {
 				tabledata.add(Pair.of(row.getParticipant(), row.getMultiplier()));
 			}
@@ -150,9 +150,9 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 		@Override
 		public void setValueAt(Object value, int row, int col){
 			if(col==1){
-				int val = 1;
+				Double val = 1.0;
 				try{
-					val = Integer.parseInt((String)value);
+					val = Double.parseDouble((String)value);
 				}
 				catch(NumberFormatException ex){
 					SemGenError.showError("Multiplier not a valid number.", "Invalid Number");
@@ -165,14 +165,14 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 		
 		protected class ParticipantRow {
 			PhysicalEntity participant;
-			int multiplier;
+			Double multiplier;
 			
 			ParticipantRow(PhysicalEntity pe) {
 				participant = pe;
-				multiplier = 1;
+				multiplier = 1.0;
 			}
 			
-			ParticipantRow(PhysicalEntity pe, int stoich) {
+			ParticipantRow(PhysicalEntity pe, Double stoich) {
 				participant = pe;
 				multiplier = stoich;
 			}
@@ -185,11 +185,11 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 				return participant;
 			}
 			
-			int getMultiplier() {
+			Double getMultiplier() {
 				return multiplier;
 			}
 			
-			void setMultiplier(int stoich) {
+			void setMultiplier(Double stoich) {
 				multiplier = stoich;
 			}
 		}
