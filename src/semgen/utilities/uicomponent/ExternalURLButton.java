@@ -14,6 +14,7 @@ import semgen.utilities.BrowserLauncher;
 import semgen.utilities.SemGenIcon;
 import semsim.SemSimConstants;
 import semsim.owl.SemSimOWLFactory;
+import semsim.webservices.BioPortalConstants;
 
 public class ExternalURLButton extends JLabel implements MouseListener{
 
@@ -41,22 +42,23 @@ public class ExternalURLButton extends JLabel implements MouseListener{
 			String fullontname = SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.get(namespace);
 			String abbrev = SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.get(fullontname);
 			
-			if(abbrev!=null){
-				if(abbrev.equals("BRENDA")) abbrev = "BTO";
-				String urlstring = "http://bioportal.bioontology.org/ontologies/" + abbrev + "/?p=classes&conceptid=" + SemSimOWLFactory.URIencoding(termuri.toString());
-				
-				BrowserLauncher.openURL(urlstring);
-			}
-			// If the uri is from UNIPROT
-			else if(SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.get(
+			// Use UNIPROT website for UNIPROT terms...
+			if(SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.get(
 					SemSimOWLFactory.getNamespaceFromIRI(termuri.toString()))==SemSimConstants.UNIPROT_FULLNAME){
 				String id = SemSimOWLFactory.getIRIfragment(termuri.toString());
 				String urlstring = "http://www.uniprot.org/uniprot/" + id;
+				BrowserLauncher.openURL(urlstring);				
+			}
+			// ...else if we have identified the ontology and it is available through BioPortal, open the BioPortal URL
+			else if(abbrev!=null && BioPortalConstants.ONTOLOGY_FULL_NAMES_AND_BIOPORTAL_IDS.containsKey(fullontname)){
+				// Special case for BRENDA
+				if(abbrev.equals("BRENDA")) abbrev = "BTO";
+				String urlstring = "http://bioportal.bioontology.org/ontologies/" + abbrev + "/?p=classes&conceptid=" + SemSimOWLFactory.URIencoding(termuri.toString());
 				BrowserLauncher.openURL(urlstring);
 			}
-			// Else the knowledge resource is not available through BioPortal
+			// ...otherwise the knowledge resource is not known or not available online
 			else{
-				JOptionPane.showMessageDialog(getParent(), "Sorry, BioPortal does not provide information about that resource.");
+				JOptionPane.showMessageDialog(getParent(), "Sorry, could not determine where to find more information about that resource.");
 			}
 		}
 	}
