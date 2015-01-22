@@ -372,21 +372,21 @@ public class SemSimOWLreader extends ModelReader {
 							// Enter source information
 							for(String src : srcs){
 								PhysicalEntity srcent = getPhysicalEntityFromURI(ont, URI.create(src));
-								int m = getMultiplierForProcessParticipant(ont, processind, 
+								Double m = getMultiplierForProcessParticipant(ont, processind, 
 										SemSimConstants.HAS_SINK_URI.toString(), src);
 								pproc.addSource(srcent, m);
 							}
 							// Enter sink info
 							for(String sink : sinks){
 								PhysicalEntity sinkent = getPhysicalEntityFromURI(ont, URI.create(sink));
-								int m = getMultiplierForProcessParticipant(ont, processind, 
+								Double m = getMultiplierForProcessParticipant(ont, processind, 
 										SemSimConstants.HAS_SINK_URI.toString(), sink);
 								pproc.addSink(sinkent, m);
 							}
 							// Enter mediator info
 							for(String med : mediators){
 								PhysicalEntity medent = getPhysicalEntityFromURI(ont, URI.create(med));
-								int m = getMultiplierForProcessParticipant(ont, processind, 
+								Double m = getMultiplierForProcessParticipant(ont, processind, 
 										SemSimConstants.HAS_SINK_URI.toString(), med);
 								pproc.addMediator(medent, m);
 							}
@@ -639,8 +639,8 @@ public class SemSimOWLreader extends ModelReader {
 	}
 	
 	// Get the multiplier for a process participant
-	private int getMultiplierForProcessParticipant(OWLOntology ont, String process, String prop, String ent){
-		int val = 1;
+	private Double getMultiplierForProcessParticipant(OWLOntology ont, String process, String prop, String ent){
+		Double val = 1.0;
 		OWLIndividual procind = factory.getOWLNamedIndividual(IRI.create(process));
 		OWLIndividual entind = factory.getOWLNamedIndividual(IRI.create(ent));
 		OWLObjectProperty owlprop = factory.getOWLObjectProperty(IRI.create(prop));
@@ -651,12 +651,10 @@ public class SemSimOWLreader extends ModelReader {
 			if(ax.equalsIgnoreAnnotations(axiom)){
 				if(!ax.getAnnotations(annprop).isEmpty()){
 					OWLLiteral litval = (OWLLiteral) ax.getAnnotations(annprop).toArray(new OWLAnnotation[]{})[0].getValue();
-					if (litval.isInteger() ) {
-						val = litval.parseInteger();
+					if (litval.isInteger()) {
+						val = (double)litval.parseInteger();
 					}
-					else {
-						val = (int)Math.round(litval.parseDouble());
-					}
+					else val = litval.parseDouble();
 				}
 			}
 		}

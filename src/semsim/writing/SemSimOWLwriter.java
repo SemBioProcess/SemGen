@@ -692,7 +692,7 @@ public class SemSimOWLwriter extends ModelWriter {
 	}
 	
 	// Assert the multiplier on process participants
-	private Set<OWLAnnotation> makeMultiplierAnnotation(PhysicalEntity pp, Integer stoich){
+	private Set<OWLAnnotation> makeMultiplierAnnotation(PhysicalEntity pp, Double stoich){
 		Set<OWLAnnotation> anns = new HashSet<OWLAnnotation>();
 		OWLLiteral lit = factory.getOWLLiteral(stoich);
 		OWLAnnotation anno = factory.getOWLAnnotation(factory.getOWLAnnotationProperty(IRI.create(SemSimConstants.HAS_MULTIPLIER_URI)), lit);

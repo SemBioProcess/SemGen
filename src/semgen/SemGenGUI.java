@@ -12,7 +12,7 @@ import semgen.extraction.ExtractorTabFactory;
 import semgen.extraction.workbench.ExtractorFactory;
 import semgen.menu.SemGenMenuBar;
 import semgen.merging.MergerTabFactory;
-import semgen.merging.workbench.MergerFactory;
+import semgen.merging.workbench.MergerWorkbenchFactory;
 import semgen.utilities.SemGenTask;
 import semgen.utilities.Workbench;
 import semgen.utilities.WorkbenchFactory;
@@ -28,8 +28,6 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
-import javax.swing.SwingUtilities;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -99,7 +97,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 	}
 	
 	public void startNewMergerTask(){
-		MergerFactory factory = new MergerFactory();
+		MergerWorkbenchFactory factory = new MergerWorkbenchFactory();
 		MergerTabFactory tabfactory = new MergerTabFactory(settings, globalactions);
 		addTab(factory, tabfactory);
 	}
@@ -167,7 +165,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 				JOptionPane.showMessageDialog(null,"Cannot create or load \n"+ uritocheck.toString()+
 					"\n because the file is already open for editing.",null, JOptionPane.PLAIN_MESSAGE);
 				return true;
-				}
+			}
 		}
 		return false;
 	}
@@ -177,16 +175,19 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		// If the file has been altered, prompt for a save
 		boolean returnval =  component.closeTab();
 		if (returnval) {
-			opentabs.remove(component);
 			removeTab(component);
+			if (numtabs != 0) {
+				globalactions.setCurrentTab(opentabs.get(getSelectedIndex()));
+			}
 		}
 		
 		return returnval;
 	}
 	
 	private void removeTab(SemGenTab component) {
-			remove(indexOfComponent(component));
-			numtabs = numtabs - 1;
+		opentabs.remove(component);
+		remove(indexOfComponent(component));
+		numtabs = numtabs - 1;
 	}
 	
 	// When a tab is clicked make it the currently displayed tab

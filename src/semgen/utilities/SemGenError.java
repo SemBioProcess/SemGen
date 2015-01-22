@@ -39,8 +39,8 @@ public class SemGenError {
 		JOptionPane.showMessageDialog(parent, "Please first remove unspecified annotations for the following codewords:\n" + listofds);
 	}
 	
-	public static void showFunctionalSubmodelError(File file){
-		JOptionPane.showMessageDialog(parent, "Did not load " + file.getName() + 
+	public static void showFunctionalSubmodelError(String file){
+		JOptionPane.showMessageDialog(parent, "Did not load " + file + 
 		"\n\nSemGen does not support merging of models with CellML-type components yet.");
 	}
 	

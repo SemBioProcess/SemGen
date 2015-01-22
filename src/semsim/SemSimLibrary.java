@@ -28,7 +28,6 @@ public class SemSimLibrary {
 	public static final double SEMSIM_VERSION = 0.2;
 	public static final IRI SEMSIM_VERSION_IRI = IRI.create(SemSimConstants.SEMSIM_NAMESPACE + "SemSimVersion");
 	
-
 	private OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	public OWLOntology OPB;
 	
@@ -40,13 +39,13 @@ public class SemSimLibrary {
 	private Set<String> jsimUnitPrefixesTable;
 	private Set<String> cellMLUnitsTable;
 	
-	private static Set<String> OPBproperties = new HashSet<String>();
-	private static Set<String> OPBflowProperties = new HashSet<String>();
-	private static Set<String> OPBprocessProperties = new HashSet<String>();
-	private static Set<String> OPBdynamicalProperties = new HashSet<String>();
-	private static Set<String> OPBamountProperties = new HashSet<String>();
-	private static Set<String> OPBforceProperties = new HashSet<String>();
-	private static Set<String> OPBstateProperties = new HashSet<String>();
+	private Set<String> OPBproperties = new HashSet<String>();
+	private Set<String> OPBflowProperties = new HashSet<String>();
+	private Set<String> OPBprocessProperties = new HashSet<String>();
+	private Set<String> OPBdynamicalProperties = new HashSet<String>();
+	private Set<String> OPBamountProperties = new HashSet<String>();
+	private Set<String> OPBforceProperties = new HashSet<String>();
+	private Set<String> OPBstateProperties = new HashSet<String>();
 	
 	public SemSimLibrary() {
 		loadLibrary();

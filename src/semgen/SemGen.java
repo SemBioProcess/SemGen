@@ -35,7 +35,6 @@ import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.utilities.uicomponent.SemGenDialog;
-import semgen.utilities.uicomponent.SemGenProgressBar;
 import semsim.ErrorLog;
 import semsim.SemSimLibrary;
 import semsim.reading.ModelReader;

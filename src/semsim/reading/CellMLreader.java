@@ -672,7 +672,7 @@ public class CellMLreader extends ModelReader {
 						Resource physentres = sourceres.getPropertyResourceValue(CellMLbioRDFblock.hasphysicalentityreference);
 						PhysicalModelComponent sourcepmc = getPMCfromRDFresourceAndAnnotate(physentres);
 						Literal multiplier = sourceres.getProperty(CellMLbioRDFblock.hasmultiplier).getObject().asLiteral();
-						process.addSource((PhysicalEntity) sourcepmc, multiplier.getInt());
+						process.addSource((PhysicalEntity) sourcepmc, multiplier.getDouble());
 					}
 					// Read in the sink participants
 					NodeIterator sinkit = rdfblock.rdf.listObjectsOfProperty(propertyofres, CellMLbioRDFblock.hassinkparticipant);
@@ -681,7 +681,7 @@ public class CellMLreader extends ModelReader {
 						Resource physentres = sinkres.getPropertyResourceValue(CellMLbioRDFblock.hasphysicalentityreference);
 						PhysicalModelComponent sinkpmc = getPMCfromRDFresourceAndAnnotate(physentres);
 						Literal multiplier = sinkres.getProperty(CellMLbioRDFblock.hasmultiplier).getObject().asLiteral();
-						process.addSink((PhysicalEntity) sinkpmc, multiplier.getInt());
+						process.addSink((PhysicalEntity) sinkpmc, multiplier.getDouble());
 					}
 					// Read in the mediator participants
 					NodeIterator mediatorit = rdfblock.rdf.listObjectsOfProperty(propertyofres, CellMLbioRDFblock.hasmediatorparticipant);
@@ -690,7 +690,7 @@ public class CellMLreader extends ModelReader {
 						Resource physentres = mediatorres.getPropertyResourceValue(CellMLbioRDFblock.hasphysicalentityreference);
 						PhysicalModelComponent mediatorpmc = getPMCfromRDFresourceAndAnnotate(physentres);
 						Literal multiplier = mediatorres.getProperty(CellMLbioRDFblock.hasmultiplier).getObject().asLiteral();
-						process.addMediator((PhysicalEntity) mediatorpmc, multiplier.getInt());
+						process.addMediator((PhysicalEntity) mediatorpmc, multiplier.getDouble());
 					}
 				}
 			}

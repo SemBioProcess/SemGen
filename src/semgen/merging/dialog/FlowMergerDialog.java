@@ -1,4 +1,4 @@
-package semgen.merging;
+package semgen.merging.dialog;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -34,11 +34,11 @@ public class FlowMergerDialog extends SemGenDialog implements
 		PropertyChangeListener, ActionListener{
 
 	private static final long serialVersionUID = 7845342502406090947L;
-	public JOptionPane optionPane;
-	public JPanel mainpanel = new JPanel();
-	public String disp;
-	public OWLOntology keptont;
-	public JButton questionbutton = new JButton(SemGenIcon.questionicon);
+	private JOptionPane optionPane;
+	private JPanel mainpanel = new JPanel();
+	private String disp;
+	private OWLOntology keptont;
+	private JButton questionbutton = new JButton(SemGenIcon.questionicon);
 
 	public FlowMergerDialog(String disp, Set<String> flowdepsfromdiscarded,
 			OWLOntology discardedont, OWLOntology keptont) {
