@@ -165,7 +165,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 				JOptionPane.showMessageDialog(null,"Cannot create or load \n"+ uritocheck.toString()+
 					"\n because the file is already open for editing.",null, JOptionPane.PLAIN_MESSAGE);
 				return true;
-				}
+			}
 		}
 		return false;
 	}
@@ -175,16 +175,19 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		// If the file has been altered, prompt for a save
 		boolean returnval =  component.closeTab();
 		if (returnval) {
-			opentabs.remove(component);
 			removeTab(component);
+			if (numtabs != 0) {
+				globalactions.setCurrentTab(opentabs.get(getSelectedIndex()));
+			}
 		}
 		
 		return returnval;
 	}
 	
 	private void removeTab(SemGenTab component) {
-			remove(indexOfComponent(component));
-			numtabs = numtabs - 1;
+		opentabs.remove(component);
+		remove(indexOfComponent(component));
+		numtabs = numtabs - 1;
 	}
 	
 	// When a tab is clicked make it the currently displayed tab
