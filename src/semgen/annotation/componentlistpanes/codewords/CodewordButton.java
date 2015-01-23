@@ -9,7 +9,6 @@ import semgen.annotation.AnnotatorTab;
 import semgen.annotation.annotatorpane.composites.PropertyMarker;
 import semgen.annotation.componentlistpanes.AnnotationObjectButton;
 import semgen.utilities.SemGenFont;
-import semsim.PropertyType;
 import semsim.SemSimConstants;
 import semsim.model.computational.datastructures.DataStructure;
 
@@ -58,12 +57,12 @@ public class CodewordButton extends AnnotationObjectButton {
 		Color oldcolor = propoflabel.color;
 		Color col = Color.white; 
 		String tooltip = null;
-		PropertyType type = ds.getPropertyType(SemGen.semsimlib);
-		if(type == PropertyType.PropertyOfPhysicalEntity){
+		int type = ds.getPropertyType(SemGen.semsimlib);
+		if(type == SemSimConstants.PROPERTY_OF_PHYSICAL_ENTITY){
 			col = Color.black;
 			tooltip = "<html>Codeword identified as a property of a physical <i>entity</i></html>";
 		}
-		else if(type == PropertyType.PropertyOfPhysicalProcess){
+		else if(type == SemSimConstants.PROPERTY_OF_PHYSICAL_PROCESS){
 			col = processgreen;
 			tooltip = "<html>Codeword identified as a property of a physical <i>process</i></html>";
 		}

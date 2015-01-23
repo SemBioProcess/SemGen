@@ -20,7 +20,6 @@ import semgen.SemGenSettings;
 import semgen.annotation.annotatorpane.AnnotationPanel;
 import semgen.utilities.SemGenFont;
 import semsim.Annotatable;
-import semsim.PropertyType;
 import semsim.SemSimConstants;
 import semsim.annotation.StructuralRelation;
 import semsim.model.SemSimModel;
@@ -137,12 +136,12 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 			// Otherwise there is no process or entity specified. Set the add entity/ add process buttons
 			// based on type of physical property specified 
 			else if(datastructure.getPhysicalProperty().hasRefersToAnnotation()){
-				PropertyType type = datastructure.getPropertyType(SemGen.semsimlib);
-				if(type == PropertyType.PropertyOfPhysicalEntity){
+				int type = datastructure.getPropertyType(SemGen.semsimlib);
+				if(type == SemSimConstants.PROPERTY_OF_PHYSICAL_ENTITY){
 					addentbutton.setEnabled(true);
 					addprocbutton.setEnabled(false);
 				}
-				else if(type == PropertyType.PropertyOfPhysicalProcess){
+				else if(type == SemSimConstants.PROPERTY_OF_PHYSICAL_PROCESS){
 					addentbutton.setEnabled(false);
 					addprocbutton.setEnabled(true);
 				}
