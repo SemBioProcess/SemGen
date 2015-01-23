@@ -152,8 +152,6 @@ public class SemSimOWLwriter extends ModelWriter {
 	
 	private void addDataStructures() throws OWLException {
 		
-		
-		
 		for(DataStructure ds : localdss){		
 			String dsuri = namespace + SemSimOWLFactory.URIencoding(ds.getName());
 			OWLNamedIndividual dsind = factory.getOWLNamedIndividual(IRI.create(dsuri));
@@ -277,7 +275,6 @@ public class SemSimOWLwriter extends ModelWriter {
 								for(PhysicalEntity ent : participants){
 									URI uriforent = null;
 									if(ent instanceof CompositePhysicalEntity){
-										System.out.println("DS: " + ent.getName());
 										uriforent = processCompositePhysicalEntity((CompositePhysicalEntity) ent, namespace);
 									}
 									else{
@@ -309,7 +306,7 @@ public class SemSimOWLwriter extends ModelWriter {
 				}
 			}
 		// If not declared and not used to compute anything, leave the data structure out of the model
-	}
+		}
 	}
 	
 	private void setRelations() throws OWLException {
@@ -327,7 +324,6 @@ public class SemSimOWLwriter extends ModelWriter {
 	private void addCompositeAnnotations() throws OWLException {
 		for(PhysicalProperty prop : semsimmodel.getPropertyAndCompositePhysicalEntityMap().keySet()){
 			CompositePhysicalEntity cpe =  semsimmodel.getPropertyAndCompositePhysicalEntityMap().get(prop);
-			System.out.println("Add comp: " + cpe.makeName());
 			URI indexuri = processCompositePhysicalEntity(cpe, namespace);
 			
 			// Associate the CompositePhysicalEntity with its index uri in the ontology 
@@ -493,6 +489,7 @@ public class SemSimOWLwriter extends ModelWriter {
 		}
 	}
 	
+	// Add the model's curational metadata
 	private void addModelAnnotations() throws OWLException {
 		SemSimOWLFactory.addOntologyAnnotation(ont, SemSimLibrary.SEMSIM_VERSION_IRI, Double.toString(SemSimLibrary.SEMSIM_VERSION), manager);
 		SemSimOWLFactory.addOntologyAnnotation(ont, SemSimModel.LEGACY_CODE_LOCATION_IRI, semsimmodel.getLegacyCodeLocation(), manager);
@@ -519,7 +516,6 @@ public class SemSimOWLwriter extends ModelWriter {
 			URI compuri = URI.create(logSingularPhysicalComponentAndGetURIasString(cpe, namespace));
 			SemSimOWLFactory.createSemSimIndividual(ont, compuri.toString(), 
 					factory.getOWLClass(IRI.create(SemSimConstants.COMPOSITE_PHYSICAL_ENTITY_CLASS_URI)), "", manager);
-			System.out.println("Subclassing: " + compuri);
 
 			PhysicalEntity indexent = cpe.getArrayListOfEntities().get(0);
 			
@@ -555,7 +551,6 @@ public class SemSimOWLwriter extends ModelWriter {
 		if(nextcpe.getArrayListOfEntities().size()>1){
 			// check if an equivalent nextcpe already exists
 			nextcpe = SemSimUtil.getEquivalentCompositeEntityIfAlreadyInMap(nextcpe, compositeEntitiesAndIndexes);
-			System.out.println("Processing next: " + nextcpe.makeName());
 			nexturi = processCompositePhysicalEntity(nextcpe, namespace);
 		}
 		// If we're at the end of the composite
@@ -686,7 +681,6 @@ public class SemSimOWLwriter extends ModelWriter {
 				parenturistring = SemSimOWLFactory.getNamespaceFromIRI(uriforind) + SemSimOWLFactory.URIencoding(pmc.getName());
 				if(!allphysmodclasses.contains(parenturistring)){
 					parenturistring = pmc.getSemSimClassURI().toString();
-					System.out.println(pmc.getName() + " " + parenturistring);
 				}
 				label = pmc.getName();
 				description = pmc.getDescription();

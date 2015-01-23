@@ -57,11 +57,7 @@ public class AnnotationComponentReplacer extends SemGenDialog implements
 		optionPane.setInitialValue(options[0]);
 
 		setContentPane(optionPane);
-	}
-	
-	@Override
-	protected void showDialog() {
-
+		showDialog();
 	}
 	
 	public void propertyChange(PropertyChangeEvent arg0) {
