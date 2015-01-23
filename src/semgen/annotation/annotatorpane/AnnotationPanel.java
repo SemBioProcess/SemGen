@@ -6,9 +6,9 @@ import semgen.annotation.AnnotatorTab;
 import semgen.annotation.annotatorpane.composites.CompositeAnnotationPanel;
 import semgen.annotation.annotatorpane.composites.SemSimComponentAnnotationPanel;
 import semgen.annotation.annotatorpane.composites.StructuralRelationPanel;
-import semgen.annotation.componentdisplays.AnnotationObjectButton;
-import semgen.annotation.componentdisplays.codewords.CodewordButton;
-import semgen.annotation.componentdisplays.submodels.SubmodelButton;
+import semgen.annotation.componentlistpanes.AnnotationObjectButton;
+import semgen.annotation.componentlistpanes.codewords.CodewordButton;
+import semgen.annotation.componentlistpanes.submodels.SubmodelButton;
 import semgen.annotation.dialog.HumanDefEditor;
 import semgen.annotation.dialog.referenceclass.SingularAnnotationEditor;
 import semgen.annotation.dialog.selector.SelectorDialogForCodewordsOfSubmodel;
@@ -19,17 +19,17 @@ import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenSeparator;
 import semsim.Annotatable;
 import semsim.SemSimConstants;
+import semsim.annotation.ReferenceOntologyAnnotation;
+import semsim.annotation.StructuralRelation;
 import semsim.model.Importable;
 import semsim.model.SemSimComponent;
 import semsim.model.SemSimModel;
-import semsim.model.annotation.ReferenceOntologyAnnotation;
-import semsim.model.annotation.StructuralRelation;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.Submodel;
-import semsim.model.physical.FunctionalSubmodel;
+import semsim.model.physical.object.FunctionalSubmodel;
 import semsim.owl.SemSimOWLFactory;
 import semsim.writing.CaseInsensitiveComparator;
 
@@ -236,7 +236,7 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 		add(Box.createVerticalGlue(), BorderLayout.SOUTH);
 		
 		setVisible(true);
-		ann.dialogscrollpane.scrollToLeft();
+		ann.annotatorscrollpane.scrollToLeft();
 		this.validate();
 		this.repaint();
 	}
@@ -300,7 +300,7 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 			nestedsubmodelpane.setCustomText(editcomptext);
 			nestedsubmodelpane.setForeground(Color.gray);
 		}
-		annotator.dialogscrollpane.scrollToLeft();
+		annotator.annotatorscrollpane.scrollToLeft();
 	}
 	
 	public void refreshCompositeAnnotation(){
@@ -312,7 +312,7 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 		String comment = smc.getDescription();
 
 		// Get the human readable definition for the codeword
-		if (!comment.equals("") && comment!=null) {
+		if (!comment.equals("")) {
 			humandefpane.setCustomText(comment);
 			humandefpane.setForeground(Color.blue);
 			// Refresh the indicator icons next to the codeword in the bottom left of the Annotator
@@ -462,7 +462,7 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 	public void mouseClicked(MouseEvent arg0) {
 		if (arg0.getComponent() == humremovebutton) {
 			if(thebutton.editable){
-				smc.setDescription(null);
+				smc.setDescription("");
 				refreshHumanReadableDefinition();
 				humremovebutton.setEnabled(false);
 				annotator.setModelSaved(false);

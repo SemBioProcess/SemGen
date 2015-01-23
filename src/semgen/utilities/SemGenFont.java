@@ -1,3 +1,8 @@
+/**
+ * Class for setting the application's default font and size, allowing application
+ * wide changes to be made from a single place.
+ */
+
 package semgen.utilities;
 
 import java.awt.Font;

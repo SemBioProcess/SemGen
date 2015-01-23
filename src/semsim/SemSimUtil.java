@@ -6,16 +6,20 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.physical.CompositePhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
+import semsim.model.physical.object.CompositePhysicalEntity;
+import semsim.writing.CaseInsensitiveComparator;
 
 /**
  * A collection of utility methods for working with SemSim models
@@ -96,7 +100,6 @@ public class SemSimUtil {
 		return selfrefODE;
 	}
 	
-	
 	/**
 	 * Replace all occurrences of a sub-string within a mathematical expression
 	 *  @param exp The expression that will be processed for replacement
@@ -104,8 +107,7 @@ public class SemSimUtil {
 	 *  @param discarded The string to be replaced
 	 *  @return A string containing any replacements
 	 */
-	public static String replaceCodewordsInString(String exp, String kept, String discarded) {
-		
+	public static String replaceCodewordsInString(String exp, String kept, String discarded) {	
 		if(exp.contains(discarded)){
 			// need end of line delimiter so the pattern matches against codewords that end the line
 			String eqstring = " " + exp + " ";
@@ -122,8 +124,7 @@ public class SemSimUtil {
 				result = m.find();
 			}
 			m.appendTail(sb);
-			String newcompcode = sb.toString().trim();
-			return newcompcode;
+			return sb.toString().trim();
 		}
 		else return exp;
 	}
@@ -134,23 +135,18 @@ public class SemSimUtil {
 	 *  @param outputfile The file to which the string will be written
 	 */
 	public static void writeStringToFile(String content, File outputfile){
-		if(content!=null){
-			if(!content.equals("") && outputfile!=null){
-				PrintWriter pwriter;
-				try {
-					pwriter = new PrintWriter(new FileWriter(outputfile));
-					pwriter.print(content);
-					pwriter.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}			
+		if(content!=null && !content.equals("") && outputfile!=null){
+			try {
+				PrintWriter pwriter = new PrintWriter(new FileWriter(outputfile));
+				pwriter.print(content);
+				pwriter.close();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 	}
 	
-	
-	public static CompositePhysicalEntity getEquivalentCompositeEntityIfAlreadyInMap(CompositePhysicalEntity cpe, Map<? extends PhysicalModelComponent, URI> map){
-		
+	public static CompositePhysicalEntity getEquivalentCompositeEntityIfAlreadyInMap(CompositePhysicalEntity cpe, Map<? extends PhysicalModelComponent, URI> map){		
 		// Go through the composite physical entities already processed and see if there is one that
 		// matches the cpe argument in terms of the physical entities and structural relations used
 		for(PhysicalModelComponent testcomp : map.keySet()){
@@ -167,4 +163,15 @@ public class SemSimUtil {
 		if(cpe == null) System.out.println("Next cpe was null");
 		return cpe;
 	}	
+	
+	/* 
+	 * Take collection of DataStructures and return an ArrayList sorted alphabetically
+	 * */
+	public static ArrayList<DataStructure> alphebetizeSemSimObjects(Collection<DataStructure>  collection) {
+		TreeMap<String, DataStructure> dsnamemap = new TreeMap<String, DataStructure>(new CaseInsensitiveComparator());
+		for (DataStructure ds : collection) {
+			dsnamemap.put(ds.getName(), ds);
+		}
+		return new ArrayList<DataStructure>(dsnamemap.values());
+	}
 }

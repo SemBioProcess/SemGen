@@ -5,12 +5,10 @@ import java.net.URI;
 import semsim.owl.SemSimOWLFactory;
 
 public class MIRIAMannotation {
-	int qualifier;
 	public String rdflabel;
 	public URI fulluri;
 	
-	public MIRIAMannotation(int qualifier, String uristring, String rdflabel){
-		this.qualifier = qualifier;
+	public MIRIAMannotation(String uristring, String rdflabel){
 		this.rdflabel = rdflabel;
 		fulluri = URI.create(uristring);
 	}

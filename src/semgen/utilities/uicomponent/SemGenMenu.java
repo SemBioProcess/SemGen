@@ -46,6 +46,7 @@ public abstract class SemGenMenu extends JMenu implements ActionListener {
 		item.addActionListener(this);
 		return item;
 	}
+	
 	@Override
 	public abstract void actionPerformed(ActionEvent arg0);
 	

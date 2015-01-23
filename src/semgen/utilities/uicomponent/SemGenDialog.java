@@ -1,3 +1,7 @@
+/** 
+ * Abstract class for producing dialogs with consistent behavior.
+ */
+
 package semgen.utilities.uicomponent;
 
 import javax.swing.JDialog;
@@ -19,6 +23,9 @@ public abstract class SemGenDialog extends JDialog{
 		frame = location;
 	}
 	
+	/**
+	 * Call when the dialog is ready for display
+	 */
 	protected void showDialog() {
 		pack();
 		setLocationRelativeTo(location);

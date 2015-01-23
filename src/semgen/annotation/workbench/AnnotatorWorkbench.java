@@ -16,13 +16,15 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import semgen.GlobalActions;
 import semgen.SemGen;
+import semgen.annotation.routines.AnnotationCopier;
+import semgen.annotation.workbench.ModelAnnotationsBench.ModelChangeEnum;
 import semgen.utilities.CSVExporter;
 import semgen.utilities.SemGenError;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semsim.SemSimUtil;
+import semsim.annotation.SemSimRelation;
 import semsim.model.SemSimModel;
-import semsim.model.annotation.SemSimRelation;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.ModelClassifier;
 import semsim.writing.CellMLwriter;
@@ -31,19 +33,18 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	private SemSimModel semsimmodel;
 	protected File sourcefile; //File originally loaded at start of Annotation session (could be 
 							//in SBML, MML, CellML or SemSim format)
-	private ModelAnnotations modanns;
+	private ModelAnnotationsBench modanns;
 	private boolean modelsaved = true;
 	private int lastsavedas = -1;
 	
 	public AnnotatorWorkbench(File file, SemSimModel model) {
 		semsimmodel = model;
 		sourcefile = file;
-		lastsavedas = semsimmodel.getSourceModelType();
-		
+		lastsavedas = semsimmodel.getSourceModelType();	
 	}
 	
 	public void initialize() {
-		modanns = new ModelAnnotations(semsimmodel);
+		modanns = new ModelAnnotationsBench(semsimmodel);
 		modanns.addObserver(this);
 		// Add unspecified physical model components for use during annotation
 		semsimmodel.addCustomPhysicalEntity(SemSimModel.unspecifiedName, "Non-specific entity for use as a placeholder during annotation");
@@ -103,7 +104,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 					}
 					else if(lastsavedas==ModelClassifier.CELLML_MODEL){
 						File outputfile =  new File(fileURI);
-						String content = new CellMLwriter().writeToString(semsimmodel);
+						String content = new CellMLwriter(semsimmodel).writeToString();
 						SemSimUtil.writeStringToFile(content, outputfile);
 					}
 				} catch (Exception e) {e.printStackTrace();}		
@@ -123,7 +124,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 
 	@Override
 	public File saveModelAs() {
-		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("Choose location to save file", new String[]{"cellml","owl"});
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("Choose location to save file", new String[]{"owl"});
 		if (filec.SaveAsAction()!=null) {
 			sourcefile = filec.getSelectedFile();
 			lastsavedas = filec.getFileType();
@@ -178,10 +179,23 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		setModelSaved(false);
 	}
 	
+	public void importModelAnnotations() {
+		AnnotationCopier copier = new AnnotationCopier(semsimmodel);
+		if (copier.doCopy()) {
+			setChanged();
+			notifyObservers();
+		}
+	}
+	
+	public ModelAnnotationsBench getModelAnnotationsWorkbench() {
+		return modanns;
+	}
+	
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		setModelSaved(false);
+		if (arg1!=ModelChangeEnum.METADATASELECTED) {
+			setModelSaved(false);
+		}
 	}
-
 
 }

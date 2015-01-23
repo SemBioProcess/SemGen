@@ -1,26 +1,21 @@
 package semgen.visualizations;
 
-import java.awt.BorderLayout;
+import java.awt.Desktop;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URISyntaxException;
+import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.JPanel;
-
-import chrriis.common.WebServer;
-import chrriis.dj.nativeswing.swtimpl.NativeInterface;
-import chrriis.dj.nativeswing.swtimpl.components.WebBrowserAdapter;
-import chrriis.dj.nativeswing.swtimpl.components.WebBrowserEvent;
+import org.apache.commons.io.IOUtils;
 
 import com.google.gson.Gson;
-
 import semgen.SemGen;
-import semsim.PropertyType;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
@@ -28,20 +23,36 @@ import semsim.model.computational.datastructures.MappableVariable;
 /**
  * Displays D3 visualizations of a SemSim model
  * 
- * To add a new visualization:
- * 1) Create a new html template in the resources folder
- * 2) Add an entry in for the template in _visualizationTemplates
- * 
  * @author Ryan
  *
  */
 public class D3 {
 
-	// D3 main html file
-	private final static String D3MainHtml = "/resources/d3/main.html";
+	// This string is used to insert graph json into html.
+	// The template html files that define the d3 graphs contain this string.
+	// When we load the template files we replace this string with the json representation of the SemSim model
+	//
+	// Note: Paths to the template files are contained in _visualizationTemplates.
+	// Take a look at one of the files and search for %GRAPHJSON% to see how its used 
+	private static final String GraphJsonReplaceString = "%GRAPHJSON%";
+	
+	// Maps a visualization type to a template file
+	private static final Map<VisualizationType, String> _visualizationTemplates;
 	
 	// Json representation of the semsim model
 	private String _graphJson;
+	
+	/**
+	 * Initialize the visualization template map
+	 */
+	static {
+		Map<VisualizationType, String> visualizationTemplates = new Hashtable<VisualizationType, String>();
+		visualizationTemplates.put(VisualizationType.DirectedGraph, "/resources/d3DirectedEdgesTemplate.html");
+		visualizationTemplates.put(VisualizationType.DependencyWheel, "/resources/d3DependencyWheelTemplate.html");
+		
+		// Save an immutable map
+		_visualizationTemplates = Collections.unmodifiableMap(visualizationTemplates);
+	}
 	
 	public D3(SemSimModel semSimModel)
 	{
@@ -59,44 +70,26 @@ public class D3 {
 	 * 4) Opens the temporary html file
 	 * 
 	 * @param visualizationType - type of d3 visualization
-	 * @throws URISyntaxException 
 	 * @throws IOException
 	 */
-	public JPanel visualize()
+	public void visualize(VisualizationType visualizationType) throws IOException
 	{
-		System.out.println("Loading d3 graph");
+		// Load the html
+		String visualizationTemplateFilePath = _visualizationTemplates.get(visualizationType);
+		InputStream htmlInputStream = D3.class.getResourceAsStream(visualizationTemplateFilePath);
+		String html = IOUtils.toString(htmlInputStream);
 		
-		NativeInterface.open();
+		// Embed the SemSim model graph json in the html
+		html = html.replace(GraphJsonReplaceString, _graphJson);
 		
-		// Embed the browser in a java panel
-		JPanel webBrowserPanel = new JPanel(new BorderLayout());
-		CommunicatingWebBrowser<D3WebBrowserCommandSender> webBrowser = new CommunicatingWebBrowser<D3WebBrowserCommandSender>(D3WebBrowserCommandSender.class);
-	    webBrowser.setMenuBarVisible(false);
-        webBrowser.setBarsVisible(false);
-        webBrowser.setFocusable(false);
-	    webBrowser.navigate(WebServer.getDefaultWebServer().getClassPathResourceURL(getClass().getName(), D3MainHtml));
-	    webBrowserPanel.add(webBrowser, BorderLayout.CENTER);
-	    
-	    // Used to send commands to javascript
-	    final D3WebBrowserCommandSender commandSender = webBrowser.getCommandSender();
-	    
-	    // When the page is loaded send the graph json to the browser
-	    webBrowser.addWebBrowserListener(new WebBrowserAdapter() {
-
-	    	@Override
-			public void loadingProgressChanged(WebBrowserEvent e) {
-	    		if(e.getWebBrowser().getLoadingProgress() == 100)
-	    		{
-	    			// Send the json to javascript
-	    			commandSender.loadGraph(D3.this._graphJson);
-	    			e.getWebBrowser().removeWebBrowserListener(this);
-	    		}
-	    	}
-		});
-
-	    System.out.println("D3 graph loaded.");
-	    
-	    return webBrowserPanel;
+		// Create a temporary html file containing the new html
+		File tempHtmlFile = File.createTempFile("d3visualization-" + visualizationType, ".html");
+		BufferedWriter bw = new BufferedWriter(new FileWriter(tempHtmlFile));
+	    bw.write(html);
+	    bw.close();
+		
+	    // Open the temp html file
+	    Desktop.getDesktop().browse(tempHtmlFile.toURI());
 	}
 	
 	/**
@@ -113,25 +106,9 @@ public class D3 {
 		// out with nodes and links before we turn it to json.
 		Graph d3Graph = new Graph();
 		
-		// Get solution domain declarations
-		Set<DataStructure> domaincodewords = new HashSet<DataStructure>();
-		for(DataStructure ds : semSimModel.getSolutionDomains()){
-			domaincodewords.add(semSimModel.getDataStructure(ds.getName() + ".min"));
-			domaincodewords.add(semSimModel.getDataStructure(ds.getName() + ".max"));
-			domaincodewords.add(semSimModel.getDataStructure(ds.getName() + ".delta"));
-		}
-		
 		// Loop over all of the data structures (variables) and insert relationships into
 		// the d3 graph
 		for(DataStructure dataStructure : semSimModel.getDataStructures()){
-			// If the data structure is part of a solution domain declaration or
-			// it is not used to compute any other terms, ignore it.
-			if(dataStructure.isSolutionDomain() ||
-				domaincodewords.contains(dataStructure) && dataStructure.getUsedToCompute().isEmpty())
-			{
-				continue;
-			}
-			
 			// Are there inputs?
 			Set<? extends DataStructure> inputs = null;
 			if(dataStructure.getComputation()!=null)
@@ -157,15 +134,25 @@ public class D3 {
 	}
 	
 	/**
+	 * Type of d3 visualization
+	 * 
+	 * @author Ryan
+	 *
+	 */
+	public enum VisualizationType
+	{
+		DirectedGraph,
+		DependencyWheel
+	}
+	
+	/**
 	 * Represents a node in a d3 graph
 	 * 
 	 * @author Ryan
 	 *
 	 */
 	private class Node {
-		@SuppressWarnings("unused")
 		public int group;
-		
 		public String name;
 		
 		private transient int _nodeIndex;
@@ -187,13 +174,8 @@ public class D3 {
 	 *
 	 */
 	private class Link {
-		@SuppressWarnings("unused")
 		public int source;
-		
-		@SuppressWarnings("unused")
 		public int target;
-		
-		@SuppressWarnings("unused")
 		public int value;
 		
 		public Link(int source, int target)
@@ -213,7 +195,6 @@ public class D3 {
 	private class Graph {
 		public ArrayList<Node> nodes;
 		public ArrayList<Link> links;
-		public Map<Integer, String> groups;
 		
 		private transient Map<String, Node> _nodeCache;
 		
@@ -223,7 +204,6 @@ public class D3 {
 			links = new ArrayList<Link>();
 			
 			_nodeCache = new Hashtable<String, Node>();
-			groups = new HashMap<Integer, String>();
 		}
 		
 		/**
@@ -243,13 +223,9 @@ public class D3 {
 			if(_nodeCache.containsKey(name))
 				return _nodeCache.get(name);
 				
-			PropertyType type = dataStructure.getPropertyType(SemGen.semsimlib);
-			if(!groups.containsKey(type.getIndex()))
-				groups.put(type.getIndex(), type.toString());
-			
 			// Create a the new node representing this data structure (variable)
 			Node node = new Node(dataStructure.getName(),
-					type.getIndex(),
+					dataStructure.getPropertyType(SemGen.semsimlib),
 					this.nodes.size());
 			
 			// Add the new node to our list of nodes

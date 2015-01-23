@@ -1,8 +1,12 @@
+/**
+ * Application entry point. Resource verification and initialization, application configuration
+ * and Frame creation are all specified in this class.
+ */
+
 package semgen;
 
 import java.awt.Color;
 import java.awt.HeadlessException;
-import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
@@ -26,32 +30,40 @@ import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.SemGenGUI;
 import semgen.menu.SemGenMenuBar;
+import semgen.utilities.OntologyCache;
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.utilities.uicomponent.SemGenDialog;
-import semgen.utilities.uicomponent.SemGenProgressBar;
+import semsim.ErrorLog;
 import semsim.SemSimLibrary;
+import semsim.reading.ModelReader;
+import semsim.writing.ModelWriter;
 
 public class SemGen extends JFrame implements Observer{
 	private static final long serialVersionUID = 1L;
-	public static SemSimLibrary semsimlib = new SemSimLibrary();
-	private GlobalActions gacts = new GlobalActions();
-	
-	public static double version = 2.0;
+
+	public static double version = 3.0;
 	public static PrintWriter logfilewriter;
 	public static File tempdir = new File(System.getProperty("java.io.tmpdir"));
 	public static final String logfileloc = tempdir.getAbsolutePath() + "/SemGen_log.txt";
-	public static final File logfile = new File(logfileloc);
+	public static OntologyCache termcache = new OntologyCache();
+	private final static File logfile = new File(logfileloc);
 	
 	private final static int WINDOWS=1;
 	private static final int MACOSX=2;
 	
-	private SemGenSettings settings = new SemGenSettings();
 	public static Date datenow = new Date();
 	public SimpleDateFormat sdflog = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
-
-	SemGenGUI contentpane = null; 
+	
+	//The application store for the default settings
+	private SemGenSettings settings = new SemGenSettings();
+	//A library of SemSim constants and definitions. This is created once and referenced
+	//without modification by the rest of the program.
+	public static SemSimLibrary semsimlib = new SemSimLibrary();
+	//A class for application level events such as exiting and creating new tabs
+	private GlobalActions gacts = new GlobalActions();
+	private SemGenGUI contentpane = null; 
 	
 	/** Main method for running an instance of SemGen */
 	public static void main(String[] args) {
@@ -63,6 +75,7 @@ public class SemGen extends JFrame implements Observer{
 		
 		System.out.print("Loading SemGen...");
 		logfilewriter.println("Loading SemGen");
+		configureSemSim();
 		
 		 SwingUtilities.invokeLater(new Runnable() {
 		     public void run() {
@@ -70,6 +83,14 @@ public class SemGen extends JFrame implements Observer{
 		     }
 		  });
 	}
+	
+	private static void configureSemSim() {
+		ModelReader.pointtoSemSimLibrary(semsimlib);
+		ModelWriter.pointtoSemSimLibrary(semsimlib);
+		ErrorLog.setLogFile(logfilewriter);
+	}
+
+	/**Set the user interface look and feel to the Nimbus Swing layout and create the frame*/
 	public static void createAndShowGUI() {
 		try {
 			UIManager.put("nimbusOrange", new Color(51,98,140));
@@ -93,20 +114,20 @@ public class SemGen extends JFrame implements Observer{
 		super("OSXAdapter");
 		OSValidation();
 		
-		//Title and configure application
 		setTitle(":: S e m  G e n ::");
+		//Set the default location for the creation of child windows (ie: dialogs) as the center  
+		//of the main frame
 		SemGenError.setFrame(this);
 		SemGenDialog.setFrame(this);
-		SemGenProgressBar.setLocation(this);
+		
 		SemGenOpenFileChooser.currentdirectory = new File(settings.getStartDirectory());
 		// Need this for programmatic use of jsbatch
 		System.setProperty("jsim.home", "./jsimhome");
+		//Create an instance of SemGen's default font and load it into memory
 		SemGenFont.defaultUIFont();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		settings.setAppSize(Toolkit.getDefaultToolkit().getScreenSize());
-		
 		gacts.addObserver(this);
-		
+		 
 		SemGenMenuBar menubar = new SemGenMenuBar(settings, gacts);
 		contentpane = new SemGenGUI(settings, menubar, gacts);
 		setContentPane(contentpane);
@@ -116,6 +137,9 @@ public class SemGen extends JFrame implements Observer{
 		addListeners();
 		this.pack();
 		
+		//Maximize screen
+		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
+		settings.setAppSize(getSize());
 		System.out.println("Loaded.");
 		logfilewriter.println("Session started on: " + sdflog.format(datenow) + "\n");
 		
@@ -153,7 +177,8 @@ public class SemGen extends JFrame implements Observer{
 		else 
 			JOptionPane.showMessageDialog(this, "Couldn't open " + libsbmlfile.getAbsolutePath() + " for loading.");
 	}
-	//Define and Add Frame Listeners
+	
+	/**Define and Add Frame Listeners */
 	private void addListeners() {
 		//On frame resize or move, store new dimensions
 		addComponentListener(new ComponentAdapter() {
@@ -177,13 +202,16 @@ public class SemGen extends JFrame implements Observer{
 			}
 		});
 	}
-	//Quit - behavior defined in content frame
+
+	/** Quit - verify that it is OK to quit and store the user's current preferences
+	 * and any local ontology terms if it yes
+	 * */
 	public void quit() throws HeadlessException, OWLException {
 		
 		if(contentpane.quit()){
 			try {
 				settings.storeSettings();
-				semsimlib.storeCachedOntologyTerms();
+				termcache.storeCachedOntologyTerms();
 				System.exit(0);
 			} 
 			catch (URISyntaxException e) {e.printStackTrace();}

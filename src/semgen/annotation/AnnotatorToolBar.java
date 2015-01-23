@@ -14,22 +14,20 @@ import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
-import semgen.annotation.componentdisplays.codewords.CodewordButton;
+import semgen.annotation.componentlistpanes.codewords.CodewordButton;
 import semgen.annotation.dialog.AnnotationComponentReplacer;
-import semgen.annotation.dialog.ModelLevelMetadataEditor;
 import semgen.annotation.dialog.referenceclass.AddReferenceClassDialog;
 import semgen.annotation.dialog.selector.RemovePhysicalComponentDialog;
-import semgen.annotation.routines.AnnotationCopier;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.encoding.Encoder;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.DropDownCheckList;
 import semgen.utilities.uicomponent.SemGenTabToolbar;
 import semsim.SemSimConstants;
-import semsim.model.physical.CompositePhysicalEntity;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
+import semsim.model.physical.object.CompositePhysicalEntity;
 
 public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener {
 	private static final long serialVersionUID = 1L;
@@ -38,7 +36,6 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 	private AnnotatorWorkbench workbench;
 	private SemGenToolbarButton annotateitemchangesourcemodelcode = new SemGenToolbarButton(SemGenIcon.setsourceicon);
 	private SemGenToolbarButton annotateitemcopy = new SemGenToolbarButton(SemGenIcon.importicon);
-	private SemGenToolbarButton annotateitemeditmodelanns = new SemGenToolbarButton(SemGenIcon.annotatemodelicon);
 	private SemGenToolbarButton annotateitemexportcsv = new SemGenToolbarButton(SemGenIcon.exporticon);
 	private SemGenToolbarButton annotateitemshowmarkers;
 	private JButton annotateitemshowimports = new JButton("Show imports");
@@ -82,9 +79,6 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		annotateitemexportcsv.setToolTipText("Create a .csv file that tabulates model codeword annotations for use in spreadsheets, manuscript preparation, etc.");
 		annotateitemexportcsv.addActionListener(this);
 
-		annotateitemeditmodelanns.setToolTipText("Edit metadata for this SemSim model");
-		annotateitemeditmodelanns.addActionListener(this);
-		
 		annotateitemaddrefterm.addActionListener(this);
 		annotateitemaddrefterm.setToolTipText("Add a reference ontology term to use for annotating this model");
 		
@@ -106,7 +100,6 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		add(sortselector);
 		addSeparator();
 		
-		add(annotateitemeditmodelanns);
 		add(annotateitemchangesourcemodelcode);
 		add(annotateitemcopy);
 		add(annotateitemexportcsv);
@@ -174,16 +167,8 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 				workbench.exportCSV(); 
 		}
 		
-		if(o == annotateitemeditmodelanns){
-				new ModelLevelMetadataEditor(anntab);
-		}
-		
 		if (o == annotateitemcopy) {
-				try {
-					new AnnotationCopier(anntab);
-				} catch (OWLException | CloneNotSupportedException e1) {
-					e1.printStackTrace();
-				}
+			workbench.importModelAnnotations();
 		}
 		
 		if (o == annotateitemaddrefterm) {

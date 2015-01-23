@@ -21,6 +21,7 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
+import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.NodeIterator;
 import com.hp.hpl.jena.rdf.model.Property;
@@ -30,43 +31,43 @@ import com.hp.hpl.jena.rdf.model.Statement;
 
 import semsim.CellMLconstants;
 import semsim.SemSimConstants;
+import semsim.annotation.Annotation;
+import semsim.annotation.CurationalMetadata;
+import semsim.annotation.CurationalMetadata.Metadata;
+import semsim.annotation.ReferenceOntologyAnnotation;
+import semsim.annotation.StructuralRelation;
 import semsim.model.SemSimComponent;
 import semsim.model.SemSimModel;
-import semsim.model.annotation.Annotation;
-import semsim.model.annotation.ReferenceOntologyAnnotation;
-import semsim.model.annotation.StructuralRelation;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
-import semsim.model.physical.CompositePhysicalEntity;
-import semsim.model.physical.CustomPhysicalEntity;
-import semsim.model.physical.FunctionalSubmodel;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
-import semsim.model.physical.PhysicalProperty;
 import semsim.model.physical.Submodel;
+import semsim.model.physical.object.CompositePhysicalEntity;
+import semsim.model.physical.object.CustomPhysicalEntity;
+import semsim.model.physical.object.FunctionalSubmodel;
+import semsim.model.physical.object.PhysicalProperty;
 import semsim.owl.SemSimOWLFactory;
 import semsim.writing.CellMLbioRDFblock;
 
-public class CellMLreader {
-
+public class CellMLreader extends ModelReader {
 	private Namespace mainNS;
-	private SemSimModel semsimmodel;
 	private CellMLbioRDFblock rdfblock;
 	private String rdfstring;
 	private Element rdfblockelement;
 	private Map<String, PhysicalModelComponent> URIandPMCmap = new HashMap<String, PhysicalModelComponent>();
 	private String unnamedstring = "[unnamed!]";
-
-	
 	private XMLOutputter xmloutputter = new XMLOutputter();
-
-	public SemSimModel readFromFile(File file) {
-		
-		String modelname = file.getName().substring(0, file.getName().indexOf("."));
-		semsimmodel = new SemSimModel();
+	
+	public CellMLreader(File file) {
+		super(file);
+	}
+	
+	public SemSimModel readFromFile() {
+		String modelname = srcfile.getName().substring(0, srcfile.getName().indexOf("."));
 		semsimmodel.setName(modelname);
 		
 		xmloutputter.setFormat(Format.getPrettyFormat());
@@ -74,12 +75,8 @@ public class CellMLreader {
 		SAXBuilder builder = new SAXBuilder();
 		Document doc = null;
 		try {
-			doc = builder.build(file);
-		} catch (JDOMException e) {
-			e.printStackTrace();
-			semsimmodel.addError(e.getLocalizedMessage());
-			return semsimmodel;
-		} catch (IOException e) {
+			doc = builder.build(srcfile);
+		} catch (JDOMException | IOException e) {
 			e.printStackTrace();
 			semsimmodel.addError(e.getLocalizedMessage());
 			return semsimmodel;
@@ -90,9 +87,9 @@ public class CellMLreader {
 		}
 
 		// Add model-level metadata
-		semsimmodel.addAnnotation(new Annotation(SemSimConstants.LEGACY_CODE_LOCATION_RELATION, file.getAbsolutePath()));
-		semsimmodel.addAnnotation(new Annotation(SemSimConstants.SEMSIM_VERSION_RELATION, Double.toString(SemSimConstants.SEMSIM_VERSION)));
-
+		semsimmodel.setSourcefilelocation(srcfile.getAbsolutePath());
+		semsimmodel.setSemsimversion(sslib.getSemSimVersion());
+		
 		// Get the namespace that indicates if it is a CellML 1.0 or 1.1 model
 		mainNS = doc.getRootElement().getNamespace();
 		
@@ -106,7 +103,7 @@ public class CellMLreader {
 			rdfstring = getUTFformattedString(xmloutputter.outputString(rdfblockelement));
 		}
 		
-		rdfblock = new CellMLbioRDFblock(semsimmodel, rdfstring, mainNS.getURI().toString());
+		rdfblock = new CellMLbioRDFblock(semsimmodel.getNamespace(), rdfstring, mainNS.getURI().toString());
 		
 		// Get the semsim namespace of the model, if present, according to the rdf block
 		String modelnamespacefromrdfblock = rdfblock.rdf.getNsPrefixURI("model");
@@ -133,7 +130,8 @@ public class CellMLreader {
 				Element importedcompel = (Element) importedcompsit.next();
 				String localcompname = importedcompel.getAttributeValue("name");
 				String origcompname = importedcompel.getAttributeValue("component_ref");
-				FunctionalSubmodel instantiatedsubmodel = SemSimComponentImporter.importFunctionalSubmodel(file, semsimmodel, localcompname, origcompname, hrefValue);
+				FunctionalSubmodel instantiatedsubmodel = 
+						SemSimComponentImporter.importFunctionalSubmodel(srcfile, semsimmodel, localcompname, origcompname, hrefValue, sslib);
 				String metadataid = importedcompel.getAttributeValue("id", CellMLconstants.cmetaNS);
 				instantiatedsubmodel.setMetadataID(metadataid);
 
@@ -151,7 +149,7 @@ public class CellMLreader {
 			UnitOfMeasurement uom = new UnitOfMeasurement(unitname);
 			semsimmodel.addUnit(uom);
 			String isbaseunitval = unit.getAttributeValue("base_units");
-			if(isbaseunitval!=null || CellMLconstants.CellML_UNIT_DICTIONARY.contains(unitname)){
+			if(isbaseunitval!=null || sslib.isCellMLBaseUnit(unitname)){
 				uom.setFundamental(true);
 			}
 			else{
@@ -161,7 +159,6 @@ public class CellMLreader {
 		
 		unitit = doc.getRootElement().getChildren("units", mainNS).iterator();
 
-		
 		// Process the unit factors
 		while(unitit.hasNext()){
 			Element unit = (Element) unitit.next();
@@ -190,7 +187,6 @@ public class CellMLreader {
 		// Iterate through all the components, create new members of the SemSim "Submodel" class as we go
 		Iterator<?> componentit = doc.getRootElement().getChildren("component", mainNS).iterator();
 		while(componentit.hasNext()){
-
 			Element comp = (Element) componentit.next();
 			String compname = comp.getAttributeValue("name");
 			String metadataid = comp.getAttributeValue("id", CellMLconstants.cmetaNS);
@@ -247,11 +243,11 @@ public class CellMLreader {
 				}
 				
 				// Set interface values
-				if(publicinterface!=null) ((MappableVariable)cvar).setPublicInterfaceValue(publicinterface);
-				if(privateinterface!=null) ((MappableVariable)cvar).setPrivateInterfaceValue(privateinterface);
+				if(publicinterface!=null) cvar.setPublicInterfaceValue(publicinterface);
+				if(privateinterface!=null) cvar.setPrivateInterfaceValue(privateinterface);
 				
 				// CHANGE THIS?  What is scope of initial value?
-				if(initval!=null) ((MappableVariable)cvar).setCellMLinitialValue(initval);
+				if(initval!=null) cvar.setCellMLinitialValue(initval);
 
 				cvar.setPhysicalProperty(new PhysicalProperty());
 				
@@ -350,9 +346,6 @@ public class CellMLreader {
 				MappableVariable var1 = (MappableVariable) semsimmodel.getDataStructure(var1name);
 				MappableVariable var2 = (MappableVariable) semsimmodel.getDataStructure(var2name);
 				
-				MappableVariable inputvar = null;
-				MappableVariable outputvar = null;
-				
 				Submodel encapsulatedsubmodel = null;
 				MappableVariable encapsulatedvariable = null;
 				MappableVariable encapsulatingvariable = null;
@@ -376,6 +369,9 @@ public class CellMLreader {
 					}
 				}
 				
+				MappableVariable inputvar = null;
+				MappableVariable outputvar = null;
+				
 				if(var1.getPublicInterfaceValue()!=null && var2.getPublicInterfaceValue()!=null){
 					if(var1.getPublicInterfaceValue().equals("out") && var2.getPublicInterfaceValue().equals("in")){
 						inputvar = var1;
@@ -397,6 +393,7 @@ public class CellMLreader {
 						outputvar = encapsulatedvariable;
 					}
 				}
+				
 				if(inputvar==null || outputvar==null){
 					semsimmodel.addError("Error mapping " + var1.getName() + " to " + var2.getName() + ": could not arrange an interface based on the variables' input/output designations");
 				}
@@ -457,10 +454,8 @@ public class CellMLreader {
 		if(doc.getRootElement()!=null){
 			String name = doc.getRootElement().getAttributeValue("name");
 			String id = doc.getRootElement().getAttributeValue("id", CellMLconstants.cmetaNS);
-			if(name!=null && !name.equals(""))
-				semsimmodel.addAnnotation(new Annotation(SemSimConstants.MODEL_NAME_RELATION, id));
-			if(id!=null && !id.equals(""))
-				semsimmodel.addAnnotation(new Annotation(SemSimConstants.MODEL_ID_RELATION, id));
+			if(name!=null && !name.equals("")) semsimmodel.setModelAnnotation(Metadata.fullname, id);
+			if(id!=null && !id.equals("")) semsimmodel.setModelAnnotation(Metadata.sourcemodelid, id);
 			
 			// Try to get pubmed ID from RDF tags
 			if(doc.getRootElement().getChild("RDF", CellMLconstants.rdfNS)!=null){
@@ -519,7 +514,7 @@ public class CellMLreader {
 			// end documentation processing
 		}
 		if(ab!=null && !ab.equals(""))
-			semsimmodel.addAnnotation(new Annotation(SemSimConstants.REFERENCE_PUBLICATION_PUBMED_ID_RELATION, ab));
+			semsimmodel.addAnnotation(new Annotation(CurationalMetadata.REFERENCE_PUBLICATION_PUBMED_ID_RELATION, ab));
 	}
 	
 	
@@ -543,20 +538,21 @@ public class CellMLreader {
 	private void stripSemSimRelatedContentFromRDFblock(Model rdf){
 		Iterator<Statement> stit = rdf.listStatements();
 		List<Statement> listofremovedstatements = new ArrayList<Statement>();
+		String modelns = semsimmodel.getNamespace();
 		while(stit.hasNext()){
 			Statement st = (Statement) stit.next();
 			RDFNode obnode = st.getObject();
 			if(obnode instanceof Resource){
 				Resource obres = (Resource)obnode;
 				if(obres.getNameSpace()!=null){
-					if(obres.getNameSpace().equals(semsimmodel.getNamespace())){
+					if(obres.getNameSpace().equals(modelns)){
 						listofremovedstatements.add(st);
 					}
 				}
 			}
 			Resource subres = st.getSubject();
 				if(subres.getNameSpace()!=null){
-					if(subres.getNameSpace().equals(semsimmodel.getNamespace())){
+					if(subres.getNameSpace().equals(modelns)){
 						listofremovedstatements.add(st);
 					}
 				}
@@ -573,14 +569,13 @@ public class CellMLreader {
 	
 	// Collect the reference ontology term used to describe the model component
 	private URI collectSingularBiologicalAnnotation(Document doc, SemSimComponent toann, Element el){
-		URI singularannURI = null;
-		
 		// Look for rdf markup as child of element
 		Element mainrdfel = el.getChild("RDF", CellMLconstants.rdfNS);
 		// If not present, look for it in main RDF block
 		if(mainrdfel==null)
 			mainrdfel = rdfblockelement;
 		
+		URI singularannURI = null;
 		if(mainrdfel!=null){
 			Iterator<?> descit = mainrdfel.getChildren("Description", CellMLconstants.rdfNS).iterator();
 			
@@ -593,8 +588,7 @@ public class CellMLreader {
 				if(about!=null) ref = about.replace("#", "");
 				else if(ID!=null) ref = ID;
 				
-				if(ref!=null){
-					
+				if(ref!=null){				
 					if(ref.equals(toann.getMetadataID())){
 						Element relel = rdfdesc.getChild("is", CellMLconstants.bqbNS);
 						Element freeel = rdfdesc.getChild("description", CellMLconstants.dctermsNS);
@@ -677,8 +671,8 @@ public class CellMLreader {
 						Resource sourceres = (Resource) sourceit.next();
 						Resource physentres = sourceres.getPropertyResourceValue(CellMLbioRDFblock.hasphysicalentityreference);
 						PhysicalModelComponent sourcepmc = getPMCfromRDFresourceAndAnnotate(physentres);
-						sourceres.getProperty(CellMLbioRDFblock.hasmultiplier).getObject().asLiteral();
-						process.addSource((PhysicalEntity) sourcepmc);
+						Literal multiplier = sourceres.getProperty(CellMLbioRDFblock.hasmultiplier).getObject().asLiteral();
+						process.addSource((PhysicalEntity) sourcepmc, multiplier.getDouble());
 					}
 					// Read in the sink participants
 					NodeIterator sinkit = rdfblock.rdf.listObjectsOfProperty(propertyofres, CellMLbioRDFblock.hassinkparticipant);
@@ -686,8 +680,8 @@ public class CellMLreader {
 						Resource sinkres = (Resource) sinkit.next();
 						Resource physentres = sinkres.getPropertyResourceValue(CellMLbioRDFblock.hasphysicalentityreference);
 						PhysicalModelComponent sinkpmc = getPMCfromRDFresourceAndAnnotate(physentres);
-						sinkres.getProperty(CellMLbioRDFblock.hasmultiplier).getObject().asLiteral();
-						process.addSink((PhysicalEntity) sinkpmc);
+						Literal multiplier = sinkres.getProperty(CellMLbioRDFblock.hasmultiplier).getObject().asLiteral();
+						process.addSink((PhysicalEntity) sinkpmc, multiplier.getDouble());
 					}
 					// Read in the mediator participants
 					NodeIterator mediatorit = rdfblock.rdf.listObjectsOfProperty(propertyofres, CellMLbioRDFblock.hasmediatorparticipant);
@@ -695,8 +689,8 @@ public class CellMLreader {
 						Resource mediatorres = (Resource) mediatorit.next();
 						Resource physentres = mediatorres.getPropertyResourceValue(CellMLbioRDFblock.hasphysicalentityreference);
 						PhysicalModelComponent mediatorpmc = getPMCfromRDFresourceAndAnnotate(physentres);
-						mediatorres.getProperty(CellMLbioRDFblock.hasmultiplier).getObject().asLiteral();
-						process.addMediator((PhysicalEntity) mediatorpmc);
+						Literal multiplier = mediatorres.getProperty(CellMLbioRDFblock.hasmultiplier).getObject().asLiteral();
+						process.addMediator((PhysicalEntity) mediatorpmc, multiplier.getDouble());
 					}
 				}
 			}
@@ -859,9 +853,8 @@ public class CellMLreader {
 			mathmlheadel.addContent((Element)childel.clone());
 			return mathmlheadel;
 		}
-		else return null;
+		return null;
 	}
-	
 	
 	protected static void whiteBoxFunctionalSubmodelEquations(Element varmathmlel, String compname, SemSimModel semsimmodel, DataStructure cvar){
 		Iterator<?> conit = varmathmlel.getDescendants();

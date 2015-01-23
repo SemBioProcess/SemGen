@@ -3,7 +3,7 @@ package semgen.annotation.dialog.referenceclass;
 import semgen.annotation.annotatorpane.AnnotationPanel;
 import semsim.Annotatable;
 import semsim.SemSimConstants;
-import semsim.model.annotation.ReferenceOntologyAnnotation;
+import semsim.annotation.ReferenceOntologyAnnotation;
 
 public class SingularAnnotationEditor extends AddReferenceClassDialog {
 	/**

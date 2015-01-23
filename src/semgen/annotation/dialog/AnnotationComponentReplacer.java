@@ -16,13 +16,13 @@ import javax.swing.ListSelectionModel;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.annotation.AnnotatorTab;
-import semgen.annotation.componentdisplays.codewords.CodewordButton;
+import semgen.annotation.componentlistpanes.codewords.CodewordButton;
 import semgen.annotation.dialog.referenceclass.ReferenceClassFinderPanel;
 import semgen.utilities.uicomponent.SemGenDialog;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semsim.SemSimConstants;
-import semsim.model.annotation.Annotation;
-import semsim.model.annotation.ReferenceOntologyAnnotation;
+import semsim.annotation.Annotation;
+import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.writing.CaseInsensitiveComparator;
 
@@ -57,11 +57,7 @@ public class AnnotationComponentReplacer extends SemGenDialog implements
 		optionPane.setInitialValue(options[0]);
 
 		setContentPane(optionPane);
-	}
-	
-	@Override
-	protected void showDialog() {
-
+		showDialog();
 	}
 	
 	public void propertyChange(PropertyChangeEvent arg0) {
@@ -91,7 +87,7 @@ public class AnnotationComponentReplacer extends SemGenDialog implements
 				JOptionPane.showMessageDialog(this, "Finished replacement");
 				refreshListData();
 				ann.setModelSaved(false);
-				if(ann.focusbutton instanceof CodewordButton) ann.anndialog.compositepanel.refreshUI();
+				if(ann.focusbutton instanceof CodewordButton) ann.annotatorpane.compositepanel.refreshUI();
 				optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 			} else if (value.equals("Close")) {
 				dispose();

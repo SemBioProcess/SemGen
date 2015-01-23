@@ -9,13 +9,13 @@ import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 
 import semgen.annotation.AnnotatorTab;
-import semgen.annotation.componentdisplays.codewords.CodewordButton;
+import semgen.annotation.componentlistpanes.codewords.CodewordButton;
 import semsim.model.SemSimComponent;
 import semsim.model.SemSimModel;
-import semsim.model.physical.CompositePhysicalEntity;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
-import semsim.model.physical.PhysicalProperty;
+import semsim.model.physical.object.CompositePhysicalEntity;
+import semsim.model.physical.object.PhysicalProperty;
 
 public class RemovePhysicalComponentDialog extends SemSimComponentSelectorDialog implements
 		PropertyChangeListener {
@@ -43,7 +43,7 @@ public class RemovePhysicalComponentDialog extends SemSimComponentSelectorDialog
 						JOptionPane.YES_NO_OPTION);
 				if(JOptionPane.YES_OPTION == choice){
 					removeComponentFromModel();
-					if(annotator.focusbutton instanceof CodewordButton) annotator.anndialog.compositepanel.refreshUI();
+					if(annotator.focusbutton instanceof CodewordButton) annotator.annotatorpane.compositepanel.refreshUI();
 				}
 			}
 			dispose();

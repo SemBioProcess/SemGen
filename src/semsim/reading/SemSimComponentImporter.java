@@ -4,11 +4,12 @@ import java.io.File;
 
 import org.semanticweb.owlapi.model.OWLException;
 
+import semsim.SemSimLibrary;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
-import semsim.model.physical.FunctionalSubmodel;
+import semsim.model.physical.object.FunctionalSubmodel;
 
 public class SemSimComponentImporter {
 /**
@@ -19,7 +20,7 @@ public class SemSimComponentImporter {
  */
 
 	public static FunctionalSubmodel importFunctionalSubmodel(File receivingmodelfile, SemSimModel receivingmodel,
-			String localcompname, String origcompname, String hrefValue){
+			String localcompname, String origcompname, String hrefValue, SemSimLibrary sslib){
 		
 		String supplyingmodelfilepath = getPathToSupplyingModel(receivingmodelfile, receivingmodel, hrefValue);
 		if(supplyingmodelfilepath==null){
@@ -37,14 +38,14 @@ public class SemSimComponentImporter {
 		int modeltype = ModelClassifier.classify(importedmodelfile);
 		if(modeltype == ModelClassifier.SEMSIM_MODEL){
 			try {
-				importedmodel = new SemSimOWLreader().readFromFile(importedmodelfile);
+				importedmodel = new SemSimOWLreader(importedmodelfile).readFromFile();
 			} catch (OWLException | CloneNotSupportedException e) {
 				e.printStackTrace();
 			}
 		}
 		else if(modeltype == ModelClassifier.CELLML_MODEL){
 			try {
-				importedmodel = new CellMLreader().readFromFile(importedmodelfile);
+				importedmodel = new CellMLreader(importedmodelfile).readFromFile();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

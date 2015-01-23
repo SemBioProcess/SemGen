@@ -16,16 +16,16 @@ import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.SemGen;
 import semsim.model.SemSimModel;
-import semsim.model.physical.CustomPhysicalEntity;
-import semsim.model.physical.CustomPhysicalProcess;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
-import semsim.model.physical.PhysicalProperty;
+import semsim.model.physical.object.CustomPhysicalEntity;
+import semsim.model.physical.object.CustomPhysicalProcess;
+import semsim.model.physical.object.PhysicalProperty;
 
 public class ChalkboardCoder {
 
 	public static Hashtable<String,CustomPhysicalEntity> nounnamesandphysents;
-	public static int x = 1;
+	private static int x = 1;
 	public static Set<Element> nouncollection = new HashSet<Element>();
 	
 	public static void translate(SemSimModel semsimmodel, File outputfile) throws JDOMException, IOException, OWLException {
@@ -85,7 +85,6 @@ public class ChalkboardCoder {
 					}
 					else desc = processname;
 					CustomPhysicalProcess verbobject = new CustomPhysicalProcess(processname, desc);
-					verbobject.ID = Integer.toString(x);
 					setofverbobjects.add(verbobject);
 					x++;
 					

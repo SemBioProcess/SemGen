@@ -10,37 +10,31 @@ import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.SwingUtilities;
 
-public class SemGenProgressBar extends JFrame implements ActionListener {
+public class SemGenProgressBar extends SemGenDialog implements ActionListener {
 
 	private static final long serialVersionUID = -408262547613352487L;
 	private JLabel msglabel;
 	public JProgressBar bar = new JProgressBar();
 	private JButton cancelbutton = new JButton("Cancel");
 	private CancelEvent onCancel = null;
-	protected static JFrame location = null;
 	
 	public SemGenProgressBar(String msg, Boolean isindeterminant) {
+		super("");
 		setUndecorated(true);
 		createBar(msg, isindeterminant);
-		setLocationRelativeTo(location);
-		setAlwaysOnTop(true);
-		
-		requestFocusInWindow();
-		setVisible(true);		
 	}
 	
 	public SemGenProgressBar(String msg, Boolean isindeterminant, Observer obs) {
+		super("");
 		onCancel = new CancelEvent(obs);
 		createBar(msg, isindeterminant);
 	}
 	
-	private void createBar(String msg, Boolean isindeterminant) {	
+	private void createBar(String msg, Boolean isindeterminant) {			
 		setPreferredSize(new Dimension(300, 65));
 		JPanel progpanel = new JPanel();
 		progpanel.setBorder(BorderFactory.createLineBorder(Color.gray));
@@ -61,24 +55,21 @@ public class SemGenProgressBar extends JFrame implements ActionListener {
 		add(progpanel);
 
 		if(isindeterminant) bar.setValue(101);
-		pack();	
+		this.setModalityType(ModalityType.MODELESS);
+		setAlwaysOnTop(true);
+		showDialog();
 	}
 	
 	public void updateMessage(final String message){
-		SwingUtilities.invokeLater(new Runnable() {
-		     public void run() {
-		        msglabel.setText(message);
-		     }
-		  });
-		
+		        msglabel.setText(message);		
+		        revalidate();
+		        repaint();
 	}
 	public void updateMessageAndValue(final String message, final int val){
-		SwingUtilities.invokeLater(new Runnable() {
-		     public void run() {
 		        msglabel.setText(message);
 		        bar.setValue(val);
-		     }
-		  });
+		        revalidate();
+		        repaint();
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
@@ -99,9 +90,5 @@ public class SemGenProgressBar extends JFrame implements ActionListener {
 			setChanged();
 			notifyObservers();
 		}
-	}
-	
-	public static void setLocation(JFrame frame) {
-		location = frame;
 	}
 }

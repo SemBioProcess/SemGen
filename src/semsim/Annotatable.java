@@ -4,9 +4,9 @@ package semsim;
 import java.net.URI;
 import java.util.Set;
 
-import semsim.model.annotation.Annotation;
-import semsim.model.annotation.ReferenceOntologyAnnotation;
-import semsim.model.annotation.SemSimRelation;
+import semsim.annotation.Annotation;
+import semsim.annotation.ReferenceOntologyAnnotation;
+import semsim.annotation.SemSimRelation;
 
 /**
  * Interface providing methods for annotating

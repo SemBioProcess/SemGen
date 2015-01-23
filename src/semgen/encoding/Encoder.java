@@ -4,23 +4,31 @@ import java.io.File;
 
 import javax.swing.JOptionPane;
 
+import org.semanticweb.owlapi.model.OWLException;
+
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenTask;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.utilities.uicomponent.SemGenProgressBar;
-import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
+import semsim.writing.ModelWriter;
 import semsim.writing.CellMLwriter;
 import semsim.writing.MMLwriter;
-import semsim.writing.Writer;
 
-public class Encoder {
-	File outputfile = null;
-	
+public class Encoder {	
 	public Encoder() {
-		startEncoding(null,"");
+		SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select SemSim model to encode", 
+				new String[] {"owl"});
+		File inputfile = sgc.getSelectedFile();
+		if (inputfile != null) {
+			String filenamesuggestion = inputfile.getName();
+			if(filenamesuggestion.contains(".")) {
+				filenamesuggestion = filenamesuggestion.substring(0, filenamesuggestion.lastIndexOf("."));
+			}
+			startEncoding(inputfile, filenamesuggestion);
+		}
 	}
 	
 	public Encoder(File afile, String filenamesuggestion) {
@@ -31,76 +39,62 @@ public class Encoder {
 		startEncoding(model, filenamesuggestion);
 	}
 	
+	public void startEncoding(File afile, String filenamesuggestion){
+		SemSimModel model = LoadSemSimModel.loadSemSimModelFromFile(afile, false);
+		if(!model.getErrors().isEmpty()){
+			SemGenError.showError("Selected model had errors:", "Could not encode model");
+			return;
+		}
+		startEncoding(model, filenamesuggestion);
+	}
+	
 	// Automatically apply OPB annotations to the physical properties associated
 	// with the model's data structures					
-	public void startEncoding(Object inputfileormodel, String filenamesuggestion){
+	public void startEncoding(SemSimModel model, String filenamesuggestion){
 		Object[] optionsarray = new Object[] {"CellML", "MML (JSim)"};
 		
 		Object selection = JOptionPane.showInputDialog(null, "Select output format", "SemGen coder", JOptionPane.PLAIN_MESSAGE, null, optionsarray, "CellML");
-		if(filenamesuggestion.contains(".")) {
-			filenamesuggestion = filenamesuggestion.substring(0, filenamesuggestion.lastIndexOf("."));
-		}
 		
-		Writer outwriter = null;
+		ModelWriter outwriter = null;
 		SemGenSaveFileChooser fc = new SemGenSaveFileChooser("Choose Destination");
 		if(selection == optionsarray[0]){
 			fc.addFilters(new String[]{"cellml"});
-			outwriter = new CellMLwriter();
+			outwriter = new CellMLwriter(model);
 		}
 		
 		if(selection == optionsarray[1]){
 			fc.addFilters(new String[]{"mml"});
-			outwriter = new MMLwriter();
+			outwriter = new MMLwriter(model);
 		}
+		File outputfile = fc.SaveAsAction();
+		if (outputfile != null) {
+			CoderTask task = new CoderTask(outwriter, outputfile);
 		
-		CoderTask task;
-		if(inputfileormodel == null){
-			task = new CoderTask(outwriter);
+			task.execute();
+			SemGenError.showSemSimErrors();
 		}
-		else {
-			task = new CoderTask((SemSimModel)inputfileormodel, outwriter);
-		}
-		outputfile = fc.SaveAsAction();
-		if (outputfile != null) task.execute();
 	}
-		
-		public class CoderTask extends SemGenTask {
-			public File inputfile;
-			public Writer writer;
-			public SemSimModel model;
+	
+	public class CoderTask extends SemGenTask {
+			private ModelWriter writer;
+			private File output;
 	        
-			public CoderTask(Writer writer){
-				SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select SemSim model to encode", 
-						new String[] {"owl"});
-				inputfile = sgc.getSelectedFile();
+			public CoderTask(ModelWriter writer, File dest){
 	        	this.writer = writer;
-	        }
-			public CoderTask(SemSimModel model, Writer writer){
-				this.model = model;
-	        	this.writer = writer;
+	        	output = dest;
 			}
 	        @Override
 	        public Void doInBackground() {
 	        	progframe = new SemGenProgressBar("Encoding...", true);
-	    		if(model == null){
-	        		model = LoadSemSimModel.loadSemSimModelFromFile(inputfile, false);
-	    			if(!model.getErrors().isEmpty()){
-	    				SemGenError.showError("Selected model had errors:", "Could not encode model");
-	    				return null;
-	    			}
-	    		}
-				CoderAction(model, writer);
+	        	while (!isCancelled()) {
+	        		try {
+						writer.writeToFile(output);
+					} catch (OWLException e) {
+						e.printStackTrace();
+					}	
+	        		break;
+	        	}
 	            return null;
 	        }
-	        
-	    	public void CoderAction(SemSimModel model, Writer writer){
-	    		String content = writer.writeToString(model);
-	    		if(content!=null)
-	    			SemSimUtil.writeStringToFile(content, outputfile);
-	    		else
-	    			SemGenError.showError("Sorry. There was a problem encoding " + model.getName() + 
-	    					"\nThe JSim API threw an exception.",  
-	    					"Error");
-	    	}
-	    }
+	}
 }

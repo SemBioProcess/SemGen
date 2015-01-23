@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
 import semgen.annotation.AnnotatorTab;
-import semgen.annotation.componentdisplays.codewords.CodewordButton;
+import semgen.annotation.componentlistpanes.codewords.CodewordButton;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.uicomponent.SemGenDialog;
 import semsim.Annotatable;
@@ -71,7 +71,7 @@ public class AddReferenceClassDialog extends SemGenDialog implements
 						"Added " + (String) refclasspanel.resultslistright.getSelectedValue() + " as reference" + type,
 						"", JOptionPane.PLAIN_MESSAGE);
 			annotator.setModelSaved(false);
-			if(annotator.focusbutton instanceof CodewordButton) annotator.anndialog.compositepanel.refreshUI();
+			if(annotator.focusbutton instanceof CodewordButton) annotator.annotatorpane.compositepanel.refreshUI();
 		}
 	}
 }

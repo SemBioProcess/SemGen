@@ -20,7 +20,7 @@ import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
-import semsim.model.physical.PhysicalProperty;
+import semsim.model.physical.object.PhysicalProperty;
 
 public class PhysioMapWriter{
 	

@@ -6,25 +6,23 @@ import java.util.HashSet;
 import java.util.Set;
 
 import semsim.Annotatable;
-import semsim.PropertyType;
 import semsim.SemSimConstants;
 import semsim.SemSimLibrary;
-import semsim.model.annotation.Annotation;
-import semsim.model.annotation.ReferenceOntologyAnnotation;
-import semsim.model.annotation.SemSimRelation;
+import semsim.annotation.Annotation;
+import semsim.annotation.ReferenceOntologyAnnotation;
+import semsim.annotation.SemSimRelation;
 import semsim.model.computational.Computation;
 import semsim.model.computational.ComputationalModelComponent;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
-import semsim.model.physical.PhysicalProperty;
+import semsim.model.physical.object.PhysicalProperty;
 
 /**
  * This class represents a named element in a simulation model that
  * is assigned some computational value during simulation.
  */
-public class DataStructure extends ComputationalModelComponent implements Annotatable, Cloneable{
-	
+public abstract class DataStructure extends ComputationalModelComponent implements Annotatable, Cloneable{	
 	private Computation computation;
 	private PhysicalProperty physicalProperty;
 	private DataStructure solutionDomain;
@@ -334,11 +332,9 @@ public class DataStructure extends ComputationalModelComponent implements Annota
 		return isImported;
 	}
 	
-	public boolean isReal() {
-		return false;
-	}
+	public abstract boolean isReal();
 	
-	public PropertyType getPropertyType(SemSimLibrary lib){
+	public int getPropertyType(SemSimLibrary lib){
 		if(hasPhysicalProperty()){
 			// If there's already an OPB reference annotation
 			if(getPhysicalProperty().hasRefersToAnnotation()){
@@ -346,22 +342,29 @@ public class DataStructure extends ComputationalModelComponent implements Annota
 				
 				if(lib.OPBhasStateProperty(roa) ||
 						lib.OPBhasForceProperty(roa)){
-					return PropertyType.PropertyOfPhysicalEntity;
+					return SemSimConstants.PROPERTY_OF_PHYSICAL_ENTITY;
 				}
 				else if(lib.OPBhasProcessProperty(roa)){
-					return PropertyType.PropertyOfPhysicalProcess;
+					return SemSimConstants.PROPERTY_OF_PHYSICAL_PROCESS;
 				}
-				else return PropertyType.Unknown;
+				else return SemSimConstants.UNKNOWN_PROPERTY_TYPE;
 			}
 			// Otherwise, see if there is already an entity or process associated with the codeword
 			else if(getPhysicalProperty().getPhysicalPropertyOf() instanceof PhysicalEntity){
-				return PropertyType.PropertyOfPhysicalEntity;
+				return SemSimConstants.PROPERTY_OF_PHYSICAL_ENTITY;
 			}
 			else if(getPhysicalProperty().getPhysicalPropertyOf() instanceof PhysicalProcess){
-				return PropertyType.PropertyOfPhysicalProcess;
+				return SemSimConstants.PROPERTY_OF_PHYSICAL_PROCESS;
 			}
-			else return PropertyType.Unknown;
+			else return SemSimConstants.UNKNOWN_PROPERTY_TYPE;
 		}
-		else return PropertyType.Unknown;
+		else return SemSimConstants.UNKNOWN_PROPERTY_TYPE;
+	}
+	
+	public void copySingularAnnotations(DataStructure srcds){
+		removeAllReferenceAnnotations();
+		for(ReferenceOntologyAnnotation ann : srcds.getAllReferenceOntologyAnnotations()){
+			addReferenceOntologyAnnotation(ann.getRelation(), ann.getReferenceURI(), ann.getValueDescription());
+		}
 	}
 }
