@@ -176,16 +176,15 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		boolean returnval =  component.closeTab();
 		if (returnval) {
 			removeTab(component);
+			opentabs.remove(component);
 			if (numtabs != 0) {
 				globalactions.setCurrentTab(opentabs.get(getSelectedIndex()));
 			}
 		}
-		
 		return returnval;
 	}
 	
 	private void removeTab(SemGenTab component) {
-		opentabs.remove(component);
 		remove(indexOfComponent(component));
 		numtabs = numtabs - 1;
 	}
