@@ -202,10 +202,6 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		add(centersplitpane, BorderLayout.CENTER);
 		setVisible(true);
 		visualizeAllDataStructures(false);
-		
-		// Add a d3 graph representation of the semsim model to the graph tab pane
-		D3 d3Graph = new D3(semsimmodel);
-		graphtabpane.add("D3 Graph", d3Graph.visualize());
 	}
 	
 	public void createToolbar() {
