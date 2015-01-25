@@ -18,6 +18,7 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.units.UnitFactor;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
@@ -35,6 +36,10 @@ public class SemSimLibrary {
 	private Hashtable<String, String[]> compositeAnnRelationsTable;
 	private Hashtable<String, String[]> metadataRelationsTable;
 	private Hashtable<String, String[]> jsimUnitsTable;
+	
+	// Hashtable for mapping CellML base units to OPB classes.
+	// Similar to OPBClassesForUnitsTable, but instead maps Hashtable of {baseunit:exponent} to OPB class.
+    private Hashtable<Hashtable<String, Double>, String[]> OPBClassesForBaseUnitsTable;
 	
 	private Set<String> jsimUnitPrefixesTable;
 	private Set<String> cellMLUnitsTable;
@@ -58,6 +63,7 @@ public class SemSimLibrary {
 			jsimUnitsTable = ResourcesManager.createHashtableFromFile("cfg/jsimUnits");
 			
 			OPBClassesForUnitsTable = ResourcesManager.createHashtableFromFile("cfg/OPBClassesForUnits.txt");
+            OPBClassesForBaseUnitsTable = ResourcesManager.createHashtableFromBaseUnitFile("cfg/OPBClassesForBaseUnits.txt");
 			jsimUnitPrefixesTable = ResourcesManager.createSetFromFile("cfg/jsimUnitPrefixes");
 			cellMLUnitsTable = ResourcesManager.createSetFromFile("cfg/CellMLUnits.txt");
 		} catch (FileNotFoundException e3) {
@@ -88,6 +94,20 @@ public class SemSimLibrary {
 		return OPBClassesForUnitsTable.get(unit);
 	}
 	
+	public String[] getOPBBaseUnitRefTerms(DataStructure ds) {
+		// For each ds, store its base units in Hashtable as baseunitname:exponent
+		Hashtable<String, Double> baseUnits = new Hashtable<String, Double>();
+		for(UnitFactor factor : ds.getUnit().getUnitFactors()) {
+			String baseunitname = factor.getBaseUnit().getName();
+			Double exponent = factor.getExponent();
+			baseUnits.put(baseunitname, exponent);
+		}
+		if(OPBClassesForBaseUnitsTable.containsKey(baseUnits)) {
+			return OPBClassesForBaseUnitsTable.get(baseUnits);
+		}
+		return null;
+	}
+	
 	public boolean isJSimUnitPrefixable(String unit) {
 		return (jsimUnitsTable.get(unit)[0]).equals("true");
 	}
@@ -109,6 +129,10 @@ public class SemSimLibrary {
 	public ReferenceOntologyAnnotation getOPBAnnotationFromPhysicalUnit(DataStructure ds){
 		ReferenceOntologyAnnotation roa = null;
 		String[] candidateOPBclasses = getOPBUnitRefTerm(ds.getUnit().getName());
+		// If there is no OPB class, checkbase units.
+		if (candidateOPBclasses == null) {
+			candidateOPBclasses = getOPBBaseUnitRefTerms(ds);
+		}
 		if (candidateOPBclasses != null && candidateOPBclasses.length == 1) {
 			OWLClass cls = SemSimOWLFactory.factory.getOWLClass(IRI.create(SemSimConstants.OPB_NAMESPACE + candidateOPBclasses[0]));
 			String OPBpropname = SemSimOWLFactory.getRDFLabels(OPB, cls)[0];
