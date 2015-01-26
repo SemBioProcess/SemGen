@@ -525,7 +525,6 @@
 
     <owl:DatatypeProperty rdf:about="http://www.bhi.washington.edu/SemSim#refersTo">
         <rdf:type rdf:resource="&owl;FunctionalProperty"/>
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_model_component"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
     
