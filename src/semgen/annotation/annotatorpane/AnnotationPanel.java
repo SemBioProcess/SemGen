@@ -38,6 +38,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.ListIterator;
 import java.util.Set;
 import java.awt.event.MouseEvent;
@@ -281,20 +282,23 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 			editcomptext = "No submodels associated with this submodel";
 		}
 		
-		Set<DataStructure> associatedcodewords = submod.getAssociatedDataStructures();
-		Set<Submodel> associatedcomponents = submod.getSubmodels();
+		Set<DataStructure> associateddss = new HashSet<DataStructure>(); //submod.getAssociatedDataStructures();
+		associateddss.addAll(submod.getAssociatedDataStructures());
+		
+		Set<Submodel> associatedsubmodels = submod.getSubmodels();
 		
 		// Include the codewords that are in the subcomponents in the list of associated codewords
 		cdwdsfromcomps = SemSimOWLFactory.getCodewordsAssociatedWithNestedSubmodels(submod);
-		associatedcodewords.addAll(cdwdsfromcomps);
-		if(!associatedcodewords.isEmpty())
-			setSubmodelDataOnScreen(submod, subtitlefield, associatedcodewords, "Codewords");
+		associateddss.addAll(cdwdsfromcomps);
+
+		if(!associateddss.isEmpty())
+			setSubmodelDataOnScreen(submod, subtitlefield, associateddss, "Codewords");
 		else{
 			subtitlefield.setCustomText(subtitletext);
 			subtitlefield.setForeground(Color.gray);
 		}
-		if(!associatedcomponents.isEmpty()){
-			setSubmodelDataOnScreen(submod, nestedsubmodelpane, associatedcomponents, "Sub-components");
+		if(!associatedsubmodels.isEmpty()){
+			setSubmodelDataOnScreen(submod, nestedsubmodelpane, associatedsubmodels, "Sub-components");
 		}
 		else{
 			nestedsubmodelpane.setCustomText(editcomptext);
