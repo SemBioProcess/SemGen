@@ -42,7 +42,6 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 
 	private ArrayList<SemGenTab> opentabs = new ArrayList<SemGenTab>(); //Open annotation tabs
 
-	public int numtabs = 0;
 	private SemGenMenuBar menu;
 
 	public SemGenGUI(SemGenSettings sets,  SemGenMenuBar menubar, GlobalActions gacts){
@@ -54,8 +53,6 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		setPreferredSize(sets.getAppSize());
 		setOpaque(true);
 		setBackground(Color.white);
-			
-		numtabs = 0;
 	}
 	
 	// METHODS
@@ -69,7 +66,13 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 	public void startNewAnnotatorTask(){
 		AnnotatorFactory factory = new AnnotatorFactory(settings.doAutoAnnotate());
 		if (factory.isValid()) {
-			if (isOntologyOpenForEditing(factory.getFileURI())) return;
+			int i = 0;
+			for (URI uri : factory.getFileURIs()) {
+				if (isOntologyOpenForEditing(uri)) {
+					if (factory.removeFilebyIndex(i)) return;
+				}
+				i++;
+			}	
 			AnnotationTabFactory tabfactory = new AnnotationTabFactory(settings, globalactions);
 			addTab(factory, tabfactory);
 		}
@@ -139,21 +142,22 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		}
 		
 		public void endTask() {	
-			tab = tabfactory.makeTab(workbenchfactory.getWorkbench());
-			numtabs++;
-			addTab(tab.getName(), tab);
-			opentabs.add(tab);
-			
-			globalactions.setCurrentTab(tab);
-			tab.loadTab();
-			tab.addObservertoWorkbench(menu.filemenu);
-			setTabComponentAt(numtabs-1, tab.getTabLabel());
-			
-			tab.addMouseListenertoTabLabel(new tabClickedListener(numtabs-1));
-			tab.setClosePolicy(new tabCloseListener(tab));
-			setSelectedComponent(getComponentAt(numtabs - 1));
-			getComponentAt(numtabs - 1).repaint();
-			getComponentAt(numtabs - 1).validate();
+			for (T workbench : workbenchfactory.getWorkbenches()) {
+				tab = tabfactory.makeTab(workbench);
+				addTab(tab.getName(), tab);
+				opentabs.add(tab);
+				int tabcount = opentabs.size();
+				globalactions.setCurrentTab(tab);
+				tab.loadTab();
+				tab.addObservertoWorkbench(menu.filemenu);
+				setTabComponentAt(tabcount-1, tab.getTabLabel());
+				
+				tab.addMouseListenertoTabLabel(new tabClickedListener(tab));
+				tab.setClosePolicy(new tabCloseListener(tab));
+				setSelectedComponent(getComponentAt(tabcount - 1));
+				getComponentAt(tabcount - 1).repaint();
+				getComponentAt(tabcount - 1).validate();
+			}
 		}
 	}
 	
@@ -177,7 +181,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		if (returnval) {
 			removeTab(component);
 			opentabs.remove(component);
-			if (numtabs != 0) {
+			if (opentabs.size() != 0) {
 				globalactions.setCurrentTab(opentabs.get(getSelectedIndex()));
 			}
 		}
@@ -186,16 +190,16 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 	
 	private void removeTab(SemGenTab component) {
 		remove(indexOfComponent(component));
-		numtabs = numtabs - 1;
 	}
 	
 	// When a tab is clicked make it the currently displayed tab
 	private class tabClickedListener extends MouseAdapter {
-		int tabindex;
-		tabClickedListener(int index) {
-			tabindex = index;
+		SemGenTab tab;
+		tabClickedListener(SemGenTab tb) {
+			tab = tb;
 		}
 		public void mouseClicked(MouseEvent arg0) {
+			int tabindex = opentabs.indexOf(tab);
 			setSelectedIndex(tabindex);
 			globalactions.setCurrentTab((SemGenTab) getComponentAt(tabindex));
 		}

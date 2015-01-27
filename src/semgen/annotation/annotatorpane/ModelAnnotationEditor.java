@@ -36,20 +36,35 @@ public class ModelAnnotationEditor extends JPanel implements Observer {
 		
 		setBackground(SemGenSettings.lightblue);
 		drawAnnotationList();
+		//makeDescriptionsUniform();
 	}
 	
 	private void drawAnnotationList() {
 		ArrayList<String[]> list = metadatabench.getAllMetadataInformation();
-		
+
 		for (String[] sarray : list) {
 			AnnTextPanel newpanel = new AnnTextPanel(sarray[0]);
 			newpanel.setText(sarray[1]);
+
 			annpanels.add(newpanel);
 			add(newpanel);
 		}
-		
 		validate();
 		focusOnSelection();
+	}
+	
+	private void makeDescriptionsUniform() {
+		int descsize;
+		int largest = 0;
+		for (ModelAnnPanel pan : annpanels) {
+			descsize = pan.getDescriptionWidth();
+			if (descsize>largest) largest = descsize;
+		}
+		for (ModelAnnPanel pan : annpanels) {
+			pan.setDescriptionWidth(largest);
+		}
+		validate();
+		repaint();
 	}
 	
 	private void setMetadataValue(AnnTextPanel panel, String value) {
@@ -74,28 +89,35 @@ public class ModelAnnotationEditor extends JPanel implements Observer {
 	private abstract class ModelAnnPanel extends JPanel {
 		private static final long serialVersionUID = 1L;
 		protected boolean wasedited = false;
+		protected JLabel description;
 		
 		protected ModelAnnPanel(String title) {
 			setBackground(SemGenSettings.lightblue);
 			addMouseListener(new MAPMouseAdapter());
 			addKeyListener(new MAPKeyboardListener());
 			setLayout(new BorderLayout(0,0));
-			JLabel discription = new JLabel(title);
-			add(discription, BorderLayout.WEST);
+			description = new JLabel(title);
+			add(description, BorderLayout.WEST);
 			add(Box.createGlue());
 		}
 		public abstract void giveFocus();
 		public abstract void removeFocus();
-		
-		protected int getPanelIndex() {
-			return annpanels.indexOf(this);
-		}
 		
 		protected class MAPMouseAdapter extends MouseAdapter{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				giveFocus();
 			}
+		}
+		
+		protected int getDescriptionWidth() {
+			return description.getWidth();
+		}
+		
+		protected void setDescriptionWidth(int width) {
+			description.setSize(width, description.getHeight());
+			validate();
+			repaint();
 		}
 		
 		protected class MAPFocusListener implements FocusListener {

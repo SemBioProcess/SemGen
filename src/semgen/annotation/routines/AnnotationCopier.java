@@ -35,7 +35,7 @@ public class AnnotationCopier {
 	}
 	
 	private void chooseSourceModel(){
-		SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select SemSim model containing annotations");
+		SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select SemSim model containing annotations", false);
 		File sourcefile = sgc.getSelectedFile();
 		if (sourcefile == null) {
 			valid = false;

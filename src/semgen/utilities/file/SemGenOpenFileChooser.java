@@ -39,25 +39,18 @@ public class SemGenOpenFileChooser extends SemGenFileChooser implements ActionLi
 	
 	private static final long serialVersionUID = -9040553448654731532L;
 		
-	public SemGenOpenFileChooser(String title){
+	public SemGenOpenFileChooser(String title, Boolean multi){
 		super(title);
-		setMultiSelectionEnabled(false);
+		setMultiSelectionEnabled(multi);
 		initialize();
 		openFile();
 	}
 	
-	public SemGenOpenFileChooser(String title, String[] filters){
+	public SemGenOpenFileChooser(String title, String[] filters, Boolean multi){
 		super(title, filters);
-		setMultiSelectionEnabled(false);
+		setMultiSelectionEnabled(multi);
 		initialize();
 		openFile();
-	}
-	
-	public SemGenOpenFileChooser(Set<File> file, String title){
-		super(title);
-		setMultiSelectionEnabled(true);
-		initialize();
-		openFile(file);
 	}
 	
 	public SemGenOpenFileChooser(Set<File> file, String title, String[] filters){
@@ -247,7 +240,6 @@ public class SemGenOpenFileChooser extends SemGenFileChooser implements ActionLi
 		
 		File tempfile = new File(SemGen.tempdir.getAbsoluteFile() + "/" + name);
 		SemSimUtil.writeStringToFile(content, tempfile);
-		
 	}
 	
 }
