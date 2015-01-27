@@ -184,6 +184,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		add(splitpane, BorderLayout.CENTER);
 		setVisible(true);
 		
+		splitpane.setDividerLocation(360);
 		eastsplitpane.setDividerLocation((int)(initheight-150)/2);
 		swsplitpane.setDividerLocation((int)(initheight-150)/2);
 		westsplitpane.setDividerLocation((int)(initheight-150)/6);
