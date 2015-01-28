@@ -1,9 +1,5 @@
 package semgen.visualizations;
 
-import java.awt.BorderLayout;
-
-import javax.swing.JPanel;
-
 import chrriis.common.WebServer;
 import chrriis.dj.nativeswing.swtimpl.components.WebBrowserAdapter;
 import chrriis.dj.nativeswing.swtimpl.components.WebBrowserEvent;

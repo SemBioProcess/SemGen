@@ -1,21 +1,11 @@
 package semgen.visualizations;
 
-import java.awt.BorderLayout;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
-
-import javax.swing.JPanel;
-
-import chrriis.common.WebServer;
-import chrriis.dj.nativeswing.swtimpl.NativeInterface;
-import chrriis.dj.nativeswing.swtimpl.components.WebBrowserAdapter;
-import chrriis.dj.nativeswing.swtimpl.components.WebBrowserEvent;
 
 import com.google.gson.Gson;
 
