@@ -22,6 +22,7 @@ import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semgen.utilities.uicomponent.SemGenTab;
+import semsim.PropertyType;
 import semsim.SemSimConstants;
 import semsim.model.Importable;
 import semsim.model.SemSimModel;
@@ -329,12 +330,12 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 			CodewordButton cb = (CodewordButton)aob;
 			DataStructure ds = cb.ds;
 
-			int type = ds.getPropertyType(SemGen.semsimlib);
+			PropertyType type = ds.getPropertyType(SemGen.semsimlib);
 			
 			// Group according to physical property type
-			if(type==SemSimConstants.PROPERTY_OF_PHYSICAL_ENTITY)
+			if(type  == PropertyType.PropertyOfPhysicalEntity)
 				entset.add(cb);
-			else if(type==SemSimConstants.PROPERTY_OF_PHYSICAL_PROCESS)
+			else if(type == PropertyType.PropertyOfPhysicalProcess)
 				procset.add(cb);
 			else depset.add(cb);
 		}
