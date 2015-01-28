@@ -263,7 +263,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 						if(value == "Apply" && this.getFocusOwner() != refclasspanel.findbox){
 							// If something from list actually selected
 							if(refclasspanel.resultslistright.getSelectedValue()!=null){
-								String desc = (String) refclasspanel.resultslistright.getSelectedValue();
+								String desc = (String) refclasspanel.resultslistright.getSelectedValue().trim();
 								URI uri = URI.create(refclasspanel.resultsanduris.get(refclasspanel.resultslistright.getSelectedValue()));
 								
 								// If we're annotating a physical property...

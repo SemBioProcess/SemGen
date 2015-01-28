@@ -56,7 +56,7 @@ public class AddReferenceClassDialog extends SemGenDialog implements
 				return;
 			}
 			
-			String selectedname = (String) refclasspanel.resultslistright.getSelectedValue();
+			String selectedname = (String) refclasspanel.resultslistright.getSelectedValue().trim();
 			String type = "";
 			optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 			if (value == "Add as entity" && this.getFocusOwner() != refclasspanel.findbox) {

@@ -35,7 +35,7 @@ public class AnnotationCopier {
 	}
 	
 	private void chooseSourceModel(){
-		SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select SemSim model containing annotations");
+		SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select SemSim model containing annotations", false);
 		File sourcefile = sgc.getSelectedFile();
 		if (sourcefile == null) {
 			valid = false;
@@ -132,7 +132,7 @@ public class AnnotationCopier {
 			PhysicalProcess srcprocess = (PhysicalProcess)pmc;
 			for(PhysicalEntity source : srcprocess.getSourcePhysicalEntities()){
 				PhysicalEntity sourceentcopy = (PhysicalEntity) copyPhysicalModelComponent(targetmod, source);
-				((PhysicalProcess) pmccopy).addSource(sourceentcopy, srcprocess.getSinkStoichiometry(source));
+				((PhysicalProcess) pmccopy).addSource(sourceentcopy, srcprocess.getSourceStoichiometry(source));
 			}
 			for(PhysicalEntity sink : srcprocess.getSinkPhysicalEntities()){
 				PhysicalEntity sinkentcopy = (PhysicalEntity) copyPhysicalModelComponent(targetmod, sink);
@@ -140,7 +140,7 @@ public class AnnotationCopier {
 			}
 			for(PhysicalEntity med : srcprocess.getMediatorPhysicalEntities()){
 				PhysicalEntity medentcopy = (PhysicalEntity) copyPhysicalModelComponent(targetmod, med);
-				((PhysicalProcess) pmccopy).addMediator(medentcopy, srcprocess.getSinkStoichiometry(med));
+				((PhysicalProcess) pmccopy).addMediator(medentcopy, srcprocess.getMediatorStoichiometry(med));
 			}
 		}
 		return pmccopy;

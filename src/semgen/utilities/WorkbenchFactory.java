@@ -9,29 +9,37 @@ package semgen.utilities;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 public abstract class WorkbenchFactory<T extends Workbench>  implements Runnable {
-
-	protected File sourcefile;
+	protected ArrayList<File> sourcefile = new ArrayList<File>();
 	protected boolean cont = true;
 	protected String status;
-	protected T workbench;
+	protected HashSet<T> workbenches = new HashSet<T>();
 	protected final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 	
 	public WorkbenchFactory() {}
 
 	public WorkbenchFactory(String initialstatus) {
 		status = initialstatus;
+	}
+	
+	protected boolean makeWorkbenches() {
+		for (File file : sourcefile) {
+			makeWorkbench(file);
 		}
+		return (workbenches.size() > 0);
+	}
 	
-	protected abstract boolean makeWorkbench();
+	abstract protected void makeWorkbench(File file);
 	
-	public T getWorkbench() {
-		return workbench;
+	public HashSet<T> getWorkbenches() {
+		return workbenches;
 	}
 	
 	public void run() {
-		if (!makeWorkbench()) abort();
+		if (!makeWorkbenches()) abort();
 	}
 	
 	public String getStatus() {

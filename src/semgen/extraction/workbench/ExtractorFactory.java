@@ -10,43 +10,42 @@ import semsim.model.SemSimModel;
 import semsim.reading.ModelClassifier;
 
 public class ExtractorFactory extends WorkbenchFactory<ExtractorWorkbench> {
-	File sourcefile;
 	public ExtractorFactory() {
 		super("Loading File");
 		final SemGenOpenFileChooser sgc =  new SemGenOpenFileChooser("Extractor - Select source SemSim model",
-				new String[]{"owl"} );
-		sourcefile = sgc.getSelectedFile();
-		if (sourcefile == null) {
-			abort();
+				new String[]{"owl"},true);
+		for (File file : sgc.getSelectedFiles()) {
+			if(ModelClassifier.classify(file)==ModelClassifier.CELLML_MODEL) {
+				isCellMLError();
+				continue;
+			}
+			sourcefile.add(file);
 		}
-		else if(ModelClassifier.classify(sourcefile)==ModelClassifier.CELLML_MODEL) {
-			isCellMLError();
+		if (sourcefile.size()==0) 
 			abort();
-		}
 	}
 	
 	public ExtractorFactory(File file) {
 		super("Loading File");
-		sourcefile = file;
+		sourcefile.add(file);
 	}
 	
-	protected boolean makeWorkbench() {	
-		System.out.println("Loading " + sourcefile.getName());
+	protected void makeWorkbench(File file) {	
+		System.out.println("Loading " + file.getName());
 		
 		setStatus("Creating SemSimModel");		
-		SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(sourcefile, false);
+		SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(file, false);
 		
 		if(!semsimmodel.getErrors().isEmpty()){
-			return false;
+			return;
 		}
 		
-		if(ModelClassifier.classify(sourcefile)==ModelClassifier.CELLML_MODEL || semsimmodel.getFunctionalSubmodels().size()>0){
+		if(ModelClassifier.classify(file)==ModelClassifier.CELLML_MODEL || semsimmodel.getFunctionalSubmodels().size()>0){
 			isCellMLError();
-			return false;
+			return;
 		}
 		
-		workbench = new ExtractorWorkbench(sourcefile, semsimmodel);
-		return true;
+		workbenches.add(new ExtractorWorkbench(file, semsimmodel));
 	}	
 	
 	private void isCellMLError() {

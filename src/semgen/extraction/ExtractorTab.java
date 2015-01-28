@@ -800,7 +800,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	}
 	
 	public void atomicDecomposition() {
-		SemGenOpenFileChooser fc = new SemGenOpenFileChooser("Select directory for extracted models");
+		SemGenOpenFileChooser fc = new SemGenOpenFileChooser("Select directory for extracted models", false);
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
 		File file = new File(fc.getSelectedFile().getAbsolutePath());
