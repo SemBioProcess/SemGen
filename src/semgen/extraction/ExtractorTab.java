@@ -45,7 +45,6 @@ import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semgen.utilities.uicomponent.SemGenTab;
-import semgen.visualizations.D3;
 import semsim.SemSimUtil;
 import semsim.extraction.Extractor;
 import semsim.model.SemSimModel;
