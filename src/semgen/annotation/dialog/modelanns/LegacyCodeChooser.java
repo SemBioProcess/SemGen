@@ -60,7 +60,7 @@ public class LegacyCodeChooser extends SemGenDialog implements ActionListener,
 	public void actionPerformed(ActionEvent arg0) {
 		Object o = arg0.getSource();
 		if (o == locbutton) {
-			SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select legacy model code"); //null
+			SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select legacy model code", false); //null
 			File file = sgc.getSelectedFile();
 			if (file!=null) txtfld.setText(file.getAbsolutePath());
 		}

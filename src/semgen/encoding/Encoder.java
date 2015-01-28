@@ -20,7 +20,7 @@ import semsim.writing.MMLwriter;
 public class Encoder {	
 	public Encoder() {
 		SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select SemSim model to encode", 
-				new String[] {"owl"});
+				new String[] {"owl"}, false);
 		File inputfile = sgc.getSelectedFile();
 		if (inputfile != null) {
 			String filenamesuggestion = inputfile.getName();
