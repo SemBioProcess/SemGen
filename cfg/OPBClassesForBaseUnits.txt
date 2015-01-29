@@ -17,14 +17,14 @@ liter^1, second^-1; OPB_00299 #flow
 metre^3, second^-1; OPB_00299 #flow
 meter^3, second^-1; OPB_00299 #flow
 newton^1, metre^-2; OPB_00509 #pressure
-newton^1, meter^-2; OPB_00509 #pressure/stress (?)
+newton^1, meter^-2; OPB_00509 #pressure/stress
 pascal^1; OPB_00509 #pressure
 mole^1; OPB_00425 #amount
-kilogram^1; OPB_01319 #mass (?)
-gram^1; OPB_01319 #mass (?)
-kelvin^1; OPB_00165 #temperature (?)
-celcius^1; OPB_00165 #temperature (?)
-coulomb^1; OPB_00411 #charge (?)
+kilogram^1; OPB_00189 #mass
+gram^1; OPB_00189 #mass
+kelvin^1; OPB_00165 #temperature
+celcius^1; OPB_00165 #temperature
+coulomb^1; OPB_00411 #charge
 hertz^1; OPB_00045 #frequency
 second^-1; OPB_0045 #frequency
 metre^1; OPB_00451 #length
