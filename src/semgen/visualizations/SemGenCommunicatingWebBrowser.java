@@ -8,11 +8,10 @@ public class SemGenCommunicatingWebBrowser extends
 		CommunicatingWebBrowser<SemGenWebBrowserCommandSender> {
 
 	// Stage html
-	private final static String StageHtml = "/resources/d3/stage.html";
+	private final static String StageHtml = "/resources/stage.html";
 	
-	public SemGenCommunicatingWebBrowser(
-			Class<SemGenWebBrowserCommandSender> senderInterface) {
-		super(senderInterface);
+	public SemGenCommunicatingWebBrowser() {
+		super(SemGenWebBrowserCommandSender.class);
 
 		System.out.println("Loading SemGen web browser");
 		
