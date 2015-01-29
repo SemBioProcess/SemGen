@@ -2,6 +2,8 @@ package semgen.annotation.componentlistpanes.buttontree;
 
 import java.awt.Component;
 import java.awt.Graphics2D;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,6 +31,7 @@ import semgen.SemGenSettings;
 import semgen.annotation.AnnotatorTab;
 import semgen.annotation.componentlistpanes.AnnotationObjectButton;
 import semgen.annotation.componentlistpanes.codewords.CodewordButton;
+import semgen.annotation.componentlistpanes.submodels.SubmodelButton;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semsim.model.SemSimComponent;
@@ -64,7 +67,7 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 	    setCellRenderer(renderer);
 		setLargeModel(true);
 		addTreeSelectionListener(this);
-		
+		this.addMouseListener(new NodeClickEvent());
 		looseds = new HashSet<DataStructure>();
 		looseds.addAll(ann.semsimmodel.getDataStructures());
 		
@@ -88,12 +91,13 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 	}
 	
 	private void traverseSubmodelBranch(DefaultMutableTreeNode curroot, Submodel sub){
-		DefaultMutableTreeNode submodelnode = new DefaultMutableTreeNode(ann.submodelbuttontable.get(sub.getName()));
+		SubmodelButton smb = ann.submodelbuttontable.get(sub.getName());
+		DefaultMutableTreeNode submodelnode = new DefaultMutableTreeNode(smb);
 		
-		if(settings.showImports() || ann.getSubmodelButtonVisibility(ann.submodelbuttontable.get(sub.getName()))){
+		if(settings.showImports() || ann.getSubmodelButtonVisibility(smb)){
 			curroot.add(submodelnode);
-			nodebuttonmap.put(ann.submodelbuttontable.get(sub.getName()), submodelnode);
-			ann.submodelbuttontable.get(sub.getName()).refreshAllCodes();
+			nodebuttonmap.put(smb, submodelnode);
+			smb.refreshAllCodes();
 		}
 		
 		// Get all the data structures in the submodel
@@ -173,8 +177,8 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 		return ar;
 	}
 	
-	public void valueChanged(TreeSelectionEvent arg0) {
-	    DefaultMutableTreeNode node = (DefaultMutableTreeNode) this.getLastSelectedPathComponent();
+	private void changeNode() {
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode) this.getLastSelectedPathComponent();
 
 	    if (node == null) //Nothing is selected.   
 	    	return;
@@ -191,5 +195,15 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 	    else if(nodeObj instanceof SemSimModel){
 	    	ann.showSelectAnnotationObjectMessage();
 	    }
+	}
+	
+	public void valueChanged(TreeSelectionEvent arg0) {
+		changeNode();
+	}
+	
+	private class NodeClickEvent extends MouseAdapter {
+		public void mouseClicked(MouseEvent arg0) {
+			changeNode();
+		}
 	}
 }
