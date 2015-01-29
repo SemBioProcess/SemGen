@@ -1,5 +1,7 @@
 package semgen.visualizations;
 
+import javax.naming.InvalidNameException;
+
 import chrriis.common.WebServer;
 import chrriis.dj.nativeswing.swtimpl.components.WebBrowserAdapter;
 import chrriis.dj.nativeswing.swtimpl.components.WebBrowserEvent;
@@ -10,8 +12,8 @@ public class SemGenCommunicatingWebBrowser extends
 	// Stage html
 	private final static String StageHtml = "/resources/stage.html";
 	
-	public SemGenCommunicatingWebBrowser() {
-		super(SemGenWebBrowserCommandSender.class);
+	public SemGenCommunicatingWebBrowser(CommunicatingWebBrowserCommandReceiver commandReceiver) throws InvalidNameException {
+		super(SemGenWebBrowserCommandSender.class, commandReceiver);
 
 		System.out.println("Loading SemGen web browser");
 		

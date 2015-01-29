@@ -3,12 +3,16 @@ package semgen.stage;
 import java.awt.BorderLayout;
 import java.util.Observer;
 
+import javax.naming.InvalidNameException;
+import javax.swing.JOptionPane;
+
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenTab;
 import semgen.visualizations.SemGenCommunicatingWebBrowser;
+import semgen.visualizations.SemGenWebBrowserCommandReceiver;
 
 public class StageTab extends SemGenTab {
 
@@ -22,10 +26,14 @@ public class StageTab extends SemGenTab {
 	 */
 	public static String canCreate() {
 		try {
-			new SemGenCommunicatingWebBrowser();
+			new SemGenCommunicatingWebBrowser(null);
 			return null;
 		} catch (NoClassDefFoundError e) {
+			e.printStackTrace();
 			return "Unable to show the stage. This may be because swt.jar is not loading properly. Exception: " + e.getMessage();
+		} catch (InvalidNameException e) {
+			e.printStackTrace();
+			return e.getMessage();
 		}
 	}
 
@@ -33,13 +41,17 @@ public class StageTab extends SemGenTab {
 	public void loadTab() {
 		setOpaque(false);
 		setLayout(new BorderLayout());
-		
+
 		// Prepare to create the browser
 		NativeInterface.open();
-
+		
 		// Create the browser
-		SemGenCommunicatingWebBrowser browser = new SemGenCommunicatingWebBrowser();
-		this.add(browser);
+		try {
+			SemGenCommunicatingWebBrowser browser = new SemGenCommunicatingWebBrowser(new StageCommandReceiver());
+			this.add(browser);
+		} catch (InvalidNameException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -65,5 +77,20 @@ public class StageTab extends SemGenTab {
 		// TODO Auto-generated method stub
 
 	}
+	
+	/**
+	 * Receives commands from javascript
+	 * @author Ryan
+	 *
+	 */
+	private class StageCommandReceiver extends SemGenWebBrowserCommandReceiver {
 
+		/**
+		 * Receives the add model command
+		 */
+		@Override
+		public void onAddModel() {
+			JOptionPane.showMessageDialog(null, "Add model from stage coming soon");
+		}
+	}
 }

@@ -1,7 +1,12 @@
 package semgen.visualizations;
 
+import java.util.Arrays;
+
+import javax.naming.InvalidNameException;
+
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
 import chrriis.dj.nativeswing.swtimpl.components.WebBrowserAdapter;
+import chrriis.dj.nativeswing.swtimpl.components.WebBrowserCommandEvent;
 import chrriis.dj.nativeswing.swtimpl.components.WebBrowserEvent;
 
 /**
@@ -50,16 +55,60 @@ import chrriis.dj.nativeswing.swtimpl.components.WebBrowserEvent;
 @SuppressWarnings("serial")
 public class CommunicatingWebBrowser<TSender> extends JWebBrowser {
 	
+	// Name of the variable in javascript that receives commands
+	private final String JavascriptCommandReceiverVariableName = "javaCommandReciever";
+	
+	// Name of the variable in javascript that sends commands
+	private final String JavascriptCommandSenderVariableName = "javaCommandSender";
+	
+	// Javascript needs to listen for this event to learn when the javascript is loaded
+	private final String InitializationEventName = "cwb-initialized";
+	
+	// This function is called to let javascript developers know when the browser has initialized.
+	private final String TriggerInitializationEventScript =
+			"function cwb_triggerInitialized(receiver, sender) {" + CommunicationHelpers.NLJS +
+				"var event;" + CommunicationHelpers.NLJS +
+				"if (document.createEvent) {" + CommunicationHelpers.NLJS +
+					"event = document.createEvent('HTMLEvents');" + CommunicationHelpers.NLJS +
+					"event.initEvent('" + InitializationEventName + "', true, true);" + CommunicationHelpers.NLJS +
+				"}" + CommunicationHelpers.NLJS +
+				"else {" + CommunicationHelpers.NLJS +
+					"event = document.createEventObject();" + CommunicationHelpers.NLJS +
+					"event.eventType = '" + InitializationEventName + "';" + CommunicationHelpers.NLJS +
+				"}" + CommunicationHelpers.NLJS +
+				
+				"event.eventName = '" + InitializationEventName + "';" + CommunicationHelpers.NLJS +
+				"event.commandSender = sender;" + CommunicationHelpers.NLJS +
+				"event.commandReceiver = receiver;" + CommunicationHelpers.NLJS +
+	
+				"if (document.createEvent) {" + CommunicationHelpers.NLJS +
+					"window.dispatchEvent(event);" + CommunicationHelpers.NLJS +
+				"}" + CommunicationHelpers.NLJS +
+				"else {" + CommunicationHelpers.NLJS +
+					"window.fireEvent('on' + event.eventType, event);" + CommunicationHelpers.NLJS +
+				"}" + CommunicationHelpers.NLJS +
+			"}";
+	
 	// Generator for command sender values
 	private WebBrowserCommandSenderGenerator<TSender> _commandSenderGenerator;
 	
-	public CommunicatingWebBrowser(Class<TSender> senderInterface) {
+	// Command receiver
+	private CommunicatingWebBrowserCommandReceiver _commandReceiver;
+	
+	public CommunicatingWebBrowser(Class<TSender> commandSenderInterface, CommunicatingWebBrowserCommandReceiver commandReceiver) throws InvalidNameException {
 		super();
 		
-		_commandSenderGenerator = new WebBrowserCommandSenderGenerator<TSender>(senderInterface, this, "javaCommandReciever");
+		_commandSenderGenerator = new WebBrowserCommandSenderGenerator<TSender>(commandSenderInterface,
+				this,
+				JavascriptCommandReceiverVariableName);
+
+		if(commandReceiver != null){
+			_commandReceiver = commandReceiver;
+			_commandReceiver.validate();
+		}
 		
-		// Insert the initialization script into the header while the page is loading
-		addWebBrowserListener(new InitializationWebBrowserAdapter());
+		// Insert the adapter that facilitates communication
+		addWebBrowserListener(new CommunicatingWebBrowserAdapter());
 	}
 	
 	public TSender getCommandSender() {
@@ -67,11 +116,13 @@ public class CommunicatingWebBrowser<TSender> extends JWebBrowser {
 	}
 	
 	/**
-	 * Inserts an initialization script into the page header while the page is loading
+	 * 1) Inserts an initialization script into the page header while the page is loading.
+	 * 		This allows java and javascript to communicate using an agreed upon contract.
+	 * 2) Listens for commands from javascript
 	 * @author Ryan
 	 *
 	 */
-	private class InitializationWebBrowserAdapter extends WebBrowserAdapter {
+	private class CommunicatingWebBrowserAdapter extends WebBrowserAdapter {
 		
 		/**
 		 * When the page is loading this function inserts an initialization script
@@ -83,8 +134,28 @@ public class CommunicatingWebBrowser<TSender> extends JWebBrowser {
 		 */
 		@Override
 		public void loadingProgressChanged(WebBrowserEvent e) {
+			
+			// Wait until the browser completely loads
+			if(e.getWebBrowser().getLoadingProgress() != 100)
+				return;
+			
 			// We don't need to listen for anymore events
 			e.getWebBrowser().removeWebBrowserListener(this);
+
+			// Get the script for the command receiver
+			String javascriptCommandReceiver = _commandSenderGenerator.generateJavascriptReceiver();
+			
+			// If there's a command receiver get it's corresponding sender in javascript
+			// Otherwise, use a dummy object
+			String javascriptCommandSender = "var " + JavascriptCommandSenderVariableName + " = null;";
+			if(_commandReceiver != null)
+				javascriptCommandSender = _commandReceiver.generateJavascriptSender(JavascriptCommandSenderVariableName);
+			
+			// Stitch together the script html
+			String scriptInnerHtml = 
+					javascriptCommandReceiver + CommunicationHelpers.NLJS +
+					javascriptCommandSender + CommunicationHelpers.NLJS +
+					TriggerInitializationEventScript;
 			
 			// Insert a script element into the page header that defines an object that receives commands.
 			// the page is responsible for registering handlers for those commands
@@ -92,11 +163,17 @@ public class CommunicatingWebBrowser<TSender> extends JWebBrowser {
 					"var head = document.getElementsByTagName('head')[0];" + CommunicationHelpers.NL +
 					"var script = document.createElement('script');" + CommunicationHelpers.NL +
 					"script.type = 'text/javascript';" + CommunicationHelpers.NL +
-					"script.innerHTML = \"" + _commandSenderGenerator.generateJavascript() + "\";" + CommunicationHelpers.NL +
-					"head.appendChild(script);";
+					"script.innerHTML = \"" + scriptInnerHtml + "\";" + CommunicationHelpers.NL +
+					"head.appendChild(script);" + CommunicationHelpers.NL +
+					"cwb_triggerInitialized(" + JavascriptCommandReceiverVariableName + ", " + JavascriptCommandSenderVariableName + ");";
 			
 			// Execute the initialization script
 			CommunicatingWebBrowser.this.executeJavascript(initializationScript);
+		}
+		
+		@Override
+		public void commandReceived(WebBrowserCommandEvent e) {
+			// TODO: Implement comamnd received
 		}
 	}
 }

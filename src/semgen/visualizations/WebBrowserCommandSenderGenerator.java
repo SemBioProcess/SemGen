@@ -32,7 +32,8 @@ public class WebBrowserCommandSenderGenerator<T> {
 			throw new NullPointerException("browser");
 		
 		if(javascriptCommandReceiverVariableName == null ||
-				javascriptCommandReceiverVariableName.isEmpty()) {
+				javascriptCommandReceiverVariableName.isEmpty())
+		{
 			throw new NullPointerException("javascriptCommandReceiverVariableName");
 		}
 		
@@ -59,32 +60,32 @@ public class WebBrowserCommandSenderGenerator<T> {
 	 * handlers for events executed in java
 	 * @return String representation of javascript object
 	 */
-	public String generateJavascript() {
+	public String generateJavascriptReceiver() {
 		// Use reflection to create methods in javascript that listen for commands from java
-		String javascriptCommunicatorMethods = "";
-		Method[] javaCommunicatorMethods = _senderInterface.getDeclaredMethods();
-		for(int i = 0; i < javaCommunicatorMethods.length; i++) {
-			Method method = javaCommunicatorMethods[i];
+		String javascriptReceiverMethods = "";
+		Method[] javaCommandSenderMethods = _senderInterface.getDeclaredMethods();
+		for(int i = 0; i < javaCommandSenderMethods.length; i++) {
+			Method method = javaCommandSenderMethods[i];
 			String senderMethodName = method.getName();
 			
 			// The method name for the javascript function that receives the java function call
 			String javascriptMethodName = CommunicationHelpers.getEventHandlerMethodName(senderMethodName);
 					
-			javascriptCommunicatorMethods += String.format(
+			javascriptReceiverMethods += String.format(
 					"%s: function (handler) { this.registerEventHandler('%s', handler); }," + CommunicationHelpers.NLJS,
 					javascriptMethodName, 
 					javascriptMethodName);
 		}
 		
-		// Return a script that defines the communicator object.
-		// Javascript will use this object to communicate with java in a type safe manner.
+		// Return a script that defines the recceiver in javascript.
+		// Javascript will use this object to receive messages from java in a type safe manner.
 		return 
 			"var " + _javascriptCommandReceiverVariableName + " = {" + CommunicationHelpers.NLJS +
 				"eventHandlers: {}," + CommunicationHelpers.NLJS +
 				"registerEventHandler: function ( functionName, handler ) { this.eventHandlers[functionName] = handler; }," + CommunicationHelpers.NLJS +
 				"executeHandler: function ( functionName ) { this.eventHandlers[functionName].apply(null, Array.prototype.slice.call(arguments, 1)); }," + CommunicationHelpers.NLJS +
-				javascriptCommunicatorMethods +
-			"}";
+				javascriptReceiverMethods +
+			"};";
 	}
 	
 	/**
