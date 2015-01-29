@@ -21,6 +21,7 @@ public class NewTaskDialog extends SemGenDialog implements ActionListener {
 	public JButton openmenuextractbutton = new JButton("Extract a model", SemGenIcon.extractoricon);
 	public JButton openmenumergebutton = new JButton("Merge models", SemGenIcon.mergeicon);
 	public JButton encodebutton = new JButton("Encode a model",SemGenIcon.codericon);
+	public JButton stagebutton = new JButton("Open the stage", SemGenIcon.annotatemodelicon);
 	private GlobalActions globalactions;
 	
 	public NewTaskDialog(GlobalActions gacts) {
@@ -30,15 +31,21 @@ public class NewTaskDialog extends SemGenDialog implements ActionListener {
 		openpanel.setLayout(new BoxLayout(openpanel, BoxLayout.Y_AXIS));
 		openpanel.setAlignmentX(JPanel.CENTER_ALIGNMENT);
 		
-		JButton[] bs = {annotatebutton, openmenuextractbutton, openmenumergebutton, encodebutton};
-		for (JButton b : bs) {
-			b.setEnabled(true);
-			b.setFont(SemGenFont.defaultPlain(1));
-			b.addActionListener(this);
-			b.setAlignmentX(JButton.CENTER_ALIGNMENT);
-			openpanel.add(b);
+		JButton[] buttons = {
+			annotatebutton,
+			openmenuextractbutton,
+			openmenumergebutton,
+			encodebutton,
+			stagebutton
+		};
+		for (JButton button : buttons) {
+			button.setEnabled(true);
+			button.setFont(SemGenFont.defaultPlain(1));
+			button.addActionListener(this);
+			button.setAlignmentX(JButton.CENTER_ALIGNMENT);
+			openpanel.add(button);
 		}
-		openpanel.setPreferredSize(new Dimension(250,135));
+		openpanel.setPreferredSize(new Dimension(250,165));
 		openpanel.setBorder(BorderFactory.createEmptyBorder(5,0,0,0));
 		
 		JOptionPane selectopentype = new JOptionPane(openpanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_OPTION, null);
@@ -59,9 +66,11 @@ public class NewTaskDialog extends SemGenDialog implements ActionListener {
 		else if (o == openmenumergebutton){
 			globalactions.NewMergerTab();
 		}
-		
 		else if (o == encodebutton) {
 			new Encoder();
+		}
+		else if (o == stagebutton) {
+			globalactions.NewStageTab();
 		}
 		dispose();
 	}

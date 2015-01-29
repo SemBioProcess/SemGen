@@ -13,6 +13,8 @@ import semgen.extraction.workbench.ExtractorFactory;
 import semgen.menu.SemGenMenuBar;
 import semgen.merging.MergerTabFactory;
 import semgen.merging.workbench.MergerWorkbenchFactory;
+import semgen.stage.StageTabFactory;
+import semgen.stage.StageWorkbenchFactory;
 import semgen.utilities.SemGenTask;
 import semgen.utilities.Workbench;
 import semgen.utilities.WorkbenchFactory;
@@ -28,6 +30,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -102,6 +105,12 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 	public void startNewMergerTask(){
 		MergerWorkbenchFactory factory = new MergerWorkbenchFactory();
 		MergerTabFactory tabfactory = new MergerTabFactory(settings, globalactions);
+		addTab(factory, tabfactory);
+	}
+	
+	public void startNewStageTask(){
+		StageWorkbenchFactory factory = new StageWorkbenchFactory();
+		StageTabFactory tabfactory = new StageTabFactory(settings, globalactions);
 		addTab(factory, tabfactory);
 	}
 
@@ -219,23 +228,26 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 	// is fired, this method processes it
 	@Override
 	public void update(Observable o, Object arg) {
-		if (arg==GlobalActions.appactions.TABCLOSED) {
+		if (arg == GlobalActions.appactions.TABCLOSED) {
 			closeTabAction(globalactions.getCurrentTab());
 		}
-		if (arg==GlobalActions.appactions.ANNOTATE) {
+		if (arg == GlobalActions.appactions.ANNOTATE) {
 			this.startNewAnnotatorTask();
 		}
-		if (arg==GlobalActions.appactions.ANNOTATEEXISTING) {
+		if (arg == GlobalActions.appactions.ANNOTATEEXISTING) {
 			this.startNewAnnotatorTask(globalactions.getSeed());
 		}
-		if (arg==GlobalActions.appactions.EXTRACT) {
+		if (arg == GlobalActions.appactions.EXTRACT) {
 			this.startNewExtractorTask();
 		}
-		if (arg==GlobalActions.appactions.EXTRACTEXISTING) {
+		if (arg == GlobalActions.appactions.EXTRACTEXISTING) {
 			this.startNewExtractorTask(globalactions.getSeed());
 		}
-		if (arg==GlobalActions.appactions.MERGE) {
+		if (arg == GlobalActions.appactions.MERGE) {
 			startNewMergerTask();
+		}
+		if (arg == GlobalActions.appactions.STAGE) {
+			startNewStageTask();
 		}
 	}
 	

@@ -10,8 +10,19 @@ import semgen.utilities.uicomponent.SemGenTab;
  * to classes outside of calling the object's ancestor hierarchy.
  */
 public class GlobalActions extends Observable {
-	public static enum appactions { QUIT, TABCHANGED, TABCLOSED, SAVED, 
-		ANNOTATE, ANNOTATEEXISTING, EXTRACT, EXTRACTEXISTING, MERGE }
+	public static enum appactions {
+		ANNOTATE,
+		ANNOTATEEXISTING,
+		EXTRACT,
+		EXTRACTEXISTING,
+		MERGE,
+		QUIT,
+		SAVED,
+		STAGE,
+		TABCHANGED,
+		TABCLOSED,
+	};
+	
 	private SemGenTab currentTab;
 	private File seed;
 	
@@ -62,6 +73,11 @@ public class GlobalActions extends Observable {
 		seed = obj;
 		setChanged();
 		notifyObservers(appactions.MERGE);
+	}
+	
+	public void NewStageTab() {
+		setChanged();
+		notifyObservers(appactions.STAGE);
 	}
 
 	/** 
