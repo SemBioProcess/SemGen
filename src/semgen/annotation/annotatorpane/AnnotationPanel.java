@@ -242,15 +242,6 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 		this.repaint();
 	}
 
-	public void FormatComponents(JPanel panel, JLabel label, int panelindent) {
-		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
-		panel.setBackground(SemGenSettings.lightblue);
-		panel.setBorder(BorderFactory.createEmptyBorder(0, panelindent, 0, 15));
-		panel.setAlignmentX(Component.LEFT_ALIGNMENT);
-		label.setBorder(BorderFactory.createEmptyBorder(10, panelindent/2, 3, 15));
-		label.setFont(SemGenFont.defaultBold());
-	}
-
 	public void FormatButton(JLabel label, String tooltip, Boolean enabled) {
 		label.addMouseListener(this);
 		label.setToolTipText(tooltip);

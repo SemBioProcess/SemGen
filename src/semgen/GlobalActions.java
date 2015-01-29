@@ -7,7 +7,7 @@ import semgen.utilities.uicomponent.SemGenTab;
 /**
  * Class for notifying application level classes of requests and events 
  * from elsewhere in SemGen. Contains methods for passing a file
- * to classes outside of calling the object's ancestor hierarchy.
+ * to classes outside of the calling object's ancestor hierarchy.
  */
 public class GlobalActions extends Observable {
 	public static enum appactions { QUIT, TABCHANGED, TABCLOSED, SAVED, 

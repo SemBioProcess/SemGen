@@ -282,14 +282,12 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 			AlphabetizeAndSetCodewords();
 			AlphabetizeAndSetSubmodels();
 			if(focusbutton!=null){
-				if(!settings.useTreeView()){
-					if(focusbutton instanceof CodewordButton)
-						codewordscrollpane.scrollToComponent(focusbutton);
-					else if(focusbutton instanceof SubmodelButton)
-						submodelscrollpane.scrollToComponent(focusbutton);
-					codewordpanel.validate();
-					codewordpanel.repaint();
-				}
+				if(focusbutton instanceof CodewordButton)
+					codewordscrollpane.scrollToComponent(focusbutton);
+				else if(focusbutton instanceof SubmodelButton)
+					submodelscrollpane.scrollToComponent(focusbutton);
+				codewordpanel.validate();
+				codewordpanel.repaint();
 			}
 		}
 
@@ -672,6 +670,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	public void update(Observable arg0, Object arg1) {
 		if (arg1 == ModelAnnotationsBench.ModelChangeEnum.METADATASELECTED) {
 			showModelAnnotator();
+			return;
 		}
 		if (!isSaved()) {
 			refreshAnnotatableElements();
