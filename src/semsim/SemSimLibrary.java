@@ -16,6 +16,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
+import semgen.SemGenGUI;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.units.UnitFactor;
@@ -198,14 +199,20 @@ public class SemSimLibrary {
 		return OPBprocessProperties.contains(u.toString());
 	}
 	
+	public boolean isOPBprocessProperty(URI u){
+		return (OPBhasFlowProperty(u) || OPBhasProcessProperty(u));
+	}
+	
 	public boolean checkOPBpropertyValidity(PhysicalProperty prop, URI OPBuri){
 		if(prop.getPhysicalPropertyOf()!=null){
 			
+			Boolean URIisprocessproperty = isOPBprocessProperty(OPBuri);
 			// This conditional statement makes sure that physical processes are annotated with appropriate OPB terms
 			// It only limits physical entity properties to non-process properties. It does not limit based on whether
 			// the OPB term is for a constitutive property. Not sure if it should, yet.
-			if((prop.getPhysicalPropertyOf() instanceof PhysicalEntity || prop.getPhysicalPropertyOf() instanceof PhysicalProcess ) && 
-				(OPBhasFlowProperty(OPBuri) || OPBhasProcessProperty(OPBuri))) {
+			if((prop.getPhysicalPropertyOf() instanceof PhysicalEntity && URIisprocessproperty)
+					|| (prop.getPhysicalPropertyOf() instanceof PhysicalProcess && !URIisprocessproperty)){
+			
 				return false;
 			}
 		}
