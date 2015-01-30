@@ -8,3 +8,24 @@ html, body, iframe {
 body {
 	font-family: 12px sans-serif;
 }
+
+.addModelButton {
+	position: absolute;
+	top: 0;
+	left: 0;
+	margin: 5px;
+	width:50px;
+	height:50px;
+	border-radius:250px;
+	font-size:20px;
+	color:#fff;
+	line-height:50px;
+	text-align:center;
+	background:#3b5998;
+	opacity: .5;
+}
+
+.addModelButton:hover {
+	opacity: 1;
+	cursor: pointer;
+}
