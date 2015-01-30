@@ -26,9 +26,10 @@ public class StageTab extends SemGenTab {
 	 */
 	public static String canCreate() {
 		try {
+			NativeInterface.open();
 			new SemGenCommunicatingWebBrowser(null);
 			return null;
-		} catch (NoClassDefFoundError e) {
+		} catch (NoClassDefFoundError | UnsatisfiedLinkError e) {
 			e.printStackTrace();
 			return "Unable to show the stage. This may be because swt.jar is not loading properly. Exception: " + e.getMessage();
 		} catch (InvalidNameException e) {
