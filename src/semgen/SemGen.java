@@ -33,6 +33,7 @@ import semgen.menu.SemGenMenuBar;
 import semgen.utilities.OntologyCache;
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
+import semgen.utilities.SemGenIcon;
 import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.utilities.uicomponent.SemGenDialog;
 import semsim.ErrorLog;
@@ -88,6 +89,8 @@ public class SemGen extends JFrame implements Observer{
 		ModelReader.pointtoSemSimLibrary(semsimlib);
 		ModelWriter.pointtoSemSimLibrary(semsimlib);
 		ErrorLog.setLogFile(logfilewriter);
+		// Need this for programmatic use of jsbatch
+		System.setProperty("jsim.home", "./jsimhome");
 	}
 
 	/**Set the user interface look and feel to the Nimbus Swing layout and create the frame*/
@@ -115,14 +118,14 @@ public class SemGen extends JFrame implements Observer{
 		OSValidation();
 		
 		setTitle(":: S e m  G e n ::");
+		this.setIconImage(SemGenIcon.semgenbigicon.getImage());
 		//Set the default location for the creation of child windows (ie: dialogs) as the center  
 		//of the main frame
 		SemGenError.setFrame(this);
 		SemGenDialog.setFrame(this);
 		
 		SemGenOpenFileChooser.currentdirectory = new File(settings.getStartDirectory());
-		// Need this for programmatic use of jsbatch
-		System.setProperty("jsim.home", "./jsimhome");
+
 		//Create an instance of SemGen's default font and load it into memory
 		SemGenFont.defaultUIFont();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
