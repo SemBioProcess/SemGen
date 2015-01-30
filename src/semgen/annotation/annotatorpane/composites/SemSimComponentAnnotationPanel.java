@@ -415,7 +415,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 						ReferenceOntologyAnnotation otherann = selectedsmc.getFirstRefersToReferenceOntologyAnnotation();
 						
 						// Check if OPB property is valid
-						if(SemGen.semsimlib.checkOPBpropertyValidity((PhysicalProperty) selectedsmc, otherann.getReferenceURI())){
+						if(SemGen.semsimlib.checkOPBpropertyValidity((PhysicalProperty) smc, otherann.getReferenceURI())){
 							applyReferenceOntologyAnnotation(otherann, true);
 						}
 						else{
