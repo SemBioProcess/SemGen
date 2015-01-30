@@ -3,6 +3,7 @@ package semgen.visualizations;
 import java.util.Arrays;
 
 import javax.naming.InvalidNameException;
+import javax.swing.JOptionPane;
 
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
 import chrriis.dj.nativeswing.swtimpl.components.WebBrowserAdapter;
@@ -138,9 +139,6 @@ public class CommunicatingWebBrowser<TSender> extends JWebBrowser {
 			// Wait until the browser completely loads
 			if(e.getWebBrowser().getLoadingProgress() != 100)
 				return;
-			
-			// We don't need to listen for anymore events
-			e.getWebBrowser().removeWebBrowserListener(this);
 
 			// Get the script for the command receiver
 			String javascriptCommandReceiver = _commandSenderGenerator.generateJavascriptReceiver();
@@ -173,7 +171,9 @@ public class CommunicatingWebBrowser<TSender> extends JWebBrowser {
 		
 		@Override
 		public void commandReceived(WebBrowserCommandEvent e) {
-			// TODO: Implement comamnd received
+			String command = e.getCommand();
+			Object[] parameters = e.getParameters();
+			JOptionPane.showMessageDialog(null, "Command: " + command + ", params: " + Arrays.toString(parameters));
 		}
 	}
 }

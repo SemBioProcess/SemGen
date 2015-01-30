@@ -61,7 +61,11 @@ public abstract class CommunicatingWebBrowserCommandReceiver {
 				
 			// Each javascript method will send a command to java with arguments
 			javascriptSenderMethods += String.format(
-					"%s: function () { sendNSCommand('%s', arguments); }," + CommunicationHelpers.NLJS,
+					"%s: function () {" + CommunicationHelpers.NLJS +
+						"var argumentsArray = Array.prototype.slice.call(arguments);" + CommunicationHelpers.NLJS +		// Create an array object from the arguments array
+						"argumentsArray.unshift('%s');" + CommunicationHelpers.NLJS +									// Add the name of the function to call to the beginning of the array
+						"sendNSCommand.apply(this, argumentsArray);" + CommunicationHelpers.NLJS +						// Send the command
+					"}," + CommunicationHelpers.NLJS,
 					javascriptMethodName, 
 					javascriptMethodName);
 		}
