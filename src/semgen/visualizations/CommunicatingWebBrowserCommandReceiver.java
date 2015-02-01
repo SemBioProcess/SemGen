@@ -1,5 +1,6 @@
 package semgen.visualizations;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
@@ -56,12 +57,12 @@ public abstract class CommunicatingWebBrowserCommandReceiver {
 		Method[] javaReceiverMethods = this.getClass().getDeclaredMethods();
 		for(int i = 0; i < javaReceiverMethods.length; i++) {
 			Method method = javaReceiverMethods[i];
-			String receiverMethodName = method.getName();
+			String javaMethodName = method.getName();
 			
 			// The method name for the javascript function that sends the command to java
 			// Removes 'on' from the beginning of the string and lowercases the first character.
 			// For example, 'onAddModel' -> 'addModel'
-			String javascriptMethodName = receiverMethodName.substring(2);
+			String javascriptMethodName = javaMethodName.substring(2);
 			javascriptMethodName = WordUtils.uncapitalize(javascriptMethodName.substring(0,1)) + 	// capitalize the first letter
 					javascriptMethodName.substring(1); 												// get the rest of method name
 				
@@ -73,7 +74,7 @@ public abstract class CommunicatingWebBrowserCommandReceiver {
 						"sendNSCommand.apply(this, argumentsArray);" + CommunicationHelpers.NLJS +						// Send the command
 					"}," + CommunicationHelpers.NLJS,
 					javascriptMethodName, 
-					javascriptMethodName);
+					javaMethodName);
 		}
 		
 		// Return a script that defines the sender object.
@@ -95,11 +96,32 @@ public abstract class CommunicatingWebBrowserCommandReceiver {
 			 * Receives a command from javascript and calls the receiving function
 			 */
 			@Override
-			public void commandReceived(WebBrowserCommandEvent e) {
-				String command = e.getCommand();
-				Object[] parameters = e.getParameters();
+			public void commandReceived(WebBrowserCommandEvent event) {
+				String methodName = event.getCommand();
+				Object[] parameters = event.getParameters();
 				
-				JOptionPane.showMessageDialog(null, "Command: " + command + ", params: " + Arrays.toString(parameters));
+				// Create and array of parameter types
+				Class<?>[] parameterTypes = new Class<?>[parameters.length];
+				for(int paramIndex = 0; paramIndex < parameters.length; paramIndex++) {
+					parameterTypes[paramIndex] = parameters[paramIndex].getClass();
+				}
+				
+				// Get the java method to call
+				Method receivingMethod;
+				try {
+					receivingMethod = CommunicatingWebBrowserCommandReceiver.this.getClass().getMethod(methodName, parameterTypes);
+				} catch (SecurityException | NoSuchMethodException getMethodException) {
+					getMethodException.printStackTrace();
+					return;
+				}
+				
+				// Invoke the java method with parameters from javascript
+				try {
+					receivingMethod.invoke(CommunicatingWebBrowserCommandReceiver.this, parameters);
+				} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException invokeMethodException) {
+					invokeMethodException.printStackTrace();
+					return;
+				}
 			}
 		});
 	}

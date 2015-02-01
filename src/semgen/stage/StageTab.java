@@ -84,7 +84,7 @@ public class StageTab extends SemGenTab {
 	 * @author Ryan
 	 *
 	 */
-	private class StageCommandReceiver extends SemGenWebBrowserCommandReceiver {
+	public class StageCommandReceiver extends SemGenWebBrowserCommandReceiver {
 
 		/**
 		 * Receives the add model command
