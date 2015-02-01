@@ -1,13 +1,8 @@
 package semgen.visualizations;
 
-import java.util.Arrays;
-
 import javax.naming.InvalidNameException;
-import javax.swing.JOptionPane;
-
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
 import chrriis.dj.nativeswing.swtimpl.components.WebBrowserAdapter;
-import chrriis.dj.nativeswing.swtimpl.components.WebBrowserCommandEvent;
 import chrriis.dj.nativeswing.swtimpl.components.WebBrowserEvent;
 
 /**
@@ -106,6 +101,7 @@ public class CommunicatingWebBrowser<TSender> extends JWebBrowser {
 		if(commandReceiver != null){
 			_commandReceiver = commandReceiver;
 			_commandReceiver.validate();
+			_commandReceiver.listenForBrowserCommands(this);
 		}
 		
 		// Insert the adapter that facilitates communication
@@ -117,9 +113,9 @@ public class CommunicatingWebBrowser<TSender> extends JWebBrowser {
 	}
 	
 	/**
-	 * 1) Inserts an initialization script into the page header while the page is loading.
-	 * 		This allows java and javascript to communicate using an agreed upon contract.
-	 * 2) Listens for commands from javascript
+	 * Inserts an initialization script into the page header while the page is loading.
+	 * This allows java and javascript to communicate using an agreed upon contract.
+	 *
 	 * @author Ryan
 	 *
 	 */
@@ -140,6 +136,9 @@ public class CommunicatingWebBrowser<TSender> extends JWebBrowser {
 			if(e.getWebBrowser().getLoadingProgress() != 100)
 				return;
 
+			// We don't need to listen for anymore events
+			e.getWebBrowser().removeWebBrowserListener(this);
+			
 			// Get the script for the command receiver
 			String javascriptCommandReceiver = _commandSenderGenerator.generateJavascriptReceiver();
 			
@@ -167,13 +166,6 @@ public class CommunicatingWebBrowser<TSender> extends JWebBrowser {
 			
 			// Execute the initialization script
 			CommunicatingWebBrowser.this.executeJavascript(initializationScript);
-		}
-		
-		@Override
-		public void commandReceived(WebBrowserCommandEvent e) {
-			String command = e.getCommand();
-			Object[] parameters = e.getParameters();
-			JOptionPane.showMessageDialog(null, "Command: " + command + ", params: " + Arrays.toString(parameters));
 		}
 	}
 }

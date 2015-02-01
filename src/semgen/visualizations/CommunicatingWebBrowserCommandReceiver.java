@@ -1,10 +1,16 @@
 package semgen.visualizations;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 import javax.naming.InvalidNameException;
+import javax.swing.JOptionPane;
 
 import org.apache.commons.lang3.text.WordUtils;
+
+import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
+import chrriis.dj.nativeswing.swtimpl.components.WebBrowserAdapter;
+import chrriis.dj.nativeswing.swtimpl.components.WebBrowserCommandEvent;
 
 /**
  * Contract for receiving commands from Javascript
@@ -76,5 +82,25 @@ public abstract class CommunicatingWebBrowserCommandReceiver {
 			"var " + javascriptCommandSenderVariableName + " = {" + CommunicationHelpers.NLJS +
 				javascriptSenderMethods +
 			"};";
+	}
+	
+	/**
+	 * Creates a web browser adapter that listens for javascript commands
+	 * and adds it to the browser
+	 */
+	public void listenForBrowserCommands(JWebBrowser browser) {
+		browser.addWebBrowserListener(new WebBrowserAdapter()
+		{
+			/**
+			 * Receives a command from javascript and calls the receiving function
+			 */
+			@Override
+			public void commandReceived(WebBrowserCommandEvent e) {
+				String command = e.getCommand();
+				Object[] parameters = e.getParameters();
+				
+				JOptionPane.showMessageDialog(null, "Command: " + command + ", params: " + Arrays.toString(parameters));
+			}
+		});
 	}
 }
