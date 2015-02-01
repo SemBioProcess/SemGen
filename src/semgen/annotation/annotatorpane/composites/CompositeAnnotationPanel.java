@@ -185,7 +185,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 					}
 				}
 				ents.add(semsimmodel.getCustomPhysicalEntityByName(SemSimModel.unspecifiedName));
-				rels.add(SemSimConstants.CONTAINED_IN_RELATION);
+				rels.add(SemSimConstants.PART_OF_RELATION);
 				datastructure.getPhysicalProperty().setPhysicalPropertyOf(semsimmodel.addCompositePhysicalEntity(ents, rels));
 			}
 			ad.annotator.setModelSaved(false);
