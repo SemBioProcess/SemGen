@@ -10,7 +10,6 @@ import semgen.utilities.Workbench;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
-import semgen.visualizations.SemGenWebBrowserCommandReceiver;
 import semgen.visualizations.SemGenWebBrowserCommandSender;
 import semsim.model.SemSimModel;
 
@@ -83,12 +82,11 @@ public class StageWorkbench extends Workbench {
 	 * @author Ryan
 	 *
 	 */
-	public class StageCommandReceiver extends SemGenWebBrowserCommandReceiver {
+	public class StageCommandReceiver extends CommunicatingWebBrowserCommandReceiver {
 
 		/**
 		 * Receives the add model command
 		 */
-		@Override
 		public void onAddModel() {
 			SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select models to load", true);
 			for (File file : sgc.getSelectedFiles()) {

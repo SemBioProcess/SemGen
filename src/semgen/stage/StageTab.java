@@ -12,7 +12,6 @@ import semgen.SemGenSettings;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenTab;
 import semgen.visualizations.SemGenCommunicatingWebBrowser;
-import semgen.visualizations.SemGenWebBrowserCommandReceiver;
 
 public class StageTab extends SemGenTab {
 
