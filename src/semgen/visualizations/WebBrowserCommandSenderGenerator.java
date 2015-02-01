@@ -24,7 +24,7 @@ public class WebBrowserCommandSenderGenerator<T> {
 	private T _sender;
 	
 	@SuppressWarnings("unchecked")
-	public WebBrowserCommandSenderGenerator(Class<T> senderInterface, JWebBrowser browser, String javascriptCommandReceiverVariableName) {
+	public WebBrowserCommandSenderGenerator(Class<T> senderInterface, CommunicatingWebBrowser<T> browser, String javascriptCommandReceiverVariableName) {
 		if(senderInterface == null)
 			throw new NullPointerException("senderInterface");
 		
@@ -95,9 +95,9 @@ public class WebBrowserCommandSenderGenerator<T> {
 	 */
 	private class WebBrowserCommandSenderInvocationHandler implements InvocationHandler {
 		
-		private JWebBrowser _browser;
+		private CommunicatingWebBrowser<T> _browser;
 		
-		public WebBrowserCommandSenderInvocationHandler(JWebBrowser browser) {
+		public WebBrowserCommandSenderInvocationHandler(CommunicatingWebBrowser<T> browser) {
 			if(browser == null)
 				throw new NullPointerException("browser");
 			
@@ -126,7 +126,7 @@ public class WebBrowserCommandSenderGenerator<T> {
 			// For example is the method called is "loadGraph" with "abcd" as the argument, the following statement will be executed
 			// <CommandReceiverVarName>.onLoadGraph('abcd');
 			String executionScript = String.format("%s.executeHandler('%s', %s);", _javascriptCommandReceiverVariableName, methodToInvoke, argsString);
-			_browser.executeJavascript(executionScript);
+			_browser.executeJavascriptAndHandleErrors(executionScript);
 			
 			return null;
 		}

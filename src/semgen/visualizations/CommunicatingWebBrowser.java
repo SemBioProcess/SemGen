@@ -1,6 +1,7 @@
 package semgen.visualizations;
 
 import javax.naming.InvalidNameException;
+
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
 import chrriis.dj.nativeswing.swtimpl.components.WebBrowserAdapter;
 import chrriis.dj.nativeswing.swtimpl.components.WebBrowserEvent;
@@ -85,6 +86,16 @@ public class CommunicatingWebBrowser<TSender> extends JWebBrowser {
 				"}" + CommunicationHelpers.NLJS +
 			"}";
 	
+	// Executes javascript and handles errors
+	private final String ExecuteJavascriptAndHandleErrorsScript = 
+			"function executeAndHandleErrors(func) {" + CommunicationHelpers.NLJS +
+				"try {" + CommunicationHelpers.NLJS +
+					"func();" + CommunicationHelpers.NLJS +
+				"} catch (e) { " + CommunicationHelpers.NLJS +
+					"alert('Error executing javascript: ' + e.message);" + CommunicationHelpers.NLJS +
+				"}" + CommunicationHelpers.NLJS +
+			"}";
+	
 	// Generator for command sender values
 	private WebBrowserCommandSenderGenerator<TSender> _commandSenderGenerator;
 	
@@ -110,6 +121,16 @@ public class CommunicatingWebBrowser<TSender> extends JWebBrowser {
 	
 	public TSender getCommandSender() {
 		return _commandSenderGenerator.getSender();
+	}
+	
+	/**
+	 * Executes the given javascript and handles errors.
+	 * @param javascript Javasript to execute
+	 */
+	public void executeJavascriptAndHandleErrors(String javascript) {
+		// Execute the passed in javascript from within a function that handles errors
+		javascript = String.format("executeAndHandleErrors(function () { %s });", javascript);
+		executeJavascript(javascript);
 	}
 	
 	/**
@@ -152,7 +173,8 @@ public class CommunicatingWebBrowser<TSender> extends JWebBrowser {
 			String scriptInnerHtml = 
 					javascriptCommandReceiver + CommunicationHelpers.NLJS +
 					javascriptCommandSender + CommunicationHelpers.NLJS +
-					TriggerInitializationEventScript;
+					TriggerInitializationEventScript + CommunicationHelpers.NLJS +
+					ExecuteJavascriptAndHandleErrorsScript;
 			
 			// Insert a script element into the page header that defines an object that receives commands.
 			// the page is responsible for registering handlers for those commands
