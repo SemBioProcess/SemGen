@@ -16,8 +16,13 @@ import semgen.visualizations.SemGenWebBrowserCommandReceiver;
 
 public class StageTab extends SemGenTab {
 
+	// Stage workbench
+	private StageWorkbench _workbench;
+	
 	public StageTab(SemGenSettings sets, GlobalActions globalacts, StageWorkbench bench) {
 		super("Stage", SemGenIcon.annotatemodelicon, "Stage for facilitating SemGen tasks", sets, globalacts);
+		
+		_workbench = bench;
 	}
 	
 	/**
@@ -48,7 +53,7 @@ public class StageTab extends SemGenTab {
 		
 		// Create the browser
 		try {
-			SemGenCommunicatingWebBrowser browser = new SemGenCommunicatingWebBrowser(new StageCommandReceiver());
+			SemGenCommunicatingWebBrowser browser = new SemGenCommunicatingWebBrowser(_workbench.getCommandReceiver());
 			this.add(browser);
 		} catch (InvalidNameException e) {
 			e.printStackTrace();
@@ -77,21 +82,5 @@ public class StageTab extends SemGenTab {
 	public void addObservertoWorkbench(Observer obs) {
 		// TODO Auto-generated method stub
 
-	}
-	
-	/**
-	 * Receives commands from javascript
-	 * @author Ryan
-	 *
-	 */
-	public class StageCommandReceiver extends SemGenWebBrowserCommandReceiver {
-
-		/**
-		 * Receives the add model command
-		 */
-		@Override
-		public void onAddModel() {
-			JOptionPane.showMessageDialog(null, "Add model from stage coming soon");
-		}
 	}
 }
