@@ -12,9 +12,9 @@ package semgen.visualizations;
 public interface SemGenWebBrowserCommandSender {
 	
 	/**
-	 * Sends a test string to the browser. This will eventually be removed.
+	 * Sends the add model command
 	 * 
 	 * @param testString
 	 */
-	void test(String testString);
+	void addModel(String modelName);
 }

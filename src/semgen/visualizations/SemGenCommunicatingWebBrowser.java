@@ -25,23 +25,6 @@ public class SemGenCommunicatingWebBrowser extends
         // Load the stage
 	    this.navigate(WebServer.getDefaultWebServer().getClassPathResourceURL(getClass().getName(), StageHtml));
 	    
-	    // THIS IS A TEST. THIS WILL BE REMOVED.
-	    // When the page is loaded send the graph json to the browser
-	    this.addWebBrowserListener(new WebBrowserAdapter() {
-
-	    	@Override
-			public void loadingProgressChanged(WebBrowserEvent e) {
-	    		if(e.getWebBrowser().getLoadingProgress() == 100)
-	    		{
-	    			// Send the json to javascript
-	    			SemGenCommunicatingWebBrowser.this.getCommandSender().test("'This message was sent fromm Java'");
-	    			e.getWebBrowser().removeWebBrowserListener(this);
-	    		}
-	    	}
-		});
-	    // JPanel webBrowserPanel = new JPanel(new BorderLayout());
-	    // webBrowserPanel.add(webBrowser, BorderLayout.CENTER);
-	    
 	    System.out.println("SemGen web browser loaded");
 	}
 

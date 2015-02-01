@@ -5,4 +5,8 @@ $(window).bind("cwb-initialized", function(e) {
 	$(".addModelButton").click(function() {
 		sender.addModel();
 	});
+	
+	receiver.onAddModel(function (modelName) {
+		alert('adding model: ' + modelName);
+	})
 });

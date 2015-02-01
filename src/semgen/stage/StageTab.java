@@ -54,6 +54,7 @@ public class StageTab extends SemGenTab {
 		// Create the browser
 		try {
 			SemGenCommunicatingWebBrowser browser = new SemGenCommunicatingWebBrowser(_workbench.getCommandReceiver());
+			_workbench.setCommandSender(browser.getCommandSender());
 			this.add(browser);
 		} catch (InvalidNameException e) {
 			e.printStackTrace();

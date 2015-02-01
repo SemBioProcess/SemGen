@@ -118,7 +118,7 @@ public class WebBrowserCommandSenderGenerator<T> {
 					if(i != 0)
 						argsString += ", ";
 					
-					argsString += String.format("%s", args[i].toString());
+					argsString += String.format("'%s'", args[i].toString());
 				}
 			}
 			
