@@ -6,9 +6,10 @@ $(window).load(function() {
 	if(typeof sendNSCommand != 'undefined')
 		return;
 	
+	var modelNum = 0;
 	var mockSender = {
 			addModel: function() {
-				mockReceiver.addModel("Test model");
+				mockReceiver.addModel("Test model " + modelNum++);
 			},
 	};
 	
