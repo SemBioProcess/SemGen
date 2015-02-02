@@ -334,17 +334,19 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	
 	public abstract boolean isReal();
 	
+	/** @return Returns an int indicating whether the data structure is a property of
+	 * a physical entity, physical process, etc.
+	 */
 	public int getPropertyType(SemSimLibrary lib){
 		if(hasPhysicalProperty()){
 			// If there's already an OPB reference annotation
 			if(getPhysicalProperty().hasRefersToAnnotation()){
 				ReferenceOntologyAnnotation roa = (getPhysicalProperty().getFirstRefersToReferenceOntologyAnnotation());
 				
-				if(lib.OPBhasStateProperty(roa) ||
-						lib.OPBhasForceProperty(roa)){
+				if(lib.OPBhasStateProperty(roa) || lib.OPBhasForceProperty(roa)){
 					return SemSimConstants.PROPERTY_OF_PHYSICAL_ENTITY;
 				}
-				else if(lib.OPBhasProcessProperty(roa)){
+				else if(lib.OPBhasFlowProperty(roa) || lib.OPBhasProcessProperty(roa)){
 					return SemSimConstants.PROPERTY_OF_PHYSICAL_PROCESS;
 				}
 				else return SemSimConstants.UNKNOWN_PROPERTY_TYPE;
