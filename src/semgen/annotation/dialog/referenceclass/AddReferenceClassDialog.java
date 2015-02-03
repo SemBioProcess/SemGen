@@ -50,6 +50,7 @@ public class AddReferenceClassDialog extends SemGenDialog implements
 	
 	public void propertyChange(PropertyChangeEvent arg0) {
 		if (arg0.getPropertyName()=="value") {
+			if (optionPane.getValue() == JOptionPane.UNINITIALIZED_VALUE) return;
 			String value = optionPane.getValue().toString();
 			if (value == "Close") {
 				this.dispose();
@@ -58,7 +59,7 @@ public class AddReferenceClassDialog extends SemGenDialog implements
 			
 			String selectedname = (String) refclasspanel.resultslistright.getSelectedValue().trim();
 			String type = "";
-			optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+			
 			if (value == "Add as entity" && this.getFocusOwner() != refclasspanel.findbox) {
 				type = " physical enitity";
 			}
@@ -72,6 +73,7 @@ public class AddReferenceClassDialog extends SemGenDialog implements
 						"", JOptionPane.PLAIN_MESSAGE);
 			annotator.setModelSaved(false);
 			if(annotator.focusbutton instanceof CodewordButton) annotator.annotatorpane.compositepanel.refreshUI();
+			optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 		}
 	}
 }
