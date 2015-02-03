@@ -586,7 +586,6 @@
 
     <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Custom_physical_entity">
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
-        <owl:disjointWith rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:comment rdf:datatype="&xsd;string">A physical entity defined in a specific SemSim model.</rdfs:comment>
     </owl:Class>
     
@@ -596,7 +595,6 @@
 
     <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Custom_physical_process">
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_process"/>
-        <owl:disjointWith rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_process"/>
         <rdfs:comment rdf:datatype="&xsd;string">A physical process defined in a specific SemSim model.</rdfs:comment>
     </owl:Class>
     
