@@ -71,14 +71,17 @@ public class ObjectPropertyEditor extends JPanel implements ActionListener, Prop
 
 		// get the list contents
 		if (this.subject != null) {
+			
+			// If the relation does not have to do with process participants
 			if(relation!=SemSimConstants.HAS_SOURCE_RELATION && relation!=SemSimConstants.HAS_SINK_RELATION
 					&& relation!=SemSimConstants.HAS_MEDIATOR_RELATION){
 				for(Annotation ann : subject.getAnnotations()){
 					if(ann.getRelation()==relation && (ann instanceof ReferenceOntologyAnnotation)){
-						String desc = ((ReferenceOntologyAnnotation)ann).getValueDescription();
+						ReferenceOntologyAnnotation refann = (ReferenceOntologyAnnotation)ann;
+						String desc = refann.getValueDescription();
 						namesandobjects.put(
-								desc + " (" + ((ReferenceOntologyAnnotation)ann).getOntologyAbbreviation() + ")",
-								subject);
+								desc + " (" + refann.getOntologyAbbreviation() + ")",
+								model.getPhysicalModelComponentByReferenceURI(refann.getReferenceURI()));
 					}
 				}
 			}
