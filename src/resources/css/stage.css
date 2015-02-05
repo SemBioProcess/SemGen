@@ -29,3 +29,38 @@ body {
 	opacity: 1;
 	cursor: pointer;
 }
+
+ul.flyoutMenu {
+	position: relative;
+	display: inline-block;
+	margin: 10px;
+	padding: 0;
+	border: 1px solid black;
+}
+
+ul.flyoutMenu:after {
+	content: '';
+	position: absolute;
+	left: 40%;
+	top: -10px;
+	width: 0;
+	height: 0;
+	border-left: 8px solid transparent;
+	border-right: 8px solid transparent;
+	border-bottom: 10px solid #444;
+}
+
+ul.flyoutMenu li {				
+	list-style: none;
+	padding: 5px 10px;
+	border-bottom: 1px solid black;
+}
+
+ul.flyoutMenu li:hover {
+	background-color: #DFE3EE;
+	cursor: pointer;
+}
+
+ul.flyoutMenu li:last-child {
+	border: none;
+}
