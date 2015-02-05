@@ -106,8 +106,14 @@ public class ModelAnnotationEditor extends JPanel implements Observer {
 		protected class MAPMouseAdapter extends MouseAdapter{
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				annpanels.get(metadatabench.getFocusIndex()).removeFocus();
+				setMetadataIndex();
 				giveFocus();
 			}
+		}
+		
+		private void setMetadataIndex() {
+			metadatabench.setMetadataSelectionIndex(annpanels.indexOf(this));
 		}
 		
 		protected int getDescriptionWidth() {
@@ -156,7 +162,8 @@ public class ModelAnnotationEditor extends JPanel implements Observer {
 		
 		AnnTextPanel(String title) {
 			super(title);
-			textbox.addFocusListener(new MAPFocusListener());
+			//textbox.addFocusListener(new MAPFocusListener());
+			textbox.addMouseListener(new MAPMouseAdapter());
 			textbox.addKeyListener(new MAPKeyboardListener());
 			add(textbox);
 		}
