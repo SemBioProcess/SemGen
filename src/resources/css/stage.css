@@ -30,7 +30,11 @@ body {
 	cursor: pointer;
 }
 
-ul.flyoutMenu {
+.flyoutMenu {
+	position: absolute;
+}
+
+.flyoutMenu ul {
 	position: relative;
 	display: inline-block;
 	margin: 10px;
@@ -38,7 +42,7 @@ ul.flyoutMenu {
 	border: 1px solid black;
 }
 
-ul.flyoutMenu:after {
+.flyoutMenu ul:after {
 	content: '';
 	position: absolute;
 	left: 40%;
@@ -50,17 +54,17 @@ ul.flyoutMenu:after {
 	border-bottom: 10px solid #444;
 }
 
-ul.flyoutMenu li {				
+.flyoutMenu ul li {				
 	list-style: none;
 	padding: 5px 10px;
 	border-bottom: 1px solid black;
 }
 
-ul.flyoutMenu li:hover {
+.flyoutMenu ul li:hover {
 	background-color: #DFE3EE;
 	cursor: pointer;
 }
 
-ul.flyoutMenu li:last-child {
+.flyoutMenu ul li:last-child {
 	border: none;
 }
