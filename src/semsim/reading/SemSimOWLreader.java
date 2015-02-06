@@ -421,11 +421,10 @@ public class SemSimOWLreader extends ModelReader {
 						String label = SemSimOWLFactory.getRDFLabels(ont, supercls.asOWLClass())[0];
 						
 						// If the reference term hasn't been added yet, add it
-						PhysicalModelComponent refpmc = null;
 						if(customclassuri==SemSimConstants.CUSTOM_PHYSICAL_PROCESS_CLASS_URI)
-							refpmc = semsimmodel.addReferencePhysicalProcess(superclsuri, label);
+							semsimmodel.addReferencePhysicalProcess(superclsuri, label);
 						if(customclassuri==SemSimConstants.CUSTOM_PHYSICAL_ENTITY_CLASS_URI)
-							refpmc = semsimmodel.addReferencePhysicalEntity(superclsuri, label);
+							semsimmodel.addReferencePhysicalEntity(superclsuri, label);
 						
 						// Add isVersionOf annotation
 						PhysicalModelComponent pmc = null;
