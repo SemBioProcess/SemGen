@@ -34,7 +34,7 @@ import semgen.utilities.OntologyCache;
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
-import semgen.utilities.file.SemGenOpenFileChooser;
+import semgen.utilities.file.SemGenFileChooser;
 import semgen.utilities.uicomponent.SemGenDialog;
 import semsim.ErrorLog;
 import semsim.SemSimLibrary;
@@ -124,7 +124,7 @@ public class SemGen extends JFrame implements Observer{
 		SemGenError.setFrame(this);
 		SemGenDialog.setFrame(this);
 		
-		SemGenOpenFileChooser.currentdirectory = new File(settings.getStartDirectory());
+		SemGenFileChooser.currentdirectory = new File(settings.getStartDirectory());
 
 		//Create an instance of SemGen's default font and load it into memory
 		SemGenFont.defaultUIFont();
