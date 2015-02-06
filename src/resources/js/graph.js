@@ -88,8 +88,10 @@ function Graph() {
 	    node.exit().remove();
 	    
 	    force.on("tick", function() {
-
-	        node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y         + ")"; });
+	    	// Execute the tick handler for each node
+	    	node.each(function (d) {
+	    		d.tickHandler(this);
+	    	});
 
 	        link.attr("x1", function(d) { return d.source.x; })
 	          .attr("y1", function(d) { return d.source.y; })
@@ -113,4 +115,31 @@ function Graph() {
 
 	// Run it
 	update();
+}
+
+function Node(id, r) {
+	this.id = id;
+	this.r = r;
+}
+
+Node.prototype.tickHandler = function (element) {
+	$(element).attr("transform", "translate(" + this.x + "," + this.y + ")");
+}
+
+ModelNode.prototype = new Node();
+ModelNode.prototype.constructor = Node;
+function ModelNode (id, flyoutMenu) {
+	Node.prototype.constructor.call(this, id, 16);
+	this.fixed = true;
+	
+	this.flyoutMenu = flyoutMenu;
+}
+
+ModelNode.prototype.onClick = function (e) {
+	this.flyoutMenu.positionAroundElement(e.target);
+    e.stopPropagation();
+}
+
+ModelNode.prototype.onMouseDown = function (e) {
+	this.flyoutMenu.getRoot().hide();
 }

@@ -11,18 +11,7 @@ $(window).bind("cwb-initialized", function(e) {
 	
 	// Adds a model node to the d3 graph
 	receiver.onAddModel(function (modelName) {
-		graph.addNode({
-	    	id: modelName,
-	    	r: 16,
-	    	fixed: true,
-	    	onClick: function (e) {
-	    		flyoutMenu.positionAroundElement(e.target);
-	    		e.stopPropagation();
-	    	},
-	    	onMouseDown: function (e) {
-	    		flyoutMenu.getRoot().hide();
-	    	},
-	    });
+		graph.addNode(new ModelNode(modelName, flyoutMenu));
 	})
 });
 
