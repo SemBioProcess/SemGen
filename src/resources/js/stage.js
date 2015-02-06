@@ -19,6 +19,9 @@ $(window).bind("cwb-initialized", function(e) {
 	    		flyoutMenu.positionAroundElement(e.target);
 	    		e.stopPropagation();
 	    	},
+	    	onMouseDown: function (e) {
+	    		flyoutMenu.getRoot().hide();
+	    	},
 	    });
 	})
 });

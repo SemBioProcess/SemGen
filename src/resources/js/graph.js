@@ -68,6 +68,10 @@ function Graph() {
 	        .on("click", function(d) {
 	        	if(d.onClick)
 	        		d.onClick(d3.event);
+	        })
+	        .on("mousedown", function(d) {
+	        	if(d.onMouseDown)
+	        		d.onMouseDown(d3.event);
 	        });
 
 	    nodeEnter.append("svg:circle")
