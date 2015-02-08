@@ -20,6 +20,8 @@ import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
+import org.sbml.libsbml.ASTNode;
+import org.sbml.libsbml.libsbml;
 
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -271,7 +273,7 @@ public class CellMLreader extends ModelReader {
 				semsimmodel.addDataStructure(cvar);
 			}
 			
-			// Add MathML for each component variable
+			// Add MathML and computational code for each component variable
 			varit = comp.getChildren("variable", mainNS).iterator();
 			
 			while(varit.hasNext()){
@@ -285,7 +287,10 @@ public class CellMLreader extends ModelReader {
 					Element varmathmlel = getMathMLforOutputVariable(varname, compMathMLelements);
 					if(varmathmlel!=null){
 						String varmathml = xmloutputter.outputString(varmathmlel);
+						ASTNode ast_result = libsbml.readMathMLFromString(varmathml);
+						String ast_as_string = libsbml.formulaToString(ast_result);
 						cvar.getComputation().setMathML(varmathml);
+						cvar.getComputation().setComputationalCode(ast_as_string);
 						
 						// Create the computational dependency network among the component variables
 						whiteBoxFunctionalSubmodelEquations(varmathmlel, compname, semsimmodel, cvar);
