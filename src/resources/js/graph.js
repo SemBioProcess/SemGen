@@ -5,12 +5,7 @@
  */
 
 function Graph() {
-	
-	// Add a handler that's fired on tick
-	this.addTickHandler = function (handler) {
-		externalTickHandlers.push(handler);
-	};
-	
+
 	// Add a node to the graph
 	this.addNode = function (nodeData) {
 		if(!nodeData)
@@ -22,14 +17,16 @@ function Graph() {
 		if(typeof nodeData.r != "number")
 			throw "Node radius must be a number";
 		
+		if(typeof nodeData.className != "string")
+			throw "Node className must be a string";
+		
 	    nodes.push(nodeData);
 	    update();
 	};
 
 	// Set up the D3 visualisation in the specified element
 	var w = 500,
-	    h = 500,
-	    externalTickHandlers = [];
+	    h = 500;
 	
 	// Get the stage and style it
 	var vis = d3.select("#stage")
@@ -63,16 +60,8 @@ function Graph() {
 	        .data(nodes, function(d) { return d.id; });
 
 	    var nodeEnter = node.enter().append("g")
-	        .attr("class", "node")
-	        .call(force.drag)
-	        .on("click", function(d) {
-	        	if(d.onClick)
-	        		d.onClick(d3.event);
-	        })
-	        .on("mousedown", function(d) {
-	        	if(d.onMouseDown)
-	        		d.onMouseDown(d3.event);
-	        });
+	        .attr("class", function (d) {return d.className; })
+	        .call(force.drag);
 
 	    nodeEnter.append("svg:circle")
 		    .attr("r", function(d) { return d.r; })
@@ -97,11 +86,6 @@ function Graph() {
 	          .attr("y1", function(d) { return d.source.y; })
 	          .attr("x2", function(d) { return d.target.x; })
 	          .attr("y2", function(d) { return d.target.y; });
-	        
-	        // Execute external handlers
-	        externalTickHandlers.forEach(function (handler) {
-	        	handler();
-	        });
 	    });
 
 	    // Restart the force layout.

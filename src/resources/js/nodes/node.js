@@ -4,6 +4,11 @@
 function Node(id, r) {
 	this.id = id;
 	this.r = r;
+	this.className = "node";
+}
+
+Node.prototype.addClassName = function (className) {
+	this.className += " " + className;
 }
 
 Node.prototype.tickHandler = function (element) {

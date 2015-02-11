@@ -30,42 +30,23 @@ body {
 	cursor: pointer;
 }
 
-.flyoutMenu {
-	position: absolute;
-}
-
-.flyoutMenu ul {
-	position: relative;
+ul.modelPopover {
 	display: inline-block;
-	margin: 10px;
+	margin: 0;
 	padding: 0;
-	border: 1px solid black;
-	background-color: #FFFFFF;
 }
 
-.flyoutMenu ul:after {
-	content: '';
-	position: absolute;
-	left: 40%;
-	top: -10px;
-	width: 0;
-	height: 0;
-	border-left: 8px solid transparent;
-	border-right: 8px solid transparent;
-	border-bottom: 10px solid #444;
-}
-
-.flyoutMenu ul li {				
+ul.modelPopover li {				
 	list-style: none;
 	padding: 5px 10px;
 	border-bottom: 1px solid black;
 }
 
-.flyoutMenu ul li:hover {
+ul.modelPopover li:hover {
 	background-color: #DFE3EE;
 	cursor: pointer;
 }
 
-.flyoutMenu ul li:last-child {
+ul.modelPopover li:last-child {
 	border: none;
 }
