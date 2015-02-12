@@ -30,8 +30,11 @@ body {
 	cursor: pointer;
 }
 
-ul.modelPopover {
-	display: inline-block;
+.popover-title {
+	font-size: 18px;
+}
+
+.popover-content ul {
 	margin: 0;
 	padding: 0;
 }
@@ -39,14 +42,29 @@ ul.modelPopover {
 ul.modelPopover li {				
 	list-style: none;
 	padding: 5px 10px;
-	border-bottom: 1px solid black;
 }
 
-ul.modelPopover li:hover {
+ul.modelPopover li a {
+	display: block;
+	width: 100%;
+	padding: 7px;
+	text-align: center;
+	font-weight: normal;
+	color: inherit;
+	text-decoration: none;
+	border: 1px solid black;
+	background-color: #FFFFFF;
+}
+
+ul.modelPopover li a:hover {
 	background-color: #DFE3EE;
 	cursor: pointer;
 }
 
 ul.modelPopover li:last-child {
 	border: none;
+}
+
+ul.modelPopover li.submenuContainer {
+	background-color: #F8F8F8;
 }

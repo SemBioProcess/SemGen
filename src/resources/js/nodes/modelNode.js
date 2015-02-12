@@ -22,12 +22,20 @@ function ModelNode (id) {
 			html: true,
 			content: 
 				"<ul class='modelPopover'>" +
-					"<li onclick='comingSoonClickHandler(this);'>Merge</li>" +
-					"<li onclick='comingSoonClickHandler(this);'>Annotate</li>" +
-					"<li onclick='comingSoonClickHandler(this);'>Extract</li>" +
-					"<li onclick='comingSoonClickHandler(this);'>Visualize</li>" +
+					"<li><a href='#' onclick='comingSoonClickHandler(this);'>Merge</a></li>" +
+					"<li><a href='#' onclick='comingSoonClickHandler(this);'>Annotate</a></li>" +
+					"<li><a href='#' onclick='comingSoonClickHandler(this);'>Extract</a></li>" +
+					"<li class='submenuContainer'>" +
+						"Visualize" +
+						"<ul>" +
+							"<li><a href='#' onclick='comingSoonClickHandler(this);'>Submodels</a></li>" +
+							"<li><a href='#' onclick='comingSoonClickHandler(this);'>Dependencies</a></li>" +
+						"</ul>" +
+					"</li>" +
 				"</ul>",
 			placement: "bottom" });
+
+		initialized = true;
 	}
 }
 
