@@ -1,11 +1,13 @@
 /**
  * Represents a node in the d3 graph
  */
-function Node(id, r) {
+function Node(id, r, group) {
 	this.id = id;
 	this.r = r;
+	this.group = group;
 	this.className = "node";
 	this.element;
+	this.links = [];
 }
 
 Node.prototype.addClassName = function (className) {

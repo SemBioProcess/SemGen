@@ -13,12 +13,37 @@ $(window).load(function() {
 			},
 			
 			taskClicked: function (task, modelName) {
-				alert("Task: " + task + ", Model: " + modelName);
+				if(task.toLowerCase() == "dependencies") {
+					var data = [
+					    {
+					    	id: modelName + "A",
+					    	links: [modelName + "B"],
+					    	group: 0,
+					    },
+					    {
+					    	id: modelName + "B",
+					    	group: 1,
+					    },
+					    {
+					    	id: modelName + "C",
+					    	links: [modelName + "A"],
+					    	group: 2,
+					    },
+					    {
+					    	id: modelName + "D",
+					    	links: [modelName + "A", modelName + "B", modelName + "C"],
+					    	group: 0,
+					    },
+					];
+					mockReceiver.showDependencies(modelName, data);
+				}
 			},
 	};
 	
 	var mockReceiver = {
 			onAddModel: function (handler) { this.addModel = handler; },
+			
+			onShowDependencies: function (handler) { this.showDependencies = handler; },
 	};
 	
 	var event; // The custom event that will be created
