@@ -1,8 +1,11 @@
+var sender;
+var receiver;
 $(window).bind("cwb-initialized", function(e) {
-	var receiver = e.originalEvent.commandReceiver;
-	var sender = e.originalEvent.commandSender;
+	receiver = e.originalEvent.commandReceiver;
+	sender = e.originalEvent.commandSender;
 
 	var graph = new Graph();
+	var modelNodes = {};
 	
 	$(".addModelButton").click(function() {
 		sender.addModel();
@@ -10,6 +13,8 @@ $(window).bind("cwb-initialized", function(e) {
 	
 	// Adds a model node to the d3 graph
 	receiver.onAddModel(function (modelName) {
-		graph.addNode(new ModelNode(modelName));
+		var modelNode = new ModelNode(modelName);
+		modelNodes[modelName] = modelNode;
+		graph.addNode(modelNode);
 	});
 });

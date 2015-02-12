@@ -74,6 +74,11 @@ function Graph() {
             .attr("y", ".31em")
 		    .text( function(d) { return d.id; }) ;
 
+	    // Tell each node to initialize its element
+	    node.each(function (d) {
+	    	d.initialize(this);
+	    });
+	    
 	    node.exit().remove();
 	    
 	    force.on("tick", function() {

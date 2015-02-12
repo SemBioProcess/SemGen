@@ -11,6 +11,10 @@ $(window).load(function() {
 			addModel: function() {
 				mockReceiver.addModel("Test model " + modelNum++);
 			},
+			
+			taskClicked: function (task, modelName) {
+				alert("Task: " + task + ", Model: " + modelName);
+			},
 	};
 	
 	var mockReceiver = {
