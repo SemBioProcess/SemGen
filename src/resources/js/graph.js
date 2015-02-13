@@ -162,14 +162,12 @@ function Graph() {
 	};
 	
 	// Set up the D3 visualisation in the specified element
-	var w = 500,
-	    h = 500;
+	var w = $(window).width(),
+	    h = $(window).height();
 	
 	// Get the stage and style it
 	var vis = d3.select("#stage")
 	    .append("svg:svg")
-	    .attr("width", w)
-	    .attr("height", h)
 	    .attr("id", "svg")
 	    .attr("pointer-events", "all")
 	    .attr("viewBox","0 0 "+ w +" "+ h)
