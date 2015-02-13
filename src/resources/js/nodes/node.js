@@ -15,14 +15,25 @@ Node.prototype.addClassName = function (className) {
 	this.className += " " + className;
 }
 
-/**
- * Initializes the node.
- * Returns true if this element has already been initialized
- */
-Node.prototype.initialize = function (element) {
-	var oldElement = this.element;
-	this.element = element;
-	return oldElement == this.element;
+Node.prototype.createVisualElement = function (element) {
+	var root = d3.select(element);
+	
+    root.append("svg:circle")
+	    .attr("r", this.r)
+	    .attr("id", "Node;"+this.id)
+	    .attr("class","nodeStrokeClass");
+    
+	// A copy of the text with a thick white stroke for legibility.
+    root.append("svg:text")
+	    .attr("x", 20)
+	    .attr("y", ".31em")
+	    .attr("class", "shadow")
+	    .text(this.displayName);
+
+    root.append("svg:text")
+	    .attr("x", 20)
+	    .attr("y", ".31em")
+	    .text(this.displayName);
 }
 
 Node.prototype.tickHandler = function (element) {

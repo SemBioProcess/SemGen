@@ -79,29 +79,8 @@ function Graph() {
 	    var nodeEnter = node.enter().append("g")
 	        .attr("class", function (d) {return d.className; })
 	        .call(force.drag)
-	        .style("fill", function (d) {return color(d.group);});;
-
-	    nodeEnter.append("svg:circle")
-		    .attr("r", function(d) { return d.r; })
-		    .attr("id",function(d) { return "Node;"+d.id;})
-		    .attr("class","nodeStrokeClass");
-	    
-		// A copy of the text with a thick white stroke for legibility.
-	    nodeEnter.append("svg:text")
-		    .attr("x", 20)
-		    .attr("y", ".31em")
-		    .attr("class", "shadow")
-		    .text(function(d) { return d.displayName; });
-	
-	    nodeEnter.append("svg:text")
-		    .attr("x", 20)
-		    .attr("y", ".31em")
-		    .text(function(d) { return d.displayName; });
-
-	    // Initialize each node
-	    node.each(function (d) {
-	    	d.initialize(this);
-	    });
+	        .style("fill", function (d) {return color(d.group);})
+	        .each(function (d) { d.createVisualElement(this); });
 	    
 	    node.exit().remove();
 	    

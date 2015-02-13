@@ -9,12 +9,16 @@ ModelNode.prototype.constructor = Node;
 function ModelNode (name) {
 	Node.prototype.constructor.call(this, name, name, 16, 0);
 	this.fixed = true;
+	this.isInitialized = false;
 	
 	this.addClassName("modelNode");
 }
 
-ModelNode.prototype.initialize = function (element) {
-	if(Node.prototype.initialize.call(this, element))
+ModelNode.prototype.createVisualElement = function (element) {
+	Node.prototype.createVisualElement.call(this, element);
+	
+	// If we've initialized don't create
+	if(this.isInitialized)
 		return;
 	
 	// Define the popover html
@@ -61,6 +65,8 @@ ModelNode.prototype.initialize = function (element) {
 	});
 	
 	$(window).click(function () { hideOpenPopover(); });
+	
+	this.isInitialized = true;
 }
 
 function hideOpenPopover() {
