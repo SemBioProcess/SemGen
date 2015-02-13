@@ -56,10 +56,17 @@ ModelNode.prototype.initialize = function (element) {
 			openPopover = $(this).popover();
 			openPopover.modelNode = e.data.modelNode;
 		}
+		
+		e.stopPropagation();
 	});
+	
+	$(window).click(function () { hideOpenPopover(); });
 }
 
 function hideOpenPopover() {
+	if(!openPopover)
+		return;
+	
 	openPopover.popover("hide");
 	openPopover = null;
 }
@@ -71,5 +78,4 @@ function comingSoonClickHandler(element) {
 function taskClicked (element) {
 	var task = element.innerHTML.toLowerCase();
 	sender.taskClicked(openPopover.modelNode.id, task);
-	hideOpenPopover();
 }
