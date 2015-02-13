@@ -176,7 +176,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		}
 	}
 	
-	public SemSimModel NewAnnotatorAction(){
+	public void NewAnnotatorAction(){
 		SemGen.logfilewriter.println("Started new annotater");
 		refreshAnnotatableElements();
 
@@ -184,10 +184,16 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		add(splitpane, BorderLayout.CENTER);
 		setVisible(true);
 		
-		splitpane.setDividerLocation(360);
-		eastsplitpane.setDividerLocation((int)(initheight-150)/2);
-		swsplitpane.setDividerLocation((int)(initheight-150)/2);
-		westsplitpane.setDividerLocation((int)(initheight-150)/6);
+		int iniwloc = settings.scaleWidthforScreen(360);
+		int inihloc = settings.scaleWidthforScreen(initheight-150);
+		splitpane.setDividerLocation(iniwloc);
+		eastsplitpane.setDividerLocation((int)(inihloc)/2);
+		swsplitpane.setDividerLocation((int)(inihloc)/2);
+		westsplitpane.setDividerLocation((int)(inihloc)/6);
+		
+		Dimension topmaxsize = westsplitpane.getTopComponent().getMaximumSize();
+		westsplitpane.getBottomComponent().setMinimumSize(new Dimension(0, inihloc-topmaxsize.height));
+		splitpane.getRightComponent().setMinimumSize(new Dimension(initwidth-iniwloc,0));
 		
 		codewordscrollpane.scrollToTop();
 		submodelscrollpane.scrollToTop();
@@ -218,7 +224,6 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 			} catch (BadLocationException | IOException e) {
 				e.printStackTrace();
 			} 
-		return semsimmodel;
 	}
 
 	public void addPanelTitle(String type, int totalcount, int displayedcount, SemGenScrollPane scrollpane, String zerocountmsg) {

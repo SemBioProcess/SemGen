@@ -4,6 +4,8 @@
 
 package semgen.utilities.uicomponent;
 
+import java.awt.Rectangle;
+
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
@@ -28,6 +30,7 @@ public abstract class SemGenDialog extends JDialog{
 	 */
 	protected void showDialog() {
 		pack();
+
 		setLocationRelativeTo(location);
 		setVisible(true);
 	}

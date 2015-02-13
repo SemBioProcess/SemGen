@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -58,18 +59,20 @@ public class ModelAnnotationsListPane extends SemGenScrollPane implements Observ
 	private void createUI() {
 		viewport.setBackground(Color.white);
 		drawList();
-		
+		setMaximumSize(new Dimension(360, (metadataarray.size()+2)*18));
 		setViewportView(viewport);	
 	}
 	
 	private void drawList() {
+		
 		for (Pair<String, Boolean> pair : metadatabench.getModelAnnotationFilledPairs()) {
 			MetadatawithCheck box = new MetadatawithCheck(pair.getLeft(), pair.getRight());
 			metadataarray.add(box);
-			viewport.add(box, Component.LEFT_ALIGNMENT);
+			box.setMaximumSize(new Dimension(360, 12));
+			viewport.add(box, Component.LEFT_ALIGNMENT);	
 			viewport.add(Box.createGlue());
 		}
-
+		
 		validate();
 	}
 	
