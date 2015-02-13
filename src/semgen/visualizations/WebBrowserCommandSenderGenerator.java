@@ -118,7 +118,16 @@ public class WebBrowserCommandSenderGenerator<T> {
 					if(i != 0)
 						argsString += ", ";
 					
-					argsString += String.format("'%s'", args[i].toString());
+					// Add single quotes around non-json strings so they're handled
+					// as strings in javascript. Do not add quotes around json
+					Object arg = args[i];
+					String argStringValue;
+					if(arg instanceof JsonString)
+						argStringValue = arg.toString();
+					else
+						argStringValue = String.format("'%s'", arg.toString());
+					
+					argsString += argStringValue;
 				}
 			}
 			

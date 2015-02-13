@@ -64,6 +64,6 @@ function comingSoonClickHandler(element) {
 }
 
 function taskClicked (element) {
-	var task = element.innerHTML;
-	sender.taskClicked(task, openPopover.modelNode.id);
+	var task = element.innerHTML.toLowerCase();
+	sender.taskClicked(openPopover.modelNode.id, task);
 }

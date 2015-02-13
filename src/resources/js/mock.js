@@ -12,8 +12,8 @@ $(window).load(function() {
 				mockReceiver.addModel("Test model " + modelNum++);
 			},
 			
-			taskClicked: function (task, modelName) {
-				if(task.toLowerCase() == "dependencies") {
+			taskClicked: function (modelName, task) {
+				if(task == "dependencies") {
 					var data = [
 					    {
 					    	id: modelName + "A",
@@ -35,7 +35,7 @@ $(window).load(function() {
 					    	group: 0,
 					    },
 					];
-					mockReceiver.showDependencies(modelName, data);
+					mockReceiver.showDependencyNetwork(modelName, data);
 				}
 			},
 	};
@@ -43,7 +43,7 @@ $(window).load(function() {
 	var mockReceiver = {
 			onAddModel: function (handler) { this.addModel = handler; },
 			
-			onShowDependencies: function (handler) { this.showDependencies = handler; },
+			onShowDependencyNetwork: function (handler) { this.showDependencyNetwork = handler; },
 	};
 	
 	var event; // The custom event that will be created

@@ -17,4 +17,12 @@ public interface SemGenWebBrowserCommandSender {
 	 * @param testString
 	 */
 	void addModel(String modelName);
+	
+	/**
+	 * Tell the browser to render the dependencies
+	 * 
+	 * @param modelName Name of model
+	 * @param jsonDependencies Dependencies
+	 */
+	void showDependencyNetwork(String modelName, JsonString jsonDependencies);
 }

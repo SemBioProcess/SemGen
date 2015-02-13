@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
+import semgen.stage.serialization.SemSimModelSerializer;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.file.SemGenOpenFileChooser;
@@ -96,6 +97,21 @@ public class StageWorkbench extends Workbench {
 				// Tell the view to add a model
 				_commandSender.addModel(semsimmodel.getName());
 			}
+		}
+		
+		public void onTaskClicked(String modelName, String task) {
+			// If the model doesn't exist throw an exception
+			if(!_models.containsKey(modelName))
+				throw new IllegalArgumentException(modelName);
+			
+			// Get the model
+			SemSimModel model = _models.get(modelName);
+			
+			// Execute the proper task
+			if(task.equals("dependencies"))
+				_commandSender.showDependencyNetwork(model.getName(), SemSimModelSerializer.dependencyNetworkToJson(model));
+			else
+				JOptionPane.showMessageDialog(null, "Task: '" + task +"', coming soon :)");
 		}
 	}
 }

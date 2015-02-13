@@ -22,7 +22,7 @@ $(window).bind("cwb-initialized", function(e) {
 	});
 	
 	// Adds a dependency network to the d3 graph
-	receiver.onShowDependencies(function (modelName, dependencyNodeData) {
+	receiver.onShowDependencyNetwork(function (modelName, dependencyNodeData) {
 		console.log("Showing dependencies for model " + modelName);
 		
 		var modelNode = modelNodes[modelName];
@@ -30,7 +30,7 @@ $(window).bind("cwb-initialized", function(e) {
 			alert(modelName + ' does not exist');
 			return;
 		}
-		
+
 		// Create dependency nodes from the data
 		dependencyNodeData.forEach(function (data) {
 			var node = new DependencyNode(data);
