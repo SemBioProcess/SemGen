@@ -274,7 +274,9 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 									}
 									else{
 										SemGenError.showInvalidOPBpropertyError();
+										setVisible(false);
 										optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+										setVisible(true);
 										return;
 									}
 								}
@@ -315,9 +317,6 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 								if(smc.hasRefersToAnnotation()) 
 									urlbutton.setTermURI(smc.getFirstRefersToReferenceOntologyAnnotation().getReferenceURI());
 								
-								if(refclasspanel.ontologychooser.getComponentCount()>2){
-								}
-								
 								// Refresh the combobox items for the Singular Annotation panel in the AnnotationDialog
 								anndialog.refreshSingularAnnotation();
 							}
@@ -325,7 +324,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 						else if (value == "Cancel") {
 							refclasspanel.querythread.stop();
 						}
-						dispose();
+						if (value!=JOptionPane.UNINITIALIZED_VALUE) dispose();
 					}
 				}	
 			};
