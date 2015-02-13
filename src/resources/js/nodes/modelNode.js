@@ -66,4 +66,5 @@ function comingSoonClickHandler(element) {
 function taskClicked (element) {
 	var task = element.innerHTML.toLowerCase();
 	sender.taskClicked(openPopover.modelNode.id, task);
+	openPopover.popover("hide");
 }
