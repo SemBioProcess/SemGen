@@ -170,6 +170,8 @@ function Graph() {
 	    .append("svg:svg")
 	    .attr("id", "svg")
 	    .attr("pointer-events", "all")
+	    .attr("width", w)
+	    .attr("height", h)
 	    .attr("viewBox","0 0 "+ w +" "+ h)
 	    .attr("perserveAspectRatio", "xMinYMid")
 	    .append('svg:g');
