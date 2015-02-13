@@ -52,24 +52,9 @@ function Graph() {
 		
 		// These are no longer new
 		newNodes = [];
-		
-		// Build the arrows
-		vis.append("svg:defs").selectAll("marker")
-			.data(["end"])      // Different link/path types can be defined here
-		  .enter().append("svg:marker")    // This section adds in the arrows
-			.attr("id", String)
-			.attr("viewBox", "0 -5 10 10")
-			.attr("refX", 15)
-			.attr("refY", -1.5)
-			.attr("markerWidth", 6)
-			.attr("markerHeight", 6)
-			.attr("orient", "auto")
-		  .append("svg:path")
-			.attr("d", "M0,-5L10,0L0,5");
 
-		// add the links and the arrows
-		var path = vis.append("svg:g")
-			.selectAll("path")
+		// Add the links
+		var path = vis.selectAll("path")
 			.data(links, function(d) { return d.source.id + "-" + d.target.id; });
 		
 		path.enter().append("svg:path")
@@ -138,9 +123,8 @@ function Graph() {
 
 	    // Restart the force layout.
 	    force
-		    .gravity(.05)
-		    .distance(50)
-		    .linkDistance( 50 )
+	    	.linkDistance(60)
+	    	.charge(-300)
 		    .size([w, h])
 		    .start();
 	};
