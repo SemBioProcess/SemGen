@@ -20,3 +20,7 @@ path.link {
 	fill: white;
 	opacity: .7;
 }
+
+#stage svg {
+	overflow: hidden;
+}
