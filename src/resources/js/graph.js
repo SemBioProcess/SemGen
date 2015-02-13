@@ -91,12 +91,12 @@ function Graph() {
 		    .attr("x", 20)
 		    .attr("y", ".31em")
 		    .attr("class", "shadow")
-		    .text(function(d) { return d.id; });
+		    .text(function(d) { return d.displayName; });
 	
 	    nodeEnter.append("svg:text")
 		    .attr("x", 20)
 		    .attr("y", ".31em")
-		    .text(function(d) { return d.id; });
+		    .text(function(d) { return d.displayName; });
 
 	    // Initialize each node
 	    node.each(function (d) {

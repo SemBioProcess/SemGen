@@ -14,13 +14,13 @@ import semsim.model.computational.datastructures.MappableVariable;
  *
  */
 public class Node {
-	public String id;
+	public String name;
 	public int group;
 	public ArrayList<String> links;
 	
 	public Node(DataStructure dataStructure)
 	{
-		this.id = dataStructure.getName();
+		this.name = dataStructure.getName();
 		this.group = dataStructure.getPropertyType(SemGen.semsimlib).getIndex();
 		
 		// Are there inputs?

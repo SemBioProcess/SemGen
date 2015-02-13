@@ -1,8 +1,9 @@
 /**
  * Represents a node in the d3 graph
  */
-function Node(id, r, group) {
+function Node(id, displayName, r, group) {
 	this.id = id;
+	this.displayName = displayName;
 	this.r = r;
 	this.group = group;
 	this.className = "node";

@@ -16,22 +16,22 @@ $(window).load(function() {
 				if(task == "dependencies") {
 					var data = [
 					    {
-					    	id: modelName + "A",
-					    	links: [modelName + "B"],
+					    	name: "A",
+					    	links: ["B"],
 					    	group: 0,
 					    },
 					    {
-					    	id: modelName + "B",
+					    	name: "B",
 					    	group: 1,
 					    },
 					    {
-					    	id: modelName + "C",
-					    	links: [modelName + "A"],
+					    	name: "C",
+					    	links: ["A"],
 					    	group: 2,
 					    },
 					    {
-					    	id: modelName + "D",
-					    	links: [modelName + "A", modelName + "B", modelName + "C"],
+					    	name: "D",
+					    	links: ["A", "B", "C"],
 					    	group: 0,
 					    },
 					];

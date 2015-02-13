@@ -33,7 +33,7 @@ $(window).bind("cwb-initialized", function(e) {
 
 		// Create dependency nodes from the data
 		dependencyNodeData.forEach(function (data) {
-			var node = new DependencyNode(data);
+			var node = new DependencyNode(data, modelNode);
 			graph.addNode(node);
 		});
 		
