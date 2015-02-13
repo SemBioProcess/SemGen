@@ -41,17 +41,17 @@ ModelNode.prototype.initialize = function (element) {
 	// Show the popover when the node is clicked
 	$("circle", element).click({modelNode: this}, function (e) {
 		var popover = $(this);
+		var isOpen = false;
 		
 		// If there's an open popover, hide it
-		if(openPopover != null)
-			openPopover.popover("hide");
+		if(openPopover != null) {
+			isOpen = openPopover.attr("aria-describedBy") == popover.attr("aria-describedBy");
+			hideOpenPopover();
+		}
 		
-		// If the open popover is for the node that was clicked, clear the open popover 
-		if(openPopover != null && openPopover.attr("aria-describedBy") == popover.attr("aria-describedBy"))
-			openPopover = null;
-		// Otherwise show the popover for the node that was clicked
+		// If the open popover is not the node that was clicked
 		// and store it
-		else {
+		if(!isOpen) {
 			$(this).popover("show");
 			openPopover = $(this).popover();
 			openPopover.modelNode = e.data.modelNode;
@@ -59,6 +59,11 @@ ModelNode.prototype.initialize = function (element) {
 	});
 }
 
+function hideOpenPopover() {
+	openPopover.popover("hide");
+	openPopover = null;
+}
+	
 function comingSoonClickHandler(element) {
 	alert("'" + element.innerHTML + "' coming soon!");
 }
@@ -66,5 +71,5 @@ function comingSoonClickHandler(element) {
 function taskClicked (element) {
 	var task = element.innerHTML.toLowerCase();
 	sender.taskClicked(openPopover.modelNode.id, task);
-	openPopover.popover("hide");
+	hideOpenPopover();
 }
