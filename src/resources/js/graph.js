@@ -42,9 +42,18 @@ function Graph() {
 			
 			// Add each link to our array
 			nodeData.links.forEach(function (targetId) {
+				// Try and find the target node
+				var target = findNode(targetId);
+				
+				// If the target doesn't exist ignore the link
+				if(!target) {
+					console.log("target node '" + targetId + "' does not exist. Can't build link.");
+					return;
+				}
+				
 				links.push({
-					source: findNode(nodeData.id),
-					target: findNode(targetId),
+					source: nodeData,
+					target: target,
 					value: 1,
 				});
 			});
