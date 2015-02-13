@@ -73,7 +73,7 @@ public class SemSimLibrary {
 
 		// Load the local copy of the OPB and the SemSim base ontology, and other config files into memory
 		try {
-			OPB = manager.loadOntologyFromOntologyDocument(new File("cfg/OPB_1.0.owl"));
+			OPB = manager.loadOntologyFromOntologyDocument(new File("cfg/OPB_1.03.owl"));
 			manager.loadOntologyFromOntologyDocument(new File("cfg/SemSimBase.owl"));
 		} catch (OWLOntologyCreationException e3) {
 			e3.printStackTrace();
@@ -82,7 +82,7 @@ public class SemSimLibrary {
 		try {
 			OPBproperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00147", false);
 			OPBflowProperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00573", false);
-			OPBprocessProperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB01151", false);
+			OPBprocessProperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_01151", false);
 			OPBdynamicalProperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00568", false);
 			OPBamountProperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00135", false);
 			OPBforceProperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00574", false);
