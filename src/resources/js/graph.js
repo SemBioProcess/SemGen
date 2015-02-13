@@ -68,13 +68,13 @@ function Graph() {
 			.attr("d", "M0,-5L10,0L0,5");
 
 		// add the links and the arrows
-		var path = vis.append("svg:g").selectAll("path")
+		var path = vis.append("svg:g")
+			.selectAll("path")
 			.data(links, function(d) { return d.source.id + "-" + d.target.id; });
 		
 		path.enter().append("svg:path")
 			.attr("id",function(d){return d.source.id + "-" + d.target.id;})
-			.attr("class", "link")
-			.attr("marker-end", "url(#end)");
+			.attr("class", "link");
 	    
 		path.exit().remove();
 		
@@ -91,34 +91,21 @@ function Graph() {
 		    .attr("r", function(d) { return d.r; })
 		    .attr("id",function(d) { return "Node;"+d.id;})
 		    .attr("class","nodeStrokeClass");
-
+	    
+		// A copy of the text with a thick white stroke for legibility.
 	    nodeEnter.append("svg:text")
-		    .attr("class","text")
 		    .attr("x", 20)
-            .attr("y", ".31em")
-		    .text( function(d) { return d.id; }) ;
+		    .attr("y", ".31em")
+		    .attr("class", "shadow")
+		    .text(function(d) { return d.id; });
+	
+	    nodeEnter.append("svg:text")
+		    .attr("x", 20)
+		    .attr("y", ".31em")
+		    .text(function(d) { return d.id; });
 
-	    // 1) Draw a box behind each text node
-	    // 2) Initialize each node
+	    // Initialize each node
 	    node.each(function (d) {
-	    	// Get the node's text element
-			var textElement = $(this).find("text")[0];
-			
-			// Get the box defining the text element
-			var textBox = textElement.getBBox();
-			
-			// Create the rectangle
-			var rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-			rect.setAttribute("x", textBox.x);
-			rect.setAttribute("y", textBox.y);
-			rect.setAttribute("width", textBox.width);
-			rect.setAttribute("height", textBox.height);
-			rect.setAttribute("class", "textBackgroundColor");
-
-			// Add the rectangle before the text element
-			this.insertBefore(rect, textElement);
-			
-			// Initialize each node
 	    	d.initialize(this);
 	    });
 	    
@@ -128,17 +115,20 @@ function Graph() {
 	    force.on("tick", function() {
 	    	// Display the links
 	    	path.attr("d", function(d) {
-				var dx = d.target.x - d.source.x,
-					dy = d.target.y - d.source.y,
-					dr = 0;
-					//dr = Math.sqrt(dx * dx + dy * dy); // Use this value to make the links curvy
-				return "M" + 
-					d.source.x + "," + 
-					d.source.y + "A" + 
-					dr + "," + dr + " 0 0,1 " + 
-					d.target.x + "," + 
-					d.target.y;
-			});
+	    	    var dx = d.target.x - d.source.x,
+	    	        dy = d.target.y - d.source.y,
+	    	        dr = 0,										// Lines have no arc
+	    	        theta = Math.atan2(dy, dx) + Math.PI * 2,
+	    	        d90 = Math.PI / 2,
+	    	        dtxs = d.target.x - d.target.r * Math.cos(theta),
+	    	        dtys = d.target.y - d.target.r * Math.sin(theta);
+	    	    return "M" + d.source.x + "," + d.source.y +
+	    	    		"A" + dr + "," + dr + " 0 0 1," + d.target.x + "," + d.target.y +
+	    	    		"A" + dr + "," + dr + " 0 0 0," + d.source.x + "," + d.source.y +
+	    	    		"M" + dtxs + "," + dtys + "l" + (3.5 * Math.cos(d90 - theta) - 10 * Math.cos(theta)) + "," + (-3.5 * Math.sin(d90 - theta) - 10 * Math.sin(theta)) +
+	    	    		"L" + (dtxs - 3.5 * Math.cos(d90 - theta) - 10 * Math.cos(theta)) + "," + (dtys + 3.5 * Math.sin(d90 - theta) - 10 * Math.sin(theta)) +
+	    	    		"z";
+	    	  });
 	    	
 	    	// Execute the tick handler for each node
 	    	node.each(function (d) {

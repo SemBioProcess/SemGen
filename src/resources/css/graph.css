@@ -1,6 +1,6 @@
 path.link {
-  fill: none;
-  stroke: #A8A8A8;
+  fill: #666;
+  stroke: #666;
   stroke-width: 1.5px;
 }
 
@@ -10,15 +10,16 @@ path.link {
 	stroke-width: 1.5px;
 }
 
-.node .text {
+.node text {
 	fill: #000;
     font-size: 20px;
     pointer-events: none;
 }
 
-.textBackgroundColor {
-	fill: white;
-	opacity: .7;
+.node text.shadow {
+  stroke: #fff;
+  stroke-width: 3px;
+  stroke-opacity: .8;
 }
 
 #stage svg {
