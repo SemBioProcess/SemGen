@@ -15,8 +15,12 @@ Node.prototype.addClassName = function (className) {
 	this.className += " " + className;
 }
 
-Node.prototype.createVisualElement = function (element) {
+Node.prototype.createVisualElement = function (element, graph) {
 	var root = d3.select(element);
+	
+	root.attr("class", this.className)
+    	.call(graph.force.drag)
+    	.style("fill", graph.color(this.group))
 	
     root.append("svg:circle")
 	    .attr("r", this.r)

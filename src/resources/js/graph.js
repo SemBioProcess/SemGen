@@ -76,16 +76,14 @@ function Graph() {
 	    var node = vis.selectAll("g.node")
 	        .data(nodes, function(d) { return d.id; });
 
+	    var graph = this;
 	    var nodeEnter = node.enter().append("g")
-	        .attr("class", function (d) {return d.className; })
-	        .call(force.drag)
-	        .style("fill", function (d) {return color(d.group);})
-	        .each(function (d) { d.createVisualElement(this); });
+	        .each(function (d) { d.createVisualElement(this, graph); });
 	    
 	    node.exit().remove();
 	    
 	    // Define the tick function
-	    force.on("tick", function() {
+	    this.force.on("tick", function() {
 	    	// Display the links
 	    	path.attr("d", function(d) {
 	    	    var dx = d.target.x - d.source.x,
@@ -110,9 +108,9 @@ function Graph() {
 	    });
 
 	    // Restart the force layout.
-	    force
+	    this.force
+	    	.gravity(0)
 	    	.linkDistance(60)
-	    	.charge(-300)
 		    .size([w, h])
 		    .start();
 	};
@@ -138,10 +136,10 @@ function Graph() {
 	    .attr("perserveAspectRatio", "xMinYMid")
 	    .append('svg:g');
 
-	var force = d3.layout.force();
-	var color = d3.scale.category10();
-	var nodes = force.nodes(),
-		links = force.links();
+	this.force = d3.layout.force();
+	this.color = d3.scale.category10();
+	var nodes = this.force.nodes(),
+		links = this.force.links();
 	var newNodes = [];
 	
 	// Run it

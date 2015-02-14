@@ -15,8 +15,8 @@ function ModelNode (name) {
 	this.addClassName("modelNode");
 }
 
-ModelNode.prototype.createVisualElement = function (element) {
-	Node.prototype.createVisualElement.call(this, element);
+ModelNode.prototype.createVisualElement = function (element, graph) {
+	Node.prototype.createVisualElement.call(this, element, graph);
 	
 	// Create the hull that will encapsulate child nodes
 	this.hull = d3.select("svg > g")
