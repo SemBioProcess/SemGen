@@ -9,7 +9,8 @@ ModelNode.prototype.constructor = Node;
 function ModelNode (name) {
 	Node.prototype.constructor.call(this, name, name, 16, 0);
 	this.fixed = true;
-	this.isInitialized = false;
+	this.children = null;
+	this.hull = null;
 	
 	this.addClassName("modelNode");
 }
@@ -17,10 +18,12 @@ function ModelNode (name) {
 ModelNode.prototype.createVisualElement = function (element) {
 	Node.prototype.createVisualElement.call(this, element);
 	
-	// If we've initialized don't create
-	if(this.isInitialized)
-		return;
-	
+	// Create the hull that will encapsulate child nodes
+	this.hull = d3.select("svg > g")
+		.append("g")
+		.append("path")
+		.attr("class", "hull");
+
 	// Define the popover html
 	$("circle", element).popover({
 		container: "body",
@@ -65,8 +68,26 @@ ModelNode.prototype.createVisualElement = function (element) {
 	});
 	
 	$(window).click(function () { hideOpenPopover(); });
+}
+
+ModelNode.prototype.setChildren = function (children) {
+	this.children = children;
+}
+
+ModelNode.prototype.tickHandler = function (element) {
+	Node.prototype.tickHandler.call(this, element);
 	
-	this.isInitialized = true;
+	// Draw the hull around child nodes
+	if(this.children) {
+		// Translate the child node x and y into vertices the hull understands
+		var customHull = d3.geom.hull();
+		customHull.x(function(d){return d.x;});
+		customHull.y(function(d){return d.y;});
+		
+		// Draw hull
+		this.hull.datum(customHull(this.children))
+			.attr("d", function(d) { return "M" + d.map(function(n){ return [n.x, n.y] }).join("L") + "Z"; });
+	}
 }
 
 function hideOpenPopover() {

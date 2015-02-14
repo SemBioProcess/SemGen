@@ -63,7 +63,7 @@ function Graph() {
 		newNodes = [];
 
 		// Add the links
-		var path = vis.selectAll("path")
+		var path = vis.selectAll("svg > g > path")
 			.data(links, function(d) { return d.source.id + "-" + d.target.id; });
 		
 		path.enter().append("svg:path")

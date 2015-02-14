@@ -32,10 +32,14 @@ $(window).bind("cwb-initialized", function(e) {
 		}
 
 		// Create dependency nodes from the data
+		var dependencyNodes = [];
 		dependencyNodeData.forEach(function (data) {
 			var node = new DependencyNode(data, modelNode);
+			dependencyNodes.push(node);
 			graph.addNode(node);
 		});
+		
+		modelNode.setChildren(dependencyNodes);
 		
 		graph.update();
 	});

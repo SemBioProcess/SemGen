@@ -37,5 +37,6 @@ Node.prototype.createVisualElement = function (element) {
 }
 
 Node.prototype.tickHandler = function (element) {
-	$(element).attr("transform", "translate(" + this.x + "," + this.y + ")");
+	var root = d3.select(element);
+	root.attr("transform", "translate(" + this.x + "," + this.y + ")");
 }

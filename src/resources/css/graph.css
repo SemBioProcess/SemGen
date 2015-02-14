@@ -25,3 +25,10 @@ path.link {
 #stage svg {
 	overflow: hidden;
 }
+
+.hull {
+  fill: steelblue;
+  stroke: steelblue;
+  stroke-width: 32px;
+  stroke-linejoin: round;
+}
