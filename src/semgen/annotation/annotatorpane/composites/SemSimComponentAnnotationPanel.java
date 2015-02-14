@@ -274,9 +274,9 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 									}
 									else{
 										SemGenError.showInvalidOPBpropertyError();
-										setVisible(false);
+										srchdlg.setVisible(false);
 										optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-										setVisible(true);
+										srchdlg.setVisible(true);
 										return;
 									}
 								}
