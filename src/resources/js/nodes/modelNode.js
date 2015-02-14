@@ -19,10 +19,14 @@ ModelNode.prototype.createVisualElement = function (element, graph) {
 	Node.prototype.createVisualElement.call(this, element, graph);
 	
 	// Create the hull that will encapsulate child nodes
+	var root = d3.select(element);
 	this.hull = d3.select("svg > g")
 		.append("g")
-		.append("path")
-		.attr("class", "hull");
+			.append("path")
+				.attr("class", "hull")
+				.style("opacity", .2)
+				.attr("stroke", root.style("fill"))
+				.attr("fill", root.style("fill"));
 
 	// Define the popover html
 	$("circle", element).popover({
