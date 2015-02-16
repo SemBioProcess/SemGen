@@ -4,10 +4,10 @@
 
 package semgen.utilities;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Set;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -46,6 +46,11 @@ public class SemGenError {
 	
 	public static void showInvalidOPBpropertyError(){
 		JOptionPane.showMessageDialog(parent, "That physical property is not valid for the physical entity\n or process specified in this composite annotation.",
+				"Invalid annotation", JOptionPane.ERROR_MESSAGE);
+	}
+	
+	public static void showInvalidOPBpropertyError(JDialog target){
+		JOptionPane.showMessageDialog(target, "That physical property is not valid for the physical entity\n or process specified in this composite annotation.",
 				"Invalid annotation", JOptionPane.ERROR_MESSAGE);
 	}
 	

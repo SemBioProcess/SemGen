@@ -263,7 +263,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 						if(value == "Apply" && this.getFocusOwner() != refclasspanel.findbox){
 							// If something from list actually selected
 							if(refclasspanel.resultslistright.getSelectedValue()!=null){
-								String desc = (String) refclasspanel.resultslistright.getSelectedValue().trim();
+								String desc = refclasspanel.resultslistright.getSelectedValue().trim();
 								URI uri = URI.create(refclasspanel.resultsanduris.get(refclasspanel.resultslistright.getSelectedValue()));
 								
 								// If we're annotating a physical property...
@@ -273,10 +273,8 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 										smc.addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, uri, desc);
 									}
 									else{
-										SemGenError.showInvalidOPBpropertyError();
-										srchdlg.setVisible(false);
+										SemGenError.showInvalidOPBpropertyError(srchdlg);
 										optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-										srchdlg.setVisible(true);
 										return;
 									}
 								}
