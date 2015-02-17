@@ -58,7 +58,7 @@ public class SemGen extends JFrame implements Observer{
 	public SimpleDateFormat sdflog = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
 	
 	//The application store for the default settings
-	private SemGenSettings settings = new SemGenSettings();
+	private SemGenSettings settings; 
 	//A library of SemSim constants and definitions. This is created once and referenced
 	//without modification by the rest of the program.
 	public static SemSimLibrary semsimlib = new SemSimLibrary();
@@ -106,7 +106,14 @@ public class SemGen extends JFrame implements Observer{
 			}
 		    
 		    JFrame frame = new SemGen();
-		    frame.setVisible(true);
+		    
+		    //Set the default location for the creation of child windows (ie: dialogs) as the center  
+			//of the main frame
+			SemGenError.setFrame(frame);
+			SemGenDialog.setFrame(frame);
+		    
+			frame.setVisible(true);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -119,11 +126,8 @@ public class SemGen extends JFrame implements Observer{
 		
 		setTitle(":: S e m  G e n ::");
 		this.setIconImage(SemGenIcon.semgenbigicon.getImage());
-		//Set the default location for the creation of child windows (ie: dialogs) as the center  
-		//of the main frame
-		SemGenError.setFrame(this);
-		SemGenDialog.setFrame(this);
 		
+		settings = new SemGenSettings();
 		SemGenFileChooser.currentdirectory = new File(settings.getStartDirectory());
 
 		//Create an instance of SemGen's default font and load it into memory
@@ -137,12 +141,14 @@ public class SemGen extends JFrame implements Observer{
 		setJMenuBar(menubar);
 		
 		setVisible(true);
-		addListeners();
-		this.pack();
 		
 		//Maximize screen
 		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
+		addListeners();
 		settings.setAppSize(getSize());
+		
+		this.pack();
+
 		System.out.println("Loaded.");
 		logfilewriter.println("Session started on: " + sdflog.format(datenow) + "\n");
 		
