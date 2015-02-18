@@ -39,6 +39,9 @@ public class UniProtSearcher {
 			String id = line.substring(0,line.indexOf("\t"));
 			String name = line.substring(line.indexOf("\t"),line.length());
 			
+			// append name with ID because sometimes UNIPROT names aren't unique
+			name = name + " (" + id + ")";
+			
 			String uristring = "http://identifiers.org/uniprot/" + id;
 			classnamesanduris.put(name, uristring);
 			rdflabelsanduris.put(name, uristring);
