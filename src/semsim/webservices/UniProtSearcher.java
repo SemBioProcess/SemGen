@@ -26,6 +26,7 @@ public class UniProtSearcher {
 	
 	public Map<String,String> search(String thestring) throws JDOMException, IOException{
 		Map<String,String> idnamemap = new HashMap<String,String>();
+		thestring = thestring.replace(" ", "%20");
 		URL url = new URL("http://www.uniprot.org/uniprot/?query=reviewed:yes+AND+name:" + thestring + "*&format=tab&columns=id,protein%20names");
 		System.out.println(url.toString());
 		// Use +AND+created:[current TO *] ??? (created in the current UniProtKB/Swiss-Prot release)
