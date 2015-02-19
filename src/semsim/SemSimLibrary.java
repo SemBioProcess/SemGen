@@ -73,7 +73,7 @@ public class SemSimLibrary {
 
 		// Load the local copy of the OPB and the SemSim base ontology, and other config files into memory
 		try {
-			OPB = manager.loadOntologyFromOntologyDocument(new File("cfg/OPB_1.03.owl"));
+			OPB = manager.loadOntologyFromOntologyDocument(new File("cfg/OPBv1.04.owl"));
 			manager.loadOntologyFromOntologyDocument(new File("cfg/SemSimBase.owl"));
 		} catch (OWLOntologyCreationException e3) {
 			e3.printStackTrace();
