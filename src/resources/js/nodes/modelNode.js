@@ -19,13 +19,21 @@ ModelNode.prototype.createVisualElement = function (element, graph) {
 	Node.prototype.createVisualElement.call(this, element, graph);
 	
 	// Create the hull that will encapsulate child nodes
-	var root = d3.select(element);
-
-	this.hull = root.append("path")
+	var modelArg = this;
+	this.hull = this.rootElement.append("path")
 		.attr("class", "hull")
 		.style("opacity", .2)
-		.attr("stroke", root.style("fill"))
-		.attr("fill", root.style("fill"));
+		.attr("stroke", this.rootElement.style("fill"))
+		.attr("fill", this.rootElement.style("fill"))
+		.on("click", function(d) {
+			console.log("hull click");
+			
+			// Remove child nodes from the graph
+			modelArg.children.forEach(function (child) {
+				graph.removeNode(child.id);
+			});
+			modelArg.setChildren(null);
+		});
 
 	// Define the popover html
 	$("circle", element).popover({
@@ -75,15 +83,18 @@ ModelNode.prototype.createVisualElement = function (element, graph) {
 
 ModelNode.prototype.setChildren = function (children) {
 	this.children = children;
+
+	// Show/Hide the correct elements depending on the model's state
+	var circleDisplay = this.children ? "none" : "inherit";
+	var hullDisplay = this.children ? "inherit" : "none";
+	
+	this.rootElement.select("circle").style("display", circleDisplay);
+	this.rootElement.select(".hull").style("display", hullDisplay);
 }
 
 ModelNode.prototype.tickHandler = function (element) {
-	// Hide the model node and draw the hull around child nodes
+	// Draw the hull around child nodes
 	if(this.children) {
-		// Ensure the circle element is hidden
-		var root = d3.select(element);
-		root.select("circle").style("display", "none");
-		
 		// 1) Convert the child positions into vertices that we'll use to create the hull
 		// 2) Calculate the center of the child nodes and the top of the child nodes so 
 		// 		we can position the text and hidden circle appropriately

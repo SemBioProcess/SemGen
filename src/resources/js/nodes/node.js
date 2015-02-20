@@ -17,19 +17,19 @@ Node.prototype.addClassName = function (className) {
 }
 
 Node.prototype.createVisualElement = function (element, graph) {
-	var root = d3.select(element);
-	
-	root.attr("class", this.className)
+	this.rootElement = d3.select(element);
+
+	this.rootElement.attr("class", this.className)
 		.call(graph.force.drag)
     	.style("fill", graph.color(this.group))
     	
-    root.append("svg:circle")
+    this.rootElement.append("svg:circle")
 	    .attr("r", this.r)
 	    .attr("id", "Node;"+this.id)
 	    .attr("class","nodeStrokeClass");
 	
 	// Create the text element
-	Node.appendTextElement(root, this.textSize, this.displayName);
+	Node.appendTextElement(this.rootElement, this.textSize, this.displayName);
 }
 
 Node.prototype.tickHandler = function (element) {
