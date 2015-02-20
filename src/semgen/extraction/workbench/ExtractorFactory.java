@@ -15,10 +15,10 @@ public class ExtractorFactory extends WorkbenchFactory<ExtractorWorkbench> {
 		final SemGenOpenFileChooser sgc =  new SemGenOpenFileChooser("Extractor - Select source SemSim model",
 				new String[]{"owl"},true);
 		for (File file : sgc.getSelectedFiles()) {
-			if(ModelClassifier.classify(file)==ModelClassifier.CELLML_MODEL) {
-				isCellMLError();
-				continue;
-			}
+//			if(ModelClassifier.classify(file)==ModelClassifier.CELLML_MODEL) {
+//				isCellMLError();
+//				continue;
+//			}
 			sourcefile.add(file);
 		}
 		if (sourcefile.size()==0) 
@@ -40,10 +40,10 @@ public class ExtractorFactory extends WorkbenchFactory<ExtractorWorkbench> {
 			return;
 		}
 		
-		if(ModelClassifier.classify(file)==ModelClassifier.CELLML_MODEL || semsimmodel.getFunctionalSubmodels().size()>0){
-			isCellMLError();
-			return;
-		}
+//		if(ModelClassifier.classify(file)==ModelClassifier.CELLML_MODEL || semsimmodel.getFunctionalSubmodels().size()>0){
+//			isCellMLError();
+//			return;
+//		}
 		
 		workbenches.add(new ExtractorWorkbench(file, semsimmodel));
 	}	
