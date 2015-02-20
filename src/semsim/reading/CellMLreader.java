@@ -289,6 +289,11 @@ public class CellMLreader extends ModelReader {
 						String varmathml = xmloutputter.outputString(varmathmlel);
 						ASTNode ast_result = libsbml.readMathMLFromString(varmathml);
 						String ast_as_string = libsbml.formulaToString(ast_result);
+						// formulaToString doesn't parse equal signs and differentials 
+						if(ast_as_string != null) {
+							ast_as_string = ast_as_string.substring(3, ast_as_string.length()-1);
+							ast_as_string = ast_as_string.replace(",", " =");
+						}
 						cvar.getComputation().setMathML(varmathml);
 						cvar.getComputation().setComputationalCode(ast_as_string);
 						
