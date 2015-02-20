@@ -20,13 +20,12 @@ ModelNode.prototype.createVisualElement = function (element, graph) {
 	
 	// Create the hull that will encapsulate child nodes
 	var root = d3.select(element);
-	this.hull = d3.select("svg > g")
-		.append("g")
-			.append("path")
-				.attr("class", "hull")
-				.style("opacity", .2)
-				.attr("stroke", root.style("fill"))
-				.attr("fill", root.style("fill"));
+
+	this.hull = root.append("path")
+		.attr("class", "hull")
+		.style("opacity", .2)
+		.attr("stroke", root.style("fill"))
+		.attr("fill", root.style("fill"));
 
 	// Define the popover html
 	$("circle", element).popover({
@@ -79,19 +78,38 @@ ModelNode.prototype.setChildren = function (children) {
 }
 
 ModelNode.prototype.tickHandler = function (element) {
-	Node.prototype.tickHandler.call(this, element);
-	
-	// Draw the hull around child nodes
+	// Hide the model node and draw the hull around child nodes
 	if(this.children) {
-		// Translate the child node x and y into vertices the hull understands
-		var customHull = d3.geom.hull();
-		customHull.x(function(d){return d.x;});
-		customHull.y(function(d){return d.y;});
+		// Ensure the circle element is hidden
+		var root = d3.select(element);
+		root.select("circle").style("display", "none");
+		
+		// 1) Convert the child positions into vertices that we'll use to create the hull
+		// 2) Calculate the center of the child nodes and the top of the child nodes so 
+		// 		we can position the text and hidden circle appropriately
+		var vertexes = [];
+		var centerX = 0;
+		var minY = null;
+		this.children.forEach(function (d) {
+			vertexes.push([d.x, d.y]);
+			
+			centerX += d.x;
+			minY = minY || d.y;
+			minY = d.y < minY ? d.y : minY;
+		});
+		
+		// Position the the text and hidden circle
+		this.x = centerX / this.children.length;
+		this.y = minY;
 		
 		// Draw hull
-		this.hull.datum(customHull(this.children))
-			.attr("d", function(d) { return "M" + d.map(function(n){ return [n.x, n.y] }).join("L") + "Z"; });
+		this.hull.datum(d3.geom.hull(vertexes))
+			.attr("d", function(d) { return "M" + d.join("L") + "Z"; })
+			.attr("transform", "translate(" + -this.x + "," + -this.y + ")");
 	}
+	
+	// Draw the model node
+	Node.prototype.tickHandler.call(this, element);
 }
 
 function hideOpenPopover() {

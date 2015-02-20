@@ -20,14 +20,14 @@ Node.prototype.createVisualElement = function (element, graph) {
 	var root = d3.select(element);
 	
 	root.attr("class", this.className)
-    	.call(graph.force.drag)
+		.call(graph.force.drag)
     	.style("fill", graph.color(this.group))
-	
+    	
     root.append("svg:circle")
 	    .attr("r", this.r)
 	    .attr("id", "Node;"+this.id)
 	    .attr("class","nodeStrokeClass");
-    
+	
 	// Create the text element
 	Node.appendTextElement(root, this.textSize, this.displayName);
 }
@@ -44,7 +44,7 @@ Node.appendTextElement = function (root, size, text) {
 		root.append("svg:text")
 			.attr("font-size", size + "px")
 		    .attr("x", 0)
-		    .attr("y", -size)
+		    .attr("y", -size - 5)
 		    .text(text)
 		    .attr("class", className)
 		    .attr("text-anchor", "middle");
