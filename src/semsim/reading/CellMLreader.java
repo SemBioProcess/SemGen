@@ -864,15 +864,23 @@ public class CellMLreader extends ModelReader {
 				Element conel = (Element)con;
 				if(conel.getName().equals("ci")){
 					String inputname = compname + "." + conel.getText().trim();
-					DataStructure inputds = null;
-					if(semsimmodel.containsDataStructure(inputname)){
-						inputds = semsimmodel.getDataStructure(inputname);
-					}
-					else{
-						System.err.println("Equation for " + cvar.getName() + " uses " + inputname + " but that data structure not in model");
-					}
-					if(inputds!=null){
-						cvar.getComputation().addInput(inputds);
+					
+					// If the input and output are not the same DataStructure...
+					if(! inputname.equalsIgnoreCase(cvar.getName())){
+						DataStructure inputds = null;
+						
+						// If the input is actually in the model...
+						if(semsimmodel.containsDataStructure(inputname) && !inputname.equals(cvar.getName())){
+							inputds = semsimmodel.getDataStructure(inputname);
+						}
+						else{
+							System.err.println("Equation for " + cvar.getName() + " uses " + inputname + " but that data structure not in model");
+						}
+						
+						// Add the input DataStructure
+						if(inputds!=null){
+							cvar.getComputation().addInput(inputds);
+						}
 					}
 				}
 			}
