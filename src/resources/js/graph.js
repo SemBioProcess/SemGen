@@ -29,6 +29,20 @@ function Graph() {
 		nodes.push(nodeData);
 		newNodes.push(nodeData);
 	};
+	
+	// Remove a node from the graph
+	this.removeNode = function (id) {
+		var i = 0;
+	    var node = findNode(id);
+	    while (i < links.length) {
+	    	if ((links[i].source == node)||(links[i].target == node))
+	            links.splice(i,1);
+	        else
+	        	i++;
+	    }
+	    nodes.splice(findNodeIndex(id),1);
+	    this.update();
+	};
 
 	/** 
 	 * Updates the graph
@@ -118,7 +132,15 @@ function Graph() {
 	// Find a node by its id
 	var findNode = function(id) {
 	    for (var i in nodes) {
-	        if (nodes[i]["id"] === id) return nodes[i];};
+	        if (nodes[i].id === id) return nodes[i];};
+	};
+	
+	// Find a node's index
+	var findNodeIndex = function(id) {
+		for (var i in nodes) {
+	        if (nodes[i].id == id)
+	        	return i;
+		};
 	};
 	
 	// Set up the D3 visualisation in the specified element
@@ -141,6 +163,32 @@ function Graph() {
 	var nodes = this.force.nodes(),
 		links = this.force.links();
 	var newNodes = [];
+	
+	// Fix all nodes when ctrl + M is pressed
+	d3.select("body")
+		.on("keydown", function() {
+			if(d3.event.keyCode == 77 /*M*/ && d3.event.ctrlKey) {
+				var body = $("body").toggleClass("fixedMode");
+				
+				// Fix all nodes
+				if(body.hasClass("fixedMode"))
+				{
+					nodes.forEach(function (d) {
+						d.oldFixed = d.fixed;
+						d.fixed = true;
+					});
+				}
+				// Un-fix all nodes
+				else
+				{
+					nodes.forEach(function (d) {
+						d.fixed = d.oldFixed || false;
+						d.oldFixed = undefined;
+					});
+				}
+				
+			}
+	    });
 	
 	// Run it
 	this.update();

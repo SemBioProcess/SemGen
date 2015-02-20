@@ -7,7 +7,7 @@ var openPopover;
 ModelNode.prototype = new Node();
 ModelNode.prototype.constructor = Node;
 function ModelNode (name) {
-	Node.prototype.constructor.call(this, name, name, 16, 0);
+	Node.prototype.constructor.call(this, name, name, 16, 0, 20);
 	this.fixed = true;
 	this.children = null;
 	this.hull = null;
@@ -19,14 +19,21 @@ ModelNode.prototype.createVisualElement = function (element, graph) {
 	Node.prototype.createVisualElement.call(this, element, graph);
 	
 	// Create the hull that will encapsulate child nodes
-	var root = d3.select(element);
-	this.hull = d3.select("svg > g")
-		.append("g")
-			.append("path")
-				.attr("class", "hull")
-				.style("opacity", .2)
-				.attr("stroke", root.style("fill"))
-				.attr("fill", root.style("fill"));
+	var modelArg = this;
+	this.hull = this.rootElement.append("path")
+		.attr("class", "hull")
+		.style("opacity", .2)
+		.attr("stroke", this.rootElement.style("fill"))
+		.attr("fill", this.rootElement.style("fill"))
+		.on("click", function(d) {
+			console.log("hull click");
+			
+			// Remove child nodes from the graph
+			modelArg.children.forEach(function (child) {
+				graph.removeNode(child.id);
+			});
+			modelArg.setChildren(null);
+		});
 
 	// Define the popover html
 	$("circle", element).popover({
@@ -76,22 +83,44 @@ ModelNode.prototype.createVisualElement = function (element, graph) {
 
 ModelNode.prototype.setChildren = function (children) {
 	this.children = children;
+
+	// Show/Hide the correct elements depending on the model's state
+	var circleDisplay = this.children ? "none" : "inherit";
+	var hullDisplay = this.children ? "inherit" : "none";
+	
+	this.rootElement.select("circle").style("display", circleDisplay);
+	this.rootElement.select(".hull").style("display", hullDisplay);
 }
 
 ModelNode.prototype.tickHandler = function (element) {
-	Node.prototype.tickHandler.call(this, element);
-	
 	// Draw the hull around child nodes
 	if(this.children) {
-		// Translate the child node x and y into vertices the hull understands
-		var customHull = d3.geom.hull();
-		customHull.x(function(d){return d.x;});
-		customHull.y(function(d){return d.y;});
+		// 1) Convert the child positions into vertices that we'll use to create the hull
+		// 2) Calculate the center of the child nodes and the top of the child nodes so 
+		// 		we can position the text and hidden circle appropriately
+		var vertexes = [];
+		var centerX = 0;
+		var minY = null;
+		this.children.forEach(function (d) {
+			vertexes.push([d.x, d.y]);
+			
+			centerX += d.x;
+			minY = minY || d.y;
+			minY = d.y < minY ? d.y : minY;
+		});
+		
+		// Position the the text and hidden circle
+		this.x = centerX / this.children.length;
+		this.y = minY;
 		
 		// Draw hull
-		this.hull.datum(customHull(this.children))
-			.attr("d", function(d) { return "M" + d.map(function(n){ return [n.x, n.y] }).join("L") + "Z"; });
+		this.hull.datum(d3.geom.hull(vertexes))
+			.attr("d", function(d) { return "M" + d.join("L") + "Z"; })
+			.attr("transform", "translate(" + -this.x + "," + -this.y + ")");
 	}
+	
+	// Draw the model node
+	Node.prototype.tickHandler.call(this, element);
 }
 
 function hideOpenPopover() {

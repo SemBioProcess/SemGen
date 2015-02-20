@@ -18,8 +18,11 @@ function DependencyNode (data, parentNode) {
 		}
 	}
 	
+	// Place parent model's location (plus jitter)
+	this.x = parentNode.x + Math.random();
+	this.y = parentNode.y + Math.random();
 	
-	Node.prototype.constructor.call(this, id, data.name, 5, data.group);
+	Node.prototype.constructor.call(this, id, data.name, 5, data.group, 11);
 	this.links = data.links;
 	
 	this.addClassName("dependencyNode");
