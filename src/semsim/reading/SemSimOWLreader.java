@@ -449,7 +449,7 @@ public class SemSimOWLreader extends ModelReader {
 		
 		for(String sub : subset){
 			String subname = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, sub, SemSimConstants.HAS_NAME_URI.toString());
-			
+						
 			boolean hascomputation = !SemSimOWLFactory.getIndObjectProperty(ont, sub, SemSimConstants.HAS_COMPUTATATIONAL_COMPONENT_URI.toString()).isEmpty();
 			
 			// Get all associated data structures
@@ -463,28 +463,31 @@ public class SemSimOWLreader extends ModelReader {
 			if(importval.equals("") || importval==null){
 				sssubmodel = (hascomputation) ? new FunctionalSubmodel(subname, subname, null, null) : new Submodel(subname);
 				String componentmathml = null;
+				String componentmathmlwithroot = null;
+								
 				// If computation associated with submodel, store mathml
 				if(sssubmodel instanceof FunctionalSubmodel){
 					String comp = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, sub, SemSimConstants.HAS_COMPUTATATIONAL_COMPONENT_URI.toString());
 					if(comp!=null && !comp.equals("")){
 						componentmathml = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, comp, SemSimConstants.HAS_MATHML_URI.toString());
-						if(componentmathml!=null && !componentmathml.equals(""))
+						if(componentmathml!=null && !componentmathml.equals("")){
 							((FunctionalSubmodel)sssubmodel).getComputation().setMathML(componentmathml);
+							componentmathmlwithroot = "<temp>\n" + componentmathml + "\n</temp>";
+						}
 					}
 				}
 				
-				// Associate data structures with the model
+				// Associate data structures with the model submodel
 				for(String ds : dss){
 					DataStructure theds = semsimmodel.getDataStructure(SemSimOWLFactory.getURIdecodedFragmentFromIRI(ds));
 					sssubmodel.addDataStructure(theds);
-
+					
 					// white box the equations
 					if(componentmathml!=null && !componentmathml.equals("")){
 						String localvarname = theds.getName().substring(theds.getName().lastIndexOf(".")+1,theds.getName().length());
 						SAXBuilder builder = new SAXBuilder();
-						componentmathml = "<temp>\n" + componentmathml + "\n</temp>";
 						try {
-							Document doc = builder.build(new StringReader(componentmathml));
+							Document doc = builder.build(new StringReader(componentmathmlwithroot));
 							
 							if(doc.getRootElement() instanceof Element){
 								List<?> mathmllist = doc.getRootElement().getChildren("math", CellMLconstants.mathmlNS);
@@ -502,7 +505,7 @@ public class SemSimOWLreader extends ModelReader {
 					}
 				}
 				
-				// Set the description
+				// Set the description of the submodel
 				semsimmodel.addSubmodel(sssubmodel);
 			}
 			// If submodel IS imported
