@@ -132,7 +132,7 @@ public class SemGen extends JFrame implements Observer{
 
 		//Create an instance of SemGen's default font and load it into memory
 		SemGenFont.defaultUIFont();
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		gacts.addObserver(this);
 		 
 		SemGenMenuBar menubar = new SemGenMenuBar(settings, gacts);
@@ -221,7 +221,7 @@ public class SemGen extends JFrame implements Observer{
 			try {
 				settings.storeSettings();
 				termcache.storeCachedOntologyTerms();
-				System.exit(0);
+				dispose();
 			} 
 			catch (URISyntaxException e) {e.printStackTrace();}
 		}
