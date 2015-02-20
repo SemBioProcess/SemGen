@@ -1,11 +1,12 @@
 /**
  * Represents a node in the d3 graph
  */
-function Node(id, displayName, r, group) {
+function Node(id, displayName, r, group, textSize) {
 	this.id = id;
 	this.displayName = displayName;
 	this.r = r;
 	this.group = group;
+	this.textSize = textSize;
 	this.className = "node";
 	this.element;
 	this.links = [];
@@ -27,20 +28,29 @@ Node.prototype.createVisualElement = function (element, graph) {
 	    .attr("id", "Node;"+this.id)
 	    .attr("class","nodeStrokeClass");
     
-	// A copy of the text with a thick white stroke for legibility.
-    root.append("svg:text")
-	    .attr("x", 20)
-	    .attr("y", ".31em")
-	    .attr("class", "shadow")
-	    .text(this.displayName);
-
-    root.append("svg:text")
-	    .attr("x", 20)
-	    .attr("y", ".31em")
-	    .text(this.displayName);
+	// Create the text element
+	Node.appendTextElement(root, this.textSize, this.displayName);
 }
 
 Node.prototype.tickHandler = function (element) {
 	var root = d3.select(element);
 	root.attr("transform", "translate(" + this.x + "," + this.y + ")");
+}
+
+Node.appendTextElement = function (root, size, text) {
+	// Create the text element
+	var createElement = function (className) {
+		className = className || "";
+		root.append("svg:text")
+			.attr("font-size", size + "px")
+		    .attr("x", 0)
+		    .attr("y", -size)
+		    .text(text)
+		    .attr("class", className)
+		    .attr("text-anchor", "middle");
+	};
+	
+	// Create text with a thick white stroke for legibility.
+	createElement("shadow");
+	createElement();
 }

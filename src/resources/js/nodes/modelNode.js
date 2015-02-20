@@ -7,7 +7,7 @@ var openPopover;
 ModelNode.prototype = new Node();
 ModelNode.prototype.constructor = Node;
 function ModelNode (name) {
-	Node.prototype.constructor.call(this, name, name, 16, 0);
+	Node.prototype.constructor.call(this, name, name, 16, 0, 20);
 	this.fixed = true;
 	this.children = null;
 	this.hull = null;

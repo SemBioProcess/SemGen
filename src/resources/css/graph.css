@@ -12,7 +12,6 @@ path.link {
 
 .node text {
 	fill: #000;
-    font-size: 20px;
     pointer-events: none;
 }
 
