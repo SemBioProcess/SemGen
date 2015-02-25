@@ -17,6 +17,7 @@ import semgen.SemGenSettings;
 import semgen.annotation.componentlistpanes.codewords.CodewordButton;
 import semgen.annotation.dialog.AnnotationComponentReplacer;
 import semgen.annotation.dialog.referenceclass.AddReferenceClassDialog;
+import semgen.annotation.dialog.referenceclass.compositedialog.CreateCompositeDialog;
 import semgen.annotation.dialog.selector.RemovePhysicalComponentDialog;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.encoding.Encoder;
@@ -40,6 +41,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 	private SemGenToolbarButton annotateitemshowmarkers;
 	private JButton annotateitemshowimports = new JButton("Show imports");
 	private SemGenToolbarButton annotateitemaddrefterm= new SemGenToolbarButton(SemGenIcon.createicon);
+	private SemGenToolbarButton annotateitemaddcompterm= new SemGenToolbarButton(SemGenIcon.createicon);
 	private SemGenToolbarButton annotateitemremoverefterm = new SemGenToolbarButton(SemGenIcon.eraseicon);
 	public SemGenToolbarButton annotateitemreplacerefterm = new SemGenToolbarButton(SemGenIcon.replaceicon);
 	private SemGenToolbarButton annotateitemtreeview = new SemGenToolbarButton(SemGenIcon.treeicon);
@@ -81,12 +83,15 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 
 		annotateitemaddrefterm.addActionListener(this);
 		annotateitemaddrefterm.setToolTipText("Add a reference ontology term to use for annotating this model");
-		
+				
 		annotateitemremoverefterm.addActionListener(this);
 		annotateitemremoverefterm.setToolTipText("Remove a physical entity or process term from the model");
 
 		annotateitemreplacerefterm.setToolTipText("Replace a reference ontology term with another");
 		annotateitemreplacerefterm.addActionListener(this);
+		
+		annotateitemaddcompterm.addActionListener(this);
+		annotateitemaddcompterm.setToolTipText("Add an arbitrary composite to use for annotating this model");
 		
 		extractorbutton.setToolTipText("Open this model in Extractor");
 		extractorbutton.addActionListener(this);
@@ -109,6 +114,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		add(annotateitemaddrefterm);
 		add(annotateitemremoverefterm);
 		add(annotateitemreplacerefterm);
+		add(annotateitemaddcompterm);
 		addSeparator();
 		
 		add(extractorbutton);
@@ -191,6 +197,10 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 				} catch (OWLException e1) {
 					e1.printStackTrace();
 				}
+		}
+		
+		if (o == annotateitemaddcompterm) {
+			new CreateCompositeDialog(workbench);
 		}
 		
 		if (o == coderbutton) {

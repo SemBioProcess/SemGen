@@ -6,7 +6,6 @@ import java.awt.Color;
 import semgen.SemGen;
 import semgen.SemGenSettings;
 import semgen.annotation.AnnotatorTab;
-import semgen.annotation.annotatorpane.composites.PropertyMarker;
 import semgen.annotation.componentlistpanes.AnnotationObjectButton;
 import semgen.utilities.SemGenFont;
 import semsim.SemSimConstants;

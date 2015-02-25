@@ -6,6 +6,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -15,7 +16,7 @@ import javax.swing.JPanel;
 
 import semgen.SemGenSettings;
 import semgen.annotation.AnnotatorTab;
-import semgen.annotation.annotatorpane.composites.PropertyMarker;
+import semgen.annotation.componentlistpanes.codewords.PropertyMarker;
 import semgen.utilities.SemGenFont;
 import semsim.Annotatable;
 import semsim.model.SemSimComponent;

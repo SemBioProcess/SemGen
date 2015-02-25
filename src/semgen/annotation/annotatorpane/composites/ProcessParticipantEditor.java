@@ -41,12 +41,12 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 	public AnnotatorWorkbench workbench;
 	public SemSimRelation relation;
 	public PhysicalProcess process;
-	public JButton plusbutton = new JButton(SemGenIcon.plusicon);
-	public JButton minusbutton = new JButton(SemGenIcon.minusicon);
+	private JButton plusbutton = new JButton(SemGenIcon.plusicon);
+	private JButton minusbutton = new JButton(SemGenIcon.minusicon);
 	public JTable table;
 	public ProcessParticipantTableModel tablemod;
 	public Map<String,PhysicalEntity> namesandparticipantmap = new HashMap<String,PhysicalEntity>();
-	public SemSimComponentSelectorDialog sscsd; 
+	private SemSimComponentSelectorDialog sscsd; 
 
 	public ProcessParticipantEditor(AnnotatorWorkbench wb, SemSimRelation relation, PhysicalProcess process) {	
 		workbench = wb;
@@ -80,7 +80,7 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 		return tablemod.getAllRows();
 	}
 	
-	public void setTableData(){
+	private void setTableData(){
 		Set<PhysicalEntity> participants = new HashSet<PhysicalEntity>();
 		if(relation == SemSimConstants.HAS_SOURCE_RELATION) participants.addAll(process.getSourcePhysicalEntities());
 		else if(relation == SemSimConstants.HAS_SINK_RELATION) participants.addAll(process.getSinkPhysicalEntities());

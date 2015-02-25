@@ -1,4 +1,4 @@
-package semgen.annotation.annotatorpane.composites;
+package semgen.annotation.componentlistpanes.codewords;
 
 import java.awt.Color;
 import java.awt.Dimension;
