@@ -24,6 +24,7 @@ import semgen.utilities.uicomponent.SemGenScrollPane;
 import semgen.utilities.uicomponent.SemGenTab;
 import semsim.SemSimConstants;
 import semsim.model.Importable;
+import semsim.model.SemSimComponent;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
@@ -95,7 +96,6 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		super(bench.getCurrentModelName(), SemGenIcon.annotatoricon, "Annotating " + bench.getCurrentModelName(), sets, gacts);
 		workbench = bench;
 		sourcefile = workbench.getFile();
-		semsimmodel = workbench.getSemSimModel();
 		workbench.addObservertoModelAnnotator(this);
 	}
 	
@@ -243,7 +243,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		focusbutton = aob;
 
 		annotatorscrollpane.getViewport().removeAll();
-		annotatorpane = new AnnotationPanel(this, settings, aob, globalactions);
+		annotatorpane = new AnnotationPanel(workbench, this, settings, aob, globalactions);
 		annotatorscrollpane.setViewportView(annotatorpane);
 		
 		// Highlight occurrences of codeword in legacy code
@@ -270,7 +270,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 			updateCodewordButtonTable();
 			updateSubmodelButtonTable();
 			westsplitpane.setBottomComponent(treeviewscrollpane);
-			tree = new AnnotatorButtonTree(this, settings, new DefaultMutableTreeNode(semsimmodel));
+			tree = new AnnotatorButtonTree(workbench, this, settings, new DefaultMutableTreeNode(workbench.getSemSimModel()));
 			treeviewscrollpane.getViewport().removeAll();
 			treeviewscrollpane.getViewport().add(tree);
 			
@@ -386,7 +386,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	public void AlphabetizeAndSetSubmodels(){
 		int numsubshowing = updateSubmodelButtonTable();
 		submodelpanel.removeAll();
-		int numcomponents = semsimmodel.getSubmodels().size();
+		int numcomponents = workbench.getSemSimModel().getSubmodels().size();
 		
 		// First put all the codeword buttons in an array so they can be sorted
 		addPanelTitle("Sub-models ", numcomponents, numsubshowing, submodelscrollpane, "No sub-models found");
@@ -416,9 +416,9 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	}
 	
 	public int updateCodewordButtonTable(){
-		int numdisplayed = semsimmodel.getDataStructures().size();
+		int numdisplayed = workbench.getSemSimModel().getDataStructures().size();
 		// Associate codeword names with their buttons
-		for(DataStructure ds : semsimmodel.getDataStructures()){
+		for(DataStructure ds : workbench.getSemSimModel().getDataStructures()){
 			if(!codewordbuttontable.containsKey(ds.getName())){
 				boolean hashumreadtext = ds.getDescription()!=null;
 				CodewordButton cbutton = new CodewordButton(this, settings, ds, false, "", ds.hasRefersToAnnotation(), hashumreadtext, !ds.isImportedViaSubmodel());
@@ -437,9 +437,9 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	}
 	
 	public int updateSubmodelButtonTable(){
-		int numdisplayed = semsimmodel.getSubmodels().size();
+		int numdisplayed = workbench.getSemSimModel().getSubmodels().size();
 		// Associate submodel names with their buttons
-		for(Submodel sub : semsimmodel.getSubmodels()){
+		for(Submodel sub : workbench.getSemSimModel().getSubmodels()){
 			if(!submodelbuttontable.containsKey(sub.getName())){
 				boolean editable = true;
 				if(sub instanceof FunctionalSubmodel){
@@ -474,8 +474,8 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	public void addNewSubmodelButton() throws OWLException {
 		String newname = JOptionPane.showInputDialog(this,"Enter a name for the new sub-model");
 		if(newname !=null && !newname.equals("")){
-			Submodel newsub = semsimmodel.addSubmodel(new Submodel(newname));
-			setModelSaved(false);
+			Submodel newsub = workbench.getSemSimModel().addSubmodel(new Submodel(newname));
+			workbench.setModelSaved(false);
 			AlphabetizeAndSetSubmodels();
 			submodelscrollpane.validate();
 			submodelscrollpane.repaint();
@@ -493,8 +493,8 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	}
 	
 	public void removeSubmodel(SubmodelButton cb) throws IOException{
-		semsimmodel.removeSubmodel(cb.sub);
-		setModelSaved(false);
+		workbench.getSemSimModel().removeSubmodel(cb.sub);
+		workbench.setModelSaved(false);
 		try {
 			AlphabetizeAndSetSubmodels();
 			if(submodelpanel.getComponent(1) instanceof AnnotationObjectButton) // Account for +/- panel
@@ -612,7 +612,12 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		
 		focusbutton = aob;
 		if (whichann == aob.humdeflabel) {
-			new HumanDefEditor(aob.ssc, annotatorpane);
+			SemSimComponent ssc = aob.ssc;
+			HumanDefEditor hde = new HumanDefEditor(ssc.getName(), ssc.getDescription());
+			if (!hde.getNewDescription().equals(ssc.getDescription())) {
+				ssc.setDescription(hde.getNewDescription());
+				annotatorpane.humanDefinitionChanged();
+			}
 		}
 		if(whichann == aob.singularannlabel){
 			annotatorpane.showSingularAnnotationEditor();

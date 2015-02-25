@@ -222,6 +222,16 @@ public class SemSimLibrary {
 		return cellMLUnitsTable.contains(unit);
 	}
 	
+	// Remove any OPB terms that are not Physical Properties
+	public Hashtable<String,String> removeNonPropertiesFromOPB(Hashtable<String, String> table){
+		Hashtable<String,String> newtable = new Hashtable<String,String>();
+		for(String key : table.keySet()){
+			if(OPBhasProperty(table.get(key)))
+				newtable.put(key, table.get(key));
+		}
+		return newtable;
+	}
+	
 	/**
 	 * @return The version of the SemSim API used to generate the model.
 	 */

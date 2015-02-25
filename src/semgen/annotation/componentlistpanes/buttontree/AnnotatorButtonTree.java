@@ -32,6 +32,7 @@ import semgen.annotation.AnnotatorTab;
 import semgen.annotation.componentlistpanes.AnnotationObjectButton;
 import semgen.annotation.componentlistpanes.codewords.CodewordButton;
 import semgen.annotation.componentlistpanes.submodels.SubmodelButton;
+import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semsim.model.SemSimComponent;
@@ -44,15 +45,16 @@ import semsim.writing.CaseInsensitiveComparator;
 
 public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 	private static final long serialVersionUID = 7868541704010347520L;
+	private AnnotatorWorkbench workbench;
 	public AnnotatorTab ann;
 	public Set<DataStructure> looseds;
 	public DefaultMutableTreeNode focusnode;
 	public Map<AnnotationObjectButton, DefaultMutableTreeNode> nodebuttonmap = new HashMap<AnnotationObjectButton, DefaultMutableTreeNode>();
 	protected SemGenSettings settings;
 	
-	public AnnotatorButtonTree(AnnotatorTab ann, SemGenSettings sets, DefaultMutableTreeNode root){
+	public AnnotatorButtonTree(AnnotatorWorkbench wb, AnnotatorTab ann, SemGenSettings sets, DefaultMutableTreeNode root){
 		super(root);
-		
+		workbench = wb;
 		settings = sets;
 		this.ann = ann;
 		
@@ -69,10 +71,10 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 		addTreeSelectionListener(this);
 		this.addMouseListener(new NodeClickEvent());
 		looseds = new HashSet<DataStructure>();
-		looseds.addAll(ann.semsimmodel.getDataStructures());
+		looseds.addAll(workbench.getSemSimModel().getDataStructures());
 		
-		for(String subname : getSortedNamesOfSemSimComponents(ann.semsimmodel.getSubmodels())){
-    		Submodel sub = ann.semsimmodel.getSubmodel(subname);
+		for(String subname : getSortedNamesOfSemSimComponents(workbench.getSemSimModel().getSubmodels())){
+    		Submodel sub = workbench.getSemSimModel().getSubmodel(subname);
     		traverseSubmodelBranch(root, sub);
 		}
 		
@@ -102,7 +104,7 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 		
 		// Get all the data structures in the submodel
 		for(String name : getSortedNamesOfSemSimComponents(sub.getAssociatedDataStructures())){
-			DataStructure ds = ann.semsimmodel.getDataStructure(name);
+			DataStructure ds = workbench.getSemSimModel().getDataStructure(name);
         	if(ann.codewordbuttontable.containsKey(name)){
         		AnnotationObjectButton cbutton = ann.codewordbuttontable.get(name);
         		cbutton.namelabel.setText(name.substring(name.lastIndexOf(".")+1)); // Needed to keep codeword names short

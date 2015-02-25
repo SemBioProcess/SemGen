@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.swing.JCheckBox;
 
 import semgen.annotation.annotatorpane.AnnotationPanel;
+import semgen.annotation.workbench.AnnotatorWorkbench;
 import semsim.model.physical.Submodel;
 
 public class SelectorDialogForSubmodelsOfSubmodel extends SemSimComponentSelectorDialog implements  PropertyChangeListener{
@@ -16,6 +17,7 @@ public class SelectorDialogForSubmodelsOfSubmodel extends SemSimComponentSelecto
 	public Submodel submodel;
 
 	public SelectorDialogForSubmodelsOfSubmodel(
+			AnnotatorWorkbench wb,
 			AnnotationPanel anndia,
 			Set<Submodel> setofsubs, 
 			Submodel sub2ignore,
@@ -24,7 +26,7 @@ public class SelectorDialogForSubmodelsOfSubmodel extends SemSimComponentSelecto
 			Set<Submodel> substodisable,
 			Boolean withdescriptions,
 			String title){
-		super(setofsubs, sub2ignore, preselected, substodisable, withdescriptions, title);
+		super(wb, setofsubs, sub2ignore, preselected, substodisable, withdescriptions, title);
 		this.anndia = anndia;
 		this.submodel = sub;
 		setUpUI(this);
@@ -45,12 +47,12 @@ public class SelectorDialogForSubmodelsOfSubmodel extends SemSimComponentSelecto
 					if (complist[r] instanceof JCheckBox) {
 						JCheckBox box = (JCheckBox) complist[r];
 						if (box.isSelected()) {
-							submodel.addSubmodel(anndia.semsimmodel.getSubmodel(box.getText()));
+							submodel.addSubmodel(workbench.getSemSimModel().getSubmodel(box.getText()));
 						}
 					}
 				}
 				anndia.refreshSubmodelData();
-				anndia.annotator.setModelSaved(false);
+				workbench.setModelSaved(false);
 			}
 			dispose();
 		}
