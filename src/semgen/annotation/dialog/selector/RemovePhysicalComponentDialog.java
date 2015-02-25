@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 
 import semgen.annotation.AnnotatorTab;
 import semgen.annotation.componentlistpanes.codewords.CodewordButton;
+import semgen.annotation.workbench.AnnotatorWorkbench;
 import semsim.model.SemSimComponent;
 import semsim.model.SemSimModel;
 import semsim.model.physical.PhysicalEntity;
@@ -23,9 +24,9 @@ public class RemovePhysicalComponentDialog extends SemSimComponentSelectorDialog
 	private static final long serialVersionUID = -3622371132272217159L;
 	public AnnotatorTab annotator;
 
-	public RemovePhysicalComponentDialog(AnnotatorTab ann,
+	public RemovePhysicalComponentDialog(AnnotatorWorkbench wb, AnnotatorTab ann,
 			Set<? extends SemSimComponent> settolist, SemSimComponent ssctoignore, Boolean withdescriptions, String title){
-		super(settolist, ssctoignore, null, null, withdescriptions, title);
+		super(wb, settolist, ssctoignore, null, null, withdescriptions, title);
 		this.annotator = ann;
 		setUpUI(this);
 	}
@@ -60,15 +61,15 @@ public class RemovePhysicalComponentDialog extends SemSimComponentSelectorDialog
 				if (tempbox.isSelected()) {
 					Object removedComp = nameobjectmap.get(tempbox.getText());
 					
-					for(PhysicalProperty prop: annotator.semsimmodel.getPhysicalProperties()){
+					for(PhysicalProperty prop: workbench.getSemSimModel().getPhysicalProperties()){
 						// Remove the component's use from non-composite physical entities
 						if(prop.getPhysicalPropertyOf()==removedComp){
 							
 							if(prop.getPhysicalPropertyOf() instanceof PhysicalEntity)
-								prop.setPhysicalPropertyOf(annotator.semsimmodel.getCustomPhysicalEntityByName(SemSimModel.unspecifiedName));
+								prop.setPhysicalPropertyOf(workbench.getSemSimModel().getCustomPhysicalEntityByName(SemSimModel.unspecifiedName));
 							if(prop.getPhysicalPropertyOf() instanceof PhysicalProcess){
 								// Need to do sources, sinks, meds here?
-								prop.setPhysicalPropertyOf(annotator.semsimmodel.getCustomPhysicalProcessByName(SemSimModel.unspecifiedName));
+								prop.setPhysicalPropertyOf(workbench.getSemSimModel().getCustomPhysicalProcessByName(SemSimModel.unspecifiedName));
 							}
 						}
 						// Remove the component's use from composite physical entities
@@ -77,7 +78,7 @@ public class RemovePhysicalComponentDialog extends SemSimComponentSelectorDialog
 							
 							for(int k=0; k<cpe.getArrayListOfEntities().size(); k++){
 								if(cpe.getArrayListOfEntities().get(k)==removedComp)
-									cpe.getArrayListOfEntities().set(k, annotator.semsimmodel.getCustomPhysicalEntityByName(SemSimModel.unspecifiedName));
+									cpe.getArrayListOfEntities().set(k, workbench.getSemSimModel().getCustomPhysicalEntityByName(SemSimModel.unspecifiedName));
 							}
 						}
 					}

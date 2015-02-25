@@ -172,22 +172,22 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		}
 		
 		if (o == annotateitemaddrefterm) {
-				new AddReferenceClassDialog(anntab, SemSimConstants.ALL_SEARCHABLE_ONTOLOGIES, 
+				new AddReferenceClassDialog(workbench, anntab, SemSimConstants.ALL_SEARCHABLE_ONTOLOGIES, 
 						new Object[]{"Add as entity","Add as process","Close"}, anntab.semsimmodel);
 			} 
 		
 		if (o == annotateitemremoverefterm) {
 				Set<PhysicalModelComponent> pmcs = new HashSet<PhysicalModelComponent>();
-				for(PhysicalModelComponent pmc : anntab.semsimmodel.getPhysicalModelComponents()){
+				for(PhysicalModelComponent pmc : workbench.getSemSimModel().getPhysicalModelComponents()){
 					if(!(pmc instanceof CompositePhysicalEntity) && (pmc instanceof PhysicalEntity || pmc instanceof PhysicalProcess))
 						pmcs.add(pmc);
 				}
-				new RemovePhysicalComponentDialog(anntab, pmcs, null, false, "Select components to remove");
+				new RemovePhysicalComponentDialog(workbench, anntab, pmcs, null, false, "Select components to remove");
 			}
 		
 		if (o == annotateitemreplacerefterm) {
 				try {
-					new AnnotationComponentReplacer(anntab);
+					new AnnotationComponentReplacer(workbench, anntab);
 				} catch (OWLException e1) {
 					e1.printStackTrace();
 				}
@@ -197,7 +197,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 			String filenamesuggestion = null;
 			if(anntab.sourcefile!=null) filenamesuggestion = anntab.sourcefile.getName().substring(0, anntab.sourcefile.getName().lastIndexOf("."));
 			if(workbench.unsavedChanges()){
-				new Encoder(anntab.semsimmodel, filenamesuggestion);
+				new Encoder(workbench.getSemSimModel(), filenamesuggestion);
 			} 
 		}
 	}

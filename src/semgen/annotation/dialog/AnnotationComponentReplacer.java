@@ -18,6 +18,7 @@ import org.semanticweb.owlapi.model.OWLException;
 import semgen.annotation.AnnotatorTab;
 import semgen.annotation.componentlistpanes.codewords.CodewordButton;
 import semgen.annotation.dialog.referenceclass.ReferenceClassFinderPanel;
+import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.utilities.uicomponent.SemGenDialog;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semsim.SemSimConstants;
@@ -31,19 +32,20 @@ public class AnnotationComponentReplacer extends SemGenDialog implements
 
 	private static final long serialVersionUID = 5155214590420468140L;
 	public ReferenceClassFinderPanel refclasspanel;
+	private AnnotatorWorkbench workbench;
 	public AnnotatorTab ann;
-	public SemGenScrollPane scpn;
 	public JOptionPane optionPane;
 	public Hashtable<String, String> oldclsnamesanduris = new Hashtable<String, String>();
 	public JList<String> list= new JList<String>();
 
-	public AnnotationComponentReplacer(AnnotatorTab ann) throws OWLException {
+	public AnnotationComponentReplacer(AnnotatorWorkbench wb, AnnotatorTab ann) throws OWLException {
 		super("Select a term to replace from the top list, then a term to replace it");
 		this.ann = ann;
+		workbench = wb;
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		refreshListData();
-		scpn = new SemGenScrollPane(list);
+		SemGenScrollPane scpn = new SemGenScrollPane(list);
 		
 		refclasspanel = new ReferenceClassFinderPanel(ann, SemSimConstants.ALL_SEARCHABLE_ONTOLOGIES);
 
@@ -67,18 +69,18 @@ public class AnnotationComponentReplacer extends SemGenDialog implements
 			if (value.equals("Replace all")) {
 				String oldclass = (String) list.getSelectedValue();
 				
-				String newclassuri = refclasspanel.resultsanduris.get(refclasspanel.resultslistright.getSelectedValue());
+				String newclassuri = refclasspanel.getSelectionURI();
 				String oldclassuri = oldclsnamesanduris.get(oldclass);
 				
-				for(PhysicalModelComponent pmc : ann.semsimmodel.getPhysicalModelComponents()){
+				for(PhysicalModelComponent pmc : workbench.getSemSimModel().getPhysicalModelComponents()){
 					for(Annotation anno : pmc.getAnnotations()){
 						if(anno instanceof ReferenceOntologyAnnotation){
 							ReferenceOntologyAnnotation refann = (ReferenceOntologyAnnotation)anno;
 							if(refann.getReferenceURI().toString().equals(oldclassuri)){
-								refann.setValueDescription((String) refclasspanel.resultslistright.getSelectedValue());
+								refann.setValueDescription(refclasspanel.resultslistright.getSelectedValue());
 								refann.setReferenceURI(URI.create(newclassuri));
 								refann.setReferenceOntologyAbbreviation(URI.create(newclassuri));
-								ann.setModelSaved(false);
+								workbench.setModelSaved(false);
 							}
 						}
 					}
@@ -86,8 +88,7 @@ public class AnnotationComponentReplacer extends SemGenDialog implements
 				
 				JOptionPane.showMessageDialog(this, "Finished replacement");
 				refreshListData();
-				ann.setModelSaved(false);
-				if(ann.focusbutton instanceof CodewordButton) ann.annotatorpane.compositepanel.refreshUI();
+				workbench.compositeChanged();
 				optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 			} else if (value.equals("Close")) {
 				dispose();
@@ -97,7 +98,7 @@ public class AnnotationComponentReplacer extends SemGenDialog implements
 
 	public void refreshListData() {
 		Set<String> refclassnames = new HashSet<String>();
-		for(PhysicalModelComponent pmc : ann.semsimmodel.getPhysicalModelComponents()){
+		for(PhysicalModelComponent pmc : workbench.getSemSimModel().getPhysicalModelComponents()){
 			if(pmc.hasRefersToAnnotation()){
 				ReferenceOntologyAnnotation ann = pmc.getFirstRefersToReferenceOntologyAnnotation();
 				String label = ann.getValueDescription();
