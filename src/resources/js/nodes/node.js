@@ -32,7 +32,10 @@ Node.prototype.createVisualElement = function (element, graph) {
 	Node.appendTextElement(this.rootElement, this.textSize, this.displayName);
 }
 
-Node.prototype.tickHandler = function (element) {
+Node.prototype.tickHandler = function (element, graph) {
+	this.x = Math.max(this.r, Math.min(graph.w - this.r, this.x));
+	this.y = Math.max(this.r, Math.min(graph.h - this.r, this.y));
+	
 	var root = d3.select(element);
 	root.attr("transform", "translate(" + this.x + "," + this.y + ")");
 }

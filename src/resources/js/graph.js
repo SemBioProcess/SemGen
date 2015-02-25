@@ -117,7 +117,7 @@ function Graph() {
 	    	
 	    	// Execute the tick handler for each node
 	    	node.each(function (d) {
-	    		d.tickHandler(this);
+	    		d.tickHandler(this, graph);
 	    	});
 	    });
 
@@ -125,9 +125,13 @@ function Graph() {
 	    this.force
 	    	.gravity(0)
 	    	.linkDistance(60)
-		    .size([w, h])
+		    .size([this.w, this.h])
 		    .start();
 	};
+	
+	// Set the graph's width and height
+	this.w = $(window).width();
+	this.h = $(window).height();
 	
 	// Find a node by its id
 	var findNode = function(id) {
@@ -143,18 +147,14 @@ function Graph() {
 		};
 	};
 	
-	// Set up the D3 visualisation in the specified element
-	var w = $(window).width(),
-	    h = $(window).height();
-	
 	// Get the stage and style it
 	var vis = d3.select("#stage")
 	    .append("svg:svg")
 	    .attr("id", "svg")
 	    .attr("pointer-events", "all")
-	    .attr("width", w)
-	    .attr("height", h)
-	    .attr("viewBox","0 0 "+ w +" "+ h)
+	    .attr("width", this.w)
+	    .attr("height", this.h)
+	    .attr("viewBox","0 0 "+ this.w +" "+ this.h)
 	    .attr("perserveAspectRatio", "xMinYMid")
 	    .append('svg:g');
 

@@ -92,7 +92,7 @@ ModelNode.prototype.setChildren = function (children) {
 	this.rootElement.select(".hull").style("display", hullDisplay);
 }
 
-ModelNode.prototype.tickHandler = function (element) {
+ModelNode.prototype.tickHandler = function (element, graph) {
 	// Draw the hull around child nodes
 	if(this.children) {
 		// 1) Convert the child positions into vertices that we'll use to create the hull
@@ -120,7 +120,7 @@ ModelNode.prototype.tickHandler = function (element) {
 	}
 	
 	// Draw the model node
-	Node.prototype.tickHandler.call(this, element);
+	Node.prototype.tickHandler.call(this, element, graph);
 }
 
 function hideOpenPopover() {
