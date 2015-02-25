@@ -21,7 +21,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import semgen.annotation.annotatorpane.AnnotationPanel;
-import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.utilities.uicomponent.SemGenDialog;
 import semsim.model.SemSimComponent;
 import semsim.model.SemSimModel;
@@ -41,10 +40,8 @@ public class SemSimComponentSelectorDialog extends SemGenDialog implements Actio
 	public SemSimComponent ssctoignore;
 	public Set<? extends SemSimComponent> sscstodisable;
 	public AnnotationPanel anndia;
-	protected AnnotatorWorkbench workbench;
-	
+
 	public SemSimComponentSelectorDialog(
-			AnnotatorWorkbench wb,
 			Set<? extends SemSimComponent> settolist,
 			SemSimComponent ssctoignore,
 			Set<? extends SemSimComponent> preselectedset,
@@ -52,7 +49,7 @@ public class SemSimComponentSelectorDialog extends SemGenDialog implements Actio
 			Boolean withdescriptions,
 			String title) {
 		super(title);
-		workbench = wb;
+
 		this.selectableset = settolist;
 		this.preselectedset = preselectedset;
 		this.ssctoignore = ssctoignore;

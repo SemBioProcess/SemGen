@@ -22,9 +22,7 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
 import org.apache.commons.lang3.tuple.Pair;
-
 import semgen.annotation.dialog.selector.SemSimComponentSelectorDialog;
-import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenScrollPane;
@@ -38,7 +36,7 @@ import semsim.model.physical.PhysicalProcess;
 public class ProcessParticipantEditor extends JPanel implements ActionListener, PropertyChangeListener {
 
 	private static final long serialVersionUID = 5639851498722801279L;
-	public AnnotatorWorkbench workbench;
+	public SemSimModel model;
 	public SemSimRelation relation;
 	public PhysicalProcess process;
 	public JButton plusbutton = new JButton(SemGenIcon.plusicon);
@@ -48,8 +46,8 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 	public Map<String,PhysicalEntity> namesandparticipantmap = new HashMap<String,PhysicalEntity>();
 	public SemSimComponentSelectorDialog sscsd; 
 
-	public ProcessParticipantEditor(AnnotatorWorkbench wb, SemSimRelation relation, PhysicalProcess process) {	
-		workbench = wb;
+	public ProcessParticipantEditor(SemSimModel model, SemSimRelation relation, PhysicalProcess process) {	
+		this.model = model;
 		this.relation = relation;
 		this.process = process;
 
@@ -204,8 +202,8 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 			for(String ssctempname : namesandparticipantmap.keySet()){
 				sscs.add((SemSimComponent) namesandparticipantmap.get(ssctempname));
 			}
-			PhysicalEntity unspecent = workbench.getSemSimModel().getCustomPhysicalEntityByName(SemSimModel.unspecifiedName);
-			sscsd = new SemSimComponentSelectorDialog(workbench, workbench.getSemSimModel().getPhysicalEntitiesAndExclude(unspecent), null, sscs, null, false, "Physical entities in model");
+			PhysicalEntity unspecent = model.getCustomPhysicalEntityByName(SemSimModel.unspecifiedName);
+			sscsd = new SemSimComponentSelectorDialog(model.getPhysicalEntitiesAndExclude(unspecent), null, sscs, null, false, "Physical entities in model");
 			sscsd.setUpUI(this);
 		}
 		

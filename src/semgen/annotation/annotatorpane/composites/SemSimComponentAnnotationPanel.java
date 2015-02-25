@@ -34,7 +34,6 @@ import semgen.SemGenSettings;
 import semgen.annotation.annotatorpane.AnnotationPanel;
 import semgen.annotation.dialog.CustomPhysicalComponentEditor;
 import semgen.annotation.dialog.referenceclass.CompositeAnnotationComponentSearchDialog;
-import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
@@ -59,12 +58,10 @@ import semsim.writing.CaseInsensitiveComparator;
 public class SemSimComponentAnnotationPanel extends JPanel implements ActionListener{
 
 	private static final long serialVersionUID = -6606265105415658572L;
-	private AnnotatorWorkbench workbench;
 	public Annotatable smc;
-	public Map<String,SemSimComponent> listdataandsmcmap = new HashMap<String, SemSimComponent>();
-	public AnnotationPanel annpanel;
+	public AnnotationPanel anndialog;
+	public SemSimModel semsimmodel;
 	public JComboBox<String> combobox = new JComboBox<String>(new String[]{});
-	
 	public ComponentPanelLabel searchlabel = 
 			new ComponentPanelLabel(SemGenIcon.searchicon,"Look up reference ontology term");
 	public ComponentPanelLabel createlabel = 
@@ -73,19 +70,20 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 			new ComponentPanelLabel(SemGenIcon.eraseicon, "Remove annotation component");
 	public ComponentPanelLabel modifylabel 
 	= new ComponentPanelLabel(SemGenIcon.modifyicon, "Edit custom term");
-	
 	public ExternalURLButton urlbutton = new ExternalURLButton();
+	public CompositeAnnotationComponentSearchDialog srchdlg;
 
+	public Map<String,SemSimComponent> listdataandsmcmap = new HashMap<String, SemSimComponent>();
 	public Object selecteditem;
 	protected SemGenSettings settings;
 	
-	public SemSimComponentAnnotationPanel(AnnotatorWorkbench wb, AnnotationPanel anndia, SemGenSettings sets, Annotatable smc){
-		workbench = wb;
-		this.annpanel = anndia;
+	public SemSimComponentAnnotationPanel(AnnotationPanel anndia, SemGenSettings sets, Annotatable smc){
+		this.anndialog = anndia;
 		this.smc = smc;
+		this.semsimmodel = anndia.semsimmodel;
 		this.setBackground(new Color(207, 215, 252));
 		
-		Boolean editable = annpanel.thebutton.editable;
+		Boolean editable = anndialog.thebutton.editable;
 		
 		combobox.setPreferredSize(new Dimension(350,30));
 		combobox.setMaximumSize(new Dimension(350,30));
@@ -122,7 +120,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 		
 		// If we're annotating a physical model component (i.e. a component in a composite physical entity)
 		if(smc instanceof PhysicalModelComponent && !(smc instanceof Submodel)){ 
-			for(PhysicalModelComponent pmctolist : workbench.getSemSimModel().getPhysicalModelComponents()){
+			for(PhysicalModelComponent pmctolist : anndialog.semsimmodel.getPhysicalModelComponents()){
 				if(pmctolist.getName()!=null && !pmctolist.getName().equals("") && (
 						((pmctolist instanceof PhysicalProperty) && (smc instanceof PhysicalProperty))
 						|| ((pmctolist instanceof PhysicalEntity) && (smc instanceof PhysicalEntity))
@@ -137,7 +135,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 					}
 					else if(pmctolist.getName()!=null && !(pmctolist instanceof PhysicalProperty)){
 						if(pmctolist instanceof CompositePhysicalEntity){
-							PhysicalModelComponent unspecpmc = workbench.getSemSimModel().getCustomPhysicalEntityByName(SemSimModel.unspecifiedName);
+							PhysicalModelComponent unspecpmc = anndialog.semsimmodel.getCustomPhysicalEntityByName(SemSimModel.unspecifiedName);
 							if(!((CompositePhysicalEntity)pmctolist).getArrayListOfEntities().contains(unspecpmc))
 								id = pmctolist.getName();
 						}
@@ -151,7 +149,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 						// composite physical entities available for re-use
 						if(pmctolist instanceof CompositePhysicalEntity){
 							if(!(smc instanceof PhysicalProperty)){
-								PhysicalModelComponent temp = ((DataStructure)annpanel.smc).getPhysicalProperty().getPhysicalPropertyOf();
+								PhysicalModelComponent temp = ((DataStructure)anndialog.smc).getPhysicalProperty().getPhysicalPropertyOf();
 								if(!(temp instanceof CompositePhysicalEntity)){
 									stringlist.add(id);
 								}
@@ -166,8 +164,8 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 		// If we're annotating a DataStructure or Submodel
 		else{
 			Set<Annotatable> annotatables = new HashSet<Annotatable>();
-			annotatables.addAll(workbench.getSemSimModel().getPhysicalModelComponents());
-			annotatables.addAll(workbench.getSemSimModel().getDataStructures());
+			annotatables.addAll(anndialog.semsimmodel.getPhysicalModelComponents());
+			annotatables.addAll(anndialog.semsimmodel.getDataStructures());
 			
 			for(Annotatable ann : annotatables){
 				String id = null;
@@ -255,7 +253,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 			else if(smc instanceof PhysicalProcess)
 				ontList = new String[]{SemSimConstants.GENE_ONTOLOGY_FULLNAME};
 			
-			new CompositeAnnotationComponentSearchDialog(workbench, this, ontList, new String[]{"Apply","Cancel"}) {
+			srchdlg = new CompositeAnnotationComponentSearchDialog(this, ontList, new String[]{"Apply","Cancel"}) {
 				private static final long serialVersionUID = 1L;
 
 				public void propertyChange(PropertyChangeEvent arg0) {
@@ -265,8 +263,8 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 						if(value == "Apply" && this.getFocusOwner() != refclasspanel.findbox){
 							// If something from list actually selected
 							if(refclasspanel.resultslistright.getSelectedValue()!=null){
-								String desc = refclasspanel.getSelection();
-								URI uri = URI.create(refclasspanel.getSelectionURI());
+								String desc = refclasspanel.resultslistright.getSelectedValue().trim();
+								URI uri = URI.create(refclasspanel.resultsanduris.get(refclasspanel.resultslistright.getSelectedValue()));
 								
 								// If we're annotating a physical property...
 								if(smc instanceof PhysicalProperty){
@@ -275,18 +273,18 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 										smc.addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, uri, desc);
 									}
 									else{
-										SemGenError.showInvalidOPBpropertyError(this);
+										SemGenError.showInvalidOPBpropertyError(srchdlg);
 										optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 										return;
 									}
 								}
 								//Otherwise, if the reference term hasn't been added to the model yet...
-								else if(workbench.getSemSimModel().getPhysicalModelComponentByReferenceURI(uri)==null){
+								else if(semsimmodel.getPhysicalModelComponentByReferenceURI(uri)==null){
 									if(smc instanceof PhysicalProcess){
-										smc = workbench.getSemSimModel().addReferencePhysicalProcess(uri, desc);
+										smc = semsimmodel.addReferencePhysicalProcess(uri, desc);
 									}
 									else if(smc instanceof PhysicalEntity){
-										smc = workbench.getSemSimModel().addReferencePhysicalEntity(uri, desc);
+										smc = semsimmodel.addReferencePhysicalEntity(uri, desc);
 										
 										// If we are using an FMA term, store the numerical version of the ID
 										String altID = null;
@@ -294,31 +292,31 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 									}
 								}
 								// Otherwise reuse existing annotation
-								else smc = workbench.getSemSimModel().getPhysicalModelComponentByReferenceURI(uri);
+								else smc = semsimmodel.getPhysicalModelComponentByReferenceURI(uri);
 								
 								// Refresh the annotation based on the PhysicalModelComponents specified in the PhysicalModelComponentPanels
 								try {
-									annpanel.updateCompositeAnnotationFromUIComponents();
+									anndialog.updateCompositeAnnotationFromUIComponents();
 								} catch (OWLException e) {
 									e.printStackTrace();
 								}
 								
-								annpanel.compositepanel.setAddButtonsEnabled();
+								anndialog.compositepanel.setAddButtonsEnabled();
 								
 								// Refresh all the comboboxes in the composite annotation interface
-								for(Component c : annpanel.compositepanel.getComponents()){
+								for(Component c : anndialog.compositepanel.getComponents()){
 									if(c instanceof SemSimComponentAnnotationPanel){
 										((SemSimComponentAnnotationPanel)c).refreshComboBoxItemsAndButtonVisibility();
 									}
 								}
 								// Refresh combobox items in singular annotation interface
-								annpanel.singularannpanel.refreshComboBoxItemsAndButtonVisibility();
+								anndialog.singularannpanel.refreshComboBoxItemsAndButtonVisibility();
 								
 								if(smc.hasRefersToAnnotation()) 
 									urlbutton.setTermURI(smc.getFirstRefersToReferenceOntologyAnnotation().getReferenceURI());
 								
 								// Refresh the combobox items for the Singular Annotation panel in the AnnotationDialog
-								annpanel.refreshSingularAnnotation();
+								anndialog.refreshSingularAnnotation();
 							}
 						}
 						else if (value == "Cancel") {
@@ -331,7 +329,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 			
 		}
 		else{
-			annpanel.showSingularAnnotationEditor();
+			anndialog.showSingularAnnotationEditor();
 		}
 	}
 
@@ -344,16 +342,16 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 		}
 		String input = JOptionPane.showInputDialog("Enter name for new custom physical " + porestring);
 		if(input!=null && !input.equals("")){
-			if(proc) smc = workbench.getSemSimModel().addCustomPhysicalProcess(input, "");
-			else smc = workbench.getSemSimModel().addCustomPhysicalEntity(input, "");
+			if(proc) smc = semsimmodel.addCustomPhysicalProcess(input, "");
+			else smc = semsimmodel.addCustomPhysicalEntity(input, "");
 			
 			try {
-				annpanel.updateCompositeAnnotationFromUIComponents();
+				anndialog.updateCompositeAnnotationFromUIComponents();
 			} catch (OWLException e) {
 				e.printStackTrace();
 			}
 			
-			for(Component c : annpanel.compositepanel.getComponents()){
+			for(Component c : anndialog.compositepanel.getComponents()){
 				if(c instanceof SemSimComponentAnnotationPanel){
 					SemSimComponentAnnotationPanel pan = (SemSimComponentAnnotationPanel)c;
 					removeComboBoxActionListeners(pan);
@@ -361,19 +359,19 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 					pan.combobox.addActionListener(pan);
 				}
 			}
-			new CustomPhysicalComponentEditor(workbench, (PhysicalModelComponent)smc);
+			new CustomPhysicalComponentEditor(anndialog, (PhysicalModelComponent)smc);
 		}
 	}
 	
 	private void modifyLabelClicked() {
-		new CustomPhysicalComponentEditor(workbench, (PhysicalModelComponent)smc);
+		new CustomPhysicalComponentEditor(anndialog, (PhysicalModelComponent)smc);
 	}
 	
 	private void eraseLabelClicked() {
 		// If we're erasing a component in a composite annotation...
 		if(smc instanceof PhysicalModelComponent && !(smc instanceof Submodel)){
 			int componentindex = 0;
-			Component[] comps = annpanel.compositepanel.getComponents();
+			Component[] comps = anndialog.compositepanel.getComponents();
 			for(int c=0; c<comps.length; c++){
 				if(comps[c] == this) componentindex = c;
 			}
@@ -385,18 +383,18 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 			}
 			// Otherwise, actually remove the physicalmodelcomponentpanel and structuralrelationpanel, if present
 			else{
-				Component nextcomp = annpanel.compositepanel.getComponent(componentindex + 1);
-				Component prevcomp = annpanel.compositepanel.getComponent(componentindex - 1);
-				annpanel.compositepanel.remove(this);
-				if(nextcomp instanceof StructuralRelationPanel) annpanel.compositepanel.remove(nextcomp);
-				else if(prevcomp instanceof StructuralRelationPanel) annpanel.compositepanel.remove(prevcomp);
+				Component nextcomp = anndialog.compositepanel.getComponent(componentindex + 1);
+				Component prevcomp = anndialog.compositepanel.getComponent(componentindex - 1);
+				anndialog.compositepanel.remove(this);
+				if(nextcomp instanceof StructuralRelationPanel) anndialog.compositepanel.remove(nextcomp);
+				else if(prevcomp instanceof StructuralRelationPanel) anndialog.compositepanel.remove(prevcomp);
 				try {
-					annpanel.updateCompositeAnnotationFromUIComponents();
+					anndialog.updateCompositeAnnotationFromUIComponents();
 				} catch (OWLException e) {
 					e.printStackTrace();
 				}
 			}
-			annpanel.compositepanel.refreshUI();
+			anndialog.compositepanel.refreshUI();
 		}
 		// ...otherwise we're removing a singular annotation
 		else removeAsSingularAnnotation();
@@ -429,10 +427,10 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 				else removeAsPhysicalPropertyAnnotation();
 				
 				// Update the annotation button codes and the order of the button in the scrollpane
-				boolean rescroll = annpanel.thebutton.refreshAllCodes();
+				boolean rescroll = anndialog.thebutton.refreshAllCodes();
 				if(rescroll && settings.organizeByPropertyType()){
-					annpanel.annotator.AlphabetizeAndSetCodewords();
-					annpanel.annotator.codewordscrollpane.scrollToComponent(annpanel.thebutton);
+					anndialog.annotator.AlphabetizeAndSetCodewords();
+					anndialog.annotator.codewordscrollpane.scrollToComponent(anndialog.thebutton);
 				}
 			}
 			// If not for a physical property, get the reference annotation for the selected item and apply it to whatever is being annotated
@@ -441,8 +439,8 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 					// If we are re-using a composite physical entity, just make it the object of the physical property
 					// and refresh the Annotation Dialog UI
 					if(selectedsmc instanceof CompositePhysicalEntity){
-						annpanel.compositepanel.datastructure.getPhysicalProperty().setPhysicalPropertyOf((CompositePhysicalEntity)selectedsmc);
-						annpanel.compositepanel.refreshUI();
+						anndialog.compositepanel.datastructure.getPhysicalProperty().setPhysicalPropertyOf((CompositePhysicalEntity)selectedsmc);
+						anndialog.compositepanel.refreshUI();
 						return;
 					}
 					// This happens for singular annotations and non-composite physical entity annotations
@@ -457,15 +455,15 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 				}
 			}
 			// If we're annotating a DataStructure and this panel does not represent the data structure itself (it represents a component in a composite)
-			if(annpanel.smc instanceof DataStructure && !(smc instanceof DataStructure)){
+			if(anndialog.smc instanceof DataStructure && !(smc instanceof DataStructure)){
 				// Update the physical model component represented in this panel to the new one selected by the user
 				if(!(smc instanceof PhysicalProperty)) this.smc = selectedsmc;
 				try {
-					annpanel.updateCompositeAnnotationFromUIComponents();
+					anndialog.updateCompositeAnnotationFromUIComponents();
 				} catch (OWLException e) {
 					e.printStackTrace();
 				}
-				annpanel.compositepanel.setAddButtonsEnabled();
+				anndialog.compositepanel.setAddButtonsEnabled();
 			}
 			// If we are editing either a DataStructure or Submodel's singular annotation
 			else  applyReferenceOntologyAnnotation(selectedsmc.getFirstRefersToReferenceOntologyAnnotation(), true);
@@ -485,20 +483,20 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 		smc.removeAllReferenceAnnotations();
 		smc.addAnnotation(ann);
 		urlbutton.setTermURI(ann.getReferenceURI());
-		annpanel.annotator.setModelSaved(false);
-		if(refreshCodes) annpanel.thebutton.refreshAllCodes();
+		anndialog.annotator.setModelSaved(false);
+		if(refreshCodes) anndialog.thebutton.refreshAllCodes();
 	}
 	
 	private void removeAsPhysicalPropertyAnnotation(){
-		annpanel.compositepanel.datastructure.getPhysicalProperty().removeAllReferenceAnnotations();
-		annpanel.annotator.setModelSaved(false);
-		annpanel.thebutton.refreshAllCodes();
+		anndialog.compositepanel.datastructure.getPhysicalProperty().removeAllReferenceAnnotations();
+		anndialog.annotator.setModelSaved(false);
+		anndialog.thebutton.refreshAllCodes();
 	}
 	
 	private void removeAsSingularAnnotation(){
 		smc.removeAllReferenceAnnotations();
-		annpanel.thebutton.refreshAllCodes();
-		annpanel.annotator.setModelSaved(false);
+		anndialog.thebutton.refreshAllCodes();
+		anndialog.annotator.setModelSaved(false);
 		refreshComboBoxItemsAndButtonVisibility();
 	}
 	

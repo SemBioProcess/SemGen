@@ -18,7 +18,6 @@ import javax.swing.JPanel;
 import semgen.SemGen;
 import semgen.SemGenSettings;
 import semgen.annotation.annotatorpane.AnnotationPanel;
-import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.utilities.SemGenFont;
 import semsim.Annotatable;
 import semsim.SemSimConstants;
@@ -32,22 +31,23 @@ import semsim.model.physical.object.CompositePhysicalEntity;
 
 public class CompositeAnnotationPanel extends Box implements ActionListener{
 	private static final long serialVersionUID = -3955122899870904199L;
-	private AnnotatorWorkbench workbench;
+	public SemSimModel semsimmodel;
 	public DataStructure datastructure;
 	public AnnotationPanel ad;
 	public JButton addpropertybutton = new JButton("Add property");
+	public JLabel propertyoflabel = new JLabel("property_of");
 	public JButton addentbutton = new JButton("Add entity");
 	public JButton addprocbutton = new JButton("Add process");
 	protected SemGenSettings settings;
 	
-	public CompositeAnnotationPanel(AnnotatorWorkbench bench, int orientation, SemGenSettings sets, AnnotationPanel ad, DataStructure ds){
+	public CompositeAnnotationPanel(int orientation, SemGenSettings sets, AnnotationPanel ad){
 		super(orientation);
-		workbench = bench;
 		settings = sets;
 		this.setBackground(new Color(207, 215, 252));
 		this.ad = ad;
 		setAlignmentX(Box.LEFT_ALIGNMENT);
-		datastructure = ds;
+		semsimmodel = ad.semsimmodel;
+		datastructure = (DataStructure)ad.smc;
 	}
 		
 	public void refreshUI(){
@@ -68,14 +68,12 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 		addempanel.add(addentprocpanel, BorderLayout.WEST);
 		
 		if(datastructure.getPhysicalProperty()!=null){
-			add(new SemSimComponentAnnotationPanel(workbench, ad, settings, datastructure.getPhysicalProperty()));
+			add(new SemSimComponentAnnotationPanel(ad, settings, datastructure.getPhysicalProperty()));
 		}
 		else{
 			add(addpropertybutton);
 		}
 		JPanel propofpanel = new JPanel( new BorderLayout() );
-		
-		JLabel propertyoflabel = new JLabel("property_of");
         propertyoflabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         propertyoflabel.setFont(SemGenFont.defaultItalic());
         propertyoflabel.setBorder(BorderFactory.createEmptyBorder(0, ad.indent, 0, 0));
@@ -91,7 +89,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 					CompositePhysicalEntity cpe = (CompositePhysicalEntity)pmc;
 					int s = 0;
 					for(PhysicalEntity ent : cpe.getArrayListOfEntities()){
-						add(new SemSimComponentAnnotationPanel(workbench, ad, settings, ent));
+						add(new SemSimComponentAnnotationPanel(ad, settings, ent));
 						if(s<cpe.getArrayListOfStructuralRelations().size()){
 							add(new StructuralRelationPanel(cpe.getArrayListOfStructuralRelations().get(s)));
 						}
@@ -100,7 +98,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 				}
 				// Else the property target is a single physical entity or process
 				else{
-					add(new SemSimComponentAnnotationPanel(workbench, ad, settings, pmc));
+					add(new SemSimComponentAnnotationPanel(ad, settings, pmc));
 				}
 			}
 		}
@@ -169,7 +167,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 		// If the "Add entity" button is pressed
 		if(arg0.getSource() == addentbutton){
 			if(datastructure.getPhysicalProperty().getPhysicalPropertyOf()==null){
-				datastructure.getPhysicalProperty().setPhysicalPropertyOf(workbench.getSemSimModel().getCustomPhysicalEntityByName(SemSimModel.unspecifiedName));
+				datastructure.getPhysicalProperty().setPhysicalPropertyOf(semsimmodel.getCustomPhysicalEntityByName(SemSimModel.unspecifiedName));
 			}
 			else{
 				ArrayList<PhysicalEntity> ents = new ArrayList<PhysicalEntity>();
@@ -186,11 +184,11 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 						rels.add(srp.structuralRelation);
 					}
 				}
-				ents.add(workbench.getSemSimModel().getCustomPhysicalEntityByName(SemSimModel.unspecifiedName));
+				ents.add(semsimmodel.getCustomPhysicalEntityByName(SemSimModel.unspecifiedName));
 				rels.add(SemSimConstants.PART_OF_RELATION);
-				datastructure.getPhysicalProperty().setPhysicalPropertyOf(workbench.getSemSimModel().addCompositePhysicalEntity(ents, rels));
+				datastructure.getPhysicalProperty().setPhysicalPropertyOf(semsimmodel.addCompositePhysicalEntity(ents, rels));
 			}
-			workbench.setModelSaved(false);
+			ad.annotator.setModelSaved(false);
 			
 			if(ad.thebutton.refreshAllCodes() && settings.organizeByPropertyType()){
 				ad.annotator.AlphabetizeAndSetCodewords();
@@ -202,8 +200,8 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 		// If "Add process" button pressed
 		if(arg0.getSource() == addprocbutton){
 			if(datastructure.getPhysicalProperty().getPhysicalPropertyOf()==null){
-				datastructure.getPhysicalProperty().setPhysicalPropertyOf(workbench.getSemSimModel().getCustomPhysicalProcessByName(SemSimModel.unspecifiedName));
-				workbench.setModelSaved(false);
+				datastructure.getPhysicalProperty().setPhysicalPropertyOf(semsimmodel.getCustomPhysicalProcessByName(SemSimModel.unspecifiedName));
+				ad.annotator.setModelSaved(false);
 			}
 			refreshUI();
 		}

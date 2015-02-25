@@ -11,7 +11,6 @@ import javax.swing.JTextArea;
 
 import semgen.annotation.AnnotatorTab;
 import semgen.annotation.componentlistpanes.codewords.CodewordButton;
-import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.uicomponent.SemGenDialog;
 import semsim.Annotatable;
@@ -24,11 +23,9 @@ public class AddReferenceClassDialog extends SemGenDialog implements
 	public AnnotatorTab annotator;
 	public JOptionPane optionPane;
 	public JTextArea utilarea = new JTextArea();
-	private AnnotatorWorkbench workbench; 
 
-	public AddReferenceClassDialog(AnnotatorWorkbench wb, AnnotatorTab ann, String[] ontList, Object[] options, Annotatable annotatable) {
+	public AddReferenceClassDialog(AnnotatorTab ann, String[] ontList, Object[] options, Annotatable annotatable) {
 		super("Select reference concept");
-		workbench = wb;
 		this.annotator = ann;
 		
 		refclasspanel = new ReferenceClassFinderPanel(ann, annotatable, ontList);
@@ -56,11 +53,11 @@ public class AddReferenceClassDialog extends SemGenDialog implements
 			if (optionPane.getValue() == JOptionPane.UNINITIALIZED_VALUE) return;
 			String value = optionPane.getValue().toString();
 			if (value == "Close") {
-				dispose();
+				this.dispose();
 				return;
 			}
 			
-			String selectedname = refclasspanel.getSelection();
+			String selectedname = (String) refclasspanel.resultslistright.getSelectedValue().trim();
 			String type = "";
 			
 			if (value == "Add as entity" && this.getFocusOwner() != refclasspanel.findbox) {
@@ -69,13 +66,12 @@ public class AddReferenceClassDialog extends SemGenDialog implements
 			else if(value == "Add as process" && this.getFocusOwner() != refclasspanel.findbox){
 				type =  " physical process";
 			}
-			URI refuri = URI.create(refclasspanel.getSelectionURI());
-			
-			workbench.getSemSimModel().addReferencePhysicalEntity(refuri, selectedname);
+
+			annotator.semsimmodel.addReferencePhysicalEntity(URI.create(refclasspanel.resultsanduris.get(selectedname)), selectedname);
 				JOptionPane.showMessageDialog(this,
-						"Added " + selectedname + " as reference" + type, "", JOptionPane.PLAIN_MESSAGE);
-			workbench.setModelSaved(false);
-			
+						"Added " + (String) refclasspanel.resultslistright.getSelectedValue() + " as reference" + type,
+						"", JOptionPane.PLAIN_MESSAGE);
+			annotator.setModelSaved(false);
 			if(annotator.focusbutton instanceof CodewordButton) annotator.annotatorpane.compositepanel.refreshUI();
 			optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 		}

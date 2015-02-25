@@ -36,7 +36,6 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	private ModelAnnotationsBench modanns;
 	private boolean modelsaved = true;
 	private int lastsavedas = -1;
-	public static enum modeledit {compositechanged}
 	
 	public AnnotatorWorkbench(File file, SemSimModel model) {
 		semsimmodel = model;
@@ -192,16 +191,11 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		return modanns;
 	}
 	
-	public void compositeChanged() {
-		setModelSaved(false);
-		setChanged();
-		notifyObservers(modeledit.compositechanged);
-	}
-	
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		if (arg1!=ModelChangeEnum.METADATASELECTED) {
 			setModelSaved(false);
 		}
 	}
+
 }

@@ -17,12 +17,13 @@ import javax.swing.JTextField;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import semgen.annotation.annotatorpane.AnnotationPanel;
 import semgen.annotation.annotatorpane.composites.ProcessParticipantEditor;
 import semgen.annotation.dialog.referenceclass.ObjectPropertyEditor;
-import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.utilities.uicomponent.SemGenDialog;
 import semsim.SemSimConstants;
 import semsim.annotation.ReferenceOntologyAnnotation;
+import semsim.model.SemSimModel;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
@@ -30,23 +31,27 @@ import semsim.model.physical.PhysicalProcess;
 
 public class CustomPhysicalComponentEditor extends SemGenDialog implements PropertyChangeListener {
 	private static final long serialVersionUID = 1L;
-	private AnnotatorWorkbench workbench;
-	private PhysicalModelComponent pmc;
+	
+	public SemSimModel model;
+	public PhysicalModelComponent pmc;
+	public AnnotationPanel anndia;
 
-	private JTextField mantextfield;
-	private JTextArea descriptionarea;
+	public JTextField mantextfield;
+	public JTextArea descriptionarea;
 
-	private JOptionPane optionPane;
+	public JOptionPane optionPane;
 
-	private ObjectPropertyEditor versionofeditor;
-	private ObjectPropertyEditor hasparteditor;
-	private ProcessParticipantEditor hassourceeditor;
-	private ProcessParticipantEditor hassinkeditor;
-	private ProcessParticipantEditor hasmediatoreditor;
+	public ObjectPropertyEditor versionofeditor;
+	public ObjectPropertyEditor hasparteditor;
+	public ProcessParticipantEditor hassourceeditor;
+	public ProcessParticipantEditor hassinkeditor;
+	public ProcessParticipantEditor hasmediatoreditor;
 
-	public CustomPhysicalComponentEditor(AnnotatorWorkbench wb, PhysicalModelComponent pmc) {
+
+	public CustomPhysicalComponentEditor(AnnotationPanel anndia, PhysicalModelComponent pmc) {
 		super("");
-		workbench = wb;
+		this.anndia = anndia;
+		this.model = anndia.semsimmodel;
 		this.pmc = pmc;
 		
 		mantextfield = new JTextField(pmc.getName());
@@ -73,19 +78,20 @@ public class CustomPhysicalComponentEditor extends SemGenDialog implements Prope
 		JComponent[] objectpropertyeditors;
 		String title = "Edit custom physical ";
 		
-		versionofeditor = new ObjectPropertyEditor(workbench, SemSimConstants.BQB_IS_VERSION_OF_RELATION, pmc);
+		versionofeditor = new ObjectPropertyEditor(model, SemSimConstants.BQB_IS_VERSION_OF_RELATION, pmc);
 
 		if(pmc instanceof PhysicalProcess){
 			title = title + "process";
-			hassourceeditor = new ProcessParticipantEditor(workbench, SemSimConstants.HAS_SOURCE_RELATION, (PhysicalProcess)pmc);
-			hassinkeditor = new ProcessParticipantEditor(workbench, SemSimConstants.HAS_SINK_RELATION, (PhysicalProcess)pmc);
-			hasmediatoreditor = new ProcessParticipantEditor(workbench, SemSimConstants.HAS_MEDIATOR_RELATION, (PhysicalProcess)pmc);
+			hassourceeditor = new ProcessParticipantEditor(model, SemSimConstants.HAS_SOURCE_RELATION, (PhysicalProcess)pmc);
+			hassinkeditor = new ProcessParticipantEditor(model, SemSimConstants.HAS_SINK_RELATION, (PhysicalProcess)pmc);
+			hasmediatoreditor = new ProcessParticipantEditor(model, SemSimConstants.HAS_MEDIATOR_RELATION, (PhysicalProcess)pmc);
 			
 			objectpropertyeditors = new JComponent[]{hassourceeditor, hassinkeditor, hasmediatoreditor, versionofeditor};
 		}
 		else{
 			title = title + "entity";
-			hasparteditor = new ObjectPropertyEditor(workbench, SemSimConstants.HAS_PART_RELATION, pmc);
+			hasparteditor = new ObjectPropertyEditor(model, SemSimConstants.HAS_PART_RELATION, pmc);
+//			objectpropertyeditors = new JComponent[]{hasparteditor, versionofeditor}; 
 			objectpropertyeditors = new JComponent[]{versionofeditor}; 
 
 		}
@@ -163,7 +169,8 @@ public class CustomPhysicalComponentEditor extends SemGenDialog implements Prope
 							((PhysicalProcess)pmc).addMediator(pe.getLeft(), pe.getRight());
 						}
 					}
-					workbench.compositeChanged();
+					anndia.refreshCompositeAnnotation();
+					anndia.annotator.setModelSaved(false);
 				}
 				else{
 					JOptionPane.showMessageDialog(this, "Please enter a name.");

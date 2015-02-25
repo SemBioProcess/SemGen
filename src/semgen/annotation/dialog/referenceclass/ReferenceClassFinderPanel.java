@@ -45,6 +45,10 @@ import semsim.webservices.UniProtSearcher;
 
 public class ReferenceClassFinderPanel extends JPanel implements
 		ActionListener, ListSelectionListener {
+
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = -7884648622981159203L;
 	public AnnotatorTab annotator;
 	
@@ -59,7 +63,10 @@ public class ReferenceClassFinderPanel extends JPanel implements
 	public JTextField findbox = new JTextField();
 	public JList<String> resultslistright = new JList<String>();
 
-	private Hashtable<String,String> rdflabelsanduris = new Hashtable<String,String>();
+	public Hashtable<String,String> resultsanduris = new Hashtable<String,String>();
+	public Hashtable<String,String> rdflabelsanduris = new Hashtable<String,String>();
+	public Hashtable<String, String> classnamesandshortconceptids = new Hashtable<String, String>();
+	public String bioportalID = null;
 	public GenericThread querythread = new GenericThread(this, "performSearch");
 	public Annotatable annotatable;
 	private String[] ontList;
@@ -82,7 +89,18 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		setOpaque(false);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-		createOntologyList();
+		// Create item list for ontology selector box
+		for(String ontfullname : ontList){
+			String itemtext = ontfullname;
+			if(SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.containsKey(ontfullname)){
+				itemtext = itemtext + " (" + SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.get(ontfullname) + ")";
+			}
+			if(SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.containsKey(ontfullname)
+					&& BioPortalConstants.ONTOLOGY_FULL_NAMES_AND_BIOPORTAL_IDS.containsKey(ontfullname)){
+				ontologySelectionsAndBioPortalIDmap.put(itemtext, SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.get(ontfullname));
+			}
+			else ontologySelectionsAndBioPortalIDmap.put(itemtext, null);
+		}
 		
 		String[] ontologyboxitems = ontologySelectionsAndBioPortalIDmap.keySet().toArray(new String[]{});
 		Arrays.sort(ontologyboxitems);
@@ -157,9 +175,10 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		resultslistright.setBorder(BorderFactory.createBevelBorder(1));
 		resultslistright.setEnabled(true);
 
+		Dimension scrollerdim = new Dimension(650, 400);
 		JScrollPane resultsscrollerright = new JScrollPane(resultslistright);
 		resultsscrollerright.setBorder(BorderFactory.createTitledBorder("Search results"));
-		resultsscrollerright.setPreferredSize(new Dimension(650, 400));
+		resultsscrollerright.setPreferredSize(scrollerdim);
 
 		JPanel rightscrollerbuttonpanel = new JPanel(new BorderLayout());
 		rightscrollerbuttonpanel.setOpaque(false);
@@ -179,29 +198,16 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		}
 		findbox.requestFocusInWindow();
 	}
-	
-	// Create item list for ontology selector box
-	private void createOntologyList() {
-		for(String ontfullname : ontList){
-			String itemtext = ontfullname;
-			if(SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.containsKey(ontfullname)){
-				itemtext = itemtext + " (" + SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.get(ontfullname) + ")";
-			}
-			if(SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.containsKey(ontfullname)
-					&& BioPortalConstants.ONTOLOGY_FULL_NAMES_AND_BIOPORTAL_IDS.containsKey(ontfullname)){
-				ontologySelectionsAndBioPortalIDmap.put(itemtext, SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.get(ontfullname));
-			}
-			else ontologySelectionsAndBioPortalIDmap.put(itemtext, null);
-		}
-	}
-	
+
 	// Show the RDF labels for the classes in the results list instead of the class names
 	public void showRDFlabels() {
+		resultsanduris = rdflabelsanduris;
 		String[] resultsarray = (String[]) rdflabelsanduris.keySet().toArray(new String[] {});
 		Arrays.sort(resultsarray);
 		resultslistright.setListData(resultsarray);
 	}
 
+	
 	public void actionPerformed(ActionEvent arg0) {
 		Object o = arg0.getSource();
 		if ((o == findbox || o == findbutton || o == findchooser) && !findbox.getText().equals("")) {
@@ -222,14 +228,15 @@ public class ReferenceClassFinderPanel extends JPanel implements
 	}
 
 	public void performSearch() {
+		bioportalID = null;
 		String text = findbox.getText();
 		String ontologyselection = ontologychooser.getSelectedItem().toString();
 		// Executed when the search button is pressed
 		rdflabelsanduris.clear();
+		classnamesandshortconceptids.clear();
 		resultslistright.setEnabled(true);
 		resultslistright.removeAll();
-		
-		String bioportalID = null;
+
 		if (ontologySelectionsAndBioPortalIDmap.get(ontologyselection)!=null)
 			bioportalID = ontologySelectionsAndBioPortalIDmap.get(ontologyselection);
 		
@@ -246,9 +253,12 @@ public class ReferenceClassFinderPanel extends JPanel implements
 			}
 			
 			rdflabelsanduris = bps.rdflabelsanduris;
+			classnamesandshortconceptids = bps.classnamesandshortconceptids;
+			
 			if(annotatable!=null){
-				if (ontologyselection.startsWith(SemSimConstants.ONTOLOGY_OF_PHYSICS_FOR_BIOLOGY_FULLNAME) && annotatable instanceof PhysicalProperty) {
-					rdflabelsanduris = SemGen.semsimlib.removeNonPropertiesFromOPB(rdflabelsanduris);
+				if(ontologyselection.startsWith(SemSimConstants.ONTOLOGY_OF_PHYSICS_FOR_BIOLOGY_FULLNAME) && 
+						annotatable instanceof PhysicalProperty){
+					rdflabelsanduris = removeNonPropertiesFromOPB(rdflabelsanduris);
 				}
 			}
 		}
@@ -267,7 +277,8 @@ public class ReferenceClassFinderPanel extends JPanel implements
 
 		// Sort the results
 		if (!rdflabelsanduris.isEmpty()) {
-			String[] resultsarray = rdflabelsanduris.keySet().toArray(new String[] {});
+			resultsanduris = rdflabelsanduris;
+			String[] resultsarray = (String[]) resultsanduris.keySet().toArray(new String[] {});
 			Arrays.sort(resultsarray);
 			resultslistright.setListData(resultsarray);
 		} 
@@ -281,13 +292,15 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		findbox.setEnabled(true);
 		findbutton.setEnabled(true);
 	}
-
-	public String getSelection() {
-		return resultslistright.getSelectedValue().trim();
-	}
 	
-	public String getSelectionURI() {
-		return rdflabelsanduris.get(getSelection());
+	// Remove any OPB terms that are not Physical Properties
+	public Hashtable<String,String> removeNonPropertiesFromOPB(Hashtable<String, String> table){
+		Hashtable<String,String> newtable = new Hashtable<String,String>();
+		for(String key : table.keySet()){
+			if(SemGen.semsimlib.OPBhasProperty(table.get(key)))
+				newtable.put(key, table.get(key));
+		}
+		return newtable;
 	}
 	
 	public void valueChanged(ListSelectionEvent arg0) {
@@ -295,7 +308,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
         if (!adjust) {
           JList<?> list = (JList<?>) arg0.getSource();
           if(list.getSelectedValue()!=null){
-        	  String termuri = rdflabelsanduris.get(list.getSelectedValue());
+        	  String termuri = (String) resultsanduris.get(list.getSelectedValue());
         	  externalURLbutton.setTermURI(URI.create(termuri));
           }
         }

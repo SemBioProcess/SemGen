@@ -20,7 +20,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import semgen.annotation.dialog.selector.SemSimComponentSelectorDialog;
-import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semsim.Annotatable;
@@ -29,6 +28,7 @@ import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.SemSimRelation;
 import semsim.model.SemSimComponent;
+import semsim.model.SemSimModel;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
@@ -37,7 +37,7 @@ import semsim.owl.SemSimOWLFactory;
 public class ObjectPropertyEditor extends JPanel implements ActionListener, PropertyChangeListener {
 
 	private static final long serialVersionUID = 2140271391558665212L;
-	public AnnotatorWorkbench workbench;
+	public SemSimModel model;
 	public SemSimRelation relation;
 	public Annotatable subject;
 
@@ -47,8 +47,8 @@ public class ObjectPropertyEditor extends JPanel implements ActionListener, Prop
 	public Hashtable<String,Object> namesandobjects = new Hashtable<String,Object>();
 	public SemSimComponentSelectorDialog sscsd; 
 
-	public ObjectPropertyEditor(AnnotatorWorkbench wb, SemSimRelation rel, Annotatable subject) {
-		workbench = wb;
+	public ObjectPropertyEditor(SemSimModel model, SemSimRelation rel, Annotatable subject) {
+		this.model = model;
 		relation = rel;
 		String propertyname = SemSimOWLFactory.getIRIfragment(relation.getURI().toString());
 		this.subject = subject;
@@ -81,7 +81,7 @@ public class ObjectPropertyEditor extends JPanel implements ActionListener, Prop
 						String desc = refann.getValueDescription();
 						namesandobjects.put(
 								desc + " (" + refann.getOntologyAbbreviation() + ")",
-								workbench.getSemSimModel().getPhysicalModelComponentByReferenceURI(refann.getReferenceURI()));
+								model.getPhysicalModelComponentByReferenceURI(refann.getReferenceURI()));
 					}
 				}
 			}
@@ -131,11 +131,11 @@ public class ObjectPropertyEditor extends JPanel implements ActionListener, Prop
 				for(String ssctempname : namesandobjects.keySet())
 					sscs.add((SemSimComponent) namesandobjects.get(ssctempname));
 				if(subject instanceof PhysicalEntity){
-					sscsd = new SemSimComponentSelectorDialog(workbench, workbench.getSemSimModel().getReferencePhysicalEntities(), null, sscs, null, false, "Physical entities");
+					sscsd = new SemSimComponentSelectorDialog(model.getReferencePhysicalEntities(), null, sscs, null, false, "Physical entities");
 					sscsd.setUpUI(this);
 				}
 				else if (subject instanceof PhysicalProcess){
-					sscsd = new SemSimComponentSelectorDialog(workbench, workbench.getSemSimModel().getReferencePhysicalProcesses(), null, sscs, null, false, "Physical processes");
+					sscsd = new SemSimComponentSelectorDialog(model.getReferencePhysicalProcesses(), null, sscs, null, false, "Physical processes");
 					sscsd.setUpUI(this);
 				}
 				sscsd.optionPane.addPropertyChangeListener(this);
@@ -145,7 +145,7 @@ public class ObjectPropertyEditor extends JPanel implements ActionListener, Prop
 				for(String ssctempname : namesandobjects.keySet()){
 					sscs.add((SemSimComponent) namesandobjects.get(ssctempname));
 				}
-				sscsd = new SemSimComponentSelectorDialog(workbench, workbench.getSemSimModel().getPhysicalEntities(), null, sscs, null, false, "Physical entities");
+				sscsd = new SemSimComponentSelectorDialog(model.getPhysicalEntities(), null, sscs, null, false, "Physical entities");
 				sscsd.setUpUI(this);
 			}
 		}

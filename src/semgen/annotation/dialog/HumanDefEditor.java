@@ -11,25 +11,29 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import semgen.annotation.annotatorpane.AnnotationPanel;
 import semgen.utilities.uicomponent.SemGenDialog;
+import semsim.model.SemSimComponent;
 
 public class HumanDefEditor extends SemGenDialog implements PropertyChangeListener {
 
 	private static final long serialVersionUID = -4040704987589247388L;
 	private JOptionPane optionPane;
 	private JTextArea defarea = new JTextArea();
-	private String presentval;
+	public SemSimComponent ssc;
+	public AnnotationPanel anndialog;
 
-	public HumanDefEditor(String sscname, String sscdesc) {
+	public HumanDefEditor(SemSimComponent ssc, AnnotationPanel dialog) {
 		super("Enter free-text description");
-		presentval = sscdesc;
+		this.ssc = ssc;
+		anndialog = dialog;
 
 		setPreferredSize(new Dimension(430, 250));
 		setMaximumSize(getPreferredSize());
 		setMinimumSize(getPreferredSize());
 		setResizable(false);
 
-		JLabel codewordlabel = new JLabel(sscname);
+		JLabel codewordlabel = new JLabel(ssc.getName());
 		codewordlabel.setFont(new Font("SansSerif", Font.BOLD, 12));
 
 		defarea.setForeground(Color.blue);
@@ -48,13 +52,11 @@ public class HumanDefEditor extends SemGenDialog implements PropertyChangeListen
 		optionPane.setInitialValue(options[0]);
 
 		setContentPane(optionPane);
+		String presentval = "";
+		if(ssc.getDescription()!=null) presentval = ssc.getDescription();
 		defarea.setText(presentval);
 		defarea.requestFocusInWindow();
 		showDialog();
-	}
-	
-	public String getNewDescription() {
-		return presentval;
 	}
 	
 	public final void propertyChange(PropertyChangeEvent e) {
@@ -62,7 +64,11 @@ public class HumanDefEditor extends SemGenDialog implements PropertyChangeListen
 		if (propertyfired.equals("value")) {
 			String value = optionPane.getValue().toString();
 			if (value.equals("OK")) {
-				presentval = defarea.getText();
+				ssc.setDescription(defarea.getText());
+				anndialog.annotator.setModelSaved(false);
+				anndialog.humremovebutton.setEnabled(true);
+				anndialog.refreshHumanReadableDefinition();
+				remove(this);
 			}
 			dispose();
 		}
