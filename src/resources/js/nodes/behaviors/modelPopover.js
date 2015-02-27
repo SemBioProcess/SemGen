@@ -2,6 +2,7 @@
  * Adds a popover to the given node
  * @param node
  */
+var openPopover = null;
 function ModelPopover(node) {
 	$(node).on('createVisualization', function (e, root) {
 		// Get the DOM element from the d3 selection
