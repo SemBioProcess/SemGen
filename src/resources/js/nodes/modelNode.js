@@ -9,6 +9,6 @@ function ModelNode (graph, name) {
 	
 	this.addClassName("modelNode");
 	
-	var hull = new Hull(this);
-	var popover = new ModelPopover(this);
+	this.addBehavior(Hull);
+	this.addBehavior(ModelPopover);
 }

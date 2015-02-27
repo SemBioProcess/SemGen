@@ -17,6 +17,15 @@ Node.prototype.addClassName = function (className) {
 	this.className += " " + className;
 }
 
+Node.prototype.addBehavior = function (behavior) {
+	// Behaviors are just functions that take in a node as an argument
+	// To add a behavior all we need to do is call the function
+	//
+	// Note: I added this function to make adding a behavior easier to read
+	// (e.g. this.addBehavior(SomeBehavior); )
+	behavior(this);
+}
+
 Node.prototype.createVisualElement = function (element, graph) {
 	this.rootElement = d3.select(element);
 
