@@ -21,26 +21,36 @@ $(window).bind("cwb-initialized", function(e) {
 		graph.update();
 	});
 	
+	// Add child nodes to a model node
+	var addChildNodes = function (modelName, data, createNode) {
+		var modelNode = modelNodes[modelName];
+		if(!modelNode)
+			throw "model doesn't exist";
+
+		// Create nodes from the data
+		var nodes = [];
+		data.forEach(function (d) {
+			nodes.push(createNode(d, modelNode));
+		});
+		
+		modelNode.setChildren(nodes);
+	};
+	
 	// Adds a dependency network to the d3 graph
 	receiver.onShowDependencyNetwork(function (modelName, dependencyNodeData) {
 		console.log("Showing dependencies for model " + modelName);
 		
-		var modelNode = modelNodes[modelName];
-		if(!modelNode) {
-			alert(modelName + ' does not exist');
-			return;
-		}
-
-		// Create dependency nodes from the data
-		var dependencyNodes = [];
-		dependencyNodeData.forEach(function (data) {
-			var node = new DependencyNode(graph, data, modelNode);
-			dependencyNodes.push(node);
-			graph.addNode(node);
+		addChildNodes(modelName, dependencyNodeData, function (data, parent) {
+			return new DependencyNode(graph, data, parent);
 		});
+	});
+	
+	// Adds a submodel network to the d3 graph
+	receiver.onShowSubmodelNetwork(function (modelName, submodelData) {
+		console.log("Showing submodels for model " + modelName);
 		
-		modelNode.setChildren(dependencyNodes);
-		
-		graph.update();
+		addChildNodes(modelName, submodelData, function (data) {
+			return new SubmodelNode(graph, data, parent);
+		});
 	});
 });

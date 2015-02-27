@@ -38,7 +38,19 @@ $(window).load(function() {
 					mockReceiver.showDependencyNetwork(modelName, data);
 				}
 				else if (task == "submodels") {
-					alert('submodels')
+					var data = [
+						{
+							name: "Submodel_1",
+						},
+						{
+							name: "Submodel_2",
+						},
+						{
+							name: "Submodel_3",
+						},
+					];
+					
+					mockReceiver.showSubmodelNetwork(modelName, data);
 				}
 			},
 	};
