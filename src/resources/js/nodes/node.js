@@ -38,8 +38,9 @@ Node.prototype.createVisualElement = function (element, graph) {
 	    .attr("id", "Node;"+this.id)
 	    .attr("class","nodeStrokeClass");
 	
-	// Create the text element
-	Node.appendTextElement(this.rootElement, this.textSize, this.displayName);
+	// Create the text elements
+	this.createTextElement("shadow");
+	this.createTextElement();
 	
 	$(this).triggerHandler('createVisualization', [this.rootElement]);
 }
@@ -54,20 +55,14 @@ Node.prototype.tickHandler = function (element, graph) {
 	root.attr("transform", "translate(" + this.x + "," + this.y + ")");
 }
 
-Node.appendTextElement = function (root, size, text) {
-	// Create the text element
-	var createElement = function (className) {
-		className = className || "";
-		root.append("svg:text")
-			.attr("font-size", size + "px")
-		    .attr("x", 0)
-		    .attr("y", -size - 5)
-		    .text(text)
-		    .attr("class", className)
-		    .attr("text-anchor", "middle");
-	};
-	
-	// Create text with a thick white stroke for legibility.
-	createElement("shadow");
-	createElement();
+Node.prototype.createTextElement = function (className) {
+	className = className || "";
+	distanceFromNode = this.r * 0.2;
+	this.rootElement.append("svg:text")
+		.attr("font-size", this.textSize + "px")
+	    .attr("x", 0)
+	    .attr("y", -this.textSize - distanceFromNode)
+	    .text(this.displayName)
+	    .attr("class", className)
+	    .attr("text-anchor", "middle");
 }
