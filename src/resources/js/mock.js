@@ -37,6 +37,9 @@ $(window).load(function() {
 					];
 					mockReceiver.showDependencyNetwork(modelName, data);
 				}
+				else if (task == "submodels") {
+					alert('submodels')
+				}
 			},
 	};
 	
@@ -44,6 +47,8 @@ $(window).load(function() {
 			onAddModel: function (handler) { this.addModel = handler; },
 			
 			onShowDependencyNetwork: function (handler) { this.showDependencyNetwork = handler; },
+			
+			onShowSubmodelNetwork: function (handler) { this.showSubmodelNetwork = handler; },
 	};
 	
 	var event; // The custom event that will be created

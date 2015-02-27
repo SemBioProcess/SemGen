@@ -48,7 +48,7 @@ ModelNode.prototype.createVisualElement = function (element, graph) {
 				"<li class='submenuContainer'>" +
 					"Visualize" +
 					"<ul>" +
-						"<li><a href='#' onclick='comingSoonClickHandler(this);'>Submodels</a></li>" +
+						"<li><a href='#' onclick='taskClicked(this);'>Submodels</a></li>" +
 						"<li><a href='#' onclick='taskClicked(this);'>Dependencies</a></li>" +
 					"</ul>" +
 				"</li>" +
