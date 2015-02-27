@@ -15,7 +15,7 @@ $(window).bind("cwb-initialized", function(e) {
 	receiver.onAddModel(function (modelName) {
 		console.log("Adding model " + modelName);
 		
-		var modelNode = new ModelNode(modelName);
+		var modelNode = new ModelNode(graph, modelName);
 		modelNodes[modelName] = modelNode;
 		graph.addNode(modelNode);
 		graph.update();
@@ -34,7 +34,7 @@ $(window).bind("cwb-initialized", function(e) {
 		// Create dependency nodes from the data
 		var dependencyNodes = [];
 		dependencyNodeData.forEach(function (data) {
-			var node = new DependencyNode(data, modelNode);
+			var node = new DependencyNode(graph, data, modelNode);
 			dependencyNodes.push(node);
 			graph.addNode(node);
 		});

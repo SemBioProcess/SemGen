@@ -1,7 +1,8 @@
 /**
  * Represents a node in the d3 graph
  */
-function Node(id, displayName, r, group, textSize) {
+function Node(graph, id, displayName, r, group, textSize) {
+	this.graph = graph;
 	this.id = id;
 	this.displayName = displayName;
 	this.r = r;

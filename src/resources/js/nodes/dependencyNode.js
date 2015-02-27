@@ -4,7 +4,7 @@
 
 DependencyNode.prototype = new Node();
 DependencyNode.prototype.constructor = Node;
-function DependencyNode (data, parentNode) {
+function DependencyNode (graph, data, parentNode) {
 	// We need to keep the ids of each dependency node unique by prefixing
 	// it with its parent node
 	
@@ -22,7 +22,7 @@ function DependencyNode (data, parentNode) {
 	this.x = parentNode.x + Math.random();
 	this.y = parentNode.y + Math.random();
 	
-	Node.prototype.constructor.call(this, id, data.name, 5, data.group, 11);
+	Node.prototype.constructor.call(this, graph, id, data.name, 5, data.group, 11);
 	this.links = data.links;
 	
 	this.addClassName("dependencyNode");
