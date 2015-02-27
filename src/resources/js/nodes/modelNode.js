@@ -17,12 +17,6 @@ function ModelNode (graph, name) {
 	var popover = new ModelPopover(this);
 }
 
-ModelNode.prototype.createVisualElement = function (element, graph) {
-	Node.prototype.createVisualElement.call(this, element, graph);
-
-	$(this).triggerHandler('createVisualization', [this.rootElement]);
-}
-
 ModelNode.prototype.setChildren = function (children) {
 	// Remove existing child nodes from the graph
 	if(this.children) {
@@ -38,11 +32,4 @@ ModelNode.prototype.setChildren = function (children) {
 	this.rootElement.select("circle").style("display", circleDisplay);
 	
 	$(this).triggerHandler('childrenSet', [children]);
-}
-
-ModelNode.prototype.tickHandler = function (element, graph) {
-	$(this).triggerHandler('tick');
-	
-	// Draw the model node
-	Node.prototype.tickHandler.call(this, element, graph);
 }

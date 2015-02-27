@@ -31,9 +31,13 @@ Node.prototype.createVisualElement = function (element, graph) {
 	
 	// Create the text element
 	Node.appendTextElement(this.rootElement, this.textSize, this.displayName);
+	
+	$(this).triggerHandler('createVisualization', [this.rootElement]);
 }
 
 Node.prototype.tickHandler = function (element, graph) {
+	$(this).triggerHandler('preTick');
+	
 	this.x = Math.max(this.r, Math.min(graph.w - this.r, this.x));
 	this.y = Math.max(this.r, Math.min(graph.h - this.r, this.y));
 	

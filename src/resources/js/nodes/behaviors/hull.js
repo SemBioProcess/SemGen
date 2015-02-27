@@ -25,7 +25,7 @@ function Hull(node) {
 		this.rootElement.select(".hull").style("display", children ? "inherit" : "none");
 	});
 	
-	$(node).on('tick', function () {
+	$(node).on('preTick', function () {
 		// Draw the hull around child nodes
 		if(children) {
 			// 1) Convert the child positions into vertices that we'll use to create the hull
