@@ -62,9 +62,9 @@ public class MergerWorkbench extends Workbench {
 	private SemSimModel loadModel(File file, boolean autoannotate) {
 		SemSimModel modeltoload = LoadSemSimModel.loadSemSimModelFromFile(file, autoannotate);
 		
-		if(modeltoload.getFunctionalSubmodels().size()>0) {
-			CellMLModelError(file.getName());
-		}
+//		if(modeltoload.getFunctionalSubmodels().size()>0) {
+//			CellMLModelError(file.getName());
+//		}
 		
 		return modeltoload;
 	}
@@ -81,10 +81,10 @@ public class MergerWorkbench extends Workbench {
 		
 		SemSimModel model;
 		for (File file : files) {
-			if (ModelClassifier.classify(file)==ModelClassifier.CELLML_MODEL) {
-				CellMLModelError(file.getName());
-				continue;
-			}
+//			if (ModelClassifier.classify(file)==ModelClassifier.CELLML_MODEL) {
+////				CellMLModelError(file.getName());
+////				continue;
+//			}
 			model = loadModel(file, autoannotate);
 			loadedmodels.add(model);
 			filepathlist.add(file);
