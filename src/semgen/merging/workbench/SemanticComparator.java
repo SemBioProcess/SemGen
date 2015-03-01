@@ -9,6 +9,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.PhysicalProperty;
 
@@ -18,7 +19,9 @@ public class SemanticComparator {
 
 	public SemanticComparator(SemSimModel m1, SemSimModel m2) {
 		model1 = m1; model2 = m2;
-		slndomain = model1.getSolutionDomains().toArray(new DataStructure[]{})[0];
+		
+		if(model1.getSolutionDomains().size() > 0)
+			slndomain = model1.getSolutionDomains().toArray(new DataStructure[]{})[0];
 	}
 	
 	public Set<String> identifyIdenticalCodewords() {
@@ -40,13 +43,23 @@ public class SemanticComparator {
 	public ArrayList<Pair<DataStructure, DataStructure>> identifyExactSemanticOverlap() {
 		ArrayList<Pair<DataStructure, DataStructure>> dsmatchlist = new ArrayList<Pair<DataStructure, DataStructure>>();
 		
-		DataStructure soldom2 = model2.getSolutionDomains().toArray(new DataStructure[]{})[0];
+		DataStructure soldom2 = null;
+		if(model2.getSolutionDomains().size() > 0)
+			soldom2 = model2.getSolutionDomains().toArray(new DataStructure[]{})[0];
+		
 		dsmatchlist.add(Pair.of(slndomain, soldom2));
 		
-		// Only include the annotated data structures in the resolution process
-		for(DataStructure ds1 : model1.getDataStructures()){
+		Set<DataStructure> model1ds = getComparableDataStructures(model1);
+		Set<DataStructure> model2ds = getComparableDataStructures(model2);
+		
+		// For each comparable data structure in model 1...
+		for(DataStructure ds1 : model1ds){
+			
+			// Exclude solution domains
 			if (ds1 != slndomain) {
-				for(DataStructure ds2 : model2.getDataStructures()){
+				
+				// For each comparable data structure in model 2
+				for(DataStructure ds2 : model2ds){
 					Boolean match = false;
 					
 					// Test singular annotations
@@ -100,6 +113,31 @@ public class SemanticComparator {
 		} // end of iteration through model1 data structures
 		return dsmatchlist;
 	}
+	
+	// Find all the data structures that should be compared. This weeds out 
+	// MappableVariables that have an "in" interface. For CellML-type models, the Merger should not 
+	// propose mappings between variables with an "in" interface.
+	public Set<DataStructure> getComparableDataStructures(SemSimModel model){
+		Set<DataStructure> dsset = new HashSet<DataStructure>();
+		for(DataStructure ds : model.getDataStructures()){
+			if(ds instanceof MappableVariable){
+				MappableVariable mappedds = (MappableVariable)ds;
+				
+				// If the mapped variable has an "in" interface value, don't add to the set of comparable DataStructures
+				if(mappedds.getPublicInterfaceValue()!=null){
+					if (mappedds.getPublicInterfaceValue().equals("in"))
+						continue;
+				}
+				if(mappedds.getPrivateInterfaceValue()!=null){	
+					if(mappedds.getPrivateInterfaceValue().equals("in"))
+						continue;
+				}
+			}
+			dsset.add(ds);
+		}
+		return dsset;
+	}
+	
 	
 	public Boolean testNonCompositeAnnotations(ReferenceOntologyAnnotation ann1, ReferenceOntologyAnnotation ann2){
 		return (ann1.getReferenceURI().toString().equals(ann2.getReferenceURI().toString()));
