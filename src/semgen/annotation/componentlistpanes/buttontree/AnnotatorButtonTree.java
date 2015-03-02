@@ -69,7 +69,6 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 	    setCellRenderer(renderer);
 		setLargeModel(true);
 		addTreeSelectionListener(this);
-		this.addMouseListener(new NodeClickEvent());
 		looseds = new HashSet<DataStructure>();
 		looseds.addAll(workbench.getSemSimModel().getDataStructures());
 		
@@ -203,9 +202,4 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 		changeNode();
 	}
 	
-	private class NodeClickEvent extends MouseAdapter {
-		public void mouseClicked(MouseEvent arg0) {
-			changeNode();
-		}
-	}
 }

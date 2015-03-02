@@ -15,9 +15,9 @@ import semsim.model.computational.Computation;
  */
 public class MappableVariable extends Decimal{
 
-	private String publicInterfaceValue;
-	private String privateInterfaceValue;
-	private String CellMLinitialValue;
+	private String publicInterfaceValue = new String("");
+	private String privateInterfaceValue = new String("");
+	private String CellMLinitialValue = new String("");
 	private Set<MappableVariable> mappedTo = new HashSet<MappableVariable>();
 	private Set<MappableVariable> mappedFrom = new HashSet<MappableVariable>();
 	
