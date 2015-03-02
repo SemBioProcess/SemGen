@@ -29,9 +29,8 @@ public class AddReferenceClassDialog extends SemGenDialog implements
 	public AddReferenceClassDialog(AnnotatorWorkbench wb, AnnotatorTab ann, String[] ontList, Object[] options, Annotatable annotatable) {
 		super("Select reference concept");
 		workbench = wb;
-		this.annotator = ann;
 		
-		refclasspanel = new ReferenceClassFinderPanel(ann, annotatable, ontList);
+		refclasspanel = new ReferenceClassFinderPanel(workbench, annotatable, ontList);
 
 		utilarea.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 		utilarea.setBackground(new Color(0,0,0,0));

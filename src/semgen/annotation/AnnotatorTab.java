@@ -65,7 +65,6 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	
 	public static int initwidth;
 	public static int initheight;
-	public String ontspref;
 
 	public SemSimModel semsimmodel;
 	public Hashtable<String, CodewordButton> codewordbuttontable = new Hashtable<String, CodewordButton>();

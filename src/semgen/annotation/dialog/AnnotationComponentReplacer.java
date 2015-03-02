@@ -16,7 +16,6 @@ import javax.swing.ListSelectionModel;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.annotation.AnnotatorTab;
-import semgen.annotation.componentlistpanes.codewords.CodewordButton;
 import semgen.annotation.dialog.referenceclass.ReferenceClassFinderPanel;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.utilities.uicomponent.SemGenDialog;
@@ -47,7 +46,7 @@ public class AnnotationComponentReplacer extends SemGenDialog implements
 		refreshListData();
 		SemGenScrollPane scpn = new SemGenScrollPane(list);
 		
-		refclasspanel = new ReferenceClassFinderPanel(ann, SemSimConstants.ALL_SEARCHABLE_ONTOLOGIES);
+		refclasspanel = new ReferenceClassFinderPanel(workbench, SemSimConstants.ALL_SEARCHABLE_ONTOLOGIES);
 
 		Object[] dialogarray = { scpn, refclasspanel };
 

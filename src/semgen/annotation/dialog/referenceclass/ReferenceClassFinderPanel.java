@@ -30,7 +30,7 @@ import javax.swing.event.ListSelectionListener;
 import org.jdom.JDOMException;
 
 import semgen.SemGen;
-import semgen.annotation.AnnotatorTab;
+import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.utilities.GenericThread;
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
@@ -46,7 +46,7 @@ import semsim.webservices.UniProtSearcher;
 public class ReferenceClassFinderPanel extends JPanel implements
 		ActionListener, ListSelectionListener {
 	private static final long serialVersionUID = -7884648622981159203L;
-	public AnnotatorTab annotator;
+	public AnnotatorWorkbench workbench;
 	
 	public JComboBox<String> ontologychooser;
 	public Map<String,String> ontologySelectionsAndBioPortalIDmap = new HashMap<String,String>();
@@ -64,15 +64,15 @@ public class ReferenceClassFinderPanel extends JPanel implements
 	public Annotatable annotatable;
 	private String[] ontList;
 
-	public ReferenceClassFinderPanel(AnnotatorTab ann, Annotatable annotatable, String[] ontList) {
-		annotator = ann;
+	public ReferenceClassFinderPanel(AnnotatorWorkbench bench, Annotatable annotatable, String[] ontList) {
+		workbench = bench;
 		this.ontList = ontList;
 		this.annotatable = annotatable;
 		setUpUI();
 	}
 	
-	public ReferenceClassFinderPanel(AnnotatorTab ann, String[] ontList) {
-		annotator = ann;
+	public ReferenceClassFinderPanel(AnnotatorWorkbench bench, String[] ontList) {
+		workbench = bench;
 		this.ontList = ontList;
 		setUpUI();
 	}
@@ -95,10 +95,10 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		
 		// Set ontology chooser to recently used ontology
 		ontologychooser.setSelectedIndex(0);
-		if(annotator.ontspref!=null){
+		if(workbench.getLastOntology()!=null){
 			for(String ont : ontologyboxitems){
-				if(ont.equals(annotator.ontspref)){
-					ontologychooser.setSelectedItem(annotator.ontspref);
+				if(ont.equals(workbench.getLastOntology())){
+					ontologychooser.setSelectedItem(workbench.getLastOntology());
 				}
 			}
 		}
@@ -216,7 +216,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 
 		if (o == ontologychooser) {
 			if(ontologychooser.getItemCount()>2){
-				annotator.ontspref = (String) ontologychooser.getSelectedItem();
+				workbench.setLastOntology((String) ontologychooser.getSelectedItem());
 			}
 		}
 	}

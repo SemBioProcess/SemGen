@@ -39,6 +39,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	private SemSimTermLibrary termlib;
 	private boolean modelsaved = true;
 	private int lastsavedas = -1;
+	private String ontspref;
 	public static enum modeledit {compositechanged}
 	
 	public AnnotatorWorkbench(File file, SemSimModel model) {
@@ -212,5 +213,13 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		if (arg1!=ModelChangeEnum.METADATASELECTED) {
 			setModelSaved(false);
 		}
+	}
+	
+	public String getLastOntology() {
+		return ontspref;
+	}
+	
+	public void setLastOntology(String ont) {
+		ontspref = ont;
 	}
 }
