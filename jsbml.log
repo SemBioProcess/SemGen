@@ -1,1 +1,9 @@
 [12:48:32,519  WARN BaseXMLWriter:96] - The URI rdf:li cannot be serialized in RDF/XML.
+[10:49:19,913  WARN BaseXMLWriter:96] - The URI rdf:li cannot be serialized in RDF/XML.
+[10:49:49,841  WARN BaseXMLWriter:96] - The URI rdf:li cannot be serialized in RDF/XML.
+[10:51:31,422 ERROR RDFDefaultErrorHandler:40] - http://www.cellml.org/cellml/1.0#(line 68 column 14): {E202} Expecting XML start or end element(s). String data "
+            -" not allowed. Maybe there should be an rdf:parseType='Literal' for embedding mixed XML content in RDF. Maybe a striping error.
+[10:51:31,423 ERROR RDFDefaultErrorHandler:40] - http://www.cellml.org/cellml/1.0#(line 70 column 16): {E202} Expecting XML start or end element(s). String data "
+              -" not allowed. Maybe there should be an rdf:parseType='Literal' for embedding mixed XML content in RDF. Maybe a striping error.
+[10:51:31,423 ERROR RDFDefaultErrorHandler:40] - http://www.cellml.org/cellml/1.0#(line 72 column 18): {E202} Expecting XML start or end element(s). String data "
+                -" not allowed. Maybe there should be an rdf:parseType='Literal' for embedding mixed XML content in RDF. Maybe a striping error.

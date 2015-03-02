@@ -128,8 +128,9 @@ public class SemSimLibrary {
 	
 	public ReferenceOntologyAnnotation getOPBAnnotationFromPhysicalUnit(DataStructure ds){
 		ReferenceOntologyAnnotation roa = null;
-		String[] candidateOPBclasses = getOPBUnitRefTerm(ds.getUnit().getName());
-		// If there is no OPB class, checkbase units.
+//		String[] candidateOPBclasses = getOPBUnitRefTerm(ds.getUnit().getName());
+		String[] candidateOPBclasses = null; // For the AMIA paper, we will bypass the original mapping table.
+		// If there is no OPB class, check base units.
 		if (candidateOPBclasses == null) {
 			candidateOPBclasses = getOPBBaseUnitRefTerms(ds);
 		}

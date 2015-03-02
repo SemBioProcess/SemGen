@@ -1,4 +1,4 @@
-startDirectory; C:\Users\thomp_000\Documents\SemGen_Win64\examples
+startDirectory; /Users/graham_kim/Dropbox/Semantic Project/Annotated CellML models/hinch_greenstein_tanskanen_xu_winslow_2004
 autoAnnotate; true
 showImports; true
 displayMarkers; true
