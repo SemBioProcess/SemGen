@@ -30,13 +30,12 @@ import semgen.annotation.dialog.referenceclass.CompositeAnnotationComponentSearc
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.ExternalURLButton;
-import semsim.Annotatable;
 import semsim.SemSimConstants;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.model.SemSimComponent;
+import semsim.model.SemSimModel;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
-import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 
 abstract public class SemSimEntityPanel extends JPanel implements ActionListener{
@@ -72,6 +71,7 @@ abstract public class SemSimEntityPanel extends JPanel implements ActionListener
 		
 		combobox.setModel(cbmodel);
 		combobox.setSelectedIndex(0);
+		combobox.addActionListener(this);
 		//itempanel.setBackground(SemGenSettings.lightblue);
 		itempanel.add(combobox);
 		itempanel.add(urlbutton);
@@ -92,10 +92,12 @@ abstract public class SemSimEntityPanel extends JPanel implements ActionListener
 		
 	public void setComboBoxList(DefaultComboBoxModel<String> stringlist) {
 		String sel = combobox.getSelectedItem().toString();
+		combobox.removeActionListener(this);
 		combobox.removeAllItems();
 		combobox.setModel(stringlist);
 		combobox.repaint();
 		combobox.setSelectedItem(sel);
+		combobox.addActionListener(this);
 	}
 	
 	private void searchLabelClicked() {
@@ -172,27 +174,33 @@ abstract public class SemSimEntityPanel extends JPanel implements ActionListener
 	
 	protected abstract void eraseLabelClicked();
 	
+	abstract public PhysicalEntity getPhysicalEntity(String id);
+	
 	public void actionPerformed(ActionEvent arg0) {
 		Object o = arg0.getSource();
 		if(o == combobox){
-			
 			// If for property, look up the pmc for the item, but don't change the pmc, just apply its annotation to the current pmc
-			Annotatable selectedsmc = (Annotatable) listdataandsmcmap.get(combobox.getSelectedItem());
+			if ((String) combobox.getSelectedItem()==SemSimModel.unspecifiedName) {
+				modifylabel.setEnabled(false);
+				urlbutton.setEnabled(false);
+				return;
+			}
+			
+			PhysicalEntity selectedsmc = getPhysicalEntity((String) combobox.getSelectedItem());
 
 			// If not for a physical property, get the reference annotation for the selected item and apply it to whatever is being annotated
-				if(selectedsmc!=null){
-										
-					// This happens for singular annotations and non-composite physical entity annotations
-					if(selectedsmc.hasRefersToAnnotation()){
-						urlbutton.setTermURI(selectedsmc.getFirstRefersToReferenceOntologyAnnotation().getReferenceURI());
-						modifylabel.setEnabled(false);
-						urlbutton.setEnabled(true);
-					}
-					else {
-						modifylabel.setEnabled(true);
-						urlbutton.setEnabled(false);
-					}
+			if(selectedsmc!=null){		
+				// This happens for singular annotations and non-composite physical entity annotations
+				if(selectedsmc.hasRefersToAnnotation()){
+					urlbutton.setTermURI(selectedsmc.getFirstRefersToReferenceOntologyAnnotation().getReferenceURI());
+					modifylabel.setEnabled(false);
+					urlbutton.setEnabled(true);
 				}
+				else {
+					modifylabel.setEnabled(true);
+					urlbutton.setEnabled(false);
+				}
+			}
 		}
 	}
 

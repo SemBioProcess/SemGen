@@ -11,6 +11,7 @@ import javax.swing.JTextArea;
 
 import semgen.annotation.AnnotatorTab;
 import semgen.annotation.workbench.AnnotatorWorkbench;
+import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.uicomponent.SemGenDialog;
 import semsim.SemSimConstants;
@@ -89,7 +90,10 @@ public class CreateCompositeDialog extends SemGenDialog implements PropertyChang
 			String value = optionPane.getValue().toString();
 			
 			if (value == "Add Composite") {
-				if (makeComposite()==null) return;
+				if (makeComposite()==null) {
+					SemGenError.showError(this, "Please specify all annotations for all entities.", "Unspecified Terms");
+					return;
+				}
 				
 				workbench.setModelSaved(false);
 				

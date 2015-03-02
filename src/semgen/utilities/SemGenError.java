@@ -25,6 +25,10 @@ public class SemGenError {
 		JOptionPane.showMessageDialog(parent, errtext, errtitle, JOptionPane.ERROR_MESSAGE);
 	}
 	
+	public static void showError(JDialog target, String errtext, String errtitle) {
+		JOptionPane.showMessageDialog(target, errtext, errtitle, JOptionPane.ERROR_MESSAGE);
+	}
+	
 	public static void showWebConnectionError(String location){
 		JOptionPane.showMessageDialog(parent,
 				"Please make sure you are online, otherwise the website or service \n" + 

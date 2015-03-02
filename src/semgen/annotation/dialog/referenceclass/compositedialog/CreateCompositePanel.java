@@ -19,7 +19,6 @@ import semgen.annotation.AnnotatorTab;
 import semgen.annotation.annotatorpane.composites.StructuralRelationPanel;
 import semgen.annotation.dialog.CustomPhysicalComponentEditor;
 import semgen.annotation.workbench.AnnotatorWorkbench;
-import semgen.utilities.SemGenError;
 import semsim.model.SemSimModel;
 import semsim.model.physical.PhysicalEntity;
 
@@ -92,7 +91,7 @@ public class CreateCompositePanel extends Box implements ActionListener{
 		}
 		EntitySelectionPanel esp = new EntitySelectionPanel();
 		entpans.add(esp);
-		add(esp);
+		add(esp, BorderLayout.NORTH);
 	}
 	
 	private void removeEntity(EntitySelectionPanel ent) {
@@ -112,16 +111,15 @@ public class CreateCompositePanel extends Box implements ActionListener{
 			alignAndPaint();
 			componentAdded();
 		}
-
 	}
 
 	public ArrayList<PhysicalEntity> getListofEntities() {
 		ArrayList<PhysicalEntity> pelist = new ArrayList<PhysicalEntity>();
 		String name;
+		if (entpans.isEmpty()) return null;
 		for (EntitySelectionPanel pan : entpans) {
 			name = pan.getSelection();
-			if (name.equals(SemSimModel.unspecifiedName)) {
-				SemGenError.showUnspecifiedAnnotationError(null);
+			if (name.equals(SemSimModel.unspecifiedName)) {				
 				return null;
 			}
 			PhysicalEntity pe = idpemap.get(name);
@@ -160,6 +158,11 @@ public class CreateCompositePanel extends Box implements ActionListener{
 			refreshLists();
 			combobox.setSelectedItem(sel);
 			
+		}
+
+		@Override
+		public PhysicalEntity getPhysicalEntity(String id) {
+			return idpemap.get(id);
 		}
 		
 	}
