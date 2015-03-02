@@ -23,7 +23,6 @@ import semgen.utilities.uicomponent.SemGenProgressBar;
 import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.reading.ModelClassifier;
 
 public class MergerWorkbench extends Workbench {
 	private int modelselection = -1;
@@ -61,11 +60,6 @@ public class MergerWorkbench extends Workbench {
 	
 	private SemSimModel loadModel(File file, boolean autoannotate) {
 		SemSimModel modeltoload = LoadSemSimModel.loadSemSimModelFromFile(file, autoannotate);
-		
-//		if(modeltoload.getFunctionalSubmodels().size()>0) {
-//			CellMLModelError(file.getName());
-//		}
-		
 		return modeltoload;
 	}
 	public int getNumberofStagedModels() {
@@ -307,13 +301,6 @@ public class MergerWorkbench extends Workbench {
 	@Override
 	public File saveModelAs() {
 		return null;
-	}
-	
-	private void CellMLModelError(String name) {
-		MergeEvent.functionalsubmodelerr.setMessage(name);
-		setChanged();
-		notifyObservers(MergeEvent.functionalsubmodelerr);
-		notifyModelListUpdated();
 	}
 	
 	private void notifyModelListUpdated() {
