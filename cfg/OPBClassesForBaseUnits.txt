@@ -12,6 +12,8 @@ meter^3; OPB_00154 #volume
 litre^1; OPB_00154 #volume
 liter^1; OPB_00154 #volume
 ampere^1; OPB_00318 #current
+ampere^1, metre^-2; OPB_00318 #charge flow rate
+ampere^1, meter^-2; OPB_00318 #charge flow rate
 litre^1, second^-1; OPB_00299 #flow
 liter^1, second^-1; OPB_00299 #flow
 metre^3, second^-1; OPB_00299 #flow
