@@ -109,5 +109,7 @@ public class CreateCompositeDialog extends SemGenDialog implements PropertyChang
 		}
 	}
 	
-
+	public CompositePhysicalEntity getComposite() {
+		return cpe;
+	}
 }

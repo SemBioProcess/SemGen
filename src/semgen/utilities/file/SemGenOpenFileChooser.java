@@ -86,23 +86,26 @@ public class SemGenOpenFileChooser extends SemGenFileChooser implements ActionLi
 		}
 	}
 		
-	private void openFile(Set<File> files) {	
-		if (showOpenDialog(getParent()) == JFileChooser.APPROVE_OPTION) {
+	private void openFile(Set<File> files) {
+		if (showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 			currentdirectory = getCurrentDirectory();
 			for (File file : getSelectedFiles()) {
 				files.add(file);
 			}
 		}
 		else {
+			this.setSelectedFiles(null);
 			this.setSelectedFile(null);
 		}
 	}
 	
 	private void openFile() {	
-		if (showOpenDialog(getParent()) == JFileChooser.APPROVE_OPTION) {
+		int choice = showOpenDialog(this);
+		if (choice == JFileChooser.APPROVE_OPTION) {
 			currentdirectory = getCurrentDirectory();
 		}
 		else {
+			this.setSelectedFiles(null);
 			this.setSelectedFile(null);
 		}
 	}

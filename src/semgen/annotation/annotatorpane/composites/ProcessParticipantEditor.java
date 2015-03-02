@@ -23,6 +23,7 @@ import javax.swing.table.AbstractTableModel;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import semgen.annotation.dialog.referenceclass.compositedialog.CreateCompositeDialog;
 import semgen.annotation.dialog.selector.SemSimComponentSelectorDialog;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.utilities.SemGenError;
@@ -43,6 +44,7 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 	public PhysicalProcess process;
 	private JButton plusbutton = new JButton(SemGenIcon.plusicon);
 	private JButton minusbutton = new JButton(SemGenIcon.minusicon);
+	private JButton createbutton = new JButton("Create");
 	public JTable table;
 	public ProcessParticipantTableModel tablemod;
 	public Map<String,PhysicalEntity> namesandparticipantmap = new HashMap<String,PhysicalEntity>();
@@ -59,11 +61,15 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 		minusbutton.addActionListener(this);
 		minusbutton.setToolTipText("Remove selected process participant");
 		
+		createbutton.addActionListener(this);
+		createbutton.setToolTipText("Create process participant");
+		
 		JPanel headerpanel = new JPanel();
 		headerpanel.setOpaque(false);
 		headerpanel.add(new JLabel(relation.getName()));
 		headerpanel.add(plusbutton);
 		headerpanel.add(minusbutton);
+		headerpanel.add(createbutton);
 		
 		setTableData();
 		
@@ -212,6 +218,11 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 		if (o == minusbutton) {
 			tablemod.removeRows(table.getSelectedRows());
 		}
+		if (o == createbutton) {
+			CreateCompositeDialog ccd = new CreateCompositeDialog(workbench, null, false);
+			if (ccd.getComposite()!=null) tablemod.addRow(new Object[]{ccd.getComposite()});
+		}
+		
 	};
 
 	public void propertyChange(PropertyChangeEvent e) {
