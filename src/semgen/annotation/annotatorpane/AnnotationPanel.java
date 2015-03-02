@@ -1,5 +1,34 @@
 package semgen.annotation.annotatorpane;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.beans.PropertyChangeEvent;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.ListIterator;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.Set;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JEditorPane;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+
+import org.semanticweb.owlapi.model.OWLException;
+
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
 import semgen.annotation.AnnotatorTab;
@@ -33,28 +62,6 @@ import semsim.model.physical.Submodel;
 import semsim.model.physical.object.FunctionalSubmodel;
 import semsim.owl.SemSimOWLFactory;
 import semsim.writing.CaseInsensitiveComparator;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.ListIterator;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.Set;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Cursor;
-import java.beans.PropertyChangeEvent;
-
-import javax.swing.*;
-
-import org.semanticweb.owlapi.model.OWLException;
 
 public class AnnotationPanel extends JPanel implements MouseListener, Observer{
 

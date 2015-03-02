@@ -3,26 +3,36 @@ package semgen.annotation.dialog.referenceclass.compositedialog;
 import java.awt.Color;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
+import semgen.annotation.AnnotatorTab;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.uicomponent.SemGenDialog;
+import semsim.SemSimConstants;
+import semsim.annotation.StructuralRelation;
+import semsim.model.physical.PhysicalEntity;
+import semsim.model.physical.object.CompositePhysicalEntity;
 
 public class CreateCompositeDialog extends SemGenDialog implements PropertyChangeListener{
 	private static final long serialVersionUID = 1L;
 	private CreateCompositePanel ccpanel;
+	private boolean keepopen;
 	
 	private JOptionPane optionPane;
 	private JTextArea utilarea = new JTextArea();
 	private AnnotatorWorkbench workbench; 
-	
-	public CreateCompositeDialog(AnnotatorWorkbench wb) {
+	private CompositePhysicalEntity cpe = null;
+
+	public CreateCompositeDialog(AnnotatorWorkbench wb, AnnotatorTab tab, boolean remainopen) {
 		super("Create Composite");
 		workbench = wb;
-
+		keepopen = remainopen;
+		
 		utilarea.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 		utilarea.setBackground(new Color(0,0,0,0));
 		utilarea.setLineWrap(true);
@@ -30,7 +40,13 @@ public class CreateCompositeDialog extends SemGenDialog implements PropertyChang
 		utilarea.setEditable(false);
 		utilarea.setFont(SemGenFont.defaultBold(-1));
 		
-		ccpanel = new CreateCompositePanel(workbench);
+		ccpanel = new CreateCompositePanel(workbench, tab) {
+			private static final long serialVersionUID = 1L;
+
+			public void componentAdded() {
+				newComponent();
+			}
+		};
 		
 		Object[] options = {"Add Composite", "Close"};
 		Object[] array = { utilarea, ccpanel };
@@ -44,18 +60,50 @@ public class CreateCompositeDialog extends SemGenDialog implements PropertyChang
 		showDialog();
 	}
 	
+	protected void newComponent() {
+		ccpanel.revalidate();
+		validate();
+		pack();
+	}
+	
+	public CompositePhysicalEntity makeComposite() {
+		ArrayList<PhysicalEntity> pelist = ccpanel.getListofEntities();
+		if (pelist == null) {
+			return null;
+		}
+		
+		ArrayList<StructuralRelation> rellist = new ArrayList<StructuralRelation>();
+		for (int i=0; i < pelist.size()-1; i++) {
+			rellist.add(SemSimConstants.PART_OF_RELATION);
+		}
+		
+		cpe = new CompositePhysicalEntity(pelist, rellist);
+		workbench.getSemSimModel().addCompositePhysicalEntity(cpe);
+		
+		return cpe;
+	}
+	
 	public void propertyChange(PropertyChangeEvent arg0) {
 		if (arg0.getPropertyName()=="value") {
 			if (optionPane.getValue() == JOptionPane.UNINITIALIZED_VALUE) return;
 			String value = optionPane.getValue().toString();
 			
-			if (value == "Close") {
+			if (value == "Add Composite") {
+				if (makeComposite()==null) return;
+				
+				workbench.setModelSaved(false);
+				
+			}
+			
+			if (value == "Close" || !keepopen) {
 				dispose();
+				workbench.compositeChanged();
 				return;
 			}
-			workbench.setModelSaved(false);
 			
 			optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 		}
 	}
+	
+
 }

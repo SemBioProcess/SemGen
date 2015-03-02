@@ -1,7 +1,10 @@
 package semgen.annotation.dialog.referenceclass;
 
+import semgen.annotation.AnnotatorTab;
 import semgen.annotation.annotatorpane.composites.SemSimComponentAnnotationPanel;
+import semgen.annotation.dialog.referenceclass.compositedialog.SemSimEntityPanel;
 import semgen.annotation.workbench.AnnotatorWorkbench;
+import semsim.model.physical.PhysicalEntity;
 
 public class CompositeAnnotationComponentSearchDialog extends AddReferenceClassDialog{
 	private static final long serialVersionUID = -6053255066931420852L;
@@ -11,5 +14,8 @@ public class CompositeAnnotationComponentSearchDialog extends AddReferenceClassD
 		utilarea.setText("Current annotation: " + pmcpanel.combobox.getSelectedItem());
 	}
 
-
+	public CompositeAnnotationComponentSearchDialog(AnnotatorWorkbench wb, AnnotatorTab ann, String[] ontList, Object[] options, String prev){
+		super(wb, ann, ontList, options, null);
+		utilarea.setText("Current annotation: " + prev);
+	}
 }

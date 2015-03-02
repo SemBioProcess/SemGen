@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.swing.JOptionPane;
 
@@ -26,6 +27,7 @@ import semsim.SemSimUtil;
 import semsim.annotation.SemSimRelation;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.physical.PhysicalEntity;
 import semsim.reading.ModelClassifier;
 import semsim.writing.CellMLwriter;
 
@@ -34,6 +36,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	protected File sourcefile; //File originally loaded at start of Annotation session (could be 
 							//in SBML, MML, CellML or SemSim format)
 	private ModelAnnotationsBench modanns;
+	private SemSimTermLibrary termlib;
 	private boolean modelsaved = true;
 	private int lastsavedas = -1;
 	public static enum modeledit {compositechanged}
@@ -46,6 +49,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	
 	public void initialize() {
 		modanns = new ModelAnnotationsBench(semsimmodel);
+		termlib = new SemSimTermLibrary(semsimmodel);
 		modanns.addObserver(this);
 		// Add unspecified physical model components for use during annotation
 		semsimmodel.addCustomPhysicalEntity(SemSimModel.unspecifiedName, "Non-specific entity for use as a placeholder during annotation");
@@ -190,6 +194,11 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	
 	public ModelAnnotationsBench getModelAnnotationsWorkbench() {
 		return modanns;
+	}
+	
+	public TreeMap<String,PhysicalEntity> getPhysicalEntityIDList() {
+		return termlib.getPhysEntIDMap();
+		
 	}
 	
 	public void compositeChanged() {

@@ -200,7 +200,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		}
 		
 		if (o == annotateitemaddcompterm) {
-			new CreateCompositeDialog(workbench);
+			new CreateCompositeDialog(workbench, anntab, true);
 		}
 		
 		if (o == coderbutton) {

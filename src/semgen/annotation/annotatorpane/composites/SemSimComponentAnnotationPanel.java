@@ -485,20 +485,20 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 		smc.removeAllReferenceAnnotations();
 		smc.addAnnotation(ann);
 		urlbutton.setTermURI(ann.getReferenceURI());
-		annpanel.annotator.setModelSaved(false);
+		workbench.setModelSaved(false);
 		if(refreshCodes) annpanel.thebutton.refreshAllCodes();
 	}
 	
 	private void removeAsPhysicalPropertyAnnotation(){
 		annpanel.compositepanel.datastructure.getPhysicalProperty().removeAllReferenceAnnotations();
-		annpanel.annotator.setModelSaved(false);
+		workbench.setModelSaved(false);
 		annpanel.thebutton.refreshAllCodes();
 	}
 	
 	private void removeAsSingularAnnotation(){
 		smc.removeAllReferenceAnnotations();
 		annpanel.thebutton.refreshAllCodes();
-		annpanel.annotator.setModelSaved(false);
+		workbench.setModelSaved(false);
 		refreshComboBoxItemsAndButtonVisibility();
 	}
 	

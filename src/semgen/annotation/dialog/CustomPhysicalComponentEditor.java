@@ -169,7 +169,13 @@ public class CustomPhysicalComponentEditor extends SemGenDialog implements Prope
 					JOptionPane.showMessageDialog(this, "Please enter a name.");
 				}
 			}
+			else pmc = null;
+			
 			dispose();
 		}
+	}
+	
+	public PhysicalModelComponent getCustomTerm() {
+		return pmc;
 	}
 }
