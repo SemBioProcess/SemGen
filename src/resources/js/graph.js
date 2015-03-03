@@ -48,6 +48,8 @@ function Graph() {
 	 * Updates the graph
 	 */
 	this.update = function () {
+		$(this).triggerHandler("preupdate");
+		
 		// Add new links to the graph
 		newNodes.forEach(function (nodeData) {
 			// If the node doesnt have any links move on
@@ -127,6 +129,8 @@ function Graph() {
 	    	.linkDistance(60)
 		    .size([this.w, this.h])
 		    .start();
+	    
+	    $(this).triggerHandler("postupdate");
 	};
 	
 	// Set the graph's width and height

@@ -28,30 +28,29 @@ function ModelPopover(node) {
 				"</ul>",
 			placement: "bottom",
 			trigger: "manual" });
-
-		// Show the popover when the node is clicked
-		$("circle", element).click(function (e) {
-			var popover = $(this);
-			var isOpen = false;
-			
-			// If there's an open popover, hide it
-			if(openPopover != null) {
-				isOpen = openPopover.attr("aria-describedBy") == popover.attr("aria-describedBy");
-				hideOpenPopover();
-			}
-			
-			// If the open popover is not the node that was clicked
-			// and store it
-			if(!isOpen) {
-				$(this).popover("show");
-				openPopover = $(this).popover();
-				openPopover.modelNode = node;
-			}
-			
-			e.stopPropagation();
-		});
 	});
 }
+
+SelectionManager.getInstance().onSelected(function (e, element, node) {
+	var popover = $(element);
+	var isOpen = false;
+	
+	// If there's an open popover, hide it
+	if(openPopover != null) {
+		isOpen = openPopover.attr("aria-describedBy") == popover.attr("aria-describedBy");
+		hideOpenPopover();
+	}
+	
+	// If the open popover is not the node that was clicked
+	// and store it
+	if(!isOpen) {
+		$(element).popover("show");
+		openPopover = $(element).popover();
+		openPopover.modelNode = node;
+	}
+	
+	e.stopPropagation();
+});
 
 function hideOpenPopover() {
 	if(!openPopover)
