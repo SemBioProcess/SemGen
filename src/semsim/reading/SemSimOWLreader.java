@@ -338,10 +338,10 @@ public class SemSimOWLreader extends ModelReader {
 			Set<String> propinds = SemSimOWLFactory.getIndObjectProperty(ont, processind, SemSimConstants.HAS_PHYSICAL_PROPERTY_URI.toString());
 			for(String propind : propinds){
 				String dsind = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, propind, SemSimConstants.HAS_COMPUTATATIONAL_COMPONENT_URI.toString());
-				String name = SemSimOWLFactory.getURIdecodedFragmentFromIRI(dsind);
+				String dsname = SemSimOWLFactory.getURIdecodedFragmentFromIRI(dsind);
 				
 				PhysicalProcess pproc = null;
-				String label = SemSimOWLFactory.getRDFLabels(ont, factory.getOWLNamedIndividual(IRI.create(processind)))[0];
+				String processlabel = SemSimOWLFactory.getRDFLabels(ont, factory.getOWLNamedIndividual(IRI.create(processind)))[0];
 				String description = null;
 				if(SemSimOWLFactory.getRDFComments(ont, processind)!=null)
 					description = SemSimOWLFactory.getRDFComments(ont, processind)[0];
@@ -351,17 +351,17 @@ public class SemSimOWLreader extends ModelReader {
 				if(isReferencedIndividual(ont, URI.create(processind))){
 					String refersto = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, processind, SemSimConstants.REFERS_TO_URI.toString());
 					reuseprocess = semsimmodel.getPhysicalProcessByReferenceURI(URI.create(processind))!=null;
-					if (!reuseprocess) pproc = semsimmodel.addReferencePhysicalProcess(URI.create(refersto), label);
+					if (!reuseprocess) pproc = semsimmodel.addReferencePhysicalProcess(URI.create(refersto), processlabel);
 				}
 				// Otherwise create a custom physical process
 				else{
-					reuseprocess = semsimmodel.getCustomPhysicalProcessByName(name)!=null;
-					if (!reuseprocess) pproc = semsimmodel.addCustomPhysicalProcess(label, description);
+					reuseprocess = semsimmodel.getCustomPhysicalProcessByName(processlabel)!=null;
+					if (!reuseprocess) pproc = semsimmodel.addCustomPhysicalProcess(processlabel, description);
 				}
 	
 				// Create a new physical property associated with the process and data structure
 				PhysicalProperty pp = new PhysicalProperty();
-				semsimmodel.getDataStructure(name).setPhysicalProperty(pp);
+				semsimmodel.getDataStructure(dsname).setPhysicalProperty(pp);
 	
 				if(isReferencedIndividual(ont, URI.create(propind))){
 					String referstoval = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, propind, SemSimConstants.REFERS_TO_URI.toString());
@@ -369,7 +369,7 @@ public class SemSimOWLreader extends ModelReader {
 					pp.addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, URI.create(referstoval), propertylabel);
 				}
 				
-				semsimmodel.getDataStructure(name).getPhysicalProperty().setPhysicalPropertyOf(pproc);
+				semsimmodel.getDataStructure(dsname).getPhysicalProperty().setPhysicalPropertyOf(pproc);
 	
 				// If we didn't reuse an existing process, capture the physical entity participants
 			    if(!reuseprocess){
@@ -381,7 +381,7 @@ public class SemSimOWLreader extends ModelReader {
 					for(String src : srcs){
 						PhysicalEntity srcent = getPhysicalEntityFromURI(ont, URI.create(src));
 						Double m = getMultiplierForProcessParticipant(ont, processind, 
-								SemSimConstants.HAS_SINK_URI.toString(), src);
+								SemSimConstants.HAS_SOURCE_URI.toString(), src);
 						pproc.addSource(srcent, m);
 					}
 					// Enter sink info
@@ -395,7 +395,7 @@ public class SemSimOWLreader extends ModelReader {
 					for(String med : mediators){
 						PhysicalEntity medent = getPhysicalEntityFromURI(ont, URI.create(med));
 						Double m = getMultiplierForProcessParticipant(ont, processind, 
-								SemSimConstants.HAS_SINK_URI.toString(), med);
+								SemSimConstants.HAS_MEDIATOR_URI.toString(), med);
 						pproc.addMediator(medent, m);
 					}
 				}
