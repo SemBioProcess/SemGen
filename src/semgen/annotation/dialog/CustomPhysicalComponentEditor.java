@@ -171,6 +171,7 @@ public class CustomPhysicalComponentEditor extends SemGenDialog implements Prope
 			}
 			else pmc = null;
 			
+			
 			dispose();
 		}
 	}

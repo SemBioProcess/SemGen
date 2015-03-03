@@ -87,6 +87,7 @@ public class CreateCompositeDialog extends SemGenDialog implements PropertyChang
 	public void propertyChange(PropertyChangeEvent arg0) {
 		if (arg0.getPropertyName()=="value") {
 			if (optionPane.getValue() == JOptionPane.UNINITIALIZED_VALUE) return;
+			
 			String value = optionPane.getValue().toString();
 			
 			if (value == "Add Composite") {
@@ -94,17 +95,13 @@ public class CreateCompositeDialog extends SemGenDialog implements PropertyChang
 					SemGenError.showError(this, "Please specify all annotations for all entities.", "Unspecified Terms");
 					return;
 				}
-				
-				workbench.setModelSaved(false);
-				
+				workbench.compositeChanged();
 			}
 			
 			if (value == "Close" || !keepopen) {
 				dispose();
-				workbench.compositeChanged();
 				return;
 			}
-			
 			optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 		}
 	}

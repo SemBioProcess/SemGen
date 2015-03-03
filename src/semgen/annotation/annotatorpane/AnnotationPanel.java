@@ -597,7 +597,7 @@ public class AnnotationPanel extends JPanel implements MouseListener, Observer{
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		if (arg1==modeledit.compositechanged) {
-			compositepanel.refreshUI();
+			if (compositepanel!=null) compositepanel.refreshUI();
 		}
 		
 	}
