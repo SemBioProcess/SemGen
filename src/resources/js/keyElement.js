@@ -28,9 +28,15 @@ function KeyElement (visibleNodeKeys, hiddenNodeKeys) {
 			var keyElement = document.createElement("li");
 			$(keyElement).text(keyInfo.nodeType);
 			keyElement.style.color = keyInfo.color;
-			$(keyElement).click(function (e) {
-				graph[func]($(e.target).text());
-			});
+			
+			if(keyInfo.canShowHide) {
+				$(keyElement).click(function (e) {
+					graph[func]($(e.target).text());
+				});
+				
+				keyElement.className += " canClick";
+			}
+			
 			parentElement.append(keyElement);
 		}
 	};

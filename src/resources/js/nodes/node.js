@@ -12,6 +12,7 @@ function Node(graph, id, displayName, r, color, textSize, nodeType) {
 	this.className = "node";
 	this.element;
 	this.links = [];
+	this.userCanHide = true;
 }
 
 Node.prototype.addClassName = function (className) {
@@ -60,6 +61,7 @@ Node.prototype.getKeyInfo = function () {
 	return {
 		nodeType: this.nodeType,
 		color: this.color,
+		canShowHide: this.userCanHide,
 	};
 }
 

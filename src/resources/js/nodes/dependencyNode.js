@@ -3,7 +3,7 @@
  */
 
 DependencyNode.prototype = new Node();
-DependencyNode.prototype.constructor = Node;
+DependencyNode.prototype.constructor = DependencyNode;
 function DependencyNode (graph, data, parentNode) {
 	// We need to keep the ids of each dependency node unique by prefixing
 	// it with its parent node

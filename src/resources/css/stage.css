@@ -100,7 +100,7 @@ ul.modelPopover li.submenuContainer {
     text-indent: -.7em;
 }
 
-.key ul li:hover {
+.key ul li.canClick:hover {
 	cursor: pointer;
 }
 

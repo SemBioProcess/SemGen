@@ -2,9 +2,10 @@
  * Defines nodes with children
  */
 ParentNode.prototype = new Node();
-ParentNode.prototype.constructor = Node;
-function ParentNode(graph, id, displayName, r, group, textSize) {
-	Node.prototype.constructor.call(this, graph, id, displayName, r, group, textSize);
+ParentNode.prototype.constructor = ParentNode;
+function ParentNode(graph, id, displayName, r, group, textSize, nodeType) {
+	Node.prototype.constructor.call(this, graph, id, displayName, r, group, textSize, nodeType);
+	this.userCanHide = false;
 	this.children = null;
 }
 
