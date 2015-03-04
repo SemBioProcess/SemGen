@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -189,7 +190,7 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 	    if(nodeObj instanceof AnnotationObjectButton){
 	    	try {
 				ann.annotationObjectAction((AnnotationObjectButton)nodeObj);
-			} catch (BadLocationException e) {
+			} catch (BadLocationException | IOException e) {
 				e.printStackTrace();
 			} 
 	    }
