@@ -61,8 +61,10 @@ function Graph() {
 	this.hideNodes = function (type) {
 		var nodesToHide = [];
 		nodes.forEach(function (node) {
-			if(node.nodeType == type)
+			if(node.nodeType == type) {
 				nodesToHide.push(node);
+				node.hidden = true;
+			}
 		});
 		
 		// Remove the hidden nodes from the graph
@@ -109,6 +111,7 @@ function Graph() {
 			
 			// Add all nodes back to the graph
 			nodesToRefresh.forEach(function (node) {
+				node.hidden = false;
 				this.addNode(node);
 			}, this);
 			
