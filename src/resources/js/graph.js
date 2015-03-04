@@ -256,30 +256,24 @@ function Graph() {
 	var hiddenNodes = {};
 	
 	// Fix all nodes when ctrl + M is pressed
-	d3.select("body")
-		.on("keydown", function() {
-			if(d3.event.keyCode == 77 /*M*/ && d3.event.ctrlKey) {
-				var body = $("body").toggleClass("fixedMode");
-				
-				// Fix all nodes
-				if(body.hasClass("fixedMode"))
-				{
-					nodes.forEach(function (d) {
-						d.oldFixed = d.fixed;
-						d.fixed = true;
-					});
-				}
-				// Un-fix all nodes
-				else
-				{
-					nodes.forEach(function (d) {
-						d.fixed = d.oldFixed || false;
-						d.oldFixed = undefined;
-					});
-				}
-				
-			}
-	    });
+	$(".modes .fixedNodes").bind('change', function(){        
+		Columns.columnModeOn = this.checked;
+		if(this.checked)
+		{
+			nodes.forEach(function (d) {
+				d.oldFixed = d.fixed;
+				d.fixed = true;
+			});
+		}
+		// Un-fix all nodes
+		else
+		{
+			nodes.forEach(function (d) {
+				d.fixed = d.oldFixed || false;
+				d.oldFixed = undefined;
+			});
+		}
+	});
 	
 	// Run it
 	this.update();

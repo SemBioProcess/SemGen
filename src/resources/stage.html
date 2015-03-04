@@ -16,6 +16,7 @@
 		<script src="js/nodes/selectionManager.js"></script>
 		<script src="js/nodes/behaviors/hull.js"></script>
 		<script src="js/nodes/behaviors/modelPopover.js"></script>
+		<script src="js/nodes/behaviors/columns.js"></script>
 		<script src="js/stage.js"></script>
 		
 		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
@@ -32,6 +33,17 @@
 				Node key:
 				<ul class="visibleNodeKeys"></ul>
 				<ul class="hiddenNodeKeys"></ul>
+			</div>
+			<div class="modes">
+				Graph:
+				<ul>
+					<li>
+						<input type="checkbox" class="fixedNodes"> Fix Nodes</input>
+					</li>
+					<li>
+						<input type="checkbox" class="columnView"> Column View</input>
+					</li>
+				</ul>
 			</div>
 		</div>
 		<div id="stage"></div>

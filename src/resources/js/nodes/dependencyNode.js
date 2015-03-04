@@ -30,6 +30,7 @@ function DependencyNode (graph, data, parentNode) {
 	this.links = data.links;
 	
 	this.addClassName("dependencyNode");
+	this.addBehavior(Columns)
 }
 
 // Maps node type to group number
