@@ -45,6 +45,7 @@ import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semgen.utilities.uicomponent.SemGenTab;
+import semgen.visualizations.D3;
 import semsim.SemSimUtil;
 import semsim.extraction.Extractor;
 import semsim.model.SemSimModel;
@@ -203,6 +204,9 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		add(centersplitpane, BorderLayout.CENTER);
 		setVisible(true);
 		visualizeAllDataStructures(false);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void createToolbar() {
@@ -799,7 +803,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	}
 	
 	public void atomicDecomposition() {
-		SemGenOpenFileChooser fc = new SemGenOpenFileChooser("Select directory for extracted models", false);
+		SemGenOpenFileChooser fc = new SemGenOpenFileChooser("Select directory for extracted models");
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
 		File file = new File(fc.getSelectedFile().getAbsolutePath());

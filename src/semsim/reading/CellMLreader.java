@@ -20,6 +20,8 @@ import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
+import org.sbml.libsbml.ASTNode;
+import org.sbml.libsbml.libsbml;
 
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -271,24 +273,38 @@ public class CellMLreader extends ModelReader {
 				semsimmodel.addDataStructure(cvar);
 			}
 			
-			// Add MathML for each component variable
+			// Add MathML and computational code for each component variable
 			varit = comp.getChildren("variable", mainNS).iterator();
 			
 			while(varit.hasNext()){
 				Element var = (Element) varit.next();
 				String varname = var.getAttributeValue("name");
 				String uniquevarname = compname + "." + varname;
-
+				String initval = var.getAttributeValue("initial_value");
+				
 				DataStructure cvar = semsimmodel.getDataStructure(uniquevarname);
 
 				if(compMathMLelements!=null){
 					Element varmathmlel = getMathMLforOutputVariable(varname, compMathMLelements);
 					if(varmathmlel!=null){
 						String varmathml = xmloutputter.outputString(varmathmlel);
+						ASTNode ast_result = libsbml.readMathMLFromString(varmathml);
+						String ast_as_string = libsbml.formulaToString(ast_result);
+						// formulaToString doesn't parse equal signs and differentials.
+						// Not the prettiest fix, but at least it'll make the equations look prettier.
+						if(ast_as_string != null) {
+							ast_as_string = ast_as_string.substring(3, ast_as_string.length()-1);
+							ast_as_string = ast_as_string.replace(",", " =");
+						}
 						cvar.getComputation().setMathML(varmathml);
+						cvar.getComputation().setComputationalCode(ast_as_string);
 						
 						// Create the computational dependency network among the component variables
 						whiteBoxFunctionalSubmodelEquations(varmathmlel, compname, semsimmodel, cvar);
+						
+						// Check if variable is solved using ODE, and set initial_value as start value.
+						Boolean ode = isSolvedbyODE(varname, compMathMLelements);
+						if(ode) cvar.setStartValue(initval);
 					}
 				}
 			}
@@ -854,6 +870,30 @@ public class CellMLreader extends ModelReader {
 			return mathmlheadel;
 		}
 		return null;
+	}
+	
+	protected static Boolean isSolvedbyODE(String cvarname, List<?> componentMathMLlist){
+		Iterator<?> compmathmlit = componentMathMLlist.iterator();
+		Element childel = null;
+
+		while(compmathmlit.hasNext()){
+			Element MathMLelement = (Element) compmathmlit.next();
+			Iterator<?> applyit = MathMLelement.getChildren("apply", CellMLconstants.mathmlNS).iterator();
+			
+			while(applyit.hasNext()){
+				childel = (Element) applyit.next();
+				Element subappel = (Element) childel.getChildren().get(1);
+				
+				if(subappel.getName().equals("apply")){
+					Element ciel = subappel.getChild("ci", CellMLconstants.mathmlNS);
+					Element diffeq = subappel.getChild("diff", CellMLconstants.mathmlNS);
+					if(ciel.getText().trim().equals(cvarname) && diffeq != null){
+						return true;
+					}
+				}
+			}
+		}	
+		return false;
 	}
 	
 	protected static void whiteBoxFunctionalSubmodelEquations(Element varmathmlel, String compname, SemSimModel semsimmodel, DataStructure cvar){
