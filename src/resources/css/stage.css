@@ -70,16 +70,16 @@ ul.modelPopover li.submenuContainer {
 }
 
 .stageMenu {
-	margin: 5px;
 	position: absolute;
+	margin: 5px;
 	top: 0;
 	right: 0;
+	padding: 10px;
 	border: 1px solid black;
 	opacity: .2;
 }
 
 .stageMenu:hover {
-	padding: 10px;
 	opacity: 1;
 }
 
@@ -89,12 +89,22 @@ ul.modelPopover li.submenuContainer {
 
 .key ul {
 	list-style: none;
-	margin: 5px;
+	margin: 0 5px;
 	padding: 0;
 }
 
 .key ul li {
+	margin: 5px 0;
 	font-weight: bold;
 	padding-left: 1em; 
     text-indent: -.7em;
+}
+
+.key ul li:hover {
+	cursor: pointer;
+}
+
+.key ul.hiddenNodeKeys li {
+	background-color: #D0D0D0;
+	opacity: .5;
 }

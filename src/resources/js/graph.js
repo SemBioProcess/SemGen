@@ -34,6 +34,20 @@ function Graph() {
 	this.removeNode = function (id) {
 		var i = 0;
 	    var node = findNode(id);
+	    
+	    // If we did not find the node it must be hidden
+	    if(!node) {
+	    	// Remove if from the hidden list
+	    	for(type in hiddenNodes)
+	    		for(var i = 0; i < hiddenNodes[type].length; i++)
+	    			if(hiddenNodes[type][i].id == id) {
+	    				hiddenNodes[type].splice(i, 1);
+	    				return;
+	    			}
+	    	
+	    	return;
+	    }
+	    
 	    while (i < links.length) {
 	    	if ((links[i].source == node)||(links[i].target == node))
 	            links.splice(i,1);
@@ -41,8 +55,78 @@ function Graph() {
 	        	i++;
 	    }
 	    nodes.splice(findNodeIndex(id),1);
-	    this.update();
 	};
+	
+	// Hide all nodes of the given type
+	this.hideNodes = function (type) {
+		var nodesToHide = [];
+		nodes.forEach(function (node) {
+			if(node.nodeType == type)
+				nodesToHide.push(node);
+		});
+		
+		// Remove the hidden nodes from the graph
+		nodesToHide.forEach(function (node) {
+			this.removeNode(node.id);
+		}, this);
+		
+		if(!hiddenNodes[type])
+			hiddenNodes[type] = [];
+		
+		// Save the hidden nodes in case we want to add them back
+		hiddenNodes[type] = hiddenNodes[type].concat(nodesToHide);
+		this.update();
+	}
+	
+	// Show all nodes of the given type
+	this.showNodes = function (type) {
+		if(!hiddenNodes[type])
+			return;
+		
+		// BRUTE FORCE APPROACH
+		// Remove everything from the graph
+		// Add it all back and redraw
+		// New nodes don't know about "in" links,
+		// So rather than traverse every node looking for links that point to this node,
+		// let's just redraw everything
+		// If this becomes an issues we can revisit
+		{
+			// Copy the current array of nodes
+			// so we're not iterating over the same array we're
+			// changing when we call removeNode
+			var nodesToRefresh = nodes.slice(0);
+			
+			// Remove each nodes from the graph
+			nodesToRefresh.forEach(function (node) {
+				this.removeNode(node.id);
+			}, this);
+			
+			// All nodes are new now
+			newNodes = [];
+			
+			// Add in our hidden nodes
+			nodesToRefresh = nodesToRefresh.concat(hiddenNodes[type]);
+			
+			// Add all nodes back to the graph
+			nodesToRefresh.forEach(function (node) {
+				this.addNode(node);
+			}, this);
+			
+			// These nodes are no longer hidden
+			delete hiddenNodes[type];
+		}
+		
+		this.update();
+	}
+	
+	// Get an array of the hidden nodes
+	this.getHiddenNodes = function () {
+		var hiddenNodesArr = [];
+		for(type in hiddenNodes)
+			hiddenNodesArr = hiddenNodesArr.concat(hiddenNodes[type]);
+		
+		return hiddenNodesArr;
+	}
 
 	/** 
 	 * Updates the graph
@@ -140,7 +224,9 @@ function Graph() {
 	// Find a node by its id
 	var findNode = function(id) {
 	    for (var i in nodes) {
-	        if (nodes[i].id === id) return nodes[i];};
+	        if (nodes[i].id === id)
+	        	return nodes[i];
+	    }
 	};
 	
 	// Find a node's index
@@ -167,6 +253,7 @@ function Graph() {
 	var nodes = this.force.nodes(),
 		links = this.force.links();
 	var newNodes = [];
+	var hiddenNodes = {};
 	
 	// Fix all nodes when ctrl + M is pressed
 	d3.select("body")

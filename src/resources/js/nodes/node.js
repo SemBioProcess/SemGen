@@ -56,10 +56,6 @@ Node.prototype.tickHandler = function (element, graph) {
 	root.attr("transform", "translate(" + this.x + "," + this.y + ")");
 }
 
-Node.prototype.isVisible = function () {
-	return this.rootElement.select("circle").style("display") != "none";
-}
-
 Node.prototype.getKeyInfo = function () {
 	return {
 		nodeType: this.nodeType,
