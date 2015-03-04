@@ -18,21 +18,21 @@ $(window).load(function() {
 					    {
 					    	name: "A",
 					    	links: ["B"],
-					    	group: 0,
+					    	nodeType: "state",
 					    },
 					    {
 					    	name: "B",
-					    	group: 1,
+					    	nodeType: "Rate",
 					    },
 					    {
 					    	name: "C",
 					    	links: ["A"],
-					    	group: 2,
+					    	nodeType: "constitutive",
 					    },
 					    {
 					    	name: "D",
 					    	links: ["A", "B", "C"],
-					    	group: 0,
+					    	nodeType: "State",
 					    },
 					];
 					mockReceiver.showDependencyNetwork(modelName, data);

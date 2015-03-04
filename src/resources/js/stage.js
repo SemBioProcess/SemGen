@@ -8,6 +8,7 @@ $(window).bind("cwb-initialized", function(e) {
 	var modelNodes = {};
 	
 	SelectionManager.getInstance().initialize(graph);
+	KeyElement.getInstance().initialize(graph);
 	
 	$(".addModelButton").click(function() {
 		sender.addModel();

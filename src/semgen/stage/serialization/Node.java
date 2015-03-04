@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Set;
 
 import semgen.SemGen;
+import semsim.PropertyType;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 
@@ -15,13 +16,13 @@ import semsim.model.computational.datastructures.MappableVariable;
  */
 public class Node {
 	public String name;
-	public int group;
+	public String nodeType;
 	public ArrayList<String> links;
 	
 	public Node(DataStructure dataStructure)
 	{
 		this.name = dataStructure.getName();
-		this.group = dataStructure.getPropertyType(SemGen.semsimlib).getIndex();
+		this.nodeType = dataStructure.getPropertyType(SemGen.semsimlib).toString();
 		
 		// Are there inputs?
 		Set<? extends DataStructure> inputs = null;

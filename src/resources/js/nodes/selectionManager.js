@@ -31,7 +31,7 @@ function SelectionManager () {
 	};
 }
 
-var instance = null;
+SelectionManager.instance = null;
 SelectionManager.getInstance = function () {
-	return instance || (instance = new SelectionManager());
+	return SelectionManager.instance || (SelectionManager.instance = new SelectionManager());
 }

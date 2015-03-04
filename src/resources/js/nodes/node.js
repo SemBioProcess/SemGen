@@ -1,13 +1,14 @@
 /**
  * Represents a node in the d3 graph
  */
-function Node(graph, id, displayName, r, group, textSize) {
+function Node(graph, id, displayName, r, color, textSize, nodeType) {
 	this.graph = graph;
 	this.id = id;
 	this.displayName = displayName;
 	this.r = r;
-	this.group = group;
+	this.color = color;
 	this.textSize = textSize;
+	this.nodeType = nodeType;
 	this.className = "node";
 	this.element;
 	this.links = [];
@@ -31,7 +32,7 @@ Node.prototype.createVisualElement = function (element, graph) {
 
 	this.rootElement.attr("class", this.className)
 		.call(graph.force.drag)
-    	.style("fill", graph.color(this.group))
+    	.style("fill", this.color)
     	
     this.rootElement.append("svg:circle")
 	    .attr("r", this.r)
@@ -53,6 +54,17 @@ Node.prototype.tickHandler = function (element, graph) {
 	
 	var root = d3.select(element);
 	root.attr("transform", "translate(" + this.x + "," + this.y + ")");
+}
+
+Node.prototype.isVisible = function () {
+	return this.rootElement.select("circle").style("display") != "none";
+}
+
+Node.prototype.getKeyInfo = function () {
+	return {
+		nodeType: this.nodeType,
+		color: this.color,
+	};
 }
 
 Node.prototype.createTextElement = function (className) {
