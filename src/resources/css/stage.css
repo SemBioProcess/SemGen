@@ -68,3 +68,53 @@ ul.modelPopover li:last-child {
 ul.modelPopover li.submenuContainer {
 	background-color: #F8F8F8;
 }
+
+.stageMenu {
+	position: absolute;
+	margin: 5px;
+	top: 0;
+	right: 0;
+	padding: 10px;
+	border: 1px solid black;
+	opacity: .2;
+}
+
+.stageMenu:hover {
+	opacity: 1;
+}
+
+.key {
+	font-size: 14px;
+}
+
+.key ul {
+	list-style: none;
+	margin: 0 5px;
+	padding: 0;
+}
+
+.key ul li {
+	margin: 5px 0;
+	font-weight: bold;
+	padding-left: 1em; 
+    text-indent: -.7em;
+}
+
+.key ul li.canClick:hover {
+	cursor: pointer;
+}
+
+.key ul.hiddenNodeKeys li {
+	background-color: #D0D0D0;
+	opacity: .5;
+}
+
+.modes {
+	margin-top: 10px;
+}
+
+.modes ul {
+	list-style: none;
+	padding: 0;
+	margin: 0 0 0 5px;
+}

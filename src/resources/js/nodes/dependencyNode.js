@@ -3,8 +3,8 @@
  */
 
 DependencyNode.prototype = new Node();
-DependencyNode.prototype.constructor = Node;
-function DependencyNode (data, parentNode) {
+DependencyNode.prototype.constructor = DependencyNode;
+function DependencyNode (graph, data, parentNode) {
 	// We need to keep the ids of each dependency node unique by prefixing
 	// it with its parent node
 	
@@ -18,12 +18,31 @@ function DependencyNode (data, parentNode) {
 		}
 	}
 	
-	// Place parent model's location (plus jitter)
-	this.x = parentNode.x + Math.random();
-	this.y = parentNode.y + Math.random();
+	// Ensure the node type is formatted properly
+	data.nodeType = data.nodeType.toLowerCase().capitalizeFirstLetter();
 	
-	Node.prototype.constructor.call(this, id, data.name, 5, data.group, 11);
+	// Get the correct group from the node type
+	this.group = typeToGroup[data.nodeType];
+	if(this.group == "undefined")
+		throw "invalid dependency node type: " + data.nodeType;
+	
+	Node.prototype.constructor.call(this, graph, id, data.name, 5, typeToColor[data.nodeType], 11, data.nodeType);
 	this.links = data.links;
 	
 	this.addClassName("dependencyNode");
+	this.addBehavior(Columns)
 }
+
+// Maps node type to group number
+var typeToGroup = {
+		"State": 0,
+		"Rate": 1,
+		"Constitutive": 2,
+};
+
+// Maps node type to node color
+var typeToColor = {
+		"State": "#1F77B4",
+		"Rate": "#2CA02C",
+		"Constitutive": "#FF7F0E"
+};

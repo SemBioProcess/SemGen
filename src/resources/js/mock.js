@@ -18,24 +18,39 @@ $(window).load(function() {
 					    {
 					    	name: "A",
 					    	links: ["B"],
-					    	group: 0,
+					    	nodeType: "state",
 					    },
 					    {
 					    	name: "B",
-					    	group: 1,
+					    	nodeType: "Rate",
 					    },
 					    {
 					    	name: "C",
 					    	links: ["A"],
-					    	group: 2,
+					    	nodeType: "constitutive",
 					    },
 					    {
 					    	name: "D",
 					    	links: ["A", "B", "C"],
-					    	group: 0,
+					    	nodeType: "State",
 					    },
 					];
 					mockReceiver.showDependencyNetwork(modelName, data);
+				}
+				else if (task == "submodels") {
+					var data = [
+						{
+							name: "Submodel_1",
+						},
+						{
+							name: "Submodel_2",
+						},
+						{
+							name: "Submodel_3",
+						},
+					];
+					
+					mockReceiver.showSubmodelNetwork(modelName, data);
 				}
 			},
 	};
@@ -44,6 +59,8 @@ $(window).load(function() {
 			onAddModel: function (handler) { this.addModel = handler; },
 			
 			onShowDependencyNetwork: function (handler) { this.showDependencyNetwork = handler; },
+			
+			onShowSubmodelNetwork: function (handler) { this.showSubmodelNetwork = handler; },
 	};
 	
 	var event; // The custom event that will be created
