@@ -73,7 +73,7 @@ public class SemSimLibrary {
 
 		// Load the local copy of the OPB and the SemSim base ontology, and other config files into memory
 		try {
-			OPB = manager.loadOntologyFromOntologyDocument(new File("cfg/OPB.970.owl"));
+			OPB = manager.loadOntologyFromOntologyDocument(new File("cfg/OPBv1.04.owl"));
 			manager.loadOntologyFromOntologyDocument(new File("cfg/SemSimBase.owl"));
 		} catch (OWLOntologyCreationException e3) {
 			e3.printStackTrace();
@@ -82,7 +82,7 @@ public class SemSimLibrary {
 		try {
 			OPBproperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00147", false);
 			OPBflowProperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00573", false);
-			OPBprocessProperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB01151", false);
+			OPBprocessProperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_01151", false);
 			OPBdynamicalProperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00568", false);
 			OPBamountProperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00135", false);
 			OPBforceProperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00574", false);
@@ -198,14 +198,20 @@ public class SemSimLibrary {
 		return OPBprocessProperties.contains(u.toString());
 	}
 	
+	public boolean isOPBprocessProperty(URI u){
+		return (OPBhasFlowProperty(u) || OPBhasProcessProperty(u));
+	}
+	
 	public boolean checkOPBpropertyValidity(PhysicalProperty prop, URI OPBuri){
 		if(prop.getPhysicalPropertyOf()!=null){
 			
+			Boolean URIisprocessproperty = isOPBprocessProperty(OPBuri);
 			// This conditional statement makes sure that physical processes are annotated with appropriate OPB terms
 			// It only limits physical entity properties to non-process properties. It does not limit based on whether
 			// the OPB term is for a constitutive property. Not sure if it should, yet.
-			if((prop.getPhysicalPropertyOf() instanceof PhysicalEntity || prop.getPhysicalPropertyOf() instanceof PhysicalProcess ) && 
-				(OPBhasFlowProperty(OPBuri) || OPBhasProcessProperty(OPBuri))) {
+			if((prop.getPhysicalPropertyOf() instanceof PhysicalEntity && URIisprocessproperty)
+					|| (prop.getPhysicalPropertyOf() instanceof PhysicalProcess && !URIisprocessproperty)){
+			
 				return false;
 			}
 		}
@@ -214,6 +220,16 @@ public class SemSimLibrary {
 	
 	public boolean isCellMLBaseUnit(String unit) {
 		return cellMLUnitsTable.contains(unit);
+	}
+	
+	// Remove any OPB terms that are not Physical Properties
+	public Hashtable<String,String> removeNonPropertiesFromOPB(Hashtable<String, String> table){
+		Hashtable<String,String> newtable = new Hashtable<String,String>();
+		for(String key : table.keySet()){
+			if(OPBhasProperty(table.get(key)))
+				newtable.put(key, table.get(key));
+		}
+		return newtable;
 	}
 	
 	/**

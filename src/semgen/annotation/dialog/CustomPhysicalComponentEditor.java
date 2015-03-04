@@ -17,13 +17,12 @@ import javax.swing.JTextField;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import semgen.annotation.annotatorpane.AnnotationPanel;
 import semgen.annotation.annotatorpane.composites.ProcessParticipantEditor;
 import semgen.annotation.dialog.referenceclass.ObjectPropertyEditor;
+import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.utilities.uicomponent.SemGenDialog;
 import semsim.SemSimConstants;
 import semsim.annotation.ReferenceOntologyAnnotation;
-import semsim.model.SemSimModel;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
@@ -31,26 +30,23 @@ import semsim.model.physical.PhysicalProcess;
 
 public class CustomPhysicalComponentEditor extends SemGenDialog implements PropertyChangeListener {
 	private static final long serialVersionUID = 1L;
-	
-	public SemSimModel model;
-	public PhysicalModelComponent pmc;
-	public AnnotationPanel anndia;
+	private AnnotatorWorkbench workbench;
+	private PhysicalModelComponent pmc;
 
-	public JTextField mantextfield;
-	public JTextArea descriptionarea;
+	private JTextField mantextfield;
+	private JTextArea descriptionarea;
 
-	public JOptionPane optionPane;
+	private JOptionPane optionPane;
 
-	public ObjectPropertyEditor versionofeditor;
-	public ProcessParticipantEditor hassourceeditor;
-	public ProcessParticipantEditor hassinkeditor;
-	public ProcessParticipantEditor hasmediatoreditor;
+	private ObjectPropertyEditor versionofeditor;
+	private ObjectPropertyEditor hasparteditor;
+	private ProcessParticipantEditor hassourceeditor;
+	private ProcessParticipantEditor hassinkeditor;
+	private ProcessParticipantEditor hasmediatoreditor;
 
-
-	public CustomPhysicalComponentEditor(AnnotationPanel anndia, PhysicalModelComponent pmc) {
+	public CustomPhysicalComponentEditor(AnnotatorWorkbench wb, PhysicalModelComponent pmc) {
 		super("");
-		this.anndia = anndia;
-		this.model = anndia.semsimmodel;
+		workbench = wb;
 		this.pmc = pmc;
 		
 		mantextfield = new JTextField(pmc.getName());
@@ -76,20 +72,22 @@ public class CustomPhysicalComponentEditor extends SemGenDialog implements Prope
 		
 		JComponent[] objectpropertyeditors;
 		String title = "Edit custom physical ";
+		
+		versionofeditor = new ObjectPropertyEditor(workbench, SemSimConstants.BQB_IS_VERSION_OF_RELATION, pmc);
+
 		if(pmc instanceof PhysicalProcess){
 			title = title + "process";
-			versionofeditor = new ObjectPropertyEditor(model, SemSimConstants.BQB_IS_VERSION_OF_RELATION, this.pmc);
-			hassourceeditor = new ProcessParticipantEditor(model, SemSimConstants.HAS_SOURCE_RELATION, (PhysicalProcess)pmc);
-			hassinkeditor = new ProcessParticipantEditor(model, SemSimConstants.HAS_SINK_RELATION, (PhysicalProcess)pmc);
-			hasmediatoreditor = new ProcessParticipantEditor(model, SemSimConstants.HAS_MEDIATOR_RELATION, (PhysicalProcess)pmc);
+			hassourceeditor = new ProcessParticipantEditor(workbench, SemSimConstants.HAS_SOURCE_RELATION, (PhysicalProcess)pmc);
+			hassinkeditor = new ProcessParticipantEditor(workbench, SemSimConstants.HAS_SINK_RELATION, (PhysicalProcess)pmc);
+			hasmediatoreditor = new ProcessParticipantEditor(workbench, SemSimConstants.HAS_MEDIATOR_RELATION, (PhysicalProcess)pmc);
 			
 			objectpropertyeditors = new JComponent[]{hassourceeditor, hassinkeditor, hasmediatoreditor, versionofeditor};
 		}
 		else{
 			title = title + "entity";
-			versionofeditor = new ObjectPropertyEditor(model, SemSimConstants.BQB_IS_VERSION_OF_RELATION, this.pmc);
+			hasparteditor = new ObjectPropertyEditor(workbench, SemSimConstants.HAS_PART_RELATION, pmc);
+			objectpropertyeditors = new JComponent[]{versionofeditor}; 
 
-			objectpropertyeditors = new ObjectPropertyEditor[]{versionofeditor}; 
 		}
 		
 		JPanel mainpanel = new JPanel();
@@ -129,17 +127,22 @@ public class CustomPhysicalComponentEditor extends SemGenDialog implements Prope
 					for(ObjectPropertyEditor ed : refanneds){
 						for(String pmcname : ed.namesandobjects.keySet()){
 							PhysicalModelComponent refpmc = (PhysicalModelComponent)ed.namesandobjects.get(pmcname);
-							System.out.println(refpmc);
-							System.out.println(refpmc.getName());
-							System.out.println(refpmc.getFirstRefersToReferenceOntologyAnnotation());
 							ReferenceOntologyAnnotation roa = refpmc.getFirstRefersToReferenceOntologyAnnotation();
 							pmc.addReferenceOntologyAnnotation(ed.relation, roa.getReferenceURI(), roa.getValueDescription());
 						}
 					}
 	
+					// Deal with entity-specific data
+					if(pmc instanceof PhysicalEntity){
+						for(String pmcname : hasparteditor.namesandobjects.keySet()){
+							PhysicalModelComponent refpmc = (PhysicalModelComponent)hasparteditor.namesandobjects.get(pmcname);
+							ReferenceOntologyAnnotation roa = refpmc.getFirstRefersToReferenceOntologyAnnotation();
+							pmc.addReferenceOntologyAnnotation(hasparteditor.relation, roa.getReferenceURI(), roa.getValueDescription());
+						}
+					}
 					// Deal with process-specific data (sources, sinks and mediators not added as annotations to SemSimModel:
 					// they are proeprties of the PhysicalProcess class
-					if(pmc instanceof PhysicalProcess){
+					else if(pmc instanceof PhysicalProcess){
 						if(hassourceeditor.table.isEditing())
 							  hassourceeditor.table.getCellEditor().stopCellEditing();
 						if(hassinkeditor.table.isEditing())
@@ -160,8 +163,7 @@ public class CustomPhysicalComponentEditor extends SemGenDialog implements Prope
 							((PhysicalProcess)pmc).addMediator(pe.getLeft(), pe.getRight());
 						}
 					}
-					anndia.refreshCompositeAnnotation();
-					anndia.annotator.setModelSaved(false);
+					workbench.compositeChanged();
 				}
 				else{
 					JOptionPane.showMessageDialog(this, "Please enter a name.");

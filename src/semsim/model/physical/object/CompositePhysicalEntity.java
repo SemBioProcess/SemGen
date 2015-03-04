@@ -22,9 +22,19 @@ public class CompositePhysicalEntity extends PhysicalEntity implements Comparabl
 			setArrayListOfEntities(ents);
 			setArrayListOfStructuralRelations(rels);
 		}
-		setName(makeName());
-		setDescription(getName());
 	}
+	
+	
+	@Override
+	public String getName(){
+		return makeName();
+	}
+	
+	@Override
+	public String getDescription(){
+		return makeName();
+	}
+	
 	
 	public String makeName(){
 		String name = null;

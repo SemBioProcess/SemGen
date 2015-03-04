@@ -95,6 +95,10 @@ public class ModelAnnotationsBench extends Observable {
 		notifyObservers(ModelChangeEnum.METADATASELECTED);
 	}
 	
+	public void setMetadataSelectionIndex(int index) {
+		focusindex = index;
+	}
+	
 	public int getFocusIndex() {
 		return focusindex;
 	}

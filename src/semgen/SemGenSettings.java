@@ -3,6 +3,7 @@ package semgen;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -23,7 +24,9 @@ public class SemGenSettings extends Observable{
 	public static SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmssSSSZ");
 	public static SimpleDateFormat sdflog = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
 	public Hashtable<String, String[]> startsettingstable;
-	private int width = 900, height = 720;
+	private final int defwidth = 1280, defheight = 1024;
+	private Dimension screensize;
+	private int width = 1280, height = 1024;
 	private int xpos = 0, ypos = 0;
 	
 	public static Color lightblue = new Color(207, 215, 252, 255);
@@ -35,14 +38,25 @@ public class SemGenSettings extends Observable{
 		catch (FileNotFoundException e3) {
 				e3.printStackTrace();
 		}
+		screensize = Toolkit.getDefaultToolkit().getScreenSize();
+		width = screensize.width; height = screensize.height;
 	}
 	
 	public SemGenSettings(SemGenSettings old) {
+		screensize = old.screensize;
 		startsettingstable = old.startsettingstable;
 		xpos = old.xpos;
 		ypos = old.ypos;
 		width = old.width;
 		height = old.height;
+	}
+	
+	public int scaleWidthforScreen(int w) {
+		return Math.round(w*screensize.width/defwidth);
+	}
+	
+	public int scaleHeightforScreen(int h) {
+		return Math.round(h*screensize.height/defheight);
 	}
 	
 	public Dimension getAppSize() {

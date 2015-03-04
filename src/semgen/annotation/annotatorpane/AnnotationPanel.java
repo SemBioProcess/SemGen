@@ -14,6 +14,8 @@ import semgen.annotation.dialog.referenceclass.SingularAnnotationEditor;
 import semgen.annotation.dialog.selector.SelectorDialogForCodewordsOfSubmodel;
 import semgen.annotation.dialog.selector.SelectorDialogForSubmodelsOfSubmodel;
 import semgen.annotation.routines.AnnotationCopier;
+import semgen.annotation.workbench.AnnotatorWorkbench;
+import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenSeparator;
@@ -23,7 +25,6 @@ import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.StructuralRelation;
 import semsim.model.Importable;
 import semsim.model.SemSimComponent;
-import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.PhysicalEntity;
@@ -40,6 +41,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.ListIterator;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Set;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -53,39 +56,40 @@ import javax.swing.*;
 
 import org.semanticweb.owlapi.model.OWLException;
 
-public class AnnotationPanel extends JPanel implements MouseListener{
+public class AnnotationPanel extends JPanel implements MouseListener, Observer{
 
 	private static final long serialVersionUID = -7946871333815617810L;
+	private AnnotatorWorkbench workbench;
 	public AnnotatorTab annotator;
-	public SemSimModel semsimmodel;
 	public SemSimComponent smc;
 	public AnnotationObjectButton thebutton;
 	public CompositeAnnotationPanel compositepanel;
-	public JPanel mainpanel;
 	public SemSimComponentAnnotationPanel singularannpanel;
 	private JLabel codewordlabel;
 	public AnnotationClickableTextPane subtitlefield;
 	public AnnotationClickableTextPane nestedsubmodelpane;
 	private JLabel singularannlabel = new JLabel("Singular annotation");
-	public AnnotationClickableTextPane humandefpane;
+	private AnnotationClickableTextPane humandefpane;
 	public JLabel humremovebutton = new JLabel(SemGenIcon.eraseiconsmall);
 	private JLabel copyannsbutton = new JLabel(SemGenIcon.copyicon);
 	private JLabel loadsourcemodelbutton = new JLabel(SemGenIcon.annotatoricon);
-	public Set<DataStructure> cdwdsfromcomps;
-	public String codeword;
+	private Set<DataStructure> cdwdsfromcomps;
 	protected SemGenSettings settings;
 	GlobalActions globalacts;
 	
 	public int indent = 15;
 
-	public AnnotationPanel(AnnotatorTab ann, SemGenSettings sets, AnnotationObjectButton aob, GlobalActions gacts) throws IOException{
+	public AnnotationPanel(AnnotatorWorkbench wb, AnnotatorTab ann, SemGenSettings sets, AnnotationObjectButton aob, GlobalActions gacts) throws IOException{
+		workbench = wb;
 		settings = sets;
 		globalacts = gacts;
 		annotator = ann;
 		thebutton = aob;
-		codeword = aob.getName();
-		semsimmodel = annotator.semsimmodel;
-
+		
+		workbench.addObserver(this);
+		
+		String codeword = aob.getName();
+		
 		if(aob instanceof SubmodelButton)
 			smc = ((SubmodelButton)aob).sub;
 		else smc = ((CodewordButton)aob).ds;
@@ -148,8 +152,8 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 		// If viewing a codeword, get the equation and units associated with the codeword
 		else{
 			String code = "";
-			if(semsimmodel.getDataStructure(codeword).getComputation()!=null){
-				code = semsimmodel.getDataStructure(codeword).getComputation().getComputationalCode();
+			if(workbench.getSemSimModel().getDataStructure(codeword).getComputation()!=null){
+				code = workbench.getSemSimModel().getDataStructure(codeword).getComputation().getComputationalCode();
 			}
 			eqpane = new JEditorPane();
 			eqpane.setEditable(false);
@@ -161,10 +165,11 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 			eqpane.setBackground(new Color(0,0,0,0));
 
 			String units = "dimensionless";
-			if(((DataStructure)thebutton.ssc).hasUnits())
+			DataStructure ds = (DataStructure)thebutton.ssc;
+			if(ds.hasUnits())
 				units = ((DataStructure)thebutton.ssc).getUnit().getName();
 			codewordlabel.setText(codewordlabel.getText() + " (" + units + ")");
-			compositepanel = new CompositeAnnotationPanel(BoxLayout.Y_AXIS, settings, this);
+			compositepanel = new CompositeAnnotationPanel(workbench, BoxLayout.Y_AXIS, settings, this, ds);
 		}
 		subtitlepanel.setBorder(BorderFactory.createEmptyBorder(0, indent, 0, indent));
 		subtitlepanel.setBackground(SemGenSettings.lightblue);
@@ -174,7 +179,7 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 
 		refreshData();
 
-		mainpanel = new JPanel();
+		JPanel mainpanel = new JPanel();
 		mainpanel.setLayout(new BoxLayout(mainpanel, BoxLayout.Y_AXIS));
 		
 		Box mainheader = Box.createHorizontalBox();
@@ -242,15 +247,6 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 		this.repaint();
 	}
 
-	public void FormatComponents(JPanel panel, JLabel label, int panelindent) {
-		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
-		panel.setBackground(SemGenSettings.lightblue);
-		panel.setBorder(BorderFactory.createEmptyBorder(0, panelindent, 0, 15));
-		panel.setAlignmentX(Component.LEFT_ALIGNMENT);
-		label.setBorder(BorderFactory.createEmptyBorder(10, panelindent/2, 3, 15));
-		label.setFont(SemGenFont.defaultBold());
-	}
-
 	public void FormatButton(JLabel label, String tooltip, Boolean enabled) {
 		label.addMouseListener(this);
 		label.setToolTipText(tooltip);
@@ -263,7 +259,7 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 		if(thebutton instanceof SubmodelButton)
 			refreshSubmodelData();
 		// Otherwise we're looking at a codewordbutton - get the composite annotation
-		else refreshCompositeAnnotation();
+		else compositepanel.refreshUI();;
 		refreshHumanReadableDefinition();
 		refreshSingularAnnotation();
 		validate();
@@ -275,7 +271,7 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 		String subtitletext = "Click to assign codewords to this component";
 		String editcomptext = "Click to assign sub-models";
 		
-		Submodel submod = semsimmodel.getSubmodel(thebutton.getName());
+		Submodel submod = workbench.getSemSimModel().getSubmodel(thebutton.getName());
 		
 		if(thebutton.ssc instanceof FunctionalSubmodel){
 			subtitletext = "No codewords associated with submodel";
@@ -307,10 +303,6 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 		annotator.annotatorscrollpane.scrollToLeft();
 	}
 	
-	public void refreshCompositeAnnotation(){
-		compositepanel.refreshUI();
-	}
-	
 	public void refreshHumanReadableDefinition(){
 		// Refresh the human readable definition
 		String comment = smc.getDescription();
@@ -337,7 +329,7 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 	
 	public void refreshSingularAnnotation(){
 		// Get the singular annotation for the codeword
-		singularannpanel = new SemSimComponentAnnotationPanel(this, settings, (Annotatable)smc);
+		singularannpanel = new SemSimComponentAnnotationPanel(workbench, this, settings, (Annotatable)smc);
 		singularannpanel.setBorder(BorderFactory.createEmptyBorder(0, indent+5, 0, 0));
 		annotator.updateTreeNode();
 	}
@@ -363,7 +355,7 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 				if(sub instanceof FunctionalSubmodel){ // Get rid of prepended submodel names if submodel is functional
 					name = name.substring(name.lastIndexOf(".")+1);
 				}
-				if(cdwdsfromcomps.contains(semsimmodel.getDataStructure(s)))
+				if(cdwdsfromcomps.contains(workbench.getSemSimModel().getDataStructure(s)))
 					text = text + ", " + "{" + name + "}";
 				else
 					text = text + ", " + name;
@@ -404,7 +396,7 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 			ArrayList<PhysicalEntity> entlist = new ArrayList<PhysicalEntity>();
 			ListIterator<PhysicalModelComponent> iterator = pmclist.listIterator();
 			while(iterator.hasNext()) entlist.add((PhysicalEntity)iterator.next());
-			ds.getPhysicalProperty().setPhysicalPropertyOf(semsimmodel.addCompositePhysicalEntity(entlist, structuralrellist));
+			ds.getPhysicalProperty().setPhysicalPropertyOf(workbench.getSemSimModel().addCompositePhysicalEntity(entlist, structuralrellist));
 		}
 		else if(pmclist.size()==1){
 			ds.getPhysicalProperty().setPhysicalPropertyOf(null);
@@ -420,7 +412,7 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 	}
 	
 	public void showSingularAnnotationEditor(){
-		new SingularAnnotationEditor(this, new Object[]{"Annotate","Close"}) { 
+		new SingularAnnotationEditor(workbench, this, new Object[]{"Annotate","Close"}) { 
 			private static final long serialVersionUID = 1L;
 
 			public void propertyChange(PropertyChangeEvent arg0) {
@@ -431,16 +423,16 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 					//	 If we're using this dialog to apply a non-composite annotation
 					if(value == "Annotate" && this.getFocusOwner() != refclasspanel.findbox){
 						addClassToOntology();
-						annotator.setModelSaved(false);
+						workbench.setModelSaved(false);
 					}
 					dispose();
 				}
 			}
 			
 			public void addClassToOntology() {
-				if (refclasspanel.resultslistright.getSelectedValue() != null) {
-					String selectedname = (String) refclasspanel.resultslistright.getSelectedValue();
-					String referenceuri = (String) refclasspanel.resultsanduris.get(selectedname);
+				if (refclasspanel.getSelection() != null) {
+					String selectedname = refclasspanel.getSelection();
+					String referenceuri = refclasspanel.getSelectionURI();
 					selectedname = selectedname.replaceAll("\"", "");
 					ReferenceOntologyAnnotation ann = new ReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, URI.create(referenceuri), selectedname);
 					singularannpanel.applyReferenceOntologyAnnotation(ann, true);
@@ -467,9 +459,7 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 		if (arg0.getComponent() == humremovebutton) {
 			if(thebutton.editable){
 				smc.setDescription("");
-				refreshHumanReadableDefinition();
-				humremovebutton.setEnabled(false);
-				annotator.setModelSaved(false);
+				humanDefinitionChanged();
 			}
 		}
 		
@@ -495,8 +485,9 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 		if (arg0.getComponent() == subtitlefield) {
 			Submodel sub = ((SubmodelButton)thebutton).sub;
 			new SelectorDialogForCodewordsOfSubmodel(
+					workbench,
 					this,
-					semsimmodel.getDataStructures(), 
+					workbench.getSemSimModel().getDataStructures(), 
 					null,
 					sub, 
 					sub.getAssociatedDataStructures(),
@@ -508,8 +499,9 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 		if( arg0.getComponent() == nestedsubmodelpane){
 			Submodel sub = (Submodel)thebutton.ssc;
 			new SelectorDialogForSubmodelsOfSubmodel(
+					workbench,
 					this,
-					semsimmodel.getSubmodels(),
+					workbench.getSemSimModel().getSubmodels(),
 					sub,
 					sub, 
 					sub.getSubmodels(),
@@ -519,7 +511,11 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 		}
 		
 		if (arg0.getComponent() == humandefpane) {
-			new HumanDefEditor(smc, this);
+			HumanDefEditor hde = new HumanDefEditor(smc.getName(), smc.getDescription());
+			if (!hde.getNewDescription().equals(smc.getDescription())) {
+				smc.setDescription(hde.getNewDescription());
+				humanDefinitionChanged();
+			}
 		}
 		
 		if(arg0.getComponent() == copyannsbutton){
@@ -583,5 +579,19 @@ public class AnnotationPanel extends JPanel implements MouseListener{
 		if (component instanceof JLabel && component!=codewordlabel) {
 			((JLabel)component).setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
 		}
+	}
+
+	public void humanDefinitionChanged() {
+		workbench.setModelSaved(false);
+		humremovebutton.setEnabled(smc.getDescription()!= "");
+		refreshHumanReadableDefinition();
+	}
+	
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		if (arg1==modeledit.compositechanged) {
+			compositepanel.refreshUI();
+		}
+		
 	}
 }

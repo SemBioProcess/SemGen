@@ -33,7 +33,8 @@ import semgen.menu.SemGenMenuBar;
 import semgen.utilities.OntologyCache;
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
-import semgen.utilities.file.SemGenOpenFileChooser;
+import semgen.utilities.SemGenIcon;
+import semgen.utilities.file.SemGenFileChooser;
 import semgen.utilities.uicomponent.SemGenDialog;
 import semsim.ErrorLog;
 import semsim.SemSimLibrary;
@@ -57,7 +58,7 @@ public class SemGen extends JFrame implements Observer{
 	public SimpleDateFormat sdflog = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
 	
 	//The application store for the default settings
-	private SemGenSettings settings = new SemGenSettings();
+	private SemGenSettings settings; 
 	//A library of SemSim constants and definitions. This is created once and referenced
 	//without modification by the rest of the program.
 	public static SemSimLibrary semsimlib = new SemSimLibrary();
@@ -88,6 +89,8 @@ public class SemGen extends JFrame implements Observer{
 		ModelReader.pointtoSemSimLibrary(semsimlib);
 		ModelWriter.pointtoSemSimLibrary(semsimlib);
 		ErrorLog.setLogFile(logfilewriter);
+		// Need this for programmatic use of jsbatch
+		System.setProperty("jsim.home", "./jsimhome");
 	}
 
 	/**Set the user interface look and feel to the Nimbus Swing layout and create the frame*/
@@ -103,7 +106,14 @@ public class SemGen extends JFrame implements Observer{
 			}
 		    
 		    JFrame frame = new SemGen();
-		    frame.setVisible(true);
+		    
+		    //Set the default location for the creation of child windows (ie: dialogs) as the center  
+			//of the main frame
+			SemGenError.setFrame(frame);
+			SemGenDialog.setFrame(frame);
+		    
+			frame.setVisible(true);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -115,17 +125,14 @@ public class SemGen extends JFrame implements Observer{
 		OSValidation();
 		
 		setTitle(":: S e m  G e n ::");
-		//Set the default location for the creation of child windows (ie: dialogs) as the center  
-		//of the main frame
-		SemGenError.setFrame(this);
-		SemGenDialog.setFrame(this);
+		this.setIconImage(SemGenIcon.semgenbigicon.getImage());
 		
-		SemGenOpenFileChooser.currentdirectory = new File(settings.getStartDirectory());
-		// Need this for programmatic use of jsbatch
-		System.setProperty("jsim.home", "./jsimhome");
+		settings = new SemGenSettings();
+		SemGenFileChooser.currentdirectory = new File(settings.getStartDirectory());
+
 		//Create an instance of SemGen's default font and load it into memory
 		SemGenFont.defaultUIFont();
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		gacts.addObserver(this);
 		 
 		SemGenMenuBar menubar = new SemGenMenuBar(settings, gacts);
@@ -134,12 +141,14 @@ public class SemGen extends JFrame implements Observer{
 		setJMenuBar(menubar);
 		
 		setVisible(true);
-		addListeners();
-		this.pack();
 		
 		//Maximize screen
 		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
+		addListeners();
 		settings.setAppSize(getSize());
+		
+		this.pack();
+
 		System.out.println("Loaded.");
 		logfilewriter.println("Session started on: " + sdflog.format(datenow) + "\n");
 		
@@ -212,7 +221,7 @@ public class SemGen extends JFrame implements Observer{
 			try {
 				settings.storeSettings();
 				termcache.storeCachedOntologyTerms();
-				System.exit(0);
+				dispose();
 			} 
 			catch (URISyntaxException e) {e.printStackTrace();}
 		}

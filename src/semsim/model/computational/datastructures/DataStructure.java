@@ -341,11 +341,10 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 			if(getPhysicalProperty().hasRefersToAnnotation()){
 				ReferenceOntologyAnnotation roa = (getPhysicalProperty().getFirstRefersToReferenceOntologyAnnotation());
 				
-				if(lib.OPBhasStateProperty(roa) ||
-						lib.OPBhasForceProperty(roa)){
+				if(lib.OPBhasStateProperty(roa) || lib.OPBhasForceProperty(roa)){
 					return PropertyType.PropertyOfPhysicalEntity;
 				}
-				else if(lib.OPBhasProcessProperty(roa)){
+				else if(lib.OPBhasFlowProperty(roa) || lib.OPBhasProcessProperty(roa)){
 					return PropertyType.PropertyOfPhysicalProcess;
 				}
 				else return PropertyType.Unknown;

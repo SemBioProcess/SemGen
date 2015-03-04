@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.swing.JCheckBox;
 
 import semgen.annotation.annotatorpane.AnnotationPanel;
+import semgen.annotation.workbench.AnnotatorWorkbench;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.Submodel;
 
@@ -18,6 +19,7 @@ public class SelectorDialogForCodewordsOfSubmodel extends SemSimComponentSelecto
 	public Submodel submodel;
 
 	public SelectorDialogForCodewordsOfSubmodel(
+			AnnotatorWorkbench wb,
 			AnnotationPanel anndia,
 			Set<DataStructure> dss,
 			DataStructure dstoignore, 
@@ -26,7 +28,7 @@ public class SelectorDialogForCodewordsOfSubmodel extends SemSimComponentSelecto
 			Set<DataStructure> dstodisable,
 			Boolean withdescriptions,
 			String title){
-		super(dss, dstoignore, preselected, dstodisable, withdescriptions, title);
+		super(wb, dss, dstoignore, preselected, dstodisable, withdescriptions, title);
 		this.anndia = anndia;
 		submodel = sub;
 		setUpUI(this);
@@ -48,7 +50,7 @@ public class SelectorDialogForCodewordsOfSubmodel extends SemSimComponentSelecto
 						}
 					}
 				}
-				anndia.annotator.setModelSaved(false);
+				workbench.setModelSaved(false);
 				anndia.refreshSubmodelData();	
 			}
 			dispose();

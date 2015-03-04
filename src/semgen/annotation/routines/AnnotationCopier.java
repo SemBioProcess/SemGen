@@ -216,7 +216,12 @@ public class AnnotationCopier {
 		PhysicalModelComponent srcpropof = srcds.getPhysicalProperty().getPhysicalPropertyOf();
 		
 		// If we're just copying a composite annotation within the same model...
-		if(targetmod==sourcemod) ds.getPhysicalProperty().setPhysicalPropertyOf(srcpropof);
+		if(targetmod==sourcemod) {
+			ds.getPhysicalProperty().setPhysicalPropertyOf(srcpropof);
+			if (!srcds.getPhysicalProperty().hasRefersToAnnotation()) {
+				ds.getPhysicalProperty().removeAllReferenceAnnotations();
+			}
+		}
 
 		// otherwise...
 		else{
