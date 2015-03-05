@@ -13,6 +13,7 @@ function Node(graph, id, displayName, r, color, textSize, nodeType) {
 	this.element;
 	this.links = [];
 	this.userCanHide = true;
+	this.hidden = false;
 }
 
 Node.prototype.addClassName = function (className) {

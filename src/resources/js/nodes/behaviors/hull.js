@@ -35,6 +35,11 @@ function Hull(node) {
 			var centerX = 0;
 			var minY = null;
 			children.forEach(function (d) {
+				// Hull position shouldn't be effected
+				// by hidden models
+				if(d.hidden)
+					return;
+				
 				vertexes.push([d.x, d.y]);
 				
 				centerX += d.x;
@@ -42,8 +47,11 @@ function Hull(node) {
 				minY = d.y < minY ? d.y : minY;
 			});
 			
+			if(!vertexes.length)
+				return;
+			
 			// Center the node at the top of the hull
-			node.x = centerX / this.children.length;
+			node.x = centerX / vertexes.length;
 			node.y = minY;
 			
 			// Draw hull
