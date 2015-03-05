@@ -1,4 +1,4 @@
-startDirectory; /Users/graham_kim/Dropbox/Semantic Project/Annotated CellML models/hinch_greenstein_tanskanen_xu_winslow_2004
+startDirectory; /Users/graham_kim/Dropbox/Semantic Project/Annotated CellML models/cooling_hunter_crampin_2007
 autoAnnotate; true
 showImports; true
 displayMarkers; true
