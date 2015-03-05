@@ -262,7 +262,11 @@ public class ReferenceClassFinderPanel extends JPanel implements
 				e.printStackTrace();
 				SemGenError.showWebConnectionError("UniProt web service");
 			}
+			
 			rdflabelsanduris = ups.rdflabelsanduris;
+			for(String key : rdflabelsanduris.keySet()){
+				System.out.println(rdflabelsanduris.get(key));
+			}
 		}
 
 		// Sort the results
@@ -283,7 +287,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 	}
 
 	public String getSelection() {
-		return resultslistright.getSelectedValue().trim();
+		return resultslistright.getSelectedValue();
 	}
 	
 	public String getSelectionURI() {
