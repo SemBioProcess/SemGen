@@ -41,6 +41,7 @@ public class UniProtSearcher {
 			
 			// append name with ID because sometimes UNIPROT names aren't unique
 			name = name + " (" + id + ")";
+			name = name.trim();
 			
 			String uristring = "http://identifiers.org/uniprot/" + id;
 			classnamesanduris.put(name, uristring);
