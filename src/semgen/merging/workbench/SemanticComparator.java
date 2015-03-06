@@ -141,27 +141,18 @@ public class SemanticComparator {
 		
 		// This handles physical processes
 		else if(pmc1 instanceof PhysicalProcess){
-			System.out.println("****");
-
-			System.out.println("Looking at process " + pmc1.getName());
-			System.out.println("Looking at process " + pmc2.getName());
 			
 			PhysicalProcess process1 = (PhysicalProcess)pmc1;
 			PhysicalProcess process2 = (PhysicalProcess)pmc2;
 				
 			// Test whether the two processes have the same sources, sinks and mediators
 			if (! testEquivalencyOfProcessParticipants(process1.getSourcePhysicalEntities(), process2.getSourcePhysicalEntities())){
-				System.out.println("sources not equivalent");
-
 				return false;
-
 			}
 			if (! testEquivalencyOfProcessParticipants(process1.getSinkPhysicalEntities(), process2.getSinkPhysicalEntities())){
-				System.out.println("sinks not equivalent");
 				return false;
 			}
 			if (! testEquivalencyOfProcessParticipants(process1.getMediatorPhysicalEntities(), process2.getMediatorPhysicalEntities())){
-				System.out.println("mediators not equivalent");
 				return false;
 			}
 		}
