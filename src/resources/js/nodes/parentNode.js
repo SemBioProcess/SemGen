@@ -32,6 +32,10 @@ ParentNode.prototype.setChildren = function (children) {
 			// Add the child to the graph
 			this.graph.addNode(child);
 		}, this);
+		
+		// Hide constitutive nodes by default
+		this.graph.update();
+		this.graph.hideNodes("Constitutive");
 	}
 
 	// Show/Hide the correct elements depending on the model's state
