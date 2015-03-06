@@ -12,7 +12,7 @@ function Hull(node) {
 			.style("opacity", .2)
 			.attr("stroke", root.style("fill"))
 			.attr("fill", root.style("fill"))
-			.on("click", function(d) {
+			.on("dblclick", function(d) {
 				console.log("hull click");
 				node.setChildren(null);
 			});
