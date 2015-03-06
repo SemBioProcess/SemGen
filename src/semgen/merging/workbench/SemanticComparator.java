@@ -84,7 +84,6 @@ public class SemanticComparator {
 							
 							// If the property annotations are the same, test the equivalency of what they are properties of
 							if(match){
-								System.out.println("Physical properties for " + ds1.getName() + " and " + ds2.getName() + " equivalent");
 								match = testEquivalencyOfPhysicalComponents(prop1.getPhysicalPropertyOf(), prop2.getPhysicalPropertyOf());
 							}
 						}
@@ -128,7 +127,6 @@ public class SemanticComparator {
 		// This handles physical properties, referenced singular physical entities, and referenced physical processes
 		if(pmc1.hasRefersToAnnotation() && pmc2.hasRefersToAnnotation()){
 			if(pmc1.getFirstRefersToReferenceOntologyAnnotation().getReferenceURI().toString().equals(pmc2.getFirstRefersToReferenceOntologyAnnotation().getReferenceURI().toString())){
-				System.out.println("Singular terms equivalent for " + pmc1.getName() + " and " + pmc2.getName());
 				return true;
 			}
 			return false;
