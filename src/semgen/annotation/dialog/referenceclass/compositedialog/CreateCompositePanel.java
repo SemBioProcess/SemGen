@@ -100,6 +100,10 @@ public class CreateCompositePanel extends Box implements ActionListener{
 			remove(lbllist.get(index-1));
 			lbllist.remove(index-1);
 		}
+		else if (index==0 && lbllist.size() > 0) {
+			remove(lbllist.get(0));
+			lbllist.remove(0);
+		}
 		entpans.remove(ent);
 		remove(ent);
 		componentChanged();
