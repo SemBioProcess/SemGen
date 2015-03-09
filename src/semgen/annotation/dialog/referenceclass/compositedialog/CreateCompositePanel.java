@@ -97,11 +97,12 @@ public class CreateCompositePanel extends Box implements ActionListener{
 	private void removeEntity(EntitySelectionPanel ent) {
 		int index = entpans.indexOf(ent);
 		if (index!=0) {
+			remove(lbllist.get(index-1));
 			lbllist.remove(index-1);
-			remove(index-1);
 		}
 		entpans.remove(ent);
 		remove(ent);
+		componentChanged();
 	}
 	
 	public void actionPerformed(ActionEvent arg0) {
@@ -109,7 +110,7 @@ public class CreateCompositePanel extends Box implements ActionListener{
 		if(arg0.getSource() == addentbutton){
 			addEntityPanel();
 			alignAndPaint();
-			componentAdded();
+			componentChanged();
 		}
 	}
 
@@ -130,7 +131,7 @@ public class CreateCompositePanel extends Box implements ActionListener{
 		return pelist;
 	}
 	
-	public void componentAdded() {}
+	public void componentChanged() {}
 	
 	class EntitySelectionPanel extends SemSimEntityPanel {
 		private static final long serialVersionUID = 1L;

@@ -127,13 +127,12 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 		if(ad.thebutton.editable){
 			// If the physical property is specified and there is either a process or entity that it is a property of
 			if(getComponent(2) instanceof SemSimComponentAnnotationPanel){
+				addprocbutton.setEnabled(false);
 				if(((SemSimComponentAnnotationPanel)getComponent(2)).smc instanceof PhysicalProcess){
 					addentbutton.setEnabled(false);
-					addprocbutton.setEnabled(false);
 				}
 				else{
 					addentbutton.setEnabled(true);
-					addprocbutton.setEnabled(false);
 				}
 			}
 			// Otherwise there is no process or entity specified. Set the add entity/ add process buttons

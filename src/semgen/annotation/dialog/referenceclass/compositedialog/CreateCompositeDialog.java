@@ -44,7 +44,7 @@ public class CreateCompositeDialog extends SemGenDialog implements PropertyChang
 		ccpanel = new CreateCompositePanel(workbench, tab) {
 			private static final long serialVersionUID = 1L;
 
-			public void componentAdded() {
+			public void componentChanged() {
 				newComponent();
 			}
 		};
