@@ -1,6 +1,5 @@
 package semgen.utilities;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,10 +15,9 @@ import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.writing.CaseInsensitiveComparator;
 
-public class CSVExporter {
-	public String savelocation;
-	public String datatosave = "";
-	public SemSimModel semsimmodel;
+public class CSVExporter {;
+	private String datatosave = "";
+	private SemSimModel semsimmodel;
 
 	public CSVExporter(SemSimModel semsimmodel){
 		this.semsimmodel = semsimmodel;
@@ -54,10 +52,10 @@ public class CSVExporter {
 	
 	public void saveCSV() {
 		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("", new String[]{"csv"}); 
-		if (filec!=null) {
+		if (filec.SaveAsAction()!=null) {
 			Scanner scanner = new Scanner(datatosave);
 			try {
-				PrintWriter outfile = new PrintWriter(new FileWriter(new File(savelocation)));
+				PrintWriter outfile = new PrintWriter(new FileWriter(filec.getSelectedFile()));
 				String nextline;
 				while (scanner.hasNextLine()) {
 					nextline = scanner.nextLine();

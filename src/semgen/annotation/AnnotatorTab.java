@@ -23,7 +23,6 @@ import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semgen.utilities.uicomponent.SemGenTab;
 import semsim.PropertyType;
-import semsim.SemSimConstants;
 import semsim.model.Importable;
 import semsim.model.SemSimComponent;
 import semsim.model.SemSimModel;

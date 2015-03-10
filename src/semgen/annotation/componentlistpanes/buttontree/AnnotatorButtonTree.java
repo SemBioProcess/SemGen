@@ -2,8 +2,6 @@ package semgen.annotation.componentlistpanes.buttontree;
 
 import java.awt.Component;
 import java.awt.Graphics2D;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;

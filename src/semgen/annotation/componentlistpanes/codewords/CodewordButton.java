@@ -9,7 +9,6 @@ import semgen.annotation.AnnotatorTab;
 import semgen.annotation.componentlistpanes.AnnotationObjectButton;
 import semgen.utilities.SemGenFont;
 import semsim.PropertyType;
-import semsim.SemSimConstants;
 import semsim.model.computational.datastructures.DataStructure;
 
 public class CodewordButton extends AnnotationObjectButton {

@@ -3,12 +3,10 @@ package semgen.visualizations;
 import javax.naming.InvalidNameException;
 
 import chrriis.common.WebServer;
-import chrriis.dj.nativeswing.swtimpl.components.WebBrowserAdapter;
-import chrriis.dj.nativeswing.swtimpl.components.WebBrowserEvent;
 
 public class SemGenCommunicatingWebBrowser extends
 		CommunicatingWebBrowser<SemGenWebBrowserCommandSender> {
-
+	private static final long serialVersionUID = 1L;
 	// Stage html
 	private final static String StageHtml = "/resources/stage.html";
 	

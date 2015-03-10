@@ -2,11 +2,7 @@ package semgen.visualizations;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-
 import javax.naming.InvalidNameException;
-import javax.swing.JOptionPane;
-
 import org.apache.commons.lang3.text.WordUtils;
 
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;

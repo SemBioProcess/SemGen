@@ -36,6 +36,9 @@ public class SemGenSaveFileChooser extends SemGenFileChooser {
 				extension = "mod";
 				modeltype = ModelClassifier.MML_MODEL;
 			}
+			else if(getFileFilter()==csvfilter){
+				extension = "csv";
+			}
 
 			// If there's an extension for the file type, make sure the filename ends in it
 			if(extension!=null){

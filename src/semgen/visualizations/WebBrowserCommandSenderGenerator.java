@@ -4,8 +4,6 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
-import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
-
 /**
  * Generates a command sender and its associated javascript
  * @author Ryan

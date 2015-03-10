@@ -4,8 +4,6 @@
 
 package semgen.utilities.uicomponent;
 
-import java.awt.Rectangle;
-
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
