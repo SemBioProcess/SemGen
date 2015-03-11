@@ -52,7 +52,7 @@ $(window).bind("cwb-initialized", function(e) {
 	receiver.onShowSubmodelNetwork(function (modelName, submodelData) {
 		console.log("Showing submodels for model " + modelName);
 		
-		addChildNodes(modelName, submodelData, function (data) {
+		addChildNodes(modelName, submodelData, function (data, parent) {
 			return new SubmodelNode(graph, data, parent);
 		});
 	});

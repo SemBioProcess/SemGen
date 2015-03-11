@@ -41,12 +41,15 @@ $(window).load(function() {
 					var data = [
 						{
 							name: "Submodel_1",
+							links: ["Submodel_2"],
 						},
 						{
 							name: "Submodel_2",
+							links: ["Submodel_3"],
 						},
 						{
 							name: "Submodel_3",
+							links: ["Submodel_1"],
 						},
 					];
 					

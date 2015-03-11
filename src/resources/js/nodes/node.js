@@ -1,19 +1,32 @@
 /**
  * Represents a node in the d3 graph
  */
-function Node(graph, id, displayName, r, color, textSize, nodeType) {
+function Node(graph, name, parent, links, r, color, textSize, nodeType) {
 	this.graph = graph;
-	this.id = id;
-	this.displayName = displayName;
+	this.id = name;
+	this.displayName = name;
 	this.r = r;
 	this.color = color;
 	this.textSize = textSize;
 	this.nodeType = nodeType;
 	this.className = "node";
 	this.element;
-	this.links = [];
+	this.parent = parent;
+	this.links = links || [];
 	this.userCanHide = true;
 	this.hidden = false;
+	
+	if(this.parent) {
+		// We need to keep the ids of each node unique by prefixing
+		// it with its parent node's id
+		this.id = this.parent.id + this.id;
+		
+		// Update the id of each link to contain the parent node id
+		// so we can look it up by it's id
+		for(var i = 0; i < this.links.length; i++) {
+			this.links[i] = this.parent.id + this.links[i];
+		}
+	}
 }
 
 Node.prototype.addClassName = function (className) {
