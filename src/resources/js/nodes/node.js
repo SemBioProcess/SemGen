@@ -3,6 +3,7 @@
  */
 function Node(graph, name, parent, links, r, color, textSize, nodeType) {
 	this.graph = graph;
+	this.name = name;
 	this.id = name;
 	this.displayName = name;
 	this.r = r;

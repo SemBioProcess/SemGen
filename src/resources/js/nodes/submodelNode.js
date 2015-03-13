@@ -8,3 +8,12 @@ function SubmodelNode (graph, data, parent) {
 	
 	this.addClassName("submodelNode");
 }
+
+SelectionManager.getInstance().onSelected(function (e, element, node) {
+	if(!(node instanceof SubmodelNode))
+		return;
+	
+	sender.submodelClicked(node.parent.name, node.name);
+	
+	e.stopPropagation();
+});
