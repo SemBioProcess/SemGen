@@ -31,9 +31,10 @@ public class ModelOverlapMap {
 	public ModelOverlapMap(int ind1, int ind2, SemanticComparator comparator) {
 		modelindicies = Pair.of(ind1, ind2);
 		ArrayList<Pair<DataStructure, DataStructure>> equivlist = comparator.identifyExactSemanticOverlap();
-		addDataStructureMapping(equivlist.get(0).getLeft(), equivlist.get(0).getRight(), maptype.automapping);
+		//addDataStructureMapping(equivlist.get(0).getLeft(), equivlist.get(0).getRight(), maptype.automapping);
+		
 		Pair<DataStructure, DataStructure> dspair;
-		for (int i=1; i<equivlist.size(); i++ ) {
+		for (int i=0; i<equivlist.size(); i++ ) {
 			dspair = equivlist.get(i);
 			addDataStructureMapping(dspair.getLeft(), dspair.getRight(), maptype.exactsemaoverlap);
 		}
@@ -127,7 +128,7 @@ public class ModelOverlapMap {
 		return unitmatchlist;
 	}
 	
-	public DataStructure getSolutionDomain() {
-		return dsmap.get(0).getLeft();
-	}
+//	public DataStructure getSolutionDomain() {
+//		return dsmap.get(0).getLeft();
+//	}
 }

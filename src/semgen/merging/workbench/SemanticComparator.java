@@ -47,10 +47,10 @@ public class SemanticComparator {
 		ArrayList<Pair<DataStructure, DataStructure>> dsmatchlist = new ArrayList<Pair<DataStructure, DataStructure>>();
 		
 		DataStructure soldom2 = null;
-		if(model2.getSolutionDomains().size() > 0)
+		if(model2.getSolutionDomains().size() > 0){
 			soldom2 = model2.getSolutionDomains().toArray(new DataStructure[]{})[0];
-		
-		dsmatchlist.add(Pair.of(slndomain, soldom2));
+			dsmatchlist.add(Pair.of(slndomain, soldom2));
+		}
 		
 		Set<DataStructure> model1ds = getComparableDataStructures(model1);
 		Set<DataStructure> model2ds = getComparableDataStructures(model2);

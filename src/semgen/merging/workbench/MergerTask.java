@@ -10,6 +10,7 @@ import semgen.utilities.SemGenTask;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
+import semsim.model.computational.datastructures.DataStructure;
 
 public class MergerTask extends SemGenTask {
 	private SemSimModel ssm1clone, ssm2clone, mergedmodel;
@@ -37,7 +38,9 @@ public class MergerTask extends SemGenTask {
     @Override
     public Void doInBackground() {	
     	try {
-    		removeDomainBounds(overlapmap.getSolutionDomain().getName());
+    		for(DataStructure solutiondomds : ssm1clone.getSolutionDomains())
+    			removeDomainBounds(solutiondomds.getName());
+    			
     		resolveSyntacticOverlap();
 			Merger merger = new Merger(ssm1clone, ssm2clone, overlapmap, choicelist, conversionfactors);
 			mergedmodel = merger.merge();
