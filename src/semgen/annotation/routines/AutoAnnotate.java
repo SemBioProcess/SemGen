@@ -42,7 +42,10 @@ public class AutoAnnotate {
 		Set<DataStructure> confirmedamounts = new HashSet<DataStructure>();
 		for(DataStructure camount : candidateamounts){
 			Boolean hasinitval = camount.hasStartValue();
-			
+			if((camount instanceof MappableVariable)) {
+				hasinitval = (((MappableVariable)camount).getCellMLinitialValue()!=null);
+			}
+
 			if(hasinitval && !camount.isDiscrete() 
 					&& !camount.getPhysicalProperty().hasRefersToAnnotation()){
 				ReferenceOntologyAnnotation roa = SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(camount);
