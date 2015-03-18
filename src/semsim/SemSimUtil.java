@@ -158,7 +158,7 @@ public class SemSimUtil {
 			}
 		}
 		// If we've gotten here, then there isn't a match, return the cpe argument
-		if(cpe == null) System.out.println("Next cpe was null");
+		if(cpe == null) System.err.println("Next cpe was null");
 		return cpe;
 	}	
 	
