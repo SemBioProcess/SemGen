@@ -139,12 +139,12 @@ function Graph() {
 		
 		// Add new links to the graph
 		newNodes.forEach(function (nodeData) {
-			// If the node doesnt have any links move on
-			if(!nodeData.links)
+			// If the node doesnt have any inputs move on
+			if(!nodeData.inputs)
 				return;
 			
 			// Add each link to our array
-			nodeData.links.forEach(function (sourceId) {
+			nodeData.inputs.forEach(function (sourceId) {
 				// Try and find the source node
 				var source = findNode(sourceId);
 				

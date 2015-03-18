@@ -1,7 +1,7 @@
 /**
  * Represents a node in the d3 graph
  */
-function Node(graph, name, parent, links, r, color, textSize, nodeType) {
+function Node(graph, name, parent, inputs, r, color, textSize, nodeType) {
 	this.graph = graph;
 	this.name = name;
 	this.id = name;
@@ -13,7 +13,7 @@ function Node(graph, name, parent, links, r, color, textSize, nodeType) {
 	this.className = "node";
 	this.element;
 	this.parent = parent;
-	this.links = links || [];
+	this.inputs = inputs || [];
 	this.userCanHide = true;
 	this.hidden = false;
 	
@@ -22,10 +22,10 @@ function Node(graph, name, parent, links, r, color, textSize, nodeType) {
 		// it with its parent node's id
 		this.id = this.parent.id + this.id;
 		
-		// Update the id of each link to contain the parent node id
+		// Update the id of each input to contain the parent node id
 		// so we can look it up by it's id
-		for(var i = 0; i < this.links.length; i++) {
-			this.links[i] = this.parent.id + this.links[i];
+		for(var i = 0; i < this.inputs.length; i++) {
+			this.inputs[i] = this.parent.id + this.inputs[i];
 		}
 	}
 }

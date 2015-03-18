@@ -13,7 +13,7 @@ function DependencyNode (graph, data, parentNode) {
 	if(this.group == "undefined")
 		throw "invalid dependency node type: " + data.nodeType;
 	
-	Node.prototype.constructor.call(this, graph, data.name, parentNode, data.links, 5, typeToColor[data.nodeType], 11, data.nodeType);
+	Node.prototype.constructor.call(this, graph, data.name, parentNode, data.inputs, 5, typeToColor[data.nodeType], 11, data.nodeType);
 	
 	this.addClassName("dependencyNode");
 	this.addBehavior(Columns)

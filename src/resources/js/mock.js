@@ -17,7 +17,7 @@ $(window).load(function() {
 					var data = [
 					    {
 					    	name: "A",
-					    	links: ["B"],
+					    	inputs: ["B"],
 					    	nodeType: "state",
 					    },
 					    {
@@ -26,12 +26,12 @@ $(window).load(function() {
 					    },
 					    {
 					    	name: "C",
-					    	links: ["A"],
+					    	inputs: ["A"],
 					    	nodeType: "constitutive",
 					    },
 					    {
 					    	name: "D",
-					    	links: ["A", "B", "C"],
+					    	inputs: ["A", "B", "C"],
 					    	nodeType: "State",
 					    },
 					];

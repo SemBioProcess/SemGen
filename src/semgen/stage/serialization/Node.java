@@ -17,7 +17,7 @@ import semsim.model.computational.datastructures.MappableVariable;
 public class Node {
 	public String name;
 	public String nodeType;
-	public ArrayList<String> links;
+	public ArrayList<String> inputs;
 	
 	public Node(DataStructure dataStructure)
 	{
@@ -25,17 +25,17 @@ public class Node {
 		this.nodeType = dataStructure.getPropertyType(SemGen.semsimlib).toString();
 		
 		// Are there inputs?
-		Set<? extends DataStructure> inputs = null;
+		Set<? extends DataStructure> dataStructureInputs = null;
 		if(dataStructure.getComputation()!=null)
-			inputs = dataStructure.getComputation().getInputs();
+			dataStructureInputs = dataStructure.getComputation().getInputs();
 		else if(dataStructure instanceof MappableVariable)
-			inputs = ((MappableVariable)dataStructure).getMappedTo();
+			dataStructureInputs = ((MappableVariable)dataStructure).getMappedTo();
 
 		// Add links
-		links = new ArrayList<String>();
-		for(DataStructure input : inputs)
+		inputs = new ArrayList<String>();
+		for(DataStructure input : dataStructureInputs)
 		{
-			links.add(input.getName());
+			inputs.add(input.getName());
 		}
 	}
 }
