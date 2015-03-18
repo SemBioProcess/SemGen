@@ -10,6 +10,7 @@ import org.semanticweb.owlapi.model.OWLException;
 import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.Submodel;
 import JSim.util.Xcept;
 
@@ -58,7 +59,10 @@ public class Merger {
 			
 			// If "ignore equivalency" is not selected"
 			if(keptds!=null && discardedds !=null){	
-				if (!replaceCodeWords(keptds, discardedds, modelfordiscardedds, soldom1, i)) 
+				if(keptds instanceof MappableVariable && discardedds instanceof MappableVariable){
+					rewireMappedVariableDependencies((MappableVariable)keptds, (MappableVariable)discardedds, modelfordiscardedds, i);
+				}
+				else if (! replaceCodeWords(keptds, discardedds, modelfordiscardedds, soldom1, i)) 
 					return null;
 			}
 			i++;
@@ -103,14 +107,30 @@ public class Merger {
 			mergedmodel.addSubmodel(subfrom2);
 		}
 		
-		// MIGHT NEED TO COPY IN PHYSICAL MODEL COMPONENTS?
-
-		
 		// WHAT TO DO ABOUT ONTOLOGY-LEVEL ANNOTATIONS?
 		mergedmodel.setNamespace(mergedmodel.generateNamespaceFromDateAndTime());
 		
 		return mergedmodel;
 	}
+	
+	// Changes to variables when merging two models with CellML-style mapped variables
+	private void rewireMappedVariableDependencies(MappableVariable keptds, MappableVariable discardedds, 
+			SemSimModel modelfordiscardedds, int index){
+		
+		//For the codeword that's replaced, turn it into a component input and create a mapping from the kept codeword to the discarded one.
+		discardedds.setPublicInterfaceValue("in");
+		keptds.addVariableMappingTo(discardedds);
+		
+		//Take all mappedTo values for discarded codeword and apply them to kept codeword.
+		for(MappableVariable mappedtods : discardedds.getMappedTo()){
+			keptds.addVariableMappingTo(mappedtods);
+		}
+		
+		//Also remove any initial_value that the discarded DS has.
+		discardedds.setCellMLinitialValue(null);
+	}
+	
+	
 	
 	private boolean replaceCodeWords(DataStructure keptds, DataStructure discardedds, 
 			SemSimModel modelfordiscardedds, DataStructure soldom1, int index) {
@@ -150,5 +170,4 @@ public class Merger {
 		}
 		return true;
 	}
-	
 }
