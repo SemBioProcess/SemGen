@@ -41,15 +41,15 @@ $(window).load(function() {
 					var data = [
 						{
 							name: "Submodel_1",
-							links: ["Submodel_2"],
+							inputs: ["Submodel_2"],
 						},
 						{
 							name: "Submodel_2",
-							links: ["Submodel_3"],
+							inputs: ["Submodel_3"],
 						},
 						{
 							name: "Submodel_3",
-							links: ["Submodel_1"],
+							inputs: ["Submodel_1"],
 						},
 					];
 					
@@ -61,7 +61,7 @@ $(window).load(function() {
 				var data = [
 				    {
 				    	name: "A",
-				    	links: ["B"],
+				    	inputs: ["B"],
 				    	nodeType: "state",
 				    },
 				    {
@@ -70,12 +70,12 @@ $(window).load(function() {
 				    },
 				    {
 				    	name: "C",
-				    	links: ["A"],
+				    	inputs: ["A"],
 				    	nodeType: "constitutive",
 				    },
 				    {
 				    	name: "D",
-				    	links: ["A", "B", "C"],
+				    	inputs: ["A", "B", "C"],
 				    	nodeType: "State",
 				    },
 				];
