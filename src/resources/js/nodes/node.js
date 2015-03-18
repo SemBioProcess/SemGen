@@ -64,9 +64,9 @@ Node.prototype.getInputs = function () {
 	if(!this.inputs)
 		return null;
 	
-	// Don't show any inputs to this node if it has children
+	// Don't show any inputs to this node can't link
 	if(!this.canLink())
-		return
+		return;
 	
 	// Update the id of each input to contain the parent node id
 	// so we can look it up by it's id
