@@ -41,18 +41,47 @@ $(window).load(function() {
 					var data = [
 						{
 							name: "Submodel_1",
+							links: ["Submodel_2"],
 						},
 						{
 							name: "Submodel_2",
+							links: ["Submodel_3"],
 						},
 						{
 							name: "Submodel_3",
+							links: ["Submodel_1"],
 						},
 					];
 					
 					mockReceiver.showSubmodelNetwork(modelName, data);
 				}
 			},
+			
+			submodelClicked: function(parentName, submodelName) {
+				var data = [
+				    {
+				    	name: "A",
+				    	links: ["B"],
+				    	nodeType: "state",
+				    },
+				    {
+				    	name: "B",
+				    	nodeType: "Rate",
+				    },
+				    {
+				    	name: "C",
+				    	links: ["A"],
+				    	nodeType: "constitutive",
+				    },
+				    {
+				    	name: "D",
+				    	links: ["A", "B", "C"],
+				    	nodeType: "State",
+				    },
+				];
+				
+				mockReceiver.showSubmodelDependencyNetwork(parentName, submodelName, data);
+			}
 	};
 	
 	var mockReceiver = {
@@ -61,6 +90,8 @@ $(window).load(function() {
 			onShowDependencyNetwork: function (handler) { this.showDependencyNetwork = handler; },
 			
 			onShowSubmodelNetwork: function (handler) { this.showSubmodelNetwork = handler; },
+			
+			onShowSubmodelDependencyNetwork: function (handler) { this.showSubmodelDependencyNetwork = handler; },
 	};
 	
 	var event; // The custom event that will be created

@@ -32,6 +32,9 @@ function ModelPopover(node) {
 }
 
 SelectionManager.getInstance().onSelected(function (e, element, node) {
+	if(!(node instanceof ModelNode))
+		return;
+	
 	var popover = $(element);
 	var isOpen = false;
 	

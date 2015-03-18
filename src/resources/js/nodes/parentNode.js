@@ -3,8 +3,8 @@
  */
 ParentNode.prototype = new Node();
 ParentNode.prototype.constructor = ParentNode;
-function ParentNode(graph, id, displayName, r, group, textSize, nodeType) {
-	Node.prototype.constructor.call(this, graph, id, displayName, r, group, textSize, nodeType);
+function ParentNode(graph, name, parent, links, r, group, textSize, nodeType) {
+	Node.prototype.constructor.call(this, graph, name, parent, links, r, group, textSize, nodeType);
 	this.userCanHide = false;
 	this.children = null;
 }
@@ -14,7 +14,6 @@ ParentNode.prototype.setChildren = function (children) {
 	if(this.children) {
 		this.children.forEach(function (child) {
 			this.graph.removeNode(child.id);
-			child.parent = null;
 		}, this);
 	}
 	
@@ -27,11 +26,13 @@ ParentNode.prototype.setChildren = function (children) {
 			child.x = this.x + Math.random();
 			child.y = this.y + Math.random();
 			
-			child.parent = this;
-			
 			// Add the child to the graph
 			this.graph.addNode(child);
 		}, this);
+		
+		// Hide constitutive nodes by default
+		this.graph.update();
+		this.graph.hideNodes("Constitutive");
 	}
 
 	// Show/Hide the correct elements depending on the model's state
