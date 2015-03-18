@@ -21,33 +21,6 @@ function Node(graph, name, parent, inputs, r, color, textSize, nodeType) {
 		// We need to keep the ids of each node unique by prefixing
 		// it with its parent node's id
 		this.id = this.parent.id + this.id;
-		
-		// Update the id of each input to contain the parent node id
-		// so we can look it up by it's id
-		var initialLength = this.inputs.length;
-		for(var i = 0; i < initialLength; i++) {
-			var inputData = this.inputs[i];
-			var inputName;
-			
-			var parent;
-			
-			// If the input is an object it specifies a parent
-			if(typeof inputData == "object") {
-				parent = this.graph.findNode(inputData.parents.join(''));
-				inputName = inputData.name;
-				
-				// Add a new link to the parent
-				// This link will not get fixed up since it's at the end of the array
-				this.inputs[this.inputs.length] = parent.id;
-			}
-			// Otherwise, it is a string referring to the input node
-			else {
-				parent = this.parent;
-				inputName = inputData
-			}
-			
-			this.inputs[i] = parent.id + inputName;
-		}
 	}
 }
 
@@ -81,6 +54,61 @@ Node.prototype.createVisualElement = function (element, graph) {
 	this.createTextElement();
 	
 	$(this).triggerHandler('createVisualization', [this.rootElement]);
+}
+
+Node.prototype.canLink = function () {
+	return true;
+}
+
+Node.prototype.getInputs = function () {
+	if(!this.inputs)
+		return null;
+	
+	// Don't show any inputs to this node if it has children
+	if(!this.canLink())
+		return
+	
+	// Update the id of each input to contain the parent node id
+	// so we can look it up by it's id
+	var inputs = [];
+	for(var i = 0; i < this.inputs.length; i++) {
+		var inputData = this.inputs[i];
+		var inputNodeId;
+		
+		// If the input is an object it specifies a parent
+		if(typeof inputData == "object") {
+			var parent = this.graph.findNode(inputData.parents.join(''));
+			
+			// If the parent can link add a link to it
+			if(parent.canLink())
+				inputNodeId = parent.id;
+			// Otherwise, add a link to its child
+			else
+				inputNodeId = parent.id + inputData.name;
+		}
+		// Otherwise, it is a string referring to the input node
+		else
+			inputNodeId = this.parent.id + inputData;
+		
+		// Get the input node
+		var inputNode = this.graph.findNode(inputNodeId);
+		
+		if(!inputNode) {
+			console.log("input node '" + inputNodeId + "' does not exist. Can't build link.");
+			continue;
+		}
+		
+		// If the parent has children it's circle is hidden
+		// so we don't want to show any inputs to it
+		if(!inputNode.canLink()) {
+			console.log("input node '" + inputNodeId + "' has its circle hidden. Can't build link.");
+			continue;
+		}
+		
+		inputs.push(inputNode);
+	}
+	
+	return inputs;
 }
 
 Node.prototype.tickHandler = function (element, graph) {

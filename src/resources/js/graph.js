@@ -27,7 +27,6 @@ function Graph() {
 		}
 		
 		nodes.push(nodeData);
-		newNodes.push(nodeData);
 	};
 	
 	// Remove a node from the graph
@@ -55,6 +54,16 @@ function Graph() {
 	        	i++;
 	    }
 	    nodes.splice(findNodeIndex(id),1);
+	};
+	
+	// Remove all nodes
+	this.removeAllNodes = function(){
+	    nodes.splice(0,nodes.length);
+	};
+	
+	// Remove all links
+	this.removeAllLinks = function(){
+	    links.splice(0,links.length);
 	};
 	
 	// Hide all nodes of the given type
@@ -85,39 +94,14 @@ function Graph() {
 		if(!hiddenNodes[type])
 			return;
 		
-		// BRUTE FORCE APPROACH
-		// Remove everything from the graph
-		// Add it all back and redraw
-		// New nodes don't know about "in" links,
-		// So rather than traverse every node looking for links that point to this node,
-		// let's just redraw everything
-		// If this becomes an issues we can revisit
-		{
-			// Copy the current array of nodes
-			// so we're not iterating over the same array we're
-			// changing when we call removeNode
-			var nodesToRefresh = nodes.slice(0);
-			
-			// Remove each nodes from the graph
-			nodesToRefresh.forEach(function (node) {
-				this.removeNode(node.id);
-			}, this);
-			
-			// All nodes are new now
-			newNodes = [];
-			
-			// Add in our hidden nodes
-			nodesToRefresh = nodesToRefresh.concat(hiddenNodes[type]);
-			
-			// Add all nodes back to the graph
-			nodesToRefresh.forEach(function (node) {
-				node.hidden = false;
-				this.addNode(node);
-			}, this);
-			
-			// These nodes are no longer hidden
-			delete hiddenNodes[type];
-		}
+		// Add all nodes back to the graph
+		hiddenNodes[type].forEach(function (node) {
+			node.hidden = false;
+			this.addNode(node);
+		}, this);
+		
+		// These nodes are no longer hidden
+		delete hiddenNodes[type];
 		
 		this.update();
 	}
@@ -137,33 +121,7 @@ function Graph() {
 	this.update = function () {
 		$(this).triggerHandler("preupdate");
 		
-		// Add new links to the graph
-		newNodes.forEach(function (nodeData) {
-			// If the node doesnt have any inputs move on
-			if(!nodeData.inputs)
-				return;
-			
-			// Add each link to our array
-			nodeData.inputs.forEach(function (sourceId) {
-				// Try and find the source node
-				var source = this.findNode(sourceId);
-				
-				// If the source doesn't exist ignore the link
-				if(!source) {
-					console.log("source node '" + sourceId + "' does not exist. Can't build link.");
-					return;
-				}
-				
-				links.push({
-					source: source,
-					target: nodeData,
-					value: 1,
-				});
-			}, this);
-		}, this);
-		
-		// These are no longer new
-		newNodes = [];
+		bruteForceRefresh.call(this);
 
 		// Add the links
 		var path = vis.selectAll("svg > g > path")
@@ -232,6 +190,55 @@ function Graph() {
 	this.w = $(window).width();
 	this.h = $(window).height();
 	
+	// Brute force redraw
+	// Motivation:
+	//	The z-index in SVG relies on the order of elements in html.
+	//	The way things are added using D3, we don't have much control
+	//	over ordering when we're adding and removing element dynamically.
+	//	So to get control back we remove everything and redraw everything from scratch
+	var refreshing = false;
+	var bruteForceRefresh = function () {
+		if(refreshing)
+			return;
+		
+		refreshing = true;
+		
+		// Remove all nodes from the graph
+		var allNodes = nodes.slice(0);
+		this.removeAllNodes();
+		
+		// Remove all links from the graph
+		this.removeAllLinks();
+		
+		// Redraw
+		this.update();
+		
+		// Add the nodes back
+		allNodes.forEach(function (node) {
+			this.addNode(node);
+		}, this);
+		
+		// Process links for each node
+		nodes.forEach(function (node) {
+			var inputs = node.getInputs();
+			
+			// If the node doesnt have any inputs move on
+			if(!inputs)
+				return;
+			
+			// Add each link to our array
+			inputs.forEach(function (input) {
+				links.push({
+					source: input,
+					target: node,
+					value: 1,
+				});
+			}, this);
+		}, this);
+		
+		refreshing = false;
+	}
+	
 	// Find a node's index
 	var findNodeIndex = function(id) {
 		for (var i in nodes) {
@@ -255,7 +262,6 @@ function Graph() {
 	this.color = d3.scale.category10();
 	var nodes = this.force.nodes(),
 		links = this.force.links();
-	var newNodes = [];
 	var hiddenNodes = {};
 	
 	// Fix all nodes when ctrl + M is pressed

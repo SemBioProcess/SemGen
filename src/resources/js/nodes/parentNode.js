@@ -9,6 +9,16 @@ function ParentNode(graph, name, parent, links, r, group, textSize, nodeType) {
 	this.children = null;
 }
 
+ParentNode.prototype.createVisualElement = function (element, graph) {
+	Node.prototype.createVisualElement.call(this, element, graph);
+	
+	this.rootElement.select("circle").style("display", this.children ? "none" : "inherit");
+}
+
+ParentNode.prototype.canLink = function () {
+	return !this.children;
+}
+
 ParentNode.prototype.setChildren = function (children) {
 	// Remove existing child nodes from the graph
 	if(this.children) {
@@ -42,10 +52,6 @@ ParentNode.prototype.setChildren = function (children) {
 		this.graph.update();
 		this.graph.hideNodes("Constitutive");
 	}
-
-	// Show/Hide the correct elements depending on the model's state
-	var circleDisplay = this.children ? "none" : "inherit";
-	this.rootElement.select("circle").style("display", circleDisplay);
 	
 	$(this).triggerHandler('childrenSet', [children]);
 	
