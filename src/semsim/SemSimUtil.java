@@ -89,8 +89,6 @@ public class SemSimUtil {
 						selfrefODE = true;
 					}
 					else{
-						System.out.println(statevarname);
-						System.out.println(statevarname + ": " + modelfordiscardedds.getDataStructure(statevarname).getComputation());
 						modelfordiscardedds.getDataStructure(statevarname).getComputation().setComputationalCode(neweq);
 						modelfordiscardedds.getDataStructure(statevarname).getComputation().setMathML(newmathml);
 					}
