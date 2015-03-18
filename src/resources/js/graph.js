@@ -21,7 +21,7 @@ function Graph() {
 			throw "Node className must be a string";
 		
 		// If the node already exists don't add it again
-		if(findNode(nodeData.id)) {
+		if(this.findNode(nodeData.id)) {
 			console.log("node already exists. Node id: " + nodeData.id);
 			return;
 		}
@@ -33,7 +33,7 @@ function Graph() {
 	// Remove a node from the graph
 	this.removeNode = function (id) {
 		var i = 0;
-	    var node = findNode(id);
+	    var node = this.findNode(id);
 	    
 	    // If we did not find the node it must be hidden
 	    if(!node) {
@@ -146,7 +146,7 @@ function Graph() {
 			// Add each link to our array
 			nodeData.inputs.forEach(function (sourceId) {
 				// Try and find the source node
-				var source = findNode(sourceId);
+				var source = this.findNode(sourceId);
 				
 				// If the source doesn't exist ignore the link
 				if(!source) {
@@ -159,8 +159,8 @@ function Graph() {
 					target: nodeData,
 					value: 1,
 				});
-			});
-		});
+			}, this);
+		}, this);
 		
 		// These are no longer new
 		newNodes = [];
@@ -220,17 +220,17 @@ function Graph() {
 	    $(this).triggerHandler("postupdate");
 	};
 	
-	// Set the graph's width and height
-	this.w = $(window).width();
-	this.h = $(window).height();
-	
 	// Find a node by its id
-	var findNode = function(id) {
+	this.findNode = function(id) {
 	    for (var i in nodes) {
 	        if (nodes[i].id === id)
 	        	return nodes[i];
 	    }
 	};
+	
+	// Set the graph's width and height
+	this.w = $(window).width();
+	this.h = $(window).height();
 	
 	// Find a node's index
 	var findNodeIndex = function(id) {

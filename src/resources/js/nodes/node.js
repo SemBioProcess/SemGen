@@ -24,8 +24,29 @@ function Node(graph, name, parent, inputs, r, color, textSize, nodeType) {
 		
 		// Update the id of each input to contain the parent node id
 		// so we can look it up by it's id
-		for(var i = 0; i < this.inputs.length; i++) {
-			this.inputs[i] = this.parent.id + this.inputs[i];
+		var initialLength = this.inputs.length;
+		for(var i = 0; i < initialLength; i++) {
+			var inputData = this.inputs[i];
+			var inputName;
+			
+			var parent;
+			
+			// If the input is an object it specifies a parent
+			if(typeof inputData == "object") {
+				parent = this.graph.findNode(inputData.parents.join(''));
+				inputName = inputData.name;
+				
+				// Add a new link to the parent
+				// This link will not get fixed up since it's at the end of the array
+				this.inputs[this.inputs.length] = parent.id;
+			}
+			// Otherwise, it is a string referring to the input node
+			else {
+				parent = this.parent;
+				inputName = inputData
+			}
+			
+			this.inputs[i] = parent.id + inputName;
 		}
 	}
 }

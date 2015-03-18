@@ -58,10 +58,14 @@ $(window).load(function() {
 			},
 			
 			submodelClicked: function(parentName, submodelName) {
+				var submodelInput = submodelName == "Submodel_1" ? "Submodel_2" :
+						submodelName == "Submodel_2" ? "Submodel_3" :
+						"Submodel_1";
+
 				var data = [
 				    {
 				    	name: "A",
-				    	inputs: ["B"],
+				    	inputs: ["B", { name: "A", parents: [parentName, submodelInput] }],
 				    	nodeType: "state",
 				    },
 				    {
