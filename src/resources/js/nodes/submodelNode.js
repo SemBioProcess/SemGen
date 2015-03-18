@@ -7,6 +7,8 @@ function SubmodelNode (graph, data, parent) {
 	ParentNode.prototype.constructor.call(this, graph, data.name, parent, data.inputs, 10, "#CA9485", 14, "Submodel");
 	
 	this.addClassName("submodelNode");
+	
+	this.addBehavior(Hull);
 }
 
 SelectionManager.getInstance().onSelected(function (e, element, node) {

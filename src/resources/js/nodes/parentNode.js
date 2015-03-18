@@ -12,9 +12,17 @@ function ParentNode(graph, name, parent, links, r, group, textSize, nodeType) {
 ParentNode.prototype.setChildren = function (children) {
 	// Remove existing child nodes from the graph
 	if(this.children) {
-		this.children.forEach(function (child) {
-			this.graph.removeNode(child.id);
-		}, this);
+		// Recursively remove all descendant nodes
+		var removeChildren = function (childrenArr) {
+			childrenArr.forEach(function (child) {
+				// If this child has children remove them from the graph as well
+				if(child.children)
+					removeChildren.call(this, child.children);
+				
+				this.graph.removeNode(child.id);
+			}, this);
+		};
+		removeChildren.call(this, this.children);
 	}
 	
 	this.children = children;
