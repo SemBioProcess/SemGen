@@ -144,19 +144,19 @@ function Graph() {
 				return;
 			
 			// Add each link to our array
-			nodeData.links.forEach(function (targetId) {
-				// Try and find the target node
-				var target = findNode(targetId);
+			nodeData.links.forEach(function (sourceId) {
+				// Try and find the source node
+				var source = findNode(sourceId);
 				
-				// If the target doesn't exist ignore the link
-				if(!target) {
-					console.log("target node '" + targetId + "' does not exist. Can't build link.");
+				// If the source doesn't exist ignore the link
+				if(!source) {
+					console.log("source node '" + sourceId + "' does not exist. Can't build link.");
 					return;
 				}
 				
 				links.push({
-					source: nodeData,
-					target: target,
+					source: source,
+					target: nodeData,
 					value: 1,
 				});
 			});
