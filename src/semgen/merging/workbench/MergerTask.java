@@ -11,16 +11,18 @@ import semgen.utilities.uicomponent.SemGenProgressBar;
 import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.physical.Submodel;
 
 public class MergerTask extends SemGenTask {
 	private SemSimModel ssm1clone, ssm2clone, mergedmodel;
 	private ModelOverlapMap overlapmap;
-	private HashMap<String, String> cwnamemap;
+	private HashMap<String, String> cwnamemap; // Map of codewords with identical names
+	private HashMap<String, String> submodnamemap; // Map of submodels with identical names
 	private ArrayList<ResolutionChoice> choicelist;
 	private ArrayList<Pair<Double,String>> conversionfactors;
 	
 	MergerTask(Pair<SemSimModel, SemSimModel> modelpair,
-			ModelOverlapMap modelmap,HashMap<String, String> namemap, ArrayList<ResolutionChoice> choices, 
+			ModelOverlapMap modelmap,HashMap<String, String> dsnamemap, HashMap<String,String> smnamemap, ArrayList<ResolutionChoice> choices, 
 			ArrayList<Pair<Double,String>> conversions, SemGenProgressBar bar) {
 		overlapmap = modelmap;
 		try {
@@ -29,7 +31,8 @@ public class MergerTask extends SemGenTask {
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}
-		cwnamemap = namemap;
+		cwnamemap = dsnamemap;
+		submodnamemap = smnamemap;
 		choicelist = choices;
 		conversionfactors = conversions;
 		progframe = bar;
@@ -50,9 +53,21 @@ public class MergerTask extends SemGenTask {
         return null;
     }
 
-	// Why isn't this working for Pandit-Hinch merge?
-	// Prompt the user to resolve the points of SYNTACTIC overlap (same codeword names)
 	private void resolveSyntacticOverlap() {
+		
+		// First resolve the syntactic overlap between submodels
+		for(String oldsmname : submodnamemap.keySet()){
+			String newsmname = submodnamemap.get(oldsmname);
+			Submodel renamedsm = ssm1clone.getSubmodel(oldsmname);
+			renamedsm.setName(newsmname);
+			for(DataStructure ds : renamedsm.getAssociatedDataStructures()){
+				String olddsname = ds.getName();
+				ds.setName(olddsname.replace(oldsmname, newsmname));
+				cwnamemap.remove(olddsname);  // Remove duplicate codeword mapping if present in cwnamemap
+			}
+		}
+		
+		// Then resolve for data structures
 		for (String dsname : cwnamemap.keySet()) {
 			String newdsname = cwnamemap.get(dsname);
 			ssm1clone.getDataStructure(dsname).setName(newdsname);

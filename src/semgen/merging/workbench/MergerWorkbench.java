@@ -26,7 +26,8 @@ import semsim.model.computational.datastructures.DataStructure;
 
 public class MergerWorkbench extends Workbench {
 	private int modelselection = -1;
-	private ModelOverlapMap overlapmap = null;
+	protected ModelOverlapMap overlapmap = null;
+	public SemanticComparator comparator;
 	private ArrayList<SemSimModel> loadedmodels = new ArrayList<SemSimModel>();
 	private SemSimModel mergedmodel;
 	private ArrayList<File> filepathlist = new ArrayList<File>();
@@ -75,10 +76,6 @@ public class MergerWorkbench extends Workbench {
 		
 		SemSimModel model;
 		for (File file : files) {
-//			if (ModelClassifier.classify(file)==ModelClassifier.CELLML_MODEL) {
-////				CellMLModelError(file.getName());
-////				continue;
-//			}
 			model = loadModel(file, autoannotate);
 			loadedmodels.add(model);
 			filepathlist.add(file);
@@ -121,11 +118,12 @@ public class MergerWorkbench extends Workbench {
 	}
 	
 	public void mapModels() {
-		SemanticComparator comparator = new SemanticComparator(loadedmodels.get(0), loadedmodels.get(1));
+		comparator = new SemanticComparator(loadedmodels.get(0), loadedmodels.get(1));
 		overlapmap = new ModelOverlapMap(0, 1, comparator);
 		setChanged();
 		notifyObservers(MergeEvent.mapfocuschanged);
 	}
+	
 	
 	public HashMap<String, String> createIdenticalNameMap(ArrayList<ResolutionChoice> choicelist) {
 		HashMap<String, String> identicalmap = new HashMap<String,String>();
@@ -135,7 +133,7 @@ public class MergerWorkbench extends Workbench {
 				identolnames.add(overlapmap.getDataStructurePairNames(i).getLeft());
 			}
 		}
-		for (String name : overlapmap.getIdenticalNames()) {
+		for (String name : comparator.getIdenticalCodewords()) {
 			if (!identolnames.contains(name)) {
 				identicalmap.put(name, "");
 			}
@@ -223,7 +221,7 @@ public class MergerWorkbench extends Workbench {
 		return overlapmap.compareDataStructureUnits();
 	}
 	
-	public String executeMerge(HashMap<String,String> namemap, ArrayList<ResolutionChoice> choices, 
+	public String executeMerge(HashMap<String,String> dsnamemap, HashMap<String,String> smnamemap, ArrayList<ResolutionChoice> choices, 
 			ArrayList<Pair<Double,String>> conversions, SemGenProgressBar bar) {
 		Pair<SemSimModel, SemSimModel> models = getModelOverlapMapModels(overlapmap);
 
@@ -231,7 +229,7 @@ public class MergerWorkbench extends Workbench {
 			return "One of the models to be merged has multiple solution domains.";
 		}
 		
-		MergerTask task = new MergerTask(models, overlapmap, namemap, choices, conversions, bar) {
+		MergerTask task = new MergerTask(models, overlapmap, dsnamemap, smnamemap, choices, conversions, bar) {
 			public void endTask() {
 				mergedmodel = getMergedModel();
 				setChanged();

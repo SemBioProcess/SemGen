@@ -10,6 +10,7 @@ import semsim.owl.SemSimOWLFactory;
 
 public class ModelOverlapMap {
 	Pair<Integer, Integer> modelindicies;
+	private Set<String> identicalsubmodelnames;
 	private Set<String> identicaldsnames;
 	private ArrayList<Pair<DataStructure, DataStructure>> dsmap = new ArrayList<Pair<DataStructure, DataStructure>>();
 
@@ -36,7 +37,8 @@ public class ModelOverlapMap {
 			dspair = equivlist.get(i);
 			addDataStructureMapping(dspair.getLeft(), dspair.getRight(), maptype.exactsemaoverlap);
 		}
-		identicaldsnames = comparator.identifyIdenticalCodewords();
+		identicalsubmodelnames = comparator.getIdenticalSubmodels();
+		identicaldsnames = comparator.getIdenticalCodewords();
 	}
 	
 	
@@ -49,9 +51,14 @@ public class ModelOverlapMap {
 		maptypelist.add(type);
 	}
 	
-	public Set<String> getIdenticalNames() {
+	public Set<String> getIdenticalSubmodelNames(){
+		return identicalsubmodelnames;
+	}
+	
+	public Set<String> getIdenticalNames(){
 		return identicaldsnames;
 	}
+	
 
 	public Pair<Integer, Integer> getModelIndicies() {
 		return modelindicies;

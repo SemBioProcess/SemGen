@@ -13,6 +13,7 @@ import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
+import semsim.model.physical.Submodel;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.PhysicalProperty;
 
@@ -27,11 +28,25 @@ public class SemanticComparator {
 			slndomain = model1.getSolutionDomains().toArray(new DataStructure[]{})[0];
 	}
 	
-	public Set<String> identifyIdenticalCodewords() {
+	// Collect the submodels that have the same name
+	public Set<String> getIdenticalSubmodels(){
+		Set<String> matchedsubmodels = new HashSet<String>();
+		
+		for (Submodel submodel : model1.getSubmodels()) {
+			if (model2.getSubmodel(submodel.getName())!=null) matchedsubmodels.add(submodel.getName());
+		}
+		return matchedsubmodels;
+	}
+	
+	
+	// Collect the data structures that have the same name. Ignore CellML-type component inputs (mapped variables that have an "in" interface)
+	public Set<String> getIdenticalCodewords() {
 		Set<String> matchedcdwds = new HashSet<String>();
 		
 		for (DataStructure ds : model1.getDataStructures()) {
-			if (model2.containsDataStructure(ds.getName()))	matchedcdwds.add(ds.getName());
+			if(! dataStructureIsMappedComponentInput(ds)){
+				if (model2.containsDataStructure(ds.getName()))	matchedcdwds.add(ds.getName());
+			}
 		}
 		if (slndomain != null) {
 			String slndomainname = slndomain.getName(); 
@@ -103,14 +118,8 @@ public class SemanticComparator {
 	public Set<DataStructure> getComparableDataStructures(SemSimModel model){
 		Set<DataStructure> dsset = new HashSet<DataStructure>();
 		for(DataStructure ds : model.getDataStructures()){
-			if(ds instanceof MappableVariable){
-				MappableVariable mappedds = (MappableVariable)ds;
-				
-				// If the mapped variable has an "in" interface value, don't add to the set of comparable DataStructures
-				if (mappedds.getPublicInterfaceValue().equals("in") || mappedds.getPrivateInterfaceValue().equals("in"))
-					continue;
-			}
-			dsset.add(ds);
+			if(dataStructureIsMappedComponentInput(ds)) continue;
+			else dsset.add(ds);
 		}
 		return dsset;
 	}
@@ -191,5 +200,16 @@ public class SemanticComparator {
 			// if we've made it here, the participants are equivalent
 		}
 		return matchfound;
+	}
+	
+	// Function for determining if a DataStructure is a mapped variable that is a component input as in CellML models
+	public boolean dataStructureIsMappedComponentInput(DataStructure ds){
+		if(ds instanceof MappableVariable){
+			MappableVariable mappedds = (MappableVariable)ds;
+			
+			// If the mapped variable has an "in" interface value, return true
+			return mappedds.getPublicInterfaceValue().equals("in") || mappedds.getPrivateInterfaceValue().equals("in");
+		}
+		else return false; 
 	}
 }

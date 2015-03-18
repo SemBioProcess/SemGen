@@ -40,7 +40,9 @@ public class Merger {
 		int i = 0;
 		DataStructure discardedds = null;
 		DataStructure keptds = null;
-		DataStructure soldom1 = ssm1clone.getSolutionDomains().toArray(new DataStructure[]{})[0];
+		
+		// IF there is one solution domain, get it, otherwise set soldom1 to null
+		DataStructure soldom1 = (ssm1clone.getSolutionDomains().size()==1) ? ssm1clone.getSolutionDomains().toArray(new DataStructure[]{})[0] : null;
 
 		for (Pair<DataStructure, DataStructure> dsp : overlapmap.getDataStructurePairs()) {
 			if (choicelist.get(i).equals(ResolutionChoice.first)) {
@@ -72,14 +74,17 @@ public class Merger {
 		
 		Submodel sub2 = new Submodel(ssm2clone.getName());
 		sub2.setAssociatedDataStructures(ssm2clone.getDataStructures());
-		sub2.addDataStructure(soldom1);
 		
-		if(ssm1clone.containsDataStructure(soldom1.getName() + ".min"))
-			sub2.addDataStructure(ssm1clone.getDataStructure(soldom1.getName() + ".min"));
-		if(ssm1clone.containsDataStructure(soldom1.getName() + ".max"))
-			sub2.addDataStructure(ssm1clone.getDataStructure(soldom1.getName() + ".max"));
-		if(ssm1clone.containsDataStructure(soldom1.getName() + ".delta"))
-			sub2.addDataStructure(ssm1clone.getDataStructure(soldom1.getName() + ".delta"));
+		if(soldom1!=null){
+			sub2.addDataStructure(soldom1);
+			
+			if(ssm1clone.containsDataStructure(soldom1.getName() + ".min"))
+				sub2.addDataStructure(ssm1clone.getDataStructure(soldom1.getName() + ".min"));
+			if(ssm1clone.containsDataStructure(soldom1.getName() + ".max"))
+				sub2.addDataStructure(ssm1clone.getDataStructure(soldom1.getName() + ".max"));
+			if(ssm1clone.containsDataStructure(soldom1.getName() + ".delta"))
+				sub2.addDataStructure(ssm1clone.getDataStructure(soldom1.getName() + ".delta"));
+		}
 		
 		sub2.setSubmodels(ssm2clone.getSubmodels());
 		mergedmodel.addSubmodel(sub1);
