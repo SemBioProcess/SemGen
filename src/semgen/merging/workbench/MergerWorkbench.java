@@ -31,7 +31,8 @@ public class MergerWorkbench extends Workbench {
 	private ArrayList<SemSimModel> loadedmodels = new ArrayList<SemSimModel>();
 	private SemSimModel mergedmodel;
 	private ArrayList<File> filepathlist = new ArrayList<File>();
-	private ArrayList<ArrayList<DataStructure>> dsnamelist = new ArrayList<ArrayList<DataStructure>>();
+	private ArrayList<ArrayList<DataStructure>> alldslist = new ArrayList<ArrayList<DataStructure>>();
+	private ArrayList<ArrayList<DataStructure>> exposeddslist = new ArrayList<ArrayList<DataStructure>>();
 	
 	public enum MergeEvent {
 		functionalsubmodelerr, threemodelerror, modellistupdated, modelerrors,
@@ -87,7 +88,16 @@ public class MergerWorkbench extends Workbench {
 	}
 	
 	private void addDSNameList(Collection<DataStructure> dslist) {
-		dsnamelist.add(SemSimUtil.alphebetizeSemSimObjects(dslist));
+		alldslist.add(SemSimUtil.alphebetizeSemSimObjects(dslist));
+		ArrayList<DataStructure> tempdslist = new ArrayList<DataStructure>();
+		
+		// Iterate through the DataStructures just added and weed out CellML-style inputs
+		for(DataStructure ds : alldslist.get(alldslist.size()-1)){
+			if(! ds.isFunctionalSubmodelInput()){
+				tempdslist.add(ds);
+			}
+		}
+		exposeddslist.add(tempdslist);
 	}
 	
 	public Pair<DataStructureDescriptor,DataStructureDescriptor> getDSDescriptors(int index) {
@@ -174,8 +184,8 @@ public class MergerWorkbench extends Workbench {
 	
 	public Pair<String,String> addManualCodewordMapping(int cdwd1, int cdwd2) {
 		Pair<Integer, Integer> minds = overlapmap.getModelIndicies();
-		DataStructure ds1 = dsnamelist.get(minds.getLeft()).get(cdwd1);
-		DataStructure ds2 = dsnamelist.get(minds.getRight()).get(cdwd2);
+		DataStructure ds1 = exposeddslist.get(minds.getLeft()).get(cdwd1);
+		DataStructure ds2 = exposeddslist.get(minds.getRight()).get(cdwd2);
 				
 		if (codewordMappingExists(ds1, ds2)) return Pair.of(ds1.getName(),ds2.getName());
 		addCodewordMapping(ds1, ds2
@@ -306,14 +316,13 @@ public class MergerWorkbench extends Workbench {
 		return loadedmodels.get(index).getName();
 	}
 	
-	//Get all Data Structure names and add descriptions if available.
-	public ArrayList<String> getDSNamesandDescriptions(int index) {
+
+	//For populating the manual mapping panel, get all Data Structure names and add descriptions if available.
+	public ArrayList<String> getExposedDSNamesandDescriptions(int index){
 		ArrayList<String> namelist = new ArrayList<String>();
-		for (DataStructure ds : dsnamelist.get(index)) {
+		for (DataStructure ds : exposeddslist.get(index)) {
 			String desc = "(" + ds.getName() + ")";
-			if(ds.getDescription()!=null){
-				desc = ds.getDescription() + " " + desc;
-			}
+			if(ds.getDescription()!=null) desc = ds.getDescription() + " " + desc;
 			namelist.add(desc);
 		}
 		return namelist;
