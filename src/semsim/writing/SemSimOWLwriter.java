@@ -113,15 +113,13 @@ public class SemSimOWLwriter extends ModelWriter {
 	}
 	
 	private void addUnits() throws OWLException {
-		// First add the units. Only include those that are used in local data structures, or those they are mapped from
+		// First add the units. 
 		Set<UnitOfMeasurement> unitstoadd = new HashSet<UnitOfMeasurement>();
-		for(DataStructure ds : localdss){
-			if(ds.hasUnits()){
-				if(ds.getUnit().getParentImport()==null){
-					unitstoadd.add(ds.getUnit());
-					for(UnitFactor uf : ds.getUnit().getUnitFactors()){
-						unitstoadd.add(uf.getBaseUnit());
-					}
+		for(UnitOfMeasurement uom : semsimmodel.getUnits()){
+			if(uom.getParentImport()==null){
+				unitstoadd.add(uom);
+				for(UnitFactor uf : uom.getUnitFactors()){
+					unitstoadd.add(uf.getBaseUnit());
 				}
 			}
 		}
