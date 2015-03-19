@@ -343,12 +343,9 @@ public class CellMLwriter extends ModelWriter {
 				
 				if(ds instanceof MappableVariable){
 					MappableVariable cellmlvar = (MappableVariable)ds;
-					if(cellmlvar.getCellMLinitialValue()!=null)
-						initialval = cellmlvar.getCellMLinitialValue();
-					if(cellmlvar.getPublicInterfaceValue()!=null)
-						publicintval = cellmlvar.getPublicInterfaceValue();
-					if(cellmlvar.getPrivateInterfaceValue()!=null)
-						privateintval = cellmlvar.getPrivateInterfaceValue();
+					initialval = cellmlvar.getCellMLinitialValue();
+					publicintval = cellmlvar.getPublicInterfaceValue();
+					privateintval = cellmlvar.getPrivateInterfaceValue();
 					
 					if(ds.getComputation()!=null){
 						if(ds.getComputation().getInputs().isEmpty()){
@@ -363,15 +360,15 @@ public class CellMLwriter extends ModelWriter {
 				createRDFforAnnotatedThing(ds, "v", variable, ds.getDescription());
 
 				// Add other attributes
-				if(metadataid!=null)
+				if(metadataid!=null && !metadataid.equals(""))
 					variable.setAttribute("id", metadataid, CellMLconstants.cmetaNS);
-				if(initialval!=null)
+				if(initialval!=null && !initialval.equals(""))
 					variable.setAttribute("initial_value", initialval);
-				if(nameval!=null)
+				if(nameval!=null && !nameval.equals(""))
 					variable.setAttribute("name", nameval);
-				if(publicintval!=null)
+				if(publicintval!=null && !publicintval.equals(""))
 					variable.setAttribute("public_interface", publicintval);
-				if(privateintval!=null)
+				if(privateintval!=null && !privateintval.equals(""))
 					variable.setAttribute("private_interface", privateintval);
 				
 				if(ds.hasUnits()) variable.setAttribute("units", ds.getUnit().getName());
