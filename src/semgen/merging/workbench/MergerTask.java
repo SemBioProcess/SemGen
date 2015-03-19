@@ -62,7 +62,8 @@ public class MergerTask extends SemGenTask {
 			renamedsm.setName(newsmname);
 			for(DataStructure ds : renamedsm.getAssociatedDataStructures()){
 				String olddsname = ds.getName();
-				ds.setName(olddsname.replace(oldsmname, newsmname));
+				String newdsname = ds.getName().replace(oldsmname, newsmname);
+				ds.setName(newdsname);
 				cwnamemap.remove(olddsname);  // Remove duplicate codeword mapping if present in cwnamemap
 			}
 		}
