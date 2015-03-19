@@ -126,6 +126,9 @@ public class Merger {
 			keptds.addVariableMappingTo(mappedtods);
 		}
 		
+		// Remove all mappedTo DataStructures for discarded codeword.
+		discardedds.getMappedTo().clear();
+		
 		//Also remove any initial_value that the discarded DS has.
 		discardedds.setCellMLinitialValue(null);
 	}
