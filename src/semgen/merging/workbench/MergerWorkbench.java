@@ -125,7 +125,7 @@ public class MergerWorkbench extends Workbench {
 	}
 	
 	
-	public HashMap<String, String> createIdenticalNameMap(ArrayList<ResolutionChoice> choicelist) {
+	public HashMap<String, String> createIdenticalNameMap(ArrayList<ResolutionChoice> choicelist, HashMap<String,String> submodelnamemap) {
 		HashMap<String, String> identicalmap = new HashMap<String,String>();
 		Set<String> identolnames = new HashSet<String>();
 		for (int i=0; i<choicelist.size(); i++) {	
@@ -134,7 +134,12 @@ public class MergerWorkbench extends Workbench {
 			}
 		}
 		for (String name : comparator.getIdenticalCodewords()) {
-			if (!identolnames.contains(name)) {
+			String submodelfords = "";
+			if(name.contains(".")) submodelfords = name.substring(0, name.lastIndexOf("."));
+				
+			// If an identical codeword mapping will be resolved by a semantic resolution step or a renaming of identically-named submodels, 
+		    // don't include in idneticalmap	
+			if (!identolnames.contains(name) && !submodelnamemap.containsKey(submodelfords)) {
 				identicalmap.put(name, "");
 			}
 		}
