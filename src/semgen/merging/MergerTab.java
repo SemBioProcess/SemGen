@@ -174,9 +174,9 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 				
 				// Then refresh the identical codeword name mappings in ModelOverlapMap
 				
-				choicelist.add(0, ResolutionChoice.first); //add for solution domains
+				//choicelist.add(0, ResolutionChoice.first); //add for solution domains
 				//workbench.comparator.getIdenticalCodewords();
-				HashMap<String, String> cwnamemap = workbench.createIdenticalNameMap(choicelist);
+				HashMap<String, String> cwnamemap = workbench.createIdenticalNameMap(choicelist, smnamemap);
 				for (String name : cwnamemap.keySet()) {
 					String newname = changeCodeWordNameDialog(name);
 					cwnamemap.put(name, newname);
