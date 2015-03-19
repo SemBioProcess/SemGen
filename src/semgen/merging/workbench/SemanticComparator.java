@@ -44,7 +44,7 @@ public class SemanticComparator {
 		Set<String> matchedcdwds = new HashSet<String>();
 		
 		for (DataStructure ds : model1.getDataStructures()) {
-			if(! dataStructureIsMappedComponentInput(ds)){
+			if(! ds.isFunctionalSubmodelInput()){
 				if (model2.containsDataStructure(ds.getName()))	matchedcdwds.add(ds.getName());
 			}
 		}
@@ -118,7 +118,7 @@ public class SemanticComparator {
 	public Set<DataStructure> getComparableDataStructures(SemSimModel model){
 		Set<DataStructure> dsset = new HashSet<DataStructure>();
 		for(DataStructure ds : model.getDataStructures()){
-			if(dataStructureIsMappedComponentInput(ds)) continue;
+			if(ds.isFunctionalSubmodelInput()) continue;
 			else dsset.add(ds);
 		}
 		return dsset;
@@ -200,16 +200,5 @@ public class SemanticComparator {
 			// if we've made it here, the participants are equivalent
 		}
 		return matchfound;
-	}
-	
-	// Function for determining if a DataStructure is a mapped variable that is a component input as in CellML models
-	public boolean dataStructureIsMappedComponentInput(DataStructure ds){
-		if(ds instanceof MappableVariable){
-			MappableVariable mappedds = (MappableVariable)ds;
-			
-			// If the mapped variable has an "in" interface value, return true
-			return mappedds.getPublicInterfaceValue().equals("in") || mappedds.getPrivateInterfaceValue().equals("in");
-		}
-		else return false; 
 	}
 }
