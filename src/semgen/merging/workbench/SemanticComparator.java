@@ -9,7 +9,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
@@ -19,13 +18,14 @@ import semsim.model.physical.object.PhysicalProperty;
 
 public class SemanticComparator {
 	private SemSimModel model1, model2;
-	private DataStructure slndomain;
+	private DataStructure slndomain = null;
 
 	public SemanticComparator(SemSimModel m1, SemSimModel m2) {
 		model1 = m1; model2 = m2;
 		
-		if(model1.getSolutionDomains().size() > 0)
+		if ((model1.getSolutionDomains().size() > 0) && (model2.getSolutionDomains().size() > 0)) {
 			slndomain = model1.getSolutionDomains().toArray(new DataStructure[]{})[0];
+		}
 	}
 	
 	// Collect the submodels that have the same name
@@ -61,9 +61,8 @@ public class SemanticComparator {
 	public ArrayList<Pair<DataStructure, DataStructure>> identifyExactSemanticOverlap() {
 		ArrayList<Pair<DataStructure, DataStructure>> dsmatchlist = new ArrayList<Pair<DataStructure, DataStructure>>();
 		
-		DataStructure soldom2 = null;
-		if(model2.getSolutionDomains().size() > 0){
-			soldom2 = model2.getSolutionDomains().toArray(new DataStructure[]{})[0];
+		if(slndomain != null){
+			DataStructure soldom2 = model2.getSolutionDomains().toArray(new DataStructure[]{})[0];
 			dsmatchlist.add(Pair.of(slndomain, soldom2));
 		}
 		
@@ -118,8 +117,7 @@ public class SemanticComparator {
 	public Set<DataStructure> getComparableDataStructures(SemSimModel model){
 		Set<DataStructure> dsset = new HashSet<DataStructure>();
 		for(DataStructure ds : model.getDataStructures()){
-			if(ds.isFunctionalSubmodelInput()) continue;
-			else dsset.add(ds);
+			if(!ds.isFunctionalSubmodelInput()) dsset.add(ds);
 		}
 		return dsset;
 	}
@@ -200,5 +198,9 @@ public class SemanticComparator {
 			// if we've made it here, the participants are equivalent
 		}
 		return matchfound;
+	}
+	
+	public boolean hasSolutionMapping() {
+		return slndomain != null;
 	}
 }

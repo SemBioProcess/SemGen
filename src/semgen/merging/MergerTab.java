@@ -355,9 +355,6 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		if (arg == MergeEvent.functionalsubmodelerr) {
-			SemGenError.showFunctionalSubmodelError(((MergeEvent)arg).getMessage());
-		}
 		if (arg == MergeEvent.threemodelerror) {
 			SemGenError.showError("Currently, SemGen can only merge two models at a time.", "Too many models");
 		}	

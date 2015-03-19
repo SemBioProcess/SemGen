@@ -35,8 +35,7 @@ public class MergerWorkbench extends Workbench {
 	private ArrayList<ArrayList<DataStructure>> exposeddslist = new ArrayList<ArrayList<DataStructure>>();
 	
 	public enum MergeEvent {
-		functionalsubmodelerr, threemodelerror, modellistupdated, modelerrors,
-		mapfocuschanged, mappingadded, mergecompleted;
+		threemodelerror, modellistupdated, modelerrors,	mapfocuschanged, mappingadded, mergecompleted;
 		
 		String message = null;
 		
@@ -177,11 +176,7 @@ public class MergerWorkbench extends Workbench {
 		}
 		return names;
 	}
-	
-	public void addSemanticCodewordMapping(String cdwd1, String cdwd2) {
-		addCodewordMapping(cdwd1, cdwd2, maptype.exactsemaoverlap);
-	}
-	
+
 	public Pair<String,String> addManualCodewordMapping(int cdwd1, int cdwd2) {
 		Pair<Integer, Integer> minds = overlapmap.getModelIndicies();
 		DataStructure ds1 = exposeddslist.get(minds.getLeft()).get(cdwd1);
@@ -199,16 +194,12 @@ public class MergerWorkbench extends Workbench {
 		return overlapmap.getMappingCount();
 	}
 	
-	public boolean hasSemanticOverlap() {
-		return (overlapmap.getMappingCount()>0);
+	public int getSolutionDomainCount() {
+		return overlapmap.getSolutionDomainCount();
 	}
 	
-	private void addCodewordMapping(String cdwd1, String cdwd2, maptype maptype) {
-		Pair<Integer, Integer> minds = overlapmap.getModelIndicies();
-		DataStructure ds1 = loadedmodels.get(minds.getLeft()).getDataStructure(cdwd1);
-		DataStructure ds2 = loadedmodels.get(minds.getRight()).getDataStructure(cdwd2);
-		
-		overlapmap.addDataStructureMapping(ds1, ds2, maptype);
+	public boolean hasSemanticOverlap() {
+		return (overlapmap.getMappingCount()>0);
 	}
 	
 	private void addCodewordMapping(DataStructure ds1, DataStructure ds2, maptype maptype) {

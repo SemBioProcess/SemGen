@@ -42,8 +42,9 @@ public class ResolutionPane extends JPanel implements Observer {
 				SemGenError.showError("SemGen did not find any semantic equivalencies between the models", "Merger message");
 				return;
 		}
-		
-		for (int i = 0; i < workbench.getMappingCount(); i++) {
+		int n = workbench.getSolutionDomainCount();
+		for (int i = n; i < (workbench.getMappingCount()); i++) {
+			if (i!=n) add(new JSeparator());
 			addResolutionPanel(i);
 		}
 		
@@ -52,7 +53,6 @@ public class ResolutionPane extends JPanel implements Observer {
 	}
 	
 	private void addResolutionPanel(int index) {
-		if (index!=0) add(new JSeparator());
 		ResolutionPanel resbtn = new ResolutionPanel(workbench.getDSDescriptors(index).getLeft(), 
 				workbench.getDSDescriptors(index).getRight(),
 				workbench.getOverlapMapModelNames(), 
@@ -60,9 +60,7 @@ public class ResolutionPane extends JPanel implements Observer {
 		
 		resbtn.addMouseListener(new ResPaneMouse(resbtn));
 		resolvelist.add(resbtn);
-		
-		if(! workbench.getMapPairType(index).equals(ModelOverlapMap.maptype.automapping))
-			add(resbtn);
+		add(resbtn);			
 	}
 
 	@Override

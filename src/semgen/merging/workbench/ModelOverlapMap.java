@@ -15,6 +15,7 @@ public class ModelOverlapMap {
 	private ArrayList<Pair<DataStructure, DataStructure>> dsmap = new ArrayList<Pair<DataStructure, DataStructure>>();
 
 	private ArrayList<maptype> maptypelist = new ArrayList<maptype>();	
+	private int slndomcnt = 0;
 	
 	protected static enum maptype {
 		exactsemaoverlap("(exact semantic match)"), 
@@ -32,8 +33,15 @@ public class ModelOverlapMap {
 	public ModelOverlapMap(int ind1, int ind2, SemanticComparator comparator) {
 		modelindicies = Pair.of(ind1, ind2);
 		ArrayList<Pair<DataStructure, DataStructure>> equivlist = comparator.identifyExactSemanticOverlap();		
+		
 		Pair<DataStructure, DataStructure> dspair;
-		for (int i=0; i<equivlist.size(); i++ ) {
+		if (comparator.hasSolutionMapping()) {
+			slndomcnt = 1;
+			dspair = equivlist.get(0);
+			addDataStructureMapping(dspair.getLeft(), dspair.getRight(), maptype.automapping);
+		}
+		
+		for (int i=slndomcnt; i<(equivlist.size() - slndomcnt); i++ ) {
 			dspair = equivlist.get(i);
 			addDataStructureMapping(dspair.getLeft(), dspair.getRight(), maptype.exactsemaoverlap);
 		}
@@ -131,5 +139,9 @@ public class ModelOverlapMap {
 			unitmatchlist.add(true);
 		}
 		return unitmatchlist;
+	}
+	
+	public int getSolutionDomainCount() {
+		return slndomcnt;
 	}
 }
