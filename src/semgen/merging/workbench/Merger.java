@@ -2,9 +2,14 @@ package semgen.merging.workbench;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.jdom.Content;
+import org.jdom.Element;
 import org.jdom.JDOMException;
+import org.jdom.output.XMLOutputter;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semsim.SemSimUtil;
@@ -12,6 +17,9 @@ import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.Submodel;
+import semsim.model.physical.object.FunctionalSubmodel;
+import semsim.reading.CellMLreader;
+import semsim.writing.CellMLwriter;
 import JSim.util.Xcept;
 
 public class Merger {
@@ -131,6 +139,21 @@ public class Merger {
 		
 		//Also remove any initial_value that the discarded DS has.
 		discardedds.setCellMLinitialValue(null);
+		
+		// Find mathML block for the discarded codeword and remove it from the FunctionalSubmodel's computational code
+		FunctionalSubmodel fs = modelfordiscardedds.getParentFunctionalSubmodelForMappableVariable(discardedds);
+		String componentMathMLstring = fs.getComputation().getMathML();
+		String varname = discardedds.getName().replace(fs.getName() + ".", "");
+
+		if(componentMathMLstring!=null){
+			List<Content> componentMathML = CellMLwriter.makeXMLContentFromStringForMathML(componentMathMLstring);
+			Iterator<Content> compmathmlit = componentMathML.iterator();
+			Element varmathmlel = CellMLreader.getElementForOutputVariableFromComponentMathML(varname, compmathmlit);
+			if(varmathmlel!=null){
+				componentMathML.remove(varmathmlel.detach());
+				fs.getComputation().setMathML(new XMLOutputter().outputString(componentMathML));
+			}
+		}
 	}
 	
 	
