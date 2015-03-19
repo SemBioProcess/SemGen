@@ -60,6 +60,7 @@ public class MergerTask extends SemGenTask {
 			String newsmname = submodnamemap.get(oldsmname);
 			Submodel renamedsm = ssm1clone.getSubmodel(oldsmname);
 			renamedsm.setName(newsmname);
+			renamedsm.setLocalName(newsmname);
 			for(DataStructure ds : renamedsm.getAssociatedDataStructures()){
 				String olddsname = ds.getName();
 				String newdsname = ds.getName().replace(oldsmname, newsmname);
