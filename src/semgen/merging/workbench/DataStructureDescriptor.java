@@ -15,7 +15,11 @@ public class DataStructureDescriptor {
 	public DataStructureDescriptor(DataStructure ds) {
 		descriptormap.put(Descriptor.name, ds.getName());
 		descriptormap.put(Descriptor.description, ds.getDescription());
-		descriptormap.put(Descriptor.units, ds.getUnit().getComputationalCode());
+		
+		if(ds.hasUnits())
+			descriptormap.put(Descriptor.units, ds.getUnit().getComputationalCode());
+		else descriptormap.put(Descriptor.units, "");
+		
 		descriptormap.put(Descriptor.computationalcode, ds.getComputation().getComputationalCode());
 		
 		makeStringListFromSet(Descriptor.inputs, ds.getComputationInputs(), true);
