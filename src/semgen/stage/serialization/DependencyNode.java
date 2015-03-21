@@ -21,7 +21,7 @@ public class DependencyNode extends Node {
 	
 	public DependencyNode(DataStructure dataStructure, String parentModel)
 	{
-		super(getNodeNameParts(dataStructure)[VariableNamePart]);
+		super(getDataStructureVariableName(dataStructure));
 		
 		this.nodeType = dataStructure.getPropertyType(SemGen.semsimlib).toString();
 
@@ -31,7 +31,7 @@ public class DependencyNode extends Node {
 		if(dataStructure.getComputation() != null) {
 			for(DataStructure input : dataStructure.getComputation().getInputs())
 			{
-				inputs.add(getNodeNameParts(input)[VariableNamePart]);
+				inputs.add(getDataStructureVariableName(input));
 			}
 		}
 		
@@ -55,5 +55,18 @@ public class DependencyNode extends Node {
 	 */
 	private static String[] getNodeNameParts(DataStructure dataStrcuture) {
 		return dataStrcuture.getName().split("\\.");
+	}
+	
+	/**
+	 * Get the data structure's name. If it's a child of a submodel its name will be concatenated.
+	 * If it's not, its name will just be the varaible name
+	 * @param dataStructure - data structure to get name from
+	 * @return Data structure's name
+	 */
+	private static String getDataStructureVariableName(DataStructure dataStructure) {
+		String[] nameParts = getNodeNameParts(dataStructure);
+		if(nameParts.length != 2)
+			return dataStructure.getName();
+		return nameParts[VariableNamePart];
 	}
 }
