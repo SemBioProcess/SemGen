@@ -60,7 +60,7 @@ Node.prototype.canLink = function () {
 	return true;
 }
 
-Node.prototype.getInputs = function () {
+Node.prototype.getLinks = function () {
 	if(!this.inputs)
 		return null;
 	
@@ -68,15 +68,16 @@ Node.prototype.getInputs = function () {
 	if(!this.canLink())
 		return;
 	
-	// Update the id of each input to contain the parent node id
-	// so we can look it up by it's id
-	var inputs = [];
+	// Build an array of links from our list of inputs
+	var links = [];
 	for(var i = 0; i < this.inputs.length; i++) {
 		var inputData = this.inputs[i];
 		var inputNodeId;
+		var type;
 		
 		// If the input is an object it specifies a parent
 		if(typeof inputData == "object") {
+			type = "external";
 			var parent = this.graph.findNode(inputData.parents.join(''));
 			
 			// If the parent can link add a link to it
@@ -87,8 +88,10 @@ Node.prototype.getInputs = function () {
 				inputNodeId = parent.id + inputData.name;
 		}
 		// Otherwise, it is a string referring to the input node
-		else
+		else {
+			type = "internal";
 			inputNodeId = this.parent.id + inputData;
+		}
 		
 		// Get the input node
 		var inputNode = this.graph.findNode(inputNodeId);
@@ -105,10 +108,15 @@ Node.prototype.getInputs = function () {
 			continue;
 		}
 		
-		inputs.push(inputNode);
+		links.push({
+			source: inputNode,
+			target: this,
+			type: type,
+			value: 1,
+		});
 	}
 	
-	return inputs;
+	return links;
 }
 
 Node.prototype.tickHandler = function (element, graph) {

@@ -129,7 +129,7 @@ function Graph() {
 		
 		path.enter().append("svg:path")
 			.attr("id",function(d){return d.source.id + "-" + d.target.id;})
-			.attr("class", "link");
+			.attr("class", function(d) { return "link " + d.type; });
 	    
 		path.exit().remove();
 		
@@ -220,21 +220,17 @@ function Graph() {
 		
 		// Process links for each node
 		nodes.forEach(function (node) {
-			var inputs = node.getInputs();
+			var nodeLinks = node.getLinks();
 			
-			// If the node doesnt have any inputs move on
-			if(!inputs)
+			// If the node doesnt have any links move on
+			if(!nodeLinks)
 				return;
 			
-			// Add each link to our array
-			inputs.forEach(function (input) {
-				links.push({
-					source: input,
-					target: node,
-					value: 1,
-				});
-			}, this);
+			// Add the node's links to our master list
+			links = links.concat(nodeLinks);
 		}, this);
+		
+		this.force.links(links);
 		
 		refreshing = false;
 	}

@@ -4,6 +4,10 @@ path.link {
   stroke-width: 1.5px;
 }
 
+path.link.external {
+	stroke-dasharray: 5;
+}
+
 .node {
 	cursor: move;
 	stroke: none;
