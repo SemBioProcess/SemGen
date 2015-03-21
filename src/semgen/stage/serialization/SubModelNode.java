@@ -14,12 +14,14 @@ import semsim.model.physical.Submodel;
 public class SubModelNode extends Node {
 	public ArrayList<DependencyNode> dependencies;
 	
-	public SubModelNode(Submodel subModel) {
+	public SubModelNode(Submodel subModel, String parentModelName) {
 		super(subModel.getName());
 
 		dependencies = new ArrayList<DependencyNode>();
+		
+		// SemSimModelSerializer.getDependencyNetwork(subModel);
 		for(DataStructure dependency : subModel.getAssociatedDataStructures()) {
-			dependencies.add(new DependencyNode(dependency));
+			dependencies.add(new DependencyNode(dependency, parentModelName));
 		}
 	}
 

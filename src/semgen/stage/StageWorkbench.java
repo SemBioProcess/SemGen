@@ -117,13 +117,12 @@ public class StageWorkbench extends Workbench {
 							SemSimModelSerializer.toJsonString(SemSimModelSerializer.getDependencyNetwork(model)));
 					break;
 				case "submodels":
-					/*
 					ArrayList<SubModelNode> submodelNetwork = SemSimModelSerializer.getSubmodelNetwork(model);
 					if(submodelNetwork.isEmpty())
 						JOptionPane.showMessageDialog(null, "'" + model.getName() + "' does not have any submodels");
 					else
 						_commandSender.showSubmodelNetwork(model.getName(), SemSimModelSerializer.toJsonString(submodelNetwork));
-					break;*/
+					break;
 				default:
 					JOptionPane.showMessageDialog(null, "Task: '" + task +"', coming soon :)");
 			}

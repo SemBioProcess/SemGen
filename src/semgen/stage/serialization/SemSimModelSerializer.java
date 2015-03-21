@@ -42,7 +42,7 @@ public class SemSimModelSerializer {
 				continue;
 			}
 			
-			dependencies.add(new DependencyNode(dataStructure));
+			dependencies.add(new DependencyNode(dataStructure, semSimModel.getName()));
 		}
 		
 		// Turn the dependencies into a string
@@ -61,7 +61,7 @@ public class SemSimModelSerializer {
 	{
 		ArrayList<SubModelNode> subModelNetwork = new ArrayList<SubModelNode>();
 		for(Submodel subModel : semSimModel.getSubmodels()){
-			subModelNetwork.add(new SubModelNode(subModel));
+			subModelNetwork.add(new SubModelNode(subModel, semSimModel.getName()));
 		}
 		
 		return subModelNetwork;
