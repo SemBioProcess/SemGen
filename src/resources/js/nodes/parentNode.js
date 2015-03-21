@@ -50,7 +50,9 @@ ParentNode.prototype.setChildren = function (children) {
 		
 		// Hide constitutive nodes by default
 		this.graph.update();
-		this.graph.hideNodes("Constitutive");
+		
+		if(this.graph.hasNodeOfType("State") || this.graph.hasNodeOfType("Rate"))
+			this.graph.hideNodes("Constitutive");
 	}
 	
 	$(this).triggerHandler('childrenSet', [children]);

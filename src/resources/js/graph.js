@@ -66,6 +66,16 @@ function Graph() {
 	    links.splice(0,links.length);
 	};
 	
+	// Check to see if there's at least 1 node of the given type
+	this.hasNodeOfType = function (type) {
+		for(var index = 0; index < nodes.length; index++) {
+			if(nodes[index].nodeType == type)
+				return true;
+		}
+		
+		return false;
+	};
+	
 	// Hide all nodes of the given type
 	this.hideNodes = function (type) {
 		var nodesToHide = [];
