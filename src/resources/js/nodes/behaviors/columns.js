@@ -9,7 +9,7 @@ function Columns(node) {
 	// If column mode is on, listen for tick
 	// If it's off, don't
 	var checkColumnMode = function () {
-		if(Columns.columnModeOn)
+		if($(".modes .columnView").is(':checked'))
 			$(node).on('preTick', columnModeHandler);
 		else
 			$(node).off('preTick', columnModeHandler);
@@ -32,12 +32,10 @@ function Columns(node) {
 // Initialize the bind
 Columns.initialize = function () {
 	$(".modes .columnView").bind('change', function(){        
-		Columns.columnModeOn = this.checked;
 		$(Columns).triggerHandler('columnModeChanged')
 	});
 }
 
-Columns.columnModeOn = false;
 Columns.columnWidth = 200;
 Columns.columnPosition = {
 	"State": -150,
