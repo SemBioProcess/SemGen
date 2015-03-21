@@ -172,7 +172,7 @@ function Graph() {
 	    this.force
 	    	.charge(-300)
 	    	.gravity(0)
-	    	.linkDistance(80)
+	    	.linkDistance(function (d) { return d.length; })
 		    .size([this.w, this.h])
 		    .start();
 	    

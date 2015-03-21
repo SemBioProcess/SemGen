@@ -80,6 +80,11 @@ Node.prototype.getLinks = function () {
 			type = "external";
 			var parent = this.graph.findNode(inputData.parents.join(''));
 			
+			if(!parent) {
+				console.log("External link without a parent!");
+				continue;
+			}
+			
 			// If the parent can link add a link to it
 			if(parent.canLink())
 				inputNodeId = parent.id;
@@ -112,6 +117,7 @@ Node.prototype.getLinks = function () {
 			source: inputNode,
 			target: this,
 			type: type,
+			length: type == "external" ? 200 : 80,
 			value: 1,
 		});
 	}
