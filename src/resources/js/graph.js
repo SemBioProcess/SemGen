@@ -176,6 +176,13 @@ function Graph() {
 		    .start();
 	    
 	    $(this).triggerHandler("postupdate");
+	    
+	    // This is for new nodes. We need to set them to fixed if we're in fixed mode
+	    // There's a delay so the forces can equalize
+	    setTimeout(function () {
+	    	if(fixedMode)
+	    		nodes.forEach(setFixed);
+	    }, 7000);
 	};
 	
 	// Find a node by its id
@@ -259,24 +266,31 @@ function Graph() {
 	var nodes = this.force.nodes(),
 		links = this.force.links();
 	var hiddenNodes = {};
+	var fixedMode = false;
+	
+	var setFixed = function (node) {
+		node.oldFixed = node.fixed;
+		node.fixed = true;
+	};
+	
+	var resetFixed = function (node) {
+		node.fixed = node.oldFixed || false;
+		node.oldFixed = undefined;
+	};
 	
 	// Fix all nodes when ctrl + M is pressed
 	$(".modes .fixedNodes").bind('change', function(){        
 		Columns.columnModeOn = this.checked;
 		if(this.checked)
 		{
-			nodes.forEach(function (d) {
-				d.oldFixed = d.fixed;
-				d.fixed = true;
-			});
+			nodes.forEach(setFixed);
+			fixedMode = true;
 		}
 		// Un-fix all nodes
 		else
 		{
-			nodes.forEach(function (d) {
-				d.fixed = d.oldFixed || false;
-				d.oldFixed = undefined;
-			});
+			nodes.forEach(resetFixed);
+			fixedMode = false;
 		}
 	});
 	
