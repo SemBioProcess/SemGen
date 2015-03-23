@@ -25,4 +25,12 @@ public interface SemGenWebBrowserCommandSender {
 	 * @param jsonDependencies Dependencies
 	 */
 	void showDependencyNetwork(String modelName, JsonString jsonDependencies);
+	
+	/**
+	 * Tell the browser to render the submodel dependencies
+	 * 
+	 * @param modelName name of parent model
+	 * @param jsonSubmodelNetwork submodel network
+	 */
+	void showSubmodelNetwork(String modelName, JsonString jsonSubmodelNetwork);
 }

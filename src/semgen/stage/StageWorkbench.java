@@ -1,18 +1,21 @@
 package semgen.stage;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JOptionPane;
 
 import semgen.stage.serialization.SemSimModelSerializer;
+import semgen.stage.serialization.SubModelNode;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
 import semgen.visualizations.SemGenWebBrowserCommandSender;
 import semsim.model.SemSimModel;
+import semsim.model.physical.Submodel;
 
 public class StageWorkbench extends Workbench {
 
@@ -108,10 +111,21 @@ public class StageWorkbench extends Workbench {
 			SemSimModel model = _models.get(modelName);
 			
 			// Execute the proper task
-			if(task.equals("dependencies"))
-				_commandSender.showDependencyNetwork(model.getName(), SemSimModelSerializer.dependencyNetworkToJson(model));
-			else
-				JOptionPane.showMessageDialog(null, "Task: '" + task +"', coming soon :)");
+			switch(task) {
+				case "dependencies":
+					_commandSender.showDependencyNetwork(model.getName(),
+							SemSimModelSerializer.toJsonString(SemSimModelSerializer.getDependencyNetwork(model)));
+					break;
+				case "submodels":
+					ArrayList<SubModelNode> submodelNetwork = SemSimModelSerializer.getSubmodelNetwork(model);
+					if(submodelNetwork.isEmpty())
+						JOptionPane.showMessageDialog(null, "'" + model.getName() + "' does not have any submodels");
+					else
+						_commandSender.showSubmodelNetwork(model.getName(), SemSimModelSerializer.toJsonString(submodelNetwork));
+					break;
+				default:
+					JOptionPane.showMessageDialog(null, "Task: '" + task +"', coming soon :)");
+			}
 		}
 	}
 }

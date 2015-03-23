@@ -24,27 +24,22 @@ $(window).bind("cwb-initialized", function(e) {
 		graph.update();
 	});
 	
-	// Add child nodes to a model node
-	var addChildNodes = function (modelName, data, createNode) {
+	// Get a model node
+	var getModelNode = function (modelName) {
 		var modelNode = modelNodes[modelName];
 		if(!modelNode)
 			throw "model doesn't exist";
-
-		// Create nodes from the data
-		var nodes = [];
-		data.forEach(function (d) {
-			nodes.push(createNode(d, modelNode));
-		});
 		
-		modelNode.setChildren(nodes);
+		return modelNode;
 	};
 	
 	// Adds a dependency network to the d3 graph
 	receiver.onShowDependencyNetwork(function (modelName, dependencyNodeData) {
 		console.log("Showing dependencies for model " + modelName);
 		
-		addChildNodes(modelName, dependencyNodeData, function (data, parent) {
-			return new DependencyNode(graph, data, parent);
+		var modelNode = getModelNode(modelName);
+		addChildNodes(modelNode, dependencyNodeData, function (data) {
+			return new DependencyNode(graph, data, modelNode);
 		});
 	});
 	
@@ -52,8 +47,20 @@ $(window).bind("cwb-initialized", function(e) {
 	receiver.onShowSubmodelNetwork(function (modelName, submodelData) {
 		console.log("Showing submodels for model " + modelName);
 		
-		addChildNodes(modelName, submodelData, function (data) {
-			return new SubmodelNode(graph, data, parent);
+		var modelNode = getModelNode(modelName);
+		addChildNodes(modelNode, submodelData, function (data) {
+			return new SubmodelNode(graph, data, modelNode);
 		});
 	});
 });
+
+// Add child nodes to a model node
+function addChildNodes(parentNode, data, createNode) {
+	// Create nodes from the data
+	var nodes = [];
+	data.forEach(function (d) {
+		nodes.push(createNode(d));
+	});
+	
+	parentNode.setChildren(nodes);
+};
