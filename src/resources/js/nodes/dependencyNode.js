@@ -5,19 +5,6 @@
 DependencyNode.prototype = new Node();
 DependencyNode.prototype.constructor = DependencyNode;
 function DependencyNode (graph, data, parentNode) {
-	// We need to keep the ids of each dependency node unique by prefixing
-	// it with its parent node
-	
-	// Update the id of each node to contain its parent node
-	var id = parentNode.id + data.name;
-	
-	// Update the id of each link to contain the parent node id
-	if(data.links) {
-		for(var i = 0; i < data.links.length; i++) {
-			data.links[i] = parentNode.id + data.links[i];
-		}
-	}
-	
 	// Ensure the node type is formatted properly
 	data.nodeType = data.nodeType.toLowerCase().capitalizeFirstLetter();
 	
@@ -26,8 +13,7 @@ function DependencyNode (graph, data, parentNode) {
 	if(this.group == "undefined")
 		throw "invalid dependency node type: " + data.nodeType;
 	
-	Node.prototype.constructor.call(this, graph, id, data.name, 5, typeToColor[data.nodeType], 11, data.nodeType);
-	this.links = data.links;
+	Node.prototype.constructor.call(this, graph, data.name, parentNode, data.inputs, 5, typeToColor[data.nodeType], 11, data.nodeType);
 	
 	this.addClassName("dependencyNode");
 	this.addBehavior(Columns)

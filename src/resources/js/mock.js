@@ -17,7 +17,7 @@ $(window).load(function() {
 					var data = [
 					    {
 					    	name: "A",
-					    	links: ["B"],
+					    	inputs: ["B"],
 					    	nodeType: "state",
 					    },
 					    {
@@ -26,12 +26,12 @@ $(window).load(function() {
 					    },
 					    {
 					    	name: "C",
-					    	links: ["A"],
+					    	inputs: ["A"],
 					    	nodeType: "constitutive",
 					    },
 					    {
 					    	name: "D",
-					    	links: ["A", "B", "C"],
+					    	inputs: ["A", "B", "C"],
 					    	nodeType: "State",
 					    },
 					];
@@ -41,12 +41,75 @@ $(window).load(function() {
 					var data = [
 						{
 							name: "Submodel_1",
+							dependencies: [
+							    {
+							    	name: "A",
+							    	inputs: ["B", { name: "A", parents: [modelName, "Submodel_2"] }],
+							    	nodeType: "state",
+							    },
+							    {
+							    	name: "B",
+							    	nodeType: "Rate",
+							    },
+							    {
+							    	name: "C",
+							    	inputs: ["A"],
+							    	nodeType: "constitutive",
+							    },
+							    {
+							    	name: "D",
+							    	inputs: ["A", "B", "C"],
+							    	nodeType: "State",
+							    },
+							],
 						},
 						{
 							name: "Submodel_2",
+							dependencies: [
+							    {
+							    	name: "A",
+							    	inputs: ["B", { name: "A", parents: [modelName, "Submodel_3"] }],
+							    	nodeType: "state",
+							    },
+							    {
+							    	name: "B",
+							    	nodeType: "Rate",
+							    },
+							    {
+							    	name: "C",
+							    	inputs: ["A"],
+							    	nodeType: "constitutive",
+							    },
+							    {
+							    	name: "D",
+							    	inputs: ["A", "B", "C"],
+							    	nodeType: "State",
+							    },
+							],
 						},
 						{
 							name: "Submodel_3",
+							dependencies: [
+							    {
+							    	name: "A",
+							    	inputs: ["B", { name: "A", parents: [modelName, "Submodel_1"] }],
+							    	nodeType: "state",
+							    },
+							    {
+							    	name: "B",
+							    	nodeType: "Rate",
+							    },
+							    {
+							    	name: "C",
+							    	inputs: ["A"],
+							    	nodeType: "constitutive",
+							    },
+							    {
+							    	name: "D",
+							    	inputs: ["A", "B", "C"],
+							    	nodeType: "State",
+							    },
+							],
 						},
 					];
 					

@@ -30,22 +30,31 @@ function Hull(node) {
 		if(children) {
 			// 1) Convert the child positions into vertices that we'll use to create the hull
 			// 2) Calculate the center of the child nodes and the top of the child nodes so 
-			// 		we can position the text and hidden circle appropriately
+			// 		we can position the text and parent node appropriately
 			var vertexes = [];
 			var centerX = 0;
 			var minY = null;
-			children.forEach(function (d) {
-				// Hull position shouldn't be effected
-				// by hidden models
-				if(d.hidden)
-					return;
-				
-				vertexes.push([d.x, d.y]);
-				
-				centerX += d.x;
-				minY = minY || d.y;
-				minY = d.y < minY ? d.y : minY;
-			});
+			
+			// Recursively analyze all descendants
+			var analyzeChildren = function (childrenArr) {
+				childrenArr.forEach(function (child) {
+					// Hull position shouldn't be effected
+					// by hidden models
+					if(child.hidden)
+						return;
+					
+					// If the child has children analyze them as well
+					if(child.children)
+						analyzeChildren(child.children);
+					
+					vertexes.push([child.x, child.y]);
+					
+					centerX += child.x;
+					minY = minY || child.y;
+					minY = child.y < minY ? child.y : minY;
+				});
+			};
+			analyzeChildren(children);
 			
 			if(!vertexes.length)
 				return;
