@@ -80,6 +80,9 @@ public class Merger {
 		SemSimModel mergedmodel = ssm1clone;
 		
 		// Create submodels representing the merged components, copy over all info from model2 into model1
+		// Commenting this out for now. Need to redo the way SemGen stores composite models.
+		
+		/*
 		Submodel sub1 = new Submodel(ssm1clone.getName());
 		sub1.setAssociatedDataStructures(ssm1clone.getDataStructures());
 		sub1.setSubmodels(ssm1clone.getSubmodels());
@@ -101,6 +104,7 @@ public class Merger {
 		sub2.setSubmodels(ssm2clone.getSubmodels());
 		mergedmodel.addSubmodel(sub1);
 		mergedmodel.addSubmodel(sub2);
+		*/
 		
 		// Copy in all data structures
 		for(DataStructure dsfrom2 : ssm2clone.getDataStructures()){
@@ -128,6 +132,9 @@ public class Merger {
 		//For the codeword that's replaced, turn it into a component input and create a mapping from the kept codeword to the discarded one.
 		discardedds.setPublicInterfaceValue("in");
 		keptds.addVariableMappingTo(discardedds);
+		
+		// Also, remove the computational dependency information for the discarded codeword
+		discardedds.getComputationInputs().clear();
 		
 		//Take all mappedTo values for discarded codeword and apply them to kept codeword.
 		for(MappableVariable mappedtods : discardedds.getMappedTo()){
