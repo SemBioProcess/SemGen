@@ -166,9 +166,8 @@ public class SemSimOWLFactory {
 	public static void createSemSimIndividuals(OWLOntology ont, Hashtable<String,String[]> indandparents, String suffix, OWLOntologyManager manager)
 			throws OWLException {
 
-		String[] keyset = new String[indandparents.size()];
 		String[] parentname = new String[] {};
-		keyset = (String[]) indandparents.keySet().toArray(keyset);
+		String[] keyset = (String[]) indandparents.keySet().toArray();
 		for (int i = 0; i < keyset.length; i++) {
 			parentname = (String[]) indandparents.get(keyset[i]);
 			OWLClass parent = factory.getOWLClass(IRI.create(parentname[0]));
