@@ -1,6 +1,7 @@
 package semgen.stage;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -104,7 +105,7 @@ public class StageWorkbench extends Workbench {
 			}
 		}
 		
-		public void onAddModelByName(String modelName) {
+		public void onAddModelByName(String modelName) throws FileNotFoundException {
 			File file = new File("examples/AnnotatedModels/" + modelName + ".owl");
 			SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(file, false);
 			_models.put(semsimmodel.getName(),  semsimmodel);

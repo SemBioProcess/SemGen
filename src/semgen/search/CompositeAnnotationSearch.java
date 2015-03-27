@@ -55,7 +55,7 @@ public class CompositeAnnotationSearch {
 //					String freeText = ds.getDescription();
 //					System.out.println(compAnn + "; " + semsimmodel.getName());
 //					System.out.println(freeText + "; " + semsimmodel.getName());
-//					Matcher m = p.matcher(compAnn); // Still buggy for some reason. E.g., calcium && troponin.
+//					Matcher m = p.matcher(compAnn);
 //					found = m.find();
 //					if(found) {
 //						searchResults.add(semsimmodel);
