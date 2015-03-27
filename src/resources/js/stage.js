@@ -52,6 +52,35 @@ $(window).bind("cwb-initialized", function(e) {
 			return new SubmodelNode(graph, data, modelNode);
 		});
 	});
+	
+	// Show search results on stage
+	receiver.onSearch(function (searchResults) {
+		console.log("Showing search results");
+		
+		var searchResultsArray = searchResults.replace("[", '').replace("]", '').split(",");
+		var searchResultsList = document.getElementById("searchResultsList");
+		while(searchResultsList.firstChild) {
+			searchResultsList.removeChild(searchResultsList.firstChild);
+			// Possible memory leak if event handlers aren't removed?
+		};
+		searchResultsList.appendChild(makeUL(searchResultsArray));
+	});
+	
+	// Add model when clicked
+	$('#searchResultsList').on('click', 'li', function() {
+		var modelName = $(this).text().trim();
+		sender.addModelByName(modelName);
+	});
+});
+
+// Prevent enter key from submitting form: Once submitted, sender doesn't fire again.
+$(document).ready(function() {
+	$(window).keydown(function(event){
+		if(event.keyCode == 13) {
+			event.preventDefault();
+			return false;
+		}
+	});
 });
 
 // Add child nodes to a model node
@@ -65,7 +94,17 @@ function addChildNodes(parentNode, data, createNode) {
 	parentNode.setChildren(nodes);
 };
 
+// Relays string from html form to Java
 function search(searchString) {
-	window.alert("Searching for " + searchString);
 	sender.search(searchString);
-}
+};
+
+function makeUL(array) {
+    var list = document.createElement('ul');
+    for(var i = 0; i < array.length; i++) {
+        var item = document.createElement('li');
+        item.appendChild(document.createTextNode(array[i]));
+        list.appendChild(item);
+    }
+    return list;
+};

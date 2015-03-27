@@ -29,7 +29,7 @@ public class CompositeAnnotationSearch {
 			queryString += newStr;
 		}
 		Pattern p = Pattern.compile(queryString);
-		System.out.println(queryString);
+		//System.out.println(queryString);
 		
 		// LOADING EACH SEMSIM MODEL TOOK TOO LONG.
 		// INSTEAD WE HAVE A TEXT FILE OF ALL COMPOSITE ANNOTATIONS AND FREETEXT DESCRIPTIONS TO SEARCH FROM
@@ -73,8 +73,8 @@ public class CompositeAnnotationSearch {
 				Boolean found = false;
 				int delimIndex = 0;
 				while(annotationFile.hasNext()) {
-					wholeline = annotationFile.nextLine().toLowerCase();
-					Matcher m = p.matcher(wholeline);
+					wholeline = annotationFile.nextLine();
+					Matcher m = p.matcher(wholeline.toLowerCase());
 					found = m.find();
 					if(found) {
 						delimIndex = wholeline.indexOf(";");

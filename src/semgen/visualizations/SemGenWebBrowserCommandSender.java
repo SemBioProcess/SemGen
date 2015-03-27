@@ -1,5 +1,7 @@
 package semgen.visualizations;
 
+import java.util.Set;
+
 /**
  * Contract for sending commands between java and javascript
  * 
@@ -33,4 +35,6 @@ public interface SemGenWebBrowserCommandSender {
 	 * @param jsonSubmodelNetwork submodel network
 	 */
 	void showSubmodelNetwork(String modelName, JsonString jsonSubmodelNetwork);
+
+	void search(Set<String> searchResults);
 }

@@ -104,6 +104,14 @@ public class StageWorkbench extends Workbench {
 			}
 		}
 		
+		public void onAddModelByName(String modelName) {
+			File file = new File("examples/AnnotatedModels/" + modelName + ".owl");
+			SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(file, false);
+			_models.put(semsimmodel.getName(),  semsimmodel);
+			
+			_commandSender.addModel(semsimmodel.getName());
+		}
+		
 		public void onTaskClicked(String modelName, String task) {
 			// If the model doesn't exist throw an exception
 			if(!_models.containsKey(modelName))
@@ -131,9 +139,8 @@ public class StageWorkbench extends Workbench {
 		}
 		
 		public void onSearch(String searchString) {
-			System.out.println("onSearch is working!");
 			Set<String> searchResults = CompositeAnnotationSearch.compositeAnnotationSearch(searchString);
-			//send searchResults back to stage.js
+			_commandSender.search(searchResults);
 		}
 	}
 }

@@ -85,16 +85,28 @@ ul.modelPopover li.submenuContainer {
 
 .stageSearch {
 	position: absolute;
-	margin: 5px;
-	top: 150px;
-	right: 1px;
+	width:350px;
+	max-width:350px;
+	margin: 1px;
+	top: 300px;
+	right: 5px;
 	padding: 10px;
 	border: 1px solid black;
-	opacity: .2;
+	opacity: 1;
 }
 
-.stageSearch:hover {
+.searchResults ul {
+	list-style: none;
+	padding-left: 0;
+}
+
+.searchResults li {
+	opacity: .7;
+}
+.searchResults li:hover {
+	color:#293e6a;
 	opacity: 1;
+	cursor: pointer;
 }
 
 .key {
