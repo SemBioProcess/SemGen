@@ -1,0 +1,667 @@
+Chemical concentration of potassium(1+) in Portion of cytosol in Cardiac myocyte; smith_crampin_2004
+Intracellular potassium ion concentration; smith_crampin_2004
+Chemical concentration of sodium(1+) in Portion of cytosol in Cardiac myocyte; smith_crampin_2004
+Intracellular sodium ion concentration; smith_crampin_2004
+Chemical concentration of potassium(1+) in Extracellular space; smith_crampin_2004
+Extracellular potassium ion concentration; smith_crampin_2004
+Electrochemical potential of Plasma membrane in Cardiac myocyte; smith_crampin_2004
+Membrane potential; smith_crampin_2004
+Temperature of Human body; smith_crampin_2004
+Ambient temperature; smith_crampin_2004
+Electrochemical potential of Plasma membrane in Cardiac myocyte; smith_crampin_2004
+Membrane potential; smith_crampin_2004
+Chemical concentration of proton in Portion of cytosol in Cardiac myocyte; smith_crampin_2004
+Intracellular proton concentration; smith_crampin_2004
+Chemical concentration of MgATP(2-) in Portion of cytosol in Cardiac myocyte; smith_crampin_2004
+Intracellular concentration of magnesium-bound ATP; smith_crampin_2004
+Chemical concentration of sodium(1+) in Extracellular space; smith_crampin_2004
+Extracellular sodium ion concentration; smith_crampin_2004
+Chemical concentration of sodium(1+) in Portion of cytosol in Cardiac myocyte; smith_crampin_2004
+Intracellular sodium ion concentration; smith_crampin_2004
+Chemical concentration of "MgADP" in Portion of cytosol in Cardiac myocyte; smith_crampin_2004
+Intracellular concentration of magnesium-bound ADP; smith_crampin_2004
+Chemical concentration of inorganic phosphate in Portion of cytosol in Cardiac myocyte; smith_crampin_2004
+Intracellular concentration of inorganic phosphate ; smith_crampin_2004
+Chemical concentration of "MgADP" in Portion of cytosol in Cardiac myocyte; smith_crampin_2004
+Intracellular concentration of magnesium-bound ADP; smith_crampin_2004
+Tensile velocity of Contraction of contractile element; siebert_CC_2008
+Velocity of contractile component; siebert_CC_2008
+Surface normal tensile stress of Cardiac myocyte; niederer_hunter_smith_2006
+Active tension of cardiac myocyte; niederer_hunter_smith_2006
+Chemical concentration of 	Troponin C, slow skeletal and cardiac muscles (TN-C) in Portion of cytosol in Cardiac myocyte; niederer_hunter_smith_2006
+Intracellular troponin concentration; niederer_hunter_smith_2006
+Surface normal tensile stress of Cardiac myocyte; niederer_hunter_smith_2006
+Active tension of cardiac myocyte; niederer_hunter_smith_2006
+Chemical concentration of calcium(2+) in Portion of cytosol in Cardiac myocyte; niederer_hunter_smith_2006
+Intracellular calcium (2+) concentration; niederer_hunter_smith_2006
+Chemical concentration flow rate of Internal Cytosolic Ca2+ transfer; iyer_mazhari_winslow_2004
+Calcium flux between the diadic subspace and blulk cytosol; iyer_mazhari_winslow_2004
+Charge flow rate of Slow delayed rectifier potassium channel current; iyer_mazhari_winslow_2004
+Slow delayed rectifier potassium channel current; iyer_mazhari_winslow_2004
+Charge flow rate of Slow delayed rectifier potassium channel current; iyer_mazhari_winslow_2004
+Slow delayed rectifier potassium channel current; iyer_mazhari_winslow_2004
+Nernst potential of calcium(2+) in Plasma membrane in Cardiac myocyte; iyer_mazhari_winslow_2004
+Nernst potential of calcium across the plasma membrane of the cardiac myocyte; iyer_mazhari_winslow_2004
+Chemical concentration of calcium(2+) in Portion of cytosol in Cardiac myocyte; tran_smith_loiselle_crampin_2009
+Concentration of calcium in the cytosol; tran_smith_loiselle_crampin_2009
+Tensile velocity of Contraction of contractile element; siebert_CC_SEC_2008
+Velocity of contractile component; siebert_CC_SEC_2008
+Chemical molar flow rate of Intercellular diffusion between two pancreatic acinar cells; bindschadler_2001
+Diffusion of Ca between coupled cells; bindschadler_2001
+Chemical molar flow rate of Ca out of cell 1 cytoplasm to extracellular matrix via ATPase pumps; bindschadler_2001
+Ca flow out of cell 1 via ATPase pumps; bindschadler_2001
+Chemical concentration of calcium ion in Portion of cytosol in "First pancreatic acinar cell"; bindschadler_2001
+Cell 1 Ca concentration in the cytoplasm; bindschadler_2001
+Chemical concentration flow rate of Metabolism of Methadone in Organ; Yang_2006
+Metabolic rate of methadone; Yang_2006
+Chemical concentration of methadone in "Metabolizing Tissue of Organ"; Yang_2006
+Total methadone concentration in the organ's metabolizing tissue; Yang_2006
+Chemical concentration of "Bound Methadone" in Portion of plasma in Portion of blood; Yang_2006
+Bound concentration of methadone; Yang_2006
+Chemical concentration of methadone in "Metabolizing Tissue of Organ"; Yang_2006
+Total methadone concentration in the organ's metabolizing tissue; Yang_2006
+Chemical concentration of "Free Methadone" in Portion of arterial blood; Yang_2006
+Arterial blood concentration of methadone; Yang_2006
+Chemical concentration of methadone in "Metabolizing Tissue of Organ"; Yang_2006
+Total methadone concentration in the organ's metabolizing tissue; Yang_2006
+Chemical concentration flow rate of Metabolism of Methadone in Organ; Yang_2006
+Metabolic rate of methadone; Yang_2006
+Fluid volume of Portion of venous blood; Yang_2006
+Venous blood volume; Yang_2006
+Total volume of shape of Organ; Yang_2006
+Volume of organ; Yang_2006
+Chemical concentration of methadone in Portion of arterial blood; Yang_2006
+Arterial blood concentration of methadone; Yang_2006
+Chemical concentration of methadone in Portion of venous blood; Yang_2006
+Mixed venous concentration of drug; Yang_2006
+Chemical concentration of "Free Methadone" in Portion of arterial blood; Yang_2006
+Arterial blood concentration of methadone; Yang_2006
+Chemical concentration of methadone in Portion of venous blood; Yang_2006
+Mixed venous concentration of drug; Yang_2006
+Chemical concentration of "Bound Methadone" in Portion of plasma in Portion of blood; Yang_2006
+Bound concentration of methadone; Yang_2006
+Chemical concentration of "Free Methadone" in Portion of plasma; Yang_2006
+Free methadone concentration in plasma; Yang_2006
+Fluid volume of Portion of arterial blood; Yang_2006
+Arterial blood volume; Yang_2006
+Chemical concentration of "Free Methadone" in Portion of plasma; Yang_2006
+Free methadone concentration in plasma; Yang_2006
+Chemical concentration of "Proton-bound, antechamber-facing conformation of H-ATPase catalytic component" in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+Concentration of proton-bound, antechamber-facing conformation of H-ATPase catalytic component; chang_fujita_2001_H_ATPase
+Chemical concentration of "Double proton-bound, antechamber-facing conformation of H-ATPase catalytic component" in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+Concentration of double proton-bound, antechamber-facing conformation of H-ATPase catalytic component; chang_fujita_2001_H_ATPase
+Chemical concentration of ATP in Portion of cytosol in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+Cytosolic ATP concentration in type-A intercalated cells of late distal tubule; chang_fujita_2001_H_ATPase
+Chemical concentration of "Double proton-bound, cytosol-facing conformation of H-ATPase catalytic component" in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+Concentration of double proton-bound, cytosol-facing conformation of H-ATPase catalytic component; chang_fujita_2001_H_ATPase
+Chemical concentration of "Double proton-bound, antechamber-facing conformation of H-ATPase catalytic component" in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+Concentration of double proton-bound, antechamber-facing conformation of H-ATPase catalytic component; chang_fujita_2001_H_ATPase
+Chemical concentration of phosphate(3-) in Portion of cytosol in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+Cytosolic phosphate(3-) concentration in type-A intercalated cells of late distal tubule; chang_fujita_2001_H_ATPase
+Chemical concentration of "Antechamber-facing conformation of H-ATPase catalytic component" in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+Concentration of antechamber-facing conformation of H-ATPase catalytic component; chang_fujita_2001_H_ATPase
+Chemical concentration of proton in Portion of cytosol in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+H+ concentration in the cytosolic space; chang_fujita_2001_H_ATPase
+Chemical concentration of "Double proton-bound, cytosol-facing conformation of H-ATPase catalytic component" in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+Concentration of double proton-bound, cytosol-facing conformation of H-ATPase catalytic component; chang_fujita_2001_H_ATPase
+Chemical concentration of phosphate(3-) in Portion of cytosol in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+Cytosolic phosphate(3-) concentration in type-A intercalated cells of late distal tubule; chang_fujita_2001_H_ATPase
+Chemical concentration of "Antechamber-facing conformation of H-ATPase catalytic component" in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+Concentration of antechamber-facing conformation of H-ATPase catalytic component; chang_fujita_2001_H_ATPase
+Chemical concentration of proton in Portion of extracellular matrix in "Late distal tubule"; chang_fujita_2001_H_ATPase
+Extracellular H+ concentration; chang_fujita_2001_H_ATPase
+Electrical potential of Portion of extracellular matrix in "Late distal tubule"; chang_fujita_2001_H_ATPase
+Extracellular electrical potential; chang_fujita_2001_H_ATPase
+Chemical concentration of proton in Portion of cytosol in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+H+ concentration in the cytosolic space; chang_fujita_2001_H_ATPase
+Chemical concentration of "Double proton-bound, antechamber-facing conformation of H-ATPase catalytic component" in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+Concentration of double proton-bound, antechamber-facing conformation of H-ATPase catalytic component; chang_fujita_2001_H_ATPase
+Chemical concentration of ADP in Portion of cytosol in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+Cytosolic ADP concentration in type-A intercalated cells of late distal tubule; chang_fujita_2001_H_ATPase
+Temperature of Late distal tubule; chang_fujita_2001_H_ATPase
+Ambient temperature; chang_fujita_2001_H_ATPase
+Chemical concentration of "Proton-bound, antechamber-facing conformation of H-ATPase catalytic component" in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+Concentration of proton-bound, antechamber-facing conformation of H-ATPase catalytic component; chang_fujita_2001_H_ATPase
+Chemical concentration of "Double proton-bound, cytosol-facing conformation of H-ATPase catalytic component" in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+Concentration of double proton-bound, cytosol-facing conformation of H-ATPase catalytic component; chang_fujita_2001_H_ATPase
+Chemical concentration of "Cytosol-facing conformation of H-ATPase catalytic component" in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+Concentration of cytosol-facing conformation of H-ATPase catalytic component; chang_fujita_2001_H_ATPase
+Chemical concentration of proton in Portion of cytosol in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+H+ concentration in the cytosolic space; chang_fujita_2001_H_ATPase
+Chemical concentration of phosphate(3-) in Portion of cytosol in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+Cytosolic phosphate(3-) concentration in type-A intercalated cells of late distal tubule; chang_fujita_2001_H_ATPase
+Chemical concentration of ATP in Portion of cytosol in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+Cytosolic ATP concentration in type-A intercalated cells of late distal tubule; chang_fujita_2001_H_ATPase
+Chemical concentration of ATP in Portion of cytosol in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+Cytosolic ATP concentration in type-A intercalated cells of late distal tubule; chang_fujita_2001_H_ATPase
+Chemical concentration of "Cytosol-facing conformation of H-ATPase catalytic component" in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+Concentration of cytosol-facing conformation of H-ATPase catalytic component; chang_fujita_2001_H_ATPase
+Chemical concentration of proton in "Antechamber of H-ATPase" in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+H+ concentration in the antechamber between the membrane and catalytic components of H-ATPase; chang_fujita_2001_H_ATPase
+Chemical concentration of proton in Portion of cytosol in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+H+ concentration in the cytosolic space; chang_fujita_2001_H_ATPase
+Chemical concentration of "Cytosol-facing conformation of H-ATPase catalytic component" in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+Concentration of cytosol-facing conformation of H-ATPase catalytic component; chang_fujita_2001_H_ATPase
+Chemical concentration of proton in "Antechamber of H-ATPase" in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+H+ concentration in the antechamber between the membrane and catalytic components of H-ATPase; chang_fujita_2001_H_ATPase
+Chemical concentration of "Proton-bound, cytosol-facing conformation of H-ATPase catalytic component" in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+Concentration of proton-bound, cytosol-facing conformation of H-ATPase catalytic component; chang_fujita_2001_H_ATPase
+Chemical concentration of "Proton-bound, antechamber-facing conformation of H-ATPase catalytic component" in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+Concentration of proton-bound, antechamber-facing conformation of H-ATPase catalytic component; chang_fujita_2001_H_ATPase
+Chemical concentration of proton in "Antechamber of H-ATPase" in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+H+ concentration in the antechamber between the membrane and catalytic components of H-ATPase; chang_fujita_2001_H_ATPase
+Electrical potential of renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+Intraceullar electrical potential; chang_fujita_2001_H_ATPase
+Chemical concentration of "Proton-bound, cytosol-facing conformation of H-ATPase catalytic component" in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+Concentration of proton-bound, cytosol-facing conformation of H-ATPase catalytic component; chang_fujita_2001_H_ATPase
+Chemical concentration of "Antechamber-facing conformation of H-ATPase catalytic component" in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+Concentration of antechamber-facing conformation of H-ATPase catalytic component; chang_fujita_2001_H_ATPase
+Chemical concentration of ADP in Portion of cytosol in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+Cytosolic ADP concentration in type-A intercalated cells of late distal tubule; chang_fujita_2001_H_ATPase
+Chemical concentration of "Proton-bound, cytosol-facing conformation of H-ATPase catalytic component" in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+Concentration of proton-bound, cytosol-facing conformation of H-ATPase catalytic component; chang_fujita_2001_H_ATPase
+Chemical concentration of proton in "Antechamber of H-ATPase" in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+H+ concentration in the antechamber between the membrane and catalytic components of H-ATPase; chang_fujita_2001_H_ATPase
+Chemical concentration of ADP in Portion of cytosol in renal alpha-intercalated cell in "Late distal tubule"; chang_fujita_2001_H_ATPase
+Cytosolic ADP concentration in type-A intercalated cells of late distal tubule; chang_fujita_2001_H_ATPase
+Chemical concentration of calcium(2+) in Portion of extracellular matrix in Myocardium; rice_winslow_jafri_1999
+Extracellular calcium concentration; rice_winslow_jafri_1999
+Chemical concentration of ammonium ion in "Na-H Exchanger" in Portion of extracellular matrix in Portion of extracellular matrix; Chang_Fujita_2001_Na_H_exchanger
+Ammonium bound Na-H exchanger extracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of sodium(1+) in "Na-H Exchanger" in Portion of extracellular matrix in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Sodium bound Na-H exchanger extracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of "Na-H Exchanger" in Portion of extracellular matrix in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Na-H exchanger extracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of "Na-H Exchanger" in Portion of extracellular matrix in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Na-H exchanger extracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of sodium(1+) in "Na-H Exchanger" in Portion of extracellular matrix in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Sodium bound Na-H exchanger extracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of "Na-H Exchanger" in Portion of cytosol in renal intercalated cell in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Na-H exchanger intracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of hydride in Portion of extracellular matrix in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Hydrogen ion concentration in the substrate; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of ammonium ion in Portion of cytosol in renal intercalated cell in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Ammonium bound Na-H exchanger intracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of sodium(1+) in Portion of cytosol in renal intercalated cell in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Sodium bound Na-H exchanger intracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of sodium(1+) in Portion of cytosol in renal intercalated cell in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Intracellular sodium ion concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of "Na-H Exchanger" in Portion of extracellular matrix in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Na-H exchanger extracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of hydride in "Na-H Exchanger" in Portion of cytosol in renal intercalated cell in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Hydrogen bound Na-H exchanger intracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of "Na-H Exchanger" in Portion of extracellular matrix in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Na-H exchanger extracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of hydride in Portion of extracellular matrix in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Hydrogen ion concentration in the substrate; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of "Na-H Exchanger" in Portion of cytosol in renal intercalated cell in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Na-H exchanger intracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of ammonium ion in Portion of cytosol in renal intercalated cell in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Ammonium bound Na-H exchanger intracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of hydride in "Na-H Exchanger" in Portion of extracellular matrix in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Hydrogen bound Na-H exchanger extracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of ammonium ion in Portion of extracellular matrix in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Ammonium extracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of sodium(1+) in Portion of cytosol in renal intercalated cell in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Intracellular sodium ion concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of sodium(1+) in "Na-H Exchanger" in Portion of extracellular matrix in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Sodium bound Na-H exchanger extracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of hydride in "Na-H Exchanger" in Portion of extracellular matrix in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Hydrogen bound Na-H exchanger extracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of ammonium ion in Portion of cytosol in renal intercalated cell in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Ammonium intracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of sodium(1+) in Portion of cytosol in renal intercalated cell in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Sodium bound Na-H exchanger intracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of ammonium ion in "Na-H Exchanger" in Portion of extracellular matrix in Portion of extracellular matrix; Chang_Fujita_2001_Na_H_exchanger
+Ammonium bound Na-H exchanger extracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of sodium(1+) in Portion of extracellular matrix in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Sodium ion concentration in the substrate; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of sodium(1+) in Portion of cytosol in renal intercalated cell in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Sodium bound Na-H exchanger intracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of ammonium ion in Portion of extracellular matrix in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Ammonium extracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of "Na-H Exchanger" in Portion of cytosol in renal intercalated cell in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Na-H exchanger intracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of hydride in Portion of extracellular matrix in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Hydrogen ion concentration in the substrate; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of hydride in Portion of cytosol in renal intercalated cell in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Hydrogen ion intracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of ammonium ion in Portion of cytosol in renal intercalated cell in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Ammonium intracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of hydride in "Na-H Exchanger" in Portion of cytosol in renal intercalated cell in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Hydrogen bound Na-H exchanger intracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of ammonium ion in "Na-H Exchanger" in Portion of extracellular matrix in Portion of extracellular matrix; Chang_Fujita_2001_Na_H_exchanger
+Ammonium bound Na-H exchanger extracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of ammonium ion in Portion of cytosol in renal intercalated cell in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Ammonium intracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of "Na-H Exchanger" in Portion of cytosol in renal intercalated cell in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Na-H exchanger intracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of hydride in "Na-H Exchanger" in Portion of extracellular matrix in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Hydrogen bound Na-H exchanger extracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of sodium(1+) in Portion of cytosol in renal intercalated cell in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Intracellular sodium ion concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of sodium(1+) in Portion of extracellular matrix in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Sodium ion concentration in the substrate; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of hydride in Portion of cytosol in renal intercalated cell in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Hydrogen ion intracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of ammonium ion in Portion of cytosol in renal intercalated cell in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Ammonium bound Na-H exchanger intracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of ammonium ion in Portion of extracellular matrix in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Ammonium extracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of hydride in "Na-H Exchanger" in Portion of cytosol in renal intercalated cell in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Hydrogen bound Na-H exchanger intracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of sodium(1+) in Portion of extracellular matrix in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Sodium ion concentration in the substrate; Chang_Fujita_2001_Na_H_exchanger
+Chemical concentration of hydride in Portion of cytosol in renal intercalated cell in Distal convoluted tubule; Chang_Fujita_2001_Na_H_exchanger
+Hydrogen ion intracellular concentration; Chang_Fujita_2001_Na_H_exchanger
+Charge flow rate of Potassium current across plasma membrane; Hodgkin_Huxley_1952
+Potassium current across the plasma membrane; Hodgkin_Huxley_1952
+Charge amount of Plasma membrane; Hodgkin_Huxley_1952
+Displacement of the membrane potential from its resting value; Hodgkin_Huxley_1952
+Charge amount of Plasma membrane in Nerve fiber; Hodgkin_Huxley_1952
+Displacement of the membrane potential from its resting value; Hodgkin_Huxley_1952
+Charge flow rate of Sodium current across plasma membrane; Hodgkin_Huxley_1952
+Sodium current across the plasma membrane; Hodgkin_Huxley_1952
+Charge amount of Plasma membrane; Hodgkin_Huxley_1952
+Displacement of the membrane potential from its resting value; Hodgkin_Huxley_1952
+Charge amount of Plasma membrane; Hodgkin_Huxley_1952
+Displacement of the membrane potential from its resting value; Hodgkin_Huxley_1952
+Charge amount of Plasma membrane; Hodgkin_Huxley_1952
+Displacement of the membrane potential from its resting value; Hodgkin_Huxley_1952
+Charge flow rate of Sodium current across plasma membrane; Hodgkin_Huxley_1952
+Sodium current across the plasma membrane; Hodgkin_Huxley_1952
+Charge flow rate of Leak current across plasma membrane; Hodgkin_Huxley_1952
+Leakage current across the plasma membrane; Hodgkin_Huxley_1952
+Charge amount of Plasma membrane; Hodgkin_Huxley_1952
+Displacement of the membrane potential from its resting value; Hodgkin_Huxley_1952
+Charge flow rate of Leak current across plasma membrane; Hodgkin_Huxley_1952
+Leakage current across the plasma membrane; Hodgkin_Huxley_1952
+Charge flow rate of Potassium current across plasma membrane; Hodgkin_Huxley_1952
+Potassium current across the plasma membrane; Hodgkin_Huxley_1952
+Charge amount of Plasma membrane; Hodgkin_Huxley_1952
+Displacement of the membrane potential from its resting value; Hodgkin_Huxley_1952
+Chemical concentration of potassium(1+) in Portion of extracellular matrix; pandit_clark_giles_demir_2001
+Concentration of potassium external to the cardiac myocyte; pandit_clark_giles_demir_2001
+Chemical concentration of sodium(1+) in Portion of extracellular matrix; pandit_clark_giles_demir_2001
+Concentration of sodium external to the cardiac myocyte; pandit_clark_giles_demir_2001
+Chemical concentration of potassium(1+) in Portion of cytosol in Cardiac myocyte; pandit_clark_giles_demir_2001
+Concentration of potassium in bulk cytosol; pandit_clark_giles_demir_2001
+Chemical molar flow rate of Sarcoplasmic reticulum calcium release flux; pandit_clark_giles_demir_2001
+Calcium flux through sarcoplasmic reticulum RyR receptor ; pandit_clark_giles_demir_2001
+Span of spatial entity of Set of skeletal muscle cells in Striated muscle tissue; Holmes_2006
+Contribution of muscle contractile elements to fraction of muscle length; Holmes_2006
+Surface normal tensile stress of Skeletal muscle tissue; Holmes_2006
+Steady-state force; Holmes_2006
+Tensile velocity of Skeletal muscle contraction; Holmes_2006
+Shortening velocity; Holmes_2006
+Span of spatial entity of Elastic tissue in Striated muscle tissue; Holmes_2006
+Contribution of muscle elastic elements to fraction of muscle length; Holmes_2006
+Chemical molar amount of "External Na and Substrate Bound SGLT2 Cotransporter" in Plasma membrane in oocyte; MacKenzie_1996
+Pre-steady state external CNaS concentration; MacKenzie_1996
+Chemical molar amount of sodium-glucose transport protein subtype 2 inhibitor in Plasma membrane in oocyte; MacKenzie_1996
+Density of functional SGLT2 carriers in the oocyte membrane; MacKenzie_1996
+Chemical concentration of methyl alpha-D-glucopyranoside in "Cell culture medium"; MacKenzie_1996
+Glucose concentration in experimental medium; MacKenzie_1996
+Chemical molar amount of "External Unbound SGLT2 Cotransporter" in Plasma membrane in oocyte; MacKenzie_1996
+Pre-steady state external unbound cotransporter concentration; MacKenzie_1996
+Chemical concentration of methyl alpha-D-glucopyranoside in "Cell culture medium"; MacKenzie_1996
+Glucose concentration in experimental medium; MacKenzie_1996
+Electrical potential of Plasma membrane in oocyte; MacKenzie_1996
+Electrical potential of the cell membrane; MacKenzie_1996
+Chemical concentration of sodium(1+) in Portion of cytosol in oocyte; MacKenzie_1996
+Intracellular sodium concentration; MacKenzie_1996
+Chemical molar amount of sodium-glucose transport protein subtype 2 inhibitor in Plasma membrane in oocyte; MacKenzie_1996
+Density of functional SGLT2 carriers in the oocyte membrane; MacKenzie_1996
+Chemical concentration of sodium(1+) in "Cell culture medium"; MacKenzie_1996
+Sodium concentration in cell culture medium; MacKenzie_1996
+Chemical molar amount of "External Na and Substrate Bound SGLT2 Cotransporter" in Plasma membrane in oocyte; MacKenzie_1996
+Pre-steady state external CNaS concentration; MacKenzie_1996
+Chemical molar amount of "Internal Unbound SGLT2 Cotransporter" in Plasma membrane in oocyte; MacKenzie_1996
+Pre-steady state internal unbound cotransporter concentration; MacKenzie_1996
+Electrical potential of Plasma membrane in oocyte; MacKenzie_1996
+Electrical potential of the cell membrane; MacKenzie_1996
+Chemical molar amount of "External Na Bound SGLT2 Cotransporter" in Plasma membrane in oocyte; MacKenzie_1996
+Pre-steady state external Na bound cotransporter concentration; MacKenzie_1996
+Chemical concentration of methyl alpha-D-glucopyranoside in "Cell culture medium"; MacKenzie_1996
+Glucose concentration in experimental medium; MacKenzie_1996
+Chemical molar amount of "Internal Na Bound SGLT2 Cotransporter" in Plasma membrane in oocyte; MacKenzie_1996
+Pre-steady state internal CNa concentration; MacKenzie_1996
+Chemical molar amount of "Internal Na and Substrate Bound SGLT2 Cotransporter" in Plasma membrane in oocyte; MacKenzie_1996
+Steady state internal CNaS concentration; MacKenzie_1996
+Chemical concentration of methyl alpha-D-glucopyranoside in Portion of cytosol in oocyte; MacKenzie_1996
+Intracellular glucose concentration; MacKenzie_1996
+Chemical molar amount of "Internal Unbound SGLT2 Cotransporter" in Plasma membrane in oocyte; MacKenzie_1996
+Pre-steady state internal unbound cotransporter concentration; MacKenzie_1996
+Chemical molar amount of "Internal Na Bound SGLT2 Cotransporter" in Plasma membrane in oocyte; MacKenzie_1996
+Pre-steady state internal CNa concentration; MacKenzie_1996
+Charge flow rate of Sodium ion flow into cytosol via SGLT2 cotransporter; MacKenzie_1996
+Sodium ion flow into the cytosol; MacKenzie_1996
+Chemical molar amount of "Internal Na and Substrate Bound SGLT2 Cotransporter" in Plasma membrane in oocyte; MacKenzie_1996
+Steady state internal CNaS concentration; MacKenzie_1996
+Chemical concentration of sodium(1+) in Portion of cytosol in oocyte; MacKenzie_1996
+Intracellular sodium concentration; MacKenzie_1996
+Chemical molar amount of "External Na Bound SGLT2 Cotransporter" in Plasma membrane in oocyte; MacKenzie_1996
+Pre-steady state external Na bound cotransporter concentration; MacKenzie_1996
+Chemical molar amount of sodium-glucose transport protein subtype 2 inhibitor in Plasma membrane in oocyte; MacKenzie_1996
+Density of functional SGLT2 carriers in the oocyte membrane; MacKenzie_1996
+Charge flow rate of Glucose transport across cell membrane via SGLT2 cotransporters; MacKenzie_1996
+Na-glucose pre-steady state current; MacKenzie_1996
+Chemical concentration of sodium(1+) in "Cell culture medium"; MacKenzie_1996
+Sodium concentration in cell culture medium; MacKenzie_1996
+Chemical concentration of methyl alpha-D-glucopyranoside in Portion of cytosol in oocyte; MacKenzie_1996
+Intracellular glucose concentration; MacKenzie_1996
+Chemical molar amount of sodium-glucose transport protein subtype 2 inhibitor in Plasma membrane in oocyte; MacKenzie_1996
+Density of functional SGLT2 carriers in the oocyte membrane; MacKenzie_1996
+Chemical concentration of sodium(1+) in "Cell culture medium"; MacKenzie_1996
+Sodium concentration in cell culture medium; MacKenzie_1996
+Chemical molar amount of sodium-glucose transport protein subtype 2 inhibitor in Plasma membrane in oocyte; MacKenzie_1996
+Density of functional SGLT2 carriers in the oocyte membrane; MacKenzie_1996
+Fluid pressure of Portion of blood in Left ventricle; Smith_2004
+Left ventricular blood pressure; Smith_2004
+Fluid flow rate of Blood flow through pulmonary valve; Smith_2004
+Blood flow through pulmonary valve; Smith_2004
+Fluid flow rate of Pulmonary circulatory blood flow; Smith_2004
+Pulmonary blood flow; Smith_2004
+Fluid volume of Pericardium; Smith_2004
+Volume of the pericardium; Smith_2004
+Fluid flow rate of Blood flow through tricuspid valve; Smith_2004
+Blood flow across tricuspid valve; Smith_2004
+Fluid pressure of Portion of blood in Right ventricle; Smith_2004
+Right ventricular blood pressure; Smith_2004
+Fluid pressure of Portion of blood in Vena cava; Smith_2004
+Blood Pressure in the Vena Cava; Smith_2004
+Fluid volume of Wall of left ventricle; Smith_2004
+Volume of the free wall of the left ventricle; Smith_2004
+Fluid pressure of Wall of left ventricle; Smith_2004
+Pressure across the left ventricular freewall; Smith_2004
+Fluid volume of Cardiac septum; Smith_2004
+Septal wall volume; Smith_2004
+Fluid volume of Portion of blood in Left ventricle; Smith_2004
+Volume of blood contained in left ventricle; Smith_2004
+Fluid flow rate of Blood flow through tricuspid valve; Smith_2004
+Blood flow across tricuspid valve; Smith_2004
+Fluid pressure of Portion of blood in Aorta; Smith_2004
+Aortic Blood Pressure; Smith_2004
+Fluid pressure of Wall of right ventricle; Smith_2004
+Pressure across the right ventricular free wall; Smith_2004
+Fluid pressure of Portion of blood in Aorta; Smith_2004
+Aortic Blood Pressure; Smith_2004
+Fluid pressure of Portion of blood in Right ventricle; Smith_2004
+Right ventricular blood pressure; Smith_2004
+Fluid flow rate of Blood flow through pulmonary valve; Smith_2004
+Blood flow through pulmonary valve; Smith_2004
+Fluid flow rate of Systemic circulatory blood flow; Smith_2004
+Systemic circulatory blood flow; Smith_2004
+Fluid pressure of Portion of blood in Pericardium; Smith_2004
+Pericardial blood volume; Smith_2004
+Fluid flow rate of Pulmonary circulatory blood flow; Smith_2004
+Pulmonary blood flow; Smith_2004
+Fluid volume of Wall of right ventricle; Smith_2004
+Right ventricular free wall volume; Smith_2004
+Fluid pressure of Portion of blood in Pulmonary artery; Smith_2004
+Blood pressure in the pulmonary artery; Smith_2004
+Fluid volume of Cardiac septum; Smith_2004
+Septal wall volume; Smith_2004
+Fluid pressure of Portion of blood in Left ventricle; Smith_2004
+Left ventricular blood pressure; Smith_2004
+Fluid flow rate of Systemic circulatory blood flow; Smith_2004
+Systemic circulatory blood flow; Smith_2004
+Fluid pressure of Portion of blood in Vena cava; Smith_2004
+Blood Pressure in the Vena Cava; Smith_2004
+Fluid pressure of Portion of blood in Aorta; Smith_2004
+Aortic Blood Pressure; Smith_2004
+Fluid flow rate of Blood flow through aortic valve; Smith_2004
+Blood flow through atrial valve; Smith_2004
+Fluid volume of Portion of blood in Aorta; Smith_2004
+Volume of blood contained in aorta; Smith_2004
+Fluid flow rate of Blood flow through mitral valve; Smith_2004
+Blood flow through mitrial valve; Smith_2004
+Fluid pressure of Portion of blood in Left ventricle; Smith_2004
+Left ventricular blood pressure; Smith_2004
+Fluid flow rate of Blood flow through tricuspid valve; Smith_2004
+Blood flow across tricuspid valve; Smith_2004
+Fluid volume of Portion of blood in Right ventricle; Smith_2004
+Right ventricle blood volume; Smith_2004
+Fluid pressure of Portion of blood in Left ventricle; Smith_2004
+Left ventricular blood pressure; Smith_2004
+Fluid flow rate of Blood flow through aortic valve; Smith_2004
+Blood flow through atrial valve; Smith_2004
+Fluid pressure of Portion of blood in Pulmonary artery; Smith_2004
+Blood pressure in the pulmonary artery; Smith_2004
+Fluid volume of Portion of blood in Left ventricle; Smith_2004
+Volume of blood contained in left ventricle; Smith_2004
+Fluid pressure of Portion of blood in Aorta; Smith_2004
+Aortic Blood Pressure; Smith_2004
+Fluid flow rate of Pulmonary circulatory blood flow; Smith_2004
+Pulmonary blood flow; Smith_2004
+Fluid pressure of Portion of blood in Right ventricle; Smith_2004
+Right ventricular blood pressure; Smith_2004
+Fluid flow rate of Systemic circulatory blood flow; Smith_2004
+Systemic circulatory blood flow; Smith_2004
+Fluid volume of Portion of blood in Right ventricle; Smith_2004
+Right ventricle blood volume; Smith_2004
+Fluid volume of Wall of left ventricle; Smith_2004
+Volume of the free wall of the left ventricle; Smith_2004
+Fluid volume of Portion of blood; Smith_2004
+Vena cava blood volume; Smith_2004
+Fluid flow rate of Blood flow through mitral valve; Smith_2004
+Blood flow through mitrial valve; Smith_2004
+Fluid pressure of Portion of blood in Pulmonary artery; Smith_2004
+Blood pressure in the pulmonary artery; Smith_2004
+Fluid volume of Cardiac septum; Smith_2004
+Septal wall volume; Smith_2004
+Fluid volume of Wall of right ventricle; Smith_2004
+Right ventricular free wall volume; Smith_2004
+Fluid volume of Portion of blood in Right ventricle; Smith_2004
+Right ventricle blood volume; Smith_2004
+Fluid pressure of Portion of blood in Pulmonary vein; Smith_2004
+Pulmonary venous blood pressure; Smith_2004
+Fluid pressure of Portion of blood in Vena cava; Smith_2004
+Blood Pressure in the Vena Cava; Smith_2004
+Fluid flow rate of Blood flow through pulmonary valve; Smith_2004
+Blood flow through pulmonary valve; Smith_2004
+Fluid pressure of Portion of blood in Pulmonary vein; Smith_2004
+Pulmonary venous blood pressure; Smith_2004
+Fluid pressure of Portion of blood in Vena cava; Smith_2004
+Blood Pressure in the Vena Cava; Smith_2004
+Fluid flow rate of Blood flow through mitral valve; Smith_2004
+Blood flow through mitrial valve; Smith_2004
+Fluid pressure of Portion of blood in Pericardium; Smith_2004
+Pericardial blood volume; Smith_2004
+Fluid pressure of Portion of blood in Pericardium; Smith_2004
+Pericardial blood volume; Smith_2004
+Fluid volume of Portion of blood in Left ventricle; Smith_2004
+Volume of blood contained in left ventricle; Smith_2004
+Fluid pressure of Portion of blood in Right ventricle; Smith_2004
+Right ventricular blood pressure; Smith_2004
+Fluid pressure of Portion of blood in Left ventricle; Smith_2004
+Left ventricular blood pressure; Smith_2004
+Fluid flow rate of Blood flow through aortic valve; Smith_2004
+Blood flow through atrial valve; Smith_2004
+Fluid pressure of Portion of blood in Pulmonary vein; Smith_2004
+Pulmonary venous blood pressure; Smith_2004
+Fluid pressure of Portion of blood in Pulmonary vein; Smith_2004
+Pulmonary venous blood pressure; Smith_2004
+Fluid pressure of Portion of blood in Right ventricle; Smith_2004
+Right ventricular blood pressure; Smith_2004
+Fluid pressure of Portion of blood in Pulmonary artery; Smith_2004
+Blood pressure in the pulmonary artery; Smith_2004
+Chemical concentration of potassium(1+) in Portion of cytosol in Cardiac myocyte; Hilgemann_1987
+Potassium intracellular concentration; Hilgemann_1987
+Charge flow rate of Fast sodium channel current across plasma membrane; Hilgemann_1987
+TTX sensittive fast Na current; Hilgemann_1987
+Electrical potential of Plasma membrane in Cardiac myocyte; Hilgemann_1987
+Cardiac myocyte membrane potential; Hilgemann_1987
+Chemical concentration of calcium(2+) in Portion of extracellular matrix; Hilgemann_1987
+Extracellular calcium concentration; Hilgemann_1987
+Chemical concentration of calcium(2+) in Sarcoplasmic reticulum in Regular ventricular cardiac myocyte; hinch_greenstein_tanskanen_xu_winslow_2004
+Calcium (2+) concentration in sarcoplasmic reticulum; hinch_greenstein_tanskanen_xu_winslow_2004
+Charge flow rate of Delayed rectifier K channel current; DiFrancesco_Noble_1985
+Delayed K current; DiFrancesco_Noble_1985
+Charge flow rate of Na background current across plasma membrane of cardiac myocyte; DiFrancesco_Noble_1985
+Sodium background current; DiFrancesco_Noble_1985
+Chemical concentration of calcium(2+) in Portion of cytosol in Cardiac myocyte; DiFrancesco_Noble_1985
+Intracellular Ca concentration; DiFrancesco_Noble_1985
+Chemical concentration of calcium ion in Portion of cytosol; De_Young_1992
+Cytosolic free Ca concentration; De_Young_1992
+Chemical concentration of Mitogen-activated protein kinase 1 (MAP kinase 1) (MAPK 1) (EC 2.7.11.24) (ERT1) (Extracellular signal-regulated kinase 2) (ERK-2) (MAP kinase isoform p42) (p42-MAPK) (Mitogen-activated protein kinase 2) (MAP kinase 2) (MAPK 2) (P28482) in Oocyte; asthagiri_lauffenburger_2001
+Concentration of active signaling enzyme 5; asthagiri_lauffenburger_2001
+Chemical concentration of Mitogen-activated protein kinase 1 (MAP kinase 1) (MAPK 1) (EC 2.7.11.24) (ERT1) (Extracellular signal-regulated kinase 2) (ERK-2) (MAP kinase isoform p42) (p42-MAPK) (Mitogen-activated protein kinase 2) (MAP kinase 2) (MAPK 2) (P28482) in Oocyte; asthagiri_lauffenburger_2001
+Concentration of active signaling enzyme 5; asthagiri_lauffenburger_2001
+Chemical concentration of Mitogen-activated protein kinase 1 (MAP kinase 1) (MAPK 1) (EC 2.7.11.24) (ERT1) (Extracellular signal-regulated kinase 2) (ERK-2) (MAP kinase isoform p42) (p42-MAPK) (Mitogen-activated protein kinase 2) (MAP kinase 2) (MAPK 2) (P28482) in Oocyte; asthagiri_lauffenburger_2001
+Concentration of active signaling enzyme 5; asthagiri_lauffenburger_2001
+Chemical flow rate of Degradation of free IP3; cooling_hunter_crampin_2007
+Reaction R16 flux; cooling_hunter_crampin_2007
+Chemical concentration of "Receptor bound to G-alpha-GDP" in Plasma membrane in Regular atrial cardiac myocyte; cooling_hunter_crampin_2007
+Density of receptors coupled with G-proteins; cooling_hunter_crampin_2007
+Chemical concentration of "Ligand" in Extracellular space; cooling_hunter_crampin_2007
+Full-strength ligand concentration during stimulation; cooling_hunter_crampin_2007
+Chemical concentration of "Ligand bound to receptor" in Plasma membrane in Regular atrial cardiac myocyte; cooling_hunter_crampin_2007
+Ligand-bound receptor density; cooling_hunter_crampin_2007
+Chemical concentration of "PLC-beta bound to calcium (2+)" in Plasma membrane in Regular atrial cardiac myocyte; cooling_hunter_crampin_2007
+Density of PLC-beta bound to calcium (2+); cooling_hunter_crampin_2007
+Fluid pressure of Wall of right ventricle in Heart; Heldt_Shim_2002
+Blood pressure in the right ventricle; Heldt_Shim_2002
+Fluid pressure of Portion of blood in Pulmonary capillary; Heldt_Shim_2002
+Pulmonary capillaries chamber pressure; Heldt_Shim_2002
+Fluid pressure of Pericardial cavity; Heldt_Shim_2002
+Pericardial chamber pressure; Heldt_Shim_2002
+Fluid volume of Portion of blood in "Distal pulmonary arteries"; Heldt_Shim_2002
+Distal pulmonary arterial volume; Heldt_Shim_2002
+Fluid volume of Portion of blood in Body; Heldt_Shim_2002
+Total blood in circulation; Heldt_Shim_2002
+Fluid pressure of Portion of blood in "Proximal pulmonary arteries"; Heldt_Shim_2002
+Proximal pulmonary chamber arterial pressure; Heldt_Shim_2002
+Fluid volume of Portion of blood in "Small coronary veins"; Heldt_Shim_2002
+Small coronary veins volume; Heldt_Shim_2002
+Fluid volume of Portion of blood in Systemic arterial system; Heldt_Shim_2002
+Systemic arterial volume; Heldt_Shim_2002
+Fluid volume of Portion of blood in Right ventricle in Heart; Heldt_Shim_2002
+Fluid volume in the right ventricle; Heldt_Shim_2002
+Fluid pressure of Portion of blood in Systemic arterial system; Heldt_Shim_2002
+Systemic arterial pressure; Heldt_Shim_2002
+Fluid pressure of Portion of blood in Set of pulmonary veins; Heldt_Shim_2002
+Pulmonary veins chamber pressure; Heldt_Shim_2002
+Fluid pressure of Pleural cavity; Heldt_Shim_2002
+Pleural chamber pressure; Heldt_Shim_2002
+Fluid volume of Portion of blood in Systemic venous system; Heldt_Shim_2002
+Systemic veins volume; Heldt_Shim_2002
+Fluid pressure of "Wall of capillary" in Pulmonary capillary; Heldt_Shim_2002
+Pulmonary capillaries transmural pressure; Heldt_Shim_2002
+Fluid volume of Portion of blood in "Coronary capillaries"; Heldt_Shim_2002
+Coronary capillaries volume; Heldt_Shim_2002
+Fluid volume of Portion of blood in Set of all systemic capillaries; Heldt_Shim_2002
+Systemic capillaries volume; Heldt_Shim_2002
+Fluid volume of Portion of blood in Set of pulmonary veins; Heldt_Shim_2002
+Pulmonary venous volume; Heldt_Shim_2002
+Fluid pressure of Pleural cavity in Surface of lung; Heldt_Shim_2002
+Transmural pleural pressure; Heldt_Shim_2002
+Fluid pressure of Wall of arteriole in Set of all pulmonary arterioles; Heldt_Shim_2002
+Pulmonary arterioles transmural pressure; Heldt_Shim_2002
+Fluid volume of Portion of blood in Systemic venous system; Heldt_Shim_2002
+Systemic venous volume; Heldt_Shim_2002
+Fluid volume of Portion of blood in Set of epicardial tributaries of all cardiac veins; Heldt_Shim_2002
+Epicardial veins volume; Heldt_Shim_2002
+Fluid volume of Portion of blood in "Small coronary arteries"; Heldt_Shim_2002
+Small coronary arteries volume; Heldt_Shim_2002
+Fluid pressure of Portion of blood in Distal zone of aorta; Heldt_Shim_2002
+Distal aorta chamber pressure; Heldt_Shim_2002
+Fluid pressure of Wall of aorta in "Proximal zone of aorta"; Heldt_Shim_2002
+Proximal aorta transmural pressure; Heldt_Shim_2002
+Fluid volume of Pericardium; Heldt_Shim_2002
+Total volume enclosed by pericardium; Heldt_Shim_2002
+Fluid volume of Portion of blood in Set of proximal epicardial branches of coronary arteries; Heldt_Shim_2002
+Proximal epicardial arteries volume; Heldt_Shim_2002
+Fluid volume of Portion of blood in Left atrium in Heart; Heldt_Shim_2002
+Fluid volume in the left atrium; Heldt_Shim_2002
+Fluid pressure of Portion of blood in Set of all systemic capillaries; Heldt_Shim_2002
+Systemic capillaries pressure; Heldt_Shim_2002
+Fluid pressure of Portion of blood in Set of all pulmonary arterioles; Heldt_Shim_2002
+Pulmonary arterioles chamber pressure; Heldt_Shim_2002
+Fluid volume of Portion of blood in Set of all epicardial branches of all coronary arteries; Heldt_Shim_2002
+Distal epicardial arteries volume; Heldt_Shim_2002
+Fluid pressure of Portion of blood in "Distal pulmonary arteries"; Heldt_Shim_2002
+Distal pulmonary arterial chamber pressure; Heldt_Shim_2002
+Fluid volume of Portion of blood in "Large coronary veins"; Heldt_Shim_2002
+Large coronary veins volume; Heldt_Shim_2002
+Fluid volume of Portion of blood in "Proximal zone of aorta"; Heldt_Shim_2002
+Proximal aorta volume; Heldt_Shim_2002
+Fluid volume of Portion of blood in Vena cava; Heldt_Shim_2002
+Vena cava volume; Heldt_Shim_2002
+Fluid pressure of "Wall of artery" in "Proximal pulmonary arteries"; Heldt_Shim_2002
+Proximal pulmonary arterial transmural pressure; Heldt_Shim_2002
+Fluid volume of Portion of body fluid in Body; Heldt_Shim_2002
+Total blood volume; Heldt_Shim_2002
+Fluid flow rate of Blood flow through the distal aorta; Heldt_Shim_2002
+Distal aorta flow; Heldt_Shim_2002
+Fluid pressure of Portion of blood in "Coronary capillaries"; Heldt_Shim_2002
+Coronary capillary chamber pressure; Heldt_Shim_2002
+Fluid pressure of Portion of body fluid in Interstitial space in Myocardium; Heldt_Shim_2002
+Myocardium interstitial fluid pressure; Heldt_Shim_2002
+Fluid pressure of Portion of blood in Set of proximal epicardial branches of coronary arteries; Heldt_Shim_2002
+Proximal epicardial arteries chamber pressure; Heldt_Shim_2002
+Fluid volume of Portion of blood in Pulmonary arterial tree; Heldt_Shim_2002
+Pulmonary arterial volume; Heldt_Shim_2002
+Fluid pressure of Wall of right atrium in Heart; Heldt_Shim_2002
+Pressure in the right atrium; Heldt_Shim_2002
+Fluid pressure of "Wall of artery" in Set of proximal epicardial branches of coronary arteries; Heldt_Shim_2002
+Proximal epicardial arteries transmural pressure; Heldt_Shim_2002
+Fluid pressure of Wall of left atrium in Heart; Heldt_Shim_2002
+Pressure in the left atrium; Heldt_Shim_2002
+Fluid volume of Portion of blood in Set of pulmonary veins; Heldt_Shim_2002
+Pulmonary veins volume; Heldt_Shim_2002
+Fluid pressure of "Wall of capillary" in "Coronary capillaries"; Heldt_Shim_2002
+Coronary capillary transmural pressure; Heldt_Shim_2002
+Fluid pressure of Portion of blood in Right ventricle in Heart; Heldt_Shim_2002
+Right ventricular chamber pressure; Heldt_Shim_2002
+Fluid volume of Portion of blood in "Large coronary arteries"; Heldt_Shim_2002
+Large coronary arteries volume; Heldt_Shim_2002
+Fluid pressure of Surface of fibrous pericardium; Heldt_Shim_2002
+Transmural pericardial pressure; Heldt_Shim_2002
+Fluid pressure of Portion of blood in Vena cava; Heldt_Shim_2002
+Vena cava chamber pressure; Heldt_Shim_2002
+Fluid flow rate of Blood flow through proximal aorta; Heldt_Shim_2002
+Proximal aorta flow; Heldt_Shim_2002
+Fluid volume of Portion of blood in "Proximal pulmonary arteries"; Heldt_Shim_2002
+Proximal pulmonary arterial volume; Heldt_Shim_2002
+Fluid volume of Portion of blood in Right atrium in Heart; Heldt_Shim_2002
+Fluid volume in the right atrium; Heldt_Shim_2002
+Fluid volume of Portion of blood in Left ventricle in Heart; Heldt_Shim_2002
+Blood volume in the left ventricle; Heldt_Shim_2002
+Fluid volume of Portion of blood in "Proximal systemic arteries"; Heldt_Shim_2002
+Proximal systemic arteries volume; Heldt_Shim_2002
+Fluid volume of Portion of blood in Systemic arterial system; Heldt_Shim_2002
+Volume of systemic arteries; Heldt_Shim_2002
+Fluid volume of Portion of blood in "Coronary vasculature"; Heldt_Shim_2002
+Volume of blood in coronary circulation; Heldt_Shim_2002
+Fluid pressure of Portion of blood in Right atrium in Heart; Heldt_Shim_2002
+Right atrial chamber pressure; Heldt_Shim_2002
+Fluid pressure of "Wall of artery" in Vena cava; Heldt_Shim_2002
+Vena cava transmural pressure; Heldt_Shim_2002
+Fluid volume of Portion of blood in Myocardium; Heldt_Shim_2002
+Myocardium blood volume; Heldt_Shim_2002
+Fluid pressure of "Wall of vein" in Set of pulmonary veins; Heldt_Shim_2002
+Pulmonary veins transmural pressure; Heldt_Shim_2002
+Fluid pressure of Wall of left ventricle in Heart; Heldt_Shim_2002
+Pressure in the left ventricle; Heldt_Shim_2002
+Fluid pressure of "Wall of artery" in "Distal pulmonary arteries"; Heldt_Shim_2002
+Distal pulmonary arterial transmural pressure; Heldt_Shim_2002
+Fluid pressure of Wall of aorta in Distal zone of aorta; Heldt_Shim_2002
+Distal aorta transmural pressure; Heldt_Shim_2002
+Fluid pressure of Portion of blood in "Proximal zone of aorta"; Heldt_Shim_2002
+Proximal aorta chamber pressure; Heldt_Shim_2002
+Fluid pressure of Portion of blood in "Proximal systemic arteries"; Heldt_Shim_2002
+Proximal systemic arteries pressure; Heldt_Shim_2002
+Fluid pressure of Portion of blood in Left atrium in Heart; Heldt_Shim_2002
+Left atrial chamber pressure; Heldt_Shim_2002
+Fluid volume of Portion of blood in Set of all pulmonary arterioles; Heldt_Shim_2002
+Pulmonary arterioles volume; Heldt_Shim_2002
+Fluid volume of Portion of blood in Pulmonary capillary; Heldt_Shim_2002
+Pulmonary capillaries volume; Heldt_Shim_2002
+Fluid volume of Portion of blood in Distal zone of aorta; Heldt_Shim_2002
+Distal aorta volume; Heldt_Shim_2002
+Fluid pressure of Portion of blood in Systemic venous system; Heldt_Shim_2002
+Systemic veins pressure; Heldt_Shim_2002
+Fluid pressure of Portion of blood in Left ventricle in Heart; Heldt_Shim_2002
+Left ventricular chamber pressure; Heldt_Shim_2002
+
