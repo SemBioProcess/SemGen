@@ -46,6 +46,16 @@
 				</ul>
 			</div>
 		</div>
+		<div class="stageSearch">
+			Search for Annotated Models
+			<form>
+				<input name="searchString" id="searchString" type="text" placeholder="Search..." onkeydown="if (event.keyCode == 13) document.getElementById('searchButton').click()">
+				<input name="searchButton" id="searchButton" type="button" onclick="search(document.getElementById('searchString').value)" value="Search">
+			</form>
+			<div class="searchResults">
+				Search Results
+			</div>
+		</div>
 		<div id="stage"></div>
 	</body>
 </html>

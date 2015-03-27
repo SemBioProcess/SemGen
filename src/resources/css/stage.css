@@ -83,6 +83,20 @@ ul.modelPopover li.submenuContainer {
 	opacity: 1;
 }
 
+.stageSearch {
+	position: absolute;
+	margin: 5px;
+	top: 150px;
+	right: 1px;
+	padding: 10px;
+	border: 1px solid black;
+	opacity: .2;
+}
+
+.stageSearch:hover {
+	opacity: 1;
+}
+
 .key {
 	font-size: 14px;
 }
