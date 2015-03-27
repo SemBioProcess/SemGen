@@ -58,6 +58,9 @@ $(window).bind("cwb-initialized", function(e) {
 		console.log("Showing search results");
 		
 		var searchResultsArray = searchResults.replace("[", '').replace("]", '').split(",");
+		searchResultsArray.sort(function (a, b) {
+		    return a.toLowerCase().localeCompare(b.toLowerCase());
+		});
 		var searchResultsList = document.getElementById("searchResultsList");
 		while(searchResultsList.firstChild) {
 			searchResultsList.removeChild(searchResultsList.firstChild);
