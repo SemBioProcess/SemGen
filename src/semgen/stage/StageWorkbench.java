@@ -4,9 +4,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JOptionPane;
 
+import semgen.search.CompositeAnnotationSearch;
 import semgen.stage.serialization.SemSimModelSerializer;
 import semgen.stage.serialization.SubModelNode;
 import semgen.utilities.Workbench;
@@ -126,6 +128,12 @@ public class StageWorkbench extends Workbench {
 				default:
 					JOptionPane.showMessageDialog(null, "Task: '" + task +"', coming soon :)");
 			}
+		}
+		
+		public void onSearch(String searchString) {
+			System.out.println("onSearch is working!");
+			Set<String> searchResults = CompositeAnnotationSearch.compositeAnnotationSearch(searchString);
+			//send searchResults back to stage.js
 		}
 	}
 }

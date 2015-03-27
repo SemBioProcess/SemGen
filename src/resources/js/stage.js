@@ -6,7 +6,7 @@ $(window).bind("cwb-initialized", function(e) {
 
 	var graph = new Graph();
 	var modelNodes = {};
-	
+		
 	SelectionManager.getInstance().initialize(graph);
 	KeyElement.getInstance().initialize(graph);
 	
@@ -64,3 +64,8 @@ function addChildNodes(parentNode, data, createNode) {
 	
 	parentNode.setChildren(nodes);
 };
+
+function search(searchString) {
+	window.alert("Searching for " + searchString);
+	sender.search(searchString);
+}
