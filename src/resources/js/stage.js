@@ -77,7 +77,15 @@ $(window).bind("cwb-initialized", function(e) {
 
 // Prevent enter key from submitting form: Once submitted, sender doesn't fire again.
 $(window).load(function() {
-	$("#searchString").keyup(function() {
+	$(".stageSearch").mouseover(function (){
+		$(".stageSearch .searchValueContainer").css('display', 'inline-block');
+	});
+	
+	$(".stageSearch").mouseout(function (){
+		$(".stageSearch .searchValueContainer").hide();
+	});
+	
+	$(".searchString").keyup(function() {
 		sender.search($( this ).val());
 	});
 });

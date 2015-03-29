@@ -85,14 +85,27 @@ ul.modelPopover li.submenuContainer {
 
 .stageSearch {
 	position: absolute;
-	width:350px;
-	max-width:350px;
 	margin: 1px;
-	top: 300px;
-	right: 5px;
+	top: 6px;
+	left: 50px;
 	padding: 10px;
-	border: 1px solid black;
 	opacity: 1;
+}
+
+.stageSearch .searchIcon {
+	margin-top: 2px;
+	float: left;
+	height: 20px;
+	width: 20px;
+}
+
+.stageSearch .searchValueContainer {
+	float: left;
+	display: none;
+}
+
+.stageSearch .searchString {
+	width: 500px;
 }
 
 .searchResults ul {
