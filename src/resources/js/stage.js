@@ -72,15 +72,20 @@ $(window).bind("cwb-initialized", function(e) {
 	$('#searchResultsList').on('click', 'li', function() {
 		var modelName = $(this).text().trim();
 		sender.addModelByName(modelName);
+		
+		// Hide the search box
+		$(".stageSearch .searchValueContainer").hide();
 	});
 });
 
 // Prevent enter key from submitting form: Once submitted, sender doesn't fire again.
 $(window).load(function() {
+	// When you mouseover the search element show the search box and results
 	$(".stageSearch").mouseover(function (){
 		$(".stageSearch .searchValueContainer").css('display', 'inline-block');
 	});
 	
+	// When you mouseout of the search element hide the search box and results
 	$(".stageSearch").mouseout(function (){
 		$(".stageSearch .searchValueContainer").hide();
 	});
