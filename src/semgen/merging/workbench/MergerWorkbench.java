@@ -26,15 +26,16 @@ import semsim.model.computational.datastructures.DataStructure;
 
 public class MergerWorkbench extends Workbench {
 	private int modelselection = -1;
-	private ModelOverlapMap overlapmap = null;
+	protected ModelOverlapMap overlapmap = null;
+	public SemanticComparator comparator;
 	private ArrayList<SemSimModel> loadedmodels = new ArrayList<SemSimModel>();
 	private SemSimModel mergedmodel;
 	private ArrayList<File> filepathlist = new ArrayList<File>();
-	private ArrayList<ArrayList<DataStructure>> dsnamelist = new ArrayList<ArrayList<DataStructure>>();
+	private ArrayList<ArrayList<DataStructure>> alldslist = new ArrayList<ArrayList<DataStructure>>();
+	private ArrayList<ArrayList<DataStructure>> exposeddslist = new ArrayList<ArrayList<DataStructure>>();
 	
 	public enum MergeEvent {
-		functionalsubmodelerr, threemodelerror, modellistupdated, modelerrors,
-		mapfocuschanged, mappingadded, mergecompleted;
+		threemodelerror, modellistupdated, modelerrors,	mapfocuschanged, mappingadded, mergecompleted;
 		
 		String message = null;
 		
@@ -75,10 +76,6 @@ public class MergerWorkbench extends Workbench {
 		
 		SemSimModel model;
 		for (File file : files) {
-//			if (ModelClassifier.classify(file)==ModelClassifier.CELLML_MODEL) {
-////				CellMLModelError(file.getName());
-////				continue;
-//			}
 			model = loadModel(file, autoannotate);
 			loadedmodels.add(model);
 			filepathlist.add(file);
@@ -90,7 +87,16 @@ public class MergerWorkbench extends Workbench {
 	}
 	
 	private void addDSNameList(Collection<DataStructure> dslist) {
-		dsnamelist.add(SemSimUtil.alphebetizeSemSimObjects(dslist));
+		alldslist.add(SemSimUtil.alphebetizeSemSimObjects(dslist));
+		ArrayList<DataStructure> tempdslist = new ArrayList<DataStructure>();
+		
+		// Iterate through the DataStructures just added and weed out CellML-style inputs
+		for(DataStructure ds : alldslist.get(alldslist.size()-1)){
+			if(! ds.isFunctionalSubmodelInput()){
+				tempdslist.add(ds);
+			}
+		}
+		exposeddslist.add(tempdslist);
 	}
 	
 	public Pair<DataStructureDescriptor,DataStructureDescriptor> getDSDescriptors(int index) {
@@ -121,13 +127,14 @@ public class MergerWorkbench extends Workbench {
 	}
 	
 	public void mapModels() {
-		SemanticComparator comparator = new SemanticComparator(loadedmodels.get(0), loadedmodels.get(1));
+		comparator = new SemanticComparator(loadedmodels.get(0), loadedmodels.get(1));
 		overlapmap = new ModelOverlapMap(0, 1, comparator);
 		setChanged();
 		notifyObservers(MergeEvent.mapfocuschanged);
 	}
 	
-	public HashMap<String, String> createIdenticalNameMap(ArrayList<ResolutionChoice> choicelist) {
+	
+	public HashMap<String, String> createIdenticalNameMap(ArrayList<ResolutionChoice> choicelist, HashMap<String,String> submodelnamemap) {
 		HashMap<String, String> identicalmap = new HashMap<String,String>();
 		Set<String> identolnames = new HashSet<String>();
 		for (int i=0; i<choicelist.size(); i++) {	
@@ -135,8 +142,13 @@ public class MergerWorkbench extends Workbench {
 				identolnames.add(overlapmap.getDataStructurePairNames(i).getLeft());
 			}
 		}
-		for (String name : overlapmap.getIdenticalNames()) {
-			if (!identolnames.contains(name)) {
+		for (String name : comparator.getIdenticalCodewords()) {
+			String submodelfords = "";
+			if(name.contains(".")) submodelfords = name.substring(0, name.lastIndexOf("."));
+				
+			// If an identical codeword mapping will be resolved by a semantic resolution step or a renaming of identically-named submodels, 
+		    // don't include in idneticalmap	
+			if (!identolnames.contains(name) && !submodelnamemap.containsKey(submodelfords)) {
 				identicalmap.put(name, "");
 			}
 		}
@@ -164,15 +176,11 @@ public class MergerWorkbench extends Workbench {
 		}
 		return names;
 	}
-	
-	public void addSemanticCodewordMapping(String cdwd1, String cdwd2) {
-		addCodewordMapping(cdwd1, cdwd2, maptype.exactsemaoverlap);
-	}
-	
+
 	public Pair<String,String> addManualCodewordMapping(int cdwd1, int cdwd2) {
 		Pair<Integer, Integer> minds = overlapmap.getModelIndicies();
-		DataStructure ds1 = dsnamelist.get(minds.getLeft()).get(cdwd1);
-		DataStructure ds2 = dsnamelist.get(minds.getRight()).get(cdwd2);
+		DataStructure ds1 = exposeddslist.get(minds.getLeft()).get(cdwd1);
+		DataStructure ds2 = exposeddslist.get(minds.getRight()).get(cdwd2);
 				
 		if (codewordMappingExists(ds1, ds2)) return Pair.of(ds1.getName(),ds2.getName());
 		addCodewordMapping(ds1, ds2
@@ -186,16 +194,12 @@ public class MergerWorkbench extends Workbench {
 		return overlapmap.getMappingCount();
 	}
 	
-	public boolean hasSemanticOverlap() {
-		return (overlapmap.getMappingCount()>0);
+	public int getSolutionDomainCount() {
+		return overlapmap.getSolutionDomainCount();
 	}
 	
-	private void addCodewordMapping(String cdwd1, String cdwd2, maptype maptype) {
-		Pair<Integer, Integer> minds = overlapmap.getModelIndicies();
-		DataStructure ds1 = loadedmodels.get(minds.getLeft()).getDataStructure(cdwd1);
-		DataStructure ds2 = loadedmodels.get(minds.getRight()).getDataStructure(cdwd2);
-		
-		overlapmap.addDataStructureMapping(ds1, ds2, maptype);
+	public boolean hasSemanticOverlap() {
+		return (overlapmap.getMappingCount()>0);
 	}
 	
 	private void addCodewordMapping(DataStructure ds1, DataStructure ds2, maptype maptype) {
@@ -223,7 +227,7 @@ public class MergerWorkbench extends Workbench {
 		return overlapmap.compareDataStructureUnits();
 	}
 	
-	public String executeMerge(HashMap<String,String> namemap, ArrayList<ResolutionChoice> choices, 
+	public String executeMerge(HashMap<String,String> dsnamemap, HashMap<String,String> smnamemap, ArrayList<ResolutionChoice> choices, 
 			ArrayList<Pair<Double,String>> conversions, SemGenProgressBar bar) {
 		Pair<SemSimModel, SemSimModel> models = getModelOverlapMapModels(overlapmap);
 
@@ -231,7 +235,7 @@ public class MergerWorkbench extends Workbench {
 			return "One of the models to be merged has multiple solution domains.";
 		}
 		
-		MergerTask task = new MergerTask(models, overlapmap, namemap, choices, conversions, bar) {
+		MergerTask task = new MergerTask(models, overlapmap, dsnamemap, smnamemap, choices, conversions, bar) {
 			public void endTask() {
 				mergedmodel = getMergedModel();
 				setChanged();
@@ -303,14 +307,13 @@ public class MergerWorkbench extends Workbench {
 		return loadedmodels.get(index).getName();
 	}
 	
-	//Get all Data Structure names and add descriptions if available.
-	public ArrayList<String> getDSNamesandDescriptions(int index) {
+
+	//For populating the manual mapping panel, get all Data Structure names and add descriptions if available.
+	public ArrayList<String> getExposedDSNamesandDescriptions(int index){
 		ArrayList<String> namelist = new ArrayList<String>();
-		for (DataStructure ds : dsnamelist.get(index)) {
+		for (DataStructure ds : exposeddslist.get(index)) {
 			String desc = "(" + ds.getName() + ")";
-			if(ds.getDescription()!=null){
-				desc = ds.getDescription() + " " + desc;
-			}
+			if(ds.getDescription()!=null) desc = ds.getDescription() + " " + desc;
 			namelist.add(desc);
 		}
 		return namelist;

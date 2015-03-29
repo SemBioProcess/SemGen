@@ -258,8 +258,8 @@ public class CellMLwriter extends ModelWriter {
 					MappableVariable var1 = (MappableVariable)ds;
 					for(MappableVariable mappedvar : var1.getMappedTo()){
 	
-						FunctionalSubmodel sub1 = getSubmodelForAssociatedMappableVariable(var1);
-						FunctionalSubmodel sub2 = getSubmodelForAssociatedMappableVariable(mappedvar);
+						FunctionalSubmodel sub1 = semsimmodel.getParentFunctionalSubmodelForMappableVariable(var1);
+						FunctionalSubmodel sub2 = semsimmodel.getParentFunctionalSubmodelForMappableVariable(mappedvar);
 						
 						if(sub1!=null && sub2!=null){
 							if(sub1.getParentImport()==null && sub2.getParentImport()==null){
@@ -343,12 +343,9 @@ public class CellMLwriter extends ModelWriter {
 				
 				if(ds instanceof MappableVariable){
 					MappableVariable cellmlvar = (MappableVariable)ds;
-					if(cellmlvar.getCellMLinitialValue()!=null)
-						initialval = cellmlvar.getCellMLinitialValue();
-					if(cellmlvar.getPublicInterfaceValue()!=null)
-						publicintval = cellmlvar.getPublicInterfaceValue();
-					if(cellmlvar.getPrivateInterfaceValue()!=null)
-						privateintval = cellmlvar.getPrivateInterfaceValue();
+					initialval = cellmlvar.getCellMLinitialValue();
+					publicintval = cellmlvar.getPublicInterfaceValue();
+					privateintval = cellmlvar.getPrivateInterfaceValue();
 					
 					if(ds.getComputation()!=null){
 						if(ds.getComputation().getInputs().isEmpty()){
@@ -363,15 +360,15 @@ public class CellMLwriter extends ModelWriter {
 				createRDFforAnnotatedThing(ds, "v", variable, ds.getDescription());
 
 				// Add other attributes
-				if(metadataid!=null)
+				if(metadataid!=null && !metadataid.equals(""))
 					variable.setAttribute("id", metadataid, CellMLconstants.cmetaNS);
-				if(initialval!=null)
+				if(initialval!=null && !initialval.equals(""))
 					variable.setAttribute("initial_value", initialval);
-				if(nameval!=null)
+				if(nameval!=null && !nameval.equals(""))
 					variable.setAttribute("name", nameval);
-				if(publicintval!=null)
+				if(publicintval!=null && !publicintval.equals(""))
 					variable.setAttribute("public_interface", publicintval);
-				if(privateintval!=null)
+				if(privateintval!=null && !privateintval.equals(""))
 					variable.setAttribute("private_interface", privateintval);
 				
 				if(ds.hasUnits()) variable.setAttribute("units", ds.getUnit().getName());
@@ -397,7 +394,7 @@ public class CellMLwriter extends ModelWriter {
 		SemSimUtil.writeStringToFile(writeToString(), new File(destination));
 	}
 	
-	public Content makeXMLContentFromString(String xml){
+	public static Content makeXMLContentFromString(String xml){
 		try {
 			InputStream stream = new ByteArrayInputStream(xml.getBytes("UTF-8"));
 			Document aDoc = new SAXBuilder().build(stream);
@@ -408,7 +405,7 @@ public class CellMLwriter extends ModelWriter {
 		} 
 	}
 	
-	public List<Content> makeXMLContentFromStringForMathML(String xml){
+	public static List<Content> makeXMLContentFromStringForMathML(String xml){
 		xml = "<temp>\n" + xml + "\n</temp>";
 		Content c = makeXMLContentFromString(xml);
 		
@@ -422,10 +419,6 @@ public class CellMLwriter extends ModelWriter {
 		return listofmathmlels;
 	}
 	
-	public FunctionalSubmodel getSubmodelForAssociatedMappableVariable(MappableVariable var){
-		String compname = var.getName().substring(0, var.getName().lastIndexOf("."));
-		return (FunctionalSubmodel) semsimmodel.getSubmodel(compname);
-	}
 	
 	
 	// Add RDF-formatted semantic metadata for an annotated data structure or submodel 

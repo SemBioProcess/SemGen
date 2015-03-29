@@ -9,29 +9,44 @@ import org.apache.commons.lang3.tuple.Pair;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
+import semsim.model.physical.Submodel;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.PhysicalProperty;
 
 public class SemanticComparator {
 	private SemSimModel model1, model2;
-	private DataStructure slndomain;
+	private DataStructure slndomain = null;
 
 	public SemanticComparator(SemSimModel m1, SemSimModel m2) {
 		model1 = m1; model2 = m2;
 		
-		if(model1.getSolutionDomains().size() > 0)
+		if ((model1.getSolutionDomains().size() > 0) && (model2.getSolutionDomains().size() > 0)) {
 			slndomain = model1.getSolutionDomains().toArray(new DataStructure[]{})[0];
+		}
 	}
 	
-	public Set<String> identifyIdenticalCodewords() {
+	// Collect the submodels that have the same name
+	public Set<String> getIdenticalSubmodels(){
+		Set<String> matchedsubmodels = new HashSet<String>();
+		
+		for (Submodel submodel : model1.getSubmodels()) {
+			if (model2.getSubmodel(submodel.getName())!=null) matchedsubmodels.add(submodel.getName());
+		}
+		return matchedsubmodels;
+	}
+	
+	
+	// Collect the data structures that have the same name. Ignore CellML-type component inputs (mapped variables that have an "in" interface)
+	public Set<String> getIdenticalCodewords() {
 		Set<String> matchedcdwds = new HashSet<String>();
 		
 		for (DataStructure ds : model1.getDataStructures()) {
-			if (model2.containsDataStructure(ds.getName()))	matchedcdwds.add(ds.getName());
+			if(! ds.isFunctionalSubmodelInput()){
+				if (model2.containsDataStructure(ds.getName()))	matchedcdwds.add(ds.getName());
+			}
 		}
 		if (slndomain != null) {
 			String slndomainname = slndomain.getName(); 
@@ -46,9 +61,8 @@ public class SemanticComparator {
 	public ArrayList<Pair<DataStructure, DataStructure>> identifyExactSemanticOverlap() {
 		ArrayList<Pair<DataStructure, DataStructure>> dsmatchlist = new ArrayList<Pair<DataStructure, DataStructure>>();
 		
-		DataStructure soldom2 = null;
-		if(model2.getSolutionDomains().size() > 0){
-			soldom2 = model2.getSolutionDomains().toArray(new DataStructure[]{})[0];
+		if(slndomain != null){
+			DataStructure soldom2 = model2.getSolutionDomains().toArray(new DataStructure[]{})[0];
 			dsmatchlist.add(Pair.of(slndomain, soldom2));
 		}
 		
@@ -103,14 +117,7 @@ public class SemanticComparator {
 	public Set<DataStructure> getComparableDataStructures(SemSimModel model){
 		Set<DataStructure> dsset = new HashSet<DataStructure>();
 		for(DataStructure ds : model.getDataStructures()){
-			if(ds instanceof MappableVariable){
-				MappableVariable mappedds = (MappableVariable)ds;
-				
-				// If the mapped variable has an "in" interface value, don't add to the set of comparable DataStructures
-				if (mappedds.getPublicInterfaceValue().equals("in") || mappedds.getPrivateInterfaceValue().equals("in"))
-					continue;
-			}
-			dsset.add(ds);
+			if(!ds.isFunctionalSubmodelInput()) dsset.add(ds);
 		}
 		return dsset;
 	}
@@ -191,5 +198,9 @@ public class SemanticComparator {
 			// if we've made it here, the participants are equivalent
 		}
 		return matchfound;
+	}
+	
+	public boolean hasSolutionMapping() {
+		return slndomain != null;
 	}
 }

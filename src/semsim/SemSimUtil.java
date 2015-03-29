@@ -89,8 +89,6 @@ public class SemSimUtil {
 						selfrefODE = true;
 					}
 					else{
-						System.out.println(statevarname);
-						System.out.println(statevarname + ": " + modelfordiscardedds.getDataStructure(statevarname).getComputation());
 						modelfordiscardedds.getDataStructure(statevarname).getComputation().setComputationalCode(neweq);
 						modelfordiscardedds.getDataStructure(statevarname).getComputation().setMathML(newmathml);
 					}
@@ -160,7 +158,7 @@ public class SemSimUtil {
 			}
 		}
 		// If we've gotten here, then there isn't a match, return the cpe argument
-		if(cpe == null) System.out.println("Next cpe was null");
+		if(cpe == null) System.err.println("Next cpe was null");
 		return cpe;
 	}	
 	

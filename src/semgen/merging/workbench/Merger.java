@@ -2,15 +2,24 @@ package semgen.merging.workbench;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.jdom.Content;
+import org.jdom.Element;
 import org.jdom.JDOMException;
+import org.jdom.output.XMLOutputter;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.Submodel;
+import semsim.model.physical.object.FunctionalSubmodel;
+import semsim.reading.CellMLreader;
+import semsim.writing.CellMLwriter;
 import JSim.util.Xcept;
 
 public class Merger {
@@ -40,7 +49,9 @@ public class Merger {
 		int i = 0;
 		DataStructure discardedds = null;
 		DataStructure keptds = null;
-		DataStructure soldom1 = ssm1clone.getSolutionDomains().toArray(new DataStructure[]{})[0];
+		
+		// IF there is one solution domain, get it, otherwise set soldom1 to null
+		DataStructure soldom1 = (ssm1clone.getSolutionDomains().size()==1) ? ssm1clone.getSolutionDomains().toArray(new DataStructure[]{})[0] : null;
 
 		for (Pair<DataStructure, DataStructure> dsp : overlapmap.getDataStructurePairs()) {
 			if (choicelist.get(i).equals(ResolutionChoice.first)) {
@@ -56,7 +67,10 @@ public class Merger {
 			
 			// If "ignore equivalency" is not selected"
 			if(keptds!=null && discardedds !=null){	
-				if (!replaceCodeWords(keptds, discardedds, modelfordiscardedds, soldom1, i)) 
+				if(keptds instanceof MappableVariable && discardedds instanceof MappableVariable){
+					rewireMappedVariableDependencies((MappableVariable)keptds, (MappableVariable)discardedds, modelfordiscardedds, i);
+				}
+				else if (! replaceCodeWords(keptds, discardedds, modelfordiscardedds, soldom1, i)) 
 					return null;
 			}
 			i++;
@@ -72,14 +86,17 @@ public class Merger {
 		
 		Submodel sub2 = new Submodel(ssm2clone.getName());
 		sub2.setAssociatedDataStructures(ssm2clone.getDataStructures());
-		sub2.addDataStructure(soldom1);
 		
-		if(ssm1clone.containsDataStructure(soldom1.getName() + ".min"))
-			sub2.addDataStructure(ssm1clone.getDataStructure(soldom1.getName() + ".min"));
-		if(ssm1clone.containsDataStructure(soldom1.getName() + ".max"))
-			sub2.addDataStructure(ssm1clone.getDataStructure(soldom1.getName() + ".max"));
-		if(ssm1clone.containsDataStructure(soldom1.getName() + ".delta"))
-			sub2.addDataStructure(ssm1clone.getDataStructure(soldom1.getName() + ".delta"));
+		if(soldom1!=null){
+			sub2.addDataStructure(soldom1);
+			
+			if(ssm1clone.containsDataStructure(soldom1.getName() + ".min"))
+				sub2.addDataStructure(ssm1clone.getDataStructure(soldom1.getName() + ".min"));
+			if(ssm1clone.containsDataStructure(soldom1.getName() + ".max"))
+				sub2.addDataStructure(ssm1clone.getDataStructure(soldom1.getName() + ".max"));
+			if(ssm1clone.containsDataStructure(soldom1.getName() + ".delta"))
+				sub2.addDataStructure(ssm1clone.getDataStructure(soldom1.getName() + ".delta"));
+		}
 		
 		sub2.setSubmodels(ssm2clone.getSubmodels());
 		mergedmodel.addSubmodel(sub1);
@@ -98,14 +115,48 @@ public class Merger {
 			mergedmodel.addSubmodel(subfrom2);
 		}
 		
-		// MIGHT NEED TO COPY IN PHYSICAL MODEL COMPONENTS?
-
-		
 		// WHAT TO DO ABOUT ONTOLOGY-LEVEL ANNOTATIONS?
 		mergedmodel.setNamespace(mergedmodel.generateNamespaceFromDateAndTime());
 		
 		return mergedmodel;
 	}
+	
+	// Changes to variables when merging two models with CellML-style mapped variables
+	private void rewireMappedVariableDependencies(MappableVariable keptds, MappableVariable discardedds, 
+			SemSimModel modelfordiscardedds, int index){
+		
+		//For the codeword that's replaced, turn it into a component input and create a mapping from the kept codeword to the discarded one.
+		discardedds.setPublicInterfaceValue("in");
+		keptds.addVariableMappingTo(discardedds);
+		
+		//Take all mappedTo values for discarded codeword and apply them to kept codeword.
+		for(MappableVariable mappedtods : discardedds.getMappedTo()){
+			keptds.addVariableMappingTo(mappedtods);
+		}
+		
+		// Remove all mappedTo DataStructures for discarded codeword.
+		discardedds.getMappedTo().clear();
+		
+		//Also remove any initial_value that the discarded DS has.
+		discardedds.setCellMLinitialValue(null);
+		
+		// Find mathML block for the discarded codeword and remove it from the FunctionalSubmodel's computational code
+		FunctionalSubmodel fs = modelfordiscardedds.getParentFunctionalSubmodelForMappableVariable(discardedds);
+		String componentMathMLstring = fs.getComputation().getMathML();
+		String varname = discardedds.getName().replace(fs.getName() + ".", "");
+
+		if(componentMathMLstring!=null){
+			List<Content> componentMathML = CellMLwriter.makeXMLContentFromStringForMathML(componentMathMLstring);
+			Iterator<Content> compmathmlit = componentMathML.iterator();
+			Element varmathmlel = CellMLreader.getElementForOutputVariableFromComponentMathML(varname, compmathmlit);
+			if(varmathmlel!=null){
+				componentMathML.remove(varmathmlel.detach());
+				fs.getComputation().setMathML(new XMLOutputter().outputString(componentMathML));
+			}
+		}
+	}
+	
+	
 	
 	private boolean replaceCodeWords(DataStructure keptds, DataStructure discardedds, 
 			SemSimModel modelfordiscardedds, DataStructure soldom1, int index) {
@@ -145,5 +196,4 @@ public class Merger {
 		}
 		return true;
 	}
-	
 }

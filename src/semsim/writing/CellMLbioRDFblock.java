@@ -244,7 +244,6 @@ public class CellMLbioRDFblock {
 			return rdf.getResource(pmcsandresourceURIs.get(pmc).toString());
 		}
 		else{
-			System.out.println(pmc.getName());
 	
 			String resname = modelns;	
 			String typeprefix = pmc.getComponentTypeasString();
@@ -314,13 +313,10 @@ public class CellMLbioRDFblock {
 			// been added to the RDF block, add it
 			Statement annagainstst = rdf.createStatement(res, refprop, refres);
 			if(refres!=null && !rdf.contains(annagainstst)) rdf.add(annagainstst);
-			
-			System.out.println(ann.getReferenceURI());
 		}
 		
 		// If it is a custom entity or process. Store the name and description
 		if((pmc instanceof CustomPhysicalProcess) || (pmc instanceof CustomPhysicalEntity)){
-			System.out.println("CUSTOM");
 			if(pmc.getName()!=null){
 				Statement namest = rdf.createStatement(res, hasname, pmc.getName());
 				if(!rdf.contains(namest)) rdf.add(namest);

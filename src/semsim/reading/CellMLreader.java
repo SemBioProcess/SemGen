@@ -838,39 +838,45 @@ public class CellMLreader extends ModelReader {
 	}
 		
 	
-	protected static Element getMathMLforOutputVariable(String cvarname, List<?> componentMathMLlist){
+	// Wraps a cloned version of the mathML element that solves a component variable inside a parent mathML element
+	public static Element getMathMLforOutputVariable(String cvarname, List<?> componentMathMLlist){
 		Element mathmlheadel = new Element("math", CellMLconstants.mathmlNS);
 		Iterator<?> compmathmlit = componentMathMLlist.iterator();
-		Boolean foundeq = false;
+		Element childel = getElementForOutputVariableFromComponentMathML(cvarname, compmathmlit);
+		if(childel!=null){
+			mathmlheadel.addContent((Element)childel.clone());
+			return mathmlheadel;
+		}
+		return null;
+	}
+	
+	
+	// Returns the mathML Element representing the equation for the specified variable
+	public static Element getElementForOutputVariableFromComponentMathML(String cvarname, Iterator<?> compmathmlit){
 		Element childel = null;
-
 		while(compmathmlit.hasNext()){
 			Element MathMLelement = (Element) compmathmlit.next();
 			Iterator<?> applyit = MathMLelement.getChildren("apply", CellMLconstants.mathmlNS).iterator();
 			
-			while(applyit.hasNext() && !foundeq){
+			while(applyit.hasNext()){
 				childel = (Element) applyit.next();
 				Element subappel = (Element) childel.getChildren().get(1);
 				
 				if(subappel.getName().equals("apply")){
 					Element ciel = subappel.getChild("ci", CellMLconstants.mathmlNS);
 					if(ciel.getText().trim().equals(cvarname)){
-						foundeq = true;
+						return childel;
 					}
 				}
 				else if(subappel.getName().equals("ci")){
 					if(subappel.getText().trim().equals(cvarname))
-						foundeq = true;
+						return childel;
 				}
 			}
 		}	
-			
-		if(foundeq){
-			mathmlheadel.addContent((Element)childel.clone());
-			return mathmlheadel;
-		}
-		return null;
+		return null; // If we are here we didn't find the MathML element for the output variable
 	}
+	
 	
 	protected static Boolean isSolvedbyODE(String cvarname, List<?> componentMathMLlist){
 		Iterator<?> compmathmlit = componentMathMLlist.iterator();

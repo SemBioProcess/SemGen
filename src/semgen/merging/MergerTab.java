@@ -165,8 +165,18 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 		
 		if (choicelist != null) {
 				addmanualmappingbutton.setEnabled(false);
-				choicelist.add(0, ResolutionChoice.first); //add for solution domains
-				HashMap<String, String> cwnamemap = workbench.createIdenticalNameMap(choicelist);
+				
+				HashMap<String, String> smnamemap = new HashMap<String,String>();
+				for(String oldsubmodelname : workbench.comparator.getIdenticalSubmodels()){
+					String newsubmodelname = changeSubmodelNameDialog(oldsubmodelname);
+					smnamemap.put(oldsubmodelname, newsubmodelname);
+				}
+				
+				// Then refresh the identical codeword name mappings in ModelOverlapMap
+				
+				//choicelist.add(0, ResolutionChoice.first); //add for solution domains
+				//workbench.comparator.getIdenticalCodewords();
+				HashMap<String, String> cwnamemap = workbench.createIdenticalNameMap(choicelist, smnamemap);
 				for (String name : cwnamemap.keySet()) {
 					String newname = changeCodeWordNameDialog(name);
 					cwnamemap.put(name, newname);
@@ -187,7 +197,7 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 					conversionlist.add(Pair.of(1.0, "*"));
 				}
 				SemGenProgressBar progframe = new SemGenProgressBar("Merging...", true);
-				String error = workbench.executeMerge(cwnamemap, choicelist, conversionlist, progframe);
+				String error = workbench.executeMerge(cwnamemap, smnamemap, choicelist, conversionlist, progframe);
 				if (error!=null){
 					SemGenError.showError(
 							"ERROR: " + error, "Merge Failed");
@@ -270,6 +280,23 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 		resmapsplitpane.setDividerLocation(dividerlocation);
 	}
 
+	public String changeSubmodelNameDialog(String oldname){
+		String newname = null;
+		while(true){
+			newname = JOptionPane.showInputDialog(this, "Both models contain a submodel called " + oldname + ".\n" +
+					"Enter new name for the submodel from " + workbench.getModelName(0) + ".\nNo special characters, no spaces.", "Duplicate submodel name", JOptionPane.OK_OPTION);
+			
+			if(newname!=null && !newname.equals("")){
+				if(newname.equals(oldname)){
+					JOptionPane.showMessageDialog(this, "That is the existing name. Please choose a new one.");
+				}
+				else break;
+			}
+		}
+		return newname;
+	}
+	
+	
 	public String changeCodeWordNameDialog(String dsname) {
 		String newdsname = null;
 		while(true){
@@ -328,9 +355,6 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		if (arg == MergeEvent.functionalsubmodelerr) {
-			SemGenError.showFunctionalSubmodelError(((MergeEvent)arg).getMessage());
-		}
 		if (arg == MergeEvent.threemodelerror) {
 			SemGenError.showError("Currently, SemGen can only merge two models at a time.", "Too many models");
 		}	

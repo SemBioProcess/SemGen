@@ -28,6 +28,7 @@ import semsim.model.computational.RelationalConstraint;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.Decimal;
 import semsim.model.computational.datastructures.MMLchoice;
+import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.datastructures.SemSimInteger;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalEntity;
@@ -440,6 +441,13 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 			if(sub instanceof FunctionalSubmodel) fxnalsubs.add((FunctionalSubmodel) sub);
 		}
 		return fxnalsubs;
+	}
+	
+	
+	/**@return The parent FunctionalSubmodel for a MappableVariable.*/
+	public FunctionalSubmodel getParentFunctionalSubmodelForMappableVariable(MappableVariable var){
+		String compname = var.getName().substring(0, var.getName().lastIndexOf("."));
+		return (FunctionalSubmodel) getSubmodel(compname);
 	}
 	
 	

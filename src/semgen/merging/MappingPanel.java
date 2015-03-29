@@ -40,7 +40,7 @@ public class MappingPanel extends JPanel implements Observer {
 	
 	public void populatePanel(int index) {
 		title.setText(workbench.getModelName(index));
-		ArrayList<String> list = workbench.getDSNamesandDescriptions(index);
+		ArrayList<String> list = workbench.getExposedDSNamesandDescriptions(index);
 		String[] array = new String[list.size()];
 		list.toArray(array);
 		scrollercontent.setListData(array);

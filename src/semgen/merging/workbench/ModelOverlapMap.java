@@ -10,10 +10,12 @@ import semsim.owl.SemSimOWLFactory;
 
 public class ModelOverlapMap {
 	Pair<Integer, Integer> modelindicies;
+	private Set<String> identicalsubmodelnames;
 	private Set<String> identicaldsnames;
 	private ArrayList<Pair<DataStructure, DataStructure>> dsmap = new ArrayList<Pair<DataStructure, DataStructure>>();
 
 	private ArrayList<maptype> maptypelist = new ArrayList<maptype>();	
+	private int slndomcnt = 0;
 	
 	protected static enum maptype {
 		exactsemaoverlap("(exact semantic match)"), 
@@ -31,12 +33,20 @@ public class ModelOverlapMap {
 	public ModelOverlapMap(int ind1, int ind2, SemanticComparator comparator) {
 		modelindicies = Pair.of(ind1, ind2);
 		ArrayList<Pair<DataStructure, DataStructure>> equivlist = comparator.identifyExactSemanticOverlap();		
+		
 		Pair<DataStructure, DataStructure> dspair;
-		for (int i=0; i<equivlist.size(); i++ ) {
+		if (comparator.hasSolutionMapping()) {
+			slndomcnt = 1;
+			dspair = equivlist.get(0);
+			addDataStructureMapping(dspair.getLeft(), dspair.getRight(), maptype.automapping);
+		}
+		
+		for (int i=slndomcnt; i<(equivlist.size() - slndomcnt); i++ ) {
 			dspair = equivlist.get(i);
 			addDataStructureMapping(dspair.getLeft(), dspair.getRight(), maptype.exactsemaoverlap);
 		}
-		identicaldsnames = comparator.identifyIdenticalCodewords();
+		identicalsubmodelnames = comparator.getIdenticalSubmodels();
+		identicaldsnames = comparator.getIdenticalCodewords();
 	}
 	
 	
@@ -49,9 +59,14 @@ public class ModelOverlapMap {
 		maptypelist.add(type);
 	}
 	
-	public Set<String> getIdenticalNames() {
+	public Set<String> getIdenticalSubmodelNames(){
+		return identicalsubmodelnames;
+	}
+	
+	public Set<String> getIdenticalNames(){
 		return identicaldsnames;
 	}
+	
 
 	public Pair<Integer, Integer> getModelIndicies() {
 		return modelindicies;
@@ -124,5 +139,9 @@ public class ModelOverlapMap {
 			unitmatchlist.add(true);
 		}
 		return unitmatchlist;
+	}
+	
+	public int getSolutionDomainCount() {
+		return slndomcnt;
 	}
 }

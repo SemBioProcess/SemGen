@@ -335,6 +335,13 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	
 	public abstract boolean isReal();
 	
+	
+	/** @return Whether this DataStructure instance is a mapped variable that is a component input as in CellML models.*/
+	public boolean isFunctionalSubmodelInput(){
+		return false;
+	}
+	
+	
 	public PropertyType getPropertyType(SemSimLibrary lib){
 		if(hasPhysicalProperty()){
 			// If there's already an OPB reference annotation

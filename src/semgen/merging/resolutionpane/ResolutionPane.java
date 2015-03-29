@@ -19,6 +19,7 @@ import semgen.merging.workbench.DataStructureDescriptor;
 import semgen.merging.workbench.Merger.ResolutionChoice;
 import semgen.merging.workbench.MergerWorkbench;
 import semgen.merging.workbench.MergerWorkbench.MergeEvent;
+import semgen.merging.workbench.ModelOverlapMap;
 import semgen.utilities.SemGenError;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 
@@ -41,17 +42,17 @@ public class ResolutionPane extends JPanel implements Observer {
 				SemGenError.showError("SemGen did not find any semantic equivalencies between the models", "Merger message");
 				return;
 		}
-		
-		for (int i = 1; i < workbench.getMappingCount(); i++) {
-			addMapping(i);
+		int n = workbench.getSolutionDomainCount();
+		for (int i = n; i < (workbench.getMappingCount()); i++) {
+			if (i!=n) add(new JSeparator());
+			addResolutionPanel(i);
 		}
 		
 		validate();
 		repaint();
 	}
 	
-	private void addMapping(int index) {
-		if (index!=0) add(new JSeparator());
+	private void addResolutionPanel(int index) {
 		ResolutionPanel resbtn = new ResolutionPanel(workbench.getDSDescriptors(index).getLeft(), 
 				workbench.getDSDescriptors(index).getRight(),
 				workbench.getOverlapMapModelNames(), 
@@ -59,13 +60,13 @@ public class ResolutionPane extends JPanel implements Observer {
 		
 		resbtn.addMouseListener(new ResPaneMouse(resbtn));
 		resolvelist.add(resbtn);
-		add(resbtn);
+		add(resbtn);			
 	}
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		if (arg1 == MergeEvent.mappingadded) {
-			addMapping(workbench.getMappingCount()-1);
+			addResolutionPanel(workbench.getMappingCount()-1);
 			validate();
 			repaint();
 		}
@@ -101,7 +102,7 @@ public class ResolutionPane extends JPanel implements Observer {
 		
 		public void mouseClicked(MouseEvent e) {
 			selection = resolvelist.indexOf(mousee);
-			showInformation(workbench.getDSDescriptors(selection+1));
+			showInformation(workbench.getDSDescriptors(selection));
 		}
 	}
 	
