@@ -116,6 +116,21 @@ $(window).load(function() {
 					mockReceiver.showSubmodelNetwork(modelName, data);
 				}
 			},
+			
+			addModelByName: function(modelName) {
+				mockReceiver.addModel(modelName);
+			},
+			
+			search: function (searchStr) {
+				searchResults = [
+				     searchStr + "Search Result 1",
+				     searchStr + "Search Result 2",
+				     searchStr + "Search Result 3",
+				];
+				
+				
+				mockReceiver.search(searchResults);
+			},
 	};
 	
 	var mockReceiver = {
@@ -124,6 +139,8 @@ $(window).load(function() {
 			onShowDependencyNetwork: function (handler) { this.showDependencyNetwork = handler; },
 			
 			onShowSubmodelNetwork: function (handler) { this.showSubmodelNetwork = handler; },
+			
+			onSearch: function (handler) { this.search = handler; }
 	};
 	
 	var event; // The custom event that will be created

@@ -56,9 +56,8 @@ $(window).bind("cwb-initialized", function(e) {
 	// Show search results on stage
 	receiver.onSearch(function (searchResults) {
 		console.log("Showing search results");
-		
-		var searchResultsArray = searchResults.replace("[", '').replace("]", '').split(",");
-		searchResultsArray.sort(function (a, b) {
+
+		searchResults.sort(function (a, b) {
 		    return a.toLowerCase().localeCompare(b.toLowerCase());
 		});
 		var searchResultsList = document.getElementById("searchResultsList");
@@ -66,7 +65,7 @@ $(window).bind("cwb-initialized", function(e) {
 			searchResultsList.removeChild(searchResultsList.firstChild);
 			// Possible memory leak if event handlers aren't removed?
 		};
-		searchResultsList.appendChild(makeUL(searchResultsArray));
+		searchResultsList.appendChild(makeUL(searchResults));
 	});
 	
 	// Add model when clicked

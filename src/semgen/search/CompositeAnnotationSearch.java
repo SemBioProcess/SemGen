@@ -8,6 +8,10 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
+
+import semgen.visualizations.JsonString;
+
 //import semgen.utilities.file.LoadSemSimModel;
 //import semsim.model.SemSimModel;
 //import semsim.model.computational.datastructures.DataStructure;
@@ -16,7 +20,7 @@ public class CompositeAnnotationSearch {
 	// Given a keyword, do a string search on data structures from a set of annotated SemSim models.
 	// Return a list of SemSim models containing the keyword.
 	
-	public static Set<String> compositeAnnotationSearch(String keyword) {
+	public static JsonString compositeAnnotationSearch(String keyword) {
 		// Set<SemSimModel> searchFrom = new HashSet<SemSimModel>();
 		Set<String> searchResults = new HashSet<String>();
 		
@@ -89,7 +93,8 @@ public class CompositeAnnotationSearch {
 			e.printStackTrace();
 		}
 		
-		return searchResults;
+		// Turn the set into a json array
+		return new JsonString("[\"" + StringUtils.join(searchResults, "\",\"") + "\"]");
 	}
 
 }
