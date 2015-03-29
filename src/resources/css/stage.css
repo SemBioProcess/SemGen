@@ -113,12 +113,8 @@ ul.modelPopover li.submenuContainer {
 	padding-left: 0;
 }
 
-.searchResults li {
-	opacity: .7;
-}
 .searchResults li:hover {
-	color:#293e6a;
-	opacity: 1;
+	background-color: #dfe3ee;
 	cursor: pointer;
 }
 
