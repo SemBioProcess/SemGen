@@ -110,6 +110,8 @@ ul.modelPopover li.submenuContainer {
 .searchResults ul {
 	list-style: none;
 	padding-left: 0;
+	border: 1px solid black;
+    border-top: none;
 }
 
 .searchResults li:hover {
