@@ -76,12 +76,9 @@ $(window).bind("cwb-initialized", function(e) {
 });
 
 // Prevent enter key from submitting form: Once submitted, sender doesn't fire again.
-$(document).ready(function() {
-	$(window).keydown(function(event){
-		if(event.keyCode == 13) {
-			event.preventDefault();
-			return false;
-		}
+$(window).load(function() {
+	$("#searchString").keyup(function() {
+		sender.search($( this ).val());
 	});
 });
 
@@ -94,11 +91,6 @@ function addChildNodes(parentNode, data, createNode) {
 	});
 	
 	parentNode.setChildren(nodes);
-};
-
-// Relays string from html form to Java
-function search(searchString) {
-	sender.search(searchString);
 };
 
 function makeUL(array) {
