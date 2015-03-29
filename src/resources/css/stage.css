@@ -93,11 +93,12 @@ ul.modelPopover li.submenuContainer {
 }
 
 .stageSearch .searchIcon {
-	margin-top: 2px;
+	margin-top: 6px;
 	float: left;
 }
 
 .stageSearch .searchValueContainer {
+	margin-top: 4px;
 	float: left;
 	margin-left: 5px;
 	display: none;
