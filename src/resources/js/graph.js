@@ -219,6 +219,39 @@ function Graph() {
 	    }
 	};
 	
+	// Highlight a node, its links, and the nodes that its linked to
+	this.highlightMode = function (highlightNode) {
+		// Remove any existing dim assignments
+		vis.selectAll(".node, path.link").each(function (d) {
+			d3.select(this).classed("dim", false);
+		});
+		
+		// If no node was passed in there's nothing to dim
+		if(!highlightNode)
+			return;
+		
+		// Get all the nodes that need to be highlighted
+		// and dim all the links that need to be dimmed
+		var nodesToHighlight = {};
+		nodesToHighlight[highlightNode.index] = 1;
+		vis.selectAll("path.link").each(function (d) {
+			if(d.source == highlightNode || d.target == highlightNode) {
+				nodesToHighlight[d.source.index] = 1;
+				nodesToHighlight[d.target.index] = 1;
+				return;
+			}
+			
+			// Dim the link since it's not connected to the node we care about
+			d3.select(this).classed("dim", true);
+		});
+		
+		// Dim all the nodes that need to be dimmed
+		vis.selectAll(".node").each(function (d) {
+			if(!nodesToHighlight[d.index])
+				d3.select(this).classed("dim", true);
+		});
+	};
+	
 	// Set the graph's width and height
 	this.w = $(window).width();
 	this.h = $(window).height();
