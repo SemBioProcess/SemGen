@@ -22,7 +22,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import semgen.merging.workbench.DataStructureDescriptor;
 import semgen.merging.workbench.DataStructureDescriptor.Descriptor;
 import semgen.merging.workbench.Merger.ResolutionChoice;
-import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 
 public class ResolutionPanel extends JPanel {
@@ -102,6 +101,7 @@ public class ResolutionPanel extends JPanel {
 		mainpanel.setBackground(Color.white);
 		mainpanel.add(actionpanel, BorderLayout.WEST);
 		mainpanel.add(infopanel, BorderLayout.EAST);
+		mainpanel.setBorder(BorderFactory.createEmptyBorder(5,5,10,5));
 		this.add(mainpanel, BorderLayout.NORTH);
 		this.add(Box.createVerticalGlue(), BorderLayout.SOUTH);
 	}
