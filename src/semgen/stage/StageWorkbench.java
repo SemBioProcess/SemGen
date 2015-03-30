@@ -144,5 +144,9 @@ public class StageWorkbench extends Workbench {
 			JsonString searchResults = CompositeAnnotationSearch.compositeAnnotationSearch(searchString);
 			_commandSender.search(searchResults);
 		}
+		
+		public void onMerge(String modelName1, String modelName2) {
+			JOptionPane.showMessageDialog(null, "Merge: '" + modelName1 +"' and '" + modelName2 + "' coming soon :)");
+		}
 	}
 }
