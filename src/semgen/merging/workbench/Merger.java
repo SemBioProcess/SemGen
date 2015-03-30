@@ -165,20 +165,6 @@ public class Merger {
 				fs.getComputation().setMathML(new XMLOutputter().outputString(componentMathML));
 			}
 		}
-		
-		// If the parent FunctionalSubmodel for the discarded codeword now only has inputs, remove the submodel from the parent model
-		boolean onlyinputs = true;
-		for(DataStructure ds : fs.getAssociatedDataStructures()){
-			if(ds instanceof MappableVariable){
-				MappableVariable dsasmv = (MappableVariable)ds;
-				if(dsasmv.getPublicInterfaceValue().equals("in")) continue;
-				else{
-					onlyinputs = false;
-					break;
-				}
-			}
-		}
-		if(onlyinputs) modelfordiscardedds.removeSubmodel(fs);
 	}
 	
 	
