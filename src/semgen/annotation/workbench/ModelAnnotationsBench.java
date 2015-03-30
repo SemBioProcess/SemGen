@@ -40,7 +40,7 @@ public class ModelAnnotationsBench extends Observable {
 	}
 	
 	public void setModelSourceFile(String loc) {
-		model.setSourcefilelocation(loc);
+		model.setSourceFileLocation(loc);
 		setChanged();
 		notifyObservers(ModelChangeEnum.SOURCECHANGED);
 	}

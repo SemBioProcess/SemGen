@@ -119,6 +119,9 @@ public class Merger {
 			mergedmodel.addSubmodel(subfrom2);
 		}
 		
+		// Remove legacy code info
+		mergedmodel.setSourceFileLocation(null);
+		
 		// WHAT TO DO ABOUT ONTOLOGY-LEVEL ANNOTATIONS?
 		mergedmodel.setNamespace(mergedmodel.generateNamespaceFromDateAndTime());
 		
@@ -146,6 +149,7 @@ public class Merger {
 		
 		//Also remove any initial_value that the discarded DS has.
 		discardedds.setCellMLinitialValue(null);
+		discardedds.setStartValue(null);
 		
 		// Find mathML block for the discarded codeword and remove it from the FunctionalSubmodel's computational code
 		FunctionalSubmodel fs = modelfordiscardedds.getParentFunctionalSubmodelForMappableVariable(discardedds);
@@ -161,6 +165,20 @@ public class Merger {
 				fs.getComputation().setMathML(new XMLOutputter().outputString(componentMathML));
 			}
 		}
+		
+		// If the parent FunctionalSubmodel for the discarded codeword now only has inputs, remove the submodel from the parent model
+		boolean onlyinputs = true;
+		for(DataStructure ds : fs.getAssociatedDataStructures()){
+			if(ds instanceof MappableVariable){
+				MappableVariable dsasmv = (MappableVariable)ds;
+				if(dsasmv.getPublicInterfaceValue().equals("in")) continue;
+				else{
+					onlyinputs = false;
+					break;
+				}
+			}
+		}
+		if(onlyinputs) modelfordiscardedds.removeSubmodel(fs);
 	}
 	
 	
