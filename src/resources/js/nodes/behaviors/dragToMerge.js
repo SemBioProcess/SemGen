@@ -3,6 +3,7 @@
  * @param node
  */
 var AllNodes = [];
+var DropZoneSideLength = 50;
 function DragToMerge(_node) {
 	AllNodes.push(_node);
 	
@@ -13,10 +14,10 @@ function DragToMerge(_node) {
 	$(_node).on('createVisualization', function (e, root) {
 		// Add a rectagle that is the drop zone
 		root.append("svg:rect")
-			.attr("x", -_node.r)
+			.attr("x", -DropZoneSideLength/2)
 			.attr("y", -_node.r)
-		    .attr("width", _node.r * 2)
-		    .attr("height", _node.r * 2)
+		    .attr("width", DropZoneSideLength)
+		    .attr("height", DropZoneSideLength)
 		    .attr("class","dropZoneRect");
 		
 		// Save the original location so we can move the node back
@@ -55,9 +56,9 @@ function DragToMerge(_node) {
 					if(node == _node)
 						return;
 					
-					var leftBound = node.x - node.r*2;
-					var rightBound = node.x + node.r*2;
-					var upperBound = node.y + node.r*2;
+					var leftBound = node.x - node.r - DropZoneSideLength/2;
+					var rightBound = node.x + node.r + DropZoneSideLength/2;
+					var upperBound = node.y + DropZoneSideLength;
 					var lowerBound = node.y - node.r*2;
 					if(_node.x >= leftBound &&
 						_node.x <= rightBound &&
