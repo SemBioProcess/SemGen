@@ -80,6 +80,9 @@ function DragToMerge(_node) {
 		        	sender.merge(_node.name, mergeNode.name);
 		        	mergeNode = null;
 		        	
+		        	// Move the node back to its original location
+		        	_node.px = originalLocation.x;
+		        	_node.py = originalLocation.y;
 		        	_node.x = originalLocation.x;
 		        	_node.y = originalLocation.y;
 		        }
