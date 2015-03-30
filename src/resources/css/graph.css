@@ -41,3 +41,17 @@ path.link.external {
   stroke-width: 32px;
   stroke-linejoin: round;
 }
+
+.modelNode .dropZoneRect {
+	display: none;
+}
+
+.modelNode.dropZone .dropZoneRect {
+	display: block;
+	fill: red;
+}
+
+.modelNode.dropZone.canDrop .dropZoneRect {
+	display: block;
+	fill: yellow;
+}

@@ -131,6 +131,10 @@ $(window).load(function() {
 				
 				mockReceiver.search(searchResults);
 			},
+			
+			merge: function (modelName1, modelName2) {
+				alert("Merge: '" + modelName1 + "' and '" + modelName2 + "'");
+			},
 	};
 	
 	var mockReceiver = {
