@@ -1375,8 +1375,7 @@ Current through the transient outward potassium channel; pandit_clark_giles_demi
 Nernst potential of potassium(1+) in Plasma membrane in Cardiac myocyte; pandit_clark_giles_demir_2001
 Nernst potential for sodium across the plasma membrane; pandit_clark_giles_demir_2001
 Charge flow rate of Background potassium channel current; pandit_clark_giles_demir_2001
-Current through the background potassium channel
-; pandit_clark_giles_demir_2001
+Current through the background potassium channel; pandit_clark_giles_demir_2001
 Chemical concentration of calcium(2+) in Portion of cytosol in Cardiac myocyte; pandit_clark_giles_demir_2001
 Concentration of calcium in bulk cytosol; pandit_clark_giles_demir_2001
 Chemical concentration of potassium(1+) in Portion of extracellular matrix; pandit_clark_giles_demir_2001
@@ -1480,8 +1479,7 @@ Current through the steady-state outward potassium channel; pandit_clark_giles_d
 Charge flow rate of L-type calcium channel current; pandit_clark_giles_demir_2001
 Current through L-type calcium channel; pandit_clark_giles_demir_2001
 Charge flow rate of Background potassium channel current; pandit_clark_giles_demir_2001
-Current through the background potassium channel
-; pandit_clark_giles_demir_2001
+Current through the background potassium channel; pandit_clark_giles_demir_2001
 Nernst potential of calcium(2+) in Plasma membrane in Cardiac myocyte; pandit_clark_giles_demir_2001
 Nernst potential of calcium across the plasma membrane; pandit_clark_giles_demir_2001
 Electrical potential of Plasma membrane in Cardiac myocyte; pandit_clark_giles_demir_2001

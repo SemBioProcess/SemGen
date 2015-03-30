@@ -5,8 +5,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-
 import javax.swing.JOptionPane;
 
 import semgen.search.CompositeAnnotationSearch;
@@ -19,7 +17,6 @@ import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
 import semgen.visualizations.JsonString;
 import semgen.visualizations.SemGenWebBrowserCommandSender;
 import semsim.model.SemSimModel;
-import semsim.model.physical.Submodel;
 
 public class StageWorkbench extends Workbench {
 
@@ -140,7 +137,7 @@ public class StageWorkbench extends Workbench {
 			}
 		}
 		
-		public void onSearch(String searchString) {
+		public void onSearch(String searchString) throws FileNotFoundException {
 			JsonString searchResults = CompositeAnnotationSearch.compositeAnnotationSearch(searchString);
 			_commandSender.search(searchResults);
 		}
