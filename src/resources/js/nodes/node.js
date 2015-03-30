@@ -1,7 +1,7 @@
 /**
  * Represents a node in the d3 graph
  */
-function Node(graph, name, parent, inputs, r, color, textSize, nodeType) {
+function Node(graph, name, parent, inputs, r, color, textSize, nodeType, charge) {
 	this.graph = graph;
 	this.name = name;
 	this.id = name;
@@ -10,6 +10,7 @@ function Node(graph, name, parent, inputs, r, color, textSize, nodeType) {
 	this.color = color;
 	this.textSize = textSize;
 	this.nodeType = nodeType;
+	this.charge = charge;
 	this.className = "node";
 	this.element;
 	this.parent = parent;

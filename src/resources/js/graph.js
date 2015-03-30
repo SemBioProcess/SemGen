@@ -160,7 +160,7 @@ function Graph() {
 
 	    // Restart the force layout.
 	    this.force
-	    	.charge(-300)
+	    	.charge(function (d) { return d.charge; })
 	    	.linkDistance(function (d) { return d.length; })
 		    .size([this.w, this.h])
 		    .start();

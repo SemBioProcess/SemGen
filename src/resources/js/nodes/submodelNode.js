@@ -14,7 +14,7 @@ function SubmodelNode (graph, data, parent) {
 		inputs = inputs.concat(dependency.inputs);
 	});
 	
-	ParentNode.prototype.constructor.call(this, graph, data.name, parent, inputs, 10, "#CA9485", 14, "Submodel");
+	ParentNode.prototype.constructor.call(this, graph, data.name, parent, inputs, 10, "#CA9485", 14, "Submodel", -1000);
 	this.dependencies = data.dependencies;
 	
 	this.addClassName("submodelNode");
