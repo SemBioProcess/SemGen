@@ -92,7 +92,9 @@ $(window).load(function() {
 	});
 	
 	$(".searchString").keyup(function() {
-		sender.search($( this ).val());
+		if( $(this).val() ) {
+			sender.search($( this ).val());
+		}
 	});
 });
 
