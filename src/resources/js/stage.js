@@ -66,7 +66,6 @@ $(window).bind("cwb-initialized", function(e) {
 		var searchResultsList = document.getElementById("searchResultsList");
 		while(searchResultsList.firstChild) {
 			searchResultsList.removeChild(searchResultsList.firstChild);
-			// Possible memory leak if event handlers aren't removed?
 		};
 		searchResultsList.appendChild(makeUL(searchResults));
 	});
@@ -81,7 +80,6 @@ $(window).bind("cwb-initialized", function(e) {
 	});
 });
 
-// Prevent enter key from submitting form: Once submitted, sender doesn't fire again.
 $(window).load(function() {
 	// When you mouseover the search element show the search box and results
 	$(".stageSearch").mouseover(function (){
@@ -94,7 +92,9 @@ $(window).load(function() {
 	});
 	
 	$(".searchString").keyup(function() {
-		sender.search($( this ).val());
+		if( $(this).val() ) {
+			sender.search($( this ).val());
+		}
 	});
 });
 
