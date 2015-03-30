@@ -1,7 +1,9 @@
 package semgen;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.Observable;
+import java.util.Set;
 
 import semgen.utilities.uicomponent.SemGenTab;
 /**
@@ -16,6 +18,7 @@ public class GlobalActions extends Observable {
 		EXTRACT,
 		EXTRACTEXISTING,
 		MERGE,
+		MERGEEXISTING,
 		QUIT,
 		SAVED,
 		STAGE,
@@ -25,6 +28,7 @@ public class GlobalActions extends Observable {
 	
 	private SemGenTab currentTab;
 	private File seed;
+	private Set<File> seeds;
 	
 	GlobalActions() {}
 	
@@ -75,6 +79,15 @@ public class GlobalActions extends Observable {
 		notifyObservers(appactions.MERGE);
 	}
 	
+	public void NewMergerTab(File model1, File model2) {
+		seeds = new HashSet<File>();
+		seeds.add(model1);
+		seeds.add(model2);
+		
+		setChanged();
+		notifyObservers(appactions.MERGEEXISTING);
+	}
+	
 	public void NewStageTab() {
 		setChanged();
 		notifyObservers(appactions.STAGE);
@@ -88,6 +101,13 @@ public class GlobalActions extends Observable {
 		seed = null;
 		return file;
 	}
+	
+	public Set<File> getSeeds() {
+		Set<File> files = seeds;
+		seeds = null;
+		return files;
+	}
+	
 	public void requestSave() {
 		getCurrentTab().requestSave();
 		setChanged();
