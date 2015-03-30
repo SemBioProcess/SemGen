@@ -44,6 +44,9 @@ path.link.external {
 
 .modelNode .dropZoneRect {
 	display: none;
+	stroke: #C8C8C8;
+	stroke-dasharray: 10;
+	stroke-width: 3;
 }
 
 .modelNode.dropZone .dropZoneRect {
