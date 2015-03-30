@@ -18,8 +18,8 @@ public class ModelOverlapMap {
 	private int slndomcnt = 0;
 	
 	protected static enum maptype {
-		exactsemaoverlap("(exact semantic match)"), 
-		manualmapping("(manual mapping)"),
+		exactsemaoverlap("exact semantic match"), 
+		manualmapping("manual mapping"),
 		automapping("automated solution domain mapping");
 		private String label;
 		maptype(String lbl) {
