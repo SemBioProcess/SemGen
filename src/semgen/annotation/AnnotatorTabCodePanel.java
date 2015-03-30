@@ -142,7 +142,7 @@ public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 		}
 
 		if (!cont) {
-			setText("ERROR: Could not access model code"
+			setText("WARNING: Could not access model code"
 					+ " at " + modelloc
 					+ "\n\nIf the file is on the web, make sure you are connected to the internet."
 					+ "\nIf the file is local, make sure it exists at the location above."
