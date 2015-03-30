@@ -4,6 +4,9 @@
 
 package semgen.utilities;
 
+import java.awt.Image;
+import java.util.LinkedList;
+
 import javax.swing.ImageIcon;
 
 import semgen.SemGenGUI;
@@ -43,6 +46,8 @@ public class SemGenIcon {
 	public static final ImageIcon annotatemodelicon = createImageIcon("icons/annotatemodel.gif");
 	public static final ImageIcon checkmarkicon = createImageIcon("icons/passed.png");
 	public static final ImageIcon semgenbigicon = createImageIcon("icons/semgeniconbig.png");
+	public static final ImageIcon semgenicon = createImageIcon("icons/semgenicon.icns");
+	public static final ImageIcon semgenwinicon = createImageIcon("icons/semgeniconWIN.ico");
 	
 	/** Returns an ImageIcon, or null if the path was invalid. */
 	private static ImageIcon createImageIcon(String path) {
@@ -52,5 +57,13 @@ public class SemGenIcon {
 			return null;
 		} 
 		return new ImageIcon(imgURL);
+	}
+	
+	public static LinkedList<Image> getSemGenLogoList() {
+		LinkedList<Image> iconlist = new LinkedList<Image>();
+		iconlist.add(semgenicon.getImage());
+		iconlist.add(semgenbigicon.getImage());
+		iconlist.add(semgenwinicon.getImage());
+		return  iconlist;
 	}
 }

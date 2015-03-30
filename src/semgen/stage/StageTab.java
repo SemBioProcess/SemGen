@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.util.Observer;
 
 import javax.naming.InvalidNameException;
-import javax.swing.JOptionPane;
-
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
@@ -14,7 +12,7 @@ import semgen.utilities.uicomponent.SemGenTab;
 import semgen.visualizations.SemGenCommunicatingWebBrowser;
 
 public class StageTab extends SemGenTab {
-
+	private static final long serialVersionUID = 1L;
 	// Stage workbench
 	private StageWorkbench _workbench;
 	

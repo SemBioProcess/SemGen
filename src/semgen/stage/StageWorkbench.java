@@ -15,7 +15,6 @@ import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
 import semgen.visualizations.SemGenWebBrowserCommandSender;
 import semsim.model.SemSimModel;
-import semsim.model.physical.Submodel;
 
 public class StageWorkbench extends Workbench {
 
