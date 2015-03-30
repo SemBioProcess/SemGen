@@ -79,33 +79,6 @@ public class Merger {
 		// What if both models have a custom phys component with the same name?
 		SemSimModel mergedmodel = ssm1clone;
 		
-		// Create submodels representing the merged components, copy over all info from model2 into model1
-		// Commenting this out for now. Need to redo the way SemGen stores composite models.
-		
-		/*
-		Submodel sub1 = new Submodel(ssm1clone.getName());
-		sub1.setAssociatedDataStructures(ssm1clone.getDataStructures());
-		sub1.setSubmodels(ssm1clone.getSubmodels());
-		
-		Submodel sub2 = new Submodel(ssm2clone.getName());
-		sub2.setAssociatedDataStructures(ssm2clone.getDataStructures());
-		
-		if(soldom1!=null){
-			sub2.addDataStructure(soldom1);
-			
-			if(ssm1clone.containsDataStructure(soldom1.getName() + ".min"))
-				sub2.addDataStructure(ssm1clone.getDataStructure(soldom1.getName() + ".min"));
-			if(ssm1clone.containsDataStructure(soldom1.getName() + ".max"))
-				sub2.addDataStructure(ssm1clone.getDataStructure(soldom1.getName() + ".max"));
-			if(ssm1clone.containsDataStructure(soldom1.getName() + ".delta"))
-				sub2.addDataStructure(ssm1clone.getDataStructure(soldom1.getName() + ".delta"));
-		}
-		
-		sub2.setSubmodels(ssm2clone.getSubmodels());
-		mergedmodel.addSubmodel(sub1);
-		mergedmodel.addSubmodel(sub2);
-		*/
-		
 		// Copy in all data structures
 		for(DataStructure dsfrom2 : ssm2clone.getDataStructures()){
 			mergedmodel.addDataStructure(dsfrom2);
