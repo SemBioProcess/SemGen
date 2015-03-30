@@ -1,7 +1,5 @@
 package semgen.visualizations;
 
-import java.util.Set;
-
 /**
  * Contract for sending commands between java and javascript
  * 
