@@ -48,10 +48,10 @@ path.link.external {
 
 .modelNode.dropZone .dropZoneRect {
 	display: block;
-	fill: red;
+	fill: #C3FDB8;
 }
 
 .modelNode.dropZone.canDrop .dropZoneRect {
 	display: block;
-	fill: yellow;
+	fill: #50D050;
 }
