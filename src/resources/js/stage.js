@@ -18,6 +18,9 @@ $(window).bind("cwb-initialized", function(e) {
 	receiver.onAddModel(function (modelName) {
 		console.log("Adding model " + modelName);
 		
+		if(modelNodes[modelName])
+			throw "Model already exists";
+		
 		var modelNode = new ModelNode(graph, modelName);
 		modelNodes[modelName] = modelNode;
 		graph.addNode(modelNode);
