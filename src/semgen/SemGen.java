@@ -126,7 +126,7 @@ public class SemGen extends JFrame implements Observer{
 		
 		setTitle(":: S e m  G e n ::");
 		//this.setIconImage(SemGenIcon.semgenbigicon.getImage());
-		this.setIconImages(SemGenIcon.getSemGenLogoList());
+		//this.setIconImages(SemGenIcon.getSemGenLogoList());
 		
 		settings = new SemGenSettings();
 		SemGenFileChooser.currentdirectory = new File(settings.getStartDirectory());
