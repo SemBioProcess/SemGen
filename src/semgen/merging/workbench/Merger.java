@@ -120,7 +120,7 @@ public class Merger {
 		}
 		
 		// Remove legacy code info
-		mergedmodel.setSourceFileLocation(null);
+		mergedmodel.setSourceFileLocation("");
 		
 		// WHAT TO DO ABOUT ONTOLOGY-LEVEL ANNOTATIONS?
 		mergedmodel.setNamespace(mergedmodel.generateNamespaceFromDateAndTime());
