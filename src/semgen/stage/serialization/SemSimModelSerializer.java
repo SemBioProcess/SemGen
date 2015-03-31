@@ -42,7 +42,7 @@ public class SemSimModelSerializer {
 				continue;
 			}
 			
-			dependencies.add(new DependencyNode(dataStructure, semSimModel.getName()));
+			dependencies.add(new DependencyNode(dataStructure));
 		}
 		
 		// Turn the dependencies into a string
