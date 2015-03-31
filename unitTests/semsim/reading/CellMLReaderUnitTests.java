@@ -7,7 +7,6 @@ import java.io.File;
 import org.junit.Test;
 
 import semsim.CollateralHelper;
-import semsim.SemSimConstants;
 import semsim.SemSimLibrary;
 import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata;

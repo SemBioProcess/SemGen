@@ -20,7 +20,6 @@
 	<classpathentry kind="lib" path="thirdParty/jdom.jar"/>
 	<classpathentry kind="lib" path="thirdParty/jena-2.6.4-tests.jar"/>
 	<classpathentry kind="lib" path="thirdParty/jena-2.6.4.jar"/>
-	<classpathentry kind="lib" path="thirdParty/JSimClient.jar"/>
 	<classpathentry kind="lib" path="thirdParty/jung-algorithms-2.0.jar"/>
 	<classpathentry kind="lib" path="thirdParty/jung-api-2.0.jar"/>
 	<classpathentry kind="lib" path="thirdParty/jung-graph-impl-2.0.jar"/>
@@ -34,12 +33,11 @@
 	<classpathentry kind="lib" path="thirdParty/slf4j-log4j12-1.5.8.jar"/>
 	<classpathentry kind="lib" path="thirdParty/stax-api-1.0.1.jar"/>
 	<classpathentry kind="lib" path="thirdParty/wstx-asl-3.2.9.jar"/>
-	<classpathentry kind="lib" path="thirdParty/xercesImpl-2.7.1.jar"/>
 	<classpathentry kind="lib" path="thirdParty/commons-lang3-3.3.2.jar"/>
 	<classpathentry kind="lib" path="thirdParty/DJNativeSwing-SWT.jar"/>
 	<classpathentry kind="lib" path="thirdParty/DJNativeSwing.jar"/>
 	<classpathentry kind="lib" path="thirdParty/swt-4.4-win32-win32-x86_64.jar"/>
 	<classpathentry kind="lib" path="thirdParty/JSimServer.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="thirdParty/JSimClient.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
