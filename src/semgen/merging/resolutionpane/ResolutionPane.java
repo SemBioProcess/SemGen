@@ -19,7 +19,6 @@ import semgen.merging.workbench.DataStructureDescriptor;
 import semgen.merging.workbench.Merger.ResolutionChoice;
 import semgen.merging.workbench.MergerWorkbench;
 import semgen.merging.workbench.MergerWorkbench.MergeEvent;
-import semgen.merging.workbench.ModelOverlapMap;
 import semgen.utilities.SemGenError;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 
@@ -82,6 +81,9 @@ public class ResolutionPane extends JPanel implements Observer {
 	
 	public ArrayList<ResolutionChoice>  pollResolutionList() {
 		ArrayList<ResolutionChoice> choicelist = new ArrayList<ResolutionChoice>();
+		for (int i = 0; i < workbench.getSolutionDomainCount(); i++) {
+			choicelist.add(ResolutionChoice.first);
+		}
 		for (ResolutionPanel panel : resolvelist) {
 			if (panel.getSelection().equals(ResolutionChoice.noselection)) return null;
 			choicelist.add(panel.getSelection());

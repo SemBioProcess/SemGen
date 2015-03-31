@@ -166,17 +166,15 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 		if (choicelist != null) {
 				addmanualmappingbutton.setEnabled(false);
 				
-				HashMap<String, String> smnamemap = new HashMap<String,String>();
-				for(String oldsubmodelname : workbench.comparator.getIdenticalSubmodels()){
+				HashMap<String, String> smnamemap = workbench.createIdenticalSubmodelNameMap();
+				for(String oldsubmodelname : smnamemap.keySet()){
 					String newsubmodelname = changeSubmodelNameDialog(oldsubmodelname);
 					smnamemap.put(oldsubmodelname, newsubmodelname);
 				}
 				
 				// Then refresh the identical codeword name mappings in ModelOverlapMap
 				
-				//choicelist.add(0, ResolutionChoice.first); //add for solution domains
-				//workbench.comparator.getIdenticalCodewords();
-				HashMap<String, String> cwnamemap = workbench.createIdenticalNameMap(choicelist, smnamemap);
+				HashMap<String, String> cwnamemap = workbench.createIdenticalNameMap(choicelist, smnamemap.keySet());
 				for (String name : cwnamemap.keySet()) {
 					String newname = changeCodeWordNameDialog(name);
 					cwnamemap.put(name, newname);
@@ -187,10 +185,7 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 					if (!unitoverlaps.get(i)) {
 						ResolutionChoice choice = choicelist.get(i);
 						if (!choice.equals(ResolutionChoice.ignore)) {
-							//Prompt user for conversion factors, selection cancel returns 0 and cancels the merge
-							ConversionFactorDialog condia = new ConversionFactorDialog(workbench.getDSDescriptors(i), choice.equals(ResolutionChoice.first));
-							if (condia.getConversionFactor().getLeft().equals(0.0)) return;
-							conversionlist.add(condia.getConversionFactor());
+							if (!getConversion(conversionlist, i, choice.equals(ResolutionChoice.first))) return;
 							continue;
 						}
 					}
@@ -207,6 +202,14 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 			JOptionPane.showMessageDialog(this, "Some codeword overlaps are unresolved.");
 			return;
 		}
+	}
+	
+	//Prompt user for conversion factors, selection cancel returns 0 and cancels the merge
+	private boolean getConversion(ArrayList<Pair<Double,String>> list, int index, boolean isfirst) {		
+		ConversionFactorDialog condia = new ConversionFactorDialog(workbench.getDSDescriptors(index), isfirst);
+		if (condia.getConversionFactor().getLeft().equals(0.0)) return false;
+		list.add(condia.getConversionFactor());
+		return true;
 	}
 	
 	private void plusButtonAction(){

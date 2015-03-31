@@ -67,7 +67,6 @@ public class ModelOverlapMap {
 		return identicaldsnames;
 	}
 	
-
 	public Pair<Integer, Integer> getModelIndicies() {
 		return modelindicies;
 	}
