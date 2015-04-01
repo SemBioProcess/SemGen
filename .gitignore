@@ -37,3 +37,4 @@ Icon
 
 # Other files and folders
 bin/
+*.prefs

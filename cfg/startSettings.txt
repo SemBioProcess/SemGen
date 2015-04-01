@@ -6,3 +6,12 @@ organizeByPropertyType; true
 sortbyCompositeCompleteness; false
 treeView; false
 helpURL; http://sbp.bhi.washington.edu/projects/semgen/semgenhelp
+
+
+
+
+
+
+
+
+

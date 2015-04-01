@@ -1,18 +1,20 @@
 package semgen.stage;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.swing.JOptionPane;
 
+import semgen.search.CompositeAnnotationSearch;
 import semgen.stage.serialization.SemSimModelSerializer;
 import semgen.stage.serialization.SubModelNode;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
+import semgen.visualizations.JsonString;
 import semgen.visualizations.SemGenWebBrowserCommandSender;
 import semsim.model.SemSimModel;
 
@@ -101,6 +103,14 @@ public class StageWorkbench extends Workbench {
 			}
 		}
 		
+		public void onAddModelByName(String modelName) throws FileNotFoundException {
+			File file = new File("examples/AnnotatedModels/" + modelName + ".owl");
+			SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(file, false);
+			_models.put(semsimmodel.getName(),  semsimmodel);
+			
+			_commandSender.addModel(semsimmodel.getName());
+		}
+		
 		public void onTaskClicked(String modelName, String task) {
 			// If the model doesn't exist throw an exception
 			if(!_models.containsKey(modelName))
@@ -125,6 +135,11 @@ public class StageWorkbench extends Workbench {
 				default:
 					JOptionPane.showMessageDialog(null, "Task: '" + task +"', coming soon :)");
 			}
+		}
+		
+		public void onSearch(String searchString) throws FileNotFoundException {
+			JsonString searchResults = CompositeAnnotationSearch.compositeAnnotationSearch(searchString);
+			_commandSender.search(searchResults);
 		}
 	}
 }

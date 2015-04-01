@@ -33,4 +33,6 @@ public interface SemGenWebBrowserCommandSender {
 	 * @param jsonSubmodelNetwork submodel network
 	 */
 	void showSubmodelNetwork(String modelName, JsonString jsonSubmodelNetwork);
+
+	void search(JsonString searchResults);
 }

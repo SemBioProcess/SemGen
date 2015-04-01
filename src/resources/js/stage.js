@@ -6,7 +6,7 @@ $(window).bind("cwb-initialized", function(e) {
 
 	var graph = new Graph();
 	var modelNodes = {};
-	
+		
 	SelectionManager.getInstance().initialize(graph);
 	KeyElement.getInstance().initialize(graph);
 	
@@ -52,6 +52,51 @@ $(window).bind("cwb-initialized", function(e) {
 			return new SubmodelNode(graph, data, modelNode);
 		});
 	});
+	
+	// Show search results on stage
+	receiver.onSearch(function (searchResults) {
+		console.log("Showing search results");
+
+		searchResults.sort(function (a, b) {
+		    return a.toLowerCase().localeCompare(b.toLowerCase());
+		});
+		var searchResultsList = document.getElementById("searchResultsList");
+		while(searchResultsList.firstChild) {
+			searchResultsList.removeChild(searchResultsList.firstChild);
+		};
+		searchResultsList.appendChild(makeUL(searchResults));
+	});
+	
+	// Add model when clicked
+	$('#searchResultsList').on('click', 'li', function() {
+		var modelName = $(this).text().trim();
+		sender.addModelByName(modelName);
+		
+		// Hide the search box
+		$(".stageSearch .searchValueContainer").hide();
+	});
+});
+
+$(window).load(function() {
+	// When you mouseover the search element show the search box and results
+	$(".stageSearch").mouseover(function (){
+		$(".stageSearch .searchValueContainer").css('display', 'inline-block');
+	});
+	
+	// When you mouseout of the search element hide the search box and results
+	$(".stageSearch").mouseout(function (){
+		$(".stageSearch .searchValueContainer").hide();
+	});
+	
+	$(".searchString").keyup(function() {
+		if( $(this).val() ) {
+			$(".stageSearch .searchValueContainer .searchResults").show()
+			sender.search($( this ).val());
+		}
+		else {
+			$(".stageSearch .searchValueContainer .searchResults").hide()
+		}
+	});
 });
 
 // Add child nodes to a model node
@@ -63,4 +108,14 @@ function addChildNodes(parentNode, data, createNode) {
 	});
 	
 	parentNode.setChildren(nodes);
+};
+
+function makeUL(array) {
+    var list = document.createElement('ul');
+    for(var i = 0; i < array.length; i++) {
+        var item = document.createElement('li');
+        item.appendChild(document.createTextNode(array[i]));
+        list.appendChild(item);
+    }
+    return list;
 };
