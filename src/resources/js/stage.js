@@ -101,7 +101,11 @@ $(window).load(function() {
 	
 	$(".searchString").keyup(function() {
 		if( $(this).val() ) {
+			$(".stageSearch .searchValueContainer .searchResults").show()
 			sender.search($( this ).val());
+		}
+		else {
+			$(".stageSearch .searchValueContainer .searchResults").hide()
 		}
 	});
 });
