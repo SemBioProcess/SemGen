@@ -18,6 +18,8 @@ public interface SemGenWebBrowserCommandSender {
 	 */
 	void addModel(String modelName);
 	
+	
+	void removeModel(String modelName);
 	/**
 	 * Tell the browser to render the dependencies
 	 * 

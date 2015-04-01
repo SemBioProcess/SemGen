@@ -144,6 +144,10 @@ public class StageWorkbench extends Workbench {
 					else
 						_commandSender.showSubmodelNetwork(model.getName(), SemSimModelSerializer.toJsonString(submodelNetwork));
 					break;
+				case "remove":
+					_models.remove(model);
+					_commandSender.removeModel(modelName);
+					break;
 				default:
 					JOptionPane.showMessageDialog(null, "Task: '" + task +"', coming soon :)");
 			}

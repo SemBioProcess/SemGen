@@ -27,6 +27,14 @@ $(window).bind("cwb-initialized", function(e) {
 		graph.update();
 	});
 	
+	//Remove the named model node
+	receiver.onRemoveModel(function(modelName) {
+		console.log("Removing model " + modelName);
+		graph.removeNode(modelName);
+		delete modelNodes[modelName];
+		graph.update();
+	});
+	
 	// Get a model node
 	var getModelNode = function (modelName) {
 		var modelNode = modelNodes[modelName];
