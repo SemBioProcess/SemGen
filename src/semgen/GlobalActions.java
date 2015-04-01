@@ -73,16 +73,12 @@ public class GlobalActions extends Observable {
 		notifyObservers(appactions.MERGE);
 	}
 	
-	public void NewMergerTab(File obj) {
-		seed = obj;
-		setChanged();
-		notifyObservers(appactions.MERGE);
-	}
-	
 	public void NewMergerTab(File model1, File model2) {
 		seeds = new HashSet<File>();
 		seeds.add(model1);
-		seeds.add(model2);
+		
+		if(model2 != null)
+			seeds.add(model2);
 		
 		setChanged();
 		notifyObservers(appactions.MERGEEXISTING);

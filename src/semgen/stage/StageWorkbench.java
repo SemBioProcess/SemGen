@@ -137,16 +137,18 @@ public class StageWorkbench extends Workbench {
 					_commandSender.showDependencyNetwork(model.getName(),
 							SemSimModelSerializer.toJsonString(SemSimModelSerializer.getDependencyNetwork(model)));
 					break;
+				case "merge":
+					SemGen.gacts.NewMergerTab(modelInfo.Path, null);
+				case "remove":
+					_models.remove(model);
+					_commandSender.removeModel(modelName);
+					break;
 				case "submodels":
 					ArrayList<SubModelNode> submodelNetwork = SemSimModelSerializer.getSubmodelNetwork(model);
 					if(submodelNetwork.isEmpty())
 						JOptionPane.showMessageDialog(null, "'" + model.getName() + "' does not have any submodels");
 					else
 						_commandSender.showSubmodelNetwork(model.getName(), SemSimModelSerializer.toJsonString(submodelNetwork));
-					break;
-				case "remove":
-					_models.remove(model);
-					_commandSender.removeModel(modelName);
 					break;
 				default:
 					JOptionPane.showMessageDialog(null, "Task: '" + task +"', coming soon :)");
