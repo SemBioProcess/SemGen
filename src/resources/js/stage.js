@@ -56,29 +56,45 @@ $(window).bind("cwb-initialized", function(e) {
 	// Show search results on stage
 	receiver.onSearch(function (searchResults) {
 		console.log("Showing search results");
-		
-		var searchResultsArray = searchResults.replace("[", '').replace("]", '').split(",");
+
+		searchResults.sort(function (a, b) {
+		    return a.toLowerCase().localeCompare(b.toLowerCase());
+		});
 		var searchResultsList = document.getElementById("searchResultsList");
 		while(searchResultsList.firstChild) {
 			searchResultsList.removeChild(searchResultsList.firstChild);
-			// Possible memory leak if event handlers aren't removed?
 		};
-		searchResultsList.appendChild(makeUL(searchResultsArray));
+		searchResultsList.appendChild(makeUL(searchResults));
 	});
 	
 	// Add model when clicked
 	$('#searchResultsList').on('click', 'li', function() {
 		var modelName = $(this).text().trim();
 		sender.addModelByName(modelName);
+		
+		// Hide the search box
+		$(".stageSearch .searchValueContainer").hide();
 	});
 });
 
-// Prevent enter key from submitting form: Once submitted, sender doesn't fire again.
-$(document).ready(function() {
-	$(window).keydown(function(event){
-		if(event.keyCode == 13) {
-			event.preventDefault();
-			return false;
+$(window).load(function() {
+	// When you mouseover the search element show the search box and results
+	$(".stageSearch").mouseover(function (){
+		$(".stageSearch .searchValueContainer").css('display', 'inline-block');
+	});
+	
+	// When you mouseout of the search element hide the search box and results
+	$(".stageSearch").mouseout(function (){
+		$(".stageSearch .searchValueContainer").hide();
+	});
+	
+	$(".searchString").keyup(function() {
+		if( $(this).val() ) {
+			$(".stageSearch .searchValueContainer .searchResults").show()
+			sender.search($( this ).val());
+		}
+		else {
+			$(".stageSearch .searchValueContainer .searchResults").hide()
 		}
 	});
 });
@@ -92,11 +108,6 @@ function addChildNodes(parentNode, data, createNode) {
 	});
 	
 	parentNode.setChildren(nodes);
-};
-
-// Relays string from html form to Java
-function search(searchString) {
-	sender.search(searchString);
 };
 
 function makeUL(array) {

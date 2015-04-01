@@ -85,27 +85,38 @@ ul.modelPopover li.submenuContainer {
 
 .stageSearch {
 	position: absolute;
-	width:350px;
-	max-width:350px;
 	margin: 1px;
-	top: 300px;
-	right: 5px;
+	top: 6px;
+	left: 50px;
 	padding: 10px;
-	border: 1px solid black;
 	opacity: 1;
+}
+
+.stageSearch .searchIcon {
+	margin-top: 6px;
+	float: left;
+}
+
+.stageSearch .searchValueContainer {
+	margin-top: 2px;
+	float: left;
+	margin-left: 5px;
+	display: none;
+}
+
+.stageSearch .searchString {
+	width: 500px;
 }
 
 .searchResults ul {
 	list-style: none;
 	padding-left: 0;
+	border: 1px solid black;
+    border-top: none;
 }
 
-.searchResults li {
-	opacity: .7;
-}
 .searchResults li:hover {
-	color:#293e6a;
-	opacity: 1;
+	background-color: #dfe3ee;
 	cursor: pointer;
 }
 
