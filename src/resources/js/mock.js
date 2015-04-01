@@ -115,6 +115,9 @@ $(window).load(function() {
 					
 					mockReceiver.showSubmodelNetwork(modelName, data);
 				}
+				else if(task == "remove") {
+					mockReceiver.removeModel(modelName);
+				}
 			},
 			
 			addModelByName: function(modelName) {
@@ -144,7 +147,9 @@ $(window).load(function() {
 			
 			onShowSubmodelNetwork: function (handler) { this.showSubmodelNetwork = handler; },
 			
-			onSearch: function (handler) { this.search = handler; }
+			onSearch: function (handler) { this.search = handler; },
+			
+			onRemoveModel: function (handler) { this.removeModel = handler; },
 	};
 	
 	var event; // The custom event that will be created
