@@ -118,6 +118,11 @@ $(window).load(function() {
 				else if(task == "remove") {
 					mockReceiver.removeModel(modelName);
 				}
+				else if(task == "annotate" ||
+						task == "extract" ||
+						task == "merge") {
+					alert("Task: '" + task + "' executed");
+				}
 			},
 			
 			addModelByName: function(modelName) {

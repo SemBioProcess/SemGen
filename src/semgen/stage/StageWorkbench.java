@@ -133,12 +133,19 @@ public class StageWorkbench extends Workbench {
 			
 			// Execute the proper task
 			switch(task) {
+				case "annotate":
+					SemGen.gacts.NewAnnotatorTab(modelInfo.Path);
+					break;
 				case "dependencies":
 					_commandSender.showDependencyNetwork(model.getName(),
 							SemSimModelSerializer.toJsonString(SemSimModelSerializer.getDependencyNetwork(model)));
 					break;
+				case "extract":
+					SemGen.gacts.NewExtractorTab(modelInfo.Path);
+					break;
 				case "merge":
 					SemGen.gacts.NewMergerTab(modelInfo.Path, null);
+					break;
 				case "remove":
 					_models.remove(model);
 					_commandSender.removeModel(modelName);
@@ -152,6 +159,7 @@ public class StageWorkbench extends Workbench {
 					break;
 				default:
 					JOptionPane.showMessageDialog(null, "Task: '" + task +"', coming soon :)");
+					break;
 			}
 		}
 		
