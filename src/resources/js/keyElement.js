@@ -18,6 +18,10 @@ function KeyElement (visibleNodeKeys, hiddenNodeKeys) {
 		// Get unique keys
 		var keys = {};
 		nodes.forEach(function (node) {
+			// Some nodes, like hidden label nodes, don't have key info
+			if(!node.getKeyInfo)
+				return;
+			
 			var info = node.getKeyInfo();
 			keys[info.nodeType] = info;
 		});

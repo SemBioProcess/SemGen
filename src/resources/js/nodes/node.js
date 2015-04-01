@@ -2,6 +2,9 @@
  * Represents a node in the d3 graph
  */
 function Node(graph, name, parent, inputs, r, color, textSize, nodeType, charge) {
+	if(!graph)
+		return;
+
 	this.graph = graph;
 	this.name = name;
 	this.id = name;
@@ -58,7 +61,7 @@ Node.prototype.createVisualElement = function (element, graph) {
 	
 	// Create the text elements
 	this.createTextElement("shadow");
-	this.createTextElement();
+	this.createTextElement("real");
 	
 	$(this).triggerHandler('createVisualization', [this.rootElement]);
 }
@@ -140,6 +143,8 @@ Node.prototype.tickHandler = function (element, graph) {
 	
 	var root = d3.select(element);
 	root.attr("transform", "translate(" + this.x + "," + this.y + ")");
+	
+	$(this).triggerHandler('postTick');
 }
 
 Node.prototype.getKeyInfo = function () {
@@ -151,7 +156,6 @@ Node.prototype.getKeyInfo = function () {
 }
 
 Node.prototype.createTextElement = function (className) {
-	className = className || "";
 	distanceFromNode = this.r * 0.2;
 	this.rootElement.append("svg:text")
 		.attr("font-size", this.textSize + "px")

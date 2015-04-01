@@ -20,6 +20,7 @@ function SubmodelNode (graph, data, parent) {
 	this.addClassName("submodelNode");
 	
 	this.addBehavior(Hull);
+	this.addBehavior(HiddenLabelNodeGenerator);
 }
 
 SubmodelNode.prototype.createVisualElement = function (element, graph) {

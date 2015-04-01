@@ -17,8 +17,17 @@ function Graph() {
 		if(typeof nodeData.r != "number")
 			throw "Node radius must be a number";
 		
-		if(typeof nodeData.className != "string")
-			throw "Node className must be a string";
+		if(typeof nodeData.charge != "number")
+			throw "Charge must be a number";
+		
+		if(typeof nodeData.getLinks != "function")
+			throw "Node getLinks is not defined";
+		
+		if(typeof nodeData.createVisualElement != "function")
+			throw "Node createVisualElement is not defined";
+		
+		if(typeof nodeData.tickHandler != "function")
+			throw "Node tickHandler is not defined";
 		
 		// If the node already exists don't add it again
 		if(this.findNode(nodeData.id)) {
@@ -27,6 +36,7 @@ function Graph() {
 		}
 		
 		nodes.push(nodeData);
+		$(this).triggerHandler("nodeAdded", [nodeData]);
 	};
 	
 	// Remove a node from the graph
@@ -54,6 +64,7 @@ function Graph() {
 	        	i++;
 	    }
 	    nodes.splice(findNodeIndex(id),1);
+	    $(this).triggerHandler("nodeRemoved", [node]);
 	};
 	
 	// Remove all nodes
