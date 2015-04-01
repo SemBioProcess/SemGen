@@ -120,7 +120,7 @@ public class SemSimOWLreader extends ModelReader {
 				annstoremove.add(named);
 			};
 			if (named.getProperty().getIRI().equals(SemSimModel.LEGACY_CODE_LOCATION_IRI)) {
-				semsimmodel.setSourcefilelocation(((OWLLiteral)named.getValue()).getLiteral());
+				semsimmodel.setSourceFileLocation(((OWLLiteral)named.getValue()).getLiteral());
 				annstoremove.add(named);
 			};
 		}

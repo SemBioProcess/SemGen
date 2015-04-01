@@ -26,8 +26,7 @@ import semsim.model.computational.datastructures.DataStructure;
 
 public class MergerWorkbench extends Workbench {
 	private int modelselection = -1;
-	protected ModelOverlapMap overlapmap = null;
-	public SemanticComparator comparator;
+	private ModelOverlapMap overlapmap = null;
 	private ArrayList<SemSimModel> loadedmodels = new ArrayList<SemSimModel>();
 	private SemSimModel mergedmodel;
 	private ArrayList<File> filepathlist = new ArrayList<File>();
@@ -127,28 +126,37 @@ public class MergerWorkbench extends Workbench {
 	}
 	
 	public void mapModels() {
-		comparator = new SemanticComparator(loadedmodels.get(0), loadedmodels.get(1));
+		SemanticComparator comparator = new SemanticComparator(loadedmodels.get(0), loadedmodels.get(1));
 		overlapmap = new ModelOverlapMap(0, 1, comparator);
 		setChanged();
 		notifyObservers(MergeEvent.mapfocuschanged);
 	}
 	
+	public HashMap<String, String> createIdenticalSubmodelNameMap() {
+		HashMap<String, String> namemap = new HashMap<String, String>();
+		for (String name : overlapmap.getIdenticalSubmodelNames()) {
+			namemap.put(name, "");
+		}
+		return namemap;
+	}
 	
-	public HashMap<String, String> createIdenticalNameMap(ArrayList<ResolutionChoice> choicelist, HashMap<String,String> submodelnamemap) {
+	public HashMap<String, String> createIdenticalNameMap(ArrayList<ResolutionChoice> choicelist, Set<String> submodelnamemap) {
 		HashMap<String, String> identicalmap = new HashMap<String,String>();
 		Set<String> identolnames = new HashSet<String>();
-		for (int i=0; i<choicelist.size(); i++) {	
+		for (int i=getSolutionDomainCount(); i<choicelist.size(); i++) {	
 			if (!choicelist.get(i).equals(ResolutionChoice.ignore)) {
 				identolnames.add(overlapmap.getDataStructurePairNames(i).getLeft());
 			}
 		}
-		for (String name : comparator.getIdenticalCodewords()) {
-			String submodelfords = "";
-			if(name.contains(".")) submodelfords = name.substring(0, name.lastIndexOf("."));
+		for (String name : overlapmap.getIdenticalNames()) {
+			if(name.contains(".")) {
+				if (submodelnamemap.contains(name.substring(0, name.lastIndexOf("."))))
+					continue;
+			}
 				
 			// If an identical codeword mapping will be resolved by a semantic resolution step or a renaming of identically-named submodels, 
 		    // don't include in idneticalmap	
-			if (!identolnames.contains(name) && !submodelnamemap.containsKey(submodelfords)) {
+			if (!identolnames.contains(name)) {
 				identicalmap.put(name, "");
 			}
 		}

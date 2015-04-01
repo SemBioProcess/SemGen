@@ -105,16 +105,13 @@ public class CellMLwriter extends ModelWriter {
 			for(Importable ssc : importablecomponents){
 				Element importel = null;
 				Element importedpiece = null;
-				String importedpiecetagname = null;
-				String importedpiecerefattr = null;
-				String hrefVal = null;
-				String origname = null;
-				
+
 				if(ssc.isImported() && ssc.getParentImport()==null){
-					
-					hrefVal = ssc.getHrefValue();
-					origname = ssc.getReferencedName();
+					String hrefVal = ssc.getHrefValue();
+					String origname = ssc.getReferencedName();
 					String metaidprefix = null;
+					String importedpiecetagname = null;
+					String importedpiecerefattr = null;
 					
 					if(ssc instanceof FunctionalSubmodel){
 						if(ssc.isImported()){
@@ -332,14 +329,14 @@ public class CellMLwriter extends ModelWriter {
 				Element variable = new Element("variable", mainNS);
 				
 				String initialval = null;
-				String nameval = null;
+				
 				String publicintval = null;
 				String privateintval = null;
 				String metadataid = ds.getMetadataID();
-
-				if(ds.getName().contains("."))
-					nameval = ds.getName().substring(ds.getName().indexOf(".")+1);
-				else nameval = ds.getName();
+				
+				String nameval = ds.getName();
+				if(nameval.contains("."))
+					nameval = nameval.substring(nameval.indexOf(".")+1);
 				
 				if(ds instanceof MappableVariable){
 					MappableVariable cellmlvar = (MappableVariable)ds;
@@ -506,16 +503,16 @@ public class CellMLwriter extends ModelWriter {
 	}
 	
 	protected static URI formatAsIdentifiersDotOrgURI(URI uri){
-		URI newuri = null;
+		URI newuri = uri;
 		String namespace = SemSimOWLFactory.getNamespaceFromIRI(uri.toString());
-		String fragment = SemSimOWLFactory.getIRIfragment(uri.toString());
-		String newnamespace = null;
-		
+
 		// If we are looking at a URI that is NOT formatted according to identifiers.org
 		if(!uri.toString().startsWith("http://identifiers.org") 
 				&& SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.containsKey(namespace)){
 			
 			String kbname = SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.get(namespace);
+			String fragment = SemSimOWLFactory.getIRIfragment(uri.toString());
+			String newnamespace = null;
 			
 			// Look up new namespace
 			for(String nskey : SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.keySet()){
@@ -546,15 +543,13 @@ public class CellMLwriter extends ModelWriter {
 			}
 			if(kbname==SemSimConstants.FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME){
 				// Need to figure out how to get FMAIDs!!!!
-				return uri;
 			}
 			if(kbname==SemSimConstants.MOUSE_ADULT_GROSS_ANATOMY_ONTOLOGY_FULLNAME){
 				String newfragment = fragment.replace("_", ":");
 				newuri = URI.create(newnamespace + newfragment);
 			}
 		}
-		if(newuri!=null) return newuri;
-		else return uri;
+		return newuri;
 	}
 	
 	

@@ -58,7 +58,6 @@ import semsim.writing.CellMLbioRDFblock;
 public class CellMLreader extends ModelReader {
 	private Namespace mainNS;
 	private CellMLbioRDFblock rdfblock;
-	private String rdfstring;
 	private Element rdfblockelement;
 	private Map<String, PhysicalModelComponent> URIandPMCmap = new HashMap<String, PhysicalModelComponent>();
 	private String unnamedstring = "[unnamed!]";
@@ -89,7 +88,7 @@ public class CellMLreader extends ModelReader {
 		}
 
 		// Add model-level metadata
-		semsimmodel.setSourcefilelocation(srcfile.getAbsolutePath());
+		semsimmodel.setSourceFileLocation(srcfile.getAbsolutePath());
 		semsimmodel.setSemsimversion(sslib.getSemSimVersion());
 		
 		// Get the namespace that indicates if it is a CellML 1.0 or 1.1 model
@@ -101,6 +100,8 @@ public class CellMLreader extends ModelReader {
 
 		// Get the main RDF block for the CellML model
 		rdfblockelement = getRDFmarkupForElement(doc.getRootElement(), semsimmodel);
+		
+		String rdfstring = null;
 		if(rdfblockelement!=null){
 			rdfstring = getUTFformattedString(xmloutputter.outputString(rdfblockelement));
 		}
@@ -151,11 +152,10 @@ public class CellMLreader extends ModelReader {
 			UnitOfMeasurement uom = new UnitOfMeasurement(unitname);
 			semsimmodel.addUnit(uom);
 			String isbaseunitval = unit.getAttributeValue("base_units");
+			
+			uom.setFundamental(false);
 			if(isbaseunitval!=null || sslib.isCellMLBaseUnit(unitname)){
 				uom.setFundamental(true);
-			}
-			else{
-				uom.setFundamental(false);
 			}
 		}
 		
@@ -175,13 +175,14 @@ public class CellMLreader extends ModelReader {
 				String baseunits = unitfactor.getAttributeValue("units");
 				String prefix = unitfactor.getAttributeValue("prefix");
 				String exponent = unitfactor.getAttributeValue("exponent");
-				double exp = (exponent==null) ? 1.0 : Double.parseDouble(exponent);
+				
 				UnitOfMeasurement baseuom = semsimmodel.getUnit(baseunits);
 				if(baseuom==null){
 					baseuom = new UnitOfMeasurement(baseunits);
 					baseuom.setFundamental(true);
 					semsimmodel.addUnit(baseuom);
 				}
+				double exp = (exponent==null) ? 1.0 : Double.parseDouble(exponent);
 				uom.addUnitFactor(new UnitFactor(baseuom, exp, prefix));
 			}
 		}
@@ -206,8 +207,7 @@ public class CellMLreader extends ModelReader {
 			if(compMathMLelements!=null){
 				mathmltext = xmloutputter.outputString(comp.getChildren("math", CellMLconstants.mathmlNS));
 			}
-			
-			
+
 			// Iterate through variables to find the outputs
 			Set<DataStructure> outputs = new HashSet<DataStructure>();
 			Set<DataStructure> inputs = new HashSet<DataStructure>();
@@ -220,15 +220,11 @@ public class CellMLreader extends ModelReader {
 			String privateinterface = null;
 			
 			while(varit.hasNext()){
-				
 				Element var = (Element) varit.next();
-				String varname = var.getAttributeValue("name");
-				String uniquevarname = compname + "." + varname;
+				String uniquevarname = compname + "." + var.getAttributeValue("name");
 				publicinterface = var.getAttributeValue("public_interface");
 				privateinterface = var.getAttributeValue("private_interface");
-				String unitstext = var.getAttributeValue("units");
-				String initval = var.getAttributeValue("initial_value");
-				String varmetaID = var.getAttributeValue("id", CellMLconstants.cmetaNS);
+				
 				
 				MappableVariable cvar = new MappableVariable(uniquevarname);
 				
@@ -248,15 +244,18 @@ public class CellMLreader extends ModelReader {
 				if(publicinterface!=null) cvar.setPublicInterfaceValue(publicinterface);
 				if(privateinterface!=null) cvar.setPrivateInterfaceValue(privateinterface);
 				
+				String initval = var.getAttributeValue("initial_value");
 				// CHANGE THIS?  What is scope of initial value?
 				if(initval!=null) cvar.setCellMLinitialValue(initval);
 
 				cvar.setPhysicalProperty(new PhysicalProperty());
 				
 				// Set units
+				String unitstext = var.getAttributeValue("units");
 				if(unitstext!=null) cvar.setUnit(semsimmodel.getUnit(unitstext));
 				
 				cvar.setDeclared(true);
+				String varmetaID = var.getAttributeValue("id", CellMLconstants.cmetaNS);
 				if(varmetaID!=null) cvar.setMetadataID(varmetaID);
 
 				// Collect the singular biological annotation, if present
@@ -413,11 +412,10 @@ public class CellMLreader extends ModelReader {
 				if(inputvar==null || outputvar==null){
 					semsimmodel.addError("Error mapping " + var1.getName() + " to " + var2.getName() + ": could not arrange an interface based on the variables' input/output designations");
 				}
-				
-				if(inputvar!=null && outputvar!=null){
+				else {
 					inputvar.addVariableMappingTo(outputvar);
 					if(outputvar.getComputation()!=null)
-						outputvar.getComputation().addInput(inputvar);
+					outputvar.getComputation().addInput(inputvar);
 				}
 			}
 		}
@@ -435,8 +433,7 @@ public class CellMLreader extends ModelReader {
 		if(submodel.getMetadataID()!=null){
 			URI termURI = collectSingularBiologicalAnnotation(doc, submodel, comp);
 			if(termURI!=null){
-				String label = null;
-				submodel.addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, termURI, label);
+				submodel.addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, termURI, null);
 			}
 		}
 	}
@@ -494,13 +491,13 @@ public class CellMLreader extends ModelReader {
 					}
 				}
 			}
-			Boolean process = true;
+			Boolean process = false;
 			try{
 				doc.getRootElement().getChild("documentation",CellMLconstants.docNS).getChild("article",CellMLconstants.docNS).getChildren("sect1",CellMLconstants.docNS);
+				process = true;
 			}
 			catch(NullPointerException e){
 				System.err.println("Warning: in trying to parse metadata, failed to find sect1 tag in model");
-				process = false;
 			}
 			// Try to get ID from documentation tags if not in RDF
 			if(process){
@@ -544,8 +541,7 @@ public class CellMLreader extends ModelReader {
 	
 	
 	private Element getRDFmarkupForElement(Element el, SemSimModel semsimmodel){
-		Element rdfel = el.getChild("RDF", CellMLconstants.rdfNS);
-		return rdfel;
+		return el.getChild("RDF", CellMLconstants.rdfNS);
 	}
 	
 	
@@ -714,7 +710,6 @@ public class CellMLreader extends ModelReader {
 	}
 	
 	private CompositePhysicalEntity buildCompositePhysicalEntityfromRDFresource(Resource propertyofres){
-		Boolean cont = true;
 		Resource curres = propertyofres;
 		
 		ArrayList<PhysicalEntity> entlist = new ArrayList<PhysicalEntity>();
@@ -722,14 +717,14 @@ public class CellMLreader extends ModelReader {
 		PhysicalEntity startent = getCompositeEntityComponentFromResourceAndAnnotate(propertyofres);
 		entlist.add(startent); // index physical entity
 		
-		while(cont){
+		while(true){
 			Resource entityres = curres.getPropertyResourceValue(CellMLbioRDFblock.containedin);
 			
-			boolean containedinlink = false;
+			boolean containedinlink = true;
 			if(entityres==null){
 				entityres = curres.getPropertyResourceValue(CellMLbioRDFblock.partof);
+				containedinlink = false;
 			}
-			else containedinlink = true;
 			
 			// If the physical entity is linked to another as part of a composite physical entity
 			if(entityres!=null){
@@ -740,26 +735,23 @@ public class CellMLreader extends ModelReader {
 				
 				curres = entityres;
 			}
-			else cont=false;
+			else break;
 		}
 		if(entlist.size()>0 && rellist.size()>0){
-			CompositePhysicalEntity cpe = new CompositePhysicalEntity(entlist, rellist);
-			return cpe;
+			return new CompositePhysicalEntity(entlist, rellist);
 		}
-		else return null;
+		return null;
 	}
 	
 	
-	private PhysicalEntity getCompositeEntityComponentFromResourceAndAnnotate(Resource res){
-
-		// Create a singular physical entity from a component in a composite physical entity
-		PhysicalEntity returnent = null;
-		
+	private PhysicalEntity getCompositeEntityComponentFromResourceAndAnnotate(Resource res){	
 		Resource isannres = res.getPropertyResourceValue(CellMLbioRDFblock.is);
 		if(isannres==null) isannres = res.getPropertyResourceValue(CellMLbioRDFblock.refersto);
 		Resource isversionofann = res.getPropertyResourceValue(CellMLbioRDFblock.isversionof);
 		
 		// If a reference entity
+		// Create a singular physical entity from a component in a composite physical entity
+		PhysicalEntity returnent = null;
 		if(isannres!=null)
 			 returnent = semsimmodel.addReferencePhysicalEntity(URI.create(isannres.getURI()), isannres.getURI());
 		
@@ -776,17 +768,15 @@ public class CellMLreader extends ModelReader {
 		
 	
 	private PhysicalModelComponent getPMCfromRDFresourceAndAnnotate(Resource res){
-		
 		// Find the Physical Model Component corresponding to the resource's URI
 		// Instantiate, if not present
-		Resource isannres = res.getPropertyResourceValue(CellMLbioRDFblock.is);
-		if(isannres==null) isannres = res.getPropertyResourceValue(CellMLbioRDFblock.refersto);
-		Resource isversionofann = res.getPropertyResourceValue(CellMLbioRDFblock.isversionof);
 		
 		PhysicalModelComponent pmc = null;
 		if(URIandPMCmap.containsKey(res.getURI()))
 			pmc = URIandPMCmap.get(res.getURI());
 		else{
+			Resource isannres = res.getPropertyResourceValue(CellMLbioRDFblock.is);
+			if(isannres==null) isannres = res.getPropertyResourceValue(CellMLbioRDFblock.refersto);
 			// If a physical entity
 			if(res.getLocalName().startsWith("entity_")){
 				
@@ -819,7 +809,7 @@ public class CellMLreader extends ModelReader {
 					pmc = semsimmodel.addCustomPhysicalProcess(name, description);
 				}
 			}
-			
+			Resource isversionofann = res.getPropertyResourceValue(CellMLbioRDFblock.isversionof);
 			if(isversionofann!=null)
 				pmc.addAnnotation(new ReferenceOntologyAnnotation(SemSimConstants.BQB_IS_VERSION_OF_RELATION, 
 						URI.create(isversionofann.getURI()), isversionofann.getURI()));				

@@ -33,7 +33,6 @@ import semgen.menu.SemGenMenuBar;
 import semgen.utilities.OntologyCache;
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
-import semgen.utilities.SemGenIcon;
 import semgen.utilities.file.SemGenFileChooser;
 import semgen.utilities.uicomponent.SemGenDialog;
 import semsim.ErrorLog;
@@ -127,7 +126,8 @@ public class SemGen extends JFrame implements Observer{
 		OSValidation();
 		
 		setTitle(":: S e m  G e n ::");
-		this.setIconImage(SemGenIcon.semgenbigicon.getImage());
+		//this.setIconImage(SemGenIcon.semgenbigicon.getImage());
+		//this.setIconImages(SemGenIcon.getSemGenLogoList());
 		
 		settings = new SemGenSettings();
 		SemGenFileChooser.currentdirectory = new File(settings.getStartDirectory());

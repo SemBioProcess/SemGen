@@ -79,29 +79,6 @@ public class Merger {
 		// What if both models have a custom phys component with the same name?
 		SemSimModel mergedmodel = ssm1clone;
 		
-		// Create submodels representing the merged components, copy over all info from model2 into model1
-		Submodel sub1 = new Submodel(ssm1clone.getName());
-		sub1.setAssociatedDataStructures(ssm1clone.getDataStructures());
-		sub1.setSubmodels(ssm1clone.getSubmodels());
-		
-		Submodel sub2 = new Submodel(ssm2clone.getName());
-		sub2.setAssociatedDataStructures(ssm2clone.getDataStructures());
-		
-		if(soldom1!=null){
-			sub2.addDataStructure(soldom1);
-			
-			if(ssm1clone.containsDataStructure(soldom1.getName() + ".min"))
-				sub2.addDataStructure(ssm1clone.getDataStructure(soldom1.getName() + ".min"));
-			if(ssm1clone.containsDataStructure(soldom1.getName() + ".max"))
-				sub2.addDataStructure(ssm1clone.getDataStructure(soldom1.getName() + ".max"));
-			if(ssm1clone.containsDataStructure(soldom1.getName() + ".delta"))
-				sub2.addDataStructure(ssm1clone.getDataStructure(soldom1.getName() + ".delta"));
-		}
-		
-		sub2.setSubmodels(ssm2clone.getSubmodels());
-		mergedmodel.addSubmodel(sub1);
-		mergedmodel.addSubmodel(sub2);
-		
 		// Copy in all data structures
 		for(DataStructure dsfrom2 : ssm2clone.getDataStructures()){
 			mergedmodel.addDataStructure(dsfrom2);
@@ -114,6 +91,9 @@ public class Merger {
 		for(Submodel subfrom2 : ssm2clone.getSubmodels()){
 			mergedmodel.addSubmodel(subfrom2);
 		}
+		
+		// Remove legacy code info
+		mergedmodel.setSourceFileLocation("");
 		
 		// WHAT TO DO ABOUT ONTOLOGY-LEVEL ANNOTATIONS?
 		mergedmodel.setNamespace(mergedmodel.generateNamespaceFromDateAndTime());
@@ -129,6 +109,9 @@ public class Merger {
 		discardedds.setPublicInterfaceValue("in");
 		keptds.addVariableMappingTo(discardedds);
 		
+		// Also, remove the computational dependency information for the discarded codeword
+		discardedds.getComputationInputs().clear();
+		
 		//Take all mappedTo values for discarded codeword and apply them to kept codeword.
 		for(MappableVariable mappedtods : discardedds.getMappedTo()){
 			keptds.addVariableMappingTo(mappedtods);
@@ -139,6 +122,7 @@ public class Merger {
 		
 		//Also remove any initial_value that the discarded DS has.
 		discardedds.setCellMLinitialValue(null);
+		discardedds.setStartValue(null);
 		
 		// Find mathML block for the discarded codeword and remove it from the FunctionalSubmodel's computational code
 		FunctionalSubmodel fs = modelfordiscardedds.getParentFunctionalSubmodelForMappableVariable(discardedds);

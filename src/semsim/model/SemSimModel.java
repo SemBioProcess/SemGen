@@ -988,7 +988,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 		return sourcefilelocation;
 	}
 
-	public void setSourcefilelocation(String sourcefilelocation) {
+	public void setSourceFileLocation(String sourcefilelocation) {
 		this.sourcefilelocation = sourcefilelocation;
 	}
 	

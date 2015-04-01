@@ -2,7 +2,6 @@ package semgen.annotation.workbench;
 
 import java.io.File;
 import java.net.URI;
-import java.util.HashSet;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
@@ -98,11 +97,10 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 
 	@Override
 	public File saveModel() {
-		java.net.URI fileURI = sourcefile.toURI();
-		if(fileURI!=null){
-			Set<DataStructure> unspecds = new HashSet<DataStructure>();
-			unspecds.addAll(semsimmodel.getDataStructuresWithUnspecifiedAnnotations());
-			if(unspecds.isEmpty()){
+		Set<DataStructure> unspecds = semsimmodel.getDataStructuresWithUnspecifiedAnnotations();
+		if(unspecds.isEmpty()){
+			URI fileURI = sourcefile.toURI();
+			if(fileURI!=null){
 				try {
 					if(lastsavedas==ModelClassifier.SEMSIM_MODEL) {
 						OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -115,16 +113,17 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 					}
 				} catch (Exception e) {e.printStackTrace();}		
 				SemGen.logfilewriter.println(sourcefile.getName() + " was saved");
+				setModelSaved(true);
 			}
 			else{
-				SemGenError.showUnspecifiedAnnotationError(unspecds);
-			}
+				return saveModelAs();
+			}			
 		}
 		else{
-			return saveModelAs();
+			SemGenError.showUnspecifiedAnnotationError(unspecds);
+			return null;
 		}
-		setModelSaved(true);
-		
+
 		return sourcefile;
 	}
 

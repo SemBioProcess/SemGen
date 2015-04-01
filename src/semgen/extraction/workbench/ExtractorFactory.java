@@ -2,12 +2,10 @@ package semgen.extraction.workbench;
 
 import java.io.File;
 
-import semgen.utilities.SemGenError;
 import semgen.utilities.WorkbenchFactory;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.file.SemGenOpenFileChooser;
 import semsim.model.SemSimModel;
-import semsim.reading.ModelClassifier;
 
 public class ExtractorFactory extends WorkbenchFactory<ExtractorWorkbench> {
 	public ExtractorFactory() {
@@ -48,7 +46,7 @@ public class ExtractorFactory extends WorkbenchFactory<ExtractorWorkbench> {
 		workbenches.add(new ExtractorWorkbench(file, semsimmodel));
 	}	
 	
-	private void isCellMLError() {
-		SemGenError.showError("Sorry. Extraction of models with CellML-type components not yet supported.","");
-	}
+//	private void isCellMLError() {
+//		SemGenError.showError("Sorry. Extraction of models with CellML-type components not yet supported.","");
+//	}
 }
