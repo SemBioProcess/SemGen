@@ -144,13 +144,18 @@ public class SemGen extends JFrame implements Observer{
 		
 		setVisible(true);
 		
+		this.pack();
 		//Maximize screen
-		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
+		if (settings.maximizeScreen()) {
+			setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
+		}
+		else {
+			setSize(settings.getAppSize());
+			setLocation(settings.getAppLocation());
+		}
+		
 		addListeners();
 		settings.setAppSize(getSize());
-		
-		this.pack();
-
 		System.out.println("Loaded.");
 		logfilewriter.println("Session started on: " + sdflog.format(datenow) + "\n");
 		
@@ -221,6 +226,7 @@ public class SemGen extends JFrame implements Observer{
 		
 		if(contentpane.quit()){
 			try {
+				settings.setIsMaximized(getExtendedState()==JFrame.MAXIMIZED_BOTH);
 				settings.storeSettings();
 				termcache.storeCachedOntologyTerms();
 				dispose();
