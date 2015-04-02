@@ -15,9 +15,9 @@ public class CodewordButton extends AnnotationObjectButton {
 	private static final long serialVersionUID = -7555259367118052593L;
 	
 	public enum cwCompletion {noAnnotations, hasPhysProp, hasPhysEnt, hasAll}
-	public Color dependencycolor = new Color(205, 92, 92, 255);
-	public Color entityblack = Color.black;
-	public Color processgreen = new Color(50,205,50);
+	public Color constitutivecolor = new Color(255, 127, 14, 255);
+	public Color entitycolor = new Color(31, 119, 180);
+	public Color processcolor = new Color(63, 196, 63);
 	public DataStructure ds;
 	
 	public CodewordButton(AnnotatorTab ann, SemGenSettings sets, DataStructure ssc, boolean compannfilled,
@@ -58,15 +58,15 @@ public class CodewordButton extends AnnotationObjectButton {
 		String tooltip = null;
 		PropertyType type = ds.getPropertyType(SemGen.semsimlib);
 		if(type == PropertyType.PropertyOfPhysicalEntity){
-			col = Color.black;
+			col = entitycolor;
 			tooltip = "<html>Codeword identified as a property of a physical <i>entity</i></html>";
 		}
 		else if(type == PropertyType.PropertyOfPhysicalProcess){
-			col = processgreen;
+			col = processcolor;
 			tooltip = "<html>Codeword identified as a property of a physical <i>process</i></html>";
 		}
 		else{
-			col = dependencycolor;
+			col = constitutivecolor;
 			tooltip = "<html>Codeword identified as a property of a <i>constitutive</i> relation.</htm>";
 		}
 		propoflabel = new PropertyMarker(col, tooltip);

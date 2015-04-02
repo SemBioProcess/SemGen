@@ -65,6 +65,7 @@ public class DropDownCheckList extends JComboBox<CheckBox> implements ActionList
 		/** adapted from comment section of ListCellRenderer api */  
 	class CheckComboRenderer extends JCheckBox implements ListCellRenderer<Object>  {  
 			private static final long serialVersionUID = 1L;
+			private final Color selectedcolor = new Color(51, 98, 140);
 	
 			public CheckComboRenderer() {
 				this.setOpaque(true);
@@ -86,7 +87,7 @@ public class DropDownCheckList extends JComboBox<CheckBox> implements ActionList
 			    setText(item.toString());
 			    setToolTipText(((CheckBox)item).getTooltip());
 			    setSelected(((CheckBox)item).isSelected());  
-			    setBackground(((CheckBox)item).isSelected() ? Color.red : Color.white);  
+			    setBackground(((CheckBox)item).isSelected() ? selectedcolor : Color.white);  
 			    setForeground(((CheckBox)item).isSelected() ? Color.white : Color.black);  
 	
 		        return this;  

@@ -48,7 +48,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 	private SemGenToolbarButton extractorbutton = new SemGenToolbarButton(SemGenIcon.extractoricon);
 	private SemGenToolbarButton coderbutton = new SemGenToolbarButton(SemGenIcon.codericon);
 	
-	private DropDownCheckList sortselector = new DropDownCheckList("Sort Options");
+	private DropDownCheckList sortselector = new DropDownCheckList(" Sort Options");
 	private String sortbytype = new String("By Type");
 	private String sortbycompletion = new String("By Composite Completeness");
 	GlobalActions globalactions;
