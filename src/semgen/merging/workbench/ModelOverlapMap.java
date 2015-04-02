@@ -41,7 +41,7 @@ public class ModelOverlapMap {
 			addDataStructureMapping(dspair.getLeft(), dspair.getRight(), maptype.automapping);
 		}
 		
-		for (int i=slndomcnt; i<(equivlist.size() - slndomcnt); i++ ) {
+		for (int i=slndomcnt; i<(equivlist.size()); i++ ) {
 			dspair = equivlist.get(i);
 			addDataStructureMapping(dspair.getLeft(), dspair.getRight(), maptype.exactsemaoverlap);
 		}
