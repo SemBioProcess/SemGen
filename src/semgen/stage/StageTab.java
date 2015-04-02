@@ -17,7 +17,7 @@ public class StageTab extends SemGenTab {
 	private StageWorkbench _workbench;
 	
 	public StageTab(SemGenSettings sets, GlobalActions globalacts, StageWorkbench bench) {
-		super("Stage", SemGenIcon.annotatemodelicon, "Stage for facilitating SemGen tasks", sets, globalacts);
+		super("Stage", SemGenIcon.stageicon, "Stage for facilitating SemGen tasks", sets, globalacts);
 		
 		_workbench = bench;
 	}
