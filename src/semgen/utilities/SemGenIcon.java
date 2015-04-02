@@ -21,6 +21,7 @@ public class SemGenIcon {
 	public static final ImageIcon searchicon = createImageIcon("icons/Search2020.png");
 	public static final ImageIcon copyicon = createImageIcon("icons/Copy2020.png");
 	public static final ImageIcon createicon = createImageIcon("icons/Create2020.png");
+	public static final ImageIcon createcompenticon = createImageIcon("icons/CreateCompEnt2020.png");
 	public static final ImageIcon eraseicon = createImageIcon("icons/Erase2020.png");
 	public static final ImageIcon eraseiconsmall = createImageIcon("icons/Erase1313.png");
 	public static final ImageIcon modifyicon = createImageIcon("icons/Modify2020.png");
@@ -32,6 +33,7 @@ public class SemGenIcon {
 	public static final ImageIcon annotatoriconsmall = createImageIcon("icons/annotatoricon1515.png");
 	public static final ImageIcon codericon = createImageIcon("icons/codericon2020.png");
 	public static final ImageIcon mergeicon = createImageIcon("icons/mergeicon2020.png");
+	public static final ImageIcon stageicon = createImageIcon("icons/stageicon2020.png");
 	public static final ImageIcon moreinfoicon = createImageIcon("icons/moreinfoicon2020.png");
 	public static final ImageIcon externalURLicon = createImageIcon("icons/externalURL2020.png");
 	public static final ImageIcon expendcontracticon = createImageIcon("icons/expandcontracticon1.gif");

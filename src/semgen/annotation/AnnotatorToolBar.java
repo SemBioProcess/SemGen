@@ -41,7 +41,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 	private SemGenToolbarButton annotateitemshowmarkers;
 	private JButton annotateitemshowimports = new JButton("Show imports");
 	private SemGenToolbarButton annotateitemaddrefterm= new SemGenToolbarButton(SemGenIcon.createicon);
-	private SemGenToolbarButton annotateitemaddcompterm= new SemGenToolbarButton(SemGenIcon.createicon);
+	private SemGenToolbarButton annotateitemaddcompterm= new SemGenToolbarButton(SemGenIcon.createcompenticon);
 	private SemGenToolbarButton annotateitemremoverefterm = new SemGenToolbarButton(SemGenIcon.eraseicon);
 	public SemGenToolbarButton annotateitemreplacerefterm = new SemGenToolbarButton(SemGenIcon.replaceicon);
 	private SemGenToolbarButton annotateitemtreeview = new SemGenToolbarButton(SemGenIcon.treeicon);
@@ -112,9 +112,10 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		
 		add(new ToolBarLabel("Reference Terms:"));
 		add(annotateitemaddrefterm);
+		add(annotateitemaddcompterm);
 		add(annotateitemremoverefterm);
 		add(annotateitemreplacerefterm);
-		add(annotateitemaddcompterm);
+		
 		addSeparator();
 		
 		add(extractorbutton);

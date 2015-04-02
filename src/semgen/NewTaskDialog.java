@@ -21,7 +21,7 @@ public class NewTaskDialog extends SemGenDialog implements ActionListener {
 	public JButton openmenuextractbutton = new JButton("Extract a model", SemGenIcon.extractoricon);
 	public JButton openmenumergebutton = new JButton("Merge models", SemGenIcon.mergeicon);
 	public JButton encodebutton = new JButton("Encode a model",SemGenIcon.codericon);
-	public JButton stagebutton = new JButton("Open the stage", SemGenIcon.annotatemodelicon);
+	public JButton stagebutton = new JButton("Open the stage", SemGenIcon.stageicon);
 	private GlobalActions globalactions;
 	
 	public NewTaskDialog(GlobalActions gacts) {
