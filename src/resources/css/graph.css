@@ -24,15 +24,6 @@ path.link.external {
   stroke-opacity: .8;
 }
 
-.dim {
-	opacity: 0.2;
-}
-
-.modelNode.dim {
-	opacity: 1;
-}
-
-
 #stage svg {
 	overflow: hidden;
 }

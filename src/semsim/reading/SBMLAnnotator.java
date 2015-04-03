@@ -208,7 +208,7 @@ public class SBMLAnnotator {
 						PhysicalEntity prod = speciesandphysents.get(speciesprod);
 						if(pmc instanceof PhysicalProcess){
 							PhysicalProcess pmcp = (PhysicalProcess)pmc;
-							pmcp.addSink(prod, rxn.getReactant(l).getStoichiometry());
+							pmcp.addSink(prod, rxn.getProduct(l).getStoichiometry());
 						}
 					}
 				}

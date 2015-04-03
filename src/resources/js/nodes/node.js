@@ -48,17 +48,11 @@ Node.prototype.createVisualElement = function (element, graph) {
 	this.rootElement.attr("class", this.className)
 		.call(graph.force.drag)
     	.style("fill", this.color)
-
+    	
     this.rootElement.append("svg:circle")
 	    .attr("r", this.r)
 	    .attr("id", "Node;"+this.id)
-	    .attr("class","nodeStrokeClass")
-	    .on("mouseover", function (d) {
-	    	graph.highlightMode(d);
-	    })
-	    .on("mouseout", function () {
-	    	graph.highlightMode(null);
-	    });;
+	    .attr("class","nodeStrokeClass");
 	
 	// Create the text elements
 	this.createTextElement("shadow");

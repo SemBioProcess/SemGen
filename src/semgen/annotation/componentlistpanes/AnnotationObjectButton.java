@@ -34,6 +34,8 @@ public abstract class AnnotationObjectButton extends JPanel {
 	public JLabel compannlabel = new JLabel();
 	public JLabel singularannlabel = new JLabel();
 	public JLabel humdeflabel = new JLabel();
+	public Color editablelabelcolor = new Color(10, 50, 220);
+	public Color noneditablelabelcolor = Color.gray;
 	public JPanel indicatorspanel = new JPanel();
 	public JPanel indicatorssuperpanel = new JPanel(new BorderLayout());
 	public PropertyMarker propoflabel = new PropertyMarker(Color.white, null);
@@ -150,8 +152,8 @@ public abstract class AnnotationObjectButton extends JPanel {
 
 	public void annotationAdded(JLabel label, Boolean iscompann) {
 		label.setFont(SemGenFont.Bold("Serif", -2));
-		if(editable) label.setForeground(Color.blue);
-		else label.setForeground(Color.gray);
+		if(editable) label.setForeground(editablelabelcolor);
+		else label.setForeground(noneditablelabelcolor);
 		if (!iscompann) {
 			label.setText(label.getName());
 		}
@@ -161,7 +163,7 @@ public abstract class AnnotationObjectButton extends JPanel {
 
 	public void annotationNotAdded(JLabel label) {
 		label.setFont(SemGenFont.Plain("Serif", -2));
-		label.setForeground(Color.gray);
+		label.setForeground(noneditablelabelcolor);
 		label.setText("_");
 		repaint();
 		validate();

@@ -69,8 +69,6 @@ public class BioPortalSearcher {
 	public static String getRDFLabelUsingBioPortal(String id, String bioportalontID){
 		String label = null;
 
-	    System.out.println("HERE2");
-
 		try {
 			System.out.println("Looking up " + id);
 			URL url = new URL(
