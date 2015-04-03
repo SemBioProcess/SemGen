@@ -190,9 +190,9 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		swsplitpane.setDividerLocation((int)(inihloc)/2);
 		westsplitpane.setDividerLocation((int)(inihloc)/6);
 		
-		Dimension topmaxsize = westsplitpane.getTopComponent().getMaximumSize();
-		westsplitpane.getBottomComponent().setMinimumSize(new Dimension(0, inihloc-topmaxsize.height));
-		splitpane.getRightComponent().setMinimumSize(new Dimension(initwidth-iniwloc,0));
+		//Dimension topmaxsize = westsplitpane.getTopComponent().getMaximumSize();
+		//westsplitpane.getBottomComponent().setMinimumSize(new Dimension(0, inihloc-topmaxsize.height));
+		//splitpane.getRightComponent().setMinimumSize(new Dimension(initwidth-iniwloc,0));
 		
 		codewordscrollpane.scrollToTop();
 		submodelscrollpane.scrollToTop();
