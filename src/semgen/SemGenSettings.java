@@ -209,7 +209,7 @@ public class SemGenSettings extends Observable{
 			writer = new PrintWriter(new FileWriter(new File("cfg/startSettings.txt")));
 			writer.println("startDirectory; " + SemGenOpenFileChooser.currentdirectory.getAbsolutePath());
 			writer.println("maximize; " + maximize.toString());
-			writer.println("screensize; " + this.getAppWidth() + "x" + this.getAppWidth());
+			writer.println("screensize; " + this.getAppWidth() + "x" + this.getAppHeight());
 			writer.println("screenpos; " + this.getAppXPos() + "x" + this.getAppYPos());
 			writer.println("autoAnnotate; " + doAutoAnnotate().toString());
 			writer.println("showImports; " + showImports().toString());
