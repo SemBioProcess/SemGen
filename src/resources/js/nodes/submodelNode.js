@@ -14,23 +14,25 @@ function SubmodelNode (graph, data, parent) {
 		inputs = inputs.concat(dependency.inputs);
 	});
 	
-	ParentNode.prototype.constructor.call(this, graph, data.name, parent, inputs, 10, "#CA9485", 14, "Submodel");
+	ParentNode.prototype.constructor.call(this, graph, data.name, parent, inputs, 10, "#CA9485", 16, "Submodel", -1000);
 	this.dependencies = data.dependencies;
 	
 	this.addClassName("submodelNode");
 	
 	this.addBehavior(Hull);
+	this.addBehavior(HiddenLabelNodeGenerator);
 }
 
-// When the submodel is clicked created dependency nodes from it's dependency data
-SelectionManager.getInstance().onSelected(function (e, element, node) {
-	if(!(node instanceof SubmodelNode))
-		return;
+SubmodelNode.prototype.createVisualElement = function (element, graph) {
+	ParentNode.prototype.createVisualElement.call(this, element, graph);
 	
-	// Create dependency nodes from the submodel's dependency data
-	addChildNodes(node, node.dependencies, function (data) {
-		return new DependencyNode(node.graph, data, node);
+	// When the submodel is clicked created dependency nodes from it's dependency data
+	this.rootElement.select("circle").on("dblclick", function (node) {
+		// Create dependency nodes from the submodel's dependency data
+		addChildNodes(node, node.dependencies, function (data) {
+			return new DependencyNode(node.graph, data, node);
+		});
+		
+		d3.event.stopPropagation();
 	});
-	
-	e.stopPropagation();
-});
+}

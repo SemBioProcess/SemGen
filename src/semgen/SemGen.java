@@ -48,6 +48,10 @@ public class SemGen extends JFrame implements Observer{
 	public static File tempdir = new File(System.getProperty("java.io.tmpdir"));
 	public static final String logfileloc = tempdir.getAbsolutePath() + "/SemGen_log.txt";
 	public static OntologyCache termcache = new OntologyCache();
+	
+	//A class for application level events such as exiting and creating new tabs
+	public static GlobalActions gacts = new GlobalActions();
+
 	private final static File logfile = new File(logfileloc);
 	
 	private final static int WINDOWS=1;
@@ -61,8 +65,6 @@ public class SemGen extends JFrame implements Observer{
 	//A library of SemSim constants and definitions. This is created once and referenced
 	//without modification by the rest of the program.
 	public static SemSimLibrary semsimlib = new SemSimLibrary();
-	//A class for application level events such as exiting and creating new tabs
-	private GlobalActions gacts = new GlobalActions();
 	private SemGenGUI contentpane = null; 
 	
 	/** Main method for running an instance of SemGen */
@@ -142,13 +144,18 @@ public class SemGen extends JFrame implements Observer{
 		
 		setVisible(true);
 		
+		this.pack();
 		//Maximize screen
-		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
+		if (settings.maximizeScreen()) {
+			setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
+		}
+		else {
+			setSize(settings.getAppSize());
+			setLocation(settings.getAppLocation());
+		}
+		
 		addListeners();
 		settings.setAppSize(getSize());
-		
-		this.pack();
-
 		System.out.println("Loaded.");
 		logfilewriter.println("Session started on: " + sdflog.format(datenow) + "\n");
 		
@@ -219,6 +226,7 @@ public class SemGen extends JFrame implements Observer{
 		
 		if(contentpane.quit()){
 			try {
+				settings.setIsMaximized(getExtendedState()==JFrame.MAXIMIZED_BOTH);
 				settings.storeSettings();
 				termcache.storeCachedOntologyTerms();
 				dispose();

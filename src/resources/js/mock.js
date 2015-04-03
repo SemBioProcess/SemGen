@@ -115,6 +115,14 @@ $(window).load(function() {
 					
 					mockReceiver.showSubmodelNetwork(modelName, data);
 				}
+				else if(task == "remove") {
+					mockReceiver.removeModel(modelName);
+				}
+				else if(task == "annotate" ||
+						task == "extract" ||
+						task == "merge") {
+					alert("Task: '" + task + "' executed");
+				}
 			},
 			
 			addModelByName: function(modelName) {
@@ -131,6 +139,12 @@ $(window).load(function() {
 				
 				mockReceiver.search(searchResults);
 			},
+			
+			merge: function (modelName1, modelName2) {
+				alert("Merge: '" + modelName1 + "' and '" + modelName2 + "'");
+			},
+			
+			log: function () {}
 	};
 	
 	var mockReceiver = {
@@ -140,7 +154,9 @@ $(window).load(function() {
 			
 			onShowSubmodelNetwork: function (handler) { this.showSubmodelNetwork = handler; },
 			
-			onSearch: function (handler) { this.search = handler; }
+			onSearch: function (handler) { this.search = handler; },
+			
+			onRemoveModel: function (handler) { this.removeModel = handler; },
 	};
 	
 	var event; // The custom event that will be created

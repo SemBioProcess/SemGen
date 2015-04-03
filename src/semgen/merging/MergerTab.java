@@ -41,6 +41,8 @@ import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semgen.utilities.uicomponent.SemGenTab;
+import semsim.model.SemSimModel;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -62,12 +64,15 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 	private JButton loadingbutton = new JButton(SemGenIcon.blankloadingiconsmall);
 	private MappingPanel mappingpanelleft, mappingpanelright; 
 	private MergerWorkbench workbench;
+	private Set<File> existingModels;
 	
-	public MergerTab(SemGenSettings sets, GlobalActions globalacts, MergerWorkbench bench) {
+	public MergerTab(SemGenSettings sets, GlobalActions globalacts, MergerWorkbench bench, Set<File> existing) {
 		super("Merger", SemGenIcon.mergeicon, "Tab for Merging SemSim Models", sets, globalacts);
 		
 		workbench = bench;
 		workbench.addObserver(this);
+		
+		existingModels = existing;
 	}
 	
 	@Override
@@ -138,7 +143,13 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 		this.add(Box.createGlue());
 		this.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
 		
-		plusButtonAction();
+		// If there are existing models, load them
+		if(existingModels != null && existingModels.size() > 0) {
+			AddModelsToMergeTask task = new AddModelsToMergeTask(existingModels);
+			task.execute(); 
+		}
+		else
+			plusButtonAction();
 	}
 	
 	public void actionPerformed(ActionEvent arg0) {

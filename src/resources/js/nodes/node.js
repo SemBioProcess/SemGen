@@ -1,7 +1,10 @@
 /**
  * Represents a node in the d3 graph
  */
-function Node(graph, name, parent, inputs, r, color, textSize, nodeType) {
+function Node(graph, name, parent, inputs, r, color, textSize, nodeType, charge) {
+	if(!graph)
+		return;
+
 	this.graph = graph;
 	this.name = name;
 	this.id = name;
@@ -10,12 +13,14 @@ function Node(graph, name, parent, inputs, r, color, textSize, nodeType) {
 	this.color = color;
 	this.textSize = textSize;
 	this.nodeType = nodeType;
+	this.charge = charge;
 	this.className = "node";
 	this.element;
 	this.parent = parent;
 	this.inputs = inputs || [];
 	this.userCanHide = true;
 	this.hidden = false;
+	this.spaceBetweenTextAndNode = this.r * 0.2 + this.textSize;
 	
 	if(this.parent) {
 		// We need to keep the ids of each node unique by prefixing
@@ -51,7 +56,7 @@ Node.prototype.createVisualElement = function (element, graph) {
 	
 	// Create the text elements
 	this.createTextElement("shadow");
-	this.createTextElement();
+	this.createTextElement("real");
 	
 	$(this).triggerHandler('createVisualization', [this.rootElement]);
 }
@@ -117,7 +122,7 @@ Node.prototype.getLinks = function () {
 			source: inputNode,
 			target: this,
 			type: type,
-			length: type == "external" ? 200 : 80,
+			length: type == "external" ? 200 : 40,
 			value: 1,
 		});
 	}
@@ -128,11 +133,18 @@ Node.prototype.getLinks = function () {
 Node.prototype.tickHandler = function (element, graph) {
 	$(this).triggerHandler('preTick');
 	
+	// Don't let nodes overlap their parent labels
+	if(this.parent && this.y < this.parent.y)
+		this.y = this.parent.y;
+	
+	
 	this.x = Math.max(this.r, Math.min(graph.w - this.r, this.x));
-	this.y = Math.max(this.r, Math.min(graph.h - this.r, this.y));
+	this.y = Math.max(this.r + this.spaceBetweenTextAndNode, Math.min(graph.h - this.r, this.y));
 	
 	var root = d3.select(element);
 	root.attr("transform", "translate(" + this.x + "," + this.y + ")");
+	
+	$(this).triggerHandler('postTick');
 }
 
 Node.prototype.getKeyInfo = function () {
@@ -144,12 +156,11 @@ Node.prototype.getKeyInfo = function () {
 }
 
 Node.prototype.createTextElement = function (className) {
-	className = className || "";
-	distanceFromNode = this.r * 0.2;
+	
 	this.rootElement.append("svg:text")
 		.attr("font-size", this.textSize + "px")
 	    .attr("x", 0)
-	    .attr("y", -this.textSize - distanceFromNode)
+	    .attr("y", -this.spaceBetweenTextAndNode)
 	    .text(this.displayName)
 	    .attr("class", className)
 	    .attr("text-anchor", "middle");

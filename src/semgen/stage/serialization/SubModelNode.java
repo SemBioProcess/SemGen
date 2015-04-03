@@ -21,7 +21,7 @@ public class SubModelNode extends Node {
 		
 		// SemSimModelSerializer.getDependencyNetwork(subModel);
 		for(DataStructure dependency : subModel.getAssociatedDataStructures()) {
-			dependencies.add(new DependencyNode(dependency, parentModelName));
+			dependencies.add(new SubModelDependencyNode(dependency, parentModelName));
 		}
 	}
 

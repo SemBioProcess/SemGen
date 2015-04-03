@@ -5,8 +5,10 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.swing.JOptionPane;
 
+import semgen.SemGen;
 import semgen.search.CompositeAnnotationSearch;
 import semgen.stage.serialization.SemSimModelSerializer;
 import semgen.stage.serialization.SubModelNode;
@@ -21,13 +23,13 @@ import semsim.model.SemSimModel;
 public class StageWorkbench extends Workbench {
 
 	// Maps semsim model name to a semsim model
-	private Map<String, SemSimModel> _models;
+	private Map<String, ModelInfo> _models;
 	
 	// Used to send commands to the view
 	private SemGenWebBrowserCommandSender _commandSender;
 	
 	public StageWorkbench() {
-		_models = new HashMap<String, SemSimModel>();
+		_models = new HashMap<String, ModelInfo>();
 	}
 	
 	/**
@@ -81,6 +83,16 @@ public class StageWorkbench extends Workbench {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	private class ModelInfo {
+		public SemSimModel Model;
+		public File Path;
+		
+		public ModelInfo(SemSimModel model, File path) {
+			Model = model;
+			Path = path;
+		}
+	}
 
 	/**
 	 * Receives commands from javascript
@@ -89,6 +101,8 @@ public class StageWorkbench extends Workbench {
 	 */
 	public class StageCommandReceiver extends CommunicatingWebBrowserCommandReceiver {
 
+		public static final boolean ShowJavascriptLogs = false;
+		
 		/**
 		 * Receives the add model command
 		 */
@@ -96,7 +110,7 @@ public class StageWorkbench extends Workbench {
 			SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select models to load", true);
 			for (File file : sgc.getSelectedFiles()) {
 				SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(file, false);
-				_models.put(semsimmodel.getName(), semsimmodel);
+				_models.put(semsimmodel.getName(), new ModelInfo(semsimmodel, file));
 				
 				// Tell the view to add a model
 				_commandSender.addModel(semsimmodel.getName());
@@ -106,7 +120,7 @@ public class StageWorkbench extends Workbench {
 		public void onAddModelByName(String modelName) throws FileNotFoundException {
 			File file = new File("examples/AnnotatedModels/" + modelName + ".owl");
 			SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(file, false);
-			_models.put(semsimmodel.getName(),  semsimmodel);
+			_models.put(semsimmodel.getName(), new ModelInfo(semsimmodel, file));
 			
 			_commandSender.addModel(semsimmodel.getName());
 		}
@@ -117,13 +131,27 @@ public class StageWorkbench extends Workbench {
 				throw new IllegalArgumentException(modelName);
 			
 			// Get the model
-			SemSimModel model = _models.get(modelName);
+			ModelInfo modelInfo = _models.get(modelName);
+			SemSimModel model = modelInfo.Model;
 			
 			// Execute the proper task
 			switch(task) {
+				case "annotate":
+					SemGen.gacts.NewAnnotatorTab(modelInfo.Path);
+					break;
 				case "dependencies":
 					_commandSender.showDependencyNetwork(model.getName(),
 							SemSimModelSerializer.toJsonString(SemSimModelSerializer.getDependencyNetwork(model)));
+					break;
+				case "extract":
+					SemGen.gacts.NewExtractorTab(modelInfo.Path);
+					break;
+				case "merge":
+					SemGen.gacts.NewMergerTab(modelInfo.Path, null);
+					break;
+				case "remove":
+					_models.remove(model);
+					_commandSender.removeModel(modelName);
 					break;
 				case "submodels":
 					ArrayList<SubModelNode> submodelNetwork = SemSimModelSerializer.getSubmodelNetwork(model);
@@ -134,12 +162,36 @@ public class StageWorkbench extends Workbench {
 					break;
 				default:
 					JOptionPane.showMessageDialog(null, "Task: '" + task +"', coming soon :)");
+					break;
 			}
 		}
 		
 		public void onSearch(String searchString) throws FileNotFoundException {
 			JsonString searchResults = CompositeAnnotationSearch.compositeAnnotationSearch(searchString);
 			_commandSender.search(searchResults);
+		}
+		
+		public void onMerge(String modelName1, String modelName2) {
+			// If the models don't exist throw an exception
+			if(!_models.containsKey(modelName1))
+				throw new IllegalArgumentException(modelName1);
+			
+			if(!_models.containsKey(modelName2))
+				throw new IllegalArgumentException(modelName2);
+			
+			ModelInfo model1Info = _models.get(modelName1);
+			ModelInfo model2Info = _models.get(modelName2);
+			
+			SemGen.gacts.NewMergerTab(model1Info.Path, model2Info.Path);
+		}
+		
+		/**
+		 * Print Javascript logs in Java
+		 * @param log
+		 */
+		public void onLog(String log) {
+			if(ShowJavascriptLogs)
+				System.out.println(log);
 		}
 	}
 }

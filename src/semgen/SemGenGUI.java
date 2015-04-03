@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
 
 public class SemGenGUI extends JTabbedPane implements Observer{
 	private static final long serialVersionUID = 3618439495848469800L;
@@ -106,6 +107,12 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 	public void startNewMergerTask(){
 		MergerWorkbenchFactory factory = new MergerWorkbenchFactory();
 		MergerTabFactory tabfactory = new MergerTabFactory(settings, globalactions);
+		addTab(factory, tabfactory);
+	}
+	
+	public void startNewMergerTask(Set<File> existingFiles){
+		MergerWorkbenchFactory factory = new MergerWorkbenchFactory();
+		MergerTabFactory tabfactory = new MergerTabFactory(settings, globalactions, existingFiles);
 		addTab(factory, tabfactory);
 	}
 	
@@ -256,6 +263,9 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		}
 		if (arg == GlobalActions.appactions.MERGE) {
 			startNewMergerTask();
+		}
+		if (arg == GlobalActions.appactions.MERGEEXISTING) {
+			startNewMergerTask(globalactions.getSeeds());
 		}
 		if (arg == GlobalActions.appactions.STAGE) {
 			startNewStageTask();

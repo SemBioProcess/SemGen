@@ -26,6 +26,7 @@ public class SemGenSettings extends Observable{
 	public Hashtable<String, String[]> startsettingstable;
 	private final int defwidth = 1280, defheight = 1024;
 	private Dimension screensize;
+	private Boolean maximize = false;
 	private int width = 1280, height = 1024;
 	private int xpos = 0, ypos = 0;
 	
@@ -40,6 +41,8 @@ public class SemGenSettings extends Observable{
 		}
 		screensize = Toolkit.getDefaultToolkit().getScreenSize();
 		width = screensize.width; height = screensize.height;
+		getPreviousScreenSize();
+		getPreviousScreenPosition();
 	}
 	
 	public SemGenSettings(SemGenSettings old) {
@@ -59,6 +62,21 @@ public class SemGenSettings extends Observable{
 		return Math.round(h*screensize.height/defheight);
 	}
 	
+	public void getPreviousScreenSize() {
+		String dim = startsettingstable.get("screensize")[0];
+		String[] dims = dim.trim().split("x");
+		width = Integer.parseInt(dims[0]);
+		height = Integer.parseInt(dims[1]);
+		
+	}
+	
+	public void getPreviousScreenPosition() {
+		String dim = startsettingstable.get("screenpos")[0];
+		String[] dims = dim.trim().split("x");
+		xpos = Integer.parseInt(dims[0]);
+		ypos = Integer.parseInt(dims[1]);
+	}
+	
 	public Dimension getAppSize() {
 		return new Dimension(width, height);
 	}
@@ -75,8 +93,8 @@ public class SemGenSettings extends Observable{
 		return height;
 	}
 	
-	public Dimension getAppLocation() {
-		return new Dimension(xpos, ypos);
+	public Point getAppLocation() {
+		return new Point(xpos, ypos);
 	}
 	
 	public void setAppLocation(Point pt) {
@@ -92,6 +110,12 @@ public class SemGenSettings extends Observable{
 	}
 	public String getStartDirectory() {
 		return startsettingstable.get("startDirectory")[0];
+	}
+	
+	public Boolean maximizeScreen() {
+		String max = startsettingstable.get("maximize")[0];
+		if (max==null) return false;
+		return startsettingstable.get("maximize")[0].trim().equals("true");
 	}
 	
 	public Boolean doAutoAnnotate() {
@@ -175,11 +199,18 @@ public class SemGenSettings extends Observable{
 		return startsettingstable.get("helpURL")[0];
 	}
 	
+	public void setIsMaximized(boolean maxed) {
+		maximize = maxed;
+	}
+	
 	public void storeSettings() throws URISyntaxException {
 		PrintWriter writer;
 		try {
 			writer = new PrintWriter(new FileWriter(new File("cfg/startSettings.txt")));
 			writer.println("startDirectory; " + SemGenOpenFileChooser.currentdirectory.getAbsolutePath());
+			writer.println("maximize; " + maximize.toString());
+			writer.println("screensize; " + this.getAppWidth() + "x" + this.getAppWidth());
+			writer.println("screenpos; " + this.getAppXPos() + "x" + this.getAppYPos());
 			writer.println("autoAnnotate; " + doAutoAnnotate().toString());
 			writer.println("showImports; " + showImports().toString());
 			writer.println("displayMarkers; " + useDisplayMarkers().toString());

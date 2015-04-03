@@ -10,6 +10,13 @@ $(window).bind("cwb-initialized", function(e) {
 	SelectionManager.getInstance().initialize(graph);
 	KeyElement.getInstance().initialize(graph);
 	
+	// Sends logs to java
+	var originalConsoleLog = console.log;
+	console.log = function (val) {
+		originalConsoleLog.call(console, val);
+		sender.log(val);
+	}
+	
 	$(".addModelButton").click(function() {
 		sender.addModel();
 	});
@@ -18,9 +25,20 @@ $(window).bind("cwb-initialized", function(e) {
 	receiver.onAddModel(function (modelName) {
 		console.log("Adding model " + modelName);
 		
+		if(modelNodes[modelName])
+			throw "Model already exists";
+		
 		var modelNode = new ModelNode(graph, modelName);
 		modelNodes[modelName] = modelNode;
 		graph.addNode(modelNode);
+		graph.update();
+	});
+	
+	//Remove the named model node
+	receiver.onRemoveModel(function(modelName) {
+		console.log("Removing model " + modelName);
+		graph.removeNode(modelName);
+		delete modelNodes[modelName];
 		graph.update();
 	});
 	

@@ -17,8 +17,17 @@ function Graph() {
 		if(typeof nodeData.r != "number")
 			throw "Node radius must be a number";
 		
-		if(typeof nodeData.className != "string")
-			throw "Node className must be a string";
+		if(typeof nodeData.charge != "number")
+			throw "Charge must be a number";
+		
+		if(typeof nodeData.getLinks != "function")
+			throw "Node getLinks is not defined";
+		
+		if(typeof nodeData.createVisualElement != "function")
+			throw "Node createVisualElement is not defined";
+		
+		if(typeof nodeData.tickHandler != "function")
+			throw "Node tickHandler is not defined";
 		
 		// If the node already exists don't add it again
 		if(this.findNode(nodeData.id)) {
@@ -27,6 +36,7 @@ function Graph() {
 		}
 		
 		nodes.push(nodeData);
+		$(this).triggerHandler("nodeAdded", [nodeData]);
 	};
 	
 	// Remove a node from the graph
@@ -54,6 +64,7 @@ function Graph() {
 	        	i++;
 	    }
 	    nodes.splice(findNodeIndex(id),1);
+	    $(this).triggerHandler("nodeRemoved", [node]);
 	};
 	
 	// Remove all nodes
@@ -128,13 +139,16 @@ function Graph() {
 	/** 
 	 * Updates the graph
 	 */
+	var path;
+	var node;
+	var graph = this;
 	this.update = function () {
 		$(this).triggerHandler("preupdate");
 		
 		bruteForceRefresh.call(this);
 
 		// Add the links
-		var path = vis.selectAll("svg > g > path")
+		path = vis.selectAll("svg > g > path")
 			.data(links, function(d) { return d.source.id + "-" + d.target.id; });
 		
 		path.enter().append("svg:path")
@@ -144,43 +158,20 @@ function Graph() {
 		path.exit().remove();
 		
 		// Build the nodes
-	    var node = vis.selectAll("g.node")
+	    node = vis.selectAll("g.node")
 	        .data(nodes, function(d) { return d.id; });
 
-	    var graph = this;
 	    var nodeEnter = node.enter().append("g")
 	        .each(function (d) { d.createVisualElement(this, graph); });
 	    
 	    node.exit().remove();
 	    
 	    // Define the tick function
-	    this.force.on("tick", function() {
-	    	// Display the links
-	    	path.attr("d", function(d) {
-	    	    var dx = d.target.x - d.source.x,
-	    	        dy = d.target.y - d.source.y,
-	    	        dr = 0,										// Lines have no arc
-	    	        theta = Math.atan2(dy, dx) + Math.PI * 2,
-	    	        d90 = Math.PI / 2,
-	    	        dtxs = d.target.x - d.target.r * Math.cos(theta),
-	    	        dtys = d.target.y - d.target.r * Math.sin(theta);
-	    	    return "M" + d.source.x + "," + d.source.y +
-	    	    		"A" + dr + "," + dr + " 0 0 1," + d.target.x + "," + d.target.y +
-	    	    		"A" + dr + "," + dr + " 0 0 0," + d.source.x + "," + d.source.y +
-	    	    		"M" + dtxs + "," + dtys + "l" + (3.5 * Math.cos(d90 - theta) - 10 * Math.cos(theta)) + "," + (-3.5 * Math.sin(d90 - theta) - 10 * Math.sin(theta)) +
-	    	    		"L" + (dtxs - 3.5 * Math.cos(d90 - theta) - 10 * Math.cos(theta)) + "," + (dtys + 3.5 * Math.sin(d90 - theta) - 10 * Math.sin(theta)) +
-	    	    		"z";
-	    	  });
-	    	
-	    	// Execute the tick handler for each node
-	    	node.each(function (d) {
-	    		d.tickHandler(this, graph);
-	    	});
-	    });
+	    this.force.on("tick", this.tick);
 
 	    // Restart the force layout.
 	    this.force
-	    	.charge(-300)
+	    	.charge(function (d) { return d.charge; })
 	    	.linkDistance(function (d) { return d.length; })
 		    .size([this.w, this.h])
 		    .start();
@@ -193,6 +184,31 @@ function Graph() {
 	    	if(fixedMode)
 	    		nodes.forEach(setFixed);
 	    }, 7000);
+	};
+	
+	this.tick = function () {
+    	// Display the links
+    	path.attr("d", function(d) {
+    	    var dx = d.target.x - d.source.x,
+    	        dy = d.target.y - d.source.y,
+    	        dr = 0,										// Lines have no arc
+    	        theta = Math.atan2(dy, dx) + Math.PI * 2,
+    	        d90 = Math.PI / 2,
+    	        dtxs = d.target.x - d.target.r * Math.cos(theta),
+    	        dtys = d.target.y - d.target.r * Math.sin(theta),
+    	        arrowHeadWidth = 5;
+    	    return "M" + d.source.x + "," + d.source.y +
+    	    		"A" + dr + "," + dr + " 0 0 1," + d.target.x + "," + d.target.y +
+    	    		"A" + dr + "," + dr + " 0 0 0," + d.source.x + "," + d.source.y +
+    	    		"M" + dtxs + "," + dtys + "l" + (arrowHeadWidth * Math.cos(d90 - theta) - 10 * Math.cos(theta)) + "," + (-arrowHeadWidth * Math.sin(d90 - theta) - 10 * Math.sin(theta)) +
+    	    		"L" + (dtxs - arrowHeadWidth * Math.cos(d90 - theta) - 10 * Math.cos(theta)) + "," + (dtys + arrowHeadWidth * Math.sin(d90 - theta) - 10 * Math.sin(theta)) +
+    	    		"z";
+    	  });
+    	  
+    	// Execute the tick handler for each node
+    	node.each(function (d) {
+    		d.tickHandler(this, graph);
+    	});
 	};
 	
 	// Find a node by its id
