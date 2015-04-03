@@ -143,6 +143,8 @@ $(window).load(function() {
 			merge: function (modelName1, modelName2) {
 				alert("Merge: '" + modelName1 + "' and '" + modelName2 + "'");
 			},
+			
+			log: function () {}
 	};
 	
 	var mockReceiver = {
