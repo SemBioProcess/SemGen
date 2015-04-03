@@ -38,7 +38,11 @@ public class DependencyNode extends Node {
 		if(dataStructure.getComputation() != null) {
 			for(DataStructure input : dataStructure.getComputation().getInputs())
 			{
-				this.inputs.add(getName(input));
+				String inputName = getName(input);
+				
+				// Don't add self pointing links
+				if(!this.name.equals(inputName))
+					this.inputs.add(inputName);
 			}
 		}
 	}
