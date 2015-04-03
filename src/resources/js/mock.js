@@ -115,7 +115,7 @@ $(window).load(function() {
 					
 					mockReceiver.showSubmodelNetwork(modelName, data);
 				}
-				else if(task == "remove") {
+				else if(task == "close") {
 					mockReceiver.removeModel(modelName);
 				}
 				else if(task == "annotate" ||

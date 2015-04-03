@@ -18,7 +18,7 @@ function ModelPopover(node) {
 					"<li><a href='#' onclick='taskClicked(this);'>Merge</a></li>" +
 					"<li><a href='#' onclick='taskClicked(this);'>Annotate</a></li>" +
 					"<li><a href='#' onclick='taskClicked(this);'>Extract</a></li>" +
-					"<li><a href='#' onclick='taskClicked(this);'>Remove</a></li>" +
+					"<li><a href='#' onclick='taskClicked(this);'>Close</a></li>" +
 					"<li class='submenuContainer'>" +
 						"Visualize" +
 						"<ul>" +
