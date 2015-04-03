@@ -1,6 +1,6 @@
 startDirectory; C:\Users\Christopher\Dropbox\Semantic Project\PHNmerge
 maximize; false
-screensize; 950x780
+screensize; 950x600
 screenpos; 0x0
 autoAnnotate; true
 showImports; true
