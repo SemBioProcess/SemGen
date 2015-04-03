@@ -20,6 +20,7 @@ function Node(graph, name, parent, inputs, r, color, textSize, nodeType, charge)
 	this.inputs = inputs || [];
 	this.userCanHide = true;
 	this.hidden = false;
+	this.spaceBetweenTextAndNode = this.r * 0.2 + this.textSize;
 	
 	if(this.parent) {
 		// We need to keep the ids of each node unique by prefixing
@@ -138,8 +139,13 @@ Node.prototype.getLinks = function () {
 Node.prototype.tickHandler = function (element, graph) {
 	$(this).triggerHandler('preTick');
 	
+	// Don't let nodes overlap their parent labels
+	if(this.parent && this.y < this.parent.y)
+		this.y = this.parent.y;
+	
+	
 	this.x = Math.max(this.r, Math.min(graph.w - this.r, this.x));
-	this.y = Math.max(this.r, Math.min(graph.h - this.r, this.y));
+	this.y = Math.max(this.r + this.spaceBetweenTextAndNode, Math.min(graph.h - this.r, this.y));
 	
 	var root = d3.select(element);
 	root.attr("transform", "translate(" + this.x + "," + this.y + ")");
@@ -156,11 +162,11 @@ Node.prototype.getKeyInfo = function () {
 }
 
 Node.prototype.createTextElement = function (className) {
-	distanceFromNode = this.r * 0.2;
+	
 	this.rootElement.append("svg:text")
 		.attr("font-size", this.textSize + "px")
 	    .attr("x", 0)
-	    .attr("y", -this.textSize - distanceFromNode)
+	    .attr("y", -this.spaceBetweenTextAndNode)
 	    .text(this.displayName)
 	    .attr("class", className)
 	    .attr("text-anchor", "middle");
