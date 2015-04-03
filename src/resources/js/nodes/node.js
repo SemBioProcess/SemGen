@@ -128,7 +128,7 @@ Node.prototype.getLinks = function () {
 			source: inputNode,
 			target: this,
 			type: type,
-			length: type == "external" ? 200 : 80,
+			length: type == "external" ? 200 : 40,
 			value: 1,
 		});
 	}

@@ -19,9 +19,10 @@ function HiddenLabelNodeGenerator(anchorNode) {
 	// spread apart
 	var numHiddenNodesToCreate = 2 + Math.floor((anchorNode.name.length - 5) / 15);
 	var hiddenLabelNodes = [];
+	var hiddenNodeCharge = anchorNode.charge / numHiddenNodesToCreate;
 	for(var nodeNum = 0; nodeNum < numHiddenNodesToCreate; nodeNum++) {
 		var percentageFromLeftOfLabel = nodeNum / (numHiddenNodesToCreate - 1)
-		hiddenLabelNodes.push(new HiddenLabelNode(anchorNode, percentageFromLeftOfLabel))
+		hiddenLabelNodes.push(new HiddenLabelNode(anchorNode, percentageFromLeftOfLabel, hiddenNodeCharge))
 	}
 	
 	// Add hidden nodes when the anchor node is added to the graph

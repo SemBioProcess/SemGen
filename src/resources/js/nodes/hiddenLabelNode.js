@@ -2,10 +2,10 @@
  * Hidden nodes attached to labels to prevent labels and other nodes from overlapping
  */
 var ShowHiddenNodes = false;
-function HiddenLabelNode(anchorNode, percentageFromLeftOfLabel) {
+function HiddenLabelNode(anchorNode, percentageFromLeftOfLabel, charge) {
 	this.id = percentageFromLeftOfLabel + "HiddenLabelNodeFor" + anchorNode.id;
 	this.r = 5;
-	this.charge = -150;
+	this.charge = charge;
 	
 	// This node does not have any links
 	this.getLinks = function () {
