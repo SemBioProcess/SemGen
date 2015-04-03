@@ -186,6 +186,7 @@ public class StageWorkbench extends Workbench {
 		}
 		
 		/**
+		 * Print Javascript logs in Java
 		 * @param log
 		 */
 		public void onLog(String log) {
