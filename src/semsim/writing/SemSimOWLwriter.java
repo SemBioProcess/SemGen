@@ -352,10 +352,9 @@ public class SemSimOWLwriter extends ModelWriter {
 							"", anns, manager);
 				}
 				for(PhysicalEntity mediator : proc.getMediatorPhysicalEntities()){
-					Set<OWLAnnotation> anns = makeMultiplierAnnotation(mediator, proc.getMediatorStoichiometry(mediator));
-					SemSimOWLFactory.setIndObjectPropertyWithAnnotations(ont, singularPMCsAndUrisForDataStructures.get(proc).toString(),
+					SemSimOWLFactory.setIndObjectProperty(ont, singularPMCsAndUrisForDataStructures.get(proc).toString(),
 							singularPMCsAndUrisForDataStructures.get(mediator).toString(), SemSimConstants.HAS_MEDIATOR_URI.toString(),
-							"", anns, manager);
+							"", manager);
 				}
 			}
 		}

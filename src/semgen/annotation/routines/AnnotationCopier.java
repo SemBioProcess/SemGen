@@ -140,7 +140,7 @@ public class AnnotationCopier {
 			}
 			for(PhysicalEntity med : srcprocess.getMediatorPhysicalEntities()){
 				PhysicalEntity medentcopy = (PhysicalEntity) copyPhysicalModelComponent(targetmod, med);
-				((PhysicalProcess) pmccopy).addMediator(medentcopy, srcprocess.getMediatorStoichiometry(med));
+				((PhysicalProcess) pmccopy).addMediator(medentcopy);
 			}
 		}
 		return pmccopy;

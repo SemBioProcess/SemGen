@@ -160,7 +160,7 @@ public class CustomPhysicalComponentEditor extends SemGenDialog implements Prope
 						}
 						((PhysicalProcess)pmc).getMediators().clear();
 						for(Pair<PhysicalEntity, Double> pe : hasmediatoreditor.getTableData()){
-							((PhysicalProcess)pmc).addMediator(pe.getLeft(), pe.getRight());
+							((PhysicalProcess)pmc).addMediator(pe.getLeft());
 						}
 					}
 					workbench.compositeChanged();
@@ -170,8 +170,6 @@ public class CustomPhysicalComponentEditor extends SemGenDialog implements Prope
 				}
 			}
 			else pmc = null;
-			
-			
 			dispose();
 		}
 	}

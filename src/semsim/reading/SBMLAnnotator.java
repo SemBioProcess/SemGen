@@ -218,7 +218,7 @@ public class SBMLAnnotator {
 						PhysicalEntity mod = speciesandphysents.get(speciesmod);
 						if(pmc instanceof PhysicalProcess){
 							PhysicalProcess pmcp = (PhysicalProcess)pmc;
-							pmcp.addMediator(mod, rxn.getReactant(l).getStoichiometry());
+							pmcp.addMediator(mod);
 						}
 					}
 				}

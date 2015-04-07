@@ -7,7 +7,7 @@ import java.util.Set;
 public abstract class PhysicalProcess extends PhysicalModelComponent{
 	private LinkedHashMap<PhysicalEntity, Double> sources = new LinkedHashMap<PhysicalEntity, Double>();
 	private LinkedHashMap<PhysicalEntity, Double> sinks = new LinkedHashMap<PhysicalEntity, Double>();
-	private LinkedHashMap<PhysicalEntity, Double> mediators = new LinkedHashMap<PhysicalEntity, Double>();	
+	private Set<PhysicalEntity> mediators = new HashSet<PhysicalEntity>();	
 	
 	public void addSource(PhysicalEntity entity, Double stoichiometry){
 		sources.put(entity, stoichiometry);
@@ -17,8 +17,8 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 		sinks.put(entity, stoichiometry);
 	}
 	
-	public void addMediator(PhysicalEntity entity, Double stoichiometry){
-		mediators.put(entity, stoichiometry);
+	public void addMediator(PhysicalEntity entity){
+		mediators.add(entity);
 	}
 	
 	public Set<PhysicalEntity> getSourcePhysicalEntities(){
@@ -30,7 +30,7 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 	}
 	
 	public Set<PhysicalEntity> getMediatorPhysicalEntities(){
-		return mediators.keySet();
+		return mediators;
 	}
 
 	public void setSources(LinkedHashMap<PhysicalEntity, Double> sources) {
@@ -49,11 +49,11 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 		return sinks;
 	}
 
-	public void setMediators(LinkedHashMap<PhysicalEntity, Double> mediators) {
+	public void setMediators(Set<PhysicalEntity> mediators) {
 		this.mediators = mediators;
 	}
 
-	public LinkedHashMap<PhysicalEntity, Double> getMediators() {
+	public Set<PhysicalEntity> getMediators() {
 		return mediators;
 	}
 	
@@ -69,10 +69,6 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 		return sinks.get(entity);
 	}
 	
-	public Double getMediatorStoichiometry(PhysicalEntity entity) {
-		return mediators.get(entity);
-	}
-	
 	public void setStoichiometry(PhysicalEntity entity, Double stoich) {
 		getParticipantswithMultipliers().put(entity,stoich);
 	}
@@ -81,7 +77,6 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 		LinkedHashMap<PhysicalEntity, Double> allps = new LinkedHashMap<PhysicalEntity, Double>();
 		allps.putAll(getSources());
 		allps.putAll(getSinks());
-		allps.putAll(getMediators());
 		return allps;
 	}
 	

@@ -374,9 +374,7 @@ public class SemSimOWLreader extends ModelReader {
 			// Enter mediator info
 			for(String med : mediators){
 				PhysicalEntity medent = getPhysicalEntityFromURI(ont, URI.create(med));
-				Double m = getMultiplierForProcessParticipant(ont, processind, 
-						SemSimConstants.HAS_MEDIATOR_URI.toString(), med);
-				pproc.addMediator(medent, m);
+				pproc.addMediator(medent);
 			}
 		    
 			// Get the properties of the process represented in the model

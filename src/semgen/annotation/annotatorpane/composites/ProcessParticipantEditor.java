@@ -20,6 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableColumn;
 
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -98,6 +99,12 @@ public class ProcessParticipantEditor extends JPanel implements ActionListener, 
 		}
 		tablemod = new ProcessParticipantTableModel(temp);
 		table = new JTable(tablemod);
+		
+		// If we are showing the mediators, remove the multiplier field in the table
+		if(relation == SemSimConstants.HAS_MEDIATOR_RELATION){
+			TableColumn multcolumn = table.getColumn("Multiplier");
+			table.getColumnModel().removeColumn(multcolumn);
+		}
 		table.setFillsViewportHeight(false);
 	}
 	

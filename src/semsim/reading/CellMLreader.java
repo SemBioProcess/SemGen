@@ -701,8 +701,7 @@ public class CellMLreader extends ModelReader {
 						Resource mediatorres = (Resource) mediatorit.next();
 						Resource physentres = mediatorres.getPropertyResourceValue(CellMLbioRDFblock.hasphysicalentityreference);
 						PhysicalModelComponent mediatorpmc = getPMCfromRDFresourceAndAnnotate(physentres);
-						Literal multiplier = mediatorres.getProperty(CellMLbioRDFblock.hasmultiplier).getObject().asLiteral();
-						process.addMediator((PhysicalEntity) mediatorpmc, multiplier.getDouble());
+						process.addMediator((PhysicalEntity) mediatorpmc);
 					}
 				}
 			}
