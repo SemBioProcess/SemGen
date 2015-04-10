@@ -93,7 +93,7 @@ public class AnnotationCopier {
 					
 					ds.copyDescription(srcds);
 					ds.copySingularAnnotations(srcds);
-					copyCompositeAnnotation(targetmod, sourcemod, srcds, ds);
+					copyCompositeAnnotation(targetmod, sourcemod, ds, srcds);
 					
 				} // otherwise no matching data structure found in source model
 			} // end of data structure loop
@@ -207,19 +207,21 @@ public class AnnotationCopier {
 		return changemadetosubmodels;
 	}
 	
-	public static void copyCompositeAnnotation(SemSimModel targetmod, SemSimModel sourcemod, DataStructure srcds, DataStructure ds) {		
-		if(srcds.getPhysicalProperty().hasRefersToAnnotation()){
-			ds.getPhysicalProperty().removeAllReferenceAnnotations();
-			ReferenceOntologyAnnotation roa = srcds.getPhysicalProperty().getFirstRefersToReferenceOntologyAnnotation();
-			ds.getPhysicalProperty().addReferenceOntologyAnnotation(roa.getRelation(), roa.getReferenceURI(), roa.getValueDescription());
+	public static void copyCompositeAnnotation(SemSimModel targetmod, SemSimModel sourcemod, DataStructure targetds, DataStructure sourceds) {
+		
+		targetds.getPhysicalProperty().removeAllReferenceAnnotations();
+
+		if(sourceds.getPhysicalProperty().hasRefersToAnnotation()){
+			ReferenceOntologyAnnotation roa = sourceds.getPhysicalProperty().getFirstRefersToReferenceOntologyAnnotation();
+			targetds.getPhysicalProperty().addReferenceOntologyAnnotation(roa.getRelation(), roa.getReferenceURI(), roa.getValueDescription());
 		}
-		PhysicalModelComponent srcpropof = srcds.getPhysicalProperty().getPhysicalPropertyOf();
+		PhysicalModelComponent srcpropof = sourceds.getPhysicalProperty().getPhysicalPropertyOf();
 		
 		// If we're just copying a composite annotation within the same model...
 		if(targetmod==sourcemod) {
-			ds.getPhysicalProperty().setPhysicalPropertyOf(srcpropof);
-			if (!srcds.getPhysicalProperty().hasRefersToAnnotation()) {
-				ds.getPhysicalProperty().removeAllReferenceAnnotations();
+			targetds.getPhysicalProperty().setPhysicalPropertyOf(srcpropof);
+			if (!sourceds.getPhysicalProperty().hasRefersToAnnotation()) {
+				targetds.getPhysicalProperty().removeAllReferenceAnnotations();
 			}
 		}
 
@@ -228,10 +230,10 @@ public class AnnotationCopier {
 			try{
 				// If there is a property_of specified
 				if(srcpropof!=null)
-					ds.getPhysicalProperty().setPhysicalPropertyOf(copyPhysicalModelComponent(targetmod, srcpropof));
+					targetds.getPhysicalProperty().setPhysicalPropertyOf(copyPhysicalModelComponent(targetmod, srcpropof));
 				
 				// otherwise there is no specified target for the physical property
-				else ds.getPhysicalProperty().setPhysicalPropertyOf(null);
+				else targetds.getPhysicalProperty().setPhysicalPropertyOf(null);
 			} catch (CloneNotSupportedException e) {
 				e.printStackTrace();
 			}
