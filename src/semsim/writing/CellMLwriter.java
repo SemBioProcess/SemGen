@@ -328,7 +328,7 @@ public class CellMLwriter extends ModelWriter {
 			for(DataStructure ds : submodel.getAssociatedDataStructures()){
 				Element variable = new Element("variable", mainNS);
 				
-				String initialval = null;
+				String initialval = ds.getStartValue();  // Overwritten later by getCellMLintialValue if ds is CellML-type variable
 				
 				String publicintval = null;
 				String privateintval = null;
@@ -338,18 +338,19 @@ public class CellMLwriter extends ModelWriter {
 				if(nameval.contains("."))
 					nameval = nameval.substring(nameval.indexOf(".")+1);
 				
+				// If the Data Structure is a CellML-type variable
 				if(ds instanceof MappableVariable){
 					MappableVariable cellmlvar = (MappableVariable)ds;
 					initialval = cellmlvar.getCellMLinitialValue();
 					publicintval = cellmlvar.getPublicInterfaceValue();
 					privateintval = cellmlvar.getPrivateInterfaceValue();
-					
-					if(ds.getComputation()!=null){
-						if(ds.getComputation().getInputs().isEmpty()){
-							String code = ds.getComputation().getComputationalCode();
-							if(code!=null)
-								initialval = code.substring(code.indexOf("=")+1).trim();
-						}
+				}
+				// Otherwise, if the variable is a static parameter, get the value and store it as the initial_value
+				else if(ds.getComputation()!=null){
+					if(ds.getComputation().getInputs().isEmpty()){
+						String code = ds.getComputation().getComputationalCode();
+						if(code!=null)
+							initialval = code.substring(code.indexOf("=")+1).trim();
 					}
 				}
 				

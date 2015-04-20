@@ -156,6 +156,7 @@ public class SemSimOWLreader extends ModelReader {
 						// If it's not a CellML-type variable
 						if(SemSimOWLFactory.getIndDatatypeProperty(ont, dsind, SemSimConstants.CELLML_COMPONENT_PUBLIC_INTERFACE_URI.toString()).isEmpty()
 								&& SemSimOWLFactory.getIndDatatypeProperty(ont, dsind, SemSimConstants.CELLML_COMPONENT_PRIVATE_INTERFACE_URI.toString()).isEmpty()
+								&& SemSimOWLFactory.getIndDatatypeProperty(ont, dsind, SemSimConstants.CELLML_INITIAL_VALUE_URI.toString()).isEmpty()
 								&& SemSimOWLFactory.getIndObjectProperty(ont, dsind, SemSimConstants.MAPPED_TO_URI.toString()).isEmpty()
 								&& !SemSimOWLFactory.getIndObjectProperty(ont, dsind, SemSimConstants.IS_OUTPUT_FOR_URI.toString()).isEmpty()){
 							ds = semsimmodel.addDataStructure(new Decimal(name));
@@ -201,7 +202,7 @@ public class SemSimOWLreader extends ModelReader {
 						ds.addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, URI.create(referstovalds), label);
 					}
 					
-					// If a CellML-type variable, get interface values
+					// If a CellML-type variable, get interface values and initial value
 					if(ds instanceof MappableVariable){
 						String pubint = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, dsind, SemSimConstants.CELLML_COMPONENT_PUBLIC_INTERFACE_URI.toString());
 						String privint = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, dsind, SemSimConstants.CELLML_COMPONENT_PRIVATE_INTERFACE_URI.toString());
@@ -209,7 +210,7 @@ public class SemSimOWLreader extends ModelReader {
 						if(!pubint.equals("")) ((MappableVariable)ds).setPublicInterfaceValue(pubint);
 						if(!privint.equals("")) ((MappableVariable)ds).setPrivateInterfaceValue(privint);
 						
-						String initval = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, dsind, SemSimConstants.HAS_START_VALUE_URI.toString());
+						String initval = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, dsind, SemSimConstants.CELLML_INITIAL_VALUE_URI.toString());
 						if(initval!=null && !initval.equals("")) ((MappableVariable)ds).setCellMLinitialValue(initval);
 					}
 					
@@ -474,8 +475,8 @@ public class SemSimOWLreader extends ModelReader {
 				}
 				
 				// Associate data structures with the model submodel
-				for(String ds : dss){
-					DataStructure theds = semsimmodel.getDataStructure(SemSimOWLFactory.getURIdecodedFragmentFromIRI(ds));
+				for(String dsname : dss){
+					DataStructure theds = semsimmodel.getDataStructure(SemSimOWLFactory.getURIdecodedFragmentFromIRI(dsname));
 					sssubmodel.addDataStructure(theds);
 					
 					// white box the equations
@@ -493,6 +494,13 @@ public class SemSimOWLreader extends ModelReader {
 									XMLOutputter xmloutputter = new XMLOutputter();
 									theds.getComputation().setMathML(xmloutputter.outputString(varmathml));
 									CellMLreader.whiteBoxFunctionalSubmodelEquations(varmathml, subname, semsimmodel, theds);
+									
+									// Check if variable is solved using ODE, and is a CellML-type variable, set startValue to CellML intial value.
+									Boolean ode = CellMLreader.isSolvedbyODE(localvarname, mathmllist);
+									if(ode && (theds instanceof MappableVariable)){
+										MappableVariable mv = (MappableVariable)theds;
+										mv.setStartValue(mv.getCellMLinitialValue());
+									}
 								}
 							}
 						} catch (JDOMException | IOException e) {

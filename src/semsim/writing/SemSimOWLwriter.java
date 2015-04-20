@@ -212,7 +212,6 @@ public class SemSimOWLwriter extends ModelWriter {
 			SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimConstants.IS_SOLUTION_DOMAIN_URI.toString(), ds.isSolutionDomain(), manager);
 			SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimConstants.IS_DISCRETE_URI.toString(), ds.isDiscrete(), manager);
 			SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimConstants.IS_DECLARED_URI.toString(), ds.isDeclared(), manager);
-			SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimConstants.HAS_START_VALUE_URI.toString(), ds.getStartValue(), manager);
 			SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimConstants.METADATA_ID_URI.toString(), ds.getMetadataID(), manager);
 			
 			// Assert CellML-type mappings between data structures
@@ -222,8 +221,9 @@ public class SemSimOWLwriter extends ModelWriter {
 					if(localdss.contains(var))
 						SemSimOWLFactory.setIndObjectProperty(ont, dsuri, varuri, SemSimConstants.MAPPED_TO_URI.toString(), "", manager);
 				}
-				// Set CellML initial value - IS THIS THE RIGHT THING TO DO?
-				SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimConstants.HAS_START_VALUE_URI.toString(),
+				
+				// Set CellML initial value
+				SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimConstants.CELLML_INITIAL_VALUE_URI.toString(),
 						((MappableVariable)ds).getCellMLinitialValue(), manager);
 				
 				// Set the interface values
@@ -235,6 +235,11 @@ public class SemSimOWLwriter extends ModelWriter {
 				if(privint!=null) SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimConstants.CELLML_COMPONENT_PRIVATE_INTERFACE_URI.toString(),
 						privint, manager);
 			}
+			
+			// If not a CellML-type variable, store startValue info
+			else 
+				SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimConstants.HAS_START_VALUE_URI.toString(), ds.getStartValue(), manager);
+
 			
 			// Create physical entity and physical process individuals, link to properties
 			if(ds.hasPhysicalProperty()){

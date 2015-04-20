@@ -279,6 +279,7 @@ public class MMLwriter extends ModelWriter{
 		}
 		output = output.concat("-------------------------------\n");
 		output = output.concat("*/\n");
+		System.out.println(output);
 		return output;
 
 	}
