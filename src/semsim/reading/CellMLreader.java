@@ -176,17 +176,31 @@ public class CellMLreader extends ModelReader {
 				String prefix = unitfactor.getAttributeValue("prefix");
 				String exponent = unitfactor.getAttributeValue("exponent");
 				
+				double exp = (exponent==null) ? 1.0 : Double.parseDouble(exponent);
+				
 				UnitOfMeasurement baseuom = semsimmodel.getUnit(baseunits);
 				if(baseuom==null){
 					baseuom = new UnitOfMeasurement(baseunits);
-					baseuom.setFundamental(true);
+					if(sslib.isCellMLBaseUnit(baseuom.getName())) {
+						baseuom.setFundamental(true);
+					}
 					semsimmodel.addUnit(baseuom);
+					uom.addUnitFactor(new UnitFactor(baseuom, exp, prefix));
 				}
-				double exp = (exponent==null) ? 1.0 : Double.parseDouble(exponent);
-				uom.addUnitFactor(new UnitFactor(baseuom, exp, prefix));
+				// Break down base units that aren't fundamental CellML units.
+				else if(!baseuom.isFundamental()) {
+					UnitOfMeasurement parentuom = semsimmodel.getUnit(baseuom.getName());
+					for(UnitFactor factor : parentuom.getUnitFactors()) {
+						uom.addUnitFactor(new UnitFactor(factor.getBaseUnit(), exp*factor.getExponent(), factor.getPrefix()));
+					}
+				}
+				else {
+					uom.addUnitFactor(new UnitFactor(baseuom, exp, prefix));
+				}
+				
 			}
 		}
-		
+
 		// Iterate through all the components, create new members of the SemSim "Submodel" class as we go
 		Iterator<?> componentit = doc.getRootElement().getChildren("component", mainNS).iterator();
 		while(componentit.hasNext()){
