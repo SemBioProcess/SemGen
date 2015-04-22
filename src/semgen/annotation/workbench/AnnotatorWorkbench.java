@@ -39,7 +39,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	private boolean modelsaved = true;
 	private int lastsavedas = -1;
 	private String ontspref;
-	public static enum modeledit {compositechanged}
+	public static enum modeledit {compositechanged, modelimport}
 	
 	public AnnotatorWorkbench(File file, SemSimModel model) {
 		semsimmodel = model;
@@ -187,6 +187,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	public void importModelAnnotations() {
 		AnnotationCopier copier = new AnnotationCopier(semsimmodel);
 		if (copier.doCopy()) {
+			setModelSaved(false);
 			setChanged();
 			notifyObservers();
 		}

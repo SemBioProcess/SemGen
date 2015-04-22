@@ -95,6 +95,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 		super(bench.getCurrentModelName(), SemGenIcon.annotatoricon, "Annotating " + bench.getCurrentModelName(), sets, gacts);
 		workbench = bench;
 		sourcefile = workbench.getFile();
+		workbench.addObserver(this);
 		workbench.addObservertoModelAnnotator(this);
 	}
 	
@@ -653,7 +654,7 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 
 	public boolean closeTab() {
 		return workbench.unsavedChanges();
-}
+	}
 
 	@Override
 	public boolean isSaved() {

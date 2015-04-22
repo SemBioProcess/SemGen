@@ -481,7 +481,7 @@ public class CellMLreader extends ModelReader {
 		if(doc.getRootElement()!=null){
 			String name = doc.getRootElement().getAttributeValue("name");
 			String id = doc.getRootElement().getAttributeValue("id", CellMLconstants.cmetaNS);
-			if(name!=null && !name.equals("")) semsimmodel.setModelAnnotation(Metadata.fullname, id);
+			if(name!=null && !name.equals("")) semsimmodel.setModelAnnotation(Metadata.fullname, name);
 			if(id!=null && !id.equals("")) semsimmodel.setModelAnnotation(Metadata.sourcemodelid, id);
 			
 			// Try to get pubmed ID from RDF tags
