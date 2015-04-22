@@ -25,7 +25,7 @@ import semsim.webservices.UniProtSearcher;
 public class ReferenceTermNamer {
 	
 	public static final String BioPortalOBOlibraryPrefix = "http://purl.obolibrary.org/obo/";
-	public static final String BioPortalFMAnamespace = "http://sig.uw.edu/fma#";
+	public static final String BioPortalFMAnamespace = "http://purl.org/sig/ont/fma/";
 	public static final String BioPortalSNOMEDCTnamespace = "http://purl.bioontology.org/ontology/SNOMEDCT/";
 	public static final String BioPortalECGontNamespace = "http://www.cvrgrid.org/files/ECGOntologyv1.owl#";
 	
@@ -107,7 +107,7 @@ public class ReferenceTermNamer {
 			if(KBname.equals(SemSimConstants.FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME)){
 				String bioportalontID = SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.get(KBname);
 				String edittedid = id.replace("FMA%3A", "");
-				edittedid = id.replace("FMA:", "FMA_");
+				edittedid = id.replace("FMA:", "fma");
 				edittedid = SemSimOWLFactory.URIencoding(BioPortalFMAnamespace + edittedid);
 
 				name = getRDFLabelUsingBioPortal(edittedid, bioportalontID);

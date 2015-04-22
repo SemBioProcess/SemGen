@@ -259,7 +259,10 @@ public class CellMLreader extends ModelReader {
 				if(privateinterface!=null) cvar.setPrivateInterfaceValue(privateinterface);
 				
 				String initval = var.getAttributeValue("initial_value");
-				// CHANGE THIS?  What is scope of initial value?
+				
+				// Set the CellML initial value (in CellML this can be used to set an
+				// initial condition for an ODE or the value of a static constant. The 
+				// SemSim DataStructure.startValue is only for initial conditions.)
 				if(initval!=null) cvar.setCellMLinitialValue(initval);
 
 				cvar.setPhysicalProperty(new PhysicalProperty());
@@ -666,14 +669,16 @@ public class CellMLreader extends ModelReader {
 			if(isannres!=null){
 				
 				// If an identifiers.org OPB namespace was used, replace it with the OPB's
-				String tempuri = isannres.getURI();
-				if(!isannres.getURI().startsWith(SemSimConstants.OPB_NAMESPACE)){
-					tempuri = isannres.getURI();
-					String frag = SemSimOWLFactory.getIRIfragment(tempuri);
-					tempuri = SemSimConstants.OPB_NAMESPACE + frag;
-				}
+//				String tempuri = isannres.getURI();
+//				if(!isannres.getURI().startsWith(SemSimConstants.OPB_NAMESPACE)){
+//					tempuri = isannres.getURI();
+//					String frag = SemSimOWLFactory.getIRIfragment(tempuri);
+//					tempuri = SemSimConstants.OPB_NAMESPACE + frag;
+//				}
+				
+				String uristring = isannres.getURI();
 				cvar.getPhysicalProperty().addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, 
-					URI.create(tempuri), tempuri);
+					URI.create(uristring), uristring);
 			}
 
 			getPMCfromRDFresourceAndAnnotate(physpropres);

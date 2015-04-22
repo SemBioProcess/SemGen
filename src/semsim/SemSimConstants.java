@@ -310,6 +310,7 @@ public class SemSimConstants {
 		aMap1.put("http://purl.org/sig/ont/fma/", FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME);
 		aMap1.put("http://sig.biostr.washington.edu/fma3.0#", FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME);
 		aMap1.put("http://sig.uw.edu/fma#", FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME);
+		aMap1.put("http://identifiers.org/fma/", FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME);
 		aMap1.put("http://purl.org/obo/owl/GO#", GENE_ONTOLOGY_FULLNAME);
 		aMap1.put("http://purl.obolibrary.org/obo/GO", GENE_ONTOLOGY_FULLNAME);
 		aMap1.put("urn:miriam:obo.go:", GENE_ONTOLOGY_FULLNAME);
@@ -337,6 +338,7 @@ public class SemSimConstants {
 		aMap1.put("http://purl.obolibrary.org/obo/CMO", CLINICAL_MEASUREMENT_ONTOLOGY_FULLNAME);
 		aMap1.put("http://purl.uniprot.org/uniprot/", UNIPROT_FULLNAME);
 		aMap1.put("http://identifiers.org/uniprot/", UNIPROT_FULLNAME);
+		aMap1.put("http://www.uniprot.org/uniprot/", UNIPROT_FULLNAME);
 		aMap1.put("http://purl.org/obo/owl/DOID#", HUMAN_DISEASE_ONTOLOGY_FULLNAME);
 		aMap1.put("http://purl.bioontology.org/ontology/MA", MOUSE_ADULT_GROSS_ANATOMY_ONTOLOGY_FULLNAME);
 		aMap1.put("http://purl.org/obo/owl/MA#", MOUSE_ADULT_GROSS_ANATOMY_ONTOLOGY_FULLNAME);

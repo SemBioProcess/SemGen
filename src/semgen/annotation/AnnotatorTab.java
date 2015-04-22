@@ -226,10 +226,9 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 			} 
 	}
 
-	public void addPanelTitle(String type, int totalcount, int displayedcount, SemGenScrollPane scrollpane, String zerocountmsg) {
+	public void addPanelTitle(String type, int totalcount, SemGenScrollPane scrollpane, String zerocountmsg) {
 		scrollpane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.gray), 
-				type + "(" + totalcount + " total, " + displayedcount + " editable)", 
-				TitledBorder.CENTER, TitledBorder.TOP, SemGenFont.defaultBold(2)));
+				type + "(" + totalcount + ")", TitledBorder.CENTER, TitledBorder.TOP, SemGenFont.defaultBold(2)));
 		if (totalcount == 0 && type.equals("Codeword ")) {
 			scrollpane.getViewport().add(new JLabel(zerocountmsg));
 		} 
@@ -301,10 +300,10 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	
 	public void AlphabetizeAndSetCodewords(){
 		codewordpanel.removeAll();
-		int numcdwdsshowing = updateCodewordButtonTable();
+		updateCodewordButtonTable();
 		ArrayList<AnnotationObjectButton> aoblist = getAnnotationObjectButtonArray(codewordbuttontable);
 		
-		addPanelTitle("Codewords ", aoblist.size(), numcdwdsshowing, codewordscrollpane, "No codewords or dependencies found");
+		addPanelTitle("Codewords ", aoblist.size(), codewordscrollpane, "No codewords or dependencies found");
 		if(settings.organizeByCompositeCompleteness()) setCodewordsbyAnnCompleteness(aoblist);
 		if(settings.organizeByPropertyType()) setCodewordsbyMarker(aoblist);
 		
@@ -384,12 +383,12 @@ public class AnnotatorTab extends SemGenTab implements ActionListener, MouseList
 	}
 	
 	public void AlphabetizeAndSetSubmodels(){
-		int numsubshowing = updateSubmodelButtonTable();
+		updateSubmodelButtonTable();
 		submodelpanel.removeAll();
 		int numcomponents = workbench.getSemSimModel().getSubmodels().size();
 		
 		// First put all the codeword buttons in an array so they can be sorted
-		addPanelTitle("Sub-models ", numcomponents, numsubshowing, submodelscrollpane, "No sub-models found");
+		addPanelTitle("Sub-models ", numcomponents, submodelscrollpane, "No sub-models found");
 		JPanel componentaddremovepanel = new JPanel();
 		componentaddremovepanel.setOpaque(false);
 		componentaddremovepanel.setLayout(new BoxLayout(componentaddremovepanel, BoxLayout.X_AXIS));
