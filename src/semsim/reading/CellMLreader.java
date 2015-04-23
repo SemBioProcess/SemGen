@@ -920,7 +920,7 @@ public class CellMLreader extends ModelReader {
 					String inputname = compname + "." + conel.getText().trim();
 					
 					// If the input and output are not the same DataStructure...
-					if(! inputname.equalsIgnoreCase(cvar.getName())){
+					if(! inputname.equals(cvar.getName())){
 						DataStructure inputds = null;
 						
 						// If the input is actually in the model...
