@@ -23,6 +23,7 @@ import javax.swing.Box;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.Icon;
 import javax.swing.JComboBox;
+import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -85,6 +86,8 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 		this.smc = smc;
 		this.setBackground(new Color(207, 215, 252));
 		
+		setLayout(new BorderLayout());
+
 		Boolean editable = annpanel.thebutton.editable;
 		
 		combobox.setPreferredSize(new Dimension(350,30));
@@ -101,7 +104,6 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 		if(smc.hasRefersToAnnotation())
 			urlbutton.setTermURI(smc.getFirstRefersToReferenceOntologyAnnotation().getReferenceURI());
 		
-		setLayout(new BorderLayout());
 		JPanel itempanel = new JPanel();
 		itempanel.setBackground(SemGenSettings.lightblue);
 		itempanel.add(combobox);
@@ -189,7 +191,19 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 			stringlist.add(0,SemSimModel.unspecifiedName);
 			listdataandsmcmap.put(SemSimModel.unspecifiedName, null);
 		}
-		else if(smc instanceof PhysicalProcess) combobox.setFont(SemGenFont.defaultItalic());
+		else if(smc instanceof PhysicalProcess){
+			combobox.setFont(SemGenFont.defaultItalic());
+			
+			// Show process participants
+			String participantstring = getParticipantsString((PhysicalProcess)smc);
+			JEditorPane ptextpane = new JEditorPane("text/html",participantstring);
+			ptextpane.setOpaque(false);
+			//ptextpane.setBackground(SemGenSettings.lightblue);
+			ptextpane.setBackground(new Color(0,0,0,0));
+			ptextpane.setFont(SemGenFont.defaultPlain(-2));
+			ptextpane.setBorder(BorderFactory.createEmptyBorder(3, 30, 3, 0));
+			add(ptextpane, BorderLayout.SOUTH);
+		}
 		
 		String[] stringarray = stringlist.toArray(new String[]{});
 		String text = null;
@@ -550,5 +564,21 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 		}
 	}
 	
+	// Create string indicating the participants in the process
+	public String getParticipantsString(PhysicalProcess proc){
+		String pstring = "<html><body>";
+		
+		for(PhysicalEntity source : proc.getSourcePhysicalEntities()){
+			pstring = pstring + "<b>Source:</b> " + source.getName() + "<br>";
+		}
+		for(PhysicalEntity sink : proc.getSinkPhysicalEntities()){
+			pstring = pstring + "<b>Sink:</b> " + sink.getName() + "<br>";
+		}
+		for(PhysicalEntity med : proc.getMediatorPhysicalEntities()){
+			pstring = pstring + "<b>Mediator:</b> " + med.getName() + "<br>";
+		}
+		
+		return pstring + "</body></html>";
+	}
 
 }
