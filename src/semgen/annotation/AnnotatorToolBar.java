@@ -129,14 +129,12 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		
 		if (o == annotateitemshowmarkers){
 			settings.toggleDisplayMarkers();
-
 			annotateitemshowmarkers.setIcon(displayIcontoUse());
 		}
 	
 		if(o == annotateitemshowimports){
 			// Set visbility of imported codewords and submodels
 			settings.toggleShowImports();
-
 		}
 		
 		if(o == annotateitemtreeview){
@@ -165,7 +163,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		
 		if (o == annotateitemaddrefterm) {
 
-			} 
+		} 
 		
 		if (o == annotateitemremoverefterm) {
 				Set<PhysicalModelComponent> pmcs = new HashSet<PhysicalModelComponent>();
@@ -197,6 +195,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		public SortSelectionListener(SemGenSettings sets) {
 			settings =sets;
 		}
+		
 		@Override
 		public void itemStateChanged(ItemEvent arg0) {
 			String obj = sortselector.getLastSelectedItem();

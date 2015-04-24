@@ -67,6 +67,7 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 		workbench = bench;
 		sourcefile = workbench.getFile();
 		workbench.addObserver(this);
+		settings.addObserver(this);
 		workbench.addObservertoModelAnnotator(this);
 	}
 	
@@ -87,6 +88,7 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 		annotatorscrollpane.getViewport().setBackground(SemGenSettings.lightblue);
 
 		cwpane = new CodewordListPane(workbench, settings);
+		smpane = new SubmodelListPane(workbench, settings);
 		
 		swsplitpane  = new JSplitPane(JSplitPane.VERTICAL_SPLIT, cwpane, smpane);
 		swsplitpane.setOneTouchExpandable(true);
@@ -102,10 +104,6 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 		
 		NewAnnotatorAction();
 	}
-	//Required to add the application menu as an observer
-	public void addObservertoWorkbench(Observer obs) {
-		workbench.addObserver(obs);
-	}
 	
 	// --------------------------------//
 	// METHODS
@@ -113,8 +111,7 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 	
 	public void NewAnnotatorAction(){
 		SemGen.logfilewriter.println("Started new annotater");
-		refreshAnnotatableElements();
-
+		
 		add(toolbar, BorderLayout.NORTH);
 		add(splitpane, BorderLayout.CENTER);
 		setVisible(true);
@@ -126,15 +123,12 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 		swsplitpane.setDividerLocation((int)(inihloc)/2);
 		westsplitpane.setDividerLocation((int)(inihloc)/6);
 		
-		//Dimension topmaxsize = westsplitpane.getTopComponent().getMaximumSize();
-		//westsplitpane.getBottomComponent().setMinimumSize(new Dimension(0, inihloc-topmaxsize.height));
-		//splitpane.getRightComponent().setMinimumSize(new Dimension(initwidth-iniwloc,0));
-		
 		cwpane.scrollToTop();
 		smpane.scrollToTop();
 		
 		// If we are hiding the imported codewords, select the first one that is editable
-
+		changeComponentView();
+		showSelectAnnotationObjectMessage();
 	}
 
 	private void subModelSelected() {
@@ -153,6 +147,16 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 		annotatorscrollpane.setViewportView(modelmetadataeditor);
 	}
 	
+	private void changeComponentView() {
+		if (settings.useTreeView()) {
+			westsplitpane.setBottomComponent(treeviewscrollpane);
+		}
+		else {
+			toolbar.enableSort(true);
+			westsplitpane.setBottomComponent(swsplitpane);
+		}
+	}
+	
 	public void annotationObjectAction() {
 		annotatorscrollpane.setViewportView(annotatorpane);
 		annotatorscrollpane.scrollToTop();
@@ -163,15 +167,11 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 		int divLoc = splitpane.getDividerLocation();
 		if(divLoc==-1)
 			divLoc = (int)(settings.getAppWidth())/4;
-		
-			toolbar.enableSort(true);
-			westsplitpane.setBottomComponent(swsplitpane);
-		
 
 		splitpane.setDividerLocation(divLoc);
 	}
 
-	public void showSelectAnnotationObjectMessage(){
+	private void showSelectAnnotationObjectMessage(){
 		annotatorscrollpane.getViewport().removeAll();
 		JPanel panel = new JPanel(new BorderLayout());
 		JLabel label = new JLabel("Select a codeword or submodel to view annotations");

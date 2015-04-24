@@ -52,7 +52,6 @@ import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.FunctionalSubmodel;
 import semsim.model.physical.object.PhysicalProperty;
-import semsim.owl.SemSimOWLFactory;
 import semsim.writing.CellMLbioRDFblock;
 
 public class CellMLreader extends ModelReader {

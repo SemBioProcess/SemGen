@@ -365,11 +365,6 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 	}
 
 	@Override
-	public void addObservertoWorkbench(Observer obs) {
-		workbench.addObserver(obs);
-	}
-
-	@Override
 	public void update(Observable o, Object arg) {
 		if (arg == MergeEvent.threemodelerror) {
 			SemGenError.showError("Currently, SemGen can only merge two models at a time.", "Too many models");

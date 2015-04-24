@@ -1,8 +1,6 @@
 package semgen.stage;
 
 import java.awt.BorderLayout;
-import java.util.Observer;
-
 import javax.naming.InvalidNameException;
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import semgen.GlobalActions;
@@ -72,12 +70,6 @@ public class StageTab extends SemGenTab {
 
 	@Override
 	public void requestSaveAs() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void addObservertoWorkbench(Observer obs) {
 		// TODO Auto-generated method stub
 
 	}

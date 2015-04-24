@@ -21,6 +21,7 @@ import semsim.utilities.ResourcesManager;
  * be made for an object's private use.
  */
 public class SemGenSettings extends Observable{
+	private enum SettingChange {toggletree, showimports, cwsort, toggleproptype}
 	public static SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmssSSSZ");
 	public static SimpleDateFormat sdflog = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
 	public Hashtable<String, String[]> startsettingstable;
@@ -150,26 +151,36 @@ public class SemGenSettings extends Observable{
 	public void toggleCompositeCompleteness() {
 		Boolean tog = !organizeByCompositeCompleteness();
 		startsettingstable.put("sortbyCompositeCompleteness", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.cwsort);
 	}
 	
 	public void toggleByPropertyType() {
 		Boolean tog = !organizeByPropertyType();
 		startsettingstable.put("organizeByPropertyType", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.cwsort);
 	}
 	
 	public void toggleDisplayMarkers() {
 		Boolean tog = !useDisplayMarkers();
 		startsettingstable.put("displayMarkers", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.toggleproptype);
 	}
 	
 	public void toggleTreeView() {
 		Boolean tog = !useTreeView();
 		startsettingstable.put("treeView", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.toggletree);
 	}
 	
 	public void toggleShowImports() {
 		Boolean tog = !showImports();
 		startsettingstable.put("showImports", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.showimports);
 	}
 	
 	public void toggleAutoAnnotate(Boolean tog) {
@@ -178,22 +189,32 @@ public class SemGenSettings extends Observable{
 	
 	public void toggleCompositeCompleteness(Boolean tog) {
 		startsettingstable.put("sortbyCompositeCompleteness", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.cwsort);
 	}
 	
 	public void toggleByPropertyType(Boolean tog) {
 		startsettingstable.put("organizeByPropertyType", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.cwsort);
 	}
 	
 	public void toggleDisplayMarkers(Boolean tog) {
 		startsettingstable.put("displayMarkers", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.toggleproptype);
 	}
 	
 	public void toggleTreeView(Boolean tog) {
 		startsettingstable.put("treeView", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.toggletree);
 	}
 	
 	public void toggleShowImports(Boolean tog) {
 		startsettingstable.put("showImports", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.showimports);
 	}
 	public String getHelpURL() {
 		return startsettingstable.get("helpURL")[0];

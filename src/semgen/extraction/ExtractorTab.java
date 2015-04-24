@@ -14,7 +14,6 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Observer;
 import java.util.Set;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
@@ -986,11 +985,4 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		}
 		return null;
 	}
-
-	@Override
-	public void addObservertoWorkbench(Observer obs) {
-
-	}
-
-
 }
