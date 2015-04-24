@@ -1,4 +1,4 @@
-package semsim;
+package semsim.utilities;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;

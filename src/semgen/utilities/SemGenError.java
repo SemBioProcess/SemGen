@@ -11,8 +11,8 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import semsim.ErrorLog;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.utilities.ErrorLog;
 
 public class SemGenError {
 	private static JFrame parent = null;

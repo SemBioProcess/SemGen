@@ -27,9 +27,9 @@ import javax.swing.Painter;
 
 import semgen.SemGenSettings;
 import semgen.annotation.AnnotatorTab;
-import semgen.annotation.componentlistpanes.AnnotationObjectButton;
-import semgen.annotation.componentlistpanes.codewords.CodewordButton;
-import semgen.annotation.componentlistpanes.submodels.SubmodelButton;
+import semgen.annotation.componentlistpanes.buttons.AnnotationObjectButton;
+import semgen.annotation.componentlistpanes.buttons.CodewordButton;
+import semgen.annotation.componentlistpanes.buttons.SubmodelButton;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;

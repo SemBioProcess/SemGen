@@ -24,7 +24,6 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import semsim.SemSimConstants;
 import semsim.SemSimLibrary;
-import semsim.SemSimUtil;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.StructuralRelation;
@@ -47,6 +46,7 @@ import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.owl.SemSimOWLFactory;
+import semsim.utilities.SemSimUtil;
 
 public class SemSimOWLwriter extends ModelWriter {
 	public OWLOntologyManager manager = OWLManager.createOWLOntologyManager();

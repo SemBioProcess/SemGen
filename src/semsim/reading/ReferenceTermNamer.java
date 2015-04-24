@@ -17,10 +17,10 @@ import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.SemSimModel;
 import semsim.owl.SemSimOWLFactory;
-import semsim.webservices.BioPortalConstants;
-import semsim.webservices.BioPortalSearcher;
-import semsim.webservices.KEGGsearcher;
-import semsim.webservices.UniProtSearcher;
+import semsim.utilities.webservices.BioPortalConstants;
+import semsim.utilities.webservices.BioPortalSearcher;
+import semsim.utilities.webservices.KEGGsearcher;
+import semsim.utilities.webservices.UniProtSearcher;
 
 public class ReferenceTermNamer {
 	

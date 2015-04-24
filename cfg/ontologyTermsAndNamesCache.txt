@@ -11,8 +11,8 @@ http://identifiers.org/chebi/CHEBI:16761; ADP
 urn:miriam:obo.chebi:CHEBI%3A16905; -bisphosphate
 http://purl.obolibrary.org/obo/CHEBI_17234; glucose
 http://identifiers.org/go/GO:0005829; cytosol
-urn:miriam:obo.go:GO%3A0000162; tryptophan biosynthetic process
 urn:miriam:obo.chebi:CHEBI%3A18021; phosphoenolpyruvate
+urn:miriam:obo.go:GO%3A0000162; tryptophan biosynthetic process
 http://bhi.washington.edu/OPB#OPB_00318; Charge flow rate
 urn:miriam:kegg.compound:C00345; 6-Phospho-D-gluconate
 http://identifiers.org/obo.go/GO:0004889; acetylcholine-activated cation-selective channel activity
@@ -27,10 +27,10 @@ urn:miriam:kegg.reaction:R00959; alpha-D-Glucose 1-phosphate 1
 urn:miriam:obo.go:GO%3A0009070; serine family amino acid biosynthetic process
 urn:miriam:obo.chebi:CHEBI%3A17665; alpha-D-glucose 6-phosphate
 http://identifiers.org/obo.go/GO:0005623; cell
-urn:miriam:obo.go:GO%3A0044275; cellular carbohydrate catabolic process
-urn:miriam:kegg.reaction:R00209; pyruvate:NAD+ 2-oxidoreductase (CoA-acetylating)
-urn:miriam:kegg.compound:C05345; beta-D-Fructose 6-phosphate
 http://identifiers.org/opb/OPB_00340; Chemical concentration
+urn:miriam:kegg.reaction:R00209; pyruvate:NAD+ 2-oxidoreductase (CoA-acetylating)
+urn:miriam:obo.go:GO%3A0044275; cellular carbohydrate catabolic process
+urn:miriam:kegg.compound:C05345; beta-D-Fructose 6-phosphate
 urn:miriam:kegg.reaction:R01070; -bisphosphate D-glyceraldehyde-3-phosphate-lyase (glycerone-phosphate-forming)
 http://identifiers.org/uniprot/O76243; Body wall hemoglobin
 urn:miriam:obo.go:GO%3A0006002; fructose 6-phosphate metabolic process
@@ -58,9 +58,9 @@ http://identifiers.org/uniprot/P62993; Growth factor receptor-bound protein 2
 http://identifiers.org/uniprot/Q02750; Dual specificity mitogen-activated protein kinase kinase 1
 http://identifiers.org/obo.go/GO:0005768; endosome
 http://purl.obolibrary.org/obo/CHEBI_17306; maltose
-urn:miriam:kegg.reaction:R01056; D-ribose-5-phosphate aldose-ketose-isomerase
-http://identifiers.org/chebi/CHEBI:17990; 1-O-(indol-3-ylacetyl)-beta-D-glucose
 urn:miriam:kegg.reaction:R01641; sedoheptulose-7-phosphate:D-glyceraldehyde-3-phosphate glycolaldehyde transferase
+http://identifiers.org/chebi/CHEBI:17990; 1-O-(indol-3-ylacetyl)-beta-D-glucose
+urn:miriam:kegg.reaction:R01056; D-ribose-5-phosphate aldose-ketose-isomerase
 http://bhi.washington.edu/OPB#OPB_00154; Fluid volume
 http://identifiers.org/obo.go/GO:0031623; receptor internalization
 urn:miriam:kegg.compound:C00022; Pyruvate
@@ -69,15 +69,15 @@ http://identifiers.org/obo.go/GO:0046777; protein autophosphorylation
 urn:miriam:obo.go:GO%3A0005829; cytosol
 urn:miriam:kegg.compound:C00279; D-Erythrose 4-phosphate
 urn:miriam:obo.chebi:CHEBI%3A17835; 2-phospho-D-glyceric acid
-http://identifiers.org/uniprot/P98077; SHC-transforming protein 2
 http://identifiers.org/uniprot/P00533; Epidermal growth factor receptor
+http://identifiers.org/uniprot/P98077; SHC-transforming protein 2
 http://identifiers.org/obo.go/GO:0031387; MPF complex
 urn:miriam:kegg.compound:C00117; D-Ribose 5-phosphate
-http://bhi.washington.edu/OPB#OPB_00340; Chemical concentration
 urn:miriam:obo.go:GO%3A0019683; glyceraldehyde-3-phosphate catabolic process
+http://bhi.washington.edu/OPB#OPB_00340; Chemical concentration
 urn:miriam:kegg.compound:C00668; alpha-D-Glucose 6-phosphate
-urn:miriam:kegg.compound:C00111; Glycerone phosphate
 urn:miriam:kegg.reaction:R01049; ATP:D-ribose-5-phosphate diphosphotransferase
+urn:miriam:kegg.compound:C00111; Glycerone phosphate
 urn:miriam:obo.chebi:CHEBI%3A17797; D-ribose 5-phosphate
 http://identifiers.org/uniprot/P28482; Mitogen-activated protein kinase 1
 urn:miriam:obo.chebi:CHEBI%3A17794; 3-phospho-D-glyceric acid
@@ -96,8 +96,8 @@ urn:miriam:obo.chebi:CHEBI%3A16332; D-xylulose 5-phosphate
 urn:miriam:obo.chebi:CHEBI%3A15721; sedoheptulose 7-phosphate
 http://identifiers.org/obo.go/GO:0030119; AP-type membrane coat adaptor complex
 http://identifiers.org/cl/CL:0000746; cardiac muscle cell
-urn:miriam:kegg.compound:C00103; D-Glucose 1-phosphate
 urn:miriam:obo.chebi:CHEBI%3A17234; glucose
+urn:miriam:kegg.compound:C00103; D-Glucose 1-phosphate
 urn:miriam:obo.chebi:CHEBI%3A17138; glyceraldehyde 3-phosphate
 urn:miriam:kegg.reaction:R01529; D-Ribulose-5-phosphate 3-epimerase
 urn:miriam:kegg.reaction:R01528; 6-phospho-D-gluconate:NADP+ 2-oxidoreductase (decarboxylating)

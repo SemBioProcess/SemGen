@@ -1,4 +1,4 @@
-package semsim.webservices;
+package semsim.utilities.webservices;
 
 import java.util.Collections;
 import java.util.HashMap;

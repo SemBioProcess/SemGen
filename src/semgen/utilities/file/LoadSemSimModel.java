@@ -22,7 +22,7 @@ import semsim.reading.ModelClassifier;
 import semsim.reading.ReferenceTermNamer;
 import semsim.reading.SBMLAnnotator;
 import semsim.reading.SemSimOWLreader;
-import semsim.webservices.WebserviceTester;
+import semsim.utilities.webservices.WebserviceTester;
 
 public class LoadSemSimModel {
 	

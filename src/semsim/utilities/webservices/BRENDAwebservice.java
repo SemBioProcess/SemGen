@@ -1,4 +1,4 @@
-package semsim.webservices;
+package semsim.utilities.webservices;
 
 import java.util.ArrayList;
 import java.util.Scanner;

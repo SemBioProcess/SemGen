@@ -12,13 +12,13 @@ import org.jdom.JDOMException;
 import org.jdom.output.XMLOutputter;
 import org.semanticweb.owlapi.model.OWLException;
 
-import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.Submodel;
 import semsim.model.physical.object.FunctionalSubmodel;
 import semsim.reading.CellMLreader;
+import semsim.utilities.SemSimUtil;
 import semsim.writing.CellMLwriter;
 import JSim.util.Xcept;
 

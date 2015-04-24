@@ -19,7 +19,6 @@ import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 
 import semsim.SemSimConstants;
-import semsim.SemSimUtil;
 import semsim.annotation.CurationalMetadata;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.StructuralRelation;
@@ -31,6 +30,7 @@ import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
+import semsim.utilities.SemSimUtil;
 
 public class CellMLbioRDFblock {
 	// For CompositePhysicalEntities, this relates a CPE with it's index entity Resource

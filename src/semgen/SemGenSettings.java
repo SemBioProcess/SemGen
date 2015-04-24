@@ -15,7 +15,7 @@ import java.util.Hashtable;
 import java.util.Observable;
 
 import semgen.utilities.file.SemGenOpenFileChooser;
-import semsim.ResourcesManager;
+import semsim.utilities.ResourcesManager;
 /**
  * Structure for storing and retrieving application settings during run time. A copy can
  * be made for an object's private use.

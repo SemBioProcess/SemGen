@@ -22,10 +22,10 @@ import org.sbml.libsbml.ASTNode;
 import org.sbml.libsbml.libsbml;
 
 import semsim.SemSimLibrary;
-import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
+import semsim.utilities.SemSimUtil;
 
 
 public class MATLABwriter extends ModelWriter{
