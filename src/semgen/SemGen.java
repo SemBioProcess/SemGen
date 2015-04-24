@@ -35,9 +35,9 @@ import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.file.SemGenFileChooser;
 import semgen.utilities.uicomponent.SemGenDialog;
-import semsim.ErrorLog;
 import semsim.SemSimLibrary;
 import semsim.reading.ModelReader;
+import semsim.utilities.ErrorLog;
 import semsim.writing.ModelWriter;
 
 public class SemGen extends JFrame implements Observer{

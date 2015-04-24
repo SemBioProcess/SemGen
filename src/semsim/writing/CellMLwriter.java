@@ -32,7 +32,6 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import semsim.Annotatable;
 import semsim.CellMLconstants;
 import semsim.SemSimConstants;
-import semsim.SemSimUtil;
 import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata;
 import semsim.model.Importable;
@@ -46,6 +45,7 @@ import semsim.model.physical.Submodel;
 import semsim.model.physical.object.FunctionalSubmodel;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.owl.SemSimOWLFactory;
+import semsim.utilities.SemSimUtil;
 
 public class CellMLwriter extends ModelWriter {
 	private Namespace mainNS;

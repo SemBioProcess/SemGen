@@ -39,9 +39,9 @@ import semgen.utilities.uicomponent.ExternalURLButton;
 import semsim.Annotatable;
 import semsim.SemSimConstants;
 import semsim.model.physical.object.PhysicalProperty;
-import semsim.webservices.BioPortalConstants;
-import semsim.webservices.BioPortalSearcher;
-import semsim.webservices.UniProtSearcher;
+import semsim.utilities.webservices.BioPortalConstants;
+import semsim.utilities.webservices.BioPortalSearcher;
+import semsim.utilities.webservices.UniProtSearcher;
 
 public class ReferenceClassFinderPanel extends JPanel implements
 		ActionListener, ListSelectionListener {

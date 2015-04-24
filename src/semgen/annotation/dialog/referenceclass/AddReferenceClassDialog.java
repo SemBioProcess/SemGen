@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
 import semgen.annotation.AnnotatorTab;
-import semgen.annotation.componentlistpanes.codewords.CodewordButton;
+import semgen.annotation.componentlistpanes.buttons.CodewordButton;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.uicomponent.SemGenDialog;

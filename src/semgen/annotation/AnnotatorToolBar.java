@@ -14,7 +14,7 @@ import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
-import semgen.annotation.componentlistpanes.codewords.CodewordButton;
+import semgen.annotation.componentlistpanes.buttons.CodewordButton;
 import semgen.annotation.dialog.AnnotationComponentReplacer;
 import semgen.annotation.dialog.referenceclass.AddReferenceClassDialog;
 import semgen.annotation.dialog.referenceclass.compositedialog.CreateCompositeDialog;

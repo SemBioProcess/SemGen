@@ -14,7 +14,7 @@ import semgen.utilities.BrowserLauncher;
 import semgen.utilities.SemGenIcon;
 import semsim.SemSimConstants;
 import semsim.owl.SemSimOWLFactory;
-import semsim.webservices.BioPortalConstants;
+import semsim.utilities.webservices.BioPortalConstants;
 
 public class ExternalURLButton extends JLabel implements MouseListener{
 

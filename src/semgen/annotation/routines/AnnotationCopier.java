@@ -56,9 +56,7 @@ public class AnnotationCopier {
 		if (isValid()) {
 			CopierTask task = new CopierTask();
 			task.execute();
-			while (!task.isDone()) {
-				
-			}
+			while (!task.isDone()) {}
 			return task.changesMade();
 		}
 		return false;

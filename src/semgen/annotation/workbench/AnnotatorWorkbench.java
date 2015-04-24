@@ -22,12 +22,12 @@ import semgen.utilities.CSVExporter;
 import semgen.utilities.SemGenError;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.SemGenSaveFileChooser;
-import semsim.SemSimUtil;
 import semsim.annotation.SemSimRelation;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
 import semsim.reading.ModelClassifier;
+import semsim.utilities.SemSimUtil;
 import semsim.writing.CellMLwriter;
 
 public class AnnotatorWorkbench extends Workbench implements Observer {

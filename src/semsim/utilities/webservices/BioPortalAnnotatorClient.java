@@ -1,4 +1,4 @@
-package semsim.webservices;
+package semsim.utilities.webservices;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

@@ -7,8 +7,6 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.HashSet;
 
-import semsim.ErrorLog;
-import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
 import semsim.model.computational.RelationalConstraint;
 import semsim.model.computational.datastructures.DataStructure;
@@ -16,6 +14,8 @@ import semsim.model.computational.datastructures.Decimal;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.datastructures.SemSimInteger;
 import semsim.model.computational.units.UnitOfMeasurement;
+import semsim.utilities.ErrorLog;
+import semsim.utilities.SemSimUtil;
 import JSim.aserver.ASModel;
 import JSim.aserver.ASServer;
 import JSim.data.NamedVal;

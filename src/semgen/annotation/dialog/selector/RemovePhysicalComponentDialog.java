@@ -9,7 +9,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 
 import semgen.annotation.AnnotatorTab;
-import semgen.annotation.componentlistpanes.codewords.CodewordButton;
+import semgen.annotation.componentlistpanes.buttons.CodewordButton;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semsim.model.SemSimComponent;
 import semsim.model.SemSimModel;
