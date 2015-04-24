@@ -33,6 +33,7 @@ import com.hp.hpl.jena.rdf.model.Statement;
 
 import semsim.CellMLconstants;
 import semsim.SemSimConstants;
+import semsim.SemSimUtil;
 import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata;
 import semsim.annotation.CurationalMetadata.Metadata;
@@ -52,7 +53,6 @@ import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.FunctionalSubmodel;
 import semsim.model.physical.object.PhysicalProperty;
-import semsim.owl.SemSimOWLFactory;
 import semsim.writing.CellMLbioRDFblock;
 
 public class CellMLreader extends ModelReader {
@@ -302,27 +302,35 @@ public class CellMLreader extends ModelReader {
 
 				if(compMathMLelements!=null){
 					Element varmathmlel = getMathMLforOutputVariable(varname, compMathMLelements);
+					
 					if(varmathmlel!=null){
-						String varmathml = xmloutputter.outputString(varmathmlel);
-						ASTNode ast_result = libsbml.readMathMLFromString(varmathml);
-						String ast_as_string = libsbml.formulaToString(ast_result);
-						// formulaToString doesn't parse equal signs and differentials.
-						// Not the prettiest fix, but at least it'll make the equations look prettier.
-						if(ast_as_string != null) {
-							ast_as_string = ast_as_string.substring(3, ast_as_string.length()-1);
-							ast_as_string = ast_as_string.replace(",", " =");
-						}
-						cvar.getComputation().setMathML(varmathml);
-						cvar.getComputation().setComputationalCode(ast_as_string);
-						
-						// Create the computational dependency network among the component variables
-						whiteBoxFunctionalSubmodelEquations(varmathmlel, compname, semsimmodel, cvar);
 						
 						// Check if variable is solved using ODE, and set initial_value as start value.
 						Boolean ode = isSolvedbyODE(varname, compMathMLelements);
 						if(ode) cvar.setStartValue(initval);
+						
+						String varmathml = xmloutputter.outputString(varmathmlel);
+						
+						cvar.getComputation().setMathML(varmathml);
+
+						String varmathmlRHS = SemSimUtil.getRHSofMathML(varmathml, varname);
+						ASTNode ast_result = libsbml.readMathMLFromString(varmathmlRHS);
+						String RHS = libsbml.formulaToString(ast_result);
+						
+						// formulaToString doesn't parse equal signs and differentials.
+						// Not the prettiest fix, but at least it'll make the equations look prettier.
+						if(RHS != null) {
+							String LHS = ode ? "d(" + varname + ")/dt = " : varname + " = ";
+							cvar.getComputation().setComputationalCode(LHS + RHS);
+						}
+						
+						// Create the computational dependency network among the component variables
+						whiteBoxFunctionalSubmodelEquations(varmathmlel, compname, semsimmodel, cvar);
 					}
 				}
+				
+				if(cvar.getComputation().getComputationalCode()==null && initval!=null)
+					cvar.getComputation().setComputationalCode(varname + " = " + initval);
 			}
 			
 			FunctionalSubmodel submodel = new FunctionalSubmodel(submodelname, outputs);

@@ -198,9 +198,12 @@ public class AnnotationPanel extends JPanel implements MouseListener, Observer{
 
 		if(smc instanceof MappableVariable){
 			MappableVariable mvar = (MappableVariable)smc;
-			if(!mvar.getMappedTo().isEmpty() || !mvar.getMappedFrom().isEmpty()){
+			if(mvar.getMappedTo().size()>0 || mvar.getMappedFrom().size()>0){
 				mainheader.add(copyannsbutton);
 				codewordlabel.setBorder(BorderFactory.createEmptyBorder(5, indent, 5, 10));
+			}
+			if(mvar.getMappedFrom().size()>0){
+				eqpane.setText("(value mapped from " + mvar.getMappedFrom().toArray(new MappableVariable[]{})[0].getName() + ")");
 			}
 		}
 		// If we're looking at an imported submodel

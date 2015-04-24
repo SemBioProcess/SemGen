@@ -14,13 +14,13 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.Namespace;
-import org.jdom.filter.ElementFilter;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.sbml.libsbml.ASTNode;
 import org.sbml.libsbml.libsbml;
 
+import semsim.SemSimConstants;
 import semsim.SemSimLibrary;
 import semsim.SemSimUtil;
 import semsim.model.SemSimModel;
@@ -34,9 +34,8 @@ public class MATLABwriter extends ModelWriter{
 	public String statevarvectorname;
 	public String solutiondomain;
 	private SAXBuilder saxbuilder = new SAXBuilder();
-	private static Namespace mathMLnamespace = Namespace.getNamespace("http://www.w3.org/1998/Math/MathML");
-	private static String mathMLhead = "<math xmlns=\"http://www.w3.org/1998/Math/MathML\">";
-	private static String mathMLtail = "</math>";
+	private String mathMLhead = "<math xmlns=\"http://www.w3.org/1998/Math/MathML\">";
+	private String mathMLtail = "</math>";
 	private XMLOutputter outputter = new XMLOutputter();
 
 	public MATLABwriter(SemSimModel model) {
@@ -71,7 +70,7 @@ public class MATLABwriter extends ModelWriter{
 			String dsname = ds.getName();
 			String dslocalname = dsname.contains(".") ? dsname.substring(dsname.lastIndexOf(".")+1, dsname.length()) : dsname;
 			
-			if(mathmlstring!=null) mathmlstring = getRHSofMathML(mathmlstring, dslocalname);
+			if(mathmlstring!=null) mathmlstring = SemSimUtil.getRHSofMathML(mathmlstring, dslocalname);
 			
 			ASTNode ast_result   = libsbml.readMathMLFromString(mathmlstring);
 			String ast_as_string = libsbml.formulaToString(ast_result);
@@ -324,49 +323,7 @@ public class MATLABwriter extends ModelWriter{
 	}
 	
 	
-	public String getRHSofMathML(String mathmlstring, String solvedvarlocalname){
-		
-		try {
-			Document doc = saxbuilder.build(new StringReader(mathmlstring));
-			
-			// Get the <eq> element if there is one...
-			Boolean hastopeqel = false;
-			if(doc.getRootElement().getChild("apply",mathMLnamespace)!=null){
-				if(doc.getRootElement().getChild("apply",mathMLnamespace).getChild("eq", mathMLnamespace)!=null){
-					hastopeqel = true;
-				}
-			}
-			if(hastopeqel){
-				Element eqel = doc.getRootElement().getChild("apply",mathMLnamespace).getChild("eq",mathMLnamespace);
-				Element eqparentel = eqel.getParentElement();
-				
-				// Iterate over the <eq> element's siblings by getting its parent's children
-				Iterator<?> eqparentelit = eqparentel.getChildren().iterator();
 	
-				while(eqparentelit.hasNext()){
-					Element nextel = (Element)eqparentelit.next();
-					Boolean iseqel = nextel.getName().equals("eq");
-					
-					Iterator<?> nexteldescit = nextel.getDescendants(new ElementFilter("diff"));
-					
-					Boolean isLHS = (nextel.getName().equals("ci") && nextel.getText().equals(solvedvarlocalname))
-									|| nexteldescit.hasNext();
-	
-					// If the element doesn't represent the LHS of the equation, or isn't the <eq> element,
-					// then we've found our RHS
-					if(! isLHS && ! iseqel)
-						return mathMLhead + "\n" + outputter.outputString(nextel) + "\n" + mathMLtail;
-				}
-			}
-			// Otherwise there's no <eq> element, we assume that the mathml is OK as it exists
-			else return mathmlstring;
-		} catch (JDOMException | IOException e) {
-			e.printStackTrace();
-		}
-
-		// If we're here we haven't found the RHS
-		return null;
-	}
 	
 	// Create MATLAB-friendly conditional statement to replace piecewise formulations
 	private String makePiecewiseExpression(String mathmlstring, DataStructure solvedvar){
@@ -381,8 +338,9 @@ public class MATLABwriter extends ModelWriter{
 		try {
 			doc = saxbuilder.build(new StringReader(mathmlstring));
 			
-			if(doc.getRootElement().getChild("piecewise", mathMLnamespace)!=null){
-				Iterator<?> piecesit = doc.getRootElement().getChild("piecewise",mathMLnamespace).getChildren("piece", mathMLnamespace).iterator();
+			Namespace mathns = SemSimConstants.MATHML_NAMESPACE_OBJ;
+			if(doc.getRootElement().getChild("piecewise", mathns)!=null){
+				Iterator<?> piecesit = doc.getRootElement().getChild("piecewise",mathns).getChildren("piece", mathns).iterator();
 				
 				while(piecesit.hasNext()){
 					Element pieceel = (Element)piecesit.next();
@@ -405,8 +363,8 @@ public class MATLABwriter extends ModelWriter{
 				
 				// Get the <otherwise> statement
 				String otherwise_ast_string = "???";
-				if(doc.getRootElement().getChild("piecewise",mathMLnamespace).getChild("otherwise", mathMLnamespace)!=null){
-					Element otherwiseel = doc.getRootElement().getChild("piecewise",mathMLnamespace).getChild("otherwise", mathMLnamespace);
+				if(doc.getRootElement().getChild("piecewise",mathns).getChild("otherwise", mathns)!=null){
+					Element otherwiseel = doc.getRootElement().getChild("piecewise",mathns).getChild("otherwise", mathns);
 					ASTNode otherwise_ast   = libsbml.readMathMLFromString(mathMLhead + outputter.outputString(otherwiseel.getChildren()) + mathMLtail);
 					otherwise_ast_string = libsbml.formulaToString(otherwise_ast);
 				}
