@@ -26,6 +26,7 @@ import semsim.annotation.SemSimRelation;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
+import semsim.model.physical.Submodel;
 import semsim.reading.ModelClassifier;
 import semsim.utilities.SemSimUtil;
 import semsim.writing.CellMLwriter;
@@ -36,10 +37,13 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 							//in SBML, MML, CellML or SemSim format)
 	private ModelAnnotationsBench modanns;
 	private SemSimTermLibrary termlib;
+	private CodewordToolDrawer cwdrawer;
+	private SubModelToolDrawer smdrawer;
 	private boolean modelsaved = true;
 	private int lastsavedas = -1;
 	private String ontspref;
-	public static enum modeledit {compositechanged, modelimport}
+	public static enum WBEvent {freetextrequest}
+	public static enum modeledit {compositechanged, modelimport, smselection, cwselection, smlistchanged}
 	
 	public AnnotatorWorkbench(File file, SemSimModel model) {
 		semsimmodel = model;
@@ -49,13 +53,26 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	
 	public void initialize() {
 		modanns = new ModelAnnotationsBench(semsimmodel);
-		termlib = new SemSimTermLibrary(semsimmodel);
 		modanns.addObserver(this);
+		termlib = new SemSimTermLibrary(semsimmodel);
+		cwdrawer = new CodewordToolDrawer(semsimmodel.getDataStructures());
+		cwdrawer.addObserver(this);
+		smdrawer = new SubModelToolDrawer(semsimmodel.getSubmodels());
+		smdrawer.addObserver(this);
+
 		// Add unspecified physical model components for use during annotation
 		semsimmodel.addCustomPhysicalEntity(SemSimModel.unspecifiedName, "Non-specific entity for use as a placeholder during annotation");
 		semsimmodel.addCustomPhysicalProcess(SemSimModel.unspecifiedName, "Non-specific process for use as a placeholder during annotation");
 
 		setModelSaved(isSemSimorCellMLModel());
+	}
+	
+	public CodewordToolDrawer openCodewordDrawer() {
+		return cwdrawer;
+	}
+	
+	public SubModelToolDrawer openSubmodelDrawer() {
+		return smdrawer;
 	}
 	
 	public void addObservertoModelAnnotator(Observer obs) {
@@ -199,7 +216,11 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	
 	public TreeMap<String,PhysicalEntity> getPhysicalEntityIDList() {
 		return termlib.getPhysEntIDMap();
-		
+	}
+	
+	public void addSubModel(String newname) {
+		semsimmodel.addSubmodel(new Submodel(newname));
+		setModelSaved(false);
 	}
 	
 	public void compositeChanged() {
@@ -212,6 +233,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	public void update(Observable arg0, Object arg1) {
 		if (arg1!=ModelChangeEnum.METADATASELECTED) {
 			setModelSaved(false);
+			return;
 		}
 	}
 	
@@ -221,5 +243,31 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	
 	public void setLastOntology(String ont) {
 		ontspref = ont;
+	}
+	
+	private void submodelListChanged() {
+		setModelSaved(false);
+		setChanged();
+		notifyObservers(modeledit.smlistchanged);
+	}
+	
+	public void addSubmodeltoModel(String name) {
+		semsimmodel.addSubmodel(smdrawer.addSubmodel(name));
+		submodelListChanged();
+	}
+	
+	public void removeSubmodelfromModel() {
+		semsimmodel.removeSubmodel(smdrawer.removeSubmodel());
+		submodelListChanged();
+	}
+	
+	public Boolean validateNewComponentName(String newname){
+		return (!newname.equals("") && !cwdrawer.containsComponentwithName(newname) &&
+			!smdrawer.containsComponentwithName(newname) && !newname.contains("--"));
+	}
+	
+	public void requestFreetextChange() {
+		setChanged();
+		notifyObservers(WBEvent.freetextrequest);
 	}
 }

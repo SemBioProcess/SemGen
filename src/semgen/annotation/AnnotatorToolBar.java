@@ -10,21 +10,13 @@ import java.util.Set;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-import org.semanticweb.owlapi.model.OWLException;
-
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
-import semgen.annotation.componentlistpanes.buttons.CodewordButton;
-import semgen.annotation.dialog.AnnotationComponentReplacer;
-import semgen.annotation.dialog.referenceclass.AddReferenceClassDialog;
-import semgen.annotation.dialog.referenceclass.compositedialog.CreateCompositeDialog;
-import semgen.annotation.dialog.selector.RemovePhysicalComponentDialog;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.encoding.Encoder;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.DropDownCheckList;
 import semgen.utilities.uicomponent.SemGenTabToolbar;
-import semsim.SemSimConstants;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
@@ -33,7 +25,6 @@ import semsim.model.physical.object.CompositePhysicalEntity;
 public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
-	AnnotatorTab anntab;
 	private AnnotatorWorkbench workbench;
 	private SemGenToolbarButton annotateitemchangesourcemodelcode = new SemGenToolbarButton(SemGenIcon.setsourceicon);
 	private SemGenToolbarButton annotateitemcopy = new SemGenToolbarButton(SemGenIcon.importicon);
@@ -53,10 +44,9 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 	private String sortbycompletion = new String("By Composite Completeness");
 	GlobalActions globalactions;
 
-	public AnnotatorToolBar(AnnotatorTab tab, GlobalActions gacts, AnnotatorWorkbench wkbnch, SemGenSettings sets) {
+	public AnnotatorToolBar(GlobalActions gacts, AnnotatorWorkbench wkbnch, SemGenSettings sets) {
 		super(sets);
 		workbench = wkbnch;
-		anntab = tab;
 		globalactions = gacts;
 
 		annotateitemshowimports.addActionListener(this);
@@ -139,23 +129,18 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		
 		if (o == annotateitemshowmarkers){
 			settings.toggleDisplayMarkers();
-			for(String s : anntab.codewordbuttontable.keySet()){
-				CodewordButton cb = anntab.codewordbuttontable.get(s);
-				((CodewordButton)cb).propoflabel.setVisible(settings.useDisplayMarkers());
-				cb.validate();
-			}
+
 			annotateitemshowmarkers.setIcon(displayIcontoUse());
 		}
 	
 		if(o == annotateitemshowimports){
 			// Set visbility of imported codewords and submodels
 			settings.toggleShowImports();
-			anntab.refreshAnnotatableElements();
+
 		}
 		
 		if(o == annotateitemtreeview){
 			settings.toggleTreeView();
-			anntab.refreshAnnotatableElements();
 		}
 		if (o == extractorbutton) {
 			try {
@@ -179,8 +164,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		}
 		
 		if (o == annotateitemaddrefterm) {
-				new AddReferenceClassDialog(workbench, anntab, SemSimConstants.ALL_SEARCHABLE_ONTOLOGIES, 
-						new Object[]{"Add as entity","Add as process","Close"}, anntab.semsimmodel);
+
 			} 
 		
 		if (o == annotateitemremoverefterm) {
@@ -189,24 +173,19 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 					if(!(pmc instanceof CompositePhysicalEntity) && (pmc instanceof PhysicalEntity || pmc instanceof PhysicalProcess))
 						pmcs.add(pmc);
 				}
-				new RemovePhysicalComponentDialog(workbench, anntab, pmcs, null, false, "Select components to remove");
 			}
 		
 		if (o == annotateitemreplacerefterm) {
-				try {
-					new AnnotationComponentReplacer(workbench, anntab);
-				} catch (OWLException e1) {
-					e1.printStackTrace();
-				}
+
 		}
 		
 		if (o == annotateitemaddcompterm) {
-			new CreateCompositeDialog(workbench, anntab, true);
+
 		}
 		
 		if (o == coderbutton) {
 			String filenamesuggestion = null;
-			if(anntab.sourcefile!=null) filenamesuggestion = anntab.sourcefile.getName().substring(0, anntab.sourcefile.getName().lastIndexOf("."));
+			if(workbench.getSourceModelLocation()!=null) filenamesuggestion = workbench.getSourceModelLocation().substring(0, workbench.getSourceModelLocation().lastIndexOf("."));
 			if(workbench.unsavedChanges()){
 				new Encoder(workbench.getSemSimModel(), filenamesuggestion);
 			} 
@@ -227,7 +206,6 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 			if (obj == sortbycompletion) {
 				settings.toggleCompositeCompleteness();
 		    }
-			anntab.AlphabetizeAndSetCodewords();
 		}
 	}
 	

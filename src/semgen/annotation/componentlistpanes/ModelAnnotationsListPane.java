@@ -33,6 +33,7 @@ public class ModelAnnotationsListPane extends SemGenScrollPane implements Observ
 	SemGenSettings settings;
 	ArrayList<MetadataBox> metadataarray = new ArrayList<MetadataBox>();
 	JPanel viewport = new JPanel();
+
 	
 	public ModelAnnotationsListPane(AnnotatorWorkbench wb, SemGenSettings sets) {
 		viewport.setLayout(new BoxLayout(viewport, BoxLayout.Y_AXIS));

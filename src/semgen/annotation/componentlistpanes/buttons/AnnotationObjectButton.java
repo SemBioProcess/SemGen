@@ -6,6 +6,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -14,190 +15,130 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import semgen.SemGenSettings;
-import semgen.annotation.AnnotatorTab;
 import semgen.utilities.SemGenFont;
-import semsim.Annotatable;
-import semsim.model.SemSimComponent;
 
 public abstract class AnnotationObjectButton extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	public AnnotatorTab annotater;
-	protected SemGenSettings settings;
-	public SemSimComponent ssc;
+	protected ArrayList<JLabel> indicators = new ArrayList<JLabel>();
+	protected boolean editable;
+	protected JLabel namelabel = new JLabel();
 
-
-	public Boolean editable;
-	public JLabel namelabel = new JLabel();
-	public JLabel compannlabel = new JLabel();
-	public JLabel singularannlabel = new JLabel();
-	public JLabel humdeflabel = new JLabel();
-	public Color editablelabelcolor = new Color(10, 50, 220);
-	public Color noneditablelabelcolor = Color.gray;
-	public JPanel indicatorspanel = new JPanel();
-	public JPanel indicatorssuperpanel = new JPanel(new BorderLayout());
-	public PropertyMarker propoflabel = new PropertyMarker(Color.white, null);
-	public int maxHeight = 35;
-	public int ipph = 18;
+	protected JLabel singularannlabel = new JLabel("_");
+	protected JLabel humdeflabel = new JLabel("_");
 	
-	public AnnotationObjectButton(AnnotatorTab ann, SemGenSettings sets, SemSimComponent ssc,  
-			boolean noncompannfilled, boolean humdeffilled, boolean editable) {
-		settings = sets;
-		this.annotater = ann;
-		this.ssc = ssc;
-		this.setLayout(new BorderLayout(0, 0));
-
+	protected Color editablelabelcolor = new Color(10, 50, 220);
+	protected Color noneditablelabelcolor = Color.gray;
+	
+	protected JPanel indicatorspanel = new JPanel();
+	protected JPanel indicatorssuperpanel = new JPanel(new BorderLayout());
+	
+	public AnnotationObjectButton(String name, boolean canedit) {
+		editable = canedit;
+		setLayout(new BorderLayout(0, 0));
 		
-		this.editable = editable;
 		this.setFocusable(true);
-		this.addKeyListener(ann);
-		this.setMaximumSize(new Dimension(999999, maxHeight));
-
-		namelabel.setFont(SemGenFont.defaultPlain());
-		namelabel.setOpaque(false);
-		namelabel.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 10));
-		namelabel.setBackground(new Color(0,0,0,0));
-		namelabel.addMouseListener(new AOBMouseListener(namelabel));
-		
-		setIdentifyingData(ssc.getName());
-		
-		indicatorspanel.setPreferredSize(new Dimension(50, ipph));
-		indicatorspanel.setLayout(new BoxLayout(indicatorspanel, BoxLayout.X_AXIS));
-		indicatorspanel.setAlignmentY(TOP_ALIGNMENT);
-
-		compannlabel.setText("_");
-		compannlabel.setName("C");
-		compannlabel.setToolTipText("Indicates status of codeword's composite annotation");
-		compannlabel.setBorder(BorderFactory.createEmptyBorder(0, 2, 0, 2));
-		compannlabel.setAlignmentY(JComponent.CENTER_ALIGNMENT);
-		compannlabel.setFont(SemGenFont.Plain("Serif", -3));
-
-		singularannlabel.setText("_");
-		singularannlabel.setName("S");
-		singularannlabel.setToolTipText("Click to set singular reference annotation");
-		singularannlabel.setBorder(BorderFactory.createEmptyBorder(0, 2, 0, 2));
-		singularannlabel.setAlignmentY(JComponent.CENTER_ALIGNMENT);
-		singularannlabel.setFont(SemGenFont.Plain("Serif", -3));
-
-		
-		humdeflabel.setText("_");
-		humdeflabel.setName("F");
-		humdeflabel.setToolTipText("Click to set free-text description");
-		humdeflabel.setBorder(BorderFactory.createEmptyBorder(0, 1, 0, 1));
-		humdeflabel.setAlignmentY(JComponent.CENTER_ALIGNMENT);
-		humdeflabel.setFont(SemGenFont.Plain("Serif", -3));
-		
-		if(editable){
-			compannlabel.addMouseListener(new AOBMouseListener(compannlabel));
-			singularannlabel.addMouseListener(new AOBMouseListener(singularannlabel));
-			humdeflabel.addMouseListener(new AOBMouseListener(humdeflabel));
-		}
-		else namelabel.setForeground(Color.gray);
-
-
-		
-		if (noncompannfilled) {annotationAdded(singularannlabel, false);} 
-		else {annotationNotAdded(singularannlabel);}
-		
-		if (humdeffilled) {annotationAdded(humdeflabel, false);} 
-		else {annotationNotAdded(humdeflabel);}
-				
-		indicatorspanel.add(compannlabel);
-		indicatorspanel.add(singularannlabel);
-		indicatorspanel.add(humdeflabel);
-		indicatorspanel.setOpaque(false);
-		
-		indicatorssuperpanel.setOpaque(false);
-		indicatorssuperpanel.add(Box.createGlue(), BorderLayout.WEST);
-		indicatorssuperpanel.add(indicatorspanel, BorderLayout.CENTER);
-		propoflabel.setVisible(false);
-		indicatorssuperpanel.add(propoflabel, BorderLayout.EAST);
-
-		add(Box.createGlue(), BorderLayout.EAST);
-		add(namelabel, BorderLayout.CENTER);
-		add(indicatorssuperpanel, BorderLayout.WEST);
-
+		this.setMaximumSize(new Dimension(999999, 35));
 		setBackground(Color.white);
 		setBorder(BorderFactory.createEmptyBorder(1, 2, 1, 2));
 		setOpaque(true);
+		
+		namelabel.setOpaque(false);
+		namelabel.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 10));
+		namelabel.setBackground(new Color(0,0,0,0));
+
+		namelabel.setForeground(Color.gray);
+		
 		setForeground(Color.black);
 		setVisible(true);
 	}
 	
-	public void setIdentifyingData(String name){
-		this.setName(name);
-		namelabel.setText(name);
-	}
-	
-	public boolean refreshAllCodes(){
-		refreshFreeTextCode();
-		refreshSingularAnnotationCode();
-		annotater.updateTreeNode();
-		return true;
-	}
+	public void drawButton() {
+		makeIndicator(singularannlabel, "S", "Click to set singular reference annotation");
+		singularannlabel.addMouseListener(new ClickableMouseListener(singularannlabel));
+		makeIndicator(humdeflabel, "F", "Click to set free-text description");
+		humdeflabel.addMouseListener(new ClickableMouseListener(humdeflabel));
 		
-	public void refreshSingularAnnotationCode(){
-		if(((Annotatable)ssc).hasRefersToAnnotation()){
-			annotationAdded(singularannlabel, false);
+		indicatorspanel.setOpaque(false);
+		
+		indicatorspanel.setLayout(new BoxLayout(indicatorspanel, BoxLayout.X_AXIS));
+		indicatorspanel.setAlignmentY(TOP_ALIGNMENT);
+		
+		for (JLabel lbl : indicators) {
+			indicatorspanel.add(lbl);
 		}
-		else annotationNotAdded(singularannlabel);
+
+		indicatorssuperpanel.setOpaque(false);
+		indicatorssuperpanel.add(Box.createGlue(), BorderLayout.WEST);
+		indicatorssuperpanel.add(indicatorspanel, BorderLayout.CENTER);
+
+		add(Box.createGlue(), BorderLayout.EAST);
+		add(namelabel, BorderLayout.CENTER);
+		add(indicatorssuperpanel, BorderLayout.WEST);
 	}
 	
-	public void refreshFreeTextCode(){
-		if(ssc.getDescription().isEmpty()) annotationNotAdded(humdeflabel);
-		else annotationAdded(humdeflabel, false);
+	public void makeIndicator(JLabel lbl, String name, String tooltip) {
+		lbl.setName(name);
+		lbl.setToolTipText(tooltip);
+		lbl.setBorder(BorderFactory.createEmptyBorder(0, 2, 0, 2));
+		lbl.setAlignmentY(JComponent.CENTER_ALIGNMENT);
+		lbl.setFont(SemGenFont.Plain("Serif", -3));
+		lbl.addMouseListener(new IndicatorMouseListener(lbl));
+		indicators.add(lbl);
 	}
-
-	public void annotationAdded(JLabel label, Boolean iscompann) {
-		label.setFont(SemGenFont.Bold("Serif", -2));
-		if(editable) label.setForeground(editablelabelcolor);
-		else label.setForeground(noneditablelabelcolor);
-		if (!iscompann) {
-			label.setText(label.getName());
+	
+	public String getText() {
+		return namelabel.getText();
+	}
+	
+	public void toggleHumanDefinition(boolean hasdef) {
+		toggleIndicator(humdeflabel, hasdef);
+	}
+	
+	public void toggleSingleAnnotation(boolean hasdef) {
+		toggleIndicator(singularannlabel, hasdef);
+	}
+	
+	protected void toggleIndicator(JLabel lbl, boolean hasann) {
+		lbl.setForeground(noneditablelabelcolor);
+		if (hasann) {
+			lbl.setText(lbl.getName());
+			lbl.setFont(SemGenFont.Bold("Serif", -2));
+			if(editable) lbl.setForeground(editablelabelcolor);
+		}
+		else {
+			lbl.setText("_");
+			lbl.setFont(SemGenFont.Plain("Serif", -2));
 		}
 		validate();
 		repaint();
 	}
-
-	public void annotationNotAdded(JLabel label) {
-		label.setFont(SemGenFont.Plain("Serif", -2));
-		label.setForeground(noneditablelabelcolor);
-		label.setText("_");
-		repaint();
-		validate();
+	
+	protected class IndicatorMouseListener extends MouseAdapter {
+		private JLabel label;
+		public IndicatorMouseListener(JLabel target){
+			label = target;
+		}
+		
+		public void mouseExited(MouseEvent e) {
+				label.setOpaque(false);
+				label.setBackground(null);
+				label.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		}
 	}
 	
-	private void requestAnnotatorFocus(JLabel label) {
-		requestFocusInWindow();
-		annotater.changeButtonFocus(this, label);
-		annotater.focusbutton = this;
-	}
-	
-	protected class AOBMouseListener extends MouseAdapter {
-		JLabel label;
-		public AOBMouseListener(JLabel target){
+	protected class ClickableMouseListener extends MouseAdapter {
+		private JLabel label;
+		public ClickableMouseListener(JLabel target){
 			label = target;
 		}
 		
 		public void mouseEntered(MouseEvent e) {
-			if (label!=compannlabel && label!=propoflabel){
 				label.setOpaque(true);
 				label.setBackground(new Color(255,231,186));
 				label.setCursor(new Cursor(Cursor.HAND_CURSOR));
-			}
-		}
-
-		public void mouseExited(MouseEvent e) {
-			if(label!=propoflabel){
-				label.setOpaque(false);
-				label.setBackground(null);
-				label.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-			}
-		}
-
-		public void mousePressed(MouseEvent e) {
-			requestAnnotatorFocus(label);
 		}
 	}
+	
+
 }

@@ -374,4 +374,8 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 			addReferenceOntologyAnnotation(ann.getRelation(), ann.getReferenceURI(), ann.getValueDescription());
 		}
 	}
+	
+	public boolean hasAssociatedPhysicalComponent() {
+		return physicalProperty.getPhysicalPropertyOf()==null;
+	}
 }
