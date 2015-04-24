@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import semgen.annotation.AnnotatorTab;
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenTask;
 import semgen.utilities.file.LoadSemSimModel;
@@ -64,16 +63,15 @@ public class AnnotationCopier {
 		return false;
 	}
 	
-	public static Set<MappableVariable> copyAllAnnotationsToMappedVariables(AnnotatorTab ann, MappableVariable ds){
+	public Set<MappableVariable> copyAllAnnotationsToMappedVariables(MappableVariable ds){
 		Set<MappableVariable> allmappedvars = new HashSet<MappableVariable>();
 		allmappedvars.addAll(getAllMappedVariables(ds, ds, new HashSet<MappableVariable>()));
 		for(MappableVariable otherds : allmappedvars){
 			System.out.println("Copying to " + otherds.getName());
 			if(!otherds.isImportedViaSubmodel()){
-				ann.setModelSaved(false);
 				otherds.copyDescription(ds);
 				otherds.copySingularAnnotations(ds);
-				copyCompositeAnnotation(ann.semsimmodel, ann.semsimmodel, ds, otherds);
+				copyCompositeAnnotation(targetmod, targetmod, ds, otherds);
 			}
 		}
 		return allmappedvars;

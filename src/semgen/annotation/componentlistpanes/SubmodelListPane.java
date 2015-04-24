@@ -1,6 +1,8 @@
 package semgen.annotation.componentlistpanes;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Observable;
 
@@ -15,13 +17,12 @@ import org.semanticweb.owlapi.model.OWLException;
 import semgen.SemGenSettings;
 import semgen.annotation.componentlistpanes.buttons.SubmodelButton;
 import semgen.annotation.workbench.AnnotatorWorkbench;
-import semgen.annotation.workbench.SubModelToolDrawer;
+import semgen.annotation.workbench.drawers.SubModelToolDrawer;
 import semgen.utilities.SemGenIcon;
 
-public class SubmodelListPane extends AnnotatorListPane<SubmodelButton, SubModelToolDrawer> {
+public class SubmodelListPane extends AnnotatorListPane<SubmodelButton, SubModelToolDrawer> implements ActionListener{
 	private static final long serialVersionUID = 1L;
-	private SubModelToolDrawer drawer;
-	
+
 	private JButton addsubmodelbutton = new JButton(SemGenIcon.plusicon);
 	private JButton removesubmodelbutton = new JButton(SemGenIcon.minusicon);
 	
@@ -30,6 +31,8 @@ public class SubmodelListPane extends AnnotatorListPane<SubmodelButton, SubModel
 
 		addsubmodelbutton.addActionListener(this);
 		removesubmodelbutton.addActionListener(this);
+		
+		updateButtonTable();
 	}
 
 	public void updateButtonTable(){
@@ -91,13 +94,24 @@ public class SubmodelListPane extends AnnotatorListPane<SubmodelButton, SubModel
 
 		public ListButton(String name, boolean canedit) {
 			super(name, canedit);
-			humdeflabel.addMouseListener(new FreeTextMouseListener());
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			
 		}
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			changeButtonFocus(this);
+			if (arg0.getSource()==humdeflabel) {
+				workbench.requestFreetextChange();
+			}
+		}
+
+
+
+
 	}
 	
 }

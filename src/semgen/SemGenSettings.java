@@ -21,7 +21,7 @@ import semsim.utilities.ResourcesManager;
  * be made for an object's private use.
  */
 public class SemGenSettings extends Observable{
-	private enum SettingChange {toggletree, showimports, cwsort, toggleproptype}
+	public enum SettingChange {toggletree, showimports, cwsort, toggleproptype}
 	public static SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmssSSSZ");
 	public static SimpleDateFormat sdflog = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
 	public Hashtable<String, String[]> startsettingstable;

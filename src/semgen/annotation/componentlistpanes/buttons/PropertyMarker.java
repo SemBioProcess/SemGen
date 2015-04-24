@@ -25,6 +25,7 @@ public class PropertyMarker extends JLabel{
 	}
 	
 	public void updateType(Color col, String tooltip) {
+		color = col;
 		setToolTipText(tooltip);
 		repaint();
 	}

@@ -1,11 +1,9 @@
 package semgen.annotation;
 
-import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.model.OWLOntologyManager;
-
 import semgen.GlobalActions;
 import semgen.SemGen;
 import semgen.SemGenSettings;
+import semgen.SemGenSettings.SettingChange;
 import semgen.annotation.annotatorpane.AnnotationPanel;
 import semgen.annotation.annotatorpane.CodewordAnnotationPanel;
 import semgen.annotation.annotatorpane.ModelAnnotationEditor;
@@ -13,15 +11,13 @@ import semgen.annotation.annotatorpane.SubmodelAnnotationPanel;
 import semgen.annotation.componentlistpanes.CodewordListPane;
 import semgen.annotation.componentlistpanes.ModelAnnotationsListPane;
 import semgen.annotation.componentlistpanes.SubmodelListPane;
-import semgen.annotation.workbench.AnnotatorDrawer;
 import semgen.annotation.workbench.AnnotatorWorkbench;
-import semgen.annotation.workbench.ModelAnnotationsBench;
 import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
+import semgen.annotation.workbench.drawers.AnnotatorDrawer;
+import semgen.annotation.workbench.drawers.ModelAnnotationsBench;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semgen.utilities.uicomponent.SemGenTab;
-import semsim.model.SemSimModel;
-
 import java.net.URI;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -29,6 +25,7 @@ import java.awt.event.MouseListener;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
+
 import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
@@ -37,14 +34,11 @@ import java.awt.BorderLayout;
 public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 
 	private static final long serialVersionUID = -5360722647774877228L;
-	public OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	public File sourcefile; //File originally loaded at start of Annotation session (could be in SBML, MML, CellML or SemSim format)
 	private AnnotatorWorkbench workbench;
 	
 	public static int initwidth;
 	public static int initheight;
-
-	public SemSimModel semsimmodel;
 
 	private AnnotatorToolBar toolbar;
 	private JSplitPane splitpane;
@@ -157,7 +151,7 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 		}
 	}
 	
-	public void annotationObjectAction() {
+	private void annotationObjectAction() {
 		annotatorscrollpane.setViewportView(annotatorpane);
 		annotatorscrollpane.scrollToTop();
 	}
@@ -182,14 +176,6 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 		codearea.removeAllHighlights();
 	}
 	
-	public boolean getModelSaved(){
-		return workbench.getModelSaved();
-	}
-	
-	public void setModelSaved(boolean val){
-		workbench.setModelSaved(val);
-	}
-
 	public void mouseEntered(MouseEvent e) {
 		Component component = e.getComponent();
 		if (component instanceof AbstractButton) {
@@ -224,7 +210,7 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 
 	@Override
 	public boolean isSaved() {
-		return getModelSaved();
+		return workbench.getModelSaved();
 	}
 
 	@Override
@@ -244,21 +230,28 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 	
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		if (arg1 == ModelAnnotationsBench.ModelChangeEnum.METADATASELECTED) {
-			showModelAnnotator();
-			return;
-		}
-		if (arg1==modeledit.cwselection) {
-			try {
-				codewordSelected();
+		if (arg0==workbench) {
+			if (arg1 == ModelAnnotationsBench.ModelChangeEnum.METADATASELECTED) {
+				showModelAnnotator();
+				return;
+			}
+			if (arg1==modeledit.cwselection) {
+				try {
+					codewordSelected();
+				} catch (BadLocationException e) {
+					e.printStackTrace();
+				}
 				annotationObjectAction() ;
-			} catch (BadLocationException e) {
-				e.printStackTrace();
+			}
+			if (arg1==modeledit.smselection) {
+				this.subModelSelected();
+				annotationObjectAction();
 			}
 		}
-		if (arg1==modeledit.smselection) {
-			this.subModelSelected();
-			annotationObjectAction();
+		if (arg0==settings) {
+			if (arg1==SettingChange.toggletree) {
+				changeComponentView();
+			}
 		}
 
 	}

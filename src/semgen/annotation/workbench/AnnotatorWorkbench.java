@@ -17,7 +17,10 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import semgen.GlobalActions;
 import semgen.SemGen;
 import semgen.annotation.routines.AnnotationCopier;
-import semgen.annotation.workbench.ModelAnnotationsBench.ModelChangeEnum;
+import semgen.annotation.workbench.drawers.CodewordToolDrawer;
+import semgen.annotation.workbench.drawers.ModelAnnotationsBench;
+import semgen.annotation.workbench.drawers.SubModelToolDrawer;
+import semgen.annotation.workbench.drawers.ModelAnnotationsBench.ModelChangeEnum;
 import semgen.utilities.CSVExporter;
 import semgen.utilities.SemGenError;
 import semgen.utilities.Workbench;
@@ -228,15 +231,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		setChanged();
 		notifyObservers(modeledit.compositechanged);
 	}
-	
-	@Override
-	public void update(Observable arg0, Object arg1) {
-		if (arg1!=ModelChangeEnum.METADATASELECTED) {
-			setModelSaved(false);
-			return;
-		}
-	}
-	
+
 	public String getLastOntology() {
 		return ontspref;
 	}
@@ -269,5 +264,14 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	public void requestFreetextChange() {
 		setChanged();
 		notifyObservers(WBEvent.freetextrequest);
+	}
+	
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		//Event forwarding
+		if ((arg1==modeledit.smselection) || (arg1==modeledit.cwselection)){
+			setChanged();
+			notifyObservers(arg1);
+		}
 	}
 }

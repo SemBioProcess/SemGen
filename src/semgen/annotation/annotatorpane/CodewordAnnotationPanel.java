@@ -3,7 +3,7 @@ package semgen.annotation.annotatorpane;
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
 import semgen.annotation.workbench.AnnotatorWorkbench;
-import semgen.annotation.workbench.CodewordToolDrawer;
+import semgen.annotation.workbench.drawers.CodewordToolDrawer;
 
 public class CodewordAnnotationPanel extends AnnotationPanel<CodewordToolDrawer> {
 

@@ -6,6 +6,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -14,10 +15,12 @@ import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
 
 import semgen.utilities.SemGenFont;
 
-public abstract class AnnotationObjectButton extends JPanel {
+public abstract class AnnotationObjectButton extends JPanel implements MouseListener {
 	private static final long serialVersionUID = 1L;
 
 	protected ArrayList<JLabel> indicators = new ArrayList<JLabel>();
@@ -32,6 +35,7 @@ public abstract class AnnotationObjectButton extends JPanel {
 	
 	protected JPanel indicatorspanel = new JPanel();
 	protected JPanel indicatorssuperpanel = new JPanel(new BorderLayout());
+	protected Border outline = BorderFactory.createBevelBorder(BevelBorder.RAISED);
 	
 	public AnnotationObjectButton(String name, boolean canedit) {
 		editable = canedit;
@@ -42,14 +46,13 @@ public abstract class AnnotationObjectButton extends JPanel {
 		setBackground(Color.white);
 		setBorder(BorderFactory.createEmptyBorder(1, 2, 1, 2));
 		setOpaque(true);
-		
+		namelabel.setText(name);
 		namelabel.setOpaque(false);
 		namelabel.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 10));
-		namelabel.setBackground(new Color(0,0,0,0));
-
-		namelabel.setForeground(Color.gray);
+		namelabel.setBackground(Color.black);
 		
 		setForeground(Color.black);
+		if (!editable) namelabel.setForeground(Color.gray);
 		setVisible(true);
 	}
 	
@@ -83,7 +86,10 @@ public abstract class AnnotationObjectButton extends JPanel {
 		lbl.setBorder(BorderFactory.createEmptyBorder(0, 2, 0, 2));
 		lbl.setAlignmentY(JComponent.CENTER_ALIGNMENT);
 		lbl.setFont(SemGenFont.Plain("Serif", -3));
-		lbl.addMouseListener(new IndicatorMouseListener(lbl));
+		lbl.addMouseListener(this);
+		if (editable) { 
+			lbl.addMouseListener(new IndicatorMouseListener(lbl));
+		}
 		indicators.add(lbl);
 	}
 	
@@ -139,6 +145,19 @@ public abstract class AnnotationObjectButton extends JPanel {
 				label.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		}
 	}
-	
+	@Override
+	public void mouseExited(MouseEvent e) {
+		this.setBorder(BorderFactory.createEmptyBorder(1, 2, 1, 2));
+	}
 
+	@Override
+	public void mousePressed(MouseEvent e) {}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+	}
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		this.setBorder(outline);
+	}
 }

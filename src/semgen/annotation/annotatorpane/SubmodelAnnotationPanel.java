@@ -3,7 +3,7 @@ package semgen.annotation.annotatorpane;
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
 import semgen.annotation.workbench.AnnotatorWorkbench;
-import semgen.annotation.workbench.SubModelToolDrawer;
+import semgen.annotation.workbench.drawers.SubModelToolDrawer;
 
 public class SubmodelAnnotationPanel extends AnnotationPanel<SubModelToolDrawer> {
 

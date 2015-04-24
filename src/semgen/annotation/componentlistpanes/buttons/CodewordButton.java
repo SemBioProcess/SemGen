@@ -3,9 +3,10 @@ package semgen.annotation.componentlistpanes.buttons;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+
 import javax.swing.JLabel;
 
-import semgen.annotation.workbench.CodewordToolDrawer.CodewordCompletion;
+import semgen.annotation.workbench.drawers.CodewordToolDrawer.CodewordCompletion;
 import semgen.utilities.SemGenFont;
 import semsim.PropertyType;
 
@@ -24,12 +25,23 @@ public abstract class CodewordButton extends AnnotationObjectButton {
 		
 		makeIndicator(compannlabel, "C", "Indicates status of codeword's composite annotation");
 		compannlabel.addMouseListener(new IndicatorMouseListener(compannlabel));
-		namelabel.setFont(SemGenFont.defaultItalic());
+		if(editable) compannlabel.setForeground(editablelabelcolor);
+		else compannlabel.setForeground(noneditablelabelcolor);
+		
 		drawButton();
+		namelabel.setFont(SemGenFont.defaultItalic());
+		propoflabel.addMouseListener(this);
 		indicatorssuperpanel.add(propoflabel, BorderLayout.EAST);
 	}
 	
 	public void refreshCompositeAnnotationCode(CodewordCompletion cwc) {
+		if (cwc!=CodewordCompletion.noAnnotations) {
+			compannlabel.setFont(SemGenFont.Bold("Serif", -2));
+		}
+		else {
+			compannlabel.setFont(SemGenFont.Plain("Serif", -3));
+		}
+		
 		compannlabel.setText(cwc.getCode());
 	}
 
@@ -37,9 +49,8 @@ public abstract class CodewordButton extends AnnotationObjectButton {
 		propoflabel.setVisible(showmarkers);
 	}
 	
-	public boolean refreshPropertyOfMarker(PropertyType ptype){
-		Color oldcolor = new Color(propoflabel.color.getRGB());
-		Color col =  constitutivecolor;; 
+	public void refreshPropertyOfMarker(PropertyType ptype){
+		Color col =  constitutivecolor;
 		String tooltip;
 		if(ptype == PropertyType.PropertyOfPhysicalEntity){
 			col = entitycolor;
@@ -55,8 +66,5 @@ public abstract class CodewordButton extends AnnotationObjectButton {
 		propoflabel.updateType(col, tooltip);
 		indicatorssuperpanel.add(propoflabel, BorderLayout.EAST);
 		validate();
-
-		// Indicate whether to re-scroll to this button
-		return (oldcolor!=col); 
 	}
 }

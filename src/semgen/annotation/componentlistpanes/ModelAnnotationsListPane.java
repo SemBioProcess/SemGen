@@ -22,7 +22,7 @@ import org.openjena.atlas.lib.Pair;
 
 import semgen.SemGenSettings;
 import semgen.annotation.workbench.AnnotatorWorkbench;
-import semgen.annotation.workbench.ModelAnnotationsBench;
+import semgen.annotation.workbench.drawers.ModelAnnotationsBench;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenScrollPane;

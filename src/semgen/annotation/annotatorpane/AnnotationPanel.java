@@ -4,8 +4,8 @@ import javax.swing.JPanel;
 
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
-import semgen.annotation.workbench.AnnotatorDrawer;
 import semgen.annotation.workbench.AnnotatorWorkbench;
+import semgen.annotation.workbench.drawers.AnnotatorDrawer;
 
 public class AnnotationPanel<P extends AnnotatorDrawer> extends JPanel {
 	private static final long serialVersionUID = 1L;

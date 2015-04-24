@@ -1,4 +1,4 @@
-package semgen.annotation.workbench;
+package semgen.annotation.workbench.drawers;
 
 import java.util.Observable;
 
@@ -11,9 +11,13 @@ public abstract class AnnotatorDrawer extends Observable {
 	
 	public void setSelectedIndex(int index) {
 		currentfocus = index;
+		setChanged();
+		selectionNotification();
 	}
 	
 	public int getSelectedIndex() {
 		return currentfocus;
 	}
+	
+	protected abstract void selectionNotification();
 }

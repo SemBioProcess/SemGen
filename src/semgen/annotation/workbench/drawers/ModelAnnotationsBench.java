@@ -1,4 +1,4 @@
-package semgen.annotation.workbench;
+package semgen.annotation.workbench.drawers;
 
 import java.util.ArrayList;
 import java.util.Observable;

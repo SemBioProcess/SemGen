@@ -1,10 +1,11 @@
-package semgen.annotation.workbench;
+package semgen.annotation.workbench.drawers;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Set;
 
 import semgen.SemGen;
+import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
 import semsim.PropertyType;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.utilities.SemSimComponentComparator;
@@ -37,6 +38,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer {
 		for (DataStructure ds : datastructures) {
 			if (ds.isImportedViaSubmodel() && options[0]) continue;
 			cws.add(i);
+			i++;
 		}
 		
 		if(options[1]) setCodewordsbyAnnCompleteness(cws);
@@ -50,7 +52,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer {
 		ArrayList<Integer> depset = new ArrayList<Integer>();
 
 		for (Integer index : displaylist) {
-			PropertyType type = datastructures.get(index).getPropertyType(SemGen.semsimlib);
+			PropertyType type = getPropertyType(index);
 			
 			// Group according to physical property type
 			if(type  == PropertyType.PropertyOfPhysicalEntity)
@@ -64,6 +66,10 @@ public class CodewordToolDrawer extends AnnotatorDrawer {
 		displaylist.addAll(entset);
 		displaylist.addAll(procset);
 		displaylist.addAll(depset);
+	}
+	
+	public PropertyType getPropertyType(int index) {
+		return datastructures.get(index).getPropertyType(SemGen.semsimlib);
 	}
 	
 	private void setCodewordsbyAnnCompleteness(ArrayList<Integer> displaylist) {
@@ -148,5 +154,8 @@ public class CodewordToolDrawer extends AnnotatorDrawer {
 		return datastructures.get(currentfocus);
 	}
 	
-
+	@Override
+	protected void selectionNotification() {
+		notifyObservers(modeledit.cwselection);
+	}
 }

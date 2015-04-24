@@ -1,7 +1,6 @@
 package semgen.annotation.componentlistpanes;
 
 import java.awt.Color;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -21,12 +20,12 @@ import javax.swing.border.TitledBorder;
 
 import semgen.SemGenSettings;
 import semgen.annotation.componentlistpanes.buttons.AnnotationObjectButton;
-import semgen.annotation.workbench.AnnotatorDrawer;
 import semgen.annotation.workbench.AnnotatorWorkbench;
+import semgen.annotation.workbench.drawers.AnnotatorDrawer;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 
-public abstract class AnnotatorListPane<T extends AnnotationObjectButton, D extends AnnotatorDrawer> extends SemGenScrollPane implements ActionListener, KeyListener, Observer {
+public abstract class AnnotatorListPane<T extends AnnotationObjectButton, D extends AnnotatorDrawer> extends SemGenScrollPane implements KeyListener, Observer {
 	private static final long serialVersionUID = 1L;
 	protected AnnotatorWorkbench workbench;
 	protected D drawer;
@@ -41,9 +40,13 @@ public abstract class AnnotatorListPane<T extends AnnotationObjectButton, D exte
 		settings = sets;
 		drawer = tooldrawer;
 		
+		workbench.addObserver(this);
+		drawer.addObserver(this);
+		settings.addObserver(this);
+		
 		buttonpane.setBackground(Color.white);
 		buttonpane.setLayout(new BoxLayout(buttonpane, BoxLayout.Y_AXIS));
-		add(buttonpane);
+		setViewportView(buttonpane);
 		
 		InputMap im = getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 		// Override up and down key functions so user can use arrows to move between codewords
@@ -67,20 +70,26 @@ public abstract class AnnotatorListPane<T extends AnnotationObjectButton, D exte
 		focusbutton = focus;
 		focusbutton.setBackground(SemGenSettings.lightblue);
 		scrollToComponent(focusbutton);
-		drawer.setSelectedIndex(btnarray.indexOf(focus));
+		drawer.setSelectedIndex(btnlist.get(focus));
 	}
 	
 	protected void addButton(T btn, Integer index) {
 		btnlist.put(btn, index);
 		btnarray.add(btn);
 		buttonpane.add(btn);
-		btn.addMouseListener(new AOBMouseListener(btn));
+		btn.addMouseListener(btn);
 	}
 	
 	public void update() {
+		btnlist.clear();
+		btnarray.clear();
+		buttonpane.removeAll();
 		updateButtonTable();
 		
-		scrollToComponent(focusbutton);
+		if (drawer.getSelectedIndex()!=-1) {
+			changeButtonFocus(btnarray.get(drawer.getSelectedIndex()));
+		}
+
 		buttonpane.validate();
 		buttonpane.repaint();
 	}
@@ -105,21 +114,4 @@ public abstract class AnnotatorListPane<T extends AnnotationObjectButton, D exte
 	public void keyTyped(KeyEvent e) {}
 	
 	protected abstract void updateButtonTable();
-	
-	protected class AOBMouseListener extends MouseAdapter {
-		T btn;
-		public AOBMouseListener(T aob){
-			btn = aob;
-		}
-		
-		public void mouseClicked(MouseEvent e) {
-			changeButtonFocus(btn);
-		}
-	}
-	
-	protected class FreeTextMouseListener extends MouseAdapter {
-		public void mouseClicked(MouseEvent e) {
-			workbench.requestFreetextChange();
-		}
-	}
 }

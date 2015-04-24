@@ -1,4 +1,4 @@
-package semgen.annotation.workbench;
+package semgen.annotation.workbench.drawers;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,6 +30,7 @@ public class SubModelToolDrawer extends AnnotatorDrawer {
 		for (Submodel sm : submodels) {
 			if (sm.isImported() && showimports) continue;
 			sms.add(i);
+			i++;
 		}
 		return sms;
 	}
@@ -89,5 +90,10 @@ public class SubModelToolDrawer extends AnnotatorDrawer {
 	//Temporary
 	public Submodel getCurrentSelection() {
 		return submodels.get(currentfocus);
+	}
+
+	@Override
+	protected void selectionNotification() {
+		notifyObservers(modeledit.smselection);
 	}
 }
