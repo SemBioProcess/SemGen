@@ -1,4 +1,4 @@
-startDirectory; C:\Users\Christopher\Dropbox\Semantic Project\PHNmerge
+startDirectory; C:\Users\Christopher\Documents
 maximize; true
 screensize; 1938x1050
 screenpos; -9x-9
@@ -7,5 +7,5 @@ showImports; true
 displayMarkers; true
 organizeByPropertyType; true
 sortbyCompositeCompleteness; true
-treeView; false
+treeView; true
 helpURL; http://sbp.bhi.washington.edu/projects/semgen/semgenhelp

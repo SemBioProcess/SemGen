@@ -3,8 +3,6 @@ package semgen.annotation.componentlistpanes;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Observer;
@@ -25,7 +23,7 @@ import semgen.annotation.workbench.drawers.AnnotatorDrawer;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 
-public abstract class AnnotatorListPane<T extends AnnotationObjectButton, D extends AnnotatorDrawer> extends SemGenScrollPane implements KeyListener, Observer {
+public abstract class AnnotatorListPane<T extends AnnotationObjectButton, D extends AnnotatorDrawer<?>> extends SemGenScrollPane implements KeyListener, Observer {
 	private static final long serialVersionUID = 1L;
 	protected AnnotatorWorkbench workbench;
 	protected D drawer;

@@ -166,11 +166,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		} 
 		
 		if (o == annotateitemremoverefterm) {
-				Set<PhysicalModelComponent> pmcs = new HashSet<PhysicalModelComponent>();
-				for(PhysicalModelComponent pmc : workbench.getSemSimModel().getPhysicalModelComponents()){
-					if(!(pmc instanceof CompositePhysicalEntity) && (pmc instanceof PhysicalEntity || pmc instanceof PhysicalProcess))
-						pmcs.add(pmc);
-				}
+
 			}
 		
 		if (o == annotateitemreplacerefterm) {

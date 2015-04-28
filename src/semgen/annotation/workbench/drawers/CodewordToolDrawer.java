@@ -10,7 +10,7 @@ import semsim.PropertyType;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.utilities.SemSimComponentComparator;
 
-public class CodewordToolDrawer extends AnnotatorDrawer {
+public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	public enum CodewordCompletion {
 		noAnnotations("_"), hasPhysProp("P+_"), hasPhysEnt("_+X"), hasAll("P+X");
 		private String code;
@@ -24,18 +24,17 @@ public class CodewordToolDrawer extends AnnotatorDrawer {
 		}
 	}
 	
-	private ArrayList<DataStructure> datastructures = new ArrayList<DataStructure>();
 	public CodewordToolDrawer(Set<DataStructure> dslist) {
-		datastructures.addAll(dslist);
+		componentlist.addAll(dslist);
 		
-		Collections.sort(datastructures, new SemSimComponentComparator());
+		Collections.sort(componentlist, new SemSimComponentComparator());
 	}
 	
 	public ArrayList<Integer> getCodewordstoDisplay(Boolean[] options){
 		ArrayList<Integer> cws = new ArrayList<Integer>();
 		
 		int i = 0;
-		for (DataStructure ds : datastructures) {
+		for (DataStructure ds : componentlist) {
 			if (ds.isImportedViaSubmodel() && options[0]) continue;
 			cws.add(i);
 			i++;
@@ -69,7 +68,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer {
 	}
 	
 	public PropertyType getPropertyType(int index) {
-		return datastructures.get(index).getPropertyType(SemGen.semsimlib);
+		return componentlist.get(index).getPropertyType(SemGen.semsimlib);
 	}
 	
 	private void setCodewordsbyAnnCompleteness(ArrayList<Integer> displaylist) {
@@ -103,7 +102,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer {
 	}
 	
 	public CodewordCompletion getAnnotationStatus(int index) {
-		DataStructure ds = datastructures.get(index);
+		DataStructure ds = componentlist.get(index);
 
 		if (!ds.hasPhysicalProperty() && !ds.hasAssociatedPhysicalComponent()) {
 			return CodewordCompletion.noAnnotations;
@@ -117,43 +116,19 @@ public class CodewordToolDrawer extends AnnotatorDrawer {
 		return CodewordCompletion.hasAll;
 	}
 	
-	public String getCodewordName(int index) {
-		return datastructures.get(index).getName();
-	}
-	
 	public boolean isEditable(int index) {
-		return !datastructures.get(index).isImportedViaSubmodel();
+		return !componentlist.get(index).isImportedViaSubmodel();
 	}
 	
 	public boolean hasSingularAnnotation(int index) {
-		return datastructures.get(index).hasRefersToAnnotation();
+		return componentlist.get(index).hasRefersToAnnotation();
 	}
-	
-	public boolean hasHumanReadableDef(int index) {
-		return datastructures.get(index).getDescription()!="";
-	}
-	
-	public int getFocusIndex() {
-		return currentfocus;
-	}
-	
+
 	public String getFocusLookupName() {
-		DataStructure ds = datastructures.get(currentfocus);
+		DataStructure ds = componentlist.get(currentfocus);
 		return ds.getName().substring(ds.getName().lastIndexOf(".")+1);
 	}
 
-	public Boolean containsComponentwithName(String name){
-		for (DataStructure ds : datastructures) {
-			if (ds.getName().equals(name)) return true;
-		}
-		return false;
-	}
-	
-	//Temporary
-	public DataStructure getCurrentSelection() {
-		return datastructures.get(currentfocus);
-	}
-	
 	@Override
 	protected void selectionNotification() {
 		notifyObservers(modeledit.cwselection);

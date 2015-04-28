@@ -20,7 +20,6 @@ import semgen.annotation.routines.AnnotationCopier;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
 import semgen.annotation.workbench.drawers.ModelAnnotationsBench;
 import semgen.annotation.workbench.drawers.SubModelToolDrawer;
-import semgen.annotation.workbench.drawers.ModelAnnotationsBench.ModelChangeEnum;
 import semgen.utilities.CSVExporter;
 import semgen.utilities.SemGenError;
 import semgen.utilities.Workbench;
@@ -264,6 +263,10 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	public void requestFreetextChange() {
 		setChanged();
 		notifyObservers(WBEvent.freetextrequest);
+	}
+	
+	public AnnotatorTreeMap makeTreeMap(boolean useimports) {
+		return new AnnotatorTreeMap(useimports, smdrawer, cwdrawer);
 	}
 	
 	@Override

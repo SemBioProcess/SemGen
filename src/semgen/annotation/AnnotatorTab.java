@@ -8,6 +8,7 @@ import semgen.annotation.annotatorpane.AnnotationPanel;
 import semgen.annotation.annotatorpane.CodewordAnnotationPanel;
 import semgen.annotation.annotatorpane.ModelAnnotationEditor;
 import semgen.annotation.annotatorpane.SubmodelAnnotationPanel;
+import semgen.annotation.componentlistpanes.AnnotatorButtonTree;
 import semgen.annotation.componentlistpanes.CodewordListPane;
 import semgen.annotation.componentlistpanes.ModelAnnotationsListPane;
 import semgen.annotation.componentlistpanes.SubmodelListPane;
@@ -18,6 +19,8 @@ import semgen.annotation.workbench.drawers.ModelAnnotationsBench;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semgen.utilities.uicomponent.SemGenTab;
+import semsim.SemSimObject;
+
 import java.net.URI;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -48,7 +51,7 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 	public SemGenScrollPane annotatorscrollpane = new SemGenScrollPane();
 	private SemGenScrollPane treeviewscrollpane = new SemGenScrollPane();
 
-	public AnnotationPanel<? extends AnnotatorDrawer> annotatorpane;
+	public AnnotationPanel<? extends AnnotatorDrawer<? extends SemSimObject>> annotatorpane;
 
 	private CodewordListPane cwpane;
 	private SubmodelListPane smpane;	
@@ -143,9 +146,12 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 	
 	private void changeComponentView() {
 		if (settings.useTreeView()) {
+			AnnotatorButtonTree tree = new AnnotatorButtonTree(workbench, settings);
+			treeviewscrollpane.setViewportView(tree);
 			westsplitpane.setBottomComponent(treeviewscrollpane);
 		}
 		else {
+			treeviewscrollpane.removeAll();
 			toolbar.enableSort(true);
 			westsplitpane.setBottomComponent(swsplitpane);
 		}
