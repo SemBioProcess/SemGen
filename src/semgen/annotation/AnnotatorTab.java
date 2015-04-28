@@ -87,6 +87,9 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 		cwpane = new CodewordListPane(workbench, settings);
 		smpane = new SubmodelListPane(workbench, settings);
 		
+		AnnotatorButtonTree tree = new AnnotatorButtonTree(workbench, settings);
+		treeviewscrollpane.setViewportView(tree);
+		
 		swsplitpane  = new JSplitPane(JSplitPane.VERTICAL_SPLIT, cwpane, smpane);
 		swsplitpane.setOneTouchExpandable(true);
 		
@@ -146,12 +149,11 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 	
 	private void changeComponentView() {
 		if (settings.useTreeView()) {
-			AnnotatorButtonTree tree = new AnnotatorButtonTree(workbench, settings);
-			treeviewscrollpane.setViewportView(tree);
+			
 			westsplitpane.setBottomComponent(treeviewscrollpane);
 		}
 		else {
-			treeviewscrollpane.removeAll();
+			//treeviewscrollpane.setViewport(null);
 			toolbar.enableSort(true);
 			westsplitpane.setBottomComponent(swsplitpane);
 		}

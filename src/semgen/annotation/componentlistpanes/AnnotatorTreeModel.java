@@ -1,6 +1,5 @@
 package semgen.annotation.componentlistpanes;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
@@ -14,13 +13,13 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 import semgen.SemGenSettings;
-import semgen.annotation.componentlistpanes.buttons.AnnotationObjectButton;
 import semgen.annotation.componentlistpanes.buttons.CodewordButton;
 import semgen.annotation.componentlistpanes.buttons.SubmodelButton;
 import semgen.annotation.workbench.AnnotatorTreeMap;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
 import semgen.annotation.workbench.drawers.SubModelToolDrawer;
+import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 
 public class AnnotatorTreeModel implements TreeModel {
@@ -77,8 +76,8 @@ public class AnnotatorTreeModel implements TreeModel {
 		parent.add(newnode);
 	}
 	
-	private void fireMouseClicked(DefaultMutableTreeNode node) {
-		
+	public void buttonSelected(DefaultMutableTreeNode node) {
+		nodemap.get(node).onSelection();
 	}
 	
 	private void addCodewordNode(Integer index, DefaultMutableTreeNode parent) {
@@ -139,17 +138,13 @@ public class AnnotatorTreeModel implements TreeModel {
 	}
 	
 	private void changeButtonFocus(Component focusbutton) {
-		if(focus!=null){
-			focus.setBackground(Color.white);
-		}
 		focus = focusbutton;
-		focus.setBackground(SemGenSettings.lightblue);
 	}
 	
 	protected interface TreeButton {
 		public void updateButton(int index);
 		public Component getButton();
-		public void fireMouseClicked();
+		public void onSelection();
 	}
 	
 	protected class RootButton extends JLabel implements TreeButton {
@@ -157,24 +152,23 @@ public class AnnotatorTreeModel implements TreeModel {
 
 		public RootButton() {
 			setIcon(SemGenIcon.homeiconsmall);
+			setFont(SemGenFont.defaultBold(1));
 			setText(workbench.getCurrentModelName());
 		}
 		
 		@Override
-		public void updateButton(int index) {
-			
-		}
+		public void updateButton(int index) {}
 
 		@Override
 		public Component getButton() {
 			return this;
 		}
 
+
 		@Override
-		public void fireMouseClicked() {
-			
+		public void onSelection() {
+			workbench.getModelAnnotationsWorkbench().notifyOberserversofMetadataSelection(0);
 		}
-		
 	}
 	
 	class SubModelTreeButton extends SubmodelButton implements TreeButton {
@@ -187,17 +181,14 @@ public class AnnotatorTreeModel implements TreeModel {
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
-			changeButtonFocus(this);
-			smdrawer.setSelectedIndex(smmap.get(this));
 			if (arg0.getSource()==humdeflabel) {
 				workbench.requestFreetextChange();
 			}
-			
 		}
 		
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			
+
 		}
 
 		@Override
@@ -212,8 +203,9 @@ public class AnnotatorTreeModel implements TreeModel {
 		}
 
 		@Override
-		public void fireMouseClicked() {
-
+		public void onSelection() {
+			changeButtonFocus(this);
+			smdrawer.setSelectedIndex(smmap.get(this));
 		}
 	}
 	
@@ -227,11 +219,7 @@ public class AnnotatorTreeModel implements TreeModel {
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
-			changeButtonFocus(this);
-			cwdrawer.setSelectedIndex(cwmap.get(this));
-			if (arg0.getSource()==humdeflabel) {
-				workbench.requestFreetextChange();
-			}
+
 		}
 
 		@Override
@@ -246,11 +234,11 @@ public class AnnotatorTreeModel implements TreeModel {
 		public Component getButton() {
 			return this;
 		}
-
+		
 		@Override
-		public void fireMouseClicked() {
-			// TODO Auto-generated method stub
-			
+		public void onSelection() {
+			changeButtonFocus(this);
+			cwdrawer.setSelectedIndex(cwmap.get(this));
 		}
 	}
 	

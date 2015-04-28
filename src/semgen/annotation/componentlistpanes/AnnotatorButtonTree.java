@@ -1,9 +1,8 @@
 package semgen.annotation.componentlistpanes;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -14,14 +13,13 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeCellRenderer;
-import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 import javax.swing.Painter;
 
 import semgen.SemGenSettings;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 
-public class AnnotatorButtonTree extends JTree implements TreeSelectionListener, MouseListener, Observer{
+public class AnnotatorButtonTree extends JTree implements TreeSelectionListener, Observer{
 	private static final long serialVersionUID = 7868541704010347520L;
 	private AnnotatorTreeModel model;
 	
@@ -29,13 +27,13 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener,
 		wb.addObserver(this);
 
 		model = new AnnotatorTreeModel(wb, sets);
-		
 		setModel(model);
 		UIDefaults dialogTheme = new UIDefaults();
 		dialogTheme.put("Tree:TreeCell[Focused+Selected].backgroundPainter", new MyPainter());
 		dialogTheme.put("Tree:TreeCell[Enabled+Selected].backgroundPainter", new MyPainter());
 		putClientProperty("Nimbus.Overrides.InheritDefaults", true);
 		putClientProperty("Nimbus.Overrides", dialogTheme);
+		addTreeSelectionListener(this);
 		
 		setLargeModel(true);
 		this.setCellRenderer(new Renderer());
@@ -52,52 +50,28 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener,
 	}
 	
 	class Renderer implements TreeCellRenderer {
-
 		@Override
 		public Component getTreeCellRendererComponent(JTree arg0, Object node,
-				boolean arg2, boolean arg3, boolean arg4, int arg5, boolean arg6) {
+				boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
 			
-			return model.getButton((DefaultMutableTreeNode)node).getButton();
+			Component btn = model.getButton((DefaultMutableTreeNode)node).getButton();
+			
+			if (selected) btn.setBackground(SemGenSettings.lightblue);
+			else btn.setBackground(Color.white);
+			
+			return btn;
 		}	
 	}
 	
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
-		
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode)
+                getLastSelectedPathComponent();
+		model.buttonSelected(node);
 	}
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
 
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		TreePath tp = this.getPathForLocation(arg0.getX(), arg0.getY());
-	
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 }
