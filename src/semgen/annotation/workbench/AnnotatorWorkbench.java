@@ -255,9 +255,15 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		submodelListChanged();
 	}
 	
-	public Boolean validateNewComponentName(String newname){
-		return (!newname.equals("") && !cwdrawer.containsComponentwithName(newname) &&
-			!smdrawer.containsComponentwithName(newname) && !newname.contains("--"));
+	public Boolean submitSubmodelName(String newname) {
+		if (!newname.equals("") && !cwdrawer.containsComponentwithName(newname) &&
+			!smdrawer.containsComponentwithName(newname) && !newname.contains("--")) {
+			
+			
+			return true;
+		}
+		
+		return false;
 	}
 	
 	public void requestFreetextChange() {

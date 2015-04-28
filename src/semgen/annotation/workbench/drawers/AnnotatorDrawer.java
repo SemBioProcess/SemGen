@@ -17,6 +17,10 @@ public abstract class AnnotatorDrawer<T extends SemSimObject> extends Observable
 		return componentlist.get(index).getName();
 	}
 	
+	public String getCodewordName() {
+		return componentlist.get(currentfocus).getName();
+	}
+	
 	public Integer getIndexofComponent(T comp) {
 		return componentlist.indexOf(comp);
 	}
@@ -49,4 +53,8 @@ public abstract class AnnotatorDrawer<T extends SemSimObject> extends Observable
 	public abstract boolean hasSingularAnnotation(int index);
 	protected abstract void selectionNotification();
 	public abstract boolean isEditable(int index);
+	
+	public boolean isEditable() {
+		return isEditable(currentfocus);
+	}
 }

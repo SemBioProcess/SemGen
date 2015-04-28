@@ -18,13 +18,13 @@ import semgen.utilities.SemGenFont;
 public class AnnotationClickableTextPane extends JTextPane {
 	private static final long serialVersionUID = -1862678829844737844L;
 
-	public AnnotationClickableTextPane(String text, int indent, boolean addMouseListener){
+	public AnnotationClickableTextPane(String text, int indent, boolean clickable){
 		setEditable(false);
 		setOpaque(false);
 		setBorder(BorderFactory.createEmptyBorder(0, indent, 7, 15));
 		setBackground(new Color(0,0,0,0));
 
-		if(addMouseListener){  // If need mouse listener, then it's clickable, if not, customize for computational code field
+		if(clickable){  // If need mouse listener, then it's clickable, if not, customize for computational code field
 			addMouseListener(new mouseforTextPane());
 			setFont(SemGenFont.defaultPlain());
 		}
