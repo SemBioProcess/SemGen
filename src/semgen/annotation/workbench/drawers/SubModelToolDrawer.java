@@ -7,11 +7,9 @@ import java.util.Set;
 import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.Submodel;
-import semsim.model.physical.object.FunctionalSubmodel;
 import semsim.utilities.SemSimComponentComparator;
 
 public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
-	private Integer currentfocus = -1;
 	
 	public SubModelToolDrawer(Set<Submodel> modlist) {
 		componentlist = new ArrayList<Submodel>();
@@ -38,10 +36,14 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 	public boolean isEditable(int index) {
 		boolean editable = true;
 		Submodel sm = componentlist.get(index);
-		if(sm instanceof FunctionalSubmodel){
+		if(sm.isFunctional()){
 			editable = sm.getParentImport()==null;
 		}
 		return editable;
+	}
+	
+	public boolean isImported() {
+		return componentlist.get(currentfocus).isImported();
 	}
 	
 	public String getCodewordName(int index) {
@@ -84,5 +86,9 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 	@Override
 	protected void selectionNotification() {
 		notifyObservers(modeledit.smselection);
+	}
+	
+	public boolean isFunctional() {
+		return componentlist.get(currentfocus).isFunctional();
 	}
 }

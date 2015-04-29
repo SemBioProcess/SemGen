@@ -26,12 +26,14 @@ public class FunctionalSubmodel extends Submodel {
 	public FunctionalSubmodel(String name, DataStructure output) {
 		super(name);
 		computation = new Computation(output);
+		functional = true;
 	}
 	
 	public FunctionalSubmodel(String name, Set<DataStructure> outputs) {
 		super(name);
 		this.setLocalName(name);
 		computation = new Computation(outputs);
+		functional = true;
 	}
 	
 	public FunctionalSubmodel(String name, String localName, String referencedName, String hrefValue){
@@ -46,6 +48,7 @@ public class FunctionalSubmodel extends Submodel {
 			setHrefValue(hrefValue);
 		}
 		computation = new Computation();
+		functional = true;
 	}
 
 	public Map<String, Set<FunctionalSubmodel>> getRelationshipSubmodelMap() {

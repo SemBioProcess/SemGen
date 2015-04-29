@@ -6,32 +6,40 @@ import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
 import semgen.annotation.workbench.AnnotatorWorkbench;
+import semgen.annotation.workbench.AnnotatorWorkbench.WBEvent;
 import semgen.annotation.workbench.drawers.AnnotatorDrawer;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
+import semsim.SemSimObject;
 
-public abstract class AnnotationPanel<P extends AnnotatorDrawer<?>> extends JPanel implements MouseListener, Observer {
+public abstract class AnnotationPanel<P extends AnnotatorDrawer<? extends SemSimObject>> extends JPanel implements MouseListener, Observer {
 	private static final long serialVersionUID = 1L;
 
 	protected AnnotatorWorkbench workbench;
-	protected AnnotatorDrawer drawer;
+	protected P drawer;
 	protected SemGenSettings settings;
 	protected GlobalActions globalacts;
 	
-	protected JLabel codewordlabel = new JLabel("");
+	protected JPanel mainpanel = new JPanel();
+	protected JLabel codewordlabel = new JLabel();
 	protected AnnotatorButton humremovebutton = new AnnotatorButton(SemGenIcon.eraseiconsmall, "Remove this annotation");
-
+	protected AnnotationClickableTextPane humandefpane;
+	
+	//protected SemSimComponentAnnotationPanel singularannpanel;
 	protected JLabel singularannlabel = new JLabel("Singular annotation");
 
 	protected int indent = 15;
@@ -49,39 +57,90 @@ public abstract class AnnotationPanel<P extends AnnotatorDrawer<?>> extends JPan
 	}
 	
 	protected void drawUI() {
-		JPanel mainpanel = new JPanel();
-		constructMainPanel(mainpanel);
+		mainpanel.setLayout(new BoxLayout(mainpanel, BoxLayout.Y_AXIS));
+		mainpanel.setBackground(SemGenSettings.lightblue);
+		
 		createHeader();
+		createHumanDefinitionPanel();
+		createUniqueElements();
+		singularannlabel.setFont(SemGenFont.defaultBold());
+		singularannlabel.setBorder(BorderFactory.createEmptyBorder(10, indent, 5, 0));
+		mainpanel.add(singularannlabel);
+		addSingularAnnotationPanel();
 		
 		add(mainpanel, BorderLayout.NORTH);
 		add(Box.createVerticalGlue(), BorderLayout.SOUTH);
 		
-		refreshUI();
+		refreshData();
+		
+		setVisible(true);
+		validate();
+		repaint();
 	}
 	
 	private void createHeader() {
 		codewordlabel.setBorder(BorderFactory.createEmptyBorder(5, indent, 5, 10));
 		codewordlabel.setFont(SemGenFont.defaultBold(3));
 		codewordlabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
+		codewordlabel.setText(drawer.getCodewordName());
 		
 		Box mainheader = Box.createHorizontalBox();
 		mainheader.setBackground(SemGenSettings.lightblue);
 		mainheader.setAlignmentX(LEFT_ALIGNMENT);
 		
-		
 		mainheader.add(codewordlabel);
+		formatHeader(mainheader);
+		mainheader.add(Box.createGlue());
+		mainpanel.add(mainheader);
 	}
 	
-	private void createDefinitionPanel() {
+	private void createHumanDefinitionPanel() {
+		JPanel humandefpanel = new JPanel(new BorderLayout());
+		humandefpanel.setBackground(SemGenSettings.lightblue);
+		humandefpanel.setBorder(BorderFactory.createEmptyBorder(0, indent, 0, 0));
+		humandefpanel.setAlignmentX(JPanel.LEFT_ALIGNMENT);
 		
+		JPanel humandefsubpanel = new JPanel();
+		humandefsubpanel.setBackground(SemGenSettings.lightblue);
+		humandefsubpanel.setLayout(new BoxLayout(humandefsubpanel, BoxLayout.X_AXIS));
+		
+		humandefpane = new AnnotationClickableTextPane(drawer.getHumanReadableDef(),indent, drawer.isEditable());
+		humandefpane.setAlignmentX(JTextArea.LEFT_ALIGNMENT);
+		humandefpane.addMouseListener(this);
+		humremovebutton.setEnabled(drawer.isEditable());
+		
+		humandefsubpanel.add(humandefpane);
+		humandefsubpanel.add(humremovebutton);
+		humandefpanel.add(humandefsubpanel, BorderLayout.WEST);
+		humandefpanel.add(Box.createGlue(), BorderLayout.EAST);
+		
+		mainpanel.add(humandefpanel);
 	}
 	
-	protected abstract void formatHeader();
-	protected abstract void constructMainPanel(JPanel main);
-	protected abstract void refreshUI();
-	protected abstract void constructHumanDefinitionPanel();
+	protected void refreshFreeText() {
+		humandefpane.setText(drawer.getHumanReadableDef());
+	}
 	
-
+	private void addSingularAnnotationPanel() {
+		//singularannpanel.setAlignmentX(JPanel.LEFT_ALIGNMENT);
+		
+		//mainpanel.add(singularannpanel);
+	}
+	
+	protected abstract void formatHeader(Box mainheader);
+	protected abstract void createUniqueElements();
+	protected abstract void refreshData();	
+	protected abstract void updateUnique(Observable o, Object arg1);	
+	
+	@Override
+	public void update(Observable o, Object arg) {
+		if (arg==WBEvent.freetextrequest) {
+			
+		}
+		
+		updateUnique(o, arg);
+	}
+	
 	protected class AnnotatorButton extends JLabel {
 		private static final long serialVersionUID = 1L;
 		
@@ -89,7 +148,6 @@ public abstract class AnnotationPanel<P extends AnnotatorDrawer<?>> extends JPan
 			super(image);
 			addMouseListener(new LabelMouseBehavior(this));
 			setToolTipText(tooltip);
-			setEnabled(drawer.isEditable());
 			setBorder(BorderFactory.createEmptyBorder(1,1,1,1));	
 		}
 		

@@ -129,6 +129,24 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		return ds.getName().substring(ds.getName().lastIndexOf(".")+1);
 	}
 
+	public String getUnits() {
+		if (componentlist.get(currentfocus).hasUnits()) {
+			return componentlist.get(currentfocus).getUnit().getName();
+		}
+		return "dimensionless";
+	}
+	
+	public String getEquationasString() {
+		if(componentlist.get(currentfocus).getComputation()!=null){
+			return componentlist.get(currentfocus).getComputation().getComputationalCode();
+		}
+		return "";
+	}
+	
+	public boolean isMapped() {
+		return componentlist.get(currentfocus).isMapped();
+	}
+	
 	@Override
 	protected void selectionNotification() {
 		notifyObservers(modeledit.cwselection);

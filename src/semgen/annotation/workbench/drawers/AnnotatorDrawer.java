@@ -42,6 +42,12 @@ public abstract class AnnotatorDrawer<T extends SemSimObject> extends Observable
 	public boolean hasHumanReadableDef(int index) {
 		return componentlist.get(index).getDescription()!="";
 	}
+	
+	public String getHumanReadableDef() {
+		String desc = componentlist.get(currentfocus).getDescription();
+		if (desc!="") desc = "[unspecified]";
+		return desc;
+	}
 
 	public Boolean containsComponentwithName(String name){
 		for (T comp : componentlist) {

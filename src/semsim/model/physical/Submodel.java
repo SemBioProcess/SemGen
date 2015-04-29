@@ -19,6 +19,7 @@ public class Submodel extends PhysicalModelComponent implements Cloneable, Impor
 	private String referencedName;
 	private String localName;
 	private Importable parentImport;
+	protected boolean functional = false;
 	
 	public Submodel(String name){ 
 		setName(name);
@@ -121,5 +122,9 @@ public class Submodel extends PhysicalModelComponent implements Cloneable, Impor
 	@Override
 	public URI getSemSimClassURI() {
 		return SemSimConstants.SUBMODEL_CLASS_URI;
+	}
+	
+	public boolean isFunctional() {
+		return functional;
 	}
 }

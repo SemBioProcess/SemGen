@@ -30,6 +30,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	private Set<DataStructure> usedToCompute = new HashSet<DataStructure>();
 	private Set<Annotation> annotations = new HashSet<Annotation>();
 	private boolean isSolutionDomain, isDiscrete, isDeclared, isImported;
+	protected boolean mappable = false;
 	private String startValue;
 	private UnitOfMeasurement unit;
 	
@@ -377,5 +378,9 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	
 	public boolean hasAssociatedPhysicalComponent() {
 		return physicalProperty.getPhysicalPropertyOf()==null;
+	}
+	
+	public boolean isMapped() {
+		return false;
 	}
 }

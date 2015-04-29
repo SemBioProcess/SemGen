@@ -6,7 +6,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Observable;
 
-import javax.swing.JLabel;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -15,11 +16,14 @@ import semgen.SemGenSettings;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.drawers.SubModelToolDrawer;
 import semgen.utilities.SemGenIcon;
+import semgen.utilities.uicomponent.SemGenSeparator;
 
 public class SubmodelAnnotationPanel extends AnnotationPanel<SubModelToolDrawer> {
 	private static final long serialVersionUID = 1L;
 	
 	protected AnnotatorButton loadsourcemodelbutton = new AnnotatorButton(SemGenIcon.annotatoricon, "Annotate source model for this imported sub-model");
+	private AnnotationClickableTextPane nestedsubmodelpane;
+	private AnnotationClickableTextPane subtitlefield;
 	
 	public SubmodelAnnotationPanel(AnnotatorWorkbench wb, SemGenSettings sets,
 			GlobalActions gacts) {
@@ -29,28 +33,35 @@ public class SubmodelAnnotationPanel extends AnnotationPanel<SubModelToolDrawer>
 	}
 
 	@Override
-	public void update(Observable o, Object arg) {
-		
-	}
-
-	@Override
-	protected void constructMainPanel(JPanel main) {
-		
-	}
-
-	@Override
-	protected void refreshUI() {
-		
-	}
-
-	@Override
-	protected void formatHeader() {
+	protected void formatHeader(Box mainheader) {
 		if (drawer.isEditable()) {
 			codewordlabel.addMouseListener(new SubmodelCodewordMouseBehavior());
 			codewordlabel.addMouseListener(this);
 		}
+		if(drawer.isImported()){
+			mainheader.add(loadsourcemodelbutton);
+			codewordlabel.setBorder(BorderFactory.createEmptyBorder(5, indent, 5, 10));
+		}
 	}
 	
+	@Override
+	protected void createUniqueElements() {
+		subtitlefield = new AnnotationClickableTextPane("", 2*indent, drawer.isEditable() && !drawer.isFunctional());
+		nestedsubmodelpane = new AnnotationClickableTextPane("", 2*indent, drawer.isEditable() && !drawer.isFunctional());
+		
+		subtitlefield.setAlignmentX(JPanel.LEFT_ALIGNMENT);
+		mainpanel.add(subtitlefield);
+		nestedsubmodelpane.setAlignmentX(JPanel.LEFT_ALIGNMENT);
+		mainpanel.add(nestedsubmodelpane);
+		mainpanel.add(new SemGenSeparator());
+		
+	}
+
+	@Override
+	protected void refreshData() {
+		
+	}
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		
@@ -76,9 +87,10 @@ public class SubmodelAnnotationPanel extends AnnotationPanel<SubModelToolDrawer>
 		
 	}
 
-	@Override
-	protected void constructHumanDefinitionPanel() {
 
+	@Override
+	public void updateUnique(Observable o, Object arg) {
+		
 	}
 	
 	private class SubmodelCodewordMouseBehavior extends MouseAdapter {
@@ -104,4 +116,6 @@ public class SubmodelAnnotationPanel extends AnnotationPanel<SubModelToolDrawer>
 			}
 		}
 	}
+
+
 }

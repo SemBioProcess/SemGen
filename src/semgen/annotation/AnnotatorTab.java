@@ -162,6 +162,7 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 	private void annotationObjectAction() {
 		annotatorscrollpane.setViewportView(annotatorpane);
 		annotatorscrollpane.scrollToTop();
+		annotatorscrollpane.scrollToLeft();
 	}
 	
 	// Refresh the display of codewords and submodels based on the view options selected in the Annotate menu

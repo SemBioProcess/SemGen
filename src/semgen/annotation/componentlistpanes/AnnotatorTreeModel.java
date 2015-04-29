@@ -75,11 +75,7 @@ public class AnnotatorTreeModel implements TreeModel {
 		smmap.put(renderer, index);
 		parent.add(newnode);
 	}
-	
-	public void buttonSelected(DefaultMutableTreeNode node) {
-		nodemap.get(node).onSelection();
-	}
-	
+		
 	private void addCodewordNode(Integer index, DefaultMutableTreeNode parent) {
 		DefaultMutableTreeNode newnode = new DefaultMutableTreeNode("cw" + index);
 		
@@ -90,6 +86,11 @@ public class AnnotatorTreeModel implements TreeModel {
 		cwmap.put(renderer, index);
 		parent.add(newnode);
 	}
+	
+	public void buttonSelected(DefaultMutableTreeNode node) {
+		nodemap.get(node).onSelection();
+	}
+
 
 	public TreeButton getButton(DefaultMutableTreeNode node) {
 		return nodemap.get(node);
@@ -163,7 +164,6 @@ public class AnnotatorTreeModel implements TreeModel {
 		public Component getButton() {
 			return this;
 		}
-
 
 		@Override
 		public void onSelection() {

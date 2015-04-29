@@ -94,6 +94,10 @@ public class MappableVariable extends Decimal{
 		return mappedFrom;
 	}
 	
+	public boolean isMapped() {
+		return !getMappedTo().isEmpty() || !getMappedFrom().isEmpty(); 
+	}
+	
 	@Override
 	public boolean isFunctionalSubmodelInput(){
 		// If the mapped variable has an "in" interface value, return true
