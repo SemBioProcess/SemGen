@@ -21,7 +21,6 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -36,6 +35,7 @@ import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.ExternalURLButton;
+import semgen.utilities.uicomponent.SemGenScrollPane;
 import semsim.Annotatable;
 import semsim.SemSimConstants;
 import semsim.model.physical.object.PhysicalProperty;
@@ -157,7 +157,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		resultslistright.setBorder(BorderFactory.createBevelBorder(1));
 		resultslistright.setEnabled(true);
 
-		JScrollPane resultsscrollerright = new JScrollPane(resultslistright);
+		SemGenScrollPane resultsscrollerright = new SemGenScrollPane(resultslistright);
 		resultsscrollerright.setBorder(BorderFactory.createTitledBorder("Search results"));
 		resultsscrollerright.setPreferredSize(new Dimension(650, 400));
 
