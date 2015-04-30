@@ -115,6 +115,39 @@ $(window).load(function() {
 					
 					mockReceiver.showSubmodelNetwork(modelName, data);
 				}
+				else if(task == "physiomap") {
+					var data = [
+					    {
+					    	name: "Entity 1",
+					    	inputs: ["Process A"],
+					    	nodeType: "state",
+					    },
+					    {
+					    	name: "Process A",
+					    	nodeType: "Rate",
+					    },
+					    {
+					    	name: "Entity 2",
+					    	inputs: ["Process B"],
+					    	nodeType: "state",
+					    },
+					    {
+					    	name: "Process B",
+					    	nodeType: "Rate",
+					    },
+					    {
+					    	name: "Entity 3",
+					    	inputs: ["Process A", "Process B"],
+					    	nodeType: "State",
+					    },
+					    {
+					    	name: "Process C",
+					    	inputs: ["Entity 1", "Entity 2"],
+					    	nodeType: "Rate",
+					    },
+					];
+					mockReceiver.showPhysioMapNetwork(modelName, data);
+				}
 				else if(task == "close") {
 					mockReceiver.removeModel(modelName);
 				}
@@ -153,6 +186,8 @@ $(window).load(function() {
 			onShowDependencyNetwork: function (handler) { this.showDependencyNetwork = handler; },
 			
 			onShowSubmodelNetwork: function (handler) { this.showSubmodelNetwork = handler; },
+			
+			onShowPhysioMapNetwork: function (handler) { this.showPhysioMapNetwork = handler; },
 			
 			onSearch: function (handler) { this.search = handler; },
 			
