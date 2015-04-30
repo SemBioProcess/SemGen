@@ -23,7 +23,7 @@ public class DependencyNode extends Node {
 	
 	/**
 	 * Allow descendant classes to pass in a node name
-	 * @param name name of node
+	 * @param name of node
 	 * @param dataStructure node data
 	 */
 	protected DependencyNode(String name, DataStructure dataStructure)
