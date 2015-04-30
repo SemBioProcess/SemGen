@@ -160,6 +160,10 @@ public class StageWorkbench extends Workbench {
 					else
 						_commandSender.showSubmodelNetwork(model.getName(), SemSimModelSerializer.toJsonString(submodelNetwork));
 					break;
+				case "physiomap":
+					_commandSender.showPhysioMapNetwork(model.getName(),
+							SemSimModelSerializer.toJsonString(SemSimModelSerializer.getPhysioMapNetwork(model)));
+					break;
 				default:
 					JOptionPane.showMessageDialog(null, "Task: '" + task +"', coming soon :)");
 					break;

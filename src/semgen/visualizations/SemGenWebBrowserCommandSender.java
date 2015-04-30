@@ -37,4 +37,12 @@ public interface SemGenWebBrowserCommandSender {
 	void showSubmodelNetwork(String modelName, JsonString jsonSubmodelNetwork);
 
 	void search(JsonString searchResults);
+
+	/**
+	 * Tell the browser to render the PhysioMap
+	 * 
+	 * @param modelName name of model
+	 * @param jsonPhysioMap PhysioMap
+	 */
+	void showPhysioMapNetwork(String modelName, JsonString jsonPhysioMap);
 }

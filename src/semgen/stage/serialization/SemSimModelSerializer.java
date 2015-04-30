@@ -67,6 +67,27 @@ public class SemSimModelSerializer {
 		return subModelNetwork;
 	}
 	
+	/**
+	 * Get the SemSim model PhysioMap network, which defines
+	 * nodes and links that the d3.js engine will use
+	 * to create visualizations
+	 * 
+	 * @param semSimModel - SemSim model to get PhysioMap network from
+	 * @return PhysioMap network
+	 */
+	public static ArrayList<PhysioMapNode> getPhysioMapNetwork(SemSimModel semSimModel) {
+		ArrayList<PhysioMapNode> physiomapNetwork = new ArrayList<PhysioMapNode>();
+		
+		for(DataStructure dataStructure : semSimModel.getDataStructures()){
+			if(dataStructure.getPhysicalProperty().getPhysicalPropertyOf() != null) {
+				physiomapNetwork.add(new PhysioMapNode(dataStructure, 
+						dataStructure.getPhysicalProperty().getPhysicalPropertyOf().getName()));
+			}
+		}
+		
+		return physiomapNetwork;
+	}
+	
 	public static JsonString toJsonString(Object obj) {
 		Gson gson = new Gson();
 		String json = gson.toJson(obj);
