@@ -48,7 +48,7 @@ public class SemGenSettings extends Observable{
 	
 	public SemGenSettings(SemGenSettings old) {
 		screensize = old.screensize;
-		startsettingstable = old.startsettingstable;
+		startsettingstable = new Hashtable<String, String[]>(old.startsettingstable);
 		xpos = old.xpos;
 		ypos = old.ypos;
 		width = old.width;

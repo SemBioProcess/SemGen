@@ -9,9 +9,7 @@ public abstract class AnnotatorDrawer<T extends SemSimObject> extends Observable
 	protected int currentfocus = -1;
 	protected ArrayList<T> componentlist = new ArrayList<T>();
 	
-	public AnnotatorDrawer() {
-		
-	}
+	public AnnotatorDrawer() {}
 	
 	public String getCodewordName(int index) {
 		return componentlist.get(index).getName();
@@ -40,12 +38,16 @@ public abstract class AnnotatorDrawer<T extends SemSimObject> extends Observable
 	}
 	
 	public boolean hasHumanReadableDef(int index) {
-		return componentlist.get(index).getDescription()!="";
+		return !componentlist.get(index).getDescription().isEmpty();
+	}
+	
+	public boolean hasHumanReadableDef() {
+		return !componentlist.get(currentfocus).getDescription().isEmpty();
 	}
 	
 	public String getHumanReadableDef() {
 		String desc = componentlist.get(currentfocus).getDescription();
-		if (desc!="") desc = "[unspecified]";
+		if (desc.isEmpty()) desc = "[unspecified]";
 		return desc;
 	}
 

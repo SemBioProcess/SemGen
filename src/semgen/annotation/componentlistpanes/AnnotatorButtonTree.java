@@ -17,17 +17,22 @@ import javax.swing.tree.TreeSelectionModel;
 import javax.swing.Painter;
 
 import semgen.SemGenSettings;
+import semgen.annotation.componentlistpanes.buttons.AnnotatorTreeNode;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 
 public class AnnotatorButtonTree extends JTree implements TreeSelectionListener, Observer{
 	private static final long serialVersionUID = 7868541704010347520L;
 	private AnnotatorTreeModel model;
+	private AnnotatorWorkbench workbench;
+	private Renderer renderer = new Renderer();
 	
 	public AnnotatorButtonTree(AnnotatorWorkbench wb, SemGenSettings sets){
+		super(new AnnotatorTreeModel(wb, sets));
+		workbench = wb;
 		wb.addObserver(this);
+		sets.addObserver(this);
 
-		model = new AnnotatorTreeModel(wb, sets);
-		setModel(model);
+		setCellRenderer(renderer);
 		UIDefaults dialogTheme = new UIDefaults();
 		dialogTheme.put("Tree:TreeCell[Focused+Selected].backgroundPainter", new MyPainter());
 		dialogTheme.put("Tree:TreeCell[Enabled+Selected].backgroundPainter", new MyPainter());
@@ -36,10 +41,15 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener,
 		addTreeSelectionListener(this);
 		
 		setLargeModel(true);
-		this.setCellRenderer(new Renderer());
+		
 		getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 		setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		setVisible(true);
+	}
+	
+	public void reloadTree() {
+		model.reload();
+		validate();
 	}
 	
 	class MyPainter implements Painter<Object>{
@@ -54,7 +64,7 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener,
 		public Component getTreeCellRendererComponent(JTree arg0, Object node,
 				boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
 			
-			Component btn = model.getButton((DefaultMutableTreeNode)node).getButton();
+			Component btn = ((AnnotatorTreeNode)node).getButton();
 			
 			if (selected) btn.setBackground(SemGenSettings.lightblue);
 			else btn.setBackground(Color.white);
@@ -65,13 +75,18 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener,
 	
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
-		DefaultMutableTreeNode node = (DefaultMutableTreeNode)
+		AnnotatorTreeNode node = (AnnotatorTreeNode)
                 getLastSelectedPathComponent();
-		model.buttonSelected(node);
+		if (node!=null) node.onSelection();
 	}
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
 
+	}
+	
+	public void destroy() {
+		clearSelection();
+		model.destroy();		
 	}
 }

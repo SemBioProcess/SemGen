@@ -46,18 +46,21 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 	private AnnotatorToolBar toolbar;
 	private JSplitPane splitpane;
 	private JSplitPane eastsplitpane;
-	public JSplitPane westsplitpane;
-	public JSplitPane swsplitpane;
-	public SemGenScrollPane annotatorscrollpane = new SemGenScrollPane();
-	private SemGenScrollPane treeviewscrollpane = new SemGenScrollPane();
-
-	public AnnotationPanel<? extends AnnotatorDrawer<? extends SemSimObject>> annotatorpane;
-
-	private CodewordListPane cwpane;
-	private SubmodelListPane smpane;	
-	public ModelAnnotationsListPane modelannspane;
+	private JSplitPane westsplitpane;
+	private SemGenScrollPane annotatorscrollpane = new SemGenScrollPane();
 	
-	public AnnotatorTabCodePanel codearea;
+	private JSplitPane swsplitpane;
+	private SemGenScrollPane treeviewscrollpane;
+	
+	private AnnotatorButtonTree tree;
+	private SubmodelListPane smpane;
+	private CodewordListPane cwpane;
+	
+	private AnnotationPanel<? extends AnnotatorDrawer<? extends SemSimObject>> annotatorpane;
+
+	private ModelAnnotationsListPane modelannspane;
+	
+	private AnnotatorTabCodePanel codearea;
 
 	public AnnotatorTab(SemGenSettings sets, GlobalActions gacts, AnnotatorWorkbench bench) {
 		super(bench.getCurrentModelName(), SemGenIcon.annotatoricon, "Annotating " + bench.getCurrentModelName(), sets, gacts);
@@ -84,16 +87,7 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 		annotatorscrollpane.setBackground(SemGenSettings.lightblue);
 		annotatorscrollpane.getViewport().setBackground(SemGenSettings.lightblue);
 
-		cwpane = new CodewordListPane(workbench, settings);
-		smpane = new SubmodelListPane(workbench, settings);
-		
-		AnnotatorButtonTree tree = new AnnotatorButtonTree(workbench, settings);
-		treeviewscrollpane.setViewportView(tree);
-		
-		swsplitpane  = new JSplitPane(JSplitPane.VERTICAL_SPLIT, cwpane, smpane);
-		swsplitpane.setOneTouchExpandable(true);
-		
-		westsplitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, modelannspane, swsplitpane); 
+		westsplitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, modelannspane, null); 
 		westsplitpane.setOneTouchExpandable(true);
 
 		eastsplitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, annotatorscrollpane, legacycodescrollpane);
@@ -118,13 +112,20 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 		
 		int iniwloc = settings.scaleWidthforScreen(360);
 		int inihloc = settings.scaleWidthforScreen(initheight-150);
-		splitpane.setDividerLocation(iniwloc);
-		eastsplitpane.setDividerLocation((int)(inihloc)/2);
-		swsplitpane.setDividerLocation((int)(inihloc)/2);
-		westsplitpane.setDividerLocation((int)(inihloc)/6);
 		
-		cwpane.scrollToTop();
-		smpane.scrollToTop();
+		tree = new AnnotatorButtonTree(workbench, settings);
+		treeviewscrollpane = new SemGenScrollPane(tree);
+		
+		cwpane = new CodewordListPane(workbench, settings);
+		smpane = new SubmodelListPane(workbench, settings);
+		
+		swsplitpane  = new JSplitPane(JSplitPane.VERTICAL_SPLIT, cwpane, smpane);
+		swsplitpane.setDividerLocation((int)(inihloc)/2);
+		swsplitpane.setOneTouchExpandable(true);
+		
+		splitpane.setDividerLocation(iniwloc);
+		eastsplitpane.setDividerLocation((int)(inihloc)/2);	
+		westsplitpane.setDividerLocation((int)(inihloc)/6);
 		
 		// If we are hiding the imported codewords, select the first one that is editable
 		changeComponentView();
@@ -149,11 +150,12 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 	
 	private void changeComponentView() {
 		if (settings.useTreeView()) {
-			
+			toolbar.enableSort(false);
 			westsplitpane.setBottomComponent(treeviewscrollpane);
 		}
 		else {
-			//treeviewscrollpane.setViewport(null);
+			cwpane.update();
+			smpane.update();
 			toolbar.enableSort(true);
 			westsplitpane.setBottomComponent(swsplitpane);
 		}
@@ -263,5 +265,9 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 			}
 		}
 
+	}
+	
+	public void destroy() {
+		workbench.deleteObserver(this);
 	}
 }

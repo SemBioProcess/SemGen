@@ -1,6 +1,5 @@
 package semgen.annotation.componentlistpanes;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.util.Observable;
 
@@ -17,10 +16,9 @@ public class CodewordListPane extends AnnotatorListPane<CodewordButton, Codeword
 
 	public CodewordListPane(AnnotatorWorkbench wb, SemGenSettings sets) {
 		super(wb, sets, wb.openCodewordDrawer());
-		updateButtonTable();
 	}
 
-	protected void updateButtonTable(){
+	public void updateButtonTable(){
 		Boolean[] dispoptions = new Boolean[]{
 				settings.showImports(),
 				settings.organizeByCompositeCompleteness(),
@@ -51,6 +49,10 @@ public class CodewordListPane extends AnnotatorListPane<CodewordButton, Codeword
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		if (arg0==settings) {
+			if (arg1==SettingChange.toggletree && settings.useTreeView()) {
+				destroy();
+			}
+			
 			if (arg1==SettingChange.toggleproptype) {
 				toggleMarkers();
 			}

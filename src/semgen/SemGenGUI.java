@@ -50,7 +50,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 	private SemGenMenuBar menu;
 
 	public SemGenGUI(SemGenSettings sets,  SemGenMenuBar menubar, GlobalActions gacts){
-		settings = new SemGenSettings(sets);
+		settings = sets;
 		menu = menubar;
 		globalactions = gacts;
 		globalactions.addObserver(this);

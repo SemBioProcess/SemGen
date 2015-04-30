@@ -50,6 +50,7 @@ public abstract class AnnotatorListPane<T extends AnnotationObjectButton, D exte
 		// Override up and down key functions so user can use arrows to move between codewords
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "none");
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "none");
+		scrollToTop();
 	}
 	
 	public void addPanelTitle(String type, int totalcount, String zerocountmsg) {
@@ -60,6 +61,18 @@ public abstract class AnnotatorListPane<T extends AnnotationObjectButton, D exte
 		}
 	}
 	
+	public void update() {
+		destroy();
+		updateButtonTable();
+		
+		if (drawer.getSelectedIndex()!=-1) {
+			changeButtonFocus(btnarray.get(drawer.getSelectedIndex()));
+		}
+
+		buttonpane.validate();
+		buttonpane.repaint();
+	}
+		
 	protected void changeButtonFocus(T focus) {
 		requestFocusInWindow();
 		if(focusbutton!=null){
@@ -78,19 +91,7 @@ public abstract class AnnotatorListPane<T extends AnnotationObjectButton, D exte
 		btn.addMouseListener(btn);
 	}
 	
-	public void update() {
-		btnlist.clear();
-		btnarray.clear();
-		buttonpane.removeAll();
-		updateButtonTable();
-		
-		if (drawer.getSelectedIndex()!=-1) {
-			changeButtonFocus(btnarray.get(drawer.getSelectedIndex()));
-		}
 
-		buttonpane.validate();
-		buttonpane.repaint();
-	}
 	
 	public void keyPressed(KeyEvent e) {
 		int id = e.getKeyCode();
@@ -112,4 +113,10 @@ public abstract class AnnotatorListPane<T extends AnnotationObjectButton, D exte
 	public void keyTyped(KeyEvent e) {}
 	
 	protected abstract void updateButtonTable();
+	
+	public void destroy() {
+		btnlist.clear();
+		btnarray.clear();
+		buttonpane.removeAll();
+	}
 }

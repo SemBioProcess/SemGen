@@ -119,6 +119,9 @@ public abstract class AnnotationPanel<P extends AnnotatorDrawer<? extends SemSim
 	
 	protected void refreshFreeText() {
 		humandefpane.setText(drawer.getHumanReadableDef());
+		if (drawer.hasHumanReadableDef()) {
+			humandefpane.setForeground(Color.blue);
+		}
 	}
 	
 	private void addSingularAnnotationPanel() {
@@ -127,12 +130,7 @@ public abstract class AnnotationPanel<P extends AnnotatorDrawer<? extends SemSim
 		//mainpanel.add(singularannpanel);
 	}
 	
-	protected abstract void formatHeader(Box mainheader);
-	protected abstract void createUniqueElements();
-	protected abstract void refreshData();	
-	protected abstract void updateUnique(Observable o, Object arg1);	
-	
-	@Override
+		@Override
 	public void update(Observable o, Object arg) {
 		if (arg==WBEvent.freetextrequest) {
 			
@@ -140,7 +138,12 @@ public abstract class AnnotationPanel<P extends AnnotatorDrawer<? extends SemSim
 		
 		updateUnique(o, arg);
 	}
-	
+		
+	protected abstract void formatHeader(Box mainheader);
+	protected abstract void createUniqueElements();
+	protected abstract void refreshData();	
+	protected abstract void updateUnique(Observable o, Object arg1);	
+
 	protected class AnnotatorButton extends JLabel {
 		private static final long serialVersionUID = 1L;
 		
@@ -176,4 +179,8 @@ public abstract class AnnotationPanel<P extends AnnotatorDrawer<? extends SemSim
 		}
 	}
 	
+	public void destroy() {
+		workbench.deleteObserver(this);
+		drawer.deleteObserver(this);
+	}
 }

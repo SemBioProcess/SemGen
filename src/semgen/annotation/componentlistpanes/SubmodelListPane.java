@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.SemGenSettings;
+import semgen.SemGenSettings.SettingChange;
 import semgen.annotation.componentlistpanes.buttons.SubmodelButton;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.drawers.SubModelToolDrawer;
@@ -31,14 +32,9 @@ public class SubmodelListPane extends AnnotatorListPane<SubmodelButton, SubModel
 
 		addsubmodelbutton.addActionListener(this);
 		removesubmodelbutton.addActionListener(this);
-		
-		updateButtonTable();
 	}
 
 	public void updateButtonTable(){
-		btnlist.clear();
-		buttonpane.removeAll();
-
 		ArrayList<Integer> numlist = drawer.getSubmodelstoDisplay(settings.showImports());
 		addPanelTitle("Sub-models ", numlist.size(), "No sub-models found");
 		
@@ -86,7 +82,9 @@ public class SubmodelListPane extends AnnotatorListPane<SubmodelButton, SubModel
 
 	@Override
 	public void update(Observable o, Object arg) {
-
+		if (arg==SettingChange.toggletree && settings.useTreeView()) {
+			destroy();
+		}
 	}
 	
 	private class ListButton extends SubmodelButton {
