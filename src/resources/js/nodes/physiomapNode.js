@@ -11,9 +11,9 @@ function PhysioMapNode (graph, data, parentNode) {
 	// Get the correct group from the node type
 	this.group = typeToGroup[data.nodeType];
 	if(this.group == "undefined")
-		throw "invalid dependency node type: " + data.nodeType;
+		throw "invalid physiomap node type: " + data.nodeType;
 	
-	Node.prototype.constructor.call(this, graph, data.name, parentNode, data.inputs, 5, typeToColor[data.nodeType], 14, data.nodeType, -300);
+	Node.prototype.constructor.call(this, graph, data.name, parentNode, data.inputs, data.sources, data.sinks, data.mediators, 5, typeToColor[data.nodeType], 14, data.nodeType, -300);
 	
 	this.addClassName("physiomapNode");
 	this.addBehavior(Columns);

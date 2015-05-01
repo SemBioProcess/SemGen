@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 
 import semgen.SemGen;
 import semgen.search.CompositeAnnotationSearch;
+import semgen.stage.serialization.PhysioMapNode;
 import semgen.stage.serialization.SemSimModelSerializer;
 import semgen.stage.serialization.SubModelNode;
 import semgen.utilities.Workbench;
@@ -161,7 +162,11 @@ public class StageWorkbench extends Workbench {
 						_commandSender.showSubmodelNetwork(model.getName(), SemSimModelSerializer.toJsonString(submodelNetwork));
 					break;
 				case "physiomap":
-					_commandSender.showPhysioMapNetwork(model.getName(),
+					ArrayList<PhysioMapNode> physiomapNetwork = SemSimModelSerializer.getPhysioMapNetwork(model);
+					if(physiomapNetwork.isEmpty())
+						JOptionPane.showMessageDialog(null,  "'" + model.getName() + "' does not have a PhysioMap");
+					else
+						_commandSender.showPhysioMapNetwork(model.getName(),
 							SemSimModelSerializer.toJsonString(SemSimModelSerializer.getPhysioMapNetwork(model)));
 					break;
 				default:
