@@ -3,15 +3,11 @@ package semgen.annotation.componentlistpanes;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
-import java.util.Observable;
-import java.util.Observer;
-
 import javax.swing.BorderFactory;
 import javax.swing.JTree;
 import javax.swing.UIDefaults;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeSelectionModel;
 import javax.swing.Painter;

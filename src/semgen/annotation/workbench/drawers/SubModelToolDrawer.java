@@ -17,12 +17,11 @@ import semsim.writing.CaseInsensitiveComparator;
 public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 	
 	public SubModelToolDrawer(Set<Submodel> modlist) {
-		componentlist = new ArrayList<Submodel>();
 		componentlist.addAll(modlist);
 		refreshSubModels();
 	}
 	
-	private void refreshSubModels() {
+	public void refreshSubModels() {
 		Collections.sort(componentlist, new SemSimComponentComparator());
 	}
 	
@@ -60,23 +59,13 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 	}
 
 	public Submodel removeSubmodel() {
-		Submodel sm = componentlist.get(currentfocus);
-		componentlist.remove(currentfocus);
-		refreshSubModels();
-		return sm;
+		return componentlist.remove(currentfocus);
 	}
 	
 	public Submodel addSubmodel(String name) {
 		Submodel sm = new Submodel(name);
 		componentlist.add(sm);
-		refreshSubModels();
 		return sm;
-	}
-	
-	public void changeSubmodelName(String newname) {
-		componentlist.get(currentfocus).setName(newname);
-		setChanged();
-		notifyObservers(modeledit.smlistchanged);
 	}
 	
 	public ArrayList<DataStructure> getDataStructures() {
@@ -122,6 +111,12 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 		return smdslist;
 	}
 	
+	public void setSubmodelName(String newname) {
+		componentlist.get(currentfocus).setName(newname);
+		refreshSubModels();
+		setChanged();
+		notifyObservers(modeledit.smnamechange);
+	}
 	
 	public ArrayList<String> getAssociatedSubmodelNames() {
 		ArrayList<String> associated = new ArrayList<String>();
@@ -141,6 +136,10 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 	
 	public boolean isFunctional() {
 		return componentlist.get(currentfocus).isFunctional();
+	}
+	
+	public boolean isFunctional(int index) {
+		return componentlist.get(index).isFunctional();
 	}
 
 	@Override

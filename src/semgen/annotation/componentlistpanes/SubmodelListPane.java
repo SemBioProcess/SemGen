@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -14,7 +15,9 @@ import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.SemGenSettings;
 import semgen.annotation.componentlistpanes.buttons.SubmodelButton;
+import semgen.annotation.dialog.TextChangeDialog;
 import semgen.annotation.workbench.AnnotatorWorkbench;
+import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
 import semgen.annotation.workbench.drawers.SubModelToolDrawer;
 import semgen.utilities.SemGenIcon;
 
@@ -54,9 +57,10 @@ public class SubmodelListPane extends AnnotatorListPane<SubmodelButton, SubModel
 	}
 
 	public void addNewSubmodelButton() throws OWLException {
-		String newname = JOptionPane.showInputDialog(this,"Enter a name for the new sub-model");
-		if(newname !=null && !newname.equals("")){
-			workbench.addSubModel(newname);
+		TextChangeDialog tcd = new TextChangeDialog("Add Submodel", "Enter a name for the new sub-model", "");
+		String newname = tcd.getNewText();
+		if(!newname.equals("")){
+			workbench.addSubmodeltoModel(newname);
 		}
 	}
 
@@ -79,7 +83,12 @@ public class SubmodelListPane extends AnnotatorListPane<SubmodelButton, SubModel
 
 	@Override
 	public void updateUnique(Object arg) {
-
+		if ((arg == modeledit.smnamechange) || (arg == modeledit.smlistchanged)){
+			update();
+		}
+		if (focusbutton!=null) {
+			removesubmodelbutton.setEnabled(!drawer.isFunctional());
+		}
 	}
 	
 	private class ListButton extends SubmodelButton {

@@ -44,8 +44,8 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	private boolean modelsaved = true;
 	private int lastsavedas = -1;
 	private String ontspref;
-	public static enum WBEvent {freetextrequest, smselection, cwselection, }
-	public static enum modeledit {compositechanged, modelimport, smlistchanged, freetextchange}
+	public static enum WBEvent {freetextrequest, smselection, cwselection }
+	public static enum modeledit {compositechanged, modelimport, smlistchanged, freetextchange, smnamechange}
 	
 	public AnnotatorWorkbench(File file, SemSimModel model) {
 		semsimmodel = model;
@@ -219,12 +219,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	public TreeMap<String,PhysicalEntity> getPhysicalEntityIDList() {
 		return termlib.getPhysEntIDMap();
 	}
-	
-	public void addSubModel(String newname) {
-		semsimmodel.addSubmodel(new Submodel(newname));
-		setModelSaved(false);
-	}
-	
+		
 	public void compositeChanged() {
 		setModelSaved(false);
 		setChanged();
@@ -240,6 +235,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	}
 	
 	private void submodelListChanged() {
+		smdrawer.refreshSubModels();
 		setModelSaved(false);
 		setChanged();
 		notifyObservers(modeledit.smlistchanged);

@@ -15,7 +15,9 @@ import javax.swing.JPanel;
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
 import semgen.annotation.common.AnnotationClickableTextPane;
+import semgen.annotation.dialog.TextChangeDialog;
 import semgen.annotation.workbench.AnnotatorWorkbench;
+import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
 import semgen.annotation.workbench.drawers.SubModelToolDrawer;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenSeparator;
@@ -144,7 +146,9 @@ public class SubmodelAnnotationPanel extends AnnotationPanel<SubModelToolDrawer>
 
 	@Override
 	public void updateUnique(Observable o, Object arg) {
-		
+		if (arg == modeledit.smnamechange) {
+			codewordlabel.setText(drawer.getCodewordName());
+		}
 	}
 	
 	private class SubmodelCodewordMouseBehavior extends MouseAdapter {
@@ -161,15 +165,17 @@ public class SubmodelAnnotationPanel extends AnnotationPanel<SubModelToolDrawer>
 		public void mouseClicked(MouseEvent arg0) {
 			String currentname =  drawer.getCodewordName();
 			while (true) {
-				String newcompname = JOptionPane.showInputDialog(null, "Rename component", currentname);
-				if(newcompname!=null && !newcompname.equals(currentname)){
-					if (workbench.submitSubmodelName(newcompname)) break;
-					
-					JOptionPane.showMessageDialog(null, "That name is either invalid or already taken");
+				TextChangeDialog tcd = new TextChangeDialog("Rename component", currentname, currentname);
+				String newcompname = tcd.getNewText();
+				if(newcompname.equals(currentname) && !newcompname.equals("")) break;
+				
+				if (workbench.submitSubmodelName(newcompname)) {
+					drawer.setSubmodelName(newcompname);
+					break;
 				}
+					
+				JOptionPane.showMessageDialog(null, "That name is either invalid or already taken");
 			}
 		}
 	}
-
-
 }

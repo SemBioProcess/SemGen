@@ -53,7 +53,7 @@ public class TextChangeDialog extends SemGenDialog implements PropertyChangeList
 		showDialog();
 	}
 	
-	public String getNewDescription() {
+	public String getNewText() {
 		return presentval;
 	}
 	

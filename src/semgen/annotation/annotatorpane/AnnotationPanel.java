@@ -154,8 +154,8 @@ public abstract class AnnotationPanel<P extends AnnotatorDrawer<? extends SemSim
 	private void changeFreeText() {
 		String current = drawer.getHumanReadableDef();
 		TextChangeDialog hde = new TextChangeDialog("Enter free-text description", drawer.getCodewordName(), current);
-		if (!hde.getNewDescription().equals(current)) {
-			drawer.setHumanReadableDefinition(hde.getNewDescription());
+		if (!hde.getNewText().equals(current)) {
+			drawer.setHumanReadableDefinition(hde.getNewText());
 		}
 	}
 	

@@ -159,6 +159,9 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 				fireNodeChanged(focus);
 			}
 		}
+		if (arg1 == modeledit.smnamechange) {
+			fireTreeStructureChanged();
+		}
 	}
 	
 	protected class RootButton extends AnnotatorTreeNode {

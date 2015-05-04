@@ -130,6 +130,8 @@ public abstract class AnnotatorListPane<T extends AnnotationObjectButton, D exte
 				}
 			}
 		}
+		
+		updateUnique(arg);
 	}
 	
 	protected abstract void updateButtonTable();
