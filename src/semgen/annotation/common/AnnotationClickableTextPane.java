@@ -1,4 +1,4 @@
-package semgen.annotation.annotatorpane;
+package semgen.annotation.common;
 
 
 import java.awt.Color;

@@ -1,8 +1,6 @@
 package semgen.annotation.componentlistpanes;
 
 import java.awt.event.MouseEvent;
-import java.util.Observable;
-
 import javax.swing.Box;
 
 import semgen.SemGenSettings;
@@ -47,19 +45,10 @@ public class CodewordListPane extends AnnotatorListPane<CodewordButton, Codeword
 	}
 
 	@Override
-	public void update(Observable arg0, Object arg1) {
-		if (arg0==settings) {
-			if (arg1==SettingChange.toggletree && settings.useTreeView()) {
-				destroy();
-			}
-			
+	public void updateUnique(Object arg1) {
 			if (arg1==SettingChange.toggleproptype) {
 				toggleMarkers();
 			}
-			else if ((arg1==SettingChange.cwsort) || (arg1==SettingChange.showimports)) {
-				update();
-			}
-		}
 	}
 	
 	private class ListButton extends CodewordButton {

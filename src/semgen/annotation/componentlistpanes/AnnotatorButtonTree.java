@@ -20,7 +20,7 @@ import semgen.SemGenSettings;
 import semgen.annotation.componentlistpanes.buttons.AnnotatorTreeNode;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 
-public class AnnotatorButtonTree extends JTree implements TreeSelectionListener, Observer{
+public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 	private static final long serialVersionUID = 7868541704010347520L;
 	private AnnotatorTreeModel model;
 	private AnnotatorWorkbench workbench;
@@ -29,8 +29,7 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener,
 	public AnnotatorButtonTree(AnnotatorWorkbench wb, SemGenSettings sets){
 		super(new AnnotatorTreeModel(wb, sets));
 		workbench = wb;
-		wb.addObserver(this);
-		sets.addObserver(this);
+
 
 		setCellRenderer(renderer);
 		UIDefaults dialogTheme = new UIDefaults();
@@ -80,10 +79,7 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener,
 		if (node!=null) node.onSelection();
 	}
 
-	@Override
-	public void update(Observable arg0, Object arg1) {
 
-	}
 	
 	public void destroy() {
 		clearSelection();

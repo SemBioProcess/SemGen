@@ -4,8 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Observable;
-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -15,7 +13,6 @@ import javax.swing.JPanel;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.SemGenSettings;
-import semgen.SemGenSettings.SettingChange;
 import semgen.annotation.componentlistpanes.buttons.SubmodelButton;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.drawers.SubModelToolDrawer;
@@ -81,10 +78,8 @@ public class SubmodelListPane extends AnnotatorListPane<SubmodelButton, SubModel
 	}
 
 	@Override
-	public void update(Observable o, Object arg) {
-		if (arg==SettingChange.toggletree && settings.useTreeView()) {
-			destroy();
-		}
+	public void updateUnique(Object arg) {
+
 	}
 	
 	private class ListButton extends SubmodelButton {

@@ -19,8 +19,12 @@ import javax.swing.JTextArea;
 
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
+import semgen.annotation.annotatorpane.subpanels.SingularAnnotationPanel;
+import semgen.annotation.common.AnnotationClickableTextPane;
+import semgen.annotation.dialog.TextChangeDialog;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.AnnotatorWorkbench.WBEvent;
+import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
 import semgen.annotation.workbench.drawers.AnnotatorDrawer;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
@@ -39,12 +43,13 @@ public abstract class AnnotationPanel<P extends AnnotatorDrawer<? extends SemSim
 	protected AnnotatorButton humremovebutton = new AnnotatorButton(SemGenIcon.eraseiconsmall, "Remove this annotation");
 	protected AnnotationClickableTextPane humandefpane;
 	
-	//protected SemSimComponentAnnotationPanel singularannpanel;
+	protected SingularAnnotationPanel singularannpanel;
 	protected JLabel singularannlabel = new JLabel("Singular annotation");
 
 	protected int indent = 15;
 	
 	public AnnotationPanel(AnnotatorWorkbench wb, P tooldrawer, SemGenSettings sets, GlobalActions gacts) {
+		super(new BorderLayout());
 		workbench = wb;
 		workbench.addObserver(this);
 		settings = sets;
@@ -53,7 +58,6 @@ public abstract class AnnotationPanel<P extends AnnotatorDrawer<? extends SemSim
 		drawer.addObserver(this);
 		
 		setBackground(SemGenSettings.lightblue);
-		setLayout(new BorderLayout());
 	}
 	
 	protected void drawUI() {
@@ -104,13 +108,14 @@ public abstract class AnnotationPanel<P extends AnnotatorDrawer<? extends SemSim
 		humandefsubpanel.setBackground(SemGenSettings.lightblue);
 		humandefsubpanel.setLayout(new BoxLayout(humandefsubpanel, BoxLayout.X_AXIS));
 		
-		humandefpane = new AnnotationClickableTextPane(drawer.getHumanReadableDef(),indent, drawer.isEditable());
+		humandefpane = new AnnotationClickableTextPane("",indent, drawer.isEditable());
 		humandefpane.setAlignmentX(JTextArea.LEFT_ALIGNMENT);
 		humandefpane.addMouseListener(this);
-		humremovebutton.setEnabled(drawer.isEditable());
+		refreshFreeText();
 		
 		humandefsubpanel.add(humandefpane);
 		humandefsubpanel.add(humremovebutton);
+		humremovebutton.addMouseListener(this);
 		humandefpanel.add(humandefsubpanel, BorderLayout.WEST);
 		humandefpanel.add(Box.createGlue(), BorderLayout.EAST);
 		
@@ -121,24 +126,49 @@ public abstract class AnnotationPanel<P extends AnnotatorDrawer<? extends SemSim
 		humandefpane.setText(drawer.getHumanReadableDef());
 		if (drawer.hasHumanReadableDef()) {
 			humandefpane.setForeground(Color.blue);
+			humremovebutton.setEnabled(true);
+		}
+		else {
+			humandefpane.setForeground(Color.gray);
+			humremovebutton.setEnabled(false);
 		}
 	}
 	
 	private void addSingularAnnotationPanel() {
-		//singularannpanel.setAlignmentX(JPanel.LEFT_ALIGNMENT);
-		
-		//mainpanel.add(singularannpanel);
+		singularannpanel = new SingularAnnotationPanel(drawer);
+		singularannpanel.setAlignmentX(JPanel.LEFT_ALIGNMENT);
+		mainpanel.add(singularannpanel);
 	}
 	
-		@Override
+	@Override
 	public void update(Observable o, Object arg) {
 		if (arg==WBEvent.freetextrequest) {
-			
+			changeFreeText();
 		}
-		
+		if (arg==modeledit.freetextchange) {
+			refreshFreeText();
+		}
 		updateUnique(o, arg);
 	}
 		
+	private void changeFreeText() {
+		String current = drawer.getHumanReadableDef();
+		TextChangeDialog hde = new TextChangeDialog("Enter free-text description", drawer.getCodewordName(), current);
+		if (!hde.getNewDescription().equals(current)) {
+			drawer.setHumanReadableDefinition(hde.getNewDescription());
+		}
+	}
+	
+	public void mouseClicked(MouseEvent e) {
+		Object obj = e.getSource();
+		if (obj==humremovebutton) {
+			drawer.setHumanReadableDefinition("");
+		}
+		if (obj==humandefpane) {
+			changeFreeText();
+		}
+	}
+	
 	protected abstract void formatHeader(Box mainheader);
 	protected abstract void createUniqueElements();
 	protected abstract void refreshData();	

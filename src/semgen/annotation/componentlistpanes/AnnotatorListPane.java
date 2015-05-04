@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.BorderFactory;
@@ -17,8 +18,10 @@ import javax.swing.KeyStroke;
 import javax.swing.border.TitledBorder;
 
 import semgen.SemGenSettings;
+import semgen.SemGenSettings.SettingChange;
 import semgen.annotation.componentlistpanes.buttons.AnnotationObjectButton;
 import semgen.annotation.workbench.AnnotatorWorkbench;
+import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
 import semgen.annotation.workbench.drawers.AnnotatorDrawer;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.uicomponent.SemGenScrollPane;
@@ -91,8 +94,6 @@ public abstract class AnnotatorListPane<T extends AnnotationObjectButton, D exte
 		btn.addMouseListener(btn);
 	}
 	
-
-	
 	public void keyPressed(KeyEvent e) {
 		int id = e.getKeyCode();
 		int index = btnarray.indexOf(focusbutton);
@@ -112,11 +113,25 @@ public abstract class AnnotatorListPane<T extends AnnotationObjectButton, D exte
 	public void keyReleased(KeyEvent e) {}
 	public void keyTyped(KeyEvent e) {}
 	
-	protected abstract void updateButtonTable();
-	
 	public void destroy() {
 		btnlist.clear();
 		btnarray.clear();
 		buttonpane.removeAll();
 	}
+	
+	public void update(Observable o, Object arg) {
+		if (arg==SettingChange.toggletree && settings.useTreeView()) {
+			destroy();
+		}
+		if (o==drawer) {
+			if (arg==modeledit.freetextchange) {
+				if (focusbutton!=null) {
+					focusbutton.toggleHumanDefinition(drawer.hasHumanReadableDef());
+				}
+			}
+		}
+	}
+	
+	protected abstract void updateButtonTable();
+	protected abstract void updateUnique(Object arg);
 }

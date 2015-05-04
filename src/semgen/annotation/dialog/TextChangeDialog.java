@@ -13,15 +13,15 @@ import javax.swing.JTextArea;
 
 import semgen.utilities.uicomponent.SemGenDialog;
 
-public class HumanDefEditor extends SemGenDialog implements PropertyChangeListener {
+public class TextChangeDialog extends SemGenDialog implements PropertyChangeListener {
 
 	private static final long serialVersionUID = -4040704987589247388L;
 	private JOptionPane optionPane;
 	private JTextArea defarea = new JTextArea();
 	private String presentval;
 
-	public HumanDefEditor(String sscname, String sscdesc) {
-		super("Enter free-text description");
+	public TextChangeDialog(String title, String sscname, String sscdesc) {
+		super(title);
 		presentval = sscdesc;
 
 		setPreferredSize(new Dimension(430, 250));

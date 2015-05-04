@@ -44,8 +44,8 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	private boolean modelsaved = true;
 	private int lastsavedas = -1;
 	private String ontspref;
-	public static enum WBEvent {freetextrequest}
-	public static enum modeledit {compositechanged, modelimport, smselection, cwselection, smlistchanged}
+	public static enum WBEvent {freetextrequest, smselection, cwselection, }
+	public static enum modeledit {compositechanged, modelimport, smlistchanged, freetextchange}
 	
 	public AnnotatorWorkbench(File file, SemSimModel model) {
 		semsimmodel = model;
@@ -258,8 +258,6 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	public Boolean submitSubmodelName(String newname) {
 		if (!newname.equals("") && !cwdrawer.containsComponentwithName(newname) &&
 			!smdrawer.containsComponentwithName(newname) && !newname.contains("--")) {
-			
-			
 			return true;
 		}
 		
@@ -278,9 +276,12 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		//Event forwarding
-		if ((arg1==modeledit.smselection) || (arg1==modeledit.cwselection)){
+		if ((arg1==WBEvent.smselection) || (arg1==WBEvent.cwselection)){
 			setChanged();
 			notifyObservers(arg1);
+		}
+		if (arg1==modeledit.freetextchange) {
+			this.setModelSaved(false);
 		}
 	}
 }

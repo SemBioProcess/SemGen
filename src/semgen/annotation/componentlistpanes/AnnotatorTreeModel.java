@@ -3,6 +3,8 @@ package semgen.annotation.componentlistpanes;
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JLabel;
 import javax.swing.event.TreeModelEvent;
@@ -15,12 +17,13 @@ import semgen.SemGenSettings;
 import semgen.annotation.componentlistpanes.buttons.AnnotatorTreeNode;
 import semgen.annotation.workbench.AnnotatorTreeMap;
 import semgen.annotation.workbench.AnnotatorWorkbench;
+import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
 import semgen.annotation.workbench.drawers.SubModelToolDrawer;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 
-public class AnnotatorTreeModel implements TreeModel {
+public class AnnotatorTreeModel implements TreeModel, Observer {
 	private AnnotatorWorkbench workbench;
 	private CodewordToolDrawer cwdrawer;
 	private SubModelToolDrawer smdrawer;
@@ -39,6 +42,11 @@ public class AnnotatorTreeModel implements TreeModel {
 		settings = sets;
 		cwdrawer = wb.openCodewordDrawer();
 		smdrawer = wb.openSubmodelDrawer();
+		
+		wb.addObserver(this);
+		cwdrawer.addObserver(this);
+		smdrawer.addObserver(this);
+		sets.addObserver(this);
 		
 		loadModel();
 	}
@@ -144,6 +152,15 @@ public class AnnotatorTreeModel implements TreeModel {
 		fireTreeStructureChanged();
 	}
 
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		if (arg1==modeledit.freetextchange) {
+			if (focus!=null) {
+				fireNodeChanged(focus);
+			}
+		}
+	}
+	
 	protected class RootButton extends AnnotatorTreeNode {
 		private static final long serialVersionUID = 1L;
 		
@@ -177,8 +194,8 @@ public class AnnotatorTreeModel implements TreeModel {
 			int index = smmap.get(this);
 			
 			SubModelTreeButton btn = new SubModelTreeButton(smdrawer.getCodewordName(index), smdrawer.isEditable(index));
-			btn.toggleHumanDefinition(cwdrawer.hasHumanReadableDef(index));
-			btn.toggleSingleAnnotation(cwdrawer.hasSingularAnnotation(index));
+			btn.toggleHumanDefinition(smdrawer.hasHumanReadableDef(index));
+			btn.toggleSingleAnnotation(smdrawer.hasSingularAnnotation(index));
 			return btn;
 		}
 

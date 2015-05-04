@@ -13,6 +13,7 @@ import semgen.annotation.componentlistpanes.CodewordListPane;
 import semgen.annotation.componentlistpanes.ModelAnnotationsListPane;
 import semgen.annotation.componentlistpanes.SubmodelListPane;
 import semgen.annotation.workbench.AnnotatorWorkbench;
+import semgen.annotation.workbench.AnnotatorWorkbench.WBEvent;
 import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
 import semgen.annotation.workbench.drawers.AnnotatorDrawer;
 import semgen.annotation.workbench.drawers.ModelAnnotationsBench;
@@ -133,10 +134,12 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 	}
 
 	private void subModelSelected() {
+		if (annotatorpane!= null) annotatorpane.destroy();
 		annotatorpane = new SubmodelAnnotationPanel(workbench, settings, globalactions);
 	}
 	
 	private void codewordSelected() throws BadLocationException {
+		if (annotatorpane!= null) annotatorpane.destroy();
 		annotatorpane = new CodewordAnnotationPanel(workbench, settings, globalactions);
 		// Highlight occurrences of codeword in legacy code
 		codearea.setCodeword(workbench.openCodewordDrawer().getFocusLookupName());
@@ -246,7 +249,7 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 				showModelAnnotator();
 				return;
 			}
-			if (arg1==modeledit.cwselection) {
+			if (arg1==WBEvent.cwselection) {
 				try {
 					codewordSelected();
 				} catch (BadLocationException e) {
@@ -254,7 +257,7 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 				}
 				annotationObjectAction() ;
 			}
-			if (arg1==modeledit.smselection) {
+			if (arg1==WBEvent.smselection) {
 				this.subModelSelected();
 				annotationObjectAction();
 			}
@@ -265,9 +268,5 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 			}
 		}
 
-	}
-	
-	public void destroy() {
-		workbench.deleteObserver(this);
 	}
 }

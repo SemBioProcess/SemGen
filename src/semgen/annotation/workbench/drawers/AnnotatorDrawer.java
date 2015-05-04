@@ -1,8 +1,10 @@
 package semgen.annotation.workbench.drawers;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Observable;
 
+import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
 import semsim.SemSimObject;
 
 public abstract class AnnotatorDrawer<T extends SemSimObject> extends Observable {
@@ -37,6 +39,12 @@ public abstract class AnnotatorDrawer<T extends SemSimObject> extends Observable
 		return currentfocus;
 	}
 	
+	public void setHumanReadableDefinition(String newdef) {
+		componentlist.get(currentfocus).setDescription(newdef);
+		setChanged();
+		notifyObservers(modeledit.freetextchange);
+	}
+	
 	public boolean hasHumanReadableDef(int index) {
 		return !componentlist.get(index).getDescription().isEmpty();
 	}
@@ -47,7 +55,11 @@ public abstract class AnnotatorDrawer<T extends SemSimObject> extends Observable
 	
 	public String getHumanReadableDef() {
 		String desc = componentlist.get(currentfocus).getDescription();
-		if (desc.isEmpty()) desc = "[unspecified]";
+		
+		if (desc.isEmpty()) {
+			if (isImported()) desc = "No free-text description specified";
+			else desc = "Click to set free-text description";
+		}
 		return desc;
 	}
 
@@ -58,11 +70,26 @@ public abstract class AnnotatorDrawer<T extends SemSimObject> extends Observable
 		return false;
 	}
 	
-	public abstract boolean hasSingularAnnotation(int index);
-	protected abstract void selectionNotification();
-	public abstract boolean isEditable(int index);
+	public boolean hasSingularAnnotation() {
+		return hasSingularAnnotation(currentfocus);
+	}
+	
+	public String getSingularAnnotationasString() {
+		return getSingularAnnotationasString(currentfocus);
+	}
+	
+	public URI getSingularAnnotationURI() {
+		return getSingularAnnotationURI(currentfocus);
+	}
 	
 	public boolean isEditable() {
 		return isEditable(currentfocus);
 	}
+	
+	public abstract URI getSingularAnnotationURI(int index);
+	public abstract boolean hasSingularAnnotation(int index);
+	public abstract String getSingularAnnotationasString(int index);
+	protected abstract void selectionNotification();
+	public abstract boolean isEditable(int index);
+	public abstract boolean isImported();
 }

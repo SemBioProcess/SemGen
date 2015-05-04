@@ -84,10 +84,7 @@ public class CodewordAnnotationPanel extends AnnotationPanel<CodewordToolDrawer>
 		}
 	}
 
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		
-	}
+
 
 	@Override
 	public void mouseEntered(MouseEvent e) {

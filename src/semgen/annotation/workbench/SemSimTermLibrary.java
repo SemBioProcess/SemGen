@@ -21,7 +21,7 @@ public class SemSimTermLibrary {
 		for (ReferencePhysicalEntity rpe : model.getReferencePhysicalEntities()) {
 			ReferenceOntologyAnnotation ra = rpe.getFirstRefersToReferenceOntologyAnnotation();
 			
-			stringlist.put(ra.getValueDescription() + " (" + ra.getOntologyAbbreviation() + ")", rpe);
+			stringlist.put(ra.getNamewithOntologyAbreviation(), rpe);
 		}
 		return stringlist;
 	}

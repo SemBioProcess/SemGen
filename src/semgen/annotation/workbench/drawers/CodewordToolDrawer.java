@@ -1,13 +1,17 @@
 package semgen.annotation.workbench.drawers;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Set;
 
 import semgen.SemGen;
+import semgen.annotation.workbench.AnnotatorWorkbench.WBEvent;
 import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
 import semsim.PropertyType;
+import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.physical.object.PhysicalProperty;
 import semsim.utilities.SemSimComponentComparator;
 
 public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
@@ -123,6 +127,11 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	public boolean hasSingularAnnotation(int index) {
 		return componentlist.get(index).hasRefersToAnnotation();
 	}
+	
+	@Override
+	public URI getSingularAnnotationURI(int index) {
+		return componentlist.get(index).getFirstRefersToReferenceOntologyAnnotation().getReferenceURI();
+	}
 
 	public String getFocusLookupName() {
 		DataStructure ds = componentlist.get(currentfocus);
@@ -148,7 +157,30 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	}
 	
 	@Override
-	protected void selectionNotification() {
-		notifyObservers(modeledit.cwselection);
+	public String getSingularAnnotationasString(int index) {
+		if (hasSingularAnnotation(index)) {
+			return componentlist.get(index).getFirstRefersToReferenceOntologyAnnotation().getNamewithOntologyAbreviation();
+		}
+		return SemSimModel.unspecifiedName;
 	}
+	
+	@Override
+	protected void selectionNotification() {
+		notifyObservers(WBEvent.cwselection);
+	}
+
+	public boolean isProcess() {
+		PhysicalProperty pp = componentlist.get(currentfocus).getPhysicalProperty();
+		if (pp == null) return false; 
+		return SemGen.semsimlib.isOPBprocessProperty(pp.getFirstRefersToReferenceOntologyAnnotation().getReferenceURI());
+	}
+
+	@Override
+	public boolean isImported() {
+		return componentlist.get(currentfocus).isImportedViaSubmodel();
+	}
+	
+//	public int countEntities() {
+//		PhysicalProperty pp = componentlist.get(currentfocus).getPhysicalProperty().getPhysicalPropertyOf();
+//	}
 }
