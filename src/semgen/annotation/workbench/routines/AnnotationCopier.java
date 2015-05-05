@@ -1,4 +1,4 @@
-package semgen.annotation.routines;
+package semgen.annotation.workbench.routines;
 
 
 import java.io.File;
@@ -63,7 +63,7 @@ public class AnnotationCopier {
 		return false;
 	}
 	
-	public Set<MappableVariable> copyAllAnnotationsToMappedVariables(MappableVariable ds){
+	public static Set<MappableVariable> copyAllAnnotationsToMappedVariables(MappableVariable ds){
 		Set<MappableVariable> allmappedvars = new HashSet<MappableVariable>();
 		allmappedvars.addAll(getAllMappedVariables(ds, ds, new HashSet<MappableVariable>()));
 		for(MappableVariable otherds : allmappedvars){
@@ -71,7 +71,7 @@ public class AnnotationCopier {
 			if(!otherds.isImportedViaSubmodel()){
 				otherds.copyDescription(ds);
 				otherds.copySingularAnnotations(ds);
-				copyCompositeAnnotation(targetmod, targetmod, ds, otherds);
+				copyCompositeAnnotation(ds, otherds);
 			}
 		}
 		return allmappedvars;
@@ -94,7 +94,7 @@ public class AnnotationCopier {
 					
 					ds.copyDescription(srcds);
 					ds.copySingularAnnotations(srcds);
-					copyCompositeAnnotation(targetmod, sourcemod, ds, srcds);
+					copyCompositeAnnotation(targetmod, ds, srcds);
 					
 				} // otherwise no matching data structure found in source model
 			} // end of data structure loop
@@ -207,9 +207,10 @@ public class AnnotationCopier {
 		}
 		return changemadetosubmodels;
 	}
-	
-	public static void copyCompositeAnnotation(SemSimModel targetmod, SemSimModel sourcemod, DataStructure targetds, DataStructure sourceds) {
-		
+	/** 
+	 * Intra-model datastructure copy
+	 * */
+	public static void copyCompositeAnnotation(DataStructure targetds, DataStructure sourceds) {
 		targetds.getPhysicalProperty().removeAllReferenceAnnotations();
 
 		if(sourceds.getPhysicalProperty().hasRefersToAnnotation()){
@@ -219,27 +220,36 @@ public class AnnotationCopier {
 		PhysicalModelComponent srcpropof = sourceds.getPhysicalProperty().getPhysicalPropertyOf();
 		
 		// If we're just copying a composite annotation within the same model...
-		if(targetmod==sourcemod) {
-			targetds.getPhysicalProperty().setPhysicalPropertyOf(srcpropof);
-			if (!sourceds.getPhysicalProperty().hasRefersToAnnotation()) {
-				targetds.getPhysicalProperty().removeAllReferenceAnnotations();
-			}
-		}
-
-		// otherwise...
-		else{
-			try{
-				// If there is a property_of specified
-				if(srcpropof!=null)
-					targetds.getPhysicalProperty().setPhysicalPropertyOf(copyPhysicalModelComponent(targetmod, srcpropof));
-				
-				// otherwise there is no specified target for the physical property
-				else targetds.getPhysicalProperty().setPhysicalPropertyOf(null);
-			} catch (CloneNotSupportedException e) {
-				e.printStackTrace();
-			}
+		targetds.getPhysicalProperty().setPhysicalPropertyOf(srcpropof);
+		if (!sourceds.getPhysicalProperty().hasRefersToAnnotation()) {
+			targetds.getPhysicalProperty().removeAllReferenceAnnotations();
 		}
 	}
+	
+	/** 
+	 * Inter-model datastructure copy 
+	 * */
+	public static void copyCompositeAnnotation(SemSimModel targetmod, DataStructure targetds, DataStructure sourceds) {		
+		targetds.getPhysicalProperty().removeAllReferenceAnnotations();
+
+		if(sourceds.getPhysicalProperty().hasRefersToAnnotation()){
+			ReferenceOntologyAnnotation roa = sourceds.getPhysicalProperty().getFirstRefersToReferenceOntologyAnnotation();
+			targetds.getPhysicalProperty().addReferenceOntologyAnnotation(roa.getRelation(), roa.getReferenceURI(), roa.getValueDescription());
+		}
+		PhysicalModelComponent srcpropof = sourceds.getPhysicalProperty().getPhysicalPropertyOf();
+		
+		try{
+			// If there is a property_of specified
+			if(srcpropof!=null)
+				targetds.getPhysicalProperty().setPhysicalPropertyOf(copyPhysicalModelComponent(targetmod, srcpropof));
+			
+			// otherwise there is no specified target for the physical property
+			else targetds.getPhysicalProperty().setPhysicalPropertyOf(null);
+		} 
+		catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+}
 	
 	public static Set<MappableVariable> getAllMappedVariables(MappableVariable rootds, MappableVariable ds, Set<MappableVariable> runningset){		
 		Set<MappableVariable> allmappedvars  = new HashSet<MappableVariable>();

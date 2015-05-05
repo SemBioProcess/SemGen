@@ -6,11 +6,14 @@ import java.util.Observable;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
+import semgen.annotation.annotatorpane.subpanels.CompositeAnnotationPanel;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
@@ -21,8 +24,8 @@ import semgen.utilities.uicomponent.SemGenSeparator;
 public class CodewordAnnotationPanel extends AnnotationPanel<CodewordToolDrawer> {
 	private static final long serialVersionUID = 1L;
 
-	protected AnnotatorButton copyannsbutton = new AnnotatorButton(SemGenIcon.copyicon, "Copy annotations to all mapped variables");
-	//private CompositeAnnotationPanel compositepanel;
+	private AnnotatorButton copyannsbutton;
+	private CompositeAnnotationPanel compositepanel;
 	
 	public CodewordAnnotationPanel(AnnotatorWorkbench wb, SemGenSettings sets,
 			GlobalActions gacts) {
@@ -33,6 +36,8 @@ public class CodewordAnnotationPanel extends AnnotationPanel<CodewordToolDrawer>
 	@Override
 	protected void formatHeader(Box mainheader) {	
 		if(drawer.isMapped()){
+			copyannsbutton = new AnnotatorButton(SemGenIcon.copyicon, "Copy annotations to all mapped variables");
+			copyannsbutton.addMouseListener(this);
 			mainheader.add(copyannsbutton);
 			codewordlabel.setBorder(BorderFactory.createEmptyBorder(5, indent, 5, 10));
 		}
@@ -43,8 +48,8 @@ public class CodewordAnnotationPanel extends AnnotationPanel<CodewordToolDrawer>
 	protected void createUniqueElements() {
 		createEquationPane();
 
-		//compositepanel = new CompositeAnnotationPanel(workbench, BoxLayout.Y_AXIS, settings);
-		
+		compositepanel = new CompositeAnnotationPanel(drawer, BoxLayout.Y_AXIS);
+	
 		JLabel compositelabel = new JLabel("Composite annotation");
 		compositelabel.setFont(SemGenFont.defaultBold());
 		compositelabel.setBorder(BorderFactory.createEmptyBorder(10, indent, 0, 0));
@@ -52,7 +57,7 @@ public class CodewordAnnotationPanel extends AnnotationPanel<CodewordToolDrawer>
 		mainpanel.add(compositelabel);
 		
 		mainpanel.add(Box.createGlue());
-		//mainpanel.add(compositepanel);
+		mainpanel.add(compositepanel);
 		mainpanel.add(Box.createGlue());
 		mainpanel.add(new SemGenSeparator());
 		
@@ -83,8 +88,16 @@ public class CodewordAnnotationPanel extends AnnotationPanel<CodewordToolDrawer>
 			//compositepanel.refreshUI();
 		}
 	}
-
-
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		super.mouseClicked(e);
+		if(e.getComponent() == copyannsbutton){
+			int x = JOptionPane.showConfirmDialog(this, "Really copy annotations to mapped variables?", "Confirm", JOptionPane.YES_NO_OPTION);
+			if(x==JOptionPane.YES_OPTION){
+				drawer.copytoMappedVariables();
+			}
+		}
+	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {

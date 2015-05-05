@@ -19,13 +19,10 @@ import semgen.annotation.workbench.AnnotatorWorkbench;
 public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 	private static final long serialVersionUID = 7868541704010347520L;
 	private AnnotatorTreeModel model;
-	private AnnotatorWorkbench workbench;
 	private Renderer renderer = new Renderer();
 	
 	public AnnotatorButtonTree(AnnotatorWorkbench wb, SemGenSettings sets){
 		super(new AnnotatorTreeModel(wb, sets));
-		workbench = wb;
-
 
 		setCellRenderer(renderer);
 		UIDefaults dialogTheme = new UIDefaults();
@@ -56,7 +53,7 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 	
 	class Renderer implements TreeCellRenderer {
 		@Override
-		public Component getTreeCellRendererComponent(JTree arg0, Object node,
+		public Component getTreeCellRendererComponent(JTree tree, Object node,
 				boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
 			
 			Component btn = ((AnnotatorTreeNode)node).getButton();

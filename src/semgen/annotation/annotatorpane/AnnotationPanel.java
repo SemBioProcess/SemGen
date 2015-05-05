@@ -167,6 +167,7 @@ public abstract class AnnotationPanel<P extends AnnotatorDrawer<? extends SemSim
 		if (obj==humandefpane) {
 			changeFreeText();
 		}
+		
 	}
 	
 	protected abstract void formatHeader(Box mainheader);

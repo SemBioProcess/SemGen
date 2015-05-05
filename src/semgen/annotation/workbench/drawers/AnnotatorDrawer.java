@@ -2,7 +2,9 @@ package semgen.annotation.workbench.drawers;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Observable;
+import java.util.Set;
 
 import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
 import semsim.SemSimObject;
@@ -10,6 +12,7 @@ import semsim.SemSimObject;
 public abstract class AnnotatorDrawer<T extends SemSimObject> extends Observable {
 	protected int currentfocus = -1;
 	protected ArrayList<T> componentlist = new ArrayList<T>();
+	protected Set<Integer> changeset = new HashSet<Integer>();
 	
 	public AnnotatorDrawer() {}
 	
@@ -86,10 +89,24 @@ public abstract class AnnotatorDrawer<T extends SemSimObject> extends Observable
 		return isEditable(currentfocus);
 	}
 	
+	public Set<Integer> getChangedComponents() {
+		Set<Integer> cset = new HashSet<Integer>(changeset);
+		cset.clear();
+		return cset;
+	}
+	
+	protected void addComponentstoChangeSet(Set<? extends T> objs) {
+		for (T t : objs) {
+			changeset.add(componentlist.indexOf(t));
+		}
+		changeNotification();
+	}
+	
 	public abstract URI getSingularAnnotationURI(int index);
 	public abstract boolean hasSingularAnnotation(int index);
 	public abstract String getSingularAnnotationasString(int index);
 	protected abstract void selectionNotification();
+	protected abstract void changeNotification();
 	public abstract boolean isEditable(int index);
 	public abstract boolean isImported();
 }

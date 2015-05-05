@@ -13,7 +13,7 @@ import semsim.model.computational.Computation;
  * <p>
  * http://www.cellml.org/specifications/cellml_1.1/#sec_model_structure
  */
-public class MappableVariable extends Decimal{
+public class MappableVariable extends Decimal {
 
 	private String publicInterfaceValue = new String("");
 	private String privateInterfaceValue = new String("");

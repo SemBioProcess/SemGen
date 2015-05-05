@@ -1,4 +1,4 @@
-package semgen.annotation.routines;
+package semgen.annotation.workbench.routines;
 
 import java.util.HashSet;
 import java.util.Set;

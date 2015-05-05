@@ -1,12 +1,14 @@
 package semgen.annotation.componentlistpanes;
 
 import java.awt.event.MouseEvent;
+
 import javax.swing.Box;
 
 import semgen.SemGenSettings;
 import semgen.SemGenSettings.SettingChange;
 import semgen.annotation.componentlistpanes.buttons.CodewordButton;
 import semgen.annotation.workbench.AnnotatorWorkbench;
+import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
 
 public class CodewordListPane extends AnnotatorListPane<CodewordButton, CodewordToolDrawer> {
@@ -44,10 +46,24 @@ public class CodewordListPane extends AnnotatorListPane<CodewordButton, Codeword
 		}
 	}
 
+	
+	protected void refreshChangedButtons() {
+		for (Integer i : drawer.getChangedComponents()) {
+			CodewordButton cb = btnlist.inverseBidiMap().get(i);
+			cb.toggleHumanDefinition(drawer.hasHumanReadableDef(i));
+			cb.toggleSingleAnnotation(drawer.hasSingularAnnotation(i));
+			cb.refreshCompositeAnnotationCode(drawer.getAnnotationStatus(i));
+		}
+	}
+
+	
 	@Override
-	public void updateUnique(Object arg1) {
-			if (arg1==SettingChange.toggleproptype) {
+	public void updateUnique(Object arg) {
+			if (arg==SettingChange.toggleproptype) {
 				toggleMarkers();
+			}
+			if	(arg==modeledit.compositechanged) {
+				refreshChangedButtons();
 			}
 	}
 	

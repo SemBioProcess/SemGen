@@ -32,7 +32,9 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 	private RootButton root = new RootButton();
 	
 	private HashMap<CodewordTreeButton, Integer> cwmap = new HashMap<CodewordTreeButton, Integer>();
+	private HashMap<Integer, CodewordTreeButton> cwmapinv = new HashMap<Integer, CodewordTreeButton>();
 	private HashMap<SubModelTreeButton, Integer> smmap = new HashMap<SubModelTreeButton, Integer>();
+	private HashMap<Integer, SubModelTreeButton> smmapinv = new HashMap<Integer, SubModelTreeButton>();
 	
 	private ArrayList<TreeModelListener> listeners = new ArrayList<TreeModelListener>();
 	protected SemGenSettings settings;
@@ -72,6 +74,7 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 		}
 		
 		smmap.put(newnode, index);
+		smmapinv.put(index, newnode);
 		parent.add(newnode);
 	}
 		
@@ -79,11 +82,13 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 		CodewordTreeButton newnode = new CodewordTreeButton();
 		
 		cwmap.put(newnode, index);
+		cwmapinv.put(index, newnode);
 		parent.add(newnode);
 	}
 	
 	public void reload() {
 		loadModel();
+		
 		fireTreeStructureChanged();
 	}
 	
@@ -147,20 +152,36 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 	public void destroy() {
 		focus = null;
 		root.removeAllChildren();
-		cwmap.clear();
-		smmap.clear();
+		cwmap.clear(); cwmapinv.clear();
+		smmap.clear(); smmapinv.clear();
 		fireTreeStructureChanged();
 	}
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		if (arg1==modeledit.freetextchange) {
-			if (focus!=null) {
-				fireNodeChanged(focus);
+		if (settings.useTreeView()) {
+			if (arg1==modeledit.freetextchange) {
+				if (focus!=null) {
+					fireNodeChanged(focus);
+				}
 			}
-		}
-		if (arg1 == modeledit.smnamechange) {
-			fireTreeStructureChanged();
+			if (arg0==smdrawer) {
+				if (arg1 == modeledit.smnamechange) {
+					fireTreeStructureChanged();
+				}
+				if	(arg1==modeledit.submodelchanged) {
+					for (Integer i : smdrawer.getChangedComponents()) {
+						fireNodeChanged(smmapinv.get(i));
+					}
+				}
+			}
+			if (arg0==cwdrawer) {
+				if	(arg1==modeledit.compositechanged) {
+					for (Integer i : cwdrawer.getChangedComponents()) {
+						fireNodeChanged(cwmapinv.get(i));
+					}
+				}
+			}
 		}
 	}
 	
@@ -182,6 +203,7 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 
 		@Override
 		public void onSelection() {
+			changeButtonFocus(this);
 			workbench.getModelAnnotationsWorkbench().notifyOberserversofMetadataSelection(0);
 		}
 	}
@@ -218,7 +240,8 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 		@Override
 		public Component getButton() {
 			int index = cwmap.get(this);
-			CodewordTreeButton btn = new CodewordTreeButton(cwdrawer.getCodewordName(index), cwdrawer.isEditable(index), settings.useDisplayMarkers());
+			
+			CodewordTreeButton btn = new CodewordTreeButton(cwdrawer.getLookupName(index), cwdrawer.isEditable(index), settings.useDisplayMarkers());
 			
 			btn.toggleHumanDefinition(cwdrawer.hasHumanReadableDef(index));
 			btn.toggleSingleAnnotation(cwdrawer.hasSingularAnnotation(index));

@@ -11,7 +11,7 @@ import org.semanticweb.owlapi.model.OWLException;
 
 import JSim.util.Xcept;
 import semgen.SemGen;
-import semgen.annotation.routines.AutoAnnotate;
+import semgen.annotation.workbench.routines.AutoAnnotate;
 import semgen.utilities.SemGenError;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semsim.model.SemSimModel;

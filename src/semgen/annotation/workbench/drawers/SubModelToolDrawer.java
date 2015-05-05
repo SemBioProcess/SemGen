@@ -154,4 +154,20 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 	public URI getSingularAnnotationURI(int index) {
 		return componentlist.get(index).getFirstRefersToReferenceOntologyAnnotation().getReferenceURI();
 	}
+	
+	public ArrayList<Integer> getSubmodelsWithoutFocus() {
+		ArrayList<Integer> submodels = new ArrayList<Integer>();
+		for (int i = 0; i < submodels.size(); i++) {
+			submodels.add(i);
+		}
+		submodels.remove(currentfocus);
+		
+		return submodels;
+	}
+	
+	@Override
+	protected void changeNotification() {
+		setChanged();
+		notifyObservers(modeledit.submodelchanged);
+	}
 }

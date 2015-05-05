@@ -81,6 +81,15 @@ public class SubmodelListPane extends AnnotatorListPane<SubmodelButton, SubModel
 		}
 	}
 
+	protected void refreshChangedButtons() {
+		for (Integer i : drawer.getChangedComponents()) {
+			SubmodelButton sbm = btnlist.inverseBidiMap().get(i);
+			sbm.toggleHumanDefinition(drawer.hasHumanReadableDef(i));
+			sbm.toggleSingleAnnotation(drawer.hasSingularAnnotation(i));
+		}
+	}
+
+	
 	@Override
 	public void updateUnique(Object arg) {
 		if ((arg == modeledit.smnamechange) || (arg == modeledit.smlistchanged)){
@@ -88,6 +97,9 @@ public class SubmodelListPane extends AnnotatorListPane<SubmodelButton, SubModel
 		}
 		if (focusbutton!=null) {
 			removesubmodelbutton.setEnabled(!drawer.isFunctional());
+		}
+		if	(arg==modeledit.submodelchanged) {
+			refreshChangedButtons();
 		}
 	}
 	

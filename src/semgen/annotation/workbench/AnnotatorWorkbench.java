@@ -16,10 +16,10 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import semgen.GlobalActions;
 import semgen.SemGen;
-import semgen.annotation.routines.AnnotationCopier;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
 import semgen.annotation.workbench.drawers.ModelAnnotationsBench;
 import semgen.annotation.workbench.drawers.SubModelToolDrawer;
+import semgen.annotation.workbench.routines.AnnotationCopier;
 import semgen.utilities.CSVExporter;
 import semgen.utilities.SemGenError;
 import semgen.utilities.Workbench;
@@ -28,7 +28,6 @@ import semsim.annotation.SemSimRelation;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
-import semsim.model.physical.Submodel;
 import semsim.reading.ModelClassifier;
 import semsim.utilities.SemSimUtil;
 import semsim.writing.CellMLwriter;
@@ -45,7 +44,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	private int lastsavedas = -1;
 	private String ontspref;
 	public static enum WBEvent {freetextrequest, smselection, cwselection }
-	public static enum modeledit {compositechanged, modelimport, smlistchanged, freetextchange, smnamechange}
+	public static enum modeledit {compositechanged, submodelchanged, modelimport, smlistchanged, freetextchange, smnamechange }
 	
 	public AnnotatorWorkbench(File file, SemSimModel model) {
 		semsimmodel = model;

@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -16,6 +15,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.border.TitledBorder;
+
+import org.apache.commons.collections15.bidimap.DualHashBidiMap;
 
 import semgen.SemGenSettings;
 import semgen.SemGenSettings.SettingChange;
@@ -32,7 +33,7 @@ public abstract class AnnotatorListPane<T extends AnnotationObjectButton, D exte
 	protected D drawer;
 	protected SemGenSettings settings;
 	protected ArrayList<T> btnarray = new ArrayList<T>();
-	protected LinkedHashMap<T, Integer> btnlist = new LinkedHashMap<T, Integer>();
+	protected DualHashBidiMap<T, Integer> btnlist = new DualHashBidiMap<T, Integer>();
 	protected JPanel buttonpane = new JPanel();
 	protected T focusbutton;
 	
@@ -75,7 +76,7 @@ public abstract class AnnotatorListPane<T extends AnnotationObjectButton, D exte
 		buttonpane.validate();
 		buttonpane.repaint();
 	}
-		
+
 	protected void changeButtonFocus(T focus) {
 		requestFocusInWindow();
 		if(focusbutton!=null){
@@ -120,20 +121,21 @@ public abstract class AnnotatorListPane<T extends AnnotationObjectButton, D exte
 	}
 	
 	public void update(Observable o, Object arg) {
-		if (arg==SettingChange.toggletree && settings.useTreeView()) {
-			destroy();
-		}
-		if (o==drawer) {
-			if (arg==modeledit.freetextchange) {
+		if (!settings.useTreeView()) {
+			if (arg==SettingChange.toggletree && settings.useTreeView()) {
+				destroy();
+			}
+			if (o==drawer) {
 				if (focusbutton!=null) {
-					focusbutton.toggleHumanDefinition(drawer.hasHumanReadableDef());
+					if (arg==modeledit.freetextchange) {
+						focusbutton.toggleHumanDefinition(drawer.hasHumanReadableDef());
+					}
 				}
 			}
+			updateUnique(arg);
 		}
-		
-		updateUnique(arg);
 	}
-	
+	protected abstract void refreshChangedButtons();
 	protected abstract void updateButtonTable();
 	protected abstract void updateUnique(Object arg);
 }

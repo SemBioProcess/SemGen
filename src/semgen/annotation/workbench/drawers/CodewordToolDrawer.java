@@ -8,9 +8,11 @@ import java.util.Set;
 import semgen.SemGen;
 import semgen.annotation.workbench.AnnotatorWorkbench.WBEvent;
 import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
+import semgen.annotation.workbench.routines.AnnotationCopier;
 import semsim.PropertyType;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.utilities.SemSimComponentComparator;
 
@@ -27,6 +29,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 			return code;
 		}
 	}
+	
 	
 	public CodewordToolDrawer(Set<DataStructure> dslist) {
 		componentlist.addAll(dslist);
@@ -133,9 +136,14 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		return componentlist.get(index).getFirstRefersToReferenceOntologyAnnotation().getReferenceURI();
 	}
 
+	public String getLookupName(int index) {
+		String name = componentlist.get(index).getName();
+		if (!name.contains(".")) return name;
+		return name.substring(name.lastIndexOf(".")+1);
+	}
+	
 	public String getFocusLookupName() {
-		DataStructure ds = componentlist.get(currentfocus);
-		return ds.getName().substring(ds.getName().lastIndexOf(".")+1);
+		return getLookupName(currentfocus);
 	}
 
 	public String getUnits() {
@@ -178,6 +186,20 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	@Override
 	public boolean isImported() {
 		return componentlist.get(currentfocus).isImportedViaSubmodel();
+	}
+	
+	public void copytoMappedVariables() {
+		MappableVariable thevar = (MappableVariable)componentlist.get(currentfocus);
+		
+		Set<MappableVariable> mapped = AnnotationCopier.copyAllAnnotationsToMappedVariables(thevar);
+		addComponentstoChangeSet(mapped);
+		changeNotification();
+	}
+
+	@Override
+	protected void changeNotification() {
+		setChanged();
+		notifyObservers(modeledit.compositechanged);
 	}
 	
 //	public int countEntities() {
