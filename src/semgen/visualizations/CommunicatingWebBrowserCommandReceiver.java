@@ -2,12 +2,14 @@ package semgen.visualizations;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
 import javax.naming.InvalidNameException;
+
 import org.apache.commons.lang3.text.WordUtils;
 
-import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
-import chrriis.dj.nativeswing.swtimpl.components.WebBrowserAdapter;
-import chrriis.dj.nativeswing.swtimpl.components.WebBrowserCommandEvent;
+import com.teamdev.jxbrowser.chromium.Browser;
+import com.teamdev.jxbrowser.chromium.BrowserFunction;
+import com.teamdev.jxbrowser.chromium.JSValue;
 
 /**
  * Contract for receiving commands from Javascript
@@ -67,7 +69,7 @@ public abstract class CommunicatingWebBrowserCommandReceiver {
 					"%s: function () {" + CommunicationHelpers.NLJS +
 						"var argumentsArray = Array.prototype.slice.call(arguments);" + CommunicationHelpers.NLJS +		// Create an array object from the arguments array
 						"argumentsArray.unshift('%s');" + CommunicationHelpers.NLJS +									// Add the name of the function to call to the beginning of the array
-						"sendNSCommand.apply(this, argumentsArray);" + CommunicationHelpers.NLJS +						// Send the command
+						"sendJavaCommand.apply(this, argumentsArray);" + CommunicationHelpers.NLJS +						// Send the command
 					"}," + CommunicationHelpers.NLJS,
 					javascriptMethodName, 
 					javaMethodName);
@@ -85,21 +87,34 @@ public abstract class CommunicatingWebBrowserCommandReceiver {
 	 * Creates a web browser adapter that listens for javascript commands
 	 * and adds it to the browser
 	 */
-	public void listenForBrowserCommands(JWebBrowser browser) {
-		browser.addWebBrowserListener(new WebBrowserAdapter()
-		{
-			/**
-			 * Receives a command from javascript and calls the receiving function
-			 */
-			@Override
-			public void commandReceived(WebBrowserCommandEvent event) {
-				String methodName = event.getCommand();
-				Object[] parameters = event.getParameters();
+	public void listenForBrowserCommands(Browser browser) {
+		browser.registerFunction("sendJavaCommand", new BrowserFunction() {
+		    public JSValue invoke(JSValue... args) {
+		        String methodName = args[0].getString();
+				Object[] parameters = new Object[args.length - 1];
 				
-				// Create and array of parameter types
+				// Create and array of parameters and parameter types
 				Class<?>[] parameterTypes = new Class<?>[parameters.length];
-				for(int paramIndex = 0; paramIndex < parameters.length; paramIndex++) {
-					parameterTypes[paramIndex] = parameters[paramIndex].getClass();
+				for(int paramIndex = 0, argIndex = 1; argIndex < args.length; paramIndex++, argIndex++) {
+					JSValue jsValue = args[argIndex];
+					
+					Class<?> type;
+					Object param;
+					if(jsValue.isBoolean()) {
+						type = boolean.class;
+						param = jsValue.getBoolean();
+					}
+					else if(jsValue.isNumber()) {
+						type = Number.class;
+						param = jsValue.getNumber();
+					}
+					else {
+						type = String.class;
+						param = jsValue.getString();
+					}
+					
+					parameterTypes[paramIndex] = type;
+					parameters[paramIndex] = param;
 				}
 				
 				// Get the java method to call
@@ -108,7 +123,7 @@ public abstract class CommunicatingWebBrowserCommandReceiver {
 					receivingMethod = CommunicatingWebBrowserCommandReceiver.this.getClass().getMethod(methodName, parameterTypes);
 				} catch (SecurityException | NoSuchMethodException getMethodException) {
 					getMethodException.printStackTrace();
-					return;
+					return null;
 				}
 				
 				// Invoke the java method with parameters from javascript
@@ -116,9 +131,10 @@ public abstract class CommunicatingWebBrowserCommandReceiver {
 					receivingMethod.invoke(CommunicatingWebBrowserCommandReceiver.this, parameters);
 				} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException invokeMethodException) {
 					invokeMethodException.printStackTrace();
-					return;
+					return null;
 				}
-			}
+				return null;
+		    }
 		});
 	}
 }

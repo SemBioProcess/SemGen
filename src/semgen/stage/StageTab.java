@@ -4,7 +4,9 @@ import java.awt.BorderLayout;
 import java.util.Observer;
 
 import javax.naming.InvalidNameException;
-import chrriis.dj.nativeswing.swtimpl.NativeInterface;
+
+import com.teamdev.jxbrowser.chromium.swing.BrowserView;
+
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
 import semgen.utilities.SemGenIcon;
@@ -28,7 +30,6 @@ public class StageTab extends SemGenTab {
 	 */
 	public static String canCreate() {
 		try {
-			NativeInterface.open();
 			new SemGenCommunicatingWebBrowser(null);
 			return null;
 		} catch (NoClassDefFoundError | UnsatisfiedLinkError e) {
@@ -44,15 +45,13 @@ public class StageTab extends SemGenTab {
 	public void loadTab() {
 		setOpaque(false);
 		setLayout(new BorderLayout());
-
-		// Prepare to create the browser
-		NativeInterface.open();
 		
 		// Create the browser
 		try {
 			SemGenCommunicatingWebBrowser browser = new SemGenCommunicatingWebBrowser(_workbench.getCommandReceiver());
 			_workbench.setCommandSender(browser.getCommandSender());
-			this.add(browser);
+			BrowserView browserView = new BrowserView(browser);
+			this.add(browserView);
 		} catch (InvalidNameException e) {
 			e.printStackTrace();
 		}
