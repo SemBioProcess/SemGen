@@ -6,34 +6,47 @@ import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
+import semgen.utilities.SemGenFont;
+
 public class SelectionPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	protected ArrayList<JCheckBox> checklist = new ArrayList<JCheckBox>();
-	protected boolean multiselect;
 	
-	public SelectionPanel(boolean multi) {
-		multiselect = multi;
+	public SelectionPanel() {
+		setOpaque(false);
 	}
 
-	public void setChecklist(ArrayList<String> termlist, ArrayList<Boolean> preselectlist) {
+	public void setChecklist(ArrayList<String> termlist) {
+		layoutChecklist(termlist);
+		validate();
+	}
+	
+	public void setChecklist(ArrayList<String> termlist, ArrayList<Integer> preselectlist) {
 		layoutChecklist(termlist);
 		doPreselection(preselectlist);
+		validate();
+	}
+	
+	public void setChecklist(ArrayList<String> termlist, ArrayList<Integer> preselectlist, ArrayList<Integer> disablelist) {
+		layoutChecklist(termlist);
+		doPreselection(preselectlist);
+		disableEntries(disablelist);
+		validate();
 	}
 	
 	private void layoutChecklist(ArrayList<String> objectlist) {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		for (String s : objectlist) {
 			JCheckBox cb = new JCheckBox(s); 
+			cb.setFont(SemGenFont.defaultPlain());
 			checklist.add(cb);
 			add(cb);
 		}
 	}
 	
-	private void doPreselection(ArrayList<Boolean> preselectlist) {
-		int i =0;
-		for (JCheckBox cb : checklist) {
-			cb.setSelected(preselectlist.get(i));
-			i++;
+	private void doPreselection(ArrayList<Integer> preselectlist) {
+		for (int i : preselectlist) {
+			checklist.get(i).setSelected(true);
 		}
 	}
 	
@@ -43,11 +56,10 @@ public class SelectionPanel extends JPanel {
 		}
 	}
 	
-	public Integer[] getSelection() {
-		Integer[] selections = new Integer[]{};
-		int i = 0;
+	public ArrayList<Integer> getSelection() {
+		ArrayList<Integer> selections = new ArrayList<Integer>();
 		for (JCheckBox cb : checklist) {
-			if (cb.isSelected()) selections[i] = checklist.indexOf(cb);
+			if (cb.isSelected()) selections.add(checklist.indexOf(cb));
 		}
 		return selections;
 	}

@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Observable;
 
@@ -15,9 +16,11 @@ import javax.swing.JPanel;
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
 import semgen.annotation.common.AnnotationClickableTextPane;
+import semgen.annotation.dialog.SemSimComponentSelectionDialog;
 import semgen.annotation.dialog.TextChangeDialog;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
+import semgen.annotation.workbench.drawers.CodewordToolDrawer;
 import semgen.annotation.workbench.drawers.SubModelToolDrawer;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenSeparator;
@@ -28,11 +31,12 @@ public class SubmodelAnnotationPanel extends AnnotationPanel<SubModelToolDrawer>
 	protected AnnotatorButton loadsourcemodelbutton = new AnnotatorButton(SemGenIcon.annotatoricon, "Annotate source model for this imported sub-model");
 	private AnnotationClickableTextPane nestedsubmodelpane;
 	private AnnotationClickableTextPane subtitlefield;
+	private CodewordToolDrawer cwdrawer;
 	
 	public SubmodelAnnotationPanel(AnnotatorWorkbench wb, SemGenSettings sets,
 			GlobalActions gacts) {
 		super(wb, wb.openSubmodelDrawer(), sets, gacts);
-
+		cwdrawer = workbench.openCodewordDrawer();
 		drawUI();
 	}
 
@@ -55,9 +59,14 @@ public class SubmodelAnnotationPanel extends AnnotationPanel<SubModelToolDrawer>
 		
 		refreshSubmodelData();
 		subtitlefield.setAlignmentX(JPanel.LEFT_ALIGNMENT);
-		mainpanel.add(subtitlefield);
+
 		nestedsubmodelpane.setAlignmentX(JPanel.LEFT_ALIGNMENT);
+		if (!drawer.isFunctional()) {
+			subtitlefield.addMouseListener(this);
+			nestedsubmodelpane.addMouseListener(this);
+		}
 		mainpanel.add(nestedsubmodelpane);
+		mainpanel.add(subtitlefield);
 		mainpanel.add(new SemGenSeparator());
 		
 	}
@@ -71,13 +80,13 @@ public class SubmodelAnnotationPanel extends AnnotationPanel<SubModelToolDrawer>
 			editcomptext = "No submodels associated with this submodel";
 		}
 		
-//		Include the codewords that are in the subcomponents in the list of associated codewords
+		//	Include the codewords that are in the subcomponents in the list of associated codewords
 		ArrayList<String> assoccomp = drawer.getDataStructureNames();
 		ArrayList<String> assocsmds = drawer.getAssociatedSubModelDataStructureNames();
 
-		boolean isempty = !assoccomp.isEmpty() || !assocsmds.isEmpty();
-		if (isempty) {
-			subtitletext = "Codewords: " + generateSubcomponentText(assoccomp);
+		boolean isempty = assoccomp.isEmpty() && assocsmds.isEmpty();
+		if (!isempty) {
+			subtitletext = generateSubcomponentText(assoccomp);
 			if (!assocsmds.isEmpty()) {
 				if (!assoccomp.isEmpty()) {
 					subtitletext = subtitletext + ", ";
@@ -118,32 +127,62 @@ public class SubmodelAnnotationPanel extends AnnotationPanel<SubModelToolDrawer>
 		pane.setText(text);		
 	}
 	
-	@Override
-	protected void refreshData() {
+	protected void associateSubmodels() {
+		ArrayList<Integer> sms = drawer.getSubmodelsWithoutFocus();
+		SemSimComponentSelectionDialog dialog = new SemSimComponentSelectionDialog(
+				"Select Submodels", drawer.getComponentNamesfromIndicies(sms), drawer.getAssociatedSubmodelIndicies(sms));
 		
+		drawer.addSubmodelstoSubmodel(dialog.getSelections());
+		refreshSubmodelData();
+	}
+	
+	protected void associateDatastructures() {
+		ArrayList<Integer> dsind = cwdrawer.getCodewordstoDisplay(new Boolean[]{settings.showImports(), false, false});
+		ArrayList<String> dsnames = new ArrayList<String>();
+		for (Integer i : dsind) {
+			dsnames.add(cwdrawer.getCodewordName(i));
+		}
+		SemSimComponentSelectionDialog dialog = new SemSimComponentSelectionDialog(
+				"Select Data Structures", dsnames, workbench.getSelectedSubmodelDSIndicies());
+		
+		workbench.addDataStructurestoSubmodel(dialog.getSelections());
+		refreshSubmodelData();
+
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent e) {
-		
-	}
+	public void mouseEntered(MouseEvent e) {}
 
 	@Override
-	public void mouseExited(MouseEvent e) {
-		
-	}
+	public void mouseExited(MouseEvent e) {}
 
 	@Override
-	public void mousePressed(MouseEvent e) {
-		
-	}
+	public void mousePressed(MouseEvent e) {}
 
 	@Override
-	public void mouseReleased(MouseEvent e) {
+	public void mouseReleased(MouseEvent e) {}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		super.mouseClicked(e);
+		// Activated if user selects the Annotator icon within the AnnotationDialog (used for imported submodels)
+		if(e.getComponent() == nestedsubmodelpane){
+			associateSubmodels();
+		}
+		if(e.getComponent() == subtitlefield){
+			associateDatastructures();
+		}
+		if(e.getComponent() == loadsourcemodelbutton){
+			File file = workbench.getSourceSubmodelFile();
+
+			if(file.exists()){
+				globalacts.NewAnnotatorTab(file);
+			}
+			else{JOptionPane.showMessageDialog(this, "Could not locate source file for this sub-model.", "ERROR", JOptionPane.ERROR_MESSAGE);}
+		}
 		
 	}
-
-
+	
 	@Override
 	public void updateUnique(Observable o, Object arg) {
 		if (arg == modeledit.smnamechange) {

@@ -4,8 +4,6 @@ import java.io.File;
 
 import javax.swing.JOptionPane;
 
-import org.semanticweb.owlapi.model.OWLException;
-
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenTask;
 import semgen.utilities.file.LoadSemSimModel;

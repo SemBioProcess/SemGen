@@ -22,7 +22,7 @@ import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.ExternalURLButton;
 
-public abstract class AnnotationSelectorPanel extends JPanel implements ActionListener{
+public abstract class AnnotationChooserPanel extends JPanel implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	private ArrayList<JLabel> lbllist = new ArrayList<JLabel>();
 	private JComboBox<String> combobox = new JComboBox<String>();
@@ -35,7 +35,7 @@ public abstract class AnnotationSelectorPanel extends JPanel implements ActionLi
 	private ComponentPanelLabel createlabel;
 	protected ExternalURLButton urlbutton;
 	
-	public AnnotationSelectorPanel() {
+	public AnnotationChooserPanel() {
 		super(new BorderLayout());
 		this.setBackground(SemGenSettings.lightblue);
 		

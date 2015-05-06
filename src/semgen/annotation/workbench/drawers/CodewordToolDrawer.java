@@ -30,7 +30,6 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		}
 	}
 	
-	
 	public CodewordToolDrawer(Set<DataStructure> dslist) {
 		componentlist.addAll(dslist);
 		

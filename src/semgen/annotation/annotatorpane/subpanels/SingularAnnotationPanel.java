@@ -2,12 +2,10 @@ package semgen.annotation.annotatorpane.subpanels;
 
 import java.awt.event.ActionEvent;
 
-import javax.swing.BorderFactory;
-
-import semgen.annotation.common.AnnotationSelectorPanel;
+import semgen.annotation.common.AnnotationChooserPanel;
 import semgen.annotation.workbench.drawers.AnnotatorDrawer;
 
-public class SingularAnnotationPanel extends AnnotationSelectorPanel{
+public class SingularAnnotationPanel extends AnnotationChooserPanel{
 	private static final long serialVersionUID = 1L;
 
 	public AnnotatorDrawer<?> drawer;

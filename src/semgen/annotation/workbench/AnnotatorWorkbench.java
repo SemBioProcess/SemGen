@@ -2,6 +2,7 @@ package semgen.annotation.workbench;
 
 import java.io.File;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
@@ -240,6 +241,23 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		notifyObservers(modeledit.smlistchanged);
 	}
 	
+	public ArrayList<Integer> getSelectedSubmodelDSIndicies() {
+		ArrayList<DataStructure> dslist = smdrawer.getSelectionDataStructures();
+		ArrayList<Integer> dsindicies = new ArrayList<Integer>();
+		
+		for (DataStructure ds : dslist) {
+			dsindicies.add(cwdrawer.getIndexofComponent(ds));
+		}
+		
+		return dsindicies;
+	}
+	
+	public void addDataStructurestoSubmodel(ArrayList<Integer> dsindicies) {
+		smdrawer.setDataStructures(cwdrawer.getComponentsfromIndicies(dsindicies));
+		setChanged();
+		notifyObservers(modeledit.smlistchanged);
+	}
+	
 	public void addSubmodeltoModel(String name) {
 		semsimmodel.addSubmodel(smdrawer.addSubmodel(name));
 		submodelListChanged();
@@ -278,5 +296,9 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		if (arg1==modeledit.freetextchange) {
 			this.setModelSaved(false);
 		}
+	}
+	
+	public File getSourceSubmodelFile() {
+		return new File(getFile().getParent() + "/" + smdrawer.getHrefValue());
 	}
 }

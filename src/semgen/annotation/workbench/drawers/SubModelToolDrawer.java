@@ -3,6 +3,7 @@ package semgen.annotation.workbench.drawers;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import semgen.annotation.workbench.AnnotatorWorkbench.WBEvent;
@@ -15,7 +16,6 @@ import semsim.utilities.SemSimComponentComparator;
 import semsim.writing.CaseInsensitiveComparator;
 
 public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
-	
 	public SubModelToolDrawer(Set<Submodel> modlist) {
 		componentlist.addAll(modlist);
 		refreshSubModels();
@@ -62,13 +62,23 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 		return componentlist.remove(currentfocus);
 	}
 	
+	public void addSubmodelstoSubmodel(ArrayList<Integer> sms) {
+		Set<Submodel> smset = new HashSet<Submodel>();
+		for (Integer i : sms) {
+			smset.add(componentlist.get(i));
+		}
+		componentlist.get(currentfocus).setSubmodels(smset);
+	}
+	
 	public Submodel addSubmodel(String name) {
 		Submodel sm = new Submodel(name);
 		componentlist.add(sm);
+		refreshSubModels();
+		currentfocus = componentlist.indexOf(sm);
 		return sm;
 	}
 	
-	public ArrayList<DataStructure> getDataStructures() {
+	public ArrayList<DataStructure> getSelectionDataStructures() {
 		return getDataStructures(currentfocus);
 	}
 	
@@ -80,6 +90,12 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 		
 		return smdslist;
 	}
+	
+	public void setDataStructures(Set<DataStructure> dsset) {
+		componentlist.get(currentfocus).setAssociatedDataStructures(dsset);
+	}
+	
+
 	
 	public ArrayList<String> getAssociatedSubModelDataStructureNames() {
 		Set<DataStructure> smset = SemSimOWLFactory.getCodewordsAssociatedWithNestedSubmodels(componentlist.get(currentfocus));
@@ -94,7 +110,6 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 		
 		Collections.sort(associated, new CaseInsensitiveComparator());
 		return associated;
-		
 	}
 	
 	public ArrayList<String> getDataStructureNames() {
@@ -112,8 +127,10 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 	}
 	
 	public void setSubmodelName(String newname) {
-		componentlist.get(currentfocus).setName(newname);
+		Submodel sm = componentlist.get(currentfocus);
+		sm.setName(newname);
 		refreshSubModels();
+		currentfocus = componentlist.indexOf(sm);
 		setChanged();
 		notifyObservers(modeledit.smnamechange);
 	}
@@ -142,6 +159,10 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 		return componentlist.get(index).isFunctional();
 	}
 
+	public String getHrefValue() {
+		return 	componentlist.get(currentfocus).getHrefValue();
+	}
+	
 	@Override
 	public String getSingularAnnotationasString(int index) {
 		if (hasSingularAnnotation(index)) {
@@ -157,12 +178,32 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 	
 	public ArrayList<Integer> getSubmodelsWithoutFocus() {
 		ArrayList<Integer> submodels = new ArrayList<Integer>();
-		for (int i = 0; i < submodels.size(); i++) {
+		for (int i = 0; i < componentlist.size(); i++) {
 			submodels.add(i);
 		}
 		submodels.remove(currentfocus);
 		
 		return submodels;
+	}
+	
+	public ArrayList<Integer> getAssociatedSubmodelIndicies(ArrayList<Integer> sms) {
+		ArrayList<Integer> associates = new ArrayList<Integer>();
+		
+		for (Submodel sm : componentlist.get(currentfocus).getSubmodels()) {
+			associates.add(componentlist.indexOf(sm));
+		}
+		return associates;
+	}
+	
+	public ArrayList<Integer> getFunctionalSubmodelIndicies(ArrayList<Integer> sms) {
+		ArrayList<Integer> associates = new ArrayList<Integer>();
+		
+		for (Integer sm : sms) {
+			if (componentlist.get(sm).isFunctional()) {
+				associates.add(sm);
+			}
+		}
+		return associates;
 	}
 	
 	@Override

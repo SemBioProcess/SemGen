@@ -75,8 +75,6 @@ public abstract class AnnotationPanel<P extends AnnotatorDrawer<? extends SemSim
 		add(mainpanel, BorderLayout.NORTH);
 		add(Box.createVerticalGlue(), BorderLayout.SOUTH);
 		
-		refreshData();
-		
 		setVisible(true);
 		validate();
 		repaint();
@@ -172,7 +170,6 @@ public abstract class AnnotationPanel<P extends AnnotatorDrawer<? extends SemSim
 	
 	protected abstract void formatHeader(Box mainheader);
 	protected abstract void createUniqueElements();
-	protected abstract void refreshData();	
 	protected abstract void updateUnique(Observable o, Object arg1);	
 
 	protected class AnnotatorButton extends JLabel {

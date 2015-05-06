@@ -3,9 +3,12 @@ package semgen.annotation.componentlistpanes;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
+
 import javax.swing.BorderFactory;
 import javax.swing.JTree;
 import javax.swing.UIDefaults;
+import javax.swing.event.TreeExpansionEvent;
+import javax.swing.event.TreeExpansionListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreeCellRenderer;
@@ -16,7 +19,7 @@ import semgen.SemGenSettings;
 import semgen.annotation.componentlistpanes.buttons.AnnotatorTreeNode;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 
-public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
+public class AnnotatorButtonTree extends JTree implements TreeSelectionListener, TreeExpansionListener{
 	private static final long serialVersionUID = 7868541704010347520L;
 	private AnnotatorTreeModel model;
 	private Renderer renderer = new Renderer();
@@ -25,6 +28,7 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 		super(new AnnotatorTreeModel(wb, sets));
 
 		setCellRenderer(renderer);
+		addTreeExpansionListener(this);
 		UIDefaults dialogTheme = new UIDefaults();
 		dialogTheme.put("Tree:TreeCell[Focused+Selected].backgroundPainter", new MyPainter());
 		dialogTheme.put("Tree:TreeCell[Enabled+Selected].backgroundPainter", new MyPainter());
@@ -39,9 +43,14 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 		setVisible(true);
 	}
 	
-	public void reloadTree() {
+	public void reloadTree() {	
 		model.reload();
+		getCurrentSelection();
 		validate();
+	}
+	
+	private void getCurrentSelection() {
+		setSelectionPath(model.getSelectedPath());
 	}
 	
 	class MyPainter implements Painter<Object>{
@@ -51,13 +60,25 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 		}
 	}
 	
+	@Override
+	public void valueChanged(TreeSelectionEvent e) {
+		AnnotatorTreeNode node = (AnnotatorTreeNode)
+                getLastSelectedPathComponent();
+		if (node!=null) node.onSelection();
+	}
+	
+	public void destroy() {
+		clearSelection();
+		model.destroy();
+	}
+	
 	class Renderer implements TreeCellRenderer {
 		@Override
 		public Component getTreeCellRendererComponent(JTree tree, Object node,
 				boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
+			AnnotatorTreeNode anode = ((AnnotatorTreeNode)node);
 			
-			Component btn = ((AnnotatorTreeNode)node).getButton();
-			
+			Component btn = anode.getButton();
 			if (selected) btn.setBackground(SemGenSettings.lightblue);
 			else btn.setBackground(Color.white);
 			
@@ -65,17 +86,14 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener{
 		}	
 	}
 	
-	@Override
-	public void valueChanged(TreeSelectionEvent e) {
-		AnnotatorTreeNode node = (AnnotatorTreeNode)
-                getLastSelectedPathComponent();
-		if (node!=null) node.onSelection();
-	}
+		@Override
+		public void treeCollapsed(TreeExpansionEvent event) {
+			((AnnotatorTreeNode)event.getPath().getLastPathComponent()).setExpanded(false);
+		}
 
-
-	
-	public void destroy() {
-		clearSelection();
-		model.destroy();		
-	}
+		@Override
+		public void treeExpanded(TreeExpansionEvent event) {
+			((AnnotatorTreeNode)event.getPath().getLastPathComponent()).setExpanded(true);
+		}
+		
 }

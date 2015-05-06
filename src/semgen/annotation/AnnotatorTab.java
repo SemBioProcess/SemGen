@@ -14,7 +14,6 @@ import semgen.annotation.componentlistpanes.ModelAnnotationsListPane;
 import semgen.annotation.componentlistpanes.SubmodelListPane;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.AnnotatorWorkbench.WBEvent;
-import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
 import semgen.annotation.workbench.drawers.AnnotatorDrawer;
 import semgen.annotation.workbench.drawers.ModelAnnotationsBench;
 import semgen.utilities.SemGenIcon;

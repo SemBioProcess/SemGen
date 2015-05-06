@@ -79,7 +79,7 @@ public class EntitySelectorGroup extends Box {
 		}
 	}
 	
-	private class SelectorPanel extends AnnotationSelectorPanel {
+	private class SelectorPanel extends AnnotationChooserPanel {
 		protected SelectorPanel() {
 			
 		}

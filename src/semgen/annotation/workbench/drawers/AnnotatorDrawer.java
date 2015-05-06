@@ -24,6 +24,15 @@ public abstract class AnnotatorDrawer<T extends SemSimObject> extends Observable
 		return componentlist.get(currentfocus).getName();
 	}
 	
+	public ArrayList<String> getComponentNamesfromIndicies(ArrayList<Integer> sms) {
+		ArrayList<String> components = new ArrayList<String>();
+		
+		for (Integer i : sms) {
+			components.add(componentlist.get(i).getName());
+		}
+		return components;
+	}
+	
 	public Integer getIndexofComponent(T comp) {
 		return componentlist.indexOf(comp);
 	}
@@ -93,6 +102,15 @@ public abstract class AnnotatorDrawer<T extends SemSimObject> extends Observable
 		Set<Integer> cset = new HashSet<Integer>(changeset);
 		cset.clear();
 		return cset;
+	}
+	
+	public HashSet<T> getComponentsfromIndicies(ArrayList<Integer> sms) {
+		HashSet<T> components = new HashSet<T>();
+		
+		for (Integer i : sms) {
+			components.add(componentlist.get(i));
+		}
+		return components;
 	}
 	
 	protected void addComponentstoChangeSet(Set<? extends T> objs) {

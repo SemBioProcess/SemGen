@@ -10,6 +10,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 public abstract class AnnotatorTreeNode extends DefaultMutableTreeNode {
 	private static final long serialVersionUID = 1L;
 	
+	protected boolean isexpanded = false;
+	
 	public abstract void updateButton(int index);
 	public abstract Component getButton();
 	public abstract void onSelection();
@@ -41,5 +43,13 @@ public abstract class AnnotatorTreeNode extends DefaultMutableTreeNode {
 		public void mouseClicked(MouseEvent arg0) {
 			
 		}
+	}
+	
+	public void setExpanded(boolean expand) {
+		isexpanded = expand;
+	}
+	
+	public boolean isExpanded() {
+		return isexpanded;
 	}
 }

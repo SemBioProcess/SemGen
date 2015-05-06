@@ -76,11 +76,6 @@ public class CodewordAnnotationPanel extends AnnotationPanel<CodewordToolDrawer>
 		mainpanel.add(eqpane);
 		mainpanel.add(new SemGenSeparator());
 	}
-	
-	@Override
-	protected void refreshData() {
-
-	}
 
 	@Override
 	public void updateUnique(Observable o, Object arg1) {

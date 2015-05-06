@@ -88,7 +88,6 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 	
 	public void reload() {
 		loadModel();
-		
 		fireTreeStructureChanged();
 	}
 	
@@ -139,11 +138,15 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
     }
 	
 	protected void fireNodeChanged(DefaultMutableTreeNode node) {
-        TreeModelEvent e = new TreeModelEvent(this, new Object[] {node});
+        TreeModelEvent e = new TreeModelEvent(this, node.getPath());
         for (TreeModelListener tml : listeners) {
             tml.treeStructureChanged(e);
         }
     }
+	
+	public TreePath getSelectedPath() {
+		return new TreePath(focus.getPath());
+	}
 	
 	private void changeButtonFocus(AnnotatorTreeNode focusbutton) {
 		focus = focusbutton;
@@ -167,7 +170,9 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 			}
 			if (arg0==smdrawer) {
 				if (arg1 == modeledit.smnamechange) {
+					changeButtonFocus(smmapinv.get(smdrawer.getSelectedIndex()));
 					fireTreeStructureChanged();
+					
 				}
 				if	(arg1==modeledit.submodelchanged) {
 					for (Integer i : smdrawer.getChangedComponents()) {

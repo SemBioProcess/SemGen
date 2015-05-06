@@ -6,6 +6,7 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
+
 import semgen.annotation.common.SelectionPanel;
 import semgen.utilities.uicomponent.SemGenDialog;
 import semgen.utilities.uicomponent.SemGenScrollPane;
@@ -15,20 +16,29 @@ public class SemSimComponentSelectionDialog extends SemGenDialog implements Prop
 	protected JOptionPane optionPane;
 	protected Object[] options = new Object[]{"OK","Cancel"};
 
-	protected SelectionPanel panel;
+	protected SelectionPanel panel = new SelectionPanel();
 	protected boolean result = false;
 	
-	public SemSimComponentSelectionDialog(String title, ArrayList<String> termlist, ArrayList<Boolean> preselectlist, boolean multiselect) {
+	public SemSimComponentSelectionDialog(String title, ArrayList<String> termlist) {
 		super(title);
-		setPreferredSize(new Dimension(500, 600));
-		panel = new SelectionPanel(multiselect);
-		panel.setChecklist(termlist, preselectlist);
-		
-		drawUI(termlist);
-		showDialog();
+		panel.setChecklist(termlist);
+		drawUI();
 	}
 	
-	public void drawUI(ArrayList<String> objectlist) {	
+	public SemSimComponentSelectionDialog(String title, ArrayList<String> termlist, ArrayList<Integer> preselectlist) {
+		super(title);
+		panel.setChecklist(termlist, preselectlist);
+		drawUI();
+	}
+	
+	public SemSimComponentSelectionDialog(String title, ArrayList<String> termlist, ArrayList<Integer> preselectlist, ArrayList<Integer> disablelist) {
+		super(title);
+		panel.setChecklist(termlist, preselectlist, disablelist);
+		drawUI();
+	}
+	
+	public void drawUI() {
+		setPreferredSize(new Dimension(500, 600));	
 		SemGenScrollPane scroller = new SemGenScrollPane(panel);
 		
 		Object[] array = {scroller};
@@ -41,9 +51,10 @@ public class SemSimComponentSelectionDialog extends SemGenDialog implements Prop
 		optionPane.setInitialValue(options[0]);
 
 		setContentPane(optionPane);
+		showDialog();
 	}
 	
-	public Integer[] getSelections() {
+	public ArrayList<Integer> getSelections() {
 		return panel.getSelection();
 	}
 
