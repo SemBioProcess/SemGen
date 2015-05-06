@@ -40,6 +40,12 @@
 	<classpathentry kind="lib" path="thirdParty/DJNativeSwing.jar"/>
 	<classpathentry kind="lib" path="thirdParty/swt-4.4-win32-win32-x86_64.jar"/>
 	<classpathentry kind="lib" path="thirdParty/JSimServer.jar"/>
+	<classpathentry kind="lib" path="thirdParty/jxbrowser/jxbrowser-5.2.jar"/>
+	<classpathentry kind="lib" path="thirdParty/jxbrowser/jxbrowser-linux32-5.2.jar"/>
+	<classpathentry kind="lib" path="thirdParty/jxbrowser/jxbrowser-linux64-5.2.jar"/>
+	<classpathentry kind="lib" path="thirdParty/jxbrowser/jxbrowser-mac-5.2.jar"/>
+	<classpathentry kind="lib" path="thirdParty/jxbrowser/jxbrowser-win-5.2.jar"/>
+	<classpathentry kind="lib" path="thirdParty/jxbrowser/license.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
