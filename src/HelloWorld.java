@@ -4,10 +4,13 @@
  * Use is subject to license terms.
  */
 
+import chrriis.common.WebServer;
+
 import com.teamdev.jxbrowser.chromium.Browser;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -41,6 +44,6 @@ public class HelloWorld {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        browser.loadURL(addressBar.getText());
+        browser.loadURL(WebServer.getDefaultWebServer().getClassPathResourceURL(new HelloWorld().getClass().getName(), "/resources/stage.html"));
     }
 }
