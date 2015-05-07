@@ -7,14 +7,18 @@ import java.util.Observable;
 import java.util.Set;
 
 import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
+import semgen.annotation.workbench.SemSimTermLibrary;
 import semsim.SemSimObject;
 
 public abstract class AnnotatorDrawer<T extends SemSimObject> extends Observable {
+	protected SemSimTermLibrary termlib;
 	protected int currentfocus = -1;
 	protected ArrayList<T> componentlist = new ArrayList<T>();
 	protected Set<Integer> changeset = new HashSet<Integer>();
 	
-	public AnnotatorDrawer() {}
+	public AnnotatorDrawer(SemSimTermLibrary lib) {
+		termlib = lib;
+	}
 	
 	public String getCodewordName(int index) {
 		return componentlist.get(index).getName();

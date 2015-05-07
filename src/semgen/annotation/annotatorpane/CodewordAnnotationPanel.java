@@ -48,7 +48,7 @@ public class CodewordAnnotationPanel extends AnnotationPanel<CodewordToolDrawer>
 	protected void createUniqueElements() {
 		createEquationPane();
 
-		compositepanel = new CompositeAnnotationPanel(drawer, BoxLayout.Y_AXIS);
+		compositepanel = new CompositeAnnotationPanel(termlib, drawer, BoxLayout.Y_AXIS);
 	
 		JLabel compositelabel = new JLabel("Composite annotation");
 		compositelabel.setFont(SemGenFont.defaultBold());

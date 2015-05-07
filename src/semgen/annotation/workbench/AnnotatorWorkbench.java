@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
-import java.util.TreeMap;
-
 import javax.swing.JOptionPane;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
@@ -28,7 +26,6 @@ import semgen.utilities.file.SemGenSaveFileChooser;
 import semsim.annotation.SemSimRelation;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.physical.PhysicalEntity;
 import semsim.reading.ModelClassifier;
 import semsim.utilities.SemSimUtil;
 import semsim.writing.CellMLwriter;
@@ -54,12 +51,12 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	}
 	
 	public void initialize() {
+		termlib = new SemSimTermLibrary(semsimmodel);
 		modanns = new ModelAnnotationsBench(semsimmodel);
 		modanns.addObserver(this);
-		termlib = new SemSimTermLibrary(semsimmodel);
-		cwdrawer = new CodewordToolDrawer(semsimmodel.getDataStructures());
+		cwdrawer = new CodewordToolDrawer(termlib, semsimmodel.getDataStructures());
 		cwdrawer.addObserver(this);
-		smdrawer = new SubModelToolDrawer(semsimmodel.getSubmodels());
+		smdrawer = new SubModelToolDrawer(termlib, semsimmodel.getSubmodels());
 		smdrawer.addObserver(this);
 
 		// Add unspecified physical model components for use during annotation
@@ -75,6 +72,14 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	
 	public SubModelToolDrawer openSubmodelDrawer() {
 		return smdrawer;
+	}
+	
+	public ModelAnnotationsBench getModelAnnotationsWorkbench() {
+		return modanns;
+	}
+	
+	public SemSimTermLibrary openTermLibrary() {
+		return termlib;
 	}
 	
 	public void addObservertoModelAnnotator(Observer obs) {
@@ -210,14 +215,6 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 			setChanged();
 			notifyObservers();
 		}
-	}
-	
-	public ModelAnnotationsBench getModelAnnotationsWorkbench() {
-		return modanns;
-	}
-	
-	public TreeMap<String,PhysicalEntity> getPhysicalEntityIDList() {
-		return termlib.getPhysEntIDMap();
 	}
 		
 	public void compositeChanged() {

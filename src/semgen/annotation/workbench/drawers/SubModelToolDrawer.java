@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.AnnotatorWorkbench.WBEvent;
 import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
 import semsim.model.SemSimModel;
@@ -16,7 +17,8 @@ import semsim.utilities.SemSimComponentComparator;
 import semsim.writing.CaseInsensitiveComparator;
 
 public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
-	public SubModelToolDrawer(Set<Submodel> modlist) {
+	public SubModelToolDrawer(SemSimTermLibrary lib, Set<Submodel> modlist) {
+		super(lib);
 		componentlist.addAll(modlist);
 		refreshSubModels();
 	}

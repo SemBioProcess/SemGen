@@ -43,6 +43,7 @@ import semsim.model.physical.object.PhysicalDependency;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
+import semsim.model.physical.object.ReferencePhysicalProperty;
 import semsim.writing.SemSimOWLwriter;
 
 /**
@@ -92,6 +93,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 	// Physical model components
 	private Set<Submodel> submodels = new HashSet<Submodel>();
 	private Set<PhysicalEntity> physicalentities = new HashSet<PhysicalEntity>();
+	private Set<ReferencePhysicalProperty> physicalpropertyclasses = new HashSet<ReferencePhysicalProperty>();
 	private Set<PhysicalProcess> physicalprocesses = new HashSet<PhysicalProcess>();
 	private Set<String> errors = new HashSet<String>();
 	
@@ -677,6 +679,14 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 		return pps;
 	}
 	
+
+	public Set<ReferencePhysicalProperty> getPhysicalPropertyClasses() {
+		return physicalpropertyclasses;
+	}
+
+	public void addPhysicalPropertyClass(ReferencePhysicalProperty pptoadd) {
+		physicalpropertyclasses.add(pptoadd);
+	}
 
 	/**
 	 * @return Retrieves all PhysicalEntities, PhysicalProperties, PhsicalProcesses, PhysicalDependencies and Submodels in the model

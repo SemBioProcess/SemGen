@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Set;
 
 import semgen.SemGen;
+import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.AnnotatorWorkbench.WBEvent;
 import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
 import semgen.annotation.workbench.routines.AnnotationCopier;
@@ -14,6 +15,7 @@ import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.object.PhysicalProperty;
+import semsim.model.physical.object.ReferencePhysicalProperty;
 import semsim.utilities.SemSimComponentComparator;
 
 public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
@@ -30,7 +32,8 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		}
 	}
 	
-	public CodewordToolDrawer(Set<DataStructure> dslist) {
+	public CodewordToolDrawer(SemSimTermLibrary lib, Set<DataStructure> dslist) {
+		super(lib);
 		componentlist.addAll(dslist);
 		
 		Collections.sort(componentlist, new SemSimComponentComparator());
@@ -110,8 +113,8 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	public CodewordCompletion getAnnotationStatus(int index) {
 		DataStructure ds = componentlist.get(index);
 
-		if (!ds.hasPhysicalProperty() && !ds.hasAssociatedPhysicalComponent()) {
-			return CodewordCompletion.noAnnotations;
+		if (ds.hasPhysicalProperty() && ds.hasAssociatedPhysicalComponent()) {
+			return CodewordCompletion.hasAll;
 		}
 		else if (ds.hasPhysicalProperty() && !ds.hasAssociatedPhysicalComponent()) {
 			return CodewordCompletion.hasPhysProp;
@@ -119,7 +122,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		else if (!ds.hasPhysicalProperty() && ds.hasAssociatedPhysicalComponent()) {
 			return CodewordCompletion.hasPhysEnt;
 		}
-		return CodewordCompletion.hasAll;
+		return CodewordCompletion.noAnnotations;
 	}
 	
 	public boolean isEditable(int index) {
@@ -195,6 +198,17 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		changeNotification();
 	}
 
+	public Integer getIndexofPhysicalProperty() {
+		if (!componentlist.get(currentfocus).hasPhysicalProperty()) return -1;
+		return termlib.getPhysicalPropertyIndex(componentlist.get(currentfocus).getPhysicalProperty());
+	}
+	
+	public void setDatastructurePhysicalProperty(Integer index) {
+		ReferencePhysicalProperty rpp = termlib.getPhysicalProperty(index);
+		PhysicalProperty pp = new PhysicalProperty();
+		
+	}
+	
 	@Override
 	protected void changeNotification() {
 		setChanged();

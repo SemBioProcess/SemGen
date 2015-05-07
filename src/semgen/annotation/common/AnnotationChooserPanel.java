@@ -25,7 +25,7 @@ import semgen.utilities.uicomponent.ExternalURLButton;
 public abstract class AnnotationChooserPanel extends JPanel implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	private ArrayList<JLabel> lbllist = new ArrayList<JLabel>();
-	private JComboBox<String> combobox = new JComboBox<String>();
+	protected JComboBox<String> combobox = new JComboBox<String>();
 	
 	private JPanel itempanel = new JPanel();
 	private static Dimension dim = new Dimension(350,30);
@@ -34,6 +34,7 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 	private ComponentPanelLabel modifylabel;
 	private ComponentPanelLabel createlabel;
 	protected ExternalURLButton urlbutton;
+	public static String unspecifiedName = "*unspecified*";
 	
 	public AnnotationChooserPanel() {
 		super(new BorderLayout());
@@ -45,7 +46,6 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 		itempanel.setBackground(SemGenSettings.lightblue);
 		itempanel.add(combobox);
 
-	
 	}
 	
 	public void makeStaticPanel(String selection, boolean isrefterm) {
@@ -61,7 +61,6 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 		addSearchButton();
 		addEraseButton();
 	}
-	
 
 	public void makeEntitySelector() {
 		addURLButton();
@@ -145,20 +144,23 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 	}
 	
 	public int getSelection() {
-		return combobox.getSelectedIndex();
+		return combobox.getSelectedIndex()-1;
 	}
 	
 	public void setSelection(int index) {
-		combobox.setSelectedIndex(index);
+		combobox.setSelectedIndex(index+1);
 	}
 	
-	public void setComboList(ArrayList<String> peidlist) {
-		String sel = combobox.getSelectedItem().toString();
+	public void setComboList(ArrayList<String> peidlist, Integer item) {
 		combobox.removeActionListener(this);
 		combobox.removeAllItems();
-		combobox.setModel(new DefaultComboBoxModel<String>(peidlist.toArray(new String[]{})));
+		ArrayList<String> idlist = new ArrayList<String>();
+		idlist.add(unspecifiedName);
+		idlist.addAll(peidlist);
+		
+		combobox.setModel(new DefaultComboBoxModel<String>(idlist.toArray(new String[]{})));
+		combobox.setSelectedIndex(item+1);
 		combobox.repaint();
-		combobox.setSelectedItem(sel);
 		combobox.addActionListener(this);
 	}
 	

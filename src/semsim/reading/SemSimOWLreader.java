@@ -55,6 +55,7 @@ import semsim.model.physical.Submodel;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.FunctionalSubmodel;
 import semsim.model.physical.object.PhysicalProperty;
+import semsim.model.physical.object.ReferencePhysicalProperty;
 import semsim.owl.SemSimOWLFactory;
 
 public class SemSimOWLreader extends ModelReader {
@@ -81,6 +82,7 @@ public class SemSimOWLreader extends ModelReader {
 		if (verifyModel()) return semsimmodel;
 		
 		collectModelAnnotations();
+		collectReferenceClasses();
 		collectDataStructures();
 		mapCellMLTypeVariables();
 		collectUnits();
@@ -140,6 +142,16 @@ public class SemSimOWLreader extends ModelReader {
 		}
 	}
 
+	private void collectReferenceClasses() throws OWLException {
+		for (String pps : SemSimOWLFactory.getAllSubclasses(ont,  SemSimConstants.PHYSICAL_PROPERTY_CLASS_URI.toString(),false)) {
+			String label = SemSimOWLFactory.getRDFLabels(ont, factory.getOWLClass(IRI.create(pps)))[0];
+			if (label.isEmpty()) continue;
+			ReferencePhysicalProperty pp = new ReferencePhysicalProperty(label, URI.create(pps));
+			
+			semsimmodel.addPhysicalPropertyClass(pp);
+		}
+	}
+	
 	private void collectDataStructures() throws OWLException {
 		// Get data structures and add them to model - Decimals, Integers, MMLchoice
 				for(String dsind : SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimConstants.DATA_STRUCTURE_CLASS_URI.toString())){

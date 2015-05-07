@@ -25,6 +25,7 @@ import semgen.annotation.dialog.TextChangeDialog;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.AnnotatorWorkbench.WBEvent;
 import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
+import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.drawers.AnnotatorDrawer;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
@@ -34,6 +35,7 @@ public abstract class AnnotationPanel<P extends AnnotatorDrawer<? extends SemSim
 	private static final long serialVersionUID = 1L;
 
 	protected AnnotatorWorkbench workbench;
+	protected SemSimTermLibrary termlib;
 	protected P drawer;
 	protected SemGenSettings settings;
 	protected GlobalActions globalacts;
@@ -52,6 +54,7 @@ public abstract class AnnotationPanel<P extends AnnotatorDrawer<? extends SemSim
 		super(new BorderLayout());
 		workbench = wb;
 		workbench.addObserver(this);
+		termlib = wb.openTermLibrary();
 		settings = sets;
 		globalacts = gacts;
 		drawer = tooldrawer;

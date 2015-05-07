@@ -75,7 +75,7 @@ public class EntitySelectorGroup extends Box {
 	
 	public void refreshLists(ArrayList<String> peidlist) {
 		for (SelectorPanel p : selectors) {
-			p.setComboList(peidlist);
+			//p.setComboList(peidlist);
 		}
 	}
 	
