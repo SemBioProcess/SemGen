@@ -23,23 +23,6 @@ public class StageTab extends SemGenTab {
 		
 		_workbench = bench;
 	}
-	
-	/**
-	 * Can we create the SemGenTab on this platform?
-	 * @return null if we can create the tab. Return an error message if we can't.
-	 */
-	public static String canCreate() {
-		try {
-			new SemGenCommunicatingWebBrowser(null);
-			return null;
-		} catch (NoClassDefFoundError | UnsatisfiedLinkError e) {
-			e.printStackTrace();
-			return "Unable to show the stage. This may be because swt.jar is not loading properly. Exception: " + e.getMessage();
-		} catch (InvalidNameException e) {
-			e.printStackTrace();
-			return e.getMessage();
-		}
-	}
 
 	@Override
 	public void loadTab() {
@@ -51,7 +34,7 @@ public class StageTab extends SemGenTab {
 			SemGenCommunicatingWebBrowser browser = new SemGenCommunicatingWebBrowser(_workbench.getCommandReceiver());
 			_workbench.setCommandSender(browser.getCommandSender());
 			BrowserView browserView = new BrowserView(browser);
-			this.add(browserView);
+			this.add(browserView, BorderLayout.CENTER);
 		} catch (InvalidNameException e) {
 			e.printStackTrace();
 		}

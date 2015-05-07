@@ -10,13 +10,6 @@ $(window).bind("cwb-initialized", function(e) {
 	SelectionManager.getInstance().initialize(graph);
 	KeyElement.getInstance().initialize(graph);
 	
-	// Sends logs to java
-	var originalConsoleLog = console.log;
-	console.log = function (val) {
-		originalConsoleLog.call(console, val);
-		sender.log(val);
-	}
-	
 	$(".addModelButton").click(function() {
 		sender.addModel();
 	});
