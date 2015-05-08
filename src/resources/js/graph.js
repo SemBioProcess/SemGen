@@ -5,7 +5,8 @@
  */
 
 function Graph() {
-
+	var graph = this;
+	
 	// Add a node to the graph
 	this.addNode = function (nodeData) {
 		if(!nodeData)
@@ -141,7 +142,6 @@ function Graph() {
 	 */
 	var path;
 	var node;
-	var graph = this;
 	this.update = function () {
 		$(this).triggerHandler("preupdate");
 		
@@ -168,9 +168,6 @@ function Graph() {
 	    
 	    // Define the tick function
 	    this.force.on("tick", this.tick);
-
-	    // Update the height and width
-	    this.updateHeightAndWidth();
 	    
 	    // Restart the force layout.
 	    this.force
@@ -362,4 +359,9 @@ function Graph() {
 	
 	// Run it
 	this.update();
+	
+	window.onresize = function () {
+		graph.updateHeightAndWidth();
+		graph.update();
+	};
 }
