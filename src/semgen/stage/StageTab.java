@@ -4,8 +4,12 @@ import java.awt.BorderLayout;
 import java.util.Observer;
 
 import javax.naming.InvalidNameException;
+import javax.swing.JOptionPane;
 
+import com.teamdev.jxbrowser.chromium.BrowserPreferences;
+import com.teamdev.jxbrowser.chromium.DialogParams;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
+import com.teamdev.jxbrowser.chromium.swing.DefaultDialogHandler;
 
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
@@ -31,9 +35,24 @@ public class StageTab extends SemGenTab {
 		
 		// Create the browser
 		try {
+			// BrowserPreferences.setChromiumSwitches("--remote-debugging-port=9222"); // Uncomment to debug JS
 			SemGenCommunicatingWebBrowser browser = new SemGenCommunicatingWebBrowser(_workbench.getCommandReceiver());
 			_workbench.setCommandSender(browser.getCommandSender());
-			BrowserView browserView = new BrowserView(browser);
+
+			// String remoteDebuggingURL = browser.getRemoteDebuggingURL(); // Uncomment to debug JS. Past this url in chrome to begin debugging JS
+			final BrowserView browserView = new BrowserView(browser);
+			
+			// Show JS alerts in java dialogs
+			browser.setDialogHandler(new DefaultDialogHandler(browserView) {
+			    @Override
+			    public void onAlert(DialogParams params) {
+			        String title = "SemGen Browser Alert";
+			        String message = params.getMessage();
+			        JOptionPane.showMessageDialog(browserView, message, title,
+			                JOptionPane.PLAIN_MESSAGE);
+			    }
+			});
+			
 			this.add(browserView, BorderLayout.CENTER);
 		} catch (InvalidNameException e) {
 			e.printStackTrace();
