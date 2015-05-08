@@ -14,7 +14,7 @@ public class SemGenCommunicatingWebBrowser extends
 		System.out.println("Loading SemGen web browser");
         
         // Load the stage
-	    this.loadURL(this.getClass().getResource(StageHtml).toString());
+	    this.loadURL(this.getClass().getResource(StageHtml).toString() + "?testMode=false");
 	    
 	    System.out.println("SemGen web browser loaded");
 	}
