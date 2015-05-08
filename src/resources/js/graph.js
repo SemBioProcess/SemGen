@@ -169,6 +169,9 @@ function Graph() {
 	    // Define the tick function
 	    this.force.on("tick", this.tick);
 
+	    // Update the height and width
+	    this.updateHeightAndWidth();
+	    
 	    // Restart the force layout.
 	    this.force
 	    	.charge(function (d) { return d.charge; })
@@ -252,10 +255,6 @@ function Graph() {
 		});
 	};
 	
-	// Set the graph's width and height
-	this.w = $(window).width();
-	this.h = $(window).height();
-	
 	// Brute force redraw
 	// Motivation:
 	//	The z-index in SVG relies on the order of elements in html.
@@ -310,15 +309,23 @@ function Graph() {
 	};
 	
 	// Get the stage and style it
-	var vis = d3.select("#stage")
+	var svg = d3.select("#stage")
 	    .append("svg:svg")
 	    .attr("id", "svg")
 	    .attr("pointer-events", "all")
-	    .attr("width", this.w)
-	    .attr("height", this.h)
-	    .attr("viewBox","0 0 "+ this.w +" "+ this.h)
-	    .attr("perserveAspectRatio", "xMinYMid")
-	    .append('svg:g');
+	    .attr("perserveAspectRatio", "xMinYMid");
+	
+	var vis = svg.append('svg:g');
+	
+	// Set the graph's width and height
+	this.updateHeightAndWidth = function () {
+		this.w = $(window).width();
+		this.h = $(window).height();
+		svg.attr("width", this.w)
+	    	.attr("height", this.h)
+	    	.attr("viewBox","0 0 "+ this.w +" "+ this.h)
+	}
+	this.updateHeightAndWidth();
 
 	this.force = d3.layout.force();
 	this.color = d3.scale.category10();
