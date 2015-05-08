@@ -3,7 +3,7 @@
  */
 $(window).load(function() {
 	// sendNSCommand is defined when the stage is loaded in SemGen
-var TestMode = true;
+	if(window.location.search.indexOf("testMode=false"))
 		return;
 	
 	var modelNum = 0;
