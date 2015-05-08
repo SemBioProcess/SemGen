@@ -168,7 +168,7 @@ public class SBMLAnnotator {
 				}
 				if(ent!=null){
 					compsandphysents.put(comp, ent);
-					ds.getPhysicalProperty().setPhysicalPropertyOf(ent);
+					ds.setAssociatedPhysicalModelCompnent(ent);
 				}
 			}
 			// end of compartment for loop, next process semantics for all species
@@ -189,7 +189,7 @@ public class SBMLAnnotator {
 				if(semsimmodel.containsDataStructure(xxx(rxn.getId()) + ".rate")){
 					ratecdwd = ratecdwd + ".rate";
 				}
-				PhysicalModelComponent pmc = theds.getPhysicalProperty().getPhysicalPropertyOf();
+				PhysicalModelComponent pmc = theds.getAssociatedPhysicalModelComponent();
 
 				// Establish the relationships between the reaction and its reactants, products and modifiers
 				for(int l=0;l<rxn.getNumReactants();l++){
@@ -426,7 +426,7 @@ public class SBMLAnnotator {
 			}
 			DataStructure ds = semsimmodel.getDataStructure(ratecdwd);
 			ds.getPhysicalProperty().addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, URI.create(SemSimConstants.OPB_NAMESPACE + "OPB_00592"), "Chemical molar flow rate");
-			ds.getPhysicalProperty().setPhysicalPropertyOf(pproc);
+			ds.setAssociatedPhysicalModelCompnent(pproc);
 		}
 		return true;
 	}
@@ -460,7 +460,7 @@ public class SBMLAnnotator {
 		relationlist.add(SemSimConstants.PART_OF_RELATION);
 		CompositePhysicalEntity propertytarget = semsimmodel.addCompositePhysicalEntity(entlist, relationlist);
 		
-		ds.getPhysicalProperty().setPhysicalPropertyOf(propertytarget);
+		ds.setAssociatedPhysicalModelCompnent(propertytarget);
 
 		// Even if annotation has been used before, add the species and annotation to species and anns
 		speciesandphysents.put(species, propertytarget);
@@ -474,8 +474,8 @@ public class SBMLAnnotator {
 				// Maybe create multiple of these for species with multiple annotations?
 				String freetext = null;
 				
-				if(ds.getPhysicalProperty().getPhysicalPropertyOf()!=null){
-					PhysicalModelComponent pmc = ds.getPhysicalProperty().getPhysicalPropertyOf();
+				if(ds.getAssociatedPhysicalModelComponent()!=null){
+					PhysicalModelComponent pmc = ds.getAssociatedPhysicalModelComponent();
 					freetext = ds.getPhysicalProperty().getFirstRefersToReferenceOntologyAnnotation().getValueDescription();
 					freetext = freetext + " of ";
 					if(pmc instanceof CompositePhysicalEntity){

@@ -59,8 +59,22 @@ public class BioPortalSearcher {
 					String preferredLabel = nextel.getChildText("prefLabel");
 					String uri = nextel.getChildText("id");
 					String conceptidshort = SemSimOWLFactory.getIRIfragment(uri);
-					rdflabelsanduris.put(preferredLabel, uri);
-					classnamesandshortconceptids.put(preferredLabel,conceptidshort);
+					
+					// Only collect terms from the queried ontology; don't show terms imported from other ontologies
+					String urins = SemSimOWLFactory.getNamespaceFromIRI(uri);
+					
+					if(SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.containsKey(urins)){
+						String sourceontfullname = SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.get(urins);
+						
+						if(SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.containsKey(sourceontfullname)){
+							String sourceontID = SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.get(sourceontfullname);
+													
+							if(sourceontID.equals(bioportalID)){
+								rdflabelsanduris.put(preferredLabel, uri);
+								classnamesandshortconceptids.put(preferredLabel,conceptidshort);
+							}
+						}
+					}
 				}
 			}
 		}

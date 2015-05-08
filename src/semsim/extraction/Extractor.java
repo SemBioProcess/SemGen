@@ -65,11 +65,11 @@ public class Extractor {
 		Set<PhysicalProcess> procs = new HashSet<PhysicalProcess>();
 		for(DataStructure newds : extractedmodel.getDataStructures()){
 			if(newds.getPhysicalProperty()!=null){
-				if(newds.getPhysicalProperty().getPhysicalPropertyOf() instanceof PhysicalEntity){
-					ents.add((PhysicalEntity) newds.getPhysicalProperty().getPhysicalPropertyOf());
+				if(newds.getAssociatedPhysicalModelComponent() instanceof PhysicalEntity){
+					ents.add((PhysicalEntity) newds.getAssociatedPhysicalModelComponent());
 				}
-				else if(newds.getPhysicalProperty().getPhysicalPropertyOf() instanceof PhysicalProcess){
-					PhysicalProcess pproc = (PhysicalProcess)newds.getPhysicalProperty().getPhysicalPropertyOf();
+				else if(newds.getAssociatedPhysicalModelComponent() instanceof PhysicalProcess){
+					PhysicalProcess pproc = (PhysicalProcess)newds.getAssociatedPhysicalModelComponent();
 					procs.add(pproc);
 					ents.addAll(pproc.getSourcePhysicalEntities());
 					ents.addAll(pproc.getSinkPhysicalEntities());

@@ -11,7 +11,6 @@ import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semsim.model.SemSimModel;
-import semsim.writing.MATLABwriter;
 import semsim.writing.ModelWriter;
 import semsim.writing.CellMLwriter;
 import semsim.writing.MMLwriter;
@@ -50,7 +49,7 @@ public class Encoder {
 	// Automatically apply OPB annotations to the physical properties associated
 	// with the model's data structures					
 	public void startEncoding(SemSimModel model, String filenamesuggestion){
-		Object[] optionsarray = new Object[] {"CellML", "MATLAB", "MML (JSim)"};
+		Object[] optionsarray = new Object[] {"CellML", "MML (JSim)"};
 		
 		Object selection = JOptionPane.showInputDialog(null, "Select output format", "SemGen coder", JOptionPane.PLAIN_MESSAGE, null, optionsarray, "CellML");
 		
@@ -62,11 +61,6 @@ public class Encoder {
 		}
 		
 		if(selection == optionsarray[1]){
-			fc.addFilters(new String[]{"m"});
-			outwriter = new MATLABwriter(model);
-		}
-		
-		if(selection == optionsarray[2]){
 			fc.addFilters(new String[]{"mml"});
 			outwriter = new MMLwriter(model);
 		}

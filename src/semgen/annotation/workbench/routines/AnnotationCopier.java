@@ -217,10 +217,10 @@ public class AnnotationCopier {
 			ReferenceOntologyAnnotation roa = sourceds.getPhysicalProperty().getFirstRefersToReferenceOntologyAnnotation();
 			targetds.getPhysicalProperty().addReferenceOntologyAnnotation(roa.getRelation(), roa.getReferenceURI(), roa.getValueDescription());
 		}
-		PhysicalModelComponent srcpropof = sourceds.getPhysicalProperty().getPhysicalPropertyOf();
+		PhysicalModelComponent srcpropof = sourceds.getAssociatedPhysicalModelComponent();
 		
 		// If we're just copying a composite annotation within the same model...
-		targetds.getPhysicalProperty().setPhysicalPropertyOf(srcpropof);
+		targetds.setAssociatedPhysicalModelCompnent(srcpropof);
 		if (!sourceds.getPhysicalProperty().hasRefersToAnnotation()) {
 			targetds.getPhysicalProperty().removeAllReferenceAnnotations();
 		}
@@ -236,15 +236,15 @@ public class AnnotationCopier {
 			ReferenceOntologyAnnotation roa = sourceds.getPhysicalProperty().getFirstRefersToReferenceOntologyAnnotation();
 			targetds.getPhysicalProperty().addReferenceOntologyAnnotation(roa.getRelation(), roa.getReferenceURI(), roa.getValueDescription());
 		}
-		PhysicalModelComponent srcpropof = sourceds.getPhysicalProperty().getPhysicalPropertyOf();
+		PhysicalModelComponent srcpropof = sourceds.getAssociatedPhysicalModelComponent();
 		
 		try{
 			// If there is a property_of specified
 			if(srcpropof!=null)
-				targetds.getPhysicalProperty().setPhysicalPropertyOf(copyPhysicalModelComponent(targetmod, srcpropof));
+				targetds.setAssociatedPhysicalModelCompnent(copyPhysicalModelComponent(targetmod, srcpropof));
 			
 			// otherwise there is no specified target for the physical property
-			else targetds.getPhysicalProperty().setPhysicalPropertyOf(null);
+			else targetds.setAssociatedPhysicalModelCompnent(null);
 		} 
 		catch (CloneNotSupportedException e) {
 			e.printStackTrace();

@@ -11,9 +11,10 @@ import semgen.annotation.workbench.AnnotatorWorkbench.WBEvent;
 import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
 import semgen.annotation.workbench.routines.AnnotationCopier;
 import semsim.PropertyType;
-import semsim.model.SemSimModel;
+import semsim.SemSimConstants;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
+import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.ReferencePhysicalProperty;
 import semsim.utilities.SemSimComponentComparator;
@@ -171,7 +172,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		if (hasSingularAnnotation(index)) {
 			return componentlist.get(index).getFirstRefersToReferenceOntologyAnnotation().getNamewithOntologyAbreviation();
 		}
-		return SemSimModel.unspecifiedName;
+		return "*unspecified*";
 	}
 	
 	@Override
@@ -204,9 +205,19 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	}
 	
 	public void setDatastructurePhysicalProperty(Integer index) {
-		ReferencePhysicalProperty rpp = termlib.getPhysicalProperty(index);
-		PhysicalProperty pp = new PhysicalProperty();
-		
+		DataStructure ds = componentlist.get(currentfocus);
+		if (getIndexofPhysicalProperty()==index) return;
+		ds.getPhysicalProperty().removeAllReferenceAnnotations();
+		if (index!=-1) {
+			ReferencePhysicalProperty rpp = termlib.getPhysicalProperty(index);
+			ds.getPhysicalProperty().addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, rpp.getURI(), rpp.getName());
+		}
+		changeNotification();
+	}
+	
+	public int countEntitiesinCompositeEntity() {
+		CompositePhysicalEntity cpe = (CompositePhysicalEntity)componentlist.get(currentfocus).getAssociatedPhysicalModelComponent();
+		return cpe.getArrayListOfEntities().size();
 	}
 	
 	@Override
@@ -215,7 +226,5 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		notifyObservers(modeledit.compositechanged);
 	}
 	
-//	public int countEntities() {
-//		PhysicalProperty pp = componentlist.get(currentfocus).getPhysicalProperty().getPhysicalPropertyOf();
-//	}
+
 }

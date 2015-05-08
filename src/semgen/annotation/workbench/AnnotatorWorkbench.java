@@ -59,10 +59,6 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		smdrawer = new SubModelToolDrawer(termlib, semsimmodel.getSubmodels());
 		smdrawer.addObserver(this);
 
-		// Add unspecified physical model components for use during annotation
-		semsimmodel.addCustomPhysicalEntity(SemSimModel.unspecifiedName, "Non-specific entity for use as a placeholder during annotation");
-		semsimmodel.addCustomPhysicalProcess(SemSimModel.unspecifiedName, "Non-specific process for use as a placeholder during annotation");
-
 		setModelSaved(isSemSimorCellMLModel());
 	}
 	

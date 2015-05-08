@@ -9,7 +9,6 @@ import java.util.Set;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.AnnotatorWorkbench.WBEvent;
 import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
-import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.Submodel;
 import semsim.owl.SemSimOWLFactory;
@@ -170,7 +169,7 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 		if (hasSingularAnnotation(index)) {
 			return componentlist.get(index).getFirstRefersToReferenceOntologyAnnotation().getNamewithOntologyAbreviation();
 		}
-		return SemSimModel.unspecifiedName;
+		return "*unspecified*";
 	}
 	
 	@Override

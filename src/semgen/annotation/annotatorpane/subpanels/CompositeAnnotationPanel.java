@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -81,7 +80,7 @@ public class CompositeAnnotationPanel extends Box {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource()==combobox) {
-				combobox.getSelectedIndex();
+				drawer.setDatastructurePhysicalProperty(combobox.getSelectedIndex());
 			}
 		}
 

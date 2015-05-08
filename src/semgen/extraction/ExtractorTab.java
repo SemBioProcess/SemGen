@@ -558,8 +558,8 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 			Set<PhysicalProcess> PMprocesses = new HashSet<PhysicalProcess>();
 			for (DataStructure keptds : alldatastrs.keySet()) {
 				if(keptds.getPhysicalProperty()!=null && !alldatastrs.get(keptds).isEmpty()){
-					if(keptds.getPhysicalProperty().getPhysicalPropertyOf() instanceof PhysicalProcess){
-						PMprocesses.add((PhysicalProcess) keptds.getPhysicalProperty().getPhysicalPropertyOf());
+					if(keptds.getAssociatedPhysicalModelComponent() instanceof PhysicalProcess){
+						PMprocesses.add((PhysicalProcess) keptds.getAssociatedPhysicalModelComponent());
 					}
 				}
 				Node node = null;
@@ -698,7 +698,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		if(ds.getDescription()!=null)
 			tip = tip + ("<p><b>Description:</b> " + ds.getDescription() + "</p>");
 		if(ds.hasPhysicalProperty()){
-			if(ds.getPhysicalProperty().getPhysicalPropertyOf()!=null)
+			if(ds.getAssociatedPhysicalModelComponent()!=null)
 				tip = tip + ("<p><b>Composite annotation:</b> " + ds.getCompositeAnnotationAsString(false) + "</p>");
 		}
 		tip = tip + ("<p><b>Equation:</b> " + code + "</p>");

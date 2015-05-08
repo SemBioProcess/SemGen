@@ -249,7 +249,7 @@ public class SemSimOWLreader extends ModelReader {
 						// If it's a property of a physical entity, get the entity. Follow composite, if present
 						if(SemSimOWLFactory.indExistsInTree(propofind, SemSimConstants.PHYSICAL_ENTITY_CLASS_URI.toString(), ont)){
 							PhysicalEntity ent = getPhysicalEntityFromURI(ont, URI.create(propofind));
-							ds.getPhysicalProperty().setPhysicalPropertyOf(ent);
+							ds.setAssociatedPhysicalModelCompnent(ent);
 						}
 					}
 				}
@@ -407,7 +407,7 @@ public class SemSimOWLreader extends ModelReader {
 					pp.addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, URI.create(referstoval), propertylabel);
 				}
 				
-				semsimmodel.getDataStructure(dsname).getPhysicalProperty().setPhysicalPropertyOf(pproc);
+				semsimmodel.getDataStructure(dsname).setAssociatedPhysicalModelCompnent(pproc);
 			}
 		}
 	}

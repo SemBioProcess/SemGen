@@ -5,16 +5,26 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringReader;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jdom.filter.ElementFilter;
+import org.jdom.input.SAXBuilder;
+import org.jdom.output.XMLOutputter;
+
+import semsim.SemSimConstants;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalModelComponent;
@@ -125,6 +135,65 @@ public class SemSimUtil {
 			return sb.toString().trim();
 		}
 		else return exp;
+	}
+	
+	
+	/**
+	 * Find the right hand side of the equation for a data structure from 
+	 * the MathML associated with the data structure's computation.
+	 * @param mathmlstring The MathML string for the data structure's computation 
+	 * @param solvedvarlocalname The name of the data structure, stripped of all submodel prefixes
+	 * @return A MathML string representing the right hand side of the equation used to compute
+	 *  the data structure's value
+	 */
+	public static String getRHSofMathML(String mathmlstring, String solvedvarlocalname){
+		SAXBuilder saxbuilder = new SAXBuilder();
+
+		try {
+			Document doc = saxbuilder.build(new StringReader(mathmlstring));
+			
+			// Get the <eq> element if there is one...
+			Boolean hastopeqel = false;
+			if(doc.getRootElement().getChild("apply",SemSimConstants.MATHML_NAMESPACE_OBJ)!=null){
+				if(doc.getRootElement().getChild("apply",SemSimConstants.MATHML_NAMESPACE_OBJ).getChild("eq", SemSimConstants.MATHML_NAMESPACE_OBJ)!=null){
+					hastopeqel = true;
+				}
+			}
+			if(hastopeqel){
+				String mathMLhead = "<math xmlns=\"http://www.w3.org/1998/Math/MathML\">";
+				String mathMLtail = "</math>";
+				
+				Element eqel = doc.getRootElement().getChild("apply",SemSimConstants.MATHML_NAMESPACE_OBJ).getChild("eq",SemSimConstants.MATHML_NAMESPACE_OBJ);
+				Element eqparentel = eqel.getParentElement();
+				
+				// Iterate over the <eq> element's siblings by getting its parent's children
+				Iterator<?> eqparentelit = eqparentel.getChildren().iterator();
+	
+				while(eqparentelit.hasNext()){
+					Element nextel = (Element)eqparentelit.next();
+					Boolean iseqel = nextel.getName().equals("eq");
+					
+					Iterator<?> nexteldescit = nextel.getDescendants(new ElementFilter("diff"));
+					
+					Boolean isLHS = (nextel.getName().equals("ci") && nextel.getText().equals(solvedvarlocalname))
+									|| nexteldescit.hasNext();
+	
+					// If the element doesn't represent the LHS of the equation, or isn't the <eq> element,
+					// then we've found our RHS
+					if(! isLHS && ! iseqel){
+						XMLOutputter outputter = new XMLOutputter();
+						return mathMLhead + "\n" + outputter.outputString(nextel) + "\n" + mathMLtail;
+					}
+				}
+			}
+			// Otherwise there's no <eq> element, we assume that the mathml is OK as it exists
+			else return mathmlstring;
+		} catch (JDOMException | IOException e) {
+			e.printStackTrace();
+		}
+
+		// If we're here we haven't found the RHS
+		return null;
 	}
 	
 	/**

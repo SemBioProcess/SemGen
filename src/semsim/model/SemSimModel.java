@@ -104,7 +104,8 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 
 	private int sourceModelType;
 	private String sourcefilelocation;
-	public static String unspecifiedName = "*unspecified*";
+	public static final CustomPhysicalEntity unspecifiedentity = new CustomPhysicalEntity("", "");
+	public static final CustomPhysicalProcess unspecifiedprocess = new CustomPhysicalProcess("", "");
 	
 	/**
 	 * Constructor without namespace
@@ -1113,13 +1114,13 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 		Set<DataStructure> dsset = new HashSet<DataStructure>();
 		for(DataStructure ds : getDataStructures()){
 			if(ds.hasPhysicalProperty()){
-				if(ds.getPhysicalProperty().getPhysicalPropertyOf()!=null){
-					if(ds.getPhysicalProperty().getPhysicalPropertyOf().getName().equals(unspecifiedName)){
+				if(ds.getAssociatedPhysicalModelComponent()!=null){
+					if(ds.getAssociatedPhysicalModelComponent()==unspecifiedprocess){
 						dsset.add(ds);
 					}
-					if(ds.getPhysicalProperty().getPhysicalPropertyOf() instanceof CompositePhysicalEntity){
-						for(PhysicalEntity pe : ((CompositePhysicalEntity)ds.getPhysicalProperty().getPhysicalPropertyOf()).getArrayListOfEntities()){
-							if(pe.getName().equals(unspecifiedName))
+					if(ds.getAssociatedPhysicalModelComponent() instanceof CompositePhysicalEntity){
+						for(PhysicalEntity pe : ((CompositePhysicalEntity)ds.getAssociatedPhysicalModelComponent()).getArrayListOfEntities()){
+							if(pe==unspecifiedentity)
 								dsset.add(ds);
 						}
 					}

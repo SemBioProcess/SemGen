@@ -246,10 +246,10 @@ public class SemSimOWLwriter extends ModelWriter {
 				PhysicalProperty prop = ds.getPhysicalProperty();
 				
 				// If we have an annotated physical model component that the property points to
-				if(prop.getPhysicalPropertyOf()!=null){
+				if(ds.getAssociatedPhysicalModelComponent()!=null){
 					
 					// Create the new physical model individual and get what it's a physical property of
-					PhysicalModelComponent pmc = prop.getPhysicalPropertyOf();
+					PhysicalModelComponent pmc = ds.getAssociatedPhysicalModelComponent();
 					
 					// If it's not a composite physical entity 
 					if(!(pmc instanceof CompositePhysicalEntity)){

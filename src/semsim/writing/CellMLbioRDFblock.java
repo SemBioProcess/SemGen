@@ -81,8 +81,8 @@ public class CellMLbioRDFblock {
 					Resource propres = getResourceForPMCandAnnotate(rdf, prop);
 
 					// Only include physical properties that have reference annotations (exclude unannotated physical properties)
-					if(prop.getPhysicalPropertyOf()!=null){
-						PhysicalModelComponent propof = prop.getPhysicalPropertyOf();
+					if(ds.getAssociatedPhysicalModelComponent()!=null){
+						PhysicalModelComponent propof = ds.getAssociatedPhysicalModelComponent();
 						
 						// If the variable is a property of an entity
 						if(propof instanceof PhysicalEntity){
@@ -99,16 +99,16 @@ public class CellMLbioRDFblock {
 							}
 							// else it's a singular physical entity
 							else{
-								Resource entity = getResourceForPMCandAnnotate(rdf, prop.getPhysicalPropertyOf());
+								Resource entity = getResourceForPMCandAnnotate(rdf, ds.getAssociatedPhysicalModelComponent());
 								Statement st = rdf.createStatement(propres, physicalpropertyof, entity);
 								if(!rdf.contains(st)) rdf.add(st);
 							}
 						}
 						// Otherwise it's a property of a process
 						else{
-							PhysicalProcess process = (PhysicalProcess)prop.getPhysicalPropertyOf();
+							PhysicalProcess process = (PhysicalProcess)ds.getAssociatedPhysicalModelComponent();
 
-							Resource processres = getResourceForPMCandAnnotate(rdf, prop.getPhysicalPropertyOf());
+							Resource processres = getResourceForPMCandAnnotate(rdf, ds.getAssociatedPhysicalModelComponent());
 							Statement st = rdf.createStatement(propres, physicalpropertyof, processres);
 							if(!rdf.contains(st)) rdf.add(st);
 							

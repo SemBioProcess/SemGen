@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
+import org.jdom.Namespace;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import semsim.annotation.SemSimRelation;
@@ -51,6 +53,8 @@ public class SemSimConstants {
 	public static final String BQB_NAMESPACE = "http://biomodels.net/biology-qualifiers/";
 	public static final String BQM_NAMESPACE = "http://biomodels.net/model-qualifiers/";
 	public static final String RDF_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
+	public static final String MATHML_NAMESPACE = "http://www.w3.org/1998/Math/MathML";
+	public static final Namespace MATHML_NAMESPACE_OBJ = Namespace.getNamespace(MATHML_NAMESPACE);
 	
 	// Groups of ontologies
 	public static final String[] ALL_SEARCHABLE_ONTOLOGIES = new String[]{

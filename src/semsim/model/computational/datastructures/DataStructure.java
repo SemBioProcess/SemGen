@@ -16,6 +16,7 @@ import semsim.model.computational.Computation;
 import semsim.model.computational.ComputationalModelComponent;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalEntity;
+import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
 
@@ -80,6 +81,14 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		return physicalProperty;
 	}
 	
+	public PhysicalModelComponent getAssociatedPhysicalModelComponent() {
+		return physicalProperty.getPhysicalPropertyOf();
+	}
+	
+	public void setAssociatedPhysicalModelCompnent(PhysicalModelComponent pmc) {
+		physicalProperty.setPhysicalPropertyOf(pmc);
+	}
+	
 	/** @return The domain in which the data structure is solved
 	 *  (time, length, height, breadth, e.g.)
 	 */
@@ -104,7 +113,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	
 	/** @return Whether the DataStructure has been associated with a physical property */
 	public Boolean hasPhysicalProperty(){
-		return (physicalProperty != null);
+		return (physicalProperty.hasRefersToAnnotation());
 	}
 	
 	/** @return Whether the DataStructure has been assigned a start value */
@@ -199,13 +208,13 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 			}
 			// if physical entity or process
 			String target = "?";
-			if(getPhysicalProperty().getPhysicalPropertyOf()!=null){
-				if(getPhysicalProperty().getPhysicalPropertyOf().hasRefersToAnnotation()){
-					target = getPhysicalProperty().getPhysicalPropertyOf().getFirstRefersToReferenceOntologyAnnotation().getValueDescription();
+			if(getAssociatedPhysicalModelComponent()!=null){
+				if(getAssociatedPhysicalModelComponent().hasRefersToAnnotation()){
+					target = getAssociatedPhysicalModelComponent().getFirstRefersToReferenceOntologyAnnotation().getValueDescription();
 				}
 				// otherwise it's a composite physical entity or custom term
 				else{
-					target = getPhysicalProperty().getPhysicalPropertyOf().getName();
+					target = getAssociatedPhysicalModelComponent().getName();
 				}
 			}
 			compann = compann + target; 
@@ -286,9 +295,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		if(!getReferenceOntologyAnnotations(SemSimConstants.REFERS_TO_RELATION).isEmpty()){
 			return getReferenceOntologyAnnotations(SemSimConstants.REFERS_TO_RELATION).toArray(new ReferenceOntologyAnnotation[]{})[0];
 		}
-		else{
-			return null;
-		}
+		return null;
 	}
 	
 	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotationByURI(URI uri){
@@ -342,7 +349,6 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		return false;
 	}
 	
-	
 	public PropertyType getPropertyType(SemSimLibrary lib){
 		if(hasPhysicalProperty()){
 			// If there's already an OPB reference annotation
@@ -358,10 +364,10 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 				else return PropertyType.Unknown;
 			}
 			// Otherwise, see if there is already an entity or process associated with the codeword
-			else if(getPhysicalProperty().getPhysicalPropertyOf() instanceof PhysicalEntity){
+			else if(getAssociatedPhysicalModelComponent() instanceof PhysicalEntity){
 				return PropertyType.PropertyOfPhysicalEntity;
 			}
-			else if(getPhysicalProperty().getPhysicalPropertyOf() instanceof PhysicalProcess){
+			else if(getAssociatedPhysicalModelComponent() instanceof PhysicalProcess){
 				return PropertyType.PropertyOfPhysicalProcess;
 			}
 			else return PropertyType.Unknown;
@@ -377,7 +383,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	}
 	
 	public boolean hasAssociatedPhysicalComponent() {
-		return physicalProperty.getPhysicalPropertyOf()==null;
+		return getAssociatedPhysicalModelComponent()==null;
 	}
 	
 	public boolean isMapped() {

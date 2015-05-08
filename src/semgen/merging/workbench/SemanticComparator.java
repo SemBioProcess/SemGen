@@ -89,7 +89,9 @@ public class SemanticComparator {
 					if(!match && ds1.getPhysicalProperty()!=null && ds2.getPhysicalProperty()!=null){
 						
 						// And they are properties of a specified physical model component
-						if(ds1.getPhysicalProperty().getPhysicalPropertyOf()!=null && ds2.getPhysicalProperty().getPhysicalPropertyOf()!=null){
+						PhysicalModelComponent ds1pmc = ds1.getAssociatedPhysicalModelComponent();
+						PhysicalModelComponent ds2pmc = ds2.getAssociatedPhysicalModelComponent();
+						if(ds1pmc!=null && ds2pmc!=null){
 							PhysicalProperty prop1 = ds1.getPhysicalProperty();
 							PhysicalProperty prop2 = ds2.getPhysicalProperty();
 							
@@ -98,7 +100,7 @@ public class SemanticComparator {
 							
 							// If the property annotations are the same, test the equivalency of what they are properties of
 							if(match){
-								match = testEquivalencyOfPhysicalComponents(prop1.getPhysicalPropertyOf(), prop2.getPhysicalPropertyOf());
+								match = testEquivalencyOfPhysicalComponents(ds1pmc, ds2pmc);
 							}
 						}
 					}

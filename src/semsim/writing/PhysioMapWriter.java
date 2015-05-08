@@ -39,9 +39,9 @@ public class PhysioMapWriter{
 		// Collect physical model components with properties
 		for(DataStructure ds : model.getDataStructures()){
 			if(!ds.isImportedViaSubmodel()){
-				if(!pmcswithproperties.contains(ds.getPhysicalProperty().getPhysicalPropertyOf())){
-					if(ds.getPhysicalProperty().getPhysicalPropertyOf()!=null){
-						pmcswithproperties.add(ds.getPhysicalProperty().getPhysicalPropertyOf());
+				if(!pmcswithproperties.contains(ds.getAssociatedPhysicalModelComponent())){
+					if(ds.getAssociatedPhysicalModelComponent()!=null){
+						pmcswithproperties.add(ds.getAssociatedPhysicalModelComponent());
 					}
 				}
 			}

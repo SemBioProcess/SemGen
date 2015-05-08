@@ -346,8 +346,8 @@ public class Clusterer extends JFrame {
 			Set<String> addedterms = new HashSet<String>();
 			for (String ver : vertices) {
 				if(extractor.semsimmodel.getDataStructure(ver).hasPhysicalProperty()){
-					if(extractor.semsimmodel.getDataStructure(ver).getPhysicalProperty().getPhysicalPropertyOf()!=null){
-						PhysicalModelComponent pmc = extractor.semsimmodel.getDataStructure(ver).getPhysicalProperty().getPhysicalPropertyOf();
+					if(extractor.semsimmodel.getDataStructure(ver).getAssociatedPhysicalModelComponent()!=null){
+						PhysicalModelComponent pmc = extractor.semsimmodel.getDataStructure(ver).getAssociatedPhysicalModelComponent();
 						String name = null;
 						if(pmc.hasRefersToAnnotation()){
 							name = pmc.getFirstRefersToReferenceOntologyAnnotation().getValueDescription();
