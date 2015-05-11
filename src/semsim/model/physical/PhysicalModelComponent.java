@@ -13,7 +13,6 @@ import semsim.model.SemSimComponent;
 
 public abstract class PhysicalModelComponent extends SemSimComponent implements Annotatable, Cloneable{
 	private Set<Annotation> annotations = new HashSet<Annotation>();
-
 	
 	// Required by annotable interface:
 	public Set<Annotation> getAnnotations() {
@@ -30,7 +29,6 @@ public abstract class PhysicalModelComponent extends SemSimComponent implements 
 	}
 	
 	public void addReferenceOntologyAnnotation(SemSimRelation relation, URI uri, String description){
-		//if(!this.hasRefersToAnnotation() && this.getName()==null && relation==SemSimConstants.REFERS_TO_RELATION) setName(description);
 		addAnnotation(new ReferenceOntologyAnnotation(relation, uri, description));
 	}
 
@@ -43,20 +41,10 @@ public abstract class PhysicalModelComponent extends SemSimComponent implements 
 		}
 		return raos;
 	}
-	
-	
-	public ReferenceOntologyAnnotation getFirstRefersToReferenceOntologyAnnotation(){
-		if(!getReferenceOntologyAnnotations(SemSimConstants.REFERS_TO_RELATION).isEmpty()){
-			return getReferenceOntologyAnnotations(SemSimConstants.REFERS_TO_RELATION).toArray(new ReferenceOntologyAnnotation[]{})[0];
-		}
-		return null;
-	}
-	
-	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotationByURI(URI uri){
-		for(ReferenceOntologyAnnotation ann : getReferenceOntologyAnnotations(SemSimConstants.REFERS_TO_RELATION)){
-			if(ann.getReferenceURI().compareTo(uri)==0){
-				return ann;
-			}
+		
+	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotation(){
+		if(hasRefersToAnnotation()){
+			return new ReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, referenceuri, getDescription());
 		}
 		return null;
 	}
@@ -65,10 +53,6 @@ public abstract class PhysicalModelComponent extends SemSimComponent implements 
 		return !getAnnotations().isEmpty();
 	}
 	
-	public Boolean hasRefersToAnnotation(){
-		return getFirstRefersToReferenceOntologyAnnotation()!=null;
-	}
-
 	public void removeAllReferenceAnnotations() {
 		Set<Annotation> newset = new HashSet<Annotation>();
 		for(Annotation ann : this.getAnnotations()){
@@ -84,5 +68,18 @@ public abstract class PhysicalModelComponent extends SemSimComponent implements 
         return (PhysicalModelComponent) super.clone();
 	}
 	
+	public URI getReferstoURI() {
+		return URI.create(referenceuri.toString());
+	}
+	
 	public abstract String getComponentTypeasString();
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj==this) return true;
+		if (getClass()==obj.getClass()) return isEquivalent(obj);
+		return false;
+	}
+	
+	protected abstract boolean isEquivalent(Object obj);
 }

@@ -46,7 +46,7 @@ public class SingularAnnotationPanel extends AnnotationChooserPanel{
 
 	@Override
 	public void eraseButtonClicked() {
-		// TODO Auto-generated method stub
+		setSelection(-1);
 		
 	}
 

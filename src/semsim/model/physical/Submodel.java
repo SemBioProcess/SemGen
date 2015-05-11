@@ -127,4 +127,9 @@ public class Submodel extends PhysicalModelComponent implements Cloneable, Impor
 	public boolean isFunctional() {
 		return functional;
 	}
+
+	@Override
+	protected boolean isEquivalent(Object obj) {
+		return false;
+	}
 }

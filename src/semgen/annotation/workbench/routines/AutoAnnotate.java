@@ -4,11 +4,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import semgen.SemGen;
-import semsim.SemSimConstants;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
+import semsim.model.physical.object.PhysicalProperty;
 
 public class AutoAnnotate {
 	// Automatically apply OPB annotations to the physical properties associated
@@ -21,9 +21,11 @@ public class AutoAnnotate {
 		// If units present, set up physical property connected to each data structure
 		for(DataStructure ds : semsimmodel.getDataStructures()){
 			if(ds.hasUnits()){
-				ReferenceOntologyAnnotation roa = SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(ds);
-				if(roa!=null){
-
+				PhysicalProperty pp = SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(ds);			
+				
+				if(pp!=null){
+					semsimmodel.addPhysicalProperty(pp);
+					ReferenceOntologyAnnotation roa = pp.getRefersToReferenceOntologyAnnotation();
 					// If the codeword represents an OPB:Amount property (OPB_00135)
 					if(SemGen.semsimlib.OPBhasAmountProperty(roa))
 						candidateamounts.add(ds);
@@ -47,10 +49,8 @@ public class AutoAnnotate {
 			}
 			
 			if(hasinitval && !camount.isDiscrete() 
-					&& !camount.getPhysicalProperty().hasRefersToAnnotation()){
-				ReferenceOntologyAnnotation roa = SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(camount);
-				camount.getPhysicalProperty().addReferenceOntologyAnnotation(
-						SemSimConstants.REFERS_TO_RELATION, roa.getReferenceURI(), roa.getValueDescription());
+					&& !camount.hasPhysicalProperty()){
+				camount.setPhysicalProperty(SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(camount));
 				confirmedamounts.add(camount);
 			}
 			else unconfirmedamounts.add(camount);
@@ -61,10 +61,9 @@ public class AutoAnnotate {
 		for(DataStructure camount : temp){
 			for(DataStructure newcamount : camount.getDownstreamDataStructures(unconfirmedamounts, null)){
 				confirmedamounts.add(newcamount);
-				ReferenceOntologyAnnotation roa = SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(newcamount);
-				if(!newcamount.getPhysicalProperty().hasRefersToAnnotation())
-					newcamount.getPhysicalProperty().addReferenceOntologyAnnotation(
-						SemSimConstants.REFERS_TO_RELATION, roa.getReferenceURI(), roa.getValueDescription());
+				if (!newcamount.hasPhysicalProperty()) {
+					newcamount.setPhysicalProperty(SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(newcamount));
+				}
 			}
 		}
 		// ID the forces
@@ -83,11 +82,8 @@ public class AutoAnnotate {
 			}
 			// If already decided to annotate, or the candidate is solved with an ODE and it's not a discrete variable, annotate it
 			if((cforce.hasStartValue() || annotate) && !cforce.isDiscrete() 
-					&& !cforce.getPhysicalProperty().hasRefersToAnnotation()){
-				ReferenceOntologyAnnotation roa = SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(cforce);
-				cforce.getPhysicalProperty().addReferenceOntologyAnnotation(
-						SemSimConstants.REFERS_TO_RELATION, roa.getReferenceURI(), roa.getValueDescription());
-				confirmedforces.add(cforce);
+					&& !cforce.hasPhysicalProperty()) {
+				cforce.setPhysicalProperty(SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(cforce));
 			}
 			else unconfirmedforces.add(cforce);
 		}
@@ -98,10 +94,8 @@ public class AutoAnnotate {
 		for(DataStructure cforce : temp){
 			for(DataStructure newcforce : cforce.getDownstreamDataStructures(unconfirmedforces, null)){
 				confirmedforces.add(newcforce);
-				if(!newcforce.getPhysicalProperty().hasRefersToAnnotation()){
-					ReferenceOntologyAnnotation roa = SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(newcforce);
-					newcforce.getPhysicalProperty().addReferenceOntologyAnnotation(
-						SemSimConstants.REFERS_TO_RELATION, roa.getReferenceURI(), roa.getValueDescription());
+				if(!newcforce.hasPhysicalProperty()){
+					newcforce.setPhysicalProperty(SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(newcforce));
 				}
 			}
 		}
@@ -119,11 +113,8 @@ public class AutoAnnotate {
 			}
 			// If already decided to annotate, or the candidate is solved with an ODE and it's not a discrete variable, annotate it
 			if((cflow.hasStartValue() || annotate || cflow.getName().contains(":")) && !cflow.isDiscrete()
-					&& !cflow.getPhysicalProperty().hasRefersToAnnotation()){
-				ReferenceOntologyAnnotation roa = SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(cflow);
-				cflow.getPhysicalProperty().addReferenceOntologyAnnotation(
-						SemSimConstants.REFERS_TO_RELATION, roa.getReferenceURI(), roa.getValueDescription());
-				confirmedflows.add(cflow);
+					&& !cflow.hasPhysicalProperty()){
+				cflow.setPhysicalProperty(SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(cflow));
 			}
 			else unconfirmedflows.add(cflow);
 		}
@@ -133,10 +124,8 @@ public class AutoAnnotate {
 		for(DataStructure cflow : temp){
 			for(DataStructure newcflow : cflow.getDownstreamDataStructures(unconfirmedflows, null)){
 				confirmedforces.add(newcflow);
-				if(!newcflow.getPhysicalProperty().hasRefersToAnnotation()){
-					ReferenceOntologyAnnotation roa = SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(newcflow);
-					newcflow.getPhysicalProperty().addReferenceOntologyAnnotation(
-						SemSimConstants.REFERS_TO_RELATION, roa.getReferenceURI(), roa.getValueDescription());
+				if(!newcflow.hasPhysicalProperty()){
+					newcflow.setPhysicalProperty(SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(newcflow));
 				}
 			}
 		}

@@ -8,8 +8,13 @@ import semsim.model.physical.PhysicalEntity;
 public class ReferencePhysicalEntity extends PhysicalEntity{
 	
 	public ReferencePhysicalEntity(URI uri, String description){
-		addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, uri, description);
+		referenceuri = uri;
 		setName(description);
+	}
+	
+	@Override
+	protected boolean isEquivalent(Object obj) {
+		return ((ReferencePhysicalEntity)obj).getReferstoURI().compareTo(referenceuri)==0;
 	}
 	
 	@Override

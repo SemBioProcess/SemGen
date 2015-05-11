@@ -80,9 +80,10 @@ public class CodewordAnnotationPanel extends AnnotationPanel<CodewordToolDrawer>
 	@Override
 	public void updateUnique(Observable o, Object arg1) {
 		if (arg1==modeledit.compositechanged) {
-			//compositepanel.refreshUI();
+			compositepanel.onPropertyChange();
 		}
 	}
+	
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		super.mouseClicked(e);

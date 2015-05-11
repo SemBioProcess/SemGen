@@ -11,12 +11,10 @@ import semgen.annotation.workbench.AnnotatorWorkbench.WBEvent;
 import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
 import semgen.annotation.workbench.routines.AnnotationCopier;
 import semsim.PropertyType;
-import semsim.SemSimConstants;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.PhysicalProperty;
-import semsim.model.physical.object.ReferencePhysicalProperty;
 import semsim.utilities.SemSimComponentComparator;
 
 public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
@@ -75,6 +73,10 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		displaylist.addAll(entset);
 		displaylist.addAll(procset);
 		displaylist.addAll(depset);
+	}
+	
+	public PropertyType getPropertyType() {
+		return componentlist.get(currentfocus).getPropertyType(SemGen.semsimlib);
 	}
 	
 	public PropertyType getPropertyType(int index) {
@@ -136,9 +138,13 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	
 	@Override
 	public URI getSingularAnnotationURI(int index) {
-		return componentlist.get(index).getFirstRefersToReferenceOntologyAnnotation().getReferenceURI();
+		return componentlist.get(index).getReferstoURI();
 	}
 
+	public URI getPhysicalPropertyURI() {
+		return componentlist.get(currentfocus).getPhysicalProperty().getReferstoURI();
+	}
+	
 	public String getLookupName(int index) {
 		String name = componentlist.get(index).getName();
 		if (!name.contains(".")) return name;
@@ -170,7 +176,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	@Override
 	public String getSingularAnnotationasString(int index) {
 		if (hasSingularAnnotation(index)) {
-			return componentlist.get(index).getFirstRefersToReferenceOntologyAnnotation().getNamewithOntologyAbreviation();
+			return componentlist.get(index).getRefersToReferenceOntologyAnnotation().getNamewithOntologyAbreviation();
 		}
 		return "*unspecified*";
 	}
@@ -183,7 +189,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	public boolean isProcess() {
 		PhysicalProperty pp = componentlist.get(currentfocus).getPhysicalProperty();
 		if (pp == null) return false; 
-		return SemGen.semsimlib.isOPBprocessProperty(pp.getFirstRefersToReferenceOntologyAnnotation().getReferenceURI());
+		return SemGen.semsimlib.isOPBprocessProperty(pp.getReferstoURI());
 	}
 
 	@Override
@@ -207,10 +213,8 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	public void setDatastructurePhysicalProperty(Integer index) {
 		DataStructure ds = componentlist.get(currentfocus);
 		if (getIndexofPhysicalProperty()==index) return;
-		ds.getPhysicalProperty().removeAllReferenceAnnotations();
 		if (index!=-1) {
-			ReferencePhysicalProperty rpp = termlib.getPhysicalProperty(index);
-			ds.getPhysicalProperty().addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, rpp.getURI(), rpp.getName());
+			ds.setPhysicalProperty(termlib.getPhysicalProperty(index));
 		}
 		changeNotification();
 	}
@@ -218,6 +222,10 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	public int countEntitiesinCompositeEntity() {
 		CompositePhysicalEntity cpe = (CompositePhysicalEntity)componentlist.get(currentfocus).getAssociatedPhysicalModelComponent();
 		return cpe.getArrayListOfEntities().size();
+	}
+	
+	public boolean hasPhysicalModelComponent() {
+		return componentlist.get(currentfocus).hasAssociatedPhysicalComponent();
 	}
 	
 	@Override

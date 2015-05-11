@@ -14,6 +14,11 @@ public class CustomPhysicalEntity extends PhysicalEntity{
 	}
 	
 	@Override
+	protected boolean isEquivalent(Object obj) {
+		return ((CustomPhysicalEntity)obj).getName().compareTo(getName())==0;
+	}
+	
+	@Override
 	public URI getSemSimClassURI() {
 		return SemSimConstants.CUSTOM_PHYSICAL_ENTITY_CLASS_URI;
 	}

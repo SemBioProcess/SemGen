@@ -81,8 +81,8 @@ public class SemanticComparator {
 					
 					// Test singular annotations
 					if(ds1.hasRefersToAnnotation() && ds2.hasRefersToAnnotation()) {
-						match = testSingularAnnotations(ds1.getFirstRefersToReferenceOntologyAnnotation(),
-								ds2.getFirstRefersToReferenceOntologyAnnotation());
+						match = testSingularAnnotations(ds1.getRefersToReferenceOntologyAnnotation(),
+								ds2.getRefersToReferenceOntologyAnnotation());
 					}
 					
 					// If the physical properties are not null...
@@ -135,7 +135,7 @@ public class SemanticComparator {
 		
 		// This handles physical properties, referenced singular physical entities, and referenced physical processes
 		if(pmc1.hasRefersToAnnotation() && pmc2.hasRefersToAnnotation()){
-			if(pmc1.getFirstRefersToReferenceOntologyAnnotation().getReferenceURI().toString().equals(pmc2.getFirstRefersToReferenceOntologyAnnotation().getReferenceURI().toString())){
+			if(pmc1.getRefersToReferenceOntologyAnnotation().getReferenceURI().toString().equals(pmc2.getRefersToReferenceOntologyAnnotation().getReferenceURI().toString())){
 				return true;
 			}
 			return false;
@@ -174,8 +174,8 @@ public class SemanticComparator {
 		
 		for(int i=0; i<cpe1.getArrayListOfEntities().size(); i++){
 			if(cpe1.getArrayListOfEntities().get(i).hasRefersToAnnotation() && cpe2.getArrayListOfEntities().get(i).hasRefersToAnnotation()){
-				if(!cpe1.getArrayListOfEntities().get(i).getFirstRefersToReferenceOntologyAnnotation().getReferenceURI().toString().equals( 
-					cpe2.getArrayListOfEntities().get(i).getFirstRefersToReferenceOntologyAnnotation().getReferenceURI().toString())){
+				if(!cpe1.getArrayListOfEntities().get(i).getRefersToReferenceOntologyAnnotation().getReferenceURI().toString().equals( 
+					cpe2.getArrayListOfEntities().get(i).getRefersToReferenceOntologyAnnotation().getReferenceURI().toString())){
 					return false;
 				}
 			}

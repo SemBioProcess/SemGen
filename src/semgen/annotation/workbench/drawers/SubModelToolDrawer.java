@@ -167,14 +167,14 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 	@Override
 	public String getSingularAnnotationasString(int index) {
 		if (hasSingularAnnotation(index)) {
-			return componentlist.get(index).getFirstRefersToReferenceOntologyAnnotation().getNamewithOntologyAbreviation();
+			return componentlist.get(index).getRefersToReferenceOntologyAnnotation().getNamewithOntologyAbreviation();
 		}
 		return "*unspecified*";
 	}
 	
 	@Override
 	public URI getSingularAnnotationURI(int index) {
-		return componentlist.get(index).getFirstRefersToReferenceOntologyAnnotation().getReferenceURI();
+		return componentlist.get(index).getRefersToReferenceOntologyAnnotation().getReferenceURI();
 	}
 	
 	public ArrayList<Integer> getSubmodelsWithoutFocus() {

@@ -88,6 +88,39 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 		allpents.addAll(getMediatorPhysicalEntities());
 		return allpents;
 	}
+	
+	@Override
+	protected boolean isEquivalent(Object obj) {
+		PhysicalProcess proc = (PhysicalProcess)obj;
+		if ((sources.size()!=proc.getSources().size()) || 
+				(sinks.size()!=proc.getSinks().size()) || 
+				(mediators.size()!=proc.getMediators().size())) {
+			return false;
+		}
+		for (PhysicalEntity pe : getSources().keySet()) {
+			for (PhysicalEntity pe2 : proc.getSourcePhysicalEntities()) {
+				if (pe.isEquivalent(pe2) && (sources.get(pe)==getSourceStoichiometry(pe2)))
+					continue;
+			}
+			return false;
+		}
+		for (PhysicalEntity pe : getSinks().keySet()) {
+			for (PhysicalEntity pe2 : proc.getSinkPhysicalEntities()) {
+				if (pe.isEquivalent(pe2) && (sinks.get(pe)==getSinkStoichiometry(pe2)))
+					continue;
+			}
+			return false;
+		}
+		for (PhysicalEntity pe : getMediators()) {
+			for (PhysicalEntity pe2 : proc.getMediatorPhysicalEntities()) {
+				if (pe.isEquivalent(pe2))
+					continue;
+			}
+			return false;
+		}
+		
+		return true;
+	}
 
 	@Override
 	public String getComponentTypeasString() {

@@ -52,12 +52,12 @@ public class SemSimOWLwriter extends ModelWriter {
 	public OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	protected OWLOntology ont;
 	public OWLDataFactory factory = manager.getOWLDataFactory();
+	
 	private Map<PhysicalModelComponent, URI> singularPMCsAndUrisForDataStructures = new HashMap<PhysicalModelComponent,URI>();
 	private String base = SemSimConstants.SEMSIM_NAMESPACE;
 	private String namespace;
 	private Set<DataStructure> localdss = new HashSet<DataStructure>();
 	private Map<CompositePhysicalEntity,URI> compositeEntitiesAndIndexes = new HashMap<CompositePhysicalEntity,URI>();
-
 	
 	public SemSimOWLwriter(SemSimModel model) throws OWLOntologyCreationException {
 		super(model);
@@ -162,15 +162,15 @@ public class SemSimOWLwriter extends ModelWriter {
 			// If there is a singular annotation on the DataStructure, write it. Use reference annotation label as
 			// the DataStructure's label
 			if(ds.hasRefersToAnnotation()){
-				String referenceuri = ds.getFirstRefersToReferenceOntologyAnnotation().getReferenceURI().toString();
-				SemSimOWLFactory.setRDFLabel(ont, dsind, ds.getFirstRefersToReferenceOntologyAnnotation().getValueDescription(), manager);
+				String referenceuri = ds.getRefersToReferenceOntologyAnnotation().getReferenceURI().toString();
+				SemSimOWLFactory.setRDFLabel(ont, dsind, ds.getRefersToReferenceOntologyAnnotation().getValueDescription(), manager);
 				SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimConstants.REFERS_TO_URI.toString(), referenceuri, manager);
 			}
 			
 			// Classify the physical property under the first (and should be ONLY) reference ontology class
 			// that it is annotated against
 			if(ds.getPhysicalProperty()!=null){
-				URI propertyuri = SemSimOWLFactory.getURIforPhysicalProperty(semsimmodel, ds.getPhysicalProperty());
+				URI propertyuri = SemSimOWLFactory.getURIforPhysicalProperty(semsimmodel, ds);
 				createPhysicalModelIndividual(ds.getPhysicalProperty(), propertyuri.toString());
 				// Log the physical property and its URI
 				singularPMCsAndUrisForDataStructures.put(ds.getPhysicalProperty(), propertyuri);
@@ -243,8 +243,6 @@ public class SemSimOWLwriter extends ModelWriter {
 			
 			// Create physical entity and physical process individuals, link to properties
 			if(ds.hasPhysicalProperty()){
-				PhysicalProperty prop = ds.getPhysicalProperty();
-				
 				// If we have an annotated physical model component that the property points to
 				if(ds.getAssociatedPhysicalModelComponent()!=null){
 					
@@ -293,7 +291,7 @@ public class SemSimOWLwriter extends ModelWriter {
 							createPhysicalModelIndividual(pmc, uristring);
 						}
 						// Connect the new individual to its property
-						SemSimOWLFactory.setIndObjectProperty(ont, SemSimOWLFactory.getURIforPhysicalProperty(semsimmodel, ds.getPhysicalProperty()).toString(), uristring, 
+						SemSimOWLFactory.setIndObjectProperty(ont, SemSimOWLFactory.getURIforPhysicalProperty(semsimmodel, ds).toString(), uristring, 
 								SemSimConstants.PHYSICAL_PROPERTY_OF_URI.toString(), SemSimConstants.HAS_PHYSICAL_PROPERTY_URI.toString(), manager);
 					}
 				}
@@ -325,9 +323,12 @@ public class SemSimOWLwriter extends ModelWriter {
 	}
 	
 	private void addCompositeAnnotations() throws OWLException {
-		for(PhysicalProperty prop : semsimmodel.getPropertyAndCompositePhysicalEntityMap().keySet()){
-			CompositePhysicalEntity cpe =  semsimmodel.getPropertyAndCompositePhysicalEntityMap().get(prop);
+		for (DataStructure ds : semsimmodel.getDataStructureswithCompositesEntities()) {
+			PhysicalProperty prop = ds.getPhysicalProperty();
+
+			CompositePhysicalEntity cpe =  (CompositePhysicalEntity)ds.getAssociatedPhysicalModelComponent();
 			URI indexuri = processCompositePhysicalEntity(cpe, namespace);
+			
 			
 			// Associate the CompositePhysicalEntity with its index uri in the ontology 
 			if(!singularPMCsAndUrisForDataStructures.keySet().contains(cpe)){
@@ -335,7 +336,7 @@ public class SemSimOWLwriter extends ModelWriter {
 			}
 
 			// Connect physical property to the index physical entity for the composite entity
-			SemSimOWLFactory.setIndObjectProperty(ont, SemSimOWLFactory.getURIforPhysicalProperty(semsimmodel, prop).toString(),
+			SemSimOWLFactory.setIndObjectProperty(ont, SemSimOWLFactory.getURIforPhysicalProperty(semsimmodel, ds).toString(),
 					indexuri.toString(), SemSimConstants.PHYSICAL_PROPERTY_OF_URI.toString(), SemSimConstants.HAS_PHYSICAL_PROPERTY_URI.toString(), manager);
 		}
 	}
@@ -398,7 +399,7 @@ public class SemSimOWLwriter extends ModelWriter {
 				
 				// Set the annotation, if present
 				if(sub.hasRefersToAnnotation()){
-					ReferenceOntologyAnnotation ann = sub.getFirstRefersToReferenceOntologyAnnotation();
+					ReferenceOntologyAnnotation ann = sub.getRefersToReferenceOntologyAnnotation();
 					SemSimOWLFactory.setIndDatatypeProperty(ont, indstr, SemSimConstants.REFERS_TO_URI.toString(),
 							ann.getReferenceURI().toString(), manager);
 					SemSimOWLFactory.setRDFLabel(ont, factory.getOWLNamedIndividual(IRI.create(indstr)), ann.getValueDescription(), manager);
@@ -580,7 +581,7 @@ public class SemSimOWLwriter extends ModelWriter {
 			PhysicalEntity pe = cpe.getArrayListOfEntities().get(y);
 			// If a reference physical entity
 			if(pe.hasRefersToAnnotation()){
-				uristring = uristring + SemSimOWLFactory.getIRIfragment(pe.getFirstRefersToReferenceOntologyAnnotation().getReferenceURI().toString());
+				uristring = uristring + SemSimOWLFactory.getIRIfragment(pe.getRefersToReferenceOntologyAnnotation().getReferenceURI().toString());
 			}
 			// If custom physical entity
 			else{
@@ -624,7 +625,7 @@ public class SemSimOWLwriter extends ModelWriter {
 		if(!(pmc instanceof PhysicalProcess)){
 			if(pmc.hasRefersToAnnotation()){
 				uritrunk = uritrunk +
-				SemSimOWLFactory.getIRIfragment(pmc.getFirstRefersToReferenceOntologyAnnotation().getReferenceURI().toString());
+				SemSimOWLFactory.getIRIfragment(pmc.getRefersToReferenceOntologyAnnotation().getReferenceURI().toString());
 			}
 			else uritrunk = uritrunk + SemSimOWLFactory.URIencoding(pmc.getName());
 			uritrunk = uritrunk + "_";
@@ -662,8 +663,8 @@ public class SemSimOWLwriter extends ModelWriter {
 		String description = null;
 		
 		// If there is a "refers-to" reference ontology annotation
-		if(pmc.getFirstRefersToReferenceOntologyAnnotation()!=null){
-			ReferenceOntologyAnnotation firstann = pmc.getFirstRefersToReferenceOntologyAnnotation();
+		if(pmc.getRefersToReferenceOntologyAnnotation()!=null){
+			ReferenceOntologyAnnotation firstann = pmc.getRefersToReferenceOntologyAnnotation();
 			parenturistring = firstann.getReferenceURI().toString();
 			label = firstann.getValueDescription();
 			

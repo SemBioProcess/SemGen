@@ -27,6 +27,7 @@ import semsim.model.physical.object.PhysicalProperty;
 public abstract class DataStructure extends ComputationalModelComponent implements Annotatable, Cloneable{	
 	private Computation computation;
 	private PhysicalProperty physicalProperty;
+	private PhysicalModelComponent physicalcomponent;
 	private DataStructure solutionDomain;
 	private Set<DataStructure> usedToCompute = new HashSet<DataStructure>();
 	private Set<Annotation> annotations = new HashSet<Annotation>();
@@ -82,11 +83,11 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	}
 	
 	public PhysicalModelComponent getAssociatedPhysicalModelComponent() {
-		return physicalProperty.getPhysicalPropertyOf();
+		return physicalcomponent;
 	}
 	
-	public void setAssociatedPhysicalModelCompnent(PhysicalModelComponent pmc) {
-		physicalProperty.setPhysicalPropertyOf(pmc);
+	public void setAssociatedPhysicalModelComponent(PhysicalModelComponent pmc) {
+		physicalcomponent = pmc;
 	}
 	
 	/** @return The domain in which the data structure is solved
@@ -113,7 +114,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	
 	/** @return Whether the DataStructure has been associated with a physical property */
 	public Boolean hasPhysicalProperty(){
-		return (physicalProperty.hasRefersToAnnotation());
+		return physicalProperty != null;
 	}
 	
 	/** @return Whether the DataStructure has been assigned a start value */
@@ -164,9 +165,6 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	 */
 	public void setPhysicalProperty(PhysicalProperty pp){
 		physicalProperty = pp;
-		if(pp!=null){
-			pp.setAssociatedDataStructure(this);
-		}
 	}
 	
 	/** Set whether this DataStructure is explicitly declared in the model or not */
@@ -204,13 +202,13 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		if(getPhysicalProperty()!=null){
 			compann = "[unspecified property] of ";
 			if(getPhysicalProperty().hasRefersToAnnotation()){
-				compann = getPhysicalProperty().getFirstRefersToReferenceOntologyAnnotation().getValueDescription() + " of ";
+				compann = getPhysicalProperty().getRefersToReferenceOntologyAnnotation().getValueDescription() + " of ";
 			}
 			// if physical entity or process
 			String target = "?";
 			if(getAssociatedPhysicalModelComponent()!=null){
 				if(getAssociatedPhysicalModelComponent().hasRefersToAnnotation()){
-					target = getAssociatedPhysicalModelComponent().getFirstRefersToReferenceOntologyAnnotation().getValueDescription();
+					target = getAssociatedPhysicalModelComponent().getRefersToReferenceOntologyAnnotation().getValueDescription();
 				}
 				// otherwise it's a composite physical entity or custom term
 				else{
@@ -290,29 +288,15 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		return raos;
 	}
 	
-	
-	public ReferenceOntologyAnnotation getFirstRefersToReferenceOntologyAnnotation(){
-		if(!getReferenceOntologyAnnotations(SemSimConstants.REFERS_TO_RELATION).isEmpty()){
-			return getReferenceOntologyAnnotations(SemSimConstants.REFERS_TO_RELATION).toArray(new ReferenceOntologyAnnotation[]{})[0];
-		}
-		return null;
-	}
-	
-	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotationByURI(URI uri){
-		for(ReferenceOntologyAnnotation ann : getReferenceOntologyAnnotations(SemSimConstants.REFERS_TO_RELATION)){
-			if(ann.getReferenceURI().compareTo(uri)==0){
-				return ann;
-			}
+	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotation(){
+		if(hasRefersToAnnotation()){
+			return new ReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, referenceuri, getDescription());
 		}
 		return null;
 	}
 	
 	public Boolean isAnnotated(){
 		return !getAnnotations().isEmpty();
-	}
-	
-	public Boolean hasRefersToAnnotation(){
-		return getFirstRefersToReferenceOntologyAnnotation()!=null;
 	}
 
 	public void removeAllReferenceAnnotations() {
@@ -353,7 +337,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		if(hasPhysicalProperty()){
 			// If there's already an OPB reference annotation
 			if(getPhysicalProperty().hasRefersToAnnotation()){
-				ReferenceOntologyAnnotation roa = (getPhysicalProperty().getFirstRefersToReferenceOntologyAnnotation());
+				ReferenceOntologyAnnotation roa = (getPhysicalProperty().getRefersToReferenceOntologyAnnotation());
 				
 				if(lib.OPBhasStateProperty(roa) || lib.OPBhasForceProperty(roa)){
 					return PropertyType.PropertyOfPhysicalEntity;
@@ -384,6 +368,10 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	
 	public boolean hasAssociatedPhysicalComponent() {
 		return getAssociatedPhysicalModelComponent()==null;
+	}
+	
+	public URI getReferstoURI() {
+		return referenceuri;
 	}
 	
 	public boolean isMapped() {

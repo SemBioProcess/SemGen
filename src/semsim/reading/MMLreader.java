@@ -28,7 +28,6 @@ import semsim.model.computational.datastructures.Decimal;
 import semsim.model.computational.datastructures.MMLchoice;
 import semsim.model.computational.datastructures.SemSimInteger;
 import semsim.model.computational.units.UnitOfMeasurement;
-import semsim.model.physical.object.PhysicalProperty;
 
 public class MMLreader extends ModelReader {
 	private Hashtable<String,String> discretevarsandconstraints = new Hashtable<String,String>();
@@ -141,8 +140,6 @@ public class MMLreader extends ModelReader {
 				if(codeword.contains(":") || codeword.endsWith("__init")) ds.setDeclared(false);
 				else ds.setDeclared(true);
 				
-				ds.setPhysicalProperty(new PhysicalProperty()); // If units, instantiate property
-			
 				// Store the units attribute value
 				if (varchild.getAttributeValue("unitID") != null) {
 					String unitname = varchild.getAttributeValue("unitID");

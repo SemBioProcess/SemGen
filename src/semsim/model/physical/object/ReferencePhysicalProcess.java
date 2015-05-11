@@ -16,4 +16,9 @@ public class ReferencePhysicalProcess extends PhysicalProcess{
 	public URI getSemSimClassURI() {
 		return SemSimConstants.REFERENCE_PHYSICAL_PROCESS_CLASS_URI;
 	}
+	
+	@Override
+	protected boolean isEquivalent(Object obj) {
+		return ((ReferencePhysicalProcess)obj).getReferstoURI().compareTo(referenceuri)==0;
+	}
 }

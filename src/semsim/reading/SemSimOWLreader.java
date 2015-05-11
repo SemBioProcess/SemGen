@@ -53,14 +53,19 @@ import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.Submodel;
 import semsim.model.physical.object.CompositePhysicalEntity;
+import semsim.model.physical.object.CustomPhysicalEntity;
+import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.model.physical.object.FunctionalSubmodel;
 import semsim.model.physical.object.PhysicalProperty;
-import semsim.model.physical.object.ReferencePhysicalProperty;
+import semsim.model.physical.object.ReferencePhysicalEntity;
+import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.owl.SemSimOWLFactory;
 
 public class SemSimOWLreader extends ModelReader {
 	private OWLDataFactory factory;
-	private Map<URI, CompositePhysicalEntity> URIandCompositeEntityMap = new HashMap<URI, CompositePhysicalEntity>();
+	private Map<String, PhysicalModelComponent> identitymap = new HashMap<String, PhysicalModelComponent>();
+
+	private Map<String, PhysicalProperty> idpropertymap = new HashMap<String, PhysicalProperty>();
 	private OWLOntology ont;
 
 	public SemSimOWLreader(File file) {
@@ -83,12 +88,13 @@ public class SemSimOWLreader extends ModelReader {
 		
 		collectModelAnnotations();
 		collectReferenceClasses();
+		collectCompositeEntities();
+		createProcesses();
 		collectDataStructures();
 		mapCellMLTypeVariables();
 		collectUnits();
 		establishIsInputRelationships();
-		collectRelationalConstraints();
-		createProcesses();		
+		collectRelationalConstraints();		
 		collectCustomAnnotations();		
 		collectSubModels();
 				
@@ -143,12 +149,72 @@ public class SemSimOWLreader extends ModelReader {
 	}
 
 	private void collectReferenceClasses() throws OWLException {
-		for (String pps : SemSimOWLFactory.getAllSubclasses(ont,  SemSimConstants.PHYSICAL_PROPERTY_CLASS_URI.toString(),false)) {
-			String label = SemSimOWLFactory.getRDFLabels(ont, factory.getOWLClass(IRI.create(pps)))[0];
+		for (String refuri : SemSimOWLFactory.getAllSubclasses(ont,  SemSimConstants.PHYSICAL_PROPERTY_CLASS_URI.toString(),false)) {
+			String label = SemSimOWLFactory.getRDFLabels(ont, factory.getOWLClass(IRI.create(refuri)))[0];
 			if (label.isEmpty()) continue;
-			ReferencePhysicalProperty pp = new ReferencePhysicalProperty(label, URI.create(pps));
 			
-			semsimmodel.addPhysicalPropertyClass(pp);
+			PhysicalProperty pp = new PhysicalProperty(label, URI.create(refuri));
+			
+			semsimmodel.addPhysicalProperty(pp);
+			idpropertymap.put(refuri, pp);
+		}
+
+		for (String rperef : SemSimOWLFactory.getAllSubclasses(ont,  SemSimConstants.REFERENCE_PHYSICAL_ENTITY_CLASS_URI.toString(), false)) {
+			String label = SemSimOWLFactory.getRDFLabels(ont, factory.getOWLClass(IRI.create(rperef)))[0];
+			PhysicalEntity pe;
+			if(!rperef.toString().startsWith("http://www.bhi.washington.edu/SemSim/")){  // Account for older models that used refersTo pointers to custom annotations
+				
+				// If an identical reference entity was already added to the model, this will return the original, 
+				// otherwise it creates a new physical entity
+				pe = new ReferencePhysicalEntity(URI.create(rperef), label);
+				semsimmodel.addReferencePhysicalEntity((ReferencePhysicalEntity)pe);
+			}
+			else{
+				pe = new CustomPhysicalEntity(label, label);
+				semsimmodel.addCustomPhysicalEntity((CustomPhysicalEntity) pe);
+			}
+			identitymap.put(rperef, pe);
+		}
+
+		for (String cuperef : SemSimOWLFactory.getAllSubclasses(ont,  SemSimConstants.CUSTOM_PHYSICAL_ENTITY_CLASS_URI.toString(), false)) {
+			String label = SemSimOWLFactory.getRDFLabels(ont, factory.getOWLClass(IRI.create(cuperef)))[0];
+			CustomPhysicalEntity cupe = new CustomPhysicalEntity(label, label);
+			
+			if(SemSimOWLFactory.getRDFComments(ont, cuperef)!=null)
+				cupe.setDescription(SemSimOWLFactory.getRDFComments(ont, cuperef)[0]);
+			
+			identitymap.put(cuperef, cupe);
+			semsimmodel.addCustomPhysicalEntity(cupe);
+		}
+	}
+	
+	private void collectCompositeEntities() throws OWLException {
+		for (String cperef : SemSimOWLFactory.getIndividualsInTreeAsStrings(ont,  SemSimConstants.COMPOSITE_PHYSICAL_ENTITY_CLASS_URI.toString())) {		
+			String ind = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, cperef, SemSimConstants.HAS_INDEX_ENTITY_URI.toString());
+			ArrayList<PhysicalEntity> rpes = new ArrayList<PhysicalEntity>();
+			ArrayList<StructuralRelation> rels = new ArrayList<StructuralRelation>();
+			
+			PhysicalEntity rpe = (PhysicalEntity)getClassofIndividual(ind);
+			if (rpe == null) continue;
+			rpes.add(rpe);
+			
+			while (true) {
+				String nextind = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, ind.toString(), SemSimConstants.PART_OF_URI.toString());
+				StructuralRelation rel = SemSimConstants.PART_OF_RELATION;
+				if (nextind=="") {
+					nextind = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, ind.toString(), SemSimConstants.CONTAINED_IN_URI.toString());
+					if (nextind=="") break;
+					rel = SemSimConstants.CONTAINED_IN_RELATION;
+				}
+				rpe = (PhysicalEntity)getClassofIndividual(nextind);
+				if (rpe == null) break;
+				rpes.add(rpe);
+				rels.add(rel);
+				ind = nextind;
+			}
+			if (rpe==null) continue; 
+			CompositePhysicalEntity cpe = semsimmodel.addCompositePhysicalEntity(rpes, rels);
+			identitymap.put(ind, cpe);
 		}
 	}
 	
@@ -233,23 +299,14 @@ public class SemSimOWLreader extends ModelReader {
 					String propind = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, dsind, SemSimConstants.IS_COMPUTATIONAL_COMPONENT_FOR_URI.toString());
 					
 					if(!units.equals("") || !propind.equals("")){
-						PhysicalProperty pp = new PhysicalProperty();
-						ds.setPhysicalProperty(pp);
 						String referstoval = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, propind, SemSimConstants.REFERS_TO_URI.toString());
 						
-						// If the property is annotated, store annotation
-						if(!referstoval.equals("")){
-							String label = SemSimOWLFactory.getRDFLabels(ont, factory.getOWLNamedIndividual(IRI.create(propind)))[0];
-							pp.addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, URI.create(referstoval), label);
-						}
+						ds.setPhysicalProperty(idpropertymap.get(referstoval));
 						
 						// Set the connection between the physical property and what it's a property of
 						String propofind = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, propind, SemSimConstants.PHYSICAL_PROPERTY_OF_URI.toString());
-
-						// If it's a property of a physical entity, get the entity. Follow composite, if present
-						if(SemSimOWLFactory.indExistsInTree(propofind, SemSimConstants.PHYSICAL_ENTITY_CLASS_URI.toString(), ont)){
-							PhysicalEntity ent = getPhysicalEntityFromURI(ont, URI.create(propofind));
-							ds.setAssociatedPhysicalModelCompnent(ent);
+						if (!propofind.isEmpty()) {
+							ds.setAssociatedPhysicalModelComponent(identitymap.get(propofind));
 						}
 					}
 				}
@@ -356,14 +413,15 @@ public class SemSimOWLreader extends ModelReader {
 				description = SemSimOWLFactory.getRDFComments(ont, processind)[0];
 						
 			PhysicalProcess pproc = null;
-
 			// Create reference physical process, if there is an annotation
-			if(isReferencedIndividual(ont, URI.create(processind))){
-				String refersto = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, processind, SemSimConstants.REFERS_TO_URI.toString());
-				pproc = semsimmodel.addReferencePhysicalProcess(URI.create(refersto), processlabel);
+			String refersto = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, processind, SemSimConstants.REFERS_TO_URI.toString());
+			if (!refersto.isEmpty()) {
+				pproc = semsimmodel.addReferencePhysicalProcess(new ReferencePhysicalProcess(URI.create(refersto), processlabel));
 			}
 			// Otherwise create a custom physical process
-			else pproc = semsimmodel.addCustomPhysicalProcess(processlabel, description);
+			else {
+				pproc = semsimmodel.addCustomPhysicalProcess(new CustomPhysicalProcess(processlabel, description));
+			}
 			
 			// Capture the physical entity participants
 			Set<String> srcs = SemSimOWLFactory.getIndObjectProperty(ont, processind, SemSimConstants.HAS_SOURCE_URI.toString());
@@ -372,44 +430,26 @@ public class SemSimOWLreader extends ModelReader {
 
 			// Enter source information
 			for(String src : srcs){
-				PhysicalEntity srcent = getPhysicalEntityFromURI(ont, URI.create(src));
+				PhysicalEntity srcent = (PhysicalEntity)getClassofIndividual(src);
 				Double m = getMultiplierForProcessParticipant(ont, processind, 
 						SemSimConstants.HAS_SOURCE_URI.toString(), src);
 				pproc.addSource(srcent, m);
 			}
 			// Enter sink info
 			for(String sink : sinks){
-				PhysicalEntity sinkent = getPhysicalEntityFromURI(ont, URI.create(sink));
+				PhysicalEntity sinkent = (PhysicalEntity)getClassofIndividual(sink);
 				Double m = getMultiplierForProcessParticipant(ont, processind, 
 						SemSimConstants.HAS_SINK_URI.toString(), sink);
 				pproc.addSink(sinkent, m);
 			}
 			// Enter mediator info
 			for(String med : mediators){
-				PhysicalEntity medent = getPhysicalEntityFromURI(ont, URI.create(med));
+				PhysicalEntity medent = (PhysicalEntity)getClassofIndividual(med);
 				pproc.addMediator(medent);
 			}
-		    
-			// Get the properties of the process represented in the model
-			Set<String> propinds = SemSimOWLFactory.getIndObjectProperty(ont, processind, SemSimConstants.HAS_PHYSICAL_PROPERTY_URI.toString());
-			
-			for(String propind : propinds){
-				String dsind = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, propind, SemSimConstants.HAS_COMPUTATATIONAL_COMPONENT_URI.toString());
-				String dsname = SemSimOWLFactory.getURIdecodedFragmentFromIRI(dsind);
-				
-				// Create a new physical property associated with the process and data structure
-				PhysicalProperty pp = new PhysicalProperty();
-				semsimmodel.getDataStructure(dsname).setPhysicalProperty(pp);
-	
-				if(isReferencedIndividual(ont, URI.create(propind))){
-					String referstoval = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, propind, SemSimConstants.REFERS_TO_URI.toString());
-					String propertylabel = SemSimOWLFactory.getRDFLabels(ont, factory.getOWLNamedIndividual(IRI.create(propind)))[0];
-					pp.addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, URI.create(referstoval), propertylabel);
-				}
-				
-				semsimmodel.getDataStructure(dsname).setAssociatedPhysicalModelCompnent(pproc);
-			}
+			identitymap.put(processind, pproc);
 		}
+		
 	}
 	
 	private void collectCustomAnnotations() {
@@ -428,12 +468,6 @@ public class SemSimOWLreader extends ModelReader {
 					URI superclsuri = supercls.asOWLClass().getIRI().toURI();
 					if(!superclsuri.toString().equals(customclassuri.toString())){
 						String label = SemSimOWLFactory.getRDFLabels(ont, supercls.asOWLClass())[0];
-						
-						// If the reference term hasn't been added yet, add it
-						if(customclassuri==SemSimConstants.CUSTOM_PHYSICAL_PROCESS_CLASS_URI)
-							semsimmodel.addReferencePhysicalProcess(superclsuri, label);
-						if(customclassuri==SemSimConstants.CUSTOM_PHYSICAL_ENTITY_CLASS_URI)
-							semsimmodel.addReferencePhysicalEntity(superclsuri, label);
 						
 						// Add isVersionOf annotation
 						PhysicalModelComponent pmc = null;
@@ -572,109 +606,7 @@ public class SemSimOWLreader extends ModelReader {
 	
 	//********************************************************************//
 	//*****************************HELPER METHODS*************************//
-	
-	// Get the URI of the object of a triple that uses a structural relation as its predicate
-	private CompositePhysicalEntity getURIofObjectofPhysicalEntityStructuralRelation(OWLOntology ont, CompositePhysicalEntity cpe, 
-			URI startind) throws OWLException{
-		
-		String partof = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, startind.toString(), SemSimConstants.PART_OF_URI.toString());
-		String containedin = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, startind.toString(), SemSimConstants.CONTAINED_IN_URI.toString());
 
-		// If there is a structural relation between the startind and another individual
-		if(!partof.equals("") || !containedin.equals("")){
-			String nextind = null;
-			
-			// If the structural relation is part_of
-			if(!partof.equals("")){
-				nextind = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, startind.toString(), SemSimConstants.PART_OF_URI.toString());
-				cpe.getArrayListOfStructuralRelations().add(SemSimConstants.PART_OF_RELATION);
-			}
-			// else if the structural relation is contained_in
-			else{
-				nextind = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, startind.toString(), SemSimConstants.CONTAINED_IN_URI.toString());
-				cpe.getArrayListOfStructuralRelations().add(SemSimConstants.CONTAINED_IN_RELATION);
-			}
-			String label = SemSimOWLFactory.getRDFLabels(ont, factory.getOWLNamedIndividual(IRI.create(nextind)))[0];
-			String description = null;
-			if(SemSimOWLFactory.getRDFComments(ont, nextind)!=null)
-				description = SemSimOWLFactory.getRDFComments(ont, nextind)[0];
-			
-			PhysicalModelComponent pmc = null;
-			
-			// If the object of the triple is a reference physical entity
-			if(isReferencedIndividual(ont, URI.create(nextind))){
-				URI refuri = URI.create(SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, nextind.toString(), SemSimConstants.REFERS_TO_URI.toString()));
-				if(!refuri.toString().startsWith("http://www.bhi.washington.edu/SemSim/")){  // Account for older models that used refersTo pointers to custom annotations
-					
-					// If an identical reference entity was already added to the model, this will return the original, 
-					// otherwise it creates a new physical entity
-					pmc = semsimmodel.addReferencePhysicalEntity(refuri, label);
-				}
-				else{
-					pmc = semsimmodel.addCustomPhysicalEntity(label, description);
-				}
-			}
-			// else if it's a custom physical entity
-			else{
-				pmc = semsimmodel.addCustomPhysicalEntity(label, description);
-			}
-			
-			// add the object of the triple to the arrays that define the composite physical entity
-			cpe.getArrayListOfEntities().add((PhysicalEntity) pmc);
-			cpe = getURIofObjectofPhysicalEntityStructuralRelation(ont, cpe, URI.create(nextind));
-		}
-		return cpe;
-	}
-	
-	
-	// Determine if the individual is annotated against a reference ontology term
-	private Boolean isReferencedIndividual(OWLOntology ont, URI induri) throws OWLException{
-		return !SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, induri.toString(), SemSimConstants.REFERS_TO_URI.toString()).equals("");
-	}
-	
-	// Retrieve or generate a physical entity from its URI in the OWL-encoded SemSim model 
-	private PhysicalEntity getPhysicalEntityFromURI(OWLOntology ont, URI uri) throws OWLException{
-		PhysicalEntity ent = null;
-		String label = SemSimOWLFactory.getRDFLabels(ont, factory.getOWLNamedIndividual(IRI.create(uri)))[0];
-		String description = null;
-		if(SemSimOWLFactory.getRDFComments(ont, uri.toString())!=null)
-			description = SemSimOWLFactory.getRDFComments(ont, uri.toString())[0];
-		
-		Boolean partofcomposite = (!SemSimOWLFactory.getFunctionalIndObjectProperty(ont, uri.toString(), SemSimConstants.PART_OF_URI.toString()).equals("")
-				|| !SemSimOWLFactory.getFunctionalIndObjectProperty(ont, uri.toString(), SemSimConstants.CONTAINED_IN_URI.toString()).equals(""));
-
-		// Get the singular physical entity for the URI.
-		// If it's a reference physical entity...
-		if(isReferencedIndividual(ont, uri)){
-			String refersto = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, uri.toString(), SemSimConstants.REFERS_TO_URI.toString());
-			ent = semsimmodel.addReferencePhysicalEntity(URI.create(refersto), label);
-		}
-		// else if it's a custom physical entity
-		else ent = semsimmodel.addCustomPhysicalEntity(label, description);
-					
-		// If the URI is for an individual that is part of a composite physical entity
-		if(partofcomposite){
-			
-			// Reuse existing composite if we've already encountered it
-			if(URIandCompositeEntityMap.containsKey(uri)) 
-				return URIandCompositeEntityMap.get(uri);
-			
-			// Otherwise build the composite entity anew
-			else{
-				ArrayList<PhysicalEntity> ents = new ArrayList<PhysicalEntity>();
-				ents.add(ent);
-				ArrayList<StructuralRelation> rels = new ArrayList<StructuralRelation>();
-				CompositePhysicalEntity cent = new CompositePhysicalEntity(ents, rels);
-				cent = getURIofObjectofPhysicalEntityStructuralRelation(ont, cent, uri);
-				ent = semsimmodel.addCompositePhysicalEntity(cent.getArrayListOfEntities(), cent.getArrayListOfStructuralRelations());
-				
-				// Map the URI to the composite entity that it is an index of
-				URIandCompositeEntityMap.put(uri, cent);
-			}
-		}
-		return ent;
-	}
-	
 	// Get the multiplier for a process participant
 	private Double getMultiplierForProcessParticipant(OWLOntology ont, String process, String prop, String ent){
 		Double val = 1.0;
@@ -782,4 +714,8 @@ public class SemSimOWLreader extends ModelReader {
 		return val;
 	}
 
+	private PhysicalModelComponent getClassofIndividual(String ind) throws OWLException {
+		String indclass = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, ind, SemSimConstants.REFERS_TO_URI.toString());
+		return identitymap.get(indclass);
+	}
 }

@@ -19,6 +19,11 @@ public class PhysicalDependency extends PhysicalModelComponent{
 	}
 
 	@Override
+	protected boolean isEquivalent(Object obj) {
+		return false;
+	}
+	
+	@Override
 	public String getComponentTypeasString() {
 		return "dependency";
 	}

@@ -52,8 +52,6 @@ import semsim.SemSimConstants;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.Submodel;
-import semsim.model.physical.object.PhysicalProperty;
-
 import java.util.Map;
 import java.util.Set;
 
@@ -619,8 +617,8 @@ public class SemSimOWLFactory {
 		return result;
 	}
 	
-	public static URI getURIforPhysicalProperty(SemSimModel model, PhysicalProperty prop){
-		return URI.create(model.getNamespace() + URIencoding(prop.getAssociatedDataStructure().getName()) + "_property");
+	public static URI getURIforPhysicalProperty(SemSimModel model, DataStructure ds){
+		return URI.create(model.getNamespace() + URIencoding(ds.getName()) + "_property");
 	}
 	
 	public static String[] getRDFComments(OWLOntology ont, String indiri) {

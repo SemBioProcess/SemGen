@@ -50,9 +50,10 @@ import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.Submodel;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
+import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.model.physical.object.FunctionalSubmodel;
-import semsim.model.physical.object.PhysicalProperty;
-
+import semsim.model.physical.object.ReferencePhysicalEntity;
+import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.utilities.SemSimUtil;
 import semsim.writing.CellMLbioRDFblock;
 
@@ -265,8 +266,6 @@ public class CellMLreader extends ModelReader {
 				// initial condition for an ODE or the value of a static constant. The 
 				// SemSim DataStructure.startValue is only for initial conditions.)
 				if(initval!=null) cvar.setCellMLinitialValue(initval);
-
-				cvar.setPhysicalProperty(new PhysicalProperty());
 				
 				// Set units
 				String unitstext = var.getAttributeValue("units");
@@ -658,7 +657,6 @@ public class CellMLreader extends ModelReader {
 	
 	
 	private void collectCompositeAnnotation(Document doc, SemSimComponent toann, Element el){
-		
 		MappableVariable cvar = (MappableVariable)toann;
 		Resource cvarResource = rdfblock.rdf.getResource(mainNS.getURI().toString() + cvar.getMetadataID());
 		
@@ -698,12 +696,12 @@ public class CellMLreader extends ModelReader {
 			if(propertyofres!=null){
 				
 				PhysicalModelComponent pmc = getPMCfromRDFresourceAndAnnotate(propertyofres);
-				cvar.getPhysicalProperty().setPhysicalPropertyOf(pmc);
+				cvar.setAssociatedPhysicalModelComponent(pmc);
 				
 				// If it is a process
 				if(pmc instanceof PhysicalProcess){
 					PhysicalProcess process = (PhysicalProcess)pmc;
-					cvar.getPhysicalProperty().setPhysicalPropertyOf(pmc);
+					cvar.setAssociatedPhysicalModelComponent(pmc);
 					NodeIterator sourceit = rdfblock.rdf.listObjectsOfProperty(propertyofres, CellMLbioRDFblock.hassourceparticipant);
 					
 					// Read in the source participants
@@ -780,7 +778,7 @@ public class CellMLreader extends ModelReader {
 		// Create a singular physical entity from a component in a composite physical entity
 		PhysicalEntity returnent = null;
 		if(isannres!=null)
-			 returnent = semsimmodel.addReferencePhysicalEntity(URI.create(isannres.getURI()), isannres.getURI());
+			 returnent = semsimmodel.addReferencePhysicalEntity(new ReferencePhysicalEntity(URI.create(isannres.getURI()), isannres.getURI()));
 		
 		// If a custom entity
 		else
@@ -814,7 +812,7 @@ public class CellMLreader extends ModelReader {
 				
 				// If a reference entity
 				else if(isannres!=null)
-					pmc = semsimmodel.addReferencePhysicalEntity(URI.create(isannres.getURI()), isannres.getURI());
+					pmc = semsimmodel.addReferencePhysicalEntity(new ReferencePhysicalEntity(URI.create(isannres.getURI()), isannres.getURI()));
 				
 				// If a custom entity
 				else{
@@ -825,7 +823,7 @@ public class CellMLreader extends ModelReader {
 				
 				// If a reference process
 				if(isannres!=null){
-					pmc = semsimmodel.addReferencePhysicalProcess(URI.create(isannres.getURI()), isannres.getURI());
+					pmc = semsimmodel.addReferencePhysicalProcess(new ReferencePhysicalProcess(URI.create(isannres.getURI()), isannres.getURI()));
 				}
 				// If a custom process
 				else{
@@ -833,7 +831,7 @@ public class CellMLreader extends ModelReader {
 					String name = res.getProperty(CellMLbioRDFblock.hasname).getString();
 					if(name==null) name = unnamedstring;
 					String description = res.getProperty(CellMLbioRDFblock.description).getString();
-					pmc = semsimmodel.addCustomPhysicalProcess(name, description);
+					pmc = semsimmodel.addCustomPhysicalProcess(new CustomPhysicalProcess(name, description));
 				}
 			}
 			Resource isversionofann = res.getPropertyResourceValue(CellMLbioRDFblock.isversionof);
@@ -851,7 +849,7 @@ public class CellMLreader extends ModelReader {
 		String name = res.getProperty(CellMLbioRDFblock.hasname).getString();
 		if(name==null) name = unnamedstring;
 		String description = res.getProperty(CellMLbioRDFblock.description).getString();
-		return semsimmodel.addCustomPhysicalEntity(name, description);
+		return semsimmodel.addCustomPhysicalEntity(new CustomPhysicalEntity(name, description));
 	}
 		
 	

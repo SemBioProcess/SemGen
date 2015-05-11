@@ -6,6 +6,7 @@ public abstract class SemSimObject {
 	private String name = new String("");
 	private String description = new String("");
 	private String metadataID = new String("");
+	protected URI referenceuri = URI.create(new String(""));
 	
 	/**
 	 * Get the component's free-text description
@@ -66,6 +67,11 @@ public abstract class SemSimObject {
 		return metadataID;
 	}
 	
+	public Boolean hasRefersToAnnotation() {
+		return !referenceuri.toString().isEmpty();
+	}
+	
 	public abstract URI getSemSimClassURI();
+	
 }
 

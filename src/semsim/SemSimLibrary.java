@@ -3,6 +3,7 @@ package semsim;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
@@ -20,6 +21,7 @@ import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.physical.PhysicalEntity;
+import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.owl.SemSimOWLFactory;
@@ -33,18 +35,19 @@ public class SemSimLibrary {
 	private OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	public OWLOntology OPB;
 	
-	private Hashtable<String, String[]> OPBClassesForUnitsTable;
-	private Hashtable<String, String[]> compositeAnnRelationsTable;
-	private Hashtable<String, String[]> metadataRelationsTable;
-	private Hashtable<String, String[]> jsimUnitsTable;
+	private HashMap<String, String[]> OPBClassesForUnitsTable;
+	private HashMap<String, String[]> compositeAnnRelationsTable;
+	private HashMap<String, String[]> metadataRelationsTable;
+	private HashMap<String, String[]> jsimUnitsTable;
 	
 	// Hashtable for mapping CellML base units to OPB classes.
 	// Similar to OPBClassesForUnitsTable, but instead maps Hashtable of {baseunit:exponent} to OPB class.
-    private Hashtable<Hashtable<String, Double>, String[]> OPBClassesForBaseUnitsTable;
+    private HashMap<HashMap<String, Double>, String[]> OPBClassesForBaseUnitsTable;
 	
 	private Set<String> jsimUnitPrefixesTable;
 	private Set<String> cellMLUnitsTable;
 	
+	private HashMap<String, PhysicalProperty> commonproperties = new HashMap<String, PhysicalProperty>();
 	private Set<String> OPBproperties = new HashSet<String>();
 	private Set<String> OPBflowProperties = new HashSet<String>();
 	private Set<String> OPBprocessProperties = new HashSet<String>();
@@ -59,12 +62,13 @@ public class SemSimLibrary {
 	
 	private void loadLibrary() {
 		try {
-			compositeAnnRelationsTable = ResourcesManager.createHashtableFromFile("cfg/structuralRelations.txt");
-			metadataRelationsTable = ResourcesManager.createHashtableFromFile("cfg/metadataRelations.txt");
-			jsimUnitsTable = ResourcesManager.createHashtableFromFile("cfg/jsimUnits");
+			loadCommonProperties();
+			compositeAnnRelationsTable = ResourcesManager.createHashMapFromFile("cfg/structuralRelations.txt");
+			metadataRelationsTable = ResourcesManager.createHashMapFromFile("cfg/metadataRelations.txt");
+			jsimUnitsTable = ResourcesManager.createHashMapFromFile("cfg/jsimUnits");
 			
-			OPBClassesForUnitsTable = ResourcesManager.createHashtableFromFile("cfg/OPBClassesForUnits.txt");
-            OPBClassesForBaseUnitsTable = ResourcesManager.createHashtableFromBaseUnitFile("cfg/OPBClassesForBaseUnits.txt");
+			OPBClassesForUnitsTable = ResourcesManager.createHashMapFromFile("cfg/OPBClassesForUnits.txt");
+            OPBClassesForBaseUnitsTable = ResourcesManager.createHashMapFromBaseUnitFile("cfg/OPBClassesForBaseUnits.txt");
 			jsimUnitPrefixesTable = ResourcesManager.createSetFromFile("cfg/jsimUnitPrefixes");
 			cellMLUnitsTable = ResourcesManager.createSetFromFile("cfg/CellMLUnits.txt");
 		} catch (FileNotFoundException e3) {
@@ -91,13 +95,24 @@ public class SemSimLibrary {
 		} catch (OWLException e2) {e2.printStackTrace();}
 	}
 	
+	private void loadCommonProperties() throws FileNotFoundException {
+		HashMap<String, String[]> ptable = ResourcesManager.createHashMapFromFile("cfg/CommonProperties.txt");
+		for (String s : ptable.keySet()) {
+			this.commonproperties.put(s, new PhysicalProperty(ptable.get(s)[0], URI.create(s)));
+		}
+	}
+	
+	public Set<PhysicalProperty> getCommonProperties() {
+		return new HashSet<PhysicalProperty>(commonproperties.values());
+	}
+	
 	public String[] getOPBUnitRefTerm(String unit) {
 		return OPBClassesForUnitsTable.get(unit);
 	}
 	
 	public String[] getOPBBaseUnitRefTerms(DataStructure ds) {
 		// For each ds, store its base units in Hashtable as baseunitname:exponent
-		Hashtable<String, Double> baseUnits = new Hashtable<String, Double>();
+		HashMap<String, Double> baseUnits = new HashMap<String, Double>();
 		for(UnitFactor factor : ds.getUnit().getUnitFactors()) {
 			String baseunitname = factor.getBaseUnit().getName();
 			Double exponent = factor.getExponent();
@@ -121,25 +136,30 @@ public class SemSimLibrary {
 		return jsimUnitPrefixesTable;
 	}
 	
-
-	
 	public String[] getListofMetaDataRelations() {
 		return metadataRelationsTable.keySet().toArray(new String[]{});
 	}
 	
-	public ReferenceOntologyAnnotation getOPBAnnotationFromPhysicalUnit(DataStructure ds){
-		ReferenceOntologyAnnotation roa = null;
+	public PhysicalProperty getOPBAnnotationFromPhysicalUnit(DataStructure ds){
 		String[] candidateOPBclasses = getOPBUnitRefTerm(ds.getUnit().getName());
 		// If there is no OPB class, checkbase units.
 		if (candidateOPBclasses == null) {
 			candidateOPBclasses = getOPBBaseUnitRefTerms(ds);
 		}
+		PhysicalProperty pp = null;
 		if (candidateOPBclasses != null && candidateOPBclasses.length == 1) {
-			OWLClass cls = SemSimOWLFactory.factory.getOWLClass(IRI.create(SemSimConstants.OPB_NAMESPACE + candidateOPBclasses[0]));
-			String OPBpropname = SemSimOWLFactory.getRDFLabels(OPB, cls)[0];
-			roa = new ReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, cls.getIRI().toURI(), OPBpropname);
+			String term = SemSimConstants.OPB_NAMESPACE + candidateOPBclasses[0];
+			pp = commonproperties.get(term);
+			if (pp==null) {
+				OWLClass cls = SemSimOWLFactory.factory.getOWLClass(IRI.create(term));
+				pp = new PhysicalProperty(SemSimOWLFactory.getRDFLabels(OPB, cls)[0], URI.create(term));
+			}
 		}
-		return roa;
+		return pp;
+	}
+	
+	public PhysicalProperty getOPBAnnotationFromReferenceID(String id){
+		return commonproperties.get(id);
 	}
 	
 	public OWLOntology getLoadedOntology(String onturi) throws OWLOntologyCreationException {
@@ -203,15 +223,15 @@ public class SemSimLibrary {
 		return (OPBhasFlowProperty(u) || OPBhasProcessProperty(u));
 	}
 	
-	public boolean checkOPBpropertyValidity(PhysicalProperty prop, URI OPBuri){
-		if(prop.getPhysicalPropertyOf()!=null){
+	public boolean checkOPBpropertyValidity(PhysicalProperty prop, PhysicalModelComponent pmc){
+		if(pmc!=null){
 			
-			Boolean URIisprocessproperty = isOPBprocessProperty(OPBuri);
+			Boolean URIisprocessproperty = isOPBprocessProperty(prop.getReferstoURI());
 			// This conditional statement makes sure that physical processes are annotated with appropriate OPB terms
 			// It only limits physical entity properties to non-process properties. It does not limit based on whether
 			// the OPB term is for a constitutive property. Not sure if it should, yet.
-			if((prop.getPhysicalPropertyOf() instanceof PhysicalEntity && URIisprocessproperty)
-					|| (prop.getPhysicalPropertyOf() instanceof PhysicalProcess && !URIisprocessproperty)){
+			if((pmc instanceof PhysicalEntity && URIisprocessproperty)
+					|| (pmc instanceof PhysicalProcess && !URIisprocessproperty)){
 			
 				return false;
 			}

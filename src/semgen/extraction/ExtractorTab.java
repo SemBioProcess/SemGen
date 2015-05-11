@@ -228,33 +228,35 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	
 	// List physical processes
 	public Hashtable<PhysicalProcess, Set<DataStructure>> listprocesses() {
-		Map<PhysicalProperty,PhysicalProcess> propandproc = semsimmodel.getPropertyAndPhysicalProcessTable();
+		Set<DataStructure> propandproc = semsimmodel.getDataStructureswithPhysicalProcesses();
 		// List physical properties of processes
-		for(PhysicalProperty prop : propandproc.keySet()){
-			PhysicalProcess proc = propandproc.get(prop);
+		for(DataStructure ds : propandproc){
+			PhysicalProperty prop = ds.getPhysicalProperty();
+			PhysicalProcess proc = (PhysicalProcess)ds.getAssociatedPhysicalModelComponent();
 			Set<DataStructure> cdwds = new HashSet<DataStructure>();
 			if(!processesanddatastrs.containsKey(proc)){
-				cdwds.add(prop.getAssociatedDataStructure());
+				cdwds.add(ds);
 				processesanddatastrs.put(proc, cdwds);
 			}
 			// Otherwise we already added the process to the process-datastructure map, add the current property
 			else
-				processesanddatastrs.get(proc).add(prop.getAssociatedDataStructure());
+				processesanddatastrs.get(proc).add(ds);
 		}
 		return processesanddatastrs;
 	}
 	
 	// List physical entities
 	public Hashtable<PhysicalEntity, Set<DataStructure>> listentities() {
-		Map<PhysicalProperty,PhysicalEntity> propandent = semsimmodel.getPropertyAndPhysicalEntityMap();
-		for(PhysicalProperty prop : propandent.keySet()){
-			PhysicalEntity ent = propandent.get(prop);
+		Set<DataStructure> propandent = semsimmodel.getDataStructureswithCompositesEntities();
+		for(DataStructure ds : propandent){
+			PhysicalProperty prop = ds.getPhysicalProperty();
+			PhysicalEntity ent = (PhysicalEntity)ds.getAssociatedPhysicalModelComponent();
 			if(entsanddatastrs.containsKey(ent)){
-				entsanddatastrs.get(ent).add(prop.getAssociatedDataStructure());
+				entsanddatastrs.get(ent).add(ds);
 			}
 			else{
 				Set<DataStructure> cdwds = new HashSet<DataStructure>();
-				cdwds.add(prop.getAssociatedDataStructure());
+				cdwds.add(ds);
 				entsanddatastrs.put(ent, cdwds);
 			}
 		}

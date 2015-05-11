@@ -456,7 +456,7 @@ public class CellMLwriter extends ModelWriter {
 				
 				// Add singular annotation
 				if(a.hasRefersToAnnotation()){
-					URI uri = a.getFirstRefersToReferenceOntologyAnnotation().getReferenceURI();
+					URI uri = a.getRefersToReferenceOntologyAnnotation().getReferenceURI();
 					Property isprop = ResourceFactory.createProperty(SemSimConstants.BQB_IS_URI.toString());
 					URI furi = formatAsIdentifiersDotOrgURI(uri);
 					Resource refres = localrdf.createResource(furi.toString());

@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Observable;
 
 import semgen.utilities.file.SemGenOpenFileChooser;
@@ -24,7 +24,7 @@ public class SemGenSettings extends Observable{
 	public enum SettingChange {toggletree, showimports, cwsort, toggleproptype}
 	public static SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmssSSSZ");
 	public static SimpleDateFormat sdflog = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
-	public Hashtable<String, String[]> startsettingstable;
+	public HashMap<String, String[]> startsettingstable;
 	private final int defwidth = 1280, defheight = 1024;
 	private Dimension screensize;
 	private Boolean maximize = false;
@@ -35,7 +35,7 @@ public class SemGenSettings extends Observable{
 	
 	public SemGenSettings() {
 		try {
-			startsettingstable = ResourcesManager.createHashtableFromFile("cfg/startSettings.txt");
+			startsettingstable = ResourcesManager.createHashMapFromFile("cfg/startSettings.txt");
 		} 
 		catch (FileNotFoundException e3) {
 				e3.printStackTrace();
@@ -48,7 +48,7 @@ public class SemGenSettings extends Observable{
 	
 	public SemGenSettings(SemGenSettings old) {
 		screensize = old.screensize;
-		startsettingstable = new Hashtable<String, String[]>(old.startsettingstable);
+		startsettingstable = new HashMap<String, String[]>(old.startsettingstable);
 		xpos = old.xpos;
 		ypos = old.ypos;
 		width = old.width;

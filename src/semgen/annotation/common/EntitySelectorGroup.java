@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 
 import semgen.SemGenSettings;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
@@ -16,8 +17,8 @@ public class EntitySelectorGroup extends Box {
 	private ArrayList<StructuralRelationPanel> relations = new ArrayList<StructuralRelationPanel>();
 	private CodewordToolDrawer drawer;
 	
-	public EntitySelectorGroup(CodewordToolDrawer bench, int orientation) {
-		super(orientation);
+	public EntitySelectorGroup(CodewordToolDrawer bench) {
+		super(BoxLayout.PAGE_AXIS);
 		drawer = bench;
 		this.setBackground(SemGenSettings.lightblue);
 		setAlignmentX(Box.LEFT_ALIGNMENT);

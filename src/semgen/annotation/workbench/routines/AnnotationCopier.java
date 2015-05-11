@@ -23,6 +23,10 @@ import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.Submodel;
 import semsim.model.physical.object.CompositePhysicalEntity;
+import semsim.model.physical.object.CustomPhysicalEntity;
+import semsim.model.physical.object.CustomPhysicalProcess;
+import semsim.model.physical.object.ReferencePhysicalEntity;
+import semsim.model.physical.object.ReferencePhysicalProcess;
 
 public class AnnotationCopier {
 	private SemSimModel targetmod, sourcemod;
@@ -152,15 +156,14 @@ public class AnnotationCopier {
 		
 		// If it's a reference concept...
 		if(pmc.hasRefersToAnnotation()){
-			ReferenceOntologyAnnotation rpeann = pmc.getFirstRefersToReferenceOntologyAnnotation();
-			pmccopy = targetmod.addReferencePhysicalEntity(rpeann.getReferenceURI(), rpeann.getValueDescription());
+			pmccopy = targetmod.addReferencePhysicalEntity((ReferencePhysicalEntity)pmc);
 		}
 		// If it's a custom concept...
 		else{
 			if(pmc instanceof PhysicalEntity)
-				pmccopy = targetmod.addCustomPhysicalEntity(pmc.getName(), pmc.getDescription());
+				pmccopy = targetmod.addCustomPhysicalEntity((CustomPhysicalEntity)pmc);
 			else if(pmc instanceof PhysicalProcess)
-				pmccopy = targetmod.addCustomPhysicalProcess(pmc.getName(), pmc.getDescription());
+				pmccopy = targetmod.addCustomPhysicalProcess((CustomPhysicalProcess)(pmc));
 			
 			// Add annotations
 			for(Annotation ann : pmc.getAnnotations())
@@ -173,16 +176,11 @@ public class AnnotationCopier {
 	
 	// Add any reference entities or processes so they are available during the annotation process
 	private static void addClassesNeededToDefineCustomTerm(SemSimModel targetmod, PhysicalModelComponent source) throws CloneNotSupportedException{
-		for(Annotation sourceann : source.getAnnotations()){
-			if(sourceann instanceof ReferenceOntologyAnnotation){
-				ReferenceOntologyAnnotation roa = (ReferenceOntologyAnnotation)sourceann;
-				if(targetmod.getPhysicalModelComponentByReferenceURI(roa.getReferenceURI())==null){
-					if(source instanceof PhysicalEntity)
-						targetmod.addReferencePhysicalEntity(roa.getReferenceURI(), roa.getValueDescription());
-					else targetmod.addReferencePhysicalProcess(roa.getReferenceURI(), roa.getValueDescription());
-				}
+		if (source.hasRefersToAnnotation()) {
+				if(source instanceof PhysicalEntity)
+					targetmod.addReferencePhysicalEntity((ReferencePhysicalEntity)source);
+				else targetmod.addReferencePhysicalProcess((ReferencePhysicalProcess)source);
 			}
-		}
 	}
 	
 	// Copy over all the submodel data
@@ -211,40 +209,26 @@ public class AnnotationCopier {
 	 * Intra-model datastructure copy
 	 * */
 	public static void copyCompositeAnnotation(DataStructure targetds, DataStructure sourceds) {
-		targetds.getPhysicalProperty().removeAllReferenceAnnotations();
-
-		if(sourceds.getPhysicalProperty().hasRefersToAnnotation()){
-			ReferenceOntologyAnnotation roa = sourceds.getPhysicalProperty().getFirstRefersToReferenceOntologyAnnotation();
-			targetds.getPhysicalProperty().addReferenceOntologyAnnotation(roa.getRelation(), roa.getReferenceURI(), roa.getValueDescription());
-		}
+		targetds.setPhysicalProperty(sourceds.getPhysicalProperty());
 		PhysicalModelComponent srcpropof = sourceds.getAssociatedPhysicalModelComponent();
 		
 		// If we're just copying a composite annotation within the same model...
-		targetds.setAssociatedPhysicalModelCompnent(srcpropof);
-		if (!sourceds.getPhysicalProperty().hasRefersToAnnotation()) {
-			targetds.getPhysicalProperty().removeAllReferenceAnnotations();
-		}
+		targetds.setAssociatedPhysicalModelComponent(srcpropof);
 	}
 	
 	/** 
 	 * Inter-model datastructure copy 
 	 * */
 	public static void copyCompositeAnnotation(SemSimModel targetmod, DataStructure targetds, DataStructure sourceds) {		
-		targetds.getPhysicalProperty().removeAllReferenceAnnotations();
-
-		if(sourceds.getPhysicalProperty().hasRefersToAnnotation()){
-			ReferenceOntologyAnnotation roa = sourceds.getPhysicalProperty().getFirstRefersToReferenceOntologyAnnotation();
-			targetds.getPhysicalProperty().addReferenceOntologyAnnotation(roa.getRelation(), roa.getReferenceURI(), roa.getValueDescription());
-		}
+		targetds.setPhysicalProperty(sourceds.getPhysicalProperty());
+		
 		PhysicalModelComponent srcpropof = sourceds.getAssociatedPhysicalModelComponent();
 		
 		try{
 			// If there is a property_of specified
 			if(srcpropof!=null)
-				targetds.setAssociatedPhysicalModelCompnent(copyPhysicalModelComponent(targetmod, srcpropof));
+				targetds.setAssociatedPhysicalModelComponent(copyPhysicalModelComponent(targetmod, srcpropof));
 			
-			// otherwise there is no specified target for the physical property
-			else targetds.setAssociatedPhysicalModelCompnent(null);
 		} 
 		catch (CloneNotSupportedException e) {
 			e.printStackTrace();

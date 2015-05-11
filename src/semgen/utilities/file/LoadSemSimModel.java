@@ -2,6 +2,7 @@ package semgen.utilities.file;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Hashtable;
 
 import javax.swing.JOptionPane;
 
@@ -48,8 +49,9 @@ public class LoadSemSimModel {
 					boolean online = WebserviceTester.testBioPortalWebservice("Annotation via web services failed.");
 					if(!online) 
 						SemGenError.showWebConnectionError("BioPortal search service");
-					
-					SBMLAnnotator.annotate(file, semsimmodel, online, SemGen.termcache.getOntTermsandNamesCache());
+					 Hashtable<String, String[]> cache = new  Hashtable<String, String[]>();
+					cache.putAll(SemGen.termcache.getOntTermsandNamesCache());
+					SBMLAnnotator.annotate(file, semsimmodel, online, cache);
 					ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel, SemGen.termcache.getOntTermsandNamesCache(), online);
 					SBMLAnnotator.setFreeTextDefinitionsForDataStructuresAndSubmodels(semsimmodel);
 					progframe.dispose();

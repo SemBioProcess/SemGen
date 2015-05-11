@@ -286,7 +286,7 @@ public class CellMLbioRDFblock {
 		
 		// If there is an "is" annotation (aka "refersTo")
 		if(pmc.hasRefersToAnnotation()){
-			ann = pmc.getFirstRefersToReferenceOntologyAnnotation();
+			ann = pmc.getRefersToReferenceOntologyAnnotation();
 		}
 		// Else use the first "isVersionOf" annotation found
 		else if(pmc.getReferenceOntologyAnnotations(SemSimConstants.BQB_IS_VERSION_OF_RELATION).size()>0){

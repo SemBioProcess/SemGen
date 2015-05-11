@@ -65,20 +65,14 @@ public interface Annotatable {
 	 * Retrieve the first {@link ReferenceOntologyAnnotation} found applied to this object
 	 * that uses the SemSim:refersTo relation (SemSimConstants.REFERS_TO_RELATION).
 	 */
-	public ReferenceOntologyAnnotation getFirstRefersToReferenceOntologyAnnotation();
+	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotation();
 	
 	
 	/**
-	 * Retrieve the first {@link ReferenceOntologyAnnotation} found applied to this object
-	 * that uses the SemSim:refersTo relation (SemSimConstants.REFERS_TO_RELATION) and references
-	 * a specific URI
-	 * 
-	 * @param uri The URI of the ontology term to search for in the set of {@link ReferenceOntologyAnnotation}s
-	 * applied to this object.
+	 * Retrieve the reference URI.
 	 */
-	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotationByURI(URI uri);
-	
-	
+	public URI getReferstoURI();
+		
 	/**
 	 * @return True if an object has at least one {@link Annotation}, otherwise false.
 	 */
