@@ -80,7 +80,7 @@ public class Merger {
 		SemSimModel mergedmodel = ssm1clone;
 		
 		// Copy in all data structures
-		for(DataStructure dsfrom2 : ssm2clone.getDataStructures()){
+		for(DataStructure dsfrom2 : ssm2clone.getAssociatedDataStructures()){
 			mergedmodel.addDataStructure(dsfrom2);
 		}
 		
@@ -158,7 +158,7 @@ public class Merger {
 		
 		if(discardedds.isSolutionDomain()){
 		  // Re-set the solution domain designations for all DataStructures in model 2
-			for(DataStructure nsdds : ssm2clone.getDataStructures()){
+			for(DataStructure nsdds : ssm2clone.getAssociatedDataStructures()){
 				if(nsdds.hasSolutionDomain())
 					nsdds.setSolutionDomain(soldom1);
 			}

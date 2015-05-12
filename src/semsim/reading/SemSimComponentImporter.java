@@ -105,7 +105,7 @@ public class SemSimComponentImporter {
 			// When parsing SemSim OWL files, all Data Structures are added to model first. They may be imported, so reuse if already present.
 			if(!model.containsDataStructure(localdsname)) model.addDataStructure(ds);
 			else{
-				ds = model.getDataStructure(localdsname);
+				ds = model.getAssociatedDataStructure(localdsname);
 			}
 			if(ds.getUnit()!=null){
 				// Reuse units, if present

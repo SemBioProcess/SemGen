@@ -4,8 +4,7 @@ import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 
-import semsim.Annotatable;
-import semsim.SemSimConstants;
+import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.SemSimRelation;
@@ -42,12 +41,7 @@ public abstract class PhysicalModelComponent extends SemSimComponent implements 
 		return raos;
 	}
 		
-	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotation(){
-		if(hasRefersToAnnotation()){
-			return new ReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, referenceuri, getDescription());
-		}
-		return null;
-	}
+
 	
 	public Boolean isAnnotated(){
 		return !getAnnotations().isEmpty();
@@ -67,11 +61,7 @@ public abstract class PhysicalModelComponent extends SemSimComponent implements 
 	public PhysicalModelComponent clone() throws CloneNotSupportedException {
         return (PhysicalModelComponent) super.clone();
 	}
-	
-	public URI getReferstoURI() {
-		return URI.create(referenceuri.toString());
-	}
-	
+
 	public abstract String getComponentTypeasString();
 	
 	@Override

@@ -30,6 +30,7 @@ import semgen.SemGen;
 import semsim.SemSimConstants;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
+import semsim.annotation.ReferenceTerm;
 import semsim.annotation.StructuralRelation;
 import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.model.SemSimModel;
@@ -101,7 +102,7 @@ public class SBMLAnnotator {
 			// collect all compartment annotations
 			for(int c=0; c<sbmlmodel.getListOfCompartments().size(); c++){
 				Compartment comp = sbmlmodel.getCompartment(c);
-				DataStructure ds = semsimmodel.getDataStructure(xxx(comp.getId()));
+				DataStructure ds = semsimmodel.getAssociatedDataStructure(xxx(comp.getId()));
 				
 				String OPBclassID = null;
 				// Annotate the physical property of the compartment
@@ -140,7 +141,7 @@ public class SBMLAnnotator {
 								// If the annotation is an "is-a" annotation
 								if(cvterm.getBiologicalQualifierType()==libsbmlConstants.BQB_IS){
 									ent = semsimmodel.addReferencePhysicalEntity(new ReferencePhysicalEntity(ma.fulluri, ma.rdflabel));
-									description = ent.getRefersToReferenceOntologyAnnotation().getValueDescription();
+									description = ent.getDescription();
 									resourcesandanns.put(resource, ma);
 									entcreated = true;
 								}
@@ -188,7 +189,7 @@ public class SBMLAnnotator {
 				setCompositeAnnotationForModelComponent(rxn, sbmlmodel, semsimmodel, resourcesandanns, isonline, 
 						compsandphysents, speciesandphysents, ontologytermsandnamescache);
 				String ratecdwd = xxx(rxn.getId());
-				DataStructure theds = semsimmodel.getDataStructure(ratecdwd);
+				DataStructure theds = semsimmodel.getAssociatedDataStructure(ratecdwd);
 				
 				if(semsimmodel.containsDataStructure(xxx(rxn.getId()) + ".rate")){
 					ratecdwd = ratecdwd + ".rate";
@@ -237,8 +238,8 @@ public class SBMLAnnotator {
 					String speciesid = sbmlmodel.getSpecies(speciesref.getSpecies()).getId();
 					
 					// species ids that start with _ are prefixed with xxx during SBML-to-MML translation
-					if(semsimmodel.getDataStructure(xxx(speciesid))!=null){
-						dss.add(semsimmodel.getDataStructure(xxx(speciesid)));
+					if(semsimmodel.getAssociatedDataStructure(xxx(speciesid))!=null){
+						dss.add(semsimmodel.getAssociatedDataStructure(xxx(speciesid)));
 					}
 				}
 				for(int sp=0; sp<rxn.getNumProducts(); sp++){
@@ -246,8 +247,8 @@ public class SBMLAnnotator {
 					String speciesid = sbmlmodel.getSpecies(speciesref.getSpecies()).getId();
 					
 					// species ids that start with _ are prefied with xxx during SBML-to-MML translation
-					if(semsimmodel.getDataStructure(speciesid)!=null){
-						dss.add(semsimmodel.getDataStructure(xxx(speciesid)));
+					if(semsimmodel.getAssociatedDataStructure(speciesid)!=null){
+						dss.add(semsimmodel.getAssociatedDataStructure(xxx(speciesid)));
 					}
 				}
 				for(int sp=0; sp<rxn.getNumModifiers(); sp++){
@@ -255,8 +256,8 @@ public class SBMLAnnotator {
 					String speciesid = sbmlmodel.getSpecies(speciesref.getSpecies()).getId();
 					
 					// species ids that start with _ are prefied with xxx during SBML-to-MML translation
-					if(semsimmodel.getDataStructure(speciesid)!=null){
-						dss.add(semsimmodel.getDataStructure(xxx(speciesid)));
+					if(semsimmodel.getAssociatedDataStructure(speciesid)!=null){
+						dss.add(semsimmodel.getAssociatedDataStructure(xxx(speciesid)));
 					}
 				}
 				
@@ -274,7 +275,7 @@ public class SBMLAnnotator {
 				
 				if(pmc!=null){
 					if(pmc.hasRefersToAnnotation()){
-						ReferenceOntologyAnnotation refann = pmc.getRefersToReferenceOntologyAnnotation();
+						ReferenceOntologyAnnotation refann = ((ReferenceTerm) pmc).getRefersToReferenceOntologyAnnotation();
 						sub.addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, refann.getReferenceURI(), 
 								refann.getValueDescription());
 					}
@@ -428,7 +429,7 @@ public class SBMLAnnotator {
 			if(semsimmodel.containsDataStructure(xxx(rxn.getId() + ".rate"))){
 				ratecdwd = ratecdwd + ".rate";
 			}
-			DataStructure ds = semsimmodel.getDataStructure(ratecdwd);
+			DataStructure ds = semsimmodel.getAssociatedDataStructure(ratecdwd);
 			ds.getPhysicalProperty().addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, URI.create(SemSimConstants.OPB_NAMESPACE + "OPB_00592"), "Chemical molar flow rate");
 			ds.setAssociatedPhysicalModelComponent(pproc);
 		}
@@ -441,7 +442,7 @@ public class SBMLAnnotator {
 		// Exit routine if we're not online
 		if(!isonline) return;
 		
-		DataStructure ds = semsimmodel.getDataStructure(cdwd);
+		DataStructure ds = semsimmodel.getAssociatedDataStructure(cdwd);
 		ReferenceOntologyAnnotation propann = null;
 		if(!species.getHasOnlySubstanceUnits()){
 			 propann = new ReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, URI.create(SemSimConstants.OPB_NAMESPACE + "OPB_00340"), "Chemical concentration");
@@ -472,7 +473,7 @@ public class SBMLAnnotator {
 	
 
 	public static void setFreeTextDefinitionsForDataStructuresAndSubmodels(SemSimModel themodel){		
-		for(DataStructure ds : themodel.getDataStructures()){
+		for(DataStructure ds : themodel.getAssociatedDataStructures()){
 			if(ds.getDescription()==null){
 				
 				// Maybe create multiple of these for species with multiple annotations?
@@ -488,7 +489,7 @@ public class SBMLAnnotator {
 						freetext = freetext + compentname;
 					}
 					else if(pmc.hasRefersToAnnotation())
-						freetext = freetext + pmc.getRefersToReferenceOntologyAnnotation().getValueDescription();
+						freetext = freetext + pmc.getDescription();
 					else
 						freetext = freetext + "\"" + pmc.getName() + "\"";
 				}
@@ -496,8 +497,8 @@ public class SBMLAnnotator {
 				
 				// UNCOMMENT TO Create a custom accumulation process for the cdwd's time derivative
 				if(ds.hasSolutionDomain()){
-					if(themodel.getDataStructure(ds.getName() + ":" + ds.getSolutionDomain().getName())!=null){
-						DataStructure tds = themodel.getDataStructure(ds.getName() + ":" + ds.getSolutionDomain().getName());
+					if(themodel.getAssociatedDataStructure(ds.getName() + ":" + ds.getSolutionDomain().getName())!=null){
+						DataStructure tds = themodel.getAssociatedDataStructure(ds.getName() + ":" + ds.getSolutionDomain().getName());
 						if(ds.getDescription()!=null)
 							tds.setDescription("Change in \"" + ds.getDescription().toLowerCase() + "\" with respect to " + ds.getSolutionDomain().getName());
 					}

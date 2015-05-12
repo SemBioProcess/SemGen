@@ -7,6 +7,7 @@ import java.util.Set;
 import org.apache.commons.lang3.tuple.Pair;
 
 import semsim.annotation.ReferenceOntologyAnnotation;
+import semsim.annotation.ReferenceTerm;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
@@ -43,7 +44,7 @@ public class SemanticComparator {
 	public Set<String> getIdenticalCodewords() {
 		Set<String> matchedcdwds = new HashSet<String>();
 		
-		for (DataStructure ds : model1.getDataStructures()) {
+		for (DataStructure ds : model1.getAssociatedDataStructures()) {
 			if(! ds.isFunctionalSubmodelInput()){
 				if (model2.containsDataStructure(ds.getName()))	matchedcdwds.add(ds.getName());
 			}
@@ -118,7 +119,7 @@ public class SemanticComparator {
 	// propose mappings between variables with an "in" interface.
 	public Set<DataStructure> getComparableDataStructures(SemSimModel model){
 		Set<DataStructure> dsset = new HashSet<DataStructure>();
-		for(DataStructure ds : model.getDataStructures()){
+		for(DataStructure ds : model.getAssociatedDataStructures()){
 			if(!ds.isFunctionalSubmodelInput()) dsset.add(ds);
 		}
 		return dsset;
@@ -135,7 +136,7 @@ public class SemanticComparator {
 		
 		// This handles physical properties, referenced singular physical entities, and referenced physical processes
 		if(pmc1.hasRefersToAnnotation() && pmc2.hasRefersToAnnotation()){
-			if(pmc1.getRefersToReferenceOntologyAnnotation().getReferenceURI().toString().equals(pmc2.getRefersToReferenceOntologyAnnotation().getReferenceURI().toString())){
+			if(((ReferenceTerm)pmc1).getReferstoURI().toString().equals(((ReferenceTerm)pmc2).getReferstoURI().toString())){
 				return true;
 			}
 			return false;
@@ -174,8 +175,8 @@ public class SemanticComparator {
 		
 		for(int i=0; i<cpe1.getArrayListOfEntities().size(); i++){
 			if(cpe1.getArrayListOfEntities().get(i).hasRefersToAnnotation() && cpe2.getArrayListOfEntities().get(i).hasRefersToAnnotation()){
-				if(!cpe1.getArrayListOfEntities().get(i).getRefersToReferenceOntologyAnnotation().getReferenceURI().toString().equals( 
-					cpe2.getArrayListOfEntities().get(i).getRefersToReferenceOntologyAnnotation().getReferenceURI().toString())){
+				if(!((ReferenceTerm) cpe1.getArrayListOfEntities().get(i)).getReferstoURI().toString().equals( 
+					((ReferenceTerm) cpe2.getArrayListOfEntities().get(i)).getReferstoURI().toString())){
 					return false;
 				}
 			}

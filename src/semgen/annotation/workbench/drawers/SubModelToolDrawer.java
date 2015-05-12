@@ -9,6 +9,7 @@ import java.util.Set;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.AnnotatorWorkbench.WBEvent;
 import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
+import semsim.annotation.ReferenceTerm;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.Submodel;
 import semsim.owl.SemSimOWLFactory;
@@ -167,14 +168,14 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 	@Override
 	public String getSingularAnnotationasString(int index) {
 		if (hasSingularAnnotation(index)) {
-			return componentlist.get(index).getRefersToReferenceOntologyAnnotation().getNamewithOntologyAbreviation();
+			return ((ReferenceTerm)componentlist.get(index)).getRefersToReferenceOntologyAnnotation().getNamewithOntologyAbreviation();
 		}
 		return "*unspecified*";
 	}
 	
 	@Override
 	public URI getSingularAnnotationURI(int index) {
-		return componentlist.get(index).getRefersToReferenceOntologyAnnotation().getReferenceURI();
+		return ((ReferenceTerm)componentlist.get(index)).getRefersToReferenceOntologyAnnotation().getReferenceURI();
 	}
 	
 	public ArrayList<Integer> getSubmodelsWithoutFocus() {

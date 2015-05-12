@@ -6,11 +6,13 @@ import java.util.Set;
 
 import semsim.SemSimConstants;
 import semsim.annotation.ReferenceOntologyAnnotation;
+import semsim.annotation.ReferenceTerm;
 import semsim.annotation.SemSimRelation;
 import semsim.model.Importable;
+import semsim.model.SemSimCollection;
 import semsim.model.computational.datastructures.DataStructure;
 
-public class Submodel extends PhysicalModelComponent implements Cloneable, Importable{
+public class Submodel extends PhysicalModelComponent implements Cloneable, Importable, SemSimCollection, ReferenceTerm {
 	
 	private Set<DataStructure> associatedDataStructures = new HashSet<DataStructure>();
 	private Set<Submodel> submodels = new HashSet<Submodel>();
@@ -25,8 +27,9 @@ public class Submodel extends PhysicalModelComponent implements Cloneable, Impor
 		setName(name);
 	}
 	
-	public void addDataStructure(DataStructure ds){
+	public DataStructure addDataStructure(DataStructure ds){
 		associatedDataStructures.add(ds);
+		return ds;
 	}
 	
 	public void addSubmodel(Submodel submodel){
@@ -114,6 +117,18 @@ public class Submodel extends PhysicalModelComponent implements Cloneable, Impor
 		this.parentImport = parent;
 	}
 
+	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotation(){
+		if(hasRefersToAnnotation()){
+			return new ReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, referenceuri, getDescription());
+		}
+		return null;
+	}
+	
+	public URI getReferstoURI() {
+		return URI.create(referenceuri.toString());
+	}
+	
+	
 	@Override
 	public String getComponentTypeasString() {
 		return "submodel";

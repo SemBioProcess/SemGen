@@ -7,8 +7,8 @@ import java.util.Map;
 
 import org.jdom.JDOMException;
 
-import semsim.Annotatable;
 import semsim.SemSimConstants;
+import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.model.SemSimComponent;

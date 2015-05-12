@@ -78,7 +78,7 @@ public class MergerWorkbench extends Workbench {
 			model = loadModel(file, autoannotate);
 			loadedmodels.add(model);
 			filepathlist.add(file);
-			addDSNameList(model.getDataStructures());
+			addDSNameList(model.getAssociatedDataStructures());
 		}
 
 		notifyModelListUpdated();

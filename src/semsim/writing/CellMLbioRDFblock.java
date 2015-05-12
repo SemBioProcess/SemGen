@@ -21,6 +21,7 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import semsim.SemSimConstants;
 import semsim.annotation.CurationalMetadata;
 import semsim.annotation.ReferenceOntologyAnnotation;
+import semsim.annotation.ReferenceTerm;
 import semsim.annotation.StructuralRelation;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
@@ -286,7 +287,7 @@ public class CellMLbioRDFblock {
 		
 		// If there is an "is" annotation (aka "refersTo")
 		if(pmc.hasRefersToAnnotation()){
-			ann = pmc.getRefersToReferenceOntologyAnnotation();
+			ann = ((ReferenceTerm)pmc).getRefersToReferenceOntologyAnnotation();
 		}
 		// Else use the first "isVersionOf" annotation found
 		else if(pmc.getReferenceOntologyAnnotations(SemSimConstants.BQB_IS_VERSION_OF_RELATION).size()>0){

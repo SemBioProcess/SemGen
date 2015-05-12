@@ -213,7 +213,7 @@ public class CellMLreader extends ModelReader {
 			String submodelname = compname;
 
 			// Need to make sure the sub-model name is unique and not taken by a data structure
-			while(semsimmodel.getDataStructure(submodelname)!=null || semsimmodel.getCustomPhysicalEntityByName(submodelname)!=null ||
+			while(semsimmodel.getAssociatedDataStructure(submodelname)!=null || semsimmodel.getCustomPhysicalEntityByName(submodelname)!=null ||
 				semsimmodel.getCustomPhysicalProcessByName(submodelname)!=null){
 				submodelname = submodelname + "_";
 			}
@@ -298,7 +298,7 @@ public class CellMLreader extends ModelReader {
 				String uniquevarname = compname + "." + varname;
 				String initval = var.getAttributeValue("initial_value");
 				
-				DataStructure cvar = semsimmodel.getDataStructure(uniquevarname);
+				DataStructure cvar = semsimmodel.getAssociatedDataStructure(uniquevarname);
 
 				if(compMathMLelements!=null){
 					Element varmathmlel = getMathMLforOutputVariable(varname, compMathMLelements);
@@ -383,8 +383,8 @@ public class CellMLreader extends ModelReader {
 				String var1name = sub1.getName() + "." + varcon.getAttributeValue("variable_1");
 				String var2name = sub2.getName() + "." + varcon.getAttributeValue("variable_2");
 				
-				MappableVariable var1 = (MappableVariable) semsimmodel.getDataStructure(var1name);
-				MappableVariable var2 = (MappableVariable) semsimmodel.getDataStructure(var2name);
+				MappableVariable var1 = (MappableVariable) semsimmodel.getAssociatedDataStructure(var1name);
+				MappableVariable var2 = (MappableVariable) semsimmodel.getAssociatedDataStructure(var2name);
 				
 				Submodel encapsulatedsubmodel = null;
 				MappableVariable encapsulatedvariable = null;
@@ -932,7 +932,7 @@ public class CellMLreader extends ModelReader {
 						
 						// If the input is actually in the model...
 						if(semsimmodel.containsDataStructure(inputname) && !inputname.equals(cvar.getName())){
-							inputds = semsimmodel.getDataStructure(inputname);
+							inputds = semsimmodel.getAssociatedDataStructure(inputname);
 						}
 						else{
 							System.err.println("Equation for " + cvar.getName() + " uses " + inputname + " but that data structure not in model");

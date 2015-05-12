@@ -13,13 +13,14 @@ import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntology;
 
-import semsim.Annotatable;
 import semsim.SemSimConstants;
 import semsim.SemSimObject;
 import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata;
 import semsim.annotation.CurationalMetadata.Metadata;
+import semsim.annotation.Annotatable;
 import semsim.annotation.ReferenceOntologyAnnotation;
+import semsim.annotation.ReferenceTerm;
 import semsim.annotation.SemSimRelation;
 import semsim.annotation.StructuralRelation;
 import semsim.model.computational.ComputationalModelComponent;
@@ -78,7 +79,7 @@ import semsim.writing.SemSimOWLwriter;
  * model aspect.
  */
 
-public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
+public class SemSimModel extends SemSimObject implements Cloneable, Annotatable, SemSimCollection {
 	public static final IRI LEGACY_CODE_LOCATION_IRI = IRI.create(SemSimConstants.SEMSIM_NAMESPACE + "legacyCodeURI");
 	private CurationalMetadata metadata = new CurationalMetadata();
 	private double semsimversion;
@@ -122,22 +123,6 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 	public CurationalMetadata getCurationalMetadata() {
 		return metadata;
 	}
-	
-	/**
-	 * Add a {@link DataStructure} to the model. DataStructure is not added to model 
-	 * if one with the same name already exists.
-	 * 
-	 * @param ds The DataStructure to add
-	 * @return The DataStructure to add
-	 */
-	public DataStructure addDataStructure(DataStructure ds){
-		if(!containsDataStructure(ds.getName())){
-			dataStructures.add(ds);
-		}
-		else System.err.println("Model already has data structure named " + ds.getName() + ". Using existing data structure.");
-		return ds;
-	}
-	
 	
 	/**
 	 * Add an error to the model. Errors are just string notifications indicating a 
@@ -312,7 +297,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 	 * @return True if the model contains a DataStructure with the specified name, otherwise false.
 	 */
 	public boolean containsDataStructure(String name){
-		return getDataStructure(name)!=null;
+		return getAssociatedDataStructure(name)!=null;
 	}
 	
 	
@@ -327,7 +312,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 	/**
 	 * @return The set of all {@link DataStructure}s in the model.
 	 */
-	public Set<DataStructure> getDataStructures(){
+	public Set<DataStructure> getAssociatedDataStructures(){
 		return dataStructures;
 	}
 	
@@ -369,6 +354,21 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 		}
 		return dataStructures;
 	}
+
+	/**
+	 * Add a {@link DataStructure} to the model. DataStructure is not added to model 
+	 * if one with the same name already exists.
+	 * 
+	 * @param ds The DataStructure to add
+	 * @return The DataStructure to add
+	 */
+	public DataStructure addDataStructure(DataStructure ds){
+		if(!containsDataStructure(ds.getName())){
+			dataStructures.add(ds);
+		}
+		else System.err.println("Model already has data structure named " + ds.getName() + ". Using existing data structure.");
+		return ds;
+	}
 	
 	/**
 	 * @return The set of all computational and physical elements in the model.
@@ -389,7 +389,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 	 */
 	public Set<ComputationalModelComponent> getComputationalModelComponents(){
 		Set<ComputationalModelComponent> set = new HashSet<ComputationalModelComponent>();
-		for(DataStructure ds : getDataStructures()){
+		for(DataStructure ds : getAssociatedDataStructures()){
 			set.add(ds);
 			if(ds.getComputation()!=null) set.add(ds.getComputation());
 		}
@@ -404,7 +404,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 	 */
 	public Set<String> getDataStructureNames(){
 		Set<String> set = new HashSet<String>();
-		for(DataStructure ds : getDataStructures()){
+		for(DataStructure ds : getAssociatedDataStructures()){
 			set.add(ds.getName());
 		}
 		return set;
@@ -416,8 +416,8 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 	 * @param name The name to search for.
 	 * @return The DataStructure with the specified name or null if not found.
 	 */
-	public DataStructure getDataStructure(String name){
-		for(DataStructure dstest : getDataStructures()){
+	public DataStructure getAssociatedDataStructure(String name){
+		for(DataStructure dstest : getAssociatedDataStructures()){
 			if(dstest.getName().equals(name)) return dstest;
 		}
 		return null;
@@ -432,7 +432,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 	 */
 	public Set<DataStructure> getDeclaredDataStructures(){
 		Set<DataStructure> dsset = new HashSet<DataStructure>();
-		for(DataStructure ds : getDataStructures()){
+		for(DataStructure ds : getAssociatedDataStructures()){
 			if(ds.isDeclared()) dsset.add(ds);
 		}
 		return dsset;
@@ -456,7 +456,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 	 */
 	public Set<DataStructure> getDecimals(){
 		Set<DataStructure> set = new HashSet<DataStructure>();
-		for(DataStructure ds : getDataStructures()){
+		for(DataStructure ds : getAssociatedDataStructures()){
 			if(ds instanceof Decimal) set.add(ds);
 		}
 		return set;
@@ -499,7 +499,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 	 */
 	public Set<DataStructure> getIntegers(){
 		Set<DataStructure> set = new HashSet<DataStructure>();
-		for(DataStructure ds : getDataStructures()){
+		for(DataStructure ds : getAssociatedDataStructures()){
 			if(ds instanceof SemSimInteger) set.add(ds);
 		}
 		return set;
@@ -537,7 +537,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 	 */
 	public Set<DataStructure> getMMLchoiceVars(){
 		Set<DataStructure> set = new HashSet<DataStructure>();
-		for(DataStructure ds : getDataStructures()){
+		for(DataStructure ds : getAssociatedDataStructures()){
 			if(ds instanceof MMLchoice) set.add(ds);
 		}
 		return set;
@@ -551,7 +551,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 	 */
 	public Set<DataStructure> getSolutionDomains(){
 		Set<DataStructure> sdset = new HashSet<DataStructure>();
-		for(DataStructure ds : getDataStructures()){
+		for(DataStructure ds : getAssociatedDataStructures()){
 			if(ds.isSolutionDomain()) sdset.add(ds);
 		}
 		return sdset;
@@ -684,8 +684,10 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 	 */
 	public ReferencePhysicalEntity getPhysicalEntityByReferenceURI(URI uri){
 		for (PhysicalEntity pe : physicalentities) {
-			if (pe.getReferstoURI().equals(uri) && pe.hasRefersToAnnotation()) {
-				return (ReferencePhysicalEntity)pe;
+			if (pe.hasRefersToAnnotation()) {
+				if (((ReferenceTerm)pe).getReferstoURI().equals(uri)) {
+					return (ReferencePhysicalEntity)pe;
+				}
 			}
 		}
 		return null;
@@ -699,8 +701,10 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 	 */
 	public ReferencePhysicalProcess getPhysicalProcessByReferenceURI(URI uri){
 		for (PhysicalProcess pp : physicalprocesses) {
-			if (pp.hasRefersToAnnotation() && pp.getReferstoURI().equals(uri)) {
-				return (ReferencePhysicalProcess)pp;
+			if (pp.hasRefersToAnnotation()) {
+					if (((ReferenceTerm)pp).getReferstoURI().equals(uri)) {
+						return (ReferencePhysicalProcess)pp;
+					}
 			}
 		}
 		return null;
@@ -923,7 +927,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 	 */
 	public Set<PhysicalDependency> getPhysicalDependencies() {
 		Set<PhysicalDependency> deps = new HashSet<PhysicalDependency>();
-		for(DataStructure ds : getDataStructures()){
+		for(DataStructure ds : getAssociatedDataStructures()){
 			if(ds.getComputation()!=null){
 				if(ds.getComputation().getPhysicalDependency()!=null)
 					deps.add(ds.getComputation().getPhysicalDependency());
@@ -982,8 +986,8 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 	 * @param name The name of the DataStructure to delete.
 	 */
 	public void removeDataStructure(String name) {
-		if(getDataStructure(name)!=null){
-			DataStructure ds = getDataStructure(name);
+		if(getAssociatedDataStructure(name)!=null){
+			DataStructure ds = getAssociatedDataStructure(name);
 			for(DataStructure otherds : ds.getUsedToCompute()){
 				otherds.getComputation().getInputs().remove(ds);
 			}
@@ -1053,7 +1057,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 	
 	public Set<DataStructure> getDataStructuresWithUnspecifiedAnnotations(){
 		Set<DataStructure> dsset = new HashSet<DataStructure>();
-		for(DataStructure ds : getDataStructures()){
+		for(DataStructure ds : getAssociatedDataStructures()){
 			if(ds.hasPhysicalProperty()){
 					if(ds.getAssociatedPhysicalModelComponent()==unspecifiedprocess){
 						dsset.add(ds);
@@ -1135,19 +1139,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 		}
 		return raos;
 	}
-	
-	
-	/**
-	 * Retrieve the first {@link ReferenceOntologyAnnotation} found applied to this object
-	 * that uses the SemSim:refersTo relation (SemSimConstants.REFERS_TO_RELATION).
-	 */
-	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotation(){
-		if(hasRefersToAnnotation()){
-			return new ReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, referenceuri, getDescription());
-		}
-		return null;
-	}
-	
+
 	/**
 	 * @return True if an object has at least one {@link Annotation}, otherwise false.
 	 */
@@ -1192,9 +1184,22 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable{
 	public URI getSemSimClassURI() {
 		return SemSimConstants.SEMSIM_MODEL_CLASS_URI;
 	}
-
-	@Override
-	public URI getReferstoURI() {
-		return referenceuri;
+		
+	public void replacePhysicalProperty(PhysicalProperty tobereplaced, PhysicalProperty toreplace) {
+		Set<PhysicalProperty> pps = new HashSet<PhysicalProperty>();
+		pps.addAll(physicalproperties);
+		for (PhysicalProperty pp : pps) {
+			if (pp.equals(tobereplaced)) {
+				physicalproperties.remove(pp);
+				physicalproperties.add(toreplace);
+			}
+		}
+		for (DataStructure ds : dataStructures) {
+			if (ds.hasPhysicalProperty()) {
+				if (ds.getPhysicalProperty().equals(tobereplaced)) {
+					ds.setPhysicalProperty(toreplace);
+				}
+			}
+		}
 	}
 }

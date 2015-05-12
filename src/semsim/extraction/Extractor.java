@@ -63,7 +63,7 @@ public class Extractor {
 		// Copy the physical entity and process info into the model-level entity and process sets
 		Set<PhysicalEntity> ents = new HashSet<PhysicalEntity>();
 		Set<PhysicalProcess> procs = new HashSet<PhysicalProcess>();
-		for(DataStructure newds : extractedmodel.getDataStructures()){
+		for(DataStructure newds : extractedmodel.getAssociatedDataStructures()){
 			if(newds.getPhysicalProperty()!=null){
 				if(newds.getAssociatedPhysicalModelComponent() instanceof PhysicalEntity){
 					ents.add((PhysicalEntity) newds.getAssociatedPhysicalModelComponent());

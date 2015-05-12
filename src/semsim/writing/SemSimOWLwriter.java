@@ -26,6 +26,7 @@ import semsim.SemSimConstants;
 import semsim.SemSimLibrary;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
+import semsim.annotation.ReferenceTerm;
 import semsim.annotation.StructuralRelation;
 import semsim.model.Importable;
 import semsim.model.SemSimModel;
@@ -100,7 +101,7 @@ public class SemSimOWLwriter extends ModelWriter {
  *  Exclude those that are imports of imports
 */	
 	private void getLocalDataStuctures() throws OWLException {
-		localdss.addAll(semsimmodel.getDataStructures());
+		localdss.addAll(semsimmodel.getAssociatedDataStructures());
 		
 		for(Submodel sub : semsimmodel.getSubmodels()){
 			if(sub instanceof FunctionalSubmodel){
@@ -581,7 +582,7 @@ public class SemSimOWLwriter extends ModelWriter {
 			PhysicalEntity pe = cpe.getArrayListOfEntities().get(y);
 			// If a reference physical entity
 			if(pe.hasRefersToAnnotation()){
-				uristring = uristring + SemSimOWLFactory.getIRIfragment(pe.getRefersToReferenceOntologyAnnotation().getReferenceURI().toString());
+				uristring = uristring + SemSimOWLFactory.getIRIfragment(((ReferenceTerm)pe).getReferstoURI().toString());
 			}
 			// If custom physical entity
 			else{
@@ -625,7 +626,7 @@ public class SemSimOWLwriter extends ModelWriter {
 		if(!(pmc instanceof PhysicalProcess)){
 			if(pmc.hasRefersToAnnotation()){
 				uritrunk = uritrunk +
-				SemSimOWLFactory.getIRIfragment(pmc.getRefersToReferenceOntologyAnnotation().getReferenceURI().toString());
+				SemSimOWLFactory.getIRIfragment(((ReferenceTerm) pmc).getReferstoURI().toString());
 			}
 			else uritrunk = uritrunk + SemSimOWLFactory.URIencoding(pmc.getName());
 			uritrunk = uritrunk + "_";
@@ -633,7 +634,7 @@ public class SemSimOWLwriter extends ModelWriter {
 		}
 		else uri = URI.create(uritrunk + SemSimOWLFactory.URIencoding(pmc.getName()));
 		
-		if(semsimmodel.getDataStructure(pmc.getName())!=null){
+		if(semsimmodel.getAssociatedDataStructure(pmc.getName())!=null){
 			try {
 				uri = URI.create(SemSimOWLFactory.generateUniqueIRIwithNumber(uri.toString() + "_",
 						SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimConstants.DATA_STRUCTURE_CLASS_URI.toString())));
@@ -663,8 +664,8 @@ public class SemSimOWLwriter extends ModelWriter {
 		String description = null;
 		
 		// If there is a "refers-to" reference ontology annotation
-		if(pmc.getRefersToReferenceOntologyAnnotation()!=null){
-			ReferenceOntologyAnnotation firstann = pmc.getRefersToReferenceOntologyAnnotation();
+		if(pmc.hasRefersToAnnotation()!=null){
+			ReferenceOntologyAnnotation firstann = ((ReferenceTerm)pmc).getRefersToReferenceOntologyAnnotation();
 			parenturistring = firstann.getReferenceURI().toString();
 			label = firstann.getValueDescription();
 			

@@ -231,7 +231,6 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		Set<DataStructure> propandproc = semsimmodel.getDataStructureswithPhysicalProcesses();
 		// List physical properties of processes
 		for(DataStructure ds : propandproc){
-			PhysicalProperty prop = ds.getPhysicalProperty();
 			PhysicalProcess proc = (PhysicalProcess)ds.getAssociatedPhysicalModelComponent();
 			Set<DataStructure> cdwds = new HashSet<DataStructure>();
 			if(!processesanddatastrs.containsKey(proc)){
@@ -277,7 +276,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	public Hashtable<DataStructure, Set<DataStructure>> listcodewords() {
 		// Iinda weird that we do it this way, but it's because of the way it used to be
 		Hashtable<DataStructure, Set<DataStructure>> table = new Hashtable<DataStructure, Set<DataStructure>>();
-		for(DataStructure ds : semsimmodel.getDataStructures()){
+		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
 			Set<DataStructure> dsset = new HashSet<DataStructure>();
 			dsset.add(ds);
 			table.put(ds, dsset);
@@ -470,7 +469,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		for(DataStructure ds : allpreserveddatastructures.keySet()){
 			if(ds.hasSolutionDomain()){
 				if(ds.hasStartValue() && !allpreserveddatastructures.get(ds).isEmpty()
-						&& semsimmodel.getDataStructure(ds.getName() + ":" + ds.getSolutionDomain().getName())!=null){
+						&& semsimmodel.getAssociatedDataStructure(ds.getName() + ":" + ds.getSolutionDomain().getName())!=null){
 					tempmap.put(ds, ds.getComputationInputs());
 					// Assumes that all inputs to the state variable are derivatives with respect to some solution domain
 					// This is the way the SemSim model is structured, but is different from what is in the XMML
@@ -578,9 +577,9 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 				
 				Set<DataStructure> domaincodewords = new HashSet<DataStructure>();
 				for(DataStructure ds : semsimmodel.getSolutionDomains()){
-					domaincodewords.add(semsimmodel.getDataStructure(ds.getName() + ".min"));
-					domaincodewords.add(semsimmodel.getDataStructure(ds.getName() + ".max"));
-					domaincodewords.add(semsimmodel.getDataStructure(ds.getName() + ".delta"));
+					domaincodewords.add(semsimmodel.getAssociatedDataStructure(ds.getName() + ".min"));
+					domaincodewords.add(semsimmodel.getAssociatedDataStructure(ds.getName() + ".max"));
+					domaincodewords.add(semsimmodel.getAssociatedDataStructure(ds.getName() + ".delta"));
 				}
 
 				// If the data structure is part of a solution domain declaration and it is not used to compute any other terms, ignore it
@@ -790,7 +789,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 
 	public void visualizeAllDataStructures(Boolean clusteringonly) {
 		Hashtable<DataStructure, Set<? extends DataStructure>> alldatastrs = new Hashtable<DataStructure, Set<? extends DataStructure>>();
-		for(DataStructure ds : semsimmodel.getDataStructures()){
+		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
 			if(ds.getComputation()!=null)
 				alldatastrs.put(ds, ds.getComputationInputs());
 			else if(ds instanceof MappableVariable)

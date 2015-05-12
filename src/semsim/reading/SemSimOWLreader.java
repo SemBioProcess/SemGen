@@ -191,6 +191,7 @@ public class SemSimOWLreader extends ModelReader {
 	private void collectCompositeEntities() throws OWLException {
 		for (String cperef : SemSimOWLFactory.getIndividualsInTreeAsStrings(ont,  SemSimConstants.COMPOSITE_PHYSICAL_ENTITY_CLASS_URI.toString())) {		
 			String ind = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, cperef, SemSimConstants.HAS_INDEX_ENTITY_URI.toString());
+			String index = ind;
 			ArrayList<PhysicalEntity> rpes = new ArrayList<PhysicalEntity>();
 			ArrayList<StructuralRelation> rels = new ArrayList<StructuralRelation>();
 			
@@ -212,9 +213,8 @@ public class SemSimOWLreader extends ModelReader {
 				rels.add(rel);
 				ind = nextind;
 			}
-			if (rpe==null) continue; 
 			CompositePhysicalEntity cpe = semsimmodel.addCompositePhysicalEntity(rpes, rels);
-			identitymap.put(ind, cpe);
+			identitymap.put(index, cpe);
 		}
 	}
 	
@@ -314,10 +314,10 @@ public class SemSimOWLreader extends ModelReader {
 	
 	private void mapCellMLTypeVariables() throws OWLException {
 		for(String dsind : SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimConstants.DECIMAL_CLASS_URI.toString())){
-			DataStructure ds = semsimmodel.getDataStructure(SemSimOWLFactory.getURIdecodedFragmentFromIRI(dsind));
+			DataStructure ds = semsimmodel.getAssociatedDataStructure(SemSimOWLFactory.getURIdecodedFragmentFromIRI(dsind));
 			if(ds instanceof MappableVariable){
 				for(String mappedvaruri : SemSimOWLFactory.getIndObjectProperty(ont, dsind, SemSimConstants.MAPPED_TO_URI.toString())){
-					DataStructure mappedvar = semsimmodel.getDataStructure(SemSimOWLFactory.getURIdecodedFragmentFromIRI(mappedvaruri));
+					DataStructure mappedvar = semsimmodel.getAssociatedDataStructure(SemSimOWLFactory.getURIdecodedFragmentFromIRI(mappedvaruri));
 					if(mappedvar!=null && (mappedvar instanceof MappableVariable)){
 						((MappableVariable)ds).addVariableMappingTo((MappableVariable)mappedvar);
 						// Use mapping info in input/output network
@@ -351,7 +351,7 @@ public class SemSimOWLreader extends ModelReader {
 			
 			// Set the units for the data structures
 			for(String dsuri : SemSimOWLFactory.getIndObjectProperty(ont, unitind, SemSimConstants.UNIT_FOR_URI.toString())){
-				DataStructure ds = semsimmodel.getDataStructure(SemSimOWLFactory.getURIdecodedFragmentFromIRI(dsuri));
+				DataStructure ds = semsimmodel.getAssociatedDataStructure(SemSimOWLFactory.getURIdecodedFragmentFromIRI(dsuri));
 				ds.setUnit(uom);
 			}
 			
@@ -381,14 +381,14 @@ public class SemSimOWLreader extends ModelReader {
 			String name = SemSimOWLFactory.getURIdecodedFragmentFromIRI(dsind);
 			String computationind = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, dsind, SemSimConstants.IS_OUTPUT_FOR_URI.toString());
 			Set<String> compinputs = SemSimOWLFactory.getIndObjectProperty(ont, computationind, SemSimConstants.HAS_INPUT_URI.toString());
-			DataStructure ds = semsimmodel.getDataStructure(name);
+			DataStructure ds = semsimmodel.getAssociatedDataStructure(name);
 
 			for(String in : compinputs){
-				ds.getComputation().addInput(semsimmodel.getDataStructure(SemSimOWLFactory.getURIdecodedFragmentFromIRI(in)));
+				ds.getComputation().addInput(semsimmodel.getAssociatedDataStructure(SemSimOWLFactory.getURIdecodedFragmentFromIRI(in)));
 			}
 			// set the data structure's solution domain
 			String soldom = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, dsind, SemSimConstants.HAS_SOLUTION_DOMAIN_URI.toString());
-			semsimmodel.getDataStructure(name).setSolutionDomain(semsimmodel.getDataStructure(SemSimOWLFactory.getURIdecodedFragmentFromIRI(soldom)));
+			semsimmodel.getAssociatedDataStructure(name).setSolutionDomain(semsimmodel.getAssociatedDataStructure(SemSimOWLFactory.getURIdecodedFragmentFromIRI(soldom)));
 		}
 	}
 	
@@ -522,7 +522,7 @@ public class SemSimOWLreader extends ModelReader {
 				
 				// Associate data structures with the model submodel
 				for(String dsname : dss){
-					DataStructure theds = semsimmodel.getDataStructure(SemSimOWLFactory.getURIdecodedFragmentFromIRI(dsname));
+					DataStructure theds = semsimmodel.getAssociatedDataStructure(SemSimOWLFactory.getURIdecodedFragmentFromIRI(dsname));
 					sssubmodel.addDataStructure(theds);
 					
 					// white box the equations

@@ -31,10 +31,10 @@ import semgen.utilities.ComparatorByName;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenScrollPane;
+import semsim.annotation.ReferenceTerm;
 import semsim.model.SemSimComponent;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalModelComponent;
-import semsim.model.physical.Submodel;
 
 public class ExtractorSelectionPanel extends JPanel implements ActionListener, MouseListener {
 	private static final long serialVersionUID = -487389420876921191L;
@@ -105,8 +105,8 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 		for (SemSimComponent ssc : table.keySet()) {
 			if(ssc instanceof PhysicalModelComponent){
 				PhysicalModelComponent pmc  = (PhysicalModelComponent)ssc;
-				if(pmc.hasRefersToAnnotation() && !(pmc instanceof Submodel)){
-					checkboxtext = pmc.getName() + " (" + pmc.getRefersToReferenceOntologyAnnotation().getOntologyAbbreviation() + ")";
+				if(pmc.hasRefersToAnnotation()){
+					checkboxtext = pmc.getName() + " (" + ((ReferenceTerm)pmc).getRefersToReferenceOntologyAnnotation().getOntologyAbbreviation() + ")";
 				}
 				else checkboxtext = pmc.getName();
 			}

@@ -25,10 +25,12 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 
 import semsim.SemSimConstants;
+import semsim.SemSimLibrary;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.object.CompositePhysicalEntity;
+import semsim.model.physical.object.PhysicalProperty;
 import semsim.writing.CaseInsensitiveComparator;
 
 /**
@@ -55,7 +57,7 @@ public class SemSimUtil {
 		Set<DataStructure> dsstocheck = new HashSet<DataStructure>();
 		dsstocheck.add(discardedds);
 		
-		if(discardedds.isSolutionDomain()) dsstocheck.addAll(modelfordiscardedds.getDataStructures());
+		if(discardedds.isSolutionDomain()) dsstocheck.addAll(modelfordiscardedds.getAssociatedDataStructures());
 		else dsstocheck.addAll(discardedds.getUsedToCompute());
 
 		for(DataStructure dscheck : dsstocheck){
@@ -69,14 +71,14 @@ public class SemSimUtil {
 				String neweq = dscheck.getComputation().getComputationalCode();
 				if(dscheck.getComputation().getComputationalCode()!=null){
 					neweq = replaceCodewordsInString(dscheck.getComputation().getComputationalCode(), replacementtext, oldtext);
-					modelfordiscardedds.getDataStructure(dscheck.getName()).getComputation().setComputationalCode(neweq);
+					modelfordiscardedds.getAssociatedDataStructure(dscheck.getName()).getComputation().setComputationalCode(neweq);
 				}
 	
 				// Assume that if discarded cdwd is in an IC for another cdwd, the discarded cdwd is set as an input to the other cdwd
 				String newstart = dscheck.getStartValue();
 				if(dscheck.hasStartValue()){
 					newstart = replaceCodewordsInString(dscheck.getStartValue(), replacementtext, oldtext);
-					modelfordiscardedds.getDataStructure(dscheck.getName()).setStartValue(newstart);
+					modelfordiscardedds.getAssociatedDataStructure(dscheck.getName()).setStartValue(newstart);
 				}
 				
 				// apply conversion factors in mathml
@@ -87,7 +89,7 @@ public class SemSimUtil {
 							"<apply><times /><ci>" + replacementtext + "</ci><cn>" + conversionfactor + "</cn></apply>");
 					else newmathml = dscheck.getComputation().getMathML().replace("<ci>" + oldtext + "</ci>",
 							"<ci>" + replacementtext + "</ci>");
-					modelfordiscardedds.getDataStructure(dscheck.getName()).getComputation().setMathML(newmathml);
+					modelfordiscardedds.getAssociatedDataStructure(dscheck.getName()).getComputation().setMathML(newmathml);
 				}
 				
 				// If the data structure that needs to have its computations edited is a derivative,
@@ -99,8 +101,8 @@ public class SemSimUtil {
 						selfrefODE = true;
 					}
 					else{
-						modelfordiscardedds.getDataStructure(statevarname).getComputation().setComputationalCode(neweq);
-						modelfordiscardedds.getDataStructure(statevarname).getComputation().setMathML(newmathml);
+						modelfordiscardedds.getAssociatedDataStructure(statevarname).getComputation().setComputationalCode(neweq);
+						modelfordiscardedds.getAssociatedDataStructure(statevarname).getComputation().setMathML(newmathml);
 					}
 				}
 			}
@@ -231,7 +233,7 @@ public class SemSimUtil {
 		return cpe;
 	}	
 	
-	/* 
+	/** 
 	 * Take collection of DataStructures and return an ArrayList sorted alphabetically
 	 * */
 	public static ArrayList<DataStructure> alphebetizeSemSimObjects(Collection<DataStructure>  collection) {
@@ -240,5 +242,15 @@ public class SemSimUtil {
 			dsnamemap.put(ds.getName(), ds);
 		}
 		return new ArrayList<DataStructure>(dsnamemap.values());
+	}
+	
+	/** 
+	 * Replace all OPB physical properties with their equivalent in the list contained in the SemSimLibrary; therebye 
+	 * maintaining a single set of unique property instances
+	 * */
+	public static void regularizePhysicalProperties(SemSimModel model, SemSimLibrary lib) {
+		for (PhysicalProperty pp : lib.getCommonProperties()) {
+			model.replacePhysicalProperty(pp, pp);
+		}
 	}
 }

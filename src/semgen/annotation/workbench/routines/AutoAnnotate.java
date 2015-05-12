@@ -19,7 +19,7 @@ public class AutoAnnotate {
 		Set<DataStructure> candidateflows = new HashSet<DataStructure>();
 		
 		// If units present, set up physical property connected to each data structure
-		for(DataStructure ds : semsimmodel.getDataStructures()){
+		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
 			if(ds.hasUnits()){
 				PhysicalProperty pp = SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(ds);			
 				

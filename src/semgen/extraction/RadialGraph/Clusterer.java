@@ -165,7 +165,7 @@ public class Clusterer extends JFrame {
 							}
 							Set<DataStructure> dsuris = new HashSet<DataStructure>();
 							for (String dsname : vv.getPickedVertexState().getPicked()) {
-								dsuris.add(extractor.semsimmodel.getDataStructure(dsname));
+								dsuris.add(extractor.semsimmodel.getAssociatedDataStructure(dsname));
 							}
 							Component[] clusters = extractor.clusterpanel.checkboxpanel.getComponents();
 							extractor.clusterpanel.checkboxpanel.removeAll();
@@ -332,7 +332,7 @@ public class Clusterer extends JFrame {
 			Color c = colors[i % colors.length];
 			Set<DataStructure> datastrs = new HashSet<DataStructure>();
 			for(String vertex : vertices){
-				datastrs.add(extractor.semsimmodel.getDataStructure(vertex));
+				datastrs.add(extractor.semsimmodel.getAssociatedDataStructure(vertex));
 			}
 
 			JLabel modulelabel = new JLabel("Cluster " + (i + 1));
@@ -345,12 +345,12 @@ public class Clusterer extends JFrame {
 			// Update the semantics panel
 			Set<String> addedterms = new HashSet<String>();
 			for (String ver : vertices) {
-				if(extractor.semsimmodel.getDataStructure(ver).hasPhysicalProperty()){
-					if(extractor.semsimmodel.getDataStructure(ver).getAssociatedPhysicalModelComponent()!=null){
-						PhysicalModelComponent pmc = extractor.semsimmodel.getDataStructure(ver).getAssociatedPhysicalModelComponent();
+				if(extractor.semsimmodel.getAssociatedDataStructure(ver).hasPhysicalProperty()){
+					if(extractor.semsimmodel.getAssociatedDataStructure(ver).getAssociatedPhysicalModelComponent()!=null){
+						PhysicalModelComponent pmc = extractor.semsimmodel.getAssociatedDataStructure(ver).getAssociatedPhysicalModelComponent();
 						String name = null;
 						if(pmc.hasRefersToAnnotation()){
-							name = pmc.getRefersToReferenceOntologyAnnotation().getValueDescription();
+							name = pmc.getDescription();
 						}
 						else{
 							name = pmc.getName();

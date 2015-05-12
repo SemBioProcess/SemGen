@@ -91,10 +91,10 @@ public class AnnotationCopier {
 		@Override
 		protected Void doInBackground() throws Exception {
 			progframe.updateMessage("Copying...");
-			for(DataStructure ds : targetmod.getDataStructures()){
+			for(DataStructure ds : targetmod.getAssociatedDataStructures()){
 				if(sourcemod.containsDataStructure(ds.getName())){
 					changed = true;
-					DataStructure srcds = sourcemod.getDataStructure(ds.getName());
+					DataStructure srcds = sourcemod.getAssociatedDataStructure(ds.getName());
 					
 					ds.copyDescription(srcds);
 					ds.copySingularAnnotations(srcds);

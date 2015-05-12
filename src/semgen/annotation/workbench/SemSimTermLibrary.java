@@ -1,8 +1,6 @@
 package semgen.annotation.workbench;
 
 import java.util.ArrayList;
-import java.util.Collections;
-
 import semgen.SemGen;
 import semsim.model.SemSimModel;
 import semsim.model.physical.PhysicalProcess;
@@ -10,7 +8,6 @@ import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.ReferencePhysicalEntity;
-import semsim.utilities.SemSimComponentComparator;
 
 public class SemSimTermLibrary {
 	ArrayList<PhysicalProperty> pps = new ArrayList<PhysicalProperty>();
@@ -28,11 +25,18 @@ public class SemSimTermLibrary {
 		for (PhysicalProperty pp : model.getPhysicalProperties()) {
 			addPhysicalProperty(pp);
 		}
-		Collections.sort(pps, new SemSimComponentComparator());
-		
-		rpes.addAll(model.getReferencePhysicalEntities());
-		cupes.addAll(model.getCustomPhysicalEntities());
-		cpes.addAll(model.getCompositePhysicalEntities());
+		for (ReferencePhysicalEntity rpe : model.getReferencePhysicalEntities()) {
+			addReferencePhysicalEntity(rpe);
+		}
+		for (CustomPhysicalEntity cupe : model.getCustomPhysicalEntities()) {
+			addCustomPhysicalEntity(cupe);
+		}
+		for (CompositePhysicalEntity cpe : model.getCompositePhysicalEntities()) {
+			addCompositePhysicalEntity(cpe);
+		}
+		for (PhysicalProcess proc : model.getPhysicalProcesses()) {
+			addPhysicalProcess(proc);
+		}
 		procs.addAll(model.getPhysicalProcesses());
 	}
 	
@@ -93,7 +97,6 @@ public class SemSimTermLibrary {
 	public Integer getPhysicalPropertyIndex(PhysicalProperty pp) {
 		return pps.indexOf(pp);
 	}
-
 	
 	public ArrayList<String> getPhysicalPropertyNames() {
 		ArrayList<String> names = new ArrayList<String>();

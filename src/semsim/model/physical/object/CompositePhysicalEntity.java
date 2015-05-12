@@ -45,7 +45,7 @@ public class CompositePhysicalEntity extends PhysicalEntity implements Comparabl
 		for(int x=0; x<getArrayListOfEntities().size(); x++){
 			PhysicalEntity ent = getArrayListOfEntities().get(x);
 			if(ent.hasRefersToAnnotation())
-				name = name + ent.getRefersToReferenceOntologyAnnotation().getValueDescription();
+				name = name + ent.getDescription();
 			else
 				name = name + "\"" + ent.getName() + "\"";
 			

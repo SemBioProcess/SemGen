@@ -54,7 +54,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		termlib = new SemSimTermLibrary(semsimmodel);
 		modanns = new ModelAnnotationsBench(semsimmodel);
 		modanns.addObserver(this);
-		cwdrawer = new CodewordToolDrawer(termlib, semsimmodel.getDataStructures());
+		cwdrawer = new CodewordToolDrawer(termlib, semsimmodel.getAssociatedDataStructures());
 		cwdrawer.addObserver(this);
 		smdrawer = new SubModelToolDrawer(termlib, semsimmodel.getSubmodels());
 		smdrawer.addObserver(this);

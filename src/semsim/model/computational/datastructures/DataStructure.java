@@ -5,10 +5,10 @@ import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 
-import semsim.Annotatable;
 import semsim.PropertyType;
 import semsim.SemSimConstants;
 import semsim.SemSimLibrary;
+import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.SemSimRelation;
@@ -208,7 +208,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 			String target = "?";
 			if(getAssociatedPhysicalModelComponent()!=null){
 				if(getAssociatedPhysicalModelComponent().hasRefersToAnnotation()){
-					target = getAssociatedPhysicalModelComponent().getRefersToReferenceOntologyAnnotation().getValueDescription();
+					target = getAssociatedPhysicalModelComponent().getDescription();
 				}
 				// otherwise it's a composite physical entity or custom term
 				else{

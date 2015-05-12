@@ -23,6 +23,7 @@ import semsim.reading.ModelClassifier;
 import semsim.reading.ReferenceTermNamer;
 import semsim.reading.SBMLAnnotator;
 import semsim.reading.SemSimOWLreader;
+import semsim.utilities.SemSimUtil;
 import semsim.utilities.webservices.WebserviceTester;
 
 public class LoadSemSimModel {
@@ -77,7 +78,7 @@ public class LoadSemSimModel {
 				}
 				break;
 			case ModelClassifier.SEMSIM_MODEL:
-				semsimmodel = loadSemSimOWL(file);
+				semsimmodel = loadSemSimOWL(file);	
 				break;
 				
 			default:
@@ -97,7 +98,8 @@ public class LoadSemSimModel {
 				return semsimmodel;
 			}
 			semsimmodel.setName(file.getName().substring(0, file.getName().lastIndexOf(".")));
-			semsimmodel.setSourceModelType(modeltype);				
+			semsimmodel.setSourceModelType(modeltype);
+			SemSimUtil.regularizePhysicalProperties(semsimmodel, SemGen.semsimlib);
 		}
 
 		return semsimmodel;

@@ -4,8 +4,8 @@ import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 
-import semsim.Annotatable;
 import semsim.SemSimConstants;
+import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.SemSimRelation;

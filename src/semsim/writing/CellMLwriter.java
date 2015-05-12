@@ -29,11 +29,12 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 
-import semsim.Annotatable;
 import semsim.CellMLconstants;
 import semsim.SemSimConstants;
+import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata;
+import semsim.annotation.ReferenceTerm;
 import semsim.model.Importable;
 import semsim.model.SemSimComponent;
 import semsim.model.SemSimModel;
@@ -169,12 +170,12 @@ public class CellMLwriter extends ModelWriter {
 			}
 			
 			// Declare the components and their variables
-			looseDataStructures.addAll(semsimmodel.getDataStructures());
+			looseDataStructures.addAll(semsimmodel.getAssociatedDataStructures());
 
 			// If there are no functional submodels, then create a new one that houses all the data structures
 			if(semsimmodel.getFunctionalSubmodels().size()==0){
-				FunctionalSubmodel maincomponent = new FunctionalSubmodel("component_0", semsimmodel.getDataStructures());
-				maincomponent.setAssociatedDataStructures(semsimmodel.getDataStructures());
+				FunctionalSubmodel maincomponent = new FunctionalSubmodel("component_0", semsimmodel.getAssociatedDataStructures());
+				maincomponent.setAssociatedDataStructures(semsimmodel.getAssociatedDataStructures());
 				String mathml = "";
 				for(DataStructure ds : maincomponent.getAssociatedDataStructures()){
 					mathml = mathml + ds.getComputation().getMathML() + "\n";
@@ -250,7 +251,7 @@ public class CellMLwriter extends ModelWriter {
 		
 			// Declare the connections
 			Set<CellMLConnection> connections = new HashSet<CellMLConnection>();
-			for(DataStructure ds : semsimmodel.getDataStructures()){
+			for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
 				if(ds instanceof MappableVariable){
 					MappableVariable var1 = (MappableVariable)ds;
 					for(MappableVariable mappedvar : var1.getMappedTo()){
@@ -456,7 +457,7 @@ public class CellMLwriter extends ModelWriter {
 				
 				// Add singular annotation
 				if(a.hasRefersToAnnotation()){
-					URI uri = a.getRefersToReferenceOntologyAnnotation().getReferenceURI();
+					URI uri = ((ReferenceTerm)a).getRefersToReferenceOntologyAnnotation().getReferenceURI();
 					Property isprop = ResourceFactory.createProperty(SemSimConstants.BQB_IS_URI.toString());
 					URI furi = formatAsIdentifiersDotOrgURI(uri);
 					Resource refres = localrdf.createResource(furi.toString());

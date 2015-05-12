@@ -1,12 +1,8 @@
-package semsim;
+package semsim.annotation;
 
 
 import java.net.URI;
 import java.util.Set;
-
-import semsim.annotation.Annotation;
-import semsim.annotation.ReferenceOntologyAnnotation;
-import semsim.annotation.SemSimRelation;
 
 /**
  * Interface providing methods for annotating
@@ -61,18 +57,6 @@ public interface Annotatable {
 	 */
 	public void removeAllReferenceAnnotations();
 	
-	/**
-	 * Retrieve the first {@link ReferenceOntologyAnnotation} found applied to this object
-	 * that uses the SemSim:refersTo relation (SemSimConstants.REFERS_TO_RELATION).
-	 */
-	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotation();
-	
-	
-	/**
-	 * Retrieve the reference URI.
-	 */
-	public URI getReferstoURI();
-		
 	/**
 	 * @return True if an object has at least one {@link Annotation}, otherwise false.
 	 */
