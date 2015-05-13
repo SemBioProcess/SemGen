@@ -2,14 +2,11 @@ package semgen.merging.workbench;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.jdom.Content;
-import org.jdom.Element;
 import org.jdom.JDOMException;
-import org.jdom.output.XMLOutputter;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semsim.model.SemSimModel;
@@ -17,9 +14,7 @@ import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.Submodel;
 import semsim.model.physical.object.FunctionalSubmodel;
-import semsim.reading.CellMLreader;
 import semsim.utilities.SemSimUtil;
-import semsim.writing.CellMLwriter;
 import JSim.util.Xcept;
 
 public class Merger {
@@ -50,9 +45,18 @@ public class Merger {
 		DataStructure discardedds = null;
 		DataStructure keptds = null;
 		
-		// IF there is one solution domain, get it, otherwise set soldom1 to null
+		
+		// If there is one solution domain, get it, otherwise set soldom1 to null
 		DataStructure soldom1 = (ssm1clone.getSolutionDomains().size()==1) ? ssm1clone.getSolutionDomains().toArray(new DataStructure[]{})[0] : null;
-
+		
+		Set<DataStructure> discardeddsset = new HashSet<DataStructure>();
+		Set<DataStructure> keptdsset = new HashSet<DataStructure>();
+		Set<DataStructure> dsdonotprune = new HashSet<DataStructure>();
+		boolean prune = true;
+		
+		i = 0;
+		
+		// Step through resolution points and replace/rewire codewords as needed
 		for (Pair<DataStructure, DataStructure> dsp : overlapmap.getDataStructurePairs()) {
 			if (choicelist.get(i).equals(ResolutionChoice.first)) {
 				discardedds = dsp.getRight();
@@ -65,15 +69,46 @@ public class Merger {
 				modelfordiscardedds = ssm1clone;
 			}
 			
-			// If "ignore equivalency" is not selected"
+			// If "ignore equivalency" is NOT selected
 			if(keptds!=null && discardedds !=null){	
+				
+				discardeddsset.add(discardedds);
+				keptdsset.add(keptds);
+				dsdonotprune.add(keptds);
+				
 				if(keptds instanceof MappableVariable && discardedds instanceof MappableVariable){
 					rewireMappedVariableDependencies((MappableVariable)keptds, (MappableVariable)discardedds, modelfordiscardedds, i);
+					dsdonotprune.add(discardedds); // MappableVariables that are turned into "receivers" should not be pruned
 				}
 				else if (! replaceCodeWords(keptds, discardedds, modelfordiscardedds, soldom1, i)) 
 					return null;
 			}
 			i++;
+		}
+		
+		// Determine which data structures should be pruned	
+		if(prune){
+			Set<DataStructure> runningsettoprune = new HashSet<DataStructure>();
+			runningsettoprune.addAll(discardeddsset);
+			
+			runningsettoprune = getDataStructuresToPrune(discardeddsset, runningsettoprune, dsdonotprune);
+			runningsettoprune.removeAll(dsdonotprune);
+			
+			for(DataStructure dstoprune : runningsettoprune){
+				SemSimModel parentmodel = ssm1clone.getDataStructures().contains(dstoprune) ? ssm1clone : ssm2clone;
+				parentmodel.removeDataStructure(dstoprune.getName());  // Pruning
+				
+				// Remove equation in MathML block, if inputds is a MappableVariable
+				if(dstoprune instanceof MappableVariable){
+					FunctionalSubmodel fs = parentmodel.getParentFunctionalSubmodelForMappableVariable((MappableVariable)dstoprune);
+					fs.removeVariableEquationFromMathML((MappableVariable)dstoprune);
+				}
+			}
+		}
+			
+		// Remove the computational dependency information for the discarded/receiverized codewords
+		for(DataStructure onediscardedds : discardeddsset){
+			onediscardedds.getComputationInputs().clear();
 		}
 	
 		// What if both models have a custom phys component with the same name?
@@ -92,6 +127,9 @@ public class Merger {
 			mergedmodel.addSubmodel(subfrom2);
 		}
 		
+		// Prune empty submodels
+		if(prune) pruneSubmodels(mergedmodel);
+		
 		// Remove legacy code info
 		mergedmodel.setSourceFileLocation("");
 		
@@ -102,52 +140,72 @@ public class Merger {
 	}
 	
 	// Changes to variables when merging two models with CellML-style mapped variables
-	private void rewireMappedVariableDependencies(MappableVariable keptds, MappableVariable discardedds, 
-			SemSimModel modelfordiscardedds, int index){
+	private void rewireMappedVariableDependencies(MappableVariable sourceds, MappableVariable receiverds, 
+			SemSimModel modelforrecieverds, int index){
+				
+		//For the codeword that will now receive values from the source codeword,
+		// turn it into a component input and create a mapping from the source codeword to the receiver.
+		receiverds.setPublicInterfaceValue("in");
+		sourceds.addVariableMappingTo(receiverds);
 		
-		//For the codeword that's replaced, turn it into a component input and create a mapping from the kept codeword to the discarded one.
-		discardedds.setPublicInterfaceValue("in");
-		keptds.addVariableMappingTo(discardedds);
-		
-		// Also, remove the computational dependency information for the discarded codeword
-		discardedds.getComputationInputs().clear();
-		
-		//Take all mappedTo values for discarded codeword and apply them to kept codeword.
-		for(MappableVariable mappedtods : discardedds.getMappedTo()){
-			keptds.addVariableMappingTo(mappedtods);
+		//Take all mappedTo values for receiver codeword and apply them to source codeword.
+		for(MappableVariable mappedtods : receiverds.getMappedTo()){
+			sourceds.addVariableMappingTo(mappedtods);
 		}
 		
-		// Remove all mappedTo DataStructures for discarded codeword.
-		discardedds.getMappedTo().clear();
+		// Remove all mappedTo DataStructures for receiver codeword.
+		receiverds.getMappedTo().clear();
 		
-		//Also remove any initial_value that the discarded DS has.
-		discardedds.setCellMLinitialValue(null);
-		discardedds.setStartValue(null);
+		//Also remove any initial_value that the receiver DS has.
+		receiverds.setCellMLinitialValue(null);
+		receiverds.setStartValue(null);
 		
-		// Find mathML block for the discarded codeword and remove it from the FunctionalSubmodel's computational code
-		FunctionalSubmodel fs = modelfordiscardedds.getParentFunctionalSubmodelForMappableVariable(discardedds);
-		String componentMathMLstring = fs.getComputation().getMathML();
-		String varname = discardedds.getName().replace(fs.getName() + ".", "");
-
-		if(componentMathMLstring!=null){
-			List<Content> componentMathML = CellMLwriter.makeXMLContentFromStringForMathML(componentMathMLstring);
-			Iterator<Content> compmathmlit = componentMathML.iterator();
-			Element varmathmlel = CellMLreader.getElementForOutputVariableFromComponentMathML(varname, compmathmlit);
-			if(varmathmlel!=null){
-				componentMathML.remove(varmathmlel.detach());
-				fs.getComputation().setMathML(new XMLOutputter().outputString(componentMathML));
-			}
-		}
+		// Find mathML block for the receiver codeword and remove it from the FunctionalSubmodel's computational code
+		FunctionalSubmodel fs = modelforrecieverds.getParentFunctionalSubmodelForMappableVariable(receiverds);
+		fs.removeVariableEquationFromMathML(receiverds);
 	}
 	
+	
+	// Collect those data structures that are "orphaned" by the merge and flag them for pruning
+	private Set<DataStructure> getDataStructuresToPrune(Set<DataStructure> settocheck, Set<DataStructure> runningset, Set<DataStructure> flagimmune){
+		
+		Set<DataStructure> allinputs = new HashSet<DataStructure>();
+		Set<DataStructure> nextsettoprocess = new HashSet<DataStructure>();
+		
+		// Get all inputs to codewords that are edited (replaced, turned into receivers, or orphaned)
+		for(DataStructure dstocheck : settocheck){
+			allinputs.addAll(dstocheck.getComputationInputs());
+		}
+		
+		for(DataStructure inputds : allinputs){
+			
+			// If the input is only used to compute codewords that are pruned, prune it
+			if(runningset.containsAll(inputds.getUsedToCompute())){
+				
+//				 Don't prune data structures that must be included in the model
+				if(! flagimmune.contains(inputds)){
+					runningset.add(inputds);
+					nextsettoprocess.add(inputds);
+				}
+			}
+		}
+		
+		// Process recursively
+		if(nextsettoprocess.size()>0)
+			getDataStructuresToPrune(nextsettoprocess, runningset, flagimmune);
+		
+		return runningset;
+	}
 	
 	
 	private boolean replaceCodeWords(DataStructure keptds, DataStructure discardedds, 
 			SemSimModel modelfordiscardedds, DataStructure soldom1, int index) {
+		
 		// If we need to add in a unit conversion factor
 		String replacementtext = keptds.getName();
 		
 		Pair<Double, String> conversionfactor = conversionfactors.get(index);
+		
 		// if the two terms have different names, or a conversion factor is required
 		if(!discardedds.getName().equals(keptds.getName()) || conversionfactor.getLeft()!=1){
 			replacementtext = "(" + keptds.getName() + conversionfactor.getRight() + String.valueOf(conversionfactor.getLeft()) + ")";
@@ -157,7 +215,8 @@ public class Merger {
 		// What to do about sol doms that have different units?
 		
 		if(discardedds.isSolutionDomain()){
-		  // Re-set the solution domain designations for all DataStructures in model 2
+		  
+			// Re-set the solution domain designations for all DataStructures in model 2
 			for(DataStructure nsdds : ssm2clone.getDataStructures()){
 				if(nsdds.hasSolutionDomain())
 					nsdds.setSolutionDomain(soldom1);
@@ -169,6 +228,7 @@ public class Merger {
 		
 		// If we are removing a state variable, remove its derivative, if present
 		if(discardedds.hasSolutionDomain()){
+			
 			if(modelfordiscardedds.containsDataStructure(discardedds.getName() + ":" + discardedds.getSolutionDomain().getName())){
 				modelfordiscardedds.removeDataStructure(discardedds.getName() + ":" + discardedds.getSolutionDomain().getName());
 			}
@@ -179,5 +239,19 @@ public class Merger {
 			overlapmap.getIdenticalNames().remove(discardedds.getName());
 		}
 		return true;
+	}
+	
+	// Remove empty submodels
+	private void pruneSubmodels(SemSimModel model){
+		Set<Submodel> tempset = new HashSet<Submodel>();
+		tempset.addAll(model.getSubmodels());
+		
+		for(Submodel sub : tempset){
+			
+			if(sub.getAssociatedDataStructures().isEmpty()){
+				model.removeSubmodel(sub);
+				System.out.println("Removed submodel " + sub.getName());
+			}
+		}
 	}
 }
