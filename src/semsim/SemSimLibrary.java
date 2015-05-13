@@ -16,6 +16,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
+import semgen.annotation.routines.AutoAnnotate;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.units.UnitFactor;
@@ -97,11 +98,11 @@ public class SemSimLibrary {
 	
 	public String[] getOPBBaseUnitRefTerms(DataStructure ds) {
 		// For each ds, store its base units in Hashtable as baseunitname:exponent
+		String unitName = ds.getUnit().getName();
 		Hashtable<String, Double> baseUnits = new Hashtable<String, Double>();
-		for(UnitFactor factor : ds.getUnit().getUnitFactors()) {
-			String baseunitname = factor.getBaseUnit().getName();
-			Double exponent = factor.getExponent();
-			baseUnits.put(baseunitname, exponent);
+		baseUnits = AutoAnnotate.fundamentalBaseUnits.get(unitName); // Recursively processed base units
+		if(baseUnits.isEmpty() && isCellMLBaseUnit(unitName)) {
+			baseUnits.put(unitName, 1.0);
 		}
 		if(OPBClassesForBaseUnitsTable.containsKey(baseUnits)) {
 			return OPBClassesForBaseUnitsTable.get(baseUnits);
@@ -130,7 +131,7 @@ public class SemSimLibrary {
 	public ReferenceOntologyAnnotation getOPBAnnotationFromPhysicalUnit(DataStructure ds){
 		ReferenceOntologyAnnotation roa = null;
 		String[] candidateOPBclasses = getOPBUnitRefTerm(ds.getUnit().getName());
-		// If there is no OPB class, checkbase units.
+		// If there is no OPB class, check base units.
 		if (candidateOPBclasses == null) {
 			candidateOPBclasses = getOPBBaseUnitRefTerms(ds);
 		}
