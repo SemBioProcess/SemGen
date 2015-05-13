@@ -1,12 +1,21 @@
 package semsim.model.physical.object;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.jdom.Content;
+import org.jdom.Element;
+import org.jdom.output.XMLOutputter;
+
 import semsim.model.computational.Computation;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.Submodel;
+import semsim.reading.CellMLreader;
+import semsim.writing.CellMLwriter;
 
 /**
  * Class created to represent CellML component constructs.
@@ -54,5 +63,33 @@ public class FunctionalSubmodel extends Submodel {
 
 	public Computation getComputation() {
 		return computation;
+	}
+	
+	@Override
+	public void removeSubmodel(Submodel sub){
+		
+		getSubmodels().remove(sub);
+		
+		// Remove FunctionalSubmodel subsumption assertions (encapsulation, containment, etc.)
+		for(String rel : getRelationshipSubmodelMap().keySet()){
+			getRelationshipSubmodelMap().get(rel).remove(sub);
+		}
+	}
+	
+	// Remove the MathML block for a particular codeword from a functional submodel
+	public void removeVariableEquationFromMathML(MappableVariable var){
+		
+		String componentMathMLstring = getComputation().getMathML();
+		String varname = var.getName().replace(getName() + ".", "");
+
+		if(componentMathMLstring!=null){
+			List<Content> componentMathML = CellMLwriter.makeXMLContentFromStringForMathML(componentMathMLstring);
+			Iterator<Content> compmathmlit = componentMathML.iterator();
+			Element varmathmlel = CellMLreader.getElementForOutputVariableFromComponentMathML(varname, compmathmlit);
+			if(varmathmlel!=null){
+				componentMathML.remove(varmathmlel.detach());
+				getComputation().setMathML(new XMLOutputter().outputString(componentMathML));
+			}
+		}
 	}
 }
