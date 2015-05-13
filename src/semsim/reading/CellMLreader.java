@@ -186,7 +186,7 @@ public class CellMLreader extends ModelReader {
 				uom.addUnitFactor(new UnitFactor(baseuom, exp, prefix));
 			}
 		}
-		
+
 		// Iterate through all the components, create new members of the SemSim "Submodel" class as we go
 		Iterator<?> componentit = doc.getRootElement().getChildren("component", mainNS).iterator();
 		while(componentit.hasNext()){
@@ -255,15 +255,30 @@ public class CellMLreader extends ModelReader {
 				
 				// Set units
 				String unitstext = var.getAttributeValue("units");
-				if(unitstext!=null) cvar.setUnit(semsimmodel.getUnit(unitstext));
+				
+				// If a unit is specified...
+				if(unitstext!=null){
+					
+					// If the specified unit for the variable wasn't already added to the semsim model, 
+					// and it's a CellML base unit, assign the new unit
+					if(semsimmodel.getUnit(unitstext)==null && sslib.isCellMLBaseUnit(unitstext)){
+						UnitOfMeasurement newunit = new UnitOfMeasurement(unitstext);
+						newunit.setFundamental(true);
+						semsimmodel.addUnit(newunit);
+						cvar.setUnit(newunit);
+					}
+					else cvar.setUnit(semsimmodel.getUnit(unitstext));
+				}
 				
 				cvar.setDeclared(true);
 				String varmetaID = var.getAttributeValue("id", CellMLconstants.cmetaNS);
+				
 				if(varmetaID!=null) cvar.setMetadataID(varmetaID);
 
 				// Collect the singular biological annotation, if present
 				if(cvar.getMetadataID()!=null){
 					URI termURI = collectSingularBiologicalAnnotation(doc, cvar, var);
+					
 					if(termURI!=null){
 						String label = null;
 						cvar.addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, termURI, label);
@@ -299,9 +314,7 @@ public class CellMLreader extends ModelReader {
 						
 						cvar.getComputation().setMathML(varmathml);
 
-						String varmathmlRHS = SemSimUtil.getRHSofMathML(varmathml, varname);
-						ASTNode ast_result = libsbml.readMathMLFromString(varmathmlRHS);
-						String RHS = libsbml.formulaToString(ast_result);
+						String RHS = getRHSofDataStructureEquation(varmathml, varname);
 						
 						// formulaToString doesn't parse equal signs and differentials.
 						// Not the prettiest fix, but at least it'll make the equations look prettier.
@@ -768,8 +781,7 @@ public class CellMLreader extends ModelReader {
 			 returnent = semsimmodel.addReferencePhysicalEntity(URI.create(isannres.getURI()), isannres.getURI());
 		
 		// If a custom entity
-		else
-			returnent = addCustomPhysicalEntityToModel(res);
+		else returnent = addCustomPhysicalEntityToModel(res);
 		
 		if(isversionofann!=null)
 			returnent.addAnnotation(new ReferenceOntologyAnnotation(SemSimConstants.BQB_IS_VERSION_OF_RELATION, 
@@ -814,7 +826,6 @@ public class CellMLreader extends ModelReader {
 				}
 				// If a custom process
 				else{
-					System.out.println(res.getURI());
 					String name = res.getProperty(CellMLbioRDFblock.hasname).getString();
 					if(name==null) name = unnamedstring;
 					String description = res.getProperty(CellMLbioRDFblock.description).getString();
@@ -935,6 +946,16 @@ public class CellMLreader extends ModelReader {
 		}
 	}
 	
+	
+	public static String getRHSofDataStructureEquation(String varmathml, String varname){
+		
+		String varmathmlRHS = SemSimUtil.getRHSofMathML(varmathml, varname);
+		ASTNode ast_result = libsbml.readMathMLFromString(varmathmlRHS);
+		
+		return libsbml.formulaToString(ast_result);
+	}
+	
+	
 	private String getUTFformattedString(String str){
 		try {
 			return new String(str.getBytes(), "UTF-8");
@@ -943,6 +964,4 @@ public class CellMLreader extends ModelReader {
 			return null;
 		}
 	}
-	
 }
-
