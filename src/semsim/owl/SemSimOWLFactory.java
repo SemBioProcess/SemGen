@@ -204,9 +204,13 @@ public class SemSimOWLFactory {
 		OWLIndividual ind = factory.getOWLNamedIndividual(IRI.create(subject));
 		OWLIndividual value = factory.getOWLNamedIndividual(IRI.create(object));
 		OWLObjectProperty prop = factory.getOWLObjectProperty(IRI.create(rel));
-		OWLAxiom axiom = factory.getOWLObjectPropertyAssertionAxiom(prop, ind,value);
-		if(anns!=null)
-			axiom = axiom.getAnnotatedAxiom(anns);
+		
+		// If no annotations applied, use getOWLOBjectPropertyAssertionAxiom method without annotation argument,
+		// otherwise use the method with the annotation argument (the latter is used to avoid overwriting an existing axiom
+		// with the same subject, predicate and object).
+		OWLAxiom axiom = (anns==null) ? 
+				factory.getOWLObjectPropertyAssertionAxiom(prop, ind, value) :
+					factory.getOWLObjectPropertyAssertionAxiom(prop, ind, value, anns);
 		return axiom;
 	}
 	
