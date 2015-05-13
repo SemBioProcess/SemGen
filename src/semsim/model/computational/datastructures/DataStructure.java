@@ -367,7 +367,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	}
 	
 	public boolean hasAssociatedPhysicalComponent() {
-		return getAssociatedPhysicalModelComponent()==null;
+		return getAssociatedPhysicalModelComponent()!=null;
 	}
 	
 	public URI getReferstoURI() {

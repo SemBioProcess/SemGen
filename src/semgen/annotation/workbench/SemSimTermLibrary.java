@@ -1,8 +1,10 @@
 package semgen.annotation.workbench;
 
 import java.util.ArrayList;
+
 import semgen.SemGen;
 import semsim.model.SemSimModel;
+import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
@@ -15,6 +17,8 @@ public class SemSimTermLibrary {
 	ArrayList<CustomPhysicalEntity> cupes = new ArrayList<CustomPhysicalEntity>();
 	ArrayList<CompositePhysicalEntity> cpes = new ArrayList<CompositePhysicalEntity>();
 	ArrayList<PhysicalProcess> procs = new ArrayList<PhysicalProcess>();
+	
+	ArrayList<IndexCard<?>> masterlist = new ArrayList<IndexCard<?>>();
 	
 	public SemSimTermLibrary(SemSimModel model) {
 		pps.addAll(SemGen.semsimlib.getCommonProperties());
@@ -47,6 +51,7 @@ public class SemSimTermLibrary {
 			}
 		}
 		pps.add(pp);
+		masterlist.add(new IndexCard<PhysicalProperty>(pps.indexOf(pp), pps));
 		return;
 	}
 	
@@ -57,6 +62,7 @@ public class SemSimTermLibrary {
 			}
 		}
 		rpes.add(rpe);
+		masterlist.add(new IndexCard<ReferencePhysicalEntity>(rpes.indexOf(rpe), rpes));
 		return;
 	}
 	
@@ -66,6 +72,7 @@ public class SemSimTermLibrary {
 				return;
 			}
 		}
+		masterlist.add(new IndexCard<CustomPhysicalEntity>(cupes.indexOf(cupe), cupes));
 		cupes.add(cupe);
 		return;
 	}
@@ -76,6 +83,7 @@ public class SemSimTermLibrary {
 				return;
 			}
 		}
+		masterlist.add(new IndexCard<CompositePhysicalEntity>(cpes.indexOf(cpe), cpes));
 		cpes.add(cpe);
 		return;
 	}
@@ -87,6 +95,7 @@ public class SemSimTermLibrary {
 			}
 		}
 		procs.add(proc);
+		masterlist.add(new IndexCard<PhysicalProcess>(procs.indexOf(proc), procs));
 		return;
 	}
 	
@@ -160,5 +169,46 @@ public class SemSimTermLibrary {
 	
 	public String getPhysicalPropertyName(Integer index) {
 		return pps.get(index).getName();
+	}
+	
+	public ArrayList<Integer> getAllReferenceTerms() {
+		ArrayList<Integer> refterms = new ArrayList<Integer>();
+		for (IndexCard<?> card : masterlist) {
+			if (card.isReferenceTerm()) {
+				refterms.add(masterlist.indexOf(card));
+			}
+		}
+		return refterms;
+	}
+	
+	public ArrayList<String> getComponentNames(ArrayList<Integer> list) {
+		ArrayList<String> namelist = new ArrayList<String>();
+		
+		
+		return namelist;
+	}
+	
+	protected class IndexCard<T extends PhysicalModelComponent> {
+		private Integer pmcindex;
+		private ArrayList<T> indexedlist;
+		private Boolean reference;
+		
+		public IndexCard(int index, ArrayList<T> list) {
+			pmcindex = index;
+			indexedlist = list;
+			reference = list.get(index).hasRefersToAnnotation();
+		}
+		
+		public Integer getIndex() {
+			return pmcindex;
+		}
+		
+		public T getObject() {
+			return indexedlist.get(pmcindex);
+		}
+		
+		public boolean isReferenceTerm() {
+			return reference;
+		}
 	}
 }

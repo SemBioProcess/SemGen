@@ -47,6 +47,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 		addentbutton.addActionListener(this);
 		addprocbutton.addActionListener(this);
 		setPhysicalComponentPanel();
+		onPropertyChange();
 		validate();
 	}
 
@@ -83,11 +84,10 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 			esg = null;
 			showAddEntityProcessButtons();
 		}
+		add(pmcpanel);
 	}
 	
 	private void showAddEntityProcessButtons() {
-		
-
 		pmcpanel.add(addentbutton);
 		pmcpanel.add(addprocbutton);
 		

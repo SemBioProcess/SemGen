@@ -233,6 +233,4 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		setChanged();
 		notifyObservers(modeledit.compositechanged);
 	}
-	
-
 }
