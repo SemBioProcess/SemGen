@@ -56,9 +56,7 @@ public class Submodel extends PhysicalModelComponent implements Cloneable, Impor
 	}
 	
 	public void removeSubmodel(Submodel sub){
-		if(submodels.contains(sub)){
 			submodels.remove(sub);
-		}
 	}
 	
 	@Override
