@@ -176,7 +176,7 @@ public class SemSimOWLreader extends ModelReader {
 			identitymap.put(rperef, pe);
 		}
 
-		for (String cuperef : SemSimOWLFactory.getAllSubclasses(ont,  SemSimConstants.CUSTOM_PHYSICAL_ENTITY_CLASS_URI.toString(), false)) {
+		for (String cuperef : SemSimOWLFactory.getIndividualsInTreeAsStrings(ont,  SemSimConstants.CUSTOM_PHYSICAL_ENTITY_CLASS_URI.toString())) {
 			String label = SemSimOWLFactory.getRDFLabels(ont, factory.getOWLClass(IRI.create(cuperef)))[0];
 			CustomPhysicalEntity cupe = new CustomPhysicalEntity(label, label);
 			
@@ -196,7 +196,12 @@ public class SemSimOWLreader extends ModelReader {
 			ArrayList<StructuralRelation> rels = new ArrayList<StructuralRelation>();
 			
 			PhysicalEntity rpe = (PhysicalEntity)getClassofIndividual(ind);
-			if (rpe == null) continue;
+			if (rpe == null) {
+				
+				if (rpe == null) continue;
+			}
+			
+			
 			rpes.add(rpe);
 			
 			while (true) {

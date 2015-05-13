@@ -41,7 +41,6 @@ public class SemSimTermLibrary {
 		for (PhysicalProcess proc : model.getPhysicalProcesses()) {
 			addPhysicalProcess(proc);
 		}
-		procs.addAll(model.getPhysicalProcesses());
 	}
 	
 	public void addPhysicalProperty(PhysicalProperty pp) {
@@ -83,8 +82,8 @@ public class SemSimTermLibrary {
 				return;
 			}
 		}
-		masterlist.add(new IndexCard<CompositePhysicalEntity>(cpes.indexOf(cpe), cpes));
 		cpes.add(cpe);
+		masterlist.add(new IndexCard<CompositePhysicalEntity>(cpes.indexOf(cpe), cpes));
 		return;
 	}
 	
