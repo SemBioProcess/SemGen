@@ -135,11 +135,6 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	public boolean hasSingularAnnotation(int index) {
 		return componentlist.get(index).hasRefersToAnnotation();
 	}
-	
-	@Override
-	public URI getSingularAnnotationURI(int index) {
-		return componentlist.get(index).getReferstoURI();
-	}
 
 	public URI getPhysicalPropertyURI() {
 		return componentlist.get(currentfocus).getPhysicalProperty().getReferstoURI();
@@ -173,18 +168,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		return componentlist.get(currentfocus).isMapped();
 	}
 	
-	@Override
-	public String getSingularAnnotationasString(int index) {
-		if (hasSingularAnnotation(index)) {
-			return componentlist.get(index).getRefersToReferenceOntologyAnnotation().getNamewithOntologyAbreviation();
-		}
-		return "*unspecified*";
-	}
-	
-	@Override
-	protected void selectionNotification() {
-		notifyObservers(WBEvent.cwselection);
-	}
+
 
 	public boolean isProcess() {
 		PhysicalProperty pp = componentlist.get(currentfocus).getPhysicalProperty();
@@ -192,11 +176,6 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		return SemGen.semsimlib.isOPBprocessProperty(pp.getReferstoURI());
 	}
 
-	@Override
-	public boolean isImported() {
-		return componentlist.get(currentfocus).isImportedViaSubmodel();
-	}
-	
 	public void copytoMappedVariables() {
 		MappableVariable thevar = (MappableVariable)componentlist.get(currentfocus);
 		
@@ -226,6 +205,33 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	
 	public boolean hasPhysicalModelComponent() {
 		return componentlist.get(currentfocus).hasAssociatedPhysicalComponent();
+	}
+	
+	@Override
+	public Integer getSingularAnnotationLibraryIndex(int index) {
+		return termlib.getComponentIndex(componentlist.get(index).getReferenceTerm());
+	}
+	
+	@Override
+	protected void selectionNotification() {
+		notifyObservers(WBEvent.cwselection);
+	}
+	
+	@Override
+	public boolean isImported() {
+		return componentlist.get(currentfocus).isImportedViaSubmodel();
+	}
+	
+	@Override
+	public URI getSingularAnnotationURI() {
+		if (componentlist.get(currentfocus).hasRefersToAnnotation()) return componentlist.get(currentfocus).getReferstoURI();
+		return null;
+	}
+	
+	@Override
+	public String getSingularAnnotationasString(Integer index) {
+		if (componentlist.get(currentfocus).hasRefersToAnnotation()) return componentlist.get(currentfocus).getDescription() ;
+		return "";
 	}
 	
 	@Override

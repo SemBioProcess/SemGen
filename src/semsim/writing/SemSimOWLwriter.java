@@ -150,7 +150,6 @@ public class SemSimOWLwriter extends ModelWriter {
 	}
 	
 	private void addDataStructures() throws OWLException {
-		
 		for(DataStructure ds : localdss){		
 			String dsuri = namespace + SemSimOWLFactory.URIencoding(ds.getName());
 			OWLNamedIndividual dsind = factory.getOWLNamedIndividual(IRI.create(dsuri));
@@ -163,7 +162,7 @@ public class SemSimOWLwriter extends ModelWriter {
 			// If there is a singular annotation on the DataStructure, write it. Use reference annotation label as
 			// the DataStructure's label
 			if(ds.hasRefersToAnnotation()){
-				String referenceuri = ds.getRefersToReferenceOntologyAnnotation().getReferenceURI().toString();
+				String referenceuri = ds.getReferstoURI().toString();
 				SemSimOWLFactory.setRDFLabel(ont, dsind, ds.getRefersToReferenceOntologyAnnotation().getValueDescription(), manager);
 				SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimConstants.REFERS_TO_URI.toString(), referenceuri, manager);
 			}

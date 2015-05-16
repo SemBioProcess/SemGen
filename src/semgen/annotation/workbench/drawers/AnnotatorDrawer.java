@@ -90,12 +90,8 @@ public abstract class AnnotatorDrawer<T extends SemSimObject> extends Observable
 		return hasSingularAnnotation(currentfocus);
 	}
 	
-	public String getSingularAnnotationasString() {
-		return getSingularAnnotationasString(currentfocus);
-	}
-	
-	public URI getSingularAnnotationURI() {
-		return getSingularAnnotationURI(currentfocus);
+	public Integer getSingularAnnotationLibraryIndex() {
+		return getSingularAnnotationLibraryIndex(currentfocus);
 	}
 	
 	public boolean isEditable() {
@@ -124,11 +120,18 @@ public abstract class AnnotatorDrawer<T extends SemSimObject> extends Observable
 		changeNotification();
 	}
 	
-	public abstract URI getSingularAnnotationURI(int index);
+	public String getSingularAnnotationasString() {
+		return getSingularAnnotationasString(currentfocus);
+	}
+	
+	public abstract Integer getSingularAnnotationLibraryIndex(int index);
 	public abstract boolean hasSingularAnnotation(int index);
-	public abstract String getSingularAnnotationasString(int index);
 	protected abstract void selectionNotification();
 	protected abstract void changeNotification();
 	public abstract boolean isEditable(int index);
 	public abstract boolean isImported();
+
+	public abstract URI getSingularAnnotationURI();
+
+	public abstract String getSingularAnnotationasString(Integer index);
 }

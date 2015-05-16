@@ -3,6 +3,7 @@ package semgen.annotation.workbench;
 import java.util.ArrayList;
 
 import semgen.SemGen;
+import semsim.annotation.ReferenceTerm;
 import semsim.model.SemSimModel;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
@@ -71,8 +72,8 @@ public class SemSimTermLibrary {
 				return;
 			}
 		}
-		masterlist.add(new IndexCard<CustomPhysicalEntity>(cupes.indexOf(cupe), cupes));
 		cupes.add(cupe);
+		masterlist.add(new IndexCard<CustomPhysicalEntity>(cupes.indexOf(cupe), cupes));
 		return;
 	}
 	
@@ -179,12 +180,28 @@ public class SemSimTermLibrary {
 		}
 		return refterms;
 	}
+	public Integer getComponentIndex(ReferenceTerm rt) {
+		return getComponentIndex((PhysicalModelComponent)rt);
+	}
+	
+	public Integer getComponentIndex(PhysicalModelComponent pmc) {
+		for (IndexCard<?> card : masterlist) {
+			if (card.isTermEquivalent(pmc)) return masterlist.indexOf(card);
+		}
+		return -1;
+	}
 	
 	public ArrayList<String> getComponentNames(ArrayList<Integer> list) {
 		ArrayList<String> namelist = new ArrayList<String>();
-		
+		for (Integer index : list) {
+			namelist.add(masterlist.get(index).getName());
+		}
 		
 		return namelist;
+	}
+	
+	public PhysicalModelComponent getComponent(Integer index) {
+		return masterlist.get(index).getObject();
 	}
 	
 	protected class IndexCard<T extends PhysicalModelComponent> {
@@ -208,6 +225,14 @@ public class SemSimTermLibrary {
 		
 		public boolean isReferenceTerm() {
 			return reference;
+		}
+		
+		public String getName() {
+			return indexedlist.get(pmcindex).getName();
+		}
+		
+		public Boolean isTermEquivalent(PhysicalModelComponent term) {
+			return indexedlist.get(pmcindex).equals(term);
 		}
 	}
 }

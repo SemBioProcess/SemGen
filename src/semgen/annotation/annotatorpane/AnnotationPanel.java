@@ -136,7 +136,7 @@ public abstract class AnnotationPanel<P extends AnnotatorDrawer<? extends SemSim
 	}
 	
 	private void addSingularAnnotationPanel() {
-		singularannpanel = new SingularAnnotationPanel(drawer);
+		singularannpanel = new SingularAnnotationPanel(drawer, termlib);
 		singularannpanel.setAlignmentX(JPanel.LEFT_ALIGNMENT);
 		mainpanel.add(singularannpanel);
 	}

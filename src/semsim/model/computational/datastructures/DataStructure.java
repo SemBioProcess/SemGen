@@ -6,11 +6,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import semsim.PropertyType;
-import semsim.SemSimConstants;
 import semsim.SemSimLibrary;
 import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
+import semsim.annotation.ReferenceTerm;
 import semsim.annotation.SemSimRelation;
 import semsim.model.computational.Computation;
 import semsim.model.computational.ComputationalModelComponent;
@@ -24,10 +24,11 @@ import semsim.model.physical.object.PhysicalProperty;
  * This class represents a named element in a simulation model that
  * is assigned some computational value during simulation.
  */
-public abstract class DataStructure extends ComputationalModelComponent implements Annotatable, Cloneable{	
+public abstract class DataStructure extends ComputationalModelComponent implements Annotatable, Cloneable {	
 	private Computation computation;
 	private PhysicalProperty physicalProperty;
 	private PhysicalModelComponent physicalcomponent;
+	private ReferenceTerm singularterm;
 	private DataStructure solutionDomain;
 	private Set<DataStructure> usedToCompute = new HashSet<DataStructure>();
 	private Set<Annotation> annotations = new HashSet<Annotation>();
@@ -288,13 +289,6 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		return raos;
 	}
 	
-	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotation(){
-		if(hasRefersToAnnotation()){
-			return new ReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, referenceuri, getDescription());
-		}
-		return null;
-	}
-	
 	public Boolean isAnnotated(){
 		return !getAnnotations().isEmpty();
 	}
@@ -370,11 +364,39 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		return getAssociatedPhysicalModelComponent()!=null;
 	}
 	
+	public void setSingularAnnotation(ReferenceTerm refterm) {
+		singularterm = refterm;
+	}
+	
+	public void removeSingularAnnotation() {
+		singularterm = null;
+	}
+	
+	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotation(){
+		if(hasRefersToAnnotation()){
+			return singularterm.getRefersToReferenceOntologyAnnotation();
+		}
+		return null;
+	}
+	
+	@Override
+	public Boolean hasRefersToAnnotation() {
+		return singularterm!=null;
+	}
+	
 	public URI getReferstoURI() {
-		return referenceuri;
+		return singularterm.getReferstoURI();
+	}
+	
+	public ReferenceTerm getReferenceTerm() {
+		return singularterm;
 	}
 	
 	public boolean isMapped() {
 		return false;
+	}
+	
+	public void setSingularAnnotation(URI refuri) {
+		referenceuri = refuri;
 	}
 }

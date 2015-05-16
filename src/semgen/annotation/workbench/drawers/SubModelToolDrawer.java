@@ -9,7 +9,6 @@ import java.util.Set;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.AnnotatorWorkbench.WBEvent;
 import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
-import semsim.annotation.ReferenceTerm;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.Submodel;
 import semsim.owl.SemSimOWLFactory;
@@ -97,8 +96,6 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 		componentlist.get(currentfocus).setAssociatedDataStructures(dsset);
 	}
 	
-
-	
 	public ArrayList<String> getAssociatedSubModelDataStructureNames() {
 		Set<DataStructure> smset = SemSimOWLFactory.getCodewordsAssociatedWithNestedSubmodels(componentlist.get(currentfocus));
 		
@@ -148,6 +145,7 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 		
 		return associated;
 	}
+	
 	@Override
 	protected void selectionNotification() {
 		notifyObservers(WBEvent.smselection);
@@ -166,16 +164,8 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 	}
 	
 	@Override
-	public String getSingularAnnotationasString(int index) {
-		if (hasSingularAnnotation(index)) {
-			return ((ReferenceTerm)componentlist.get(index)).getRefersToReferenceOntologyAnnotation().getNamewithOntologyAbreviation();
-		}
-		return "*unspecified*";
-	}
-	
-	@Override
-	public URI getSingularAnnotationURI(int index) {
-		return ((ReferenceTerm)componentlist.get(index)).getRefersToReferenceOntologyAnnotation().getReferenceURI();
+	public Integer getSingularAnnotationLibraryIndex(int index) {
+		return termlib.getComponentIndex(componentlist.get(index).getReferenceTerm());
 	}
 	
 	public ArrayList<Integer> getSubmodelsWithoutFocus() {
@@ -212,5 +202,17 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 	protected void changeNotification() {
 		setChanged();
 		notifyObservers(modeledit.submodelchanged);
+	}
+
+	@Override
+	public URI getSingularAnnotationURI() {
+		if (componentlist.get(currentfocus).hasRefersToAnnotation()) return componentlist.get(currentfocus).getReferstoURI();
+		return null;
+	}
+
+	@Override
+	public String getSingularAnnotationasString(Integer index) {
+		if (componentlist.get(currentfocus).hasRefersToAnnotation()) return componentlist.get(currentfocus).getDescription() ;
+		return "";
 	}
 }

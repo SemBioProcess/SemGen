@@ -1,18 +1,22 @@
 package semgen.annotation.annotatorpane.subpanels;
 
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 import semgen.annotation.common.AnnotationChooserPanel;
+import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.drawers.AnnotatorDrawer;
 
 public class SingularAnnotationPanel extends AnnotationChooserPanel{
 	private static final long serialVersionUID = 1L;
-
-	public AnnotatorDrawer<?> drawer;
+	private SemSimTermLibrary library;
+	private AnnotatorDrawer<?> drawer;
+	private ArrayList<Integer> combolist;
 	
-	public SingularAnnotationPanel(AnnotatorDrawer<?> wb) {
+	public SingularAnnotationPanel(AnnotatorDrawer<?> wb, SemSimTermLibrary lib) {
 		super();
 		drawer = wb;
+		library = lib;
 		if (drawer.isEditable()) {
 			makeSingularAnnotationSelector();
 		}
@@ -20,6 +24,7 @@ public class SingularAnnotationPanel extends AnnotationChooserPanel{
 			makeStaticPanel(drawer.getSingularAnnotationasString(), drawer.hasHumanReadableDef());
 		}
 		constructSelector();
+		refreshSingularAnnotation();
 	}
 	
 	public void makeSingularAnnotationSelector() {
@@ -33,10 +38,14 @@ public class SingularAnnotationPanel extends AnnotationChooserPanel{
 		
 		
 	}
-
+	
+	// Get the singular annotation for the codeword
 	public void refreshSingularAnnotation(){
-		// Get the singular annotation for the codeword
+		combolist = library.getAllReferenceTerms();
+		ArrayList<String> names = library.getComponentNames(combolist);
 		
+		Integer i = combolist.indexOf(drawer.getSingularAnnotationLibraryIndex());
+		setComboList(names, i);
 	}
 	
 	@Override

@@ -17,6 +17,7 @@ public class Submodel extends PhysicalModelComponent implements Cloneable, Impor
 	private Set<DataStructure> associatedDataStructures = new HashSet<DataStructure>();
 	private Set<Submodel> submodels = new HashSet<Submodel>();
 	private boolean isImported = false;
+	private ReferenceTerm singularterm;
 	private String hrefValue;
 	private String referencedName;
 	private String localName;
@@ -117,17 +118,36 @@ public class Submodel extends PhysicalModelComponent implements Cloneable, Impor
 		this.parentImport = parent;
 	}
 
+
+	
+	@Override
+	public Boolean hasRefersToAnnotation() {
+		return singularterm != null;
+	}
+	
+	public void setSingularAnnotation(ReferenceTerm refterm) {
+		singularterm = refterm;
+	}
+	
+	public void removeSingularAnnotation() {
+		singularterm = null;
+	}
+	
 	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotation(){
 		if(hasRefersToAnnotation()){
-			return new ReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, referenceuri, getDescription());
+			return singularterm.getRefersToReferenceOntologyAnnotation();
 		}
 		return null;
 	}
 	
 	public URI getReferstoURI() {
-		return URI.create(referenceuri.toString());
+		return singularterm.getReferstoURI();
 	}
 	
+	
+	public ReferenceTerm getReferenceTerm() {
+		return singularterm;
+	}
 	
 	@Override
 	public String getComponentTypeasString() {
@@ -142,7 +162,7 @@ public class Submodel extends PhysicalModelComponent implements Cloneable, Impor
 	public boolean isFunctional() {
 		return functional;
 	}
-
+	
 	@Override
 	protected boolean isEquivalent(Object obj) {
 		return false;
