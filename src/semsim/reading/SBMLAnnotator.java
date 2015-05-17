@@ -275,9 +275,7 @@ public class SBMLAnnotator {
 				
 				if(pmc!=null){
 					if(pmc.hasRefersToAnnotation()){
-						ReferenceOntologyAnnotation refann = ((ReferenceTerm) pmc).getRefersToReferenceOntologyAnnotation();
-						sub.addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, refann.getReferenceURI(), 
-								refann.getValueDescription());
+						sub.setSingularAnnotation((ReferenceTerm) pmc);
 					}
 				}
 			}

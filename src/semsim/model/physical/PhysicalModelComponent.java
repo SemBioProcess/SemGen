@@ -66,6 +66,7 @@ public abstract class PhysicalModelComponent extends SemSimComponent implements 
 	
 	@Override
 	public boolean equals(Object obj) {
+		if (obj==null) return false;
 		if (obj==this) return true;
 		if (getClass()==obj.getClass()) return isEquivalent(obj);
 		return false;

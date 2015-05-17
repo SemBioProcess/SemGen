@@ -188,7 +188,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 		CompositePhysicalEntity newcpe = new CompositePhysicalEntity(entlist, rellist);
 		for(CompositePhysicalEntity cpe : getCompositePhysicalEntities()){
 			// If there's already an equivalent CompositePhysicalEntity in the model, return it and don't do anything else.
-			if(newcpe.compareTo(cpe)==0){
+			if(newcpe.equals(cpe)){
 				return cpe;
 			}
 		}
@@ -322,11 +322,13 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	public Set<DataStructure> getDataStructureswithCompositesEntities(){
 		Set<DataStructure> dswcpes = new HashSet<DataStructure>();
 		for (DataStructure ds : dataStructures) {
-			if (ds.getAssociatedPhysicalModelComponent() instanceof CompositePhysicalEntity) {
-				dswcpes.add(ds);
+			if (ds.hasAssociatedPhysicalComponent()) {
+				if (ds.getAssociatedPhysicalModelComponent() instanceof CompositePhysicalEntity) {
+					dswcpes.add(ds);
+				}
 			}
 		}
-		return dataStructures;
+		return dswcpes;
 	}
 	
 	/**
@@ -379,6 +381,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 		Set<SemSimComponent> set = new HashSet<SemSimComponent>();
 		set.addAll(getComputationalModelComponents());
 		set.addAll(getPhysicalModelComponents());
+		set.addAll(getSubmodels());
 		return set;
 	}
 	
@@ -665,7 +668,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	}
 	
 	/**
-	 * @return Retrieves all PhysicalEntities, PhysicalProperties, PhsicalProcesses, PhysicalDependencies and Submodels in the model
+	 * @return Retrieves all PhysicalEntities, PhysicalProperties, PhsicalProcesses and PhysicalDependencies in the model
 	 */
 	public Set<PhysicalModelComponent> getPhysicalModelComponents(){
 		Set<PhysicalModelComponent> set = new HashSet<PhysicalModelComponent>();
@@ -673,7 +676,6 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 		set.addAll(getPhysicalEntities());
 		set.addAll(getPhysicalProcesses());
 		set.addAll(getPhysicalDependencies());
-		set.addAll(getSubmodels());
 		return set;
 	}
 	

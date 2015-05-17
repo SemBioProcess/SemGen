@@ -458,7 +458,9 @@ public class CellMLreader extends ModelReader {
 		if(submodel.getMetadataID()!=null){
 			URI termURI = collectSingularBiologicalAnnotation(doc, submodel, comp);
 			if(termURI!=null){
-				submodel.addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, termURI, null);
+				ReferencePhysicalEntity rpe = new ReferencePhysicalEntity(termURI, termURI.toString());
+				semsimmodel.addReferencePhysicalEntity(rpe);
+				submodel.setSingularAnnotation(rpe);
 			}
 		}
 	}

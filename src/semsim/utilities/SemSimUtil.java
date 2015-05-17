@@ -223,7 +223,7 @@ public class SemSimUtil {
 				CompositePhysicalEntity testcpe = (CompositePhysicalEntity)testcomp;
 
 				// If we've found an equivalent composite entity, return it immediately
-				if(testcpe.compareTo(cpe)==0){
+				if(testcpe.equals(cpe)){
 					return testcpe;
 				}
 			}

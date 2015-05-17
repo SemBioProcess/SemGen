@@ -104,7 +104,7 @@ public class SemSimOWLwriter extends ModelWriter {
 		localdss.addAll(semsimmodel.getAssociatedDataStructures());
 		
 		for(Submodel sub : semsimmodel.getSubmodels()){
-			if(sub instanceof FunctionalSubmodel){
+			if(sub.isFunctional()){
 				FunctionalSubmodel fsub = (FunctionalSubmodel)sub;
 				if(fsub.isImported() && fsub.getParentImport()!=null){
 					localdss.removeAll(((FunctionalSubmodel)sub).getAssociatedDataStructures());
@@ -162,24 +162,79 @@ public class SemSimOWLwriter extends ModelWriter {
 			// If there is a singular annotation on the DataStructure, write it. Use reference annotation label as
 			// the DataStructure's label
 			if(ds.hasRefersToAnnotation()){
-				String referenceuri = ds.getReferstoURI().toString();
-				SemSimOWLFactory.setRDFLabel(ont, dsind, ds.getRefersToReferenceOntologyAnnotation().getValueDescription(), manager);
-				SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimConstants.REFERS_TO_URI.toString(), referenceuri, manager);
+				ReferenceTerm refterm = ds.getReferenceTerm();
+				SemSimOWLFactory.setRDFLabel(ont, dsind, refterm.getName(), manager);
+				SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimConstants.REFERS_TO_URI.toString(), refterm.getReferstoURI(), manager);
 			}
 			
-			// Classify the physical property under the first (and should be ONLY) reference ontology class
+			// Classify the physical property under its reference ontology class
 			// that it is annotated against
-			if(ds.getPhysicalProperty()!=null){
+			if(ds.hasPhysicalProperty() || ds.hasAssociatedPhysicalComponent()){
+				PhysicalProperty dspp = ds.getPhysicalProperty();
+				if (dspp==null) dspp = new PhysicalProperty("",null);
 				URI propertyuri = SemSimOWLFactory.getURIforPhysicalProperty(semsimmodel, ds);
-				createPhysicalModelIndividual(ds.getPhysicalProperty(), propertyuri.toString());
+				createPhysicalModelIndividual(dspp, propertyuri.toString());
 				// Log the physical property and its URI
-				singularPMCsAndUrisForDataStructures.put(ds.getPhysicalProperty(), propertyuri);
+				singularPMCsAndUrisForDataStructures.put(dspp, propertyuri);
 				SemSimOWLFactory.setIndObjectProperty(ont, propertyuri.toString(),
 						dsuri, SemSimConstants.HAS_COMPUTATATIONAL_COMPONENT_URI.toString(),
 						SemSimConstants.IS_COMPUTATIONAL_COMPONENT_FOR_URI.toString(), manager);
 				if(ds.getComputation()!=null && !(ds instanceof MappableVariable))
 					SemSimOWLFactory.setIndObjectProperty(ont, propertyuri.toString(),
 						dsuri + "_dependency", SemSimConstants.IS_DETERMINED_BY_URI.toString(), SemSimConstants.DETERMINES_URI.toString(), manager);
+				// Create physical entity and physical process individuals, link to properties
+			
+				if(ds.hasAssociatedPhysicalComponent()){
+					
+					// Create the new physical model individual and get what it's a physical property of
+					PhysicalModelComponent pmc = ds.getAssociatedPhysicalModelComponent();
+					
+					// If it's not a composite physical entity 
+					if(!(pmc instanceof CompositePhysicalEntity)){
+						String uristring = null;
+						
+						// If it's a singular physical entity
+						if(pmc instanceof PhysicalEntity){
+							uristring = logSingularPhysicalComponentAndGetURIasString(pmc, namespace);
+						}
+						// Otherwise it's a physical process
+						else{
+							// Need to make sure that each process gets its own physical property individual, even
+							// if some are annotated as being the exact same process
+							if(singularPMCsAndUrisForDataStructures.containsKey(pmc)){
+								uristring = makeURIforPhysicalModelComponent(semsimmodel.getNamespace(), pmc, 
+										SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimConstants.PHYSICAL_MODEL_COMPONENT_CLASS_URI.toString())).toString();
+							}
+							else{
+								uristring = logSingularPhysicalComponentAndGetURIasString(pmc, namespace);
+								SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimConstants.PHYSICAL_ENTITY_CLASS_URI.toString());
+
+								// Make sure to log all the participating entities - some may not be directly associated
+								// with a data structure but only used to define the process
+								Set<PhysicalEntity> participants = ((PhysicalProcess)pmc).getParticipants();
+
+								for(PhysicalEntity ent : participants){
+									URI uriforent = null;
+									if(ent instanceof CompositePhysicalEntity){
+										uriforent = processCompositePhysicalEntity((CompositePhysicalEntity) ent, namespace);
+									}
+									else{
+										String enturistring = logSingularPhysicalComponentAndGetURIasString(ent, namespace);
+										uriforent = URI.create(enturistring);
+									}
+									singularPMCsAndUrisForDataStructures.put(ent, uriforent);
+								}
+							}
+						}
+						// Add the individual to the ontology if not already there, create it
+						if(!SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimConstants.PHYSICAL_MODEL_COMPONENT_CLASS_URI.toString()).contains(uristring)){
+							createPhysicalModelIndividual(pmc, uristring);
+						}
+						// Connect the new individual to its property
+						SemSimOWLFactory.setIndObjectProperty(ont, SemSimOWLFactory.getURIforPhysicalProperty(semsimmodel, ds).toString(), uristring, 
+								SemSimConstants.PHYSICAL_PROPERTY_OF_URI.toString(), SemSimConstants.HAS_PHYSICAL_PROPERTY_URI.toString(), manager);
+					}
+				}
 			}
 			
 			// If the data structure is solved with an explicit computation, store that info
@@ -239,63 +294,6 @@ public class SemSimOWLwriter extends ModelWriter {
 			// If not a CellML-type variable, store startValue info
 			else 
 				SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimConstants.HAS_START_VALUE_URI.toString(), ds.getStartValue(), manager);
-
-			
-			// Create physical entity and physical process individuals, link to properties
-			if(ds.hasPhysicalProperty()){
-				// If we have an annotated physical model component that the property points to
-				if(ds.getAssociatedPhysicalModelComponent()!=null){
-					
-					// Create the new physical model individual and get what it's a physical property of
-					PhysicalModelComponent pmc = ds.getAssociatedPhysicalModelComponent();
-					
-					// If it's not a composite physical entity 
-					if(!(pmc instanceof CompositePhysicalEntity)){
-						String uristring = null;
-						
-						// If it's a singular physical entity
-						if(pmc instanceof PhysicalEntity){
-							uristring = logSingularPhysicalComponentAndGetURIasString(pmc, namespace);
-						}
-						// Otherwise it's a physical process
-						else{
-							// Need to make sure that each process gets its own physical property individual, even
-							// if some are annotated as being the exact same process
-							if(singularPMCsAndUrisForDataStructures.containsKey(pmc)){
-								uristring = makeURIforPhysicalModelComponent(semsimmodel.getNamespace(), pmc, 
-										SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimConstants.PHYSICAL_MODEL_COMPONENT_CLASS_URI.toString())).toString();
-							}
-							else{
-								uristring = logSingularPhysicalComponentAndGetURIasString(pmc, namespace);
-								SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimConstants.PHYSICAL_ENTITY_CLASS_URI.toString());
-
-								// Make sure to log all the participating entities - some may not be directly associated
-								// with a data structure but only used to define the process
-								Set<PhysicalEntity> participants = ((PhysicalProcess)pmc).getParticipants();
-
-								for(PhysicalEntity ent : participants){
-									URI uriforent = null;
-									if(ent instanceof CompositePhysicalEntity){
-										uriforent = processCompositePhysicalEntity((CompositePhysicalEntity) ent, namespace);
-									}
-									else{
-										String enturistring = logSingularPhysicalComponentAndGetURIasString(ent, namespace);
-										uriforent = URI.create(enturistring);
-									}
-									singularPMCsAndUrisForDataStructures.put(ent, uriforent);
-								}
-							}
-						}
-						// Add the individual to the ontology if not already there, create it
-						if(!SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimConstants.PHYSICAL_MODEL_COMPONENT_CLASS_URI.toString()).contains(uristring)){
-							createPhysicalModelIndividual(pmc, uristring);
-						}
-						// Connect the new individual to its property
-						SemSimOWLFactory.setIndObjectProperty(ont, SemSimOWLFactory.getURIforPhysicalProperty(semsimmodel, ds).toString(), uristring, 
-								SemSimConstants.PHYSICAL_PROPERTY_OF_URI.toString(), SemSimConstants.HAS_PHYSICAL_PROPERTY_URI.toString(), manager);
-					}
-				}
-			}
 			
 			// Get the units info
 			if(ds.hasUnits()){
@@ -324,11 +322,8 @@ public class SemSimOWLwriter extends ModelWriter {
 	
 	private void addCompositeAnnotations() throws OWLException {
 		for (DataStructure ds : semsimmodel.getDataStructureswithCompositesEntities()) {
-			PhysicalProperty prop = ds.getPhysicalProperty();
-
 			CompositePhysicalEntity cpe =  (CompositePhysicalEntity)ds.getAssociatedPhysicalModelComponent();
 			URI indexuri = processCompositePhysicalEntity(cpe, namespace);
-			
 			
 			// Associate the CompositePhysicalEntity with its index uri in the ontology 
 			if(!singularPMCsAndUrisForDataStructures.keySet().contains(cpe)){
@@ -663,19 +658,19 @@ public class SemSimOWLwriter extends ModelWriter {
 		String description = null;
 		
 		// If there is a "refers-to" reference ontology annotation
-		if(pmc.hasRefersToAnnotation()!=null){
-			ReferenceOntologyAnnotation firstann = ((ReferenceTerm)pmc).getRefersToReferenceOntologyAnnotation();
-			parenturistring = firstann.getReferenceURI().toString();
-			label = firstann.getValueDescription();
+		if(pmc.hasRefersToAnnotation()){
+			ReferenceTerm firstann = (ReferenceTerm)pmc;
+			parenturistring = firstann.getReferstoURI().toString();
+			label = firstann.getName();
 			
 			// Add the reference class to the semsim model if needed
 			if(!allphysmodclasses.contains(parenturistring)){
-				SemSimOWLFactory.addExternalReferenceClass(ont, parenturistring, physicaltype, firstann.getValueDescription(), manager);
+				SemSimOWLFactory.addExternalReferenceClass(ont, parenturistring, physicaltype, label, manager);
 			}
 			// Put the individual physical component in the reference class
 			SemSimOWLFactory.createSemSimIndividual(ont, uriforind, factory.getOWLClass(IRI.create(parenturistring)), "", manager);
 			// Establish "refersTo" relationship
-			SemSimOWLFactory.setIndDatatypeProperty(ont, uriforind, base + "refersTo", firstann.getReferenceURI().toString(), manager);
+			SemSimOWLFactory.setIndDatatypeProperty(ont, uriforind, base + "refersTo", firstann.getReferstoURI().toString(), manager);
 		}
 		// Otherwise it's a custom entity, custom process or unspecified property
 		else if (!(pmc instanceof CompositePhysicalEntity)){

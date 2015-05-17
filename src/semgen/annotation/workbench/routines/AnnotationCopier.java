@@ -11,9 +11,7 @@ import semgen.utilities.SemGenTask;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.utilities.uicomponent.SemGenProgressBar;
-import semsim.SemSimConstants;
 import semsim.annotation.Annotation;
-import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.StructuralRelation;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
@@ -196,11 +194,8 @@ public class AnnotationCopier {
 				// Copy free-text description
 				sub.setDescription(srcsub.getDescription());
 				
-				// Copy singular annotations
-				sub.removeAllReferenceAnnotations();
-				for(ReferenceOntologyAnnotation ann : srcsub.getReferenceOntologyAnnotations(SemSimConstants.REFERS_TO_RELATION)){
-					sub.addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, ann.getReferenceURI(), ann.getValueDescription());
-				}
+				// Copy singular annotation
+				sub.setSingularAnnotation(srcsub.getReferenceTerm());
 			}
 		}
 		return changemadetosubmodels;

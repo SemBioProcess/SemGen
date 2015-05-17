@@ -18,4 +18,6 @@ public interface ReferenceTerm {
 	 * @return True if an object has at least one {@link ReferenceOntologyAnnotation}, otherwise false;
 	 */
 	public Boolean hasRefersToAnnotation();
+	
+	public String getName();
 }

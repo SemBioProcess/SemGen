@@ -7,12 +7,12 @@ import java.util.Set;
 import semsim.SemSimConstants;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
-import semsim.annotation.SemSimRelation;
 import semsim.model.Importable;
 import semsim.model.SemSimCollection;
+import semsim.model.SemSimComponent;
 import semsim.model.computational.datastructures.DataStructure;
 
-public class Submodel extends PhysicalModelComponent implements Cloneable, Importable, SemSimCollection, ReferenceTerm {
+public class Submodel extends SemSimComponent implements Cloneable, Importable, SemSimCollection, ReferenceTerm {
 	
 	private Set<DataStructure> associatedDataStructures = new HashSet<DataStructure>();
 	private Set<Submodel> submodels = new HashSet<Submodel>();
@@ -64,11 +64,6 @@ public class Submodel extends PhysicalModelComponent implements Cloneable, Impor
 		if(submodels.contains(sub)){
 			submodels.remove(sub);
 		}
-	}
-	
-	@Override
-	public void addReferenceOntologyAnnotation(SemSimRelation relation, URI uri, String description){
-		addAnnotation(new ReferenceOntologyAnnotation(relation, uri, description));
 	}
 	
 	public Submodel clone() throws CloneNotSupportedException {
@@ -149,10 +144,6 @@ public class Submodel extends PhysicalModelComponent implements Cloneable, Impor
 		return singularterm;
 	}
 	
-	@Override
-	public String getComponentTypeasString() {
-		return "submodel";
-	}
 	
 	@Override
 	public URI getSemSimClassURI() {
@@ -162,9 +153,5 @@ public class Submodel extends PhysicalModelComponent implements Cloneable, Impor
 	public boolean isFunctional() {
 		return functional;
 	}
-	
-	@Override
-	protected boolean isEquivalent(Object obj) {
-		return false;
-	}
+
 }

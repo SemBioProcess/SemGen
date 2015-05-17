@@ -357,7 +357,7 @@ public class MMLreader extends ModelReader {
 		semsimmodel.setSemsimversion(sslib.getSemSimVersion());
 		
 		// If jsbatch couldn't parse the model code into an xmml file, log the error
-		if(semsimmodel.getAssociatedDataStructures().isEmpty() && semsimmodel.getPhysicalModelComponents().isEmpty()){
+		if(semsimmodel.getAssociatedDataStructures().isEmpty() && semsimmodel.getPhysicalModelComponents().isEmpty() && semsimmodel.getSubmodels().isEmpty()){
 			semsimmodel.addError(srcfile.getName() + " model appears to be empty.");
 		}
 		return semsimmodel;
