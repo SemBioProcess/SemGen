@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 
+import semgen.SemGen;
 import semsim.SemSimConstants;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
@@ -144,6 +145,12 @@ public class Submodel extends SemSimComponent implements Cloneable, Importable, 
 		return singularterm;
 	}
 	
+	/**
+	 * @return The name of the knowledge base that contains the URI used as the annotation value
+	 */
+	public String getNamewithOntologyAbreviation() {
+		return singularterm.getName() + " (" + SemGen.semsimlib.getReferenceOntologyAbbreviation(singularterm.getReferstoURI()) + ")";
+	}
 	
 	@Override
 	public URI getSemSimClassURI() {

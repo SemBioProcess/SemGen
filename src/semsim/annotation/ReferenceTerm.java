@@ -20,4 +20,6 @@ public interface ReferenceTerm {
 	public Boolean hasRefersToAnnotation();
 	
 	public String getName();
+	
+	public String getNamewithOntologyAbreviation();
 }

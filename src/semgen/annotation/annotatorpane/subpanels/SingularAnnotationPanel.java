@@ -35,7 +35,10 @@ public class SingularAnnotationPanel extends AnnotationChooserPanel{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
+		if (e.getSource()==combobox) {
+			int sing = getSelection();
+			drawer.setSingularAnnotation(sing);
+		}
 		
 	}
 	
@@ -61,19 +64,11 @@ public class SingularAnnotationPanel extends AnnotationChooserPanel{
 
 	@Override
 	public void searchButtonClicked() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
-	public void createButtonClicked() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void createButtonClicked() {	}
 
 	@Override
-	public void modifyButtonClicked() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void modifyButtonClicked() {	}
 }

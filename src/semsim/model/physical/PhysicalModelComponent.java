@@ -40,9 +40,7 @@ public abstract class PhysicalModelComponent extends SemSimComponent implements 
 		}
 		return raos;
 	}
-		
 
-	
 	public Boolean isAnnotated(){
 		return !getAnnotations().isEmpty();
 	}

@@ -9,6 +9,7 @@ import java.util.Set;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.AnnotatorWorkbench.WBEvent;
 import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
+import semsim.annotation.ReferenceTerm;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.Submodel;
 import semsim.owl.SemSimOWLFactory;
@@ -214,5 +215,17 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 	public String getSingularAnnotationasString(Integer index) {
 		if (componentlist.get(currentfocus).hasRefersToAnnotation()) return componentlist.get(currentfocus).getDescription() ;
 		return "";
+	}
+
+	@Override
+	public void setSingularAnnotation(int selectedIndex) {
+		if (selectedIndex!=-1) {
+			componentlist.get(currentfocus).setSingularAnnotation((ReferenceTerm)termlib.getComponent(selectedIndex));
+		}
+		else {
+			componentlist.get(currentfocus).setSingularAnnotation(null);
+		}
+		changeset.add(currentfocus);
+		changeNotification();
 	}
 }

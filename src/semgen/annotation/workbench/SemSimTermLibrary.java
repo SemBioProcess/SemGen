@@ -228,6 +228,7 @@ public class SemSimTermLibrary {
 		}
 		
 		public String getName() {
+			if (reference) return ((ReferenceTerm)indexedlist.get(pmcindex)).getNamewithOntologyAbreviation();
 			return indexedlist.get(pmcindex).getName();
 		}
 		

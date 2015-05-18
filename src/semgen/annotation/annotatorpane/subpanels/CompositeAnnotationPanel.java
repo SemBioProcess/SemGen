@@ -100,22 +100,22 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 	public void onPropertyChange() {
 		propsel.toggleNoneSelected(drawer.getIndexofPhysicalProperty()==-1);
 		if (esg==null) {
-		PropertyType type = drawer.getPropertyType();
-		switch (type) {
-			case PropertyOfPhysicalEntity:
-				addentbutton.setEnabled(true); 
-				addprocbutton.setEnabled(false);
-				break;
-			case PropertyOfPhysicalProcess:
-				addentbutton.setEnabled(false); 
-				//addprocbutton.setEnabled();
-				break;
-			default:
-				addentbutton.setEnabled(true); 
-				addprocbutton.setEnabled(true);
-				break;
-			
-			}
+			PropertyType type = drawer.getPropertyType();
+			switch (type) {
+				case PropertyOfPhysicalEntity:
+					addentbutton.setEnabled(true); 
+					addprocbutton.setEnabled(false);
+					break;
+				case PropertyOfPhysicalProcess:
+					addentbutton.setEnabled(false); 
+					addprocbutton.setEnabled(true);
+					break;
+				default:
+					addentbutton.setEnabled(true); 
+					addprocbutton.setEnabled(true);
+					break;
+				
+				}
 		}
 	}
 	
@@ -144,7 +144,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource()==combobox) {
-				drawer.setDatastructurePhysicalProperty(combobox.getSelectedIndex());
+				drawer.setDatastructurePhysicalProperty(getSelection());
 			}
 		}
 

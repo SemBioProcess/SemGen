@@ -395,8 +395,4 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	public boolean isMapped() {
 		return false;
 	}
-	
-	public void setSingularAnnotation(URI refuri) {
-		referenceuri = refuri;
-	}
 }

@@ -253,6 +253,18 @@ public class SemSimLibrary {
 		return newtable;
 	}
 	
+	public String getReferenceOntologyAbbreviation(URI uri) {
+		String ontologyAbbreviation = "?";
+		String namespace = SemSimOWLFactory.getNamespaceFromIRI(uri.toString());
+		if(SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.containsKey(namespace)){
+			String fullname = SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.get(namespace);
+			if(SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.containsKey(fullname)){
+				ontologyAbbreviation = SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.get(fullname);
+			}
+		}
+		return ontologyAbbreviation;
+	}
+	
 	/**
 	 * @return The version of the SemSim API used to generate the model.
 	 */

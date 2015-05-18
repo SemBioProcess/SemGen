@@ -100,7 +100,7 @@ public abstract class AnnotatorDrawer<T extends SemSimObject> extends Observable
 	
 	public Set<Integer> getChangedComponents() {
 		Set<Integer> cset = new HashSet<Integer>(changeset);
-		cset.clear();
+		changeset.clear();
 		return cset;
 	}
 	
@@ -134,4 +134,6 @@ public abstract class AnnotatorDrawer<T extends SemSimObject> extends Observable
 	public abstract URI getSingularAnnotationURI();
 
 	public abstract String getSingularAnnotationasString(Integer index);
+
+	public abstract void setSingularAnnotation(int selectedIndex);
 }

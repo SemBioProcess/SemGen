@@ -2,6 +2,7 @@ package semsim.model.physical.object;
 
 import java.net.URI;
 
+import semgen.SemGen;
 import semsim.SemSimConstants;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
@@ -26,6 +27,12 @@ public class ReferencePhysicalProcess extends PhysicalProcess implements Referen
 		return URI.create(referenceuri.toString());
 	}
 	
+	/**
+	 * @return The name of the knowledge base that contains the URI used as the annotation value
+	 */
+	public String getNamewithOntologyAbreviation() {
+		return getName() + " (" + SemGen.semsimlib.getReferenceOntologyAbbreviation(referenceuri) + ")";
+	}
 	
 	@Override
 	public URI getSemSimClassURI() {

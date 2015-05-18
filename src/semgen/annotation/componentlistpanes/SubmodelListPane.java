@@ -123,9 +123,6 @@ public class SubmodelListPane extends AnnotatorListPane<SubmodelButton, SubModel
 			}
 		}
 
-
-
-
 	}
 	
 }

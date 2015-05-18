@@ -11,6 +11,7 @@ import semgen.annotation.workbench.AnnotatorWorkbench.WBEvent;
 import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
 import semgen.annotation.workbench.routines.AnnotationCopier;
 import semsim.PropertyType;
+import semsim.annotation.ReferenceTerm;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.object.CompositePhysicalEntity;
@@ -168,8 +169,6 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		return componentlist.get(currentfocus).isMapped();
 	}
 	
-
-
 	public boolean isProcess() {
 		PhysicalProperty pp = componentlist.get(currentfocus).getPhysicalProperty();
 		if (pp == null) return false; 
@@ -191,7 +190,6 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	
 	public void setDatastructurePhysicalProperty(Integer index) {
 		DataStructure ds = componentlist.get(currentfocus);
-		if (getIndexofPhysicalProperty()==index) return;
 		if (index!=-1) {
 			ds.setPhysicalProperty(termlib.getPhysicalProperty(index));
 		}
@@ -235,8 +233,22 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	}
 	
 	@Override
+	public void setSingularAnnotation(int selectedIndex) {
+		if (selectedIndex!=-1) {
+			componentlist.get(currentfocus).setSingularAnnotation((ReferenceTerm)termlib.getComponent(selectedIndex));
+		}
+		else {
+			componentlist.get(currentfocus).setSingularAnnotation(null);
+		}
+		changeset.add(currentfocus);
+		changeNotification();
+	}
+		
+	@Override
 	protected void changeNotification() {
 		setChanged();
 		notifyObservers(modeledit.compositechanged);
 	}
+	
+
 }
