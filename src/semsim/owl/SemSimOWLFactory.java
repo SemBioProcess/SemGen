@@ -520,9 +520,11 @@ public class SemSimOWLFactory {
 	}
 
 	public static void addOntologyAnnotation(OWLOntology ont, IRI property, String val, OWLOntologyManager manager){
-		OWLLiteral lit = factory.getOWLLiteral(val,"en");
-		OWLAnnotation anno = factory.getOWLAnnotation(factory.getOWLAnnotationProperty(property), lit);
-		manager.applyChange(new AddOntologyAnnotation(ont, anno));
+		if(val!=null){
+			OWLLiteral lit = factory.getOWLLiteral(val,"en");
+			OWLAnnotation anno = factory.getOWLAnnotation(factory.getOWLAnnotationProperty(property), lit);
+			manager.applyChange(new AddOntologyAnnotation(ont, anno));
+		}
 	}
 	
 	public static Set<String> getAllSubclasses(OWLOntology ont, String parent, Boolean includeparent) throws OWLException{
