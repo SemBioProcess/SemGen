@@ -751,6 +751,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 			try {
 				Map<DataStructure, Set<? extends DataStructure>> table = primeextraction();
 				if (table.size() != 0) {
+					extractedfile = saveExtraction();
 					if (extractedfile != null) {
 						try {
 							extractedmodel = Extractor.extract(semsimmodel, table);
