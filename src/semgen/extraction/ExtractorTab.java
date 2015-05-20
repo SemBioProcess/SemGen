@@ -980,7 +980,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	public void requestSaveAs() {}
 	
 	public File saveExtraction() {
-		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("Choose location to save file", new String[]{"cellml","owl"});
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("Choose location to save file", new String[]{"owl","cellml"});
 		if (filec.SaveAsAction()!=null) {
 			extractedfile = filec.getSelectedFile();
 			return extractedfile;
