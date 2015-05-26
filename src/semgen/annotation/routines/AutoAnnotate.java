@@ -10,8 +10,7 @@ import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
-import semsim.model.computational.units.UnitFactor;
-import semsim.model.computational.units.UnitOfMeasurement;
+import semsim.utilities.SemSimUtil;
 
 public class AutoAnnotate {
 	// Automatically apply OPB annotations to the physical properties associated
@@ -24,7 +23,7 @@ public class AutoAnnotate {
 		Set<DataStructure> candidateforces = new HashSet<DataStructure>();
 		Set<DataStructure> candidateflows = new HashSet<DataStructure>();
 		
-		fundamentalBaseUnits = getFundamentalBaseUnits(semsimmodel);
+		fundamentalBaseUnits = SemSimUtil.getAllUnitsAsFundamentalBaseUnits(semsimmodel);
 		
 		// If units present, set up physical property connected to each data structure
 		for(DataStructure ds : semsimmodel.getDataStructures()){
@@ -150,32 +149,5 @@ public class AutoAnnotate {
 		}
 		return semsimmodel;
 	}
-	
-	public static Hashtable<String, Hashtable<String, Double>> getFundamentalBaseUnits(SemSimModel semsimmodel) {
-		Set<UnitOfMeasurement> units = semsimmodel.getUnits();
-		Hashtable<String, Hashtable<String, Double>> fundamentalBaseUnits = new Hashtable<String, Hashtable<String, Double>>();
-		
-		for(UnitOfMeasurement uom : units) {
-			Hashtable<String, Double> newUnitFactor = recurseBaseUnits(uom, 1.0);
-			
-			fundamentalBaseUnits.put(uom.getName(), newUnitFactor);
-		}
-		return fundamentalBaseUnits;
-	}
 
-	private static Hashtable<String, Double> recurseBaseUnits(UnitOfMeasurement uom, Double oldExp) {
-		Set<UnitFactor> unitFactors = uom.getUnitFactors();
-		Hashtable<String, Double> newUnitFactor = new Hashtable<String, Double>();
-		for(UnitFactor factor : unitFactors) {
-			UnitOfMeasurement baseuom = factor.getBaseUnit();
-			Double newExp = factor.getExponent()*oldExp;
-			if(SemGen.semsimlib.isCellMLBaseUnit(baseuom.getName())) {
-				newUnitFactor.put(baseuom.getName(), newExp);
-			}
-			else {
-				newUnitFactor.putAll(recurseBaseUnits(baseuom, newExp));
-			}
-		}
-		return newUnitFactor;
-	}
 }
