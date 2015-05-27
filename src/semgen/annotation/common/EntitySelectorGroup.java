@@ -20,7 +20,7 @@ public class EntitySelectorGroup extends Box {
 	public EntitySelectorGroup(CodewordToolDrawer bench) {
 		super(BoxLayout.PAGE_AXIS);
 		drawer = bench;
-		this.setBackground(SemGenSettings.lightblue);
+		setBackground(SemGenSettings.lightblue);
 		setAlignmentX(Box.LEFT_ALIGNMENT);
 	}
 	
@@ -29,9 +29,9 @@ public class EntitySelectorGroup extends Box {
 			addProcessSelector();
 		}
 		else {
-		//	for (int i = 0; i < numboxes; i++) {
+			for (int i = 0; i < drawer.countEntitiesinCompositeEntity(); i++) {
 				
-		//	}
+			}
 		}
 		alignAndPaint(15);
 	}
@@ -49,8 +49,9 @@ public class EntitySelectorGroup extends Box {
 	
 	public void addProcessSelector() {
 		SelectorPanel p = new SelectorPanel();
-		p.makeEntitySelector();
+		p.makeProcessSelector();
 		selectors.add(p);
+		add(p);
 	}
 	
 	
@@ -81,6 +82,8 @@ public class EntitySelectorGroup extends Box {
 	}
 	
 	private class SelectorPanel extends AnnotationChooserPanel {
+		private static final long serialVersionUID = 1L;
+
 		protected SelectorPanel() {
 			
 		}
@@ -94,12 +97,7 @@ public class EntitySelectorGroup extends Box {
 		public void webButtonClicked() {
 			
 		}
-
-		@Override
-		public void eraseButtonClicked() {
-			
-		}
-
+		
 		@Override
 		public void searchButtonClicked() {
 			

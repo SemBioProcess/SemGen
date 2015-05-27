@@ -2,12 +2,11 @@ package semgen.annotation.annotatorpane.subpanels;
 
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
-
 import semgen.annotation.common.AnnotationChooserPanel;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.drawers.AnnotatorDrawer;
 
-public class SingularAnnotationPanel extends AnnotationChooserPanel{
+public class SingularAnnotationPanel extends AnnotationChooserPanel {
 	private static final long serialVersionUID = 1L;
 	private SemSimTermLibrary library;
 	private AnnotatorDrawer<?> drawer;
@@ -38,6 +37,7 @@ public class SingularAnnotationPanel extends AnnotationChooserPanel{
 		if (e.getSource()==combobox) {
 			int sing = getSelection();
 			drawer.setSingularAnnotation(sing);
+			toggleNoneSelected(sing == -1);
 		}
 		
 	}
@@ -57,12 +57,6 @@ public class SingularAnnotationPanel extends AnnotationChooserPanel{
 	}
 
 	@Override
-	public void eraseButtonClicked() {
-		setSelection(-1);
-		
-	}
-
-	@Override
 	public void searchButtonClicked() {
 	}
 
@@ -71,4 +65,5 @@ public class SingularAnnotationPanel extends AnnotationChooserPanel{
 
 	@Override
 	public void modifyButtonClicked() {	}
+
 }

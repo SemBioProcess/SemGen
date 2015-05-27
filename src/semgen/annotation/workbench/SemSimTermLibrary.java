@@ -11,8 +11,10 @@ import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.ReferencePhysicalEntity;
+import semsim.utilities.ReferenceOntologies.ReferenceOntology;
 
 public class SemSimTermLibrary {
+	private ReferenceOntology lastont;
 	ArrayList<PhysicalProperty> pps = new ArrayList<PhysicalProperty>();
 	ArrayList<ReferencePhysicalEntity> rpes = new ArrayList<ReferencePhysicalEntity>();
 	ArrayList<CustomPhysicalEntity> cupes = new ArrayList<CustomPhysicalEntity>();
@@ -44,59 +46,61 @@ public class SemSimTermLibrary {
 		}
 	}
 	
-	public void addPhysicalProperty(PhysicalProperty pp) {
+	public int addPhysicalProperty(PhysicalProperty pp) {
 		for (PhysicalProperty p : pps) {
 			if (p.equals(pp)) { 
-				return;
+				return pps.indexOf(p);
 			}
 		}
 		pps.add(pp);
-		masterlist.add(new IndexCard<PhysicalProperty>(pps.indexOf(pp), pps));
-		return;
+		IndexCard<PhysicalProperty> ppic = new IndexCard<PhysicalProperty>(pps.indexOf(pp), pps);
+		masterlist.add(ppic);
+		return pps.indexOf(pp);
 	}
 	
-	public void addReferencePhysicalEntity(ReferencePhysicalEntity rpe) {
+	public int addReferencePhysicalEntity(ReferencePhysicalEntity rpe) {
 		for (ReferencePhysicalEntity librpe : rpes) {
 			if (librpe.equals(rpe)) { 
-				return;
+				return rpes.indexOf(librpe);
 			}
 		}
 		rpes.add(rpe);
-		masterlist.add(new IndexCard<ReferencePhysicalEntity>(rpes.indexOf(rpe), rpes));
-		return;
+		IndexCard<ReferencePhysicalEntity> rpeic = new IndexCard<ReferencePhysicalEntity>(rpes.indexOf(rpe), rpes);
+		masterlist.add(rpeic);
+		return rpes.indexOf(rpe);
 	}
 	
-	public void addCustomPhysicalEntity(CustomPhysicalEntity cupe) {
+	public int addCustomPhysicalEntity(CustomPhysicalEntity cupe) {
 		for (CustomPhysicalEntity libcupe : cupes) {
 			if (libcupe.equals(cupe)) { 
-				return;
+				return cupes.indexOf(libcupe);
 			}
 		}
 		cupes.add(cupe);
 		masterlist.add(new IndexCard<CustomPhysicalEntity>(cupes.indexOf(cupe), cupes));
-		return;
+		return cupes.indexOf(cupe);
 	}
 	
-	public void addCompositePhysicalEntity(CompositePhysicalEntity cpe) {
+	public int addCompositePhysicalEntity(CompositePhysicalEntity cpe) {
 		for (CompositePhysicalEntity libcpe : cpes) {
 			if (libcpe.equals(cpe)) { 
-				return;
+				return cpes.indexOf(libcpe);
 			}
 		}
 		cpes.add(cpe);
 		masterlist.add(new IndexCard<CompositePhysicalEntity>(cpes.indexOf(cpe), cpes));
-		return;
+		return cpes.indexOf(cpe);
 	}
 	
-	public void addPhysicalProcess(PhysicalProcess proc) {
+	public int addPhysicalProcess(PhysicalProcess proc) {
 		for (PhysicalProcess libproc : procs) {
 			if (libproc.equals(proc)) { 
-				return;
+				return procs.indexOf(libproc);
 			}
 		}
 		procs.add(proc);
 		masterlist.add(new IndexCard<PhysicalProcess>(procs.indexOf(proc), procs));
-		return;
+		return procs.indexOf(proc);
 	}
 	
 	public PhysicalProperty getPhysicalProperty(Integer index) {
@@ -235,5 +239,13 @@ public class SemSimTermLibrary {
 		public Boolean isTermEquivalent(PhysicalModelComponent term) {
 			return indexedlist.get(pmcindex).equals(term);
 		}
+	}
+	
+	public ReferenceOntology getLastOntology() {
+		return lastont;
+	}
+	
+	public void setLastOntology(ReferenceOntology ont) {
+		lastont = ont;
 	}
 }

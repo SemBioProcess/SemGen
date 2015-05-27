@@ -40,7 +40,6 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	private SubModelToolDrawer smdrawer;
 	private boolean modelsaved = true;
 	private int lastsavedas = -1;
-	private String ontspref;
 	public static enum WBEvent {freetextrequest, smselection, cwselection }
 	public static enum modeledit {compositechanged, submodelchanged, modelimport, smlistchanged, freetextchange, smnamechange }
 	
@@ -217,14 +216,6 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		setModelSaved(false);
 		setChanged();
 		notifyObservers(modeledit.compositechanged);
-	}
-
-	public String getLastOntology() {
-		return ontspref;
-	}
-	
-	public void setLastOntology(String ont) {
-		ontspref = ont;
 	}
 	
 	private void submodelListChanged() {

@@ -122,7 +122,7 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 	protected void addEraseButton() {
 		eraselabel = new ComponentPanelLabel(SemGenIcon.eraseicon, "Remove annotation component"){
 			public void onClick() {
-				eraseButtonClicked();
+				setSelection(-1);
 			}
 		};
 		lbllist.add(eraselabel);
@@ -149,7 +149,6 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 	
 	public void setSelection(int index) {
 		combobox.setSelectedIndex(index+1);
-		toggleNoneSelected(index == -1);
 	}
 	
 	public void setComboList(ArrayList<String> peidlist, Integer item) {
@@ -161,12 +160,13 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 		
 		combobox.setModel(new DefaultComboBoxModel<String>(idlist.toArray(new String[]{})));
 		combobox.setSelectedIndex(item+1);
-		combobox.repaint();
+		toggleNoneSelected(getSelection() == -1);
 		combobox.addActionListener(this);
+		
+		combobox.repaint();
 	}
 	
 	public abstract void webButtonClicked();
-	public abstract void eraseButtonClicked();
 	public abstract void searchButtonClicked();
 	public abstract void createButtonClicked();
 	public abstract void modifyButtonClicked();

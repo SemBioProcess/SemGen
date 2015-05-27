@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Set;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
@@ -244,8 +243,8 @@ public class SemSimLibrary {
 	}
 	
 	// Remove any OPB terms that are not Physical Properties
-	public Hashtable<String,String> removeNonPropertiesFromOPB(Hashtable<String, String> table){
-		Hashtable<String,String> newtable = new Hashtable<String,String>();
+	public HashMap<String,String> removeNonPropertiesFromOPB(HashMap<String, String> table){
+		HashMap<String,String> newtable = new HashMap<String,String>();
 		for(String key : table.keySet()){
 			if(OPBhasProperty(table.get(key)))
 				newtable.put(key, table.get(key));

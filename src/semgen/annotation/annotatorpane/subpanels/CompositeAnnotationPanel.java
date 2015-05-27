@@ -15,10 +15,12 @@ import javax.swing.JPanel;
 import semgen.SemGenSettings;
 import semgen.annotation.common.AnnotationChooserPanel;
 import semgen.annotation.common.EntitySelectorGroup;
+import semgen.annotation.dialog.termlibrary.AddReferenceClassDialog;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
 import semgen.utilities.SemGenFont;
 import semsim.PropertyType;
+import semsim.utilities.ReferenceOntologies.OntologyDomain;
 
 public class CompositeAnnotationPanel extends Box implements ActionListener{
 	private static final long serialVersionUID = 1L;
@@ -90,7 +92,6 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 	private void showAddEntityProcessButtons() {
 		pmcpanel.add(addentbutton);
 		pmcpanel.add(addprocbutton);
-		
 	}
 	
 	private void refreshPropertyTerms() {
@@ -145,6 +146,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource()==combobox) {
 				drawer.setDatastructurePhysicalProperty(getSelection());
+				toggleNoneSelected(getSelection() == -1);
 			}
 		}
 
@@ -154,13 +156,11 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 		}
 
 		@Override
-		public void eraseButtonClicked() {
-			setSelection(-1);
-		}
-
-		@Override
 		public void searchButtonClicked() {
-			
+			AddReferenceClassDialog rcd = new AddReferenceClassDialog(termlib, OntologyDomain.PhysicalProperty);
+			if (rcd.getIndexofSelection()!=-1) {
+				drawer.setDatastructurePhysicalProperty(rcd.getIndexofSelection());
+			}
 		}
 
 		@Override

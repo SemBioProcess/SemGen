@@ -114,8 +114,6 @@ public class Submodel extends SemSimComponent implements Cloneable, Importable, 
 		this.parentImport = parent;
 	}
 
-
-	
 	@Override
 	public Boolean hasRefersToAnnotation() {
 		return singularterm != null;

@@ -1,8 +1,6 @@
 package semsim.utilities.webservices;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,11 +19,9 @@ import org.jdom.input.SAXBuilder;
 
 public class UniProtSearcher {
 	public static Namespace ns = Namespace.getNamespace("xs", "http://uniprot.org/uniprot");
-	public Hashtable<String,String> classnamesanduris = new Hashtable<String,String>();
-	public Hashtable<String,String> rdflabelsanduris = new Hashtable<String,String>();
 	
-	public Map<String,String> search(String thestring) throws JDOMException, IOException{
-		Map<String,String> idnamemap = new HashMap<String,String>();
+	public HashMap<String,String> search(String thestring) throws JDOMException, IOException{
+		HashMap<String,String> idnamemap = new HashMap<String,String>();
 		thestring = thestring.replace(" ", "%20");
 		URL url = new URL("http://www.uniprot.org/uniprot/?query=reviewed:yes+AND+name:" + thestring + "*&format=tab&columns=id,protein%20names");
 		System.out.println(url.toString());
@@ -44,8 +40,7 @@ public class UniProtSearcher {
 			name = name.trim();
 			
 			String uristring = "http://identifiers.org/uniprot/" + id;
-			classnamesanduris.put(name, uristring);
-			rdflabelsanduris.put(name, uristring);
+			idnamemap.put(name, uristring);
 		}
 		s.close();
 		return idnamemap;

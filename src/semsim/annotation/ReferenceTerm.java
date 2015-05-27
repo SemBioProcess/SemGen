@@ -3,6 +3,7 @@ package semsim.annotation;
 import java.net.URI;
 
 public interface ReferenceTerm {
+	
 	/**
 	 * Retrieve the first {@link ReferenceOntologyAnnotation} found applied to this object
 	 * that uses the SemSim:refersTo relation (SemSimConstants.REFERS_TO_RELATION).

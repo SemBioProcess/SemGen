@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -23,14 +23,11 @@ import semsim.owl.SemSimOWLFactory;
 
 
 public class BioPortalSearcher {
-	public Hashtable<String,String> rdflabelsanduris = new Hashtable<String,String>();
-	public Hashtable<String,String> classnamesandshortconceptids = new Hashtable<String,String>();
 	
-	public void search(String text, String bioportalID, int exactmatch) throws IOException, JDOMException{
+	public HashMap<String,String> search(String text, String bioportalID, int exactmatch) throws IOException, JDOMException{
 		text = text.replace(" ", "+");
 		
-		boolean exactmatchbool = false;
-		if(exactmatch==1) exactmatchbool = true; 
+		boolean exactmatchbool = exactmatch==1; 
 		
 		URL url = new URL(
 				"http://data.bioontology.org/search?q="
@@ -45,7 +42,8 @@ public class BioPortalSearcher {
 		BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
 		Document doc = new SAXBuilder().build(in);
 		in.close();
-
+		
+		HashMap<String,String> rdflabelsanduris = new HashMap<String,String>();
 		// Process XML results from BioPortal REST service
 		if (doc!=null) {
 			if(doc.getRootElement().getName().equals("nilClass"))
@@ -58,7 +56,6 @@ public class BioPortalSearcher {
 					Element nextel = (Element) resultsiterator.next();
 					String preferredLabel = nextel.getChildText("prefLabel");
 					String uri = nextel.getChildText("id");
-					String conceptidshort = SemSimOWLFactory.getIRIfragment(uri);
 					
 					// Only collect terms from the queried ontology; don't show terms imported from other ontologies
 					String urins = SemSimOWLFactory.getNamespaceFromIRI(uri);
@@ -71,13 +68,13 @@ public class BioPortalSearcher {
 													
 							if(sourceontID.equals(bioportalID)){
 								rdflabelsanduris.put(preferredLabel, uri);
-								classnamesandshortconceptids.put(preferredLabel,conceptidshort);
 							}
 						}
 					}
 				}
 			}
 		}
+		return rdflabelsanduris;
 	}
 	
 	public static String getRDFLabelUsingBioPortal(String id, String bioportalontID){
