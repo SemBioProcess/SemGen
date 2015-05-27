@@ -1,6 +1,7 @@
 package semgen.stage;
 
 import java.awt.BorderLayout;
+import java.io.IOException;
 import java.util.Observer;
 
 import javax.naming.InvalidNameException;
@@ -54,7 +55,7 @@ public class StageTab extends SemGenTab {
 			});
 			
 			this.add(browserView, BorderLayout.CENTER);
-		} catch (InvalidNameException e) {
+		} catch (InvalidNameException | IOException e) {
 			e.printStackTrace();
 		}
 	}
