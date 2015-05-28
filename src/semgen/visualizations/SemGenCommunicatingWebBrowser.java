@@ -28,12 +28,16 @@ public class SemGenCommunicatingWebBrowser extends CommunicatingWebBrowser<SemGe
 		Path tempResourcesDirPath = Files.createTempDirectory("SemGen-" + Long.toString(System.nanoTime()));
 		File tempResourcesDir = tempResourcesDirPath.toFile();
 		if(!FileUtils.copyResourcesRecursively(this.getClass().getResource(ResourcesDir), tempResourcesDir)) {
-			System.out.println("Unable to copy resources directory. Failed to load browser.");
+			System.out.println("Failed to load the browser. Unable to copy resources to " + tempResourcesDirPath.toString());
 			return;
 		}
+		else
+			System.out.println("Browser files copied sucessfully to " + tempResourcesDirPath.toString());
 		
         // Load the stage from the temp dir
-	    this.loadURL(tempResourcesDir.getAbsolutePath() + StageHtml);
+		String stageDir = tempResourcesDir.getAbsolutePath() + StageHtml;
+		System.out.println("Loading the stage @: " + stageDir);
+		this.loadURL(stageDir);
 	    
 	    LoggerProvider.getBrowserLogger().setLevel(Level.SEVERE);			// The BrowserLogger is used to log browser messages.
 	    LoggerProvider.getIPCLogger().setLevel(Level.SEVERE);				// The IPCLogger is used to log IPC (Inter-Process Communication) messages.
