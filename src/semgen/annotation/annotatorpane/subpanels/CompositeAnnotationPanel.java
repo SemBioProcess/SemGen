@@ -32,7 +32,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 
 	private PropertySelectorPanel propsel;
 	private EntitySelectorGroup esg;
-	private JPanel pmcpanel = new JPanel();
+	private Box pmcpanel;
 	
 	public CompositeAnnotationPanel(SemSimTermLibrary lib, CodewordToolDrawer bench, int orientation){
 		super(orientation);
@@ -40,24 +40,19 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 		termlib = lib;
 		setBackground(SemGenSettings.lightblue);
 		setAlignmentX(Box.LEFT_ALIGNMENT);
-		
+
 		createPropertyPanel();
-		
-		pmcpanel.setLayout(new BoxLayout(pmcpanel, BoxLayout.X_AXIS));
-		pmcpanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		
 		addentbutton.addActionListener(this);
 		addprocbutton.addActionListener(this);
-		setPhysicalComponentPanel();
-		onPropertyChange();
+		
 		validate();
 	}
 
 	private void createPropertyPanel() {
 		propsel = new PropertySelectorPanel(!drawer.isEditable());
 		if (drawer.isEditable()) {
-			refreshPropertyTerms();
-			onPropertyChange();
+			propsel.setComboList(termlib.getSortedPhysicalPropertyIndicies(), drawer.getIndexofPhysicalProperty());
 		}
 		propsel.constructSelector();
 		propsel.setBorder(BorderFactory.createEmptyBorder(0, indent, 0, 0));
@@ -73,34 +68,43 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
         propofpanel.add(propertyoflabel, BorderLayout.SOUTH);
         add(propofpanel);
         
-	}
-	
-	private void setPhysicalComponentPanel() {
-		pmcpanel.removeAll();
-		
-		if (drawer.hasPhysicalModelComponent()) {
-			esg = new EntitySelectorGroup(drawer);
-			pmcpanel.add(esg);
-		}
-		else {
-			esg = null;
-			showAddEntityProcessButtons();
-		}
-		add(pmcpanel);
+        onPropertyChange();
 	}
 	
 	private void showAddEntityProcessButtons() {
-		pmcpanel.add(addentbutton);
-		pmcpanel.add(addprocbutton);
+		if (pmcpanel!=null) remove(pmcpanel);
+		Box btnbox = new Box(BoxLayout.X_AXIS);
+		btnbox.add(addentbutton);
+		btnbox.add(addprocbutton);
+		pmcpanel = btnbox;
+		add(pmcpanel);
 	}
 	
-	private void refreshPropertyTerms() {
-		propsel.setComboList(termlib.getPhysicalPropertyNames(), drawer.getIndexofPhysicalProperty());
+	private void setProcessSelector() {
+		if (pmcpanel!=null) remove(pmcpanel);
+		Box procbox = new Box(BoxLayout.X_AXIS);
+		ProcessSelectorPanel pcp = new ProcessSelectorPanel(!drawer.isEditable());
+
+		pcp.setComboList(termlib.getSortedPhysicalProcessIndicies(), drawer.getIndexofModelComponent());
+		procbox.add(pcp);
+		procbox.setBorder(BorderFactory.createEmptyBorder(0, indent*3, 0, 0));
+		
+		pmcpanel = procbox;
+		add(pmcpanel);
+	}
+	
+	private void setCompositeSelector() {
+		if (pmcpanel!=null) remove(pmcpanel);
+		esg = new EntitySelectorGroup(drawer, termlib);
+		pmcpanel = esg;
+		add(pmcpanel);
 	}
 	
 	public void onPropertyChange() {
 		propsel.toggleNoneSelected(drawer.getIndexofPhysicalProperty()==-1);
-		if (esg==null) {
+
+		if (!drawer.hasPhysicalModelComponent()) {
+			showAddEntityProcessButtons();
 			PropertyType type = drawer.getPropertyType();
 			switch (type) {
 				case PropertyOfPhysicalEntity:
@@ -115,8 +119,15 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 					addentbutton.setEnabled(true); 
 					addprocbutton.setEnabled(true);
 					break;
-				
 				}
+		}
+		else {
+			if (drawer.isProcess()) {
+				setProcessSelector();
+			}
+			else {
+				setCompositeSelector();
+			}
 		}
 	}
 	
@@ -128,16 +139,9 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 	@SuppressWarnings("serial")
 	private class PropertySelectorPanel extends AnnotationChooserPanel {
 		protected PropertySelectorPanel(boolean isstatic) {
+			super(termlib);
 			if (isstatic) {
-				String ppname;
-				Integer index = drawer.getIndexofPhysicalProperty();
-				if (index==-1) {
-					ppname = AnnotationChooserPanel.unspecifiedName;
-				}
-				else {
-					ppname = termlib.getPhysicalPropertyName(index);
-				}
-				makeStaticPanel(ppname, true);
+				makeStaticPanel(drawer.getIndexofPhysicalProperty());
 			}
 			else makePhysicalPropertySelector();
 		}
@@ -147,19 +151,15 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 			if (e.getSource()==combobox) {
 				drawer.setDatastructurePhysicalProperty(getSelection());
 				toggleNoneSelected(getSelection() == -1);
+				onPropertyChange();
 			}
-		}
-
-		@Override
-		public void webButtonClicked() {
-			urlbutton.openTerminBrowser(drawer.getPhysicalPropertyURI());
 		}
 
 		@Override
 		public void searchButtonClicked() {
 			AddReferenceClassDialog rcd = new AddReferenceClassDialog(termlib, OntologyDomain.PhysicalProperty);
 			if (rcd.getIndexofSelection()!=-1) {
-				drawer.setDatastructurePhysicalProperty(rcd.getIndexofSelection());
+				setComboList(termlib.getSortedPhysicalPropertyIndicies(), rcd.getIndexofSelection());
 			}
 		}
 
@@ -169,5 +169,34 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 		@Override
 		public void modifyButtonClicked() {}
 	}
+	
+	@SuppressWarnings("serial")
+	private class ProcessSelectorPanel extends AnnotationChooserPanel {
+		protected ProcessSelectorPanel(boolean isstatic) {
+			super(termlib);
+			if (isstatic) {
+				makeStaticPanel(drawer.getIndexofModelComponent());
+			}
+			else makeProcessSelector();
+			constructSelector();
+		}
 
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource()==combobox) {
+				//drawer.setDatastructurePhysicalProperty(getSelection());
+				toggleNoneSelected(getSelection() == -1);
+				onPropertyChange();
+			}
+		}
+
+		@Override
+		public void searchButtonClicked() {}
+
+		@Override
+		public void createButtonClicked() {}
+
+		@Override
+		public void modifyButtonClicked() {}
+	}
 }

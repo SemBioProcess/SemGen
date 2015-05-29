@@ -186,25 +186,6 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		resultslistright.setListData(resultsarray);
 	}
 
-	public void actionPerformed(ActionEvent arg0) {
-		Object o = arg0.getSource();
-		if ((o == findbox || o == findbutton || o == findchooser) && !findbox.getText().equals("")) {
-			loadingbutton.setIcon(SemGenIcon.loadingicon);
-			findbox.setEnabled(false);
-			findbutton.setEnabled(false);
-			resultslistright.setListData(new String[] {});
-			querythread = new GenericThread(this, "performSearch");
-			querythread.start();
-		}
-
-		if (o == ontologychooser) {
-			selected = domain.getDomainOntologyatIndex(ontologychooser.getSelectedIndex());
-			if(ontologychooser.getItemCount()>2){
-				library.setLastOntology(selected);
-			}
-		}
-	}
-
 	// Executed when the search button is pressed
 	public void performSearch() {
 		String text = findbox.getText();
@@ -212,10 +193,10 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		resultslistright.setEnabled(true);
 		resultslistright.removeAll();
 		
-		String bioportalID = selected.getBioPortalID();
+		String bioportalID = selected.getNickName();
 		
 		// If the user is searching BioPortal
-		if (bioportalID!=null) {
+		if (bioportalID!=selected.getBioPortalID()) {
 			BioPortalSearcher bps = new BioPortalSearcher();
 			try {
 				rdflabelsanduris = bps.search(text, bioportalID, findchooser.getSelectedIndex());
@@ -261,16 +242,18 @@ public class ReferenceClassFinderPanel extends JPanel implements
 	}
 	
 	public void addTermtoLibrary() {
-		String sel = resultslistright.getSelectedValue();
-		URI uri = URI.create(rdflabelsanduris.get(sel));
-		if (domain.equals(OntologyDomain.PhysicalProperty)) {
-			termindex = library.addPhysicalProperty(new PhysicalProperty(sel, uri));
-		}
-		if (domain.equals(OntologyDomain.PhysicalEntity)) {
-			termindex = library.addReferencePhysicalEntity(new ReferencePhysicalEntity(uri, sel));
-		}
-		if (domain.equals(OntologyDomain.PhysicalProcess)) {
-			termindex = library.addPhysicalProcess(new ReferencePhysicalProcess(uri, sel));
+		if (!resultslistright.isSelectionEmpty()) {
+			String sel = resultslistright.getSelectedValue();
+			URI uri = URI.create(rdflabelsanduris.get(sel));
+			if (domain.equals(OntologyDomain.PhysicalProperty)) {
+				termindex = library.addPhysicalProperty(new PhysicalProperty(sel, uri));
+			}
+			if (domain.equals(OntologyDomain.PhysicalEntity)) {
+				termindex = library.addReferencePhysicalEntity(new ReferencePhysicalEntity(uri, sel));
+			}
+			if (domain.equals(OntologyDomain.PhysicalProcess)) {
+				termindex = library.addPhysicalProcess(new ReferencePhysicalProcess(uri, sel));
+			}
 		}
 	}
 	
@@ -280,6 +263,25 @@ public class ReferenceClassFinderPanel extends JPanel implements
 	
 	public void clearSelection() {
 		termindex = -1;
+	}
+	
+	public void actionPerformed(ActionEvent arg0) {
+		Object o = arg0.getSource();
+		if ((o == findbox || o == findbutton || o == findchooser) && !findbox.getText().equals("")) {
+			loadingbutton.setIcon(SemGenIcon.loadingicon);
+			findbox.setEnabled(false);
+			findbutton.setEnabled(false);
+			resultslistright.setListData(new String[] {});
+			querythread = new GenericThread(this, "performSearch");
+			querythread.start();
+		}
+
+		if (o == ontologychooser) {
+			selected = domain.getDomainOntologyatIndex(ontologychooser.getSelectedIndex());
+			if(ontologychooser.getItemCount()>2){
+				library.setLastOntology(selected);
+			}
+		}
 	}
 	
 	public void valueChanged(ListSelectionEvent arg0) {

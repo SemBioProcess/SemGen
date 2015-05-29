@@ -1,6 +1,5 @@
 package semgen.annotation.workbench.drawers;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -166,7 +165,7 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 	
 	@Override
 	public Integer getSingularAnnotationLibraryIndex(int index) {
-		return termlib.getComponentIndex(componentlist.get(index).getReferenceTerm());
+		return -1;
 	}
 	
 	public ArrayList<Integer> getSubmodelsWithoutFocus() {
@@ -205,17 +204,6 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 		notifyObservers(modeledit.submodelchanged);
 	}
 
-	@Override
-	public URI getSingularAnnotationURI() {
-		if (componentlist.get(currentfocus).hasRefersToAnnotation()) return componentlist.get(currentfocus).getReferstoURI();
-		return null;
-	}
-
-	@Override
-	public String getSingularAnnotationasString(Integer index) {
-		if (componentlist.get(currentfocus).hasRefersToAnnotation()) return componentlist.get(currentfocus).getDescription() ;
-		return "";
-	}
 
 	@Override
 	public void setSingularAnnotation(int selectedIndex) {

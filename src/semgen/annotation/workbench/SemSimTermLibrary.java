@@ -1,6 +1,8 @@
 package semgen.annotation.workbench;
 
+import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import semgen.SemGen;
 import semsim.annotation.ReferenceTerm;
@@ -12,19 +14,22 @@ import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.utilities.ReferenceOntologies.ReferenceOntology;
+import semsim.writing.CaseInsensitiveComparator;
 
 public class SemSimTermLibrary {
 	private ReferenceOntology lastont;
-	ArrayList<PhysicalProperty> pps = new ArrayList<PhysicalProperty>();
-	ArrayList<ReferencePhysicalEntity> rpes = new ArrayList<ReferencePhysicalEntity>();
-	ArrayList<CustomPhysicalEntity> cupes = new ArrayList<CustomPhysicalEntity>();
-	ArrayList<CompositePhysicalEntity> cpes = new ArrayList<CompositePhysicalEntity>();
-	ArrayList<PhysicalProcess> procs = new ArrayList<PhysicalProcess>();
+	ArrayList<Integer> pps = new ArrayList<Integer>();
+	ArrayList<Integer> rpes = new ArrayList<Integer>();
+	ArrayList<Integer> cupes = new ArrayList<Integer>();
+	ArrayList<Integer> cpes = new ArrayList<Integer>();
+	ArrayList<Integer> procs = new ArrayList<Integer>();
 	
 	ArrayList<IndexCard<?>> masterlist = new ArrayList<IndexCard<?>>();
 	
 	public SemSimTermLibrary(SemSimModel model) {
-		pps.addAll(SemGen.semsimlib.getCommonProperties());
+		for (PhysicalProperty pp : SemGen.semsimlib.getCommonProperties()) {
+			addPhysicalProperty(pp);
+		}
 		addTermsinModel(model);
 	}
 	
@@ -47,92 +52,134 @@ public class SemSimTermLibrary {
 	}
 	
 	public int addPhysicalProperty(PhysicalProperty pp) {
-		for (PhysicalProperty p : pps) {
-			if (p.equals(pp)) { 
-				return pps.indexOf(p);
-			}
-		}
-		pps.add(pp);
-		IndexCard<PhysicalProperty> ppic = new IndexCard<PhysicalProperty>(pps.indexOf(pp), pps);
+		int i = getPhysicalPropertyIndex(pp);
+		if (i!=-1) return i; 
+		
+		IndexCard<PhysicalProperty> ppic = new IndexCard<PhysicalProperty>(pp);
 		masterlist.add(ppic);
-		return pps.indexOf(pp);
+		
+		i = masterlist.indexOf(ppic);
+		pps.add(i);
+		return i;
 	}
 	
 	public int addReferencePhysicalEntity(ReferencePhysicalEntity rpe) {
-		for (ReferencePhysicalEntity librpe : rpes) {
-			if (librpe.equals(rpe)) { 
-				return rpes.indexOf(librpe);
-			}
-		}
-		rpes.add(rpe);
-		IndexCard<ReferencePhysicalEntity> rpeic = new IndexCard<ReferencePhysicalEntity>(rpes.indexOf(rpe), rpes);
-		masterlist.add(rpeic);
-		return rpes.indexOf(rpe);
+		int i = this.getIndexofReferencePhysicalEntity(rpe);
+		if (i!=-1) return i; 
+		
+		IndexCard<ReferencePhysicalEntity> ic = new IndexCard<ReferencePhysicalEntity>(rpe);
+		masterlist.add(ic);
+		
+		i = masterlist.indexOf(ic);
+		rpes.add(i);
+		return i;
 	}
 	
 	public int addCustomPhysicalEntity(CustomPhysicalEntity cupe) {
-		for (CustomPhysicalEntity libcupe : cupes) {
-			if (libcupe.equals(cupe)) { 
-				return cupes.indexOf(libcupe);
-			}
-		}
-		cupes.add(cupe);
-		masterlist.add(new IndexCard<CustomPhysicalEntity>(cupes.indexOf(cupe), cupes));
-		return cupes.indexOf(cupe);
+		int i = getIndexofCustomPhysicalEntity(cupe);
+		if (i!=-1) return i; 
+		
+		IndexCard<CustomPhysicalEntity> ic = new IndexCard<CustomPhysicalEntity>(cupe);
+		masterlist.add(ic);
+		
+		i = masterlist.indexOf(ic);
+		cupes.add(i);
+		return i;
 	}
 	
 	public int addCompositePhysicalEntity(CompositePhysicalEntity cpe) {
-		for (CompositePhysicalEntity libcpe : cpes) {
-			if (libcpe.equals(cpe)) { 
-				return cpes.indexOf(libcpe);
-			}
-		}
-		cpes.add(cpe);
-		masterlist.add(new IndexCard<CompositePhysicalEntity>(cpes.indexOf(cpe), cpes));
-		return cpes.indexOf(cpe);
+		int i = getIndexofCompositePhysicalEntity(cpe);
+		if (i!=-1) return i; 
+		
+		IndexCard<CompositePhysicalEntity> ic = new IndexCard<CompositePhysicalEntity>(cpe);
+		masterlist.add(ic);
+		
+		i = masterlist.indexOf(ic);
+		cpes.add(i);
+		return i;
 	}
 	
 	public int addPhysicalProcess(PhysicalProcess proc) {
-		for (PhysicalProcess libproc : procs) {
-			if (libproc.equals(proc)) { 
-				return procs.indexOf(libproc);
-			}
-		}
-		procs.add(proc);
-		masterlist.add(new IndexCard<PhysicalProcess>(procs.indexOf(proc), procs));
-		return procs.indexOf(proc);
+		int i = getPhysicalProcessIndex(proc);
+		if (i!=-1) return i; 
+		
+		IndexCard<PhysicalProcess> ic = new IndexCard<PhysicalProcess>(proc);
+		masterlist.add(ic);
+		
+		i = masterlist.indexOf(ic);
+		procs.add(i);
+		return i;
 	}
 	
 	public PhysicalProperty getPhysicalProperty(Integer index) {
-		return pps.get(index);
+		return (PhysicalProperty)masterlist.get(index).getObject();
 	}
 
 	public Integer getPhysicalPropertyIndex(PhysicalProperty pp) {
-		return pps.indexOf(pp);
-	}
-	
-	public ArrayList<String> getPhysicalPropertyNames() {
-		ArrayList<String> names = new ArrayList<String>();
-		for (PhysicalProperty pp : pps) {
-			names.add(pp.getName());
+		for (Integer i : pps) {
+			if (masterlist.get(i).isTermEquivalent(pp)) return i; 
 		}
-		return names;
+		return -1;
 	}
 	
+	public ArrayList<Integer> getSortedPhysicalPropertyIndicies() {
+		return sortComponentIndiciesbyName(pps);
+	}
+
 	public ReferencePhysicalEntity getReferencePhysicalEntity(Integer index) {
-		return rpes.get(index);
+		return (ReferencePhysicalEntity)masterlist.get(index).getObject();
+	}
+	
+	public int getIndexofReferencePhysicalEntity(ReferencePhysicalEntity rpe) {
+		for (Integer i : rpes) {
+			if (masterlist.get(i).isTermEquivalent(rpe)) return i; 
+		}
+		return -1;
 	}
 
 	public CustomPhysicalEntity getCustomPhysicalEntity(Integer index) {
-		return cupes.get(index);
+		return (CustomPhysicalEntity)masterlist.get(index).getObject();
 	}
 
-	public CompositePhysicalEntity getCompositePhysicalEntity(Integer index) {
-		return cpes.get(index);
+	public int getIndexofCustomPhysicalEntity(CustomPhysicalEntity cupe) {
+		for (Integer i : cupes) {
+			if (masterlist.get(i).isTermEquivalent(cupe)) return i; 
+		}
+		return -1;
+	}
+	
+	public CustomPhysicalEntity getCompositePhysicalEntity(Integer index) {
+		return (CustomPhysicalEntity)masterlist.get(index).getObject();
 	}
 
+	public int getIndexofCompositePhysicalEntity(CompositePhysicalEntity cpe) {
+		for (Integer i : cpes) {
+			if (masterlist.get(i).isTermEquivalent(cpe)) return i; 
+		}
+		return -1;
+	}
+	
 	public PhysicalProcess getPhysicalProcess(Integer index) {
-		return procs.get(index);
+		return (PhysicalProcess)masterlist.get(index).getObject();
+	}
+		
+	public Integer getPhysicalProcessIndex(PhysicalProcess process) {
+		for (Integer i : procs) {
+			if (masterlist.get(i).isTermEquivalent(process)) return i; 
+		}
+		return -1;
+	}
+	
+	public ArrayList<Integer> getSortedPhysicalProcessIndicies() {
+		return sortComponentIndiciesbyName(procs);
+	}	
+	
+	public ArrayList<Integer> getSortedSingularPhysicalEntityIndicies() {
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		list.addAll(cupes);
+		list.addAll(rpes);
+		
+		return sortComponentIndiciesbyName(list);
 	}
 	
 	public void removePhysicalProperty(Integer index) {
@@ -155,26 +202,6 @@ public class SemSimTermLibrary {
 		procs.remove(index);
 	}
 	
-	public ArrayList<Integer> getPhysicalPropertyIndicies() {
-		ArrayList<Integer> indicies = new ArrayList<Integer>();
-		for (Integer i=0; i < pps.size(); i++) {
-			indicies.add(i);
-		}
-		return indicies;
-	}
-	
-	public ArrayList<String> getPhysicalPropertyNames(ArrayList<Integer> indicies) {
-		ArrayList<String> names = new ArrayList<String>();
-		for (Integer i : indicies) {
-			names.add(pps.get(i).getName());
-		}
-		return names;
-	}
-	
-	public String getPhysicalPropertyName(Integer index) {
-		return pps.get(index).getName();
-	}
-	
 	public ArrayList<Integer> getAllReferenceTerms() {
 		ArrayList<Integer> refterms = new ArrayList<Integer>();
 		for (IndexCard<?> card : masterlist) {
@@ -184,10 +211,7 @@ public class SemSimTermLibrary {
 		}
 		return refterms;
 	}
-	public Integer getComponentIndex(ReferenceTerm rt) {
-		return getComponentIndex((PhysicalModelComponent)rt);
-	}
-	
+
 	public Integer getComponentIndex(PhysicalModelComponent pmc) {
 		for (IndexCard<?> card : masterlist) {
 			if (card.isTermEquivalent(pmc)) return masterlist.indexOf(card);
@@ -204,27 +228,49 @@ public class SemSimTermLibrary {
 		return namelist;
 	}
 	
+	public String getComponentName(int index) {
+		return masterlist.get(index).getName();
+	}
+	
 	public PhysicalModelComponent getComponent(Integer index) {
 		return masterlist.get(index).getObject();
 	}
 	
+	private ArrayList<Integer> sortComponentIndiciesbyName(ArrayList<Integer> indicies) {
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		for (Integer i : indicies) {
+			map.put(masterlist.get(i).getName(), i);
+		}
+		ArrayList<String> names = new ArrayList<String>(map.keySet());
+		names.sort(new CaseInsensitiveComparator());
+		
+		ArrayList<Integer> sortedlist = new ArrayList<Integer>();
+		
+		for (String s : names) {
+			sortedlist.add(map.get(s));
+		}
+		return sortedlist;
+	}
+	
+	public boolean isReferenceTerm(Integer index) {
+		return masterlist.get(index).isReferenceTerm();
+	}
+	
+	public URI getReferenceComponentURI(Integer index) {
+		return masterlist.get(index).getReferenceURI();
+	}
+	
 	protected class IndexCard<T extends PhysicalModelComponent> {
-		private Integer pmcindex;
-		private ArrayList<T> indexedlist;
+		private T component;
 		private Boolean reference;
 		
-		public IndexCard(int index, ArrayList<T> list) {
-			pmcindex = index;
-			indexedlist = list;
-			reference = list.get(index).hasRefersToAnnotation();
-		}
-		
-		public Integer getIndex() {
-			return pmcindex;
+		public IndexCard(T comp) {
+			component = comp;
+			reference = component.hasRefersToAnnotation();
 		}
 		
 		public T getObject() {
-			return indexedlist.get(pmcindex);
+			return component;
 		}
 		
 		public boolean isReferenceTerm() {
@@ -232,12 +278,19 @@ public class SemSimTermLibrary {
 		}
 		
 		public String getName() {
-			if (reference) return ((ReferenceTerm)indexedlist.get(pmcindex)).getNamewithOntologyAbreviation();
-			return indexedlist.get(pmcindex).getName();
+			if (reference) return ((ReferenceTerm)component).getNamewithOntologyAbreviation();
+			return component.getName();
+		}
+		
+		public URI getReferenceURI() {
+			if (isReferenceTerm()) {
+				return ((ReferenceTerm)component).getReferstoURI();
+			}
+			return null;
 		}
 		
 		public Boolean isTermEquivalent(PhysicalModelComponent term) {
-			return indexedlist.get(pmcindex).equals(term);
+			return component.equals(term);
 		}
 	}
 	
@@ -248,4 +301,6 @@ public class SemSimTermLibrary {
 	public void setLastOntology(ReferenceOntology ont) {
 		lastont = ont;
 	}
+
+
 }

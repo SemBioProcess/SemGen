@@ -8,6 +8,7 @@ import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import semgen.SemGenSettings;
 import semgen.utilities.SemGenFont;
 
 public class StructuralRelationPanel extends JPanel{
@@ -23,6 +24,7 @@ public class StructuralRelationPanel extends JPanel{
 		partOf.setFont(SemGenFont.defaultItalic());
 		partOf.setPreferredSize(dims);
 		partOf.setMaximumSize(dims);
+		setBackground(SemGenSettings.lightblue);
 		
 		add(partOf, BorderLayout.WEST);
 		add(Box.createGlue(), BorderLayout.EAST);

@@ -53,8 +53,8 @@ public class AddReferenceClassDialog extends SemGenDialog implements
 				dispose();
 				return;
 			}
-			
-			optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+			refclasspanel.addTermtoLibrary();
+			dispose();
 		}
 	}
 	

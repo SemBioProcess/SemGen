@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import semgen.SemGenSettings;
+import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.ExternalURLButton;
@@ -34,10 +35,13 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 	private ComponentPanelLabel modifylabel;
 	private ComponentPanelLabel createlabel;
 	protected ExternalURLButton urlbutton;
+	protected SemSimTermLibrary library;
+	private ArrayList<Integer> comboindicies;
 	public static String unspecifiedName = "*unspecified*";
 	
-	public AnnotationChooserPanel() {
+	public AnnotationChooserPanel(SemSimTermLibrary lib) {
 		super(new BorderLayout());
+		library = lib;
 		this.setBackground(SemGenSettings.lightblue);
 		
 		combobox.setPreferredSize(dim);
@@ -45,15 +49,21 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 		
 		itempanel.setBackground(SemGenSettings.lightblue);
 		itempanel.add(combobox);
-
 	}
 	
-	public void makeStaticPanel(String selection, boolean isrefterm) {
+	public void makeStaticPanel(int selection) {
 		combobox.setEnabled(false);
-		combobox.addItem(selection);
-		if (isrefterm) {
-			addURLButton();
+		String ppname;
+		if (selection==-1) {
+			ppname = AnnotationChooserPanel.unspecifiedName;
 		}
+		else {
+			ppname = library.getComponentName(selection);
+			if (library.isReferenceTerm(selection)) {
+				addURLButton();
+			}
+		}
+		combobox.addItem(ppname);
 	}
 	
 	public void makePhysicalPropertySelector() {
@@ -144,29 +154,37 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 	}
 	
 	public int getSelection() {
-		return combobox.getSelectedIndex()-1;
+		return comboindicies.get(combobox.getSelectedIndex());
 	}
 	
 	public void setSelection(int index) {
-		combobox.setSelectedIndex(index+1);
+		combobox.setSelectedIndex(comboindicies.indexOf(index));
 	}
 	
-	public void setComboList(ArrayList<String> peidlist, Integer item) {
+	public void setComboList(ArrayList<Integer> peidlist, Integer selection) {
 		combobox.removeActionListener(this);
 		combobox.removeAllItems();
+		
+		setLibraryIndicies(peidlist);
+		
 		ArrayList<String> idlist = new ArrayList<String>();
 		idlist.add(unspecifiedName);
-		idlist.addAll(peidlist);
+		idlist.addAll(library.getComponentNames(peidlist));
 		
 		combobox.setModel(new DefaultComboBoxModel<String>(idlist.toArray(new String[]{})));
-		combobox.setSelectedIndex(item+1);
-		toggleNoneSelected(getSelection() == -1);
+		setSelection(selection);
+		toggleNoneSelected(selection == -1);
 		combobox.addActionListener(this);
 		
 		combobox.repaint();
 	}
 	
-	public abstract void webButtonClicked();
+	private void setLibraryIndicies(ArrayList<Integer> peidlist) {
+		comboindicies = new ArrayList<Integer>();
+		comboindicies.add(-1);
+		comboindicies.addAll(peidlist);
+	}
+	
 	public abstract void searchButtonClicked();
 	public abstract void createButtonClicked();
 	public abstract void modifyButtonClicked();
@@ -208,7 +226,7 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 
 	class WebMouseAdapter extends MouseAdapter {
 		public void mouseClicked(MouseEvent arg0) {
-			webButtonClicked();
+			urlbutton.openTerminBrowser(library.getReferenceComponentURI(getSelection()));
 		}
 	}
 }

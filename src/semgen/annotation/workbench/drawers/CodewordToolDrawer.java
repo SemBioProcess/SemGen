@@ -14,8 +14,12 @@ import semsim.PropertyType;
 import semsim.annotation.ReferenceTerm;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
+import semsim.model.physical.PhysicalEntity;
+import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.object.CompositePhysicalEntity;
+import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.PhysicalProperty;
+import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.utilities.SemSimComponentComparator;
 
 public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
@@ -141,6 +145,10 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		return componentlist.get(currentfocus).getPhysicalProperty().getReferstoURI();
 	}
 	
+	public URI getPhysicalComponentURI() {
+		return ((ReferenceTerm)componentlist.get(currentfocus).getAssociatedPhysicalModelComponent()).getReferstoURI();
+	}
+	
 	public String getLookupName(int index) {
 		String name = componentlist.get(index).getName();
 		if (!name.contains(".")) return name;
@@ -193,6 +201,8 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		if (index!=-1) {
 			ds.setPhysicalProperty(termlib.getPhysicalProperty(index));
 		}
+		else ds.setPhysicalProperty(null);
+		
 		changeNotification();
 	}
 	
@@ -201,13 +211,33 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		return cpe.getArrayListOfEntities().size();
 	}
 	
+	public ArrayList<Integer> getCompositeEntityIndicies() {
+		CompositePhysicalEntity cpe = (CompositePhysicalEntity)componentlist.get(currentfocus).getAssociatedPhysicalModelComponent();
+		ArrayList<Integer> indexlist = new ArrayList<Integer>();
+		for (PhysicalEntity pe : cpe.getArrayListOfEntities()) {
+			if (pe==null) {
+				indexlist.add(-1);
+				continue;
+			}
+			int i;
+			if (pe.hasRefersToAnnotation()) {
+				i = termlib.getIndexofReferencePhysicalEntity((ReferencePhysicalEntity)pe);
+			}
+			else {
+				i = termlib.getIndexofCustomPhysicalEntity((CustomPhysicalEntity)pe);
+			}
+			indexlist.add(i);
+		}
+		return indexlist;
+	}
+	
 	public boolean hasPhysicalModelComponent() {
 		return componentlist.get(currentfocus).hasAssociatedPhysicalComponent();
 	}
 	
 	@Override
 	public Integer getSingularAnnotationLibraryIndex(int index) {
-		return termlib.getComponentIndex(componentlist.get(index).getReferenceTerm());
+		return termlib.getComponentIndex((PhysicalModelComponent)componentlist.get(index).getReferenceTerm());
 	}
 	
 	@Override
@@ -220,16 +250,8 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		return componentlist.get(currentfocus).isImportedViaSubmodel();
 	}
 	
-	@Override
-	public URI getSingularAnnotationURI() {
-		if (componentlist.get(currentfocus).hasRefersToAnnotation()) return componentlist.get(currentfocus).getReferstoURI();
-		return null;
-	}
-	
-	@Override
-	public String getSingularAnnotationasString(Integer index) {
-		if (componentlist.get(currentfocus).hasRefersToAnnotation()) return componentlist.get(currentfocus).getDescription() ;
-		return "";
+	public int getIndexofModelComponent() {
+		return termlib.getComponentIndex(componentlist.get(currentfocus).getAssociatedPhysicalModelComponent());
 	}
 	
 	@Override

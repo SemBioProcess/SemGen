@@ -1,6 +1,5 @@
 package semgen.annotation.workbench.drawers;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Observable;
@@ -120,20 +119,12 @@ public abstract class AnnotatorDrawer<T extends SemSimObject> extends Observable
 		changeNotification();
 	}
 	
-	public String getSingularAnnotationasString() {
-		return getSingularAnnotationasString(currentfocus);
-	}
-	
 	public abstract Integer getSingularAnnotationLibraryIndex(int index);
 	public abstract boolean hasSingularAnnotation(int index);
 	protected abstract void selectionNotification();
 	protected abstract void changeNotification();
 	public abstract boolean isEditable(int index);
 	public abstract boolean isImported();
-
-	public abstract URI getSingularAnnotationURI();
-
-	public abstract String getSingularAnnotationasString(Integer index);
 
 	public abstract void setSingularAnnotation(int selectedIndex);
 }

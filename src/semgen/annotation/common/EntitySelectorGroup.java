@@ -9,6 +9,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 
 import semgen.SemGenSettings;
+import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
 
 public class EntitySelectorGroup extends Box {
@@ -16,24 +17,24 @@ public class EntitySelectorGroup extends Box {
 	private ArrayList<SelectorPanel> selectors = new ArrayList<SelectorPanel>();
 	private ArrayList<StructuralRelationPanel> relations = new ArrayList<StructuralRelationPanel>();
 	private CodewordToolDrawer drawer;
+	private SemSimTermLibrary termlib;
 	
-	public EntitySelectorGroup(CodewordToolDrawer bench) {
+	public EntitySelectorGroup(CodewordToolDrawer bench, SemSimTermLibrary lib) {
 		super(BoxLayout.PAGE_AXIS);
+		termlib = lib;
 		drawer = bench;
 		setBackground(SemGenSettings.lightblue);
 		setAlignmentX(Box.LEFT_ALIGNMENT);
+		
+		drawBox();
 	}
 	
-	public void drawBox(boolean isprocess) {
-		if (isprocess) {
-			addProcessSelector();
-		}
-		else {
-			for (int i = 0; i < drawer.countEntitiesinCompositeEntity(); i++) {
-				
-			}
+	public void drawBox() {
+		for (int i = 0; i < drawer.countEntitiesinCompositeEntity(); i++) {
+			addEntitySelector();
 		}
 		alignAndPaint(15);
+		refreshLists();
 	}
 	
 	public void addEntitySelector() {
@@ -42,18 +43,10 @@ public class EntitySelectorGroup extends Box {
 			relations.add(lbl); 
 			add(lbl);
 		}
-		SelectorPanel esp = new SelectorPanel();
+		SelectorPanel esp = new SelectorPanel(!drawer.isEditable());
 		selectors.add(esp);
 		add(esp, BorderLayout.NORTH);
-	}
-	
-	public void addProcessSelector() {
-		SelectorPanel p = new SelectorPanel();
-		p.makeProcessSelector();
-		selectors.add(p);
-		add(p);
-	}
-	
+	}	
 	
 	private void alignAndPaint(int indent){
 		int x = indent;
@@ -75,26 +68,30 @@ public class EntitySelectorGroup extends Box {
 		removeAll();
 	}
 	
-	public void refreshLists(ArrayList<String> peidlist) {
-		for (SelectorPanel p : selectors) {
-			//p.setComboList(peidlist);
+	public void refreshLists() {
+		ArrayList<Integer> choices = termlib.getSortedSingularPhysicalEntityIndicies();
+		ArrayList<Integer> composite = drawer.getCompositeEntityIndicies();
+		for (int i=0; i < selectors.size(); i++) {
+			selectors.get(i).setComboList(choices, composite.get(i));
 		}
 	}
 	
 	private class SelectorPanel extends AnnotationChooserPanel {
 		private static final long serialVersionUID = 1L;
 
-		protected SelectorPanel() {
-			
+		protected SelectorPanel(boolean isstatic) {
+			super(termlib);
+			if (isstatic) {
+				makeStaticPanel(drawer.getIndexofModelComponent());
+			}
+			else {
+				makeEntitySelector();
+			}
+			constructSelector();
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
-		}
-
-		@Override
-		public void webButtonClicked() {
 			
 		}
 		
