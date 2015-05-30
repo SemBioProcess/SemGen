@@ -70,6 +70,7 @@ public class SemGenCommunicatingWebBrowser extends CommunicatingWebBrowser<SemGe
 		if(resourceDir == null)
 			resourceDir = SemGenCommunicatingWebBrowser.class.getResource("/SemGen" + ResourcesDir);
 		
+		// Did we find the resources dir?
 		if(resourceDir == null)
 			System.out.println("Unable to find resources dir. :(");
 		else
