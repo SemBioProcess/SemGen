@@ -2,10 +2,13 @@ package semgen.visualizations;
 
 import javax.naming.InvalidNameException;
 
+import semgen.SemGen;
+
 import com.teamdev.jxbrowser.chromium.LoggerProvider;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.logging.*;
@@ -27,7 +30,10 @@ public class SemGenCommunicatingWebBrowser extends CommunicatingWebBrowser<SemGe
 		// Copy files to temp dir
 		Path tempDirPath = Files.createTempDirectory("SemGen-" + Long.toString(System.nanoTime()));
 		File tempDir = tempDirPath.toFile();
-		if(!FileUtils.copyResourcesRecursively(this.getClass().getResource(ResourcesDir), tempDir)) {
+		
+		System.out.println("Created the following temporary directory to hold stage files: " + tempDir.toString());
+		
+		if(!FileUtils.copyResourcesRecursively(getResourceDir(), tempDir)) {
 			System.out.println("Failed to load the browser. Unable to copy resources to " + tempDir.toString());
 			return;
 		}
@@ -51,6 +57,25 @@ public class SemGenCommunicatingWebBrowser extends CommunicatingWebBrowser<SemGe
 	    LoggerProvider.getChromiumProcessLogger().setLevel(Level.SEVERE);	// The ChromiumProcessLogger is used to log messages that are come from Chromium process.
 	    
 	    System.out.println("SemGen web browser loaded");
+	}
+	
+	/**
+	 * This is somewhat of a hack.
+	 * getResource returns a different url when run from Eclipse and
+	 * when run from an executable jar. I'm not sure why, so I handle both in this function.
+	 * @return A url pointing to the resource dir
+	 */
+	private static URL getResourceDir() {
+		URL resourceDir = SemGenCommunicatingWebBrowser.class.getResource(ResourcesDir);
+		if(resourceDir == null)
+			resourceDir = SemGenCommunicatingWebBrowser.class.getResource("/SemGen" + ResourcesDir);
+		
+		if(resourceDir == null)
+			System.out.println("Unable to find resources dir. :(");
+		else
+			System.out.println("Found the resources dir! :)");
+		
+		return resourceDir;
 	}
 
 }
