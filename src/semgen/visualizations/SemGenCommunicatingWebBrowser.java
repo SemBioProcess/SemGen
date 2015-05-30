@@ -17,7 +17,7 @@ public class SemGenCommunicatingWebBrowser extends CommunicatingWebBrowser<SemGe
 	private final static String ResourcesDir = "/resources";
 	
 	// Stage html in resource dir
-	private final static String StageHtml = ResourcesDir + "/stage.html?testMode=false";
+	private final static String StageHtml = "/stage.html?testMode=false";
 	
 	public SemGenCommunicatingWebBrowser(CommunicatingWebBrowserCommandReceiver commandReceiver) throws InvalidNameException, IOException {
 		super(SemGenWebBrowserCommandSender.class, commandReceiver);
@@ -25,17 +25,24 @@ public class SemGenCommunicatingWebBrowser extends CommunicatingWebBrowser<SemGe
 		System.out.println("Loading SemGen web browser");
         
 		// Copy files to temp dir
-		Path tempResourcesDirPath = Files.createTempDirectory("SemGen-" + Long.toString(System.nanoTime()));
-		File tempResourcesDir = tempResourcesDirPath.toFile();
-		if(!FileUtils.copyResourcesRecursively(this.getClass().getResource(ResourcesDir), tempResourcesDir)) {
-			System.out.println("Failed to load the browser. Unable to copy resources to " + tempResourcesDirPath.toString());
+		Path tempDirPath = Files.createTempDirectory("SemGen-" + Long.toString(System.nanoTime()));
+		File tempDir = tempDirPath.toFile();
+		if(!FileUtils.copyResourcesRecursively(this.getClass().getResource(ResourcesDir), tempDir)) {
+			System.out.println("Failed to load the browser. Unable to copy resources to " + tempDir.toString());
 			return;
 		}
 		else
-			System.out.println("Browser files copied sucessfully to " + tempResourcesDirPath.toString());
+			System.out.println("Browser files copied sucessfully to " + tempDir.toString());
+		
+		String tempDirAbsolutePath = tempDir.getAbsolutePath();
+		
+		// Paths that start with the seperator need to include
+		// the file:// protocol at the beginning of the path
+		if(tempDirAbsolutePath.startsWith(File.separator))
+			tempDirAbsolutePath = "file://" + tempDirAbsolutePath;
 		
         // Load the stage from the temp dir
-		String stageDir = tempResourcesDir.getAbsolutePath() + StageHtml;
+		String stageDir = tempDirAbsolutePath + ResourcesDir + StageHtml;
 		System.out.println("Loading the stage @: " + stageDir);
 		this.loadURL(stageDir);
 	    
