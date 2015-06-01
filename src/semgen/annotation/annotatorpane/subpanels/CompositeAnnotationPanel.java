@@ -143,7 +143,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 
 		@Override
 		public void searchButtonClicked() {
-			AddReferenceClassDialog rcd = new AddReferenceClassDialog(termlib, OntologyDomain.PhysicalProperty);
+			AddReferenceClassDialog rcd = new AddReferenceClassDialog(termlib, OntologyDomain.AssociatePhysicalProperty);
 			if (rcd.getIndexofSelection()!=-1) {
 				setComboList(termlib.getSortedAssociatePhysicalPropertyIndicies(), rcd.getIndexofSelection());
 			}

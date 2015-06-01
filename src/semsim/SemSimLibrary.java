@@ -252,6 +252,16 @@ public class SemSimLibrary {
 		return newtable;
 	}
 	
+	// Remove any OPB terms that are not Physical Properties
+	public HashMap<String,String> removeOPBAttributeProperties(HashMap<String, String> table){
+		HashMap<String,String> newtable = new HashMap<String,String>();
+		for(String key : table.keySet()){
+			if(!OPBhasProperty(table.get(key)))
+				newtable.put(key, table.get(key));
+		}
+		return newtable;
+	}
+	
 	public String getReferenceOntologyAbbreviation(URI uri) {
 		String ontologyAbbreviation = "?";
 		String namespace = SemSimOWLFactory.getNamespaceFromIRI(uri.toString());

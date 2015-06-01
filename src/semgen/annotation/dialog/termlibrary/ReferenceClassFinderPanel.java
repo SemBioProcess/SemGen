@@ -36,7 +36,6 @@ import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.ExternalURLButton;
-import semsim.SemSimConstants;
 import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
@@ -207,11 +206,14 @@ public class ReferenceClassFinderPanel extends JPanel implements
 				e.printStackTrace();
 			}
 
-			if (domain.equals(OntologyDomain.PhysicalProperty) ) {
+			if (domain.equals(OntologyDomain.AssociatePhysicalProperty) ) {
 				rdflabelsanduris = SemGen.semsimlib.removeNonPropertiesFromOPB(rdflabelsanduris);
 			}
+			else if (domain.equals(OntologyDomain.PhysicalProperty) ) {
+				rdflabelsanduris = SemGen.semsimlib.removeOPBAttributeProperties(rdflabelsanduris);
+			}
 		}
-		else if(selected.getFullName().startsWith(SemSimConstants.UNIPROT_FULLNAME)){
+		else if(selected.getFullName().startsWith(ReferenceOntology.UNIPROT.getFullName())){
 			UniProtSearcher ups = new UniProtSearcher();
 			try {
 				rdflabelsanduris = ups.search(text);
@@ -245,7 +247,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		if (!resultslistright.isSelectionEmpty()) {
 			String sel = resultslistright.getSelectedValue();
 			URI uri = URI.create(rdflabelsanduris.get(sel));
-			if (domain.equals(OntologyDomain.PhysicalProperty)) {
+			if (domain.equals(OntologyDomain.AssociatePhysicalProperty)) {
 				termindex = library.addAssociatePhysicalProperty(new PhysicalPropertyinComposite(sel, uri));
 			}
 			if (domain.equals(OntologyDomain.PhysicalEntity)) {
