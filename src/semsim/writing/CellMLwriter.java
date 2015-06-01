@@ -44,7 +44,7 @@ import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.Submodel;
 import semsim.model.physical.object.FunctionalSubmodel;
-import semsim.model.physical.object.PhysicalProperty;
+import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.owl.SemSimOWLFactory;
 import semsim.utilities.SemSimUtil;
 
@@ -428,7 +428,7 @@ public class CellMLwriter extends ModelWriter {
 			
 			Boolean hasphysprop = false;
 			if(a instanceof DataStructure){
-				PhysicalProperty prop = ((DataStructure)a).getPhysicalProperty();
+				PhysicalPropertyinComposite prop = ((DataStructure)a).getPhysicalProperty();
 				if(prop!=null){
 					if(prop.hasRefersToAnnotation()) hasphysprop = true;
 				}

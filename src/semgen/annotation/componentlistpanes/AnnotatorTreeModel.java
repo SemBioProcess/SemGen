@@ -181,7 +181,7 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 				}
 			}
 			if (arg0==cwdrawer) {
-				if	(arg1==modeledit.compositechanged) {
+				if	(arg1==modeledit.codewordchanged) {
 					for (Integer i : cwdrawer.getChangedComponents()) {
 						fireNodeChanged(cwmapinv.get(i));
 					}

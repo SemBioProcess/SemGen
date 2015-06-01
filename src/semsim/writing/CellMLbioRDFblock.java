@@ -30,7 +30,7 @@ import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
-import semsim.model.physical.object.PhysicalProperty;
+import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.utilities.SemSimUtil;
 
 public class CellMLbioRDFblock {
@@ -76,7 +76,7 @@ public class CellMLbioRDFblock {
 		if(!ds.isImportedViaSubmodel()){
 			
 			if(ds.getPhysicalProperty()!=null){
-				PhysicalProperty prop = ds.getPhysicalProperty();
+				PhysicalPropertyinComposite prop = ds.getPhysicalProperty();
 				
 				if(prop.hasRefersToAnnotation()){
 					Resource propres = getResourceForPMCandAnnotate(rdf, prop);
@@ -307,7 +307,7 @@ public class CellMLbioRDFblock {
 			
 			// Use SemSim:refersTo for annotated Physical model components
 			if(refprop == is){
-				if(pmc instanceof PhysicalProperty || pmc instanceof PhysicalEntity
+				if(pmc instanceof PhysicalPropertyinComposite || pmc instanceof PhysicalEntity
 						|| pmc instanceof PhysicalProcess) refprop = refersto;
 			}
 			// If we have a reference resource and the annotation statement hasn't already 

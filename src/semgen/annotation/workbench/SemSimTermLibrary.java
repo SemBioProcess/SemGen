@@ -5,19 +5,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import semgen.SemGen;
+import semsim.SemSimConstants;
 import semsim.annotation.ReferenceTerm;
+import semsim.annotation.StructuralRelation;
 import semsim.model.SemSimModel;
+import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.PhysicalProperty;
+import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.utilities.ReferenceOntologies.ReferenceOntology;
 import semsim.writing.CaseInsensitiveComparator;
 
 public class SemSimTermLibrary {
 	private ReferenceOntology lastont;
+	ArrayList<Integer> cpepps = new ArrayList<Integer>();
 	ArrayList<Integer> pps = new ArrayList<Integer>();
 	ArrayList<Integer> rpes = new ArrayList<Integer>();
 	ArrayList<Integer> cupes = new ArrayList<Integer>();
@@ -27,13 +32,16 @@ public class SemSimTermLibrary {
 	ArrayList<IndexCard<?>> masterlist = new ArrayList<IndexCard<?>>();
 	
 	public SemSimTermLibrary(SemSimModel model) {
-		for (PhysicalProperty pp : SemGen.semsimlib.getCommonProperties()) {
-			addPhysicalProperty(pp);
+		for (PhysicalPropertyinComposite pp : SemGen.semsimlib.getCommonProperties()) {
+			addAssociatePhysicalProperty(pp);
 		}
 		addTermsinModel(model);
 	}
 	
 	public void addTermsinModel(SemSimModel model) {
+		for (PhysicalPropertyinComposite pp : model.getAssociatePhysicalProperties()) {
+			addAssociatePhysicalProperty(pp);
+		}
 		for (PhysicalProperty pp : model.getPhysicalProperties()) {
 			addPhysicalProperty(pp);
 		}
@@ -49,6 +57,18 @@ public class SemSimTermLibrary {
 		for (PhysicalProcess proc : model.getPhysicalProcesses()) {
 			addPhysicalProcess(proc);
 		}
+	}
+	
+	public int addAssociatePhysicalProperty(PhysicalPropertyinComposite pp) {
+		int i = getPhysicalPropertyIndex(pp);
+		if (i!=-1) return i; 
+		
+		IndexCard<PhysicalPropertyinComposite> ppic = new IndexCard<PhysicalPropertyinComposite>(pp);
+		masterlist.add(ppic);
+		
+		i = masterlist.indexOf(ppic);
+		cpepps.add(i);
+		return i;
 	}
 	
 	public int addPhysicalProperty(PhysicalProperty pp) {
@@ -99,6 +119,21 @@ public class SemSimTermLibrary {
 		return i;
 	}
 	
+	public int createCompositePhysicalEntity(ArrayList<Integer> peindicies) {
+		//Avoid creating a composite with a null in the entity list
+		if (peindicies.contains(-1)) return -1;
+		ArrayList<PhysicalEntity> pes = new ArrayList<PhysicalEntity>();
+		ArrayList<StructuralRelation> rels = new ArrayList<StructuralRelation>();
+		for (Integer i : peindicies) {
+			if (i==-1) pes.add(null); 
+			pes.add((PhysicalEntity)masterlist.get(i).getObject());
+			rels.add(SemSimConstants.PART_OF_RELATION);
+		}
+		rels.remove(0);
+		
+		return addCompositePhysicalEntity(new CompositePhysicalEntity(pes, rels));
+	}
+	
 	public int addPhysicalProcess(PhysicalProcess proc) {
 		int i = getPhysicalProcessIndex(proc);
 		if (i!=-1) return i; 
@@ -111,15 +146,26 @@ public class SemSimTermLibrary {
 		return i;
 	}
 	
-	public PhysicalProperty getPhysicalProperty(Integer index) {
-		return (PhysicalProperty)masterlist.get(index).getObject();
+	public PhysicalPropertyinComposite getAssociatePhysicalProperty(Integer index) {
+		return (PhysicalPropertyinComposite)masterlist.get(index).getObject();
 	}
 
+	public Integer getPhysicalPropertyIndex(PhysicalPropertyinComposite pp) {
+		for (Integer i : cpepps) {
+			if (masterlist.get(i).isTermEquivalent(pp)) return i; 
+		}
+		return -1;
+	}
+	
 	public Integer getPhysicalPropertyIndex(PhysicalProperty pp) {
 		for (Integer i : pps) {
 			if (masterlist.get(i).isTermEquivalent(pp)) return i; 
 		}
 		return -1;
+	}
+	
+	public ArrayList<Integer> getSortedAssociatePhysicalPropertyIndicies() {
+		return sortComponentIndiciesbyName(cpepps);
 	}
 	
 	public ArrayList<Integer> getSortedPhysicalPropertyIndicies() {
@@ -183,7 +229,7 @@ public class SemSimTermLibrary {
 	}
 	
 	public void removePhysicalProperty(Integer index) {
-		pps.remove(index);
+		cpepps.remove(index);
 	}
 
 	public void removeReferencePhysicalEntity(Integer index) {
@@ -301,6 +347,4 @@ public class SemSimTermLibrary {
 	public void setLastOntology(ReferenceOntology ont) {
 		lastont = ont;
 	}
-
-
 }

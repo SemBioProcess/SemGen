@@ -52,7 +52,7 @@ import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.Submodel;
-import semsim.model.physical.object.PhysicalProperty;
+import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.utilities.SemSimUtil;
 import semsim.writing.MMLwriter;
 import edu.uci.ics.jung.graph.util.EdgeType;
@@ -248,7 +248,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	public Hashtable<PhysicalEntity, Set<DataStructure>> listentities() {
 		Set<DataStructure> propandent = semsimmodel.getDataStructureswithCompositesEntities();
 		for(DataStructure ds : propandent){
-			PhysicalProperty prop = ds.getPhysicalProperty();
+			PhysicalPropertyinComposite prop = ds.getPhysicalProperty();
 			PhysicalEntity ent = (PhysicalEntity)ds.getAssociatedPhysicalModelComponent();
 			if(entsanddatastrs.containsKey(ent)){
 				entsanddatastrs.get(ent).add(ds);

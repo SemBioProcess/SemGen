@@ -79,7 +79,7 @@ public class CodewordAnnotationPanel extends AnnotationPanel<CodewordToolDrawer>
 
 	@Override
 	public void updateUnique(Observable o, Object arg1) {
-		if (arg1==modeledit.compositechanged) {
+		if (arg1==modeledit.propertychanged) {
 			compositepanel.onPropertyChange();
 		}
 	}

@@ -25,7 +25,7 @@ import semgen.utilities.uicomponent.ExternalURLButton;
 
 public abstract class AnnotationChooserPanel extends JPanel implements ActionListener{
 	private static final long serialVersionUID = 1L;
-	private ArrayList<JLabel> lbllist = new ArrayList<JLabel>();
+	protected ArrayList<JLabel> lbllist = new ArrayList<JLabel>();
 	protected JComboBox<String> combobox = new JComboBox<String>();
 	
 	private JPanel itempanel = new JPanel();
@@ -113,7 +113,7 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 	
 	@SuppressWarnings("serial")
 	protected void addCustomButtons() {
-			createlabel = new ComponentPanelLabel(SemGenIcon.createicon,"Create new custom term"){ 
+			createlabel = new ComponentPanelLabel(SemGenIcon.createcompenticon,"Create new custom term"){ 
 				public void onClick() {
 					createButtonClicked();
 				}
@@ -132,10 +132,14 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 	protected void addEraseButton() {
 		eraselabel = new ComponentPanelLabel(SemGenIcon.eraseicon, "Remove annotation component"){
 			public void onClick() {
-				setSelection(-1);
+				onEraseButtonClick();
 			}
 		};
 		lbllist.add(eraselabel);
+	}
+	
+	protected void onEraseButtonClick() {
+		setSelection(-1);
 	}
 	
 	public void toggleNoneSelected(boolean noselection) {
@@ -189,10 +193,10 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 	public abstract void createButtonClicked();
 	public abstract void modifyButtonClicked();
 	
-	class ComponentPanelLabel extends JLabel {
+	protected class ComponentPanelLabel extends JLabel {
 		private static final long serialVersionUID = 1L;
 
-		ComponentPanelLabel(Icon icon, String tooltip) {
+		public ComponentPanelLabel(Icon icon, String tooltip) {
 			super(icon);
 			setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
 			setBackground(Color.white);
@@ -226,7 +230,9 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 
 	class WebMouseAdapter extends MouseAdapter {
 		public void mouseClicked(MouseEvent arg0) {
-			urlbutton.openTerminBrowser(library.getReferenceComponentURI(getSelection()));
+			if (urlbutton.isEnabled()) {
+				urlbutton.openTerminBrowser(library.getReferenceComponentURI(getSelection()));
+			}
 		}
 	}
 }

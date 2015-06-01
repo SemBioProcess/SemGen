@@ -15,7 +15,7 @@ import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.Submodel;
 import semsim.model.physical.object.CompositePhysicalEntity;
-import semsim.model.physical.object.PhysicalProperty;
+import semsim.model.physical.object.PhysicalPropertyinComposite;
 
 public class SemanticComparator {
 	private SemSimModel model1, model2;
@@ -93,8 +93,8 @@ public class SemanticComparator {
 						PhysicalModelComponent ds1pmc = ds1.getAssociatedPhysicalModelComponent();
 						PhysicalModelComponent ds2pmc = ds2.getAssociatedPhysicalModelComponent();
 						if(ds1pmc!=null && ds2pmc!=null){
-							PhysicalProperty prop1 = ds1.getPhysicalProperty();
-							PhysicalProperty prop2 = ds2.getPhysicalProperty();
+							PhysicalPropertyinComposite prop1 = ds1.getPhysicalProperty();
+							PhysicalPropertyinComposite prop2 = ds2.getPhysicalProperty();
 							
 							// Test equivalency of physical properties
 							match = testEquivalencyOfPhysicalComponents(prop1, prop2);

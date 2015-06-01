@@ -10,7 +10,6 @@ import semsim.SemSimLibrary;
 import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
-import semsim.annotation.ReferenceTerm;
 import semsim.annotation.SemSimRelation;
 import semsim.model.computational.Computation;
 import semsim.model.computational.ComputationalModelComponent;
@@ -19,6 +18,7 @@ import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
+import semsim.model.physical.object.PhysicalPropertyinComposite;
 
 /**
  * This class represents a named element in a simulation model that
@@ -26,9 +26,9 @@ import semsim.model.physical.object.PhysicalProperty;
  */
 public abstract class DataStructure extends ComputationalModelComponent implements Annotatable, Cloneable {	
 	private Computation computation;
-	private PhysicalProperty physicalProperty;
+	private PhysicalPropertyinComposite physicalProperty;
 	private PhysicalModelComponent physicalcomponent;
-	private ReferenceTerm singularterm;
+	private PhysicalProperty singularterm;
 	private DataStructure solutionDomain;
 	private Set<DataStructure> usedToCompute = new HashSet<DataStructure>();
 	private Set<Annotation> annotations = new HashSet<Annotation>();
@@ -77,9 +77,9 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	}
 	
 	/**
-	 * @return The {@link PhysicalProperty} simulated by the DataStructure
+	 * @return The {@link PhysicalPropertyinComposite} simulated by the DataStructure
 	 */
-	public PhysicalProperty getPhysicalProperty(){
+	public PhysicalPropertyinComposite getPhysicalProperty(){
 		return physicalProperty;
 	}
 	
@@ -161,10 +161,10 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	}
 	
 	/**
-	 * Assign a {@link PhysicalProperty} to the DataStructure 
+	 * Assign a {@link PhysicalPropertyinComposite} to the DataStructure 
 	 * @param pp The PhysicalProperty instance to assign to the DataStructure
 	 */
-	public void setPhysicalProperty(PhysicalProperty pp){
+	public void setAssociatePhysicalProperty(PhysicalPropertyinComposite pp){
 		physicalProperty = pp;
 	}
 	
@@ -364,7 +364,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		return getAssociatedPhysicalModelComponent()!=null;
 	}
 	
-	public void setSingularAnnotation(ReferenceTerm refterm) {
+	public void setSingularAnnotation(PhysicalProperty refterm) {
 		singularterm = refterm;
 	}
 	
@@ -388,7 +388,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		return singularterm.getReferstoURI();
 	}
 	
-	public ReferenceTerm getReferenceTerm() {
+	public PhysicalProperty getSingularTerm() {
 		return singularterm;
 	}
 	

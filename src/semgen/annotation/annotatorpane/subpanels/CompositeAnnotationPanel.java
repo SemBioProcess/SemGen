@@ -19,7 +19,6 @@ import semgen.annotation.dialog.termlibrary.AddReferenceClassDialog;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
 import semgen.utilities.SemGenFont;
-import semsim.PropertyType;
 import semsim.utilities.ReferenceOntologies.OntologyDomain;
 
 public class CompositeAnnotationPanel extends Box implements ActionListener{
@@ -52,7 +51,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 	private void createPropertyPanel() {
 		propsel = new PropertySelectorPanel(!drawer.isEditable());
 		if (drawer.isEditable()) {
-			propsel.setComboList(termlib.getSortedPhysicalPropertyIndicies(), drawer.getIndexofPhysicalProperty());
+			propsel.setComboList(termlib.getSortedAssociatePhysicalPropertyIndicies(), drawer.getIndexofPhysicalProperty());
 		}
 		propsel.constructSelector();
 		propsel.setBorder(BorderFactory.createEmptyBorder(0, indent, 0, 0));
@@ -74,8 +73,10 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 	private void showAddEntityProcessButtons() {
 		if (pmcpanel!=null) remove(pmcpanel);
 		Box btnbox = new Box(BoxLayout.X_AXIS);
+		btnbox.setBorder(BorderFactory.createEmptyBorder(0, indent*3, 0, 0));
 		btnbox.add(addentbutton);
 		btnbox.add(addprocbutton);
+		btnbox.add(Box.createHorizontalGlue());
 		pmcpanel = btnbox;
 		add(pmcpanel);
 	}
@@ -95,7 +96,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 	
 	private void setCompositeSelector() {
 		if (pmcpanel!=null) remove(pmcpanel);
-		esg = new EntitySelectorGroup(drawer, termlib);
+		esg = new CodewordCompositeSelectors(termlib);
 		pmcpanel = esg;
 		add(pmcpanel);
 	}
@@ -103,23 +104,8 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 	public void onPropertyChange() {
 		propsel.toggleNoneSelected(drawer.getIndexofPhysicalProperty()==-1);
 
-		if (!drawer.hasPhysicalModelComponent()) {
+		if (!drawer.hasPhysicalModelComponent() && !(drawer.hasAssociatedPhysicalProperty())) {
 			showAddEntityProcessButtons();
-			PropertyType type = drawer.getPropertyType();
-			switch (type) {
-				case PropertyOfPhysicalEntity:
-					addentbutton.setEnabled(true); 
-					addprocbutton.setEnabled(false);
-					break;
-				case PropertyOfPhysicalProcess:
-					addentbutton.setEnabled(false); 
-					addprocbutton.setEnabled(true);
-					break;
-				default:
-					addentbutton.setEnabled(true); 
-					addprocbutton.setEnabled(true);
-					break;
-				}
 		}
 		else {
 			if (drawer.isProcess()) {
@@ -159,7 +145,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 		public void searchButtonClicked() {
 			AddReferenceClassDialog rcd = new AddReferenceClassDialog(termlib, OntologyDomain.PhysicalProperty);
 			if (rcd.getIndexofSelection()!=-1) {
-				setComboList(termlib.getSortedPhysicalPropertyIndicies(), rcd.getIndexofSelection());
+				setComboList(termlib.getSortedAssociatePhysicalPropertyIndicies(), rcd.getIndexofSelection());
 			}
 		}
 
@@ -184,9 +170,8 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource()==combobox) {
-				//drawer.setDatastructurePhysicalProperty(getSelection());
+				drawer.setDataStructureComposite(getSelection());
 				toggleNoneSelected(getSelection() == -1);
-				onPropertyChange();
 			}
 		}
 
@@ -198,5 +183,20 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 
 		@Override
 		public void modifyButtonClicked() {}
+	}
+	
+	private class CodewordCompositeSelectors extends EntitySelectorGroup {
+		private static final long serialVersionUID = 1L;
+
+		public CodewordCompositeSelectors(SemSimTermLibrary lib) {
+			super(lib, drawer.getCompositeEntityIndicies(), drawer.isEditable());
+			
+		}
+
+		@Override
+		public void onChange() {
+			Integer compin = termlib.createCompositePhysicalEntity(pollSelectors());
+			drawer.setDataStructureComposite(compin);
+		}		
 	}
 }

@@ -5,7 +5,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Set;
 import javax.swing.JOptionPane;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
@@ -20,7 +19,6 @@ import semgen.annotation.workbench.drawers.ModelAnnotationsBench;
 import semgen.annotation.workbench.drawers.SubModelToolDrawer;
 import semgen.annotation.workbench.routines.AnnotationCopier;
 import semgen.utilities.CSVExporter;
-import semgen.utilities.SemGenError;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semsim.annotation.SemSimRelation;
@@ -41,7 +39,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	private boolean modelsaved = true;
 	private int lastsavedas = -1;
 	public static enum WBEvent {freetextrequest, smselection, cwselection }
-	public static enum modeledit {compositechanged, submodelchanged, modelimport, smlistchanged, freetextchange, smnamechange }
+	public static enum modeledit {propertychanged, compositechanged, codewordchanged, submodelchanged, modelimport, smlistchanged, freetextchange, smnamechange }
 	
 	public AnnotatorWorkbench(File file, SemSimModel model) {
 		semsimmodel = model;
@@ -116,32 +114,25 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 
 	@Override
 	public File saveModel() {
-		Set<DataStructure> unspecds = semsimmodel.getDataStructuresWithUnspecifiedAnnotations();
-		if(unspecds.isEmpty()){
-			URI fileURI = sourcefile.toURI();
-			if(fileURI!=null){
-				try {
-					if(lastsavedas==ModelClassifier.SEMSIM_MODEL) {
-						OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-						manager.saveOntology(semsimmodel.toOWLOntology(), new RDFXMLOntologyFormat(), IRI.create(fileURI));
-					}
-					else if(lastsavedas==ModelClassifier.CELLML_MODEL){
-						File outputfile =  new File(fileURI);
-						String content = new CellMLwriter(semsimmodel).writeToString();
-						SemSimUtil.writeStringToFile(content, outputfile);
-					}
-				} catch (Exception e) {e.printStackTrace();}		
-				SemGen.logfilewriter.println(sourcefile.getName() + " was saved");
-				setModelSaved(true);
-			}
-			else{
-				return saveModelAs();
-			}			
+		URI fileURI = sourcefile.toURI();
+		if(fileURI!=null){
+			try {
+				if(lastsavedas==ModelClassifier.SEMSIM_MODEL) {
+					OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+					manager.saveOntology(semsimmodel.toOWLOntology(), new RDFXMLOntologyFormat(), IRI.create(fileURI));
+				}
+				else if(lastsavedas==ModelClassifier.CELLML_MODEL){
+					File outputfile =  new File(fileURI);
+					String content = new CellMLwriter(semsimmodel).writeToString();
+					SemSimUtil.writeStringToFile(content, outputfile);
+				}
+			} catch (Exception e) {e.printStackTrace();}		
+			SemGen.logfilewriter.println(sourcefile.getName() + " was saved");
+			setModelSaved(true);
 		}
 		else{
-			SemGenError.showUnspecifiedAnnotationError(unspecds);
-			return null;
-		}
+			return saveModelAs();
+		}			
 
 		return sourcefile;
 	}
@@ -277,7 +268,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 			setChanged();
 			notifyObservers(arg1);
 		}
-		if (arg1==modeledit.freetextchange) {
+		if (arg1==modeledit.freetextchange || arg1==modeledit.codewordchanged || arg1==modeledit.submodelchanged) {
 			this.setModelSaved(false);
 		}
 	}

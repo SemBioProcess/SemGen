@@ -204,7 +204,7 @@ public class AnnotationCopier {
 	 * Intra-model datastructure copy
 	 * */
 	public static void copyCompositeAnnotation(DataStructure targetds, DataStructure sourceds) {
-		targetds.setPhysicalProperty(sourceds.getPhysicalProperty());
+		targetds.setAssociatePhysicalProperty(sourceds.getPhysicalProperty());
 		PhysicalModelComponent srcpropof = sourceds.getAssociatedPhysicalModelComponent();
 		
 		// If we're just copying a composite annotation within the same model...
@@ -215,7 +215,7 @@ public class AnnotationCopier {
 	 * Inter-model datastructure copy 
 	 * */
 	public static void copyCompositeAnnotation(SemSimModel targetmod, DataStructure targetds, DataStructure sourceds) {		
-		targetds.setPhysicalProperty(sourceds.getPhysicalProperty());
+		targetds.setAssociatePhysicalProperty(sourceds.getPhysicalProperty());
 		
 		PhysicalModelComponent srcpropof = sourceds.getAssociatedPhysicalModelComponent();
 		

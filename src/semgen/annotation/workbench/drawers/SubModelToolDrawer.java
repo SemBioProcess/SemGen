@@ -56,7 +56,7 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 	}
 	
 	public boolean hasSingularAnnotation(int index) {
-		return componentlist.get(index).hasRefersToAnnotation();
+		return false;
 	}
 
 	public Submodel removeSubmodel() {
@@ -207,13 +207,5 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 
 	@Override
 	public void setSingularAnnotation(int selectedIndex) {
-		if (selectedIndex!=-1) {
-			componentlist.get(currentfocus).setSingularAnnotation((ReferenceTerm)termlib.getComponent(selectedIndex));
-		}
-		else {
-			componentlist.get(currentfocus).setSingularAnnotation(null);
-		}
-		changeset.add(currentfocus);
-		changeNotification();
 	}
 }

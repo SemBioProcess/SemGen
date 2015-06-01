@@ -62,7 +62,7 @@ public class CodewordListPane extends AnnotatorListPane<CodewordButton, Codeword
 			if (arg==SettingChange.toggleproptype) {
 				toggleMarkers();
 			}
-			if	(arg==modeledit.compositechanged) {
+			if	(arg==modeledit.codewordchanged) {
 				refreshChangedButtons();
 			}
 	}

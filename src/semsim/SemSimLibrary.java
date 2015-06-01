@@ -22,7 +22,7 @@ import semsim.model.computational.units.UnitFactor;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
-import semsim.model.physical.object.PhysicalProperty;
+import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.owl.SemSimOWLFactory;
 import semsim.utilities.ResourcesManager;
 
@@ -46,7 +46,7 @@ public class SemSimLibrary {
 	private Set<String> jsimUnitPrefixesTable;
 	private Set<String> cellMLUnitsTable;
 	
-	private HashMap<String, PhysicalProperty> commonproperties = new HashMap<String, PhysicalProperty>();
+	private HashMap<String, PhysicalPropertyinComposite> commonproperties = new HashMap<String, PhysicalPropertyinComposite>();
 	private Set<String> OPBproperties = new HashSet<String>();
 	private Set<String> OPBflowProperties = new HashSet<String>();
 	private Set<String> OPBprocessProperties = new HashSet<String>();
@@ -97,12 +97,12 @@ public class SemSimLibrary {
 	private void loadCommonProperties() throws FileNotFoundException {
 		HashMap<String, String[]> ptable = ResourcesManager.createHashMapFromFile("cfg/CommonProperties.txt");
 		for (String s : ptable.keySet()) {
-			this.commonproperties.put(s, new PhysicalProperty(ptable.get(s)[0], URI.create(s)));
+			this.commonproperties.put(s, new PhysicalPropertyinComposite(ptable.get(s)[0], URI.create(s)));
 		}
 	}
 	
-	public Set<PhysicalProperty> getCommonProperties() {
-		return new HashSet<PhysicalProperty>(commonproperties.values());
+	public Set<PhysicalPropertyinComposite> getCommonProperties() {
+		return new HashSet<PhysicalPropertyinComposite>(commonproperties.values());
 	}
 	
 	public String[] getOPBUnitRefTerm(String unit) {
@@ -139,25 +139,25 @@ public class SemSimLibrary {
 		return metadataRelationsTable.keySet().toArray(new String[]{});
 	}
 	
-	public PhysicalProperty getOPBAnnotationFromPhysicalUnit(DataStructure ds){
+	public PhysicalPropertyinComposite getOPBAnnotationFromPhysicalUnit(DataStructure ds){
 		String[] candidateOPBclasses = getOPBUnitRefTerm(ds.getUnit().getName());
 		// If there is no OPB class, checkbase units.
 		if (candidateOPBclasses == null) {
 			candidateOPBclasses = getOPBBaseUnitRefTerms(ds);
 		}
-		PhysicalProperty pp = null;
+		PhysicalPropertyinComposite pp = null;
 		if (candidateOPBclasses != null && candidateOPBclasses.length == 1) {
 			String term = SemSimConstants.OPB_NAMESPACE + candidateOPBclasses[0];
 			pp = commonproperties.get(term);
 			if (pp==null) {
 				OWLClass cls = SemSimOWLFactory.factory.getOWLClass(IRI.create(term));
-				pp = new PhysicalProperty(SemSimOWLFactory.getRDFLabels(OPB, cls)[0], URI.create(term));
+				pp = new PhysicalPropertyinComposite(SemSimOWLFactory.getRDFLabels(OPB, cls)[0], URI.create(term));
 			}
 		}
 		return pp;
 	}
 	
-	public PhysicalProperty getOPBAnnotationFromReferenceID(String id){
+	public PhysicalPropertyinComposite getOPBAnnotationFromReferenceID(String id){
 		return commonproperties.get(id);
 	}
 	
@@ -222,7 +222,7 @@ public class SemSimLibrary {
 		return (OPBhasFlowProperty(u) || OPBhasProcessProperty(u));
 	}
 	
-	public boolean checkOPBpropertyValidity(PhysicalProperty prop, PhysicalModelComponent pmc){
+	public boolean checkOPBpropertyValidity(PhysicalPropertyinComposite prop, PhysicalModelComponent pmc){
 		if(pmc!=null){
 			
 			Boolean URIisprocessproperty = isOPBprocessProperty(prop.getReferstoURI());

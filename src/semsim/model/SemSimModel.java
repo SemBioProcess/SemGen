@@ -41,6 +41,7 @@ import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.model.physical.object.FunctionalSubmodel;
 import semsim.model.physical.object.PhysicalDependency;
 import semsim.model.physical.object.PhysicalProperty;
+import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.writing.SemSimOWLwriter;
@@ -58,9 +59,9 @@ import semsim.writing.SemSimOWLwriter;
  * <p>
  * For example, a model of cellular glycolysis may represent the chemical concentration of
  * intracellular glucose with a variable called "cgluc." This can be captured within a SemSim model by
- * creating a {@link DataStructure} with the name "cgluc" and a corresponding {@link PhysicalProperty}
+ * creating a {@link DataStructure} with the name "cgluc" and a corresponding {@link PhysicalPropertyinComposite}
  * that is annotated against the Ontology of Physics for Biology term "Chemical concentration."
- * This {@link PhysicalProperty} would be a property of a {@link PhysicalEntity} representing 
+ * This {@link PhysicalPropertyinComposite} would be a property of a {@link PhysicalEntity} representing 
  * intracellular glucose. In this case we would use a {@link CompositePhysicalEntity} that consists of
  * a singular {@link PhysicalEntity} representing glucose that is linked to another singular {@link PhysicalEntity}
  * representing the cytosol via the "part of" {@link SemSimRelation}. To capture the biological meaning
@@ -93,6 +94,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	private Set<Submodel> submodels = new HashSet<Submodel>();
 	private Set<PhysicalEntity> physicalentities = new HashSet<PhysicalEntity>();
 	private Set<PhysicalProperty> physicalproperties = new HashSet<PhysicalProperty>();
+	private Set<PhysicalPropertyinComposite> associatephysicalproperties = new HashSet<PhysicalPropertyinComposite>();
 	private Set<PhysicalProcess> physicalprocesses = new HashSet<PhysicalProcess>();
 	private Set<String> errors = new HashSet<String>();
 	
@@ -103,8 +105,6 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 
 	private int sourceModelType;
 	private String sourcefilelocation;
-	public static final CustomPhysicalEntity unspecifiedentity = new CustomPhysicalEntity("", "");
-	public static final CustomPhysicalProcess unspecifiedprocess = new CustomPhysicalProcess("", "");
 	
 	/**
 	 * Constructor without namespace
@@ -242,6 +242,14 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	}
 	
 	
+	public PhysicalPropertyinComposite addAssociatePhysicalProperty(PhysicalPropertyinComposite pp){
+		if(getAssociatePhysicalPropertybyURI(pp.getReferstoURI())!=null) pp = getAssociatePhysicalPropertybyURI(pp.getReferstoURI());
+		else{
+			associatephysicalproperties.add(pp);
+		}
+		return pp;
+	}
+	
 	public PhysicalProperty addPhysicalProperty(PhysicalProperty pp){
 		if(getPhysicalPropertybyURI(pp.getReferstoURI())!=null) pp = getPhysicalPropertybyURI(pp.getReferstoURI());
 		else{
@@ -250,8 +258,15 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 		return pp;
 	}
 	
+	public PhysicalPropertyinComposite getAssociatePhysicalPropertybyURI(URI uri) {
+		for (PhysicalPropertyinComposite pp : associatephysicalproperties) {
+			if (pp.getReferstoURI().equals(uri)) return pp;
+		}
+		return null;
+	}
+	
 	public PhysicalProperty getPhysicalPropertybyURI(URI uri) {
-		for (PhysicalProperty pp : physicalproperties) {
+		for (PhysicalProperty pp :physicalproperties) {
 			if (pp.getReferstoURI().equals(uri)) return pp;
 		}
 		return null;
@@ -661,7 +676,14 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	
 	
 	/**
-	 * @return All PhysicalProperties in the model.
+	 * @return All PhysicalProperties which can be associated with a composite in the model.
+	 */
+	public Set<PhysicalPropertyinComposite> getAssociatePhysicalProperties() {
+		return associatephysicalproperties;
+	}
+	
+	/**
+	 * @return All PhysicalProperties which cannot be associated with a composite in the model.
 	 */
 	public Set<PhysicalProperty> getPhysicalProperties() {
 		return physicalproperties;
@@ -672,8 +694,9 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	 */
 	public Set<PhysicalModelComponent> getPhysicalModelComponents(){
 		Set<PhysicalModelComponent> set = new HashSet<PhysicalModelComponent>();
-		set.addAll(getPhysicalProperties());
+		set.addAll(getAssociatePhysicalProperties());
 		set.addAll(getPhysicalEntities());
+		set.addAll(getPhysicalProperties());
 		set.addAll(getPhysicalProcesses());
 		set.addAll(getPhysicalDependencies());
 		return set;
@@ -1057,25 +1080,6 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 		return sourceModelType;
 	}
 	
-	public Set<DataStructure> getDataStructuresWithUnspecifiedAnnotations(){
-		Set<DataStructure> dsset = new HashSet<DataStructure>();
-		for(DataStructure ds : getAssociatedDataStructures()){
-			if(ds.hasPhysicalProperty()){
-					if(ds.getAssociatedPhysicalModelComponent()==unspecifiedprocess){
-						dsset.add(ds);
-					}
-					if(ds.getAssociatedPhysicalModelComponent() instanceof CompositePhysicalEntity){
-						for(PhysicalEntity pe : ((CompositePhysicalEntity)ds.getAssociatedPhysicalModelComponent()).getArrayListOfEntities()){
-							if(pe==unspecifiedentity)
-								dsset.add(ds);
-						}
-					}			
-			}
-			else System.out.println(ds.getName() + " didn't have a physical property");
-		}
-		return dsset;
-	}
-	
 	// Required by annotable interface:
 	/**
 	 * @return All SemSim Annotations applied to an object
@@ -1187,19 +1191,19 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 		return SemSimConstants.SEMSIM_MODEL_CLASS_URI;
 	}
 		
-	public void replacePhysicalProperty(PhysicalProperty tobereplaced, PhysicalProperty toreplace) {
-		Set<PhysicalProperty> pps = new HashSet<PhysicalProperty>();
-		pps.addAll(physicalproperties);
-		for (PhysicalProperty pp : pps) {
+	public void replacePhysicalProperty(PhysicalPropertyinComposite tobereplaced, PhysicalPropertyinComposite toreplace) {
+		Set<PhysicalPropertyinComposite> pps = new HashSet<PhysicalPropertyinComposite>();
+		pps.addAll(associatephysicalproperties);
+		for (PhysicalPropertyinComposite pp : pps) {
 			if (pp.equals(tobereplaced)) {
-				physicalproperties.remove(pp);
-				physicalproperties.add(toreplace);
+				associatephysicalproperties.remove(pp);
+				associatephysicalproperties.add(toreplace);
 			}
 		}
 		for (DataStructure ds : dataStructures) {
 			if (ds.hasPhysicalProperty()) {
 				if (ds.getPhysicalProperty().equals(tobereplaced)) {
-					ds.setPhysicalProperty(toreplace);
+					ds.setAssociatePhysicalProperty(toreplace);
 				}
 			}
 		}

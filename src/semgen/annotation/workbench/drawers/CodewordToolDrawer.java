@@ -19,6 +19,7 @@ import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.PhysicalProperty;
+import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.utilities.SemSimComponentComparator;
 
@@ -178,7 +179,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	}
 	
 	public boolean isProcess() {
-		PhysicalProperty pp = componentlist.get(currentfocus).getPhysicalProperty();
+		PhysicalPropertyinComposite pp = componentlist.get(currentfocus).getPhysicalProperty();
 		if (pp == null) return false; 
 		return SemGen.semsimlib.isOPBprocessProperty(pp.getReferstoURI());
 	}
@@ -198,12 +199,27 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	
 	public void setDatastructurePhysicalProperty(Integer index) {
 		DataStructure ds = componentlist.get(currentfocus);
-		if (index!=-1) {
-			ds.setPhysicalProperty(termlib.getPhysicalProperty(index));
+		//If the new selection is equivalent to the old, do nothing.
+		if (termlib.getPhysicalPropertyIndex(ds.getPhysicalProperty())==index) {
+			return;
 		}
-		else ds.setPhysicalProperty(null);
+		if (index!=-1) {
+			ds.setAssociatePhysicalProperty(termlib.getAssociatePhysicalProperty(index));
+		}
+		else ds.setAssociatePhysicalProperty(null);
 		
-		changeNotification();
+		changeNotification(modeledit.propertychanged);
+	}
+	
+	public void setDataStructureComposite(Integer index) {
+		DataStructure ds = componentlist.get(currentfocus);
+		//If the new selection is equivalent to the old, do nothing.
+		if (termlib.getComponentIndex(ds.getAssociatedPhysicalModelComponent())==index || index==-1) {
+			return;
+		}
+		ds.setAssociatedPhysicalModelComponent(termlib.getComponent(index));
+
+		changeNotification(modeledit.compositechanged);
 	}
 	
 	public int countEntitiesinCompositeEntity() {
@@ -212,23 +228,29 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	}
 	
 	public ArrayList<Integer> getCompositeEntityIndicies() {
-		CompositePhysicalEntity cpe = (CompositePhysicalEntity)componentlist.get(currentfocus).getAssociatedPhysicalModelComponent();
 		ArrayList<Integer> indexlist = new ArrayList<Integer>();
-		for (PhysicalEntity pe : cpe.getArrayListOfEntities()) {
-			if (pe==null) {
-				indexlist.add(-1);
-				continue;
+		if (hasPhysicalModelComponent()) {
+			CompositePhysicalEntity cpe = (CompositePhysicalEntity)componentlist.get(currentfocus).getAssociatedPhysicalModelComponent();
+		
+			for (PhysicalEntity pe : cpe.getArrayListOfEntities()) {
+				int i;
+				if (pe.hasRefersToAnnotation()) {
+					i = termlib.getIndexofReferencePhysicalEntity((ReferencePhysicalEntity)pe);
+				}
+				else {
+					i = termlib.getIndexofCustomPhysicalEntity((CustomPhysicalEntity)pe);
+				}
+				indexlist.add(i);
 			}
-			int i;
-			if (pe.hasRefersToAnnotation()) {
-				i = termlib.getIndexofReferencePhysicalEntity((ReferencePhysicalEntity)pe);
-			}
-			else {
-				i = termlib.getIndexofCustomPhysicalEntity((CustomPhysicalEntity)pe);
-			}
-			indexlist.add(i);
+		}
+		else {
+			indexlist.add(-1);
 		}
 		return indexlist;
+	}
+	
+	public boolean hasAssociatedPhysicalProperty() {
+		return componentlist.get(currentfocus).hasPhysicalProperty();
 	}
 	
 	public boolean hasPhysicalModelComponent() {
@@ -237,7 +259,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	
 	@Override
 	public Integer getSingularAnnotationLibraryIndex(int index) {
-		return termlib.getComponentIndex((PhysicalModelComponent)componentlist.get(index).getReferenceTerm());
+		return termlib.getComponentIndex((PhysicalModelComponent)componentlist.get(index).getSingularTerm());
 	}
 	
 	@Override
@@ -257,7 +279,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	@Override
 	public void setSingularAnnotation(int selectedIndex) {
 		if (selectedIndex!=-1) {
-			componentlist.get(currentfocus).setSingularAnnotation((ReferenceTerm)termlib.getComponent(selectedIndex));
+			componentlist.get(currentfocus).setSingularAnnotation((PhysicalProperty)termlib.getComponent(selectedIndex));
 		}
 		else {
 			componentlist.get(currentfocus).setSingularAnnotation(null);
@@ -269,8 +291,13 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	@Override
 	protected void changeNotification() {
 		setChanged();
-		notifyObservers(modeledit.compositechanged);
+		notifyObservers(modeledit.codewordchanged);
 	}
 	
+	private void changeNotification(modeledit edit) {
+		setChanged();
+		notifyObservers(edit);
+		changeNotification();
+	}
 
 }

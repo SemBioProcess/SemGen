@@ -38,7 +38,6 @@ import semsim.CellMLconstants;
 import semsim.SemSimConstants;
 import semsim.SemSimLibrary;
 import semsim.annotation.Annotation;
-import semsim.annotation.ReferenceTerm;
 import semsim.annotation.StructuralRelation;
 import semsim.model.SemSimModel;
 import semsim.model.computational.RelationalConstraint;
@@ -58,6 +57,7 @@ import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.model.physical.object.FunctionalSubmodel;
 import semsim.model.physical.object.PhysicalProperty;
+import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.owl.SemSimOWLFactory;
@@ -66,7 +66,7 @@ public class SemSimOWLreader extends ModelReader {
 	private OWLDataFactory factory;
 	private Map<String, PhysicalModelComponent> identitymap = new HashMap<String, PhysicalModelComponent>();
 
-	private Map<String, PhysicalProperty> idpropertymap = new HashMap<String, PhysicalProperty>();
+	private Map<String, PhysicalPropertyinComposite> idpropertymap = new HashMap<String, PhysicalPropertyinComposite>();
 	private OWLOntology ont;
 
 	public SemSimOWLreader(File file) {
@@ -154,9 +154,9 @@ public class SemSimOWLreader extends ModelReader {
 			String label = SemSimOWLFactory.getRDFLabels(ont, factory.getOWLClass(IRI.create(refuri)))[0];
 			if (label.isEmpty()) continue;
 			
-			PhysicalProperty pp = new PhysicalProperty(label, URI.create(refuri));
+			PhysicalPropertyinComposite pp = new PhysicalPropertyinComposite(label, URI.create(refuri));
 			
-			semsimmodel.addPhysicalProperty(pp);
+			semsimmodel.addAssociatePhysicalProperty(pp);
 			idpropertymap.put(refuri, pp);
 		}
 
@@ -334,7 +334,7 @@ public class SemSimOWLreader extends ModelReader {
 					// If the data structure is annotated, store annotation
 					if(!referstovalds.equals("")){	
 						String reflabel = SemSimOWLFactory.getRDFLabels(ont, factory.getOWLNamedIndividual(IRI.create(dsind)))[0];
-						ds.setSingularAnnotation(getReferenceTerm(referstovalds, reflabel));
+						ds.setSingularAnnotation((PhysicalProperty)getReferenceTerm(referstovalds, reflabel));
 					}
 					
 					// If a CellML-type variable, get interface values and initial value
@@ -357,7 +357,7 @@ public class SemSimOWLreader extends ModelReader {
 					
 					if(!units.equals("") || !propind.equals("")){
 						String referstoval = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, propind, SemSimConstants.REFERS_TO_URI.toString());	
-						if (!referstoval.isEmpty())	ds.setPhysicalProperty(idpropertymap.get(referstoval));
+						if (!referstoval.isEmpty())	ds.setAssociatePhysicalProperty(idpropertymap.get(referstoval));
 						
 						// Set the connection between the physical property and what it's a property of
 						String propofind = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, propind, SemSimConstants.PHYSICAL_PROPERTY_OF_URI.toString());
@@ -569,14 +569,6 @@ public class SemSimOWLreader extends ModelReader {
 				sssubmodel = 
 						SemSimComponentImporter.importFunctionalSubmodel(srcfile, semsimmodel, subname, referencename, importval, sslib);
 			}
-			
-			// Store refersTo annotations, if present (accommodate older models that used nonCompositeAnnotationRefersTo)
-			String referstovalsub = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, sub, SemSimConstants.REFERS_TO_URI.toString());
-			if(!referstovalsub.equals("")) {
-				String sublabel = SemSimOWLFactory.getRDFLabels(ont, factory.getOWLNamedIndividual(IRI.create(sub)))[0];
-				sssubmodel.setSingularAnnotation(getReferenceTerm(referstovalsub, sublabel));
-				sssubmodel.setDescription(sublabel);
-			}
 		}
 		
 		// If a sub-model has sub-models, add that info to the model, store subsumption types as annotations
@@ -715,22 +707,12 @@ public class SemSimOWLreader extends ModelReader {
 		return val;
 	}
 	
-	private ReferenceTerm getReferenceTerm(String refersto, String description) {
-		ReferenceTerm term = idpropertymap.get(refersto);
+	private PhysicalModelComponent getReferenceTerm(String refersto, String description) {
+		PhysicalModelComponent term = idpropertymap.get(refersto);
 		if (term==null) {
-			term = (ReferenceTerm)identitymap.get(refersto);
-		}
-		if (term==null) {
-			if (refersto.contains(SemSimConstants.OPB_NAMESPACE)) {
-				term = new PhysicalProperty(description, URI.create(refersto));
-				idpropertymap.put(refersto, (PhysicalProperty) term);
-				semsimmodel.addPhysicalProperty((PhysicalProperty) term);
-			}
-			else {
-				term = new ReferencePhysicalEntity(URI.create(refersto), description);
-				identitymap.put(refersto, (PhysicalModelComponent) term);
-				semsimmodel.addReferencePhysicalEntity((ReferencePhysicalEntity) term);
-			}
+			term = new PhysicalProperty(description, URI.create(refersto));
+			identitymap.put(refersto, term);
+			semsimmodel.addPhysicalProperty((PhysicalProperty) term);
 		}
 		return term;
 	}
