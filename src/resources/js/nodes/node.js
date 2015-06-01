@@ -1,13 +1,13 @@
 /**
  * Represents a node in the d3 graph
  */
-function Node(graph, name, parent, inputs, sources, sinks, mediators, r, color, textSize, nodeType, charge) {
+function Node(graph, id, name, parent, inputs, r, color, textSize, nodeType, charge) {
 	if(!graph)
 		return;
 
 	this.graph = graph;
+	this.id = id;
 	this.name = name;
-	this.id = name;
 	this.displayName = name;
 	this.r = r;
 	this.color = color;
@@ -18,18 +18,9 @@ function Node(graph, name, parent, inputs, sources, sinks, mediators, r, color, 
 	this.element;
 	this.parent = parent;
 	this.inputs = inputs || [];
-	this.sources = sources || [];
-	this.sinks = sinks || [];
-	this.mediators = mediators || [];
 	this.userCanHide = true;
 	this.hidden = false;
 	this.spaceBetweenTextAndNode = this.r * 0.2 + this.textSize;
-	
-	if(this.parent) {
-		// We need to keep the ids of each node unique by prefixing
-		// it with its parent node's id
-		this.id = this.parent.id + this.id;
-	}
 }
 
 Node.prototype.addClassName = function (className) {
@@ -89,10 +80,10 @@ Node.prototype.getLinks = function () {
 		var inputNodeId;
 		var type;
 		
-		// If the input is an object it specifies a parent
-		if(typeof inputData == "object") {
+		// If the linked node is in a different parent, mark it as external
+		if(inputData.parentModelId != this.parent.id) {
 			type = "external";
-			var parent = this.graph.findNode(inputData.parents.join(''));
+			var parent = this.graph.findNode(inputData.parentModelId);
 			
 			if(!parent) {
 				console.log("External link without a parent!");
@@ -104,12 +95,12 @@ Node.prototype.getLinks = function () {
 				inputNodeId = parent.id;
 			// Otherwise, add a link to its child
 			else
-				inputNodeId = parent.id + inputData.name;
+				inputNodeId = inputData.sourceId;
 		}
 		// Otherwise, it is a string referring to the input node
 		else {
 			type = "internal";
-			inputNodeId = this.parent.id + inputData;
+			inputNodeId = inputData.sourceId;
 		}
 		
 		// Get the input node
@@ -129,165 +120,6 @@ Node.prototype.getLinks = function () {
 		
 		links.push({
 			source: inputNode,
-			target: this,
-			type: type,
-			length: type == "external" ? 200 : 40,
-			value: 1,
-		});
-	}
-	
-	// Get PhysioMap source links
-	for(var i = 0; i < this.sources.length; i++) {
-		var sourceData = this.sources[i];
-		var sourceNodeId;
-		var type;
-		
-		// If the source is an object it specifies a parent
-		if(typeof sourceData == "object") {
-			type = "external";
-			var parent = this.graph.findNode(sourceData.parents.join(''));
-			
-			if(!parent) {
-				console.log("External link without a parent!");
-				continue;
-			}
-			
-			// If the parent can link add a link to it
-			if(parent.canLink())
-				sourceNodeId = parent.id;
-			// Otherwise, add a link to its child
-			else
-				sourceNodeId = parent.id + sourceData.name;
-		}
-		// Otherwise, it is a string referring to the source node
-		else {
-			type = "internal";
-			sourceNodeId = this.parent.id + sourceData;
-		}
-		
-		// Get the source node
-		var sourceNode = this.graph.findNode(sourceNodeId);
-		
-		if(!sourceNode) {
-			console.log("source node '" + sourceNodeId + "' does not exist. Can't build link.");
-			continue;
-		}
-		
-		// If the parent has children it's circle is hidden
-		// so we don't want to show any sources to it
-		if(!sourceNode.canLink()) {
-			console.log("source node '" + sourceNodeId + "' has its circle hidden. Can't build link.");
-			continue;
-		}
-		
-		links.push({
-			source: sourceNode,
-			target: this,
-			type: type,
-			length: type == "external" ? 200 : 40,
-			value: 1,
-		});
-	}
-	
-	// Get PhysioMap sink links
-	for(var i = 0; i < this.sinks.length; i++) {
-		var sinkData = this.sinks[i];
-		var sinkNodeId;
-		var type;
-		
-		// If the sink is an object it specifies a parent
-		if(typeof sinkData == "object") {
-			type = "external";
-			var parent = this.graph.findNode(sinkData.parents.join(''));
-			
-			if(!parent) {
-				console.log("External link without a parent!");
-				continue;
-			}
-			
-			// If the parent can link add a link to it
-			if(parent.canLink())
-				sinkNodeId = parent.id;
-			// Otherwise, add a link to its child
-			else
-				sinkNodeId = parent.id + sinkData.name;
-		}
-		// Otherwise, it is a string referring to the sink node
-		else {
-			type = "internal";
-			sinkNodeId = this.parent.id + sinkData;
-		}
-		
-		// Get the sink node
-		var sinkNode = this.graph.findNode(sinkNodeId);
-		
-		if(!sinkNode) {
-			console.log("sink node '" + sinkNodeId + "' does not exist. Can't build link.");
-			continue;
-		}
-		
-		// If the parent has children it's circle is hidden
-		// so we don't want to show any sinks to it
-		if(!sinkNode.canLink()) {
-			console.log("sink node '" + sinkNodeId + "' has its circle hidden. Can't build link.");
-			continue;
-		}
-		
-		links.push({
-			source: this,
-			target: sinkNode,
-			type: type,
-			length: type == "external" ? 200 : 40,
-			value: 1,
-		});
-	}
-	
-	// Get PhysioMap mediator links
-	for(var i = 0; i < this.mediators.length; i++) {
-		var mediatorData = this.mediators[i];
-		var mediatorNodeId;
-		var type;
-		
-		// If the mediator is an object it specifies a parent
-		if(typeof mediatorData == "object") {
-			type = "external";
-			var parent = this.graph.findNode(mediatorData.parents.join(''));
-			
-			if(!parent) {
-				console.log("External link without a parent!");
-				continue;
-			}
-			
-			// If the parent can link add a link to it
-			if(parent.canLink())
-				mediatorNodeId = parent.id;
-			// Otherwise, add a link to its child
-			else
-				mediatorNodeId = parent.id + mediatorData.name;
-		}
-		// Otherwise, it is a string referring to the mediator node
-		else {
-			type = "internal";
-			mediatorNodeId = this.parent.id + mediatorData;
-		}
-		
-		// Get the mediator node
-		var mediatorNode = this.graph.findNode(mediatorNodeId);
-		
-		if(!mediatorNode) {
-			console.log("mediator node '" + mediatorNodeId + "' does not exist. Can't build link.");
-			continue;
-		}
-		
-		// If the parent has children it's circle is hidden
-		// so we don't want to show any mediators to it
-		if(!mediatorNode.canLink()) {
-			console.log("mediator node '" + mediatorNodeId + "' has its circle hidden. Can't build link.");
-			continue;
-		}
-		
-		links.push({
-			source: mediatorNode,
 			target: this,
 			type: type,
 			length: type == "external" ? 200 : 40,

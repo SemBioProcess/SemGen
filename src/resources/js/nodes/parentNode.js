@@ -3,8 +3,8 @@
  */
 ParentNode.prototype = new Node();
 ParentNode.prototype.constructor = ParentNode;
-function ParentNode(graph, name, parent, links, r, group, textSize, nodeType, charge) {
-	Node.prototype.constructor.call(this, graph, name, parent, links, null, null, null, r, group, textSize, nodeType, charge);
+function ParentNode(graph, id, name, parent, links, r, group, textSize, nodeType, charge) {
+	Node.prototype.constructor.call(this, graph, id, name, parent, links, r, group, textSize, nodeType, charge);
 	this.userCanHide = false;
 	this.children = null;
 }

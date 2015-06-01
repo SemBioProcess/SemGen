@@ -10,11 +10,8 @@ public class SubModelDependencyNode extends DependencyNode {
 	public final static int SubmodelNamePart = 0;
 	public final static int VariableNamePart = 1;
 	
-	private String _parentModelName;
-	
-	public SubModelDependencyNode(DataStructure dataStructure, String parentModelName) {
-		super(getDataStructureVariableName(dataStructure), dataStructure);
-		_parentModelName = parentModelName;
+	public SubModelDependencyNode(DataStructure dataStructure, SubModelNode parentNode) {
+		super(getDataStructureVariableName(dataStructure), dataStructure, parentNode.parentModelId);
 		
 		// Are there inputs from other models?
 		if(dataStructure instanceof MappableVariable) {
@@ -27,7 +24,9 @@ public class SubModelDependencyNode extends DependencyNode {
 				// Mapped variables are treat special in the JS code.
 				// We need to know the parent model and submodel name
 				// so we can fetch the proper "mapped from" node
-				this.inputs.add(new MappableVariableDependency(variableName, new String[] { _parentModelName, submodelName }));
+				this.inputs.add(new Link(
+						Node.buildId(variableName, parentNode.id),
+						parentNode.id));
 			}
 		}
 	}

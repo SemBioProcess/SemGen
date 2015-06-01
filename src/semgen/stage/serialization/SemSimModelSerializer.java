@@ -9,6 +9,8 @@ import com.google.gson.Gson;
 import semgen.visualizations.JsonString;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.physical.PhysicalEntity;
+import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.Submodel;
 
 public class SemSimModelSerializer {
@@ -42,7 +44,7 @@ public class SemSimModelSerializer {
 				continue;
 			}
 			
-			dependencies.add(new DependencyNode(dataStructure));
+			dependencies.add(new DependencyNode(dataStructure, semSimModel.getName()));
 		}
 		
 		// Turn the dependencies into a string
@@ -79,9 +81,18 @@ public class SemSimModelSerializer {
 		ArrayList<PhysioMapNode> physiomapNetwork = new ArrayList<PhysioMapNode>();
 		
 		for(DataStructure dataStructure : semSimModel.getDataStructures()){
-			if(dataStructure.getPhysicalProperty().getPhysicalPropertyOf() != null) {
-				physiomapNetwork.add(new PhysioMapNode(dataStructure, 
-						dataStructure.getPhysicalProperty().getPhysicalPropertyOf().getName()));
+			if(dataStructure.getPhysicalProperty().getPhysicalPropertyOf() != null &&
+				dataStructure.getPhysicalProperty().getPhysicalPropertyOf() instanceof PhysicalProcess) {
+				
+				PhysicalProcess proc = (PhysicalProcess) dataStructure.getPhysicalProperty().getPhysicalPropertyOf();
+				
+				for(PhysicalEntity sink : proc.getSinkPhysicalEntities()) {
+					physiomapNetwork.add(new PhysioMapNode(sink.getName(),
+							semSimModel.getName(),
+							proc.getName(),
+							proc.getSourcePhysicalEntities(),
+							proc.getMediatorPhysicalEntities()));
+				}
 			}
 		}
 		

@@ -15,13 +15,13 @@ public class SubModelNode extends Node {
 	public ArrayList<DependencyNode> dependencies;
 	
 	public SubModelNode(Submodel subModel, String parentModelName) {
-		super(subModel.getName());
+		super(subModel.getName(), parentModelName);
 
 		dependencies = new ArrayList<DependencyNode>();
 		
 		// SemSimModelSerializer.getDependencyNetwork(subModel);
 		for(DataStructure dependency : subModel.getAssociatedDataStructures()) {
-			dependencies.add(new SubModelDependencyNode(dependency, parentModelName));
+			dependencies.add(new SubModelDependencyNode(dependency, this));
 		}
 	}
 

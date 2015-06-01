@@ -1,6 +1,7 @@
 package semgen.stage.serialization;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import semgen.SemGen;
 import semsim.model.computational.datastructures.DataStructure;
@@ -8,33 +9,22 @@ import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 
 public class PhysioMapNode extends Node {
-	
-	public ArrayList<Object> sources;
-	public ArrayList<Object> sinks;
-	public ArrayList<Object> mediators;
-	
-	public String nodeType;
 
-	public PhysioMapNode(DataStructure ds, String pmcName) {
-		super(pmcName);
+	public PhysioMapNode(String name, String parentModelId, String processName, Set<PhysicalEntity> sources, Set<PhysicalEntity> mediators) {
+		super(name, parentModelId);
 		
-		sources = new ArrayList<Object>();
-		sinks = new ArrayList<Object>();
-		mediators = new ArrayList<Object>();
-				
-		this.nodeType = ds.getPropertyType(SemGen.semsimlib).toString();
-				
-		if(ds.getPhysicalProperty().getPhysicalPropertyOf() instanceof PhysicalProcess) {
-			PhysicalProcess proc = (PhysicalProcess) ds.getPhysicalProperty().getPhysicalPropertyOf();
-			for(PhysicalEntity ent : proc.getSourcePhysicalEntities()) {
-				sources.add(ent.getName());
+		for(PhysicalEntity source : sources) {
+			ArrayList<String> mediatorsNames = new ArrayList<String>();
+			for(PhysicalEntity mediator : mediators) {
+				mediatorsNames.add(mediator.getName());
 			}
-			for(PhysicalEntity ent : proc.getSinkPhysicalEntities()) {
-				sinks.add(ent.getName());
-			}
-			for(PhysicalEntity ent : proc.getMediatorPhysicalEntities()) {
-				mediators.add(ent.getName());
-			}
+			
+			inputs.add(new Link(
+					Node.buildId(source.getName(), this.parentModelId),
+					processName,
+					mediatorsNames));
 		}
+
+		
 	}
 }
