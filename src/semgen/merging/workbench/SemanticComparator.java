@@ -17,7 +17,7 @@ import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.PhysicalProperty;
 
 public class SemanticComparator {
-	private SemSimModel model1, model2;
+	public SemSimModel model1, model2;
 	private DataStructure slndomain = null;
 
 	public SemanticComparator(SemSimModel m1, SemSimModel m2) {
