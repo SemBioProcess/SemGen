@@ -264,7 +264,7 @@ public class SemSimComponentAnnotationPanel extends JPanel implements ActionList
 						SemSimConstants.FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME,
 						SemSimConstants.GENE_ONTOLOGY_FULLNAME,
 						SemSimConstants.MOUSE_ADULT_GROSS_ANATOMY_ONTOLOGY_FULLNAME,
-						SemSimConstants.PROTEIN_ONTOLOGY_FULLNAME};
+						SemSimConstants.UNIPROT_FULLNAME};
 			}
 			else if(smc instanceof PhysicalProcess)
 				ontList = new String[]{SemSimConstants.GENE_ONTOLOGY_FULLNAME};

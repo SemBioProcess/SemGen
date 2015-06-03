@@ -70,7 +70,6 @@ public class SemSimConstants {
 			SemSimConstants.PHENOTYPE_AND_TRAIT_ONTOLOGY_FULLNAME,
 			SemSimConstants.SNOMEDCT_FULLNAME,
 			SemSimConstants.SYSTEMS_BIOLOGY_ONTOLOGY_FULLNAME,
-			SemSimConstants.PROTEIN_ONTOLOGY_FULLNAME,
 			SemSimConstants.UNIPROT_FULLNAME
 	};
 	
