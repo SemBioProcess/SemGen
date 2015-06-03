@@ -20,6 +20,7 @@ import semgen.annotation.routines.AutoAnnotate;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.units.UnitFactor;
+import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
@@ -97,13 +98,22 @@ public class SemSimLibrary {
 	}
 	
 	public String[] getOPBBaseUnitRefTerms(DataStructure ds) {
-		// For each ds, store its base units in Hashtable as baseunitname:exponent
-		String unitName = ds.getUnit().getName();
+		UnitOfMeasurement uom = ds.getUnit();
+		String unitName = uom.getName();
 		Hashtable<String, Double> baseUnits = new Hashtable<String, Double>();
-		baseUnits = AutoAnnotate.fundamentalBaseUnits.get(unitName); // Recursively processed base units
-		if(baseUnits.isEmpty() && isCellMLBaseUnit(unitName)) {
+		Set<UnitFactor> unitfactors= new HashSet<UnitFactor>();
+		unitfactors = AutoAnnotate.fundamentalBaseUnits.get(unitName); // Recursively processed base units
+		for(UnitFactor unitfactor : unitfactors) {
+			String baseUnit = unitfactor.getBaseUnit().getName();
+			Double exponent = unitfactor.getExponent();
+			baseUnits.put(baseUnit, exponent);
+		}
+		
+		// Some units do not have unit factors. Instead its name is a base unit.
+		if(unitfactors.isEmpty() && isCellMLBaseUnit(unitName)) {
 			baseUnits.put(unitName, 1.0);
 		}
+
 		if(OPBClassesForBaseUnitsTable.containsKey(baseUnits)) {
 			return OPBClassesForBaseUnitsTable.get(baseUnits);
 		}

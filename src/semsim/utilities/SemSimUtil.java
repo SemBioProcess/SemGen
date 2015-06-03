@@ -249,34 +249,36 @@ public class SemSimUtil {
 	/**
 	 * Given a SemSim model, recursively processes custom units and returns all of its units broken down into fundamental base units
 	 * @param SemSim model
-	 * @return Hashtable of customUnit:(baseUnit1:exp1, baseUnit:exp2, ...)
+	 * @return Hashtable of customUnit:Set<UnitFactor>
 	 */
-	public static Hashtable<String, Hashtable<String, Double>> getAllUnitsAsFundamentalBaseUnits(SemSimModel semsimmodel) {
+	public static Hashtable<String, Set<UnitFactor>> getAllUnitsAsFundamentalBaseUnits(SemSimModel semsimmodel) {
 		Set<UnitOfMeasurement> units = semsimmodel.getUnits();
-		Hashtable<String, Hashtable<String, Double>> fundamentalBaseUnits = new Hashtable<String, Hashtable<String, Double>>();
+		Hashtable<String, Set<UnitFactor>> fundamentalBaseUnits = new Hashtable<String, Set<UnitFactor>>();
 		
 		for(UnitOfMeasurement uom : units) {
-			Hashtable<String, Double> newUnitFactor = recurseBaseUnits(uom, 1.0);
+			Set<UnitFactor> newUnitFactor = recurseBaseUnits(uom, 1.0);
 			
 			fundamentalBaseUnits.put(uom.getName(), newUnitFactor);
 		}
 		return fundamentalBaseUnits;
 	}
 	// Used in tandem with getFundamentalBaseUnits
-	private static Hashtable<String, Double> recurseBaseUnits(UnitOfMeasurement uom, Double oldExp) {
+	private static Set<UnitFactor> recurseBaseUnits(UnitOfMeasurement uom, Double oldExp) {
 		SemSimLibrary semsimlib = new SemSimLibrary();
 		Set<UnitFactor> unitFactors = uom.getUnitFactors();
-		Hashtable<String, Double> newUnitFactor = new Hashtable<String, Double>();
+		Set<UnitFactor> newUnitFactors = new HashSet<UnitFactor>();
 		for(UnitFactor factor : unitFactors) {
 			UnitOfMeasurement baseuom = factor.getBaseUnit();
-			Double newExp = factor.getExponent()*oldExp;
+			double newExp = factor.getExponent()*oldExp;
+			String prefix = factor.getPrefix();
 			if(semsimlib.isCellMLBaseUnit(baseuom.getName())) {
-				newUnitFactor.put(baseuom.getName(), newExp);
+				UnitFactor baseUnitFactor = new UnitFactor(baseuom, newExp, prefix);
+				newUnitFactors.add(baseUnitFactor);
 			}
 			else {
-				newUnitFactor.putAll(recurseBaseUnits(baseuom, newExp));
+				newUnitFactors.addAll(recurseBaseUnits(baseuom, newExp));
 			}
 		}
-		return newUnitFactor;
+		return newUnitFactors;
 	}
 }

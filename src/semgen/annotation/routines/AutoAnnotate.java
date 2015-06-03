@@ -10,13 +10,14 @@ import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
+import semsim.model.computational.units.UnitFactor;
 import semsim.utilities.SemSimUtil;
 
 public class AutoAnnotate {
 	// Automatically apply OPB annotations to the physical properties associated
 	// with the model's data structures
 	
-	public static Hashtable<String, Hashtable<String, Double>> fundamentalBaseUnits;
+	public static Hashtable<String, Set<UnitFactor>> fundamentalBaseUnits;
 	
 	public static SemSimModel autoAnnotateWithOPB(SemSimModel semsimmodel) {		
 		Set<DataStructure> candidateamounts = new HashSet<DataStructure>();
