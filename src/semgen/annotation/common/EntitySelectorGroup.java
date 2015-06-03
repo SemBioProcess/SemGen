@@ -13,8 +13,11 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 
 import semgen.SemGenSettings;
+import semgen.annotation.dialog.termlibrary.AddReferenceClassDialog;
+import semgen.annotation.dialog.termlibrary.CustomTermDialog;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.SemGenIcon;
+import semsim.utilities.ReferenceOntologies.OntologyDomain;
 
 public abstract class EntitySelectorGroup extends Box implements ActionListener {
 	private static final long serialVersionUID = 1L;
@@ -25,12 +28,11 @@ public abstract class EntitySelectorGroup extends Box implements ActionListener 
 	protected ArrayList<Integer> selections;
 	
 	public EntitySelectorGroup(SemSimTermLibrary lib) {
-		super(BoxLayout.PAGE_AXIS);
+		super(BoxLayout.Y_AXIS);
 		termlib = lib;
 		selections = new ArrayList<Integer>();
 		selections.add(-1);
 		setBackground(SemGenSettings.lightblue);
-		setAlignmentX(Box.LEFT_ALIGNMENT);
 		
 		drawBox(true);
 	}
@@ -64,10 +66,12 @@ public abstract class EntitySelectorGroup extends Box implements ActionListener 
 		if (selectors.size()!=0) {
 			StructuralRelationPanel lbl = new StructuralRelationPanel();
 			relations.add(lbl); 
+			lbl.setAlignmentX(Box.LEFT_ALIGNMENT);
 			add(lbl);
 		}
 		SelectorPanel esp = new SelectorPanel(editable, selections.get(selectionindex));
 		selectors.add(esp);
+		esp.setAlignmentX(Box.LEFT_ALIGNMENT);
 		add(esp, BorderLayout.NORTH);
 	}	
 	
@@ -154,22 +158,29 @@ public abstract class EntitySelectorGroup extends Box implements ActionListener 
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource().equals(combobox)) {
 				onChange();
+				toggleCustom(!termlib.isReferenceTerm(getSelection()));
 			}
 		}
 		
 		@Override
 		public void searchButtonClicked() {
-			
+			AddReferenceClassDialog rcd = new AddReferenceClassDialog(termlib, OntologyDomain.PhysicalEntity);
+			if (rcd.getIndexofSelection()!=-1) {
+				setComboList(termlib.getSortedSingularPhysicalEntityIndicies(), rcd.getIndexofSelection());
+				onChange();
+			}
 		}
 
 		@Override
 		public void createButtonClicked() {
-			
+			CustomTermDialog ctd = new CustomTermDialog();
+			ctd.makeEntityTerm(termlib);
 		}
 
 		@Override
 		public void modifyButtonClicked() {
-			
+			CustomTermDialog ctd = new CustomTermDialog();
+			ctd.makeEntityTerm(termlib, getSelection());
 		}
 		
 		@Override

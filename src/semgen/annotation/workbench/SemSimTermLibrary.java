@@ -4,9 +4,13 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.commons.lang3.tuple.Triple;
+
 import semgen.SemGen;
 import semsim.SemSimConstants;
+import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
+import semsim.annotation.SemSimRelation;
 import semsim.annotation.StructuralRelation;
 import semsim.model.SemSimModel;
 import semsim.model.physical.PhysicalEntity;
@@ -21,6 +25,7 @@ import semsim.utilities.ReferenceOntologies.ReferenceOntology;
 import semsim.writing.CaseInsensitiveComparator;
 
 public class SemSimTermLibrary {
+	
 	private ReferenceOntology lastont;
 	ArrayList<Integer> cpepps = new ArrayList<Integer>();
 	ArrayList<Integer> pps = new ArrayList<Integer>();
@@ -129,7 +134,9 @@ public class SemSimTermLibrary {
 			pes.add((PhysicalEntity)masterlist.get(i).getObject());
 			rels.add(SemSimConstants.PART_OF_RELATION);
 		}
-		rels.remove(0);
+		if (!rels.isEmpty()) {
+			rels.remove(0);
+		}
 		
 		return addCompositePhysicalEntity(new CompositePhysicalEntity(pes, rels));
 	}
@@ -144,6 +151,33 @@ public class SemSimTermLibrary {
 		i = masterlist.indexOf(ic);
 		procs.add(i);
 		return i;
+	}
+	
+	public Triple<ArrayList<Integer>, ArrayList<Integer>, ArrayList<Integer>> getProcessParticipants(Integer index) {
+		PhysicalProcess process = (PhysicalProcess) masterlist.get(index).getObject();
+		
+		ArrayList<Integer> sources = new ArrayList<Integer>();
+		
+		for (PhysicalEntity entity : process.getSourcePhysicalEntities()) {
+			 sources.add(getComponentIndex(entity));
+		}
+				 
+		ArrayList<Integer> sinks = new ArrayList<Integer>();
+		
+		for (PhysicalEntity entity : process.getSourcePhysicalEntities()) {
+			 sources.add(getComponentIndex(entity));
+		}
+		
+		ArrayList<Integer> mediators = new ArrayList<Integer>();
+		
+		for (PhysicalEntity entity : process.getSourcePhysicalEntities()) {
+			 sources.add(getComponentIndex(entity));
+		}
+				
+		Triple<ArrayList<Integer>, ArrayList<Integer>, ArrayList<Integer>> participants =
+			 Triple.of(sources, sinks, mediators);
+		
+		return participants;
 	}
 	
 	public PhysicalPropertyinComposite getAssociatePhysicalProperty(Integer index) {
@@ -174,6 +208,10 @@ public class SemSimTermLibrary {
 
 	public ReferencePhysicalEntity getReferencePhysicalEntity(Integer index) {
 		return (ReferencePhysicalEntity)masterlist.get(index).getObject();
+	}
+	
+	public ArrayList<Integer> getSortedReferencePhysicalEntityIndicies() {
+		return sortComponentIndiciesbyName(rpes);
 	}
 	
 	public int getIndexofReferencePhysicalEntity(ReferencePhysicalEntity rpe) {
@@ -228,6 +266,10 @@ public class SemSimTermLibrary {
 		return sortComponentIndiciesbyName(list);
 	}
 	
+	public ArrayList<Integer> getSortedCompositePhysicalEntityIndicies() {
+		return sortComponentIndiciesbyName(cpes);
+	}
+	
 	public void removePhysicalProperty(Integer index) {
 		cpepps.remove(index);
 	}
@@ -278,8 +320,24 @@ public class SemSimTermLibrary {
 		return masterlist.get(index).getName();
 	}
 	
+	public String getComponentDescription(int index) {
+		return masterlist.get(index).getDescription();
+	}
+	
 	public PhysicalModelComponent getComponent(Integer index) {
 		return masterlist.get(index).getObject();
+	}
+	
+	/** Check if a component in the library already has a given name
+	 * 
+	 * @param nametocheck
+	 * @return
+	 */
+	public int libraryHasName(String nametocheck) {
+		for (IndexCard<?> card : masterlist) {
+			if (nametocheck.equalsIgnoreCase(card.getName().trim())) return masterlist.indexOf(card);
+		}
+		return -1;
 	}
 	
 	private ArrayList<Integer> sortComponentIndiciesbyName(ArrayList<Integer> indicies) {
@@ -306,6 +364,35 @@ public class SemSimTermLibrary {
 		return masterlist.get(index).getReferenceURI();
 	}
 	
+	public ReferenceTerm getReferenceTermbyURI(URI uri) {
+		for (Integer i : getAllReferenceTerms()) {
+			ReferenceTerm term = (ReferenceTerm) masterlist.get(i);
+			if (term.getReferstoURI().equals(uri)) return term;
+		}
+		return null;
+	}
+	
+	public ArrayList<Integer> getIndiciesofReferenceRelations(int indexcard, SemSimRelation rel) {
+		ArrayList<Integer> indicies = new ArrayList<Integer>();
+		if (indexcard!=-1) {
+			ArrayList<URI> uris = masterlist.get(indexcard).getAnnotationObjectsbyRelation(rel);
+			
+			for (URI uri : uris) {
+				ReferenceTerm term = getReferenceTermbyURI(uri);
+				indicies.add(masterlist.indexOf((PhysicalModelComponent)term));
+			}
+		}
+		return indicies;
+	}
+	
+	public void setName(int index, String name) {
+		masterlist.get(index).getObject().setName(name);
+	}
+	
+	public void setDescription(int index, String description) {
+		masterlist.get(index).getObject().setName(description);
+	}
+	
 	protected class IndexCard<T extends PhysicalModelComponent> {
 		private T component;
 		private Boolean reference;
@@ -315,6 +402,10 @@ public class SemSimTermLibrary {
 			reference = component.hasRefersToAnnotation();
 		}
 		
+		public String getDescription() {
+			return component.getDescription();
+		}
+
 		public T getObject() {
 			return component;
 		}
@@ -333,6 +424,16 @@ public class SemSimTermLibrary {
 				return ((ReferenceTerm)component).getReferstoURI();
 			}
 			return null;
+		}
+		
+		public ArrayList<URI> getAnnotationObjectsbyRelation(SemSimRelation rel) {
+			ArrayList<URI> uris = new ArrayList<URI>();
+			
+			for (ReferenceOntologyAnnotation ann : component.getReferenceOntologyAnnotations(rel)) {
+				uris.add(ann.getReferenceURI());
+			}
+			
+			return uris;
 		}
 		
 		public Boolean isTermEquivalent(PhysicalModelComponent term) {

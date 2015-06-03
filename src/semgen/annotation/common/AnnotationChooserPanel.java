@@ -27,6 +27,7 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 	private static final long serialVersionUID = 1L;
 	protected ArrayList<JLabel> lbllist = new ArrayList<JLabel>();
 	protected JComboBox<String> combobox = new JComboBox<String>();
+	private ArrayList<Integer> comboindicies;
 	
 	private JPanel itempanel = new JPanel();
 	private static Dimension dim = new Dimension(350,30);
@@ -36,7 +37,7 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 	private ComponentPanelLabel createlabel;
 	protected ExternalURLButton urlbutton;
 	protected SemSimTermLibrary library;
-	private ArrayList<Integer> comboindicies;
+	
 	public static String unspecifiedName = "*unspecified*";
 	
 	public AnnotationChooserPanel(SemSimTermLibrary lib) {
@@ -148,7 +149,7 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 		if (urlbutton != null) urlbutton.setEnabled(!noselection); 
 	}
 	
-	public void toggleCustom(boolean iscustom) {
+	protected void toggleCustom(boolean iscustom) {
 		modifylabel.setEnabled(iscustom);
 		toggleWebSearch(!iscustom);
 	}
@@ -177,7 +178,9 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 		
 		combobox.setModel(new DefaultComboBoxModel<String>(idlist.toArray(new String[]{})));
 		setSelection(selection);
+		
 		toggleNoneSelected(selection == -1);
+		if (modifylabel!=null && selection != -1) toggleCustom(!library.isReferenceTerm(selection));
 		combobox.addActionListener(this);
 		
 		combobox.repaint();
@@ -208,7 +211,9 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 		
 		class LabelMouseBehavior extends MouseAdapter {
 			public void mouseClicked(MouseEvent arg0) {
-				onClick();
+				if (arg0.getComponent().isEnabled()) {
+					onClick();
+				}
 			}
 			
 			public void mouseEntered(MouseEvent e) {
@@ -219,7 +224,9 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			}
 			public void mousePressed(MouseEvent arg0) {
-				setBorder(BorderFactory.createLineBorder(Color.blue,1));
+				if (arg0.getComponent().isEnabled()) {
+					setBorder(BorderFactory.createLineBorder(Color.blue,1));
+				}
 			}
 	
 			public void mouseReleased(MouseEvent arg0) {

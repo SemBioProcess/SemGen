@@ -16,6 +16,7 @@ import semgen.SemGenSettings;
 import semgen.annotation.common.AnnotationChooserPanel;
 import semgen.annotation.common.EntitySelectorGroup;
 import semgen.annotation.dialog.termlibrary.AddReferenceClassDialog;
+import semgen.annotation.dialog.termlibrary.CustomTermDialog;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
 import semgen.utilities.SemGenFont;
@@ -65,6 +66,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 		propofpanel.setBackground(SemGenSettings.lightblue);
 		propofpanel.add(propsel, BorderLayout.NORTH);
         propofpanel.add(propertyoflabel, BorderLayout.SOUTH);
+        propofpanel.setAlignmentX(Box.LEFT_ALIGNMENT);
         add(propofpanel);
         
         onPropertyChange();
@@ -73,11 +75,11 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 	private void showAddEntityProcessButtons() {
 		if (pmcpanel!=null) remove(pmcpanel);
 		Box btnbox = new Box(BoxLayout.X_AXIS);
-		btnbox.setBorder(BorderFactory.createEmptyBorder(0, indent*3, 0, 0));
 		btnbox.add(addentbutton);
 		btnbox.add(addprocbutton);
 		btnbox.add(Box.createHorizontalGlue());
 		pmcpanel = btnbox;
+		btnbox.setBorder(BorderFactory.createEmptyBorder(0, indent*2, 0, 0));
 		add(pmcpanel);
 	}
 	
@@ -88,8 +90,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 
 		pcp.setComboList(termlib.getSortedPhysicalProcessIndicies(), drawer.getIndexofModelComponent());
 		procbox.add(pcp);
-		procbox.setBorder(BorderFactory.createEmptyBorder(0, indent*3, 0, 0));
-		
+		procbox.setBorder(BorderFactory.createEmptyBorder(0, indent*2, 0, 0));
 		pmcpanel = procbox;
 		add(pmcpanel);
 	}
@@ -98,6 +99,8 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 		if (pmcpanel!=null) remove(pmcpanel);
 		esg = new CodewordCompositeSelectors(termlib);
 		pmcpanel = esg;
+		esg.setAlignmentX(Box.LEFT_ALIGNMENT);
+		esg.setBorder(BorderFactory.createEmptyBorder(0, indent*2, 0, 0));
 		add(pmcpanel);
 	}
 	
@@ -115,11 +118,18 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 				setCompositeSelector();
 			}
 		}
+		
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
+		Object obj = e.getSource();
+		if (obj==addentbutton) {
+			setCompositeSelector();
+		}
+		if (obj==addprocbutton) {
+			setProcessSelector();
+		}
 	}
 	
 	@SuppressWarnings("serial")
@@ -146,6 +156,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 			AddReferenceClassDialog rcd = new AddReferenceClassDialog(termlib, OntologyDomain.AssociatePhysicalProperty);
 			if (rcd.getIndexofSelection()!=-1) {
 				setComboList(termlib.getSortedAssociatePhysicalPropertyIndicies(), rcd.getIndexofSelection());
+				onPropertyChange();
 			}
 		}
 
@@ -179,10 +190,16 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 		public void searchButtonClicked() {}
 
 		@Override
-		public void createButtonClicked() {}
+		public void createButtonClicked() {
+			CustomTermDialog ctd = new CustomTermDialog();
+			ctd.makeProcessTerm(termlib);
+		}
 
 		@Override
-		public void modifyButtonClicked() {}
+		public void modifyButtonClicked() {
+			CustomTermDialog ctd = new CustomTermDialog();
+			ctd.makeProcessTerm(termlib, getSelection());
+		}
 	}
 	
 	private class CodewordCompositeSelectors extends EntitySelectorGroup {
