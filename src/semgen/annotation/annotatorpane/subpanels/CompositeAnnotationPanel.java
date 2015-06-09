@@ -181,7 +181,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource()==combobox) {
-				drawer.setDataStructureComposite(getSelection());
+				drawer.setDataStructureComposite(getSelection(), false);
 				toggleNoneSelected(getSelection() == -1);
 			}
 		}
@@ -211,9 +211,9 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 		}
 
 		@Override
-		public void onChange() {
+		public void onChange(boolean customchange) {
 			Integer compin = termlib.createCompositePhysicalEntity(pollSelectors());
-			drawer.setDataStructureComposite(compin);
+			drawer.setDataStructureComposite(compin, customchange);
 		}		
 	}
 }

@@ -23,4 +23,6 @@ public interface ReferenceTerm {
 	public String getName();
 	
 	public String getNamewithOntologyAbreviation();
+	
+	public String getDescription();
 }

@@ -105,13 +105,12 @@ public abstract class EntitySelectorGroup extends Box implements ActionListener 
 	public void removeEntity(SelectorPanel pan) {
 		int i = selectors.indexOf(pan);
 		selectors.remove(pan);
-		remove(pan);
 		if (i!=0) { 
 			StructuralRelationPanel srp = relations.get(i-1);
-			selectors.remove(srp);
-			remove(srp);
+			relations.remove(srp);
 		}
-		onChange();
+		onChange(false);
+		drawBox(true);
 	}
 
 	protected ArrayList<Integer> pollSelectors() {
@@ -135,7 +134,7 @@ public abstract class EntitySelectorGroup extends Box implements ActionListener 
 		}
 	}
 	
-	public abstract void onChange();
+	public abstract void onChange(boolean customchange);
 	
 	private class SelectorPanel extends AnnotationChooserPanel {
 		private static final long serialVersionUID = 1L;
@@ -157,7 +156,7 @@ public abstract class EntitySelectorGroup extends Box implements ActionListener 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource().equals(combobox)) {
-				onChange();
+				onChange(false);
 				toggleCustom(!termlib.isReferenceTerm(getSelection()));
 			}
 		}
@@ -165,22 +164,28 @@ public abstract class EntitySelectorGroup extends Box implements ActionListener 
 		@Override
 		public void searchButtonClicked() {
 			AddReferenceClassDialog rcd = new AddReferenceClassDialog(termlib, OntologyDomain.PhysicalEntity);
-			if (rcd.getIndexofSelection()!=-1) {
-				setComboList(termlib.getSortedSingularPhysicalEntityIndicies(), rcd.getIndexofSelection());
-				onChange();
-			}
+			onNewTerm(rcd.getIndexofSelection());
 		}
 
 		@Override
 		public void createButtonClicked() {
 			CustomTermDialog ctd = new CustomTermDialog();
 			ctd.makeEntityTerm(termlib);
+			onNewTerm(ctd.getSelection());
 		}
 
 		@Override
 		public void modifyButtonClicked() {
 			CustomTermDialog ctd = new CustomTermDialog();
 			ctd.makeEntityTerm(termlib, getSelection());
+			onNewTerm(ctd.getSelection());
+		}
+		
+		protected void onNewTerm(Integer selection) {
+			if (selection!=-1) {
+				setComboList(termlib.getSortedSingularPhysicalEntityIndicies(), selection);
+				onChange(true);
+			}
 		}
 		
 		@Override

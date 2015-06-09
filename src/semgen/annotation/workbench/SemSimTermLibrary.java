@@ -3,6 +3,7 @@ package semgen.annotation.workbench;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import org.apache.commons.lang3.tuple.Triple;
 
@@ -112,6 +113,16 @@ public class SemSimTermLibrary {
 		return i;
 	}
 	
+	public int createCustomPhysicalEntity(String name, String description) {
+		return addCustomPhysicalEntity(new CustomPhysicalEntity(name, description));
+	}
+	
+	public void modifyCustomPhysicalEntity(int index, String name, String description) {
+		CustomPhysicalEntity cpe = getCustomPhysicalEntity(index);
+		cpe.setName(name);
+		cpe.setDescription(description);
+	}
+	
 	public int addCompositePhysicalEntity(CompositePhysicalEntity cpe) {
 		int i = getIndexofCompositePhysicalEntity(cpe);
 		if (i!=-1) return i; 
@@ -153,31 +164,42 @@ public class SemSimTermLibrary {
 		return i;
 	}
 	
-	public Triple<ArrayList<Integer>, ArrayList<Integer>, ArrayList<Integer>> getProcessParticipants(Integer index) {
-		PhysicalProcess process = (PhysicalProcess) masterlist.get(index).getObject();
-		
-		ArrayList<Integer> sources = new ArrayList<Integer>();
-		
-		for (PhysicalEntity entity : process.getSourcePhysicalEntities()) {
-			 sources.add(getComponentIndex(entity));
-		}
-				 
-		ArrayList<Integer> sinks = new ArrayList<Integer>();
-		
-		for (PhysicalEntity entity : process.getSourcePhysicalEntities()) {
-			 sources.add(getComponentIndex(entity));
+	private LinkedHashMap<Integer, Double> getIndexMultiplierMap(LinkedHashMap<PhysicalEntity, Double> pes) {
+		LinkedHashMap<Integer, Double>  ppmap = new LinkedHashMap<Integer, Double>();
+		for (PhysicalEntity pe : pes.keySet()) {
+			ppmap.put(getComponentIndex(pe), pes.get(pe));
 		}
 		
+		return ppmap;
+	}
+	
+	public LinkedHashMap<Integer, Double> getProcessSourcesIndexMultiplierMap(Integer index) {
+		PhysicalProcess process = getPhysicalProcess(index);
+		return getIndexMultiplierMap(process.getSources());
+	}
+	
+	public LinkedHashMap<Integer, Double> getProcessSinksIndexMultiplierMap(Integer index) {
+		PhysicalProcess process = getPhysicalProcess(index);
+		return getIndexMultiplierMap(process.getSinks());
+	}
+	
+	public ArrayList<Integer> getProcessMediatorIndicies(Integer index) {
+		PhysicalProcess process = getPhysicalProcess(index);
 		ArrayList<Integer> mediators = new ArrayList<Integer>();
-		
-		for (PhysicalEntity entity : process.getSourcePhysicalEntities()) {
-			 sources.add(getComponentIndex(entity));
+		for (PhysicalEntity entity : process.getMediators()) {
+			mediators.add(getComponentIndex(entity));
 		}
-				
-		Triple<ArrayList<Integer>, ArrayList<Integer>, ArrayList<Integer>> participants =
-			 Triple.of(sources, sinks, mediators);
-		
-		return participants;
+		return sortComponentIndiciesbyName(mediators);
+	}
+	
+	public Double getSourceMultiplier(Integer procindex, Integer partindex) {
+		LinkedHashMap<Integer, Double> map = getProcessSourcesIndexMultiplierMap(procindex);
+		return map.get(partindex);
+	}
+	
+	public Double getSinkMultiplier(Integer procindex, Integer partindex) {
+		LinkedHashMap<Integer, Double> map = getProcessSinksIndexMultiplierMap(procindex);
+		return map.get(partindex);
 	}
 	
 	public PhysicalPropertyinComposite getAssociatePhysicalProperty(Integer index) {
@@ -391,6 +413,12 @@ public class SemSimTermLibrary {
 	
 	public void setDescription(int index, String description) {
 		masterlist.get(index).getObject().setName(description);
+	}
+	
+	public void addRelationship(Integer termindex, SemSimRelation relation, Integer reftermindex) {
+		PhysicalModelComponent pmc = masterlist.get(termindex).getObject();
+		ReferenceTerm refterm = (ReferenceTerm) masterlist.get(reftermindex).getObject();
+		pmc.addReferenceOntologyAnnotation(relation, refterm.getReferstoURI(), refterm.getDescription());
 	}
 	
 	protected class IndexCard<T extends PhysicalModelComponent> {
