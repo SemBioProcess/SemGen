@@ -193,12 +193,20 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 		public void createButtonClicked() {
 			CustomTermDialog ctd = new CustomTermDialog();
 			ctd.makeProcessTerm(termlib);
+			createTerm(ctd.getSelection());
 		}
 
 		@Override
 		public void modifyButtonClicked() {
 			CustomTermDialog ctd = new CustomTermDialog();
 			ctd.makeProcessTerm(termlib, getSelection());
+			createTerm(ctd.getSelection());
+		}
+			
+		private void createTerm(int procindex) {
+			if (procindex != -1) {
+				setComboList(termlib.getSortedPhysicalProcessIndicies(), procindex);
+			}
 		}
 	}
 	

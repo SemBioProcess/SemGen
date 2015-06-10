@@ -3,9 +3,8 @@ package semgen.annotation.workbench;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
-
-import org.apache.commons.lang3.tuple.Triple;
 
 import semgen.SemGen;
 import semsim.SemSimConstants;
@@ -19,6 +18,7 @@ import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
+import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.model.physical.object.ReferencePhysicalEntity;
@@ -173,6 +173,13 @@ public class SemSimTermLibrary {
 		return ppmap;
 	}
 	
+	public Double getMultiplier(Integer procindex, Integer partindex) {
+		LinkedHashMap<Integer, Double> map = new LinkedHashMap<Integer, Double>();
+		map.putAll(getProcessSourcesIndexMultiplierMap(procindex));
+		map.putAll(getProcessSinksIndexMultiplierMap(procindex));
+		return map.get(partindex);
+	}
+	
 	public LinkedHashMap<Integer, Double> getProcessSourcesIndexMultiplierMap(Integer index) {
 		PhysicalProcess process = getPhysicalProcess(index);
 		return getIndexMultiplierMap(process.getSources());
@@ -200,6 +207,41 @@ public class SemSimTermLibrary {
 	public Double getSinkMultiplier(Integer procindex, Integer partindex) {
 		LinkedHashMap<Integer, Double> map = getProcessSinksIndexMultiplierMap(procindex);
 		return map.get(partindex);
+	}
+	
+	public int createProcess(String name, String desc) {
+		PhysicalProcess proc = new CustomPhysicalProcess(name, desc);
+		return addPhysicalProcess(proc);
+	}
+	
+	public void editProcess(Integer procindex, String name, String desc) {
+		PhysicalProcess proc = getPhysicalProcess(procindex);
+		proc.setName(name);
+		proc.setDescription(desc);
+	}
+	
+	public void setProcessSources(Integer procindex, ArrayList<Integer> sources, ArrayList<Double> mults) {
+		LinkedHashMap<PhysicalEntity, Double> map = new LinkedHashMap<PhysicalEntity, Double>();
+		for (int i=0; i<sources.size(); i++) {
+			map.put(getCompositePhysicalEntity(sources.get(i)), mults.get(i));
+		}
+		getPhysicalProcess(procindex).setSources(map);
+	}
+	
+	public void setProcessSinks(Integer procindex, ArrayList<Integer> sinks, ArrayList<Double> mults) {
+		LinkedHashMap<PhysicalEntity, Double> map = new LinkedHashMap<PhysicalEntity, Double>();
+		for (int i=0; i<sinks.size(); i++) {
+			map.put(getCompositePhysicalEntity(sinks.get(i)), mults.get(i));
+		}
+		getPhysicalProcess(procindex).setSinks(map);
+	}
+	
+	public void setProcessMediators(Integer procindex, ArrayList<Integer> mediators) {
+		HashSet<PhysicalEntity> map = new HashSet<PhysicalEntity>();
+		for (Integer mediator : mediators) {
+			map.add(this.getCompositePhysicalEntity(mediator));
+		}
+		getPhysicalProcess(procindex).setMediators(map);
 	}
 	
 	public PhysicalPropertyinComposite getAssociatePhysicalProperty(Integer index) {
@@ -254,8 +296,8 @@ public class SemSimTermLibrary {
 		return -1;
 	}
 	
-	public CustomPhysicalEntity getCompositePhysicalEntity(Integer index) {
-		return (CustomPhysicalEntity)masterlist.get(index).getObject();
+	public CompositePhysicalEntity getCompositePhysicalEntity(Integer index) {
+		return (CompositePhysicalEntity)masterlist.get(index).getObject();
 	}
 
 	public int getIndexofCompositePhysicalEntity(CompositePhysicalEntity cpe) {
