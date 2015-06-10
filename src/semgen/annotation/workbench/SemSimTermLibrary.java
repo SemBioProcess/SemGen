@@ -421,7 +421,10 @@ public class SemSimTermLibrary {
 	}
 	
 	public boolean isReferenceTerm(Integer index) {
-		return masterlist.get(index).isReferenceTerm();
+		if (index!=-1) {
+			return masterlist.get(index).isReferenceTerm();
+		}
+		return false;
 	}
 	
 	public URI getReferenceComponentURI(Integer index) {

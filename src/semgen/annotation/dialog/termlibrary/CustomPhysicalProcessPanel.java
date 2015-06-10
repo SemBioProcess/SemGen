@@ -104,7 +104,6 @@ public abstract class CustomPhysicalProcessPanel extends CustomTermOptionPane {
 			
 			setElements(preselected, entities);			
 		}
-		
 	}
 	
 	private class ParticipantEditor extends ProcessParticipantEditor {

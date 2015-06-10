@@ -23,8 +23,8 @@ public abstract class EntitySelectorGroup extends Box implements ActionListener 
 	private static final long serialVersionUID = 1L;
 	private ArrayList<SelectorPanel> selectors = new ArrayList<SelectorPanel>();
 	private ArrayList<StructuralRelationPanel> relations = new ArrayList<StructuralRelationPanel>();
-	private JButton addButton;
-	private SemSimTermLibrary termlib;
+	protected JButton addButton;
+	protected SemSimTermLibrary termlib;
 	protected ArrayList<Integer> selections;
 	
 	public EntitySelectorGroup(SemSimTermLibrary lib) {
@@ -60,6 +60,7 @@ public abstract class EntitySelectorGroup extends Box implements ActionListener 
 		}
 		alignAndPaint(15);
 		refreshLists();
+		setEraseable();
 	}
 	
 	public void addEntitySelector(boolean editable, int selectionindex) {
@@ -124,6 +125,7 @@ public abstract class EntitySelectorGroup extends Box implements ActionListener 
 	protected void insertEntity(int loc) {
 		selections.add(loc, -1);
 		drawBox(true);
+		
 	}
 	
 	@Override
@@ -131,6 +133,16 @@ public abstract class EntitySelectorGroup extends Box implements ActionListener 
 		if (e.getSource().equals(addButton)) {
 			selections.add(-1);
 			drawBox(true);
+		}
+	}
+	
+	protected void setEraseable() {
+		boolean enabled = true;
+		if (selectors.size()==1 && selectors.get(0).getSelection()==-1) {
+			enabled = false;
+		}
+		for (SelectorPanel sp : selectors) {
+			sp.enableEraseButton(enabled);
 		}
 	}
 	
@@ -158,6 +170,7 @@ public abstract class EntitySelectorGroup extends Box implements ActionListener 
 			if (e.getSource().equals(combobox)) {
 				onChange(false);
 				toggleCustom(!termlib.isReferenceTerm(getSelection()));
+				setEraseable();
 			}
 		}
 		
@@ -190,7 +203,12 @@ public abstract class EntitySelectorGroup extends Box implements ActionListener 
 		
 		@Override
 		protected void onEraseButtonClick() {
-			removeEntity(this);
+			if (selectors.size()>1) {
+				removeEntity(this);
+			}
+			else {
+				setSelection(-1);
+			}
 		}
 		
 		private class AddEntityClick extends MouseAdapter {

@@ -96,6 +96,10 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 		validate();
 	}
 	
+	public void enableEraseButton(boolean isenabled) {
+		eraselabel.setEnabled(isenabled);
+	}
+	
 	protected void addURLButton() {
 		urlbutton = new ExternalURLButton();
 		urlbutton.addMouseListener(new WebMouseAdapter());

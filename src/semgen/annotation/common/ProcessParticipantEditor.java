@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
+import semgen.annotation.dialog.CreateCompositeDialog;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenIcon;
@@ -119,7 +120,10 @@ public abstract class ProcessParticipantEditor extends JPanel implements ActionL
 	}
 	
 	private void createParticipant() {
-		
+		CreateCompositeDialog ccd = new CreateCompositeDialog(library);
+		if (ccd.getComposite() != -1) {
+			addParticipant(ccd.getComposite());
+		}
 	}
 	
 	public abstract void addParticipant();
