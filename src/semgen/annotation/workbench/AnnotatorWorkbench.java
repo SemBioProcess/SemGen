@@ -5,6 +5,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
+
 import javax.swing.JOptionPane;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
@@ -16,6 +17,7 @@ import semgen.GlobalActions;
 import semgen.SemGen;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
 import semgen.annotation.workbench.drawers.ModelAnnotationsBench;
+import semgen.annotation.workbench.drawers.ModelAnnotationsBench.ModelChangeEnum;
 import semgen.annotation.workbench.drawers.SubModelToolDrawer;
 import semgen.annotation.workbench.routines.AnnotationCopier;
 import semgen.utilities.CSVExporter;
@@ -264,7 +266,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		//Event forwarding
-		if ((arg1==WBEvent.smselection) || (arg1==WBEvent.cwselection)){
+		if ((arg1==WBEvent.smselection) || (arg1==WBEvent.cwselection) || arg1==ModelChangeEnum.METADATASELECTED){
 			setChanged();
 			notifyObservers(arg1);
 		}

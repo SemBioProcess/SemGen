@@ -207,18 +207,24 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 			ds.setAssociatePhysicalProperty(termlib.getAssociatePhysicalProperty(index));
 		}
 		else ds.setAssociatePhysicalProperty(null);
-		
+		changeset.add(currentfocus);
 		changeNotification(modeledit.propertychanged);
 	}
 	
 	public void setDataStructureComposite(Integer index, boolean objectchange) {
 		DataStructure ds = componentlist.get(currentfocus);
-		//If the new selection is equivalent to the old, do nothing.
-		if ((termlib.getComponentIndex(ds.getAssociatedPhysicalModelComponent())==index || index==-1) && !objectchange) {
+		
+		//If the new selection is equivalent to the old, do nothing; unless objectchange is true.
+		if ((termlib.getComponentIndex(ds.getAssociatedPhysicalModelComponent())==index) && !objectchange) {
 			return;
 		}
-		ds.setAssociatedPhysicalModelComponent(termlib.getComponent(index));
-
+		if (index==-1) {
+			ds.setAssociatedPhysicalModelComponent(null);
+		}
+		else {
+			ds.setAssociatedPhysicalModelComponent(termlib.getComponent(index));
+		}
+		changeset.add(currentfocus);
 		changeNotification(modeledit.compositechanged);
 	}
 	

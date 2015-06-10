@@ -50,7 +50,6 @@ public class SubmodelListPane extends AnnotatorListPane<SubmodelButton, SubModel
 			addButton(sbm, index);
 			btnlist.put(sbm, index);
 			sbm.toggleHumanDefinition(drawer.hasHumanReadableDef(index));
-			sbm.toggleSingleAnnotation(drawer.hasSingularAnnotation(index));
 			buttonpane.add(sbm);
 		}
 		buttonpane.add(Box.createGlue());
@@ -85,7 +84,6 @@ public class SubmodelListPane extends AnnotatorListPane<SubmodelButton, SubModel
 		for (Integer i : drawer.getChangedComponents()) {
 			SubmodelButton sbm = btnlist.inverseBidiMap().get(i);
 			sbm.toggleHumanDefinition(drawer.hasHumanReadableDef(i));
-			sbm.toggleSingleAnnotation(drawer.hasSingularAnnotation(i));
 		}
 	}
 

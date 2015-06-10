@@ -12,6 +12,7 @@ import semsim.PropertyType;
 
 public abstract class CodewordButton extends AnnotationObjectButton {
 	private static final long serialVersionUID = -7555259367118052593L;
+	protected JLabel singularannlabel = new JLabel("_");
 	private JLabel compannlabel = new JLabel("_");
 	private PropertyMarker propoflabel = new PropertyMarker(Color.white, null);
 	
@@ -22,9 +23,13 @@ public abstract class CodewordButton extends AnnotationObjectButton {
 	public CodewordButton(String name, boolean canedit, boolean showmarkers) {
 		super(name, canedit);
 		indicatorspanel.setPreferredSize(new Dimension(50, 18));
-		
+	
 		makeIndicator(compannlabel, "C", "Indicates status of codeword's composite annotation");
 		compannlabel.addMouseListener(new IndicatorMouseListener(compannlabel));
+		
+		makeIndicator(singularannlabel, "S", "Click to set singular reference annotation");
+		singularannlabel.addMouseListener(new ClickableMouseListener(singularannlabel));
+		
 		if(editable) compannlabel.setForeground(editablelabelcolor);
 		else compannlabel.setForeground(noneditablelabelcolor);
 		
@@ -45,6 +50,10 @@ public abstract class CodewordButton extends AnnotationObjectButton {
 		compannlabel.setText(cwc.getCode());
 	}
 
+	public void toggleSingleAnnotation(boolean hasdef) {
+		toggleIndicator(singularannlabel, hasdef);
+	}
+	
 	public void togglePropertyMarkers(boolean showmarkers) {
 		propoflabel.setVisible(showmarkers);
 	}

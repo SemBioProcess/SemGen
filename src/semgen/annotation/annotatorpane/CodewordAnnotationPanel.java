@@ -10,10 +10,12 @@ import javax.swing.BoxLayout;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
 import semgen.annotation.annotatorpane.subpanels.CompositeAnnotationPanel;
+import semgen.annotation.annotatorpane.subpanels.SingularAnnotationPanel;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
@@ -26,6 +28,7 @@ public class CodewordAnnotationPanel extends AnnotationPanel<CodewordToolDrawer>
 
 	private AnnotatorButton copyannsbutton;
 	private CompositeAnnotationPanel compositepanel;
+	private SingularAnnotationPanel singularannpanel;
 	
 	public CodewordAnnotationPanel(AnnotatorWorkbench wb, SemGenSettings sets,
 			GlobalActions gacts) {
@@ -61,6 +64,17 @@ public class CodewordAnnotationPanel extends AnnotationPanel<CodewordToolDrawer>
 		mainpanel.add(Box.createGlue());
 		mainpanel.add(new SemGenSeparator());
 		
+		JLabel singularannlabel = new JLabel("Singular annotation");
+		singularannlabel.setFont(SemGenFont.defaultBold());
+		singularannlabel.setBorder(BorderFactory.createEmptyBorder(10, indent, 5, 0));
+		mainpanel.add(singularannlabel);
+		addSingularAnnotationPanel();
+	}
+	
+	private void addSingularAnnotationPanel() {
+		singularannpanel = new SingularAnnotationPanel(drawer, termlib);
+		singularannpanel.setAlignmentX(JPanel.LEFT_ALIGNMENT);
+		mainpanel.add(singularannpanel);
 	}
 	
 	private void createEquationPane() {

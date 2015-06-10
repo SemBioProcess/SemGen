@@ -1,6 +1,7 @@
 package semgen.annotation.annotatorpane.subpanels;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,8 +10,11 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import org.eclipse.swt.internal.Library;
 
 import semgen.SemGenSettings;
 import semgen.annotation.common.AnnotationChooserPanel;
@@ -29,6 +33,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 	private int indent = 15;
 	private JButton addentbutton = new JButton("Add entity");
 	private JButton addprocbutton = new JButton("Add process");
+	private JEditorPane ptextpane;
 
 	private PropertySelectorPanel propsel;
 	private EntitySelectorGroup esg;
@@ -75,6 +80,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 	private void showAddEntityProcessButtons() {
 		if (pmcpanel!=null) remove(pmcpanel);
 		Box btnbox = new Box(BoxLayout.X_AXIS);
+		btnbox.setAlignmentX(Box.LEFT_ALIGNMENT);
 		btnbox.add(addentbutton);
 		btnbox.add(addprocbutton);
 		btnbox.add(Box.createHorizontalGlue());
@@ -85,14 +91,45 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 	
 	private void setProcessSelector() {
 		if (pmcpanel!=null) remove(pmcpanel);
-		Box procbox = new Box(BoxLayout.X_AXIS);
+		Box procbox = new Box(BoxLayout.Y_AXIS);
+		procbox.setAlignmentX(Box.LEFT_ALIGNMENT);
 		ProcessSelectorPanel pcp = new ProcessSelectorPanel(!drawer.isEditable());
 
 		pcp.setComboList(termlib.getSortedPhysicalProcessIndicies(), drawer.getIndexofModelComponent());
+		
+		ptextpane = new JEditorPane("text/html",listParticipants());
+		ptextpane.setEditable(false);
+		ptextpane.setOpaque(false);
+		ptextpane.setBackground(new Color(0,0,0,0));
+		ptextpane.setFont(SemGenFont.defaultPlain(-2));
+		ptextpane.setBorder(BorderFactory.createEmptyBorder(3, 30, 3, 0));
+		
 		procbox.add(pcp);
+		procbox.add(ptextpane, BorderLayout.SOUTH);
 		procbox.setBorder(BorderFactory.createEmptyBorder(0, indent*2, 0, 0));
 		pmcpanel = procbox;
 		add(pmcpanel);
+	}
+	
+	private void showProcessParticipants() {
+		ptextpane.setText(listParticipants());
+	}
+	
+	private String listParticipants() {
+		int proc = drawer.getIndexofModelComponent();
+		String pstring = "<html><body>";
+		
+		for(int source : termlib.getProcessSourcesIndexMultiplierMap(proc).keySet()){
+			pstring = pstring + "<b>Source:</b> " + termlib.getComponentName(source) + "<br>";
+		}
+		for(int sink : termlib.getProcessSinksIndexMultiplierMap(proc).keySet()) {
+			pstring = pstring + "<b>Sink:</b> " + termlib.getComponentName(sink) + "<br>";
+		}
+		for(int mediator : termlib.getProcessMediatorIndicies(proc)){
+			pstring = pstring + "<b>Mediator:</b> " + termlib.getComponentName(mediator) + "<br>";
+		}
+		
+		return pstring + "</body></html>";
 	}
 	
 	private void setCompositeSelector() {
@@ -118,7 +155,6 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 				setCompositeSelector();
 			}
 		}
-		
 	}
 	
 	@Override
@@ -183,6 +219,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 			if (e.getSource()==combobox) {
 				drawer.setDataStructureComposite(getSelection(), false);
 				toggleNoneSelected(getSelection() == -1);
+				if (getSelection()!=-1) showProcessParticipants();
 			}
 		}
 

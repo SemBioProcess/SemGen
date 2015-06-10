@@ -19,7 +19,6 @@ import javax.swing.JTextArea;
 
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
-import semgen.annotation.annotatorpane.subpanels.SingularAnnotationPanel;
 import semgen.annotation.common.AnnotationClickableTextPane;
 import semgen.annotation.dialog.TextChangeDialog;
 import semgen.annotation.workbench.AnnotatorWorkbench;
@@ -44,9 +43,6 @@ public abstract class AnnotationPanel<P extends AnnotatorDrawer<? extends SemSim
 	protected JLabel codewordlabel = new JLabel();
 	protected AnnotatorButton humremovebutton = new AnnotatorButton(SemGenIcon.eraseiconsmall, "Remove this annotation");
 	protected AnnotationClickableTextPane humandefpane;
-	
-	protected SingularAnnotationPanel singularannpanel;
-	protected JLabel singularannlabel = new JLabel("Singular annotation");
 
 	protected int indent = 15;
 	
@@ -70,10 +66,7 @@ public abstract class AnnotationPanel<P extends AnnotatorDrawer<? extends SemSim
 		createHeader();
 		createHumanDefinitionPanel();
 		createUniqueElements();
-		singularannlabel.setFont(SemGenFont.defaultBold());
-		singularannlabel.setBorder(BorderFactory.createEmptyBorder(10, indent, 5, 0));
-		mainpanel.add(singularannlabel);
-		addSingularAnnotationPanel();
+
 		
 		add(mainpanel, BorderLayout.NORTH);
 		add(Box.createVerticalGlue(), BorderLayout.SOUTH);
@@ -134,13 +127,7 @@ public abstract class AnnotationPanel<P extends AnnotatorDrawer<? extends SemSim
 			humremovebutton.setEnabled(false);
 		}
 	}
-	
-	private void addSingularAnnotationPanel() {
-		singularannpanel = new SingularAnnotationPanel(drawer, termlib);
-		singularannpanel.setAlignmentX(JPanel.LEFT_ALIGNMENT);
-		mainpanel.add(singularannpanel);
-	}
-	
+		
 	@Override
 	public void update(Observable o, Object arg) {
 		if (arg==WBEvent.freetextrequest) {

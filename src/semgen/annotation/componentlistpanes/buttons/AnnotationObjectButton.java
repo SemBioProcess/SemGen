@@ -27,7 +27,6 @@ public abstract class AnnotationObjectButton extends JPanel implements MouseList
 	protected boolean editable;
 	protected JLabel namelabel = new JLabel();
 
-	protected JLabel singularannlabel = new JLabel("_");
 	protected JLabel humdeflabel = new JLabel("_");
 	
 	protected Color editablelabelcolor = new Color(10, 50, 220);
@@ -57,8 +56,6 @@ public abstract class AnnotationObjectButton extends JPanel implements MouseList
 	}
 	
 	public void drawButton() {
-		makeIndicator(singularannlabel, "S", "Click to set singular reference annotation");
-		singularannlabel.addMouseListener(new ClickableMouseListener(singularannlabel));
 		makeIndicator(humdeflabel, "F", "Click to set free-text description");
 		humdeflabel.addMouseListener(new ClickableMouseListener(humdeflabel));
 		
@@ -100,11 +97,7 @@ public abstract class AnnotationObjectButton extends JPanel implements MouseList
 	public void toggleHumanDefinition(boolean hasdef) {
 		toggleIndicator(humdeflabel, hasdef);
 	}
-	
-	public void toggleSingleAnnotation(boolean hasdef) {
-		toggleIndicator(singularannlabel, hasdef);
-	}
-	
+		
 	protected void toggleIndicator(JLabel lbl, boolean hasann) {
 		lbl.setForeground(noneditablelabelcolor);
 		if (hasann) {

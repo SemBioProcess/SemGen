@@ -134,13 +134,16 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 	}
 	
 	protected void fireTreeStructureChanged() {
-        fireNodeChanged(root);
+		TreeModelEvent e = new TreeModelEvent(this, root.getPath());
+        for (TreeModelListener tml : listeners) {
+            tml.treeNodesChanged(e);
+        }
     }
 	
 	protected void fireNodeChanged(DefaultMutableTreeNode node) {
         TreeModelEvent e = new TreeModelEvent(this, node.getPath());
         for (TreeModelListener tml : listeners) {
-            tml.treeStructureChanged(e);
+            tml.treeNodesChanged(e);
         }
     }
 	
@@ -181,7 +184,7 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 				}
 			}
 			if (arg0==cwdrawer) {
-				if	(arg1==modeledit.codewordchanged) {
+				if	(arg1==modeledit.codewordchanged || arg1==modeledit.propertychanged) {
 					for (Integer i : cwdrawer.getChangedComponents()) {
 						fireNodeChanged(cwmapinv.get(i));
 					}
@@ -225,7 +228,6 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 			
 			SubModelTreeButton btn = new SubModelTreeButton(smdrawer.getCodewordName(index), smdrawer.isEditable(index));
 			btn.toggleHumanDefinition(smdrawer.hasHumanReadableDef(index));
-			btn.toggleSingleAnnotation(smdrawer.hasSingularAnnotation(index));
 			return btn;
 		}
 

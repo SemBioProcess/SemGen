@@ -84,7 +84,6 @@ public class CreateCompositeDialog extends SemGenDialog implements ActionListene
 		protected int createComposite() {
 			return termlib.createCompositePhysicalEntity(pollSelectors());
 		}
-		
 	}
 
 	@Override
