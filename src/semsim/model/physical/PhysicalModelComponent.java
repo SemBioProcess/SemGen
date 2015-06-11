@@ -9,6 +9,7 @@ import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.SemSimRelation;
 import semsim.model.SemSimComponent;
+import semsim.model.SemSimTypes;
 
 public abstract class PhysicalModelComponent extends SemSimComponent implements Annotatable, Cloneable{
 	private Set<Annotation> annotations = new HashSet<Annotation>();
@@ -71,4 +72,5 @@ public abstract class PhysicalModelComponent extends SemSimComponent implements 
 	}
 	
 	protected abstract boolean isEquivalent(Object obj);
+	protected abstract SemSimTypes getSemSimType();
 }

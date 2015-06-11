@@ -3,6 +3,7 @@ package semsim.model.physical.object;
 import java.net.URI;
 
 import semsim.SemSimConstants;
+import semsim.model.SemSimTypes;
 import semsim.model.physical.PhysicalEntity;
 
 
@@ -21,5 +22,9 @@ public class CustomPhysicalEntity extends PhysicalEntity{
 	@Override
 	public URI getSemSimClassURI() {
 		return SemSimConstants.CUSTOM_PHYSICAL_ENTITY_CLASS_URI;
+	}
+	@Override
+	protected SemSimTypes getSemSimType() {
+		return SemSimTypes.CUSTOM_PHYSICAL_ENTITY;
 	}
 }

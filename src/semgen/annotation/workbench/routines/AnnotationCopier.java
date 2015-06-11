@@ -110,7 +110,6 @@ public class AnnotationCopier {
 		}
 	}
 	
-	
 	private static PhysicalModelComponent copyPhysicalModelComponent(SemSimModel targetmod, PhysicalModelComponent pmc) throws CloneNotSupportedException{
 		PhysicalModelComponent pmccopy = null;
 		

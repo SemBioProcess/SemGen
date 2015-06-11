@@ -12,6 +12,7 @@ import semgen.annotation.componentlistpanes.AnnotatorButtonTree;
 import semgen.annotation.componentlistpanes.CodewordListPane;
 import semgen.annotation.componentlistpanes.ModelAnnotationsListPane;
 import semgen.annotation.componentlistpanes.SubmodelListPane;
+import semgen.annotation.termlibrarydialog.ReferenceLibraryDialog;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.AnnotatorWorkbench.WBEvent;
 import semgen.annotation.workbench.drawers.AnnotatorDrawer;
@@ -61,6 +62,7 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 	private ModelAnnotationsListPane modelannspane;
 	
 	private AnnotatorTabCodePanel codearea;
+	private ReferenceLibraryDialog libdialog;
 
 	public AnnotatorTab(SemGenSettings sets, GlobalActions gacts, AnnotatorWorkbench bench) {
 		super(bench.getCurrentModelName(), SemGenIcon.annotatoricon, "Annotating " + bench.getCurrentModelName(), sets, gacts);
@@ -189,6 +191,13 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 		codearea.removeAllHighlights();
 	}
 	
+	public void openReferenceLibrary() {
+		if (libdialog==null) {
+			libdialog = new ReferenceLibraryDialog(workbench);
+		}
+
+	}
+	
 	public void mouseEntered(MouseEvent e) {
 		Component component = e.getComponent();
 		if (component instanceof AbstractButton) {
@@ -260,6 +269,12 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 				this.subModelSelected();
 				annotationObjectAction();
 			}
+			if (arg1==WBEvent.requestlibrary) {
+				openReferenceLibrary();
+			}
+			if (arg1==WBEvent.closelibrary) {
+				libdialog=null;
+			}
 		}
 		if (arg0==settings) {
 			if (arg1==SettingChange.toggletree) {
@@ -268,4 +283,5 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 		}
 
 	}
+	
 }

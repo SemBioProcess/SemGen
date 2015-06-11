@@ -6,6 +6,7 @@ import semgen.SemGen;
 import semsim.SemSimConstants;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
+import semsim.model.SemSimTypes;
 import semsim.model.physical.PhysicalModelComponent;
 
 public class PhysicalProperty extends PhysicalModelComponent implements ReferenceTerm{
@@ -48,5 +49,10 @@ public class PhysicalProperty extends PhysicalModelComponent implements Referenc
 	@Override
 	protected boolean isEquivalent(Object obj) {
 		return ((PhysicalProperty)obj).getReferstoURI().compareTo(referenceuri)==0;
+	}
+	
+	@Override
+	protected SemSimTypes getSemSimType() {
+		return SemSimTypes.PHYSICAL_PROPERTY;
 	}
 }

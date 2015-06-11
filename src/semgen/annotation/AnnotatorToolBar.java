@@ -155,19 +155,19 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		}
 		
 		if (o == annotateitemaddrefterm) {
-
+			workbench.requestTermLibrary();
 		} 
 		
 		if (o == annotateitemremoverefterm) {
-
-			}
+			workbench.requestTermLibrary();
+		}
 		
 		if (o == annotateitemreplacerefterm) {
-
+			workbench.requestTermLibrary();
 		}
 		
 		if (o == annotateitemaddcompterm) {
-
+			workbench.requestTermLibrary();
 		}
 		
 		if (o == coderbutton) {
@@ -179,6 +179,8 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		}
 	}
 
+
+	
 	class SortSelectionListener implements ItemListener {
 		SemGenSettings settings;
 		public SortSelectionListener(SemGenSettings sets) {

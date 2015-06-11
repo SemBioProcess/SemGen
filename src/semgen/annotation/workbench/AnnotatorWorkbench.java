@@ -40,7 +40,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	private SubModelToolDrawer smdrawer;
 	private boolean modelsaved = true;
 	private int lastsavedas = -1;
-	public static enum WBEvent {freetextrequest, smselection, cwselection }
+	public static enum WBEvent {freetextrequest, smselection, cwselection, requestlibrary, closelibrary }
 	public static enum modeledit {propertychanged, compositechanged, codewordchanged, submodelchanged, modelimport, smlistchanged, freetextchange, smnamechange }
 	
 	public AnnotatorWorkbench(File file, SemSimModel model) {
@@ -259,6 +259,11 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		notifyObservers(WBEvent.freetextrequest);
 	}
 	
+	public void onLibraryClosed() {
+		setChanged();
+		notifyObservers(WBEvent.closelibrary);
+	}
+	
 	public AnnotatorTreeMap makeTreeMap(boolean useimports) {
 		return new AnnotatorTreeMap(useimports, smdrawer, cwdrawer);
 	}
@@ -273,6 +278,11 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		if (arg1==modeledit.freetextchange || arg1==modeledit.codewordchanged || arg1==modeledit.submodelchanged) {
 			this.setModelSaved(false);
 		}
+	}
+	
+	public void requestTermLibrary() {
+		setChanged();
+		notifyObservers(WBEvent.requestlibrary);
 	}
 	
 	public File getSourceSubmodelFile() {

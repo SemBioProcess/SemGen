@@ -3,6 +3,7 @@ package semsim.model.physical.object;
 import java.net.URI;
 
 import semsim.SemSimConstants;
+import semsim.model.SemSimTypes;
 import semsim.model.computational.Computation;
 import semsim.model.physical.PhysicalModelComponent;
 
@@ -33,4 +34,8 @@ public class PhysicalDependency extends PhysicalModelComponent{
 		return SemSimConstants.PHYSICAL_DEPENDENCY_CLASS_URI;
 	}
 	
+	@Override
+	protected SemSimTypes getSemSimType() {
+		return SemSimTypes.PHYSICAL_DEPENDENCY;
+	}
 }

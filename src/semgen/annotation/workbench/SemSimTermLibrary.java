@@ -2,6 +2,7 @@ package semgen.annotation.workbench;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -13,6 +14,7 @@ import semsim.annotation.ReferenceTerm;
 import semsim.annotation.SemSimRelation;
 import semsim.annotation.StructuralRelation;
 import semsim.model.SemSimModel;
+import semsim.model.SemSimTypes;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
@@ -410,7 +412,7 @@ public class SemSimTermLibrary {
 			map.put(masterlist.get(i).getName(), i);
 		}
 		ArrayList<String> names = new ArrayList<String>(map.keySet());
-		names.sort(new CaseInsensitiveComparator());
+		Collections.sort(names, new CaseInsensitiveComparator());
 		
 		ArrayList<Integer> sortedlist = new ArrayList<Integer>();
 		
@@ -464,6 +466,33 @@ public class SemSimTermLibrary {
 		PhysicalModelComponent pmc = masterlist.get(termindex).getObject();
 		ReferenceTerm refterm = (ReferenceTerm) masterlist.get(reftermindex).getObject();
 		pmc.addReferenceOntologyAnnotation(relation, refterm.getReferstoURI(), refterm.getDescription());
+	}
+	
+	public ArrayList<Integer> getRequestedTypes(SemSimTypes[] types) {
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		for (SemSimTypes type : types) {
+			switch (type) {
+			case COMPOSITE_PHYSICAL_ENTITY:
+				list.addAll(cpes);
+				break;
+			case CUSTOM_PHYSICAL_ENTITY:
+				list.addAll(cupes);
+				break;
+			case PHYSICAL_PROCESS:
+				list.addAll(procs);
+				break;
+			case PHYSICAL_PROPERTY:
+				list.addAll(cpepps);
+				list.addAll(pps);
+				break;
+			case REFERENCE_PHYSICAL_ENTITY:
+				list.addAll(rpes);
+				break;
+			default:
+				break;
+			}
+		}
+		return list;
 	}
 	
 	protected class IndexCard<T extends PhysicalModelComponent> {

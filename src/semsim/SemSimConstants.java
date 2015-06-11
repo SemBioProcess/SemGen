@@ -56,23 +56,6 @@ public class SemSimConstants {
 	public static final String MATHML_NAMESPACE = "http://www.w3.org/1998/Math/MathML";
 	public static final Namespace MATHML_NAMESPACE_OBJ = Namespace.getNamespace(MATHML_NAMESPACE);
 	
-	// Groups of ontologies
-	public static final String[] ALL_SEARCHABLE_ONTOLOGIES = new String[]{
-			SemSimConstants.BRENDA_TISSUE_ONTOLOGY_FULLNAME,
-			SemSimConstants.CELL_TYPE_ONTOLOGY_FULLNAME,
-			SemSimConstants.CHEMICAL_ENTITIES_OF_BIOLOGICAL_INTEREST_FULLNAME,
-			SemSimConstants.CLINICAL_MEASUREMENT_ONTOLOGY_FULLNAME,
-			SemSimConstants.ECG_ONTOLOGY_FULLNAME,
-			SemSimConstants.FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME,
-			SemSimConstants.GENE_ONTOLOGY_FULLNAME,
-			SemSimConstants.MOUSE_ADULT_GROSS_ANATOMY_ONTOLOGY_FULLNAME,
-			SemSimConstants.ONTOLOGY_OF_PHYSICS_FOR_BIOLOGY_FULLNAME,
-			SemSimConstants.PHENOTYPE_AND_TRAIT_ONTOLOGY_FULLNAME,
-			SemSimConstants.SNOMEDCT_FULLNAME,
-			SemSimConstants.SYSTEMS_BIOLOGY_ONTOLOGY_FULLNAME,
-			SemSimConstants.UNIPROT_FULLNAME
-	};
-	
 	// URIs
 	public static final URI COMPUTATION_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Computation");
 	public static final URI SEMSIM_MODEL_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "SemSim_Model");

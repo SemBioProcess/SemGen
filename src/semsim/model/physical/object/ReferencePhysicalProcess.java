@@ -6,6 +6,7 @@ import semgen.SemGen;
 import semsim.SemSimConstants;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
+import semsim.model.SemSimTypes;
 import semsim.model.physical.PhysicalProcess;
 
 public class ReferencePhysicalProcess extends PhysicalProcess implements ReferenceTerm{
@@ -42,5 +43,10 @@ public class ReferencePhysicalProcess extends PhysicalProcess implements Referen
 	@Override
 	protected boolean isEquivalent(Object obj) {
 		return ((ReferencePhysicalProcess)obj).getReferstoURI().compareTo(referenceuri)==0;
+	}
+	
+	@Override
+	protected SemSimTypes getSemSimType() {
+		return SemSimTypes.REFERENCE_PHYSICAL_PROCESS;
 	}
 }

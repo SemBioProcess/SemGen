@@ -6,6 +6,7 @@ import semgen.SemGen;
 import semsim.SemSimConstants;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
+import semsim.model.SemSimTypes;
 import semsim.model.physical.PhysicalEntity;
 
 public class ReferencePhysicalEntity extends PhysicalEntity implements ReferenceTerm{
@@ -41,5 +42,10 @@ public class ReferencePhysicalEntity extends PhysicalEntity implements Reference
 	@Override
 	public URI getSemSimClassURI() {
 		return SemSimConstants.REFERENCE_PHYSICAL_ENTITY_CLASS_URI;
+	}
+	
+	@Override
+	protected SemSimTypes getSemSimType() {
+		return SemSimTypes.REFERENCE_PHYSICAL_ENTITY;
 	}
 }
