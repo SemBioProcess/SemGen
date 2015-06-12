@@ -9,6 +9,7 @@ import java.io.StringReader;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -28,6 +29,8 @@ import semsim.SemSimConstants;
 import semsim.SemSimLibrary;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.units.UnitFactor;
+import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.PhysicalPropertyinComposite;
@@ -252,5 +255,39 @@ public class SemSimUtil {
 		for (PhysicalPropertyinComposite pp : lib.getCommonProperties()) {
 			model.replacePhysicalProperty(pp, pp);
 		}
+	}
+	
+	/**
+	 * Given a SemSim model, recursively processes custom units and returns all of its units broken down into fundamental base units
+	 * @param SemSim model
+	 * @return HashMap of customUnit:(baseUnit1:exp1, baseUnit:exp2, ...)
+	 */
+	public static HashMap<String, HashMap<String, Double>> getAllUnitsAsFundamentalBaseUnits(SemSimModel semsimmodel) {
+		Set<UnitOfMeasurement> units = semsimmodel.getUnits();
+		HashMap<String, HashMap<String, Double>> fundamentalBaseUnits = new HashMap<String, HashMap<String, Double>>();
+		
+		for(UnitOfMeasurement uom : units) {
+			HashMap<String, Double> newUnitFactor = recurseBaseUnits(uom, 1.0);
+			
+			fundamentalBaseUnits.put(uom.getName(), newUnitFactor);
+		}
+		return fundamentalBaseUnits;
+	}
+	// Used in tandem with getFundamentalBaseUnits
+	private static HashMap<String, Double> recurseBaseUnits(UnitOfMeasurement uom, Double oldExp) {
+		SemSimLibrary semsimlib = new SemSimLibrary();
+		Set<UnitFactor> unitFactors = uom.getUnitFactors();
+		HashMap<String, Double> newUnitFactor = new HashMap<String, Double>();
+		for(UnitFactor factor : unitFactors) {
+			UnitOfMeasurement baseuom = factor.getBaseUnit();
+			Double newExp = factor.getExponent()*oldExp;
+			if(semsimlib.isCellMLBaseUnit(baseuom.getName())) {
+				newUnitFactor.put(baseuom.getName(), newExp);
+			}
+			else {
+				newUnitFactor.putAll(recurseBaseUnits(baseuom, newExp));
+			}
+		}
+		return newUnitFactor;
 	}
 }

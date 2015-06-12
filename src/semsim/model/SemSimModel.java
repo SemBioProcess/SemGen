@@ -1011,11 +1011,33 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	 * @param name The name of the DataStructure to delete.
 	 */
 	public void removeDataStructure(String name) {
+		
 		if(getAssociatedDataStructure(name)!=null){
 			DataStructure ds = getAssociatedDataStructure(name);
+			
 			for(DataStructure otherds : ds.getUsedToCompute()){
 				otherds.getComputation().getInputs().remove(ds);
 			}
+			
+			// If a MappableVariable, remove mappings and remove equation from parent 
+			// FunctionalSubmodel
+			if(ds instanceof MappableVariable){
+				MappableVariable mapv = (MappableVariable)ds;
+				
+				// Remove mappings to the data structure
+				for(MappableVariable fromv: mapv.getMappedFrom()){
+					fromv.getMappedTo().remove(mapv);
+				}
+				
+				// Remove mappings from the data structure
+				for(MappableVariable tov : mapv.getMappedTo()){
+					tov.getMappedFrom().remove(mapv);
+				}
+				
+				FunctionalSubmodel fs = getParentFunctionalSubmodelForMappableVariable(mapv);
+				fs.removeVariableEquationFromMathML(mapv);
+			}
+			
 			for(Submodel sub : getSubmodels()){
 				if(sub.getAssociatedDataStructures().contains(ds)) sub.getAssociatedDataStructures().remove(ds);
 			}
@@ -1048,9 +1070,12 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	 * @param submodel The Submodel to be deleted.
 	 */
 	public void removeSubmodel(Submodel submodel) {
-		// Remove submodel if a submodel in another submodel
-		for(Submodel sub : getSubmodels()) sub.removeSubmodel(submodel);
+		
+		// Remove from the model's collection of submodels
 		submodels.remove(submodel);
+
+		// If the submodel is subsumed by another submodel, remove the subsumption
+		for(Submodel sub : getSubmodels()) sub.removeSubmodel(submodel);
 	}
 	
 	

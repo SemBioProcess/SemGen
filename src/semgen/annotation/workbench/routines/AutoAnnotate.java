@@ -1,5 +1,6 @@
 package semgen.annotation.workbench.routines;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,14 +10,20 @@ import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.object.PhysicalPropertyinComposite;
+import semsim.utilities.SemSimUtil;
 
 public class AutoAnnotate {
+	
+	public static HashMap<String, HashMap<String, Double>> fundamentalBaseUnits;
+	
 	// Automatically apply OPB annotations to the physical properties associated
 	// with the model's data structures
 	public static SemSimModel autoAnnotateWithOPB(SemSimModel semsimmodel) {		
 		Set<DataStructure> candidateamounts = new HashSet<DataStructure>();
 		Set<DataStructure> candidateforces = new HashSet<DataStructure>();
 		Set<DataStructure> candidateflows = new HashSet<DataStructure>();
+		
+		fundamentalBaseUnits = SemSimUtil.getAllUnitsAsFundamentalBaseUnits(semsimmodel);
 		
 		// If units present, set up physical property connected to each data structure
 		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){

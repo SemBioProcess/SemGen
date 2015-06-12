@@ -30,6 +30,8 @@ import org.semanticweb.owlapi.model.OWLIndividual;
 import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
+import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
+import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
@@ -414,18 +416,49 @@ public class SemSimOWLreader extends ModelReader {
 			String isfundamental = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, unitind, SemSimConstants.IS_FUNDAMENTAL_UNIT_URI.toString());
 			uom.setFundamental(isfundamental.equals("true"));
 
-			// Store the unit's factoring info
-			for(String baseunitind : SemSimOWLFactory.getIndObjectProperty(ont, unitind, SemSimConstants.HAS_UNIT_FACTOR_URI.toString())){
-				String factorunitcode = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, baseunitind, SemSimConstants.HAS_COMPUTATIONAL_CODE_URI.toString());
-				if(!factorunitcode.equals("") && factorunitcode!=null){
-					UnitOfMeasurement baseunit = semsimmodel.getUnit(factorunitcode);
-					if(baseunit==null){
-						baseunit = new UnitOfMeasurement(factorunitcode);
-						semsimmodel.addUnit(baseunit);
+			// Store the unit's factoring info. Need to do this with raw OWL API b/c 
+			// you can have the same hasUnitFactor axiom but with different annotations.
+			// So we can't just use SemSimOWLFactory.getIndObjectProperty().
+			OWLNamedIndividual unitOWLind = factory.getOWLNamedIndividual(IRI.create(unitind));
+			OWLObjectProperty hasunitfactorprop = factory.getOWLObjectProperty(IRI.create(SemSimConstants.HAS_UNIT_FACTOR_URI));
+			Set<OWLObjectPropertyAssertionAxiom> oopaas = ont.getObjectPropertyAssertionAxioms(unitOWLind);
+			
+			// Go through all the object assertion axioms on this individual
+			for(OWLObjectPropertyAssertionAxiom oopaa : oopaas){
+				
+				OWLObjectPropertyExpression readprop = oopaa.getProperty();
+				
+				// If the assertion uses the "hasUnitFactor" property, collect the required info
+				if(readprop.equals(hasunitfactorprop)){
+					OWLIndividual baseunitOWLind = oopaa.getObject();
+					String baseunitind = baseunitOWLind.asOWLNamedIndividual().getIRI().toString();
+					String factorunitcode = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, baseunitind, SemSimConstants.HAS_COMPUTATIONAL_CODE_URI.toString());
+					
+					if(!factorunitcode.equals("") && factorunitcode!=null){
+						UnitOfMeasurement baseunit = semsimmodel.getUnit(factorunitcode);
+						
+						if(baseunit==null){
+							baseunit = new UnitOfMeasurement(factorunitcode);
+							semsimmodel.addUnit(baseunit);
+						}
+						
+						double exponent = 1.0;
+						String prefix = null;
+						
+						OWLAnnotationProperty unitfactorexpprop = factory.getOWLAnnotationProperty(IRI.create(SemSimConstants.UNIT_FACTOR_EXPONENT_URI));
+						OWLAnnotationProperty unitfactorprefixprop = factory.getOWLAnnotationProperty(IRI.create(SemSimConstants.UNIT_FACTOR_PREFIX_URI));
+						
+						if(!oopaa.getAnnotations(unitfactorexpprop).isEmpty()){
+							OWLLiteral litval = (OWLLiteral) oopaa.getAnnotations(unitfactorexpprop).toArray(new OWLAnnotation[]{})[0].getValue();
+							exponent = litval.parseDouble();
+						}
+						
+						if(!oopaa.getAnnotations(unitfactorprefixprop).isEmpty()){
+							OWLLiteral litval = (OWLLiteral) oopaa.getAnnotations(unitfactorprefixprop).toArray(new OWLAnnotation[]{})[0].getValue();
+							prefix = litval.getLiteral();
+						}
+						uom.addUnitFactor(new UnitFactor(baseunit, exponent, prefix));
 					}
-					double exponent = getUnitFactorExponent(ont, unitind, SemSimConstants.HAS_UNIT_FACTOR_URI.toString(), baseunitind);
-					String prefix = getStringValueFromAnnotatedObjectPropertyAxiom(ont, unitind, SemSimConstants.HAS_UNIT_FACTOR_URI, baseunitind, SemSimConstants.UNIT_FACTOR_PREFIX_URI);
-					uom.addUnitFactor(new UnitFactor(baseunit, exponent, prefix));
 				}
 			}
 		}
@@ -527,26 +560,44 @@ public class SemSimOWLreader extends ModelReader {
 				// Associate data structures with the model submodel
 				for(String dsname : dss){
 					DataStructure theds = semsimmodel.getAssociatedDataStructure(SemSimOWLFactory.getURIdecodedFragmentFromIRI(dsname));
+					String localvarname = theds.getName().substring(theds.getName().lastIndexOf(".")+1,theds.getName().length());
 					sssubmodel.addDataStructure(theds);
 					
 					// white box the equations
 					if(componentmathml!=null && !componentmathml.equals("")){
-						String localvarname = theds.getName().substring(theds.getName().lastIndexOf(".")+1,theds.getName().length());
 						SAXBuilder builder = new SAXBuilder();
+						
 						try {
 							Document doc = builder.build(new StringReader(componentmathmlwithroot));
 							
 							if(doc.getRootElement() instanceof Element){
 								List<?> mathmllist = doc.getRootElement().getChildren("math", CellMLconstants.mathmlNS);
 								
-								Element varmathml = CellMLreader.getMathMLforOutputVariable(localvarname, mathmllist);
-								if(varmathml!=null){
+								// Check if variable is solved using ODE, and is a CellML-type variable, set startValue to CellML intial value.
+								Boolean ode = CellMLreader.isSolvedbyODE(localvarname, mathmllist);
+								
+								Element varmathmlel = CellMLreader.getMathMLforOutputVariable(localvarname, mathmllist);
+								
+								if(varmathmlel!=null){
 									XMLOutputter xmloutputter = new XMLOutputter();
-									theds.getComputation().setMathML(xmloutputter.outputString(varmathml));
-									CellMLreader.whiteBoxFunctionalSubmodelEquations(varmathml, subname, semsimmodel, theds);
+									String varmathml = xmloutputter.outputString(varmathmlel);
+									theds.getComputation().setMathML(varmathml);
 									
-									// Check if variable is solved using ODE, and is a CellML-type variable, set startValue to CellML intial value.
-									Boolean ode = CellMLreader.isSolvedbyODE(localvarname, mathmllist);
+									// Assign human-readable computational code, if not already present
+									if(theds.getComputation().getComputationalCode()==null ||
+											theds.getComputation().getComputationalCode().equals("")){
+										
+										String RHS = CellMLreader.getRHSofDataStructureEquation(varmathml, localvarname);
+										
+										if(RHS != null) {
+											String soldomname = theds.hasSolutionDomain() ? "(" + theds.getSolutionDomain().getName() + ")" : "t";
+											String LHS = ode ? "d(" + localvarname + ")/d" + soldomname + " = " : localvarname + " = ";
+											theds.getComputation().setComputationalCode(LHS + RHS);
+										}
+									}
+									
+									CellMLreader.whiteBoxFunctionalSubmodelEquations(varmathmlel, subname, semsimmodel, theds);
+									
 									if(ode && (theds instanceof MappableVariable)){
 										MappableVariable mv = (MappableVariable)theds;
 										mv.setStartValue(mv.getCellMLinitialValue());
@@ -555,6 +606,21 @@ public class SemSimOWLreader extends ModelReader {
 							}
 						} catch (JDOMException | IOException e) {
 							e.printStackTrace();
+						}
+					}
+					
+					// If the human-readable computation code hasn't been found, and theds is a mappable variable,
+					// and there's a CellML initial value, use the initial value for the computational code
+					if(theds instanceof MappableVariable){
+						MappableVariable mv = (MappableVariable)theds;
+						
+						if((mv.getComputation().getComputationalCode()==null ||
+								mv.getComputation().getComputationalCode().equals("")) &&
+								(mv.getCellMLinitialValue()!=null && !mv.getCellMLinitialValue().equals(""))){ // Have to check for empty string
+																											   // b/c that's what getCellMLinitialValue
+																											   // is initialized to.
+							
+							theds.getComputation().setComputationalCode(localvarname + " = " + mv.getCellMLinitialValue());
 						}
 					}
 				}
@@ -624,7 +690,6 @@ public class SemSimOWLreader extends ModelReader {
 	}
 	
 	// Get the relationship for a submodel subsumption
-
 	private Set<String> getSubmodelSubsumptionRelationship(OWLOntology ont, String submodel, String prop, String subsubmodel){
 		Set<String> vals = new HashSet<String>();
 		OWLIndividual procind = factory.getOWLNamedIndividual(IRI.create(submodel));
@@ -646,49 +711,8 @@ public class SemSimOWLreader extends ModelReader {
 		return vals;
 	}
 	
-	// Get the exponent for a unit factor
-	private double getUnitFactorExponent(OWLOntology ont, String derivunit, String prop, String baseunit){
-		double val = 1.0;
-		OWLIndividual derivind = factory.getOWLNamedIndividual(IRI.create(derivunit));
-		OWLIndividual baseind = factory.getOWLNamedIndividual(IRI.create(baseunit));
-		OWLObjectProperty owlprop = factory.getOWLObjectProperty(IRI.create(prop));
-		OWLAxiom axiom = factory.getOWLObjectPropertyAssertionAxiom(owlprop, derivind, baseind);
-		
-		OWLAnnotationProperty annprop = factory.getOWLAnnotationProperty(IRI.create(SemSimConstants.UNIT_FACTOR_EXPONENT_URI));
-		for(OWLAxiom ax : ont.getAxioms(derivind)){
-			if(ax.equalsIgnoreAnnotations(axiom)){
-				if(!ax.getAnnotations(annprop).isEmpty()){
-					OWLLiteral litval = (OWLLiteral) ax.getAnnotations(annprop).toArray(new OWLAnnotation[]{})[0].getValue();
-					val = litval.parseDouble();
-				}
-			}
-		}
-		return val;
-	}
-	
-	// Get a string value from an annotation on an object property axiom (individual > prop > individual)
-
-	private String getStringValueFromAnnotatedObjectPropertyAxiom(OWLOntology ont, String subject, URI pred, String object, URI annpropuri){
-		String val = null;
-		OWLIndividual subjectind = factory.getOWLNamedIndividual(IRI.create(subject));
-		OWLIndividual objectind = factory.getOWLNamedIndividual(IRI.create(object));
-		OWLObjectProperty owlprop = factory.getOWLObjectProperty(IRI.create(pred));
-		OWLAxiom axiom = factory.getOWLObjectPropertyAssertionAxiom(owlprop, subjectind, objectind);
-		
-		OWLAnnotationProperty annprop = factory.getOWLAnnotationProperty(IRI.create(annpropuri));
-		for(OWLAxiom ax : ont.getAxioms(subjectind)){
-			if(ax.equalsIgnoreAnnotations(axiom)){
-				if(!ax.getAnnotations(annprop).isEmpty()){
-					OWLLiteral litval = (OWLLiteral) ax.getAnnotations(annprop).toArray(new OWLAnnotation[]{})[0].getValue();
-					val = litval.getLiteral();
-				}
-			}
-		}
-		return val;
-	}
 	
 	// Get a string value from an annotation on an datatype property axiom (individual > prop > datatype)
-
 	private String getStringValueFromAnnotatedDataPropertyAxiom(OWLOntology ont, String subject, URI pred, String data, URI annpropuri){
 		String val = null;
 		OWLIndividual subjectind = factory.getOWLNamedIndividual(IRI.create(subject));
@@ -716,7 +740,6 @@ public class SemSimOWLreader extends ModelReader {
 		}
 		return term;
 	}
-
 	private PhysicalModelComponent getClassofIndividual(String ind) throws OWLException {
 		String indclass = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, ind, SemSimConstants.REFERS_TO_URI.toString());
 		if (indclass.isEmpty()) {

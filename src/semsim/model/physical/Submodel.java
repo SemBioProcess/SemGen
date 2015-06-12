@@ -62,9 +62,7 @@ public class Submodel extends SemSimComponent implements Cloneable, Importable, 
 	}
 	
 	public void removeSubmodel(Submodel sub){
-		if(submodels.contains(sub)){
 			submodels.remove(sub);
-		}
 	}
 	
 	public Submodel clone() throws CloneNotSupportedException {

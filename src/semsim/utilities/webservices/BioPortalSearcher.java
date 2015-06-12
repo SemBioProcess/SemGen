@@ -56,7 +56,7 @@ public class BioPortalSearcher {
 					Element nextel = (Element) resultsiterator.next();
 					String preferredLabel = nextel.getChildText("prefLabel");
 					String uri = nextel.getChildText("id");
-					
+	
 					// Only collect terms from the queried ontology; don't show terms imported from other ontologies
 					String urins = SemSimOWLFactory.getNamespaceFromIRI(uri);
 					
