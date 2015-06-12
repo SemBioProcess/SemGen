@@ -6,6 +6,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
+import semgen.SemGenSettings;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.AnnotatorWorkbench.LibraryEvent;
 
@@ -15,11 +16,12 @@ public class ReferenceLibraryDialog extends JFrame {
 	JTabbedPane mainpane = new JTabbedPane(JTabbedPane.LEFT);
 	ReferenceTermPanel reftermpane;
 	ImportAnnotationsPanel importpane;
+	SemGenSettings settings;
 	
-	public ReferenceLibraryDialog(AnnotatorWorkbench wb) {
+	public ReferenceLibraryDialog(SemGenSettings sets, AnnotatorWorkbench wb) {
 		super("Annotation Reference Library");
 		workbench = wb;
-		
+		settings = sets;
 		// Set closing behavior
 			addWindowListener(new WindowAdapter() {
 				public void windowClosing(WindowEvent e) {

@@ -195,7 +195,7 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 	
 	public void openReferenceLibrary() {
 		if (libdialog==null) {
-			libdialog = new ReferenceLibraryDialog(workbench);
+			libdialog = new ReferenceLibraryDialog(settings, workbench);
 		}
 	}
 	
@@ -228,6 +228,9 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 	}
 
 	public boolean closeTab() {
+		if (libdialog!=null) {
+			libdialog.dispose();
+		}
 		return workbench.unsavedChanges();
 	}
 
@@ -272,11 +275,11 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 			}
 			if (arg1==LibraryEvent.requestlibrary) {
 				openReferenceLibrary();
-				libdialog.openImportTab();
+				libdialog.openReferenceTab();
 			}
 			if (arg1==LibraryEvent.requestimport) {
 				openReferenceLibrary();
-				libdialog.openReferenceTab();
+				libdialog.openImportTab();
 			}
 			if (arg1==LibraryEvent.closelibrary) {
 				libdialog=null;

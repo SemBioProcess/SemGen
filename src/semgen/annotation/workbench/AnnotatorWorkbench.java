@@ -197,14 +197,17 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		setModelSaved(false);
 	}
 	
-	public boolean importModelAnnotations(File file) {
+	public boolean importModelAnnotations(File file, Boolean[] options) {
 		AnnotationImporter copier = new AnnotationImporter(termlib, semsimmodel);
 		if (!copier.loadSourceModel(file)) {
 			return false;
 		}
-		setModelSaved(false);
-		setChanged();
-		notifyObservers();
+		//Notify observers if changes were made.
+		if (copier.copyModelAnnotations(options)) {
+			setModelSaved(false);
+			setChanged();
+			notifyObservers();
+		}
 	
 		return true;
 	}

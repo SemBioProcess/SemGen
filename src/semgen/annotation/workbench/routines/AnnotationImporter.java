@@ -1,8 +1,6 @@
 package semgen.annotation.workbench.routines;
 
 import java.io.File;
-import java.util.ArrayList;
-
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.file.LoadSemSimModel;
 import semsim.model.SemSimModel;
@@ -30,14 +28,14 @@ public class AnnotationImporter {
 		return true;
 	}
 	
-	public boolean copyModelAnnotations(ArrayList<Boolean> options) {
+	public boolean copyModelAnnotations(Boolean[] options) {
 		library.addTermsinModel(importedmodel);
 		boolean changed = false;
-		if (options.get(0)) {
-			
+		if (options[0]) {
+			importCodewords();
 		}
 		
-		if (options.get(1)) {
+		if (options[1]) {
 			if (copySubmodels()) changed=true;
 		}
 		return changed;
@@ -55,7 +53,6 @@ public class AnnotationImporter {
 				
 				// Copy free-text description
 				sub.setDescription(srcsub.getDescription());
-				
 			}
 		}
 		return changemadetosubmodels;
@@ -70,7 +67,7 @@ public class AnnotationImporter {
 				
 				ds.copyDescription(srcds);
 				ds.copySingularAnnotations(srcds);
-				AnnotationCopier.copyCompositeAnnotation(importingmodel, ds, srcds);
+				AnnotationCopier.copyCompositeAnnotation(library, ds, srcds);
 				
 			} // otherwise no matching data structure found in source model
 		} // end of data structure loop

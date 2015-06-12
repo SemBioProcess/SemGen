@@ -7,6 +7,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 
+import semgen.SemGenSettings;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.SemGenFont;
@@ -29,7 +30,7 @@ public class ReferenceTermPanel extends JPanel implements ActionListener {
 	public ReferenceTermPanel(AnnotatorWorkbench wb) {
 		workbench = wb;
 		library = wb.openTermLibrary();
-		
+		setBackground(SemGenSettings.lightblue);
 		makePanel();
 	}
 	

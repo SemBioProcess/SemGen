@@ -90,7 +90,7 @@ public class ReferenceOntologies {
 				new String[]{"http://purl.obolibrary.org/obo/PR"}),
 		SBO("Systems Biology Ontology", "SBO", "1046",
 				new String[]{"http://biomodels.net/SBO/", "http://purl.org/obo/owl/SBO#","http://purl.obolibrary.org/obo/SBO"}),
-		SNOMED("SNOMED - Clinical Terms", "SNOMED", "1353",
+		SNOMED("SNOMED - Clinical Terms", "SNOMEDCT", "1353",
 				new String[]{"http://purl.bioontology.org/ontology/SNOMEDCT/"}),
 		UNIPROT("Universal Protein Resource", "UNIPROPT", "",
 				new String[]{"http://purl.uniprot.org/uniprot/", "http://identifiers.org/uniprot/","http://www.uniprot.org/uniprot/"});

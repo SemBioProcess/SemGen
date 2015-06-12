@@ -512,44 +512,45 @@ public class SemSimOWLwriter extends ModelWriter {
 			createPhysicalModelIndividual(indexent, indexuristring);
 		}
 		else indexuri = compositeEntitiesAndIndexes.get(cpe);
-		
-		StructuralRelation rel = cpe.getArrayListOfStructuralRelations().get(0);
-		
-		// Truncate the composite by one entity
-		ArrayList<PhysicalEntity> nextents = new ArrayList<PhysicalEntity>();
-		ArrayList<StructuralRelation> nextrels = new ArrayList<StructuralRelation>();
-		
-		for(int u=1; u<cpe.getArrayListOfEntities().size(); u++){
-			nextents.add(cpe.getArrayListOfEntities().get(u));
-		}
-		for(int u=1; u<cpe.getArrayListOfStructuralRelations().size(); u++){
-			nextrels.add(cpe.getArrayListOfStructuralRelations().get(u));
-		}
-		CompositePhysicalEntity nextcpe = new CompositePhysicalEntity(nextents, nextrels);
-		URI nexturi = null;
-		
-		// Add sub-composites recursively
-		if(nextcpe.getArrayListOfEntities().size()>1){
-			// check if an equivalent nextcpe already exists
-			nextcpe = SemSimUtil.getEquivalentCompositeEntityIfAlreadyInMap(nextcpe, compositeEntitiesAndIndexes);
-			nexturi = processCompositePhysicalEntity(nextcpe, namespace);
-		}
-		// If we're at the end of the composite
-		else{
-			// If it's an entity we haven't processed yet
-			if(!singularPMCsAndUrisForDataStructures.containsKey(nextcpe.getArrayListOfEntities().get(0))){
-				nexturi = URI.create(logSingularPhysicalComponentAndGetURIasString(nextcpe.getArrayListOfEntities().get(0),namespace));
-				createPhysicalModelIndividual(nextcpe.getArrayListOfEntities().get(0), nexturi.toString());
-				singularPMCsAndUrisForDataStructures.put(nextcpe.getArrayListOfEntities().get(0), nexturi);
+
+		if (cpe.getArrayListOfEntities().size()>1) {
+			// Truncate the composite by one entity
+			ArrayList<PhysicalEntity> nextents = new ArrayList<PhysicalEntity>();
+			ArrayList<StructuralRelation> nextrels = new ArrayList<StructuralRelation>();
+			
+			for(int u=1; u<cpe.getArrayListOfEntities().size(); u++){
+				nextents.add(cpe.getArrayListOfEntities().get(u));
 			}
-			// Otherwise get the terminal entity that we logged previously
+			for(int u=1; u<cpe.getArrayListOfStructuralRelations().size(); u++){
+				nextrels.add(cpe.getArrayListOfStructuralRelations().get(u));
+			}
+			CompositePhysicalEntity nextcpe = new CompositePhysicalEntity(nextents, nextrels);
+			URI nexturi = null;
+			
+			// Add sub-composites recursively
+			if(nextcpe.getArrayListOfEntities().size()>1){
+				// check if an equivalent nextcpe already exists
+				nextcpe = SemSimUtil.getEquivalentCompositeEntityIfAlreadyInMap(nextcpe, compositeEntitiesAndIndexes);
+				nexturi = processCompositePhysicalEntity(nextcpe, namespace);
+			}
+			// If we're at the end of the composite
 			else{
-				nexturi = singularPMCsAndUrisForDataStructures.get(nextcpe.getArrayListOfEntities().get(0));
+				// If it's an entity we haven't processed yet
+				if(!singularPMCsAndUrisForDataStructures.containsKey(nextcpe.getArrayListOfEntities().get(0))){
+					nexturi = URI.create(logSingularPhysicalComponentAndGetURIasString(nextcpe.getArrayListOfEntities().get(0),namespace));
+					createPhysicalModelIndividual(nextcpe.getArrayListOfEntities().get(0), nexturi.toString());
+					singularPMCsAndUrisForDataStructures.put(nextcpe.getArrayListOfEntities().get(0), nexturi);
+				}
+				// Otherwise get the terminal entity that we logged previously
+				else{
+					nexturi = singularPMCsAndUrisForDataStructures.get(nextcpe.getArrayListOfEntities().get(0));
+				}
 			}
+			// Establish structural relationship between parts of composite annotation
+				StructuralRelation rel = cpe.getArrayListOfStructuralRelations().get(0);
+				SemSimOWLFactory.setIndObjectProperty(ont, indexuri.toString(), nexturi.toString(),
+						rel.getURI().toString(), SemSimConstants.INVERSE_STRUCTURAL_RELATIONS_MAP.get(rel.getURI()).toString(), manager);
 		}
-		// Establish structural relationship between parts of composite annotation
-		SemSimOWLFactory.setIndObjectProperty(ont, indexuri.toString(), nexturi.toString(),
-				rel.getURI().toString(), SemSimConstants.INVERSE_STRUCTURAL_RELATIONS_MAP.get(rel.getURI()).toString(), manager);
 		return indexuri;
 	}
 

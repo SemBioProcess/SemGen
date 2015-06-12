@@ -11,8 +11,10 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import semgen.SemGenSettings;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.utilities.SemGenError;
+import semgen.utilities.SemGenFont;
 import semgen.utilities.file.SemGenOpenFileChooser;
 
 public class ImportAnnotationsPanel extends JPanel implements ActionListener {
@@ -28,11 +30,13 @@ public class ImportAnnotationsPanel extends JPanel implements ActionListener {
 	public ImportAnnotationsPanel(AnnotatorWorkbench wb) {
 		workbench = wb;
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS)); 
+		setBackground(SemGenSettings.lightblue);
 		makePanel();
 	}
 	
 	private void makePanel() {
 		JPanel loadpane = new JPanel();
+		loadpane.setBackground(SemGenSettings.lightblue);
 		loadpane.setLayout(new BoxLayout(loadpane, BoxLayout.LINE_AXIS)); 
 		loadpane.add(loadbtn);
 		loadpane.add(modellabel);
@@ -44,26 +48,43 @@ public class ImportAnnotationsPanel extends JPanel implements ActionListener {
 		checklist.add(new JCheckBox("Import annotations for submodels with the same name"));
 		
 		JPanel optionpane = new JPanel();
+		optionpane.setBackground(SemGenSettings.lightblue);
 		optionpane.setLayout(new BoxLayout(optionpane, BoxLayout.PAGE_AXIS));
-		optionpane.add(new JLabel("Import Options"));
+		JLabel inslbl = new JLabel("Import Options");
+		inslbl.setFont(SemGenFont.defaultBold(1));
+		optionpane.add(inslbl);
 		for (JCheckBox checkbox : checklist) {
+			checkbox.setFont(SemGenFont.defaultPlain());
 			optionpane.add(checkbox);
 		}
 		
 		importbtn.setEnabled(false);
 		add(optionpane);
 		add(importbtn);
+		importbtn.addActionListener(this);
 	}
 
 	private void selectModelFile() {
-		SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select SemSim model containing annotations", false);
+		SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select SemSim model containing annotations", new String[]{"owl"}, false);
 		File sourcefile = sgc.getSelectedFile();
 		if (sourcefile != null) {
 			file = sourcefile;
 			modellabel.setText(file.getName());
-			importbtn.setEnabled(false);
+			importbtn.setEnabled(true);
 		}
 	}
+	
+	private void doCopy() {
+		Boolean[] options = new Boolean[checklist.size()];
+		for (int i = 0; i < checklist.size(); i++) {
+			options[i] = checklist.get(i).isSelected();
+		}
+		if (!workbench.importModelAnnotations(file, options)) {
+			SemGenError.showError("There were errors associated with the selected model. Not copying.", "Copy Model Failed");
+		}
+		importbtn.setEnabled(false);
+	}
+	
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -71,8 +92,12 @@ public class ImportAnnotationsPanel extends JPanel implements ActionListener {
 		if (obj.equals(loadbtn)) {
 			selectModelFile();
 		}
+		
 		if (obj.equals(importbtn)) {
-			SemGenError.showError("There were errors associated with the selected model. Not copying.", "Copy Model Failed");
+			
+			
+			
+			doCopy();
 		}
 	}
 }
