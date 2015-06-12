@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.HashMap;
+
 import javax.swing.BorderFactory;
 
 import java.awt.event.MouseEvent;
@@ -36,6 +37,7 @@ import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.ExternalURLButton;
+import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
@@ -247,6 +249,9 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		if (!resultslistright.isSelectionEmpty()) {
 			String sel = resultslistright.getSelectedValue();
 			URI uri = URI.create(rdflabelsanduris.get(sel));
+			if (domain.equals(OntologyDomain.PhysicalProperty)) {
+				termindex = library.addPhysicalProperty(new PhysicalProperty(sel, uri));
+			}
 			if (domain.equals(OntologyDomain.AssociatePhysicalProperty)) {
 				termindex = library.addAssociatePhysicalProperty(new PhysicalPropertyinComposite(sel, uri));
 			}

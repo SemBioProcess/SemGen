@@ -19,7 +19,6 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import semgen.annotation.workbench.routines.AutoAnnotate;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.computational.units.UnitFactor;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;

@@ -14,7 +14,7 @@ public class AnnotationCopier {
 	/** 
 	 * Intra-model datastructure copy
 	 * */
-	public static void copyCompositeAnnotation(DataStructure targetds, DataStructure sourceds) {
+	public static void copyCompositeAnnotation(DataStructure sourceds, DataStructure targetds) {
 		if (sourceds.hasPhysicalProperty()) {
 			targetds.setAssociatePhysicalProperty(sourceds.getPhysicalProperty());
 		}

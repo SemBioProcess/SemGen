@@ -117,6 +117,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 	
 	private String listParticipants() {
 		int proc = drawer.getIndexofModelComponent();
+		if (proc==-1) return "";
 		String pstring = "<html><body>";
 		
 		for(int source : termlib.getProcessSourcesIndexMultiplierMap(proc).keySet()){
