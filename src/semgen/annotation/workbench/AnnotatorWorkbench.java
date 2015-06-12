@@ -19,7 +19,7 @@ import semgen.annotation.workbench.drawers.CodewordToolDrawer;
 import semgen.annotation.workbench.drawers.ModelAnnotationsBench;
 import semgen.annotation.workbench.drawers.ModelAnnotationsBench.ModelChangeEnum;
 import semgen.annotation.workbench.drawers.SubModelToolDrawer;
-import semgen.annotation.workbench.routines.AnnotationCopier;
+import semgen.annotation.workbench.routines.AnnotationImporter;
 import semgen.utilities.CSVExporter;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.SemGenSaveFileChooser;
@@ -40,7 +40,8 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	private SubModelToolDrawer smdrawer;
 	private boolean modelsaved = true;
 	private int lastsavedas = -1;
-	public static enum WBEvent {freetextrequest, smselection, cwselection, requestlibrary, closelibrary }
+	public static enum WBEvent {freetextrequest, smselection, cwselection}
+	public static enum LibraryEvent {requestimport, requestlibrary, closelibrary }
 	public static enum modeledit {propertychanged, compositechanged, codewordchanged, submodelchanged, modelimport, smlistchanged, freetextchange, smnamechange }
 	
 	public AnnotatorWorkbench(File file, SemSimModel model) {
@@ -196,13 +197,16 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		setModelSaved(false);
 	}
 	
-	public void importModelAnnotations() {
-		AnnotationCopier copier = new AnnotationCopier(semsimmodel);
-		if (copier.doCopy()) {
-			setModelSaved(false);
-			setChanged();
-			notifyObservers();
+	public boolean importModelAnnotations(File file) {
+		AnnotationImporter copier = new AnnotationImporter(termlib, semsimmodel);
+		if (!copier.loadSourceModel(file)) {
+			return false;
 		}
+		setModelSaved(false);
+		setChanged();
+		notifyObservers();
+	
+		return true;
 	}
 		
 	public void compositeChanged() {
@@ -259,11 +263,6 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		notifyObservers(WBEvent.freetextrequest);
 	}
 	
-	public void onLibraryClosed() {
-		setChanged();
-		notifyObservers(WBEvent.closelibrary);
-	}
-	
 	public AnnotatorTreeMap makeTreeMap(boolean useimports) {
 		return new AnnotatorTreeMap(useimports, smdrawer, cwdrawer);
 	}
@@ -280,9 +279,9 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		}
 	}
 	
-	public void requestTermLibrary() {
+	public void sendTermLibraryEvent(LibraryEvent evt) {
 		setChanged();
-		notifyObservers(WBEvent.requestlibrary);
+		notifyObservers(evt);
 	}
 	
 	public File getSourceSubmodelFile() {

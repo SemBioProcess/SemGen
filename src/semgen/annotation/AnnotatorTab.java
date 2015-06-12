@@ -14,6 +14,7 @@ import semgen.annotation.componentlistpanes.ModelAnnotationsListPane;
 import semgen.annotation.componentlistpanes.SubmodelListPane;
 import semgen.annotation.termlibrarydialog.ReferenceLibraryDialog;
 import semgen.annotation.workbench.AnnotatorWorkbench;
+import semgen.annotation.workbench.AnnotatorWorkbench.LibraryEvent;
 import semgen.annotation.workbench.AnnotatorWorkbench.WBEvent;
 import semgen.annotation.workbench.drawers.AnnotatorDrawer;
 import semgen.annotation.workbench.drawers.ModelAnnotationsBench;
@@ -191,11 +192,11 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 		codearea.removeAllHighlights();
 	}
 	
+	
 	public void openReferenceLibrary() {
 		if (libdialog==null) {
 			libdialog = new ReferenceLibraryDialog(workbench);
 		}
-
 	}
 	
 	public void mouseEntered(MouseEvent e) {
@@ -269,10 +270,15 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 				this.subModelSelected();
 				annotationObjectAction();
 			}
-			if (arg1==WBEvent.requestlibrary) {
+			if (arg1==LibraryEvent.requestlibrary) {
 				openReferenceLibrary();
+				libdialog.openImportTab();
 			}
-			if (arg1==WBEvent.closelibrary) {
+			if (arg1==LibraryEvent.requestimport) {
+				openReferenceLibrary();
+				libdialog.openReferenceTab();
+			}
+			if (arg1==LibraryEvent.closelibrary) {
 				libdialog=null;
 			}
 		}

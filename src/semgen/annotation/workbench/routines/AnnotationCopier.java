@@ -1,16 +1,10 @@
 package semgen.annotation.workbench.routines;
 
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import semgen.utilities.SemGenError;
-import semgen.utilities.SemGenTask;
-import semgen.utilities.file.LoadSemSimModel;
-import semgen.utilities.file.SemGenOpenFileChooser;
-import semgen.utilities.uicomponent.SemGenProgressBar;
 import semsim.annotation.Annotation;
 import semsim.annotation.StructuralRelation;
 import semsim.model.SemSimModel;
@@ -19,7 +13,6 @@ import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
-import semsim.model.physical.Submodel;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
@@ -27,43 +20,6 @@ import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
 
 public class AnnotationCopier {
-	private SemSimModel targetmod, sourcemod;
-	private boolean valid = true;
-
-	public AnnotationCopier(SemSimModel target)  {
-		targetmod = target;
-		chooseSourceModel();
-	}
-	
-	private void chooseSourceModel(){
-		SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select SemSim model containing annotations", false);
-		File sourcefile = sgc.getSelectedFile();
-		if (sourcefile == null) {
-			valid = false;
-			return;
-		}
-		
-		sourcemod = LoadSemSimModel.loadSemSimModelFromFile(sourcefile, false);
-		if (sourcemod.getNumErrors() != 0) {
-			for(String err : sourcemod.getErrors()){
-				System.err.println(err);
-			}
-			SemGenError.showError("There were errors associated with the selected model. Not copying.", "Copy Model Failed");
-			valid=false;
-		}
-	}
-	
-	public boolean doCopy() {
-		if (isValid()) {
-			CopierTask task = new CopierTask();
-			task.execute();
-			while (!task.isDone()) {
-				
-			}
-			return task.changesMade();
-		}
-		return false;
-	}
 	
 	public static Set<MappableVariable> copyAllAnnotationsToMappedVariables(MappableVariable ds){
 		Set<MappableVariable> allmappedvars = new HashSet<MappableVariable>();
@@ -78,42 +34,11 @@ public class AnnotationCopier {
 		}
 		return allmappedvars;
 	}
-	
-	// Copy all annotations
-	class CopierTask extends SemGenTask {
-		private boolean changed = false;
 		
-		public CopierTask(){
-			progframe = new SemGenProgressBar("Loading model...",true);
-		}
-		@Override
-		protected Void doInBackground() throws Exception {
-			progframe.updateMessage("Copying...");
-			for(DataStructure ds : targetmod.getAssociatedDataStructures()){
-				if(sourcemod.containsDataStructure(ds.getName())){
-					changed = true;
-					DataStructure srcds = sourcemod.getAssociatedDataStructure(ds.getName());
-					
-					ds.copyDescription(srcds);
-					ds.copySingularAnnotations(srcds);
-					copyCompositeAnnotation(targetmod, ds, srcds);
-					
-				} // otherwise no matching data structure found in source model
-			} // end of data structure loop
-			if (copySubmodels(targetmod)) changed = true;
-			
-			return null;
-		}
-		
-		public boolean changesMade() {
-			return changed;
-		}
-	}
-	
 	private static PhysicalModelComponent copyPhysicalModelComponent(SemSimModel targetmod, PhysicalModelComponent pmc) throws CloneNotSupportedException{
 		PhysicalModelComponent pmccopy = null;
 		
-		// If a composite physical entity...
+		// If a composite physical entity....////.,b
 		if(pmc instanceof CompositePhysicalEntity){
 			int z = 0;
 			ArrayList<PhysicalEntity> newentarray = new ArrayList<PhysicalEntity>();
@@ -180,25 +105,7 @@ public class AnnotationCopier {
 			}
 	}
 	
-	// Copy over all the submodel data
-	// Make sure to include change flag functionality
-	private boolean copySubmodels(SemSimModel targetmod) {
-		Boolean changemadetosubmodels = false;
-		for(Submodel sub : targetmod.getSubmodels()){
-			if(sourcemod.getSubmodel(sub.getName()) !=null){
-				changemadetosubmodels = true;
-				
-				Submodel srcsub = sourcemod.getSubmodel(sub.getName());
-				
-				// Copy free-text description
-				sub.setDescription(srcsub.getDescription());
-				
-				// Copy singular annotation
-				sub.setSingularAnnotation(srcsub.getReferenceTerm());
-			}
-		}
-		return changemadetosubmodels;
-	}
+
 	/** 
 	 * Intra-model datastructure copy
 	 * */
@@ -245,10 +152,6 @@ public class AnnotationCopier {
 			}
 		}
 	    return returnset;
-	}
-	
-	public boolean isValid() {
-		return valid;
 	}
 	
 }
