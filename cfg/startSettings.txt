@@ -1,6 +1,6 @@
 startDirectory; C:\Users\Christopher\Documents
 maximize; false
-screensize; 1932x1050
+screensize; 1924x1050
 screenpos; -9x0
 autoAnnotate; true
 showImports; true

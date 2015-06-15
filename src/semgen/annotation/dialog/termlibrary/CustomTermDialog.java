@@ -68,7 +68,6 @@ public class CustomTermDialog extends SemGenDialog {
 				dispose();
 			}
 		}
-
 	}
 	
 	private class CustomProcessPane extends CustomPhysicalProcessPanel {

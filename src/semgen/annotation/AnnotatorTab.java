@@ -277,6 +277,10 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 				openReferenceLibrary();
 				libdialog.openReferenceTab();
 			}
+			if (arg1==LibraryEvent.requestcreator) {
+				openReferenceLibrary();
+				libdialog.openCreatorTab();
+			}
 			if (arg1==LibraryEvent.requestimport) {
 				openReferenceLibrary();
 				libdialog.openImportTab();

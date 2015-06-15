@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.utilities.file.SemGenSaveFileChooser;
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.writing.CaseInsensitiveComparator;
 

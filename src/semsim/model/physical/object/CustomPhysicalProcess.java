@@ -18,6 +18,12 @@ public class CustomPhysicalProcess extends PhysicalProcess{
 		setDescription(description);
 	}
 	
+	public CustomPhysicalProcess(CustomPhysicalProcess cuproc) {
+		super(cuproc);
+		setName(cuproc.getName());
+		setDescription(cuproc.getDescription());
+	}
+	
 	@Override
 	public URI getSemSimClassURI() {
 		return SemSimConstants.CUSTOM_PHYSICAL_PROCESS_CLASS_URI;

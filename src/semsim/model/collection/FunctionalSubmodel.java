@@ -1,4 +1,4 @@
-package semsim.model.physical.object;
+package semsim.model.collection;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,7 +13,6 @@ import org.jdom.output.XMLOutputter;
 import semsim.model.computational.Computation;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
-import semsim.model.physical.Submodel;
 import semsim.reading.CellMLreader;
 import semsim.writing.CellMLwriter;
 

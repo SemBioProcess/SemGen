@@ -7,9 +7,9 @@ import java.util.Set;
 import com.google.gson.Gson;
 
 import semgen.visualizations.JsonString;
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
+import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.physical.Submodel;
 
 public class SemSimModelSerializer {
 

@@ -55,14 +55,14 @@ public class ReferenceClassFinderPanel extends JPanel implements
 	private JComboBox<String> findchooser = new JComboBox<String>();
 
 	private JButton findbutton = new JButton("Go");
-	private ExternalURLButton externalURLbutton;
+	protected ExternalURLButton externalURLbutton;
 	private JButton loadingbutton = new JButton(SemGenIcon.blankloadingicon);
 
 	private JTextField findbox = new JTextField();
-	private JList<String> resultslistright = new JList<String>();
+	protected JList<String> resultslistright = new JList<String>();
 
 	private HashMap<String,String> rdflabelsanduris = new HashMap<String,String>();
-	private GenericThread querythread = new GenericThread(this, "performSearch");
+	protected GenericThread querythread = new GenericThread(this, "performSearch");
 	private OntologyDomain domain;
 	private ReferenceOntology selected = null;
 	private int termindex = -1;

@@ -5,12 +5,12 @@ import java.util.Map;
 import java.util.Set;
 
 import semsim.annotation.Annotation;
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
+import semsim.model.collection.Submodel;
 import semsim.model.computational.Computation;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
-import semsim.model.physical.Submodel;
 
 /**
  * Class for "carving out" a portion of a SemSimModel and 

@@ -14,8 +14,6 @@ import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.eclipse.swt.internal.Library;
-
 import semgen.SemGenSettings;
 import semgen.annotation.common.AnnotationChooserPanel;
 import semgen.annotation.common.EntitySelectorGroup;
@@ -193,6 +191,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 			AddReferenceClassDialog rcd = new AddReferenceClassDialog(termlib, OntologyDomain.AssociatePhysicalProperty);
 			if (rcd.getIndexofSelection()!=-1) {
 				setComboList(termlib.getSortedAssociatePhysicalPropertyIndicies(), rcd.getIndexofSelection());
+				setSelection(rcd.getIndexofSelection());
 				onPropertyChange();
 			}
 		}
@@ -244,6 +243,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener{
 		private void createTerm(int procindex) {
 			if (procindex != -1) {
 				setComboList(termlib.getSortedPhysicalProcessIndicies(), procindex);
+				setSelection(procindex);
 			}
 		}
 	}

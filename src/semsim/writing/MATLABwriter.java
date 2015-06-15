@@ -22,7 +22,7 @@ import org.sbml.libsbml.libsbml;
 
 import semsim.SemSimConstants;
 import semsim.SemSimLibrary;
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.utilities.SemSimUtil;

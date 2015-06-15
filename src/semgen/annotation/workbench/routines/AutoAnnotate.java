@@ -6,7 +6,7 @@ import java.util.Set;
 
 import semgen.SemGen;
 import semsim.annotation.ReferenceOntologyAnnotation;
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.object.PhysicalPropertyinComposite;

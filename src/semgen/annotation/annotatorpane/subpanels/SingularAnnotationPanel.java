@@ -52,6 +52,7 @@ public class SingularAnnotationPanel extends AnnotationChooserPanel {
 		AddReferenceClassDialog rcfd = new AddReferenceClassDialog(library, OntologyDomain.PhysicalProperty);
 		if (rcfd.getIndexofSelection()!=-1) {
 			setComboList(library.getSortedPhysicalPropertyIndicies(), rcfd.getIndexofSelection());
+			setSelection(rcfd.getIndexofSelection());
 		}
 		
 	}

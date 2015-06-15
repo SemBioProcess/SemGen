@@ -1,11 +1,12 @@
 package semgen.annotation.workbench.routines;
 
 import java.io.File;
+
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.file.LoadSemSimModel;
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
+import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.physical.Submodel;
 
 public class AnnotationImporter {
 	SemSimModel importedmodel;

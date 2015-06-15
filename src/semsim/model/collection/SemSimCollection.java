@@ -1,9 +1,8 @@
-package semsim.model;
+package semsim.model.collection;
 
 import java.util.Set;
 
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.physical.Submodel;
 
 public interface SemSimCollection {
 	

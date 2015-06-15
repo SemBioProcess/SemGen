@@ -1,10 +1,12 @@
 package semgen.annotation.termlibrarydialog;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -36,9 +38,14 @@ public class ImportAnnotationsPanel extends JPanel implements ActionListener {
 	
 	private void makePanel() {
 		JPanel loadpane = new JPanel();
+		loadpane.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+		loadpane.setAlignmentX(LEFT_ALIGNMENT);
 		loadpane.setBackground(SemGenSettings.lightblue);
 		loadpane.setLayout(new BoxLayout(loadpane, BoxLayout.LINE_AXIS)); 
 		loadpane.add(loadbtn);
+		modellabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+		modellabel.setFont(SemGenFont.defaultPlain());
+		modellabel.setForeground(Color.red);
 		loadpane.add(modellabel);
 		loadbtn.addActionListener(this);
 		
@@ -49,18 +56,22 @@ public class ImportAnnotationsPanel extends JPanel implements ActionListener {
 		
 		JPanel optionpane = new JPanel();
 		optionpane.setBackground(SemGenSettings.lightblue);
+		optionpane.setAlignmentX(LEFT_ALIGNMENT);
 		optionpane.setLayout(new BoxLayout(optionpane, BoxLayout.PAGE_AXIS));
 		JLabel inslbl = new JLabel("Import Options");
 		inslbl.setFont(SemGenFont.defaultBold(1));
 		optionpane.add(inslbl);
 		for (JCheckBox checkbox : checklist) {
 			checkbox.setFont(SemGenFont.defaultPlain());
+			checkbox.setBorder(BorderFactory.createEmptyBorder(2, 10, 0, 0));
 			optionpane.add(checkbox);
 		}
 		
 		importbtn.setEnabled(false);
+		optionpane.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
 		add(optionpane);
-		add(importbtn);
+		optionpane.add(importbtn);
+
 		importbtn.addActionListener(this);
 	}
 
@@ -70,6 +81,7 @@ public class ImportAnnotationsPanel extends JPanel implements ActionListener {
 		if (sourcefile != null) {
 			file = sourcefile;
 			modellabel.setText(file.getName());
+			modellabel.setForeground(Color.green);
 			importbtn.setEnabled(true);
 		}
 	}

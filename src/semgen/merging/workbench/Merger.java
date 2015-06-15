@@ -9,11 +9,11 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jdom.JDOMException;
 import org.semanticweb.owlapi.model.OWLException;
 
-import semsim.model.SemSimModel;
+import semsim.model.collection.FunctionalSubmodel;
+import semsim.model.collection.SemSimModel;
+import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
-import semsim.model.physical.Submodel;
-import semsim.model.physical.object.FunctionalSubmodel;
 import semsim.utilities.SemSimUtil;
 import JSim.util.Xcept;
 

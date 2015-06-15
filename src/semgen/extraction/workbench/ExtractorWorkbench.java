@@ -3,7 +3,7 @@ package semgen.extraction.workbench;
 import java.io.File;
 
 import semgen.utilities.Workbench;
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
 
 public class ExtractorWorkbench extends Workbench {
 	File sourcefile;

@@ -47,7 +47,7 @@ public class ReferenceOntologies {
 		public String[] getArrayofOntologyNames() {
 			String[] names = new String[domainontologies.size()];
 			for (int i = 0; i<domainontologies.size(); i++) {
-				names[i] = domainontologies.get(i).getFullName() + "(" + domainontologies.get(i).getNickName() + ")";
+				names[i] = domainontologies.get(i).getFullName() + " (" + domainontologies.get(i).getNickName() + ")";
 			}
 			return names;
 		}
@@ -82,7 +82,7 @@ public class ReferenceOntologies {
 		MA("Mouse Adult Gross Anatomy Ontology", "MA", "1000",
 				new String[]{"http://purl.bioontology.org/ontology/MA", "http://purl.org/obo/owl/MA#", "http://purl.obolibrary.org/obo/MA", 
 				"http://identifiers.org/ma/"}),
-		OPB("Ontology of Phyiscs for Biology", "OPB", "1141",
+		OPB("Ontology of Physics for Biology", "OPB", "1141",
 				new String[]{"http://bhi.washington.edu/OPB#", "http://www.owl-ontologies.com/unnamed.owl#", "http://identifiers.org/opb/"}),
 		PATO("Phenotype and Trait Ontology", "PATO", "1107",
 				new String[]{"http://purl.org/obo/owl/PATO#", "http://purl.obolibrary.org/obo/PATO"}),

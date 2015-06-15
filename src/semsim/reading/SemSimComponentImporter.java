@@ -5,11 +5,11 @@ import java.io.File;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semsim.SemSimLibrary;
-import semsim.model.SemSimModel;
+import semsim.model.collection.FunctionalSubmodel;
+import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
-import semsim.model.physical.object.FunctionalSubmodel;
 
 public class SemSimComponentImporter {
 /**

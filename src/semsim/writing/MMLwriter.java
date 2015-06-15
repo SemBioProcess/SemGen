@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.HashSet;
 
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
 import semsim.model.computational.RelationalConstraint;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.Decimal;

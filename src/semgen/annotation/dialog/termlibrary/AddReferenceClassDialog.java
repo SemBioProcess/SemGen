@@ -17,9 +17,9 @@ public class AddReferenceClassDialog extends SemGenDialog implements
 		PropertyChangeListener {
 
 	private static final long serialVersionUID = -3830623199860161812L;
-	public ReferenceClassFinderPanel refclasspanel;
-	public JOptionPane optionPane;
-	public JTextArea utilarea = new JTextArea();
+	protected ReferenceClassFinderPanel refclasspanel;
+	protected JOptionPane optionPane;
+	protected JTextArea utilarea = new JTextArea();
 
 	public AddReferenceClassDialog(SemSimTermLibrary lib, OntologyDomain dom) {
 		super("Select reference concept");

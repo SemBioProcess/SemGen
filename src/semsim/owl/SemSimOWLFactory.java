@@ -49,9 +49,10 @@ import org.semanticweb.owlapi.model.RemoveAxiom;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 
 import semsim.SemSimConstants;
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
+import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.physical.Submodel;
+
 import java.util.Map;
 import java.util.Set;
 

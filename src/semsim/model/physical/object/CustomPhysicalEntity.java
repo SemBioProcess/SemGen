@@ -14,6 +14,15 @@ public class CustomPhysicalEntity extends PhysicalEntity{
 		setDescription(description);
 	}
 	
+	/** 
+	 * Copy constructur
+	 * @param cupe
+	 */
+	public CustomPhysicalEntity(CustomPhysicalEntity cupe) {
+		setName(new String(cupe.getName()));
+		setDescription(new String(cupe.getDescription()));
+	}
+	
 	@Override
 	protected boolean isEquivalent(Object obj) {
 		return ((CustomPhysicalEntity)obj).getName().compareTo(getName())==0;

@@ -26,7 +26,8 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 	private SemGenToolbarButton annotateitemexportcsv = new SemGenToolbarButton(SemGenIcon.exporticon);
 	private SemGenToolbarButton annotateitemshowmarkers;
 	private JButton annotateitemshowimports = new JButton("Show imports");
-	private SemGenToolbarButton opentermlibrary= new SemGenToolbarButton(SemGenIcon.createcompenticon);
+	private SemGenToolbarButton opentermcreator = new SemGenToolbarButton(SemGenIcon.createcompenticon);
+	private SemGenToolbarButton opentermlibrary= new SemGenToolbarButton(SemGenIcon.modifyicon);
 	private SemGenToolbarButton annotateitemtreeview = new SemGenToolbarButton(SemGenIcon.treeicon);
 	private SemGenToolbarButton extractorbutton = new SemGenToolbarButton(SemGenIcon.extractoricon);
 	private SemGenToolbarButton coderbutton = new SemGenToolbarButton(SemGenIcon.codericon);
@@ -63,6 +64,9 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		annotateitemexportcsv.setToolTipText("Create a .csv file that tabulates model codeword annotations for use in spreadsheets, manuscript preparation, etc.");
 		annotateitemexportcsv.addActionListener(this);
 
+		opentermcreator.addActionListener(this);
+		opentermcreator.setToolTipText("Add annotation terms for this model");
+		
 		opentermlibrary.addActionListener(this);
 		opentermlibrary.setToolTipText("Manage all annotation terms for this model");
 
@@ -83,6 +87,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		addSeparator();
 		
 		add(new ToolBarLabel("Reference Terms:"));
+		add(opentermcreator);
 		add(opentermlibrary);
 		add(annotateitemcopy);
 		addSeparator();
@@ -134,6 +139,10 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 
 		if(o == annotateitemexportcsv){
 				workbench.exportCSV(); 
+		}
+		
+		if (o == opentermcreator) {
+			workbench.sendTermLibraryEvent(LibraryEvent.requestcreator);
 		}
 		
 		if (o == annotateitemcopy) {

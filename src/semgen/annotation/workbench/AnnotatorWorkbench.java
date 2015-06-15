@@ -24,7 +24,7 @@ import semgen.utilities.CSVExporter;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semsim.annotation.SemSimRelation;
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.ModelClassifier;
 import semsim.utilities.SemSimUtil;
@@ -41,7 +41,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	private boolean modelsaved = true;
 	private int lastsavedas = -1;
 	public static enum WBEvent {freetextrequest, smselection, cwselection}
-	public static enum LibraryEvent {requestimport, requestlibrary, closelibrary }
+	public static enum LibraryEvent {requestimport, requestlibrary, requestcreator, closelibrary }
 	public static enum modeledit {propertychanged, compositechanged, codewordchanged, submodelchanged, modelimport, smlistchanged, freetextchange, smnamechange }
 	
 	public AnnotatorWorkbench(File file, SemSimModel model) {

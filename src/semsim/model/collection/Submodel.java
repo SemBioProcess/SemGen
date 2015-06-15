@@ -1,4 +1,4 @@
-package semsim.model.physical;
+package semsim.model.collection;
 
 import java.net.URI;
 import java.util.HashSet;
@@ -9,7 +9,6 @@ import semsim.SemSimConstants;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
 import semsim.model.Importable;
-import semsim.model.SemSimCollection;
 import semsim.model.SemSimComponent;
 import semsim.model.computational.datastructures.DataStructure;
 

@@ -3,6 +3,7 @@ package semgen.annotation.termlibrarydialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BoxLayout;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
@@ -11,13 +12,15 @@ import semgen.SemGenSettings;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.SemGenFont;
+import semgen.utilities.uicomponent.SemGenScrollPane;
 import semsim.model.SemSimTypes;
 
-public class ReferenceTermPanel extends JPanel implements ActionListener {
+public class TermEditorPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private AnnotatorWorkbench workbench;
 	private JList<String> typechooser = new JList<String>();
 	private SemSimTermLibrary library;
+	private JList<String> termlist = new JList<String>();
 	
 	private SemSimTypes[] types = new SemSimTypes[]{
 			SemSimTypes.PHYSICAL_PROPERTY,
@@ -27,14 +30,15 @@ public class ReferenceTermPanel extends JPanel implements ActionListener {
 			SemSimTypes.PHYSICAL_PROCESS
 	};
 	
-	public ReferenceTermPanel(AnnotatorWorkbench wb) {
+	public TermEditorPanel(AnnotatorWorkbench wb) {
 		workbench = wb;
+		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS)); 
 		library = wb.openTermLibrary();
 		setBackground(SemGenSettings.lightblue);
 		makePanel();
 	}
 	
-	public void makePanel() {
+	private void makePanel() {
 		String[] names = new String[types.length];
 		for (int i = 0; i<types.length; i++) {
 			names[i] = types[i].getName();
@@ -43,8 +47,15 @@ public class ReferenceTermPanel extends JPanel implements ActionListener {
 		typechooser.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		typechooser.setListData(names);
 		add(typechooser);
+		
+		SemGenScrollPane termscroller = new SemGenScrollPane(termlist);
+		add(termscroller);
 	}
 
+	private void updateList() {
+
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		

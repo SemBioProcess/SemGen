@@ -1,4 +1,4 @@
-package semsim.model;
+package semsim.model.collection;
 
 import java.net.URI;
 import java.text.SimpleDateFormat;
@@ -23,6 +23,7 @@ import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
 import semsim.annotation.SemSimRelation;
 import semsim.annotation.StructuralRelation;
+import semsim.model.SemSimComponent;
 import semsim.model.computational.ComputationalModelComponent;
 import semsim.model.computational.RelationalConstraint;
 import semsim.model.computational.datastructures.DataStructure;
@@ -34,11 +35,9 @@ import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
-import semsim.model.physical.Submodel;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
-import semsim.model.physical.object.FunctionalSubmodel;
 import semsim.model.physical.object.PhysicalDependency;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyinComposite;

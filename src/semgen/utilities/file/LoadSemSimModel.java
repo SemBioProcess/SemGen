@@ -15,7 +15,7 @@ import semgen.SemGen;
 import semgen.annotation.workbench.routines.AutoAnnotate;
 import semgen.utilities.SemGenError;
 import semgen.utilities.uicomponent.SemGenProgressBar;
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
 import semsim.reading.CellMLreader;
 import semsim.reading.MMLParser;
 import semsim.reading.MMLreader;

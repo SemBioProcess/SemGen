@@ -5,7 +5,7 @@ import java.io.File;
 import semgen.utilities.WorkbenchFactory;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.file.SemGenOpenFileChooser;
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
 
 public class ExtractorFactory extends WorkbenchFactory<ExtractorWorkbench> {
 	public ExtractorFactory() {
