@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -22,6 +23,7 @@ import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.utilities.SemSimUtil;
 
 public class MergerWorkbench extends Workbench {
@@ -163,6 +165,11 @@ public class MergerWorkbench extends Workbench {
 		return identicalmap;
 	}
 	
+	
+	public ModelOverlapMap getModelOverlapMap(){
+		return overlapmap;
+	}
+	
 	public Pair<String, String> getMapPairNames(int index) {
 		return overlapmap.getDataStructurePairNames(index);
 	}
@@ -231,8 +238,8 @@ public class MergerWorkbench extends Workbench {
 		return Pair.of(loadedmodels.get(indexpair.getLeft()),loadedmodels.get(indexpair.getRight()));
 	}
 	
-	public ArrayList<Boolean> getUnitOverlaps() {
-		return overlapmap.compareDataStructureUnits();
+	public Map<UnitOfMeasurement, UnitOfMeasurement> getUnitOverlaps() {
+		return overlapmap.getEquivalentUnitPairs();
 	}
 	
 	public String executeMerge(HashMap<String,String> dsnamemap, HashMap<String,String> smnamemap, ArrayList<ResolutionChoice> choices, 

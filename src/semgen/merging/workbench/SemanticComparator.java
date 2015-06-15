@@ -1,7 +1,10 @@
 package semgen.merging.workbench;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -9,12 +12,15 @@ import org.apache.commons.lang3.tuple.Pair;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.units.UnitFactor;
+import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.Submodel;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.PhysicalProperty;
+import semsim.utilities.SemSimUtil;
 
 public class SemanticComparator {
 	public SemSimModel model1, model2;
@@ -110,6 +116,93 @@ public class SemanticComparator {
 		} // end of iteration through model1 data structures
 		return dsmatchlist;
 	}
+	
+	
+	// Identify semantically-equivalent units by decomposing units in both models
+	// into their base units
+	public Map<UnitOfMeasurement, UnitOfMeasurement> identifyEquivalentUnits(){
+		
+		Map<UnitOfMeasurement, UnitOfMeasurement> equivunitslist = 
+				new HashMap<UnitOfMeasurement, UnitOfMeasurement>();
+				
+		Hashtable<String, Set<UnitFactor>> baseUnitsTableModel1 = SemSimUtil.getAllUnitsAsFundamentalBaseUnits(model1);
+		Hashtable<String, Set<UnitFactor>> baseUnitsTableModel2 = SemSimUtil.getAllUnitsAsFundamentalBaseUnits(model2);
+		
+		for (String unitnamemodel1 : baseUnitsTableModel1.keySet()) {
+			
+			for(String unitnamemodel2 : baseUnitsTableModel2.keySet()){
+								
+				Set<UnitFactor> unitfrommodel1baseunits = baseUnitsTableModel1.get(unitnamemodel1);
+				Set<UnitFactor> unitfrommodel2baseunits = baseUnitsTableModel2.get(unitnamemodel2);
+				
+				// If the size of the unit factor sets aren't equal, then the units
+				// aren't equivalent
+				if(unitfrommodel1baseunits.size()!=unitfrommodel2baseunits.size()) continue;
+				
+				// If the units on the data structures are both fundamental and
+				// don't have the same name, then the units aren't equivalent
+				else if(unitfrommodel1baseunits.size()==0){
+					if(! unitnamemodel1.equals(unitnamemodel2)) continue;
+				}
+				// Otherwise we do have some unit factors to compare
+				else if(unitfrommodel1baseunits.size()>0){
+					
+					// Compare the name, prefix and exponent for each base factor
+					// If any differences, then the units aren't equivalent
+					Set<UnitFactor> baseunitsmatched = new HashSet<UnitFactor>();
+					
+					for(UnitFactor baseunitfactor1 : unitfrommodel1baseunits){
+						for(UnitFactor baseunitfactor2 : unitfrommodel2baseunits){
+							if(!baseunitsmatched.contains(baseunitfactor2)){
+								
+								boolean samename = baseunitfactor1.getBaseUnit().getName().equals(baseunitfactor2.getBaseUnit().getName());
+								boolean sameexponent = false;
+								boolean sameprefix = false;
+
+								// Compare exponents
+								if(Double.valueOf(baseunitfactor1.getExponent())!=null 
+										&& Double.valueOf(baseunitfactor2.getExponent())!=null){
+
+									if(baseunitfactor1.getExponent()==baseunitfactor2.getExponent()){
+										sameexponent = true;
+									}
+								}
+								else if(Double.valueOf(baseunitfactor1.getExponent())==null 
+										&& Double.valueOf(baseunitfactor2.getExponent())==null){
+									sameexponent = true;
+								}
+								
+								// Compare prefixes
+								if(baseunitfactor1.getPrefix()!=null && baseunitfactor2.getPrefix()!=null){
+									
+									if(baseunitfactor1.getPrefix().equals(baseunitfactor2.getPrefix())){
+										sameprefix = true;
+									}
+								}
+								else if(baseunitfactor1.getPrefix()==null && baseunitfactor2.getPrefix()==null){
+									sameprefix = true;
+								}
+								
+								if(samename && sameexponent && sameprefix){
+									baseunitsmatched.add(baseunitfactor2);
+									break;
+								}
+							}
+						}
+					}
+					// If we haven't matched all the unit factors, then units aren't equivalent
+					if(baseunitsmatched.size()!=unitfrommodel1baseunits.size()){
+						continue;
+					}
+				} 
+				
+				// If we are here, then we've found equivalent units
+				equivunitslist.put(model1.getUnit(unitnamemodel1), model2.getUnit(unitnamemodel2));
+			}
+		}
+		return equivunitslist;		
+	}
+	
 	
 	// Find all the data structures that should be compared. This weeds out 
 	// MappableVariables that have an "in" interface. For CellML-type models, the Merger should not 

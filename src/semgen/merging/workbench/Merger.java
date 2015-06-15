@@ -2,7 +2,9 @@ package semgen.merging.workbench;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -12,6 +14,8 @@ import org.semanticweb.owlapi.model.OWLException;
 import semsim.model.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
+import semsim.model.computational.units.UnitFactor;
+import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.Submodel;
 import semsim.model.physical.object.FunctionalSubmodel;
 import semsim.utilities.SemSimUtil;
@@ -114,13 +118,68 @@ public class Merger {
 		// What if both models have a custom phys component with the same name?
 		SemSimModel mergedmodel = ssm1clone;
 		
+		Map<UnitOfMeasurement,UnitOfMeasurement> equnitsmap = overlapmap.getEquivalentUnitPairs();
+		
+		// Create mirror map where model 2's units are the key set and model 1's are the values
+		Map<UnitOfMeasurement,UnitOfMeasurement> mirrorunitsmap = new HashMap<UnitOfMeasurement,UnitOfMeasurement>();
+
+		for(UnitOfMeasurement uom1 : equnitsmap.keySet()){
+			mirrorunitsmap.put(equnitsmap.get(uom1), uom1);
+		}
+		
+		
+		// Replace any in-line unit declarations for equivalent units
+		// First collect the submodels we need to check
+		Set<FunctionalSubmodel> submodelswithconstants = new HashSet<FunctionalSubmodel>();
+
+		for(FunctionalSubmodel fs : ssm2clone.getFunctionalSubmodels()){
+			if(fs.getComputation().getMathML()!=null){
+				if(fs.getComputation().getMathML().contains("<cn")) 
+					submodelswithconstants.add(fs);
+			}
+		}
+		
+		for(FunctionalSubmodel fswithcon : submodelswithconstants){
+			String oldmathml = fswithcon.getComputation().getMathML();
+			String newmathml = oldmathml;
+			for(UnitOfMeasurement uom : mirrorunitsmap.keySet()){
+				newmathml = newmathml.replace("\"" + uom.getName() + "\"", "\"" + mirrorunitsmap.get(uom).getName() + "\"");
+			}
+			fswithcon.getComputation().setMathML(newmathml);
+		}
+		
+		
 		// Copy in all data structures
 		for(DataStructure dsfrom2 : ssm2clone.getDataStructures()){
 			mergedmodel.addDataStructure(dsfrom2);
-		}
+			
+			// Deal with unit equivalencies
+			UnitOfMeasurement dsfrom2unit = dsfrom2.getUnit();
+			if(mirrorunitsmap.containsKey(dsfrom2unit)){
+				dsfrom2.setUnit(mirrorunitsmap.get(dsfrom2unit));
+			}
+		}		
 		
-		// Copy in the units
-		mergedmodel.getUnits().addAll(ssm2clone.getUnits());
+		// Copy in the units, deal with equivalencies along the way
+		for(UnitOfMeasurement model2unit : ssm2clone.getUnits()){
+					
+			// If an equivalent unit was not found for the model 2 unit, add it and
+			// deal with equivalent units in its unit factor set
+			if( ! mirrorunitsmap.containsKey(model2unit)){
+				mergedmodel.addUnit(model2unit);
+				
+				for(UnitFactor uf : model2unit.getUnitFactors()){
+					
+					// If the unit factor uses a unit with an equivalent unit in model1, replace it
+					UnitOfMeasurement baseunit = uf.getBaseUnit();
+					
+					if(mirrorunitsmap.containsKey(baseunit)){
+						uf.setBaseUnit(mirrorunitsmap.get(baseunit));
+					}
+				}
+
+			}
+		}
 		
 		// Copy in the submodels
 		for(Submodel subfrom2 : ssm2clone.getSubmodels()){
@@ -250,7 +309,6 @@ public class Merger {
 			
 			if(sub.getAssociatedDataStructures().isEmpty()){
 				model.removeSubmodel(sub);
-				System.out.println("Removed submodel " + sub.getName());
 			}
 		}
 	}

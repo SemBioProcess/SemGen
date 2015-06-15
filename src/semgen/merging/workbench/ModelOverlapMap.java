@@ -1,16 +1,15 @@
 package semgen.merging.workbench;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
 
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.computational.units.UnitFactor;
+import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.owl.SemSimOWLFactory;
-import semsim.utilities.SemSimUtil;
 
 public class ModelOverlapMap {
 	Pair<Integer, Integer> modelindicies;
@@ -18,6 +17,7 @@ public class ModelOverlapMap {
 	private Set<String> identicaldsnames;
 	private SemanticComparator comparator;
 	private ArrayList<Pair<DataStructure, DataStructure>> dsmap = new ArrayList<Pair<DataStructure, DataStructure>>();
+	private Map<UnitOfMeasurement, UnitOfMeasurement> unitsmap = new HashMap<UnitOfMeasurement, UnitOfMeasurement>();
 
 	private ArrayList<maptype> maptypelist = new ArrayList<maptype>();	
 	private int slndomcnt = 0;
@@ -37,21 +37,23 @@ public class ModelOverlapMap {
 
 	public ModelOverlapMap(int ind1, int ind2, SemanticComparator comparator) {
 		modelindicies = Pair.of(ind1, ind2);
-		this.comparator = comparator;
+		this.setSemanticComparator(comparator);
 		
-		ArrayList<Pair<DataStructure, DataStructure>> equivlist = comparator.identifyExactSemanticOverlap();		
+		ArrayList<Pair<DataStructure, DataStructure>> equivdslist = comparator.identifyExactSemanticOverlap();
 		
 		Pair<DataStructure, DataStructure> dspair;
 		if (comparator.hasSolutionMapping()) {
 			slndomcnt = 1;
-			dspair = equivlist.get(0);
+			dspair = equivdslist.get(0);
 			addDataStructureMapping(dspair.getLeft(), dspair.getRight(), maptype.automapping);
 		}
 		
-		for (int i=slndomcnt; i<(equivlist.size()); i++ ) {
-			dspair = equivlist.get(i);
+		for (int i=slndomcnt; i<(equivdslist.size()); i++ ) {
+			dspair = equivdslist.get(i);
 			addDataStructureMapping(dspair.getLeft(), dspair.getRight(), maptype.exactsemaoverlap);
 		}
+		
+		unitsmap = comparator.identifyEquivalentUnits();
 		identicalsubmodelnames = comparator.getIdenticalSubmodels();
 		identicaldsnames = comparator.getIdenticalCodewords();
 	}
@@ -131,91 +133,21 @@ public class ModelOverlapMap {
 		return dsmap;
 	}
 	
-	//Compare units of all Data Structures in the overlap map. Determine if terms are equivalent
-	// for each. Return a list of comparisons
-	public ArrayList<Boolean> compareDataStructureUnits() {
-		ArrayList<Boolean> unitmatchlist = new ArrayList<Boolean>();
-		
-		Hashtable<String, Set<UnitFactor>> baseUnitsTableModel1 = SemSimUtil.getAllUnitsAsFundamentalBaseUnits(comparator.model1);
-		Hashtable<String, Set<UnitFactor>> baseUnitsTableModel2 = SemSimUtil.getAllUnitsAsFundamentalBaseUnits(comparator.model2);
-		
-		for (Pair<DataStructure, DataStructure> dsp : dsmap) {
-			if(dsp.getLeft().hasUnits() && dsp.getRight().hasUnits()){
-				
-				String dspleftunitname = dsp.getLeft().getUnit().getName();
-				String dsprightunitname = dsp.getRight().getUnit().getName();
-				
-				Set<UnitFactor> dsfrommodel1baseunits = baseUnitsTableModel1.get(dspleftunitname);
-				Set<UnitFactor> dsfrommodel2baseunits = baseUnitsTableModel2.get(dsprightunitname);
-				
-				// If the size of the unit factor sets aren't equal, then the units
-				// aren't equivalent
-				if(dsfrommodel1baseunits.size()!=dsfrommodel2baseunits.size()){
-					unitmatchlist.add(false);
-					continue;
-				}
-				// If the units on the data structures are both fundamental and
-				// don't have the same name, then the units aren't equivalent
-				else if(dsfrommodel1baseunits.size()==0){
-					
-					if(! dspleftunitname.equals(dsprightunitname)){
-						unitmatchlist.add(false);
-						continue;
-					}
-				}
-				// Otherwise we do have some unit factors to compare
-				else if(dsfrommodel1baseunits.size()>0){
-					
-					// Compare the name, prefix and exponent for each base factor
-					// If any differences, then the units aren't equivalent
-					Set<UnitFactor> baseunitsmatched = new HashSet<UnitFactor>();
-					
-					for(UnitFactor baseunitfactor1 : dsfrommodel1baseunits){
-						for(UnitFactor baseunitfactor2 : dsfrommodel2baseunits){
-							if(!baseunitsmatched.contains(baseunitfactor2)){
-								
-								boolean samename = baseunitfactor1.getBaseUnit().getName().equals(baseunitfactor2.getBaseUnit().getName());
-								boolean sameexponent = false;
-								boolean sameprefix = false;
-
-								if(Double.valueOf(baseunitfactor1.getExponent())!=null 
-										&& Double.valueOf(baseunitfactor2.getExponent())!=null){
-
-									if(baseunitfactor1.getExponent()==baseunitfactor2.getExponent()){
-										sameexponent = true;
-									}
-								}
-								else sameexponent = true;
-								 
-								if(baseunitfactor1.getPrefix()!=null && baseunitfactor2.getPrefix()!=null){
-									
-									if(baseunitfactor1.getPrefix().equals(baseunitfactor2.getPrefix())){
-										sameprefix = true;
-									}
-								}
-								else sameprefix = true;
-								
-								if(samename && sameexponent && sameprefix){
-									baseunitsmatched.add(baseunitfactor2);
-									break;
-								}
-							}
-						}
-					}
-					// If we haven't matched all the unit factors, then units aren't equivalent
-					if(baseunitsmatched.size()!=dsfrommodel1baseunits.size()){
-						unitmatchlist.add(false);
-						continue;
-					}
-				} 
-			}
-			// If we are here, then the units are equivalent
-			unitmatchlist.add(true);
-		}
-		return unitmatchlist;
+	public Map<UnitOfMeasurement, UnitOfMeasurement> getEquivalentUnitPairs() {
+		return unitsmap;
 	}
 	
 	public int getSolutionDomainCount() {
 		return slndomcnt;
+	}
+
+
+	public SemanticComparator getSemanticComparator() {
+		return comparator;
+	}
+
+
+	public void setSemanticComparator(SemanticComparator comparator) {
+		this.comparator = comparator;
 	}
 }
