@@ -155,7 +155,22 @@ public class SemanticComparator {
 						for(UnitFactor baseunitfactor2 : unitfrommodel2baseunits){
 							if(!baseunitsmatched.contains(baseunitfactor2)){
 								
-								boolean samename = baseunitfactor1.getBaseUnit().getName().equals(baseunitfactor2.getBaseUnit().getName());
+								boolean samename = false;
+								
+								String unitfactor1name = baseunitfactor1.getBaseUnit().getName();
+								String unitfactor2name = baseunitfactor2.getBaseUnit().getName();
+								
+								// Account for liter/litre and meter/metre synonymy
+								boolean unitfactor1inliters = (unitfactor1name.equals("liter") || unitfactor1name.equals("litre"));
+								boolean unitfactor1inmeters = (unitfactor1name.equals("meter") || unitfactor1name.equals("metre"));
+								boolean unitfactor2inliters = (unitfactor2name.equals("liter") || unitfactor2name.equals("litre"));
+								boolean unitfactor2inmeters = (unitfactor2name.equals("meter") || unitfactor2name.equals("metre"));
+								
+								if((unitfactor1inliters && unitfactor2inliters) || (unitfactor1inmeters && unitfactor2inmeters))
+									samename = true;
+								else 
+									samename = baseunitfactor1.getBaseUnit().getName().equals(baseunitfactor2.getBaseUnit().getName());
+								
 								boolean sameexponent = false;
 								boolean sameprefix = false;
 
