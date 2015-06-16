@@ -355,6 +355,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	
 	public void copySingularAnnotations(DataStructure srcds){
 		removeAllReferenceAnnotations();
+		setSingularAnnotation(srcds.getSingularTerm());
 		for(ReferenceOntologyAnnotation ann : srcds.getAllReferenceOntologyAnnotations()){
 			addReferenceOntologyAnnotation(ann.getRelation(), ann.getReferenceURI(), ann.getValueDescription());
 		}

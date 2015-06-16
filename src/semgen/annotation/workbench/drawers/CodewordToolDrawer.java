@@ -211,11 +211,11 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		changeNotification(modeledit.propertychanged);
 	}
 	
-	public void setDataStructureComposite(Integer index, boolean objectchange) {
+	public void setDataStructureComposite(Integer index) {
 		DataStructure ds = componentlist.get(currentfocus);
 		
 		//If the new selection is equivalent to the old, do nothing; unless objectchange is true.
-		if ((termlib.getComponentIndex(ds.getAssociatedPhysicalModelComponent())==index) && !objectchange) {
+		if ((termlib.getComponentIndex(ds.getAssociatedPhysicalModelComponent())==index)) {
 			return;
 		}
 		if (index==-1) {

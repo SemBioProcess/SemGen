@@ -1,7 +1,6 @@
 package semgen.annotation.annotatorpane.subpanels;
 
 import java.awt.event.ActionEvent;
-
 import semgen.annotation.common.AnnotationChooserPanel;
 import semgen.annotation.dialog.termlibrary.AddReferenceClassDialog;
 import semgen.annotation.workbench.SemSimTermLibrary;
@@ -16,6 +15,7 @@ public class SingularAnnotationPanel extends AnnotationChooserPanel {
 		super(lib);
 		drawer = wb;
 		library = lib;
+		
 		if (drawer.isEditable()) {
 			makeSingularAnnotationSelector();
 		}
@@ -51,7 +51,6 @@ public class SingularAnnotationPanel extends AnnotationChooserPanel {
 	public void searchButtonClicked() {
 		AddReferenceClassDialog rcfd = new AddReferenceClassDialog(library, OntologyDomain.PhysicalProperty);
 		if (rcfd.getIndexofSelection()!=-1) {
-			setComboList(library.getSortedPhysicalPropertyIndicies(), rcfd.getIndexofSelection());
 			setSelection(rcfd.getIndexofSelection());
 		}
 		

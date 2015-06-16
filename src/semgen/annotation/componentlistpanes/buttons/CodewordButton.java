@@ -44,7 +44,7 @@ public abstract class CodewordButton extends AnnotationObjectButton {
 			compannlabel.setFont(SemGenFont.Bold("Serif", -2));
 		}
 		else {
-			compannlabel.setFont(SemGenFont.Plain("Serif", -3));
+			compannlabel.setFont(SemGenFont.Plain("Serif", -2));
 		}
 		
 		compannlabel.setText(cwc.getCode());

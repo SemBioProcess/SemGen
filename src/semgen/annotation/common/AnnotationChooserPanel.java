@@ -140,6 +140,7 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 				onEraseButtonClick();
 			}
 		};
+		eraselabel.setBorder(BorderFactory.createEmptyBorder(1,20,1,1));
 		lbllist.add(eraselabel);
 	}
 	

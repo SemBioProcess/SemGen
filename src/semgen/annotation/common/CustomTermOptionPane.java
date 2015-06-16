@@ -177,10 +177,10 @@ public abstract class CustomTermOptionPane extends JPanel implements ActionListe
 			
 			String dialogname = "Annotate " + mantextfield.getText() + " with " + relation.getURIFragment() + " relations.";
 			SemSimComponentSelectionDialog seldialog = new SemSimComponentSelectionDialog(dialogname, library.getComponentNames(entities), preselected);
-			
-			preselected = seldialog.getSelections();
-			
-			setElements(preselected, entities);
+			if (seldialog.isConfirmed()) {
+				preselected = seldialog.getSelections();
+				setElements(preselected, entities);
+			}
 		}
 
 	}

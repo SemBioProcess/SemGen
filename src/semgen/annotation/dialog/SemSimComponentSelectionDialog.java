@@ -69,4 +69,8 @@ public class SemSimComponentSelectionDialog extends SemGenDialog implements Prop
 				dispose();
 		}
 	}
+	
+	public boolean isConfirmed() {
+		return result;
+	}
 }

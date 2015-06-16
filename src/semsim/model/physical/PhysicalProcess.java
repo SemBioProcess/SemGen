@@ -41,10 +41,10 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 		return mediators;
 	}
 
-	public void setSources(LinkedHashMap<PhysicalEntity, Double> sources) {
+	public void setSources(LinkedHashMap<PhysicalEntity, Double> newsources) {
 		sources = new LinkedHashMap<PhysicalEntity, Double>();
-		for (PhysicalEntity pe : sources.keySet()) {
-			this.sources.put(pe, new Double(sources.get(pe)));
+		for (PhysicalEntity pe : newsources.keySet()) {
+			this.sources.put(pe, new Double(newsources.get(pe)));
 		}
 	}
 
@@ -52,10 +52,10 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 		return sources;
 	}
 
-	public void setSinks(LinkedHashMap<PhysicalEntity, Double> sinks) {
+	public void setSinks(LinkedHashMap<PhysicalEntity, Double> newsinks) {
 		sinks = new LinkedHashMap<PhysicalEntity, Double>();
-		for (PhysicalEntity pe : sinks.keySet()) {
-			this.sinks.put(pe, new Double(sinks.get(pe)));
+		for (PhysicalEntity pe : newsinks.keySet()) {
+			this.sinks.put(pe, new Double(newsinks.get(pe)));
 		}
 	}
 
@@ -63,9 +63,9 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 		return sinks;
 	}
 
-	public void setMediators(Set<PhysicalEntity> mediators) {
+	public void setMediators(Set<PhysicalEntity> newmediators) {
 		mediators = new HashSet<PhysicalEntity>();
-		for (PhysicalEntity pe : mediators) {
+		for (PhysicalEntity pe : newmediators) {
 			this.mediators.add(pe);
 		}
 	}

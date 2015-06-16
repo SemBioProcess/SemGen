@@ -93,7 +93,7 @@ public class SemGenSettings extends Observable{
 	public Point centerDialogOverApplication(Dimension dialogsize) {
 		Dimension appcenter = getAppCenter();
 		Dimension dialogcenter = new Dimension(dialogsize.width/2, dialogsize.height/2);
-		return new Point(appcenter.width-dialogcenter.width, appcenter.height-dialogcenter.height);
+		return new Point(appcenter.width-dialogcenter.width, appcenter.height-dialogcenter.height-100);
 	}
 	
 	public int getAppWidth() {

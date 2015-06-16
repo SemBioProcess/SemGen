@@ -37,10 +37,6 @@ import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.ExternalURLButton;
-import semsim.model.physical.object.PhysicalProperty;
-import semsim.model.physical.object.PhysicalPropertyinComposite;
-import semsim.model.physical.object.ReferencePhysicalEntity;
-import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.utilities.ReferenceOntologies.OntologyDomain;
 import semsim.utilities.ReferenceOntologies.ReferenceOntology;
 import semsim.utilities.webservices.BioPortalSearcher;
@@ -250,16 +246,16 @@ public class ReferenceClassFinderPanel extends JPanel implements
 			String sel = resultslistright.getSelectedValue();
 			URI uri = URI.create(rdflabelsanduris.get(sel));
 			if (domain.equals(OntologyDomain.PhysicalProperty)) {
-				termindex = library.addPhysicalProperty(new PhysicalProperty(sel, uri));
+				termindex = library.createPhysicalProperty(sel, uri);
 			}
 			if (domain.equals(OntologyDomain.AssociatePhysicalProperty)) {
-				termindex = library.addAssociatePhysicalProperty(new PhysicalPropertyinComposite(sel, uri));
+				termindex = library.createAssociatedPhysicalProperty(sel, uri);
 			}
 			if (domain.equals(OntologyDomain.PhysicalEntity)) {
-				termindex = library.addReferencePhysicalEntity(new ReferencePhysicalEntity(uri, sel));
+				termindex = library.createReferencePhysicalEntity(sel, uri);
 			}
 			if (domain.equals(OntologyDomain.PhysicalProcess)) {
-				termindex = library.addPhysicalProcess(new ReferencePhysicalProcess(uri, sel));
+				termindex = library.createReferencePhysicalProcess(sel, uri);
 			}
 		}
 	}

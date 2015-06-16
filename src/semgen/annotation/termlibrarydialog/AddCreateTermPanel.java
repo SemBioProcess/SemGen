@@ -74,10 +74,9 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 		typepane.setBackground(SemGenSettings.lightblue);
 		typepane.add(typechooser);
 		typepane.add(optionpane);
-		msgbox.setAlignmentX(LEFT_ALIGNMENT);
+		typepane.setAlignmentX(LEFT_ALIGNMENT);
 		typepane.add(msgbox);
 		add(typepane);
-		
 	}
 	
 	private void showCreator() {
@@ -122,6 +121,7 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 	public void valueChanged(ListSelectionEvent arg0) {
 		if (arg0.getSource().equals(typechooser)) {
 			showCreator();
+			msgbox.setText("");
 			toggleOptions(false);
 		}
 	}
@@ -221,7 +221,7 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 		}
 
 		@Override
-		public void onChange(boolean customchange) {
+		public void onChange() {
 			if (selections.contains(-1)) {
 				makebtn.setEnabled(false);
 				msgbox.setText("Composite components cannot be unspecified");

@@ -90,7 +90,8 @@ public class CustomTermDialog extends SemGenDialog {
 				dispose();
 			}
 			if (obj.equals(createbtn)) {
-				createTerm();
+				if (termindex!=-1) modifyTerm();
+				else createTerm();
 				dispose();
 			}
 		}

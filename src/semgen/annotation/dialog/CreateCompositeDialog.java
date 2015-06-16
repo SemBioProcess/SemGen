@@ -69,7 +69,7 @@ public class CreateCompositeDialog extends SemGenDialog implements ActionListene
 		}
 
 		@Override
-		public void onChange(boolean customchange) {
+		public void onChange() {
 			ArrayList<Integer> selections = pollSelectors();
 			if (selections.contains(-1)) {
 				createbtn.setEnabled(false);

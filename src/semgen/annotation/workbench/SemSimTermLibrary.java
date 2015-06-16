@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.Observable;
 
 import semgen.SemGen;
 import semsim.SemSimConstants;
@@ -24,20 +25,22 @@ import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.model.physical.object.ReferencePhysicalEntity;
+import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.utilities.ReferenceOntologies.ReferenceOntology;
 import semsim.writing.CaseInsensitiveComparator;
 
-public class SemSimTermLibrary {
+public class SemSimTermLibrary extends Observable {
 	
 	private ReferenceOntology lastont;
-	ArrayList<Integer> cpepps = new ArrayList<Integer>();
-	ArrayList<Integer> pps = new ArrayList<Integer>();
-	ArrayList<Integer> rpes = new ArrayList<Integer>();
-	ArrayList<Integer> cupes = new ArrayList<Integer>();
-	ArrayList<Integer> cpes = new ArrayList<Integer>();
-	ArrayList<Integer> procs = new ArrayList<Integer>();
+	private ArrayList<Integer> cpepps = new ArrayList<Integer>();
+	private ArrayList<Integer> pps = new ArrayList<Integer>();
+	private ArrayList<Integer> rpes = new ArrayList<Integer>();
+	private ArrayList<Integer> cupes = new ArrayList<Integer>();
+	private ArrayList<Integer> cpes = new ArrayList<Integer>();
+	private ArrayList<Integer> procs = new ArrayList<Integer>();
 	
-	ArrayList<IndexCard<?>> masterlist = new ArrayList<IndexCard<?>>();
+	private ArrayList<IndexCard<?>> masterlist = new ArrayList<IndexCard<?>>();
+	public enum LibraryEvent {SINGULAR_TERM_CREATED, SINGULAR_TERM_CHANGE, COMPOSITE_ENTITY_CHANGE, PROCESS_CHANGE};
 	
 	public SemSimTermLibrary(SemSimModel model) {
 		for (PhysicalPropertyinComposite pp : SemGen.semsimlib.getCommonProperties()) {
@@ -67,7 +70,13 @@ public class SemSimTermLibrary {
 		}
 	}
 	
-	public int addAssociatePhysicalProperty(PhysicalPropertyinComposite pp) {
+	public int createAssociatedPhysicalProperty(String name, URI uri) {
+		int i = addAssociatePhysicalProperty(new PhysicalPropertyinComposite(name, uri));
+		notifySingularAdded();
+		return i;
+	}
+	
+	private int addAssociatePhysicalProperty(PhysicalPropertyinComposite pp) {
 		int i = getPhysicalPropertyIndex(pp);
 		if (i!=-1) return i; 
 		
@@ -79,7 +88,13 @@ public class SemSimTermLibrary {
 		return i;
 	}
 	
-	public int addPhysicalProperty(PhysicalProperty pp) {
+	public int createPhysicalProperty(String name, URI uri) {
+		int i = addPhysicalProperty(new PhysicalProperty(name, uri));
+		notifySingularAdded();
+		return i;
+	}
+	
+	private int addPhysicalProperty(PhysicalProperty pp) {
 		int i = getPhysicalPropertyIndex(pp);
 		if (i!=-1) return i; 
 		
@@ -91,7 +106,13 @@ public class SemSimTermLibrary {
 		return i;
 	}
 	
-	public int addReferencePhysicalEntity(ReferencePhysicalEntity rpe) {
+	public int createReferencePhysicalEntity(String name, URI uri) {
+		int i = addReferencePhysicalEntity(new ReferencePhysicalEntity(uri, name));
+		notifySingularAdded();
+		return i;
+	}
+	
+	private int addReferencePhysicalEntity(ReferencePhysicalEntity rpe) {
 		int i = this.getIndexofReferencePhysicalEntity(rpe);
 		if (i!=-1) return i; 
 		
@@ -103,7 +124,7 @@ public class SemSimTermLibrary {
 		return i;
 	}
 	
-	public int addCustomPhysicalEntity(CustomPhysicalEntity cupe) {
+	private int addCustomPhysicalEntity(CustomPhysicalEntity cupe) {
 		int i = getIndexofCustomPhysicalEntity(cupe);
 		if (i!=-1) return i; 
 		
@@ -116,16 +137,19 @@ public class SemSimTermLibrary {
 	}
 	
 	public int createCustomPhysicalEntity(String name, String description) {
-		return addCustomPhysicalEntity(new CustomPhysicalEntity(name, description));
+		int in = addCustomPhysicalEntity(new CustomPhysicalEntity(name, description)); 
+		notifySingularAdded();
+		return in;
 	}
 	
 	public void modifyCustomPhysicalEntity(int index, String name, String description) {
 		CustomPhysicalEntity cpe = getCustomPhysicalEntity(index);
 		cpe.setName(name);
 		cpe.setDescription(description);
+		notifySingularChanged();
 	}
 	
-	public int addCompositePhysicalEntity(CompositePhysicalEntity cpe) {
+	private int addCompositePhysicalEntity(CompositePhysicalEntity cpe) {
 		int i = getIndexofCompositePhysicalEntity(cpe);
 		if (i!=-1) return i; 
 		
@@ -154,7 +178,13 @@ public class SemSimTermLibrary {
 		return addCompositePhysicalEntity(new CompositePhysicalEntity(pes, rels));
 	}
 	
-	public int addPhysicalProcess(PhysicalProcess proc) {
+	public int createReferencePhysicalProcess(String name, URI uri) {
+		int i = addPhysicalProcess(new ReferencePhysicalProcess(uri, name));
+		notifyProcessChanged();
+		return i;
+	}
+	
+	private int addPhysicalProcess(PhysicalProcess proc) {
 		int i = getPhysicalProcessIndex(proc);
 		if (i!=-1) return i; 
 		
@@ -212,14 +242,16 @@ public class SemSimTermLibrary {
 	}
 	
 	public int createProcess(String name, String desc) {
-		PhysicalProcess proc = new CustomPhysicalProcess(name, desc);
-		return addPhysicalProcess(proc);
+		int in = addPhysicalProcess(new CustomPhysicalProcess(name, desc));
+		notifyProcessChanged();
+		return in;
 	}
 	
 	public void editProcess(Integer procindex, String name, String desc) {
 		PhysicalProcess proc = getPhysicalProcess(procindex);
 		proc.setName(name);
 		proc.setDescription(desc);
+		notifyProcessChanged();
 	}
 	
 	public void setProcessSources(Integer procindex, ArrayList<Integer> sources, ArrayList<Double> mults) {
@@ -315,7 +347,7 @@ public class SemSimTermLibrary {
 		
 	public Integer getPhysicalProcessIndex(PhysicalProcess process) {
 		for (Integer i : procs) {
-			if (masterlist.get(i).isTermEquivalent(process)) return i; 
+			if (masterlist.get(i).getName().equals(process.getName())) return i; 
 		}
 		return -1;
 	}
@@ -498,6 +530,7 @@ public class SemSimTermLibrary {
 	protected class IndexCard<T extends PhysicalModelComponent> {
 		private T component;
 		private Boolean reference;
+		private Boolean removed = false;
 		
 		public IndexCard(T comp) {
 			component = comp;
@@ -538,9 +571,37 @@ public class SemSimTermLibrary {
 			return uris;
 		}
 		
+		public void setRemoved(Boolean remove) {
+			removed = remove;
+		}
+		
+		public Boolean isRemoved() {
+			return removed;
+		}
+		
 		public Boolean isTermEquivalent(PhysicalModelComponent term) {
 			return component.equals(term);
 		}
+	}
+	
+	private void notifySingularAdded() {
+		setChanged();
+		notifyObservers(LibraryEvent.SINGULAR_TERM_CREATED);
+	}
+	
+	private void notifySingularChanged() {
+		setChanged();
+		notifyObservers(LibraryEvent.SINGULAR_TERM_CHANGE);
+	}
+	
+	private void notifyProcessChanged() {
+		setChanged();
+		notifyObservers(LibraryEvent.PROCESS_CHANGE);
+	}
+	
+	private void notifyCompositeEntityChanged() {
+		setChanged();
+		notifyObservers(LibraryEvent.COMPOSITE_ENTITY_CHANGE);
 	}
 	
 	public ReferenceOntology getLastOntology() {

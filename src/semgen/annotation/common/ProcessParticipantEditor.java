@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -33,6 +34,7 @@ public abstract class ProcessParticipantEditor extends JPanel implements ActionL
 	public ProcessParticipantEditor(String name, SemSimTermLibrary lib) {
 		library = lib;
 		setLayout(new BorderLayout());
+		setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		plusbutton.addActionListener(this);
 		plusbutton.setToolTipText("Add process participant");
 

@@ -51,6 +51,7 @@ public abstract class AnnotationPanel<P extends AnnotatorDrawer<? extends SemSim
 		workbench = wb;
 		workbench.addObserver(this);
 		termlib = wb.openTermLibrary();
+		termlib.addObserver(this);
 		settings = sets;
 		globalacts = gacts;
 		drawer = tooldrawer;

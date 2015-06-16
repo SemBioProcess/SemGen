@@ -131,9 +131,10 @@ public class SubmodelAnnotationPanel extends AnnotationPanel<SubModelToolDrawer>
 		ArrayList<Integer> sms = drawer.getSubmodelsWithoutFocus();
 		SemSimComponentSelectionDialog dialog = new SemSimComponentSelectionDialog(
 				"Select Submodels", drawer.getComponentNamesfromIndicies(sms), drawer.getAssociatedSubmodelIndicies(sms));
-		
-		drawer.addSubmodelstoSubmodel(dialog.getSelections());
-		refreshSubmodelData();
+		if (dialog.isConfirmed()) {
+			drawer.addSubmodelstoSubmodel(dialog.getSelections());
+			refreshSubmodelData();
+		}
 	}
 	
 	protected void associateDatastructures() {
@@ -144,9 +145,10 @@ public class SubmodelAnnotationPanel extends AnnotationPanel<SubModelToolDrawer>
 		}
 		SemSimComponentSelectionDialog dialog = new SemSimComponentSelectionDialog(
 				"Select Data Structures", dsnames, workbench.getSelectedSubmodelDSIndicies());
-		
-		workbench.addDataStructurestoSubmodel(dialog.getSelections());
-		refreshSubmodelData();
+		if (dialog.isConfirmed()) {
+			workbench.addDataStructurestoSubmodel(dialog.getSelections());
+			refreshSubmodelData();
+		}
 
 	}
 

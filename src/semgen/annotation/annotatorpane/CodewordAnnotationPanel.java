@@ -18,6 +18,7 @@ import semgen.annotation.annotatorpane.subpanels.CompositeAnnotationPanel;
 import semgen.annotation.annotatorpane.subpanels.SingularAnnotationPanel;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
+import semgen.annotation.workbench.SemSimTermLibrary.LibraryEvent;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
@@ -95,6 +96,12 @@ public class CodewordAnnotationPanel extends AnnotationPanel<CodewordToolDrawer>
 	public void updateUnique(Observable o, Object arg1) {
 		if (arg1==modeledit.propertychanged) {
 			compositepanel.onPropertyChange();
+		}
+		if (o.equals(termlib)) {
+			compositepanel.onTermUpdate(arg1);
+			if (arg1==LibraryEvent.SINGULAR_TERM_CHANGE) {
+				singularannpanel.refreshSingularAnnotation();
+			}
 		}
 	}
 	

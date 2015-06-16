@@ -15,6 +15,7 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import semgen.GlobalActions;
 import semgen.SemGen;
+import semgen.annotation.workbench.SemSimTermLibrary.LibraryEvent;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
 import semgen.annotation.workbench.drawers.ModelAnnotationsBench;
 import semgen.annotation.workbench.drawers.ModelAnnotationsBench.ModelChangeEnum;
@@ -41,7 +42,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	private boolean modelsaved = true;
 	private int lastsavedas = -1;
 	public static enum WBEvent {freetextrequest, smselection, cwselection}
-	public static enum LibraryEvent {requestimport, requestlibrary, requestcreator, closelibrary }
+	public static enum LibraryRequest {requestimport, requestlibrary, requestcreator, closelibrary }
 	public static enum modeledit {propertychanged, compositechanged, codewordchanged, submodelchanged, modelimport, smlistchanged, freetextchange, smnamechange }
 	
 	public AnnotatorWorkbench(File file, SemSimModel model) {
@@ -52,6 +53,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	
 	public void initialize() {
 		termlib = new SemSimTermLibrary(semsimmodel);
+		termlib.addObserver(this);
 		modanns = new ModelAnnotationsBench(semsimmodel);
 		modanns.addObserver(this);
 		cwdrawer = new CodewordToolDrawer(termlib, semsimmodel.getAssociatedDataStructures());
@@ -277,12 +279,14 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 			setChanged();
 			notifyObservers(arg1);
 		}
-		if (arg1==modeledit.freetextchange || arg1==modeledit.codewordchanged || arg1==modeledit.submodelchanged) {
+		if (arg1==modeledit.freetextchange || arg1==modeledit.codewordchanged || arg1==modeledit.submodelchanged
+				|| arg1==LibraryEvent.SINGULAR_TERM_CHANGE || arg1.equals(LibraryEvent.COMPOSITE_ENTITY_CHANGE) 
+				|| arg1.equals(LibraryEvent.PROCESS_CHANGE)) {
 			this.setModelSaved(false);
 		}
 	}
 	
-	public void sendTermLibraryEvent(LibraryEvent evt) {
+	public void sendTermLibraryEvent(LibraryRequest evt) {
 		setChanged();
 		notifyObservers(evt);
 	}

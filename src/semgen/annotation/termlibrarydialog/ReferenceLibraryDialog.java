@@ -14,7 +14,7 @@ import javax.swing.JTabbedPane;
 
 import semgen.SemGenSettings;
 import semgen.annotation.workbench.AnnotatorWorkbench;
-import semgen.annotation.workbench.AnnotatorWorkbench.LibraryEvent;
+import semgen.annotation.workbench.AnnotatorWorkbench.LibraryRequest;
 import semgen.utilities.SemGenFont;
 
 public class ReferenceLibraryDialog extends JFrame implements ComponentListener, ContainerListener {
@@ -33,7 +33,7 @@ public class ReferenceLibraryDialog extends JFrame implements ComponentListener,
 		// Set closing behavior
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				workbench.sendTermLibraryEvent(LibraryEvent.closelibrary);
+				workbench.sendTermLibraryEvent(LibraryRequest.closelibrary);
 			}
 		});
 		setResizable(false);

@@ -100,10 +100,10 @@ public abstract class AnnotationObjectButton extends JPanel implements MouseList
 		
 	protected void toggleIndicator(JLabel lbl, boolean hasann) {
 		lbl.setForeground(noneditablelabelcolor);
+		if(editable) lbl.setForeground(editablelabelcolor);
 		if (hasann) {
 			lbl.setText(lbl.getName());
 			lbl.setFont(SemGenFont.Bold("Serif", -2));
-			if(editable) lbl.setForeground(editablelabelcolor);
 		}
 		else {
 			lbl.setText("_");

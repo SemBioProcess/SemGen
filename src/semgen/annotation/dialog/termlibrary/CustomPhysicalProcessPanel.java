@@ -99,10 +99,10 @@ public abstract class CustomPhysicalProcessPanel extends CustomTermOptionPane {
 			
 			String dialogname = "Annotate " + mantextfield.getText() + " with " + relation.getURIFragment() + " relations.";
 			SemSimComponentSelectionDialog seldialog = new SemSimComponentSelectionDialog(dialogname, library.getComponentNames(entities), preselected);
-			
-			preselected = seldialog.getSelections();
-			
-			setElements(preselected, entities);			
+			if (seldialog.isConfirmed()) {
+				preselected = seldialog.getSelections();	
+				setElements(preselected, entities);			
+			}
 		}
 	}
 	
@@ -135,24 +135,25 @@ public abstract class CustomPhysicalProcessPanel extends CustomTermOptionPane {
 			
 			String dialogname = "Add participants to " + mantextfield.getText();
 			SemSimComponentSelectionDialog seldialog = new SemSimComponentSelectionDialog(dialogname, library.getComponentNames(cpes), preselect, todisable);
-			preselect = seldialog.getSelections();
-			ArrayList<Integer> newsels = new ArrayList<Integer>();
-			for (Integer i : preselect) {
-				newsels.add(cpes.get(i));
-			}
-			//Remove components that are no longer selected
-			for (Integer p : new ArrayList<Integer>(participants)) {
-				if (!newsels.contains(p)) {
-					removeParticipant(p);
+			if (seldialog.isConfirmed()) {
+				preselect = seldialog.getSelections();
+				ArrayList<Integer> newsels = new ArrayList<Integer>();
+				for (Integer i : preselect) {
+					newsels.add(cpes.get(i));
+				}
+				//Remove components that are no longer selected
+				for (Integer p : new ArrayList<Integer>(participants)) {
+					if (!newsels.contains(p)) {
+						removeParticipant(p);
+					}
+				}
+				//Add new participants
+				for (Integer p : newsels) {
+					if (!participants.contains(p)) {
+						addParticipant(p);
+					}
 				}
 			}
-			//Add new participants
-			for (Integer p : newsels) {
-				if (!participants.contains(p)) {
-					addParticipant(p);
-				}
-			}
-			
 
 		}	
 	}

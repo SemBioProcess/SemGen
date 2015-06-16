@@ -11,7 +11,7 @@ import javax.swing.JButton;
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
 import semgen.annotation.workbench.AnnotatorWorkbench;
-import semgen.annotation.workbench.AnnotatorWorkbench.LibraryEvent;
+import semgen.annotation.workbench.AnnotatorWorkbench.LibraryRequest;
 import semgen.encoding.Encoder;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.DropDownCheckList;
@@ -142,15 +142,15 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		}
 		
 		if (o == opentermcreator) {
-			workbench.sendTermLibraryEvent(LibraryEvent.requestcreator);
+			workbench.sendTermLibraryEvent(LibraryRequest.requestcreator);
 		}
 		
 		if (o == annotateitemcopy) {
-			workbench.sendTermLibraryEvent(LibraryEvent.requestimport);
+			workbench.sendTermLibraryEvent(LibraryRequest.requestimport);
 		}
 		
 		if (o == opentermlibrary) {
-			workbench.sendTermLibraryEvent(LibraryEvent.requestlibrary);
+			workbench.sendTermLibraryEvent(LibraryRequest.requestlibrary);
 		} 
 		
 		

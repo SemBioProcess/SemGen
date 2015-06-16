@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -16,6 +18,7 @@ import semgen.SemGenSettings;
 import semgen.annotation.dialog.termlibrary.AddReferenceClassDialog;
 import semgen.annotation.dialog.termlibrary.CustomTermDialog;
 import semgen.annotation.workbench.SemSimTermLibrary;
+import semgen.annotation.workbench.SemSimTermLibrary.LibraryEvent;
 import semgen.utilities.SemGenIcon;
 import semsim.utilities.ReferenceOntologies.OntologyDomain;
 
@@ -110,7 +113,7 @@ public abstract class EntitySelectorGroup extends Box implements ActionListener 
 			StructuralRelationPanel srp = relations.get(i-1);
 			relations.remove(srp);
 		}
-		onChange(false);
+		onChange();
 		drawBox(true);
 	}
 
@@ -146,7 +149,7 @@ public abstract class EntitySelectorGroup extends Box implements ActionListener 
 		}
 	}
 	
-	public abstract void onChange(boolean customchange);
+	public abstract void onChange();
 	
 	private class SelectorPanel extends AnnotationChooserPanel {
 		private static final long serialVersionUID = 1L;
@@ -168,7 +171,7 @@ public abstract class EntitySelectorGroup extends Box implements ActionListener 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource().equals(combobox)) {
-				onChange(false);
+				onChange();
 				toggleCustom(!termlib.isReferenceTerm(getSelection()));
 				setEraseable();
 			}
@@ -197,7 +200,7 @@ public abstract class EntitySelectorGroup extends Box implements ActionListener 
 		protected void onNewTerm(Integer selection) {
 			if (selection!=-1) {
 				setComboList(termlib.getSortedSingularPhysicalEntityIndicies(), selection);
-				onChange(true);
+				onChange();
 			}
 		}
 		
