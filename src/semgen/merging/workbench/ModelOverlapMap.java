@@ -1,11 +1,13 @@
 package semgen.merging.workbench;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
 
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.owl.SemSimOWLFactory;
 
 public class ModelOverlapMap {
@@ -13,7 +15,8 @@ public class ModelOverlapMap {
 	private Set<String> identicalsubmodelnames;
 	private Set<String> identicaldsnames;
 	private ArrayList<Pair<DataStructure, DataStructure>> dsmap = new ArrayList<Pair<DataStructure, DataStructure>>();
-
+	private HashMap<UnitOfMeasurement, UnitOfMeasurement> unitsmap = new HashMap<UnitOfMeasurement, UnitOfMeasurement>();
+	
 	private ArrayList<maptype> maptypelist = new ArrayList<maptype>();	
 	private int slndomcnt = 0;
 	
@@ -45,6 +48,7 @@ public class ModelOverlapMap {
 			dspair = equivlist.get(i);
 			addDataStructureMapping(dspair.getLeft(), dspair.getRight(), maptype.exactsemaoverlap);
 		}
+		unitsmap = comparator.identifyEquivalentUnits();
 		identicalsubmodelnames = comparator.getIdenticalSubmodels();
 		identicaldsnames = comparator.getIdenticalCodewords();
 	}
@@ -122,6 +126,10 @@ public class ModelOverlapMap {
 	
 	public ArrayList<Pair<DataStructure, DataStructure>> getDataStructurePairs() {
 		return dsmap;
+	}
+	
+	public HashMap<UnitOfMeasurement, UnitOfMeasurement> getEquivalentUnitPairs() {
+		return unitsmap;
 	}
 	
 	//Compare units of all Data Structures in the overlap map. Determine if terms are equivalent

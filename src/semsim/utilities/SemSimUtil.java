@@ -262,32 +262,34 @@ public class SemSimUtil {
 	 * @param SemSim model
 	 * @return HashMap of customUnit:(baseUnit1:exp1, baseUnit:exp2, ...)
 	 */
-	public static HashMap<String, HashMap<String, Double>> getAllUnitsAsFundamentalBaseUnits(SemSimModel semsimmodel) {
+	public static HashMap<String, Set<UnitFactor>> getAllUnitsAsFundamentalBaseUnits(SemSimModel semsimmodel) {
 		Set<UnitOfMeasurement> units = semsimmodel.getUnits();
-		HashMap<String, HashMap<String, Double>> fundamentalBaseUnits = new HashMap<String, HashMap<String, Double>>();
+		HashMap<String, Set<UnitFactor>> fundamentalBaseUnits = new HashMap<String, Set<UnitFactor>>();
 		
 		for(UnitOfMeasurement uom : units) {
-			HashMap<String, Double> newUnitFactor = recurseBaseUnits(uom, 1.0);
+			Set<UnitFactor> newUnitFactor = recurseBaseUnits(uom, 1.0);
 			
 			fundamentalBaseUnits.put(uom.getName(), newUnitFactor);
 		}
 		return fundamentalBaseUnits;
 	}
 	// Used in tandem with getFundamentalBaseUnits
-	private static HashMap<String, Double> recurseBaseUnits(UnitOfMeasurement uom, Double oldExp) {
+	private static Set<UnitFactor> recurseBaseUnits(UnitOfMeasurement uom, Double oldExp) {
 		SemSimLibrary semsimlib = new SemSimLibrary();
 		Set<UnitFactor> unitFactors = uom.getUnitFactors();
-		HashMap<String, Double> newUnitFactor = new HashMap<String, Double>();
+		Set<UnitFactor> newUnitFactors = new HashSet<UnitFactor>();
 		for(UnitFactor factor : unitFactors) {
 			UnitOfMeasurement baseuom = factor.getBaseUnit();
-			Double newExp = factor.getExponent()*oldExp;
+			double newExp = factor.getExponent()*oldExp;
+			String prefix = factor.getPrefix();
 			if(semsimlib.isCellMLBaseUnit(baseuom.getName())) {
-				newUnitFactor.put(baseuom.getName(), newExp);
+				UnitFactor baseUnitFactor = new UnitFactor(baseuom, newExp, prefix);
+				newUnitFactors.add(baseUnitFactor);
 			}
 			else {
-				newUnitFactor.putAll(recurseBaseUnits(baseuom, newExp));
+				newUnitFactors.addAll(recurseBaseUnits(baseuom, newExp));
 			}
 		}
-		return newUnitFactor;
+		return newUnitFactors;
 	}
 }

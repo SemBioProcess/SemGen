@@ -9,12 +9,13 @@ import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
+import semsim.model.computational.units.UnitFactor;
 import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.utilities.SemSimUtil;
 
 public class AutoAnnotate {
 	
-	public static HashMap<String, HashMap<String, Double>> fundamentalBaseUnits;
+	public static HashMap<String, Set<UnitFactor>> fundamentalBaseUnits;
 	
 	// Automatically apply OPB annotations to the physical properties associated
 	// with the model's data structures
