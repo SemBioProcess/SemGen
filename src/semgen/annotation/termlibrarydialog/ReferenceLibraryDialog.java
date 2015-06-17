@@ -103,6 +103,7 @@ public class ReferenceLibraryDialog extends JFrame implements ComponentListener,
 
 	@Override
 	public void componentRemoved(ContainerEvent e) {
-		
+		validate();
+		pack();
 	}
 }

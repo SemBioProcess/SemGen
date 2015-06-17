@@ -6,9 +6,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -18,7 +15,6 @@ import semgen.SemGenSettings;
 import semgen.annotation.dialog.termlibrary.AddReferenceClassDialog;
 import semgen.annotation.dialog.termlibrary.CustomTermDialog;
 import semgen.annotation.workbench.SemSimTermLibrary;
-import semgen.annotation.workbench.SemSimTermLibrary.LibraryEvent;
 import semgen.utilities.SemGenIcon;
 import semsim.utilities.ReferenceOntologies.OntologyDomain;
 
@@ -97,6 +93,14 @@ public abstract class EntitySelectorGroup extends Box implements ActionListener 
 		selectors.clear();
 		relations.clear();
 		removeAll();
+	}
+	
+	public void reset() {
+		selections.clear();
+		selections.add(-1);
+		drawBox(true);
+		validate();
+		repaint();
 	}
 	
 	public void refreshLists() {

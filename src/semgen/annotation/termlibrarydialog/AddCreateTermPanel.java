@@ -2,6 +2,8 @@ package semgen.annotation.termlibrarydialog;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentListener;
+import java.awt.event.ContainerListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -67,7 +69,8 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 		optionpane.add(clearbtn);
 		makebtn.addActionListener(this);
 		clearbtn.addActionListener(this);
-		toggleOptions(false);
+		makebtn.setEnabled(false);
+		clearbtn.setEnabled(false);
 		
 		JPanel typepane = new JPanel();
 		typepane.setLayout(new BoxLayout(typepane, BoxLayout.PAGE_AXIS)); 
@@ -76,11 +79,19 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 		typepane.add(optionpane);
 		typepane.setAlignmentX(LEFT_ALIGNMENT);
 		typepane.add(msgbox);
-		add(typepane);
+		add(typepane); 
 	}
 	
 	private void showCreator() {
-		if (creatorpane!=null) remove(creatorpane);
+		if (creatorpane!=null) {
+			for (ContainerListener listener : getContainerListeners()) {
+				creatorpane.removeContainerListener(listener);
+			}
+			for (ComponentListener listener : getComponentListeners()) {
+				creatorpane.removeComponentListener(listener);
+			}
+			remove(creatorpane);
+		}
 		toggleOptionVisibility(true);
 		Integer sel = typechooser.getSelectedIndex();
 		switch (types[sel]) {
@@ -98,9 +109,7 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 			creatorpane = new SearchPane(library, OntologyDomain.PhysicalEntity);
 			break;
 		case COMPOSITE_PHYSICAL_ENTITY:
-			JPanel cpane = new JPanel();
-			cpane.add(new CompositeCreator(library));
-			creatorpane = cpane;
+			creatorpane = new CPEPanel();
 			break;
 		case CUSTOM_PHYSICAL_PROCESS:
 			creatorpane = new CustomProcessPane(library);
@@ -113,6 +122,14 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 			break;
 		
 		}
+		//Required to get the composite creator to display correctly
+		for (ContainerListener listener : getContainerListeners()) {
+			creatorpane.addContainerListener(listener);
+		}
+		for (ComponentListener listener : getComponentListeners()) {
+			creatorpane.addComponentListener(listener);
+		}
+		
 		add(creatorpane);
 		validate();
 	}
@@ -122,15 +139,11 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 		if (arg0.getSource().equals(typechooser)) {
 			showCreator();
 			msgbox.setText("");
-			toggleOptions(false);
+			makebtn.setEnabled(false);
+			clearbtn.setEnabled(true);
 		}
 	}
-		
-	private void toggleOptions(boolean toggle) {
-		makebtn.setEnabled(toggle);
-		clearbtn.setEnabled(toggle);
-	}
-	
+
 	private void toggleOptionVisibility(boolean toggle) {
 		makebtn.setVisible(toggle);
 		clearbtn.setVisible(toggle);
@@ -145,14 +158,15 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 		if (o==clearbtn) {
 			((TermMaker)creatorpane).clearForm();
 		}
-		toggleOptions(false);
+		makebtn.setEnabled(false);
+		clearbtn.setEnabled(true);
 	}
 	
 	private interface TermMaker {
 		public void makeTerm();
 		public void clearForm();
 	}
-	
+		
 	private class CustomEntityPane extends CustomTermOptionPane implements TermMaker {
 		private static final long serialVersionUID = 1L;
 
@@ -212,7 +226,28 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 		}
 	}
 	
-	private class CompositeCreator extends EntitySelectorGroup implements TermMaker {
+	private class CPEPanel extends JPanel implements TermMaker {
+		private static final long serialVersionUID = 1L;
+		private CompositeCreator cpec;
+		
+		public CPEPanel() {
+			cpec = new CompositeCreator(library);
+			setBackground(SemGenSettings.lightblue);
+			add(cpec);
+		}
+		@Override
+		public void makeTerm() {
+			cpec.makeTerm();
+		}
+
+		@Override
+		public void clearForm() {
+			cpec.reset();
+			revalidate();
+		}
+	}
+	
+	private class CompositeCreator extends EntitySelectorGroup  {
 		private static final long serialVersionUID = 1L;
 
 		public CompositeCreator(SemSimTermLibrary lib) {
@@ -222,6 +257,7 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 
 		@Override
 		public void onChange() {
+			pollSelectors();
 			if (selections.contains(-1)) {
 				makebtn.setEnabled(false);
 				msgbox.setText("Composite components cannot be unspecified");
@@ -232,14 +268,8 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 			}
 		}
 
-		@Override
 		public void makeTerm() {
 			termlib.createCompositePhysicalEntity(pollSelectors());
-		}
-
-		@Override
-		public void clearForm() {
-			clearGroup();
 		}
 		
 	}
@@ -256,7 +286,8 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 	        if (!adjust) {
 		        if(!resultslistright.isSelectionEmpty()){
 		        	externalURLbutton.setEnabled(true);
-		        	toggleOptions(true);
+		        	makebtn.setEnabled(true);
+		    		clearbtn.setEnabled(true);
 		        }
 	        }
 		}
