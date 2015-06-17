@@ -99,7 +99,7 @@ public class CodewordAnnotationPanel extends AnnotationPanel<CodewordToolDrawer>
 		}
 		if (o.equals(termlib)) {
 			compositepanel.onTermUpdate(arg1);
-			if (arg1==LibraryEvent.SINGULAR_TERM_CHANGE) {
+			if (arg1==LibraryEvent.SINGULAR_TERM_CHANGE || arg1==LibraryEvent.SINGULAR_TERM_CREATED) {
 				singularannpanel.refreshSingularAnnotation();
 			}
 		}

@@ -11,11 +11,15 @@ import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.Icon;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 
 import semgen.SemGenSettings;
 import semgen.annotation.workbench.SemSimTermLibrary;
@@ -25,7 +29,7 @@ import semgen.utilities.uicomponent.ExternalURLButton;
 
 public abstract class AnnotationChooserPanel extends JPanel implements ActionListener{
 	private static final long serialVersionUID = 1L;
-	protected ArrayList<JLabel> lbllist = new ArrayList<JLabel>();
+	protected ArrayList<JComponent> lbllist = new ArrayList<JComponent>();
 	protected JComboBox<String> combobox = new JComboBox<String>();
 	private ArrayList<Integer> comboindicies;
 	
@@ -48,6 +52,7 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 		combobox.setPreferredSize(dim);
 		combobox.setMaximumSize(dim);
 		
+		itempanel.setLayout(new BoxLayout(itempanel, BoxLayout.LINE_AXIS));
 		itempanel.setBackground(SemGenSettings.lightblue);
 		itempanel.add(combobox);
 	}
@@ -87,12 +92,12 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 	}
 	
 	public void constructSelector() {
-		for (JLabel btn : lbllist) {
-			itempanel.add(btn);
+		for (JComponent btn : lbllist) {
+			itempanel.add(btn, BorderLayout.EAST);
 		}
 		itempanel.validate();
 		add(itempanel, BorderLayout.WEST);
-		add(Box.createGlue(), BorderLayout.EAST);
+		add(Box.createGlue());
 		validate();
 	}
 	
@@ -140,9 +145,13 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 				onEraseButtonClick();
 			}
 		};
-		JLabel spacer = new JLabel();
-		spacer.setBorder(BorderFactory.createEmptyBorder(1,20,1,1));
-		lbllist.add(spacer);
+		JLabel dummy = new JLabel();
+		dummy.setBorder(BorderFactory.createEmptyBorder(1, 5, 1, 5));
+		lbllist.add(dummy);
+		lbllist.add(new JSeparator(SwingConstants.VERTICAL));
+		JLabel dummy2 = new JLabel();
+		dummy2.setBorder(BorderFactory.createEmptyBorder(1, 5, 1, 5));
+		lbllist.add(dummy2);
 		lbllist.add(eraselabel);
 	}
 	

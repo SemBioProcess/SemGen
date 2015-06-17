@@ -180,7 +180,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 		else if (evt.equals(LibraryEvent.COMPOSITE_ENTITY_CHANGE) && esg!=null) {
 			esg.drawBox(true);
 		}
-		else if (drawer.isProcess() && evt.equals(LibraryEvent.PROCESS_CHANGE)) {
+		else if (pcp!=null && evt.equals(LibraryEvent.PROCESS_CHANGE)) {
 			pcp.setComboList(termlib.getSortedPhysicalProcessIndicies(), drawer.getIndexofModelComponent());
 			listParticipants();
 		}
