@@ -1,10 +1,17 @@
 package semgen.stage;
 
 import java.awt.BorderLayout;
+import java.io.IOException;
 import java.util.Observer;
 
 import javax.naming.InvalidNameException;
-import chrriis.dj.nativeswing.swtimpl.NativeInterface;
+import javax.swing.JOptionPane;
+
+import com.teamdev.jxbrowser.chromium.BrowserPreferences;
+import com.teamdev.jxbrowser.chromium.DialogParams;
+import com.teamdev.jxbrowser.chromium.swing.BrowserView;
+import com.teamdev.jxbrowser.chromium.swing.DefaultDialogHandler;
+
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
 import semgen.utilities.SemGenIcon;
@@ -21,39 +28,34 @@ public class StageTab extends SemGenTab {
 		
 		_workbench = bench;
 	}
-	
-	/**
-	 * Can we create the SemGenTab on this platform?
-	 * @return null if we can create the tab. Return an error message if we can't.
-	 */
-	public static String canCreate() {
-		try {
-			NativeInterface.open();
-			new SemGenCommunicatingWebBrowser(null);
-			return null;
-		} catch (NoClassDefFoundError | UnsatisfiedLinkError e) {
-			e.printStackTrace();
-			return "Unable to show the stage. This may be because swt.jar is not loading properly. Exception: " + e.getMessage();
-		} catch (InvalidNameException e) {
-			e.printStackTrace();
-			return e.getMessage();
-		}
-	}
 
 	@Override
 	public void loadTab() {
 		setOpaque(false);
 		setLayout(new BorderLayout());
-
-		// Prepare to create the browser
-		NativeInterface.open();
 		
 		// Create the browser
 		try {
+			// BrowserPreferences.setChromiumSwitches("--remote-debugging-port=9222"); // Uncomment to debug JS
 			SemGenCommunicatingWebBrowser browser = new SemGenCommunicatingWebBrowser(_workbench.getCommandReceiver());
 			_workbench.setCommandSender(browser.getCommandSender());
-			this.add(browser);
-		} catch (InvalidNameException e) {
+
+			// String remoteDebuggingURL = browser.getRemoteDebuggingURL(); // Uncomment to debug JS. Past this url in chrome to begin debugging JS
+			final BrowserView browserView = new BrowserView(browser);
+			
+			// Show JS alerts in java dialogs
+			browser.setDialogHandler(new DefaultDialogHandler(browserView) {
+			    @Override
+			    public void onAlert(DialogParams params) {
+			        String title = "SemGen Browser Alert";
+			        String message = params.getMessage();
+			        JOptionPane.showMessageDialog(browserView, message, title,
+			                JOptionPane.PLAIN_MESSAGE);
+			    }
+			});
+			
+			this.add(browserView, BorderLayout.CENTER);
+		} catch (InvalidNameException | IOException e) {
 			e.printStackTrace();
 		}
 	}

@@ -36,10 +36,13 @@
 	<classpathentry kind="lib" path="thirdParty/wstx-asl-3.2.9.jar"/>
 	<classpathentry kind="lib" path="thirdParty/xercesImpl-2.7.1.jar"/>
 	<classpathentry kind="lib" path="thirdParty/commons-lang3-3.3.2.jar"/>
-	<classpathentry kind="lib" path="thirdParty/DJNativeSwing-SWT.jar"/>
-	<classpathentry kind="lib" path="thirdParty/DJNativeSwing.jar"/>
-	<classpathentry kind="lib" path="thirdParty/swt-4.4-win32-win32-x86_64.jar"/>
 	<classpathentry kind="lib" path="thirdParty/JSimServer.jar"/>
+	<classpathentry kind="lib" path="thirdParty/jxbrowser/jxbrowser-5.2.jar"/>
+	<classpathentry kind="lib" path="thirdParty/jxbrowser/jxbrowser-linux32-5.2.jar"/>
+	<classpathentry kind="lib" path="thirdParty/jxbrowser/jxbrowser-linux64-5.2.jar"/>
+	<classpathentry kind="lib" path="thirdParty/jxbrowser/jxbrowser-mac-5.2.jar"/>
+	<classpathentry kind="lib" path="thirdParty/jxbrowser/jxbrowser-win-5.2.jar"/>
+	<classpathentry kind="lib" path="thirdParty/jxbrowser/runtime-license-expires-5-1-2020.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
