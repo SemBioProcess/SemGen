@@ -132,7 +132,7 @@ public class CompositePhysicalEntity extends PhysicalEntity implements Comparabl
 		return compareTo((CompositePhysicalEntity)obj)==0;
 	}
 	@Override
-	protected SemSimTypes getSemSimType() {
+	public SemSimTypes getSemSimType() {
 		return SemSimTypes.COMPOSITE_PHYSICAL_ENTITY;
 	}
 }

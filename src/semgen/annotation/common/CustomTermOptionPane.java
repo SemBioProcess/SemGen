@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
 import semgen.annotation.dialog.SemSimComponentSelectionDialog;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semsim.SemSimConstants;
@@ -157,6 +158,14 @@ public abstract class CustomTermOptionPane extends JPanel implements ActionListe
 		}
 		createbtn.setEnabled(false);
 		msgbox.setText("Please enter a valid name");
+	}
+	
+	public void clear() {
+		mantextfield.setText("");
+		descriptionarea.setText("");
+		for (ObjectPropertyEditor e : objecteditors) {
+			e.clear();
+		}
 	}
 	
 	private class CustomEntityEditor extends ObjectPropertyEditor {

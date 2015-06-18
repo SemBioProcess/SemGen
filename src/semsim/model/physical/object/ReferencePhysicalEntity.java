@@ -45,7 +45,7 @@ public class ReferencePhysicalEntity extends PhysicalEntity implements Reference
 	}
 	
 	@Override
-	protected SemSimTypes getSemSimType() {
+	public SemSimTypes getSemSimType() {
 		return SemSimTypes.REFERENCE_PHYSICAL_ENTITY;
 	}
 }

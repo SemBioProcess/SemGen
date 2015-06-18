@@ -35,7 +35,7 @@ public class PhysicalDependency extends PhysicalModelComponent{
 	}
 	
 	@Override
-	protected SemSimTypes getSemSimType() {
+	public SemSimTypes getSemSimType() {
 		return SemSimTypes.PHYSICAL_DEPENDENCY;
 	}
 }

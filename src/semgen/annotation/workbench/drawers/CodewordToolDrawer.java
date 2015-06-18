@@ -12,6 +12,7 @@ import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
 import semgen.annotation.workbench.routines.AnnotationCopier;
 import semsim.PropertyType;
 import semsim.annotation.ReferenceTerm;
+import semsim.model.SemSimTypes;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.PhysicalEntity;
@@ -82,7 +83,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	}
 	
 	public PropertyType getPropertyType() {
-		return componentlist.get(currentfocus).getPropertyType(SemGen.semsimlib);
+		return getFocus().getPropertyType(SemGen.semsimlib);
 	}
 	
 	public PropertyType getPropertyType(int index) {
@@ -143,11 +144,11 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	}
 
 	public URI getPhysicalPropertyURI() {
-		return componentlist.get(currentfocus).getPhysicalProperty().getReferstoURI();
+		return getFocusAssociatedProperty().getReferstoURI();
 	}
 	
 	public URI getPhysicalComponentURI() {
-		return ((ReferenceTerm)componentlist.get(currentfocus).getAssociatedPhysicalModelComponent()).getReferstoURI();
+		return ((ReferenceTerm)getFocusComposite()).getReferstoURI();
 	}
 	
 	public String getLookupName(int index) {
@@ -161,31 +162,31 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	}
 
 	public String getUnits() {
-		if (componentlist.get(currentfocus).hasUnits()) {
-			return componentlist.get(currentfocus).getUnit().getName();
+		if (getFocus().hasUnits()) {
+			return getFocus().getUnit().getName();
 		}
 		return "dimensionless";
 	}
 	
 	public String getEquationasString() {
-		if(componentlist.get(currentfocus).getComputation()!=null){
-			return componentlist.get(currentfocus).getComputation().getComputationalCode();
+		if(getFocus().getComputation()!=null){
+			return getFocus().getComputation().getComputationalCode();
 		}
 		return "";
 	}
 	
 	public boolean isMapped() {
-		return componentlist.get(currentfocus).isMapped();
+		return getFocus().isMapped();
 	}
 	
 	public boolean isProcess() {
-		PhysicalPropertyinComposite pp = componentlist.get(currentfocus).getPhysicalProperty();
+		PhysicalPropertyinComposite pp = getFocusAssociatedProperty();
 		if (pp == null) return false; 
 		return SemGen.semsimlib.isOPBprocessProperty(pp.getReferstoURI());
 	}
 
 	public void copytoMappedVariables() {
-		MappableVariable thevar = (MappableVariable)componentlist.get(currentfocus);
+		MappableVariable thevar = (MappableVariable)getFocus();
 		
 		Set<MappableVariable> mapped = AnnotationCopier.copyAllAnnotationsToMappedVariables(thevar);
 		addComponentstoChangeSet(mapped);
@@ -194,11 +195,11 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 
 	public Integer getIndexofPhysicalProperty() {
 		if (!componentlist.get(currentfocus).hasPhysicalProperty()) return -1;
-		return termlib.getPhysicalPropertyIndex(componentlist.get(currentfocus).getPhysicalProperty());
+		return termlib.getPhysicalPropertyIndex(getFocusAssociatedProperty());
 	}
 	
 	public void setDatastructurePhysicalProperty(Integer index) {
-		DataStructure ds = componentlist.get(currentfocus);
+		DataStructure ds = getFocus();
 		//If the new selection is equivalent to the old, do nothing.
 		if (termlib.getPhysicalPropertyIndex(ds.getPhysicalProperty())==index) {
 			return;
@@ -229,14 +230,14 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	}
 	
 	public int countEntitiesinCompositeEntity() {
-		CompositePhysicalEntity cpe = (CompositePhysicalEntity)componentlist.get(currentfocus).getAssociatedPhysicalModelComponent();
+		CompositePhysicalEntity cpe = (CompositePhysicalEntity)getFocusComposite();
 		return cpe.getArrayListOfEntities().size();
 	}
 	
 	public ArrayList<Integer> getCompositeEntityIndicies() {
 		ArrayList<Integer> indexlist = new ArrayList<Integer>();
 		if (hasPhysicalModelComponent()) {
-			CompositePhysicalEntity cpe = (CompositePhysicalEntity)componentlist.get(currentfocus).getAssociatedPhysicalModelComponent();
+			CompositePhysicalEntity cpe = (CompositePhysicalEntity)getFocusComposite();
 		
 			for (PhysicalEntity pe : cpe.getArrayListOfEntities()) {
 				int i;
@@ -256,11 +257,11 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	}
 	
 	public boolean hasAssociatedPhysicalProperty() {
-		return componentlist.get(currentfocus).hasPhysicalProperty();
+		return getFocus().hasPhysicalProperty();
 	}
 	
 	public boolean hasPhysicalModelComponent() {
-		return componentlist.get(currentfocus).hasAssociatedPhysicalComponent();
+		return getFocus().hasAssociatedPhysicalComponent();
 	}
 	
 	@Override
@@ -275,25 +276,54 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	
 	@Override
 	public boolean isImported() {
-		return componentlist.get(currentfocus).isImportedViaSubmodel();
+		return getFocus().isImportedViaSubmodel();
 	}
 	
 	public int getIndexofModelComponent() {
-		return termlib.getComponentIndex(componentlist.get(currentfocus).getAssociatedPhysicalModelComponent());
+		return termlib.getComponentIndex(getFocus().getAssociatedPhysicalModelComponent());
 	}
 	
 	@Override
 	public void setSingularAnnotation(int selectedIndex) {
 		if (selectedIndex!=-1) {
-			componentlist.get(currentfocus).setSingularAnnotation((PhysicalProperty)termlib.getComponent(selectedIndex));
+			getFocus().setSingularAnnotation((PhysicalProperty)termlib.getComponent(selectedIndex));
 		}
 		else {
-			componentlist.get(currentfocus).setSingularAnnotation(null);
+			getFocus().setSingularAnnotation(null);
 		}
 		changeset.add(currentfocus);
 		changeNotification();
 	}
+	
+	public SemSimTypes getPhysicalCompositeType() {
+		if (!hasPhysicalModelComponent()) {
+			return null;
+		}
+		return getFocusComposite().getSemSimType();
+	}
 		
+	private DataStructure getFocus() {
+		return componentlist.get(currentfocus);
+	}
+	
+	private PhysicalModelComponent getFocusComposite() {
+		return getFocus().getAssociatedPhysicalModelComponent();
+	}
+	
+	private PhysicalPropertyinComposite getFocusAssociatedProperty() {
+		return getFocus().getPhysicalProperty();
+	}
+	
+	public boolean checkPropertyPMCCompatibility(Integer index) {
+		boolean isproc = SemGen.semsimlib.isOPBprocessProperty(termlib.getReferenceComponentURI(index));
+		SemSimTypes type = getPhysicalCompositeType();
+		if (!hasPhysicalModelComponent() || (isproc && type.equals(SemSimTypes.PHYSICAL_PROCESS) || 
+				(!isproc && type.equals(SemSimTypes.COMPOSITE_PHYSICAL_ENTITY)))) {
+			return true;
+		}
+		return false;
+	}
+	
 	@Override
 	protected void changeNotification() {
 		setChanged();

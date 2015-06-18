@@ -82,6 +82,13 @@ public abstract class CustomPhysicalProcessPanel extends CustomTermOptionPane {
 		library.setProcessMediators(termindex, editors.get(2).getParticipants());
 	}
 	
+	public void clear() {
+		super.clear();
+		for (ParticipantEditor e : editors) {
+			e.clear();
+		}
+	}
+	
 	private class ProcessEditor extends ObjectPropertyEditor {
 		private static final long serialVersionUID = 1L;
 
@@ -91,7 +98,7 @@ public abstract class CustomPhysicalProcessPanel extends CustomTermOptionPane {
 
 		@Override
 		protected void showSelectionDialog() {
-			ArrayList<Integer> entities = library.getSortedPhysicalProcessIndicies();
+			ArrayList<Integer> entities = library.getSortedReferencePhysicalProcessIndicies();
 			ArrayList<Integer> preselected = new ArrayList<Integer>();
 			for (Integer i : components) {
 				preselected.add(entities.indexOf(i));

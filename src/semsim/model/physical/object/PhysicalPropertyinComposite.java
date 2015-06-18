@@ -52,7 +52,7 @@ public class PhysicalPropertyinComposite extends PhysicalModelComponent implemen
 	}
 	
 	@Override
-	protected SemSimTypes getSemSimType() {
+	public SemSimTypes getSemSimType() {
 		return SemSimTypes.PHYSICAL_PROPERTY_IN_COMPOSITE;
 	}
 }

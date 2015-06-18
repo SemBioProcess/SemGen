@@ -52,7 +52,7 @@ public class PhysicalProperty extends PhysicalModelComponent implements Referenc
 	}
 	
 	@Override
-	protected SemSimTypes getSemSimType() {
+	public SemSimTypes getSemSimType() {
 		return SemSimTypes.PHYSICAL_PROPERTY;
 	}
 }

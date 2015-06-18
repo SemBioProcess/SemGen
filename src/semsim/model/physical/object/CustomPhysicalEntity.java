@@ -33,7 +33,7 @@ public class CustomPhysicalEntity extends PhysicalEntity{
 		return SemSimConstants.CUSTOM_PHYSICAL_ENTITY_CLASS_URI;
 	}
 	@Override
-	protected SemSimTypes getSemSimType() {
+	public SemSimTypes getSemSimType() {
 		return SemSimTypes.CUSTOM_PHYSICAL_ENTITY;
 	}
 }

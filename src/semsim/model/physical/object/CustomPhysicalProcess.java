@@ -29,7 +29,7 @@ public class CustomPhysicalProcess extends PhysicalProcess{
 		return SemSimConstants.CUSTOM_PHYSICAL_PROCESS_CLASS_URI;
 	}
 	@Override
-	protected SemSimTypes getSemSimType() {
+	public SemSimTypes getSemSimType() {
 		return SemSimTypes.CUSTOM_PHYSICAL_PROCESS;
 	}
 }

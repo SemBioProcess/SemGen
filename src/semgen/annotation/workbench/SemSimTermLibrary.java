@@ -356,6 +356,14 @@ public class SemSimTermLibrary extends Observable {
 		return sortComponentIndiciesbyName(procs);
 	}	
 	
+	public ArrayList<Integer> getSortedReferencePhysicalProcessIndicies() {
+		ArrayList<Integer> refprocs = new ArrayList<Integer>();
+		for (Integer i : procs) {
+			if (masterlist.get(i).isReferenceTerm()) refprocs.add(i);
+		}
+		return sortComponentIndiciesbyName(refprocs);
+	}	
+	
 	public ArrayList<Integer> getSortedSingularPhysicalEntityIndicies() {
 		ArrayList<Integer> list = new ArrayList<Integer>();
 		list.addAll(cupes);
@@ -467,7 +475,7 @@ public class SemSimTermLibrary extends Observable {
 	
 	public ReferenceTerm getReferenceTermbyURI(URI uri) {
 		for (Integer i : getAllReferenceTerms()) {
-			ReferenceTerm term = (ReferenceTerm) masterlist.get(i);
+			ReferenceTerm term = (ReferenceTerm) masterlist.get(i).getObject();
 			if (term.getReferstoURI().equals(uri)) return term;
 		}
 		return null;
@@ -480,7 +488,7 @@ public class SemSimTermLibrary extends Observable {
 			
 			for (URI uri : uris) {
 				ReferenceTerm term = getReferenceTermbyURI(uri);
-				indicies.add(masterlist.indexOf((PhysicalModelComponent)term));
+				indicies.add(getComponentIndex((PhysicalModelComponent)term));
 			}
 		}
 		return indicies;

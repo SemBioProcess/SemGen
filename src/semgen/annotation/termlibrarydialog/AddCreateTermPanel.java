@@ -6,6 +6,7 @@ import java.awt.event.ComponentListener;
 import java.awt.event.ContainerListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -59,14 +60,21 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 		}
 		typechooser.setFont(SemGenFont.defaultPlain());
 		typechooser.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		typechooser.setAlignmentX(Box.LEFT_ALIGNMENT);
+		typechooser.setAlignmentY(TOP_ALIGNMENT);
 		typechooser.setListData(names);
 		typechooser.addListSelectionListener(this);
 		typechooser.setBorder(BorderFactory.createTitledBorder("Physical Types"));
-		
+
 		JPanel optionpane = new JPanel();
+		optionpane.setLayout(new BoxLayout(optionpane, BoxLayout.LINE_AXIS));
+		optionpane.setAlignmentX(Box.LEFT_ALIGNMENT);
 		optionpane.setBackground(SemGenSettings.lightblue);
 		optionpane.add(makebtn);
 		optionpane.add(clearbtn);
+		
+		makebtn.setAlignmentX(Box.LEFT_ALIGNMENT);
+		clearbtn.setAlignmentX(Box.LEFT_ALIGNMENT);
 		makebtn.addActionListener(this);
 		clearbtn.addActionListener(this);
 		makebtn.setEnabled(false);
@@ -77,9 +85,12 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 		typepane.setBackground(SemGenSettings.lightblue);
 		typepane.add(typechooser);
 		typepane.add(optionpane);
-		typepane.setAlignmentX(LEFT_ALIGNMENT);
+		optionpane.setAlignmentX(Box.LEFT_ALIGNMENT);
+		msgbox.setAlignmentX(Box.LEFT_ALIGNMENT);
+		typepane.setBorder(BorderFactory.createEtchedBorder());
 		typepane.add(msgbox);
-		add(typepane); 
+		typepane.add(Box.createVerticalGlue());
+		add(typepane);
 	}
 	
 	private void showCreator() {
@@ -183,7 +194,7 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 				termindex=-1;
 			}
 			if (obj==this.cancelbtn) {
-				
+				clear();
 			}
 		}
 
@@ -192,7 +203,7 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 
 		@Override
 		public void clearForm() {
-			
+			clear();
 		}
 		
 	}
@@ -222,7 +233,7 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 
 		@Override
 		public void clearForm() {
-			
+			clear();
 		}
 	}
 	
@@ -303,7 +314,7 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 
 		@Override
 		public void clearForm() {
-			
+			clear();
 		}
 	}
 }

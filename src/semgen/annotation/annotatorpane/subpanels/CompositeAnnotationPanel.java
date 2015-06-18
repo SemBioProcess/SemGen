@@ -5,14 +5,17 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import semgen.SemGen;
 import semgen.SemGenSettings;
 import semgen.annotation.common.AnnotationChooserPanel;
 import semgen.annotation.common.EntitySelectorGroup;
@@ -186,6 +189,17 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 		}
 	}
 	
+	private boolean incompatibleProperty(boolean procprop) {
+		String msg;
+		if (procprop) {
+			msg = new String("A property of a process cannot be applied to a composite entity. Remove composite physical entity and apply property?");
+		}
+		else {
+			msg = new String("A property of a physical entity cannot be applied to a process. Remove physical process and apply property?");
+		}
+		int confirm = JOptionPane.showConfirmDialog(this, msg);
+		return confirm==JOptionPane.YES_OPTION;
+	}
 	
 	@SuppressWarnings("serial")
 	private class PropertySelectorPanel extends AnnotationChooserPanel {
@@ -200,6 +214,13 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource()==combobox) {
+				if (!drawer.checkPropertyPMCCompatibility(getSelection())) {
+					if (!incompatibleProperty(SemGen.semsimlib.isOPBprocessProperty(library.getReferenceComponentURI(getSelection())))) {
+						setSelection(drawer.getIndexofPhysicalProperty());
+						return;
+					}
+					drawer.setDataStructureComposite(-1);
+				}
 				drawer.setDatastructurePhysicalProperty(getSelection());
 				toggleNoneSelected(getSelection() == -1);
 				onPropertyChange();
@@ -238,7 +259,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 			if (e.getSource()==combobox) {
 				drawer.setDataStructureComposite(getSelection());
 				toggleNoneSelected(getSelection() == -1);
-				if (getSelection()!=-1) showProcessParticipants();
+				showProcessParticipants();
 			}
 		}
 
@@ -256,6 +277,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 		public void modifyButtonClicked() {
 			CustomTermDialog ctd = new CustomTermDialog();
 			ctd.makeProcessTerm(termlib, getSelection());
+			showProcessParticipants();
 		}
 			
 		private void createTerm(int procindex) {

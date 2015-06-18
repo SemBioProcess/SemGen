@@ -72,5 +72,5 @@ public abstract class PhysicalModelComponent extends SemSimComponent implements 
 	}
 	
 	protected abstract boolean isEquivalent(Object obj);
-	protected abstract SemSimTypes getSemSimType();
+	public abstract SemSimTypes getSemSimType();
 }

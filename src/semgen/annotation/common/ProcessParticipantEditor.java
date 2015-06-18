@@ -81,6 +81,11 @@ public abstract class ProcessParticipantEditor extends JPanel implements ActionL
 		}
 	}
 	
+	public void clear() {
+		participants.clear();
+		tablemodel.clear();
+	}
+	
 	public ArrayList<Integer> getParticipants() {
 		return participants;
 	}
@@ -179,6 +184,12 @@ public abstract class ProcessParticipantEditor extends JPanel implements ActionL
 		public String getColumnName(int col) {
 		      return columnNames[col];
 	    }
+		
+		public void clear() {
+			int n = data.size();
+			data.clear();
+			fireTableRowsDeleted(0, n);
+		}
 		
 		public void removeRow(int row) {
 			data.remove(row);

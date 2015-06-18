@@ -260,6 +260,13 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		}
 	}
 	
+	public void clear() {
+		clearSelection();
+		rdflabelsanduris.clear();
+		resultslistright.removeAll();
+		findbox.setText("");
+	}
+	
 	public int getSelectedTermIndex() {
 		return termindex;
 	}

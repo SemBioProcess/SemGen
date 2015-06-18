@@ -75,6 +75,10 @@ public abstract class ObjectPropertyEditor extends JPanel implements ActionListe
 		components.remove(index);
 		loadList();
 	}
+	public void clear() {
+		components.clear();
+		listcomponent.removeAll();
+	}
 	
 	protected abstract void showSelectionDialog();
 	

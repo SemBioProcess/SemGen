@@ -12,7 +12,7 @@ import semsim.model.physical.PhysicalProcess;
 public class ReferencePhysicalProcess extends PhysicalProcess implements ReferenceTerm{
 	
 	public ReferencePhysicalProcess(URI uri, String description){
-		addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, uri, description);
+		referenceuri = uri;
 		setName(description);
 	}
 	
@@ -25,7 +25,7 @@ public class ReferencePhysicalProcess extends PhysicalProcess implements Referen
 	}
 	
 	public URI getReferstoURI() {
-		return URI.create(referenceuri.toString());
+		return referenceuri;
 	}
 	
 	/**
@@ -46,7 +46,7 @@ public class ReferencePhysicalProcess extends PhysicalProcess implements Referen
 	}
 	
 	@Override
-	protected SemSimTypes getSemSimType() {
+	public SemSimTypes getSemSimType() {
 		return SemSimTypes.REFERENCE_PHYSICAL_PROCESS;
 	}
 }
