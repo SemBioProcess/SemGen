@@ -169,6 +169,12 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	}
 	
 	public String getEquationasString() {
+		if (this.isMapped()) {
+			MappableVariable var = (MappableVariable)getFocus();
+			if (var.getMappedFrom().size()>0) {
+				return "(value mapped from " + var.getMappedFrom().toArray(new MappableVariable[]{})[0].getName() + ")";
+			}
+		}
 		if(getFocus().getComputation()!=null){
 			return getFocus().getComputation().getComputationalCode();
 		}
