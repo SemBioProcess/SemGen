@@ -53,6 +53,7 @@ public class Submodel extends SemSimComponent implements Cloneable, Importable, 
 	}
 
 	public void setSubmodels(Set<Submodel> submodels) {
+		this.submodels.clear();
 		this.submodels.addAll(submodels);
 	}
 

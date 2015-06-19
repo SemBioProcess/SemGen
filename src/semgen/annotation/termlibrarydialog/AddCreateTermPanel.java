@@ -255,6 +255,7 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 		public void clearForm() {
 			cpec.reset();
 			revalidate();
+			msgbox.setText("Composite components cannot be unspecified");
 		}
 	}
 	
@@ -263,7 +264,7 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 
 		public CompositeCreator(SemSimTermLibrary lib) {
 			super(lib);
-			
+			msgbox.setText("Composite components cannot be unspecified");
 		}
 
 		@Override
@@ -280,9 +281,9 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 		}
 
 		public void makeTerm() {
-			termlib.createCompositePhysicalEntity(pollSelectors());
-		}
-		
+			int i = termlib.createCompositePhysicalEntity(pollSelectors());
+			msgbox.setText(library.getComponentName(i) + " added as Composite Physical Entity.");
+		}		
 	}
 	
 	public class SearchPane extends ReferenceClassFinderPanel implements ListSelectionListener, TermMaker {
@@ -310,6 +311,8 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 		@Override
 		public void makeTerm() {
 			addTermtoLibrary();
+			msgbox.setText(library.getComponentName(getSelectedTermIndex()) + " added as " + 
+			library.getSemSimType(getSelectedTermIndex()).getName() + ".");
 		}
 
 		@Override

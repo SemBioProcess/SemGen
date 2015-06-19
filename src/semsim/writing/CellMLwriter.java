@@ -434,7 +434,7 @@ public class CellMLwriter extends ModelWriter {
 				}
 			}
 			
-			if(a.hasRefersToAnnotation() || !freetext.equals("") || hasphysprop){
+			if(a instanceof DataStructure && (a.hasRefersToAnnotation() || !freetext.equals("") || hasphysprop)){
 				// Create metadata ID for the model element, cache locally
 				if(metaid.isEmpty()){
 					metaid = idprefix + 0;
@@ -457,7 +457,7 @@ public class CellMLwriter extends ModelWriter {
 				
 				// Add singular annotation
 				if(a.hasRefersToAnnotation()){
-					URI uri = ((ReferenceTerm)a).getRefersToReferenceOntologyAnnotation().getReferenceURI();
+					URI uri = ((DataStructure)a).getRefersToReferenceOntologyAnnotation().getReferenceURI();
 					Property isprop = ResourceFactory.createProperty(SemSimConstants.BQB_IS_URI.toString());
 					URI furi = formatAsIdentifiersDotOrgURI(uri);
 					Resource refres = localrdf.createResource(furi.toString());

@@ -182,7 +182,7 @@ public class CellMLbioRDFblock {
 		
 		annotateReferenceOrCustomResource(indexent, indexresource);
 
-		StructuralRelation rel = cpe.getArrayListOfStructuralRelations().get(0);
+
 
 		// Truncate the composite by one entity
 		ArrayList<PhysicalEntity> nextents = new ArrayList<PhysicalEntity>();
@@ -225,6 +225,8 @@ public class CellMLbioRDFblock {
 			}
 		}
 		Property structprop = partof;
+		
+		StructuralRelation rel = cpe.getArrayListOfStructuralRelations().get(0);
 		if(rel==SemSimConstants.CONTAINED_IN_RELATION) structprop = containedin;
 		
 		Statement structst = rdf.createStatement(indexresource, structprop, rdf.getResource(nexturi.toString()));

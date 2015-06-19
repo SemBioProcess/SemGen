@@ -153,7 +153,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 			showAddEntityProcessButtons();
 		}
 		else {
-			if (drawer.isProcess()) {
+			if (drawer.isProcess() ) {
 				setProcessSelector();
 			}
 			else {

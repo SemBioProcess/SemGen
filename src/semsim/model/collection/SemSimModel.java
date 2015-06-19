@@ -350,12 +350,16 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	 */
 	public Set<DataStructure> getDataStructureswithPhysicalProcesses(){
 		Set<DataStructure> dswprocs = new HashSet<DataStructure>();
+		//Set<DataStructure> withcpe = new HashSet<DataStructure>(dataStructures);
+		//withcpe.removeAll(getDataStructureswithoutAssociatedPhysicalComponents());
 		for (DataStructure ds : dataStructures) {
-			if (ds.getAssociatedPhysicalModelComponent() instanceof PhysicalProcess) {
-				dswprocs.add(ds);
+			if (ds.hasAssociatedPhysicalComponent()) {
+				if (ds.getAssociatedPhysicalModelComponent() instanceof PhysicalProcess) {
+					dswprocs.add(ds);
+				}
 			}
 		}
-		return dataStructures;
+		return dswprocs;
 	}
 	
 	/**
@@ -364,11 +368,11 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	public Set<DataStructure> getDataStructureswithoutAssociatedPhysicalComponents(){
 		Set<DataStructure> dswprocs = new HashSet<DataStructure>();
 		for (DataStructure ds : dataStructures) {
-			if (ds.getAssociatedPhysicalModelComponent() == null) {
+			if (!ds.hasAssociatedPhysicalComponent()) {
 				dswprocs.add(ds);
 			}
 		}
-		return dataStructures;
+		return dswprocs;
 	}
 
 	/**

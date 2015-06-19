@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -125,8 +125,8 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	public SparseMultigraph<String, Number> junggraph;
 
 	public Map<DataStructure, Set<? extends DataStructure>> allpreserveddatastructures;
-	public Hashtable<PhysicalEntity, Set<DataStructure>> entsanddatastrs = new Hashtable<PhysicalEntity, Set<DataStructure>>();
-	public Hashtable<PhysicalProcess, Set<DataStructure>> processesanddatastrs = new Hashtable<PhysicalProcess, Set<DataStructure>>();
+	public HashMap<PhysicalEntity, Set<DataStructure>> entsanddatastrs = new HashMap<PhysicalEntity, Set<DataStructure>>();
+	public HashMap<PhysicalProcess, Set<DataStructure>> processesanddatastrs = new HashMap<PhysicalProcess, Set<DataStructure>>();
 	public Clusterer cd;
 	public PrintWriter clusterwriter;
 	public ExtractorToolbar toolbar;
@@ -170,7 +170,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		processespanel = new ExtractorSelectionPanel(this, "Processes", listprocesses(), includepartipantscheckbox);
 		submodelspanel = new ExtractorSelectionPanel(this, "Sub-models", listsubmodels(), null);
 		codewordspanel = new ExtractorSelectionPanel(this, "Codewords", listcodewords(), extractionlevelchooser2);
-		Hashtable<PhysicalModelComponent,Set<DataStructure>> temp = new Hashtable<PhysicalModelComponent,Set<DataStructure>>();
+		HashMap<PhysicalModelComponent,Set<DataStructure>> temp = new HashMap<PhysicalModelComponent,Set<DataStructure>>();
 		clusterpanel = new ExtractorSelectionPanel(this, "Clusters", temp, clusterbutton);
 
 		AlphabetizeCheckBoxes(processespanel);
@@ -227,7 +227,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	}
 	
 	// List physical processes
-	public Hashtable<PhysicalProcess, Set<DataStructure>> listprocesses() {
+	public HashMap<PhysicalProcess, Set<DataStructure>> listprocesses() {
 		Set<DataStructure> propandproc = semsimmodel.getDataStructureswithPhysicalProcesses();
 		// List physical properties of processes
 		for(DataStructure ds : propandproc){
@@ -245,7 +245,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	}
 	
 	// List physical entities
-	public Hashtable<PhysicalEntity, Set<DataStructure>> listentities() {
+	public HashMap<PhysicalEntity, Set<DataStructure>> listentities() {
 		Set<DataStructure> propandent = semsimmodel.getDataStructureswithCompositesEntities();
 		for(DataStructure ds : propandent){
 			PhysicalPropertyinComposite prop = ds.getPhysicalProperty();
@@ -264,8 +264,8 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 
 	
 	// List the components
-	public Hashtable<Submodel, Set<DataStructure>> listsubmodels(){
-		Hashtable<Submodel,Set<DataStructure>> subsanddatastrs = new Hashtable<Submodel,Set<DataStructure>>();
+	public HashMap<Submodel, Set<DataStructure>> listsubmodels(){
+		HashMap<Submodel,Set<DataStructure>> subsanddatastrs = new HashMap<Submodel,Set<DataStructure>>();
 		for(Submodel sub : semsimmodel.getSubmodels()){
 			subsanddatastrs.put(sub, sub.getAssociatedDataStructures());
 		}
@@ -273,9 +273,9 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	}
 	
 	
-	public Hashtable<DataStructure, Set<DataStructure>> listcodewords() {
+	public HashMap<DataStructure, Set<DataStructure>> listcodewords() {
 		// Iinda weird that we do it this way, but it's because of the way it used to be
-		Hashtable<DataStructure, Set<DataStructure>> table = new Hashtable<DataStructure, Set<DataStructure>>();
+		HashMap<DataStructure, Set<DataStructure>> table = new HashMap<DataStructure, Set<DataStructure>>();
 		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
 			Set<DataStructure> dsset = new HashSet<DataStructure>();
 			dsset.add(ds);
@@ -503,7 +503,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	public Set<DataStructure> getDependencyChain(DataStructure startds){
 		// The hashtable contains the data structure URIs and whether the looping alogrithm here should collect 
 		// their inputs (true = collect)
-		Hashtable<DataStructure, Boolean> table = new Hashtable<DataStructure, Boolean>();
+		HashMap<DataStructure, Boolean> table = new HashMap<DataStructure, Boolean>();
 		table.put(startds, true);
 		DataStructure key = null;
 		Boolean cont = true;
@@ -789,7 +789,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	}
 
 	public void visualizeAllDataStructures(Boolean clusteringonly) {
-		Hashtable<DataStructure, Set<? extends DataStructure>> alldatastrs = new Hashtable<DataStructure, Set<? extends DataStructure>>();
+		HashMap<DataStructure, Set<? extends DataStructure>> alldatastrs = new HashMap<DataStructure, Set<? extends DataStructure>>();
 		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
 			if(ds.getComputation()!=null)
 				alldatastrs.put(ds, ds.getComputationInputs());

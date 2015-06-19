@@ -25,10 +25,10 @@ import semsim.model.physical.object.PhysicalPropertyinComposite;
  * is assigned some computational value during simulation.
  */
 public abstract class DataStructure extends ComputationalModelComponent implements Annotatable, Cloneable {	
-	private Computation computation;
-	private PhysicalPropertyinComposite physicalProperty;
-	private PhysicalModelComponent physicalcomponent;
-	private PhysicalProperty singularterm;
+	private Computation computation = null;
+	private PhysicalPropertyinComposite physicalProperty = null;
+	private PhysicalModelComponent physicalcomponent =null;
+	private PhysicalProperty singularterm = null;
 	private DataStructure solutionDomain;
 	private Set<DataStructure> usedToCompute = new HashSet<DataStructure>();
 	private Set<Annotation> annotations = new HashSet<Annotation>();

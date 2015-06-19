@@ -508,6 +508,10 @@ public class SemSimTermLibrary extends Observable {
 		pmc.addReferenceOntologyAnnotation(relation, refterm.getReferstoURI(), refterm.getDescription());
 	}
 	
+	public SemSimTypes getSemSimType(int index) {
+		return masterlist.get(index).getType();
+	}
+	
 	public ArrayList<Integer> getRequestedTypes(SemSimTypes[] types) {
 		ArrayList<Integer> list = new ArrayList<Integer>();
 		for (SemSimTypes type : types) {
@@ -589,6 +593,10 @@ public class SemSimTermLibrary extends Observable {
 		
 		public Boolean isTermEquivalent(PhysicalModelComponent term) {
 			return component.equals(term);
+		}
+		
+		public SemSimTypes getType() {
+			return component.getSemSimType();
 		}
 	}
 	

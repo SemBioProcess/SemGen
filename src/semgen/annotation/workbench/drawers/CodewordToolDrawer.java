@@ -187,8 +187,14 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	
 	public boolean isProcess() {
 		PhysicalPropertyinComposite pp = getFocusAssociatedProperty();
-		if (pp == null) return false; 
+		if (pp == null && !hasPhysicalModelComponent()) return false; 
+		if (pp==null) {
+			return getPhysicalCompositeType().equals(SemSimTypes.CUSTOM_PHYSICAL_PROCESS) || 
+					getPhysicalCompositeType().equals(SemSimTypes.REFERENCE_PHYSICAL_PROCESS);
+		}
+		
 		return SemGen.semsimlib.isOPBprocessProperty(pp.getReferstoURI());
+				
 	}
 
 	public void copytoMappedVariables() {
@@ -321,6 +327,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	}
 	
 	public boolean checkPropertyPMCCompatibility(Integer index) {
+		if (index==-1) return true;
 		boolean isproc = SemGen.semsimlib.isOPBprocessProperty(termlib.getReferenceComponentURI(index));
 		SemSimTypes type = getPhysicalCompositeType();
 		if (!hasPhysicalModelComponent() || (isproc && type.equals(SemSimTypes.PHYSICAL_PROCESS) || 

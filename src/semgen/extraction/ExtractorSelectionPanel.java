@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -42,17 +42,17 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 	public JCheckBox markallbox = new JCheckBox("");
 	public JPanel checkboxpanel = new JPanel();
 	public SemGenScrollPane scroller;
-	public Hashtable<? extends SemSimComponent,Set<DataStructure>> termandcdwdstable;
+	public HashMap<? extends SemSimComponent,Set<DataStructure>> termandcdwdstable;
 	public Map<String, JCheckBox> termandcheckboxmap = new HashMap<String,JCheckBox>();
 	JPanel titlepanel = new JPanel();
 	public ExtractorTab extractor;
 	public JButton expandcontractbutton = new JButton(SemGenIcon.expendcontracticon);
 
-	public ExtractorSelectionPanel(ExtractorTab extractor, String title, Hashtable<? extends SemSimComponent,Set<DataStructure>> table, JComponent addon){
+	public ExtractorSelectionPanel(ExtractorTab extractor, String title, HashMap<? extends SemSimComponent,Set<DataStructure>> table, JComponent addon){
 		this.extractor = extractor;
 		markallbox.setFont(SemGenFont.defaultItalic(-2));
 		markallbox.setToolTipText("Select all/none");
-		termandcdwdstable = (Hashtable<? extends SemSimComponent, Set<DataStructure>>) table;
+		termandcdwdstable = (HashMap<? extends SemSimComponent, Set<DataStructure>>) table;
 		setBackground(Color.white);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		checkboxpanel.setLayout(new BoxLayout(checkboxpanel, BoxLayout.Y_AXIS));
@@ -98,7 +98,7 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 		}
 	}
 	
-	public int addCheckBoxes(Hashtable<? extends SemSimComponent,Set<DataStructure>> table) {
+	public int addCheckBoxes(HashMap<? extends SemSimComponent,Set<DataStructure>> table) {
 		
 		ArrayList<JCheckBox> cbarray = new ArrayList<JCheckBox>();
 		String checkboxtext = null;
