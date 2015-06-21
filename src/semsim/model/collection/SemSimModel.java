@@ -502,7 +502,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	public Set<FunctionalSubmodel> getFunctionalSubmodels(){
 		Set<FunctionalSubmodel> fxnalsubs = new HashSet<FunctionalSubmodel>();
 		for(Submodel sub : getSubmodels()){
-			if(sub instanceof FunctionalSubmodel) fxnalsubs.add((FunctionalSubmodel) sub);
+			if(sub.isFunctional()) fxnalsubs.add((FunctionalSubmodel) sub);
 		}
 		return fxnalsubs;
 	}
@@ -917,7 +917,6 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	public Set<Submodel> getSubmodels() {
 		return submodels;
 	}
-
 	
 	/**
 	 * Specify the set of PhysicalProcesses in the model.

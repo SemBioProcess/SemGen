@@ -50,6 +50,7 @@ public class SemGenIcon {
 	public static final ImageIcon semgenbigicon = createImageIcon("icons/semgeniconbig.png");
 	public static final ImageIcon semgenicon = createImageIcon("icons/semgenicon.icns");
 	public static final ImageIcon semgenwinicon = createImageIcon("icons/semgeniconWIN.ico");
+	public static final ImageIcon semgeninsert = createImageIcon("icons/insertabove2020.png");
 	
 	/** Returns an ImageIcon, or null if the path was invalid. */
 	private static ImageIcon createImageIcon(String path) {

@@ -157,7 +157,7 @@ public abstract class EntitySelectorGroup extends Box implements ActionListener 
 	
 	private class SelectorPanel extends AnnotationChooserPanel {
 		private static final long serialVersionUID = 1L;
-		protected ComponentPanelLabel insertbtn = new ComponentPanelLabel(SemGenIcon.createicon, "Insert Physical Entity");
+		protected ComponentPanelLabel insertbtn = new ComponentPanelLabel(SemGenIcon.semgeninsert, "Insert Physical Entity");
 		
 		protected SelectorPanel(boolean editable, int entityindex) {
 			super(termlib);

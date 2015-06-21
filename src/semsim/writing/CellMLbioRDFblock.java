@@ -75,56 +75,50 @@ public class CellMLbioRDFblock {
 		// Collect physical model components with properties
 		if(!ds.isImportedViaSubmodel()){
 			
-			if(ds.getPhysicalProperty()!=null){
+			if(ds.hasPhysicalProperty()){
 				PhysicalPropertyinComposite prop = ds.getPhysicalProperty();
-				
-				if(prop.hasRefersToAnnotation()){
-					Resource propres = getResourceForPMCandAnnotate(rdf, prop);
+				Resource propres = getResourceForPMCandAnnotate(rdf, prop);
 
-					// Only include physical properties that have reference annotations (exclude unannotated physical properties)
-					if(ds.getAssociatedPhysicalModelComponent()!=null){
-						PhysicalModelComponent propof = ds.getAssociatedPhysicalModelComponent();
+				if(ds.hasAssociatedPhysicalComponent()){
+					PhysicalModelComponent propof = ds.getAssociatedPhysicalModelComponent();
+					
+					// If the variable is a property of an entity
+					if(propof instanceof PhysicalEntity){
+						CompositePhysicalEntity cpe = (CompositePhysicalEntity)propof;
 						
-						// If the variable is a property of an entity
-						if(propof instanceof PhysicalEntity){
-							
-							// If the entity is a composite entity
-							if(propof instanceof CompositePhysicalEntity){
-								CompositePhysicalEntity cpe = (CompositePhysicalEntity)propof;
-								
-								// Get the Resource corresponding to the index entity of the composite entity
-								URI indexuri = addCompositePhysicalEntityMetadata(cpe);
-								Resource indexresource = rdf.getResource(indexuri.toString());
-								Statement propofst = rdf.createStatement(propres, physicalpropertyof, indexresource);
-								if(!rdf.contains(propofst)) rdf.add(propofst);
-							}
-							// else it's a singular physical entity
-							else{
-								Resource entity = getResourceForPMCandAnnotate(rdf, ds.getAssociatedPhysicalModelComponent());
-								Statement st = rdf.createStatement(propres, physicalpropertyof, entity);
-								if(!rdf.contains(st)) rdf.add(st);
-							}
+						if (cpe.getArrayListOfEntities().size()>1) {
+							// Get the Resource corresponding to the index entity of the composite entity
+							URI indexuri = addCompositePhysicalEntityMetadata(cpe);
+							Resource indexresource = rdf.getResource(indexuri.toString());
+							Statement propofst = rdf.createStatement(propres, physicalpropertyof, indexresource);
+							if(!rdf.contains(propofst)) rdf.add(propofst);
 						}
-						// Otherwise it's a property of a process
+						// else it's a singular physical entity
 						else{
-							PhysicalProcess process = (PhysicalProcess)ds.getAssociatedPhysicalModelComponent();
-
-							Resource processres = getResourceForPMCandAnnotate(rdf, ds.getAssociatedPhysicalModelComponent());
-							Statement st = rdf.createStatement(propres, physicalpropertyof, processres);
+							Resource entity = getResourceForPMCandAnnotate(rdf, cpe.getArrayListOfEntities().get(0));
+							Statement st = rdf.createStatement(propres, physicalpropertyof, entity);
 							if(!rdf.contains(st)) rdf.add(st);
-							
-							// Set the sources
-							for(PhysicalEntity source : process.getSourcePhysicalEntities()){
-								setProcessParticipationRDFstatements(processres, source, hassourceparticipant);
-							}
-							// Set the sinks
-							for(PhysicalEntity sink : process.getSinkPhysicalEntities()){
-								setProcessParticipationRDFstatements(processres, sink, hassinkparticipant);
-							}
-							// Set the mediators
-							for(PhysicalEntity mediator : process.getMediatorPhysicalEntities()){
-								setProcessParticipationRDFstatements(processres, mediator, hasmediatorparticipant);
-							}
+						}
+					}
+					// Otherwise it's a property of a process
+					else{
+						PhysicalProcess process = (PhysicalProcess)ds.getAssociatedPhysicalModelComponent();
+
+						Resource processres = getResourceForPMCandAnnotate(rdf, ds.getAssociatedPhysicalModelComponent());
+						Statement st = rdf.createStatement(propres, physicalpropertyof, processres);
+						if(!rdf.contains(st)) rdf.add(st);
+						
+						// Set the sources
+						for(PhysicalEntity source : process.getSourcePhysicalEntities()){
+							setProcessParticipationRDFstatements(processres, source, hassourceparticipant);
+						}
+						// Set the sinks
+						for(PhysicalEntity sink : process.getSinkPhysicalEntities()){
+							setProcessParticipationRDFstatements(processres, sink, hassinkparticipant);
+						}
+						// Set the mediators
+						for(PhysicalEntity mediator : process.getMediatorPhysicalEntities()){
+							setProcessParticipationRDFstatements(processres, mediator, hasmediatorparticipant);
 						}
 					}
 				}
@@ -182,16 +176,14 @@ public class CellMLbioRDFblock {
 		
 		annotateReferenceOrCustomResource(indexent, indexresource);
 
-
-
 		// Truncate the composite by one entity
 		ArrayList<PhysicalEntity> nextents = new ArrayList<PhysicalEntity>();
 		ArrayList<StructuralRelation> nextrels = new ArrayList<StructuralRelation>();
-		int u;
-		for(u = 1; u<cpe.getArrayListOfEntities().size(); u++){
+		
+		for(int u = 1; u<cpe.getArrayListOfEntities().size(); u++){
 			nextents.add(cpe.getArrayListOfEntities().get(u));
 		}
-		for(u = 1; u<cpe.getArrayListOfStructuralRelations().size(); u++){
+		for(int u = 1; u<cpe.getArrayListOfStructuralRelations().size(); u++){
 			nextrels.add(cpe.getArrayListOfStructuralRelations().get(u));
 		}
 		CompositePhysicalEntity nextcpe = new CompositePhysicalEntity(nextents, nextrels);
@@ -246,29 +238,27 @@ public class CellMLbioRDFblock {
 		if(pmcsandresourceURIs.containsKey(pmc)){
 			return rdf.getResource(pmcsandresourceURIs.get(pmc).toString());
 		}
-		else{
-	
-			String resname = modelns;	
-			String typeprefix = pmc.getComponentTypeasString();
-			
-			if (typeprefix.matches("submodel") || typeprefix.matches("dependency"))
-				typeprefix = "unknown";
-			
-			int idnum = 0;
-			while(localids.contains(resname + typeprefix + "_" + idnum)){
-				idnum++;
-			}
-			resname = resname + typeprefix + "_" + idnum;
-
-			localids.add(resname);
-			
-			Resource res = rdf.createResource(resname);
-			pmcsandresourceURIs.put(pmc, URI.create(res.getURI()));
-			
-			annotateReferenceOrCustomResource(pmc, res);
-			
-			return res;
+		
+		String typeprefix = pmc.getComponentTypeasString();
+		
+		if (typeprefix.matches("submodel") || typeprefix.matches("dependency"))
+			typeprefix = "unknown";
+		
+		String resname = modelns;	
+		int idnum = 0;
+		while(localids.contains(resname + typeprefix + "_" + idnum)){
+			idnum++;
 		}
+		resname = resname + typeprefix + "_" + idnum;
+
+		localids.add(resname);
+		
+		Resource res = rdf.createResource(resname);
+		pmcsandresourceURIs.put(pmc, URI.create(res.getURI()));
+		
+		annotateReferenceOrCustomResource(pmc, res);
+		
+		return res;
 	}
 
 	private Resource getReferenceResourceFromURI(URI uri){
