@@ -23,6 +23,7 @@ import semgen.SemGenSettings;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.routines.TermCollector;
+import semgen.annotation.workbench.routines.TermModifier;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenScrollPane;
@@ -104,8 +105,12 @@ public class TermEditorTab extends JPanel implements ListSelectionListener {
 
 	private void onTermSelection() {
 		//Necessary to prevent memmory leaks
-		clear();
-
+		clearPanel();
+		if (termlist.isSelectionEmpty()) {
+			validate();
+			return;
+		}
+		
 		affected = workbench.collectAffiliatedTermsandCodewords(getTermSelection());
 		tip = new TermInformationPanel(workbench, affected);
 		
@@ -119,7 +124,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener {
 		validate();
 	}
 	
-	private void clear() {
+	private void clearPanel() {
 		//Necessary to prevent memmory leaks
 		if (tip!=null) {
 			for (ContainerListener listener : getContainerListeners()) {
@@ -154,7 +159,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener {
 				"Confirm",
 				JOptionPane.YES_NO_OPTION);
 		if(JOptionPane.YES_OPTION == choice){
-			
+			new TermModifier(workbench, affected).runRemove();
 		}
 	}
 	

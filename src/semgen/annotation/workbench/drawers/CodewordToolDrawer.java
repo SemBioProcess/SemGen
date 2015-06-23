@@ -285,15 +285,26 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		return termlib.getComponentIndex(getFocus().getAssociatedPhysicalModelComponent());
 	}
 	
-	@Override
-	public void setSingularAnnotation(int selectedIndex) {
+	public void batchSetSingularAnnotation(ArrayList<Integer> cws, int selectedIndex) {
+		for (Integer i : cws) {
+			setSingularAnnotation(i, selectedIndex);
+		}
+		changeNotification();
+	}
+	
+	public void setSingularAnnotation(int cwindex, int selectedIndex) {
 		if (selectedIndex!=-1) {
-			getFocus().setSingularAnnotation((PhysicalProperty)termlib.getComponent(selectedIndex));
+			componentlist.get(cwindex).setSingularAnnotation((PhysicalProperty)termlib.getComponent(selectedIndex));
 		}
 		else {
-			getFocus().setSingularAnnotation(null);
+			componentlist.get(cwindex).setSingularAnnotation(null);
 		}
-		changeset.add(currentfocus);
+		changeset.add(cwindex);
+	}
+	
+	@Override
+	public void setSingularAnnotation(int selectedIndex) {
+		setSingularAnnotation(currentfocus, selectedIndex);
 		changeNotification();
 	}
 	

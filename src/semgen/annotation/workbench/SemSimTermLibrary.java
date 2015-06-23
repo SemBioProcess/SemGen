@@ -333,7 +333,9 @@ public class SemSimTermLibrary extends Observable {
 
 	public int getIndexofCustomPhysicalEntity(CustomPhysicalEntity cupe) {
 		for (Integer i : cupes) {
-			if (masterlist.get(i).isTermEquivalent(cupe)) return i; 
+			if (masterlist.get(i).isTermEquivalent(cupe)) {
+				return i; 
+			}
 		}
 		return -1;
 	}
@@ -383,27 +385,7 @@ public class SemSimTermLibrary extends Observable {
 	public ArrayList<Integer> getSortedCompositePhysicalEntityIndicies() {
 		return sortComponentIndiciesbyName(cpes);
 	}
-	
-	public void removePhysicalProperty(Integer index) {
-		cpepps.remove(index);
-	}
-
-	public void removeReferencePhysicalEntity(Integer index) {
-		rpes.remove(index);
-	}
-
-	public void removeCustomPhysicalEntities(Integer index) {
-		cupes.remove(index);
-	}
-
-	public void removeCompositePhysicalEntities(Integer index) {
-		cpes.remove(index);
-	}
-
-	public void removePhysicalProcesses(Integer index) {
-		procs.remove(index);
-	}
-	
+		
 	public ArrayList<Integer> getAllReferenceTerms() {
 		ArrayList<Integer> refterms = new ArrayList<Integer>();
 		for (IndexCard<?> card : masterlist) {
@@ -523,6 +505,41 @@ public class SemSimTermLibrary extends Observable {
 	public ArrayList<Integer> getCompositeEntityIndicies(CompositePhysicalEntity cpe) {
 		return getCompositeEntityIndicies(getComponentIndex(cpe));
 	}
+	public void removePhysicalProperty(Integer index) {
+		cpepps.remove(index);
+		masterlist.get(index).setRemoved(true);
+		notifySingularChanged();
+	}
+
+	public void removeReferencePhysicalEntity(Integer index) {
+		rpes.remove(index);
+		masterlist.get(index).setRemoved(true);
+		notifySingularChanged();
+	}
+
+	public void removeCustomPhysicalEntity(Integer index) {
+		cupes.remove(index);
+		masterlist.get(index).setRemoved(true);
+		notifySingularChanged();
+	}
+
+	public void removeCompositePhysicalEntity(Integer index) {
+		cpes.remove(index);
+		masterlist.get(index).setRemoved(true);
+		notifyCompositeEntityChanged();
+	}
+
+	public void removePhysicalProcesses(Integer index) {
+		procs.remove(index);
+		masterlist.get(index).setRemoved(true);
+		notifyProcessChanged();
+	}
+	
+	public void removeSingularPhysicalProperty(Integer index) {
+		pps.remove(index);
+		masterlist.get(index).setRemoved(true);
+		notifySingularChanged();
+	}
 	
 	public ArrayList<Integer> getCompositeEntityIndicies(Integer index) {
 		ArrayList<Integer> indexlist = new ArrayList<Integer>();
@@ -569,8 +586,7 @@ public class SemSimTermLibrary extends Observable {
 				break;
 			}
 		}
-		sortComponentIndiciesbyName(list);
-		return list;
+		return sortComponentIndiciesbyName(list);
 	}
 	
 	protected class IndexCard<T extends PhysicalModelComponent> {
@@ -592,6 +608,7 @@ public class SemSimTermLibrary extends Observable {
 		}
 		
 		public boolean isReferenceTerm() {
+			if (removed) return false;
 			return reference;
 		}
 		
@@ -621,11 +638,8 @@ public class SemSimTermLibrary extends Observable {
 			removed = remove;
 		}
 		
-		public Boolean isRemoved() {
-			return removed;
-		}
-		
 		public Boolean isTermEquivalent(PhysicalModelComponent term) {
+			if (removed) return false;
 			return component.equals(term);
 		}
 		

@@ -171,19 +171,21 @@ public class SemSimOWLwriter extends ModelWriter {
 			// that it is annotated against
 			if(ds.hasPhysicalProperty() || ds.hasAssociatedPhysicalComponent()){
 				PhysicalPropertyinComposite dspp = ds.getPhysicalProperty();
-				if (dspp==null) dspp = new PhysicalPropertyinComposite("",null);
-				URI propertyuri = SemSimOWLFactory.getURIforPhysicalProperty(semsimmodel, ds);
-				createPhysicalModelIndividual(dspp, propertyuri.toString());
-				// Log the physical property and its URI
-				singularPMCsAndUrisForDataStructures.put(dspp, propertyuri);
-				SemSimOWLFactory.setIndObjectProperty(ont, propertyuri.toString(),
-						dsuri, SemSimConstants.HAS_COMPUTATATIONAL_COMPONENT_URI.toString(),
-						SemSimConstants.IS_COMPUTATIONAL_COMPONENT_FOR_URI.toString(), manager);
-				if(ds.getComputation()!=null && !(ds instanceof MappableVariable))
+				
+				//Create dummy property if one has not been assigned
+				if (dspp==null)  dspp = new PhysicalPropertyinComposite("",URI.create(""));
+					URI propertyuri = SemSimOWLFactory.getURIforPhysicalProperty(semsimmodel, ds);
+					createPhysicalModelIndividual(dspp, propertyuri.toString());
+					// Log the physical property and its URI
+					singularPMCsAndUrisForDataStructures.put(dspp, propertyuri);
 					SemSimOWLFactory.setIndObjectProperty(ont, propertyuri.toString(),
-						dsuri + "_dependency", SemSimConstants.IS_DETERMINED_BY_URI.toString(), SemSimConstants.DETERMINES_URI.toString(), manager);
+							dsuri, SemSimConstants.HAS_COMPUTATATIONAL_COMPONENT_URI.toString(),
+							SemSimConstants.IS_COMPUTATIONAL_COMPONENT_FOR_URI.toString(), manager);
+					if(ds.getComputation()!=null && !(ds instanceof MappableVariable))
+						SemSimOWLFactory.setIndObjectProperty(ont, propertyuri.toString(),
+							dsuri + "_dependency", SemSimConstants.IS_DETERMINED_BY_URI.toString(), SemSimConstants.DETERMINES_URI.toString(), manager);
 				// Create physical entity and physical process individuals, link to properties
-			
+				
 				if(ds.hasAssociatedPhysicalComponent()){
 					
 					// Create the new physical model individual and get what it's a physical property of
@@ -222,9 +224,10 @@ public class SemSimOWLwriter extends ModelWriter {
 						if(!SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimConstants.PHYSICAL_MODEL_COMPONENT_CLASS_URI.toString()).contains(uristring)){
 							createPhysicalModelIndividual(pmc, uristring);
 						}
-						// Connect the new individual to its property
-						SemSimOWLFactory.setIndObjectProperty(ont, SemSimOWLFactory.getURIforPhysicalProperty(semsimmodel, ds).toString(), uristring, 
-								SemSimConstants.PHYSICAL_PROPERTY_OF_URI.toString(), SemSimConstants.HAS_PHYSICAL_PROPERTY_URI.toString(), manager);
+							// Connect the new individual to its property
+							SemSimOWLFactory.setIndObjectProperty(ont, SemSimOWLFactory.getURIforPhysicalProperty(semsimmodel, ds).toString(), uristring, 
+									SemSimConstants.PHYSICAL_PROPERTY_OF_URI.toString(), SemSimConstants.HAS_PHYSICAL_PROPERTY_URI.toString(), manager);
+						
 					}
 				}
 			}
