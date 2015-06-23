@@ -3,6 +3,7 @@ package semgen.annotation.workbench.drawers;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import semgen.SemGen;
@@ -228,7 +229,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	public void setDataStructureComposite(Integer index) {
 		DataStructure ds = componentlist.get(currentfocus);
 		
-		//If the new selection is equivalent to the old, do nothing; unless objectchange is true.
+		//If the new selection is equivalent to the old, do nothing
 		if ((termlib.getComponentIndex(ds.getAssociatedPhysicalModelComponent())==index)) {
 			return;
 		}
@@ -336,6 +337,16 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 			return true;
 		}
 		return false;
+	}
+	
+	public HashSet<Integer> getAllAssociatedComposites() {
+		HashSet<Integer> associated = new HashSet<Integer>();
+		for (DataStructure ds : componentlist) {
+			if (ds.hasAssociatedPhysicalComponent()) {
+				associated.add(termlib.getComponentIndex(ds.getAssociatedPhysicalModelComponent()));
+			}
+		}
+		return associated;
 	}
 	
 	@Override

@@ -3,6 +3,7 @@ package semgen.annotation.workbench;
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -21,13 +22,17 @@ import semgen.annotation.workbench.drawers.ModelAnnotationsBench;
 import semgen.annotation.workbench.drawers.ModelAnnotationsBench.ModelChangeEnum;
 import semgen.annotation.workbench.drawers.SubModelToolDrawer;
 import semgen.annotation.workbench.routines.AnnotationImporter;
+import semgen.annotation.workbench.routines.ModelComponentValidator;
 import semgen.annotation.workbench.routines.TermCollector;
 import semgen.utilities.CSVExporter;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semsim.annotation.SemSimRelation;
+import semsim.model.SemSimTypes;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.physical.PhysicalEntity;
+import semsim.model.physical.PhysicalProcess;
 import semsim.reading.ModelClassifier;
 import semsim.utilities.SemSimUtil;
 import semsim.writing.CellMLwriter;
@@ -117,11 +122,16 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	public String getModelSourceFile() {
 		return semsimmodel.getLegacyCodeLocation();
 	}
+	
+	private void validateModelComposites() {
+		new ModelComponentValidator(this, semsimmodel);
+	}
 
 	@Override
 	public File saveModel() {
 		URI fileURI = sourcefile.toURI();
 		if(fileURI!=null){
+			validateModelComposites();
 			try {
 				if(lastsavedas==ModelClassifier.SEMSIM_MODEL) {
 					OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -158,6 +168,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 
 	public void exportCSV() {
 		try {
+			validateModelComposites();
 			new CSVExporter(semsimmodel).exportCodewords();
 		} catch (Exception e1) {e1.printStackTrace();} 
 	}
@@ -201,6 +212,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	}
 	
 	public boolean importModelAnnotations(File file, Boolean[] options) {
+		validateModelComposites();
 		AnnotationImporter copier = new AnnotationImporter(termlib, semsimmodel);
 		if (!copier.loadSourceModel(file)) {
 			return false;
