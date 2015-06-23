@@ -21,7 +21,7 @@ public class ReferenceLibraryDialog extends JFrame implements ComponentListener,
 	private static final long serialVersionUID = 1L;
 	AnnotatorWorkbench workbench;
 	JTabbedPane mainpane = new JTabbedPane(JTabbedPane.LEFT);
-	TermEditorPanel reftermpane;
+	TermEditorTab reftermpane;
 	ImportAnnotationsPanel importpane;
 	AddCreateTermPanel createaddpane;
 	SemGenSettings settings;
@@ -52,7 +52,7 @@ public class ReferenceLibraryDialog extends JFrame implements ComponentListener,
 	}
 	
 	private void makeTabs() {
-		reftermpane = new TermEditorPanel(workbench);
+		reftermpane = new TermEditorTab(workbench);
 		importpane = new ImportAnnotationsPanel(workbench);
 		createaddpane = new AddCreateTermPanel(workbench.openTermLibrary());
 		createaddpane.setMinimumSize(new Dimension(settings.getAppWidth()/4, settings.getAppHeight()/4));

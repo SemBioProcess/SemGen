@@ -195,7 +195,7 @@ public class SemSimTermLibrary extends Observable {
 		procs.add(i);
 		return i;
 	}
-	
+
 	private LinkedHashMap<Integer, Double> getIndexMultiplierMap(LinkedHashMap<PhysicalEntity, Double> pes) {
 		LinkedHashMap<Integer, Double>  ppmap = new LinkedHashMap<Integer, Double>();
 		for (PhysicalEntity pe : pes.keySet()) {
@@ -229,6 +229,14 @@ public class SemSimTermLibrary extends Observable {
 			mediators.add(getComponentIndex(entity));
 		}
 		return sortComponentIndiciesbyName(mediators);
+	}
+	
+	public ArrayList<Integer> getAllProcessParticipantIndicies(Integer index) {
+		ArrayList<Integer> parts = new ArrayList<Integer>();
+		for (PhysicalEntity entity : getPhysicalProcess(index).getParticipants()) {
+			parts.add(getComponentIndex(entity));
+		}
+		return parts;
 	}
 	
 	public Double getSourceMultiplier(Integer procindex, Integer partindex) {
@@ -512,6 +520,31 @@ public class SemSimTermLibrary extends Observable {
 		return masterlist.get(index).getType();
 	}
 	
+	public ArrayList<Integer> getCompositeEntityIndicies(CompositePhysicalEntity cpe) {
+		return getCompositeEntityIndicies(getComponentIndex(cpe));
+	}
+	
+	public ArrayList<Integer> getCompositeEntityIndicies(Integer index) {
+		ArrayList<Integer> indexlist = new ArrayList<Integer>();
+		CompositePhysicalEntity cpe = getCompositePhysicalEntity(index);
+		
+		for (PhysicalEntity pe : cpe.getArrayListOfEntities()) {
+			int i;
+			if (pe.hasRefersToAnnotation()) {
+				i = getIndexofReferencePhysicalEntity((ReferencePhysicalEntity)pe);
+			}
+			else {
+				i = getIndexofCustomPhysicalEntity((CustomPhysicalEntity)pe);
+			}
+			indexlist.add(i);
+		}
+		return indexlist;
+	}
+	
+	public boolean compositeEntityContainsSingular(int compindex, int singindex) {
+		return getCompositeEntityIndicies(compindex).contains(singindex);
+	}
+	
 	public ArrayList<Integer> getRequestedTypes(SemSimTypes[] types) {
 		ArrayList<Integer> list = new ArrayList<Integer>();
 		for (SemSimTypes type : types) {
@@ -536,6 +569,7 @@ public class SemSimTermLibrary extends Observable {
 				break;
 			}
 		}
+		sortComponentIndiciesbyName(list);
 		return list;
 	}
 	

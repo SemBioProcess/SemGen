@@ -15,13 +15,10 @@ import semsim.annotation.ReferenceTerm;
 import semsim.model.SemSimTypes;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
-import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.object.CompositePhysicalEntity;
-import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyinComposite;
-import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.utilities.SemSimComponentComparator;
 
 public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
@@ -43,6 +40,10 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		componentlist.addAll(dslist);
 		
 		Collections.sort(componentlist, new SemSimComponentComparator());
+	}
+	
+	public ArrayList<DataStructure> getCodewords() {
+		return new ArrayList<DataStructure>(componentlist);
 	}
 	
 	public ArrayList<Integer> getCodewordstoDisplay(Boolean[] options){
@@ -249,18 +250,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	public ArrayList<Integer> getCompositeEntityIndicies() {
 		ArrayList<Integer> indexlist = new ArrayList<Integer>();
 		if (hasPhysicalModelComponent()) {
-			CompositePhysicalEntity cpe = (CompositePhysicalEntity)getFocusComposite();
-		
-			for (PhysicalEntity pe : cpe.getArrayListOfEntities()) {
-				int i;
-				if (pe.hasRefersToAnnotation()) {
-					i = termlib.getIndexofReferencePhysicalEntity((ReferencePhysicalEntity)pe);
-				}
-				else {
-					i = termlib.getIndexofCustomPhysicalEntity((CustomPhysicalEntity)pe);
-				}
-				indexlist.add(i);
-			}
+			indexlist.addAll(termlib.getCompositeEntityIndicies((CompositePhysicalEntity)getFocusComposite()));
 		}
 		else {
 			indexlist.add(-1);

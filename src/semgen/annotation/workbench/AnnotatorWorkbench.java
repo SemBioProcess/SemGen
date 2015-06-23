@@ -21,6 +21,7 @@ import semgen.annotation.workbench.drawers.ModelAnnotationsBench;
 import semgen.annotation.workbench.drawers.ModelAnnotationsBench.ModelChangeEnum;
 import semgen.annotation.workbench.drawers.SubModelToolDrawer;
 import semgen.annotation.workbench.routines.AnnotationImporter;
+import semgen.annotation.workbench.routines.TermCollector;
 import semgen.utilities.CSVExporter;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.SemGenSaveFileChooser;
@@ -272,6 +273,18 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		return new AnnotatorTreeMap(useimports, smdrawer, cwdrawer);
 	}
 	
+	public void sendTermLibraryEvent(LibraryRequest evt) {
+		setChanged();
+		notifyObservers(evt);
+	}
+	
+	public File getSourceSubmodelFile() {
+		return new File(getFile().getParent() + "/" + smdrawer.getHrefValue());
+	}
+	
+	public TermCollector collectAffiliatedTermsandCodewords(Integer index) {
+		return new TermCollector(this, index);
+	}
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		//Event forwarding
@@ -286,12 +299,5 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		}
 	}
 	
-	public void sendTermLibraryEvent(LibraryRequest evt) {
-		setChanged();
-		notifyObservers(evt);
-	}
-	
-	public File getSourceSubmodelFile() {
-		return new File(getFile().getParent() + "/" + smdrawer.getHrefValue());
-	}
+
 }

@@ -94,6 +94,7 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 	}
 	
 	private void showCreator() {
+		//Necessary to prevent memmory leaks
 		if (creatorpane!=null) {
 			for (ContainerListener listener : getContainerListeners()) {
 				creatorpane.removeContainerListener(listener);
