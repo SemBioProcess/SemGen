@@ -7,12 +7,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,8 +22,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.utilities.ComparatorByName;
 import semgen.utilities.SemGenFont;
@@ -42,17 +38,17 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 	public JCheckBox markallbox = new JCheckBox("");
 	public JPanel checkboxpanel = new JPanel();
 	public SemGenScrollPane scroller;
-	public Hashtable<? extends SemSimComponent,Set<DataStructure>> termandcdwdstable;
+	public Map<? extends SemSimComponent,Set<DataStructure>> termandcdwdstable;
 	public Map<String, JCheckBox> termandcheckboxmap = new HashMap<String,JCheckBox>();
 	JPanel titlepanel = new JPanel();
 	public ExtractorTab extractor;
 	public JButton expandcontractbutton = new JButton(SemGenIcon.expendcontracticon);
 
-	public ExtractorSelectionPanel(ExtractorTab extractor, String title, Hashtable<? extends SemSimComponent,Set<DataStructure>> table, JComponent addon){
+	public ExtractorSelectionPanel(ExtractorTab extractor, String title, Map<? extends SemSimComponent,Set<DataStructure>> table, JComponent addon){
 		this.extractor = extractor;
 		markallbox.setFont(SemGenFont.defaultItalic(-2));
 		markallbox.setToolTipText("Select all/none");
-		termandcdwdstable = (Hashtable<? extends SemSimComponent, Set<DataStructure>>) table;
+		termandcdwdstable = table;
 		setBackground(Color.white);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		checkboxpanel.setLayout(new BoxLayout(checkboxpanel, BoxLayout.Y_AXIS));
@@ -98,11 +94,11 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 		}
 	}
 	
-	public int addCheckBoxes(Hashtable<? extends SemSimComponent,Set<DataStructure>> table) {
+	public int addCheckBoxes(Map<? extends SemSimComponent,Set<DataStructure>> map) {
 		
 		ArrayList<JCheckBox> cbarray = new ArrayList<JCheckBox>();
 		String checkboxtext = null;
-		for (SemSimComponent ssc : table.keySet()) {
+		for (SemSimComponent ssc : map.keySet()) {
 			if(ssc instanceof PhysicalModelComponent){
 				PhysicalModelComponent pmc  = (PhysicalModelComponent)ssc;
 				if(pmc.hasRefersToAnnotation() && !(pmc instanceof Submodel)){
@@ -114,9 +110,9 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 			
 			JCheckBox checkbox;
 			if(ssc instanceof PhysicalModelComponent)
-				checkbox = new ExtractorJCheckBox(checkboxtext, (PhysicalModelComponent)ssc, (Set<DataStructure>) table.get(ssc));
+				checkbox = new ExtractorJCheckBox(checkboxtext, (PhysicalModelComponent)ssc, (Set<DataStructure>) map.get(ssc));
 			else
-				checkbox = new ExtractorJCheckBox(checkboxtext, (Set<DataStructure>) table.get(ssc));
+				checkbox = new ExtractorJCheckBox(checkboxtext, (Set<DataStructure>) map.get(ssc));
 			
 			
 			checkbox.setBackground(Color.white);
@@ -148,11 +144,8 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 					checkbox.setSelected(markallbox.isSelected());
 				}
 			}
-			try {
-				extractor.visualize(extractor.primeextraction(), false);
-			} catch (OWLException | IOException e1) {
-				e1.printStackTrace();
-			}
+			extractor.visualize(extractor.primeextraction(), false);
+			
 			// Add the item listener back
 			for(Component c : checkboxpanel.getComponents()){
 				if (c instanceof JCheckBox) {
