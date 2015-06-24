@@ -32,6 +32,7 @@ import semgen.merging.resolutionpane.ResolutionPane;
 import semgen.merging.workbench.MergerWorkbench;
 import semgen.merging.workbench.Merger.ResolutionChoice;
 import semgen.merging.workbench.MergerWorkbench.MergeEvent;
+import semgen.merging.workbench.ModelOverlapMap;
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
@@ -41,6 +42,9 @@ import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semgen.utilities.uicomponent.SemGenTab;
+import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.units.UnitOfMeasurement;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -190,10 +194,33 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 					if (newname==null) return;
 					cwnamemap.put(name, newname);
 				}
-				ArrayList<Boolean> unitoverlaps = workbench.getUnitOverlaps();
+				HashMap<UnitOfMeasurement, UnitOfMeasurement> unitoverlaps = workbench.getUnitOverlaps();
+				
+				int numdsmappings = workbench.getMappingCount();
 				ArrayList<Pair<Double,String>> conversionlist = new ArrayList<Pair<Double,String>>(); 
-				for (int i=0; i<unitoverlaps.size(); i++) {
-					if (!unitoverlaps.get(i)) {
+				for (int i=0; i<numdsmappings; i++) {
+					
+					ModelOverlapMap overlapmap = workbench.getModelOverlapMap();
+					
+					String dsleftname = workbench.getMapPairNames(i).getLeft();
+					String dsrightname = workbench.getMapPairNames(i).getRight();
+										
+					DataStructure dsleft = overlapmap.getSemanticComparator().model1.getAssociatedDataStructure(dsleftname);
+					DataStructure dsright = overlapmap.getSemanticComparator().model2.getAssociatedDataStructure(dsrightname);
+					
+					UnitOfMeasurement uomleft = dsleft.getUnit();
+					UnitOfMeasurement uomright = dsright.getUnit();
+					
+					boolean unitsalreadymapped = false;
+					boolean bothdimensionless = (! dsleft.hasUnits() && ! dsright.hasUnits());
+					
+					if(unitoverlaps.containsKey(uomleft)){
+						if(unitoverlaps.get(uomleft).equals(uomright)){
+							unitsalreadymapped = true;
+						}
+					}
+					
+					if (! unitsalreadymapped && ! bothdimensionless) {
 						ResolutionChoice choice = choicelist.get(i);
 						if (!choice.equals(ResolutionChoice.ignore)) {
 							if (!getConversion(conversionlist, i, choice.equals(ResolutionChoice.first))) return;

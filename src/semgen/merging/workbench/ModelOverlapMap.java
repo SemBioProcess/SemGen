@@ -14,6 +14,7 @@ public class ModelOverlapMap {
 	Pair<Integer, Integer> modelindicies;
 	private Set<String> identicalsubmodelnames;
 	private Set<String> identicaldsnames;
+	private SemanticComparator comparator;
 	private ArrayList<Pair<DataStructure, DataStructure>> dsmap = new ArrayList<Pair<DataStructure, DataStructure>>();
 	private HashMap<UnitOfMeasurement, UnitOfMeasurement> unitsmap = new HashMap<UnitOfMeasurement, UnitOfMeasurement>();
 	
@@ -35,6 +36,7 @@ public class ModelOverlapMap {
 
 	public ModelOverlapMap(int ind1, int ind2, SemanticComparator comparator) {
 		modelindicies = Pair.of(ind1, ind2);
+		this.setSemanticComparator(comparator);
 		ArrayList<Pair<DataStructure, DataStructure>> equivlist = comparator.identifyExactSemanticOverlap();		
 		
 		Pair<DataStructure, DataStructure> dspair;
@@ -150,5 +152,14 @@ public class ModelOverlapMap {
 	
 	public int getSolutionDomainCount() {
 		return slndomcnt;
+	}
+	
+	public SemanticComparator getSemanticComparator() {
+		return comparator;
+	}
+
+
+	public void setSemanticComparator(SemanticComparator comparator) {
+		this.comparator = comparator;
 	}
 }

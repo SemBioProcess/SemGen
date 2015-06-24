@@ -350,8 +350,6 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	 */
 	public Set<DataStructure> getDataStructureswithPhysicalProcesses(){
 		Set<DataStructure> dswprocs = new HashSet<DataStructure>();
-		//Set<DataStructure> withcpe = new HashSet<DataStructure>(dataStructures);
-		//withcpe.removeAll(getDataStructureswithoutAssociatedPhysicalComponents());
 		for (DataStructure ds : dataStructures) {
 			if (ds.hasAssociatedPhysicalComponent()) {
 				if (ds.getAssociatedPhysicalModelComponent() instanceof PhysicalProcess) {
