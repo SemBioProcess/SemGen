@@ -15,7 +15,7 @@ public class ModelComponentValidator {
 	private CodewordToolDrawer drawer;
 	private SemSimTermLibrary library;
 	
-	private HashSet<PhysicalEntity> cpes = new HashSet<PhysicalEntity>();
+	private HashSet<PhysicalEntity> ents = new HashSet<PhysicalEntity>();
 	private HashSet<PhysicalProcess> procs = new HashSet<PhysicalProcess>();
 	
 	public ModelComponentValidator(AnnotatorWorkbench wb, SemSimModel mod) {
@@ -47,19 +47,19 @@ public class ModelComponentValidator {
 	}
 	
 	private void validateComposite(Integer index) {
-		cpes.add(library.getCompositePhysicalEntity(index));
+		ents.add(library.getCompositePhysicalEntity(index));
 		for (Integer i : library.getCompositeEntityIndicies(index)) {
-			if (library.getSemSimType(index)==SemSimTypes.CUSTOM_PHYSICAL_ENTITY) {
-				cpes.add(library.getCustomPhysicalEntity(i));
+			if (library.getSemSimType(i)==SemSimTypes.CUSTOM_PHYSICAL_ENTITY) {
+				ents.add(library.getCustomPhysicalEntity(i));
 			}
 			else {
-				cpes.add(library.getReferencePhysicalEntity(index));
+				ents.add(library.getReferencePhysicalEntity(i));
 			}
 		}
 	}
 	
 	private void setModelComponents() {
-		semsimmodel.setPhysicalEntities(cpes);
+		semsimmodel.setPhysicalEntities(ents);
 		semsimmodel.setPhysicalProcesses(procs);
 	}
 }
