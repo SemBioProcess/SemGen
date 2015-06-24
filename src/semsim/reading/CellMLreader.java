@@ -52,6 +52,8 @@ import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
+import semsim.model.physical.object.PhysicalProperty;
+import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.utilities.SemSimUtil;
@@ -666,9 +668,7 @@ public class CellMLreader extends ModelReader {
 			physpropres = cvarResource.getPropertyResourceValue(CellMLbioRDFblock.compcomponentfor);
 		
 		// If a physical property is specified for the variable
-		if(physpropres!=null && cvarResource!=null){
-			URIandPMCmap.put(physpropres.getURI(), cvar.getPhysicalProperty());
-			
+		if(physpropres!=null){
 			Resource isannres = physpropres.getPropertyResourceValue(CellMLbioRDFblock.is);
 			if(isannres==null)
 				isannres = physpropres.getPropertyResourceValue(CellMLbioRDFblock.refersto);
@@ -685,8 +685,9 @@ public class CellMLreader extends ModelReader {
 //				}
 				
 				String uristring = isannres.getURI();
-				cvar.getPhysicalProperty().addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, 
-					URI.create(uristring), uristring);
+				
+				PhysicalPropertyinComposite pp = getPhysicalProperty(uristring);
+				cvar.setAssociatePhysicalProperty(pp);
 			}
 
 			getPMCfromRDFresourceAndAnnotate(physpropres);
@@ -947,6 +948,27 @@ public class CellMLreader extends ModelReader {
 		}
 	}
 	
+	private PhysicalPropertyinComposite getPhysicalProperty(String refersto) {
+		PhysicalModelComponent term = URIandPMCmap.get(refersto);
+		if (term==null) {
+			String description = "";
+			term = new PhysicalPropertyinComposite(description, URI.create(refersto));
+			URIandPMCmap.put(refersto, term);
+			semsimmodel.addAssociatePhysicalProperty((PhysicalPropertyinComposite) term);
+		}
+		return (PhysicalPropertyinComposite)term;
+	}
+	
+	private PhysicalProperty getReferenceTerm(String refersto) {
+		PhysicalModelComponent term = URIandPMCmap.get(refersto);
+		if (term==null) {
+			String description = "";
+			term = new PhysicalProperty(description, URI.create(refersto));
+			URIandPMCmap.put(refersto, term);
+			semsimmodel.addPhysicalProperty((PhysicalProperty) term);
+		}
+		return (PhysicalProperty)term;
+	}
 	
 	public static String getRHSofDataStructureEquation(String varmathml, String varname){
 		

@@ -41,6 +41,7 @@ import semsim.SemSimConstants;
 import semsim.SemSimLibrary;
 import semsim.annotation.Annotation;
 import semsim.annotation.StructuralRelation;
+import semsim.model.SemSimTypes;
 import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
@@ -272,14 +273,7 @@ public class SemSimOWLreader extends ModelReader {
 		}
 	}
 	
-	/** 
-	 * Produces a composite for a singular term.
-	 * */
-	private CompositePhysicalEntity createSingularComposite(String uri) throws OWLException {
-		ArrayList<PhysicalEntity> entlist = new ArrayList<PhysicalEntity>();
-		entlist.add((PhysicalEntity) getClassofIndividual(uri));
-		return new CompositePhysicalEntity(entlist, new ArrayList<StructuralRelation>());	
-	}
+
 	
 	private void collectDataStructures() throws OWLException {
 		// Get data structures and add them to model - Decimals, Integers, MMLchoice
@@ -364,7 +358,11 @@ public class SemSimOWLreader extends ModelReader {
 						// Set the connection between the physical property and what it's a property of
 						String propofind = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, propind, SemSimConstants.PHYSICAL_PROPERTY_OF_URI.toString());
 						if (!propofind.isEmpty()) {
-							ds.setAssociatedPhysicalModelComponent(identitymap.get(propofind));
+							PhysicalModelComponent pmc = identitymap.get(propofind);
+							if (pmc==null) {
+								pmc = createSingularComposite(propofind);
+							}
+							ds.setAssociatedPhysicalModelComponent(pmc);
 						}
 					}
 				}
@@ -771,5 +769,16 @@ public class SemSimOWLreader extends ModelReader {
 		String sub = cuperef.subSequence(cuperef.lastIndexOf("_"), cuperef.length()).toString();
 		identitymap.put(cuperef.replace(sub, ""), cupe);
 		return semsimmodel.addCustomPhysicalEntity(cupe);
+	}
+	
+	/** 
+	 * Produces a composite for a singular term.
+	 * */
+	private CompositePhysicalEntity createSingularComposite(String uri) throws OWLException {
+		ArrayList<PhysicalEntity> entlist = new ArrayList<PhysicalEntity>();
+		entlist.add((PhysicalEntity) getClassofIndividual(uri));
+		CompositePhysicalEntity cpe = new CompositePhysicalEntity(entlist, new ArrayList<StructuralRelation>());
+		semsimmodel.addCompositePhysicalEntity(cpe);
+		return cpe;	
 	}
 }
