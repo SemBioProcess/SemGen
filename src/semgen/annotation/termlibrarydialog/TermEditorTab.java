@@ -9,12 +9,10 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
-import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -40,6 +38,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener {
 	
 	private TermInformationPanel tip;
 	private TermCollector affected;
+	private EditorToolbar toolbar= new EditorToolbar();;
 	
 	private SemSimTypes[] types = new SemSimTypes[]{
 			SemSimTypes.PHYSICAL_PROPERTY,
@@ -84,11 +83,11 @@ public class TermEditorTab extends JPanel implements ListSelectionListener {
 		typepane.add(Box.createVerticalGlue());
 		add(typepane);
 		
-		EditorToolbar toolbar = new EditorToolbar();
 		add(toolbar);
 	}
 	
 	private void updateList() {
+		termlist.clearSelection();
 		terms = library.getRequestedTypes(getTypeSelections());
 		termlist.setListData(library.getComponentNames(terms).toArray(new String[]{}));
 	}
@@ -112,6 +111,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener {
 		}
 		
 		affected = workbench.collectAffiliatedTermsandCodewords(getTermSelection());
+
 		tip = new TermInformationPanel(workbench, affected);
 		
 		for (ContainerListener listener : getContainerListeners()) {
@@ -146,10 +146,11 @@ public class TermEditorTab extends JPanel implements ListSelectionListener {
 		Object obj = arg0.getSource();
 		if (obj.equals(typechooser)) {
 			updateList();
-			termlist.clearSelection();
+			toolbar.toggleButtons();
 		}
 		if (obj.equals(termlist)) {
 			onTermSelection();
+			toolbar.toggleButtons();
 		}
 	}
 	
@@ -160,6 +161,9 @@ public class TermEditorTab extends JPanel implements ListSelectionListener {
 				JOptionPane.YES_NO_OPTION);
 		if(JOptionPane.YES_OPTION == choice){
 			new TermModifier(workbench, affected).runRemove();
+			clearPanel();
+			updateList();
+			toolbar.toggleButtons();
 		}
 	}
 	
@@ -179,15 +183,14 @@ public class TermEditorTab extends JPanel implements ListSelectionListener {
 		
 		public EditorToolbar() {
 			super(JToolBar.VERTICAL);
-			modifybtn.addActionListener(this);
-			modifybtn.setToolTipText("Modify selected term.");
+			modifybtn.addActionListener(this);	
+			replacebtn.setToolTipText("Replace selected term.");
 			add(modifybtn);
 			removebtn.addActionListener(this);
-			removebtn.setToolTipText("Remove selected term.");
 			add(removebtn);
 			replacebtn.addActionListener(this);
-			replacebtn.setToolTipText("Replace selected term.");
 			add(replacebtn);
+			toggleButtons();
 		}
 
 		@Override
@@ -204,5 +207,30 @@ public class TermEditorTab extends JPanel implements ListSelectionListener {
 			}
 		}
 		
+		public void toggleButtons() {
+			modifybtn.setToolTipText("Modify selected term.");
+			removebtn.setToolTipText("Remove selected term.");
+			if (!termlist.isSelectionEmpty()) {
+				replacebtn.setEnabled(true);
+				if (affected.targetIsReferenceTerm()) {
+					modifybtn.setEnabled(false);
+					modifybtn.setToolTipText("Reference terms cannot be modified.");
+					if (affected.getTargetTermType().equals(SemSimTypes.PHYSICAL_PROPERTY_IN_COMPOSITE)) {
+						removebtn.setEnabled(false);
+						removebtn.setToolTipText("This property cannot be removed.");
+						return;
+					}
+				}
+				else {
+					modifybtn.setEnabled(true);
+				}
+				removebtn.setEnabled(true);	
+			}
+			else {
+				modifybtn.setEnabled(false);
+				removebtn.setEnabled(false);		
+				replacebtn.setEnabled(false);
+			}
+		}
 	}
 }

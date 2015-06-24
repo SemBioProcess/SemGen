@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
+import semsim.model.SemSimTypes;
 import semsim.model.computational.datastructures.DataStructure;
 
 public class TermCollector {
@@ -47,6 +48,14 @@ public class TermCollector {
 	
 	public Integer getTermLibraryIndex() {
 		return new Integer(termindex);
+	}
+	
+	public SemSimTypes getTargetTermType() {
+		return library.getSemSimType(termindex);
+	}
+	
+	public boolean targetIsReferenceTerm() {
+		return library.isReferenceTerm(termindex);
 	}
 	
 	public ArrayList<String> getCodewordNames() {
