@@ -1011,7 +1011,6 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	 * @param name The name of the DataStructure to delete.
 	 */
 	public void removeDataStructure(String name) {
-		
 		if(getAssociatedDataStructure(name)!=null){
 			DataStructure ds = getAssociatedDataStructure(name);
 			
@@ -1070,7 +1069,6 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	 * @param submodel The Submodel to be deleted.
 	 */
 	public void removeSubmodel(Submodel submodel) {
-		
 		// Remove from the model's collection of submodels
 		submodels.remove(submodel);
 

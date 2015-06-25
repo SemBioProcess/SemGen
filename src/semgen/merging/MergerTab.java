@@ -194,33 +194,12 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 					if (newname==null) return;
 					cwnamemap.put(name, newname);
 				}
-				HashMap<UnitOfMeasurement, UnitOfMeasurement> unitoverlaps = workbench.getUnitOverlaps();
 				
-				int numdsmappings = workbench.getMappingCount();
+				ArrayList<Boolean> unitoverlaps = workbench.getUnitOverlaps();
+				
 				ArrayList<Pair<Double,String>> conversionlist = new ArrayList<Pair<Double,String>>(); 
-				for (int i=0; i<numdsmappings; i++) {
-					
-					ModelOverlapMap overlapmap = workbench.getModelOverlapMap();
-					
-					String dsleftname = workbench.getMapPairNames(i).getLeft();
-					String dsrightname = workbench.getMapPairNames(i).getRight();
-										
-					DataStructure dsleft = overlapmap.getSemanticComparator().model1.getAssociatedDataStructure(dsleftname);
-					DataStructure dsright = overlapmap.getSemanticComparator().model2.getAssociatedDataStructure(dsrightname);
-					
-					UnitOfMeasurement uomleft = dsleft.getUnit();
-					UnitOfMeasurement uomright = dsright.getUnit();
-					
-					boolean unitsalreadymapped = false;
-					boolean bothdimensionless = (! dsleft.hasUnits() && ! dsright.hasUnits());
-					
-					if(unitoverlaps.containsKey(uomleft)){
-						if(unitoverlaps.get(uomleft).equals(uomright)){
-							unitsalreadymapped = true;
-						}
-					}
-					
-					if (! unitsalreadymapped && ! bothdimensionless) {
+				for (int i=0; i<unitoverlaps.size(); i++) {
+					if (!unitoverlaps.get(i)) {
 						ResolutionChoice choice = choicelist.get(i);
 						if (!choice.equals(ResolutionChoice.ignore)) {
 							if (!getConversion(conversionlist, i, choice.equals(ResolutionChoice.first))) return;
@@ -229,6 +208,7 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 					}
 					conversionlist.add(Pair.of(1.0, "*"));
 				}
+
 				SemGenProgressBar progframe = new SemGenProgressBar("Merging...", true);
 				String error = workbench.executeMerge(cwnamemap, smnamemap, choicelist, conversionlist, progframe);
 				if (error!=null){

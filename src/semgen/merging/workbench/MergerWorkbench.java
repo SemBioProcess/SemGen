@@ -22,7 +22,6 @@ import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.utilities.SemSimUtil;
 
 public class MergerWorkbench extends Workbench {
@@ -236,8 +235,8 @@ public class MergerWorkbench extends Workbench {
 		return Pair.of(loadedmodels.get(indexpair.getLeft()),loadedmodels.get(indexpair.getRight()));
 	}
 	
-	public HashMap<UnitOfMeasurement, UnitOfMeasurement> getUnitOverlaps() {
-		return overlapmap.getEquivalentUnitPairs();
+	public ArrayList<Boolean> getUnitOverlaps() {
+		return overlapmap.compareDataStructureUnits();
 	}
 	
 	public String executeMerge(HashMap<String,String> dsnamemap, HashMap<String,String> smnamemap, ArrayList<ResolutionChoice> choices, 

@@ -14,7 +14,6 @@ public class ModelOverlapMap {
 	Pair<Integer, Integer> modelindicies;
 	private Set<String> identicalsubmodelnames;
 	private Set<String> identicaldsnames;
-	private SemanticComparator comparator;
 	private ArrayList<Pair<DataStructure, DataStructure>> dsmap = new ArrayList<Pair<DataStructure, DataStructure>>();
 	private HashMap<UnitOfMeasurement, UnitOfMeasurement> unitsmap = new HashMap<UnitOfMeasurement, UnitOfMeasurement>();
 	
@@ -36,7 +35,6 @@ public class ModelOverlapMap {
 
 	public ModelOverlapMap(int ind1, int ind2, SemanticComparator comparator) {
 		modelindicies = Pair.of(ind1, ind2);
-		this.setSemanticComparator(comparator);
 		ArrayList<Pair<DataStructure, DataStructure>> equivlist = comparator.identifyExactSemanticOverlap();		
 		
 		Pair<DataStructure, DataStructure> dspair;
@@ -139,27 +137,24 @@ public class ModelOverlapMap {
 	public ArrayList<Boolean> compareDataStructureUnits() {
 		ArrayList<Boolean> unitmatchlist = new ArrayList<Boolean>();
 		for (Pair<DataStructure, DataStructure> dsp : dsmap) {
+			boolean unitsmatch = true;
 			if(dsp.getLeft().hasUnits() && dsp.getRight().hasUnits()){
-				if (!dsp.getLeft().getUnit().getComputationalCode().equals(dsp.getRight().getUnit().getComputationalCode())){
-					unitmatchlist.add(false);
-					continue;
+				UnitOfMeasurement uomleft = dsp.getLeft().getUnit();
+				UnitOfMeasurement uomright = dsp.getRight().getUnit();
+				
+				unitsmatch = unitsmap.containsKey(uomleft);
+				if(unitsmatch){
+					unitsmatch = unitsmap.get(uomleft).equals(uomright);
 				}
 			}
-			unitmatchlist.add(true);
+			unitmatchlist.add(unitsmatch);
 		}
 		return unitmatchlist;
 	}
 	
+
+	
 	public int getSolutionDomainCount() {
 		return slndomcnt;
-	}
-	
-	public SemanticComparator getSemanticComparator() {
-		return comparator;
-	}
-
-
-	public void setSemanticComparator(SemanticComparator comparator) {
-		this.comparator = comparator;
 	}
 }

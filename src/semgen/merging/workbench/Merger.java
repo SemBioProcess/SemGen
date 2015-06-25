@@ -49,7 +49,6 @@ public class Merger {
 		DataStructure discardedds = null;
 		DataStructure keptds = null;
 		
-		
 		// If there is one solution domain, get it, otherwise set soldom1 to null
 		DataStructure soldom1 = (ssm1clone.getSolutionDomains().size()==1) ? ssm1clone.getSolutionDomains().toArray(new DataStructure[]{})[0] : null;
 		
