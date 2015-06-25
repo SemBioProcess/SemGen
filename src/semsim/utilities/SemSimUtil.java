@@ -222,14 +222,11 @@ public class SemSimUtil {
 		// Go through the composite physical entities already processed and see if there is one that
 		// matches the cpe argument in terms of the physical entities and structural relations used
 		for(PhysicalModelComponent testcomp : map.keySet()){
-			if(testcomp instanceof CompositePhysicalEntity){
-				CompositePhysicalEntity testcpe = (CompositePhysicalEntity)testcomp;
 
 				// If we've found an equivalent composite entity, return it immediately
-				if(testcpe.equals(cpe)){
-					return testcpe;
+				if(cpe.equals(testcomp)){
+					return (CompositePhysicalEntity)testcomp;
 				}
-			}
 		}
 		// If we've gotten here, then there isn't a match, return the cpe argument
 		if(cpe == null) System.err.println("Next cpe was null");

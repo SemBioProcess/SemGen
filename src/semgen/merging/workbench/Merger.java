@@ -281,9 +281,6 @@ public class Merger {
 			}
 		}
 		
-		// Remove the discarded Data Structure
-		//modelfordiscardedds.removeDataStructure(discardedds.getName());
-		
 		// If we are removing a state variable, remove its derivative, if present
 		if(discardedds.hasSolutionDomain()){
 			

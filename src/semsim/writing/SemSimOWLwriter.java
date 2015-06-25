@@ -515,7 +515,7 @@ public class SemSimOWLwriter extends ModelWriter {
 			// create the index entity, put reference class in ontology if not there already
 			createPhysicalModelIndividual(indexent, indexuristring);
 		}
-		else indexuri = compositeEntitiesAndIndexes.get(cpe);
+		else return compositeEntitiesAndIndexes.get(cpe);
 
 		if (cpe.getArrayListOfEntities().size()>1) {
 			// Truncate the composite by one entity
