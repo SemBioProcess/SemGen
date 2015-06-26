@@ -118,7 +118,7 @@ public class ExtractorWorkbench extends Workbench {
 	
 	private void createEntityDataStructureMap(){
 		
-		entitydatastructuremap = new HashMap<PhysicalEntity,Set<DataStructure>>();;
+		entitydatastructuremap = new HashMap<PhysicalEntity,Set<DataStructure>>();
 		Map<PhysicalProperty,PhysicalEntity> propandent = semsimmodel.getPropertyAndPhysicalEntityMap();
 		
 		for(PhysicalProperty prop : propandent.keySet()){

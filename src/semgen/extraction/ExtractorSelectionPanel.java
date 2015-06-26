@@ -38,17 +38,17 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 	public JCheckBox markallbox = new JCheckBox("");
 	public JPanel checkboxpanel = new JPanel();
 	public SemGenScrollPane scroller;
-	public Map<? extends SemSimComponent,Set<DataStructure>> termandcdwdstable;
+	public Map<? extends SemSimComponent,Set<DataStructure>> termandcdwdsmap;
 	public Map<String, JCheckBox> termandcheckboxmap = new HashMap<String,JCheckBox>();
 	JPanel titlepanel = new JPanel();
 	public ExtractorTab extractor;
 	public JButton expandcontractbutton = new JButton(SemGenIcon.expendcontracticon);
 
-	public ExtractorSelectionPanel(ExtractorTab extractor, String title, Map<? extends SemSimComponent,Set<DataStructure>> table, JComponent addon){
+	public ExtractorSelectionPanel(ExtractorTab extractor, String title, Map<? extends SemSimComponent,Set<DataStructure>> map, JComponent addon){
 		this.extractor = extractor;
 		markallbox.setFont(SemGenFont.defaultItalic(-2));
 		markallbox.setToolTipText("Select all/none");
-		termandcdwdstable = table;
+		termandcdwdsmap = map;
 		setBackground(Color.white);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		checkboxpanel.setLayout(new BoxLayout(checkboxpanel, BoxLayout.Y_AXIS));
@@ -77,7 +77,7 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 		scroller.setPreferredSize(new Dimension(ExtractorTab.leftpanewidth,250));
 		scroller.getHorizontalScrollBar().setMaximumSize(new Dimension(999999, 3));
 		
-		int numcb = addCheckBoxes(termandcdwdstable);
+		int numcb = addCheckBoxes();
 		if(numcb==0) scroller.setVisible(false);
 
 		titlelabel.setText(title + " (" + numcb + ")");
@@ -94,11 +94,13 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 		}
 	}
 	
-	public int addCheckBoxes(Map<? extends SemSimComponent,Set<DataStructure>> map) {
+	public int addCheckBoxes() {
 		
 		ArrayList<JCheckBox> cbarray = new ArrayList<JCheckBox>();
 		String checkboxtext = null;
-		for (SemSimComponent ssc : map.keySet()) {
+		
+		for (SemSimComponent ssc : termandcdwdsmap.keySet()) {
+						
 			if(ssc instanceof PhysicalModelComponent){
 				PhysicalModelComponent pmc  = (PhysicalModelComponent)ssc;
 				if(pmc.hasRefersToAnnotation() && !(pmc instanceof Submodel)){
@@ -109,10 +111,11 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 			else checkboxtext = ssc.getName();
 			
 			JCheckBox checkbox;
+			
 			if(ssc instanceof PhysicalModelComponent)
-				checkbox = new ExtractorJCheckBox(checkboxtext, (PhysicalModelComponent)ssc, (Set<DataStructure>) map.get(ssc));
+				checkbox = new ExtractorJCheckBox(checkboxtext, (PhysicalModelComponent)ssc, (Set<DataStructure>) termandcdwdsmap.get(ssc));
 			else
-				checkbox = new ExtractorJCheckBox(checkboxtext, (Set<DataStructure>) map.get(ssc));
+				checkbox = new ExtractorJCheckBox(checkboxtext, (Set<DataStructure>) termandcdwdsmap.get(ssc));
 			
 			
 			checkbox.setBackground(Color.white);

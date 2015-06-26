@@ -46,6 +46,7 @@ public class Extractor {
 			extractedmodel.addDataStructure(soldom.clone());
 		}
 		for(DataStructure ds : extractionmap.keySet()){
+			
 			// If the data structure has been changed from a dependent variable into an input
 			if(extractionmap.get(ds).isEmpty() && !ds.getComputation().getInputs().isEmpty()){
 				DataStructure newds = ds.clone();
@@ -63,8 +64,11 @@ public class Extractor {
 		// Copy the physical entity and process info into the model-level entity and process sets
 		Set<PhysicalEntity> ents = new HashSet<PhysicalEntity>();
 		Set<PhysicalProcess> procs = new HashSet<PhysicalProcess>();
+		
 		for(DataStructure newds : extractedmodel.getDataStructures()){
+			
 			if(newds.getPhysicalProperty()!=null){
+				
 				if(newds.getPhysicalProperty().getPhysicalPropertyOf() instanceof PhysicalEntity){
 					ents.add((PhysicalEntity) newds.getPhysicalProperty().getPhysicalPropertyOf());
 				}
