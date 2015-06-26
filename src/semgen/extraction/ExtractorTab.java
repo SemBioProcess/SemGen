@@ -248,7 +248,6 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	public HashMap<PhysicalEntity, Set<DataStructure>> listentities() {
 		Set<DataStructure> propandent = semsimmodel.getDataStructureswithCompositesEntities();
 		for(DataStructure ds : propandent){
-			PhysicalPropertyinComposite prop = ds.getPhysicalProperty();
 			PhysicalEntity ent = (PhysicalEntity)ds.getAssociatedPhysicalModelComponent();
 			if(entsanddatastrs.containsKey(ent)){
 				entsanddatastrs.get(ent).add(ds);

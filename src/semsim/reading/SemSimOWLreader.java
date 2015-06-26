@@ -63,6 +63,7 @@ import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.owl.SemSimOWLFactory;
+import semsim.utilities.SemSimUtil;
 
 public class SemSimOWLreader extends ModelReader {
 	private OWLDataFactory factory;
@@ -360,6 +361,7 @@ public class SemSimOWLreader extends ModelReader {
 							PhysicalModelComponent pmc = identitymap.get(propofind);
 							if (pmc==null) {
 								pmc = createSingularComposite(propofind);
+							
 							}
 							ds.setAssociatedPhysicalModelComponent(pmc);
 						}
@@ -774,10 +776,13 @@ public class SemSimOWLreader extends ModelReader {
 	 * Produces a composite for a singular term.
 	 * */
 	private CompositePhysicalEntity createSingularComposite(String uri) throws OWLException {
+		if (identitymap.containsKey(uri)) return (CompositePhysicalEntity) identitymap.get(uri);
 		ArrayList<PhysicalEntity> entlist = new ArrayList<PhysicalEntity>();
 		entlist.add((PhysicalEntity) getClassofIndividual(uri));
 		CompositePhysicalEntity cpe = new CompositePhysicalEntity(entlist, new ArrayList<StructuralRelation>());
+		
 		semsimmodel.addCompositePhysicalEntity(cpe);
+		identitymap.put(uri, cpe);
 		return cpe;	
 	}
 }

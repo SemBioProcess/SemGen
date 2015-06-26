@@ -14,8 +14,15 @@ public class CompositePhysicalEntity extends PhysicalEntity implements Comparabl
 	private ArrayList<StructuralRelation> arrayListOfStructuralRelations = new ArrayList<StructuralRelation>();
 
 	public CompositePhysicalEntity(ArrayList<PhysicalEntity> ents, ArrayList<StructuralRelation> rels){
+		if(ents.size()-1 != rels.size()){
+			System.err.println("Error constructing composite physical entity: " +
+					"length of relations array (" + rels.size() + 
+					") must be one less than entity array (" + ents.size() + ").");
+		}
+		else{
 			setArrayListOfEntities(ents);
 			setArrayListOfStructuralRelations(rels);
+		}
 	}
 	/** Copy constructor **/
 	public CompositePhysicalEntity(CompositePhysicalEntity cpetocopy) {

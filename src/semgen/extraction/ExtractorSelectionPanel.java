@@ -52,7 +52,7 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 		this.extractor = extractor;
 		markallbox.setFont(SemGenFont.defaultItalic(-2));
 		markallbox.setToolTipText("Select all/none");
-		termandcdwdstable = (HashMap<? extends SemSimComponent, Set<DataStructure>>) table;
+		termandcdwdstable = table;
 		setBackground(Color.white);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		checkboxpanel.setLayout(new BoxLayout(checkboxpanel, BoxLayout.Y_AXIS));

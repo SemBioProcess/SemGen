@@ -176,6 +176,10 @@ public class CellMLbioRDFblock {
 		
 		annotateReferenceOrCustomResource(indexent, indexresource);
 
+		if (cpe.getArrayListOfEntities().size()==1) {
+			return indexuri;
+		}
+		
 		// Truncate the composite by one entity
 		ArrayList<PhysicalEntity> nextents = new ArrayList<PhysicalEntity>();
 		ArrayList<StructuralRelation> nextrels = new ArrayList<StructuralRelation>();
@@ -203,7 +207,7 @@ public class CellMLbioRDFblock {
 			nexturi = addCompositePhysicalEntityMetadata(nextcpe);
 		}
 		// If we're at the end of the composite
-		else if (nextcpe.getArrayListOfEntities().size()==1) {
+		else {
 			PhysicalEntity lastent = nextcpe.getArrayListOfEntities().get(0);
 			
 			// If it's an entity we haven't processed yet
@@ -216,7 +220,6 @@ public class CellMLbioRDFblock {
 				nexturi = pmcsandresourceURIs.get(lastent);
 			}
 		}
-		if (nextcpe.getArrayListOfEntities().size()>0) {
 			Property structprop = partof;
 			
 			StructuralRelation rel = cpe.getArrayListOfStructuralRelations().get(0);
@@ -224,7 +227,7 @@ public class CellMLbioRDFblock {
 			
 			Statement structst = rdf.createStatement(indexresource, structprop, rdf.getResource(nexturi.toString()));
 			if(!rdf.contains(structst)) rdf.add(structst);
-		}
+		
 		return indexuri;
 	}
 	
