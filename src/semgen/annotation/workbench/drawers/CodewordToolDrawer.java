@@ -184,7 +184,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	}
 	
 	public boolean isMapped() {
-		return getFocus().isMapped();
+		return getFocus().isMappable();
 	}
 	
 	public boolean isProcess() {

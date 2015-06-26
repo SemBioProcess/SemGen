@@ -157,7 +157,7 @@ public class CellMLbioRDFblock {
 		
 		// Get the Resource corresponding to the index entity of the composite entity
 		// If we haven't added this composite entity before, log it
-		if(cpe == SemSimUtil.getEquivalentCompositeEntityIfAlreadyInMap(cpe, pmcsandresourceURIs)){
+		if(cpe.equals(SemSimUtil.getEquivalentCompositeEntityIfAlreadyInMap(cpe, pmcsandresourceURIs))){
 			pmcsandresourceURIs.put(cpe, URI.create(getResourceForPMCandAnnotate(rdf, cpe).getURI()));
 		}
 		// Otherwise use the CPE already stored
@@ -203,7 +203,7 @@ public class CellMLbioRDFblock {
 			nexturi = addCompositePhysicalEntityMetadata(nextcpe);
 		}
 		// If we're at the end of the composite
-		else{
+		else if (nextcpe.getArrayListOfEntities().size()==1) {
 			PhysicalEntity lastent = nextcpe.getArrayListOfEntities().get(0);
 			
 			// If it's an entity we haven't processed yet
@@ -216,14 +216,15 @@ public class CellMLbioRDFblock {
 				nexturi = pmcsandresourceURIs.get(lastent);
 			}
 		}
-		Property structprop = partof;
-		
-		StructuralRelation rel = cpe.getArrayListOfStructuralRelations().get(0);
-		if(rel==SemSimConstants.CONTAINED_IN_RELATION) structprop = containedin;
-		
-		Statement structst = rdf.createStatement(indexresource, structprop, rdf.getResource(nexturi.toString()));
-		if(!rdf.contains(structst)) rdf.add(structst);
-		
+		if (nextcpe.getArrayListOfEntities().size()>0) {
+			Property structprop = partof;
+			
+			StructuralRelation rel = cpe.getArrayListOfStructuralRelations().get(0);
+			if(rel==SemSimConstants.CONTAINED_IN_RELATION) structprop = containedin;
+			
+			Statement structst = rdf.createStatement(indexresource, structprop, rdf.getResource(nexturi.toString()));
+			if(!rdf.contains(structst)) rdf.add(structst);
+		}
 		return indexuri;
 	}
 	

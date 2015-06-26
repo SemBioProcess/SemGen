@@ -94,7 +94,7 @@ public class MappableVariable extends Decimal {
 		return mappedFrom;
 	}
 	
-	public boolean isMapped() {
+	public boolean isMappable() {
 		return !getMappedTo().isEmpty() || !getMappedFrom().isEmpty(); 
 	}
 	
