@@ -492,10 +492,15 @@ public class SemSimTermLibrary extends Observable {
 		masterlist.get(index).getObject().setName(description);
 	}
 	
+	public void clearRelations(Integer termindex, SemSimRelation relation) {
+		PhysicalModelComponent pmc = masterlist.get(termindex).getObject();
+		pmc.removeReferenceAnnotationsofType(relation);
+	}
+	
 	public void addRelationship(Integer termindex, SemSimRelation relation, Integer reftermindex) {
 		PhysicalModelComponent pmc = masterlist.get(termindex).getObject();
 		ReferenceTerm refterm = (ReferenceTerm) masterlist.get(reftermindex).getObject();
-		pmc.addReferenceOntologyAnnotation(relation, refterm.getReferstoURI(), refterm.getDescription());
+		pmc.addReferenceOntologyAnnotation(relation, refterm.getReferstoURI(), refterm.getName());
 	}
 	
 	public SemSimTypes getSemSimType(int index) {

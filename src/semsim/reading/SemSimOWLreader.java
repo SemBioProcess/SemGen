@@ -508,10 +508,14 @@ public class SemSimOWLreader extends ModelReader {
 						
 						// Add isVersionOf annotation
 						PhysicalModelComponent pmc = null;
-						if(customclassuri==SemSimConstants.CUSTOM_PHYSICAL_PROCESS_CLASS_URI)
+						if(customclassuri==SemSimConstants.CUSTOM_PHYSICAL_PROCESS_CLASS_URI) {
+							semsimmodel.addReferencePhysicalProcess(new ReferencePhysicalProcess(superclsuri, label));
 							pmc = semsimmodel.getCustomPhysicalProcessByName(SemSimOWLFactory.getRDFLabels(ont, custind)[0]);
-						if(customclassuri==SemSimConstants.CUSTOM_PHYSICAL_ENTITY_CLASS_URI)
+						}
+						if(customclassuri==SemSimConstants.CUSTOM_PHYSICAL_ENTITY_CLASS_URI) {
+							semsimmodel.addReferencePhysicalEntity(new ReferencePhysicalEntity(superclsuri, label));
 							pmc = semsimmodel.getCustomPhysicalEntityByName(SemSimOWLFactory.getRDFLabels(ont, custind)[0]);
+						}
 						if(pmc!=null){
 							pmc.addReferenceOntologyAnnotation(SemSimConstants.BQB_IS_VERSION_OF_RELATION, superclsuri, label);
 						}

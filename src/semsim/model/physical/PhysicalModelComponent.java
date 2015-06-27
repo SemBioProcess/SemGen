@@ -57,6 +57,13 @@ public abstract class PhysicalModelComponent extends SemSimComponent implements 
 		annotations.addAll(newset);
 	}
 	
+	public void removeReferenceAnnotationsofType(SemSimRelation relation) {
+		Set<ReferenceOntologyAnnotation> refs = getReferenceOntologyAnnotations(relation);
+		for (ReferenceOntologyAnnotation ref : refs) {
+			annotations.remove(ref);
+		}
+	}
+	
 	public PhysicalModelComponent clone() throws CloneNotSupportedException {
         return (PhysicalModelComponent) super.clone();
 	}

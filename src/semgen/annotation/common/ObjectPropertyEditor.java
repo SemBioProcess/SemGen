@@ -91,6 +91,7 @@ public abstract class ObjectPropertyEditor extends JPanel implements ActionListe
 	}
 	
 	public void setRelationships(int index) {
+		library.clearRelations(index, relation);
 		if (!components.isEmpty()) {
 			for (Integer c : components) {
 				library.addRelationship(index, relation, c);

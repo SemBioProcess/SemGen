@@ -454,6 +454,7 @@ public class SemSimOWLwriter extends ModelWriter {
 		for(PhysicalModelComponent pmc : custs){
 			for(ReferenceOntologyAnnotation ref : pmc.getReferenceOntologyAnnotations(SemSimConstants.BQB_IS_VERSION_OF_RELATION)){
 				OWLClass refclass = factory.getOWLClass(IRI.create(ref.getReferenceURI()));
+				
 				if(!ont.getClassesInSignature().contains(refclass)){
 					String parent = pmc.getSemSimClassURI().toString();
 					SemSimOWLFactory.addClass(ont, ref.getReferenceURI().toString(), new String[]{parent}, manager);
