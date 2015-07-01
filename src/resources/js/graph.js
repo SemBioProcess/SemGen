@@ -142,6 +142,7 @@ function Graph() {
 	 */
 	var path;
 	var node;
+	var text;
 	this.update = function () {
 		$(this).triggerHandler("preupdate");
 		
@@ -156,6 +157,26 @@ function Graph() {
 			.attr("class", function(d) { return "link " + d.type; });
 	    
 		path.exit().remove();
+		
+		// Add link text
+		text = vis.selectAll("svg > g > text")
+			.data(links, function(d) { return d.source.id + "-" + d.target.id; });
+			
+		text.enter().append("svg:text")
+			.attr("class", "linkLabel")
+			.attr("font-size", "14px")
+			.attr("text-anchor", "middle")
+			.text(function(d) {return d.label; });
+		
+		text.exit().remove();
+		
+		// // Alternatively, add link text path
+		// // I think this is too messy, though...
+		// text.append("svg:textPath")
+		// 	.attr("xlink:href", function(d) { return "#" + d.source.id + "-" + d.target.id; })
+		// 	.attr("startOffset", "15%")
+		// 	.text(function(d) {return d.label; });
+		// text.exit().remove();
 		
 		// Build the nodes
 	    node = vis.selectAll("g.node")
@@ -203,7 +224,11 @@ function Graph() {
     	    		"M" + dtxs + "," + dtys + "l" + (arrowHeadWidth * Math.cos(d90 - theta) - 10 * Math.cos(theta)) + "," + (-arrowHeadWidth * Math.sin(d90 - theta) - 10 * Math.sin(theta)) +
     	    		"L" + (dtxs - arrowHeadWidth * Math.cos(d90 - theta) - 10 * Math.cos(theta)) + "," + (dtys + arrowHeadWidth * Math.sin(d90 - theta) - 10 * Math.sin(theta)) +
     	    		"z";
-    	  });
+    	});
+		
+		// Display and update the link labels  
+		text.attr("x", function(d) { return d.source.x + (d.target.x - d.source.x)/2; });
+		text.attr("y", function(d) { return d.source.y + (d.target.y - d.source.y)/2; });
     	  
     	// Execute the tick handler for each node
     	node.each(function (d) {
@@ -219,10 +244,10 @@ function Graph() {
 	    }
 	};
 	
-	// Highlight a node, its links, and the nodes that its linked to
+	// Highlight a node, its links, link labels, and the nodes that its linked to
 	this.highlightMode = function (highlightNode) {
 		// Remove any existing dim assignments
-		vis.selectAll(".node, path.link").each(function (d) {
+		vis.selectAll(".node, path.link, text.linkLabel").each(function (d) {
 			d3.select(this).classed("dim", false);
 		});
 		
@@ -231,10 +256,10 @@ function Graph() {
 			return;
 		
 		// Get all the nodes that need to be highlighted
-		// and dim all the links that need to be dimmed
+		// and dim all the links and labels that need to be dimmed
 		var nodesToHighlight = {};
 		nodesToHighlight[highlightNode.index] = 1;
-		vis.selectAll("path.link").each(function (d) {
+		vis.selectAll("path.link, text.linkLabel").each(function (d) {
 			if(d.source == highlightNode || d.target == highlightNode) {
 				nodesToHighlight[d.source.index] = 1;
 				nodesToHighlight[d.target.index] = 1;

@@ -1,7 +1,5 @@
 package semgen.stage.serialization;
 
-import java.util.ArrayList;
-
 import semgen.SemGen;
 import semsim.model.computational.datastructures.DataStructure;
 

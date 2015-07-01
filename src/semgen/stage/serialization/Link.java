@@ -13,8 +13,9 @@ public class Link {
 		this.parentModelId = parentModelId;
 	}
 
-	public Link(String sourceId, String label, ArrayList<String> mediators) {
+	public Link(String sourceId, String parentModelId, String label, ArrayList<String> mediators) {
 		this.sourceId = sourceId;
+		this.parentModelId = parentModelId;
 		this.label = label;
 		this.mediators = mediators;
 	}

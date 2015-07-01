@@ -66,7 +66,7 @@ Node.prototype.canLink = function () {
 }
 
 Node.prototype.getLinks = function () {
-	if(!this.inputs) // Is this in the right place? Should it be in "canLink" function?
+	if(!this.inputs)
 		return null;
 	
 	// Don't show any inputs to this node can't link
@@ -79,6 +79,7 @@ Node.prototype.getLinks = function () {
 		var inputData = this.inputs[i];
 		var inputNodeId;
 		var type;
+		var linkLabel = inputData.label;
 		
 		// If the linked node is in a different parent, mark it as external
 		if(inputData.parentModelId != this.parent.id) {
@@ -97,7 +98,7 @@ Node.prototype.getLinks = function () {
 			else
 				inputNodeId = inputData.sourceId;
 		}
-		// Otherwise, it is a string referring to the input node
+		
 		else {
 			type = "internal";
 			inputNodeId = inputData.sourceId;
@@ -123,6 +124,7 @@ Node.prototype.getLinks = function () {
 			target: this,
 			type: type,
 			length: type == "external" ? 200 : 40,
+			label: linkLabel,
 			value: 1,
 		});
 	}
