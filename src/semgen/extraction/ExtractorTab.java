@@ -44,11 +44,9 @@ import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semgen.utilities.uicomponent.SemGenTab;
 import semsim.extraction.Extraction;
-import semsim.extraction.Extractor;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
@@ -778,7 +776,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 				
 				if (extractedfile != null) {
 					try {
-						extractedmodel = Extractor.extract(semsimmodel, workbench.getExtraction());
+						extractedmodel = Extraction.extractToNewModel(semsimmodel, workbench.getExtraction());
 						manager.saveOntology(extractedmodel.toOWLOntology(), new RDFXMLOntologyFormat(),IRI.create(extractedfile));
 						optionToEncode(extractedfile.getName());
 					} 
