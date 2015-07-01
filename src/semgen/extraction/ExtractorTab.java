@@ -296,10 +296,10 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		
 		Set<DataStructure> outputspreserveddatastructures = new HashSet<DataStructure>();
 
-		// Get all the data structures in the selected processes panel
-		// Then all the data structures in the selected entities panel
-		// Then all the data structures associated with the selected variables
-		// Then all the data structures from the selected modules
+		// Get all the contents in the selected processes panel
+		// Then all the contents in the selected entities panel
+		// Then all the contents associated with the selected variables
+		// Then all the contents from the selected modules
 		for(int p = 0; p < processespanel.checkboxpanel.getComponentCount(); p++){
 			
 			if (processespanel.checkboxpanel.getComponent(p) instanceof ExtractorJCheckBox) {
@@ -330,7 +330,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 			}
 		}
 		
-		// Collect data structures to preserve from the entities panel
+		// Collect contents to preserve from the entities panel
 		for (int w = 0; w < entitiespanel.checkboxpanel.getComponentCount(); w++) {
 			
 			if (entitiespanel.checkboxpanel.getComponent(w) instanceof ExtractorJCheckBox) {
@@ -363,7 +363,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 			}
 		}
 		
-		// Collect the data structures to preserve from the sub-models checkboxes
+		// Collect the contents to preserve from the sub-models checkboxes
 		for (int x = 0; x < submodelspanel.checkboxpanel.getComponentCount(); x++) {
 			
 			if (codewordspanel.checkboxpanel.getComponent(x) instanceof ExtractorJCheckBox) {
@@ -376,12 +376,12 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 					
 					for (DataStructure onedatastr : tempbox.associateddatastructures) {
 						
-						Set<DataStructure> requiredinputs = onedatastr.getComputationInputs();											
 						workbench.getExtraction().addDataStructureToExtract(onedatastr, true);
+						Set<DataStructure> requiredinputs = onedatastr.getComputationInputs();											
 						
 						for(DataStructure oneinput : requiredinputs){
 							if(!workbench.getExtraction().getDataStructuresToExtract().containsKey(oneinput)){
-								workbench.getExtraction().addDataStructureToExtract(oneinput, true);
+								workbench.getExtraction().addDataStructureToExtract(oneinput, false);
 							}
 						}
 					}
@@ -390,7 +390,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		}
 		Boolean first = true;
 		
-		// Collect the data structures to preserve from the codewords checkboxes
+		// Collect the contents to preserve from the codewords checkboxes
 		for (int x = 0; x < codewordspanel.checkboxpanel.getComponentCount(); x++) {
 			
 			if (codewordspanel.checkboxpanel.getComponent(x) instanceof ExtractorJCheckBox) {

@@ -147,6 +147,7 @@ public class Extraction {
 	
 	
 	public boolean isInputForExtraction(DataStructure ds){
+		
 		Boolean isinput = false;
 		Boolean inputexplicitlyincluded = getDataStructuresToExtract().containsKey(ds);
 		
