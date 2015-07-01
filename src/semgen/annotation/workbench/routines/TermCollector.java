@@ -37,8 +37,8 @@ public class TermCollector {
 	 * @return copy of the affiliated composites
 	 */
 	
-	public ArrayList<Integer> getCopositeAffiliates() {
-		return new ArrayList<Integer>(containingcws);
+	public ArrayList<Integer> getCompositeAffiliates() {
+		return new ArrayList<Integer>(containingindicies);
 	}
 	
 	/** 
@@ -70,23 +70,23 @@ public class TermCollector {
 	
 	private void collect() {
 		switch (library.getSemSimType(termindex)) {
-		case COMPOSITE_PHYSICAL_ENTITY:
-			collectforCompositeEntity();
-			break;
-		case CUSTOM_PHYSICAL_ENTITY:
-			collectforSingularEntity();
-			break;
-		case CUSTOM_PHYSICAL_PROCESS:
-			collectforProcess();
-			break;
 		case PHYSICAL_PROPERTY:
 			collectCodewordswithSingularProperty();
 			break;
 		case PHYSICAL_PROPERTY_IN_COMPOSITE:
 			collectAssociateProperties();
 			break;
+		case CUSTOM_PHYSICAL_ENTITY:
+			collectforSingularEntity();
+			break;
 		case REFERENCE_PHYSICAL_ENTITY:
 			collectforSingularEntity();
+			break;
+		case COMPOSITE_PHYSICAL_ENTITY:
+			collectforCompositeEntity();
+			break;
+		case CUSTOM_PHYSICAL_PROCESS:
+			collectforProcess();
 			break;
 		case REFERENCE_PHYSICAL_PROCESS:
 			collectforProcess();

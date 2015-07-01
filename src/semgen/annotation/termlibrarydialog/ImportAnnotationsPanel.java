@@ -19,6 +19,10 @@ import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.file.SemGenOpenFileChooser;
 
+/**
+ * Allows the importation of annotations from another model. The user can choose to only import the annotations into the library 
+ * all the way to a full copy of the model, submodel and datastructure annotations.
+ */
 public class ImportAnnotationsPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
@@ -51,8 +55,8 @@ public class ImportAnnotationsPanel extends JPanel implements ActionListener {
 		
 		add(loadpane);
 		
-		checklist.add(new JCheckBox("Import annotations for codewords with the same name"));
-		checklist.add(new JCheckBox("Import annotations for submodels with the same name"));
+		checklist.add(new JCheckBox("Import annotations for codewords with the same name", true));
+		checklist.add(new JCheckBox("Import annotations for submodels with the same name", true));
 		
 		JPanel optionpane = new JPanel();
 		optionpane.setBackground(SemGenSettings.lightblue);

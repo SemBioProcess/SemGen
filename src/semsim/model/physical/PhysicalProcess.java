@@ -106,6 +106,18 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 		return allpents;
 	}
 	
+	public void removeParticipant(PhysicalEntity pe) {
+		if (sources.keySet().contains(pe)) {
+			sources.remove(pe);
+		}
+		if (sinks.keySet().contains(pe)) {
+			sinks.remove(pe);
+		}
+		if (mediators.contains(pe)) {
+			mediators.remove(pe);
+		}
+	}
+	
 	@Override
 	protected boolean isEquivalent(Object obj) {
 		PhysicalProcess proc = (PhysicalProcess)obj;

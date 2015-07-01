@@ -63,7 +63,6 @@ import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.owl.SemSimOWLFactory;
-import semsim.utilities.SemSimUtil;
 
 public class SemSimOWLreader extends ModelReader {
 	private OWLDataFactory factory;

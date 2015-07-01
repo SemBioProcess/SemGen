@@ -24,7 +24,6 @@ public class ExtractorWorkbench extends Workbench {
 	
 	private Map<DataStructure,Set<? extends DataStructure>> extractionmap;
 
-
 	public ExtractorWorkbench(File file, SemSimModel model) {
 		sourcefile = file;
 		semsimmodel = model;

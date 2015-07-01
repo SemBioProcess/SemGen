@@ -29,18 +29,26 @@ import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.utilities.ReferenceOntologies.ReferenceOntology;
 import semsim.writing.CaseInsensitiveComparator;
 
+/**
+ * This class is the central repository for all SemSim annotations in an annotator tab. Each annotation is wrapped in an
+ * instance of the IndexCard class which is stored in a single ordered list (masterlist). The indicies of each instance of a 
+ * particular SemSim type are stored in seperate ArrayLists. Durring run time, items in the masterlist are not removed. Instead,
+ * its index is removed from its corresponding type index list and it's flagged as deleted.
+ * @author Christopher
+ *
+ */
 public class SemSimTermLibrary extends Observable {
 	
 	private ReferenceOntology lastont;
-	private ArrayList<Integer> cpepps = new ArrayList<Integer>();
-	private ArrayList<Integer> pps = new ArrayList<Integer>();
-	private ArrayList<Integer> rpes = new ArrayList<Integer>();
-	private ArrayList<Integer> cupes = new ArrayList<Integer>();
-	private ArrayList<Integer> cpes = new ArrayList<Integer>();
-	private ArrayList<Integer> procs = new ArrayList<Integer>();
+	private ArrayList<Integer> ppcpeindexer = new ArrayList<Integer>();
+	private ArrayList<Integer> singppindexer = new ArrayList<Integer>();
+	private ArrayList<Integer> rpeindexer = new ArrayList<Integer>();
+	private ArrayList<Integer> custpeindexer = new ArrayList<Integer>();
+	private ArrayList<Integer> cpeindexer = new ArrayList<Integer>();
+	private ArrayList<Integer> procindexer = new ArrayList<Integer>();
 	
 	private ArrayList<IndexCard<?>> masterlist = new ArrayList<IndexCard<?>>();
-	public enum LibraryEvent {SINGULAR_TERM_CREATED, SINGULAR_TERM_CHANGE, COMPOSITE_ENTITY_CHANGE, PROCESS_CHANGE};
+	public enum LibraryEvent {SINGULAR_TERM_REMOVED, SINGULAR_TERM_CREATED, SINGULAR_TERM_CHANGE, COMPOSITE_ENTITY_CHANGE, PROCESS_CHANGE};
 	
 	public SemSimTermLibrary(SemSimModel model) {
 		for (PhysicalPropertyinComposite pp : SemGen.semsimlib.getCommonProperties()) {
@@ -84,7 +92,7 @@ public class SemSimTermLibrary extends Observable {
 		masterlist.add(ppic);
 		
 		i = masterlist.indexOf(ppic);
-		cpepps.add(i);
+		ppcpeindexer.add(i);
 		return i;
 	}
 	
@@ -102,7 +110,7 @@ public class SemSimTermLibrary extends Observable {
 		masterlist.add(ppic);
 		
 		i = masterlist.indexOf(ppic);
-		pps.add(i);
+		singppindexer.add(i);
 		return i;
 	}
 	
@@ -120,7 +128,7 @@ public class SemSimTermLibrary extends Observable {
 		masterlist.add(ic);
 		
 		i = masterlist.indexOf(ic);
-		rpes.add(i);
+		rpeindexer.add(i);
 		return i;
 	}
 	
@@ -132,7 +140,7 @@ public class SemSimTermLibrary extends Observable {
 		masterlist.add(ic);
 		
 		i = masterlist.indexOf(ic);
-		cupes.add(i);
+		custpeindexer.add(i);
 		return i;
 	}
 	
@@ -157,7 +165,7 @@ public class SemSimTermLibrary extends Observable {
 		masterlist.add(ic);
 		
 		i = masterlist.indexOf(ic);
-		cpes.add(i);
+		cpeindexer.add(i);
 		return i;
 	}
 	
@@ -192,7 +200,7 @@ public class SemSimTermLibrary extends Observable {
 		masterlist.add(ic);
 		
 		i = masterlist.indexOf(ic);
-		procs.add(i);
+		procindexer.add(i);
 		return i;
 	}
 
@@ -291,25 +299,25 @@ public class SemSimTermLibrary extends Observable {
 	}
 
 	public Integer getPhysicalPropertyIndex(PhysicalPropertyinComposite pp) {
-		for (Integer i : cpepps) {
+		for (Integer i : ppcpeindexer) {
 			if (masterlist.get(i).isTermEquivalent(pp)) return i; 
 		}
 		return -1;
 	}
 	
 	public Integer getPhysicalPropertyIndex(PhysicalProperty pp) {
-		for (Integer i : pps) {
+		for (Integer i : singppindexer) {
 			if (masterlist.get(i).isTermEquivalent(pp)) return i; 
 		}
 		return -1;
 	}
 	
 	public ArrayList<Integer> getSortedAssociatePhysicalPropertyIndicies() {
-		return sortComponentIndiciesbyName(cpepps);
+		return sortComponentIndiciesbyName(ppcpeindexer);
 	}
 	
 	public ArrayList<Integer> getSortedPhysicalPropertyIndicies() {
-		return sortComponentIndiciesbyName(pps);
+		return sortComponentIndiciesbyName(singppindexer);
 	}
 
 	public ReferencePhysicalEntity getReferencePhysicalEntity(Integer index) {
@@ -317,11 +325,11 @@ public class SemSimTermLibrary extends Observable {
 	}
 	
 	public ArrayList<Integer> getSortedReferencePhysicalEntityIndicies() {
-		return sortComponentIndiciesbyName(rpes);
+		return sortComponentIndiciesbyName(rpeindexer);
 	}
 	
 	public int getIndexofReferencePhysicalEntity(ReferencePhysicalEntity rpe) {
-		for (Integer i : rpes) {
+		for (Integer i : rpeindexer) {
 			if (masterlist.get(i).isTermEquivalent(rpe)) return i; 
 		}
 		return -1;
@@ -332,7 +340,7 @@ public class SemSimTermLibrary extends Observable {
 	}
 
 	public int getIndexofCustomPhysicalEntity(CustomPhysicalEntity cupe) {
-		for (Integer i : cupes) {
+		for (Integer i : custpeindexer) {
 			if (masterlist.get(i).isTermEquivalent(cupe)) {
 				return i; 
 			}
@@ -345,7 +353,7 @@ public class SemSimTermLibrary extends Observable {
 	}
 
 	public int getIndexofCompositePhysicalEntity(CompositePhysicalEntity cpe) {
-		for (Integer i : cpes) {
+		for (Integer i : cpeindexer) {
 			if (masterlist.get(i).isTermEquivalent(cpe)) return i; 
 		}
 		return -1;
@@ -356,19 +364,19 @@ public class SemSimTermLibrary extends Observable {
 	}
 		
 	public Integer getPhysicalProcessIndex(PhysicalProcess process) {
-		for (Integer i : procs) {
+		for (Integer i : procindexer) {
 			if (masterlist.get(i).getName().equals(process.getName())) return i; 
 		}
 		return -1;
 	}
 	
 	public ArrayList<Integer> getSortedPhysicalProcessIndicies() {
-		return sortComponentIndiciesbyName(procs);
+		return sortComponentIndiciesbyName(procindexer);
 	}	
 	
 	public ArrayList<Integer> getSortedReferencePhysicalProcessIndicies() {
 		ArrayList<Integer> refprocs = new ArrayList<Integer>();
-		for (Integer i : procs) {
+		for (Integer i : procindexer) {
 			if (masterlist.get(i).isReferenceTerm()) refprocs.add(i);
 		}
 		return sortComponentIndiciesbyName(refprocs);
@@ -376,14 +384,14 @@ public class SemSimTermLibrary extends Observable {
 	
 	public ArrayList<Integer> getSortedSingularPhysicalEntityIndicies() {
 		ArrayList<Integer> list = new ArrayList<Integer>();
-		list.addAll(cupes);
-		list.addAll(rpes);
+		list.addAll(custpeindexer);
+		list.addAll(rpeindexer);
 		
 		return sortComponentIndiciesbyName(list);
 	}
 	
 	public ArrayList<Integer> getSortedCompositePhysicalEntityIndicies() {
-		return sortComponentIndiciesbyName(cpes);
+		return sortComponentIndiciesbyName(cpeindexer);
 	}
 		
 	public ArrayList<Integer> getAllReferenceTerms() {
@@ -511,37 +519,37 @@ public class SemSimTermLibrary extends Observable {
 		return getCompositeEntityIndicies(getComponentIndex(cpe));
 	}
 	public void removePhysicalProperty(Integer index) {
-		cpepps.remove(index);
+		ppcpeindexer.remove(index);
 		masterlist.get(index).setRemoved(true);
 		notifySingularChanged();
 	}
 
 	public void removeReferencePhysicalEntity(Integer index) {
-		rpes.remove(index);
+		rpeindexer.remove(index);
 		masterlist.get(index).setRemoved(true);
-		notifySingularChanged();
+		notifySingularRemoved();
 	}
 
 	public void removeCustomPhysicalEntity(Integer index) {
-		cupes.remove(index);
+		custpeindexer.remove(index);
 		masterlist.get(index).setRemoved(true);
-		notifySingularChanged();
+		notifySingularRemoved();
 	}
 
 	public void removeCompositePhysicalEntity(Integer index) {
-		cpes.remove(index);
+		cpeindexer.remove(index);
 		masterlist.get(index).setRemoved(true);
 		notifyCompositeEntityChanged();
 	}
 
 	public void removePhysicalProcesses(Integer index) {
-		procs.remove(index);
+		procindexer.remove(index);
 		masterlist.get(index).setRemoved(true);
 		notifyProcessChanged();
 	}
 	
 	public void removeSingularPhysicalProperty(Integer index) {
-		pps.remove(index);
+		singppindexer.remove(index);
 		masterlist.get(index).setRemoved(true);
 		notifySingularChanged();
 	}
@@ -572,20 +580,20 @@ public class SemSimTermLibrary extends Observable {
 		for (SemSimTypes type : types) {
 			switch (type) {
 			case COMPOSITE_PHYSICAL_ENTITY:
-				list.addAll(cpes);
+				list.addAll(cpeindexer);
 				break;
 			case CUSTOM_PHYSICAL_ENTITY:
-				list.addAll(cupes);
+				list.addAll(custpeindexer);
 				break;
 			case PHYSICAL_PROCESS:
-				list.addAll(procs);
+				list.addAll(procindexer);
 				break;
 			case PHYSICAL_PROPERTY:
-				list.addAll(cpepps);
-				list.addAll(pps);
+				list.addAll(ppcpeindexer);
+				list.addAll(singppindexer);
 				break;
 			case REFERENCE_PHYSICAL_ENTITY:
-				list.addAll(rpes);
+				list.addAll(rpeindexer);
 				break;
 			default:
 				break;
@@ -656,6 +664,11 @@ public class SemSimTermLibrary extends Observable {
 	private void notifySingularAdded() {
 		setChanged();
 		notifyObservers(LibraryEvent.SINGULAR_TERM_CREATED);
+	}
+	
+	private void notifySingularRemoved() {
+		setChanged();
+		notifyObservers(LibraryEvent.SINGULAR_TERM_REMOVED);
 	}
 	
 	private void notifySingularChanged() {
