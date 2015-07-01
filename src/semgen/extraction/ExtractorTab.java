@@ -376,9 +376,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 					
 					for (DataStructure onedatastr : tempbox.associateddatastructures) {
 						
-						// MAKE SURE TO CHECK THAT THIS IS WORKING OK
-						Set<DataStructure> requiredinputs = onedatastr.getComputationInputs();
-											
+						Set<DataStructure> requiredinputs = onedatastr.getComputationInputs();											
 						workbench.getExtraction().addDataStructureToExtract(onedatastr, true);
 						
 						for(DataStructure oneinput : requiredinputs){
@@ -776,7 +774,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 				
 				if (extractedfile != null) {
 					try {
-						extractedmodel = Extraction.extractToNewModel(semsimmodel, workbench.getExtraction());
+						extractedmodel = workbench.getExtraction().extractToNewModel();
 						manager.saveOntology(extractedmodel.toOWLOntology(), new RDFXMLOntologyFormat(),IRI.create(extractedfile));
 						optionToEncode(extractedfile.getName());
 					} 

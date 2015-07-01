@@ -20,7 +20,7 @@ public class ExtractorWorkbench extends Workbench {
 	public ExtractorWorkbench(File file, SemSimModel model) {
 		sourcefile = file;
 		semsimmodel = model;
-		extraction = new Extraction();
+		extraction = new Extraction(semsimmodel);
 	}
 	
 	@Override

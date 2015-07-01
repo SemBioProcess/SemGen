@@ -20,12 +20,38 @@ import semsim.model.physical.PhysicalProcess;
  */
 public class Extraction {
 
+	/**
+	 * The keyset for this map includes all physical processes that should be included in the extracted model.
+	 * The boolean values indicate whether the process participants should also be included.
+	 */
 	private Map<PhysicalProcess, Boolean> processestoextract;
+	
+	/**
+	 * The keyset for this map includes all physical entities that should be included in the extracted model.
+	 * The boolean values are currently meaningless, but are included for homogeneity.
+	 */
 	private Map<PhysicalEntity, Boolean> entitiestoextract;
+	
+	/**
+	 * The keyset for this map includes all data structures that should be included in the extracted model.
+	 * The boolean values indicate whether the computational inputs for the data structure
+	 * should also be included in the extraction.
+	 */
 	private Map<DataStructure, Boolean> datastructurestoextract;
+	
+	/**
+	 * The keyset for this map includes all submodels that should be included in the extracted model.
+	 * The boolean values indicate whether to attempt to preserved the submodels within the submodel.
+	 */
 	private Map<Submodel, Boolean> submodelstoextract;
 	
-	public Extraction(){
+	/**
+	 * The model from which the extraction will be extracted.
+	 */
+	private SemSimModel sourcemodel;
+	
+	public Extraction(SemSimModel sourcemodel){
+		this.setSourceModel(sourcemodel);
 		reset();
 	}
 	
@@ -35,6 +61,15 @@ public class Extraction {
 		setDataStructuresToExtract(new HashMap<DataStructure, Boolean>());
 		setSubmodelsToExtract(new HashMap<Submodel, Boolean>());
 	}
+	
+	public SemSimModel getSourceModel() {
+		return sourcemodel;
+	}
+
+	public void setSourceModel(SemSimModel sourcemodel) {
+		this.sourcemodel = sourcemodel;
+	}
+	
 
 	// Physical processes
 	public Map<PhysicalProcess, Boolean> getProcessesToExtract() {
@@ -149,24 +184,23 @@ public class Extraction {
 	 *  to the input DataStructures required to compute them (these inputs can differ from the source model)
 	 *  @return A new SemSimModel representing the extract
 	 */
-	public static SemSimModel extractToNewModel(SemSimModel srcmodel, 
-			Extraction extraction) throws CloneNotSupportedException {
+	public SemSimModel extractToNewModel() throws CloneNotSupportedException {
 		SemSimModel extractedmodel = new SemSimModel();
 		
 		// Copy over all the model-level information
-		for(Annotation modann : srcmodel.getAnnotations()){
+		for(Annotation modann : getSourceModel().getAnnotations()){
 			extractedmodel.addAnnotation(modann.clone());
 		}
 		
-		for(DataStructure soldom : srcmodel.getSolutionDomains()){
+		for(DataStructure soldom : getSourceModel().getSolutionDomains()){
 			extractedmodel.addDataStructure(soldom.clone());
 		}
-		for(DataStructure ds : extraction.getDataStructuresToExtract().keySet()){
+		for(DataStructure ds : getDataStructuresToExtract().keySet()){
 			
 			// If the data structure has been changed from a dependent variable into an input
 			DataStructure newds = null;
 			
-			if( ! extraction.getDataStructuresToExtract().get(ds) && ds.getComputation().getInputs().size()>0){
+			if( ! getDataStructuresToExtract().get(ds) && ds.getComputation().getInputs().size()>0){
 				newds = ds.clone();
 				newds.setComputation(new Computation(newds));
 				newds.setStartValue(null);
@@ -178,7 +212,7 @@ public class Extraction {
 			}
 		}
 		
-		extractSubModels(srcmodel, extractedmodel, extraction);
+		extractSubModels(extractedmodel);
 		
 		// Copy the physical entity and process info into the model-level entity and process sets
 		Set<PhysicalEntity> ents = new HashSet<PhysicalEntity>();
@@ -206,18 +240,20 @@ public class Extraction {
 	
 	// if all codewords in a component (submodel) are being preserved, preserve the component, but not if 
 	// the component is what's being extracted
-	private static void extractSubModels(SemSimModel srcmodel, SemSimModel extractedmodel,
-			Extraction extractioncontents) throws CloneNotSupportedException {
+	private void extractSubModels(SemSimModel extractedmodel) throws CloneNotSupportedException {
 		
-		for(Submodel sub : extractioncontents.getSubmodelsToExtract().keySet()){
+		for(Submodel sub : getSubmodelsToExtract().keySet()){
 			
 			Submodel newsub = extractedmodel.addSubmodel(sub.clone());
 			
-			for(Submodel subsub : newsub.getSubmodels()){
+			if(getSubmodelsToExtract().get(sub)==true){
 				
-				// If we're not preserving all the data structures for a submodel of the submodel, don't preserve the sub-submodel
-				if(!extractioncontents.getDataStructuresToExtract().keySet().containsAll(subsub.getAssociatedDataStructures())){
-					newsub.removeSubmodel(subsub);
+				for(Submodel subsub : newsub.getSubmodels()){
+					
+					// If we're not preserving all the data structures for a submodel of the submodel, don't preserve the sub-submodel
+					if(!getDataStructuresToExtract().keySet().containsAll(subsub.getAssociatedDataStructures())){
+						newsub.removeSubmodel(subsub);
+					}
 				}
 			}
 		}
