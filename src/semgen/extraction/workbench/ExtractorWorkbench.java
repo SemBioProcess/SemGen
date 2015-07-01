@@ -7,31 +7,20 @@ import java.util.Map;
 import java.util.Set;
 
 import semgen.utilities.Workbench;
+import semsim.extraction.Extraction;
 import semsim.model.collection.SemSimModel;
-import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.physical.PhysicalEntity;
-import semsim.model.physical.PhysicalProcess;
-import semsim.model.physical.object.CompositePhysicalEntity;
 
 
 public class ExtractorWorkbench extends Workbench {
 	File sourcefile;
 	SemSimModel semsimmodel;
-	private HashMap<PhysicalProcess,Set<DataStructure>> processdatastructuremap;
-	private HashMap<PhysicalEntity,Set<DataStructure>> entitydatastructuremap;
-	private HashMap<Submodel,Set<DataStructure>> submodeldatastructuremap;
-	
-	private Map<DataStructure,Set<? extends DataStructure>> extractionmap;
-
+	Extraction extraction;
 
 	public ExtractorWorkbench(File file, SemSimModel model) {
 		sourcefile = file;
 		semsimmodel = model;
-		
-		createProcessDataStructureMap();
-		createEntityDataStructureMap();
-		createSubmodelDataStructureMap();
+		extraction = new Extraction();
 	}
 	
 	@Override
@@ -53,6 +42,10 @@ public class ExtractorWorkbench extends Workbench {
 	public String getModelSourceFile() {
 		return semsimmodel.getLegacyCodeLocation();
 	}
+	
+	public Extraction getExtraction(){
+		return extraction;
+	}
 
 	@Override
 	public File saveModel() {
@@ -71,79 +64,7 @@ public class ExtractorWorkbench extends Workbench {
 	public SemSimModel getSourceModel() {
 		return semsimmodel;
 	}
-
-	public HashMap<PhysicalProcess,Set<DataStructure>> getProcessDataStructureMap(){
-		return processdatastructuremap;
-	}
 	
-	public void setProcessDataStructureMap(HashMap<PhysicalProcess,Set<DataStructure>> map){
-		processdatastructuremap = map;
-	}
-	
-	public HashMap<PhysicalEntity,Set<DataStructure>> getEntityDataStructureMap(){
-		return entitydatastructuremap;
-	}
-	
-	public void setEntityDataStructureMap(HashMap<PhysicalEntity,Set<DataStructure>> map){
-		entitydatastructuremap = map;
-	}
-	
-	public HashMap<Submodel,Set<DataStructure>> getSubmodelDataStructureMap(){
-		return submodeldatastructuremap;
-	}
-	
-	public void setSubmodelDataStructureMap(HashMap<Submodel,Set<DataStructure>> map){
-		submodeldatastructuremap = map;
-	}
-	
-	private void createProcessDataStructureMap(){
-			
-		processdatastructuremap = new HashMap<PhysicalProcess,Set<DataStructure>>();
-		Set<DataStructure> propandproc = semsimmodel.getDataStructureswithPhysicalProcesses();
-		
-		// List physical properties of processes
-		for(DataStructure ds : propandproc){
-			PhysicalProcess proc = (PhysicalProcess) ds.getAssociatedPhysicalModelComponent();
-			
-			if(processdatastructuremap.containsKey(proc)){
-				processdatastructuremap.get(proc).add(ds);
-			}
-			else{
-				Set<DataStructure> cdwds = new HashSet<DataStructure>();
-				cdwds.add(ds);
-				processdatastructuremap.put(proc, cdwds);
-			}
-		}
-	}
-	
-	private void createEntityDataStructureMap(){
-		
-		entitydatastructuremap = new HashMap<PhysicalEntity,Set<DataStructure>>();
-		Set<DataStructure> dses = semsimmodel.getDataStructureswithCompositesEntities();
-		
-		for(DataStructure ds : dses){
-			CompositePhysicalEntity ent = (CompositePhysicalEntity) ds.getAssociatedPhysicalModelComponent();
-			
-			if(entitydatastructuremap.containsKey(ent)){
-				entitydatastructuremap.get(ent).add(ds);
-			}
-			else{
-				Set<DataStructure> cdwds = new HashSet<DataStructure>();
-				cdwds.add(ds);
-				entitydatastructuremap.put(ent, cdwds);
-			}
-		}
-	}
-	
-	// Generate the mappings between submodels and the data structures they are associated with
-	private void createSubmodelDataStructureMap(){
-		
-		submodeldatastructuremap = new HashMap<Submodel,Set<DataStructure>>();
-		
-		for(Submodel submodel : semsimmodel.getSubmodels()){
-			submodeldatastructuremap.put(submodel, submodel.getAssociatedDataStructures());
-		}
-	}
 	
 	// Retrieve the set of data structures are needed to compute a given data structure
 	public Set<DataStructure> getDataStructureDependencyChain(DataStructure startds){
@@ -176,45 +97,5 @@ public class ExtractorWorkbench extends Workbench {
 		
 		Set<DataStructure> dsset = new HashSet<DataStructure>(dsandcollectmap.keySet());
 		return dsset;
-	}
-
-	public Map<DataStructure,Set<? extends DataStructure>> getExtractionMap() {
-		return extractionmap;
-	}
-
-	public void setExtractionMap(Map<DataStructure,Set<? extends DataStructure>> extractionmap) {
-		this.extractionmap = extractionmap;
-	}
-	
-	// Add a data structure's computational inputs to the extraction map
-	public void addInputsToExtractionMap(DataStructure onedatastr){
-		for (DataStructure nextds : onedatastr.getComputationInputs()) {
-			extractionmap.put(nextds, nextds.getComputationInputs());
-			for(DataStructure secondaryds : nextds.getComputationInputs()){
-				if (!extractionmap.containsKey(secondaryds)) {
-					extractionmap.put(secondaryds, new HashSet<DataStructure>());
-				}
-			}
-		}
-	}
-	
-	// Add the data structures associated with a process's participants
-	public void addParticipantsToExtractionMap(PhysicalProcess pmc) {
-		// Add data structures associated with the participants in the process
-		for(PhysicalEntity ent : pmc.getParticipants()){
-			if(getEntityDataStructureMap().containsKey(ent)){
-				for(DataStructure entds : getEntityDataStructureMap().get(ent)){
-					// Maybe change so that if a cdwd that we're including is dependent on another that's
-					// a participant, make sure to include its inputs (all inputs?)
-					getExtractionMap().put(entds, entds.getComputationInputs());
-					// Add the entity's inputs, make them terminal
-					for(DataStructure oneentin : entds.getComputationInputs()){
-						if(!getExtractionMap().containsKey(oneentin)){
-							getExtractionMap().put(oneentin, new HashSet<DataStructure>());
-						}
-					}
-				}
-			}
-		}
 	}
 }

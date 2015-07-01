@@ -1,7 +1,6 @@
 package semsim.extraction;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import semsim.annotation.Annotation;
@@ -29,12 +28,12 @@ public class Extractor {
 	 * Extract out a portion of a model as a new SemSim model
 	 * 
 	 *  @param srcmodel The SemSimModel to extract from
-	 *  @param extractionmap A list of all DataStructures to preserve in the extracted model mapped
+	 *  @param extraction A list of all DataStructures to preserve in the extracted model mapped
 	 *  to the input DataStructures required to compute them (these inputs can differ from the source model)
 	 *  @return A new SemSimModel representing the extract
 	 */
 	public static SemSimModel extract(SemSimModel srcmodel, 
-			Map<DataStructure, Set<? extends DataStructure>> extractionmap) throws CloneNotSupportedException {
+			Extraction extractioncontents) throws CloneNotSupportedException {
 		SemSimModel extractedmodel = new SemSimModel();
 		
 		// Copy over all the model-level information
@@ -45,10 +44,10 @@ public class Extractor {
 		for(DataStructure soldom : srcmodel.getSolutionDomains()){
 			extractedmodel.addDataStructure(soldom.clone());
 		}
-		for(DataStructure ds : extractionmap.keySet()){
+		for(DataStructure ds : extractioncontents.getDataStructuresToExtract().keySet()){
 			
 			// If the data structure has been changed from a dependent variable into an input
-			if(extractionmap.get(ds).isEmpty() && !ds.getComputation().getInputs().isEmpty()){
+			if( ! extractioncontents.getDataStructuresToExtract().get(ds) && ds.getComputation().getInputs().size()>0){
 				DataStructure newds = ds.clone();
 				newds.setComputation(new Computation(newds));
 				newds.setStartValue(null);
@@ -59,7 +58,7 @@ public class Extractor {
 			}
 		}
 		
-		extractSubModels(srcmodel, extractedmodel, extractionmap);
+		extractSubModels(srcmodel, extractedmodel, extractioncontents);
 		
 		// Copy the physical entity and process info into the model-level entity and process sets
 		Set<PhysicalEntity> ents = new HashSet<PhysicalEntity>();
@@ -88,16 +87,17 @@ public class Extractor {
 	// if all codewords in a component (submodel) are being preserved, preserve the component, but not if 
 	// the component is what's being extracted
 	private static void extractSubModels(SemSimModel srcmodel, SemSimModel extractedmodel,
-			Map<DataStructure, Set<? extends DataStructure>> allinds2keep) throws CloneNotSupportedException {
+			Extraction extractioncontents) throws CloneNotSupportedException {
 		
-		for(Submodel sub : srcmodel.getSubmodels()){
-			Set<DataStructure> dsset = sub.getAssociatedDataStructures();
-			if(allinds2keep.keySet().containsAll(dsset) && !dsset.isEmpty()){
-				Submodel newsub = extractedmodel.addSubmodel(sub.clone());
-				for(Submodel subsub : newsub.getSubmodels()){
-					if(!allinds2keep.keySet().containsAll(subsub.getAssociatedDataStructures())){
-						newsub.removeSubmodel(subsub);
-					}
+		for(Submodel sub : extractioncontents.getSubmodelsToExtract().keySet()){
+			
+			Submodel newsub = extractedmodel.addSubmodel(sub.clone());
+			
+			for(Submodel subsub : newsub.getSubmodels()){
+				
+				// If we're not preserving all the data structures for a submodel of the submodel, don't preserve the sub-submodel
+				if(!extractioncontents.getDataStructuresToExtract().keySet().containsAll(subsub.getAssociatedDataStructures())){
+					newsub.removeSubmodel(subsub);
 				}
 			}
 		}

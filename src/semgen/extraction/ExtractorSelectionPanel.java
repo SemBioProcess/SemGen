@@ -39,14 +39,14 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 	public JPanel checkboxpanel = new JPanel();
 	public SemGenScrollPane scroller;
 
-	public HashMap<? extends SemSimComponent,Set<DataStructure>> termandcdwdsmap;
+	public Map<? extends SemSimComponent,Set<DataStructure>> termandcdwdsmap;
 	public Map<String, JCheckBox> termandcheckboxmap = new HashMap<String,JCheckBox>();
 	JPanel titlepanel = new JPanel();
 	public ExtractorTab extractor;
 	public JButton expandcontractbutton = new JButton(SemGenIcon.expendcontracticon);
 
 
-	public ExtractorSelectionPanel(ExtractorTab extractor, String title, HashMap<? extends SemSimComponent,Set<DataStructure>> map, JComponent addon){
+	public ExtractorSelectionPanel(ExtractorTab extractor, String title, Map<? extends SemSimComponent,Set<DataStructure>> map, JComponent addon){
 		this.extractor = extractor;
 		markallbox.setFont(SemGenFont.defaultItalic(-2));
 		markallbox.setToolTipText("Select all/none");
