@@ -86,16 +86,37 @@ public class SemSimModelSerializer {
 				
 				PhysicalProcess proc = (PhysicalProcess) dataStructure.getPhysicalProperty().getPhysicalPropertyOf();
 				
-				for(PhysicalEntity sink : proc.getSinkPhysicalEntities()) {
+				for(PhysicalEntity sink : proc.getSinkPhysicalEntities()) { // Source nodes never get created
 					physiomapNetwork.add(new PhysioMapNode(sink.getName(),
 							semSimModel.getName(),
 							proc.getName(),
 							proc.getSourcePhysicalEntities(),
 							proc.getMediatorPhysicalEntities()));
 				}
+				
 			}
 		}
-		
+		// Add any missing source nodes
+		for(DataStructure dataStructure : semSimModel.getDataStructures()){
+			if(dataStructure.getPhysicalProperty().getPhysicalPropertyOf() != null &&
+				dataStructure.getPhysicalProperty().getPhysicalPropertyOf() instanceof PhysicalProcess) {
+				
+				PhysicalProcess proc = (PhysicalProcess) dataStructure.getPhysicalProperty().getPhysicalPropertyOf();
+				
+				for(PhysicalEntity source : proc.getSourcePhysicalEntities()) {
+					PhysioMapNode sourceNode = new PhysioMapNode(source.getName(),
+							semSimModel.getName(),
+							null,
+							null,
+							null);
+					boolean dup = false;
+					for(PhysioMapNode pmNode : physiomapNetwork) {
+						if(pmNode.id.equals(sourceNode.id)) dup = true;
+					}
+					if(!dup) physiomapNetwork.add(sourceNode);
+				}
+			}
+		}
 		return physiomapNetwork;
 	}
 	

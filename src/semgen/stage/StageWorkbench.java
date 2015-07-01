@@ -165,7 +165,7 @@ public class StageWorkbench extends Workbench {
 						JOptionPane.showMessageDialog(null,  "'" + model.getName() + "' does not have a PhysioMap");
 					else
 						_commandSender.showPhysioMapNetwork(model.getName(),
-							SemSimModelSerializer.toJsonString(SemSimModelSerializer.getPhysioMapNetwork(model)));
+							SemSimModelSerializer.toJsonString(physiomapNetwork));
 					break;
 				default:
 					JOptionPane.showMessageDialog(null, "Task: '" + task +"', coming soon :)");
