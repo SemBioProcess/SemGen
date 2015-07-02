@@ -80,9 +80,14 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 		makebtn.setEnabled(false);
 		clearbtn.setEnabled(false);
 		
+		JLabel title = new JLabel("Add New Term");
+		title.setFont(SemGenFont.defaultBold(3));
+		title.setAlignmentX(Box.LEFT_ALIGNMENT);
+		
 		JPanel typepane = new JPanel();
 		typepane.setLayout(new BoxLayout(typepane, BoxLayout.PAGE_AXIS)); 
 		typepane.setBackground(SemGenSettings.lightblue);
+		typepane.add(title);
 		typepane.add(typechooser);
 		typepane.add(optionpane);
 		optionpane.setAlignmentX(Box.LEFT_ALIGNMENT);

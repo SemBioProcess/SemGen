@@ -45,6 +45,7 @@ public abstract class AnnotatorListPane<T extends AnnotationObjectButton, D exte
 		workbench.addObserver(this);
 		drawer.addObserver(this);
 		settings.addObserver(this);
+		addKeyListener(this);
 		
 		buttonpane.setBackground(Color.white);
 		buttonpane.setLayout(new BoxLayout(buttonpane, BoxLayout.Y_AXIS));
@@ -99,14 +100,15 @@ public abstract class AnnotatorListPane<T extends AnnotationObjectButton, D exte
 		int id = e.getKeyCode();
 		int index = btnarray.indexOf(focusbutton);
 		// Up arrow key
-		if (id == 38) {
-			index++;
-			if(index == btnarray.size()) index = 0;
+		if (id == KeyEvent.VK_UP) {
+			index--;
+			if(index==-1) index = btnarray.size()-1;
+			
 		}
 		// Down arrow key
-		if (id == 40) {
-			index--;
-			if(index!=-1) index = btnarray.size()-1;
+		if (id == KeyEvent.VK_DOWN) {
+			index++;
+			if(index == btnarray.size()) index = 0;
 		}
 		changeButtonFocus(btnarray.get(index));
 	}
