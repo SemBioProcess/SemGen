@@ -124,7 +124,7 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 	
 	@SuppressWarnings("serial")
 	protected void addCustomButtons() {
-			createlabel = new ComponentPanelLabel(SemGenIcon.createcompenticon,"Create new custom term"){ 
+			createlabel = new ComponentPanelLabel(SemGenIcon.createicon,"Create new custom term"){ 
 				public void onClick() {
 					createButtonClicked();
 				}
