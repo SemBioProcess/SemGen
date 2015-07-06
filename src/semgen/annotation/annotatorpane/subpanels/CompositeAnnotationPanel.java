@@ -47,6 +47,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 		termlib = lib;
 		setBackground(SemGenSettings.lightblue);
 		setAlignmentX(Box.LEFT_ALIGNMENT);
+		setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 
 		createPropertyPanel();
 		
@@ -67,7 +68,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 		JLabel propertyoflabel = new JLabel("property_of");
         propertyoflabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         propertyoflabel.setFont(SemGenFont.defaultItalic());
-        propertyoflabel.setBorder(BorderFactory.createEmptyBorder(0, indent*2, 0, 0));
+        propertyoflabel.setBorder(BorderFactory.createEmptyBorder(2, indent*2, 2, 0));
         
         JPanel propofpanel = new JPanel(new BorderLayout());
 		propofpanel.setBackground(SemGenSettings.lightblue);

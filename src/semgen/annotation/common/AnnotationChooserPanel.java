@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -52,7 +53,7 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 		combobox.setPreferredSize(dim);
 		combobox.setMaximumSize(dim);
 		
-		itempanel.setLayout(new BoxLayout(itempanel, BoxLayout.LINE_AXIS));
+		itempanel.setLayout(new FlowLayout(FlowLayout.LEADING, 3, 3));
 		itempanel.setBackground(SemGenSettings.lightblue);
 		itempanel.add(combobox);
 	}
@@ -93,11 +94,11 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 	
 	public void constructSelector() {
 		for (JComponent btn : lbllist) {
-			itempanel.add(btn, BorderLayout.EAST);
+			itempanel.add(btn);
 		}
 		itempanel.validate();
 		add(itempanel, BorderLayout.WEST);
-		add(Box.createGlue());
+		add(Box.createGlue(), BorderLayout.EAST);
 		validate();
 	}
 	
@@ -145,13 +146,10 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 				onEraseButtonClick();
 			}
 		};
-		JLabel dummy = new JLabel();
-		dummy.setBorder(BorderFactory.createEmptyBorder(1, 5, 1, 5));
-		lbllist.add(dummy);
-		lbllist.add(new JSeparator(SwingConstants.VERTICAL));
-		JLabel dummy2 = new JLabel();
-		dummy2.setBorder(BorderFactory.createEmptyBorder(1, 5, 1, 5));
-		lbllist.add(dummy2);
+		JSeparator separator = new JSeparator(SwingConstants.VERTICAL);
+		separator.setPreferredSize(new Dimension(2,25));
+
+		lbllist.add(separator);
 		lbllist.add(eraselabel);
 	}
 	
