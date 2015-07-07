@@ -98,7 +98,6 @@ public class TermEditorTab extends JPanel implements ListSelectionListener {
 	}
 	
 	private void updateList() {
-		
 		termlist.clearSelection();
 		terms = library.getRequestedTypes(getTypeSelections());
 		termlist.setListData(library.getComponentNames(terms).toArray(new String[]{}));

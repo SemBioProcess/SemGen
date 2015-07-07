@@ -66,15 +66,19 @@ public class TermModifier {
 				if (cpe.getArrayListOfEntities().size() == 0) blankcpes.add(index);
 			}
 		}
+		removeSingularfromLibrary();
+		
+		for (Integer cpei : blankcpes) {
+			removeCompositeEntity(cpei);
+		}
+	}
+	
+	private void removeSingularfromLibrary() {
 		if (library.isReferenceTerm(termindex)) {
 			library.removeReferencePhysicalEntity(termindex);
 		}
 		else {
 			library.removeCustomPhysicalEntity(termindex);
-		}
-		
-		for (Integer cpei : blankcpes) {
-			removeCompositeEntity(cpei);
 		}
 	}
 	
@@ -101,10 +105,13 @@ public class TermModifier {
 	public void runReplace(int repindex, boolean remove) {
 		switch (library.getSemSimType(termindex)) {
 		case COMPOSITE_PHYSICAL_ENTITY:
+			replaceCompositeEntity(repindex, remove);
 			break;
 		case CUSTOM_PHYSICAL_ENTITY:
+			replaceSingularEntity(repindex, remove);
 			break;
 		case CUSTOM_PHYSICAL_PROCESS:
+			replaceProcess(repindex, remove);
 			break;
 		case PHYSICAL_PROPERTY:
 			replaceSingularPhysicalProperty(repindex, remove);
@@ -112,8 +119,10 @@ public class TermModifier {
 		case PHYSICAL_PROPERTY_IN_COMPOSITE:
 			break;
 		case REFERENCE_PHYSICAL_ENTITY:
+			replaceSingularEntity(repindex, remove);
 			break;
 		case REFERENCE_PHYSICAL_PROCESS:
+			replaceProcess(repindex, remove);
 			break;
 		default:
 			break;
@@ -123,5 +132,30 @@ public class TermModifier {
 	private void replaceSingularPhysicalProperty(int replacement, boolean remove) {
 		drawer.batchSetSingularAnnotation(termaffiliates.getCodewordAffiliates(), replacement);
 		if (remove) library.removeSingularPhysicalProperty(termindex);
+	}
+	
+	private void replaceSingularEntity(int replacement, boolean remove) {
+		for (Integer index : termaffiliates.getCompositeAffiliates()) {
+			PhysicalModelComponent pmc = library.getComponent(index);
+			if (pmc.getSemSimType().equals(SemSimTypes.COMPOSITE_PHYSICAL_ENTITY)) {
+				CompositePhysicalEntity cpe = (CompositePhysicalEntity)pmc;
+				cpe.replacePhysicalEntity((PhysicalEntity)library.getComponent(termindex), (PhysicalEntity)library.getComponent(replacement));
+			}
+		}
+		if (remove) removeSingularfromLibrary();
+	}
+	
+	private void replaceCompositeEntity(int replacement, boolean remove) {
+		drawer.batchSetAssociatedComposite(termaffiliates.getCodewordAffiliates(), replacement);
+		for (Integer procindex : termaffiliates.getCompositeAffiliates()) {
+			PhysicalProcess proc = (PhysicalProcess) library.getComponent(procindex);
+			proc.removeParticipant((PhysicalEntity) library.getComponent(termindex));
+		}
+		if (remove) library.removeCompositePhysicalEntity(termindex);
+	}
+	
+	private void replaceProcess(int replacement, boolean remove) {
+		drawer.batchSetAssociatedComposite(termaffiliates.getCodewordAffiliates(), -1);
+		if (remove) library.removePhysicalProcesses(termindex);
 	}
 }

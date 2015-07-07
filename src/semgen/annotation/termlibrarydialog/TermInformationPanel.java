@@ -69,7 +69,7 @@ public class TermInformationPanel extends JPanel {
 	
 	private class InfoPanel extends JPanel {
 		private static final long serialVersionUID = 1L;
-		private Dimension dim = new Dimension(400,400);
+		private Dimension dim = new Dimension(400,300);
 		
 		public InfoPanel(String name, ArrayList<String> listdata) {
 			setPreferredSize(dim);
