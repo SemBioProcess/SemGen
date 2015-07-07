@@ -22,12 +22,12 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 
 	private AnnotatorWorkbench workbench;
 	private SemGenToolbarButton annotateitemchangesourcemodelcode = new SemGenToolbarButton(SemGenIcon.setsourceicon);
-	private SemGenToolbarButton annotateitemcopy = new SemGenToolbarButton(SemGenIcon.importicon);
+	private SemGenToolbarButton annotateitemcopy = new SemGenToolbarButton(SemGenIcon.libraryimporticon);
 	private SemGenToolbarButton annotateitemexportcsv = new SemGenToolbarButton(SemGenIcon.exporticon);
 	private SemGenToolbarButton annotateitemshowmarkers;
 	private JButton annotateitemshowimports = new JButton("Show imports");
-	private SemGenToolbarButton opentermcreator = new SemGenToolbarButton(SemGenIcon.createcompenticon);
-	private SemGenToolbarButton opentermlibrary= new SemGenToolbarButton(SemGenIcon.modifyicon);
+	private SemGenToolbarButton opentermcreator = new SemGenToolbarButton(SemGenIcon.libraryaddicon);
+	private SemGenToolbarButton opentermlibrary= new SemGenToolbarButton(SemGenIcon.librarymodifyicon);
 	private SemGenToolbarButton annotateitemtreeview = new SemGenToolbarButton(SemGenIcon.treeicon);
 	private SemGenToolbarButton extractorbutton = new SemGenToolbarButton(SemGenIcon.extractoricon);
 	private SemGenToolbarButton coderbutton = new SemGenToolbarButton(SemGenIcon.codericon);

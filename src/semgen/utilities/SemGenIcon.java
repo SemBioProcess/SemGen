@@ -27,6 +27,9 @@ public class SemGenIcon {
 	public static final ImageIcon modifyicon = createImageIcon("icons/Modify2020.png");
 	public static final ImageIcon loadsourceofimporticon = createImageIcon("icons/Load2020.png");
 	public static final ImageIcon homeicon = createImageIcon("icons/Home2020.png");
+	public static final ImageIcon libraryaddicon = createImageIcon("icons/libraryadd2020.png");
+	public static final ImageIcon librarymodifyicon = createImageIcon("icons/librarymodify2020.png");
+	public static final ImageIcon libraryimporticon = createImageIcon("icons/libraryimport2020.png");
 	public static final ImageIcon homeiconsmall = createImageIcon("icons/Home1515.png");
 	public static final ImageIcon extractoricon = createImageIcon("icons/extractoricon2020.png");
 	public static final ImageIcon annotatoricon = createImageIcon("icons/annotatoricon2020.png");
