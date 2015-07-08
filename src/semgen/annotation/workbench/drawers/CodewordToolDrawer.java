@@ -21,6 +21,11 @@ import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.utilities.SemSimComponentComparator;
+/**
+ * Class for accessing and modifying codewords (data structures) in a model 
+ * @author Christopher
+ *
+ */
 
 public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	public enum CodewordCompletion {
@@ -227,20 +232,34 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	}
 	
 	public void setDataStructureComposite(Integer index) {
-		DataStructure ds = componentlist.get(currentfocus);
+		if (currentfocus==-1) return; 
+		setDataStructureComposite(currentfocus, index);
 		
+		changeset.add(currentfocus);
+		changeNotification(modeledit.compositechanged);
+	}
+	
+	public void batchSetAssociatedComposite(ArrayList<Integer> cws, int selectedIndex) {
+		for (Integer i : cws) {
+			this.setDataStructureComposite(i, selectedIndex);
+			changeset.add(i);
+		}
+		changeNotification();
+	}
+	
+	
+	public void setDataStructureComposite(Integer cwindex, Integer compindex) {
+		DataStructure ds = componentlist.get(cwindex);
 		//If the new selection is equivalent to the old, do nothing
-		if ((termlib.getComponentIndex(ds.getAssociatedPhysicalModelComponent())==index)) {
+		if ((termlib.getComponentIndex(ds.getAssociatedPhysicalModelComponent())==compindex)) {
 			return;
 		}
-		if (index==-1) {
+		if (compindex==-1) {
 			ds.setAssociatedPhysicalModelComponent(null);
 		}
 		else {
-			ds.setAssociatedPhysicalModelComponent(termlib.getComponent(index));
+			ds.setAssociatedPhysicalModelComponent(termlib.getComponent(compindex));
 		}
-		changeset.add(currentfocus);
-		changeNotification(modeledit.compositechanged);
 	}
 	
 	public int countEntitiesinCompositeEntity() {
@@ -293,6 +312,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		changeNotification();
 	}
 	
+
 	public void setSingularAnnotation(int cwindex, int selectedIndex) {
 		if (selectedIndex!=-1) {
 			componentlist.get(cwindex).setSingularAnnotation((PhysicalProperty)termlib.getComponent(selectedIndex));

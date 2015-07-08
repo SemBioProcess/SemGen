@@ -30,6 +30,14 @@ import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semsim.SemSimObject;
 
+/**
+ * Parent class for the main annotation panel. Defines functions and UI components for shared elements of the submodel and codeword
+ * annotation panes.
+ * @author Christopher
+ *
+ * @param <P>
+ */
+
 public abstract class AnnotationPanel<P extends AnnotatorDrawer<? extends SemSimObject>> extends JPanel implements MouseListener, Observer {
 	private static final long serialVersionUID = 1L;
 

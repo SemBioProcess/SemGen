@@ -18,6 +18,8 @@ import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
+import semsim.model.physical.object.CustomPhysicalProcess;
+import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.utilities.SemSimUtil;
 import JSim.util.Xcept;
 
@@ -183,6 +185,14 @@ public class Merger {
 		// Copy in the submodels
 		for(Submodel subfrom2 : ssm2clone.getSubmodels()){
 			mergedmodel.addSubmodel(subfrom2);
+		}
+		
+		for (CustomPhysicalProcess pp : ssm2clone.getCustomPhysicalProcesses()) {
+			mergedmodel.addCustomPhysicalProcess(pp);
+		}
+		
+		for (ReferencePhysicalProcess pp : ssm2clone.getReferencePhysicalProcesses()) {
+			mergedmodel.addReferencePhysicalProcess(pp);
 		}
 		
 		// Prune empty submodels

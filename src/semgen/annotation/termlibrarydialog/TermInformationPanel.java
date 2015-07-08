@@ -1,5 +1,6 @@
 package semgen.annotation.termlibrarydialog;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -68,8 +69,10 @@ public class TermInformationPanel extends JPanel {
 	
 	private class InfoPanel extends JPanel {
 		private static final long serialVersionUID = 1L;
-
+		private Dimension dim = new Dimension(400,300);
+		
 		public InfoPanel(String name, ArrayList<String> listdata) {
+			setPreferredSize(dim);
 			setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS)); 
 			setBorder(BorderFactory.createEtchedBorder());
 			setBackground(SemGenSettings.lightblue);

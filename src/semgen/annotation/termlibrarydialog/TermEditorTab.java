@@ -1,5 +1,7 @@
 package semgen.annotation.termlibrarydialog;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentListener;
@@ -9,6 +11,7 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -38,7 +41,9 @@ public class TermEditorTab extends JPanel implements ListSelectionListener {
 	
 	private TermInformationPanel tip;
 	private TermCollector affected;
-	private EditorToolbar toolbar= new EditorToolbar();;
+	private EditorToolbar toolbar= new EditorToolbar();
+	private ReplaceTermPane replacer;
+	private boolean repbtnpressed = false;
 	
 	private SemSimTypes[] types = new SemSimTypes[]{
 			SemSimTypes.PHYSICAL_PROPERTY,
@@ -68,21 +73,27 @@ public class TermEditorTab extends JPanel implements ListSelectionListener {
 		typechooser.setListData(names);
 		typechooser.addListSelectionListener(this);
 		typechooser.setBorder(BorderFactory.createTitledBorder("Physical Types"));
-
+		
 		termlist.addListSelectionListener(this);
 		termlist.setFont(SemGenFont.defaultPlain());
 		SemGenScrollPane termscroller = new SemGenScrollPane(termlist);
+		termscroller.setPreferredSize(new Dimension(300,300));
+		termscroller.setAlignmentX(Box.LEFT_ALIGNMENT);
 		
+		JLabel title = new JLabel("Edit Term");
+		title.setFont(SemGenFont.defaultBold(3));
+		title.setAlignmentX(Box.LEFT_ALIGNMENT);
 		JPanel typepane = new JPanel();
 		typepane.setLayout(new BoxLayout(typepane, BoxLayout.PAGE_AXIS)); 
 		typepane.setBackground(SemGenSettings.lightblue);
-		typepane.add(typechooser);
-		typepane.add(termscroller);
 		typepane.setBorder(BorderFactory.createEtchedBorder());
 		
+		typepane.add(title);
+		typepane.add(typechooser);
+		typepane.add(termscroller);
 		typepane.add(Box.createVerticalGlue());
-		add(typepane);
 		
+		add(typepane);
 		add(toolbar);
 	}
 	
@@ -113,7 +124,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener {
 		affected = workbench.collectAffiliatedTermsandCodewords(getTermSelection());
 
 		tip = new TermInformationPanel(workbench, affected);
-		
+	
 		for (ContainerListener listener : getContainerListeners()) {
 			tip.addContainerListener(listener);
 		}
@@ -134,7 +145,9 @@ public class TermEditorTab extends JPanel implements ListSelectionListener {
 				tip.removeComponentListener(listener);
 			}
 			remove(tip);
+			tip = null;
 		}
+		removeReplacer();
 	}
 	
 	private Integer getTermSelection() {
@@ -168,7 +181,33 @@ public class TermEditorTab extends JPanel implements ListSelectionListener {
 	}
 	
 	private void replaceComponent() {
-		
+		if (repbtnpressed) {
+			replacer = new ReplaceTermPane(workbench, affected);
+			
+			for (ContainerListener listener : getContainerListeners()) {
+				replacer.addContainerListener(listener);
+			}
+			for (ComponentListener listener : getComponentListeners()) {
+				replacer.addComponentListener(listener);
+			}
+			add(replacer);
+		}
+		else removeReplacer();
+		validate();
+	}
+	
+	private void removeReplacer() {
+		if (replacer!=null) {
+			for (ContainerListener listener : getContainerListeners()) {
+				replacer.removeContainerListener(listener);
+			}
+			for (ComponentListener listener : getComponentListeners()) {
+				replacer.removeComponentListener(listener);
+			}
+			remove(replacer);
+			replacer = null;
+			
+		}
 	}
 	
 	private void modifyComponent() {
@@ -192,7 +231,12 @@ public class TermEditorTab extends JPanel implements ListSelectionListener {
 			add(replacebtn);
 			toggleButtons();
 		}
-
+		
+		private void paintReplaceButton() {
+			if (repbtnpressed) replacebtn.setBorder(BorderFactory.createLineBorder(Color.green));
+			else replacebtn.setBorder(BorderFactory.createLineBorder(Color.red));
+		}
+		
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			Object obj = arg0.getSource();
@@ -203,6 +247,8 @@ public class TermEditorTab extends JPanel implements ListSelectionListener {
 				removeComponent();
 			}
 			if (obj.equals(replacebtn)) {
+				repbtnpressed = !repbtnpressed;
+				paintReplaceButton();
 				replaceComponent();
 			}
 		}

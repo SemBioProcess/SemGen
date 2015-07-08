@@ -24,6 +24,7 @@ import semgen.annotation.workbench.drawers.SubModelToolDrawer;
 import semgen.annotation.workbench.routines.AnnotationImporter;
 import semgen.annotation.workbench.routines.ModelComponentValidator;
 import semgen.annotation.workbench.routines.TermCollector;
+import semgen.annotation.workbench.routines.TermModifier;
 import semgen.utilities.CSVExporter;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.SemGenSaveFileChooser;
@@ -297,6 +298,11 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	public TermCollector collectAffiliatedTermsandCodewords(Integer index) {
 		return new TermCollector(this, index);
 	}
+	
+	public void replaceTerm(TermCollector affected, Integer repindex, boolean remove) {
+		new TermModifier(this, affected).runReplace(repindex, remove);
+	}
+	
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		//Event forwarding
