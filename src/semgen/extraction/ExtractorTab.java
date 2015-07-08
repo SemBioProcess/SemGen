@@ -32,14 +32,12 @@ import semgen.extraction.RadialGraph.Clusterer;
 import semgen.extraction.RadialGraph.SemGenRadialGraphView;
 import semgen.extraction.workbench.ExtractorWorkbench;
 import semgen.utilities.ComparatorByName;
-import semgen.utilities.GenericThread;
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.SemGenTask;
 import semgen.utilities.file.FileFilter;
 import semgen.utilities.file.SemGenFileChooser;
-import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semgen.utilities.uicomponent.SemGenTab;
@@ -51,8 +49,6 @@ import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
-import semsim.utilities.SemSimUtil;
-import semsim.writing.MMLwriter;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
@@ -314,11 +310,11 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 					for (DataStructure onedatastr : tempbox.associateddatastructures) {
 
 						Set<DataStructure> requiredinputs = onedatastr.getComputationInputs();
-						workbench.getExtraction().addDataStructureToExtract(onedatastr, true);						
+						workbench.getExtraction().addDataStructureToExtraction(onedatastr, true);						
 						
 						for(DataStructure oneinput : requiredinputs){
 							if(!workbench.getExtraction().getDataStructuresToExtract().containsKey(oneinput))
-								workbench.getExtraction().addDataStructureToExtract(oneinput, false);
+								workbench.getExtraction().addDataStructureToExtraction(oneinput, false);
 						}
 						
 						// If user wants to include the process participants
@@ -354,7 +350,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 							for(DataStructure onein : onedatastr.getComputationInputs()){
 								
 								if(! workbench.getExtraction().getDataStructuresToExtract().containsKey(onein)){
-									workbench.getExtraction().addDataStructureToExtract(onein, false);
+									workbench.getExtraction().addDataStructureToExtraction(onein, false);
 								}
 							}
 						}
@@ -376,12 +372,12 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 					
 					for (DataStructure onedatastr : tempbox.associateddatastructures) {
 						
-						workbench.getExtraction().addDataStructureToExtract(onedatastr, true);
+						workbench.getExtraction().addDataStructureToExtraction(onedatastr, true);
 						Set<DataStructure> requiredinputs = onedatastr.getComputationInputs();											
 						
 						for(DataStructure oneinput : requiredinputs){
 							if(!workbench.getExtraction().getDataStructuresToExtract().containsKey(oneinput)){
-								workbench.getExtraction().addDataStructureToExtract(oneinput, false);
+								workbench.getExtraction().addDataStructureToExtraction(oneinput, false);
 							}
 						}
 					}
@@ -414,18 +410,18 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 			// If the full dependency chain is requested
 			if (this.extractionlevelchooser2.isSelected()) {
 				for (DataStructure dstokeep : workbench.getDataStructureDependencyChain(pds)) {
-					workbench.getExtraction().addDataStructureToExtract(dstokeep, true);
+					workbench.getExtraction().addDataStructureToExtraction(dstokeep, true);
 				}
 			}
 			// If only the immediate inputs are requested
 			else {
 				Set<DataStructure> tempdsset = pds.getComputationInputs();
-				workbench.getExtraction().addDataStructureToExtract(pds, true);
+				workbench.getExtraction().addDataStructureToExtraction(pds, true);
 				
 				for (DataStructure oneinput : tempdsset) {
 					
 					if (! workbench.getExtraction().getDataStructuresToExtract().containsKey(oneinput)) {
-						workbench.getExtraction().addDataStructureToExtract(oneinput, true);
+						workbench.getExtraction().addDataStructureToExtraction(oneinput, true);
 					} 
 					else if (workbench.getExtraction().getDataStructuresToExtract().get(oneinput)==false) {
 						System.out.println("Already added " + oneinput.getName() + ": leaving as is");
@@ -447,12 +443,12 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 						if (!workbench.getExtraction().getDataStructuresToExtract().containsKey(onedatastr)) {
 							
 							if(onedatastr.getComputation()!=null)
-								workbench.getExtraction().addDataStructureToExtract(onedatastr, true);
+								workbench.getExtraction().addDataStructureToExtraction(onedatastr, true);
 						}
 						// If the data structure was added as an input but it should be an output, make it an output
 						else if (workbench.getExtraction().getDataStructuresToExtract().get(onedatastr)==false) {
 							workbench.getExtraction().getDataStructuresToExtract().remove(onedatastr);
-							workbench.getExtraction().addDataStructureToExtract(onedatastr, true);
+							workbench.getExtraction().addDataStructureToExtraction(onedatastr, true);
 						}
 					}
 					for (DataStructure onedatastr : tempbox.associateddatastructures) {
@@ -464,7 +460,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		for (DataStructure ds : moduleinputs) {
 			
 			if (! workbench.getExtraction().getDataStructuresToExtract().containsKey(ds)) 
-				workbench.getExtraction().addDataStructureToExtract(ds, false);
+				workbench.getExtraction().addDataStructureToExtraction(ds, false);
 		}
 		// Make sure all the state variable derivative terms are included, include their inputs
 		processStateVariables();
@@ -484,12 +480,12 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 			if(entitiespanel.termandcdwdsmap.containsKey(ent)){
 				for(DataStructure entds : entitiespanel.termandcdwdsmap.get(ent)){
 					
-					workbench.getExtraction().addDataStructureToExtract(entds, true);
+					workbench.getExtraction().addDataStructureToExtraction(entds, true);
 					
 					// Add the entity's inputs, make them terminal
 					for(DataStructure oneentin : entds.getComputationInputs()){
 						if(! workbench.getExtraction().getDataStructuresToExtract().containsKey(oneentin)){
-							workbench.getExtraction().addDataStructureToExtract(oneentin, false);
+							workbench.getExtraction().addDataStructureToExtraction(oneentin, false);
 						}
 					}
 				}
@@ -527,6 +523,8 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		workbench.getExtraction().getDataStructuresToExtract().putAll(tempmap);
 	}
 	
+	// After an extraction is performed, provide user the option to encode the extracted model
+	// in a simulation language
 	public void optionToEncode(String filenamesuggestion) {
 		int x = JOptionPane.showConfirmDialog(this, "Finished extracting "
 				+ extractedfile.getName()
@@ -534,12 +532,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 				JOptionPane.YES_NO_OPTION);
 		
 		if (x == JOptionPane.YES_OPTION) {
-			
-			try {
-				new Encoder(extractedmodel, filenamesuggestion);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			new Encoder(extractedmodel, filenamesuggestion);
 		}
 	}
 	
@@ -708,7 +701,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	}
 	
 	
-	String getToolTipForDataStructure(DataStructure ds) {
+	public String getToolTipForDataStructure(DataStructure ds) {
 		String code = "";
 		if(ds.getComputation()!=null)
 			code = ds.getComputation().getComputationalCode();
@@ -755,8 +748,8 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 				panel.remove(onecomp);
 			}
 		}
-		Collections.sort(boxset, new ComparatorByName());
 		// Sort the array alphabetically using the custom Comparator
+		Collections.sort(boxset, new ComparatorByName());
 		
 		for (ExtractorJCheckBox box : boxset) {
 			panel.add(box);
@@ -770,7 +763,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 			primeextraction();
 			
 			if ( ! workbench.getExtraction().isEmpty()) {
-				extractedfile = saveExtraction();
+				extractedfile = chooseLocationForExtraction();
 				
 				if (extractedfile != null) {
 					try {
@@ -811,70 +804,11 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		workbench.getExtraction().reset();
 		
 		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
-			workbench.getExtraction().addDataStructureToExtract(ds, true);
+			workbench.getExtraction().addDataStructureToExtraction(ds, true);
 		}
 		visualize(workbench.getExtraction(), clusteringonly);
 	}
 	
-	public void atomicDecomposition() {
-		SemGenOpenFileChooser fc = new SemGenOpenFileChooser("Select directory for extracted models", false);
-		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
-		File file = new File(fc.getSelectedFile().getAbsolutePath());
-		if (file != null) {
-			autogendirectory = file;
-			GenericThread task = new GenericThread(this, "decompose");
-			task.start();
-		}
-	}
-
-	public void decompose() {
-		SemGenProgressBar progframe = new SemGenProgressBar("Performing decomposition", false, null);
-		Component[][] setofcomponentsinpanels = new Component[][]{
-				processespanel.checkboxpanel.getComponents(),
-				entitiespanel.checkboxpanel.getComponents(),
-				submodelspanel.checkboxpanel.getComponents(),
-				codewordspanel.checkboxpanel.getComponents(),
-				clusterpanel.checkboxpanel.getComponents()};
-		
-		// first, deselect all the checkboxes
-		for(int n=0; n<5; n++){
-			for(int a=0; a<setofcomponentsinpanels[n].length; a++){
-				Component[] components = setofcomponentsinpanels[n];
-				ExtractorJCheckBox ebox = (ExtractorJCheckBox) components[a];
-				ebox.setSelected(false);
-			}
-		}
-		
-		for (int x = 0; x < setofcomponentsinpanels[1].length; x++) {
-			ExtractorJCheckBox ebox = (ExtractorJCheckBox) setofcomponentsinpanels[1][x];
-			if (x > 0) {
-				ExtractorJCheckBox previousebox = (ExtractorJCheckBox) setofcomponentsinpanels[1][x-1];
-				previousebox.setSelected(false);
-			}
-			ebox.setSelected(true);
-			extractedfile = new File(autogendirectory.getAbsolutePath() + "/" + ebox.getText() + "_FROM_" + semsimmodel.getName());
-			if (extractedfile != null) {
-				File mmldir = new File(autogendirectory + "/" + "MML_output");
-				mmldir.mkdir();
-				File coderfile = new File(mmldir.getAbsolutePath() + "/" + extractedfile.getName() + ".mod");
-				String out = null;
-					out = new MMLwriter(extractedmodel).writeToString();
-					SemSimUtil.writeStringToFile(out, coderfile);
-			} else {
-				System.out.println("ERROR in creating file during atomic decomposition");
-			}
-			progframe.bar.setValue(Math.round((100 * (x + 1)) / setofcomponentsinpanels[1].length));
-		}
-
-		// Deselect all entities
-		for (int a = 0; a < setofcomponentsinpanels[1].length; a++) {
-			ExtractorJCheckBox ebox = (ExtractorJCheckBox) setofcomponentsinpanels[1][a];
-			ebox.setSelected(false);
-		}
-		JOptionPane.showMessageDialog(this, "Atomic decomposition completed");
-		progframe.dispose();
-	}
 
 	public void batchCluster() throws IOException {
 		visualizeAllDataStructures(false);
@@ -932,9 +866,9 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	    }
 	    @Override
 	    public Void doInBackground() {
-        	try {
-        		performClusteringAnalysis();
-			} catch (Exception e) {
+    		try {
+				performClusteringAnalysis();
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
             return null;
@@ -977,6 +911,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
         }
     }
 
+	// Update whenever the set of items included in the extraction changes
 	public void itemStateChanged(ItemEvent arg0) {
 		try {
 			visualize(primeextraction(), false);
@@ -996,7 +931,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	@Override
 	public void requestSaveAs() {}
 	
-	public File saveExtraction() {
+	public File chooseLocationForExtraction() {
 		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("Choose location to save file", new String[]{"owl","cellml"});
 		if (filec.SaveAsAction()!=null) {
 			extractedfile = filec.getSelectedFile();

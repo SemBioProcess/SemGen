@@ -24,14 +24,10 @@ public class ExtractorWorkbench extends Workbench {
 	}
 	
 	@Override
-	public void initialize() {
-
-	}
+	public void initialize() {}
 
 	@Override
-	public void setModelSaved(boolean val) {
-		
-	}
+	public void setModelSaved(boolean val) {}
 
 	@Override
 	public String getCurrentModelName() {
