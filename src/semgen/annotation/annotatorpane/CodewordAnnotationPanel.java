@@ -31,6 +31,7 @@ public class CodewordAnnotationPanel extends AnnotationPanel<CodewordToolDrawer>
 	private CompositeAnnotationPanel compositepanel;
 	private SingularAnnotationPanel singularannpanel;
 	
+	
 	public CodewordAnnotationPanel(AnnotatorWorkbench wb, SemGenSettings sets,
 			GlobalActions gacts) {
 		super(wb, wb.openCodewordDrawer(), sets, gacts);

@@ -1,6 +1,9 @@
 package semgen.annotation.annotatorpane.subpanels;
 
 import java.awt.event.ActionEvent;
+
+import javax.swing.BorderFactory;
+
 import semgen.annotation.common.AnnotationChooserPanel;
 import semgen.annotation.dialog.termlibrary.AddReferenceClassDialog;
 import semgen.annotation.workbench.SemSimTermLibrary;
@@ -10,11 +13,13 @@ import semsim.utilities.ReferenceOntologies.OntologyDomain;
 public class SingularAnnotationPanel extends AnnotationChooserPanel {
 	private static final long serialVersionUID = 1L;
 	private AnnotatorDrawer<?> drawer;
+	private int indent = 15;
 	
 	public SingularAnnotationPanel(AnnotatorDrawer<?> wb, SemSimTermLibrary lib) {
 		super(lib);
 		drawer = wb;
 		library = lib;
+		this.setBorder(BorderFactory.createEmptyBorder(0, indent, 0, 0));
 		
 		if (drawer.isEditable()) {
 			makeSingularAnnotationSelector();

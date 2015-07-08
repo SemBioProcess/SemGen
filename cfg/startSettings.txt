@@ -1,7 +1,7 @@
-startDirectory; C:\Users\Christopher\Documents
-maximize; false
-screensize; 1924x1050
-screenpos; -9x0
+startDirectory; C:\Users\Christopher\Documents\SemGen Test Files
+maximize; true
+screensize; 2118x1271
+screenpos; 2391x-9
 autoAnnotate; true
 showImports; true
 displayMarkers; true

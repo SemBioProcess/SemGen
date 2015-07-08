@@ -6,8 +6,8 @@ import java.util.Set;
 
 import javax.swing.JCheckBox;
 
+import semsim.model.SemSimComponent;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.physical.PhysicalModelComponent;
 
 
 public class ExtractorJCheckBox extends JCheckBox {
@@ -17,7 +17,7 @@ public class ExtractorJCheckBox extends JCheckBox {
 	private static final long serialVersionUID = -3088569216874092127L;
 	// data structures are the codewords, not the URIs
 	public Set<DataStructure> associateddatastructures = new HashSet<DataStructure>();
-	public PhysicalModelComponent pmc;
+	public SemSimComponent smc;
 
 	public ExtractorJCheckBox(String name, Set<DataStructure> assocdatastr) {
 		super(name);
@@ -25,11 +25,11 @@ public class ExtractorJCheckBox extends JCheckBox {
 		this.setToolTipText(concatCodewordsForToolTip(associateddatastructures));
 	}
 	
-	public ExtractorJCheckBox(String name, PhysicalModelComponent pmc, Set<DataStructure> assocdatastr){
+	public ExtractorJCheckBox(String name, SemSimComponent smc, Set<DataStructure> assocdatastr){
 		super(name);
 		associateddatastructures.addAll(assocdatastr);
 		this.setToolTipText(concatCodewordsForToolTip(associateddatastructures));
-		this.pmc = pmc;
+		this.smc = smc;
 	}
 	
 	public static String concatCodewordsForToolTip(Set<DataStructure> associateddatastructures){

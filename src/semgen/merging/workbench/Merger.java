@@ -18,7 +18,6 @@ import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
-import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.utilities.SemSimUtil;
