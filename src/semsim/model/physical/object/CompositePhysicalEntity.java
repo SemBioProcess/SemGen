@@ -4,9 +4,11 @@ import java.net.URI;
 import java.util.ArrayList;
 
 import semsim.SemSimConstants;
+import semsim.annotation.ReferenceTerm;
 import semsim.annotation.StructuralRelation;
 import semsim.model.SemSimTypes;
 import semsim.model.physical.PhysicalEntity;
+import semsim.owl.SemSimOWLFactory;
 
 public class CompositePhysicalEntity extends PhysicalEntity implements Comparable<CompositePhysicalEntity>{
 	
@@ -107,12 +109,12 @@ public class CompositePhysicalEntity extends PhysicalEntity implements Comparabl
 		if(arrayListOfPhysicalEntities.size()==that.arrayListOfPhysicalEntities.size() &&
 				arrayListOfStructuralRelations.size()==that.arrayListOfStructuralRelations.size()){
 			// Test first physical entity equivalence
-			if(getArrayListOfEntities().get(0)!=that.getArrayListOfEntities().get(0)){
+			if(!getArrayListOfEntities().get(0).equals(that.getArrayListOfEntities().get(0))){
 				return 1;
 			}
 			// Test remaining entities and structural relation equivalence
 			for(int i=1;i<getArrayListOfEntities().size(); i++){
-				if((getArrayListOfEntities().get(i)!=that.getArrayListOfEntities().get(i)) ||
+				if((!getArrayListOfEntities().get(i).equals(getArrayListOfEntities().get(i))) ||
 				(getArrayListOfStructuralRelations().get(i-1)!=that.getArrayListOfStructuralRelations().get(i-1))) {
 					return 1;
 				}
@@ -121,6 +123,27 @@ public class CompositePhysicalEntity extends PhysicalEntity implements Comparabl
 		}
 		// Else the arrays were different sizes
 		return 1;
+	}
+	
+	public URI makeURI(String namespace) {
+		String uristring = namespace;
+		for(int y=0; y<getArrayListOfEntities().size();y++){
+			PhysicalEntity pe = getArrayListOfEntities().get(y);
+			// If a reference physical entity
+			if(pe.hasRefersToAnnotation()){
+				uristring = uristring + SemSimOWLFactory.getIRIfragment(((ReferenceTerm)pe).getReferstoURI().toString());
+			}
+			// If custom physical entity
+			else{
+				uristring = uristring + SemSimOWLFactory.URIencoding(pe.getName());
+			}
+			// Concatenate with the relation string, if needed
+			if(y<getArrayListOfEntities().size()-1){
+				uristring = uristring + "_" + 
+					SemSimOWLFactory.getIRIfragment(getArrayListOfStructuralRelations().get(y).getURI().toString()) + "_";
+			}
+		}
+		return URI.create(uristring);
 	}
 
 	@Override
