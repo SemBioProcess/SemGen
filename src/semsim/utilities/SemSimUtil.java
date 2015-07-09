@@ -219,6 +219,7 @@ public class SemSimUtil {
 	}
 	
 	public static CompositePhysicalEntity getEquivalentCompositeEntityIfAlreadyInMap(CompositePhysicalEntity cpe, Map<? extends PhysicalModelComponent, URI> map){		
+		if(cpe == null) System.err.println("Next cpe was null");
 		// Go through the composite physical entities already processed and see if there is one that
 		// matches the cpe argument in terms of the physical entities and structural relations used
 		for(PhysicalModelComponent testcomp : map.keySet()){
@@ -229,7 +230,6 @@ public class SemSimUtil {
 				}
 		}
 		// If we've gotten here, then there isn't a match, return the cpe argument
-		if(cpe == null) System.err.println("Next cpe was null");
 		return cpe;
 	}	
 	

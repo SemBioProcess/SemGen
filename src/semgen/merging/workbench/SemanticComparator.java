@@ -19,6 +19,7 @@ import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.PhysicalPropertyinComposite;
+import semsim.utilities.DuplicateChecker;
 import semsim.utilities.SemSimUtil;
 
 public class SemanticComparator {
@@ -27,12 +28,13 @@ public class SemanticComparator {
 
 	public SemanticComparator(SemSimModel m1, SemSimModel m2) {
 		model1 = m1; model2 = m2;
+		DuplicateChecker.removeDuplicatePhysicalEntities(model1, model2);
 		
 		if ((model1.getSolutionDomains().size() > 0) && (model2.getSolutionDomains().size() > 0)) {
 			slndomain = model1.getSolutionDomains().toArray(new DataStructure[]{})[0];
 		}
 	}
-	
+		
 	// Collect the submodels that have the same name
 	public Set<String> getIdenticalSubmodels(){
 		Set<String> matchedsubmodels = new HashSet<String>();

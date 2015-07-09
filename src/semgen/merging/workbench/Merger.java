@@ -47,7 +47,6 @@ public class Merger {
 		// First collect all the data structures that aren't going to be used in the resulting merged model
 		
 		SemSimModel modelfordiscardedds = null;
-		int i = 0;
 		DataStructure discardedds = null;
 		DataStructure keptds = null;
 		
@@ -59,7 +58,7 @@ public class Merger {
 		Set<DataStructure> dsdonotprune = new HashSet<DataStructure>();
 		boolean prune = true;
 		
-		i = 0;
+		int i = 0;
 		
 		// Step through resolution points and replace/rewire codewords as needed
 		for (Pair<DataStructure, DataStructure> dsp : overlapmap.getDataStructurePairs()) {
@@ -128,7 +127,6 @@ public class Merger {
 			mirrorunitsmap.put(equnitsmap.get(uom1), uom1);
 		}
 		
-		
 		// Replace any in-line unit declarations for equivalent units
 		// First collect the submodels we need to check
 		Set<FunctionalSubmodel> submodelswithconstants = new HashSet<FunctionalSubmodel>();
@@ -148,7 +146,6 @@ public class Merger {
 			}
 			fswithcon.getComputation().setMathML(newmathml);
 		}
-		
 		
 		// Copy in all data structures
 		for(DataStructure dsfrom2 : ssm2clone.getAssociatedDataStructures()){
@@ -180,11 +177,6 @@ public class Merger {
 				}
 
 			}
-		}
-		
-		// Copy in the submodels
-		for(Submodel subfrom2 : ssm2clone.getSubmodels()){
-			mergedmodel.addSubmodel(subfrom2);
 		}
 		
 		for (CustomPhysicalProcess pp : ssm2clone.getCustomPhysicalProcesses()) {
