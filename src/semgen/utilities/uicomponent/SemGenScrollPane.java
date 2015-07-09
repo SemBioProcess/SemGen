@@ -88,25 +88,29 @@ public class SemGenScrollPane extends JScrollPane implements MouseWheelListener{
 		   }
 		   else return;
 
+		   int iScrollAmount = evt.getScrollAmount();
+           int valMoved = selectedScrollBar.getBlockIncrement() * iScrollAmount * Math.abs(evt.getWheelRotation());
+           
 		   if (evt.getWheelRotation() >= 1)//mouse wheel was rotated down/ towards the user
-           {
-               int iScrollAmount = evt.getScrollAmount();
-               int iNewValue = selectedScrollBar.getValue() + selectedScrollBar.getBlockIncrement() * iScrollAmount * Math.abs(evt.getWheelRotation());
+           {  
+               int iNewValue = selectedScrollBar.getValue() + valMoved;
                if (iNewValue <= selectedScrollBar.getMaximum())
                {
             	   selectedScrollBar.setValue(iNewValue);
                }
+               else 
+            	   selectedScrollBar.setValue(selectedScrollBar.getMaximum());
            }
            else if (evt.getWheelRotation() <= -1)//mouse wheel was rotated up/away from the user
            {
-               int iScrollAmount = evt.getScrollAmount();
-               int iNewValue = selectedScrollBar.getValue() - selectedScrollBar.getBlockIncrement() * iScrollAmount * Math.abs(evt.getWheelRotation());
-               if (iNewValue >= 0)
+               int iNewValue = selectedScrollBar.getValue() - valMoved;
+               if (iNewValue >= selectedScrollBar.getMinimum())
                {
             	   selectedScrollBar.setValue(iNewValue);
                }
+               else
+            	   selectedScrollBar.setValue(selectedScrollBar.getMinimum());
            }
-	       
 	    }
 	}
 }
