@@ -32,7 +32,6 @@ import semgen.merging.resolutionpane.ResolutionPane;
 import semgen.merging.workbench.MergerWorkbench;
 import semgen.merging.workbench.Merger.ResolutionChoice;
 import semgen.merging.workbench.MergerWorkbench.MergeEvent;
-import semgen.merging.workbench.ModelOverlapMap;
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
@@ -42,9 +41,6 @@ import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semgen.utilities.uicomponent.SemGenTab;
-import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.computational.units.UnitOfMeasurement;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;

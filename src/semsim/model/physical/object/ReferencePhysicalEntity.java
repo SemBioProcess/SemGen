@@ -36,7 +36,7 @@ public class ReferencePhysicalEntity extends PhysicalEntity implements Reference
 	
 	@Override
 	protected boolean isEquivalent(Object obj) {
-		return ((ReferencePhysicalEntity)obj).getReferstoURI().compareTo(referenceuri)==0;
+		return ((ReferencePhysicalEntity)obj).getReferstoURI().toString().equals(referenceuri.toString());
 	}
 	
 	@Override

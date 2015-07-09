@@ -550,7 +550,7 @@ public class SemSimOWLreader extends ModelReader {
 				if (!description.isEmpty()) sssubmodel.setDescription(description);
 				
 				// If computation associated with submodel, store mathml
-				if(sssubmodel instanceof FunctionalSubmodel){
+				if(sssubmodel.isFunctional()){
 					String comp = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, sub, SemSimConstants.HAS_COMPUTATATIONAL_COMPONENT_URI.toString());
 					if(comp!=null && !comp.equals("")){
 						componentmathml = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, comp, SemSimConstants.HAS_MATHML_URI.toString());
@@ -602,7 +602,7 @@ public class SemSimOWLreader extends ModelReader {
 									
 									CellMLreader.whiteBoxFunctionalSubmodelEquations(varmathmlel, subname, semsimmodel, theds);
 									
-									if(ode && (theds instanceof MappableVariable)){
+									if(ode && (theds.isMappable())){
 										MappableVariable mv = (MappableVariable)theds;
 										mv.setStartValue(mv.getCellMLinitialValue());
 									}
@@ -615,7 +615,7 @@ public class SemSimOWLreader extends ModelReader {
 					
 					// If the human-readable computation code hasn't been found, and theds is a mappable variable,
 					// and there's a CellML initial value, use the initial value for the computational code
-					if(theds instanceof MappableVariable){
+					if(theds.isMappable()){
 						MappableVariable mv = (MappableVariable)theds;
 						
 						if((mv.getComputation().getComputationalCode()==null ||

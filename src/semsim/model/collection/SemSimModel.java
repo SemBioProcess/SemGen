@@ -711,7 +711,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	public ReferencePhysicalEntity getPhysicalEntityByReferenceURI(URI uri){
 		for (PhysicalEntity pe : physicalentities) {
 			if (pe.hasRefersToAnnotation()) {
-				if (((ReferenceTerm)pe).getReferstoURI().equals(uri)) {
+				if (((ReferencePhysicalEntity)pe).getReferstoURI().toString().equals(uri.toString())) {
 					return (ReferencePhysicalEntity)pe;
 				}
 			}

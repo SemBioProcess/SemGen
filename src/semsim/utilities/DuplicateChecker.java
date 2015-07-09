@@ -27,6 +27,7 @@ public class DuplicateChecker {
 			for (CompositePhysicalEntity cpe : model2.getCompositePhysicalEntities()) {
 				if (ds.getAssociatedPhysicalModelComponent().equals(cpe)) {
 					ds.setAssociatedPhysicalModelComponent(cpe);
+					break;
 				}
 			}
 		}

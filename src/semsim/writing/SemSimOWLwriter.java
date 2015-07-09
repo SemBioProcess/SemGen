@@ -89,7 +89,6 @@ public class SemSimOWLwriter extends ModelWriter {
 		addUnits();			
 		addDataStructures();
 		setRelations();
-		setProcessParticipants();
 		addSubModels();
 		addPhysicalComponentAnnotations();
 		addModelAnnotations();
@@ -275,9 +274,7 @@ public class SemSimOWLwriter extends ModelWriter {
 	}
 	
 	/** Add source, sink and mediator info to model */
-	private void setProcessParticipants() throws OWLException {
-		for(PhysicalProcess proc : semsimmodel.getPhysicalProcesses()){
-			if(singularPMCsAndUrisForDataStructures.containsKey(proc)){
+	private void setProcessParticipants(PhysicalProcess proc) throws OWLException {
 				for(PhysicalEntity source : proc.getSourcePhysicalEntities()){	
 					Set<OWLAnnotation> anns = makeMultiplierAnnotation(source, proc.getSourceStoichiometry(source));
 					SemSimOWLFactory.setIndObjectPropertyWithAnnotations(ont, singularPMCsAndUrisForDataStructures.get(proc).toString(),
@@ -295,8 +292,6 @@ public class SemSimOWLwriter extends ModelWriter {
 							compositeEntitiesAndIndexes.get(mediator).toString(), SemSimConstants.HAS_MEDIATOR_URI.toString(),
 							"", manager);
 				}
-			}
-		}
 	}
 	
 	private void addSubModels() throws OWLException {
@@ -454,7 +449,10 @@ public class SemSimOWLwriter extends ModelWriter {
 				// with a data structure but only used to define the process
 
 				for(PhysicalEntity ent : ((PhysicalProcess)pmc).getParticipants()){
-					processCompositePhysicalEntity((CompositePhysicalEntity) ent, namespace);
+					URI uri = processCompositePhysicalEntity((CompositePhysicalEntity) ent, namespace);
+					if (!compositeEntitiesAndIndexes.containsKey(ent)) {
+						compositeEntitiesAndIndexes.put((CompositePhysicalEntity) ent, uri);
+					}
 				}
 						
 				// Add the individual to the ontology if not already there, create it
@@ -462,9 +460,9 @@ public class SemSimOWLwriter extends ModelWriter {
 					createPhysicalModelIndividual(pmc, uristring);
 				}
 					// Connect the new individual to its property
-					SemSimOWLFactory.setIndObjectProperty(ont, SemSimOWLFactory.getURIforPhysicalProperty(semsimmodel, ds).toString(), uristring, 
-							SemSimConstants.PHYSICAL_PROPERTY_OF_URI.toString(), SemSimConstants.HAS_PHYSICAL_PROPERTY_URI.toString(), manager);
-				
+				SemSimOWLFactory.setIndObjectProperty(ont, SemSimOWLFactory.getURIforPhysicalProperty(semsimmodel, ds).toString(), uristring, 
+						SemSimConstants.PHYSICAL_PROPERTY_OF_URI.toString(), SemSimConstants.HAS_PHYSICAL_PROPERTY_URI.toString(), manager);
+				setProcessParticipants((PhysicalProcess)pmc);
 			}
 			else {
 				URI indexuri = processCompositePhysicalEntity((CompositePhysicalEntity)pmc, namespace);

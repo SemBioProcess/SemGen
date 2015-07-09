@@ -25,7 +25,7 @@ public class CustomPhysicalEntity extends PhysicalEntity{
 	
 	@Override
 	protected boolean isEquivalent(Object obj) {
-		return ((CustomPhysicalEntity)obj).getName().compareTo(getName())==0;
+		return ((CustomPhysicalEntity)obj).getName().equals(getName());
 	}
 	
 	@Override

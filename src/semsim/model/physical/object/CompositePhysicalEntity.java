@@ -114,8 +114,7 @@ public class CompositePhysicalEntity extends PhysicalEntity implements Comparabl
 			}
 			// Test remaining entities and structural relation equivalence
 			for(int i=1;i<getArrayListOfEntities().size(); i++){
-				if((!getArrayListOfEntities().get(i).equals(getArrayListOfEntities().get(i))) ||
-				(getArrayListOfStructuralRelations().get(i-1)!=that.getArrayListOfStructuralRelations().get(i-1))) {
+				if(!getArrayListOfEntities().get(i).equals(that.getArrayListOfEntities().get(i))) { 
 					return 1;
 				}
 			}
