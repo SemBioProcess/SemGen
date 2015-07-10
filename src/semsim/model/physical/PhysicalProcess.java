@@ -145,19 +145,19 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 		}
 		for (PhysicalEntity pe : getSources().keySet()) {
 			for (PhysicalEntity pe2 : proc.getSourcePhysicalEntities()) {
-				if (!pe.isEquivalent(pe2) || (sources.get(pe)!=getSourceStoichiometry(pe2)))
+				if (!pe.equals(pe2) || (!sources.get(pe).equals(proc.getSourceStoichiometry(pe2))))
 					return false;
 			}
 		}
 		for (PhysicalEntity pe : getSinks().keySet()) {
 			for (PhysicalEntity pe2 : proc.getSinkPhysicalEntities()) {
-				if (!pe.isEquivalent(pe2) && (sinks.get(pe)!=getSinkStoichiometry(pe2)))
+				if (!pe.equals(pe2) || (!sinks.get(pe).equals(proc.getSinkStoichiometry(pe2))))
 					return false;
 			}
 		}
 		for (PhysicalEntity pe : getMediators()) {
 			for (PhysicalEntity pe2 : proc.getMediatorPhysicalEntities()) {
-				if (!pe.isEquivalent(pe2))
+				if (!pe.equals(pe2))
 					return false;
 			}
 		}

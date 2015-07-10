@@ -7,6 +7,8 @@ import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import semgen.SemGen;
+import semsim.model.SemSimTypes;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
@@ -92,7 +94,7 @@ public class SemanticComparator {
 						PhysicalPropertyinComposite prop2 = ds2.getPhysicalProperty();
 							
 						// Test equivalency of physical properties
-						if(prop1.equals(prop2)){
+						if(prop1.equals(prop2)) {
 							if(ds1.hasAssociatedPhysicalComponent() && ds2.hasAssociatedPhysicalComponent()){
 								PhysicalModelComponent ds1pmc = ds1.getAssociatedPhysicalModelComponent();
 								PhysicalModelComponent ds2pmc = ds2.getAssociatedPhysicalModelComponent();
@@ -100,8 +102,12 @@ public class SemanticComparator {
 								// And they are properties of a specified physical model component
 								// If the property annotations are the same, test the equivalency of what they are properties of
 							
-								match = ds1pmc.equals(ds2pmc);//testEquivalencyOfPhysicalComponents(ds1pmc, ds2pmc);
+								match = ds1pmc.equals(ds2pmc);
 							}
+						}
+						else if (SemGen.semsimlib.OPBhasFlowProperty(prop1.getReferstoURI()) 
+								&& SemGen.semsimlib.OPBhasFlowProperty(prop2.getReferstoURI())) {
+							match = ds1.getAssociatedPhysicalModelComponent().equals(ds2.getAssociatedPhysicalModelComponent());
 						}
 					}
 					if(match){

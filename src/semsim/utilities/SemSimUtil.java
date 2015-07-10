@@ -271,7 +271,7 @@ public class SemSimUtil {
 		return fundamentalBaseUnits;
 	}
 	// Used in tandem with getFundamentalBaseUnits
-	private static Set<UnitFactor> recurseBaseUnits(UnitOfMeasurement uom, Double oldExp) {
+	public static Set<UnitFactor> recurseBaseUnits(UnitOfMeasurement uom, Double oldExp) {
 		SemSimLibrary semsimlib = new SemSimLibrary();
 		Set<UnitFactor> unitFactors = uom.getUnitFactors();
 		Set<UnitFactor> newUnitFactors = new HashSet<UnitFactor>();
