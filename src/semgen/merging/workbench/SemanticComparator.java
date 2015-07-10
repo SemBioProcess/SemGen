@@ -107,7 +107,9 @@ public class SemanticComparator {
 						}
 						else if (SemGen.semsimlib.OPBhasFlowProperty(prop1.getReferstoURI()) 
 								&& SemGen.semsimlib.OPBhasFlowProperty(prop2.getReferstoURI())) {
-							match = ds1.getAssociatedPhysicalModelComponent().equals(ds2.getAssociatedPhysicalModelComponent());
+							if(ds1.hasAssociatedPhysicalComponent() && ds2.hasAssociatedPhysicalComponent()){
+								match = ds1.getAssociatedPhysicalModelComponent().equals(ds2.getAssociatedPhysicalModelComponent());
+							}
 						}
 					}
 					if(match){
