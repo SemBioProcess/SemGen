@@ -17,7 +17,7 @@ public class SemGenCommunicatingWebBrowser extends CommunicatingWebBrowser<SemGe
 	private static final long serialVersionUID = 1L;
 	
 	// Stage html in resource dir
-	private final static String StageHtml = "stage/stage.html?testMode=false";
+	private final static String StageHtml = "cfg/stage/stage.html?testMode=false";
 	
 	public SemGenCommunicatingWebBrowser(CommunicatingWebBrowserCommandReceiver commandReceiver) throws InvalidNameException, IOException {
 		super(SemGenWebBrowserCommandSender.class, commandReceiver);
