@@ -24,9 +24,16 @@ public class SemGenCommunicatingWebBrowser extends CommunicatingWebBrowser<SemGe
 
 		System.out.println("Loading SemGen web browser");
         
-		File stageFile = new File(StageHtml);
-		System.out.println("Loading the stage @: " + stageFile.getAbsolutePath());
-		this.loadURL(stageFile.getAbsolutePath());
+		File stageHtmlFile = new File(StageHtml);
+		String stageHtmlPath = stageHtmlFile.getAbsolutePath();
+		
+		// Paths that start with the seperator need to include
+		// the file:// protocol at the beginning
+		if (stageHtmlPath.startsWith(File.separator))
+			stageHtmlPath = "file://" + stageHtmlPath;
+		
+		System.out.println("Loading the stage @: " + stageHtmlPath);
+		this.loadURL(stageHtmlPath);
 	    
 	    LoggerProvider.getBrowserLogger().setLevel(Level.SEVERE);			// The BrowserLogger is used to log browser messages.
 	    LoggerProvider.getIPCLogger().setLevel(Level.SEVERE);				// The IPCLogger is used to log IPC (Inter-Process Communication) messages.
