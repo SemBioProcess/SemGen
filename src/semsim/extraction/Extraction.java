@@ -55,6 +55,10 @@ public class Extraction {
 		reset();
 	}
 	
+	/**
+	 * Clear the processes, entities, data structures and submodels that
+	 * were previously included in the extraction.
+	 */
 	public void reset(){
 		setProcessesToExtract(new HashMap<PhysicalProcess, Boolean>());
 		setEntitiesToExtract(new HashMap<PhysicalEntity, Boolean>());
@@ -106,20 +110,23 @@ public class Extraction {
 		this.datastructurestoextract = datastructurestoextract;
 	}
 	
-	public void addDataStructureToExtract(DataStructure ds, Boolean includeinputs){
+	public void addDataStructureToExtraction(DataStructure ds, Boolean includeinputs){
 		getDataStructuresToExtract().put(ds, includeinputs);
 	}
 	
-	// Add a data structure's computational inputs to the extraction map
-	public void addInputsToExtract(DataStructure onedatastr){
+	/**
+	 * Add a data structure's computational inputs to the extraction
+	 * @param ds
+	 */
+	public void addInputsToExtract(DataStructure ds){
 		
-		for (DataStructure nextds : onedatastr.getComputationInputs()) {
+		for (DataStructure nextds : ds.getComputationInputs()) {
 			
-			addDataStructureToExtract(nextds, true);
+			addDataStructureToExtraction(nextds, true);
 			
 			for(DataStructure secondaryds : nextds.getComputationInputs()){
 				if (! getDataStructuresToExtract().containsKey(secondaryds)) {
-					addDataStructureToExtract(secondaryds, false);
+					addDataStructureToExtraction(secondaryds, false);
 				}
 			}
 		}
@@ -138,14 +145,22 @@ public class Extraction {
 		this.getSubmodelsToExtract().put(submodel, val);
 	}
 	
-	
+	/**
+	 * 
+	 * @return True if there is nothing specified for extraction, otherwise false
+	 */
 	public boolean isEmpty(){
 		return (getDataStructuresToExtract().isEmpty() && getEntitiesToExtract().isEmpty() 
 				&& getProcessesToExtract().isEmpty() && getSubmodelsToExtract().isEmpty());
 				
 	}
 	
-	
+	/**
+	 * 
+	 * @param ds
+	 * @return Whether a particular data structure is a user-defined 
+	 * input for the extraction
+	 */
 	public boolean isInputForExtraction(DataStructure ds){
 		
 		Boolean isinput = false;
@@ -159,7 +174,11 @@ public class Extraction {
 		return isinput;
 	}
 	
-	
+	/**
+	 * @param ds
+	 * @return Whether a particular data structure is converted from
+	 * a dependent variable to a user-defined input for the extraction
+	 */
 	public boolean isVariableConvertedToInput(DataStructure ds){
 		
 		Boolean inputexplicitlyincluded = getDataStructuresToExtract().containsKey(ds);
@@ -239,14 +258,18 @@ public class Extraction {
 		return extractedmodel;
 	}
 	
-	// if all codewords in a component (submodel) are being preserved, preserve the component, but not if 
-	// the component is what's being extracted
+	/**
+	 * Clones all submodels that should be preserved in the extraction.
+	 * @param extractedmodel
+	 * @throws CloneNotSupportedException
+	 */
 	private void extractSubModels(SemSimModel extractedmodel) throws CloneNotSupportedException {
 		
 		for(Submodel sub : getSubmodelsToExtract().keySet()){
 			
 			Submodel newsub = extractedmodel.addSubmodel(sub.clone());
 			
+			// If we're preserving the submodel's submodels
 			if(getSubmodelsToExtract().get(sub)==true){
 				
 				for(Submodel subsub : newsub.getSubmodels()){
