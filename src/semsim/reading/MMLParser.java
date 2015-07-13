@@ -15,7 +15,7 @@ import JSim.aserver.ASServer;
 import JSim.data.NamedVal;
 import JSim.util.UtilIO;
 import JSim.util.Xcept;
-import semsim.ErrorLog;
+import semsim.utilities.ErrorLog;
 
 public class MMLParser {
 	public int srcType = -1;

@@ -2,6 +2,7 @@ package semgen.utilities.file;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Hashtable;
 
 import javax.swing.JOptionPane;
 
@@ -11,10 +12,10 @@ import org.semanticweb.owlapi.model.OWLException;
 
 import JSim.util.Xcept;
 import semgen.SemGen;
-import semgen.annotation.routines.AutoAnnotate;
+import semgen.annotation.workbench.routines.AutoAnnotate;
 import semgen.utilities.SemGenError;
 import semgen.utilities.uicomponent.SemGenProgressBar;
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
 import semsim.reading.CellMLreader;
 import semsim.reading.MMLParser;
 import semsim.reading.MMLreader;
@@ -22,7 +23,8 @@ import semsim.reading.ModelClassifier;
 import semsim.reading.ReferenceTermNamer;
 import semsim.reading.SBMLAnnotator;
 import semsim.reading.SemSimOWLreader;
-import semsim.webservices.WebserviceTester;
+import semsim.utilities.SemSimUtil;
+import semsim.utilities.webservices.WebserviceTester;
 
 public class LoadSemSimModel {
 	
@@ -48,8 +50,9 @@ public class LoadSemSimModel {
 					boolean online = WebserviceTester.testBioPortalWebservice("Annotation via web services failed.");
 					if(!online) 
 						SemGenError.showWebConnectionError("BioPortal search service");
-					
-					SBMLAnnotator.annotate(file, semsimmodel, online, SemGen.termcache.getOntTermsandNamesCache());
+					 Hashtable<String, String[]> cache = new  Hashtable<String, String[]>();
+					cache.putAll(SemGen.termcache.getOntTermsandNamesCache());
+					SBMLAnnotator.annotate(file, semsimmodel, online, cache);
 					ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel, SemGen.termcache.getOntTermsandNamesCache(), online);
 					SBMLAnnotator.setFreeTextDefinitionsForDataStructuresAndSubmodels(semsimmodel);
 					progframe.dispose();
@@ -75,7 +78,7 @@ public class LoadSemSimModel {
 				}
 				break;
 			case ModelClassifier.SEMSIM_MODEL:
-				semsimmodel = loadSemSimOWL(file);
+				semsimmodel = loadSemSimOWL(file);	
 				break;
 				
 			default:
@@ -95,7 +98,8 @@ public class LoadSemSimModel {
 				return semsimmodel;
 			}
 			semsimmodel.setName(file.getName().substring(0, file.getName().lastIndexOf(".")));
-			semsimmodel.setSourceModelType(modeltype);				
+			semsimmodel.setSourceModelType(modeltype);
+			SemSimUtil.regularizePhysicalProperties(semsimmodel, SemGen.semsimlib);
 		}
 
 		return semsimmodel;

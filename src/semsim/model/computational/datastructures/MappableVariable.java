@@ -13,7 +13,7 @@ import semsim.model.computational.Computation;
  * <p>
  * http://www.cellml.org/specifications/cellml_1.1/#sec_model_structure
  */
-public class MappableVariable extends Decimal{
+public class MappableVariable extends Decimal {
 
 	private String publicInterfaceValue = new String("");
 	private String privateInterfaceValue = new String("");
@@ -92,6 +92,10 @@ public class MappableVariable extends Decimal{
 	 * In other words, the set of variables that determine this variable's value.*/
 	public Set<MappableVariable> getMappedFrom() {
 		return mappedFrom;
+	}
+	
+	public boolean isMappable() {
+		return !getMappedTo().isEmpty() || !getMappedFrom().isEmpty(); 
 	}
 	
 	@Override

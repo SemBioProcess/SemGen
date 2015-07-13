@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -20,8 +21,8 @@ import javax.swing.JTextField;
 
 import semgen.SemGenSettings;
 import semgen.annotation.workbench.AnnotatorWorkbench;
-import semgen.annotation.workbench.ModelAnnotationsBench;
-import semgen.annotation.workbench.ModelAnnotationsBench.ModelChangeEnum;
+import semgen.annotation.workbench.drawers.ModelAnnotationsBench;
+import semgen.annotation.workbench.drawers.ModelAnnotationsBench.ModelChangeEnum;
 
 public class ModelAnnotationEditor extends JPanel implements Observer {
 	private static final long serialVersionUID = 1L;
@@ -97,6 +98,7 @@ public class ModelAnnotationEditor extends JPanel implements Observer {
 			addKeyListener(new MAPKeyboardListener());
 			setLayout(new BorderLayout(0,0));
 			description = new JLabel(title);
+			description.setBorder(BorderFactory.createEmptyBorder(0, 7, 0, 7));
 			add(description, BorderLayout.WEST);
 			add(Box.createGlue());
 		}
@@ -177,7 +179,7 @@ public class ModelAnnotationEditor extends JPanel implements Observer {
 		}
 		
 		public void giveFocus() {
-			setBackground(Color.yellow);
+			setBackground(new Color(255,231,186));
 			textbox.requestFocus();
 			textbox.select(0, textbox.getText().length());
 		}

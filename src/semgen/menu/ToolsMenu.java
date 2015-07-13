@@ -17,12 +17,17 @@ public class ToolsMenu extends SemGenMenu implements ActionListener{
 	private JMenuItem toolsitemannotate;
 	private JMenuItem toolsitemmerge;
 	private JMenuItem toolsitemcode;
-	public JMenuItem toolsitemextract;
+	private JMenuItem toolsitemextract;
+	private JMenuItem toolsitemstage;
 	
 	public ToolsMenu(SemGenSettings sets, GlobalActions acts) {
 		super("Tools", sets, acts);
 		// Build the AnnotatorTab menu
 		getAccessibleContext().setAccessibleDescription("Select a new SemGen Tool");
+		
+		toolsitemstage = formatMenuItem(toolsitemstage, "New stage", KeyEvent.VK_T,true,true);
+		toolsitemstage.setToolTipText("Open a new stage");
+		add(toolsitemstage);
 		
 		toolsitemannotate = formatMenuItem(toolsitemannotate, "New Annotator",KeyEvent.VK_A,true,true);
 		toolsitemannotate.setToolTipText("Open a new Annotator tool");
@@ -43,6 +48,10 @@ public class ToolsMenu extends SemGenMenu implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
+		
+		if (o == toolsitemstage){
+			globalactions.NewStageTab();
+		}
 		
 		if (o == toolsitemmerge){
 			globalactions.NewMergerTab();

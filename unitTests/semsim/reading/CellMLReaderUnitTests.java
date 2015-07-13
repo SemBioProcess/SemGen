@@ -13,7 +13,7 @@ import semsim.SemSimConstants;
 import semsim.SemSimLibrary;
 import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata;
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
 
 public class CellMLReaderUnitTests extends UnitTestBase {
 	

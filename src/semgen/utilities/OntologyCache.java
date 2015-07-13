@@ -5,24 +5,23 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Hashtable;
-
-import semsim.ResourcesManager;
+import java.util.HashMap;
+import semsim.utilities.ResourcesManager;
 
 public class OntologyCache {
 
 	private File ontologyTermsAndNamesCacheFile = new File("cfg/ontologyTermsAndNamesCache.txt");
-	private Hashtable<String, String[]> ontologyTermsAndNamesCache;
+	private HashMap<String, String[]> ontologyTermsAndNamesCache;
 	
 	public OntologyCache() {
 		try {
-			ontologyTermsAndNamesCache = ResourcesManager.createHashtableFromFile("cfg/ontologyTermsAndNamesCache.txt");
+			ontologyTermsAndNamesCache = ResourcesManager.createHashMapFromFile("cfg/ontologyTermsAndNamesCache.txt");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public Hashtable<String, String[]> getOntTermsandNamesCache() {
+	public HashMap<String, String[]> getOntTermsandNamesCache() {
 		return ontologyTermsAndNamesCache;
 	}
 	

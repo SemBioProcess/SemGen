@@ -71,8 +71,6 @@ public abstract class SemGenTab extends JPanel {
 	
 	abstract public void requestSaveAs();
 	
-	abstract public void addObservertoWorkbench(Observer obs);
-	
 	public boolean fileURIMatches(URI uri) {
 		return false;
 	}

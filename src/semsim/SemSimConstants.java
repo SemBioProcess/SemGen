@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
+import org.jdom.Namespace;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import semsim.annotation.SemSimRelation;
@@ -51,23 +53,8 @@ public class SemSimConstants {
 	public static final String BQB_NAMESPACE = "http://biomodels.net/biology-qualifiers/";
 	public static final String BQM_NAMESPACE = "http://biomodels.net/model-qualifiers/";
 	public static final String RDF_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
-	
-	// Groups of ontologies
-	public static final String[] ALL_SEARCHABLE_ONTOLOGIES = new String[]{
-			SemSimConstants.BRENDA_TISSUE_ONTOLOGY_FULLNAME,
-			SemSimConstants.CELL_TYPE_ONTOLOGY_FULLNAME,
-			SemSimConstants.CHEMICAL_ENTITIES_OF_BIOLOGICAL_INTEREST_FULLNAME,
-			SemSimConstants.CLINICAL_MEASUREMENT_ONTOLOGY_FULLNAME,
-			SemSimConstants.ECG_ONTOLOGY_FULLNAME,
-			SemSimConstants.FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME,
-			SemSimConstants.GENE_ONTOLOGY_FULLNAME,
-			SemSimConstants.MOUSE_ADULT_GROSS_ANATOMY_ONTOLOGY_FULLNAME,
-			SemSimConstants.ONTOLOGY_OF_PHYSICS_FOR_BIOLOGY_FULLNAME,
-			SemSimConstants.PHENOTYPE_AND_TRAIT_ONTOLOGY_FULLNAME,
-			SemSimConstants.SNOMEDCT_FULLNAME,
-			SemSimConstants.SYSTEMS_BIOLOGY_ONTOLOGY_FULLNAME,
-			SemSimConstants.UNIPROT_FULLNAME
-	};
+	public static final String MATHML_NAMESPACE = "http://www.w3.org/1998/Math/MathML";
+	public static final Namespace MATHML_NAMESPACE_OBJ = Namespace.getNamespace(MATHML_NAMESPACE);
 	
 	// URIs
 	public static final URI COMPUTATION_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Computation");
@@ -155,6 +142,7 @@ public class SemSimConstants {
 	
 	public static final URI HAS_NOTES_URI = URI.create(SEMSIM_NAMESPACE + "hasNotes");
 
+	public static final URI CELLML_INITIAL_VALUE_URI = URI.create(SEMSIM_NAMESPACE + "hasCellMLinitialValue");
 	public static final URI CELLML_COMPONENT_PRIVATE_INTERFACE_URI = URI.create(SEMSIM_NAMESPACE + "hasCellMLprivateInterface");
 	public static final URI CELLML_COMPONENT_PUBLIC_INTERFACE_URI = URI.create(SEMSIM_NAMESPACE + "hasCellMLpublicInterface");
 	public static final URI CELLML_DOCUMENTATION_URI = URI.create(SEMSIM_NAMESPACE + "hasCellMLdocumentation");
@@ -309,6 +297,7 @@ public class SemSimConstants {
 		aMap1.put("http://purl.org/sig/ont/fma/", FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME);
 		aMap1.put("http://sig.biostr.washington.edu/fma3.0#", FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME);
 		aMap1.put("http://sig.uw.edu/fma#", FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME);
+		aMap1.put("http://identifiers.org/fma/", FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME);
 		aMap1.put("http://purl.org/obo/owl/GO#", GENE_ONTOLOGY_FULLNAME);
 		aMap1.put("http://purl.obolibrary.org/obo/GO", GENE_ONTOLOGY_FULLNAME);
 		aMap1.put("urn:miriam:obo.go:", GENE_ONTOLOGY_FULLNAME);
@@ -336,6 +325,7 @@ public class SemSimConstants {
 		aMap1.put("http://purl.obolibrary.org/obo/CMO", CLINICAL_MEASUREMENT_ONTOLOGY_FULLNAME);
 		aMap1.put("http://purl.uniprot.org/uniprot/", UNIPROT_FULLNAME);
 		aMap1.put("http://identifiers.org/uniprot/", UNIPROT_FULLNAME);
+		aMap1.put("http://www.uniprot.org/uniprot/", UNIPROT_FULLNAME);
 		aMap1.put("http://purl.org/obo/owl/DOID#", HUMAN_DISEASE_ONTOLOGY_FULLNAME);
 		aMap1.put("http://purl.bioontology.org/ontology/MA", MOUSE_ADULT_GROSS_ANATOMY_ONTOLOGY_FULLNAME);
 		aMap1.put("http://purl.org/obo/owl/MA#", MOUSE_ADULT_GROSS_ANATOMY_ONTOLOGY_FULLNAME);

@@ -7,15 +7,15 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.HashSet;
 
-import semsim.ErrorLog;
-import semsim.SemSimUtil;
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
 import semsim.model.computational.RelationalConstraint;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.Decimal;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.datastructures.SemSimInteger;
 import semsim.model.computational.units.UnitOfMeasurement;
+import semsim.utilities.ErrorLog;
+import semsim.utilities.SemSimUtil;
 import JSim.aserver.ASModel;
 import JSim.aserver.ASServer;
 import JSim.data.NamedVal;
@@ -121,7 +121,7 @@ public class MMLwriter extends ModelWriter{
 				if(!semsimmodel.containsDataStructure(name + suffixes))
 					output = output.concat(" extern " + name + suffixes[y] + ";"); 
 				else
-					output = output.concat(" " + semsimmodel.getDataStructure(name + suffixes[y]).getComputation().getComputationalCode());
+					output = output.concat(" " + semsimmodel.getAssociatedDataStructure(name + suffixes[y]).getComputation().getComputationalCode());
 			}
 		}
 		
@@ -137,7 +137,7 @@ public class MMLwriter extends ModelWriter{
 		Collections.sort(decnames, byVarName);
 		
 		for (String onedecimalstr : decnames) {
-			Decimal onedecimal = (Decimal) semsimmodel.getDataStructure(onedecimalstr);
+			Decimal onedecimal = (Decimal) semsimmodel.getAssociatedDataStructure(onedecimalstr);
 			
 			// If the codeword is declared
 			if (onedecimal.isDeclared() && !onedecimal.isSolutionDomain()
@@ -181,7 +181,7 @@ public class MMLwriter extends ModelWriter{
 		Collections.sort(intnames, byVarName);
 		
 		for (String oneintstr : intnames) {
-			SemSimInteger oneint = (SemSimInteger) semsimmodel.getDataStructure(oneintstr);
+			SemSimInteger oneint = (SemSimInteger) semsimmodel.getAssociatedDataStructure(oneintstr);
 			if (oneint.isDeclared() && !oneint.isSolutionDomain()
 					&& !domainnames.contains(oneint.getName().replace(".delta", ""))
 					&& !domainnames.contains(oneint.getName().replace(".min", ""))
@@ -228,7 +228,7 @@ public class MMLwriter extends ModelWriter{
 		ArrayList<String> alldsarray = new ArrayList<String>(semsimmodel.getDataStructureNames());
 		Collections.sort(alldsarray, byVarName);
 		for (String onedsstr : alldsarray) {
-			DataStructure onedatastr = semsimmodel.getDataStructure(onedsstr);
+			DataStructure onedatastr = semsimmodel.getAssociatedDataStructure(onedsstr);
 			if (onedatastr.hasStartValue() && onedatastr.hasSolutionDomain()) {
 				output = output.concat("\twhen (" + onedatastr.getSolutionDomain().getName()
 						+ " = " + onedatastr.getSolutionDomain().getName() + ".min){ " 
@@ -244,7 +244,7 @@ public class MMLwriter extends ModelWriter{
 		
 		// Logic for this might be a little different than previous versions
 		for (String onedsstr : alldsarray) {
-			DataStructure ds = semsimmodel.getDataStructure(onedsstr);
+			DataStructure ds = semsimmodel.getAssociatedDataStructure(onedsstr);
 			if (ds.isDeclared() && !ds.isSolutionDomain() 
 					&& !domainnames.contains(ds.getName().replace(".delta", ""))
 					&& !domainnames.contains(ds.getName().replace(".min", ""))
@@ -270,7 +270,7 @@ public class MMLwriter extends ModelWriter{
 		output = output.concat("CODEWORD DEFINITIONS\n");
 		output = output.concat("-------------------------------\n");
 		for (String onedsstr : alldsarray) {
-			DataStructure ds = semsimmodel.getDataStructure(onedsstr);
+			DataStructure ds = semsimmodel.getAssociatedDataStructure(onedsstr);
 			output = output.concat(ds.getName() + "\n");
 			if(ds.getDescription()!=null){
 				output = output.concat("   " + ds.getDescription() + "\n");
@@ -279,6 +279,7 @@ public class MMLwriter extends ModelWriter{
 		}
 		output = output.concat("-------------------------------\n");
 		output = output.concat("*/\n");
+		System.out.println(output);
 		return output;
 
 	}

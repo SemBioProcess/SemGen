@@ -33,7 +33,7 @@ import javax.swing.text.Highlighter.HighlightPainter;
 
 import semgen.SemGenSettings;
 import semgen.annotation.workbench.AnnotatorWorkbench;
-import semgen.annotation.workbench.ModelAnnotationsBench;
+import semgen.annotation.workbench.drawers.ModelAnnotationsBench;
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.uicomponent.SemGenProgressBar;

@@ -11,19 +11,20 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Observable;
 
 import semgen.utilities.file.SemGenOpenFileChooser;
-import semsim.ResourcesManager;
+import semsim.utilities.ResourcesManager;
 /**
  * Structure for storing and retrieving application settings during run time. A copy can
  * be made for an object's private use.
  */
 public class SemGenSettings extends Observable{
+	public enum SettingChange {toggletree, showimports, cwsort, toggleproptype}
 	public static SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmssSSSZ");
 	public static SimpleDateFormat sdflog = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
-	public Hashtable<String, String[]> startsettingstable;
+	public HashMap<String, String[]> startsettingstable;
 	private final int defwidth = 1280, defheight = 1024;
 	private Dimension screensize;
 	private Boolean maximize = false;
@@ -34,7 +35,7 @@ public class SemGenSettings extends Observable{
 	
 	public SemGenSettings() {
 		try {
-			startsettingstable = ResourcesManager.createHashtableFromFile("cfg/startSettings.txt");
+			startsettingstable = ResourcesManager.createHashMapFromFile("cfg/startSettings.txt");
 		} 
 		catch (FileNotFoundException e3) {
 				e3.printStackTrace();
@@ -47,7 +48,7 @@ public class SemGenSettings extends Observable{
 	
 	public SemGenSettings(SemGenSettings old) {
 		screensize = old.screensize;
-		startsettingstable = old.startsettingstable;
+		startsettingstable = new HashMap<String, String[]>(old.startsettingstable);
 		xpos = old.xpos;
 		ypos = old.ypos;
 		width = old.width;
@@ -81,8 +82,18 @@ public class SemGenSettings extends Observable{
 		return new Dimension(width, height);
 	}
 	
+	public Dimension getAppCenter() {
+		return new Dimension(width/2, height/2);
+	}
+	
 	public void setAppSize(Dimension dim) {
 		width = dim.width; height = dim.height;
+	}
+	
+	public Point centerDialogOverApplication(Dimension dialogsize) {
+		Dimension appcenter = getAppCenter();
+		Dimension dialogcenter = new Dimension(dialogsize.width/2, dialogsize.height/2);
+		return new Point(appcenter.width-dialogcenter.width, appcenter.height-dialogcenter.height-100);
 	}
 	
 	public int getAppWidth() {
@@ -150,26 +161,36 @@ public class SemGenSettings extends Observable{
 	public void toggleCompositeCompleteness() {
 		Boolean tog = !organizeByCompositeCompleteness();
 		startsettingstable.put("sortbyCompositeCompleteness", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.cwsort);
 	}
 	
 	public void toggleByPropertyType() {
 		Boolean tog = !organizeByPropertyType();
 		startsettingstable.put("organizeByPropertyType", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.cwsort);
 	}
 	
 	public void toggleDisplayMarkers() {
 		Boolean tog = !useDisplayMarkers();
 		startsettingstable.put("displayMarkers", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.toggleproptype);
 	}
 	
 	public void toggleTreeView() {
 		Boolean tog = !useTreeView();
 		startsettingstable.put("treeView", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.toggletree);
 	}
 	
 	public void toggleShowImports() {
 		Boolean tog = !showImports();
 		startsettingstable.put("showImports", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.showimports);
 	}
 	
 	public void toggleAutoAnnotate(Boolean tog) {
@@ -178,22 +199,32 @@ public class SemGenSettings extends Observable{
 	
 	public void toggleCompositeCompleteness(Boolean tog) {
 		startsettingstable.put("sortbyCompositeCompleteness", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.cwsort);
 	}
 	
 	public void toggleByPropertyType(Boolean tog) {
 		startsettingstable.put("organizeByPropertyType", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.cwsort);
 	}
 	
 	public void toggleDisplayMarkers(Boolean tog) {
 		startsettingstable.put("displayMarkers", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.toggleproptype);
 	}
 	
 	public void toggleTreeView(Boolean tog) {
 		startsettingstable.put("treeView", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.toggletree);
 	}
 	
 	public void toggleShowImports(Boolean tog) {
 		startsettingstable.put("showImports", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.showimports);
 	}
 	public String getHelpURL() {
 		return startsettingstable.get("helpURL")[0];

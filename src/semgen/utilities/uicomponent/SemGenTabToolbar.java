@@ -26,6 +26,13 @@ public class SemGenTabToolbar extends JToolBar {
 		setAlignmentY(JPanel.TOP_ALIGNMENT);
 	}
 	
+	public SemGenTabToolbar(int orient) {
+		super(orient);
+		setFloatable(false);
+		setOpaque(true);
+		setAlignmentY(JPanel.TOP_ALIGNMENT);
+	}
+	
 	protected class ToolBarLabel extends JLabel {
 		private static final long serialVersionUID = 1L;
 

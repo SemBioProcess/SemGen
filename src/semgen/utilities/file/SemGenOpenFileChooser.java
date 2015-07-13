@@ -28,7 +28,7 @@ import semgen.SemGen;
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenTask;
 import semgen.utilities.uicomponent.SemGenProgressBar;
-import semsim.SemSimUtil;
+import semsim.utilities.SemSimUtil;
 
 public class SemGenOpenFileChooser extends SemGenFileChooser implements ActionListener {
 

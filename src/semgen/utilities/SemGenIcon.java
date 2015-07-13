@@ -27,6 +27,9 @@ public class SemGenIcon {
 	public static final ImageIcon modifyicon = createImageIcon("icons/Modify2020.png");
 	public static final ImageIcon loadsourceofimporticon = createImageIcon("icons/Load2020.png");
 	public static final ImageIcon homeicon = createImageIcon("icons/Home2020.png");
+	public static final ImageIcon libraryaddicon = createImageIcon("icons/libraryadd2020.png");
+	public static final ImageIcon librarymodifyicon = createImageIcon("icons/librarymodify2020.png");
+	public static final ImageIcon libraryimporticon = createImageIcon("icons/libraryimport2020.png");
 	public static final ImageIcon homeiconsmall = createImageIcon("icons/Home1515.png");
 	public static final ImageIcon extractoricon = createImageIcon("icons/extractoricon2020.png");
 	public static final ImageIcon annotatoricon = createImageIcon("icons/annotatoricon2020.png");
@@ -42,7 +45,7 @@ public class SemGenIcon {
 	public static final ImageIcon importicon = createImageIcon("icons/import_wiz.png");
 	public static final ImageIcon exporticon = createImageIcon("icons/exportpref_obj.png");
 	public static final ImageIcon treeicon = createImageIcon("icons/hierarchicalLayout.gif");
-	public static final ImageIcon setsourceicon = createImageIcon("icons/rebase.gif");	
+	public static final ImageIcon setsourceicon = createImageIcon("icons/link2020.png");	
 	public static final ImageIcon onicon = createImageIcon("icons/onicon.gif");
 	public static final ImageIcon officon = createImageIcon("icons/officon.gif");
 	public static final ImageIcon annotatemodelicon = createImageIcon("icons/annotatemodel.gif");
@@ -50,6 +53,7 @@ public class SemGenIcon {
 	public static final ImageIcon semgenbigicon = createImageIcon("icons/semgeniconbig.png");
 	public static final ImageIcon semgenicon = createImageIcon("icons/semgenicon.icns");
 	public static final ImageIcon semgenwinicon = createImageIcon("icons/semgeniconWIN.ico");
+	public static final ImageIcon semgeninsert = createImageIcon("icons/insertabove2020.png");
 	
 	/** Returns an ImageIcon, or null if the path was invalid. */
 	private static ImageIcon createImageIcon(String path) {

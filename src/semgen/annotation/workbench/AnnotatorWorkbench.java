@@ -2,10 +2,10 @@ package semgen.annotation.workbench;
 
 import java.io.File;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Set;
-import java.util.TreeMap;
 
 import javax.swing.JOptionPane;
 
@@ -16,18 +16,26 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import semgen.GlobalActions;
 import semgen.SemGen;
-import semgen.annotation.routines.AnnotationCopier;
-import semgen.annotation.workbench.ModelAnnotationsBench.ModelChangeEnum;
+import semgen.annotation.workbench.SemSimTermLibrary.LibraryEvent;
+import semgen.annotation.workbench.drawers.CodewordToolDrawer;
+import semgen.annotation.workbench.drawers.ModelAnnotationsBench;
+import semgen.annotation.workbench.drawers.ModelAnnotationsBench.ModelChangeEnum;
+import semgen.annotation.workbench.drawers.SubModelToolDrawer;
+import semgen.annotation.workbench.routines.AnnotationImporter;
+import semgen.annotation.workbench.routines.ModelComponentValidator;
+import semgen.annotation.workbench.routines.TermCollector;
+import semgen.annotation.workbench.routines.TermModifier;
 import semgen.utilities.CSVExporter;
-import semgen.utilities.SemGenError;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.SemGenSaveFileChooser;
-import semsim.SemSimUtil;
 import semsim.annotation.SemSimRelation;
-import semsim.model.SemSimModel;
+import semsim.model.SemSimTypes;
+import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
+import semsim.model.physical.PhysicalProcess;
 import semsim.reading.ModelClassifier;
+import semsim.utilities.SemSimUtil;
 import semsim.writing.CellMLwriter;
 
 public class AnnotatorWorkbench extends Workbench implements Observer {
@@ -36,10 +44,13 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 							//in SBML, MML, CellML or SemSim format)
 	private ModelAnnotationsBench modanns;
 	private SemSimTermLibrary termlib;
+	private CodewordToolDrawer cwdrawer;
+	private SubModelToolDrawer smdrawer;
 	private boolean modelsaved = true;
 	private int lastsavedas = -1;
-	private String ontspref;
-	public static enum modeledit {compositechanged}
+	public static enum WBEvent {freetextrequest, smselection, cwselection}
+	public static enum LibraryRequest {requestimport, requestlibrary, requestcreator, closelibrary }
+	public static enum modeledit {propertychanged, compositechanged, codewordchanged, submodelchanged, modelimport, smlistchanged, freetextchange, smnamechange }
 	
 	public AnnotatorWorkbench(File file, SemSimModel model) {
 		semsimmodel = model;
@@ -48,14 +59,32 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	}
 	
 	public void initialize() {
-		modanns = new ModelAnnotationsBench(semsimmodel);
 		termlib = new SemSimTermLibrary(semsimmodel);
+		termlib.addObserver(this);
+		modanns = new ModelAnnotationsBench(semsimmodel);
 		modanns.addObserver(this);
-		// Add unspecified physical model components for use during annotation
-		semsimmodel.addCustomPhysicalEntity(SemSimModel.unspecifiedName, "Non-specific entity for use as a placeholder during annotation");
-		semsimmodel.addCustomPhysicalProcess(SemSimModel.unspecifiedName, "Non-specific process for use as a placeholder during annotation");
+		cwdrawer = new CodewordToolDrawer(termlib, semsimmodel.getAssociatedDataStructures());
+		cwdrawer.addObserver(this);
+		smdrawer = new SubModelToolDrawer(termlib, semsimmodel.getSubmodels());
+		smdrawer.addObserver(this);
 
 		setModelSaved(isSemSimorCellMLModel());
+	}
+	
+	public CodewordToolDrawer openCodewordDrawer() {
+		return cwdrawer;
+	}
+	
+	public SubModelToolDrawer openSubmodelDrawer() {
+		return smdrawer;
+	}
+	
+	public ModelAnnotationsBench getModelAnnotationsWorkbench() {
+		return modanns;
+	}
+	
+	public SemSimTermLibrary openTermLibrary() {
+		return termlib;
 	}
 	
 	public void addObservertoModelAnnotator(Observer obs) {
@@ -94,35 +123,33 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	public String getModelSourceFile() {
 		return semsimmodel.getLegacyCodeLocation();
 	}
+	
+	private void validateModelComposites() {
+		new ModelComponentValidator(this, semsimmodel);
+	}
 
 	@Override
 	public File saveModel() {
-		Set<DataStructure> unspecds = semsimmodel.getDataStructuresWithUnspecifiedAnnotations();
-		if(unspecds.isEmpty()){
-			URI fileURI = sourcefile.toURI();
-			if(fileURI!=null){
-				try {
-					if(lastsavedas==ModelClassifier.SEMSIM_MODEL) {
-						OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-						manager.saveOntology(semsimmodel.toOWLOntology(), new RDFXMLOntologyFormat(), IRI.create(fileURI));
-					}
-					else if(lastsavedas==ModelClassifier.CELLML_MODEL){
-						File outputfile =  new File(fileURI);
-						String content = new CellMLwriter(semsimmodel).writeToString();
-						SemSimUtil.writeStringToFile(content, outputfile);
-					}
-				} catch (Exception e) {e.printStackTrace();}		
-				SemGen.logfilewriter.println(sourcefile.getName() + " was saved");
-				setModelSaved(true);
-			}
-			else{
-				return saveModelAs();
-			}			
+		URI fileURI = sourcefile.toURI();
+		if(fileURI!=null){
+			validateModelComposites();
+			try {
+				if(lastsavedas==ModelClassifier.SEMSIM_MODEL) {
+					OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+					manager.saveOntology(semsimmodel.toOWLOntology(), new RDFXMLOntologyFormat(), IRI.create(fileURI));
+				}
+				else if(lastsavedas==ModelClassifier.CELLML_MODEL){
+					File outputfile =  new File(fileURI);
+					String content = new CellMLwriter(semsimmodel).writeToString();
+					SemSimUtil.writeStringToFile(content, outputfile);
+				}
+			} catch (Exception e) {e.printStackTrace();}		
+			SemGen.logfilewriter.println(sourcefile.getName() + " was saved");
+			setModelSaved(true);
 		}
 		else{
-			SemGenError.showUnspecifiedAnnotationError(unspecds);
-			return null;
-		}
+			return saveModelAs();
+		}			
 
 		return sourcefile;
 	}
@@ -142,6 +169,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 
 	public void exportCSV() {
 		try {
+			validateModelComposites();
 			new CSVExporter(semsimmodel).exportCodewords();
 		} catch (Exception e1) {e1.printStackTrace();} 
 	}
@@ -184,41 +212,110 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		setModelSaved(false);
 	}
 	
-	public void importModelAnnotations() {
-		AnnotationCopier copier = new AnnotationCopier(semsimmodel);
-		if (copier.doCopy()) {
+	public boolean importModelAnnotations(File file, Boolean[] options) {
+		validateModelComposites();
+		AnnotationImporter copier = new AnnotationImporter(termlib, semsimmodel);
+		if (!copier.loadSourceModel(file)) {
+			return false;
+		}
+		//Notify observers if changes were made.
+		if (copier.copyModelAnnotations(options)) {
+			setModelSaved(false);
 			setChanged();
 			notifyObservers();
 		}
-	}
 	
-	public ModelAnnotationsBench getModelAnnotationsWorkbench() {
-		return modanns;
+		return true;
 	}
-	
-	public TreeMap<String,PhysicalEntity> getPhysicalEntityIDList() {
-		return termlib.getPhysEntIDMap();
 		
-	}
-	
 	public void compositeChanged() {
 		setModelSaved(false);
 		setChanged();
 		notifyObservers(modeledit.compositechanged);
 	}
 	
+	private void submodelListChanged() {
+		smdrawer.refreshSubModels();
+		setModelSaved(false);
+		setChanged();
+		notifyObservers(modeledit.smlistchanged);
+	}
+	
+	public ArrayList<Integer> getSelectedSubmodelDSIndicies() {
+		ArrayList<DataStructure> dslist = smdrawer.getSelectionDataStructures();
+		ArrayList<Integer> dsindicies = new ArrayList<Integer>();
+		
+		for (DataStructure ds : dslist) {
+			dsindicies.add(cwdrawer.getIndexofComponent(ds));
+		}
+		
+		return dsindicies;
+	}
+	
+	public void addDataStructurestoSubmodel(ArrayList<Integer> dsindicies) {
+		smdrawer.setDataStructures(cwdrawer.getComponentsfromIndicies(dsindicies));
+		setChanged();
+		notifyObservers(modeledit.smlistchanged);
+	}
+	
+	public void addSubmodeltoModel(String name) {
+		semsimmodel.addSubmodel(smdrawer.addSubmodel(name));
+		submodelListChanged();
+	}
+	
+	public void removeSubmodelfromModel() {
+		semsimmodel.removeSubmodel(smdrawer.removeSubmodel());
+		submodelListChanged();
+	}
+	
+	public Boolean submitSubmodelName(String newname) {
+		if (!newname.equals("") && !cwdrawer.containsComponentwithName(newname) &&
+			!smdrawer.containsComponentwithName(newname) && !newname.contains("--")) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public void requestFreetextChange() {
+		setChanged();
+		notifyObservers(WBEvent.freetextrequest);
+	}
+	
+	public AnnotatorTreeMap makeTreeMap(boolean useimports) {
+		return new AnnotatorTreeMap(useimports, smdrawer, cwdrawer);
+	}
+	
+	public void sendTermLibraryEvent(LibraryRequest evt) {
+		setChanged();
+		notifyObservers(evt);
+	}
+	
+	public File getSourceSubmodelFile() {
+		return new File(getFile().getParent() + "/" + smdrawer.getHrefValue());
+	}
+	
+	public TermCollector collectAffiliatedTermsandCodewords(Integer index) {
+		return new TermCollector(this, index);
+	}
+	
+	public void replaceTerm(TermCollector affected, Integer repindex, boolean remove) {
+		new TermModifier(this, affected).runReplace(repindex, remove);
+	}
+	
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		if (arg1!=ModelChangeEnum.METADATASELECTED) {
-			setModelSaved(false);
+		//Event forwarding
+		if ((arg1==WBEvent.smselection) || (arg1==WBEvent.cwselection) || arg1==ModelChangeEnum.METADATASELECTED){
+			setChanged();
+			notifyObservers(arg1);
+		}
+		if (arg1==modeledit.freetextchange || arg1==modeledit.codewordchanged || arg1==modeledit.submodelchanged
+				|| arg1==LibraryEvent.SINGULAR_TERM_CHANGE || arg1.equals(LibraryEvent.COMPOSITE_ENTITY_CHANGE) 
+				|| arg1.equals(LibraryEvent.PROCESS_CHANGE)) {
+			this.setModelSaved(false);
 		}
 	}
 	
-	public String getLastOntology() {
-		return ontspref;
-	}
-	
-	public void setLastOntology(String ont) {
-		ontspref = ont;
-	}
+
 }

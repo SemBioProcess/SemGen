@@ -14,28 +14,22 @@ import semgen.utilities.BrowserLauncher;
 import semgen.utilities.SemGenIcon;
 import semsim.SemSimConstants;
 import semsim.owl.SemSimOWLFactory;
-import semsim.webservices.BioPortalConstants;
+import semsim.utilities.webservices.BioPortalConstants;
 
 public class ExternalURLButton extends JLabel implements MouseListener{
 
 	private static final long serialVersionUID = 1L;
-	private URI termuri;
 
 	public ExternalURLButton(){
 		addMouseListener(this);
 		setIcon(SemGenIcon.externalURLicon);
-		setText("");
 		setEnabled(true);
 		setToolTipText("Show term details in browser");
 		setOpaque(false);
 		setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
 	}
-	
-	public void setTermURI(URI uri){
-		termuri = uri;
-	}
 
-	public void mouseClicked(MouseEvent arg0) {
+	public void openTerminBrowser(URI termuri) {
 		if(termuri!=null){
 			System.out.println(termuri);
 			String namespace = SemSimOWLFactory.getNamespaceFromIRI(termuri.toString());
@@ -61,6 +55,10 @@ public class ExternalURLButton extends JLabel implements MouseListener{
 				JOptionPane.showMessageDialog(getParent(), "Sorry, could not determine where to find more information about that resource.");
 			}
 		}
+	}
+	
+	public void mouseClicked(MouseEvent arg0) {
+		
 	}
 
 	public void mouseEntered(MouseEvent arg0) {

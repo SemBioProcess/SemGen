@@ -89,6 +89,14 @@ public class ReferenceOntologyAnnotation extends Annotation{
 	}
 
 	/**
+	 * @return The name of the knowledge base that contains the URI used as the annotation value
+	 */
+	public String getNamewithOntologyAbreviation() {
+		return valueDescription + " (" + getOntologyAbbreviation() + ")";
+	}
+
+	
+	/**
 	 * Set the abbreviation of the knowledge base containing a specified URI
 	 * @param uri A URI from a knowledge base
 	 */

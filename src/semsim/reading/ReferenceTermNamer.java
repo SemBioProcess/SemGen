@@ -7,25 +7,25 @@ import java.util.Map;
 
 import org.jdom.JDOMException;
 
-import semsim.Annotatable;
 import semsim.SemSimConstants;
+import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.model.SemSimComponent;
+import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
-import semsim.model.SemSimModel;
 import semsim.owl.SemSimOWLFactory;
-import semsim.webservices.BioPortalConstants;
-import semsim.webservices.BioPortalSearcher;
-import semsim.webservices.KEGGsearcher;
-import semsim.webservices.UniProtSearcher;
+import semsim.utilities.webservices.BioPortalConstants;
+import semsim.utilities.webservices.BioPortalSearcher;
+import semsim.utilities.webservices.KEGGsearcher;
+import semsim.utilities.webservices.UniProtSearcher;
 
 public class ReferenceTermNamer {
 	
 	public static final String BioPortalOBOlibraryPrefix = "http://purl.obolibrary.org/obo/";
-	public static final String BioPortalFMAnamespace = "http://sig.uw.edu/fma#";
+	public static final String BioPortalFMAnamespace = "http://purl.org/sig/ont/fma/";
 	public static final String BioPortalSNOMEDCTnamespace = "http://purl.bioontology.org/ontology/SNOMEDCT/";
 	public static final String BioPortalECGontNamespace = "http://www.cvrgrid.org/files/ECGOntologyv1.owl#";
 	
@@ -107,7 +107,7 @@ public class ReferenceTermNamer {
 			if(KBname.equals(SemSimConstants.FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME)){
 				String bioportalontID = SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.get(KBname);
 				String edittedid = id.replace("FMA%3A", "");
-				edittedid = id.replace("FMA:", "FMA_");
+				edittedid = id.replace("FMA:", "fma");
 				edittedid = SemSimOWLFactory.URIencoding(BioPortalFMAnamespace + edittedid);
 
 				name = getRDFLabelUsingBioPortal(edittedid, bioportalontID);

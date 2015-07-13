@@ -2,12 +2,10 @@ package semgen.stage;
 
 import java.awt.BorderLayout;
 import java.io.IOException;
-import java.util.Observer;
 
 import javax.naming.InvalidNameException;
 import javax.swing.JOptionPane;
 
-import com.teamdev.jxbrowser.chromium.BrowserPreferences;
 import com.teamdev.jxbrowser.chromium.DialogParams;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 import com.teamdev.jxbrowser.chromium.swing.DefaultDialogHandler;
@@ -74,12 +72,6 @@ public class StageTab extends SemGenTab {
 
 	@Override
 	public void requestSaveAs() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void addObservertoWorkbench(Observer obs) {
 		// TODO Auto-generated method stub
 
 	}

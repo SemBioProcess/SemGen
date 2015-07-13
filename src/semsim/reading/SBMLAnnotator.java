@@ -26,18 +26,24 @@ import org.sbml.libsbml.SpeciesReference;
 import org.sbml.libsbml.libsbmlConstants;
 import org.semanticweb.owlapi.model.OWLException;
 
+import semgen.SemGen;
 import semsim.SemSimConstants;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
+import semsim.annotation.ReferenceTerm;
 import semsim.annotation.StructuralRelation;
 import semsim.annotation.CurationalMetadata.Metadata;
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
+import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.PhysicalModelComponent;
-import semsim.model.physical.Submodel;
 import semsim.model.physical.object.CompositePhysicalEntity;
+import semsim.model.physical.object.CustomPhysicalEntity;
+import semsim.model.physical.object.CustomPhysicalProcess;
+import semsim.model.physical.object.ReferencePhysicalEntity;
+import semsim.model.physical.object.ReferencePhysicalProcess;
 
 public class SBMLAnnotator {
 
@@ -96,7 +102,7 @@ public class SBMLAnnotator {
 			// collect all compartment annotations
 			for(int c=0; c<sbmlmodel.getListOfCompartments().size(); c++){
 				Compartment comp = sbmlmodel.getCompartment(c);
-				DataStructure ds = semsimmodel.getDataStructure(xxx(comp.getId()));
+				DataStructure ds = semsimmodel.getAssociatedDataStructure(xxx(comp.getId()));
 				
 				String OPBclassID = null;
 				// Annotate the physical property of the compartment
@@ -109,8 +115,7 @@ public class SBMLAnnotator {
 					}
 					
 					if(OPBclassID!=null){
-						ds.getPhysicalProperty().addAnnotation(new ReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION,
-								URI.create(SemSimConstants.OPB_NAMESPACE + OPBclassID), null));
+						ds.setAssociatePhysicalProperty(SemGen.semsimlib.getOPBAnnotationFromReferenceID(SemSimConstants.OPB_NAMESPACE + OPBclassID));
 					}
 				}
 				PhysicalEntity ent = null;
@@ -135,8 +140,8 @@ public class SBMLAnnotator {
 								
 								// If the annotation is an "is-a" annotation
 								if(cvterm.getBiologicalQualifierType()==libsbmlConstants.BQB_IS){
-									ent = semsimmodel.addReferencePhysicalEntity(ma.fulluri, ma.rdflabel);
-									description = ent.getFirstRefersToReferenceOntologyAnnotation().getValueDescription();
+									ent = semsimmodel.addReferencePhysicalEntity(new ReferencePhysicalEntity(ma.fulluri, ma.rdflabel));
+									description = ent.getDescription();
 									resourcesandanns.put(resource, ma);
 									entcreated = true;
 								}
@@ -144,13 +149,13 @@ public class SBMLAnnotator {
 									// Put physical entity in model but don't connect it to data structure
 									PhysicalEntity ivoent = semsimmodel.getPhysicalEntityByReferenceURI(ma.fulluri);
 									if(ivoent == null){
-										ivoent = semsimmodel.addReferencePhysicalEntity(ma.fulluri, ma.rdflabel);
+										ivoent = semsimmodel.addReferencePhysicalEntity(new ReferencePhysicalEntity(ma.fulluri, ma.rdflabel));
 									}
 									// Establish is-a relationship with reference annotation here
 									if(comp.getName()!=null && !comp.getName().equals(""))
-										ent = semsimmodel.addCustomPhysicalEntity(comp.getName(), comp.getName());
+										ent = semsimmodel.addCustomPhysicalEntity(new CustomPhysicalEntity(comp.getName(), comp.getName()));
 									else
-										ent = semsimmodel.addCustomPhysicalEntity(comp.getId(), comp.getId());
+										ent = semsimmodel.addCustomPhysicalEntity(new CustomPhysicalEntity(comp.getId(), comp.getId()));
 									ReferenceOntologyAnnotation ann = new ReferenceOntologyAnnotation(
 											SemSimConstants.BQB_IS_VERSION_OF_RELATION, ma.fulluri, ma.rdflabel);
 									ent.addAnnotation(ann);
@@ -164,11 +169,11 @@ public class SBMLAnnotator {
 				
 				// If no annotation present, create a new custom physical entity from compartment name
 				if(!hasusableann || (isonline && hasusableann && !entcreated)){
-					ent = semsimmodel.addCustomPhysicalEntity(description, description);
+					ent = semsimmodel.addCustomPhysicalEntity(new CustomPhysicalEntity(description, description));
 				}
 				if(ent!=null){
 					compsandphysents.put(comp, ent);
-					ds.getPhysicalProperty().setPhysicalPropertyOf(ent);
+					ds.setAssociatedPhysicalModelComponent(ent);
 				}
 			}
 			// end of compartment for loop, next process semantics for all species
@@ -184,12 +189,12 @@ public class SBMLAnnotator {
 				setCompositeAnnotationForModelComponent(rxn, sbmlmodel, semsimmodel, resourcesandanns, isonline, 
 						compsandphysents, speciesandphysents, ontologytermsandnamescache);
 				String ratecdwd = xxx(rxn.getId());
-				DataStructure theds = semsimmodel.getDataStructure(ratecdwd);
+				DataStructure theds = semsimmodel.getAssociatedDataStructure(ratecdwd);
 				
 				if(semsimmodel.containsDataStructure(xxx(rxn.getId()) + ".rate")){
 					ratecdwd = ratecdwd + ".rate";
 				}
-				PhysicalModelComponent pmc = theds.getPhysicalProperty().getPhysicalPropertyOf();
+				PhysicalModelComponent pmc = theds.getAssociatedPhysicalModelComponent();
 
 				// Establish the relationships between the reaction and its reactants, products and modifiers
 				for(int l=0;l<rxn.getNumReactants();l++){
@@ -233,8 +238,8 @@ public class SBMLAnnotator {
 					String speciesid = sbmlmodel.getSpecies(speciesref.getSpecies()).getId();
 					
 					// species ids that start with _ are prefixed with xxx during SBML-to-MML translation
-					if(semsimmodel.getDataStructure(xxx(speciesid))!=null){
-						dss.add(semsimmodel.getDataStructure(xxx(speciesid)));
+					if(semsimmodel.getAssociatedDataStructure(xxx(speciesid))!=null){
+						dss.add(semsimmodel.getAssociatedDataStructure(xxx(speciesid)));
 					}
 				}
 				for(int sp=0; sp<rxn.getNumProducts(); sp++){
@@ -242,8 +247,8 @@ public class SBMLAnnotator {
 					String speciesid = sbmlmodel.getSpecies(speciesref.getSpecies()).getId();
 					
 					// species ids that start with _ are prefied with xxx during SBML-to-MML translation
-					if(semsimmodel.getDataStructure(speciesid)!=null){
-						dss.add(semsimmodel.getDataStructure(xxx(speciesid)));
+					if(semsimmodel.getAssociatedDataStructure(speciesid)!=null){
+						dss.add(semsimmodel.getAssociatedDataStructure(xxx(speciesid)));
 					}
 				}
 				for(int sp=0; sp<rxn.getNumModifiers(); sp++){
@@ -251,8 +256,8 @@ public class SBMLAnnotator {
 					String speciesid = sbmlmodel.getSpecies(speciesref.getSpecies()).getId();
 					
 					// species ids that start with _ are prefied with xxx during SBML-to-MML translation
-					if(semsimmodel.getDataStructure(speciesid)!=null){
-						dss.add(semsimmodel.getDataStructure(xxx(speciesid)));
+					if(semsimmodel.getAssociatedDataStructure(speciesid)!=null){
+						dss.add(semsimmodel.getAssociatedDataStructure(xxx(speciesid)));
 					}
 				}
 				
@@ -270,9 +275,7 @@ public class SBMLAnnotator {
 				
 				if(pmc!=null){
 					if(pmc.hasRefersToAnnotation()){
-						ReferenceOntologyAnnotation refann = pmc.getFirstRefersToReferenceOntologyAnnotation();
-						sub.addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, refann.getReferenceURI(), 
-								refann.getValueDescription());
+						sub.setSingularAnnotation((ReferenceTerm) pmc);
 					}
 				}
 			}
@@ -315,7 +318,7 @@ public class SBMLAnnotator {
 								resourcesandanns.put(cvterm.getResourceURI(r), ma);
 								speciesent = semsimmodel.getPhysicalEntityByReferenceURI(ma.fulluri);
 								if(speciesent == null)
-									speciesent = semsimmodel.addReferencePhysicalEntity(ma.fulluri, ma.rdflabel);
+									speciesent = semsimmodel.addReferencePhysicalEntity(new ReferencePhysicalEntity(ma.fulluri, ma.rdflabel));
 								// If the species has already been annotated against a reference term
 								// and there is another reference term that is annotated against, add the annotation
 								else if(hasisannotation) speciesent.addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, ma.fulluri, ma.rdflabel);
@@ -328,13 +331,13 @@ public class SBMLAnnotator {
 			// Otherwise we need to create a custom physical entity for the species
 			if(!hasisannotation && isonline){
 				if(species.getName()!=null && !species.getName().equals(""))
-					speciesent = semsimmodel.addCustomPhysicalEntity(species.getName(), species.getName());
+					speciesent = semsimmodel.addCustomPhysicalEntity(new CustomPhysicalEntity(species.getName(), species.getName()));
 				else
-					speciesent = semsimmodel.addCustomPhysicalEntity(species.getId(), species.getId());
+					speciesent = semsimmodel.addCustomPhysicalEntity(new CustomPhysicalEntity(species.getId(), species.getId()));
 				
 				if(!isversionofmas.isEmpty()){
 					MIRIAMannotation appliedann = isversionofmas.toArray(new MIRIAMannotation[]{})[0];
-					semsimmodel.addReferencePhysicalEntity(appliedann.fulluri, appliedann.rdflabel);
+					semsimmodel.addReferencePhysicalEntity(new ReferencePhysicalEntity(appliedann.fulluri, appliedann.rdflabel));
 					speciesent.addReferenceOntologyAnnotation(SemSimConstants.BQB_IS_VERSION_OF_RELATION, appliedann.fulluri, appliedann.rdflabel);
 				}
 			}
@@ -395,7 +398,7 @@ public class SBMLAnnotator {
 							resourcesandanns.put(cvterm.getResourceURI(r), ma);
 							pproc = semsimmodel.getPhysicalProcessByReferenceURI(ma.fulluri);
 							if(pproc == null){
-								pproc = semsimmodel.addReferencePhysicalProcess(ma.fulluri, ma.rdflabel);
+								pproc = semsimmodel.addReferencePhysicalProcess(new ReferencePhysicalProcess(ma.fulluri, ma.rdflabel));
 							}
 							break;
 						}
@@ -408,14 +411,14 @@ public class SBMLAnnotator {
 					(isonline && ((hasusableisann && !gotisannotation) || (hasusableisversionofann && !gotisversionofannotation)
 							|| (!hasusableisann && hasusableisversionofann && gotisversionofannotation)))){
 				if(rxn.getName()!=null && !rxn.getName().equals("")){
-					pproc = semsimmodel.addCustomPhysicalProcess(rxn.getName(), "Custom process: " + rxn.getName());
+					pproc = semsimmodel.addCustomPhysicalProcess(new CustomPhysicalProcess(rxn.getName(), "Custom process: " + rxn.getName()));
 				}
 				else{
-					pproc = semsimmodel.addCustomPhysicalProcess(rxn.getId(), "Custom process: " + rxn.getId());
+					pproc = semsimmodel.addCustomPhysicalProcess(new CustomPhysicalProcess(rxn.getId(), "Custom process: " + rxn.getId()));
 				}
 				if(!isversionofmas.isEmpty()){
 					MIRIAMannotation appliedann = isversionofmas.toArray(new MIRIAMannotation[]{})[0];
-					semsimmodel.addReferencePhysicalProcess(appliedann.fulluri, appliedann.rdflabel);
+					semsimmodel.addReferencePhysicalProcess(new ReferencePhysicalProcess(appliedann.fulluri, appliedann.rdflabel));
 					pproc.addReferenceOntologyAnnotation(SemSimConstants.BQB_IS_VERSION_OF_RELATION, appliedann.fulluri, appliedann.rdflabel);
 				}
 			}
@@ -424,9 +427,9 @@ public class SBMLAnnotator {
 			if(semsimmodel.containsDataStructure(xxx(rxn.getId() + ".rate"))){
 				ratecdwd = ratecdwd + ".rate";
 			}
-			DataStructure ds = semsimmodel.getDataStructure(ratecdwd);
+			DataStructure ds = semsimmodel.getAssociatedDataStructure(ratecdwd);
 			ds.getPhysicalProperty().addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, URI.create(SemSimConstants.OPB_NAMESPACE + "OPB_00592"), "Chemical molar flow rate");
-			ds.getPhysicalProperty().setPhysicalPropertyOf(pproc);
+			ds.setAssociatedPhysicalModelComponent(pproc);
 		}
 		return true;
 	}
@@ -437,7 +440,7 @@ public class SBMLAnnotator {
 		// Exit routine if we're not online
 		if(!isonline) return;
 		
-		DataStructure ds = semsimmodel.getDataStructure(cdwd);
+		DataStructure ds = semsimmodel.getAssociatedDataStructure(cdwd);
 		ReferenceOntologyAnnotation propann = null;
 		if(!species.getHasOnlySubstanceUnits()){
 			 propann = new ReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, URI.create(SemSimConstants.OPB_NAMESPACE + "OPB_00340"), "Chemical concentration");
@@ -460,7 +463,7 @@ public class SBMLAnnotator {
 		relationlist.add(SemSimConstants.PART_OF_RELATION);
 		CompositePhysicalEntity propertytarget = semsimmodel.addCompositePhysicalEntity(entlist, relationlist);
 		
-		ds.getPhysicalProperty().setPhysicalPropertyOf(propertytarget);
+		ds.setAssociatedPhysicalModelComponent(propertytarget);
 
 		// Even if annotation has been used before, add the species and annotation to species and anns
 		speciesandphysents.put(species, propertytarget);
@@ -468,15 +471,15 @@ public class SBMLAnnotator {
 	
 
 	public static void setFreeTextDefinitionsForDataStructuresAndSubmodels(SemSimModel themodel){		
-		for(DataStructure ds : themodel.getDataStructures()){
+		for(DataStructure ds : themodel.getAssociatedDataStructures()){
 			if(ds.getDescription()==null){
 				
 				// Maybe create multiple of these for species with multiple annotations?
 				String freetext = null;
 				
-				if(ds.getPhysicalProperty().getPhysicalPropertyOf()!=null){
-					PhysicalModelComponent pmc = ds.getPhysicalProperty().getPhysicalPropertyOf();
-					freetext = ds.getPhysicalProperty().getFirstRefersToReferenceOntologyAnnotation().getValueDescription();
+				if(ds.getAssociatedPhysicalModelComponent()!=null){
+					PhysicalModelComponent pmc = ds.getAssociatedPhysicalModelComponent();
+					freetext = ds.getPhysicalProperty().getRefersToReferenceOntologyAnnotation().getValueDescription();
 					freetext = freetext + " of ";
 					if(pmc instanceof CompositePhysicalEntity){
 						String compentname = ((CompositePhysicalEntity)pmc).makeName();
@@ -484,7 +487,7 @@ public class SBMLAnnotator {
 						freetext = freetext + compentname;
 					}
 					else if(pmc.hasRefersToAnnotation())
-						freetext = freetext + pmc.getFirstRefersToReferenceOntologyAnnotation().getValueDescription();
+						freetext = freetext + pmc.getDescription();
 					else
 						freetext = freetext + "\"" + pmc.getName() + "\"";
 				}
@@ -492,8 +495,8 @@ public class SBMLAnnotator {
 				
 				// UNCOMMENT TO Create a custom accumulation process for the cdwd's time derivative
 				if(ds.hasSolutionDomain()){
-					if(themodel.getDataStructure(ds.getName() + ":" + ds.getSolutionDomain().getName())!=null){
-						DataStructure tds = themodel.getDataStructure(ds.getName() + ":" + ds.getSolutionDomain().getName());
+					if(themodel.getAssociatedDataStructure(ds.getName() + ":" + ds.getSolutionDomain().getName())!=null){
+						DataStructure tds = themodel.getAssociatedDataStructure(ds.getName() + ":" + ds.getSolutionDomain().getName());
 						if(ds.getDescription()!=null)
 							tds.setDescription("Change in \"" + ds.getDescription().toLowerCase() + "\" with respect to " + ds.getSolutionDomain().getName());
 					}
@@ -504,7 +507,7 @@ public class SBMLAnnotator {
 		// Do submodels
 		for(Submodel sub : themodel.getSubmodels()){
 			if(sub.hasRefersToAnnotation()){
-				ReferenceOntologyAnnotation refann = sub.getFirstRefersToReferenceOntologyAnnotation();
+				ReferenceOntologyAnnotation refann = sub.getRefersToReferenceOntologyAnnotation();
 				sub.setDescription(refann.getValueDescription());
 			}
 		}

@@ -5,14 +5,11 @@
 package semgen.utilities;
 
 import java.util.ArrayList;
-import java.util.Set;
-
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import semsim.ErrorLog;
-import semsim.model.computational.datastructures.DataStructure;
+import semsim.utilities.ErrorLog;
 
 public class SemGenError {
 	private static JFrame parent = null;
@@ -33,14 +30,6 @@ public class SemGenError {
 		JOptionPane.showMessageDialog(parent,
 				"Please make sure you are online, otherwise the website or service \n" + 
 				"may be experiencing difficulties.", "Error connecting to " + location, JOptionPane.ERROR_MESSAGE);
-	}
-	
-	public static void showUnspecifiedAnnotationError(Set<DataStructure> unspecds){
-		String listofds = "";
-		for(DataStructure ds : unspecds){
-			listofds = listofds + ds.getName() + "\n";
-		}
-		JOptionPane.showMessageDialog(parent, "Please first remove unspecified annotations for the following codewords:\n" + listofds);
 	}
 	
 	public static void showFunctionalSubmodelError(String file){
