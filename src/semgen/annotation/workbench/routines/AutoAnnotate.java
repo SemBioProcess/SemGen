@@ -1,5 +1,6 @@
 package semgen.annotation.workbench.routines;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -33,7 +34,7 @@ public class AutoAnnotate {
 				
 				if(pp!=null){
 					
-					ReferenceOntologyAnnotation roa = pp.getRefersToReferenceOntologyAnnotation();
+					URI roa = pp.getReferstoURI();
 					// If the codeword represents an OPB:Amount property (OPB_00135)
 					if(SemGen.semsimlib.OPBhasAmountProperty(roa)) {
 						candidateamounts.add(ds);

@@ -117,6 +117,7 @@ public class TermModifier {
 			replaceSingularPhysicalProperty(repindex, remove);
 			break;
 		case PHYSICAL_PROPERTY_IN_COMPOSITE:
+			replaceAssociatedProperty(repindex);
 			break;
 		case REFERENCE_PHYSICAL_ENTITY:
 			replaceSingularEntity(repindex, remove);
@@ -132,6 +133,10 @@ public class TermModifier {
 	private void replaceSingularPhysicalProperty(int replacement, boolean remove) {
 		drawer.batchSetSingularAnnotation(termaffiliates.getCodewordAffiliates(), replacement);
 		if (remove) library.removeSingularPhysicalProperty(termindex);
+	}
+	
+	private void replaceAssociatedProperty(int replacement) {
+		drawer.batchSetDataStructurePhysicalProperty(termaffiliates.getCodewordAffiliates(), replacement);
 	}
 	
 	private void replaceSingularEntity(int replacement, boolean remove) {

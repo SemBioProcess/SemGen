@@ -201,7 +201,6 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		}
 		
 		return SemGen.semsimlib.isOPBprocessProperty(pp.getReferstoURI());
-				
 	}
 
 	public void copytoMappedVariables() {
@@ -217,38 +216,32 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		return termlib.getPhysicalPropertyIndex(getFocusAssociatedProperty());
 	}
 	
-	public void setDatastructurePhysicalProperty(Integer index) {
-		DataStructure ds = getFocus();
+	private void setDataStructurePhysicalProperty(Integer dsindex, Integer ppindex) {
+		DataStructure ds = componentlist.get(dsindex);
 		//If the new selection is equivalent to the old, do nothing.
-		if (termlib.getPhysicalPropertyIndex(ds.getPhysicalProperty())==index) {
+		if (termlib.getPhysicalPropertyIndex(ds.getPhysicalProperty())==ppindex) {
 			return;
 		}
-		if (index!=-1) {
-			ds.setAssociatePhysicalProperty(termlib.getAssociatePhysicalProperty(index));
+		if (ppindex!=-1) {
+			ds.setAssociatePhysicalProperty(termlib.getAssociatePhysicalProperty(ppindex));
 		}
 		else ds.setAssociatePhysicalProperty(null);
-		changeset.add(currentfocus);
+		changeset.add(dsindex);
+	}
+		
+	public void batchSetDataStructurePhysicalProperty(ArrayList<Integer> dsindicies, Integer ppi) {
+		for (Integer dsi : dsindicies) {
+			setDataStructurePhysicalProperty(dsi, ppi);
+		}
 		changeNotification(modeledit.propertychanged);
 	}
 	
-	public void setDataStructureComposite(Integer index) {
-		if (currentfocus==-1) return; 
-		setDataStructureComposite(currentfocus, index);
-		
-		changeset.add(currentfocus);
-		changeNotification(modeledit.compositechanged);
+	public void setDatastructurePhysicalProperty(Integer index) {
+		setDataStructurePhysicalProperty(currentfocus, index);
+		changeNotification(modeledit.propertychanged);
 	}
 	
-	public void batchSetAssociatedComposite(ArrayList<Integer> cws, int selectedIndex) {
-		for (Integer i : cws) {
-			this.setDataStructureComposite(i, selectedIndex);
-			changeset.add(i);
-		}
-		changeNotification();
-	}
-	
-	
-	public void setDataStructureComposite(Integer cwindex, Integer compindex) {
+	private void setDataStructureComposite(Integer cwindex, Integer compindex) {
 		DataStructure ds = componentlist.get(cwindex);
 		//If the new selection is equivalent to the old, do nothing
 		if ((termlib.getComponentIndex(ds.getAssociatedPhysicalModelComponent())==compindex)) {
@@ -260,6 +253,21 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		else {
 			ds.setAssociatedPhysicalModelComponent(termlib.getComponent(compindex));
 		}
+		changeset.add(cwindex);
+	}
+	
+	public void setDataStructureComposite(Integer index) {
+		if (currentfocus==-1) return; 
+		setDataStructureComposite(currentfocus, index);
+		
+		changeNotification(modeledit.compositechanged);
+	}
+	
+	public void batchSetAssociatedComposite(ArrayList<Integer> cws, int selectedIndex) {
+		for (Integer i : cws) {
+			this.setDataStructureComposite(i, selectedIndex);
+		}
+		changeNotification();
 	}
 	
 	public int countEntitiesinCompositeEntity() {

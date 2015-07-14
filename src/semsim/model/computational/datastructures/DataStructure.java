@@ -331,15 +331,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		if(hasPhysicalProperty()){
 			// If there's already an OPB reference annotation
 			if(getPhysicalProperty().hasRefersToAnnotation()){
-				ReferenceOntologyAnnotation roa = (getPhysicalProperty().getRefersToReferenceOntologyAnnotation());
-				
-				if(lib.OPBhasStateProperty(roa) || lib.OPBhasForceProperty(roa)){
-					return PropertyType.PropertyOfPhysicalEntity;
-				}
-				else if(lib.OPBhasFlowProperty(roa) || lib.OPBhasProcessProperty(roa)){
-					return PropertyType.PropertyOfPhysicalProcess;
-				}
-				else return PropertyType.Unknown;
+				return lib.getPropertyinCompositeType(physicalProperty);
 			}
 			// Otherwise, see if there is already an entity or process associated with the codeword
 			else if(getAssociatedPhysicalModelComponent() instanceof PhysicalEntity){
@@ -350,7 +342,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 			}
 			else return PropertyType.Unknown;
 		}
-		else return PropertyType.Unknown;
+		return PropertyType.Unknown;
 	}
 	
 	public void copySingularAnnotations(DataStructure srcds){

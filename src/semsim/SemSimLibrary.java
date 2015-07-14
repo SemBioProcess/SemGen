@@ -209,12 +209,20 @@ public class SemSimLibrary {
 		return OPBforceProperties.contains(roa.getReferenceURI().toString());
 	}
 	
-	public boolean OPBhasAmountProperty(ReferenceOntologyAnnotation roa) {
-		return OPBamountProperties.contains(roa.getReferenceURI().toString());
+	public boolean OPBhasForceProperty(URI uri) {
+		return OPBforceProperties.contains(uri.toString());
+	}
+	
+	public boolean OPBhasAmountProperty(URI roa) {
+		return OPBamountProperties.contains(roa.toString());
 	}
 	
 	public boolean OPBhasStateProperty(ReferenceOntologyAnnotation roa) {
 		return OPBstateProperties.contains(roa.getReferenceURI().toString());
+	}
+	
+	public boolean OPBhasStateProperty(URI uri) {
+		return OPBstateProperties.contains(uri);
 	}
 	
 	public boolean OPBhasProcessProperty(ReferenceOntologyAnnotation roa) {
@@ -249,6 +257,18 @@ public class SemSimLibrary {
 		return true;
 	}
 	
+	public PropertyType getPropertyinCompositeType(PhysicalPropertyinComposite pp) {
+		URI roa = (pp.getReferstoURI());
+		
+		if(OPBhasStateProperty(roa) || OPBhasForceProperty(roa)){
+			return PropertyType.PropertyOfPhysicalEntity;
+		}
+		else if(OPBhasFlowProperty(roa) || OPBhasProcessProperty(roa)){
+			return PropertyType.PropertyOfPhysicalProcess;
+		}
+		else return PropertyType.Unknown;
+	}
+	
 	public boolean isCellMLBaseUnit(String unit) {
 		return cellMLUnitsTable.contains(unit);
 	}
@@ -263,11 +283,31 @@ public class SemSimLibrary {
 		return newtable;
 	}
 	
-	// Remove any OPB terms that are not Physical Properties
+	// Remove any OPB terms that are Physical Properties
 	public HashMap<String,String> removeOPBAttributeProperties(HashMap<String, String> table){
 		HashMap<String,String> newtable = new HashMap<String,String>();
 		for(String key : table.keySet()){
 			if(!OPBhasProperty(table.get(key)))
+				newtable.put(key, table.get(key));
+		}
+		return newtable;
+	}
+
+	// Remove any OPB terms that are not Physical Properties of a process
+	public HashMap<String, String> removeNonProcessProperties(HashMap<String, String> table) {
+		HashMap<String,String> newtable = new HashMap<String,String>();
+		for(String key : table.keySet()){
+			if(OPBhasFlowProperty(table.get(key)) || OPBhasProcessProperty(table.get(key)))
+				newtable.put(key, table.get(key));
+		}
+		return newtable;
+	}
+	
+	// Remove any OPB terms that are not Physical Properties of an entity
+	public HashMap<String, String> removeNonPropertiesofEntities(HashMap<String, String> table) {
+		HashMap<String,String> newtable = new HashMap<String,String>();
+		for(String key : table.keySet()){
+			if(OPBhasFlowProperty(table.get(key)) || OPBhasProcessProperty(table.get(key)))
 				newtable.put(key, table.get(key));
 		}
 		return newtable;

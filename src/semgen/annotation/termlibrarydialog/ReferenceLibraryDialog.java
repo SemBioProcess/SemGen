@@ -20,7 +20,7 @@ import semgen.utilities.SemGenFont;
 public class ReferenceLibraryDialog extends JFrame implements ComponentListener, ContainerListener {
 	private static final long serialVersionUID = 1L;
 	AnnotatorWorkbench workbench;
-	JTabbedPane mainpane = new JTabbedPane(JTabbedPane.LEFT);
+	JTabbedPane mainpane = new JTabbedPane(JTabbedPane.TOP);
 	TermEditorTab reftermpane;
 	ImportAnnotationsPanel importpane;
 	AddCreateTermPanel createaddpane;

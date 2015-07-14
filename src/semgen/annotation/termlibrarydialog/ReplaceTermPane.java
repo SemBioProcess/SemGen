@@ -20,6 +20,7 @@ import semgen.annotation.dialog.termlibrary.ReferenceClassFinderPanel;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.routines.TermCollector;
+import semsim.PropertyType;
 import semsim.model.SemSimTypes;
 import semsim.utilities.ReferenceOntologies.OntologyDomain;
 
@@ -73,14 +74,18 @@ public class ReplaceTermPane extends JPanel implements ActionListener{
 		ArrayList<Integer> terms = null;
 		OntologyDomain domain = null;
 		importbtn.setEnabled(true);
+		replaceremovebtn.setEnabled(true);
+		
 		switch (affected.getTargetTermType()) {
 		case PHYSICAL_PROPERTY:
 			terms = library.getSortedPhysicalPropertyIndicies();
 			domain = OntologyDomain.PhysicalProperty;
 			break;
 		case PHYSICAL_PROPERTY_IN_COMPOSITE:
-			terms = library.getSortedAssociatePhysicalPropertyIndicies();
-			domain = OntologyDomain.PhysicalProperty;
+			PropertyType pt = library.getPropertyinCompositeType(affected.getTermLibraryIndex());
+			terms = library.getSortedAssociatePhysicalPropertyIndiciesbyPropertyType(pt);
+			domain = OntologyDomain.AssociatePhysicalProperty;
+			replaceremovebtn.setEnabled(false);
 			break;
 		case REFERENCE_PHYSICAL_ENTITY:
 			terms = library.getRequestedTypes(new SemSimTypes[]{SemSimTypes.CUSTOM_PHYSICAL_ENTITY, SemSimTypes.REFERENCE_PHYSICAL_ENTITY});
@@ -222,7 +227,10 @@ public class ReplaceTermPane extends JPanel implements ActionListener{
 		}
 		
 		public void performSearch() {
-			performSearch();
+			super.performSearch();
+			if (domain==OntologyDomain.AssociatePhysicalProperty) {
+				
+			}
 		}
 
 		public void makeTerm() {

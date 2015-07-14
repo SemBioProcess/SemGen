@@ -9,6 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.Observable;
 
 import semgen.SemGen;
+import semsim.PropertyType;
 import semsim.SemSimConstants;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
@@ -40,7 +41,7 @@ import semsim.writing.CaseInsensitiveComparator;
 public class SemSimTermLibrary extends Observable {
 	
 	private ReferenceOntology lastont;
-	private ArrayList<Integer> ppcpeindexer = new ArrayList<Integer>();
+	private ArrayList<Integer> ppccompindexer = new ArrayList<Integer>();
 	private ArrayList<Integer> singppindexer = new ArrayList<Integer>();
 	private ArrayList<Integer> rpeindexer = new ArrayList<Integer>();
 	private ArrayList<Integer> custpeindexer = new ArrayList<Integer>();
@@ -92,7 +93,7 @@ public class SemSimTermLibrary extends Observable {
 		masterlist.add(ppic);
 		
 		i = masterlist.indexOf(ppic);
-		ppcpeindexer.add(i);
+		ppccompindexer.add(i);
 		return i;
 	}
 	
@@ -299,7 +300,7 @@ public class SemSimTermLibrary extends Observable {
 	}
 
 	public Integer getPhysicalPropertyIndex(PhysicalPropertyinComposite pp) {
-		for (Integer i : ppcpeindexer) {
+		for (Integer i : ppccompindexer) {
 			if (masterlist.get(i).isTermEquivalent(pp)) return i; 
 		}
 		return -1;
@@ -313,7 +314,34 @@ public class SemSimTermLibrary extends Observable {
 	}
 	
 	public ArrayList<Integer> getSortedAssociatePhysicalPropertyIndicies() {
-		return sortComponentIndiciesbyName(ppcpeindexer);
+		return sortComponentIndiciesbyName(ppccompindexer);
+	}
+	
+	public ArrayList<Integer> getSortedAssociatePhysicalPropertyIndiciesbyPropertyType(PropertyType type) {
+		ArrayList<Integer> results = new ArrayList<Integer>();
+		switch (type) {
+		case PropertyOfPhysicalEntity:
+			for (Integer i : ppccompindexer) {
+				URI ppc = ((PhysicalPropertyinComposite)masterlist.get(i).getObject()).getReferstoURI();
+				if (SemGen.semsimlib.OPBhasAmountProperty(ppc) || SemGen.semsimlib.OPBhasForceProperty(ppc)) {
+					results.add(i);
+				}
+			}
+			break;
+		case PropertyOfPhysicalProcess:
+			for (Integer i : ppccompindexer) {
+				PhysicalPropertyinComposite ppc = (PhysicalPropertyinComposite)masterlist.get(i).getObject();
+				if (SemGen.semsimlib.OPBhasFlowProperty(ppc.getReferstoURI())) {
+					results.add(i);
+				}
+			}
+			break;
+		case Unknown:
+			break;
+		default:
+			break;
+		}
+		return sortComponentIndiciesbyName(results);
 	}
 	
 	public ArrayList<Integer> getSortedPhysicalPropertyIndicies() {
@@ -420,6 +448,10 @@ public class SemSimTermLibrary extends Observable {
 		return namelist;
 	}
 	
+	public PropertyType getPropertyinCompositeType(int index) {
+		return SemGen.semsimlib.getPropertyinCompositeType(getAssociatePhysicalProperty(index));
+	}
+	
 	public String getComponentName(int index) {
 		return masterlist.get(index).getName();
 	}
@@ -519,7 +551,7 @@ public class SemSimTermLibrary extends Observable {
 		return getCompositeEntityIndicies(getComponentIndex(cpe));
 	}
 	public void removePhysicalProperty(Integer index) {
-		ppcpeindexer.remove(index);
+		ppccompindexer.remove(index);
 		masterlist.get(index).setRemoved(true);
 		notifySingularChanged();
 	}
@@ -589,8 +621,10 @@ public class SemSimTermLibrary extends Observable {
 				list.addAll(procindexer);
 				break;
 			case PHYSICAL_PROPERTY:
-				list.addAll(ppcpeindexer);
 				list.addAll(singppindexer);
+				break;
+			case PHYSICAL_PROPERTY_IN_COMPOSITE:
+				list.addAll(ppccompindexer);
 				break;
 			case REFERENCE_PHYSICAL_ENTITY:
 				list.addAll(rpeindexer);

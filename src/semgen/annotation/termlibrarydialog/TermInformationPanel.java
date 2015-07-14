@@ -19,14 +19,14 @@ import semsim.model.SemSimTypes;
 
 public class TermInformationPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private TermCollector affiliates;
 	private SemSimTermLibrary library;
 	private Integer selection;
-			
-	public TermInformationPanel(AnnotatorWorkbench wb, TermCollector collection) {
-		library = wb.openTermLibrary();
-		affiliates = collection;
-		selection = collection.getTermLibraryIndex();
+	private InfoPanel termpane = new InfoPanel("Affiliated Composites");
+	private InfoPanel cwpane = new InfoPanel("Affiliated Codewords");
+	private JLabel name = new JLabel("No Selection");
+	
+	public TermInformationPanel(AnnotatorWorkbench wb) {
+		library = wb.openTermLibrary();		
 		
 		createGUI();
 	}
@@ -36,42 +36,48 @@ public class TermInformationPanel extends JPanel {
 		setBackground(SemGenSettings.lightblue);
 		
 		makeInformationPanel();
-		if (!isProcess()) {
-			makeTermAffiliatePanel();
-		}
-		makeCodewordAffiliatePanel();
+		add(termpane);
+		add(cwpane);
 		validate();
 	}
 	
 	private void makeInformationPanel() {
 		JPanel infopanel = new JPanel();
 		infopanel.setBackground(SemGenSettings.lightblue);
-		JLabel name = new JLabel(library.getComponentName(selection));
+		
 		name.setFont(SemGenFont.Bold("Arial", 3));
 		infopanel.add(name);
 		add(infopanel);
 	}
 	
-	private void makeTermAffiliatePanel() {
-		InfoPanel termpane = new InfoPanel("Affiliated Composites", affiliates.getCompositeNames());
-		add(termpane);
+	public void updateInformation(TermCollector collection) {
+		if (collection==null) {
+			termpane.clearList();
+			cwpane.clearList();
+			selection = -1;
+		}
+		else {
+			selection = collection.getTermLibraryIndex();
+			termpane.setListData(collection.getCompositeNames());
+			cwpane.setListData(collection.getCodewordNames());
+			name.setText(library.getComponentName(collection.getTermLibraryIndex()));
+			termpane.setVisible(showCompositePane());
+		}
 	}
-	
-	private void makeCodewordAffiliatePanel() {
-		InfoPanel cwpane = new InfoPanel("Affiliated Codewords", affiliates.getCodewordNames());
-		add(cwpane);
-	}
-	
-	private boolean isProcess() {
-		return library.getSemSimType(selection).equals(SemSimTypes.REFERENCE_PHYSICAL_PROCESS) || 
-				library.getSemSimType(selection).equals(SemSimTypes.CUSTOM_PHYSICAL_PROCESS);
+		
+	private boolean showCompositePane() {
+		if (selection==-1) return true; 
+		return !(library.getSemSimType(selection).equals(SemSimTypes.REFERENCE_PHYSICAL_PROCESS) || 
+				library.getSemSimType(selection).equals(SemSimTypes.CUSTOM_PHYSICAL_PROCESS) ||
+				library.getSemSimType(selection).equals(SemSimTypes.PHYSICAL_PROPERTY));
 	}
 	
 	private class InfoPanel extends JPanel {
 		private static final long serialVersionUID = 1L;
 		private Dimension dim = new Dimension(400,300);
+		private JList<String> list = new JList<String>();
 		
-		public InfoPanel(String name, ArrayList<String> listdata) {
+		public InfoPanel(String name) {
 			setPreferredSize(dim);
 			setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS)); 
 			setBorder(BorderFactory.createEtchedBorder());
@@ -80,11 +86,18 @@ public class TermInformationPanel extends JPanel {
 			namelbl.setFont(SemGenFont.defaultBold(2));
 			add(namelbl);
 			
-			JList<String> list = new JList<String>(listdata.toArray(new String[]{}));
 			list.setFont(SemGenFont.defaultPlain());
 			list.setEnabled(false);
 			add(new SemGenScrollPane(list));
 			validate();
+		}
+		
+		public void setListData(ArrayList<String> listdata) {
+			list.setListData(listdata.toArray(new String[]{}));
+		}
+		public void clearList() {
+			list.clearSelection();
+			list.setListData(new String[]{});
 		}
 	}
 }

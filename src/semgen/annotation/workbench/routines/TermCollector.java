@@ -41,6 +41,10 @@ public class TermCollector {
 		return new ArrayList<Integer>(containingindicies);
 	}
 	
+	public boolean isUsed() {
+		return containingcws.size()>0;
+	}
+	
 	/** 
 	 * 
 	 * @return copy of the target term index

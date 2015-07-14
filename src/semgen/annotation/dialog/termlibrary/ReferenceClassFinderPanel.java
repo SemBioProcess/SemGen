@@ -57,9 +57,9 @@ public class ReferenceClassFinderPanel extends JPanel implements
 	private JTextField findbox = new JTextField();
 	protected JList<String> resultslistright = new JList<String>();
 
-	private HashMap<String,String> rdflabelsanduris = new HashMap<String,String>();
+	protected HashMap<String,String> rdflabelsanduris = new HashMap<String,String>();
 	protected GenericThread querythread = new GenericThread(this, "performSearch");
-	private OntologyDomain domain;
+	protected OntologyDomain domain;
 	private ReferenceOntology selected = null;
 	private int termindex = -1;
 	

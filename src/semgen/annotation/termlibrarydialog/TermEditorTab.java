@@ -7,16 +7,19 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentListener;
 import java.awt.event.ContainerListener;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -31,7 +34,7 @@ import semgen.utilities.uicomponent.SemGenScrollPane;
 import semgen.utilities.uicomponent.SemGenTabToolbar;
 import semsim.model.SemSimTypes;
 
-public class TermEditorTab extends JPanel implements ListSelectionListener {
+public class TermEditorTab extends JPanel implements ListSelectionListener, AncestorListener, Observer {
 	private static final long serialVersionUID = 1L;
 	private AnnotatorWorkbench workbench;
 	private JList<String> typechooser = new JList<String>();
@@ -47,6 +50,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener {
 	
 	private SemSimTypes[] types = new SemSimTypes[]{
 			SemSimTypes.PHYSICAL_PROPERTY,
+			SemSimTypes.PHYSICAL_PROPERTY_IN_COMPOSITE,
 			SemSimTypes.REFERENCE_PHYSICAL_ENTITY,
 			SemSimTypes.CUSTOM_PHYSICAL_ENTITY,
 			SemSimTypes.COMPOSITE_PHYSICAL_ENTITY,
@@ -55,8 +59,10 @@ public class TermEditorTab extends JPanel implements ListSelectionListener {
 	
 	public TermEditorTab(AnnotatorWorkbench wb) {
 		workbench = wb;
+		workbench.addObserver(this);
 		setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS)); 
 		library = wb.openTermLibrary();
+		this.addAncestorListener(this);
 		setBackground(SemGenSettings.lightblue);
 		makePanel();
 	}
@@ -80,21 +86,21 @@ public class TermEditorTab extends JPanel implements ListSelectionListener {
 		termscroller.setPreferredSize(new Dimension(300,300));
 		termscroller.setAlignmentX(Box.LEFT_ALIGNMENT);
 		
-		JLabel title = new JLabel("Edit Term");
-		title.setFont(SemGenFont.defaultBold(3));
-		title.setAlignmentX(Box.LEFT_ALIGNMENT);
 		JPanel typepane = new JPanel();
 		typepane.setLayout(new BoxLayout(typepane, BoxLayout.PAGE_AXIS)); 
 		typepane.setBackground(SemGenSettings.lightblue);
 		typepane.setBorder(BorderFactory.createEtchedBorder());
 		
-		typepane.add(title);
 		typepane.add(typechooser);
 		typepane.add(termscroller);
 		typepane.add(Box.createVerticalGlue());
 		
+		tip = new TermInformationPanel(workbench);
+		
 		add(typepane);
 		add(toolbar);
+		add(tip);
+		validate();
 	}
 	
 	private void updateList() {
@@ -114,40 +120,18 @@ public class TermEditorTab extends JPanel implements ListSelectionListener {
 	}
 
 	private void onTermSelection() {
-		//Necessary to prevent memmory leaks
-		clearPanel();
 		if (termlist.isSelectionEmpty()) {
 			validate();
 			return;
 		}
 		
 		affected = workbench.collectAffiliatedTermsandCodewords(getTermSelection());
-
-		tip = new TermInformationPanel(workbench, affected);
-	
-		for (ContainerListener listener : getContainerListeners()) {
-			tip.addContainerListener(listener);
-		}
-		for (ComponentListener listener : getComponentListeners()) {
-			tip.addComponentListener(listener);
-		}
-		add(tip);
-		validate();
+		tip.updateInformation(affected);
 	}
 	
 	private void clearPanel() {
-		//Necessary to prevent memmory leaks
-		if (tip!=null) {
-			for (ContainerListener listener : getContainerListeners()) {
-				tip.removeContainerListener(listener);
-			}
-			for (ComponentListener listener : getComponentListeners()) {
-				tip.removeComponentListener(listener);
-			}
-			remove(tip);
-			tip = null;
-		}
-		removeReplacer();
+		tip.updateInformation(null);
+		closeReplacer();
 	}
 	
 	private Integer getTermSelection() {
@@ -181,7 +165,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener {
 	}
 	
 	private void replaceComponent() {
-		if (repbtnpressed) {
+		if (repbtnpressed && affected.isUsed()) {
 			replacer = new ReplaceTermPane(workbench, affected);
 			
 			for (ContainerListener listener : getContainerListeners()) {
@@ -192,11 +176,11 @@ public class TermEditorTab extends JPanel implements ListSelectionListener {
 			}
 			add(replacer);
 		}
-		else removeReplacer();
+		else closeReplacer();
 		validate();
 	}
 	
-	private void removeReplacer() {
+	private void closeReplacer() {
 		if (replacer!=null) {
 			for (ContainerListener listener : getContainerListeners()) {
 				replacer.removeContainerListener(listener);
@@ -214,6 +198,28 @@ public class TermEditorTab extends JPanel implements ListSelectionListener {
 		
 	}
 	
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		if (arg0==workbench.openCodewordDrawer()) {
+			tip.updateInformation(affected);
+		}
+	}
+
+	@Override
+	public void ancestorAdded(AncestorEvent arg0) {
+		
+	}
+
+	@Override
+	public void ancestorMoved(AncestorEvent arg0) {
+		
+	}
+
+	@Override
+	public void ancestorRemoved(AncestorEvent arg0) {
+		workbench.deleteObserver(this);	
+	}
+
 	private class EditorToolbar extends SemGenTabToolbar implements ActionListener {
 		private static final long serialVersionUID = 1L;
 		private SemGenToolbarButton modifybtn = new SemGenToolbarButton(SemGenIcon.modifyicon);
@@ -256,7 +262,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener {
 		public void toggleButtons() {
 			modifybtn.setToolTipText("Modify selected term.");
 			removebtn.setToolTipText("Remove selected term.");
-			if (!termlist.isSelectionEmpty()) {
+			if (!termlist.isSelectionEmpty() && affected.isUsed()) {
 				replacebtn.setEnabled(true);
 				if (affected.targetIsReferenceTerm()) {
 					modifybtn.setEnabled(false);

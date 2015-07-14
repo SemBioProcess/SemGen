@@ -7,8 +7,6 @@ import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import semgen.SemGen;
-import semsim.model.SemSimTypes;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
