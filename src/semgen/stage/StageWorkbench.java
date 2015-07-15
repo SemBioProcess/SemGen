@@ -101,8 +101,6 @@ public class StageWorkbench extends Workbench {
 	 */
 	public class StageCommandReceiver extends CommunicatingWebBrowserCommandReceiver {
 
-		public static final boolean ShowJavascriptLogs = false;
-		
 		/**
 		 * Receives the add model command
 		 */
@@ -183,15 +181,6 @@ public class StageWorkbench extends Workbench {
 			ModelInfo model2Info = _models.get(modelName2);
 			
 			SemGen.gacts.NewMergerTab(model1Info.Path, model2Info.Path);
-		}
-		
-		/**
-		 * Print Javascript logs in Java
-		 * @param log
-		 */
-		public void onLog(String log) {
-			if(ShowJavascriptLogs)
-				System.out.println(log);
 		}
 	}
 }

@@ -1,0 +1,158 @@
+html, body, iframe {
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+
+body {
+	font-family: 12px sans-serif;
+}
+
+.addModelButton {
+	position: absolute;
+	top: 0;
+	left: 0;
+	margin: 5px;
+	width:50px;
+	height:50px;
+	border-radius:250px;
+	font-size:20px;
+	color:#fff;
+	line-height:50px;
+	text-align:center;
+	background:#3b5998;
+	opacity: .8;
+}
+
+.addModelButton:hover {
+	opacity: 1;
+	cursor: pointer;
+}
+
+.popover-title {
+	font-size: 18px;
+}
+
+.popover-content ul {
+	margin: 0;
+	padding: 0;
+}
+
+ul.modelPopover li {				
+	list-style: none;
+	padding: 5px 10px;
+}
+
+ul.modelPopover li a {
+	display: block;
+	width: 100%;
+	padding: 7px;
+	text-align: center;
+	font-weight: normal;
+	color: inherit;
+	text-decoration: none;
+	border: 1px solid black;
+	background-color: #FFFFFF;
+}
+
+ul.modelPopover li a:hover {
+	background-color: #DFE3EE;
+	cursor: pointer;
+}
+
+ul.modelPopover li:last-child {
+	border: none;
+}
+
+ul.modelPopover li.submenuContainer {
+	background-color: #F8F8F8;
+}
+
+.stageMenu {
+	position: absolute;
+	margin: 5px;
+	top: 0;
+	right: 0;
+	padding: 10px;
+	border: 1px solid black;
+	opacity: .2;
+}
+
+.stageMenu:hover {
+	opacity: 1;
+}
+
+.stageSearch {
+	position: absolute;
+	margin: 1px;
+	top: 6px;
+	left: 50px;
+	padding: 10px;
+	opacity: 1;
+}
+
+.stageSearch .searchIcon {
+	margin-top: 6px;
+	float: left;
+}
+
+.stageSearch .searchValueContainer {
+	margin-top: 2px;
+	float: left;
+	margin-left: 5px;
+	display: none;
+}
+
+.stageSearch .searchString {
+	width: 500px;
+}
+
+.searchResults ul {
+	list-style: none;
+	padding-left: 0;
+	border: 1px solid black;
+    border-top: none;
+}
+
+.searchResults li:hover {
+	background-color: #dfe3ee;
+	cursor: pointer;
+}
+
+.key {
+	font-size: 14px;
+}
+
+.key ul {
+	list-style: none;
+	margin: 0 5px;
+	padding: 0;
+}
+
+.key ul li {
+	margin: 5px 0;
+	font-weight: bold;
+	padding-left: 1em; 
+    text-indent: -.7em;
+}
+
+.key ul li.canClick:hover {
+	cursor: pointer;
+}
+
+.key ul.hiddenNodeKeys li {
+	background-color: #D0D0D0;
+	opacity: .5;
+}
+
+.modes {
+	margin-top: 10px;
+}
+
+.modes ul {
+	list-style: none;
+	padding: 0;
+	margin: 0 0 0 5px;
+}
