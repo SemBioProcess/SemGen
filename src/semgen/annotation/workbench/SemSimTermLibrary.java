@@ -636,6 +636,10 @@ public class SemSimTermLibrary extends Observable {
 		return sortComponentIndiciesbyName(list);
 	}
 	
+	public boolean isTerm(int index) {
+		return !masterlist.get(index).removed;
+	}
+	
 	protected class IndexCard<T extends PhysicalModelComponent> {
 		private T component;
 		private Boolean reference;

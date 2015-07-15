@@ -136,7 +136,12 @@ public class TermCollector {
 				Integer si = library.getPhysicalPropertyIndex(ds.getPhysicalProperty());
 				if (si.equals(termindex)) {
 					containingcws.add(drawer.getIndexofComponent(ds));
-					collectDataStructureComposite(ds);
+					if (ds.hasAssociatedPhysicalComponent()) {
+						Integer i = library.getComponentIndex(ds.getAssociatedPhysicalModelComponent());
+						if (!containingindicies.contains(i)) {
+							containingindicies.add(i);
+						}
+					}
 				}
 			}
 		}

@@ -80,7 +80,7 @@ public class Merger {
 				keptdsset.add(keptds);
 				dsdonotprune.add(keptds);
 				
-				if(keptds instanceof MappableVariable && discardedds instanceof MappableVariable){
+				if(keptds.isMappable() && discardedds.isMappable()){
 					rewireMappedVariableDependencies((MappableVariable)keptds, (MappableVariable)discardedds, modelfordiscardedds, i);
 					dsdonotprune.add(discardedds); // MappableVariables that are turned into "receivers" should not be pruned
 				}
@@ -103,7 +103,7 @@ public class Merger {
 				parentmodel.removeDataStructure(dstoprune.getName());  // Pruning
 				
 				// Remove equation in MathML block, if inputds is a MappableVariable
-				if(dstoprune instanceof MappableVariable){
+				if(dstoprune.isMappable()){
 					FunctionalSubmodel fs = parentmodel.getParentFunctionalSubmodelForMappableVariable((MappableVariable)dstoprune);
 					fs.removeVariableEquationFromMathML((MappableVariable)dstoprune);
 				}
@@ -117,6 +117,15 @@ public class Merger {
 	
 		// What if both models have a custom phys component with the same name?
 		SemSimModel mergedmodel = ssm1clone;
+		
+		//Add processes to the merged model
+		for (CustomPhysicalProcess pp : ssm2clone.getCustomPhysicalProcesses()) {
+			mergedmodel.addCustomPhysicalProcess(pp);
+		}
+		
+		for (ReferencePhysicalProcess pp : ssm2clone.getReferencePhysicalProcesses()) {
+			mergedmodel.addReferencePhysicalProcess(pp);
+		}
 		
 		Map<UnitOfMeasurement,UnitOfMeasurement> equnitsmap = overlapmap.getEquivalentUnitPairs();
 		
@@ -179,13 +188,10 @@ public class Merger {
 			}
 		}
 		
-		for (CustomPhysicalProcess pp : ssm2clone.getCustomPhysicalProcesses()) {
-			mergedmodel.addCustomPhysicalProcess(pp);
-		}
-		
-		for (ReferencePhysicalProcess pp : ssm2clone.getReferencePhysicalProcesses()) {
-			mergedmodel.addReferencePhysicalProcess(pp);
-		}
+		// Copy in the submodels
+				for(Submodel subfrom2 : ssm2clone.getSubmodels()){
+					mergedmodel.addSubmodel(subfrom2);
+				}
 		
 		// Prune empty submodels
 		if(prune) pruneSubmodels(mergedmodel);

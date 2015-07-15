@@ -26,6 +26,7 @@ import javax.swing.event.ListSelectionListener;
 import semgen.SemGenSettings;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.SemSimTermLibrary;
+import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
 import semgen.annotation.workbench.routines.TermCollector;
 import semgen.annotation.workbench.routines.TermModifier;
 import semgen.utilities.SemGenFont;
@@ -143,12 +144,11 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Ance
 		Object obj = arg0.getSource();
 		if (obj.equals(typechooser)) {
 			updateList();
-			toolbar.toggleButtons();
 		}
 		if (obj.equals(termlist)) {
 			onTermSelection();
-			toolbar.toggleButtons();
 		}
+		toolbar.toggleButtons();
 	}
 	
 	private void removeComponent() {
@@ -159,8 +159,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Ance
 		if(JOptionPane.YES_OPTION == choice){
 			new TermModifier(workbench, affected).runRemove();
 			clearPanel();
-			updateList();
-			toolbar.toggleButtons();
+			
 		}
 	}
 	
@@ -190,7 +189,6 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Ance
 			}
 			remove(replacer);
 			replacer = null;
-			
 		}
 	}
 	
@@ -200,7 +198,15 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Ance
 	
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		if (arg0==workbench.openCodewordDrawer()) {
+		if (arg1==modeledit.codewordchanged) {
+			int i = affected.getTermLibraryIndex();
+			if (!library.isTerm(i)) {
+				updateList();
+			}
+			else {
+				termlist.setSelectedIndex(terms.indexOf(i));
+			}
+			toolbar.toggleButtons();	
 			tip.updateInformation(affected);
 		}
 	}

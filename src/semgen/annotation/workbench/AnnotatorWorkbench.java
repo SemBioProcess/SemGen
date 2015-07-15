@@ -297,6 +297,8 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	
 	public void replaceTerm(TermCollector affected, Integer repindex, boolean remove) {
 		new TermModifier(this, affected).runReplace(repindex, remove);
+		setChanged();
+		notifyObservers(modeledit.codewordchanged);
 	}
 	
 	@Override

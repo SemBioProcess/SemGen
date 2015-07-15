@@ -15,6 +15,7 @@ import javax.swing.JRadioButton;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import semgen.SemGen;
 import semgen.SemGenSettings;
 import semgen.annotation.dialog.termlibrary.ReferenceClassFinderPanel;
 import semgen.annotation.workbench.AnnotatorWorkbench;
@@ -122,8 +123,8 @@ public class ReplaceTermPane extends JPanel implements ActionListener{
 	
 	private void showExisting(ArrayList<Integer> terms) {
 		existpane = new ExistingTermPane();
-		existpane.updateTermPanel(terms);
 		replacepan = existpane;
+		existpane.updateTermPanel(terms);
 		add(replacepan);
 	}
 	
@@ -218,18 +219,26 @@ public class ReplaceTermPane extends JPanel implements ActionListener{
 		}
 		
 		public void valueChanged(ListSelectionEvent arg0) {
-	        boolean adjust = arg0.getValueIsAdjusting();
-	        if (!adjust) {
-	        	replacebtn.setEnabled(!resultslistright.isSelectionEmpty());
-				replaceremovebtn.setEnabled(!resultslistright.isSelectionEmpty());
-		        externalURLbutton.setEnabled(!resultslistright.isSelectionEmpty());
+	        if (!arg0.getValueIsAdjusting()) {
+	        	boolean notempty = !resultslistright.isSelectionEmpty();	        	
+	        	replacebtn.setEnabled(notempty);
+				replaceremovebtn.setEnabled(notempty || !(domain==OntologyDomain.AssociatePhysicalProperty));
+		        externalURLbutton.setEnabled(notempty);
 	        }
 		}
 		
 		public void performSearch() {
 			super.performSearch();
 			if (domain==OntologyDomain.AssociatePhysicalProperty) {
-				
+				PropertyType pt = library.getPropertyinCompositeType(affected.getTermLibraryIndex());
+				if (pt==PropertyType.PropertyOfPhysicalEntity) {
+					rdflabelsanduris = SemGen.semsimlib.removeNonPropertiesofEntities(rdflabelsanduris);
+				}
+				else if (pt==PropertyType.PropertyOfPhysicalProcess) {
+					rdflabelsanduris = SemGen.semsimlib.removeNonProcessProperties(rdflabelsanduris);
+				}
+				String[] resultsarray = rdflabelsanduris.keySet().toArray(new String[] {});
+				resultslistright.setListData(resultsarray);
 			}
 		}
 
