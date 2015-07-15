@@ -66,6 +66,5 @@ public class TextChangeDialog extends SemGenDialog implements PropertyChangeList
 			}
 			dispose();
 		}
-		
 	}
 }

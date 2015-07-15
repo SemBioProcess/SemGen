@@ -164,7 +164,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	 * Assign a {@link PhysicalPropertyinComposite} to the DataStructure 
 	 * @param pp The PhysicalProperty instance to assign to the DataStructure
 	 */
-	public void setAssociatePhysicalProperty(PhysicalPropertyinComposite pp){
+	public void setAssociatedPhysicalProperty(PhysicalPropertyinComposite pp){
 		physicalProperty = pp;
 	}
 	

@@ -112,7 +112,7 @@ public class CodewordAnnotationPanel extends AnnotationPanel<CodewordToolDrawer>
 		if(e.getComponent() == copyannsbutton){
 			int x = JOptionPane.showConfirmDialog(this, "Really copy annotations to mapped variables?", "Confirm", JOptionPane.YES_NO_OPTION);
 			if(x==JOptionPane.YES_OPTION){
-				drawer.copytoMappedVariables();
+				drawer.copyToLocallyMappedVariables();
 			}
 		}
 	}

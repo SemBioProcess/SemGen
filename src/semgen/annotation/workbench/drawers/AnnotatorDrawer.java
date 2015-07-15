@@ -53,13 +53,7 @@ public abstract class AnnotatorDrawer<T extends SemSimObject> extends Observable
 	public int getSelectedIndex() {
 		return currentfocus;
 	}
-	
-	public void setHumanReadableDefinition(String newdef) {
-		componentlist.get(currentfocus).setDescription(newdef);
-		setChanged();
-		notifyObservers(modeledit.freetextchange);
-	}
-	
+		
 	public boolean hasHumanReadableDef(int index) {
 		return !componentlist.get(index).getDescription().isEmpty();
 	}
@@ -126,5 +120,6 @@ public abstract class AnnotatorDrawer<T extends SemSimObject> extends Observable
 	public abstract boolean isEditable(int index);
 	public abstract boolean isImported();
 
+	public abstract void setHumanReadableDefinition(String newdef);
 	public abstract void setSingularAnnotation(int selectedIndex);
 }

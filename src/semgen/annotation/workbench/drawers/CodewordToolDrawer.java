@@ -204,10 +204,18 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 				
 	}
 
-	public void copytoMappedVariables() {
+	public void copyToMappedVariables() {
 		MappableVariable thevar = (MappableVariable)getFocus();
 		
 		Set<MappableVariable> mapped = AnnotationCopier.copyAllAnnotationsToMappedVariables(thevar);
+		addComponentstoChangeSet(mapped);
+		changeNotification();
+	}
+	
+	public void copyToLocallyMappedVariables() {
+		MappableVariable thevar = (MappableVariable)getFocus();
+		
+		Set<MappableVariable> mapped = AnnotationCopier.copyAllAnnotationsToLocallyMappedVariables(thevar);
 		addComponentstoChangeSet(mapped);
 		changeNotification();
 	}
@@ -224,9 +232,10 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 			return;
 		}
 		if (index!=-1) {
-			ds.setAssociatePhysicalProperty(termlib.getAssociatePhysicalProperty(index));
+			ds.setAssociatedPhysicalProperty(termlib.getAssociatePhysicalProperty(index));
 		}
-		else ds.setAssociatePhysicalProperty(null);
+		else ds.setAssociatedPhysicalProperty(null);
+		copyToLocallyMappedVariables();
 		changeset.add(currentfocus);
 		changeNotification(modeledit.propertychanged);
 	}
@@ -234,7 +243,6 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	public void setDataStructureComposite(Integer index) {
 		if (currentfocus==-1) return; 
 		setDataStructureComposite(currentfocus, index);
-		
 		changeset.add(currentfocus);
 		changeNotification(modeledit.compositechanged);
 	}
@@ -260,6 +268,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		else {
 			ds.setAssociatedPhysicalModelComponent(termlib.getComponent(compindex));
 		}
+		copyToLocallyMappedVariables();
 	}
 	
 	public int countEntitiesinCompositeEntity() {
@@ -324,8 +333,17 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	}
 	
 	@Override
+	public void setHumanReadableDefinition(String newdef){
+		componentlist.get(currentfocus).setDescription(newdef);
+		copyToLocallyMappedVariables();
+		setChanged();
+		notifyObservers(modeledit.freetextchange);
+	}
+	
+	@Override
 	public void setSingularAnnotation(int selectedIndex) {
 		setSingularAnnotation(currentfocus, selectedIndex);
+		copyToLocallyMappedVariables();
 		changeNotification();
 	}
 	

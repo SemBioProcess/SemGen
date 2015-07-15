@@ -686,7 +686,7 @@ public class CellMLreader extends ModelReader {
 				String uristring = isannres.getURI();
 				
 				PhysicalPropertyinComposite pp = getPhysicalProperty(uristring);
-				cvar.setAssociatePhysicalProperty(pp);
+				cvar.setAssociatedPhysicalProperty(pp);
 			}
 
 			getPMCfromRDFresourceAndAnnotate(physpropres);

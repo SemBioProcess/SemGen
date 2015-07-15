@@ -64,7 +64,7 @@ public class AutoAnnotate {
 			
 			if(hasinitval && !camount.isDiscrete() 
 					&& !camount.hasPhysicalProperty()){
-				camount.setAssociatePhysicalProperty(SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(camount));
+				camount.setAssociatedPhysicalProperty(SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(camount));
 				confirmedamounts.add(camount);
 			}
 			else unconfirmedamounts.add(camount);
@@ -76,7 +76,7 @@ public class AutoAnnotate {
 			for(DataStructure newcamount : camount.getDownstreamDataStructures(unconfirmedamounts, null)){
 				confirmedamounts.add(newcamount);
 				if (!newcamount.hasPhysicalProperty()) {
-					newcamount.setAssociatePhysicalProperty(SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(newcamount));
+					newcamount.setAssociatedPhysicalProperty(SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(newcamount));
 				}
 			}
 		}
@@ -97,7 +97,7 @@ public class AutoAnnotate {
 			// If already decided to annotate, or the candidate is solved with an ODE and it's not a discrete variable, annotate it
 			if((cforce.hasStartValue() || annotate) && !cforce.isDiscrete() 
 					&& !cforce.hasPhysicalProperty()) {
-				cforce.setAssociatePhysicalProperty(SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(cforce));
+				cforce.setAssociatedPhysicalProperty(SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(cforce));
 			}
 			else unconfirmedforces.add(cforce);
 		}
@@ -109,7 +109,7 @@ public class AutoAnnotate {
 			for(DataStructure newcforce : cforce.getDownstreamDataStructures(unconfirmedforces, null)){
 				confirmedforces.add(newcforce);
 				if(!newcforce.hasPhysicalProperty()){
-					newcforce.setAssociatePhysicalProperty(SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(newcforce));
+					newcforce.setAssociatedPhysicalProperty(SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(newcforce));
 				}
 			}
 		}
@@ -128,7 +128,7 @@ public class AutoAnnotate {
 			// If already decided to annotate, or the candidate is solved with an ODE and it's not a discrete variable, annotate it
 			if((cflow.hasStartValue() || annotate || cflow.getName().contains(":")) && !cflow.isDiscrete()
 					&& !cflow.hasPhysicalProperty()){
-				cflow.setAssociatePhysicalProperty(SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(cflow));
+				cflow.setAssociatedPhysicalProperty(SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(cflow));
 			}
 			else unconfirmedflows.add(cflow);
 		}
@@ -139,7 +139,7 @@ public class AutoAnnotate {
 			for(DataStructure newcflow : cflow.getDownstreamDataStructures(unconfirmedflows, null)){
 				confirmedforces.add(newcflow);
 				if(!newcflow.hasPhysicalProperty()){
-					newcflow.setAssociatePhysicalProperty(SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(newcflow));
+					newcflow.setAssociatedPhysicalProperty(SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(newcflow));
 				}
 			}
 		}
