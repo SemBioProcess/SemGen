@@ -10,7 +10,6 @@ function PhysioMapNode (graph, data, parentNode) {
 	this.displayName = data.name.replace("Portion of ", "").capitalizeFirstLetter();
 	
 	this.addClassName("physiomapNode");
-	this.addBehavior(Columns);
 	this.addBehavior(HiddenLabelNodeGenerator);
 
 }

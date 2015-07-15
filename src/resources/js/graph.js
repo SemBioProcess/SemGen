@@ -165,6 +165,8 @@ function Graph() {
 		text.enter().append("svg:text")
 			.attr("class", "linkLabel")
 			.attr("font-size", "14px")
+			.attr("font-style", "italic")
+			.attr("fill", "green")
 			.attr("text-anchor", "middle")
 			.text(function(d) {return d.label; });
 		
