@@ -1226,7 +1226,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 		for (DataStructure ds : dataStructures) {
 			if (ds.hasPhysicalProperty()) {
 				if (ds.getPhysicalProperty().equals(tobereplaced)) {
-					ds.setAssociatePhysicalProperty(toreplace);
+					ds.setAssociatedPhysicalProperty(toreplace);
 				}
 			}
 		}

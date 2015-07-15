@@ -231,6 +231,4 @@ public abstract class EntitySelectorGroup extends Box implements ActionListener 
 		}
 		
 	}
-	
-	
 }

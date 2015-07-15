@@ -146,6 +146,13 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 	}
 	
 	@Override
+	public void setHumanReadableDefinition(String newdef){
+		componentlist.get(currentfocus).setDescription(newdef);
+		setChanged();
+		notifyObservers(modeledit.freetextchange);
+	}
+	
+	@Override
 	protected void selectionNotification() {
 		notifyObservers(WBEvent.smselection);
 	}

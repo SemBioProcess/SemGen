@@ -352,7 +352,7 @@ public class SemSimOWLreader extends ModelReader {
 					
 					if(!units.equals("") || !propind.equals("")){
 						String referstoval = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, propind, SemSimConstants.REFERS_TO_URI.toString());	
-						if (!referstoval.isEmpty())	ds.setAssociatePhysicalProperty(idpropertymap.get(referstoval));
+						if (!referstoval.isEmpty())	ds.setAssociatedPhysicalProperty(idpropertymap.get(referstoval));
 						
 						// Set the connection between the physical property and what it's a property of
 						String propofind = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, propind, SemSimConstants.PHYSICAL_PROPERTY_OF_URI.toString());

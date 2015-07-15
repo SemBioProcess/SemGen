@@ -115,7 +115,7 @@ public class SBMLAnnotator {
 					}
 					
 					if(OPBclassID!=null){
-						ds.setAssociatePhysicalProperty(SemGen.semsimlib.getOPBAnnotationFromReferenceID(SemSimConstants.OPB_NAMESPACE + OPBclassID));
+						ds.setAssociatedPhysicalProperty(SemGen.semsimlib.getOPBAnnotationFromReferenceID(SemSimConstants.OPB_NAMESPACE + OPBclassID));
 					}
 				}
 				PhysicalEntity ent = null;

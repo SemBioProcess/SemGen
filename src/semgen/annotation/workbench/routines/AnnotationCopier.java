@@ -16,11 +16,14 @@ public class AnnotationCopier {
 	 * */
 	public static void copyCompositeAnnotation(DataStructure sourceds, DataStructure targetds) {
 		if (sourceds.hasPhysicalProperty()) {
-			targetds.setAssociatePhysicalProperty(sourceds.getPhysicalProperty());
+			targetds.setAssociatedPhysicalProperty(sourceds.getPhysicalProperty());
 		}
+		else targetds.setAssociatedPhysicalProperty(null);
+		
 		if (sourceds.hasAssociatedPhysicalComponent()) {
 			targetds.setAssociatedPhysicalModelComponent(sourceds.getAssociatedPhysicalModelComponent());
 		}
+		else targetds.setAssociatedPhysicalModelComponent(null);
 	}
 	
 	/** 
@@ -29,7 +32,7 @@ public class AnnotationCopier {
 	public static void copyCompositeAnnotation(SemSimTermLibrary lib, DataStructure targetds, DataStructure sourceds) {		
 		if (sourceds.hasPhysicalProperty()) {
 			int ppindex = lib.getPhysicalPropertyIndex(sourceds.getPhysicalProperty());
-			targetds.setAssociatePhysicalProperty(lib.getAssociatePhysicalProperty(ppindex));
+			targetds.setAssociatedPhysicalProperty(lib.getAssociatePhysicalProperty(ppindex));
 		}
 		if (sourceds.hasAssociatedPhysicalComponent()) {
 			int pmcindex = lib.getComponentIndex(sourceds.getAssociatedPhysicalModelComponent());
@@ -44,15 +47,25 @@ public class AnnotationCopier {
 	public static Set<MappableVariable> copyAllAnnotationsToMappedVariables(MappableVariable ds){
 		Set<MappableVariable> allmappedvars = new HashSet<MappableVariable>();
 		allmappedvars.addAll(getAllMappedVariables(ds, ds, new HashSet<MappableVariable>()));
-		for(MappableVariable otherds : allmappedvars){
-			System.out.println("Copying to " + otherds.getName());
+		copyAllAnnotations(ds, allmappedvars);
+		return allmappedvars;
+	}
+	
+	public static Set<MappableVariable> copyAllAnnotationsToLocallyMappedVariables(MappableVariable ds){
+		Set<MappableVariable> allmappedvars = new HashSet<MappableVariable>();
+		allmappedvars.addAll(getAllLocallyMappedVariables(ds, ds, new HashSet<MappableVariable>()));
+		copyAllAnnotations(ds, allmappedvars);
+		return allmappedvars;
+	}
+	
+	private static void copyAllAnnotations(MappableVariable sourceds, Set<MappableVariable> targetdsset){
+		for(MappableVariable otherds : targetdsset){
 			if(!otherds.isImportedViaSubmodel()){
-				otherds.copyDescription(ds);
-				otherds.copySingularAnnotations(ds);
-				copyCompositeAnnotation(ds, otherds);
+				otherds.copyDescription(sourceds);
+				otherds.copySingularAnnotations(sourceds);
+				copyCompositeAnnotation(sourceds, otherds);
 			}
 		}
-		return allmappedvars;
 	}
 	
 	public static Set<MappableVariable> getAllMappedVariables(MappableVariable rootds, MappableVariable ds, Set<MappableVariable> runningset){		
@@ -61,8 +74,9 @@ public class AnnotationCopier {
 		allmappedvars.addAll(ds.getMappedFrom());
 		
 		Set<MappableVariable> returnset = runningset;
-
+		
 		for(MappableVariable var : allmappedvars){
+			
 			if(!returnset.contains(var) && var!=rootds){
 				returnset.add(var);
 				
@@ -73,4 +87,21 @@ public class AnnotationCopier {
 	    return returnset;
 	}
 	
+	public static Set<MappableVariable> getAllLocallyMappedVariables(MappableVariable rootds, MappableVariable ds, Set<MappableVariable> runningset){		
+		Set<MappableVariable> allmappedvars  = new HashSet<MappableVariable>();
+		allmappedvars.addAll(ds.getMappedTo());
+		allmappedvars.addAll(ds.getMappedFrom());
+		
+		Set<MappableVariable> returnset = runningset;
+
+		for(MappableVariable var : allmappedvars){
+			if(!returnset.contains(var) && var!=rootds && ! var.isImportedViaSubmodel()){
+				returnset.add(var);
+				
+				// Iterate recursively
+				returnset.addAll(getAllLocallyMappedVariables(rootds, var, returnset));
+			}
+		}
+	    return returnset;
+	}
 }
