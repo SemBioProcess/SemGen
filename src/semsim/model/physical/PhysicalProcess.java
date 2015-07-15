@@ -144,22 +144,34 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 			return false;
 		}
 		for (PhysicalEntity pe : getSources().keySet()) {
+			boolean hasequiv = false;
 			for (PhysicalEntity pe2 : proc.getSourcePhysicalEntities()) {
-				if (!pe.equals(pe2) || (!sources.get(pe).equals(proc.getSourceStoichiometry(pe2))))
-					return false;
+				if (pe.equals(pe2) && sources.get(pe).equals(proc.getSourceStoichiometry(pe2))) {
+					hasequiv = true;
+					break;
+				}
 			}
+			if (!hasequiv) return false;
 		}
 		for (PhysicalEntity pe : getSinks().keySet()) {
+			boolean hasequiv = false;
 			for (PhysicalEntity pe2 : proc.getSinkPhysicalEntities()) {
-				if (!pe.equals(pe2) || (!sinks.get(pe).equals(proc.getSinkStoichiometry(pe2))))
-					return false;
+				if (pe.equals(pe2) && sinks.get(pe).equals(proc.getSinkStoichiometry(pe2))) {
+					hasequiv = true;
+					break;
+				}
 			}
+			if (!hasequiv) return false;
 		}
 		for (PhysicalEntity pe : getMediators()) {
+			boolean hasequiv = false;
 			for (PhysicalEntity pe2 : proc.getMediatorPhysicalEntities()) {
-				if (!pe.equals(pe2))
-					return false;
+				if (pe.equals(pe2)) {
+					hasequiv = true;
+					break;
+				}
 			}
+			if (!hasequiv) return false;
 		}
 		
 		return true;
