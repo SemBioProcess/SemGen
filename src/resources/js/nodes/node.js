@@ -78,6 +78,7 @@ Node.prototype.getLinks = function () {
 	for(var i = 0; i < this.inputs.length; i++) {
 		var inputData = this.inputs[i];
 		var inputNodeId;
+		var sinkNodeId;
 		var type;
 		var linkLabel = inputData.label;
 		
@@ -102,14 +103,22 @@ Node.prototype.getLinks = function () {
 		else {
 			type = "internal";
 			inputNodeId = inputData.sourceId;
+			sinkNodeId = inputData.sinkId;
 		}
 		
 		// Get the input node
 		var inputNode = this.graph.findNode(inputNodeId);
 		
+		// Get the sink node
+		var sinkNode = this.graph.findNode(sinkNodeId);
+		
 		if(!inputNode) {
 			console.log("input node '" + inputNodeId + "' does not exist. Can't build link.");
 			continue;
+		}
+		
+		if(!sinkNode) {
+			console.log("sink node '" + sinkNodeId + "' does not exist. Can't build link.");
 		}
 		
 		// If the parent has children it's circle is hidden
@@ -121,7 +130,7 @@ Node.prototype.getLinks = function () {
 		
 		links.push({
 			source: inputNode,
-			target: this,
+			target: sinkNode === undefined ? this : sinkNode,
 			type: type,
 			length: type == "external" ? 200 : 40,
 			label: linkLabel,

@@ -246,6 +246,7 @@ $(window).load(function() {
 					    	inputs: [
 					    	         {
 					    	        	 sourceId: modelName + "Entity 2",
+										 sinkId: modelName + "Entity 1",
 					    	        	 parentModelId: modelName,
 					    	        	 label: "Process A",
 					    	         },
@@ -258,6 +259,7 @@ $(window).load(function() {
 					    	inputs: [
 					    	         {
 					    	        	 sourceId: modelName + "Entity 3",
+										 sinkId: modelName + "Entity 2",
 					    	        	 parentModelId: modelName,
 					    	        	 label: "Process B",
 					    	         },
@@ -270,11 +272,13 @@ $(window).load(function() {
 					    	inputs: [
 									{
 										 sourceId: modelName + "Entity 1",
+										 sinkId: modelName + "Entity 3",										 
 										 parentModelId: modelName,
 										 label: "Process C",
 									},
 					    	         {
 					    	        	 sourceId: modelName + "Entity 2",
+										 sinkId: modelName + "Entity 3",										 
 					    	        	 parentModelId: modelName,
 					    	        	 label: "Process C",
 					    	         },
