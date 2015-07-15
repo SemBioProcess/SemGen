@@ -80,7 +80,7 @@ public class Merger {
 				keptdsset.add(keptds);
 				dsdonotprune.add(keptds);
 				
-				if(keptds.isMappable() && discardedds.isMappable()){
+				if(keptds instanceof MappableVariable && discardedds instanceof MappableVariable){
 					rewireMappedVariableDependencies((MappableVariable)keptds, (MappableVariable)discardedds, modelfordiscardedds, i);
 					dsdonotprune.add(discardedds); // MappableVariables that are turned into "receivers" should not be pruned
 				}
