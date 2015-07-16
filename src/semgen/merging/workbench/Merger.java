@@ -103,7 +103,7 @@ public class Merger {
 				parentmodel.removeDataStructure(dstoprune.getName());  // Pruning
 				
 				// Remove equation in MathML block, if inputds is a MappableVariable
-				if(dstoprune.isMappable()){
+				if(dstoprune instanceof MappableVariable){
 					FunctionalSubmodel fs = parentmodel.getParentFunctionalSubmodelForMappableVariable((MappableVariable)dstoprune);
 					fs.removeVariableEquationFromMathML((MappableVariable)dstoprune);
 				}

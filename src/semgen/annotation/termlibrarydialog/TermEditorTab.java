@@ -198,13 +198,16 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Ance
 	
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		if (arg1==modeledit.codewordchanged) {
+		if (arg1==modeledit.codewordchanged || arg1==modeledit.propertychanged || arg1==modeledit.compositechanged) {
 			int i = affected.getTermLibraryIndex();
 			if (!library.isTerm(i)) {
+				affected = null;
 				updateList();
+				closeReplacer();
 			}
 			else {
 				termlist.setSelectedIndex(terms.indexOf(i));
+				affected = new TermCollector(workbench, i);
 			}
 			toolbar.toggleButtons();	
 			tip.updateInformation(affected);

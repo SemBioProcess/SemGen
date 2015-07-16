@@ -212,6 +212,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	}
 	
 	public void copyToLocallyMappedVariables() {
+		if (getFocus()==null) return; 
 		MappableVariable thevar = (MappableVariable)getFocus();
 		
 		Set<MappableVariable> mapped = AnnotationCopier.copyAllAnnotationsToLocallyMappedVariables(thevar);
@@ -364,6 +365,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	}
 		
 	private DataStructure getFocus() {
+		if (currentfocus==-1) return null;
 		return componentlist.get(currentfocus);
 	}
 	

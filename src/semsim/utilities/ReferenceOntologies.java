@@ -30,7 +30,7 @@ public class ReferenceOntologies {
 		PhysicalProperty(new ReferenceOntology[]{ReferenceOntology.CMO, ReferenceOntology.OPB, ReferenceOntology.PATO, 
 				ReferenceOntology.SBO, ReferenceOntology.SNOMED}),
 		PhysicalEntity(new ReferenceOntology[]{ReferenceOntology.CHEBI, ReferenceOntology.CL, ReferenceOntology.FMA, ReferenceOntology.GO,
-				ReferenceOntology.MA, ReferenceOntology.PR}),
+				ReferenceOntology.MA, ReferenceOntology.OBI, ReferenceOntology.PR}),
 		PhysicalProcess(new ReferenceOntology[]{ReferenceOntology.OPB, ReferenceOntology.GO});
 		
 		private ArrayList<ReferenceOntology> domainontologies = new ArrayList<ReferenceOntology>();
@@ -82,6 +82,7 @@ public class ReferenceOntologies {
 		MA("Mouse Adult Gross Anatomy Ontology", "MA", "1000",
 				new String[]{"http://purl.bioontology.org/ontology/MA", "http://purl.org/obo/owl/MA#", "http://purl.obolibrary.org/obo/MA", 
 				"http://identifiers.org/ma/"}),
+		OBI("Ontology for Biomedical Investigations", "OBI", "", new String[]{"http://purl.bioontology.org/ontology/OBI"}),
 		OPB("Ontology of Physics for Biology", "OPB", "1141",
 				new String[]{"http://bhi.washington.edu/OPB#", "http://www.owl-ontologies.com/unnamed.owl#", "http://identifiers.org/opb/"}),
 		PATO("Phenotype and Trait Ontology", "PATO", "1107",

@@ -602,7 +602,7 @@ public class SemSimOWLreader extends ModelReader {
 									
 									CellMLreader.whiteBoxFunctionalSubmodelEquations(varmathmlel, subname, semsimmodel, theds);
 									
-									if(ode && (theds.isMappable())){
+									if(ode && (theds instanceof MappableVariable)){
 										MappableVariable mv = (MappableVariable)theds;
 										mv.setStartValue(mv.getCellMLinitialValue());
 									}
@@ -615,7 +615,7 @@ public class SemSimOWLreader extends ModelReader {
 					
 					// If the human-readable computation code hasn't been found, and theds is a mappable variable,
 					// and there's a CellML initial value, use the initial value for the computational code
-					if(theds.isMappable()){
+					if(theds instanceof MappableVariable){
 						MappableVariable mv = (MappableVariable)theds;
 						
 						if((mv.getComputation().getComputationalCode()==null ||

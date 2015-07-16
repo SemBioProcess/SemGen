@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -21,6 +22,7 @@ import semgen.annotation.dialog.termlibrary.ReferenceClassFinderPanel;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.routines.TermCollector;
+import semgen.utilities.uicomponent.SemGenScrollPane;
 import semsim.PropertyType;
 import semsim.model.SemSimTypes;
 import semsim.utilities.ReferenceOntologies.OntologyDomain;
@@ -118,6 +120,7 @@ public class ReplaceTermPane extends JPanel implements ActionListener{
 		else {
 			showImporter(domain);
 		}
+		add(Box.createVerticalGlue());
 		validate();
 	}
 	
@@ -176,10 +179,14 @@ public class ReplaceTermPane extends JPanel implements ActionListener{
 			setBackground(SemGenSettings.lightblue);
 			replacebtn.setEnabled(false);
 			replaceremovebtn.setEnabled(false);
-			list.setPreferredSize(new Dimension(300,300));
+			
 			list.addListSelectionListener(this);
-			add(list);
+			SemGenScrollPane scroller = new SemGenScrollPane(list);
+			scroller.setPreferredSize(new Dimension(350,300));
+			scroller.setAlignmentY(TOP_ALIGNMENT);
+			add(scroller);
 			add(addButtonPane());
+			add(Box.createVerticalGlue());
 		}
 		
 		public void updateTermPanel(ArrayList<Integer> terms) {
@@ -195,7 +202,9 @@ public class ReplaceTermPane extends JPanel implements ActionListener{
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
 			replacebtn.setEnabled(!list.isSelectionEmpty());
-			replaceremovebtn.setEnabled(!list.isSelectionEmpty());
+			if (!affected.getTargetTermType().equals(SemSimTypes.PHYSICAL_PROPERTY_IN_COMPOSITE)) {
+				replaceremovebtn.setEnabled(!list.isSelectionEmpty());
+			}
 		}
 
 		@Override
