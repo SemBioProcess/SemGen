@@ -15,9 +15,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 
+import semgen.SemGenSettings;
 import semgen.utilities.SemGenFont;
 
 public abstract class AnnotationObjectButton extends JPanel implements MouseListener {
@@ -34,7 +34,8 @@ public abstract class AnnotationObjectButton extends JPanel implements MouseList
 	
 	protected JPanel indicatorspanel = new JPanel();
 	protected JPanel indicatorssuperpanel = new JPanel(new BorderLayout());
-	protected Border outline = BorderFactory.createBevelBorder(BevelBorder.RAISED);
+	public static Border emptyborder = BorderFactory.createEmptyBorder(2, 2, 2, 2);
+	public static Border outlineborder = BorderFactory.createLineBorder(SemGenSettings.lightblue, 2, true);
 	
 	public AnnotationObjectButton(String name, boolean canedit) {
 		editable = canedit;
@@ -43,7 +44,7 @@ public abstract class AnnotationObjectButton extends JPanel implements MouseList
 		this.setFocusable(true);
 		this.setMaximumSize(new Dimension(999999, 35));
 		setBackground(Color.white);
-		setBorder(BorderFactory.createEmptyBorder(1, 2, 1, 2));
+		setBorder(emptyborder);
 		setOpaque(true);
 		namelabel.setText(name);
 		namelabel.setOpaque(false);
@@ -140,7 +141,7 @@ public abstract class AnnotationObjectButton extends JPanel implements MouseList
 	}
 	@Override
 	public void mouseExited(MouseEvent e) {
-		this.setBorder(BorderFactory.createEmptyBorder(1, 2, 1, 2));
+		this.setBorder(emptyborder);
 	}
 
 	@Override
@@ -151,6 +152,6 @@ public abstract class AnnotationObjectButton extends JPanel implements MouseList
 	}
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		this.setBorder(outline);
+		this.setBorder(outlineborder);
 	}
 }
