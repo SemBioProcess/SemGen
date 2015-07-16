@@ -3,7 +3,6 @@ package semgen.annotation.componentlistpanes;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -21,6 +20,7 @@ import javax.swing.border.TitledBorder;
 import org.openjena.atlas.lib.Pair;
 
 import semgen.SemGenSettings;
+import semgen.annotation.componentlistpanes.buttons.AnnotationObjectButton;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.drawers.ModelAnnotationsBench;
 import semgen.utilities.SemGenFont;
@@ -28,6 +28,7 @@ import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 
 public class ModelAnnotationsListPane extends SemGenScrollPane implements Observer {
+	
 	private static final long serialVersionUID = 1L;
 	ModelAnnotationsBench metadatabench;
 	SemGenSettings settings;
@@ -71,9 +72,8 @@ public class ModelAnnotationsListPane extends SemGenScrollPane implements Observ
 			metadataarray.add(box);
 			box.setMaximumSize(new Dimension(360, 12));
 			viewport.add(box, Component.LEFT_ALIGNMENT);	
-			viewport.add(Box.createGlue());
 		}
-		
+		viewport.add(Box.createGlue());		
 		validate();
 	}
 	
@@ -91,6 +91,7 @@ public class ModelAnnotationsListPane extends SemGenScrollPane implements Observ
 		MetadataBox() {
 			super(new BorderLayout(0, 0));
 			setBackground(Color.white);
+			setBorder(AnnotationObjectButton.emptyborder);
 			this.addMouseListener(new MouseMetadataAdapter(this));
 		}
 		
@@ -131,15 +132,11 @@ public class ModelAnnotationsListPane extends SemGenScrollPane implements Observ
 			}
 			
 			public void mouseEntered(MouseEvent e) {
-				target.setOpaque(true);
-				target.setBackground(new Color(255,231,186));
-				target.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				target.setBorder(AnnotationObjectButton.outlineborder);
 			}
 
 			public void mouseExited(MouseEvent e) {
-				target.setOpaque(false);
-				target.setBackground(null);
-				target.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				target.setBorder(AnnotationObjectButton.emptyborder);
 			}
 		};
 }
