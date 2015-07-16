@@ -80,7 +80,11 @@ public class ReferenceLibraryDialog extends JFrame implements ComponentListener,
 	}
 	
 	@Override
-	public void componentHidden(ComponentEvent e) {}
+	public void componentHidden(ComponentEvent e) {
+		mainpane.validate();
+		validate();
+		pack();
+	}
 
 	@Override
 	public void componentMoved(ComponentEvent e) {}

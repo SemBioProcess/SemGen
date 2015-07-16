@@ -1,5 +1,6 @@
 package semgen.annotation.termlibrarydialog;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -39,9 +40,9 @@ public class ReplaceTermPane extends JPanel implements ActionListener{
 	private JButton replacebtn = new JButton("Replace");
 	private JButton replaceremovebtn = new JButton("Replace and Remove");
 	
-	public ReplaceTermPane(AnnotatorWorkbench wb, TermCollector aff) {
+	public ReplaceTermPane(AnnotatorWorkbench wb) {
 		workbench = wb;
-		affected = aff;
+		
 		library = wb.openTermLibrary();
 		
 		drawPanel();
@@ -49,7 +50,6 @@ public class ReplaceTermPane extends JPanel implements ActionListener{
 	
 	private void drawPanel() {
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS)); 
-		setBackground(SemGenSettings.lightblue);
 		JPanel toppane = new JPanel();
 		toppane.setBackground(SemGenSettings.lightblue);
 		JLabel desc = new JLabel("Replace with:");
@@ -68,11 +68,10 @@ public class ReplaceTermPane extends JPanel implements ActionListener{
 		toppane.add(existbtn);
 		toppane.add(importbtn);
 		add(toppane);
-
-		showReplacementPanel();
 	}
 	
-	private void showReplacementPanel() {
+	public void showReplacementPanel(TermCollector aff) {
+		affected = aff;
 		if (replacepan != null) remove(replacepan); 
 		ArrayList<Integer> terms = null;
 		OntologyDomain domain = null;
@@ -104,11 +103,11 @@ public class ReplaceTermPane extends JPanel implements ActionListener{
 			importbtn.setEnabled(false);
 			break;
 		case CUSTOM_PHYSICAL_PROCESS:
-			terms = library.getRequestedTypes(new SemSimTypes[]{SemSimTypes.CUSTOM_PHYSICAL_PROCESS, SemSimTypes.REFERENCE_PHYSICAL_PROCESS});
+			terms = library.getSortedPhysicalProcessIndicies();
 			domain = OntologyDomain.PhysicalProcess;
 			break;
 		case REFERENCE_PHYSICAL_PROCESS:
-			terms = library.getRequestedTypes(new SemSimTypes[]{SemSimTypes.CUSTOM_PHYSICAL_PROCESS, SemSimTypes.REFERENCE_PHYSICAL_PROCESS});
+			terms = library.getSortedPhysicalProcessIndicies();
 			domain = OntologyDomain.PhysicalProcess;
 			break;
 		default:
@@ -120,7 +119,6 @@ public class ReplaceTermPane extends JPanel implements ActionListener{
 		else {
 			showImporter(domain);
 		}
-		add(Box.createVerticalGlue());
 		validate();
 	}
 	
@@ -128,12 +126,14 @@ public class ReplaceTermPane extends JPanel implements ActionListener{
 		existpane = new ExistingTermPane();
 		replacepan = existpane;
 		existpane.updateTermPanel(terms);
+		setBackground(SemGenSettings.lightblue);
 		add(replacepan);
 	}
 	
 	private void showImporter(OntologyDomain domain) {
 		SearchPane importpane = new SearchPane(library, domain);
 		replacepan = importpane;
+		setBackground(new Color(216, 216, 216));
 		add(replacepan);
 	}
 	
@@ -142,7 +142,7 @@ public class ReplaceTermPane extends JPanel implements ActionListener{
 		Object obj = e.getSource();
 		
 		if (obj.equals(existbtn) || obj.equals(importbtn)) {
-			showReplacementPanel();
+			showReplacementPanel(affected);
 		}
 		if (obj.equals(replacebtn)) {
 			Integer repindex = ((GetSelection)replacepan).getSelection();
@@ -154,12 +154,12 @@ public class ReplaceTermPane extends JPanel implements ActionListener{
 		}
 	}
 	
-	private JPanel addButtonPane() {
+	private JPanel addButtonPane(Color col) {
 		JPanel btnpane = new JPanel();
 		btnpane.setLayout(new BoxLayout(btnpane, BoxLayout.LINE_AXIS));
 		btnpane.add(replaceremovebtn);
 		btnpane.add(replacebtn);
-		btnpane.setBackground(SemGenSettings.lightblue);
+		btnpane.setBackground(col);
 		return btnpane;
 	}
 	
@@ -185,7 +185,7 @@ public class ReplaceTermPane extends JPanel implements ActionListener{
 			scroller.setPreferredSize(new Dimension(350,300));
 			scroller.setAlignmentY(TOP_ALIGNMENT);
 			add(scroller);
-			add(addButtonPane());
+			add(addButtonPane(SemGenSettings.lightblue));
 			add(Box.createVerticalGlue());
 		}
 		
@@ -219,7 +219,7 @@ public class ReplaceTermPane extends JPanel implements ActionListener{
 		
 		public SearchPane(SemSimTermLibrary lib, OntologyDomain dom) {
 			super(lib, dom);
-			JPanel bp = addButtonPane();
+			JPanel bp = addButtonPane(new Color(216, 216, 216));
 			bp.add(clearbtn);
 			clearbtn.addActionListener(new ClearAction());
 			replacebtn.setEnabled(false);

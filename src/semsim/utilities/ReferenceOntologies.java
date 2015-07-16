@@ -83,7 +83,7 @@ public class ReferenceOntologies {
 				new String[]{"http://purl.bioontology.org/ontology/MA", "http://purl.org/obo/owl/MA#", "http://purl.obolibrary.org/obo/MA", 
 				"http://identifiers.org/ma/"}),
 		OBI("Ontology for Biomedical Investigations", "OBI", "", new String[]{"http://purl.bioontology.org/ontology/OBI"}),
-		OPB("Ontology of Physics for Biology", "OPB", "1141",
+		OPB("Ontology of Physics for Biology", "OPB", "", //1141
 				new String[]{"http://bhi.washington.edu/OPB#", "http://www.owl-ontologies.com/unnamed.owl#", "http://identifiers.org/opb/"}),
 		PATO("Phenotype and Trait Ontology", "PATO", "1107",
 				new String[]{"http://purl.org/obo/owl/PATO#", "http://purl.obolibrary.org/obo/PATO"}),

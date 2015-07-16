@@ -128,6 +128,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Ance
 		
 		affected = workbench.collectAffiliatedTermsandCodewords(getTermSelection());
 		tip.updateInformation(affected);
+		replaceComponent();
 	}
 	
 	private void clearPanel() {
@@ -158,21 +159,22 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Ance
 				JOptionPane.YES_NO_OPTION);
 		if(JOptionPane.YES_OPTION == choice){
 			new TermModifier(workbench, affected).runRemove();
-			clearPanel();
-			
 		}
 	}
 	
 	private void replaceComponent() {
-		if (repbtnpressed && affected.isUsed()) {
-			replacer = new ReplaceTermPane(workbench, affected);
-			
+		if (replacer==null) {
+			replacer = new ReplaceTermPane(workbench);
 			for (ContainerListener listener : getContainerListeners()) {
 				replacer.addContainerListener(listener);
 			}
 			for (ComponentListener listener : getComponentListeners()) {
 				replacer.addComponentListener(listener);
 			}
+		}
+		
+		if (repbtnpressed && affected.isUsed()) {
+			replacer.showReplacementPanel(affected);
 			add(replacer);
 		}
 		else closeReplacer();
@@ -180,16 +182,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Ance
 	}
 	
 	private void closeReplacer() {
-		if (replacer!=null) {
-			for (ContainerListener listener : getContainerListeners()) {
-				replacer.removeContainerListener(listener);
-			}
-			for (ComponentListener listener : getComponentListeners()) {
-				replacer.removeComponentListener(listener);
-			}
 			remove(replacer);
-			replacer = null;
-		}
 	}
 	
 	private void modifyComponent() {
@@ -203,7 +196,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Ance
 			if (!library.isTerm(i)) {
 				affected = null;
 				updateList();
-				closeReplacer();
+				clearPanel();
 			}
 			else {
 				termlist.setSelectedIndex(terms.indexOf(i));
@@ -226,6 +219,12 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Ance
 
 	@Override
 	public void ancestorRemoved(AncestorEvent arg0) {
+		for (ContainerListener listener : getContainerListeners()) {
+			replacer.removeContainerListener(listener);
+		}
+		for (ComponentListener listener : getComponentListeners()) {
+			replacer.removeComponentListener(listener);
+		}
 		workbench.deleteObserver(this);	
 	}
 
