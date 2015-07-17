@@ -37,6 +37,7 @@ public class SemSimConstants {
 	public static final String KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_REACTION_KB_FULLNAME = "Kyoto Encyclopedia of Genes and Genomes - Reaction";
 	// need to add interpro here: http://identifiers.org/interpro/
 	public static final String MOUSE_ADULT_GROSS_ANATOMY_ONTOLOGY_FULLNAME = "Mouse Adult Gross Anatomy Ontology";
+	public static final String ONTOLOGY_FOR_BIOMEDICAL_INVESTIGATIONS_FULLNAME = "Ontology for Biomedical Investigations";
 	public static final String ONTOLOGY_OF_PHYSICS_FOR_BIOLOGY_FULLNAME = "Ontology of Phyiscs for Biology";
 	public static final String PHENOTYPE_AND_TRAIT_ONTOLOGY_FULLNAME = "Phenotype and Trait Ontology";
 	public static final String PROTEIN_ONTOLOGY_FULLNAME = "Protein Ontology";
@@ -346,6 +347,7 @@ public class SemSimConstants {
 		aMap1.put("urn:miriam:kegg.pathway:", KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_PATHWAY_KB_FULLNAME );
 		aMap1.put("http://purl.obolibrary.org/obo/CL", CELL_TYPE_ONTOLOGY_FULLNAME );
 		aMap1.put("http://identifiers.org/cl/", CELL_TYPE_ONTOLOGY_FULLNAME );
+		aMap1.put("http://purl.obolibrary.org/obo/OBI", ONTOLOGY_FOR_BIOMEDICAL_INVESTIGATIONS_FULLNAME);
 		ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP = Collections.unmodifiableMap(aMap1);
 		
 		// Mappings between full ontology names and nicknames
@@ -368,6 +370,7 @@ public class SemSimConstants {
 		aMap6.put(KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_PATHWAY_KB_FULLNAME, "KEGG-pathway");
 		aMap6.put(KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_REACTION_KB_FULLNAME, "KEGG-reaction");
 		aMap6.put(MOUSE_ADULT_GROSS_ANATOMY_ONTOLOGY_FULLNAME, "MA");
+		aMap6.put(ONTOLOGY_FOR_BIOMEDICAL_INVESTIGATIONS_FULLNAME, "OBI");
 		aMap6.put(ONTOLOGY_OF_PHYSICS_FOR_BIOLOGY_FULLNAME, "OPB");
 		aMap6.put(PHENOTYPE_AND_TRAIT_ONTOLOGY_FULLNAME, "PATO");
 		aMap6.put(PROTEIN_ONTOLOGY_FULLNAME, "PR");
