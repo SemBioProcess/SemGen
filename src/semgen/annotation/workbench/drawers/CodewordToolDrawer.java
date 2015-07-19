@@ -189,7 +189,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	}
 	
 	public boolean isMapped() {
-		return getFocus().isMappable();
+		return getFocus().isMapped();
 	}
 	
 	public boolean isProcess() {
@@ -212,12 +212,10 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	}
 	
 	public void copyToLocallyMappedVariables() {
-		if (getFocus()==null) return; 
-		MappableVariable thevar = (MappableVariable)getFocus();
+		if (getFocus()==null) return;
+		if (!getFocus().isMapped() || getFocus().isImportedViaSubmodel()) return; 
 		
-		Set<MappableVariable> mapped = AnnotationCopier.copyAllAnnotationsToLocallyMappedVariables(thevar);
-		addComponentstoChangeSet(mapped);
-		changeNotification();
+		copyToMappedVariables();
 	}
 
 	public Integer getIndexofPhysicalProperty() {
@@ -235,21 +233,19 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 			ds.setAssociatedPhysicalProperty(termlib.getAssociatePhysicalProperty(ppindex));
 		}
 		else ds.setAssociatedPhysicalProperty(null);
-		copyToLocallyMappedVariables();
 		changeset.add(dsindex);
 	}
+	
 	public void batchSetDataStructurePhysicalProperty(ArrayList<Integer> dsindicies, Integer ppi) {
 		for (Integer dsi : dsindicies) {
 			setDataStructurePhysicalProperty(dsi, ppi);
 		}
 		changeNotification(modeledit.propertychanged);
-		copyToLocallyMappedVariables();
 	}
 	
 	public void setDatastructurePhysicalProperty(Integer index) {
 		setDataStructurePhysicalProperty(currentfocus, index);
 		changeNotification(modeledit.propertychanged);
-		copyToLocallyMappedVariables();
 	}
 	
 	private void setDataStructureComposite(Integer cwindex, Integer compindex) {
@@ -305,7 +301,14 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		return getFocus().hasAssociatedPhysicalComponent();
 	}
 	
-	@Override
+	public boolean hasSingularAnnotation() {
+		return hasSingularAnnotation(currentfocus);
+	}
+	
+	public Integer getSingularAnnotationLibraryIndex() {
+		return getSingularAnnotationLibraryIndex(currentfocus);
+	}
+	
 	public Integer getSingularAnnotationLibraryIndex(int index) {
 		return termlib.getComponentIndex((PhysicalModelComponent)componentlist.get(index).getSingularTerm());
 	}
@@ -343,17 +346,15 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	}
 	
 	@Override
-	public void setHumanReadableDefinition(String newdef){
+	public void setHumanReadableDefinition(String newdef, boolean autoann){
 		componentlist.get(currentfocus).setDescription(newdef);
-		copyToLocallyMappedVariables();
 		setChanged();
 		notifyObservers(modeledit.freetextchange);
+		if (autoann) copyToLocallyMappedVariables();
 	}
 	
-	@Override
 	public void setSingularAnnotation(int selectedIndex) {
 		setSingularAnnotation(currentfocus, selectedIndex);
-		copyToLocallyMappedVariables();
 		changeNotification();
 	}
 	

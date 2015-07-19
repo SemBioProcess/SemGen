@@ -1,7 +1,7 @@
 startDirectory; C:\Users\Christopher\Documents\SemGen Test Files
 maximize; true
-screensize; 2118x1271
-screenpos; 2391x-9
+screensize; 1938x1050
+screenpos; -9x-9
 autoAnnotate; true
 showImports; true
 displayMarkers; true
@@ -9,3 +9,4 @@ organizeByPropertyType; true
 sortbyCompositeCompleteness; true
 treeView; true
 helpURL; http://sbp.bhi.washington.edu/projects/semgen/semgenhelp
+autoAnnotateMapped; true

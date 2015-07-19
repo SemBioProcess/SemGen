@@ -261,6 +261,11 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 				showModelAnnotator();
 				return;
 			}
+			if (arg1 == WBEvent.importfreetext) {
+				if (annotatorpane!=null) {
+					annotatorpane.setFreeText(codearea.getHighlightedText());
+				}
+			}
 			if (arg1==WBEvent.cwselection) {
 				try {
 					codewordSelected();

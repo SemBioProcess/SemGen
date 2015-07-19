@@ -56,6 +56,10 @@ public class PreferenceDialog extends SemGenDialog implements PropertyChangeList
 				settings.doAutoAnnotate()) 
 				{protected void toggleSetting(Boolean sel) {settings.toggleAutoAnnotate(sel);}});
 		checklist.add(new PrefCheckBox(
+				"Auto Annotate Locally Mapped Variables", "Automatically annotate local CellML type mapped variables", 
+				settings.getAutoAnnotateMapped()) 
+				{protected void toggleSetting(Boolean sel) {settings.setAutoAnnotateMapped(sel);}});
+		checklist.add(new PrefCheckBox(
 				"Tree View", "Display codewords and submodels within the submodel tree", 
 				settings.useTreeView()) 
 				{protected void toggleSetting(Boolean sel) {settings.toggleTreeView(sel);}});

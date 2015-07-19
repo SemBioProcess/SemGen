@@ -44,7 +44,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	private SubModelToolDrawer smdrawer;
 	private boolean modelsaved = true;
 	private int lastsavedas = -1;
-	public static enum WBEvent {freetextrequest, smselection, cwselection}
+	public static enum WBEvent {freetextrequest, importfreetext, smselection, cwselection}
 	public static enum LibraryRequest {requestimport, requestlibrary, requestcreator, closelibrary }
 	public static enum modeledit {propertychanged, compositechanged, codewordchanged, submodelchanged, modelimport, smlistchanged, freetextchange, smnamechange }
 	
@@ -194,10 +194,6 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	public File getFile() {
 		return sourcefile;
 	}
-	
-	public String getSourceModelLocation() {
-		return semsimmodel.getLegacyCodeLocation();
-	}
 
 	public void changeModelSourceFile() {
 		modanns.changeModelSourceFile();
@@ -273,10 +269,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		return false;
 	}
 	
-	public void requestFreetextChange() {
-		setChanged();
-		notifyObservers(WBEvent.freetextrequest);
-	}
+
 	
 	public AnnotatorTreeMap makeTreeMap(boolean useimports) {
 		return new AnnotatorTreeMap(useimports, smdrawer, cwdrawer);
@@ -299,6 +292,16 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		new TermModifier(this, affected).runReplace(repindex, remove);
 		setChanged();
 		notifyObservers(modeledit.codewordchanged);
+	}
+	
+	public void requestFreetextChange() {
+		setChanged();
+		notifyObservers(WBEvent.freetextrequest);
+	}
+		
+	public void useCodeWindowFreetext() {
+		setChanged();
+		notifyObservers(WBEvent.importfreetext);
 	}
 	
 	@Override

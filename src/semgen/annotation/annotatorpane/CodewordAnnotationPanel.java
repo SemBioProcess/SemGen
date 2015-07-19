@@ -53,7 +53,7 @@ public class CodewordAnnotationPanel extends AnnotationPanel<CodewordToolDrawer>
 	protected void createUniqueElements() {
 		createEquationPane();
 
-		compositepanel = new CompositeAnnotationPanel(termlib, drawer, BoxLayout.Y_AXIS);
+		compositepanel = new CompositeAnnotationPanel(termlib, drawer, settings, BoxLayout.Y_AXIS);
 	
 		JLabel compositelabel = new JLabel("Composite annotation");
 		compositelabel.setFont(SemGenFont.defaultBold());
@@ -74,7 +74,7 @@ public class CodewordAnnotationPanel extends AnnotationPanel<CodewordToolDrawer>
 	}
 	
 	private void addSingularAnnotationPanel() {
-		singularannpanel = new SingularAnnotationPanel(drawer, termlib);
+		singularannpanel = new SingularAnnotationPanel(drawer, termlib, settings);
 		singularannpanel.setAlignmentX(JPanel.LEFT_ALIGNMENT);
 		mainpanel.add(singularannpanel);
 	}

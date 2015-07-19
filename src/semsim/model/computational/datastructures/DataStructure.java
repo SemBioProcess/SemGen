@@ -385,7 +385,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		return singularterm;
 	}
 	
-	public boolean isMappable() {
+	public boolean isMapped() {
 		return false;
 	}
 }

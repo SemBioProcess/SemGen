@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Observable;
 import java.util.Set;
 
-import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semsim.SemSimObject;
 
@@ -79,14 +78,6 @@ public abstract class AnnotatorDrawer<T extends SemSimObject> extends Observable
 		return false;
 	}
 	
-	public boolean hasSingularAnnotation() {
-		return hasSingularAnnotation(currentfocus);
-	}
-	
-	public Integer getSingularAnnotationLibraryIndex() {
-		return getSingularAnnotationLibraryIndex(currentfocus);
-	}
-	
 	public boolean isEditable() {
 		return isEditable(currentfocus);
 	}
@@ -112,14 +103,12 @@ public abstract class AnnotatorDrawer<T extends SemSimObject> extends Observable
 		}
 		changeNotification();
 	}
+
 	
-	public abstract Integer getSingularAnnotationLibraryIndex(int index);
-	public abstract boolean hasSingularAnnotation(int index);
 	protected abstract void selectionNotification();
 	protected abstract void changeNotification();
 	public abstract boolean isEditable(int index);
 	public abstract boolean isImported();
 
-	public abstract void setHumanReadableDefinition(String newdef);
-	public abstract void setSingularAnnotation(int selectedIndex);
+	public abstract void setHumanReadableDefinition(String newdef, boolean b);
 }

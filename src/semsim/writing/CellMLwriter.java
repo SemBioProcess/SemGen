@@ -279,7 +279,7 @@ public class CellMLwriter extends ModelWriter {
 	private void declareConnections() {
 		Set<CellMLConnection> connections = new HashSet<CellMLConnection>();
 		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
-			if(ds.isMappable()){
+			if(ds.isMapped()){
 				MappableVariable var1 = (MappableVariable)ds;
 				for(MappableVariable mappedvar : var1.getMappedTo()){
 					FunctionalSubmodel sub1 = semsimmodel.getParentFunctionalSubmodelForMappableVariable(var1);
@@ -349,7 +349,7 @@ public class CellMLwriter extends ModelWriter {
 				String publicintval = null;
 				String privateintval = null;
 				// If the Data Structure is a CellML-type variable
-				if(ds.isMappable()){
+				if(ds.isMapped()){
 					MappableVariable cellmlvar = (MappableVariable)ds;
 					initialval = cellmlvar.getCellMLinitialValue();
 					publicintval = cellmlvar.getPublicInterfaceValue();

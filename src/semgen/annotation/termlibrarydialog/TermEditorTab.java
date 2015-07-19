@@ -101,6 +101,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Ance
 		add(typepane);
 		add(toolbar);
 		add(tip);
+		add(Box.createHorizontalGlue());
 		validate();
 	}
 	
@@ -219,11 +220,13 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Ance
 
 	@Override
 	public void ancestorRemoved(AncestorEvent arg0) {
-		for (ContainerListener listener : getContainerListeners()) {
-			replacer.removeContainerListener(listener);
-		}
-		for (ComponentListener listener : getComponentListeners()) {
-			replacer.removeComponentListener(listener);
+		if (replacer!=null) {
+			for (ContainerListener listener : getContainerListeners()) {
+				replacer.removeContainerListener(listener);
+			}
+			for (ComponentListener listener : getComponentListeners()) {
+				replacer.removeComponentListener(listener);
+			}
 		}
 		workbench.deleteObserver(this);	
 	}

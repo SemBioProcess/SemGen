@@ -215,16 +215,21 @@ public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 		if(fbex)
 			indexesOfHighlightedTerms = highlightAll(codeword, true, false);
 	}
-		
+	
+	public String getHighlightedText() {
+		return getSelectedText();
+	}
+	
 	private class CodePopUp extends JPopupMenu{
 		private static final long serialVersionUID = 1L;
-		JMenuItem next, copy;
+		JMenuItem next, copy, setasfree;
 		
 		CodePopUp() {
 			next = add(new JMenuItem("Next", KeyEvent.VK_N));
 			next.setToolTipText("Find next instance of codeword in code");
 			add(new JSeparator());
 			copy = add(new JMenuItem("Copy", KeyEvent.VK_C));
+			setasfree = add(new JMenuItem("Set as Freetext", KeyEvent.VK_V));
 			
 			setActions();
 		
@@ -243,6 +248,13 @@ public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 				public void actionPerformed(ActionEvent e) {
 					StringSelection sel = new StringSelection(getSelectedText());
 					Toolkit.getDefaultToolkit().getSystemClipboard().setContents(sel, null);
+				}
+			});
+			
+			setasfree.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					workbench.useCodeWindowFreetext();
 				}
 			});
 		}

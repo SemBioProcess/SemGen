@@ -31,6 +31,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private CodewordToolDrawer drawer;
 	private SemSimTermLibrary termlib;
+	private SemGenSettings settings;
 	private int indent = 15;
 	private JButton addentbutton = new JButton("Add entity");
 	private JButton addprocbutton = new JButton("Add process");
@@ -41,10 +42,11 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 	private Box pmcpanel;
 	private ProcessSelectorPanel pcp;
 	
-	public CompositeAnnotationPanel(SemSimTermLibrary lib, CodewordToolDrawer bench, int orientation){
+	public CompositeAnnotationPanel(SemSimTermLibrary lib, CodewordToolDrawer bench, SemGenSettings sets, int orientation){
 		super(orientation);
 		drawer = bench;
 		termlib = lib;
+		settings = sets;
 		setBackground(SemGenSettings.lightblue);
 		setAlignmentX(Box.LEFT_ALIGNMENT);
 		setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
@@ -261,6 +263,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 				drawer.setDataStructureComposite(getSelection());
 				toggleNoneSelected(getSelection() == -1);
 				showProcessParticipants();
+				if (settings.getAutoAnnotateMapped()) drawer.copyToLocallyMappedVariables();
 			}
 		}
 
@@ -300,6 +303,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 		public void onChange() {
 			Integer compin = termlib.createCompositePhysicalEntity(pollSelectors());
 			drawer.setDataStructureComposite(compin);
+			if (settings.getAutoAnnotateMapped()) drawer.copyToLocallyMappedVariables();
 		}		
 	}
 }

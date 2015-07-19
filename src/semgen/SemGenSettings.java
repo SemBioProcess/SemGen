@@ -28,6 +28,7 @@ public class SemGenSettings extends Observable{
 	private final int defwidth = 1280, defheight = 1024;
 	private Dimension screensize;
 	private Boolean maximize = false;
+	private Boolean autoannmapped;
 	private int width = 1280, height = 1024;
 	private int xpos = 0, ypos = 0;
 	
@@ -44,6 +45,7 @@ public class SemGenSettings extends Observable{
 		width = screensize.width; height = screensize.height;
 		getPreviousScreenSize();
 		getPreviousScreenPosition();
+		autoannmapped = startsettingstable.get("autoAnnotateMapped")[0].trim().equals("true");
 	}
 	
 	public SemGenSettings(SemGenSettings old) {
@@ -53,6 +55,7 @@ public class SemGenSettings extends Observable{
 		ypos = old.ypos;
 		width = old.width;
 		height = old.height;
+		autoannmapped = old.autoannmapped;
 	}
 	
 	public int scaleWidthforScreen(int w) {
@@ -234,6 +237,14 @@ public class SemGenSettings extends Observable{
 		maximize = maxed;
 	}
 	
+	public void setAutoAnnotateMapped(boolean autoann) {
+		autoannmapped = autoann;
+	}
+	
+	public boolean getAutoAnnotateMapped() {
+		return autoannmapped;
+	}
+	
 	public void storeSettings() throws URISyntaxException {
 		PrintWriter writer;
 		try {
@@ -249,6 +260,7 @@ public class SemGenSettings extends Observable{
 			writer.println("sortbyCompositeCompleteness; " + organizeByCompositeCompleteness());
 			writer.println("treeView; " + useTreeView().toString());
 			writer.println("helpURL; " + getHelpURL());
+			writer.println("autoAnnotateMapped; " + autoannmapped.toString());
 			
 			writer.flush();
 			writer.close();

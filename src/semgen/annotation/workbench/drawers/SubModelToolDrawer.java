@@ -146,7 +146,7 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 	}
 	
 	@Override
-	public void setHumanReadableDefinition(String newdef){
+	public void setHumanReadableDefinition(String newdef, boolean autoann){
 		componentlist.get(currentfocus).setDescription(newdef);
 		setChanged();
 		notifyObservers(modeledit.freetextchange);
@@ -168,12 +168,7 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 	public String getHrefValue() {
 		return 	componentlist.get(currentfocus).getHrefValue();
 	}
-	
-	@Override
-	public Integer getSingularAnnotationLibraryIndex(int index) {
-		return -1;
-	}
-	
+		
 	public ArrayList<Integer> getSubmodelsWithoutFocus() {
 		ArrayList<Integer> submodels = new ArrayList<Integer>();
 		for (int i = 0; i < componentlist.size(); i++) {
@@ -208,10 +203,5 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 	protected void changeNotification() {
 		setChanged();
 		notifyObservers(modeledit.submodelchanged);
-	}
-
-
-	@Override
-	public void setSingularAnnotation(int selectedIndex) {
 	}
 }
