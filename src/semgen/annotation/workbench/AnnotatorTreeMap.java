@@ -1,5 +1,9 @@
 package semgen.annotation.workbench;
 
+/*
+ * Maps a model as a tree structure. Used for the annotator tree view. 
+ */
+
 import java.util.ArrayList;
 
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;

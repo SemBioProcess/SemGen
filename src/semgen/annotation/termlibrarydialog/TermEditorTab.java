@@ -135,6 +135,8 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Ance
 	private void clearPanel() {
 		tip.updateInformation(null);
 		closeReplacer();
+		validate();
+		repaint();
 	}
 	
 	private Integer getTermSelection() {
@@ -180,6 +182,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Ance
 		}
 		else closeReplacer();
 		validate();
+		repaint();
 	}
 	
 	private void closeReplacer() {

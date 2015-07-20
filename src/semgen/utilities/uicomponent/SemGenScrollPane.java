@@ -1,7 +1,11 @@
 package semgen.utilities.uicomponent;
 
 import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
@@ -9,12 +13,16 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
-public class SemGenScrollPane extends JScrollPane implements MouseWheelListener{
+public class SemGenScrollPane extends JScrollPane implements MouseWheelListener {
 	private static final long serialVersionUID = 2703381146331909737L;
+	private DragListener drag = new DragListener();
 	
 	public SemGenScrollPane(Component view) {
 		super(view);
 		setScrollBehavior();
+		
+		view.addMouseListener(drag);
+		view.addMouseMotionListener(drag);
 	}
 
 	public SemGenScrollPane() {
@@ -28,6 +36,7 @@ public class SemGenScrollPane extends JScrollPane implements MouseWheelListener{
         
 		this.getVerticalScrollBar().setUnitIncrement(12);
 		this.getHorizontalScrollBar().setUnitIncrement(12);
+		
 	}
 	
 	public void scrollToTopLeft() {
@@ -41,6 +50,13 @@ public class SemGenScrollPane extends JScrollPane implements MouseWheelListener{
 		       getVerticalScrollBar().setValue(0);
 		   }
 		});
+	}
+	
+	@Override
+	public void setViewportView(Component view) {
+		super.setViewportView(view);
+		view.addMouseListener(drag);
+		view.addMouseMotionListener(drag);
 	}
 	
 	public void scrollToLeft(){
@@ -112,5 +128,42 @@ public class SemGenScrollPane extends JScrollPane implements MouseWheelListener{
             	   selectedScrollBar.setValue(selectedScrollBar.getMinimum());
            }
 	    }
+	}
+	
+	//Allows scrolling via mouse or touch dragging events in the main viewport
+	private class DragListener extends MouseAdapter {
+		private Point origin;
+		
+        @Override
+        public void mousePressed(MouseEvent e) {
+        	if (getVerticalScrollBar().isVisible()) {
+	            origin = e.getPoint();
+	            setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        	}
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+        	setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent e) {       	
+            if (origin != null) {
+                if (viewport != null && getVerticalScrollBar().isVisible()) {
+                    //int deltaX = origin.x - e.getX();
+                    int deltaY = origin.y - e.getY();
+
+                    Point view = viewport.getViewPosition();
+                    //view.x += deltaX;
+                    view.y += deltaY;
+                    
+                    if (view.y >= 0 && view.y < viewport.getView().getHeight()) {
+                    	viewport.setViewPosition(view);
+                    }
+                    
+                }
+            }
+        }
 	}
 }
