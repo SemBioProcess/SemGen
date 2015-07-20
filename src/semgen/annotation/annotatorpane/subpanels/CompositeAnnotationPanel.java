@@ -164,7 +164,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 			}
 		}
 		
-		if(settings.getAutoAnnotateMapped()) drawer.copyToLocallyMappedVariables();
+		if(settings.doAutoAnnotateMapped()) drawer.copyToLocallyMappedVariables();
 	}
 	
 	@Override
@@ -265,7 +265,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 				drawer.setDataStructureComposite(getSelection());
 				toggleNoneSelected(getSelection() == -1);
 				showProcessParticipants();
-				if (settings.getAutoAnnotateMapped()) drawer.copyToLocallyMappedVariables();
+				if (settings.doAutoAnnotateMapped()) drawer.copyToLocallyMappedVariables();
 			}
 		}
 
@@ -305,7 +305,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 		public void onChange() {
 			Integer compin = termlib.createCompositePhysicalEntity(pollSelectors());
 			drawer.setDataStructureComposite(compin);
-			if (settings.getAutoAnnotateMapped()) drawer.copyToLocallyMappedVariables();
+			if (settings.doAutoAnnotateMapped()) drawer.copyToLocallyMappedVariables();
 		}		
 	}
 }

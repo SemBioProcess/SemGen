@@ -19,7 +19,8 @@ public class SemGenIcon {
 	public static final ImageIcon blankloadingicon = createImageIcon("icons/blackspinnerclearempty.gif");
 	public static final ImageIcon blankloadingiconsmall = createImageIcon("icons/blackspinnersmallempty.gif");
 	public static final ImageIcon searchicon = createImageIcon("icons/Search2020.png");
-	public static final ImageIcon copyicon = createImageIcon("icons/Copy2020.png");
+	public static final ImageIcon copyannotationicon = createImageIcon("icons/Copy2020.png");
+	public static final ImageIcon copyannotationofficon = createImageIcon("icons/CopyOff2020.png");
 	public static final ImageIcon createicon = createImageIcon("icons/Create2020.png");
 	public static final ImageIcon createcompenticon = createImageIcon("icons/CreateCompEnt2020.png");
 	public static final ImageIcon eraseicon = createImageIcon("icons/Erase2020.png");

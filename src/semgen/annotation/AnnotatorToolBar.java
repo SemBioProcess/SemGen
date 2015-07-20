@@ -7,7 +7,6 @@ import java.awt.event.ItemListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
@@ -22,10 +21,10 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 	private static final long serialVersionUID = 1L;
 
 	private AnnotatorWorkbench workbench;
+	private SemGenToolbarButton autocopymappedvars;
 	private SemGenToolbarButton annotateitemchangesourcemodelcode = new SemGenToolbarButton(SemGenIcon.setsourceicon);
 	private SemGenToolbarButton annotateitemcopy = new SemGenToolbarButton(SemGenIcon.libraryimporticon);
 	private SemGenToolbarButton annotateitemexportcsv = new SemGenToolbarButton(SemGenIcon.exporticon);
-	private JCheckBox annotateitemannlocal = new JCheckBox("Auto");
 	private SemGenToolbarButton annotateitemshowmarkers;
 	private JButton annotateitemshowimports = new JButton("Show imports");
 	private SemGenToolbarButton opentermcreator = new SemGenToolbarButton(SemGenIcon.libraryaddicon);
@@ -47,7 +46,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		annotateitemshowimports.addActionListener(this);
 		annotateitemshowimports.setToolTipText("Make imported codewords and submodels visible");
 		
-		annotateitemshowmarkers = new SemGenToolbarButton(displayIcontoUse());
+		annotateitemshowmarkers = new SemGenToolbarButton(displayMarkerIconToUse());
 		annotateitemshowmarkers.addActionListener(this);
 		annotateitemshowmarkers.setToolTipText("Display markers that indicate a codeword's property type");
 		
@@ -57,12 +56,12 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		sortselector.addItem(sortbytype, "Sort codewords by physical property type", settings.organizeByPropertyType());
 		sortselector.addItem(sortbycompletion, "Sort by the completeness of the composite term", settings.organizeByCompositeCompleteness());
 		
-		annotateitemannlocal.setToolTipText("Automatically annotate locally mapped variables");
-		annotateitemannlocal.setSelected(sets.getAutoAnnotateMapped());
-		annotateitemannlocal.addActionListener(this);
-		
 		annotateitemcopy.addActionListener(this);
 		annotateitemcopy.setToolTipText("Import annotation components from another model");
+		
+		autocopymappedvars = new SemGenToolbarButton(displayAutoCopyIconToUse());
+		autocopymappedvars.addActionListener(this);
+		autocopymappedvars.setToolTipText("Auto-copy annotations to mapped variables");
 		
 		annotateitemchangesourcemodelcode.addActionListener(this);
 		annotateitemchangesourcemodelcode.setToolTipText("Link the SemSim model with its computational code");
@@ -86,9 +85,9 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		add(annotateitemshowmarkers);
 		add(annotateitemshowimports);
 		add(sortselector);
-		add(annotateitemannlocal);
 		addSeparator();
 		
+		add(autocopymappedvars);
 		add(annotateitemchangesourcemodelcode);
 		add(annotateitemexportcsv);
 		addSeparator();
@@ -109,9 +108,14 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		sortselector.setEnabled(enable);
 	}
 	
-	private ImageIcon displayIcontoUse() {
+	private ImageIcon displayMarkerIconToUse() {
 		if (settings.useDisplayMarkers()) return SemGenIcon.onicon;
 		return SemGenIcon.officon;
+	}
+	
+	private ImageIcon displayAutoCopyIconToUse(){
+		if (settings.doAutoAnnotateMapped()) return SemGenIcon.copyannotationicon;
+		return SemGenIcon.copyannotationofficon;
 	}
 	
 	@Override
@@ -120,7 +124,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		
 		if (o == annotateitemshowmarkers){
 			settings.toggleDisplayMarkers();
-			annotateitemshowmarkers.setIcon(displayIcontoUse());
+			annotateitemshowmarkers.setIcon(displayMarkerIconToUse());
 		}
 	
 		if(o == annotateitemshowimports){
@@ -138,6 +142,11 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 				}
 			} catch (Exception e1) {
 				e1.printStackTrace();}
+		}
+		
+		if (o == autocopymappedvars){
+			settings.toggleAutoAnnotateMapped();
+			autocopymappedvars.setIcon(displayAutoCopyIconToUse());
 		}
 		
 		if (o == annotateitemchangesourcemodelcode) {
@@ -160,7 +169,6 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 			workbench.sendTermLibraryEvent(LibraryRequest.requestlibrary);
 		} 
 		
-		
 		if (o == coderbutton) {
 			String filenamesuggestion = null;
 			if(!workbench.getModelSourceFile().isEmpty()) {
@@ -169,10 +177,6 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 			if(workbench.unsavedChanges()){
 				new Encoder(workbench.getSemSimModel(), filenamesuggestion);
 			} 
-		}
-		
-		if (o == annotateitemannlocal) {
-			settings.setAutoAnnotateMapped(annotateitemannlocal.isSelected());
 		}
 	}
 
@@ -193,5 +197,4 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		    }
 		}
 	}
-	
 }

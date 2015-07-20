@@ -41,8 +41,9 @@ public class CodewordAnnotationPanel extends AnnotationPanel<CodewordToolDrawer>
 	@Override
 	protected void formatHeader(Box mainheader) {	
 		if(drawer.isMapped()){
-			copyannsbutton = new AnnotatorButton(SemGenIcon.copyicon, "Copy annotations to all mapped variables");
+			copyannsbutton = new AnnotatorButton(SemGenIcon.copyannotationicon, "Copy annotations to all mapped variables");
 			copyannsbutton.addMouseListener(this);
+			copyannsbutton.setVisible( ! settings.doAutoAnnotateMapped());
 			mainheader.add(copyannsbutton);
 			codewordlabel.setBorder(BorderFactory.createEmptyBorder(5, indent, 5, 10));
 		}

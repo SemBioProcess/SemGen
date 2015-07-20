@@ -21,7 +21,7 @@ import semsim.utilities.ResourcesManager;
  * be made for an object's private use.
  */
 public class SemGenSettings extends Observable{
-	public enum SettingChange {toggletree, showimports, cwsort, toggleproptype}
+	public enum SettingChange {toggletree, showimports, cwsort, toggleproptype, autoannotatemapped}
 	public static SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmssSSSZ");
 	public static SimpleDateFormat sdflog = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
 	public HashMap<String, String[]> startsettingstable;
@@ -156,8 +156,12 @@ public class SemGenSettings extends Observable{
 		return startsettingstable.get("sortbyCompositeCompleteness")[0].trim().equals("true");
 	}
 	
+	public Boolean doAutoAnnotateMapped() {
+		return startsettingstable.get("autoAnnotateMapped")[0].trim().equals("true");
+	}
+	
 	public void toggleAutoAnnotate() {
-		Boolean tog = !organizeByCompositeCompleteness();
+		Boolean tog = !doAutoAnnotate();
 		startsettingstable.put("autoAnnotate", new String[]{tog.toString()});
 	}
 	
@@ -196,8 +200,19 @@ public class SemGenSettings extends Observable{
 		notifyObservers(SettingChange.showimports);
 	}
 	
+	public void toggleAutoAnnotateMapped(){
+		Boolean tog = !doAutoAnnotateMapped();
+		startsettingstable.put("autoAnnotateMapped", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.autoannotatemapped);
+	}
+	
 	public void toggleAutoAnnotate(Boolean tog) {
 		startsettingstable.put("autoAnnotate", new String[]{tog.toString()});
+	}
+	
+	public void toggleAutoAnnotateMapped(Boolean tog){
+		startsettingstable.put("autoAnnotateMapped", new String[]{tog.toString()});
 	}
 	
 	public void toggleCompositeCompleteness(Boolean tog) {
@@ -229,6 +244,7 @@ public class SemGenSettings extends Observable{
 		setChanged();
 		notifyObservers(SettingChange.showimports);
 	}
+	
 	public String getHelpURL() {
 		return startsettingstable.get("helpURL")[0];
 	}
@@ -237,13 +253,6 @@ public class SemGenSettings extends Observable{
 		maximize = maxed;
 	}
 	
-	public void setAutoAnnotateMapped(boolean autoann) {
-		autoannmapped = autoann;
-	}
-	
-	public boolean getAutoAnnotateMapped() {
-		return autoannmapped;
-	}
 	
 	public void storeSettings() throws URISyntaxException {
 		PrintWriter writer;
@@ -260,7 +269,7 @@ public class SemGenSettings extends Observable{
 			writer.println("sortbyCompositeCompleteness; " + organizeByCompositeCompleteness());
 			writer.println("treeView; " + useTreeView().toString());
 			writer.println("helpURL; " + getHelpURL());
-			writer.println("autoAnnotateMapped; " + autoannmapped.toString());
+			writer.println("autoAnnotateMapped; " + doAutoAnnotateMapped().toString());
 			
 			writer.flush();
 			writer.close();

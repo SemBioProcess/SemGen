@@ -24,7 +24,7 @@ public class PreferenceDialog extends SemGenDialog implements PropertyChangeList
 	public ArrayList<PrefCheckBox> checklist = new ArrayList<PrefCheckBox>();
 	
 	public PreferenceDialog(SemGenSettings sets) {
-		super("Set SemGen Default Preferences");
+		super("SemGen default preferences");
 		settings = sets;	
 
 		makePreferences();
@@ -56,9 +56,9 @@ public class PreferenceDialog extends SemGenDialog implements PropertyChangeList
 				settings.doAutoAnnotate()) 
 				{protected void toggleSetting(Boolean sel) {settings.toggleAutoAnnotate(sel);}});
 		checklist.add(new PrefCheckBox(
-				"Auto Annotate Locally Mapped Variables", "Automatically annotate local CellML type mapped variables", 
-				settings.getAutoAnnotateMapped()) 
-				{protected void toggleSetting(Boolean sel) {settings.setAutoAnnotateMapped(sel);}});
+				"Auto Annotate Locally Mapped Variables", "Automatically annotate local CellML-type mapped variables", 
+				settings.doAutoAnnotateMapped()) 
+				{protected void toggleSetting(Boolean sel) {settings.toggleAutoAnnotateMapped(sel);}});
 		checklist.add(new PrefCheckBox(
 				"Tree View", "Display codewords and submodels within the submodel tree", 
 				settings.useTreeView()) 
@@ -84,7 +84,8 @@ public class PreferenceDialog extends SemGenDialog implements PropertyChangeList
 	public void drawCheckList() {
 		JPanel prefpanel = new JPanel();
 		prefpanel.setLayout(new BoxLayout(prefpanel, BoxLayout.Y_AXIS));
-		prefpanel.add(new JLabel("Choose Default Preferences"));
+		prefpanel.add(new JLabel("Choose preferences to use when opening new tabs\n"));
+		
 		
 		for (PrefCheckBox pref : checklist) {
 			prefpanel.add(pref);

@@ -153,18 +153,18 @@ public abstract class AnnotationPanel<P extends AnnotatorDrawer<? extends SemSim
 		if (drawer.hasHumanReadableDef()) current= drawer.getHumanReadableDef();
 		TextChangeDialog hde = new TextChangeDialog("Enter free-text description", drawer.getCodewordName(), current);
 		if (!hde.getNewText().equals(current)) {
-			drawer.setHumanReadableDefinition(hde.getNewText(), settings.getAutoAnnotateMapped());
+			drawer.setHumanReadableDefinition(hde.getNewText(), settings.doAutoAnnotateMapped());
 		}
 	}
 	
 	public void setFreeText(String txt) {
-		drawer.setHumanReadableDefinition(txt, settings.getAutoAnnotateMapped());
+		drawer.setHumanReadableDefinition(txt, settings.doAutoAnnotateMapped());
 	}
 	
 	public void mouseClicked(MouseEvent e) {
 		Object obj = e.getSource();
 		if (obj==humremovebutton) {
-			drawer.setHumanReadableDefinition("", settings.getAutoAnnotateMapped());
+			drawer.setHumanReadableDefinition("", settings.doAutoAnnotateMapped());
 		}
 		if (obj==humandefpane) {
 			changeFreeText();

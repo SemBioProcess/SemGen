@@ -46,7 +46,7 @@ public class SingularAnnotationPanel extends AnnotationChooserPanel {
 			int sing = getSelection();
 			drawer.setSingularAnnotation(sing);
 			toggleNoneSelected(sing == -1);
-			if (settings.getAutoAnnotateMapped()) drawer.copyToLocallyMappedVariables();
+			if (settings.doAutoAnnotateMapped()) drawer.copyToLocallyMappedVariables();
 		}
 	}
 	
