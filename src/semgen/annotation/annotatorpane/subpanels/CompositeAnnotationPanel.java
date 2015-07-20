@@ -163,6 +163,8 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 				setCompositeSelector();
 			}
 		}
+		
+		if(settings.getAutoAnnotateMapped()) drawer.copyToLocallyMappedVariables();
 	}
 	
 	@Override
