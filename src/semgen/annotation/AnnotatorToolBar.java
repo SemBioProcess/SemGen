@@ -83,11 +83,11 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		
 		add(annotateitemtreeview);
 		add(annotateitemshowmarkers);
+		add(autocopymappedvars);
 		add(annotateitemshowimports);
 		add(sortselector);
 		addSeparator();
 		
-		add(autocopymappedvars);
 		add(annotateitemchangesourcemodelcode);
 		add(annotateitemexportcsv);
 		addSeparator();
