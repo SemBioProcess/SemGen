@@ -96,9 +96,9 @@ public class SemSimModelSerializer {
 							proc.getSinkPhysicalEntities(),
 							proc.getMediatorPhysicalEntities());
 					boolean dup = false;
-					for(PhysioMapNode pmNode : physiomapNetwork) {
-						if(pmNode.id.equals(physEntNode.id)) dup = true;
-					}
+//					for(PhysioMapNode pmNode : physiomapNetwork) {
+//						if(pmNode.id.equals(physEntNode.id)) dup = true;
+//					}
 					if(!dup) {
 						physiomapNetwork.add(physEntNode);
 					}
@@ -106,32 +106,7 @@ public class SemSimModelSerializer {
 				
 			}
 		}
-//		Add any missing source nodes
-//		for(DataStructure dataStructure : semSimModel.getDataStructures()){
-//			if(dataStructure.getPhysicalProperty().getPhysicalPropertyOf() != null &&
-//				dataStructure.getPhysicalProperty().getPhysicalPropertyOf() instanceof PhysicalProcess) {
-//				
-//				PhysicalProcess proc = (PhysicalProcess) dataStructure.getPhysicalProperty().getPhysicalPropertyOf();
-//				for(PhysicalEntity source : proc.getSourcePhysicalEntities()) {
-//					String sourceName = source.getName();
-//					if(sourceName == "") sourceName = "Null node";
-//					PhysioMapNode sourceNode = new PhysioMapNode(sourceName,
-//							semSimModel.getName(),
-//							proc.getName(),
-//							proc.getSourcePhysicalEntities(),
-//							proc.getSinkPhysicalEntities(),
-//							proc.getMediatorPhysicalEntities());
-//					boolean dup = false;
-//					for(PhysioMapNode pmNode : physiomapNetwork) {
-//						if(pmNode.id.equals(sourceNode.id)) dup = true;
-//					}
-//					if(!dup) {
-//						physiomapNetwork.add(sourceNode);
-//					}
-//					
-//				}
-//			}
-//		}
+
 		return physiomapNetwork;
 	}
 	

@@ -280,7 +280,7 @@ $(window).load(function() {
 					    	        	 sourceId: modelName + "Entity 2",
 										 sinkId: modelName + "Entity 3",										 
 					    	        	 parentModelId: modelName,
-					    	        	 label: "Process C",
+					    	        	 label: "Process D",
 					    	         },
 					    	],
 					    },

@@ -21,6 +21,7 @@ function Node(graph, id, name, parent, inputs, r, color, textSize, nodeType, cha
 	this.userCanHide = true;
 	this.hidden = false;
 	this.spaceBetweenTextAndNode = this.r * 0.2 + this.textSize;
+	console.log(this);
 }
 
 Node.prototype.addClassName = function (className) {
@@ -78,7 +79,7 @@ Node.prototype.getLinks = function () {
 	for(var i = 0; i < this.inputs.length; i++) {
 		var inputData = this.inputs[i];
 		var inputNodeId;
-		var sinkNodeId;
+		var outputNodeId;
 		var type;
 		var linkLabel = inputData.label;
 		
@@ -103,22 +104,23 @@ Node.prototype.getLinks = function () {
 		else {
 			type = "internal";
 			inputNodeId = inputData.sourceId;
-			sinkNodeId = inputData.sinkId;
+			outputNodeId = inputData.sinkId;
 		}
 		
 		// Get the input node
 		var inputNode = this.graph.findNode(inputNodeId);
 		
 		// Get the sink node
-		var sinkNode = this.graph.findNode(sinkNodeId);
+		var outputNode =  outputNodeId === undefined ? this : this.graph.findNode(outputNodeId);
 		
 		if(!inputNode) {
 			console.log("input node '" + inputNodeId + "' does not exist. Can't build link.");
 			continue;
 		}
 		
-		if(!sinkNode) {
-			console.log("sink node '" + sinkNodeId + "' does not exist. Can't build link.");
+		if(!outputNode) {
+			console.log("sink node '" + outputNodeId + "' does not exist. Can't build link.");
+			continue;
 		}
 		
 		// If the parent has children it's circle is hidden
@@ -128,14 +130,18 @@ Node.prototype.getLinks = function () {
 			continue;
 		}
 		
-		links.push({
-			source: inputNode,
-			target: sinkNode === undefined ? this : sinkNode,
-			type: type,
-			length: type == "external" ? 200 : 40,
-			label: linkLabel,
-			value: 1,
-		});
+		// links.push({
+		// 	source: inputNode,
+		// 	target: outputNode === undefined ? this : outputNode,
+		// 	type: type,
+		// 	length: type == "external" ? 200 : 40,
+		// 	label: linkLabel,
+		// 	value: 1,
+		// });
+		
+		var length = type == "external" ? 200 : 40;
+		var newLink = new Link(this.graph, linkLabel, this.parent, inputNode, outputNode, length, type);
+		links.push(newLink);
 	}
 	
 	return links;
@@ -147,11 +153,10 @@ Node.prototype.tickHandler = function (element, graph) {
 	// Don't let nodes overlap their parent labels
 	if(this.parent && this.y < this.parent.y)
 		this.y = this.parent.y;
-	
-	
+			
 	this.x = Math.max(this.r, Math.min(graph.w - this.r, this.x));
 	this.y = Math.max(this.r + this.spaceBetweenTextAndNode, Math.min(graph.h - this.r, this.y));
-	
+
 	var root = d3.select(element);
 	root.attr("transform", "translate(" + this.x + "," + this.y + ")");
 	

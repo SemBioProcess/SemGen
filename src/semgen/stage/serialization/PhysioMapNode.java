@@ -27,7 +27,7 @@ public class PhysioMapNode extends Node {
 						parentModelId,
 						processName,
 						mediatorsNames));
-//				System.out.println(sourceName + " -> " + processName + " -> " + sinkName);
+				System.out.println(sourceName + " -> " + processName + " -> " + sinkName);
 			}
 		}
 	}
