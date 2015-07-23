@@ -49,7 +49,7 @@ public class ImportAnnotationsPanel extends JPanel implements ActionListener {
 		loadpane.add(loadbtn);
 		modellabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 		modellabel.setFont(SemGenFont.defaultPlain());
-		modellabel.setForeground(Color.red);
+		modellabel.setForeground(Color.gray);
 		loadpane.add(modellabel);
 		loadbtn.addActionListener(this);
 		
@@ -85,7 +85,7 @@ public class ImportAnnotationsPanel extends JPanel implements ActionListener {
 		if (sourcefile != null) {
 			file = sourcefile;
 			modellabel.setText(file.getName());
-			modellabel.setForeground(Color.green);
+			modellabel.setForeground(Color.blue);
 			importbtn.setEnabled(true);
 		}
 	}
