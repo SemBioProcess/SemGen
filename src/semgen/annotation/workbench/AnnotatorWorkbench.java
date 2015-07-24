@@ -313,7 +313,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		}
 		if (arg1==modeledit.freetextchange || arg1==modeledit.codewordchanged || arg1==modeledit.submodelchanged
 				|| arg1==LibraryEvent.SINGULAR_TERM_CHANGE || arg1.equals(LibraryEvent.COMPOSITE_ENTITY_CHANGE) 
-				|| arg1.equals(LibraryEvent.PROCESS_CHANGE)) {
+				|| arg1.equals(LibraryEvent.PROCESS_CHANGE) || arg1.equals(ModelChangeEnum.METADATACHANGED) || arg1.equals(ModelChangeEnum.SOURCECHANGED)) {
 			this.setModelSaved(false);
 		}
 	}

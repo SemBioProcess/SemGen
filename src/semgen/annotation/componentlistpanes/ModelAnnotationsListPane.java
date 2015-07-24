@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -13,8 +15,11 @@ import java.util.Observer;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.border.TitledBorder;
 
 import org.openjena.atlas.lib.Pair;
@@ -27,12 +32,13 @@ import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 
-public class ModelAnnotationsListPane extends SemGenScrollPane implements Observer {
+public class ModelAnnotationsListPane extends SemGenScrollPane implements Observer, KeyListener {
 	
 	private static final long serialVersionUID = 1L;
 	ModelAnnotationsBench metadatabench;
 	SemGenSettings settings;
 	ArrayList<MetadataBox> metadataarray = new ArrayList<MetadataBox>();
+	Integer focus = -1;
 	JPanel viewport = new JPanel();
 
 	
@@ -41,6 +47,13 @@ public class ModelAnnotationsListPane extends SemGenScrollPane implements Observ
 		metadatabench = wb.getModelAnnotationsWorkbench();
 		wb.addObservertoModelAnnotator(this);
 		settings = sets;
+		
+		InputMap im = getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+		// Override up and down key functions so user can use arrows to move between codewords
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "none");
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "none");
+		
+		addKeyListener(this);
 		
 		String name = metadatabench.getFullModelName();
 		if (name==null || name.isEmpty()) name = wb.getCurrentModelName();
@@ -85,6 +98,10 @@ public class ModelAnnotationsListPane extends SemGenScrollPane implements Observ
 			metadataarray.get(index).setIndicator(metadatabench.focusHasValue());
 		}
 	}
+	
+	private void assignFocus() {
+		requestFocusInWindow();
+	}
      
 	abstract class MetadataBox extends JPanel {
 		private static final long serialVersionUID = 1L;
@@ -96,6 +113,7 @@ public class ModelAnnotationsListPane extends SemGenScrollPane implements Observ
 		}
 		
 		public abstract void setIndicator(boolean status);
+		
 	};
 	
 	class MetadatawithCheck extends MetadataBox {
@@ -119,24 +137,49 @@ public class ModelAnnotationsListPane extends SemGenScrollPane implements Observ
 			if (checkmark) indicator.setIcon(SemGenIcon.checkmarkicon);
 			else indicator.setIcon(SemGenIcon.eraseiconsmall);
 		}
+		
 	};
 	
 	class MouseMetadataAdapter extends MouseAdapter {
 		MetadataBox target;
-			MouseMetadataAdapter(MetadataBox targ) {
-				target = targ;
-			}
-			
-			public void mouseClicked(MouseEvent e) {
-				metadatabench.notifyOberserversofMetadataSelection(metadataarray.indexOf(target));
-			}
-			
-			public void mouseEntered(MouseEvent e) {
-				target.setBorder(AnnotationObjectButton.outlineborder);
-			}
+		MouseMetadataAdapter(MetadataBox targ) {
+			target = targ;
+		}
+		
+		public void mouseClicked(MouseEvent e) {
+			focus = metadataarray.indexOf(target);
+			metadatabench.notifyOberserversofMetadataSelection(focus);
+			assignFocus();
+		}
+		
+		public void mouseEntered(MouseEvent e) {
+			target.setBorder(AnnotationObjectButton.outlineborder);
+		}
 
-			public void mouseExited(MouseEvent e) {
-				target.setBorder(AnnotationObjectButton.emptyborder);
+		public void mouseExited(MouseEvent e) {
+			target.setBorder(AnnotationObjectButton.emptyborder);
+		}
+	};
+		
+	public void keyPressed(KeyEvent e) {
+			int id = e.getKeyCode();
+			// Up arrow key
+			if (id == KeyEvent.VK_UP) {
+				focus--;
+				if(focus==-1) focus = metadataarray.size()-1;
+				
 			}
-		};
+			// Down arrow key
+			if (id == KeyEvent.VK_DOWN) {
+				focus++;
+				if(focus == metadataarray.size()) focus = 0;
+			}
+			
+			metadatabench.notifyOberserversofMetadataSelection(focus);
+			scrollToComponent(metadataarray.get(focus));
+	}
+
+		public void keyReleased(KeyEvent e) {}
+		public void keyTyped(KeyEvent e) {}
+		
 }

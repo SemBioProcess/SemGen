@@ -111,6 +111,7 @@ public abstract class AnnotatorListPane<T extends AnnotationObjectButton, D exte
 			if(index == btnarray.size()) index = 0;
 		}
 		changeButtonFocus(btnarray.get(index));
+		scrollToComponent(btnarray.get(index));
 	}
 
 	public void keyReleased(KeyEvent e) {}
@@ -137,6 +138,7 @@ public abstract class AnnotatorListPane<T extends AnnotationObjectButton, D exte
 			updateUnique(arg);
 		}
 	}
+	
 	protected abstract void refreshChangedButtons();
 	protected abstract void updateButtonTable();
 	protected abstract void updateUnique(Object arg);

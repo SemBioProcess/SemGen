@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
+import javax.swing.JComponent;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
@@ -67,13 +68,9 @@ public class SemGenScrollPane extends JScrollPane implements MouseWheelListener 
 			});
 	}
 	
-	public void scrollToComponent(final Component cp){
-		SwingUtilities.invokeLater(new Runnable() {
-			   public void run() { 
-			       Rectangle rc = cp.getBounds();
-				   scrollRectToVisible(rc);
-			   }
-			});
+	public void scrollToComponent(final JComponent cp){
+		Rectangle rc = cp.getBounds();
+		cp.scrollRectToVisible(rc);
 	}
 
 	@Override

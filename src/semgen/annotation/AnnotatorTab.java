@@ -25,9 +25,6 @@ import semsim.SemSimObject;
 
 import java.net.URI;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
 
@@ -36,7 +33,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.awt.BorderLayout;
 
-public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
+public class AnnotatorTab extends SemGenTab implements Observer {
 
 	private static final long serialVersionUID = -5360722647774877228L;
 	public File sourcefile; //File originally loaded at start of Annotation session (could be in SBML, MML, CellML or SemSim format)
@@ -198,30 +195,6 @@ public class AnnotatorTab extends SemGenTab implements MouseListener, Observer {
 			libdialog = new ReferenceLibraryDialog(settings, workbench);
 		}
 	}
-	
-	public void mouseEntered(MouseEvent e) {
-		Component component = e.getComponent();
-		if (component instanceof AbstractButton) {
-			AbstractButton button = (AbstractButton) component;
-			button.setBorderPainted(true);
-			button.setContentAreaFilled(true);
-			button.setOpaque(true);
-		}
-	}
-
-	public void mouseExited(MouseEvent e) {
-		Component component = e.getComponent();
-		if (component instanceof AbstractButton) {
-			AbstractButton button = (AbstractButton) component;
-			button.setBorderPainted(false);
-			button.setContentAreaFilled(false);
-			button.setOpaque(false);
-		}
-	}
-
-	public void mouseClicked(MouseEvent e) {}
-	public void mousePressed(MouseEvent arg0) {}
-	public void mouseReleased(MouseEvent arg0) {}
 	
 	public boolean fileURIMatches(URI uri) {
 		return (uri.toString().equals(sourcefile.toURI().toString()));
