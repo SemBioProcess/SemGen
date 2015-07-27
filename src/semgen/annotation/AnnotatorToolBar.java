@@ -158,15 +158,15 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		}
 		
 		if (o == opentermcreator) {
-			workbench.sendTermLibraryEvent(LibraryRequest.requestcreator);
+			workbench.sendTermLibraryEvent(LibraryRequest.REQUEST_CREATOR);
 		}
 		
 		if (o == annotateitemcopy) {
-			workbench.sendTermLibraryEvent(LibraryRequest.requestimport);
+			workbench.sendTermLibraryEvent(LibraryRequest.REQUEST_IMPORT);
 		}
 		
 		if (o == opentermlibrary) {
-			workbench.sendTermLibraryEvent(LibraryRequest.requestlibrary);
+			workbench.sendTermLibraryEvent(LibraryRequest.REQUEST_LIBRARY);
 		} 
 		
 		if (o == coderbutton) {

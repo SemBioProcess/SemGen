@@ -44,9 +44,10 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	private SubModelToolDrawer smdrawer;
 	private boolean modelsaved = true;
 	private int lastsavedas = -1;
-	public static enum WBEvent {freetextrequest, importfreetext, smselection, cwselection}
-	public static enum LibraryRequest {requestimport, requestlibrary, requestcreator, closelibrary }
-	public static enum modeledit {propertychanged, compositechanged, codewordchanged, submodelchanged, modelimport, smlistchanged, freetextchange, smnamechange }
+	public static enum WBEvent {FREETEXT_REQUEST, IMPORT_FREETEXT, SMSELECTION, CWSELECTION}
+	public static enum LibraryRequest {REQUEST_IMPORT, REQUEST_LIBRARY, REQUEST_CREATOR, CLOSE_LIBRARY }
+	public static enum ModelEdit {PROPERTY_CHANGED, COMPOSITE_CHANGED, CODEWORD_CHANGED, SUBMODEL_CHANGED, MODEL_IMPORT, 
+		SMLISTCHANGED, FREE_TEXT_CHANGED, SMNAMECHANGED }
 	
 	public AnnotatorWorkbench(File file, SemSimModel model) {
 		semsimmodel = model;
@@ -54,6 +55,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		lastsavedas = semsimmodel.getSourceModelType();	
 	}
 	
+	@Override
 	public void initialize() {
 		termlib = new SemSimTermLibrary(semsimmodel);
 		termlib.addObserver(this);
@@ -75,7 +77,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		return smdrawer;
 	}
 	
-	public ModelAnnotationsBench getModelAnnotationsWorkbench() {
+	public ModelAnnotationsBench openModelAnnotationsWorkbench() {
 		return modanns;
 	}
 	
@@ -97,10 +99,12 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 				semsimmodel.getSourceModelType()==ModelClassifier.CELLML_MODEL);
 	}
 	
+	@Override
 	public boolean getModelSaved(){
 		return modelsaved;
 	}
 	
+	@Override
 	public void setModelSaved(boolean val){
 		modelsaved = val;
 		setChanged();
@@ -116,6 +120,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		return semsimmodel.getName();
 	}
 
+	@Override
 	public String getModelSourceFile() {
 		return semsimmodel.getLegacyCodeLocation();
 	}
@@ -221,16 +226,15 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	}
 		
 	public void compositeChanged() {
-		setModelSaved(false);
 		setChanged();
-		notifyObservers(modeledit.compositechanged);
+		notifyObservers(ModelEdit.COMPOSITE_CHANGED);
 	}
 	
 	private void submodelListChanged() {
 		smdrawer.refreshSubModels();
 		setModelSaved(false);
 		setChanged();
-		notifyObservers(modeledit.smlistchanged);
+		notifyObservers(ModelEdit.SMLISTCHANGED);
 	}
 	
 	public ArrayList<Integer> getSelectedSubmodelDSIndicies() {
@@ -247,7 +251,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	public void addDataStructurestoSubmodel(ArrayList<Integer> dsindicies) {
 		smdrawer.setDataStructures(cwdrawer.getComponentsfromIndicies(dsindicies));
 		setChanged();
-		notifyObservers(modeledit.smlistchanged);
+		notifyObservers(ModelEdit.SMLISTCHANGED);
 	}
 	
 	public void addSubmodeltoModel(String name) {
@@ -269,8 +273,6 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		return false;
 	}
 	
-
-	
 	public AnnotatorTreeMap makeTreeMap(boolean useimports) {
 		return new AnnotatorTreeMap(useimports, smdrawer, cwdrawer);
 	}
@@ -291,27 +293,27 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	public void replaceTerm(TermCollector affected, Integer repindex, boolean remove) {
 		new TermModifier(this, affected).runReplace(repindex, remove);
 		setChanged();
-		notifyObservers(modeledit.codewordchanged);
+		notifyObservers(ModelEdit.CODEWORD_CHANGED);
 	}
 	
 	public void requestFreetextChange() {
 		setChanged();
-		notifyObservers(WBEvent.freetextrequest);
+		notifyObservers(WBEvent.FREETEXT_REQUEST);
 	}
 		
 	public void useCodeWindowFreetext() {
 		setChanged();
-		notifyObservers(WBEvent.importfreetext);
+		notifyObservers(WBEvent.IMPORT_FREETEXT);
 	}
 	
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		//Event forwarding
-		if ((arg1==WBEvent.smselection) || (arg1==WBEvent.cwselection) || arg1==ModelChangeEnum.METADATASELECTED){
+		if ((arg1==WBEvent.SMSELECTION) || (arg1==WBEvent.CWSELECTION) || arg1==ModelChangeEnum.METADATASELECTED){
 			setChanged();
 			notifyObservers(arg1);
 		}
-		if (arg1==modeledit.freetextchange || arg1==modeledit.codewordchanged || arg1==modeledit.submodelchanged
+		if (arg1==ModelEdit.FREE_TEXT_CHANGED || arg1==ModelEdit.CODEWORD_CHANGED || arg1==ModelEdit.SUBMODEL_CHANGED
 				|| arg1==LibraryEvent.SINGULAR_TERM_CHANGE || arg1.equals(LibraryEvent.COMPOSITE_ENTITY_CHANGE) 
 				|| arg1.equals(LibraryEvent.PROCESS_CHANGE) || arg1.equals(ModelChangeEnum.METADATACHANGED) || arg1.equals(ModelChangeEnum.SOURCECHANGED)) {
 			this.setModelSaved(false);

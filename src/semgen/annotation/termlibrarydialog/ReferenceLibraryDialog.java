@@ -33,7 +33,7 @@ public class ReferenceLibraryDialog extends JFrame implements ComponentListener,
 		// Set closing behavior
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				workbench.sendTermLibraryEvent(LibraryRequest.closelibrary);
+				workbench.sendTermLibraryEvent(LibraryRequest.CLOSE_LIBRARY);
 			}
 		});
 		setResizable(false);

@@ -32,7 +32,7 @@ public class ModelAnnotationEditor extends JPanel implements Observer {
 	
 	public ModelAnnotationEditor(AnnotatorWorkbench wb) {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		metadatabench = wb.getModelAnnotationsWorkbench();
+		metadatabench = wb.openModelAnnotationsWorkbench();
 		metadatabench.addObserver(this);
 		
 		setBackground(SemGenSettings.lightblue);

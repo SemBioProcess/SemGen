@@ -23,7 +23,7 @@ import semgen.annotation.common.AnnotationClickableTextPane;
 import semgen.annotation.dialog.TextChangeDialog;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.AnnotatorWorkbench.WBEvent;
-import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
+import semgen.annotation.workbench.AnnotatorWorkbench.ModelEdit;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.drawers.AnnotatorDrawer;
 import semgen.utilities.SemGenFont;
@@ -139,10 +139,10 @@ public abstract class AnnotationPanel<P extends AnnotatorDrawer<? extends SemSim
 		
 	@Override
 	public void update(Observable o, Object arg) {
-		if (arg==WBEvent.freetextrequest) {
+		if (arg==WBEvent.FREETEXT_REQUEST) {
 			changeFreeText();
 		}
-		if (arg==modeledit.freetextchange) {
+		if (arg==ModelEdit.FREE_TEXT_CHANGED) {
 			refreshFreeText();
 		}
 		updateUnique(o, arg);

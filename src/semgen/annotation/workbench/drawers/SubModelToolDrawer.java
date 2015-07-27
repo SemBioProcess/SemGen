@@ -7,7 +7,7 @@ import java.util.Set;
 
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.AnnotatorWorkbench.WBEvent;
-import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
+import semgen.annotation.workbench.AnnotatorWorkbench.ModelEdit;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.owl.SemSimOWLFactory;
@@ -130,7 +130,7 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 		refreshSubModels();
 		currentfocus = componentlist.indexOf(sm);
 		setChanged();
-		notifyObservers(modeledit.smnamechange);
+		notifyObservers(ModelEdit.SMNAMECHANGED);
 	}
 	
 	public ArrayList<String> getAssociatedSubmodelNames() {
@@ -149,12 +149,12 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 	public void setHumanReadableDefinition(String newdef, boolean autoann){
 		componentlist.get(currentfocus).setDescription(newdef);
 		setChanged();
-		notifyObservers(modeledit.freetextchange);
+		notifyObservers(ModelEdit.FREE_TEXT_CHANGED);
 	}
 	
 	@Override
 	protected void selectionNotification() {
-		notifyObservers(WBEvent.smselection);
+		notifyObservers(WBEvent.SMSELECTION);
 	}
 	
 	public boolean isFunctional() {
@@ -202,6 +202,6 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 	@Override
 	protected void changeNotification() {
 		setChanged();
-		notifyObservers(modeledit.submodelchanged);
+		notifyObservers(ModelEdit.SUBMODEL_CHANGED);
 	}
 }

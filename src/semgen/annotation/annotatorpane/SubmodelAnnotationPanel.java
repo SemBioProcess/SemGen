@@ -19,7 +19,7 @@ import semgen.annotation.common.AnnotationClickableTextPane;
 import semgen.annotation.dialog.SemSimComponentSelectionDialog;
 import semgen.annotation.dialog.TextChangeDialog;
 import semgen.annotation.workbench.AnnotatorWorkbench;
-import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
+import semgen.annotation.workbench.AnnotatorWorkbench.ModelEdit;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
 import semgen.annotation.workbench.drawers.SubModelToolDrawer;
 import semgen.utilities.SemGenIcon;
@@ -187,7 +187,7 @@ public class SubmodelAnnotationPanel extends AnnotationPanel<SubModelToolDrawer>
 	
 	@Override
 	public void updateUnique(Observable o, Object arg) {
-		if (arg == modeledit.smnamechange) {
+		if (arg == ModelEdit.SMNAMECHANGED) {
 			codewordlabel.setText(drawer.getCodewordName());
 		}
 	}

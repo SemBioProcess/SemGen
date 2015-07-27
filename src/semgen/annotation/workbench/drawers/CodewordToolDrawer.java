@@ -9,7 +9,7 @@ import java.util.Set;
 import semgen.SemGen;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.AnnotatorWorkbench.WBEvent;
-import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
+import semgen.annotation.workbench.AnnotatorWorkbench.ModelEdit;
 import semgen.annotation.workbench.routines.AnnotationCopier;
 import semsim.PropertyType;
 import semsim.annotation.ReferenceTerm;
@@ -240,12 +240,12 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		for (Integer dsi : dsindicies) {
 			setDataStructurePhysicalProperty(dsi, ppi);
 		}
-		changeNotification(modeledit.propertychanged);
+		changeNotification(ModelEdit.PROPERTY_CHANGED);
 	}
 	
 	public void setDatastructurePhysicalProperty(Integer index) {
 		setDataStructurePhysicalProperty(currentfocus, index);
-		changeNotification(modeledit.propertychanged);
+		changeNotification(ModelEdit.PROPERTY_CHANGED);
 	}
 	
 	private void setDataStructureComposite(Integer cwindex, Integer compindex) {
@@ -267,7 +267,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		if (currentfocus==-1) return; 
 		setDataStructureComposite(currentfocus, index);
 		
-		changeNotification(modeledit.compositechanged);
+		changeNotification(ModelEdit.COMPOSITE_CHANGED);
 	}
 	
 	public void batchSetAssociatedComposite(ArrayList<Integer> cws, int selectedIndex) {
@@ -315,7 +315,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	
 	@Override
 	protected void selectionNotification() {
-		notifyObservers(WBEvent.cwselection);
+		notifyObservers(WBEvent.CWSELECTION);
 	}
 	
 	@Override
@@ -349,7 +349,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	public void setHumanReadableDefinition(String newdef, boolean autoann){
 		componentlist.get(currentfocus).setDescription(newdef);
 		setChanged();
-		notifyObservers(modeledit.freetextchange);
+		notifyObservers(ModelEdit.FREE_TEXT_CHANGED);
 		if (autoann) copyToLocallyMappedVariables();
 	}
 	
@@ -402,10 +402,10 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	@Override
 	protected void changeNotification() {
 		setChanged();
-		notifyObservers(modeledit.codewordchanged);
+		notifyObservers(ModelEdit.CODEWORD_CHANGED);
 	}
 	
-	private void changeNotification(modeledit edit) {
+	private void changeNotification(ModelEdit edit) {
 		setChanged();
 		notifyObservers(edit);
 		changeNotification();

@@ -17,7 +17,7 @@ import semgen.SemGenSettings;
 import semgen.annotation.componentlistpanes.buttons.AnnotatorTreeNode;
 import semgen.annotation.workbench.AnnotatorTreeMap;
 import semgen.annotation.workbench.AnnotatorWorkbench;
-import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
+import semgen.annotation.workbench.AnnotatorWorkbench.ModelEdit;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
 import semgen.annotation.workbench.drawers.SubModelToolDrawer;
 import semgen.utilities.SemGenFont;
@@ -166,25 +166,25 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		if (settings.useTreeView()) {
-			if (arg1==modeledit.freetextchange) {
+			if (arg1==ModelEdit.FREE_TEXT_CHANGED) {
 				if (focus!=null) {
 					fireNodeChanged(focus);
 				}
 			}
 			if (arg0==smdrawer) {
-				if (arg1 == modeledit.smnamechange) {
+				if (arg1 == ModelEdit.SMNAMECHANGED) {
 					changeButtonFocus(smmapinv.get(smdrawer.getSelectedIndex()));
 					fireTreeStructureChanged();
 					
 				}
-				if	(arg1==modeledit.submodelchanged) {
+				if	(arg1==ModelEdit.SUBMODEL_CHANGED) {
 					for (Integer i : smdrawer.getChangedComponents()) {
 						fireNodeChanged(smmapinv.get(i));
 					}
 				}
 			}
 			if (arg0==cwdrawer) {
-				if	(arg1==modeledit.codewordchanged || arg1==modeledit.propertychanged) {
+				if	(arg1==ModelEdit.CODEWORD_CHANGED || arg1==ModelEdit.PROPERTY_CHANGED) {
 					for (Integer i : cwdrawer.getChangedComponents()) {
 						fireNodeChanged(cwmapinv.get(i));
 					}
@@ -212,7 +212,7 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 		@Override
 		public void onSelection() {
 			changeButtonFocus(this);
-			workbench.getModelAnnotationsWorkbench().notifyOberserversofMetadataSelection(0);
+			workbench.openModelAnnotationsWorkbench().notifyOberserversofMetadataSelection(0);
 		}
 	}
 	

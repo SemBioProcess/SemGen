@@ -22,7 +22,7 @@ import semgen.SemGenSettings;
 import semgen.SemGenSettings.SettingChange;
 import semgen.annotation.componentlistpanes.buttons.AnnotationObjectButton;
 import semgen.annotation.workbench.AnnotatorWorkbench;
-import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
+import semgen.annotation.workbench.AnnotatorWorkbench.ModelEdit;
 import semgen.annotation.workbench.drawers.AnnotatorDrawer;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.uicomponent.SemGenScrollPane;
@@ -108,7 +108,10 @@ public abstract class AnnotatorListPane<T extends AnnotationObjectButton, D exte
 				index = btnarray.size()-1;	
 				scrollToBottom();
 			}
-			scrollindex = index;
+			if (index!=0) {
+				scrollindex = index-1;
+				}
+				else scrollToTop();
 		}
 		// Down arrow key
 		if (id == KeyEvent.VK_DOWN) {
@@ -144,7 +147,7 @@ public abstract class AnnotatorListPane<T extends AnnotationObjectButton, D exte
 			}
 			if (o==drawer) {
 				if (focusbutton!=null) {
-					if (arg==modeledit.freetextchange) {
+					if (arg==ModelEdit.FREE_TEXT_CHANGED) {
 						focusbutton.toggleHumanDefinition(drawer.hasHumanReadableDef());
 					}
 				}

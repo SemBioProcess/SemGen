@@ -44,7 +44,7 @@ public class ModelAnnotationsListPane extends SemGenScrollPane implements Observ
 	
 	public ModelAnnotationsListPane(AnnotatorWorkbench wb, SemGenSettings sets) {
 		viewport.setLayout(new BoxLayout(viewport, BoxLayout.Y_AXIS));
-		metadatabench = wb.getModelAnnotationsWorkbench();
+		metadatabench = wb.openModelAnnotationsWorkbench();
 		wb.addObservertoModelAnnotator(this);
 		settings = sets;
 		

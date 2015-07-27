@@ -234,12 +234,12 @@ public class AnnotatorTab extends SemGenTab implements Observer {
 				showModelAnnotator();
 				return;
 			}
-			if (arg1 == WBEvent.importfreetext) {
+			if (arg1 == WBEvent.IMPORT_FREETEXT) {
 				if (annotatorpane!=null) {
 					annotatorpane.setFreeText(codearea.getHighlightedText());
 				}
 			}
-			if (arg1==WBEvent.cwselection) {
+			if (arg1==WBEvent.CWSELECTION) {
 				try {
 					codewordSelected();
 				} catch (BadLocationException e) {
@@ -247,23 +247,23 @@ public class AnnotatorTab extends SemGenTab implements Observer {
 				}
 				annotationObjectAction() ;
 			}
-			if (arg1==WBEvent.smselection) {
+			if (arg1==WBEvent.SMSELECTION) {
 				this.subModelSelected();
 				annotationObjectAction();
 			}
-			if (arg1==LibraryRequest.requestlibrary) {
+			if (arg1==LibraryRequest.REQUEST_LIBRARY) {
 				openReferenceLibrary();
 				libdialog.openReferenceTab();
 			}
-			if (arg1==LibraryRequest.requestcreator) {
+			if (arg1==LibraryRequest.REQUEST_CREATOR) {
 				openReferenceLibrary();
 				libdialog.openCreatorTab();
 			}
-			if (arg1==LibraryRequest.requestimport) {
+			if (arg1==LibraryRequest.REQUEST_IMPORT) {
 				openReferenceLibrary();
 				libdialog.openImportTab();
 			}
-			if (arg1==LibraryRequest.closelibrary) {
+			if (arg1==LibraryRequest.CLOSE_LIBRARY) {
 				libdialog=null;
 			}
 		}

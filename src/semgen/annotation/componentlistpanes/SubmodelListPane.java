@@ -17,7 +17,7 @@ import semgen.SemGenSettings;
 import semgen.annotation.componentlistpanes.buttons.SubmodelButton;
 import semgen.annotation.dialog.TextChangeDialog;
 import semgen.annotation.workbench.AnnotatorWorkbench;
-import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
+import semgen.annotation.workbench.AnnotatorWorkbench.ModelEdit;
 import semgen.annotation.workbench.drawers.SubModelToolDrawer;
 import semgen.utilities.SemGenIcon;
 
@@ -90,13 +90,13 @@ public class SubmodelListPane extends AnnotatorListPane<SubmodelButton, SubModel
 	
 	@Override
 	public void updateUnique(Object arg) {
-		if ((arg == modeledit.smnamechange) || (arg == modeledit.smlistchanged)){
+		if ((arg == ModelEdit.SMNAMECHANGED) || (arg == ModelEdit.SMLISTCHANGED)){
 			update();
 		}
 		if (focusbutton!=null) {
 			removesubmodelbutton.setEnabled(!drawer.isFunctional());
 		}
-		if	(arg==modeledit.submodelchanged) {
+		if	(arg==ModelEdit.SUBMODEL_CHANGED) {
 			refreshChangedButtons();
 		}
 	}

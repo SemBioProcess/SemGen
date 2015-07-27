@@ -8,7 +8,7 @@ import semgen.SemGenSettings;
 import semgen.SemGenSettings.SettingChange;
 import semgen.annotation.componentlistpanes.buttons.CodewordButton;
 import semgen.annotation.workbench.AnnotatorWorkbench;
-import semgen.annotation.workbench.AnnotatorWorkbench.modeledit;
+import semgen.annotation.workbench.AnnotatorWorkbench.ModelEdit;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
 
 public class CodewordListPane extends AnnotatorListPane<CodewordButton, CodewordToolDrawer> {
@@ -62,7 +62,7 @@ public class CodewordListPane extends AnnotatorListPane<CodewordButton, Codeword
 			if (arg==SettingChange.toggleproptype) {
 				toggleMarkers();
 			}
-			if	(arg==modeledit.codewordchanged) {
+			if	(arg==ModelEdit.CODEWORD_CHANGED) {
 				refreshChangedButtons();
 			}
 	}
