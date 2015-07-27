@@ -90,7 +90,7 @@ public class MMLwriter extends ModelWriter{
 			// If going from a CellML file with units not recognized by JSim, declare them in the output
 			else{
 				Boolean testprefixed = false;
-				for(String prefix : sslib.getUnitPrefixes()) {
+				for(String prefix : sslib.getUnitPrefixesAndPowersMap().keySet()) {
 					
 					if(unit.getComputationalCode().startsWith(prefix)){
 						String minusprefix = code.replaceFirst(prefix, "");

@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
@@ -45,7 +46,7 @@ public class SemSimLibrary {
 	// Similar to OPBClassesForUnitsTable, but instead maps Hashtable of {baseunit:exponent} to OPB class.
     private HashMap<HashMap<String, Double>, String[]> OPBClassesForBaseUnitsTable;
 	
-	private Set<String> jsimUnitPrefixesTable;
+	private Map<String, Integer> unitPrefixesAndPowersTable;
 	private Set<String> cellMLUnitsTable;
 	
 	private HashMap<String, PhysicalPropertyinComposite> commonproperties = new HashMap<String, PhysicalPropertyinComposite>();
@@ -70,7 +71,7 @@ public class SemSimLibrary {
 			
 			OPBClassesForUnitsTable = ResourcesManager.createHashMapFromFile("cfg/OPBClassesForUnits.txt");
             OPBClassesForBaseUnitsTable = ResourcesManager.createHashMapFromBaseUnitFile("cfg/OPBClassesForBaseUnits.txt");
-			jsimUnitPrefixesTable = ResourcesManager.createSetFromFile("cfg/jsimUnitPrefixes");
+			unitPrefixesAndPowersTable = makeUnitPrefixesAndPowersTable();
 			cellMLUnitsTable = ResourcesManager.createSetFromFile("cfg/CellMLUnits.txt");
 		} catch (FileNotFoundException e3) {
 			e3.printStackTrace();
@@ -140,10 +141,6 @@ public class SemSimLibrary {
 	
 	public boolean jsimHasUnit(String unit) {
 		return jsimUnitsTable.containsKey(unit);
-	}
-	
-	public Set<String> getUnitPrefixes() {
-		return jsimUnitPrefixesTable;
 	}
 	
 	public String[] getListofMetaDataRelations() {
@@ -323,6 +320,36 @@ public class SemSimLibrary {
 			}
 		}
 		return ontologyAbbreviation;
+	}
+	
+	public Map<String, Integer> makeUnitPrefixesAndPowersTable(){
+		Map<String,Integer> map = new HashMap<String,Integer>();
+		map.put("yotta", 24);
+		map.put("zetta", 21);	
+		map.put("exa", 18);	
+		map.put("peta", 15); 	
+		map.put("tera", 12); 	
+		map.put("giga", 9); 	
+		map.put("mega", 6); 	
+		map.put("kilo", 3); 	
+		map.put("hecto", 2); 	
+		map.put("deka", 1); 	
+		map.put("deca", 1); 	
+		map.put("deci", -1);
+		map.put("centi", -2);
+		map.put("milli", -3);
+		map.put("micro", -6);
+		map.put("nano", -9);
+		map.put("pico", -12);
+		map.put("femto", -15);
+		map.put("atto", -18);
+		map.put("zepto", -21);
+		map.put("yocto", -24);
+		return map;
+	}
+	
+	public Map<String,Integer> getUnitPrefixesAndPowersMap(){
+		return unitPrefixesAndPowersTable;
 	}
 	
 	/**

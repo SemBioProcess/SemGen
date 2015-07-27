@@ -22,6 +22,7 @@ import semsim.reading.MMLreader;
 import semsim.reading.ModelClassifier;
 import semsim.reading.ReferenceTermNamer;
 import semsim.reading.SBMLAnnotator;
+import semsim.reading.SBMLreader;
 import semsim.reading.SemSimOWLreader;
 import semsim.utilities.SemSimUtil;
 import semsim.utilities.webservices.WebserviceTester;
@@ -41,21 +42,20 @@ public class LoadSemSimModel {
 				break;
 					
 			case ModelClassifier.SBML_MODEL:// MML
-				semsimmodel = createModel(file);
-				
+				semsimmodel = new SBMLreader(file).readFromFile();
+								
 				if((semsimmodel==null) || semsimmodel.getErrors().isEmpty() && autoannotate){
 					// If it's an SBML model and we should auto-annotate
-					semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
+					//semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
 					SemGenProgressBar progframe = new SemGenProgressBar("Annotating with web services...",true);
 					boolean online = WebserviceTester.testBioPortalWebservice("Annotation via web services failed.");
 					if(!online) 
 						SemGenError.showWebConnectionError("BioPortal search service");
-					 Hashtable<String, String[]> cache = new  Hashtable<String, String[]>();
-					cache.putAll(SemGen.termcache.getOntTermsandNamesCache());
-					SBMLAnnotator.annotate(file, semsimmodel, online, cache);
 					ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel, SemGen.termcache.getOntTermsandNamesCache(), online);
-					SBMLAnnotator.setFreeTextDefinitionsForDataStructuresAndSubmodels(semsimmodel);
+//					SBMLAnnotator.setFreeTextDefinitionsForDataStructuresAndSubmodels(semsimmodel);
 					progframe.dispose();
+					System.out.println("Name: " + semsimmodel.getName());
+
 				}
 				break;
 				
