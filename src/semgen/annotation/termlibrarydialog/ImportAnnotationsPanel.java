@@ -7,6 +7,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -42,7 +43,7 @@ public class ImportAnnotationsPanel extends JPanel implements ActionListener {
 	
 	private void makePanel() {
 		JPanel loadpane = new JPanel();
-		loadpane.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+		loadpane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 0));
 		loadpane.setAlignmentX(LEFT_ALIGNMENT);
 		loadpane.setBackground(SemGenSettings.lightblue);
 		loadpane.setLayout(new BoxLayout(loadpane, BoxLayout.LINE_AXIS)); 
@@ -62,21 +63,24 @@ public class ImportAnnotationsPanel extends JPanel implements ActionListener {
 		optionpane.setBackground(SemGenSettings.lightblue);
 		optionpane.setAlignmentX(LEFT_ALIGNMENT);
 		optionpane.setLayout(new BoxLayout(optionpane, BoxLayout.PAGE_AXIS));
+		optionpane.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 0));
+
 		JLabel inslbl = new JLabel("Import Options");
 		inslbl.setFont(SemGenFont.defaultBold(1));
 		optionpane.add(inslbl);
 		for (JCheckBox checkbox : checklist) {
 			checkbox.setFont(SemGenFont.defaultPlain());
-			checkbox.setBorder(BorderFactory.createEmptyBorder(2, 10, 0, 0));
+			checkbox.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 			optionpane.add(checkbox);
 		}
 		
+		//importbtn.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 		importbtn.setEnabled(false);
-		optionpane.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-		add(optionpane);
-		optionpane.add(importbtn);
-
 		importbtn.addActionListener(this);
+		optionpane.add(add(Box.createVerticalStrut(15)));
+		optionpane.add(importbtn);
+		add(optionpane);
+
 	}
 
 	private void selectModelFile() {
