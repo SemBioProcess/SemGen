@@ -99,19 +99,33 @@ public abstract class AnnotatorListPane<T extends AnnotationObjectButton, D exte
 	public void keyPressed(KeyEvent e) {
 		int id = e.getKeyCode();
 		int index = btnarray.indexOf(focusbutton);
+		//The scrollpane scrolls scrolls one component short of where it should when the down key is pressed
+		int scrollindex = index; 
 		// Up arrow key
 		if (id == KeyEvent.VK_UP) {
 			index--;
-			if(index==-1) index = btnarray.size()-1;
-			
+			if(index==-1) {
+				index = btnarray.size()-1;	
+				scrollToBottom();
+			}
+			scrollindex = index;
 		}
 		// Down arrow key
 		if (id == KeyEvent.VK_DOWN) {
 			index++;
-			if(index == btnarray.size()) index = 0;
+			if(index == btnarray.size()) {
+				index = 0;
+				scrollToTop();
+			}
+			else {
+				if (index!=btnarray.size()-1) {
+				scrollindex = index+1;
+				}
+				else scrollToBottom();
+			}
 		}
 		changeButtonFocus(btnarray.get(index));
-		scrollToComponent(btnarray.get(index));
+		scrollToComponent(btnarray.get(scrollindex));
 	}
 
 	public void keyReleased(KeyEvent e) {}

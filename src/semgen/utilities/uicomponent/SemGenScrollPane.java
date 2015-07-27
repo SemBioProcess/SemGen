@@ -53,6 +53,14 @@ public class SemGenScrollPane extends JScrollPane implements MouseWheelListener 
 		});
 	}
 	
+	public void scrollToBottom(){
+		SwingUtilities.invokeLater(new Runnable() {
+		   public void run() { 
+		       getVerticalScrollBar().setValue(getVerticalScrollBar().getMaximum());
+		   }
+		});
+	}
+	
 	@Override
 	public void setViewportView(Component view) {
 		super.setViewportView(view);
@@ -69,7 +77,7 @@ public class SemGenScrollPane extends JScrollPane implements MouseWheelListener 
 	}
 	
 	public void scrollToComponent(final JComponent cp){
-		Rectangle rc = cp.getBounds();
+		Rectangle rc = cp.getVisibleRect();
 		cp.scrollRectToVisible(rc);
 	}
 
