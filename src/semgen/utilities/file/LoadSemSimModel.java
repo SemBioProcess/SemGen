@@ -41,12 +41,11 @@ public class LoadSemSimModel {
 					semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
 				break;
 					
-			case ModelClassifier.SBML_MODEL:// MML
+			case ModelClassifier.SBML_MODEL:
 				semsimmodel = new SBMLreader(file).readFromFile();
 								
 				if((semsimmodel==null) || semsimmodel.getErrors().isEmpty() && autoannotate){
-					// If it's an SBML model and we should auto-annotate
-					//semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
+
 					SemGenProgressBar progframe = new SemGenProgressBar("Annotating with web services...",true);
 					boolean online = WebserviceTester.testBioPortalWebservice("Annotation via web services failed.");
 					if(!online) 
@@ -54,7 +53,6 @@ public class LoadSemSimModel {
 					ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel, SemGen.termcache.getOntTermsandNamesCache(), online);
 //					SBMLAnnotator.setFreeTextDefinitionsForDataStructuresAndSubmodels(semsimmodel);
 					progframe.dispose();
-					System.out.println("Name: " + semsimmodel.getName());
 
 				}
 				break;

@@ -94,13 +94,13 @@ public class BioPortalSearcher {
 	        conn.setRequestProperty("Authorization", "apikey token=" + SemSimConstants.BIOPORTAL_API_KEY);
 	        conn.setRequestProperty("Accept", "application/json");
 			conn.setReadTimeout(60000); // Timeout after a minute
-
+			
 	        rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 	        while ((line = rd.readLine()) != null) {
 	            result += line;
 	        }
 	        rd.close();
-	        
+	        	        
 	        // process resulting input stream
             JsonNode root = SemSimConstants.JSON_OBJECT_MAPPER.readTree(result);
             JsonNode labelnode = root.get("prefLabel");
