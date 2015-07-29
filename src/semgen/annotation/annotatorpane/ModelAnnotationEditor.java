@@ -54,30 +54,12 @@ public class ModelAnnotationEditor extends JPanel implements Observer {
 		focusOnSelection();
 	}
 	
-	private void makeDescriptionsUniform() {
-		int descsize;
-		int largest = 0;
-		for (ModelAnnPanel pan : annpanels) {
-			descsize = pan.getDescriptionWidth();
-			if (descsize>largest) largest = descsize;
-		}
-		for (ModelAnnPanel pan : annpanels) {
-			pan.setDescriptionWidth(largest);
-		}
-		validate();
-		repaint();
-	}
-	
 	private void setMetadataValue(AnnTextPanel panel, String value) {
 		metadatabench.setMetadataValuebyIndex(annpanels.indexOf(panel), value);
 	}
 	
 	private void focusOnSelection() {
-		giveFocus(metadatabench.getFocusIndex());
-	}
-	
-	private void giveFocus(int index) {
-		annpanels.get(index).giveFocus();
+		annpanels.get(metadatabench.getFocusIndex()).giveFocus();
 	}
 	
 	@Override
@@ -85,17 +67,20 @@ public class ModelAnnotationEditor extends JPanel implements Observer {
 		if (arg1 == ModelChangeEnum.METADATASELECTED) {
 			focusOnSelection();
 		}
+		if (arg1 == ModelChangeEnum.METADATAIMPORTED) {
+			for (ModelAnnPanel box : annpanels) {
+				box.updateValue();
+			}
+		}
 	}
 	
 	private abstract class ModelAnnPanel extends JPanel {
 		private static final long serialVersionUID = 1L;
-		protected boolean wasedited = false;
 		protected JLabel description;
 		
 		protected ModelAnnPanel(String title) {
 			setBackground(SemGenSettings.lightblue);
 			addMouseListener(new MAPMouseAdapter());
-			addKeyListener(new MAPKeyboardListener());
 			setLayout(new BorderLayout(0,0));
 			description = new JLabel(title);
 			description.setBorder(BorderFactory.createEmptyBorder(0, 7, 0, 7));
@@ -104,6 +89,7 @@ public class ModelAnnotationEditor extends JPanel implements Observer {
 		}
 		public abstract void giveFocus();
 		public abstract void removeFocus();
+		public abstract void updateValue();
 		
 		protected class MAPMouseAdapter extends MouseAdapter{
 			@Override
@@ -117,43 +103,16 @@ public class ModelAnnotationEditor extends JPanel implements Observer {
 		private void setMetadataIndex() {
 			metadatabench.setMetadataSelectionIndex(annpanels.indexOf(this));
 		}
-		
-		protected int getDescriptionWidth() {
-			return description.getWidth();
-		}
-		
-		protected void setDescriptionWidth(int width) {
-			description.setSize(width, description.getHeight());
-			validate();
-			repaint();
-		}
-		
+				
 		protected class MAPFocusListener implements FocusListener {
 			@Override
 			public void focusGained(FocusEvent e) {
-				giveFocus();
+				
 			}
 
 			@Override
 			public void focusLost(FocusEvent e) {
 				removeFocus();
-			}
-		}
-		
-		protected class MAPKeyboardListener implements KeyListener {
-			@Override
-			public void keyPressed(KeyEvent arg0) {
-
-			}
-
-			@Override
-			public void keyReleased(KeyEvent arg0) {
-
-			}
-
-			@Override
-			public void keyTyped(KeyEvent arg0) {
-				wasedited = true;
 			}
 		}
 	}
@@ -164,9 +123,9 @@ public class ModelAnnotationEditor extends JPanel implements Observer {
 		
 		AnnTextPanel(String title) {
 			super(title);
-			//textbox.addFocusListener(new MAPFocusListener());
+			textbox.addFocusListener(new MAPFocusListener());
 			textbox.addMouseListener(new MAPMouseAdapter());
-			textbox.addKeyListener(new MAPKeyboardListener());
+			textbox.addKeyListener(new MAPKeyboardListener(this));
 			add(textbox);
 		}
 		
@@ -180,15 +139,39 @@ public class ModelAnnotationEditor extends JPanel implements Observer {
 		
 		public void giveFocus() {
 			setBackground(new Color(255,231,186));
-			textbox.requestFocus();
+			textbox.requestFocusInWindow();
 			textbox.select(0, textbox.getText().length());
 		}
 		
 		public void removeFocus() {
 			setBackground(SemGenSettings.lightblue);
-			if (wasedited) {
-				setMetadataValue(this, getText());
+		}
+		
+		protected class MAPKeyboardListener implements KeyListener {
+			AnnTextPanel target;
+			
+			protected MAPKeyboardListener(AnnTextPanel targ) {
+				target = targ;
 			}
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				setMetadataValue(target, target.getText());
+			}
+
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				
+			}
+		}
+
+		@Override
+		public void updateValue() {
+			setText(metadatabench.getMetadataValuebyIndex(annpanels.indexOf(this)));
 		}
 	}
 }

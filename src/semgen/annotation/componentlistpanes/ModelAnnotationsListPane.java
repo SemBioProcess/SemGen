@@ -97,6 +97,11 @@ public class ModelAnnotationsListPane extends SemGenScrollPane implements Observ
 			if (index==0) createBorder(metadatabench.getFullModelName());
 			metadataarray.get(index).setIndicator(metadatabench.focusHasValue());
 		}
+		if (arg1 == ModelAnnotationsBench.ModelChangeEnum.METADATAIMPORTED) {
+			for (MetadataBox box : metadataarray) {
+				box.setIndicator(metadatabench.metadataHasValue(metadataarray.indexOf(box)));
+			}
+		}
 	}
 	
 	private void assignFocus() {

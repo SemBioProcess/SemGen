@@ -123,6 +123,10 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 		return metadata;
 	}
 	
+	public void importCurationalMetadatafromModel(SemSimModel toimport, boolean overwrite) {
+		metadata.importMetadata(toimport.metadata, overwrite);
+	}
+	
 	/**
 	 * Add an error to the model. Errors are just string notifications indicating a 
 	 * problem with the model

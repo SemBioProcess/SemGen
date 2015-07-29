@@ -33,11 +33,15 @@ public class AnnotationImporter {
 		library.addTermsinModel(importedmodel);
 		boolean changed = false;
 		if (options[0]) {
-			importCodewords();
+			importingmodel.importCurationalMetadatafromModel(importedmodel, true);
+			changed = true;
+		}
+		if (options[1]) {
+			if (importCodewords()) changed = true;
 		}
 		
-		if (options[1]) {
-			if (copySubmodels()) changed=true;
+		if (options[2]) {
+			if (copySubmodels()) changed = true;
 		}
 		return changed;
 	}

@@ -56,6 +56,7 @@ public class ImportAnnotationsPanel extends JPanel implements ActionListener {
 		
 		add(loadpane);
 		
+		checklist.add(new JCheckBox("Import model level annotations", true));
 		checklist.add(new JCheckBox("Import annotations for codewords with the same name", true));
 		checklist.add(new JCheckBox("Import annotations for submodels with the same name", true));
 		
@@ -114,9 +115,6 @@ public class ImportAnnotationsPanel extends JPanel implements ActionListener {
 		}
 		
 		if (obj.equals(importbtn)) {
-			
-			
-			
 			doCopy();
 		}
 	}

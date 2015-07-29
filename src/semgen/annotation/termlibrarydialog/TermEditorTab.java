@@ -196,6 +196,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Ance
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		if (arg1==ModelEdit.CODEWORD_CHANGED || arg1==ModelEdit.PROPERTY_CHANGED || arg1==ModelEdit.COMPOSITE_CHANGED) {
+			if (affected==null) return;
 			int i = affected.getTermLibraryIndex();
 			if (!library.isTerm(i)) {
 				affected = null;

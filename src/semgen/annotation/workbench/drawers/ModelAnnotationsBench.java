@@ -20,7 +20,7 @@ public class ModelAnnotationsBench extends Observable {
 	Set<Annotation> annotations;
 	int focusindex = -1;
 		
-	public static enum ModelChangeEnum {SOURCECHANGED, METADATACHANGED, METADATASELECTED};
+	public static enum ModelChangeEnum {SOURCECHANGED, METADATACHANGED, METADATASELECTED, METADATAIMPORTED};
 	
 	public ModelAnnotationsBench(SemSimModel ssm) {
 		model = ssm;
@@ -107,7 +107,16 @@ public class ModelAnnotationsBench extends Observable {
 		return focusindex != -1;
 	}
 	
+	public void notifyMetaDataImported() {
+		setChanged();
+		notifyObservers(ModelChangeEnum.METADATAIMPORTED);
+	}
+	
 	public boolean focusHasValue() {
 		return metadata.hasAnnotationValue(metadatalist.get(focusindex));
+	}
+	
+	public boolean metadataHasValue(int index) {
+		return metadata.hasAnnotationValue(metadatalist.get(index));
 	}
 }
