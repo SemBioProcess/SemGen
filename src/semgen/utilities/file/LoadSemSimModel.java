@@ -2,7 +2,6 @@ package semgen.utilities.file;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Hashtable;
 
 import javax.swing.JOptionPane;
 
@@ -21,7 +20,6 @@ import semsim.reading.MMLParser;
 import semsim.reading.MMLreader;
 import semsim.reading.ModelClassifier;
 import semsim.reading.ReferenceTermNamer;
-import semsim.reading.SBMLAnnotator;
 import semsim.reading.SBMLreader;
 import semsim.reading.SemSimOWLreader;
 import semsim.utilities.SemSimUtil;
@@ -50,7 +48,7 @@ public class LoadSemSimModel {
 					boolean online = WebserviceTester.testBioPortalWebservice("Annotation via web services failed.");
 					if(!online) 
 						SemGenError.showWebConnectionError("BioPortal search service");
-					ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel, SemGen.termcache.getOntTermsandNamesCache(), online);
+					//ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel, SemGen.termcache.getOntTermsandNamesCache(), online);
 //					SBMLAnnotator.setFreeTextDefinitionsForDataStructuresAndSubmodels(semsimmodel);
 					progframe.dispose();
 

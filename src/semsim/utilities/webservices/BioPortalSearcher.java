@@ -3,6 +3,7 @@ package semsim.utilities.webservices;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -84,9 +85,10 @@ public class BioPortalSearcher {
 			System.out.println("Looking up " + id);
 			URL url = new URL(
 					"http://data.bioontology.org/ontologies/" + bioportalontID + "/classes/" + id);
+//			
+//			URL url = new URL("http://data.bioontology.org/ontologies/GO/classes/GO_0000162");
 			System.out.println(url);
 	        HttpURLConnection conn;
-	        BufferedReader rd;
 	        String line;
 	        String result = "";
 	        conn = (HttpURLConnection) url.openConnection();
@@ -95,17 +97,29 @@ public class BioPortalSearcher {
 	        conn.setRequestProperty("Accept", "application/json");
 			conn.setReadTimeout(60000); // Timeout after a minute
 			
-	        rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			InputStream is;
+            boolean error = false;
+            if (conn.getResponseCode() >= 200 && conn.getResponseCode() < 400) {
+                is = conn.getInputStream();
+            } else {
+                error = true;
+                is = conn.getErrorStream();
+            }
+            
+	        BufferedReader rd = new BufferedReader(new InputStreamReader(is));
 	        while ((line = rd.readLine()) != null) {
 	            result += line;
 	        }
 	        rd.close();
-	        	        
-	        // process resulting input stream
-            JsonNode root = SemSimConstants.JSON_OBJECT_MAPPER.readTree(result);
-            JsonNode labelnode = root.get("prefLabel");
-            if(labelnode!=null)
-            	label = labelnode.textValue();
+	        	      
+	        if (error) System.err.println(result);
+	        else {
+		        // process resulting input stream
+	            JsonNode root = SemSimConstants.JSON_OBJECT_MAPPER.readTree(result);
+	            JsonNode labelnode = root.get("prefLabel");
+	            if(labelnode!=null)
+	            	label = labelnode.textValue();
+	        }
 		}
         catch (Exception e) {
 			e.printStackTrace();

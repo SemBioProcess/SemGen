@@ -923,7 +923,10 @@ public class CellMLreader extends ModelReader {
 			if(con instanceof Element){
 				Element conel = (Element)con;
 				if(conel.getName().equals("ci")){
-					String inputname = compname + "." + conel.getText().trim();
+					
+					// If the component name isn't specified, use a blank prefix, otherwise use the component name
+					String prefix = (compname==null || compname.equals("")) ? "" : compname + ".";
+					String inputname = prefix + conel.getText().trim();
 					
 					// If the input and output are not the same DataStructure...
 					if(! inputname.equals(cvar.getName())){
