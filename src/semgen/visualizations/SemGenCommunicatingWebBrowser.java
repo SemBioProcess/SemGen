@@ -2,20 +2,13 @@ package semgen.visualizations;
 
 import javax.naming.InvalidNameException;
 
-import semgen.SemGen;
-
 import com.teamdev.jxbrowser.chromium.LoggerProvider;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.logging.*;
 
 public class SemGenCommunicatingWebBrowser extends CommunicatingWebBrowser<SemGenWebBrowserCommandSender> {
-	private static final long serialVersionUID = 1L;
-	
 	// Stage html in resource dir
 	private final static String StageHtml = "cfg/stage/stage.html?testMode=false";
 	

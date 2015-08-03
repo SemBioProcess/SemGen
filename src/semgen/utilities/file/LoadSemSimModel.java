@@ -2,7 +2,6 @@ package semgen.utilities.file;
 
 import java.io.File;
 import java.io.IOException;
-
 import javax.swing.JOptionPane;
 
 import org.jdom.Document;
@@ -48,7 +47,7 @@ public class LoadSemSimModel {
 					boolean online = WebserviceTester.testBioPortalWebservice("Annotation via web services failed.");
 					if(!online) 
 						SemGenError.showWebConnectionError("BioPortal search service");
-					//ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel, SemGen.termcache.getOntTermsandNamesCache(), online);
+					ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel, SemGen.termcache.getOntTermsandNamesCache(), online);
 //					SBMLAnnotator.setFreeTextDefinitionsForDataStructuresAndSubmodels(semsimmodel);
 					progframe.dispose();
 

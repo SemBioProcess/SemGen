@@ -49,7 +49,6 @@ import com.teamdev.jxbrowser.chromium.events.LoadAdapter;
  *
  * @param <TSender> - Type of interface used as a contract for communication between java and javascript
  */
-@SuppressWarnings("serial")
 public class CommunicatingWebBrowser<TSender> extends Browser {
 	
 	// Name of the variable in javascript that receives commands

@@ -1,17 +1,18 @@
 package semgen.utilities.uicomponent;
 
-import java.awt.Component;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JToolBar;
-
 import semgen.SemGenSettings;
 import semgen.utilities.SemGenFont;
 
@@ -52,29 +53,63 @@ public class SemGenTabToolbar extends JToolBar {
 			setRolloverEnabled(true);
 			setPreferredSize(new Dimension(30, 30));
 			setAlignmentY(JButton.TOP_ALIGNMENT);
-			addMouseListener(new btnbehavior());
+			addMouseListener(new btnbehavior(this));
 		}
 		
 		private class btnbehavior extends MouseAdapter {
+			AbstractButton button;
+			public btnbehavior(AbstractButton btn) {
+				button = btn;
+			}
 			public void mouseEntered(MouseEvent e) {
-				Component component = e.getComponent();
-				if (component instanceof AbstractButton) {
-					AbstractButton button = (AbstractButton) component;
-					button.setBorderPainted(true);
-					button.setContentAreaFilled(true);
-					button.setOpaque(true);
+				mouseGraphics(button, true);
+			}
+
+			public void mouseExited(MouseEvent e) {
+				mouseGraphics(button, false);
+			}
+		}
+	}
+	protected class SemGenToolbarRadioButton extends JRadioButton {
+		private static final long serialVersionUID = 1L;
+
+		public SemGenToolbarRadioButton(ImageIcon icon) {
+			super(icon);
+			
+			setSize(new Dimension(30, 30));
+			setRolloverEnabled(true);
+			setPreferredSize(new Dimension(30, 30));
+			setAlignmentY(JButton.TOP_ALIGNMENT);
+			addMouseListener(new btnbehavior(this));
+			setBorder(BorderFactory.createLineBorder(Color.BLUE));
+		}
+		
+		public void toggleSelectionGraphic() {
+			this.setBorderPainted(isSelected());
+		}
+		
+		private class btnbehavior extends MouseAdapter {
+			AbstractButton button;
+			public btnbehavior(AbstractButton btn) {
+				button = btn;
+			}
+			public void mouseEntered(MouseEvent e) {
+				if (!isSelected()) {
+					mouseGraphics(button, true);
 				}
 			}
 
 			public void mouseExited(MouseEvent e) {
-				Component component = e.getComponent();
-				if (component instanceof AbstractButton) {
-					AbstractButton button = (AbstractButton) component;
-					button.setBorderPainted(false);
-					button.setContentAreaFilled(false);
-					button.setOpaque(false);
+				if (!isSelected()) {
+					mouseGraphics(button, false);
 				}
 			}
 		}
+	}
+	
+	private void mouseGraphics(AbstractButton button, boolean dostuff) {
+		button.setBorderPainted(dostuff);
+		button.setContentAreaFilled(dostuff);
+		button.setOpaque(dostuff);
 	}
 }

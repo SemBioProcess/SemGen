@@ -13,7 +13,6 @@ import semgen.extraction.workbench.ExtractorFactory;
 import semgen.menu.SemGenMenuBar;
 import semgen.merging.MergerTabFactory;
 import semgen.merging.workbench.MergerWorkbenchFactory;
-import semgen.stage.StageTab;
 import semgen.stage.StageTabFactory;
 import semgen.stage.StageWorkbenchFactory;
 import semgen.utilities.SemGenTask;
