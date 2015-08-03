@@ -15,7 +15,7 @@ public class OntologyCache {
 	
 	public OntologyCache() {
 		try {
-			ontologyTermsAndNamesCache = ResourcesManager.createHashMapFromFile("cfg/ontologyTermsAndNamesCache.txt");
+			ontologyTermsAndNamesCache = ResourcesManager.createHashMapFromFile("cfg/ontologyTermsAndNamesCache.txt", false);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

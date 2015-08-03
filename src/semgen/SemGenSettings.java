@@ -36,7 +36,7 @@ public class SemGenSettings extends Observable{
 	
 	public SemGenSettings() {
 		try {
-			startsettingstable = ResourcesManager.createHashMapFromFile("cfg/startSettings.txt");
+			startsettingstable = ResourcesManager.createHashMapFromFile("cfg/startSettings.txt", true);
 		} 
 		catch (FileNotFoundException e3) {
 				e3.printStackTrace();

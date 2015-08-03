@@ -65,11 +65,11 @@ public class SemSimLibrary {
 	private void loadLibrary() {
 		try {
 			loadCommonProperties();
-			compositeAnnRelationsTable = ResourcesManager.createHashMapFromFile("cfg/structuralRelations.txt");
-			metadataRelationsTable = ResourcesManager.createHashMapFromFile("cfg/metadataRelations.txt");
-			jsimUnitsTable = ResourcesManager.createHashMapFromFile("cfg/jsimUnits");
+			compositeAnnRelationsTable = ResourcesManager.createHashMapFromFile("cfg/structuralRelations.txt", true);
+			metadataRelationsTable = ResourcesManager.createHashMapFromFile("cfg/metadataRelations.txt", true);
+			jsimUnitsTable = ResourcesManager.createHashMapFromFile("cfg/jsimUnits", true);
 			
-			OPBClassesForUnitsTable = ResourcesManager.createHashMapFromFile("cfg/OPBClassesForUnits.txt");
+			OPBClassesForUnitsTable = ResourcesManager.createHashMapFromFile("cfg/OPBClassesForUnits.txt", true);
             OPBClassesForBaseUnitsTable = ResourcesManager.createHashMapFromBaseUnitFile("cfg/OPBClassesForBaseUnits.txt");
 			unitPrefixesAndPowersTable = makeUnitPrefixesAndPowersTable();
 			cellMLUnitsTable = ResourcesManager.createSetFromFile("cfg/CellMLUnits.txt");
@@ -98,7 +98,7 @@ public class SemSimLibrary {
 	}
 	
 	private void loadCommonProperties() throws FileNotFoundException {
-		HashMap<String, String[]> ptable = ResourcesManager.createHashMapFromFile("cfg/CommonProperties.txt");
+		HashMap<String, String[]> ptable = ResourcesManager.createHashMapFromFile("cfg/CommonProperties.txt", true);
 		for (String s : ptable.keySet()) {
 			this.commonproperties.put(s, new PhysicalPropertyinComposite(ptable.get(s)[0], URI.create(s)));
 		}

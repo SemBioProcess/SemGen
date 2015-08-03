@@ -43,14 +43,18 @@ public class LoadSemSimModel {
 								
 				if((semsimmodel==null) || semsimmodel.getErrors().isEmpty() && autoannotate){
 
-					SemGenProgressBar progframe = new SemGenProgressBar("Annotating with web services...",true);
+					//SemGenProgressBar progframe = new SemGenProgressBar("Annotating with web services...",true);
 					boolean online = WebserviceTester.testBioPortalWebservice("Annotation via web services failed.");
-					if(!online) 
+					
+					if(!online){
+						//progframe.dispose();
 						SemGenError.showWebConnectionError("BioPortal search service");
-					ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel, SemGen.termcache.getOntTermsandNamesCache(), online);
-//					SBMLAnnotator.setFreeTextDefinitionsForDataStructuresAndSubmodels(semsimmodel);
-					progframe.dispose();
-
+					}
+					else{
+						ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel, SemGen.termcache.getOntTermsandNamesCache(), online);
+	//					SBMLAnnotator.setFreeTextDefinitionsForDataStructuresAndSubmodels(semsimmodel);
+						//progframe.dispose();
+					}
 				}
 				break;
 				
