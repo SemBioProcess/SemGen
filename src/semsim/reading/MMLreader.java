@@ -133,10 +133,11 @@ public class MMLreader extends ModelReader {
 
 				// Store the data type attribute
 				String vardatatype = varchild.getAttributeValue("dataType");
-				if (vardatatype.equals("real"))  ds = semsimmodel.addDataStructure(new Decimal(codeword));
-				else if (vardatatype.equals("int")) ds = semsimmodel.addDataStructure(new SemSimInteger(codeword));
-				else if(vardatatype.equals("choice")) ds = semsimmodel.addDataStructure(new MMLchoice(codeword));
+				if (vardatatype.equals("real"))  ds = new Decimal(codeword);
+				else if (vardatatype.equals("int")) ds = new SemSimInteger(codeword);
+				else if(vardatatype.equals("choice")) ds = new MMLchoice(codeword);
 				
+				semsimmodel.addDataStructure(ds);
 				if(codeword.contains(":") || codeword.endsWith("__init")) ds.setDeclared(false);
 				else ds.setDeclared(true);
 				

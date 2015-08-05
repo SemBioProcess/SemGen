@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.*;
  * to define the physical meaning of a SemSim model or model component, 
  * identify model authors, link a model to its PubMed ID, etc.
  */
-public class Annotation implements Cloneable{
+public class Annotation {
 	
 	protected String valueDescription;
 	protected SemSimRelation relation;
@@ -37,6 +37,14 @@ public class Annotation implements Cloneable{
 		this.relation = relation;
 		setValue(value);
 		setValueDescription(valueDescription);
+	}
+	/**
+	 * Copy Constructor
+	 */
+	public Annotation(Annotation tocopy) {
+		valueDescription = new String(tocopy.valueDescription);
+		relation = tocopy.relation;
+		value = tocopy.value;
 	}
 	
 	/**

@@ -293,17 +293,18 @@ public class SemSimOWLreader extends ModelReader {
 								&& SemSimOWLFactory.getIndDatatypeProperty(ont, dsind, SemSimConstants.CELLML_INITIAL_VALUE_URI.toString()).isEmpty()
 								&& SemSimOWLFactory.getIndObjectProperty(ont, dsind, SemSimConstants.MAPPED_TO_URI.toString()).isEmpty()
 								&& !SemSimOWLFactory.getIndObjectProperty(ont, dsind, SemSimConstants.IS_OUTPUT_FOR_URI.toString()).isEmpty()){
-							ds = semsimmodel.addDataStructure(new Decimal(name));
+							ds = new Decimal(name);
 						}
 						else
-							ds = semsimmodel.addDataStructure(new MappableVariable(name));
+							ds = new MappableVariable(name);
 					}
 					// If an integer
 					if(SemSimOWLFactory.indExistsInClass(dsind, SemSimConstants.SEMSIM_INTEGER_CLASS_URI.toString(), ont))
-						ds = semsimmodel.addDataStructure(new SemSimInteger(name));
+						ds = new SemSimInteger(name);
 					// If an MML choice variable
 					if(SemSimOWLFactory.indExistsInClass(dsind, SemSimConstants.MML_CHOICE_CLASS_URI.toString(), ont))
-						ds = semsimmodel.addDataStructure(new MMLchoice(name));
+						ds = new MMLchoice(name);
+					semsimmodel.addDataStructure(ds);
 					if(!compcode.equals("")) ds.getComputation().setComputationalCode(compcode);
 					if(!mathml.equals("")) ds.getComputation().setMathML(mathml);
 					if(!description.equals("")) ds.setDescription(description);

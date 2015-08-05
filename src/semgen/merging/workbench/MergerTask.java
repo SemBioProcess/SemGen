@@ -25,12 +25,9 @@ public class MergerTask extends SemGenTask {
 			ModelOverlapMap modelmap,HashMap<String, String> dsnamemap, HashMap<String,String> smnamemap, ArrayList<ResolutionChoice> choices, 
 			ArrayList<Pair<Double,String>> conversions, SemGenProgressBar bar) {
 		overlapmap = modelmap;
-		try {
-			ssm1clone = modelpair.getLeft().clone();
-			ssm2clone = modelpair.getRight().clone();
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
-		}
+		ssm1clone = modelpair.getLeft().clone();
+		ssm2clone = modelpair.getRight().clone();
+
 		cwnamemap = dsnamemap;
 		submodnamemap = smnamemap;
 		choicelist = choices;

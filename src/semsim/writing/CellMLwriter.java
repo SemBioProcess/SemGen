@@ -31,6 +31,7 @@ import com.hp.hpl.jena.rdf.model.Statement;
 
 import semsim.CellMLconstants;
 import semsim.SemSimConstants;
+import semsim.SemSimObject;
 import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata;
@@ -429,7 +430,7 @@ public class CellMLwriter extends ModelWriter {
 	}
 	
 	// Add RDF-formatted semantic metadata for an annotated data structure or submodel 
-	public void createRDFforAnnotatedThing(SemSimComponent annotated, String idprefix, Element el, String freetext){
+	public void createRDFforAnnotatedThing(SemSimObject annotated, String idprefix, Element el, String freetext){
 		if(annotated instanceof Annotatable){
 			Annotatable a = (Annotatable) annotated;
 			
@@ -493,7 +494,7 @@ public class CellMLwriter extends ModelWriter {
 		}
 	}
 	
-	private String createMetadataIDandSetNSPrefixes(SemSimComponent annotated, String idprefix, Element el) {
+	private String createMetadataIDandSetNSPrefixes(SemSimObject annotated, String idprefix, Element el) {
 		String metaid = annotated.getMetadataID();
 		// Create metadata ID for the model element, cache locally
 		if(metaid.isEmpty()){

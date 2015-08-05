@@ -10,9 +10,17 @@ import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.SemSimRelation;
 import semsim.model.SemSimComponent;
 import semsim.model.SemSimTypes;
+import semsim.utilities.SemSimCopy;
 
-public abstract class PhysicalModelComponent extends SemSimComponent implements Annotatable, Cloneable{
+public abstract class PhysicalModelComponent extends SemSimComponent implements Annotatable {
 	private Set<Annotation> annotations = new HashSet<Annotation>();
+	
+	public PhysicalModelComponent() {}
+	
+	public PhysicalModelComponent(PhysicalModelComponent pmctocopy) {
+		super(pmctocopy);
+		annotations = SemSimCopy.copyAnnotations(pmctocopy.getAnnotations());
+	}
 	
 	// Required by annotable interface:
 	public Set<Annotation> getAnnotations() {

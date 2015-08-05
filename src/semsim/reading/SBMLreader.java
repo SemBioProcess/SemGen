@@ -200,7 +200,8 @@ public class SBMLreader extends ModelReader{
 			// units 
 			// volume
 			
-			DataStructure ds = semsimmodel.addDataStructure(new Decimal(compid));
+			DataStructure ds = new Decimal(compid);
+			semsimmodel.addDataStructure(ds);
 			String mathml = "<cn>" + sbmlc.getSize() + "</cn>";
 			ds.getComputation().setMathML(mathml);
 			ds.getComputation().setComputationalCode(compid + " = " + Double.toString(sbmlc.getSize()));
@@ -238,7 +239,8 @@ public class SBMLreader extends ModelReader{
 		
 		for(int s=0; s<sbmlmodel.getListOfSpecies().size(); s++){
 			Species species = sbmlmodel.getSpecies(s);
-			DataStructure ds = semsimmodel.addDataStructure(new Decimal(species.getId()));
+			DataStructure ds = new Decimal(species.getId());
+			semsimmodel.addDataStructure(ds);
 			
 			// Deal with equations for species concentration/amount here
 			
@@ -287,7 +289,8 @@ public class SBMLreader extends ModelReader{
 		
 		for(int p=0; p<sbmlmodel.getListOfParameters().size(); p++){
 			Parameter sbmlpar = sbmlmodel.getParameter(p);
-			DataStructure ds = semsimmodel.addDataStructure(new Decimal(sbmlpar.getId()));
+			DataStructure ds = new Decimal(sbmlpar.getId());
+			semsimmodel.addDataStructure(ds);
 			
 			UnitOfMeasurement unitforpar = unitDefintionsAndSemSimUnitsMap.get(sbmlpar.getUnits());
 			ds.setUnit(unitforpar);
@@ -316,7 +319,10 @@ public class SBMLreader extends ModelReader{
 			DataStructure ds = null;
 			if(semsimmodel.containsDataStructure(varname)) 
 				ds = semsimmodel.getAssociatedDataStructure(varname);
-			else ds = semsimmodel.addDataStructure(new Decimal(varname));
+			else {
+				ds = new Decimal(varname); 
+				semsimmodel.addDataStructure(ds);
+			}
 			
 			ds.getComputation().setComputationalCode(varname + " = " + sbmlrule.getFormula());
 			String mathmlstring = libsbml.formulaToString(sbmlrule.getMath());
@@ -331,7 +337,8 @@ public class SBMLreader extends ModelReader{
 		
 		for(int r=0; r<sbmlmodel.getListOfReactions().size(); r++){
 			Reaction reaction = sbmlmodel.getReaction(r);
-			DataStructure ds = semsimmodel.addDataStructure(new Decimal(reaction.getId()));
+			DataStructure ds = new Decimal(reaction.getId());
+			semsimmodel.addDataStructure(ds);
 			
 			KineticLaw kineticlaw = reaction.getKineticLaw();
 			

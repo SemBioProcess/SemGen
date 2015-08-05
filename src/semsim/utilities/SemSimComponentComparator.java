@@ -2,10 +2,10 @@ package semsim.utilities;
 
 import java.util.Comparator;
 
-import semsim.model.SemSimComponent;
+import semsim.SemSimObject;
 
-public class SemSimComponentComparator implements Comparator<SemSimComponent>{
-	public int compare(SemSimComponent A, SemSimComponent B) {
+public class SemSimComponentComparator implements Comparator<SemSimObject>{
+	public int compare(SemSimObject A, SemSimObject B) {
 	    return A.getName().compareToIgnoreCase(B.getName());
 	  }
 }

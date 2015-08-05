@@ -10,11 +10,11 @@ import java.util.Set;
 import org.jdom.JDOMException;
 
 import semsim.SemSimConstants;
+import semsim.SemSimObject;
 import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
-import semsim.model.SemSimComponent;
 import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
@@ -42,7 +42,7 @@ public class ReferenceTermNamer {
 		// then see if they are missing their Descriptions. Retrieve description from web services
 		// or the local cache
 		if(online){
-			for(SemSimComponent ssc : model.getAllModelComponents()){
+			for(SemSimObject ssc : model.getAllModelComponents()){
 				if(ssc instanceof Annotatable){
 
 					Annotatable annthing = (Annotatable)ssc;

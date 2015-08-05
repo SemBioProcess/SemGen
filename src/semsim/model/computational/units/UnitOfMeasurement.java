@@ -17,9 +17,9 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 	private Set<Annotation> annotations = new HashSet<Annotation>();
 	private String computationalCode;
 	private String customDeclaration;
-	private boolean isFundamental = false;
 	private Set<UnitFactor> unitFactors = new HashSet<UnitFactor>();
 	
+	private boolean isFundamental = false;
 	private boolean isImported = false;
 	private String hrefValue;
 	private String referencedName;
@@ -32,6 +32,21 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 		setComputationalCode(name);
 	}
 	
+	/**
+	 * Copy constructor
+	 * @param uomtocopy
+	 */
+	public UnitOfMeasurement(UnitOfMeasurement uomtocopy) {
+		setName(new String(uomtocopy.getName()));
+		computationalCode = new String(uomtocopy.computationalCode);
+		customDeclaration = new String(uomtocopy.customDeclaration);
+		isFundamental = uomtocopy.isFundamental;
+		isFundamental = uomtocopy.isImported;
+		parentImport = uomtocopy.parentImport;
+		referencedName = uomtocopy.referencedName;
+		localName = uomtocopy.localName;
+		unitType = uomtocopy.unitType;
+	}
 	public void addUnitFactor(UnitFactor factor){
 		unitFactors.add(factor);
 	}

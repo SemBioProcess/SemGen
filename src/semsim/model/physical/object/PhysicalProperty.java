@@ -16,7 +16,6 @@ public class PhysicalProperty extends PhysicalModelComponent implements Referenc
 		setName(label);
 	}
 
-	
 	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotation(){
 		if(hasRefersToAnnotation()){
 			return new ReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, referenceuri, getDescription());

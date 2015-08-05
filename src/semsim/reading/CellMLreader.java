@@ -33,6 +33,7 @@ import com.hp.hpl.jena.rdf.model.Statement;
 
 import semsim.CellMLconstants;
 import semsim.SemSimConstants;
+import semsim.SemSimObject;
 import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata;
 import semsim.annotation.CurationalMetadata.Metadata;
@@ -607,7 +608,7 @@ public class CellMLreader extends ModelReader {
 	
 	
 	// Collect the reference ontology term used to describe the model component
-	private URI collectSingularBiologicalAnnotation(Document doc, SemSimComponent toann, Element el){
+	private URI collectSingularBiologicalAnnotation(Document doc, SemSimObject toann, Element el){
 		// Look for rdf markup as child of element
 		Element mainrdfel = el.getChild("RDF", CellMLconstants.rdfNS);
 		// If not present, look for it in main RDF block

@@ -12,6 +12,7 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 	protected PhysicalProcess() {}
 	
 	public PhysicalProcess(PhysicalProcess processtocopy) {
+		super(processtocopy);
 		setSources(processtocopy.getSources());
 		setSinks(processtocopy.getSinks());
 		setMediators(processtocopy.getMediators());

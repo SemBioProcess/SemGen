@@ -12,6 +12,12 @@ public class UnitFactor{
 		setPrefix(prefix);
 	}
 
+	public UnitFactor(UnitFactor uftocopy) {
+		exponent = uftocopy.exponent;
+		prefix = new String(uftocopy.prefix);
+		multiplier = uftocopy.multiplier;
+	}
+	
 	public UnitOfMeasurement getBaseUnit() {
 		return baseUnit;
 	}

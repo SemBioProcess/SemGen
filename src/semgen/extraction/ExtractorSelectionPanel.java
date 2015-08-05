@@ -27,8 +27,8 @@ import semgen.utilities.ComparatorByName;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenScrollPane;
+import semsim.SemSimObject;
 import semsim.annotation.ReferenceTerm;
-import semsim.model.SemSimComponent;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalModelComponent;
 
@@ -39,14 +39,14 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 	public JPanel checkboxpanel = new JPanel();
 	public SemGenScrollPane scroller;
 
-	public Map<? extends SemSimComponent,Set<DataStructure>> termandcdwdsmap;
+	public Map<? extends SemSimObject,Set<DataStructure>> termandcdwdsmap;
 	public Map<String, JCheckBox> termandcheckboxmap = new HashMap<String,JCheckBox>();
 	JPanel titlepanel = new JPanel();
 	public ExtractorTab extractor;
 	public JButton expandcontractbutton = new JButton(SemGenIcon.expendcontracticon);
 
 
-	public ExtractorSelectionPanel(ExtractorTab extractor, String title, Map<? extends SemSimComponent,Set<DataStructure>> map, JComponent addon){
+	public ExtractorSelectionPanel(ExtractorTab extractor, String title, Map<? extends SemSimObject,Set<DataStructure>> map, JComponent addon){
 		this.extractor = extractor;
 		markallbox.setFont(SemGenFont.defaultItalic(-2));
 		markallbox.setToolTipText("Select all/none");
@@ -101,7 +101,7 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 		ArrayList<JCheckBox> cbarray = new ArrayList<JCheckBox>();
 		String checkboxtext = null;
 		
-		for (SemSimComponent ssc : termandcdwdsmap.keySet()) {
+		for (SemSimObject ssc : termandcdwdsmap.keySet()) {
 						
 			if(ssc instanceof PhysicalModelComponent){
 				PhysicalModelComponent pmc  = (PhysicalModelComponent)ssc;

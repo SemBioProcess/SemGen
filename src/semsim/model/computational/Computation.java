@@ -43,6 +43,10 @@ public class Computation extends ComputationalModelComponent{
 		outputs.addAll(outputs);
 	}
 	
+	public Computation(Computation comptocopy) {
+		super(comptocopy);
+	}
+	
 	/**
 	 * Add a {@link DataStructure} to the Computation's set of inputs
 	 * @param input The DataStructure to add as an input
