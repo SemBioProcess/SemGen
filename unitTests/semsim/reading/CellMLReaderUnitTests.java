@@ -6,19 +6,14 @@ import java.io.File;
 
 import org.junit.Test;
 
+import semgen.UnitTestBase;
 import semsim.CollateralHelper;
-import semsim.SemSimConstants;
-import semsim.SemSimLibrary;
 import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata;
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
 
-public class CellMLReaderUnitTests {
-	SemSimLibrary sslib;
+public class CellMLReaderUnitTests extends UnitTestBase {
 	
-	public CellMLReaderUnitTests(SemSimLibrary lib) {
-		sslib = lib;
-	}
 	@Test
 	public void readFromFile_readValidFile_VerifyNonNullModelReturned() {
 		// Arrange

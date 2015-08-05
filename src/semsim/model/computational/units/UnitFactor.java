@@ -4,6 +4,7 @@ public class UnitFactor{
 	private UnitOfMeasurement baseUnit;
 	private double exponent;
 	private String prefix;
+	private double multiplier;
 	
 	public UnitFactor(UnitOfMeasurement baseUnit, double exponent, String prefix){
 		setBaseUnit(baseUnit);
@@ -23,6 +24,10 @@ public class UnitFactor{
 		return prefix;
 	}
 	
+	public double getMultiplier(){
+		return multiplier;
+	}
+	
 	public void setBaseUnit(UnitOfMeasurement baseUnit) {
 		this.baseUnit = baseUnit;
 	}
@@ -33,5 +38,9 @@ public class UnitFactor{
 	
 	public void setPrefix(String prefix) {
 		this.prefix = prefix;
+	}
+	
+	public void setMultiplier(double val){
+		this.multiplier = val;
 	}
 }

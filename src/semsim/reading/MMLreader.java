@@ -20,7 +20,7 @@ import org.jdom.output.XMLOutputter;
 import org.semanticweb.owlapi.model.OWLException;
 
 import JSim.util.Xcept;
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
 import semsim.model.computational.Computation;
 import semsim.model.computational.RelationalConstraint;
 import semsim.model.computational.datastructures.DataStructure;
@@ -28,7 +28,6 @@ import semsim.model.computational.datastructures.Decimal;
 import semsim.model.computational.datastructures.MMLchoice;
 import semsim.model.computational.datastructures.SemSimInteger;
 import semsim.model.computational.units.UnitOfMeasurement;
-import semsim.model.physical.object.PhysicalProperty;
 
 public class MMLreader extends ModelReader {
 	private Hashtable<String,String> discretevarsandconstraints = new Hashtable<String,String>();
@@ -141,8 +140,6 @@ public class MMLreader extends ModelReader {
 				if(codeword.contains(":") || codeword.endsWith("__init")) ds.setDeclared(false);
 				else ds.setDeclared(true);
 				
-				ds.setPhysicalProperty(new PhysicalProperty()); // If units, instantiate property
-			
 				// Store the units attribute value
 				if (varchild.getAttributeValue("unitID") != null) {
 					String unitname = varchild.getAttributeValue("unitID");
@@ -314,7 +311,7 @@ public class MMLreader extends ModelReader {
 				String name = solvedvar.getAttributeValue("variableID");
 				
 				if(semsimmodel.containsDataStructure(name) && solvedvar.getAttributeValue("status").equals("CURR")){
-					DataStructure solvedds = semsimmodel.getDataStructure(name);
+					DataStructure solvedds = semsimmodel.getAssociatedDataStructure(name);
 					if(!solvedds.isSolutionDomain()){
 						invariterator = invarchildren.iterator();
 	
@@ -330,7 +327,7 @@ public class MMLreader extends ModelReader {
 								// Is ok if data structures are dependent on themselves
 								// Do not include the input relationship unless the input variable is actually in the MathML
 								// for computing the output variable
-								DataStructure inputds = semsimmodel.getDataStructure(inputname);
+								DataStructure inputds = semsimmodel.getAssociatedDataStructure(inputname);
 								
 								// As long as we're not looking at an ODE tool and the input isn't the derivative of the solved var, include input
 								if(tool.getName().equals("ODETool")){
@@ -352,7 +349,7 @@ public class MMLreader extends ModelReader {
 		// Set hasInput/inputFor relationships for discrete variables and the data structures required for triggering them
 		for(String dsx : discretevarsandeventtriggerinputs.keySet()){
 			for(String inputx : discretevarsandeventtriggerinputs.get(dsx))
-				semsimmodel.getDataStructure(dsx).getComputation().addInput(semsimmodel.getDataStructure(inputx));
+				semsimmodel.getAssociatedDataStructure(dsx).getComputation().addInput(semsimmodel.getAssociatedDataStructure(inputx));
 		}
 				
 		// Add the model-level annotations
@@ -360,7 +357,7 @@ public class MMLreader extends ModelReader {
 		semsimmodel.setSemsimversion(sslib.getSemSimVersion());
 		
 		// If jsbatch couldn't parse the model code into an xmml file, log the error
-		if(semsimmodel.getDataStructures().isEmpty() && semsimmodel.getPhysicalModelComponents().isEmpty()){
+		if(semsimmodel.getAssociatedDataStructures().isEmpty() && semsimmodel.getPhysicalModelComponents().isEmpty() && semsimmodel.getSubmodels().isEmpty()){
 			semsimmodel.addError(srcfile.getName() + " model appears to be empty.");
 		}
 		return semsimmodel;
@@ -385,7 +382,7 @@ public class MMLreader extends ModelReader {
 			}
 		}
 		scnr.close();
-		for(DataStructure ds : semsimmodel.getDataStructures()){
+		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
 			if(ds.hasUnits()){
 				if(unitnamesandcustomdeclarations.containsKey(ds.getUnit().getName())){
 					String customname = ds.getUnit().getName();

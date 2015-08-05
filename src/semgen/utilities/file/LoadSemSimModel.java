@@ -2,7 +2,6 @@ package semgen.utilities.file;
 
 import java.io.File;
 import java.io.IOException;
-
 import javax.swing.JOptionPane;
 
 import org.jdom.Document;
@@ -11,17 +10,18 @@ import org.semanticweb.owlapi.model.OWLException;
 
 import JSim.util.Xcept;
 import semgen.SemGen;
-import semgen.annotation.routines.AutoAnnotate;
+import semgen.annotation.workbench.routines.AutoAnnotate;
 import semgen.utilities.SemGenError;
 import semgen.utilities.uicomponent.SemGenProgressBar;
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
 import semsim.reading.CellMLreader;
 import semsim.reading.MMLParser;
 import semsim.reading.MMLreader;
 import semsim.reading.ModelClassifier;
 import semsim.reading.ReferenceTermNamer;
-import semsim.reading.SBMLAnnotator;
+import semsim.reading.SBMLreader;
 import semsim.reading.SemSimOWLreader;
+import semsim.utilities.SemSimUtil;
 import semsim.utilities.webservices.WebserviceTester;
 
 public class LoadSemSimModel {
@@ -38,21 +38,23 @@ public class LoadSemSimModel {
 					semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
 				break;
 					
-			case ModelClassifier.SBML_MODEL:// MML
-				semsimmodel = createModel(file);
-				
+			case ModelClassifier.SBML_MODEL:
+				semsimmodel = new SBMLreader(file).readFromFile();
+								
 				if((semsimmodel==null) || semsimmodel.getErrors().isEmpty() && autoannotate){
-					// If it's an SBML model and we should auto-annotate
-					semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
-					SemGenProgressBar progframe = new SemGenProgressBar("Annotating with web services...",true);
+
+					//SemGenProgressBar progframe = new SemGenProgressBar("Annotating with web services...",true);
 					boolean online = WebserviceTester.testBioPortalWebservice("Annotation via web services failed.");
-					if(!online) 
-						SemGenError.showWebConnectionError("BioPortal search service");
 					
-					SBMLAnnotator.annotate(file, semsimmodel, online, SemGen.termcache.getOntTermsandNamesCache());
-					ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel, SemGen.termcache.getOntTermsandNamesCache(), online);
-					SBMLAnnotator.setFreeTextDefinitionsForDataStructuresAndSubmodels(semsimmodel);
-					progframe.dispose();
+					if(!online){
+						//progframe.dispose();
+						SemGenError.showWebConnectionError("BioPortal search service");
+					}
+					else{
+						ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel, SemGen.termcache.getOntTermsandNamesCache(), online);
+	//					SBMLAnnotator.setFreeTextDefinitionsForDataStructuresAndSubmodels(semsimmodel);
+						//progframe.dispose();
+					}
 				}
 				break;
 				
@@ -75,7 +77,7 @@ public class LoadSemSimModel {
 				}
 				break;
 			case ModelClassifier.SEMSIM_MODEL:
-				semsimmodel = loadSemSimOWL(file);
+				semsimmodel = loadSemSimOWL(file);	
 				break;
 				
 			default:
@@ -95,7 +97,8 @@ public class LoadSemSimModel {
 				return semsimmodel;
 			}
 			semsimmodel.setName(file.getName().substring(0, file.getName().lastIndexOf(".")));
-			semsimmodel.setSourceModelType(modeltype);				
+			semsimmodel.setSourceModelType(modeltype);
+			SemSimUtil.regularizePhysicalProperties(semsimmodel, SemGen.semsimlib);
 		}
 
 		return semsimmodel;

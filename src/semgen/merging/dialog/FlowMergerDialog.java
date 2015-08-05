@@ -147,7 +147,7 @@ public class FlowMergerDialog extends SemGenDialog implements
 		if (o == questionbutton) {
 			try {
 				// FIX ME!
-				String[] anns = null;
+				String[] anns = {};
 				JOptionPane.showMessageDialog(this,
 								"SemGen uses the semantics of model codewords to identify\n"
 										+ "conservation equations that may need to be extended to account for\n"

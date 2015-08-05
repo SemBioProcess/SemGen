@@ -22,7 +22,7 @@ import org.sbml.libsbml.libsbml;
 
 import semsim.SemSimConstants;
 import semsim.SemSimLibrary;
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.utilities.SemSimUtil;
@@ -62,7 +62,7 @@ public class MATLABwriter extends ModelWriter{
 		
 		Set<String> dsnames = semsimmodel.getDataStructureNames();
 
-		for(DataStructure ds : semsimmodel.getDataStructures()){
+		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
 			
 			// Use libSBML to convert MathML to infix notation
 			String mathmlstring = ds.getComputation().getMathML();
@@ -220,7 +220,7 @@ public class MATLABwriter extends ModelWriter{
 			outstring = outstring + "{'" + ODEdsarray[y].getName() + "'}; ";
 		}
 		
-		DataStructure soldomds = semsimmodel.getDataStructure(solutiondomain);
+		DataStructure soldomds = semsimmodel.getAssociatedDataStructure(solutiondomain);
 		String solutiondomainunits = soldomds.hasUnits() ? soldomds.getUnit().getName() : "dimensionless";
 		
 		outstring = outstring + ("];\n");

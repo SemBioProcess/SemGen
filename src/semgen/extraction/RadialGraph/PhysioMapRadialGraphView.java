@@ -64,7 +64,7 @@ import prefuse.visual.expression.InGroupPredicate;
 import prefuse.visual.sort.TreeDepthItemSorter;
 import semgen.SemGenSettings;
 import semgen.extraction.ExtractorTab;
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
 
 /**
  * Demonstration of a node-link tree viewer

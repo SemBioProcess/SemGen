@@ -3,8 +3,8 @@ package semsim.utilities;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -32,11 +32,11 @@ public class ResourcesManager {
 		return null;
 	}
 	
-	public static Hashtable<String, String[]> createHashtableFromFile(String path) throws FileNotFoundException {
+	public static HashMap<String, String[]> createHashMapFromFile(String path, boolean usecommaseparator) throws FileNotFoundException {
 			Set<String> buffer = createSetFromFile(path);
 			if (buffer == null) return null;
 			
-			Hashtable<String, String[]> table = new Hashtable<String, String[]>();
+			HashMap<String, String[]> table = new HashMap<String, String[]>();
 			Set<String> values = new HashSet<String>();
 			int semiseparatorindex = 0;
 			int commaseparatorindex = 0;
@@ -53,28 +53,31 @@ public class ResourcesManager {
 				else{
 					nextline = nextline.substring(semiseparatorindex + 2, nextline.length());
 				}
-				while (repeat) {
-					if (!nextline.contains(",")) {
-						values.add(nextline);
-						repeat = false;
-						break;
+				if(usecommaseparator)
+					while (repeat) {
+						if (!nextline.contains(",")) {
+							values.add(nextline);
+							repeat = false;
+							break;
+						}
+						commaseparatorindex = nextline.indexOf(",");
+						values.add(nextline.substring(0, nextline.indexOf(",")));
+						commaseparatorindex = nextline.indexOf(",");
+						nextline = nextline.substring(commaseparatorindex + 2,
+								nextline.length());
 					}
-					commaseparatorindex = nextline.indexOf(",");
-					values.add(nextline.substring(0, nextline.indexOf(",")));
-					commaseparatorindex = nextline.indexOf(",");
-					nextline = nextline.substring(commaseparatorindex + 2,
-							nextline.length());
-				}
+				else values.add(nextline);
+				
 				table.put(key, (String[]) values.toArray(new String[] {}));
 			}
 			return table;
 	}
 	
 	// Reader for base unit to OPB class mapping file
-		public static Hashtable<Hashtable<String, Double>, String[]> createHashtableFromBaseUnitFile(String path) throws FileNotFoundException {
+		public static HashMap<HashMap<String, Double>, String[]> createHashMapFromBaseUnitFile(String path) throws FileNotFoundException {
 			Scanner unitsfilescanner = new Scanner(new File(path));
 			if (unitsfilescanner.hasNext()) {
-				Hashtable<Hashtable<String, Double>, String[]> table = new Hashtable<Hashtable<String, Double>, String[]>();
+				HashMap<HashMap<String, Double>, String[]> table = new HashMap<HashMap<String, Double>, String[]>();
 				Set<String> opbclasses = new HashSet<String>();
 				int semiseparatorindex = 0;
 				int commaseparatorindex = 0;
@@ -83,7 +86,7 @@ public class ResourcesManager {
 				String baseunitstring = "";
 				while (unitsfilescanner.hasNext()) {
 					// Hashtable of baseunits:exponents for a given OPB class
-					Hashtable<String, Double> baseunitcombination = new Hashtable<String, Double>();
+					HashMap<String, Double> baseunitcombination = new HashMap<String, Double>();
 					opbclasses.clear();
 					nextline = unitsfilescanner.nextLine();
 					nextline.trim();

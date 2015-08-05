@@ -8,9 +8,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
 public class PropertyMarker extends JLabel{
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -8788987331968930201L;
 	public Color color;
 	private int radius = 3;
@@ -25,5 +22,11 @@ public class PropertyMarker extends JLabel{
 		g.setColor(color);
 		g.drawOval(0, 6, radius*2, radius*2);
 		g.fillOval(0, 6, radius*2, radius*2);
+	}
+	
+	public void updateType(Color col, String tooltip) {
+		color = col;
+		setToolTipText(tooltip);
+		repaint();
 	}
 }

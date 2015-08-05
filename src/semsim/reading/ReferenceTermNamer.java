@@ -3,19 +3,22 @@ package semsim.reading;
 import java.io.IOException;
 import java.net.URI;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.jdom.JDOMException;
 
-import semsim.Annotatable;
 import semsim.SemSimConstants;
+import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
+import semsim.annotation.ReferenceTerm;
 import semsim.model.SemSimComponent;
+import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
-import semsim.model.SemSimModel;
 import semsim.owl.SemSimOWLFactory;
 import semsim.utilities.webservices.BioPortalConstants;
 import semsim.utilities.webservices.BioPortalSearcher;
@@ -41,20 +44,29 @@ public class ReferenceTermNamer {
 		if(online){
 			for(SemSimComponent ssc : model.getAllModelComponents()){
 				if(ssc instanceof Annotatable){
+
 					Annotatable annthing = (Annotatable)ssc;
+					Set<Annotation> anns = new HashSet<Annotation>();
+					anns.addAll(annthing.getAnnotations());
+					
+					if(ssc instanceof ReferenceTerm) 
+						anns.add(((ReferenceTerm)ssc).getRefersToReferenceOntologyAnnotation());
+					
 					// If annotation present
-					for(Annotation ann : annthing.getAnnotations()){
+					for(Annotation ann : anns){
+
 						if(ann instanceof ReferenceOntologyAnnotation){
 							ReferenceOntologyAnnotation refann = (ReferenceOntologyAnnotation)ann;
 							URI uri = refann.getReferenceURI();
 							
 							// If we need to fill in the description
-							if(refann.getValueDescription()==uri.toString()){
+							if(refann.getValueDescription().equals(uri.toString()) || refann.getValueDescription().equals("")){
 								
 								System.out.println("Need to find " + uri.toString());
 								String name = null;
 								if(URInameMap.containsKey(uri.toString())){
 									name = URInameMap.get(uri.toString())[0];
+									System.out.println(uri.toString() + " was already cached: " + name);
 								}
 								else{
 									name = getNameFromURI(uri);

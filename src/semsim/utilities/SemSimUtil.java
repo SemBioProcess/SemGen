@@ -9,8 +9,8 @@ import java.io.StringReader;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -27,12 +27,13 @@ import org.jdom.output.XMLOutputter;
 
 import semsim.SemSimConstants;
 import semsim.SemSimLibrary;
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.object.CompositePhysicalEntity;
+import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.writing.CaseInsensitiveComparator;
 
 /**
@@ -59,7 +60,7 @@ public class SemSimUtil {
 		Set<DataStructure> dsstocheck = new HashSet<DataStructure>();
 		dsstocheck.add(discardedds);
 		
-		if(discardedds.isSolutionDomain()) dsstocheck.addAll(modelfordiscardedds.getDataStructures());
+		if(discardedds.isSolutionDomain()) dsstocheck.addAll(modelfordiscardedds.getAssociatedDataStructures());
 		else dsstocheck.addAll(discardedds.getUsedToCompute());
 
 		for(DataStructure dscheck : dsstocheck){
@@ -73,14 +74,14 @@ public class SemSimUtil {
 				String neweq = dscheck.getComputation().getComputationalCode();
 				if(dscheck.getComputation().getComputationalCode()!=null){
 					neweq = replaceCodewordsInString(dscheck.getComputation().getComputationalCode(), replacementtext, oldtext);
-					modelfordiscardedds.getDataStructure(dscheck.getName()).getComputation().setComputationalCode(neweq);
+					modelfordiscardedds.getAssociatedDataStructure(dscheck.getName()).getComputation().setComputationalCode(neweq);
 				}
 	
 				// Assume that if discarded cdwd is in an IC for another cdwd, the discarded cdwd is set as an input to the other cdwd
 				String newstart = dscheck.getStartValue();
 				if(dscheck.hasStartValue()){
 					newstart = replaceCodewordsInString(dscheck.getStartValue(), replacementtext, oldtext);
-					modelfordiscardedds.getDataStructure(dscheck.getName()).setStartValue(newstart);
+					modelfordiscardedds.getAssociatedDataStructure(dscheck.getName()).setStartValue(newstart);
 				}
 				
 				// apply conversion factors in mathml
@@ -91,7 +92,7 @@ public class SemSimUtil {
 							"<apply><times /><ci>" + replacementtext + "</ci><cn>" + conversionfactor + "</cn></apply>");
 					else newmathml = dscheck.getComputation().getMathML().replace("<ci>" + oldtext + "</ci>",
 							"<ci>" + replacementtext + "</ci>");
-					modelfordiscardedds.getDataStructure(dscheck.getName()).getComputation().setMathML(newmathml);
+					modelfordiscardedds.getAssociatedDataStructure(dscheck.getName()).getComputation().setMathML(newmathml);
 				}
 				
 				// If the data structure that needs to have its computations edited is a derivative,
@@ -103,8 +104,8 @@ public class SemSimUtil {
 						selfrefODE = true;
 					}
 					else{
-						modelfordiscardedds.getDataStructure(statevarname).getComputation().setComputationalCode(neweq);
-						modelfordiscardedds.getDataStructure(statevarname).getComputation().setMathML(newmathml);
+						modelfordiscardedds.getAssociatedDataStructure(statevarname).getComputation().setComputationalCode(neweq);
+						modelfordiscardedds.getAssociatedDataStructure(statevarname).getComputation().setMathML(newmathml);
 					}
 				}
 			}
@@ -218,24 +219,21 @@ public class SemSimUtil {
 	}
 	
 	public static CompositePhysicalEntity getEquivalentCompositeEntityIfAlreadyInMap(CompositePhysicalEntity cpe, Map<? extends PhysicalModelComponent, URI> map){		
+		if(cpe == null) System.err.println("Next cpe was null");
 		// Go through the composite physical entities already processed and see if there is one that
 		// matches the cpe argument in terms of the physical entities and structural relations used
 		for(PhysicalModelComponent testcomp : map.keySet()){
-			if(testcomp instanceof CompositePhysicalEntity){
-				CompositePhysicalEntity testcpe = (CompositePhysicalEntity)testcomp;
 
 				// If we've found an equivalent composite entity, return it immediately
-				if(testcpe.compareTo(cpe)==0){
-					return testcpe;
+				if(cpe.equals(testcomp)){
+					return (CompositePhysicalEntity)testcomp;
 				}
-			}
 		}
 		// If we've gotten here, then there isn't a match, return the cpe argument
-		if(cpe == null) System.err.println("Next cpe was null");
 		return cpe;
 	}	
 	
-	/* 
+	/** 
 	 * Take collection of DataStructures and return an ArrayList sorted alphabetically
 	 * */
 	public static ArrayList<DataStructure> alphebetizeSemSimObjects(Collection<DataStructure>  collection) {
@@ -246,14 +244,24 @@ public class SemSimUtil {
 		return new ArrayList<DataStructure>(dsnamemap.values());
 	}
 	
+	/** 
+	 * Replace all OPB physical properties with their equivalent in the list contained in the SemSimLibrary; therebye 
+	 * maintaining a single set of unique property instances
+	 * */
+	public static void regularizePhysicalProperties(SemSimModel model, SemSimLibrary lib) {
+		for (PhysicalPropertyinComposite pp : lib.getCommonProperties()) {
+			model.replacePhysicalProperty(pp, pp);
+		}
+	}
+	
 	/**
 	 * Given a SemSim model, recursively processes custom units and returns all of its units broken down into fundamental base units
 	 * @param SemSim model
-	 * @return Hashtable of customUnit:Set<UnitFactor>
+	 * @return HashMap of customUnit:(baseUnit1:exp1, baseUnit:exp2, ...)
 	 */
-	public static Hashtable<String, Set<UnitFactor>> getAllUnitsAsFundamentalBaseUnits(SemSimModel semsimmodel) {
+	public static HashMap<String, Set<UnitFactor>> getAllUnitsAsFundamentalBaseUnits(SemSimModel semsimmodel) {
 		Set<UnitOfMeasurement> units = semsimmodel.getUnits();
-		Hashtable<String, Set<UnitFactor>> fundamentalBaseUnits = new Hashtable<String, Set<UnitFactor>>();
+		HashMap<String, Set<UnitFactor>> fundamentalBaseUnits = new HashMap<String, Set<UnitFactor>>();
 		
 		for(UnitOfMeasurement uom : units) {
 			Set<UnitFactor> newUnitFactor = recurseBaseUnits(uom, 1.0);
@@ -263,7 +271,7 @@ public class SemSimUtil {
 		return fundamentalBaseUnits;
 	}
 	// Used in tandem with getFundamentalBaseUnits
-	private static Set<UnitFactor> recurseBaseUnits(UnitOfMeasurement uom, Double oldExp) {
+	public static Set<UnitFactor> recurseBaseUnits(UnitOfMeasurement uom, Double oldExp) {
 		SemSimLibrary semsimlib = new SemSimLibrary();
 		Set<UnitFactor> unitFactors = uom.getUnitFactors();
 		Set<UnitFactor> newUnitFactors = new HashSet<UnitFactor>();

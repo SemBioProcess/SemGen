@@ -2,9 +2,9 @@ package semgen.visualizations;
 
 import javax.naming.InvalidNameException;
 
-import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
-import chrriis.dj.nativeswing.swtimpl.components.WebBrowserAdapter;
-import chrriis.dj.nativeswing.swtimpl.components.WebBrowserEvent;
+import com.teamdev.jxbrowser.chromium.Browser;
+import com.teamdev.jxbrowser.chromium.events.FinishLoadingEvent;
+import com.teamdev.jxbrowser.chromium.events.LoadAdapter;
 
 /**
  * A browser that enables typed communication between java and javascript
@@ -49,8 +49,7 @@ import chrriis.dj.nativeswing.swtimpl.components.WebBrowserEvent;
  *
  * @param <TSender> - Type of interface used as a contract for communication between java and javascript
  */
-@SuppressWarnings("serial")
-public class CommunicatingWebBrowser<TSender> extends JWebBrowser {
+public class CommunicatingWebBrowser<TSender> extends Browser {
 	
 	// Name of the variable in javascript that receives commands
 	private final String JavascriptCommandReceiverVariableName = "javaCommandReciever";
@@ -116,7 +115,7 @@ public class CommunicatingWebBrowser<TSender> extends JWebBrowser {
 		}
 		
 		// Insert the adapter that facilitates communication
-		addWebBrowserListener(new CommunicatingWebBrowserAdapter());
+		addLoadListener(new CommunicatingWebBrowserLoadAdapter());
 	}
 	
 	public TSender getCommandSender() {
@@ -130,7 +129,7 @@ public class CommunicatingWebBrowser<TSender> extends JWebBrowser {
 	public void executeJavascriptAndHandleErrors(String javascript) {
 		// Execute the passed in javascript from within a function that handles errors
 		javascript = String.format("executeAndHandleErrors(function () { %s });", javascript);
-		executeJavascript(javascript);
+		executeJavaScript(javascript);
 	}
 	
 	/**
@@ -140,25 +139,21 @@ public class CommunicatingWebBrowser<TSender> extends JWebBrowser {
 	 * @author Ryan
 	 *
 	 */
-	private class CommunicatingWebBrowserAdapter extends WebBrowserAdapter {
+	private class CommunicatingWebBrowserLoadAdapter extends LoadAdapter {
 		
 		/**
-		 * When the page is loading this function inserts an initialization script
+		 * When the page is loaded this function inserts an initialization script
 		 * into the page's header
-		 * 
-		 * NOTE: We should fire an event after this script is inserted that javascript can listen for.
-		 * Until then javascript can listen for the window.onload event.
-		 * However, I'm not sure if we'll run into timing issues with the current approach.
 		 */
 		@Override
-		public void loadingProgressChanged(WebBrowserEvent e) {
+		public void onFinishLoadingFrame(FinishLoadingEvent e) {
 			
-			// Wait until the browser completely loads
-			if(e.getWebBrowser().getLoadingProgress() != 100)
+			// If this is not the main frame return
+			if(!e.isMainFrame())
 				return;
 
 			// We don't need to listen for anymore events
-			e.getWebBrowser().removeWebBrowserListener(this);
+			e.getBrowser().removeLoadListener(this);
 			
 			// Get the script for the command receiver
 			String javascriptCommandReceiver = _commandSenderGenerator.generateJavascriptReceiver();
@@ -187,7 +182,7 @@ public class CommunicatingWebBrowser<TSender> extends JWebBrowser {
 					"cwb_triggerInitialized(" + JavascriptCommandReceiverVariableName + ", " + JavascriptCommandSenderVariableName + ");";
 			
 			// Execute the initialization script
-			CommunicatingWebBrowser.this.executeJavascript(initializationScript);
+			e.getBrowser().executeJavaScript(initializationScript);
 		}
 	}
 }

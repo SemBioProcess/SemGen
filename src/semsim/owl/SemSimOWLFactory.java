@@ -49,10 +49,9 @@ import org.semanticweb.owlapi.model.RemoveAxiom;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 
 import semsim.SemSimConstants;
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
+import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.physical.Submodel;
-import semsim.model.physical.object.PhysicalProperty;
 
 import java.util.Map;
 import java.util.Set;
@@ -204,13 +203,9 @@ public class SemSimOWLFactory {
 		OWLIndividual ind = factory.getOWLNamedIndividual(IRI.create(subject));
 		OWLIndividual value = factory.getOWLNamedIndividual(IRI.create(object));
 		OWLObjectProperty prop = factory.getOWLObjectProperty(IRI.create(rel));
-		
-		// If no annotations applied, use getOWLOBjectPropertyAssertionAxiom method without annotation argument,
-		// otherwise use the method with the annotation argument (the latter is used to avoid overwriting an existing axiom
-		// with the same subject, predicate and object).
-		OWLAxiom axiom = (anns==null) ? 
-				factory.getOWLObjectPropertyAssertionAxiom(prop, ind, value) :
-					factory.getOWLObjectPropertyAssertionAxiom(prop, ind, value, anns);
+		OWLAxiom axiom = factory.getOWLObjectPropertyAssertionAxiom(prop, ind,value);
+		if(anns!=null)
+			axiom = axiom.getAnnotatedAxiom(anns);
 		return axiom;
 	}
 	
@@ -520,11 +515,9 @@ public class SemSimOWLFactory {
 	}
 
 	public static void addOntologyAnnotation(OWLOntology ont, IRI property, String val, OWLOntologyManager manager){
-		if(val!=null){
-			OWLLiteral lit = factory.getOWLLiteral(val,"en");
-			OWLAnnotation anno = factory.getOWLAnnotation(factory.getOWLAnnotationProperty(property), lit);
-			manager.applyChange(new AddOntologyAnnotation(ont, anno));
-		}
+		OWLLiteral lit = factory.getOWLLiteral(val,"en");
+		OWLAnnotation anno = factory.getOWLAnnotation(factory.getOWLAnnotationProperty(property), lit);
+		manager.applyChange(new AddOntologyAnnotation(ont, anno));
 	}
 	
 	public static Set<String> getAllSubclasses(OWLOntology ont, String parent, Boolean includeparent) throws OWLException{
@@ -625,8 +618,8 @@ public class SemSimOWLFactory {
 		return result;
 	}
 	
-	public static URI getURIforPhysicalProperty(SemSimModel model, PhysicalProperty prop){
-		return URI.create(model.getNamespace() + URIencoding(prop.getAssociatedDataStructure().getName()) + "_property");
+	public static URI getURIforPhysicalProperty(SemSimModel model, DataStructure ds){
+		return URI.create(model.getNamespace() + URIencoding(ds.getName()) + "_property");
 	}
 	
 	public static String[] getRDFComments(OWLOntology ont, String indiri) {

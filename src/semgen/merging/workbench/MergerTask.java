@@ -8,9 +8,9 @@ import org.apache.commons.lang3.tuple.Pair;
 import semgen.merging.workbench.Merger.ResolutionChoice;
 import semgen.utilities.SemGenTask;
 import semgen.utilities.uicomponent.SemGenProgressBar;
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
+import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.physical.Submodel;
 import semsim.utilities.SemSimUtil;
 
 public class MergerTask extends SemGenTask {
@@ -54,7 +54,6 @@ public class MergerTask extends SemGenTask {
     }
 
 	private void resolveSyntacticOverlap() {
-		
 		// First resolve the syntactic overlap between submodels
 		for(String oldsmname : submodnamemap.keySet()){
 			String newsmname = submodnamemap.get(oldsmname);
@@ -72,26 +71,26 @@ public class MergerTask extends SemGenTask {
 		// Then resolve for data structures
 		for (String dsname : cwnamemap.keySet()) {
 			String newdsname = cwnamemap.get(dsname);
-			ssm1clone.getDataStructure(dsname).setName(newdsname);
+			ssm1clone.getAssociatedDataStructure(dsname).setName(newdsname);
 			Boolean derivreplace = false;
 			String derivname = null;
 			
 			// If there is a derivative of the data structure that we're renaming, rename it, too
-			if(ssm1clone.getDataStructure(newdsname).hasSolutionDomain()){
-				derivname = dsname + ":" + ssm1clone.getDataStructure(newdsname).getSolutionDomain().getName();
+			if(ssm1clone.getAssociatedDataStructure(newdsname).hasSolutionDomain()){
+				derivname = dsname + ":" + ssm1clone.getAssociatedDataStructure(newdsname).getSolutionDomain().getName();
 				if(ssm1clone.containsDataStructure(derivname)){
-					ssm1clone.getDataStructure(derivname).setName(derivname.replace(dsname, newdsname));
+					ssm1clone.getAssociatedDataStructure(derivname).setName(derivname.replace(dsname, newdsname));
 					derivreplace = true;
 				}
 			}
 			// Use the new name in all the equations
-			SemSimUtil.replaceCodewordInAllEquations(ssm1clone.getDataStructure(newdsname), ssm1clone.getDataStructure(newdsname),
+			SemSimUtil.replaceCodewordInAllEquations(ssm1clone.getAssociatedDataStructure(newdsname), ssm1clone.getAssociatedDataStructure(newdsname),
 					ssm1clone, dsname, newdsname, 1);
 			
 			// IS THERE AN ISSUE WITH SELF_REF_ODEs HERE?
 			if(derivreplace){
-				SemSimUtil.replaceCodewordInAllEquations(ssm1clone.getDataStructure(derivname.replace(dsname, newdsname)),
-						ssm1clone.getDataStructure(derivname.replace(dsname, newdsname)),
+				SemSimUtil.replaceCodewordInAllEquations(ssm1clone.getAssociatedDataStructure(derivname.replace(dsname, newdsname)),
+						ssm1clone.getAssociatedDataStructure(derivname.replace(dsname, newdsname)),
 						ssm1clone, derivname, derivname.replace(dsname, newdsname), 1);
 			}
 		}

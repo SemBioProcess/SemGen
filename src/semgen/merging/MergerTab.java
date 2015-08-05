@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
@@ -33,7 +32,6 @@ import semgen.merging.resolutionpane.ResolutionPane;
 import semgen.merging.workbench.MergerWorkbench;
 import semgen.merging.workbench.Merger.ResolutionChoice;
 import semgen.merging.workbench.MergerWorkbench.MergeEvent;
-import semgen.merging.workbench.ModelOverlapMap;
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
@@ -43,9 +41,6 @@ import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semgen.utilities.uicomponent.SemGenTab;
-import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.computational.units.UnitOfMeasurement;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -196,35 +191,11 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 					cwnamemap.put(name, newname);
 				}
 				
-				Map<UnitOfMeasurement, UnitOfMeasurement> unitoverlaps = workbench.getUnitOverlaps();
-				
-				int numdsmappings = workbench.getMappingCount();
+				ArrayList<Boolean> unitoverlaps = workbench.getUnitOverlaps();
 				
 				ArrayList<Pair<Double,String>> conversionlist = new ArrayList<Pair<Double,String>>(); 
-				
-				for (int i=0; i<numdsmappings; i++) {
-					
-					ModelOverlapMap overlapmap = workbench.getModelOverlapMap();
-					
-					String dsleftname = workbench.getMapPairNames(i).getLeft();
-					String dsrightname = workbench.getMapPairNames(i).getRight();
-										
-					DataStructure dsleft = overlapmap.getSemanticComparator().model1.getDataStructure(dsleftname);
-					DataStructure dsright = overlapmap.getSemanticComparator().model2.getDataStructure(dsrightname);
-					
-					UnitOfMeasurement uomleft = dsleft.getUnit();
-					UnitOfMeasurement uomright = dsright.getUnit();
-					
-					boolean unitsalreadymapped = false;
-					boolean bothdimensionless = (! dsleft.hasUnits() && ! dsright.hasUnits());
-					
-					if(unitoverlaps.containsKey(uomleft)){
-						if(unitoverlaps.get(uomleft).equals(uomright)){
-							unitsalreadymapped = true;
-						}
-					}
-					
-					if (! unitsalreadymapped && ! bothdimensionless) {
+				for (int i=0; i<unitoverlaps.size(); i++) {
+					if (!unitoverlaps.get(i)) {
 						ResolutionChoice choice = choicelist.get(i);
 						if (!choice.equals(ResolutionChoice.ignore)) {
 							if (!getConversion(conversionlist, i, choice.equals(ResolutionChoice.first))) return;
@@ -233,10 +204,12 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 					}
 					conversionlist.add(Pair.of(1.0, "*"));
 				}
+
 				SemGenProgressBar progframe = new SemGenProgressBar("Merging...", true);
 				String error = workbench.executeMerge(cwnamemap, smnamemap, choicelist, conversionlist, progframe);
 				if (error!=null){
-					SemGenError.showError("ERROR: " + error, "Merge Failed");
+					SemGenError.showError(
+							"ERROR: " + error, "Merge Failed");
 				}
 		}
 		else {
@@ -392,11 +365,6 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 			return filec.getSelectedFile();
 		}
 		return null;
-	}
-
-	@Override
-	public void addObservertoWorkbench(Observer obs) {
-		workbench.addObserver(obs);
 	}
 
 	@Override

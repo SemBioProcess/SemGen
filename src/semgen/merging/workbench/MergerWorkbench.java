@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -21,9 +20,8 @@ import semgen.merging.workbench.ModelOverlapMap.maptype;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.uicomponent.SemGenProgressBar;
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.utilities.SemSimUtil;
 
 public class MergerWorkbench extends Workbench {
@@ -80,7 +78,7 @@ public class MergerWorkbench extends Workbench {
 			model = loadModel(file, autoannotate);
 			loadedmodels.add(model);
 			filepathlist.add(file);
-			addDSNameList(model.getDataStructures());
+			addDSNameList(model.getAssociatedDataStructures());
 		}
 
 		notifyModelListUpdated();
@@ -165,7 +163,6 @@ public class MergerWorkbench extends Workbench {
 		return identicalmap;
 	}
 	
-	
 	public ModelOverlapMap getModelOverlapMap(){
 		return overlapmap;
 	}
@@ -238,8 +235,8 @@ public class MergerWorkbench extends Workbench {
 		return Pair.of(loadedmodels.get(indexpair.getLeft()),loadedmodels.get(indexpair.getRight()));
 	}
 	
-	public Map<UnitOfMeasurement, UnitOfMeasurement> getUnitOverlaps() {
-		return overlapmap.getEquivalentUnitPairs();
+	public ArrayList<Boolean> getUnitOverlaps() {
+		return overlapmap.compareDataStructureUnits();
 	}
 	
 	public String executeMerge(HashMap<String,String> dsnamemap, HashMap<String,String> smnamemap, ArrayList<ResolutionChoice> choices, 

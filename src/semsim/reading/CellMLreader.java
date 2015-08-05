@@ -39,7 +39,9 @@ import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.StructuralRelation;
 import semsim.model.SemSimComponent;
-import semsim.model.SemSimModel;
+import semsim.model.collection.FunctionalSubmodel;
+import semsim.model.collection.SemSimModel;
+import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
@@ -47,11 +49,12 @@ import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
-import semsim.model.physical.Submodel;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
-import semsim.model.physical.object.FunctionalSubmodel;
-import semsim.model.physical.object.PhysicalProperty;
+import semsim.model.physical.object.CustomPhysicalProcess;
+import semsim.model.physical.object.PhysicalPropertyinComposite;
+import semsim.model.physical.object.ReferencePhysicalEntity;
+import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.utilities.SemSimUtil;
 import semsim.writing.CellMLbioRDFblock;
 
@@ -197,7 +200,7 @@ public class CellMLreader extends ModelReader {
 			String submodelname = compname;
 
 			// Need to make sure the sub-model name is unique and not taken by a data structure
-			while(semsimmodel.getDataStructure(submodelname)!=null || semsimmodel.getCustomPhysicalEntityByName(submodelname)!=null ||
+			while(semsimmodel.getAssociatedDataStructure(submodelname)!=null || semsimmodel.getCustomPhysicalEntityByName(submodelname)!=null ||
 				semsimmodel.getCustomPhysicalProcessByName(submodelname)!=null){
 				submodelname = submodelname + "_";
 			}
@@ -250,8 +253,6 @@ public class CellMLreader extends ModelReader {
 				// initial condition for an ODE or the value of a static constant. The 
 				// SemSim DataStructure.startValue is only for initial conditions.)
 				if(initval!=null) cvar.setCellMLinitialValue(initval);
-
-				cvar.setPhysicalProperty(new PhysicalProperty());
 				
 				// Set units
 				String unitstext = var.getAttributeValue("units");
@@ -299,7 +300,7 @@ public class CellMLreader extends ModelReader {
 				String uniquevarname = compname + "." + varname;
 				String initval = var.getAttributeValue("initial_value");
 				
-				DataStructure cvar = semsimmodel.getDataStructure(uniquevarname);
+				DataStructure cvar = semsimmodel.getAssociatedDataStructure(uniquevarname);
 
 				if(compMathMLelements!=null){
 					Element varmathmlel = getMathMLforOutputVariable(varname, compMathMLelements);
@@ -311,7 +312,7 @@ public class CellMLreader extends ModelReader {
 						if(ode) cvar.setStartValue(initval);
 						
 						String varmathml = xmloutputter.outputString(varmathmlel);
-						
+												
 						cvar.getComputation().setMathML(varmathml);
 
 						String RHS = getRHSofDataStructureEquation(varmathml, varname);
@@ -382,8 +383,8 @@ public class CellMLreader extends ModelReader {
 				String var1name = sub1.getName() + "." + varcon.getAttributeValue("variable_1");
 				String var2name = sub2.getName() + "." + varcon.getAttributeValue("variable_2");
 				
-				MappableVariable var1 = (MappableVariable) semsimmodel.getDataStructure(var1name);
-				MappableVariable var2 = (MappableVariable) semsimmodel.getDataStructure(var2name);
+				MappableVariable var1 = (MappableVariable) semsimmodel.getAssociatedDataStructure(var1name);
+				MappableVariable var2 = (MappableVariable) semsimmodel.getAssociatedDataStructure(var2name);
 				
 				Submodel encapsulatedsubmodel = null;
 				MappableVariable encapsulatedvariable = null;
@@ -457,7 +458,9 @@ public class CellMLreader extends ModelReader {
 		if(submodel.getMetadataID()!=null){
 			URI termURI = collectSingularBiologicalAnnotation(doc, submodel, comp);
 			if(termURI!=null){
-				submodel.addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, termURI, null);
+				ReferencePhysicalEntity rpe = new ReferencePhysicalEntity(termURI, termURI.toString());
+				semsimmodel.addReferencePhysicalEntity(rpe);
+				submodel.setSingularAnnotation(rpe);
 			}
 		}
 	}
@@ -656,7 +659,6 @@ public class CellMLreader extends ModelReader {
 	
 	
 	private void collectCompositeAnnotation(Document doc, SemSimComponent toann, Element el){
-		
 		MappableVariable cvar = (MappableVariable)toann;
 		Resource cvarResource = rdfblock.rdf.getResource(mainNS.getURI().toString() + cvar.getMetadataID());
 		
@@ -665,9 +667,7 @@ public class CellMLreader extends ModelReader {
 			physpropres = cvarResource.getPropertyResourceValue(CellMLbioRDFblock.compcomponentfor);
 		
 		// If a physical property is specified for the variable
-		if(physpropres!=null && cvarResource!=null){
-			URIandPMCmap.put(physpropres.getURI(), cvar.getPhysicalProperty());
-			
+		if(physpropres!=null){
 			Resource isannres = physpropres.getPropertyResourceValue(CellMLbioRDFblock.is);
 			if(isannres==null)
 				isannres = physpropres.getPropertyResourceValue(CellMLbioRDFblock.refersto);
@@ -684,8 +684,9 @@ public class CellMLreader extends ModelReader {
 //				}
 				
 				String uristring = isannres.getURI();
-				cvar.getPhysicalProperty().addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, 
-					URI.create(uristring), uristring);
+				
+				PhysicalPropertyinComposite pp = getPhysicalProperty(uristring);
+				cvar.setAssociatedPhysicalProperty(pp);
 			}
 
 			getPMCfromRDFresourceAndAnnotate(physpropres);
@@ -696,12 +697,12 @@ public class CellMLreader extends ModelReader {
 			if(propertyofres!=null){
 				
 				PhysicalModelComponent pmc = getPMCfromRDFresourceAndAnnotate(propertyofres);
-				cvar.getPhysicalProperty().setPhysicalPropertyOf(pmc);
+				cvar.setAssociatedPhysicalModelComponent(pmc);
 				
 				// If it is a process
 				if(pmc instanceof PhysicalProcess){
 					PhysicalProcess process = (PhysicalProcess)pmc;
-					cvar.getPhysicalProperty().setPhysicalPropertyOf(pmc);
+					cvar.setAssociatedPhysicalModelComponent(pmc);
 					NodeIterator sourceit = rdfblock.rdf.listObjectsOfProperty(propertyofres, CellMLbioRDFblock.hassourceparticipant);
 					
 					// Read in the source participants
@@ -778,7 +779,7 @@ public class CellMLreader extends ModelReader {
 		// Create a singular physical entity from a component in a composite physical entity
 		PhysicalEntity returnent = null;
 		if(isannres!=null)
-			 returnent = semsimmodel.addReferencePhysicalEntity(URI.create(isannres.getURI()), isannres.getURI());
+			 returnent = semsimmodel.addReferencePhysicalEntity(new ReferencePhysicalEntity(URI.create(isannres.getURI()), isannres.getURI()));
 		
 		// If a custom entity
 		else returnent = addCustomPhysicalEntityToModel(res);
@@ -811,7 +812,7 @@ public class CellMLreader extends ModelReader {
 				
 				// If a reference entity
 				else if(isannres!=null)
-					pmc = semsimmodel.addReferencePhysicalEntity(URI.create(isannres.getURI()), isannres.getURI());
+					pmc = semsimmodel.addReferencePhysicalEntity(new ReferencePhysicalEntity(URI.create(isannres.getURI()), isannres.getURI()));
 				
 				// If a custom entity
 				else{
@@ -822,14 +823,14 @@ public class CellMLreader extends ModelReader {
 				
 				// If a reference process
 				if(isannres!=null){
-					pmc = semsimmodel.addReferencePhysicalProcess(URI.create(isannres.getURI()), isannres.getURI());
+					pmc = semsimmodel.addReferencePhysicalProcess(new ReferencePhysicalProcess(URI.create(isannres.getURI()), isannres.getURI()));
 				}
 				// If a custom process
 				else{
 					String name = res.getProperty(CellMLbioRDFblock.hasname).getString();
 					if(name==null) name = unnamedstring;
 					String description = res.getProperty(CellMLbioRDFblock.description).getString();
-					pmc = semsimmodel.addCustomPhysicalProcess(name, description);
+					pmc = semsimmodel.addCustomPhysicalProcess(new CustomPhysicalProcess(name, description));
 				}
 			}
 			Resource isversionofann = res.getPropertyResourceValue(CellMLbioRDFblock.isversionof);
@@ -847,7 +848,7 @@ public class CellMLreader extends ModelReader {
 		String name = res.getProperty(CellMLbioRDFblock.hasname).getString();
 		if(name==null) name = unnamedstring;
 		String description = res.getProperty(CellMLbioRDFblock.description).getString();
-		return semsimmodel.addCustomPhysicalEntity(name, description);
+		return semsimmodel.addCustomPhysicalEntity(new CustomPhysicalEntity(name, description));
 	}
 		
 	
@@ -930,7 +931,7 @@ public class CellMLreader extends ModelReader {
 						
 						// If the input is actually in the model...
 						if(semsimmodel.containsDataStructure(inputname) && !inputname.equals(cvar.getName())){
-							inputds = semsimmodel.getDataStructure(inputname);
+							inputds = semsimmodel.getAssociatedDataStructure(inputname);
 						}
 						else{
 							System.err.println("Equation for " + cvar.getName() + " uses " + inputname + " but that data structure not in model");
@@ -946,6 +947,16 @@ public class CellMLreader extends ModelReader {
 		}
 	}
 	
+	private PhysicalPropertyinComposite getPhysicalProperty(String refersto) {
+		PhysicalModelComponent term = URIandPMCmap.get(refersto);
+		if (term==null) {
+			String description = "";
+			term = new PhysicalPropertyinComposite(description, URI.create(refersto));
+			URIandPMCmap.put(refersto, term);
+			semsimmodel.addAssociatePhysicalProperty((PhysicalPropertyinComposite) term);
+		}
+		return (PhysicalPropertyinComposite)term;
+	}
 	
 	public static String getRHSofDataStructureEquation(String varmathml, String varname){
 		

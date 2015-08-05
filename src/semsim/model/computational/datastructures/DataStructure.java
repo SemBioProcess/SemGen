@@ -5,10 +5,9 @@ import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 
-import semsim.Annotatable;
 import semsim.PropertyType;
-import semsim.SemSimConstants;
 import semsim.SemSimLibrary;
+import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.SemSimRelation;
@@ -16,20 +15,25 @@ import semsim.model.computational.Computation;
 import semsim.model.computational.ComputationalModelComponent;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalEntity;
+import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
+import semsim.model.physical.object.PhysicalPropertyinComposite;
 
 /**
  * This class represents a named element in a simulation model that
  * is assigned some computational value during simulation.
  */
-public abstract class DataStructure extends ComputationalModelComponent implements Annotatable, Cloneable{	
-	private Computation computation;
-	private PhysicalProperty physicalProperty;
+public abstract class DataStructure extends ComputationalModelComponent implements Annotatable, Cloneable {	
+	private Computation computation = null;
+	private PhysicalPropertyinComposite physicalProperty = null;
+	private PhysicalModelComponent physicalcomponent =null;
+	private PhysicalProperty singularterm = null;
 	private DataStructure solutionDomain;
 	private Set<DataStructure> usedToCompute = new HashSet<DataStructure>();
 	private Set<Annotation> annotations = new HashSet<Annotation>();
 	private boolean isSolutionDomain, isDiscrete, isDeclared, isImported;
+	protected boolean mappable = false;
 	private String startValue;
 	private UnitOfMeasurement unit;
 	
@@ -73,10 +77,18 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	}
 	
 	/**
-	 * @return The {@link PhysicalProperty} simulated by the DataStructure
+	 * @return The {@link PhysicalPropertyinComposite} simulated by the DataStructure
 	 */
-	public PhysicalProperty getPhysicalProperty(){
+	public PhysicalPropertyinComposite getPhysicalProperty(){
 		return physicalProperty;
+	}
+	
+	public PhysicalModelComponent getAssociatedPhysicalModelComponent() {
+		return physicalcomponent;
+	}
+	
+	public void setAssociatedPhysicalModelComponent(PhysicalModelComponent pmc) {
+		physicalcomponent = pmc;
 	}
 	
 	/** @return The domain in which the data structure is solved
@@ -103,7 +115,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	
 	/** @return Whether the DataStructure has been associated with a physical property */
 	public Boolean hasPhysicalProperty(){
-		return (physicalProperty != null);
+		return physicalProperty != null;
 	}
 	
 	/** @return Whether the DataStructure has been assigned a start value */
@@ -149,14 +161,11 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	}
 	
 	/**
-	 * Assign a {@link PhysicalProperty} to the DataStructure 
+	 * Assign a {@link PhysicalPropertyinComposite} to the DataStructure 
 	 * @param pp The PhysicalProperty instance to assign to the DataStructure
 	 */
-	public void setPhysicalProperty(PhysicalProperty pp){
+	public void setAssociatedPhysicalProperty(PhysicalPropertyinComposite pp){
 		physicalProperty = pp;
-		if(pp!=null){
-			pp.setAssociatedDataStructure(this);
-		}
 	}
 	
 	/** Set whether this DataStructure is explicitly declared in the model or not */
@@ -194,17 +203,17 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		if(getPhysicalProperty()!=null){
 			compann = "[unspecified property] of ";
 			if(getPhysicalProperty().hasRefersToAnnotation()){
-				compann = getPhysicalProperty().getFirstRefersToReferenceOntologyAnnotation().getValueDescription() + " of ";
+				compann = getPhysicalProperty().getRefersToReferenceOntologyAnnotation().getValueDescription() + " of ";
 			}
 			// if physical entity or process
 			String target = "?";
-			if(getPhysicalProperty().getPhysicalPropertyOf()!=null){
-				if(getPhysicalProperty().getPhysicalPropertyOf().hasRefersToAnnotation()){
-					target = getPhysicalProperty().getPhysicalPropertyOf().getFirstRefersToReferenceOntologyAnnotation().getValueDescription();
+			if(getAssociatedPhysicalModelComponent()!=null){
+				if(getAssociatedPhysicalModelComponent().hasRefersToAnnotation()){
+					target = getAssociatedPhysicalModelComponent().getDescription();
 				}
 				// otherwise it's a composite physical entity or custom term
 				else{
-					target = getPhysicalProperty().getPhysicalPropertyOf().getName();
+					target = getAssociatedPhysicalModelComponent().getName();
 				}
 			}
 			compann = compann + target; 
@@ -280,31 +289,8 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		return raos;
 	}
 	
-	
-	public ReferenceOntologyAnnotation getFirstRefersToReferenceOntologyAnnotation(){
-		if(!getReferenceOntologyAnnotations(SemSimConstants.REFERS_TO_RELATION).isEmpty()){
-			return getReferenceOntologyAnnotations(SemSimConstants.REFERS_TO_RELATION).toArray(new ReferenceOntologyAnnotation[]{})[0];
-		}
-		else{
-			return null;
-		}
-	}
-	
-	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotationByURI(URI uri){
-		for(ReferenceOntologyAnnotation ann : getReferenceOntologyAnnotations(SemSimConstants.REFERS_TO_RELATION)){
-			if(ann.getReferenceURI().compareTo(uri)==0){
-				return ann;
-			}
-		}
-		return null;
-	}
-	
 	public Boolean isAnnotated(){
 		return !getAnnotations().isEmpty();
-	}
-	
-	public Boolean hasRefersToAnnotation(){
-		return getFirstRefersToReferenceOntologyAnnotation()!=null;
 	}
 
 	public void removeAllReferenceAnnotations() {
@@ -341,37 +327,65 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		return false;
 	}
 	
-	
 	public PropertyType getPropertyType(SemSimLibrary lib){
 		if(hasPhysicalProperty()){
 			// If there's already an OPB reference annotation
 			if(getPhysicalProperty().hasRefersToAnnotation()){
-				ReferenceOntologyAnnotation roa = (getPhysicalProperty().getFirstRefersToReferenceOntologyAnnotation());
-				
-				if(lib.OPBhasStateProperty(roa) || lib.OPBhasForceProperty(roa)){
-					return PropertyType.PropertyOfPhysicalEntity;
-				}
-				else if(lib.OPBhasFlowProperty(roa) || lib.OPBhasProcessProperty(roa)){
-					return PropertyType.PropertyOfPhysicalProcess;
-				}
-				else return PropertyType.Unknown;
+				return lib.getPropertyinCompositeType(physicalProperty);
 			}
 			// Otherwise, see if there is already an entity or process associated with the codeword
-			else if(getPhysicalProperty().getPhysicalPropertyOf() instanceof PhysicalEntity){
+			else if(getAssociatedPhysicalModelComponent() instanceof PhysicalEntity){
 				return PropertyType.PropertyOfPhysicalEntity;
 			}
-			else if(getPhysicalProperty().getPhysicalPropertyOf() instanceof PhysicalProcess){
+			else if(getAssociatedPhysicalModelComponent() instanceof PhysicalProcess){
 				return PropertyType.PropertyOfPhysicalProcess;
 			}
 			else return PropertyType.Unknown;
 		}
-		else return PropertyType.Unknown;
+		return PropertyType.Unknown;
 	}
 	
 	public void copySingularAnnotations(DataStructure srcds){
 		removeAllReferenceAnnotations();
+		setSingularAnnotation(srcds.getSingularTerm());
 		for(ReferenceOntologyAnnotation ann : srcds.getAllReferenceOntologyAnnotations()){
 			addReferenceOntologyAnnotation(ann.getRelation(), ann.getReferenceURI(), ann.getValueDescription());
 		}
+	}
+	
+	public boolean hasAssociatedPhysicalComponent() {
+		return getAssociatedPhysicalModelComponent()!=null;
+	}
+	
+	public void setSingularAnnotation(PhysicalProperty refterm) {
+		singularterm = refterm;
+	}
+	
+	public void removeSingularAnnotation() {
+		singularterm = null;
+	}
+	
+	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotation(){
+		if(hasRefersToAnnotation()){
+			return singularterm.getRefersToReferenceOntologyAnnotation();
+		}
+		return null;
+	}
+	
+	@Override
+	public Boolean hasRefersToAnnotation() {
+		return singularterm!=null;
+	}
+	
+	public URI getReferstoURI() {
+		return singularterm.getReferstoURI();
+	}
+	
+	public PhysicalProperty getSingularTerm() {
+		return singularterm;
+	}
+	
+	public boolean isMapped() {
+		return false;
 	}
 }
