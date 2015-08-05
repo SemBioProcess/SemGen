@@ -38,3 +38,9 @@ Icon
 # Other files and folders
 bin/
 *.prefs
+.settings/
+
+# IntelliJ files and folders
+out/
+.idea/
+*.iml
