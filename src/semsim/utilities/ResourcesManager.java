@@ -32,7 +32,7 @@ public class ResourcesManager {
 		return null;
 	}
 	
-	public static HashMap<String, String[]> createHashMapFromFile(String path) throws FileNotFoundException {
+	public static HashMap<String, String[]> createHashMapFromFile(String path, boolean usecommaseparator) throws FileNotFoundException {
 			Set<String> buffer = createSetFromFile(path);
 			if (buffer == null) return null;
 			
@@ -53,18 +53,21 @@ public class ResourcesManager {
 				else{
 					nextline = nextline.substring(semiseparatorindex + 2, nextline.length());
 				}
-				while (repeat) {
-					if (!nextline.contains(",")) {
-						values.add(nextline);
-						repeat = false;
-						break;
+				if(usecommaseparator)
+					while (repeat) {
+						if (!nextline.contains(",")) {
+							values.add(nextline);
+							repeat = false;
+							break;
+						}
+						commaseparatorindex = nextline.indexOf(",");
+						values.add(nextline.substring(0, nextline.indexOf(",")));
+						commaseparatorindex = nextline.indexOf(",");
+						nextline = nextline.substring(commaseparatorindex + 2,
+								nextline.length());
 					}
-					commaseparatorindex = nextline.indexOf(",");
-					values.add(nextline.substring(0, nextline.indexOf(",")));
-					commaseparatorindex = nextline.indexOf(",");
-					nextline = nextline.substring(commaseparatorindex + 2,
-							nextline.length());
-				}
+				else values.add(nextline);
+				
 				table.put(key, (String[]) values.toArray(new String[] {}));
 			}
 			return table;

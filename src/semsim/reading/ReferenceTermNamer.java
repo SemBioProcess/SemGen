@@ -66,6 +66,7 @@ public class ReferenceTermNamer {
 								String name = null;
 								if(URInameMap.containsKey(uri.toString())){
 									name = URInameMap.get(uri.toString())[0];
+									System.out.println(uri.toString() + " was already cached: " + name);
 								}
 								else{
 									name = getNameFromURI(uri);
