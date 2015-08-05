@@ -4,32 +4,28 @@
  function Link(graph, name, parent, input, output, length, type) {
 	 if(!graph)
 		 return;
-	 
-	 this.graph = graph
 
+	 this.graph = graph;
 	 this.name = name;
+     this.id = input.id + "-" + output.id + "_" + name;
 	 this.displayName = name;
 	 this.className = "link";
 	 this.source = input;
 	 this.target = output;
-	 this.lenght = length;
+	 this.length = length;
 	 this.value = 1;
 	 this.type = type;
 	 
  }
  
- Link.prototype.addClassName = function (className) {
-	 this.className += " " + className;
- }
- 
- Link.prototype.addBehavior = function (behavior) {
-	// Behaviors are just functions that take in a link as an argument
-	// To add a behavior all we need to do is call the function
-	//
-	// Note: I added this function to make adding a behavior easier to read
-	// (e.g. this.addBehavior(SomeBehavior); )
-	behavior(this);
-}
+//  Link.prototype.addBehavior = function (behavior) {
+// 	// Behaviors are just functions that take in a link as an argument
+// 	// To add a behavior all we need to do is call the function
+// 	//
+// 	// Note: I added this function to make adding a behavior easier to read
+// 	// (e.g. this.addBehavior(SomeBehavior); )
+// 	behavior(this);
+// }
 
 Link.prototype.createVisualElement = function (element, graph) {
 	this.rootElement = d3.select(element);
@@ -44,18 +40,16 @@ Link.prototype.createVisualElement = function (element, graph) {
 	this.createTextElement("shadow");
 	this.createTextElement("real");
 	
-	$(this).triggerHandler('createVisualization', [this.rootElement]);
 }
 
 Link.prototype.tickHandler = function (element, graph) {
-	$(this).triggerHandler('preTick');
 	
 	// Display and update links
 	var root = d3.select(element);
-	root.attr("d", function(d) {
+	root.select("path").attr("d", function(d) {
     	    var dx = d.target.x - d.source.x,
     	        dy = d.target.y - d.source.y,
-    	        dr = 0,										// Lines have no arc
+    	        dr = 0;
     	        theta = Math.atan2(dy, dx) + Math.PI * 2,
     	        d90 = Math.PI / 2,
     	        dtxs = d.target.x - d.target.r * Math.cos(theta),
@@ -70,11 +64,11 @@ Link.prototype.tickHandler = function (element, graph) {
     	    		"z";
     	});
 		
-	// // Display and update the link labels  
-	// text.attr("x", function(d) { return d.source.x + (d.target.x - d.source.x)/2; });
-	// text.attr("y", function(d) { return d.source.y + (d.target.y - d.source.y)/2; });
+	// Display and update the link labels
+	var text = root.selectAll("text");
+	text.attr("x", function(d) { return d.source.x + (d.target.x - d.source.x)/2; });
+	text.attr("y", function(d) { return d.source.y + (d.target.y - d.source.y)/2; });
 	
-	$(this).triggerHandler('postTick');
 }
 
 Link.prototype.createTextElement = function (className) {
