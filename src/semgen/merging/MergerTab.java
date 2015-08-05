@@ -190,7 +190,9 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 					if (newname==null) return;
 					cwnamemap.put(name, newname);
 				}
+				
 				ArrayList<Boolean> unitoverlaps = workbench.getUnitOverlaps();
+				
 				ArrayList<Pair<Double,String>> conversionlist = new ArrayList<Pair<Double,String>>(); 
 				for (int i=0; i<unitoverlaps.size(); i++) {
 					if (!unitoverlaps.get(i)) {
@@ -202,6 +204,7 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 					}
 					conversionlist.add(Pair.of(1.0, "*"));
 				}
+
 				SemGenProgressBar progframe = new SemGenProgressBar("Merging...", true);
 				String error = workbench.executeMerge(cwnamemap, smnamemap, choicelist, conversionlist, progframe);
 				if (error!=null){
@@ -362,11 +365,6 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 			return filec.getSelectedFile();
 		}
 		return null;
-	}
-
-	@Override
-	public void addObservertoWorkbench(Observer obs) {
-		workbench.addObserver(obs);
 	}
 
 	@Override

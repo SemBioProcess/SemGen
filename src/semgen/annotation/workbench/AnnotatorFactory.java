@@ -6,10 +6,11 @@ package semgen.annotation.workbench;
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
+
 import semgen.utilities.WorkbenchFactory;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.file.SemGenOpenFileChooser;
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
 
 public class AnnotatorFactory extends WorkbenchFactory<AnnotatorWorkbench>{
 	boolean autoannotate = false;

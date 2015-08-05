@@ -1,11 +1,13 @@
 package semgen.merging.workbench;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
 
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.owl.SemSimOWLFactory;
 
 public class ModelOverlapMap {
@@ -13,7 +15,8 @@ public class ModelOverlapMap {
 	private Set<String> identicalsubmodelnames;
 	private Set<String> identicaldsnames;
 	private ArrayList<Pair<DataStructure, DataStructure>> dsmap = new ArrayList<Pair<DataStructure, DataStructure>>();
-
+	private HashMap<UnitOfMeasurement, UnitOfMeasurement> unitsmap = new HashMap<UnitOfMeasurement, UnitOfMeasurement>();
+	
 	private ArrayList<maptype> maptypelist = new ArrayList<maptype>();	
 	private int slndomcnt = 0;
 	
@@ -45,6 +48,7 @@ public class ModelOverlapMap {
 			dspair = equivlist.get(i);
 			addDataStructureMapping(dspair.getLeft(), dspair.getRight(), maptype.exactsemaoverlap);
 		}
+		unitsmap = comparator.identifyEquivalentUnits();
 		identicalsubmodelnames = comparator.getIdenticalSubmodels();
 		identicaldsnames = comparator.getIdenticalCodewords();
 	}
@@ -124,21 +128,31 @@ public class ModelOverlapMap {
 		return dsmap;
 	}
 	
+	public HashMap<UnitOfMeasurement, UnitOfMeasurement> getEquivalentUnitPairs() {
+		return unitsmap;
+	}
+	
 	//Compare units of all Data Structures in the overlap map. Determine if terms are equivalent
 	// for each. Return a list of comparisons
 	public ArrayList<Boolean> compareDataStructureUnits() {
 		ArrayList<Boolean> unitmatchlist = new ArrayList<Boolean>();
 		for (Pair<DataStructure, DataStructure> dsp : dsmap) {
+			boolean unitsmatch = true;
 			if(dsp.getLeft().hasUnits() && dsp.getRight().hasUnits()){
-				if (!dsp.getLeft().getUnit().getComputationalCode().equals(dsp.getRight().getUnit().getComputationalCode())){
-					unitmatchlist.add(false);
-					continue;
+				UnitOfMeasurement uomleft = dsp.getLeft().getUnit();
+				UnitOfMeasurement uomright = dsp.getRight().getUnit();
+				
+				unitsmatch = unitsmap.containsKey(uomleft);
+				if(unitsmatch){
+					unitsmatch = unitsmap.get(uomleft).equals(uomright);
 				}
 			}
-			unitmatchlist.add(true);
+			unitmatchlist.add(unitsmatch);
 		}
 		return unitmatchlist;
 	}
+	
+
 	
 	public int getSolutionDomainCount() {
 		return slndomcnt;

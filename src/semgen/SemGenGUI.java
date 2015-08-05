@@ -13,7 +13,6 @@ import semgen.extraction.workbench.ExtractorFactory;
 import semgen.menu.SemGenMenuBar;
 import semgen.merging.MergerTabFactory;
 import semgen.merging.workbench.MergerWorkbenchFactory;
-import semgen.stage.StageTab;
 import semgen.stage.StageTabFactory;
 import semgen.stage.StageWorkbenchFactory;
 import semgen.utilities.SemGenTask;
@@ -50,7 +49,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 	private SemGenMenuBar menu;
 
 	public SemGenGUI(SemGenSettings sets,  SemGenMenuBar menubar, GlobalActions gacts){
-		settings = new SemGenSettings(sets);
+		settings = sets;
 		menu = menubar;
 		globalactions = gacts;
 		globalactions.addObserver(this);
@@ -155,6 +154,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 			if (!workbenchfactory.isValid()) {
 				cancel(true);
 			}
+			workbenchfactory.addFileMenuasBenchObserver(menu.filemenu);
 			return null;
 		}
 		
@@ -166,7 +166,6 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 				int tabcount = opentabs.size();
 				globalactions.setCurrentTab(tab);
 				tab.loadTab();
-				tab.addObservertoWorkbench(menu.filemenu);
 				setTabComponentAt(tabcount-1, tab.getTabLabel());
 				
 				tab.addMouseListenertoTabLabel(new tabClickedListener(tab));

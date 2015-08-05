@@ -6,7 +6,7 @@ import java.net.URI;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semsim.SemSimLibrary;
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
 
 public abstract class ModelWriter {
 	protected static SemSimLibrary sslib;

@@ -4,16 +4,13 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import semgen.UnitTestBase;
 import semsim.CollateralHelper;
-import semsim.SemSimConstants;
-import semsim.SemSimLibrary;
 import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata;
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
 
 public class CellMLReaderUnitTests extends UnitTestBase {
 	

@@ -2,8 +2,8 @@ package semgen.stage.serialization;
 
 import java.util.ArrayList;
 
+import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.physical.Submodel;
 
 /**
  * Represents a submodel node in a d3 graph

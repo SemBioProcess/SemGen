@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.utilities.file.SemGenSaveFileChooser;
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.writing.CaseInsensitiveComparator;
 
@@ -28,7 +28,7 @@ public class CSVExporter {;
 		String[] array = semsimmodel.getDataStructureNames().toArray(new String[]{});
 		Arrays.sort(array, new CaseInsensitiveComparator());
 		for(int i=0; i<array.length; i++){
-			DataStructure ds = semsimmodel.getDataStructure(array[i]);
+			DataStructure ds = semsimmodel.getAssociatedDataStructure(array[i]);
 			if(ds.isDeclared() && !ds.getName().equals("")){
 				String valueifstatic = "";
 				if(ds.getComputation().getInputs().isEmpty()){

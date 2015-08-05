@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Field;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -127,9 +128,16 @@ public class SemGen extends JFrame implements Observer{
 	}
 	
 	//Launch application
-	public SemGen() throws NoSuchMethodException, SecurityException {
+	public SemGen() throws NoSuchMethodException, SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 		super("OSXAdapter");
-		OSXAdapter.setQuitHandler(this, getClass().getMethod("quit", (Class<?>[])null));
+
+		// Add the cfg folder to java.library.path (for using libSBML)
+		System.setProperty( "java.library.path", "cfg" );
+		Field fieldSysPath = ClassLoader.class.getDeclaredField( "sys_paths" );
+		fieldSysPath.setAccessible( true );
+		fieldSysPath.set( null, null );
+				
+		OSValidation();
 		
 		setTitle(":: S e m  G e n ::");
 		//this.setIconImage(SemGenIcon.semgenbigicon.getImage());
@@ -169,7 +177,7 @@ public class SemGen extends JFrame implements Observer{
 	}
 	
 	//Check which OS SemGen is being run under
-	private static void OSValidation() throws NoSuchMethodException, SecurityException {
+	private static void OSValidation() throws NoSuchMethodException, SecurityException{
 		int OS = 0;
 		if (OSValidator.isMac()) OS = MACOSX;
 		else if (OSValidator.isWindows()) OS = WINDOWS;

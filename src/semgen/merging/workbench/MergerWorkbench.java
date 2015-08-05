@@ -20,7 +20,7 @@ import semgen.merging.workbench.ModelOverlapMap.maptype;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.uicomponent.SemGenProgressBar;
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.utilities.SemSimUtil;
 
@@ -78,7 +78,7 @@ public class MergerWorkbench extends Workbench {
 			model = loadModel(file, autoannotate);
 			loadedmodels.add(model);
 			filepathlist.add(file);
-			addDSNameList(model.getDataStructures());
+			addDSNameList(model.getAssociatedDataStructures());
 		}
 
 		notifyModelListUpdated();
@@ -161,6 +161,10 @@ public class MergerWorkbench extends Workbench {
 			}
 		}
 		return identicalmap;
+	}
+	
+	public ModelOverlapMap getModelOverlapMap(){
+		return overlapmap;
 	}
 	
 	public Pair<String, String> getMapPairNames(int index) {

@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import semsim.SemSimConstants;
+import semsim.model.SemSimTypes;
 import semsim.model.physical.PhysicalProcess;
 
 public class CustomPhysicalProcess extends PhysicalProcess{
@@ -17,8 +18,18 @@ public class CustomPhysicalProcess extends PhysicalProcess{
 		setDescription(description);
 	}
 	
+	public CustomPhysicalProcess(CustomPhysicalProcess cuproc) {
+		super(cuproc);
+		setName(cuproc.getName());
+		setDescription(cuproc.getDescription());
+	}
+	
 	@Override
 	public URI getSemSimClassURI() {
 		return SemSimConstants.CUSTOM_PHYSICAL_PROCESS_CLASS_URI;
+	}
+	@Override
+	public SemSimTypes getSemSimType() {
+		return SemSimTypes.CUSTOM_PHYSICAL_PROCESS;
 	}
 }

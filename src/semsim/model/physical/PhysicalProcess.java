@@ -9,6 +9,14 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 	private LinkedHashMap<PhysicalEntity, Double> sinks = new LinkedHashMap<PhysicalEntity, Double>();
 	private Set<PhysicalEntity> mediators = new HashSet<PhysicalEntity>();	
 	
+	protected PhysicalProcess() {}
+	
+	public PhysicalProcess(PhysicalProcess processtocopy) {
+		setSources(processtocopy.getSources());
+		setSinks(processtocopy.getSinks());
+		setMediators(processtocopy.getMediators());
+	}
+	
 	public void addSource(PhysicalEntity entity, Double stoichiometry){
 		sources.put(entity, stoichiometry);
 	}
@@ -33,24 +41,33 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 		return mediators;
 	}
 
-	public void setSources(LinkedHashMap<PhysicalEntity, Double> sources) {
-		this.sources = sources;
+	public void setSources(LinkedHashMap<PhysicalEntity, Double> newsources) {
+		sources = new LinkedHashMap<PhysicalEntity, Double>();
+		for (PhysicalEntity pe : newsources.keySet()) {
+			this.sources.put(pe, new Double(newsources.get(pe)));
+		}
 	}
 
 	public LinkedHashMap<PhysicalEntity, Double> getSources() {
 		return sources;
 	}
 
-	public void setSinks(LinkedHashMap<PhysicalEntity, Double> sinks) {
-		this.sinks = sinks;
+	public void setSinks(LinkedHashMap<PhysicalEntity, Double> newsinks) {
+		sinks = new LinkedHashMap<PhysicalEntity, Double>();
+		for (PhysicalEntity pe : newsinks.keySet()) {
+			this.sinks.put(pe, new Double(newsinks.get(pe)));
+		}
 	}
 
 	public LinkedHashMap<PhysicalEntity, Double> getSinks() {
 		return sinks;
 	}
 
-	public void setMediators(Set<PhysicalEntity> mediators) {
-		this.mediators = mediators;
+	public void setMediators(Set<PhysicalEntity> newmediators) {
+		mediators = new HashSet<PhysicalEntity>();
+		for (PhysicalEntity pe : newmediators) {
+			this.mediators.add(pe);
+		}
 	}
 
 	public Set<PhysicalEntity> getMediators() {
@@ -87,6 +104,77 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 		allpents.addAll(getSinkPhysicalEntities());
 		allpents.addAll(getMediatorPhysicalEntities());
 		return allpents;
+	}
+	
+	public void removeParticipant(PhysicalEntity pe) {
+		if (sources.keySet().contains(pe)) {
+			sources.remove(pe);
+		}
+		if (sinks.keySet().contains(pe)) {
+			sinks.remove(pe);
+		}
+		if (mediators.contains(pe)) {
+			mediators.remove(pe);
+		}
+	}
+	
+	public void replaceParticipant(PhysicalEntity pe, PhysicalEntity rep) {
+		if (sources.keySet().contains(pe)) {
+			Double mult = sources.get(pe);
+			sources.remove(pe);
+			sources.put(rep, mult);
+		}
+		if (sinks.keySet().contains(pe)) {
+			Double mult = sinks.get(pe);
+			sinks.remove(pe);
+			sinks.put(rep, mult);
+		}
+		if (mediators.contains(pe)) {
+			mediators.remove(pe);
+			mediators.add(rep);
+		}
+	}
+	
+	@Override
+	protected boolean isEquivalent(Object obj) {
+		PhysicalProcess proc = (PhysicalProcess)obj;
+		if ((sources.size()!=proc.getSources().size()) || 
+				(sinks.size()!=proc.getSinks().size()) || 
+				(mediators.size()!=proc.getMediators().size())) {
+			return false;
+		}
+		for (PhysicalEntity pe : getSources().keySet()) {
+			boolean hasequiv = false;
+			for (PhysicalEntity pe2 : proc.getSourcePhysicalEntities()) {
+				if (pe.equals(pe2) && sources.get(pe).equals(proc.getSourceStoichiometry(pe2))) {
+					hasequiv = true;
+					break;
+				}
+			}
+			if (!hasequiv) return false;
+		}
+		for (PhysicalEntity pe : getSinks().keySet()) {
+			boolean hasequiv = false;
+			for (PhysicalEntity pe2 : proc.getSinkPhysicalEntities()) {
+				if (pe.equals(pe2) && sinks.get(pe).equals(proc.getSinkStoichiometry(pe2))) {
+					hasequiv = true;
+					break;
+				}
+			}
+			if (!hasequiv) return false;
+		}
+		for (PhysicalEntity pe : getMediators()) {
+			boolean hasequiv = false;
+			for (PhysicalEntity pe2 : proc.getMediatorPhysicalEntities()) {
+				if (pe.equals(pe2)) {
+					hasequiv = true;
+					break;
+				}
+			}
+			if (!hasequiv) return false;
+		}
+		
+		return true;
 	}
 
 	@Override

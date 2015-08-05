@@ -4,8 +4,8 @@ import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 
-import semsim.Annotatable;
 import semsim.SemSimConstants;
+import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.SemSimRelation;
@@ -88,7 +88,7 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 	}
 	
 	
-	public ReferenceOntologyAnnotation getFirstRefersToReferenceOntologyAnnotation(){
+	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotation(){
 		if(!getReferenceOntologyAnnotations(SemSimConstants.REFERS_TO_RELATION).isEmpty()){
 			return getReferenceOntologyAnnotations(SemSimConstants.REFERS_TO_RELATION).toArray(new ReferenceOntologyAnnotation[]{})[0];
 		}
@@ -109,7 +109,7 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 	}
 	
 	public Boolean hasRefersToAnnotation(){
-		return getFirstRefersToReferenceOntologyAnnotation()!=null;
+		return getRefersToReferenceOntologyAnnotation()!=null;
 	}
 
 	public void removeAllReferenceAnnotations() {
@@ -194,5 +194,9 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 	@Override
 	public URI getSemSimClassURI() {
 		return SemSimConstants.UNITS_CLASS_URI;
+	}
+	
+	public URI getReferstoURI() {
+		return referenceuri;
 	}
 }
