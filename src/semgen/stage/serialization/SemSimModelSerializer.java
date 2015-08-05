@@ -1,6 +1,7 @@
 package semgen.stage.serialization;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -46,7 +47,7 @@ public class SemSimModelSerializer {
 			
 			dependencies.add(new DependencyNode(dataStructure, semSimModel.getName()));
 		}
-		
+
 		// Turn the dependencies into a string
 		return dependencies;
 	}
@@ -78,38 +79,69 @@ public class SemSimModelSerializer {
 	 * @return PhysioMap network
 	 */
 	public static ArrayList<PhysioMapNode> getPhysioMapNetwork(SemSimModel semSimModel) {
-		ArrayList<PhysioMapNode> physiomapNetwork = new ArrayList<PhysioMapNode>();
-		
+
+		HashMap<String, PhysioMapNode> nodeMap = new HashMap<String, PhysioMapNode>();
+		ArrayList<PhysioMapNode> physioMapNetwork = new ArrayList<PhysioMapNode>();
+
 		for(DataStructure dataStructure : semSimModel.getDataStructures()){
 			if(dataStructure.getPhysicalProperty().getPhysicalPropertyOf() != null &&
-				dataStructure.getPhysicalProperty().getPhysicalPropertyOf() instanceof PhysicalProcess) {
-				
+					dataStructure.getPhysicalProperty().getPhysicalPropertyOf() instanceof PhysicalProcess) {
+
 				PhysicalProcess proc = (PhysicalProcess) dataStructure.getPhysicalProperty().getPhysicalPropertyOf();
-				
-				for(PhysicalEntity physEnt : proc.getParticipants()) { // Source nodes never get created
-					String physEntName = physEnt.getName();
-					if(physEntName == "") physEntName = "Null node";
-					PhysioMapNode physEntNode = new PhysioMapNode(physEntName,
-							semSimModel.getName(),
-							proc.getName(),
-							proc.getSourcePhysicalEntities(),
-							proc.getSinkPhysicalEntities(),
-							proc.getMediatorPhysicalEntities());
-					boolean dup = false;
-//					for(PhysioMapNode pmNode : physiomapNetwork) {
-//						if(pmNode.id.equals(physEntNode.id)) dup = true;
-//					}
-					if(!dup) {
-						physiomapNetwork.add(physEntNode);
-					}
-				}
-				
+
+				updateNodeMapForProcess(
+						semSimModel.getName(),
+						proc.getName(),
+						proc.getSourcePhysicalEntities(),
+						proc.getSinkPhysicalEntities(),
+						proc.getMediatorPhysicalEntities(),
+						nodeMap);
 			}
 		}
 
-		return physiomapNetwork;
+		physioMapNetwork.addAll(nodeMap.values());
+		return physioMapNetwork;
 	}
 	
+	private static void updateNodeMapForProcess(String parentModelId, String processName, Set<PhysicalEntity> sources, Set<PhysicalEntity> sinks, Set<PhysicalEntity> mediators, HashMap<String, PhysioMapNode> nodeMap) {
+		for(PhysicalEntity source : sources) {
+			for(PhysicalEntity sink : sinks) {
+				ArrayList<String> mediatorsNames = new ArrayList<String>();
+				for(PhysicalEntity mediator : mediators) {
+					mediatorsNames.add(Node.buildId(mediator.getName(), parentModelId));
+					getOrCreatePhysioMapNode(mediator.getName(), parentModelId, nodeMap, "Mediator");
+				}
+
+				// If the source or sink is not specified, set it to "Null node"
+				String sinkName = sink.getName();
+				if(sinkName == "") sinkName = "Null node";
+				String sourceName = source.getName();
+				if(sourceName == "") sourceName = "Null node";
+				
+				getOrCreatePhysioMapNode(sourceName, parentModelId, nodeMap, "Entity");
+				PhysioMapNode sinkNode = getOrCreatePhysioMapNode(sinkName, parentModelId, nodeMap, "Entity");
+
+				sinkNode.inputs.add(new Link(
+						Node.buildId(sourceName, parentModelId),
+						Node.buildId(sinkName, parentModelId),
+						parentModelId,
+						processName,
+						mediatorsNames));
+			}
+		}
+
+	}
+	
+	private static PhysioMapNode getOrCreatePhysioMapNode(String name, String parentModelId, HashMap<String, PhysioMapNode> nodeMap, String nodeType){
+		PhysioMapNode node = nodeMap.get(name);
+		if(node == null){		
+			node = new PhysioMapNode(name, parentModelId, nodeType);
+			nodeMap.put(name, node);
+		}
+		
+		return node;
+	}
+
 	public static JsonString toJsonString(Object obj) {
 		Gson gson = new Gson();
 		String json = gson.toJson(obj);

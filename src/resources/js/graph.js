@@ -149,10 +149,12 @@ function Graph() {
 
 		// Add the links
 		path = vis.selectAll("g.link")
-			.data(links, function(d) { return d.source.id + "-" + d.target.id; });
-			
+			.data(links, function(d) { return d.id; });
+
 		path.enter().append("g")
         	.each(function (d) { d.createVisualElement(this, graph); });
+
+		path.exit().remove();
 		
 		// Build the nodes
 	    node = vis.selectAll("g.node")
@@ -183,7 +185,7 @@ function Graph() {
 	    }, 7000);
 	};
 	
-	this.tick = function () { 	
+	this.tick = function () {
 		// Execute the tick handler for each link
 		path.each(function (d) {
 			d.tickHandler(this, graph);

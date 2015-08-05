@@ -21,7 +21,7 @@ function Node(graph, id, name, parent, inputs, r, color, textSize, nodeType, cha
 	this.userCanHide = true;
 	this.hidden = false;
 	this.spaceBetweenTextAndNode = this.r * 0.2 + this.textSize;
-	console.log(this);
+
 }
 
 Node.prototype.addClassName = function (className) {
@@ -80,9 +80,10 @@ Node.prototype.getLinks = function () {
 		var inputData = this.inputs[i];
 		var inputNodeId;
 		var outputNodeId;
+		var mediatorNodeIds;
 		var type;
 		var linkLabel = inputData.label;
-		
+
 		// If the linked node is in a different parent, mark it as external
 		if(inputData.parentModelId != this.parent.id) {
 			type = "external";
@@ -100,7 +101,14 @@ Node.prototype.getLinks = function () {
 			else
 				inputNodeId = inputData.sourceId;
 		}
-		
+
+		else if(linkLabel !== undefined) {
+			type = "physiomap";
+			inputNodeId = inputData.sourceId;
+			outputNodeId = inputData.sinkId;
+			mediatorNodeIds = inputData.mediators;
+		}
+
 		else {
 			type = "internal";
 			inputNodeId = inputData.sourceId;
@@ -112,6 +120,18 @@ Node.prototype.getLinks = function () {
 		
 		// Get the sink node
 		var outputNode =  outputNodeId === undefined ? this : this.graph.findNode(outputNodeId);
+		
+		// Get the mediator node
+		
+		var mediatorNodes = [];
+		if(mediatorNodeIds === undefined) {
+			mediatorNodes = null;
+		}
+		else {
+			for(var j = 0; j < mediatorNodeIds.length; j++) {
+				mediatorNodes.push(this.graph.findNode(mediatorNodeIds[j]));
+			}
+		}
 		
 		if(!inputNode) {
 			console.log("input node '" + inputNodeId + "' does not exist. Can't build link.");
@@ -129,19 +149,22 @@ Node.prototype.getLinks = function () {
 			console.log("input node '" + inputNodeId + "' has its circle hidden. Can't build link.");
 			continue;
 		}
-		
-		// links.push({
-		// 	source: inputNode,
-		// 	target: outputNode === undefined ? this : outputNode,
-		// 	type: type,
-		// 	length: type == "external" ? 200 : 40,
-		// 	label: linkLabel,
-		// 	value: 1,
-		// });
-		
-		var length = type == "external" ? 200 : 40;
+
+		if(type == "external") length = 200;
+		else if(type == "physiomap") length = 100;
+		else length = 40;
+
 		var newLink = new Link(this.graph, linkLabel, this.parent, inputNode, outputNode, length, type);
 		links.push(newLink);
+
+		// Add mediator links for each mediator node
+		if(mediatorNodes !== null) {
+			for (var k = 0; k < mediatorNodes.length; k++) {
+				var mediatorNode = mediatorNodes[k];
+				var newMediatorLink = new MediatorLink(this.graph, this.parent, mediatorNode, newLink, 10, "internal");
+				links.push(newMediatorLink);
+			}
+		}
 	}
 	
 	return links;

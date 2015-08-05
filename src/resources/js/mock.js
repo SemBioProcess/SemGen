@@ -11,7 +11,7 @@ $(window).load(function() {
 			addModel: function() {
 				mockReceiver.addModel("Test model " + modelNum++);
 			},
-			
+
 			taskClicked: function (modelName, task) {
 				if(task == "dependencies") {
 					var data = [
@@ -239,10 +239,11 @@ $(window).load(function() {
 				}
 				else if(task == "physiomap") {
 					var data = [
-					    {
+						{
 					    	id: modelName + "Entity 1",
 					    	parentModelId: modelName,
 					    	name: "Entity 1",
+							nodeType: "Entity",
 					    	inputs: [
 					    	         {
 					    	        	 sourceId: modelName + "Entity 2",
@@ -251,39 +252,63 @@ $(window).load(function() {
 					    	        	 label: "Process A",
 					    	         },
 					    	],
-					    },
-					    {
+                        },
+                        {
 					    	id: modelName + "Entity 2",
 					    	parentModelId: modelName,
 					    	name: "Entity 2",
-					    	inputs: [
+							nodeType: "Entity",
+							inputs: [
 					    	         {
 					    	        	 sourceId: modelName + "Entity 3",
 										 sinkId: modelName + "Entity 2",
 					    	        	 parentModelId: modelName,
 					    	        	 label: "Process B",
+										 mediators: [modelName + "Mediator B", modelName + "Mediator C"]
+					    	         },
+									 {
+					    	        	 sourceId: modelName + "Entity 1",
+										 sinkId: modelName + "Entity 2",
+					    	        	 parentModelId: modelName,
+					    	        	 label: "Process D",
+										 mediators: [modelName + "Mediator C"]
 					    	         },
 					    	],
-					    },
-					    {
+                        },
+                        {
 					    	id: modelName + "Entity 3",
 					    	parentModelId: modelName,
 					    	name: "Entity 3",
-					    	inputs: [
+							nodeType: "Entity",
+							inputs: [
 									{
 										 sourceId: modelName + "Entity 1",
-										 sinkId: modelName + "Entity 3",										 
+										 sinkId: modelName + "Entity 3",
 										 parentModelId: modelName,
 										 label: "Process C",
 									},
-					    	         {
-					    	        	 sourceId: modelName + "Entity 2",
-										 sinkId: modelName + "Entity 3",										 
-					    	        	 parentModelId: modelName,
-					    	        	 label: "Process D",
-					    	         },
+								{
+									sourceId: modelName + "Entity 1",
+									sinkId: modelName + "Entity 3",
+									parentModelId: modelName,
+									label: "Process E",
+								}
 					    	],
-					    },
+                        },
+						{
+							id: modelName + "Mediator B",
+							parentModelId: modelName,
+							name: "Mediator B",
+							nodeType: "Mediator",
+							inputs: []
+						},
+						{
+							id: modelName + "Mediator C",
+							parentModelId: modelName,
+							name: "Mediator C",
+							nodeType: "Mediator",
+							inputs: []
+						}
 					];
 					mockReceiver.showPhysioMapNetwork(modelName, data);
 				}
