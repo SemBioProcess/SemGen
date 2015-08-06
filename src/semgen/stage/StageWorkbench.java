@@ -2,7 +2,6 @@ package semgen.stage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +15,6 @@ import semgen.utilities.Workbench;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
-import semgen.visualizations.JsonString;
 import semgen.visualizations.SemGenWebBrowserCommandSender;
 import semsim.model.collection.SemSimModel;
 
@@ -119,7 +117,7 @@ public class StageWorkbench extends Workbench {
 			File file = new File("examples/AnnotatedModels/" + modelName + ".owl");
 			SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(file, false);
 			_models.put(semsimmodel.getName(), new ModelInfo(semsimmodel, file));
-			
+
 			_commandSender.addModel(semsimmodel.getName());
 		}
 		
@@ -139,7 +137,7 @@ public class StageWorkbench extends Workbench {
 					break;
 				case "dependencies":
 					_commandSender.showDependencyNetwork(model.getName(),
-							SemSimModelSerializer.toJsonString(SemSimModelSerializer.getDependencyNetwork(model)));
+							SemSimModelSerializer.getDependencyNetwork(model));
 					break;
 				case "extract":
 					SemGen.gacts.NewExtractorTab(modelInfo.Path);
@@ -152,20 +150,20 @@ public class StageWorkbench extends Workbench {
 					_commandSender.removeModel(modelName);
 					break;
 				case "submodels":
-					ArrayList<SubModelNode> submodelNetwork = SemSimModelSerializer.getSubmodelNetwork(model);
-					if(submodelNetwork.isEmpty())
+					SubModelNode[] submodelNetwork = SemSimModelSerializer.getSubmodelNetwork(model);
+					if(submodelNetwork.length <= 0)
 						JOptionPane.showMessageDialog(null, "'" + model.getName() + "' does not have any submodels");
 					else
-						_commandSender.showSubmodelNetwork(model.getName(), SemSimModelSerializer.toJsonString(submodelNetwork));
+						_commandSender.showSubmodelNetwork(model.getName(), submodelNetwork);
 					break;
 				default:
 					JOptionPane.showMessageDialog(null, "Task: '" + task +"', coming soon :)");
 					break;
 			}
 		}
-		
+
 		public void onSearch(String searchString) throws FileNotFoundException {
-			JsonString searchResults = CompositeAnnotationSearch.compositeAnnotationSearch(searchString);
+			String[] searchResults = CompositeAnnotationSearch.compositeAnnotationSearch(searchString);
 			_commandSender.search(searchResults);
 		}
 		
