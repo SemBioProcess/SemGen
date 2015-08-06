@@ -16,6 +16,7 @@ function PhysioMapNode (graph, data, parentNode) {
 	Node.prototype.constructor.call(this, graph, data.id, data.name, parentNode, data.inputs, 5, physiomapTypeToColor[data.nodeType], 14, data.nodeType, -300);
 	
 	this.displayName = data.name.replace("Portion of ", "").capitalizeFirstLetter();
+	this.displayName = limitWords(this.displayName, 5);
 	this.addClassName("physiomapNode");
 	this.addBehavior(HiddenLabelNodeGenerator);
 
@@ -32,3 +33,20 @@ var physiomapTypeToColor = {
 	"Entity": "#1F77B4",
 	"Mediator": "#FF7F0E"
 };
+
+// Limit displayName to 5 words
+var limitWords = function (text, wordLimit) {
+	var finalText = "";
+	var text2 = text.replace(/\s+/g, ' ');
+	var text3 = text2.split(' ');
+	var numberOfWords = text3.length;
+	var i=0;
+	if(numberOfWords > wordLimit)
+	{
+		for(i=0; i< wordLimit; i++)
+			finalText = finalText+" "+ text3[i]+" ";
+
+		return finalText+"...";
+	}
+	else return text;
+}

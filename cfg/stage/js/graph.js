@@ -210,6 +210,12 @@ function Graph() {
 		// Remove any existing dim assignments
 		vis.selectAll(".node, .link").each(function (d) {
 			d3.select(this).classed("dim", false);
+
+			// Replace label with display name
+			d3.select(this).selectAll("text")
+				.text(function(d) {
+					return d.displayName;
+				})
 		});
 		
 		// If no node was passed in there's nothing to dim
@@ -224,6 +230,13 @@ function Graph() {
 			if(d.source == highlightNode || d.target == highlightNode) {
 				nodesToHighlight[d.source.index] = 1;
 				nodesToHighlight[d.target.index] = 1;
+
+				// Display full name for highlighted links
+				d3.select(this).selectAll("text")
+					.text(function(d) {
+						return d.name;
+					})
+
 				return;
 			}
 			
@@ -235,6 +248,12 @@ function Graph() {
 		vis.selectAll(".node").each(function (d) {
 			if(!nodesToHighlight[d.index])
 				d3.select(this).classed("dim", true);
+			else
+				// Display full name for highlighted nodes
+				d3.select(this).selectAll("text")
+					.text(function(d) {
+						return d.name;
+					})
 		});
 	};
 	
