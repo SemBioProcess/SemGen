@@ -39,7 +39,9 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 	public UnitOfMeasurement(UnitOfMeasurement uomtocopy) {
 		setName(new String(uomtocopy.getName()));
 		computationalCode = new String(uomtocopy.computationalCode);
-		customDeclaration = new String(uomtocopy.customDeclaration);
+		if (customDeclaration != null) {
+			customDeclaration = new String(uomtocopy.customDeclaration);
+		}
 		isFundamental = uomtocopy.isFundamental;
 		isFundamental = uomtocopy.isImported;
 		parentImport = uomtocopy.parentImport;

@@ -234,7 +234,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Ance
 
 	private class EditorToolbar extends SemGenTabToolbar implements ActionListener {
 		private static final long serialVersionUID = 1L;
-		private SemGenToolbarRadioButton infobtn = new SemGenToolbarRadioButton(SemGenIcon.externalURLicon);
+		private SemGenToolbarRadioButton infobtn = new SemGenToolbarRadioButton(SemGenIcon.moreinfoicon);
 		private SemGenToolbarRadioButton modifybtn = new SemGenToolbarRadioButton(SemGenIcon.modifyicon);
 		private SemGenToolbarButton removebtn = new SemGenToolbarButton(SemGenIcon.eraseicon);
 		private SemGenToolbarRadioButton replacebtn = new SemGenToolbarRadioButton(SemGenIcon.replaceicon);

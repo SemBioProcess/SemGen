@@ -19,6 +19,7 @@ import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyinComposite;
+import semsim.utilities.SemSimCopy;
 
 /**
  * This class represents a named element in a simulation model that
@@ -36,6 +37,26 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	protected boolean mappable = false;
 	private String startValue;
 	private UnitOfMeasurement unit;
+	
+	public DataStructure() {}
+	
+	public DataStructure(DataStructure dstocopy) {
+		super(dstocopy);
+		computation = dstocopy.computation;
+		physicalProperty = dstocopy.physicalProperty;
+		physicalcomponent = dstocopy.physicalcomponent;
+		singularterm = dstocopy.singularterm;
+		solutionDomain = dstocopy.solutionDomain;
+		usedToCompute.addAll(dstocopy.usedToCompute);
+		annotations = SemSimCopy.copyAnnotations(dstocopy.annotations);
+		isSolutionDomain = dstocopy.isSolutionDomain;
+		isDiscrete = dstocopy.isDiscrete;
+		isDeclared = dstocopy.isDeclared;
+		isImported = dstocopy.isImported;
+		startValue = dstocopy.startValue;
+		unit = dstocopy.unit;
+	}
+	
 	
 	/**
 	 * Append the list of DataStructures that this DataStructure

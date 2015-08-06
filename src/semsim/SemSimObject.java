@@ -12,7 +12,9 @@ public abstract class SemSimObject {
 	
 	public SemSimObject(SemSimObject objtocopy) {
 		name = new String(objtocopy.name);
-		description = new String(objtocopy.description);
+		if (objtocopy.description != null) {
+			description = new String(objtocopy.description);
+		}
 		metadataID = new String(objtocopy.metadataID);
 		referenceuri = objtocopy.referenceuri;
 	}

@@ -267,7 +267,7 @@ public class Extraction {
 		
 		for(Submodel sub : getSubmodelsToExtract().keySet()){
 			
-			Submodel newsub = sub.clone();
+			Submodel newsub = new Submodel(sub);
 			extractedmodel.addSubmodel(newsub);
 			
 			// If we're preserving the submodel's submodels

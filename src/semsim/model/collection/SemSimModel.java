@@ -125,7 +125,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		physicalproperties.addAll(ssmtocopy.physicalproperties);
 		associatephysicalproperties.addAll(ssmtocopy.associatephysicalproperties);
 		
-		SemSimCopy.copySemSimModelStructures(ssmtocopy, this);
+		new SemSimCopy(ssmtocopy, this);
 	}
 	
 	public CurationalMetadata getCurationalMetadata() {

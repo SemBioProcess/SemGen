@@ -12,25 +12,22 @@ import semsim.model.physical.object.PhysicalDependency;
 
 public class Computation extends ComputationalModelComponent{
 
-	private PhysicalDependency physicalDependency;
+	private PhysicalDependency physicalDependency = new PhysicalDependency();
 	private Set<DataStructure> outputs = new HashSet<DataStructure>();
 	private Set<DataStructure> inputs = new HashSet<DataStructure>();
-	private String computationalCode;
-	private String mathML;
+	private String computationalCode = new String("");
+	private String mathML = new String("");
 	
 	/**
 	 * Class constructor with no output(s) specified
 	 */
-	public Computation(){
-		physicalDependency = new PhysicalDependency();
-	}
+	public Computation(){}
 	
 	/**
 	 * Class constructor with a single {@link DataStructure} set as the computation's output
 	 * @param output The output DataStructure of the Computation
 	 */
 	public Computation(DataStructure output){
-		physicalDependency = new PhysicalDependency();
 		outputs.add(output);
 	}
 	
@@ -45,6 +42,13 @@ public class Computation extends ComputationalModelComponent{
 	
 	public Computation(Computation comptocopy) {
 		super(comptocopy);
+		
+		outputs.addAll(comptocopy.outputs);
+		outputs.addAll(comptocopy.inputs);
+		if (computationalCode !=null) {
+			computationalCode = new String(comptocopy.computationalCode);
+		}
+		mathML = new String(comptocopy.mathML);
 	}
 	
 	/**

@@ -21,7 +21,7 @@ public class Submodel extends SemSimCollection implements Importable {
 		setName(name);
 	}
 	
-	protected Submodel(Submodel ssmtocopy) {
+	public Submodel(Submodel ssmtocopy) {
 		super(ssmtocopy);
 		isImported = ssmtocopy.isImported;
 		functional = ssmtocopy.functional;
@@ -32,10 +32,6 @@ public class Submodel extends SemSimCollection implements Importable {
 		localName = new String(ssmtocopy.localName);
 		submodels.addAll(ssmtocopy.submodels);
 		dataStructures.addAll(ssmtocopy.dataStructures);
-	}
-	
-	public Submodel clone() {
-        return new Submodel(this);
 	}
 	
 	// For Importable interface

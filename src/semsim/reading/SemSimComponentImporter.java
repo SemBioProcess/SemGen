@@ -86,7 +86,7 @@ public class SemSimComponentImporter {
 	
 	
 	private static FunctionalSubmodel addImportedComponentToModel(SemSimModel model, String localsemsimname, String localsourcemodelname, String hrefValue, FunctionalSubmodel origsubmodel, FunctionalSubmodel parent) throws CloneNotSupportedException{
-		FunctionalSubmodel importedcompclone = (FunctionalSubmodel) origsubmodel.clone();
+		FunctionalSubmodel importedcompclone = new FunctionalSubmodel(origsubmodel);
 		importedcompclone.setName(localsemsimname);
 		importedcompclone.setLocalName(localsourcemodelname);
 		importedcompclone.setImported(true);
