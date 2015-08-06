@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 
 import semgen.SemGen;
 import semgen.search.CompositeAnnotationSearch;
+import semgen.stage.serialization.SearchResultSet;
 import semgen.stage.serialization.SemSimModelSerializer;
 import semgen.stage.serialization.SubModelNode;
 import semgen.utilities.Workbench;
@@ -113,12 +114,14 @@ public class StageWorkbench extends Workbench {
 			}
 		}
 		
-		public void onAddModelByName(String modelName) throws FileNotFoundException {
-			File file = new File("examples/AnnotatedModels/" + modelName + ".owl");
-			SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(file, false);
-			_models.put(semsimmodel.getName(), new ModelInfo(semsimmodel, file));
+		public void onAddModelByName(String source, String modelName) throws FileNotFoundException {
+			if(source.equals(CompositeAnnotationSearch.SourceName)) {
+				File file = new File("examples/AnnotatedModels/" + modelName + ".owl");
+				SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(file, false);
+				_models.put(semsimmodel.getName(), new ModelInfo(semsimmodel, file));
 
-			_commandSender.addModel(semsimmodel.getName());
+				_commandSender.addModel(semsimmodel.getName());
+			}
 		}
 		
 		public void onTaskClicked(String modelName, String task) {
@@ -163,8 +166,12 @@ public class StageWorkbench extends Workbench {
 		}
 
 		public void onSearch(String searchString) throws FileNotFoundException {
-			String[] searchResults = CompositeAnnotationSearch.compositeAnnotationSearch(searchString);
-			_commandSender.search(searchResults);
+			SearchResultSet[] resultSets = {
+					CompositeAnnotationSearch.compositeAnnotationSearch(searchString),
+					// PMR results here
+			};
+
+			_commandSender.search(resultSets);
 		}
 		
 		public void onMerge(String modelName1, String modelName2) {

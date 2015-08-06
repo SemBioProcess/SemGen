@@ -16,7 +16,7 @@ public class CompositeAnnotationSearch {
 
 	// Given a keyword, do a string search on data structures from a set of annotated SemSim models.
 	// Return a list of SemSim model names containing the keyword.
-	public static String[] compositeAnnotationSearch(String searchString) throws FileNotFoundException {
+	public static SearchResultSet compositeAnnotationSearch(String searchString) throws FileNotFoundException {
 		List<Set<String>> compareResults = new ArrayList<Set<String>>(); 
 		String queryArray[];
 		queryArray = searchString.toLowerCase().split(" ");
@@ -50,6 +50,6 @@ public class CompositeAnnotationSearch {
 			finalResults.retainAll(resultSet);
 		}
 
-		return finalResults.toArray(new String[finalResults.size()]);
+		return new SearchResultSet(SourceName, finalResults.toArray(new String[finalResults.size()]));
 	}
 }

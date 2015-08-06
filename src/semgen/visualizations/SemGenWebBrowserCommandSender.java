@@ -44,5 +44,5 @@ public interface SemGenWebBrowserCommandSender {
 	 * Sends search results from multiple sources to JavaScript
 	 * @param resultSets Array containing search results from multiple sources
 	 */
-	void search(String[] resultSets);
+	void search(SearchResultSet[] resultSets);
 }
