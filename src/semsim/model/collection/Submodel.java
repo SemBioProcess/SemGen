@@ -27,9 +27,15 @@ public class Submodel extends SemSimCollection implements Importable {
 		functional = ssmtocopy.functional;
 		parentImport = ssmtocopy.parentImport;
 		singularterm = ssmtocopy.singularterm;
-		hrefValue = new String(ssmtocopy.hrefValue);
-		referencedName = new String(ssmtocopy.referencedName);
-		localName = new String(ssmtocopy.localName);
+		if (ssmtocopy.hrefValue!=null) {
+			hrefValue = new String(ssmtocopy.hrefValue);
+		}
+		if (ssmtocopy.referencedName!=null) {
+			referencedName = new String(ssmtocopy.referencedName);
+		}
+		if (ssmtocopy.localName!=null) {
+			localName = new String(ssmtocopy.localName);
+		}
 		submodels.addAll(ssmtocopy.submodels);
 		dataStructures.addAll(ssmtocopy.dataStructures);
 	}

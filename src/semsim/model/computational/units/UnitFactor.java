@@ -14,7 +14,9 @@ public class UnitFactor{
 
 	public UnitFactor(UnitFactor uftocopy) {
 		exponent = uftocopy.exponent;
-		prefix = new String(uftocopy.prefix);
+		if (uftocopy.prefix!=null) {
+			prefix = new String(uftocopy.prefix);
+		}
 		multiplier = uftocopy.multiplier;
 	}
 	

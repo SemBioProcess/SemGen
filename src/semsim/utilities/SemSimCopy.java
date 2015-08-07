@@ -92,6 +92,14 @@ public class SemSimCopy {
 			CompositePhysicalEntity newcpe = new CompositePhysicalEntity(cpe);
 			ArrayList<PhysicalEntity> pes = new ArrayList<PhysicalEntity>();
 			for (PhysicalEntity pe : cpe.getArrayListOfEntities()) {
+				if (!entities.containsKey(pe)) {
+					if (pe.hasRefersToAnnotation()) {
+						entities.put(pe, pe);
+					}
+					else {
+						entities.put(pe, new CustomPhysicalEntity((CustomPhysicalEntity) pe));
+					}
+				}
 				pes.add(entities.get(pe));
 			}
 			newcpe.setArrayListOfEntities(pes);
@@ -186,7 +194,12 @@ public class SemSimCopy {
 				compmap.put(comp, newcomp);
 			}
 			if (ds.hasAssociatedPhysicalComponent()) {
-				ds.setAssociatedPhysicalModelComponent(entities.get(ds.getAssociatedPhysicalModelComponent()));
+				if (entities.containsKey(ds.getAssociatedPhysicalModelComponent())) {
+					ds.setAssociatedPhysicalModelComponent(entities.get(ds.getAssociatedPhysicalModelComponent()));
+				}
+				else {
+					ds.setAssociatedPhysicalModelComponent(procs.get(ds.getAssociatedPhysicalModelComponent()));
+				}
 			}
 			if (ds.hasSolutionDomain()) {
 				ds.setSolutionDomain(dsmap.get(ds.getSolutionDomain()));

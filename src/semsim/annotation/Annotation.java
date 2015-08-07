@@ -42,7 +42,9 @@ public class Annotation {
 	 * Copy Constructor
 	 */
 	public Annotation(Annotation tocopy) {
-		valueDescription = new String(tocopy.valueDescription);
+		if (tocopy.valueDescription!=null) {
+			valueDescription = new String(tocopy.valueDescription);
+		}
 		relation = tocopy.relation;
 		value = tocopy.value;
 	}
