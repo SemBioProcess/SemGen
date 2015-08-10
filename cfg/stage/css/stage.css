@@ -109,14 +109,17 @@ ul.modelPopover li.submenuContainer {
 	width: 500px;
 }
 
-.searchResults ul {
+.searchValueContainer ul {
 	list-style: none;
 	padding-left: 0;
-	border: 1px solid black;
-    border-top: none;
 }
 
-.searchResults li:hover {
+.searchResultSet {
+	border: 1px solid black;
+	border-top: none;
+}
+
+.searchResultSetValue:hover {
 	background-color: #dfe3ee;
 	cursor: pointer;
 }
