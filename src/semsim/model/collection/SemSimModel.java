@@ -174,8 +174,30 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	 * 
 	 * @param cpe The CompositePhysicalEntity to be added.
 	 */
-	public CompositePhysicalEntity addCompositePhysicalEntity(CompositePhysicalEntity cpe){
-		return addCompositePhysicalEntity(cpe.getArrayListOfEntities(), cpe.getArrayListOfStructuralRelations());
+	public CompositePhysicalEntity addCompositePhysicalEntity(CompositePhysicalEntity newcpe){
+		
+		for(CompositePhysicalEntity cpe : getCompositePhysicalEntities()){
+			// If there's already an equivalent CompositePhysicalEntity in the model, return it and don't do anything else.
+			if(newcpe.equals(cpe)){
+				return cpe;
+			}
+		}
+		
+		physicalentities.add(newcpe);
+		
+		// If there are physical entities that are part of the composite but not yet added to the model, add them
+		// This comes into play when importing annotations from other models
+		for(PhysicalEntity ent : newcpe.getArrayListOfEntities()){
+			
+			if(!getPhysicalEntities().contains(ent)){
+				
+				if(ent.hasRefersToAnnotation()){
+					addReferencePhysicalEntity((ReferencePhysicalEntity)ent);
+				}
+				else addCustomPhysicalEntity((CustomPhysicalEntity)ent);
+			}
+		}
+		return newcpe;
 	}
 	
 	
@@ -189,25 +211,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	 */
 	public CompositePhysicalEntity addCompositePhysicalEntity(ArrayList<PhysicalEntity> entlist, ArrayList<StructuralRelation> rellist){
 		CompositePhysicalEntity newcpe = new CompositePhysicalEntity(entlist, rellist);
-		for(CompositePhysicalEntity cpe : getCompositePhysicalEntities()){
-			// If there's already an equivalent CompositePhysicalEntity in the model, return it and don't do anything else.
-			if(newcpe.equals(cpe)){
-				return cpe;
-			}
-		}
-		physicalentities.add(newcpe);
-		
-		// If there are physical entities that are part of the composite but not yet added to the model, add them
-		// This comes into play when importing annotations from other models
-		for(PhysicalEntity ent : newcpe.getArrayListOfEntities()){
-			if(!getPhysicalEntities().contains(ent)){
-				if(ent.hasRefersToAnnotation()){
-					addReferencePhysicalEntity((ReferencePhysicalEntity)ent);
-				}
-				else addCustomPhysicalEntity((CustomPhysicalEntity)ent);
-			}
-		}
-		return newcpe;
+		return addCompositePhysicalEntity(newcpe);
 	}
 	
 	

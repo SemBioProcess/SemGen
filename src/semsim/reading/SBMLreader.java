@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 
 import org.sbml.libsbml.CVTerm;
 import org.sbml.libsbml.Compartment;
+import org.sbml.libsbml.CompartmentType;
 import org.sbml.libsbml.Constraint;
 import org.sbml.libsbml.FunctionDefinition;
 import org.sbml.libsbml.InitialAssignment;
@@ -28,6 +29,7 @@ import org.sbml.libsbml.SBMLDocument;
 import org.sbml.libsbml.SBMLReader;
 import org.sbml.libsbml.SBase;
 import org.sbml.libsbml.Species;
+import org.sbml.libsbml.SpeciesType;
 import org.sbml.libsbml.Unit;
 import org.sbml.libsbml.UnitDefinition;
 import org.sbml.libsbml.libsbml;
@@ -43,7 +45,9 @@ import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.SemSimRelation;
 import semsim.annotation.StructuralRelation;
+import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.model.collection.SemSimModel;
+import semsim.model.collection.Submodel;
 import semsim.model.computational.RelationalConstraint;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.Decimal;
@@ -58,15 +62,21 @@ import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
+import semsim.owl.SemSimOWLFactory;
+import semsim.utilities.ReferenceOntologies;
+import semsim.utilities.ReferenceOntologies.OntologyDomain;
+import semsim.utilities.ReferenceOntologies.ReferenceOntology;
 
 public class SBMLreader extends ModelReader{
 
 	public Model sbmlmodel;
 	private Map<String, PhysicalEntity> compartmentAndSemSimEntitiesMap = new HashMap<String, PhysicalEntity>();
-	private Map<String, PhysicalEntity> speciesAndSemSimEntitiesMap = new HashMap<String, PhysicalEntity>();
+	private Map<String, CompositePhysicalEntity> speciesAndSemSimEntitiesMap = new HashMap<String, CompositePhysicalEntity>();
 	public Hashtable<String, String[]> ontologycache = new  Hashtable<String, String[]>();
 	public Set<String> baseUnits = new HashSet<String>();
-	
+	private Submodel parametersubmodel;
+	private Submodel speciessubmodel;
+	private Submodel compartmentsubmodel;
 	
 	
 	public SBMLreader(File file) {
@@ -97,66 +107,42 @@ public class SBMLreader extends ModelReader{
 		semsimmodel.setSemsimversion(SemSimLibrary.SEMSIM_VERSION);
 		semsimmodel.setSourceFileLocation(srcfile.getAbsolutePath());
 		
-		setBaseUnits();
-		
 		// Collect function definitions. Not used in SBML level 1.
 		// collectFunctionDefinitions();
-		if (sbmlmodel.getListOfFunctionDefinitions().size()>0){
+		if (sbmlmodel.getListOfFunctionDefinitions().size()>0)
 			addErrorToModel("SBML source model contains function definitions but these are not yet supported in SemSim.");
-			return semsimmodel;
-		}
 
-		//collectCompartmentTypes();
-		if (sbmlmodel.getListOfCompartmentTypes().size()>0){
-			addErrorToModel("SBML source model contains compartment types but these are not yet supported in SemSim.");
-			return semsimmodel;
-		}
-		
-		/*
-		 * A compartment type in SBML is a grouping construct used to establish a relationship between multiple 
-		 * Compartment objects. In SBML Level 2 Versions 2, 3 and 4, a compartment type only has an identity, and
-		 *  this identity can only be used to indicate that particular compartments belong to this type. This may 
-		 *  be useful for conveying a modeling intention, such as when a model contains many similar compartments,
-		 *   either by their biological function or the reactions they carry. Without a compartment type construct,
-		 *    it would be impossible in the language of SBML to indicate that all of the compartments share an 
-		 *    underlying conceptual relationship because each SBML compartment must be given a unique and separate 
-		 *    identity. Compartment types have no mathematical meaning in SBML Level 2—they have no effect on a model's
-		 *     mathematical interpretation. Simulators and other numerical analysis software may ignore CompartmentType
-		 *      definitions and references to them in a model.
-		
-		There is no mechanism in SBML for representing hierarchies of compartment types. One CompartmentType instance cannot
-		 be the subtype of another CompartmentType instance; SBML provides no means of defining such relationships.
-		As with other major structures in SBML, CompartmentType has a mandatory attribute, 'id', used to give the compartment
-		 type an identifier. The identifier must be a text string conforming to the identifer syntax permitted in SBML. 
-		 CompartmentType also has an optional 'name' attribute, of type string. The 'id' and 'name' must be used according
-		  to the guidelines described in the SBML specification (e.g., Section 3.3 in the Level 2 Version 4 specification).
-		CompartmentType was introduced in SBML Level 2 Version 2. It is not available in earlier versions of Level 2 nor 
-		in any version of Level 1.
-		 */
-		
-//		collectSpeciesTypes();
-// Same deal as with compartment types, just with species
-		if (sbmlmodel.getListOfCompartmentTypes().size()>0){
-			addErrorToModel("SBML source model contains species types but these are not yet supported in SemSim.");
-			return semsimmodel;
-		}
+		//collectCompartmentTypes();  // We ignore compartment types for now. 
+		// See http://sbml.org/Software/libSBML/5.11.4/docs/formatted/java-api/org/sbml/libsbml/CompartmentType.html
+
+		//collectSpeciesTypes();  // Ignore these for now, too.
+		// See http://sbml.org/Software/libSBML/5.11.4/docs/formatted/java-api/org/sbml/libsbml/SpeciesType.html
 		
 		
-//		collectInitialAssignments();
-		if (sbmlmodel.getListOfCompartmentTypes().size()>0){
-			addErrorToModel("SBML source model contains initial assignments but these are not yet supported in SemSim.");
-			return semsimmodel;
-		}
 		// Set the t=0 value for a compartment, species or parameter. The symbol field refers to the ID of the SBML element.
 		// If one of these elements already has an initial value stated in its construct, the initialAssignment overwrites it.
-		
-		
+//		collectInitialAssignments();
+		if (sbmlmodel.getListOfInitialAssignments().size()>0)
+			addErrorToModel("SBML source model contains initial assignments but these are not yet supported in SemSim.");
+
 //		collectEvents();
-		if (sbmlmodel.getListOfCompartmentTypes().size()>0){
+		if (sbmlmodel.getListOfEvents().size()>0)
 			addErrorToModel("SBML source model contains events but these are not yet supported in SemSim.");
-			return semsimmodel;
-		}
+		
+		// Create submodels for compartments and species. Each reaction gets its own submodel later.
+		if(sbmlmodel.getListOfParameters().size()>0) 
+			parametersubmodel = semsimmodel.addSubmodel(new Submodel("parameters"));
+		
+		if(sbmlmodel.getListOfCompartments().size()>0) 
+			compartmentsubmodel = semsimmodel.addSubmodel(new Submodel("compartments"));
+		
+		if(sbmlmodel.getListOfSpecies().size()>0)
+			speciessubmodel = semsimmodel.addSubmodel(new Submodel("species"));
 				
+		// if any errors at this point, return model
+		if(semsimmodel.getErrors().size()>0) return semsimmodel;
+		
+		setBaseUnits();
 		collectModelLevelData();
 		collectUnits();
 		collectCompartments();
@@ -177,10 +163,9 @@ public class SBMLreader extends ModelReader{
 		sbmlmodel.getVersion();
 		collectSBaseData(sbmlmodel, semsimmodel);
 		semsimmodel.setName(sbmlmodel.getId());
-		// Need to collect annotations here, too.
-
-		// What to do about sbml model name field???
+		semsimmodel.setModelAnnotation(Metadata.fullname, sbmlmodel.getId());
 		
+		// Need to collect annotations here, too.		
 	}
 	
 	/**
@@ -195,53 +180,12 @@ public class SBMLreader extends ModelReader{
 	}
 	
 	/**
-	 * Collect the model's function definitions
+	 * Collect the model's units
 	 */
 	private void collectUnits(){
 
-		/*
-		The attribute 'id' in UnitDefinition cannot be given simply any value, and the precise
-		details of the values permitted differ slightly between Levels of SBML:
-		The 'id' of a UnitDefinition must not contain a value from the list of SBML's predefined
-		base unit names (i.e., the strings gram, litre, etc.). In SBML Level 3, this list
-		consists of the following:
-		
-			ampere	farad	joule	lux	radian	volt
-			avogadro	gram	katal	metre	second	watt
-			becquerel	gray	kelvin	mole	siemens	weber
-			candela	henry	kilogram	newton	sievert
-			coulomb	hertz	litre	ohm	steradian
-			dimensionless	item	lumen	pascal	tesla
-			
-		This list of predefined base units is nearly identical in SBML Level 2 Version 4, 
-		the exception being that Level 2 does not define avogadro. SBML Level 2 Version 1 
-		(and only this Level+Version combination) provides an additional predefined unit name, 
-		Celsius, not available in Level 3. Finally, SBML Level 1 Versions 2–3 provide two 
-		more additional predefined unit names, meter and liter. This is explained in somewhat 
-		greater detail in the description of the Unit class.
-		
-		In SBML Level 2 (all Versions), there is an additional set of reserved identifiers:
-		substance, volume, area, length, and time. Using one of these values for the attribute
-		'id' of a UnitDefinition has the effect of redefining the model-wide default units
-		for the corresponding quantities. The list of special unit names in SBML Level 2 is
-		given in the table below:
-		
-		Identifier	Possible scalable units						Default units
-		------------------------------------------------------------------------------
-		substance	mole, item, gram, kilogram, dimensionless	mole
-		volume		litre, cubic metre, dimensionless			litre
-		area		square metre, dimensionless					square metre
-		length		metre, dimensionless, 						metre
-		time		second, dimensionless						second
-		
-		Also, SBML Level 2 imposes two limitations on redefining the predefined unit substance,
-		 volume, area, length, and time: (1) The UnitDefinition of a predefined SBML unit can 
-		 only contain a single Unit object within it. (2) The value of the 'kind' attribute in
-		  a Unit instance must be drawn from one of the values in the second column of the table
-		   above.
-		The special unit names substance, volume, area, length, and time are not defined by SBML
-		 Level 3, which uses a different approach to setting model-wide inherited units.
-		*/
+		// For more info about SBML units, see 
+		// http://sbml.org/Software/libSBML/5.11.4/docs/formatted/java-api/org/sbml/libsbml/Unit.html
 		
 		for(int u=0; u<sbmlmodel.getListOfUnitDefinitions().size(); u++){
 			
@@ -275,7 +219,8 @@ public class SBMLreader extends ModelReader{
 				unitfactor.setMultiplier(sbmlunit.getMultiplier());
 				semsimunit.addUnitFactor(unitfactor);
 			}
-			this.collectSBaseData(sbmlunitdef, semsimunit);
+			
+			collectSBaseData(sbmlunitdef, semsimunit);
 			semsimmodel.addUnit(semsimunit);
 		}
 		
@@ -319,9 +264,7 @@ public class SBMLreader extends ModelReader{
 			String compid = sbmlc.getId();
 			
 			// What to do with name?
-			// Compartment type?
 			// Constant?
-			// Derived unit definition
 			// Outside?
 			// spatial dimensions
 			// type code
@@ -329,9 +272,11 @@ public class SBMLreader extends ModelReader{
 			// volume
 			
 			DataStructure ds = semsimmodel.addDataStructure(new Decimal(compid));
+			compartmentsubmodel.addDataStructure(ds);
+			
 			String mathml = "<cn>" + sbmlc.getSize() + "</cn>";
 			ds.getComputation().setMathML(mathml);
-			ds.getComputation().setComputationalCode(compid + " = " + Double.toString(sbmlc.getSize()));
+			//ds.getComputation().setComputationalCode(compid + " = " + Double.toString(sbmlc.getSize()));
 						
 			if(sbmlc.isSetUnits()) 
 				ds.setUnit(semsimmodel.getUnit(sbmlc.getUnits()));
@@ -353,7 +298,7 @@ public class SBMLreader extends ModelReader{
 			ds.setAssociatedPhysicalProperty(prop);
 			
 			// Set the physical entity for the compartment
-			PhysicalEntity compartmentent = (PhysicalEntity) getPhysicalComponentForSBMLobject(sbmlc);
+			PhysicalEntity compartmentent = (PhysicalEntity) createPhysicalComponentForSBMLobject(sbmlc);
 			compartmentAndSemSimEntitiesMap.put(compid, compartmentent);
 						
 			ArrayList<PhysicalEntity> entlist = new ArrayList<PhysicalEntity>();
@@ -373,25 +318,18 @@ public class SBMLreader extends ModelReader{
 	 */
 	private void collectSpecies(){
 		
+		// For info on dealing with species, espeica
 		for(int s=0; s<sbmlmodel.getListOfSpecies().size(); s++){
 			Species species = sbmlmodel.getSpecies(s);
 			
-//			System.out.println("SUB: " + sbmlmodel.getSubstanceUnits());
-////			System.out.println(species.getC)
-//			System.out.println("VOL: " + sbmlmodel.getVolumeUnits());
-//			System.out.println("AREA: " + sbmlmodel.getAreaUnits());
-//			System.out.println("LENGTH: " + sbmlmodel.getLengthUnits());
-//			System.out.println("TIME: " + sbmlmodel.getTimeUnits());
-//			System.out.println("EXTENT: " + sbmlmodel.getExtentUnits());
-			
-			
 			DataStructure ds = semsimmodel.addDataStructure(new Decimal(species.getId()));
+			speciessubmodel.addDataStructure(ds);
 			
 			// Deal with equations for species concentration/amount here
 			PhysicalPropertyinComposite prop = null;
 			
 			/*
-			From http://sbml.org/Software/libSBML/5.11.4/docs/formatted/java-api/
+			From http://sbml.org/Software/libSBML/5.11.4/docs/formatted/java-api/org/sbml/libsbml/Species.html
 			In SBML Level 3, if the 'substanceUnits' attribute is not set on a given
 			Species object instance, then the unit of amount for that species is inherited
 			from the 'substanceUnits' attribute on the enclosing Model object instance. 
@@ -421,12 +359,10 @@ public class SBMLreader extends ModelReader{
 			 'mole', 'item', 'kilogram', 'gram', or units derived from these.
 			 */
 			else if(sbmlmodel.getLevel()==2){
-				if(species.isSetSubstanceUnits()){
+				if(species.isSetSubstanceUnits())
 					ds.setUnit(semsimmodel.getUnit(species.getSubstanceUnits()));
-				}
-				else{
+				else 
 					ds.setUnit(semsimmodel.getUnit("substance"));
-				}
 			}
 			
 			// The OPB properties assigned here need to account for the different possible units for 
@@ -447,7 +383,8 @@ public class SBMLreader extends ModelReader{
 
 			ds.setAssociatedPhysicalProperty(prop);
 			
-			PhysicalEntity speciesent = (PhysicalEntity) getPhysicalComponentForSBMLobject(species);
+			PhysicalEntity speciesent = (PhysicalEntity) createPhysicalComponentForSBMLobject(species);
+			
 			PhysicalEntity compartmentent = null;
 			
 			if(compartmentAndSemSimEntitiesMap.containsKey(species.getCompartment()))
@@ -467,7 +404,7 @@ public class SBMLreader extends ModelReader{
 			semsimmodel.addCompositePhysicalEntity(compositeent); // this also adds the singular physical entity to the model
 			ds.setAssociatedPhysicalModelComponent(compositeent);
 			speciesAndSemSimEntitiesMap.put(species.getId(), compositeent);
-			
+						
 			collectSBaseData(species, compositeent);
 		}
 	}
@@ -478,7 +415,8 @@ public class SBMLreader extends ModelReader{
 	private void collectParameters(){
 		for(int p=0; p<sbmlmodel.getListOfParameters().size(); p++){
 			Parameter sbmlpar = sbmlmodel.getParameter(p);
-			addParameter(sbmlpar, null);
+			DataStructure pards = addParameter(sbmlpar, null);
+			parametersubmodel.addDataStructure(pards);
 		}
 	}
 	
@@ -517,7 +455,7 @@ public class SBMLreader extends ModelReader{
 				ds = semsimmodel.getAssociatedDataStructure(varname);
 			else ds = semsimmodel.addDataStructure(new Decimal(varname));
 			
-			ds.getComputation().setComputationalCode(varname + " = " + sbmlrule.getFormula());
+			//ds.getComputation().setComputationalCode(varname + " = " + sbmlrule.getFormula());
 			String mathmlstring = libsbml.writeMathMLToString(sbmlrule.getMath());
 			ds.getComputation().setMathML(mathmlstring);
 
@@ -545,31 +483,46 @@ public class SBMLreader extends ModelReader{
 		
 		for(int r=0; r<sbmlmodel.getListOfReactions().size(); r++){
 			Reaction reaction = sbmlmodel.getReaction(r);
-			DataStructure ds = semsimmodel.addDataStructure(new Decimal(reaction.getId()));
+			String reactionID = reaction.getId();
+			
+			DataStructure ds = semsimmodel.addDataStructure(new Decimal(reactionID));
+			Submodel rxnsubmodel = new Submodel(reactionID);
+			semsimmodel.addSubmodel(rxnsubmodel);
+			rxnsubmodel.addDataStructure(ds);
 			
 			KineticLaw kineticlaw = reaction.getKineticLaw();
 			
 			// Deal with kinetic law (need to collect local parameters)
 			String mathmlstring = libsbml.writeMathMLToString(kineticlaw.getMath());
 			ds.getComputation().setMathML(mathmlstring);
-			ds.getComputation().setComputationalCode(reaction.getId() + " = " + reaction.getKineticLaw().getFormula());
+			//ds.getComputation().setComputationalCode(reaction.getId() + " = " + reaction.getKineticLaw().getFormula());
 			
 			for(int l=0; l<kineticlaw.getListOfLocalParameters().size(); l++){
 				LocalParameter lp = kineticlaw.getLocalParameter(l);
-				addParameter(lp, reaction.getId());
+				DataStructure localds = addParameter(lp, reaction.getId());
+				rxnsubmodel.addDataStructure(localds);
 			}
 			
 			// This might be unnecessary for some more recent versions of SBML models (listOfParameters might have been deprecated)
 			for(int p=0; p<kineticlaw.getListOfParameters().size(); p++){
 				Parameter par = kineticlaw.getParameter(p);
-				addParameter(par, reaction.getId());
+				DataStructure localds = addParameter(par, reaction.getId());
+				rxnsubmodel.addDataStructure(localds);
 			}
 			
-			//SBML Reaction objects are defined in units of substance/time.
+			//SBML Reaction objects are defined in units of substance/time. CHECK THIS.
 			
-			String unitid = kineticlaw.getDerivedUnitDefinition().getId();
-			UnitOfMeasurement uom = semsimmodel.getUnit(unitid);
-			ds.setUnit(uom);
+			UnitDefinition ud = kineticlaw.getDerivedUnitDefinition();
+			
+			if(ud!=null){
+				
+				if(ud.isSetId()){
+					String unitid = kineticlaw.getDerivedUnitDefinition().getId();
+					UnitOfMeasurement uom = semsimmodel.getUnit(unitid);
+					ds.setUnit(uom);
+				}
+			}
+			
 
 			PhysicalPropertyinComposite prop = null;
 			
@@ -577,7 +530,7 @@ public class SBMLreader extends ModelReader{
 			prop = new PhysicalPropertyinComposite("Chemical molar flow rate", URI.create(SemSimConstants.OPB_NAMESPACE + "OPB_00592"));
 			ds.setAssociatedPhysicalProperty(prop);
 			
-			PhysicalProcess process = (PhysicalProcess) getPhysicalComponentForSBMLobject(reaction);
+			PhysicalProcess process = (PhysicalProcess) createPhysicalComponentForSBMLobject(reaction);
 			collectSBaseData(reaction, process);
 			
 			// Set sources (reactants)
@@ -586,7 +539,7 @@ public class SBMLreader extends ModelReader{
 				double stoich = reaction.getReactant(s).getStoichiometry();
 				PhysicalEntity reactantent = speciesAndSemSimEntitiesMap.get(reactantname);
 				process.addSource(reactantent, stoich);
-				
+								
 				// Assert that the computation for the reactant depends on the rate of this reaction
 				semsimmodel.getAssociatedDataStructure(reactantname).getComputation().addInput(ds);
 			}
@@ -604,8 +557,8 @@ public class SBMLreader extends ModelReader{
 			
 			// Set mediators (modifiers)
 			for(int m=0; m<reaction.getNumModifiers(); m++){
-				String productname = reaction.getModifier(m).getSpecies();
-				PhysicalEntity mediatorent = speciesAndSemSimEntitiesMap.get(productname);
+				String mediatorname = reaction.getModifier(m).getSpecies();
+				PhysicalEntity mediatorent = speciesAndSemSimEntitiesMap.get(mediatorname);
 				process.addMediator(mediatorent);
 			}
 			
@@ -639,12 +592,6 @@ public class SBMLreader extends ModelReader{
 		// need to collect SBO terms here?
 	}
 	
-	// Copy ID of SBML element and use it as SemSimObject name
-//	private void addIDasName(SBase sbmlclass, SemSimObject semsimclass){
-//		if(sbmlclass.getId()!=null && ! sbmlclass.getId().equals(""))
-//			semsimclass.setName(sbmlclass.getId());
-//	}
-	
 	/**
 	 *  Copy the notes attached to an SBML element and into the Description field of a SemSimObject 
 	 * @param sbmlobject
@@ -675,8 +622,20 @@ public class SBMLreader extends ModelReader{
 		for(ReferenceOntologyAnnotation ann : allanns) semsimobject.addAnnotation(ann);
 	}
 	
+	/**
+	 * Collects all biological qualifier annotations for a given SBase object and 
+	 * converts them into a set of ReferenceOntologyAnnotations. If more than one
+	 * identity annotation is applied (BQBiol:is), as is common in SBML models, only the first
+	 * annotation that uses a term from a SemSim preferred knowledge resource is collected.
+	 * 
+	 * @param sbmlobject
+	 * @return The set of ReferenceOntologyAnnotations associated with the SBase object
+	 */
 	// Get biological qualifier annotations
 	private Set<ReferenceOntologyAnnotation> getBiologicalQualifierAnnotations(SBase sbmlobject){
+		
+		OntologyDomain ontdomain = ReferenceOntologies.OntologyDomain.PhysicalEntity; 
+		if (! isEntity(sbmlobject)) ontdomain = ReferenceOntologies.OntologyDomain.PhysicalProcess;
 		
 		Set<ReferenceOntologyAnnotation> anns = new HashSet<ReferenceOntologyAnnotation>();
 		
@@ -690,10 +649,29 @@ public class SBMLreader extends ModelReader{
 				
 				if(SemSimConstants.BIOLOGICAL_QUALIFIER_TYPES_AND_RELATIONS.containsKey(t)){
 					
+					int numidentityanns = 0;
+					
 					for(int j=0; j<term.getNumResources(); j++){
-						String uri = term.getResourceURI(j);
-						SemSimRelation relation = (t==0) ? SemSimConstants.REFERS_TO_RELATION : SemSimConstants.BIOLOGICAL_QUALIFIER_TYPES_AND_RELATIONS.get(t);
-						anns.add(new ReferenceOntologyAnnotation(relation, URI.create(uri), uri));
+						String uristring = term.getResourceURI(j);
+						String namespace = SemSimOWLFactory.getNamespaceFromIRI(uristring);
+						
+						// If we can look up the knowledge resource given the namespace of the CV term
+						if(ReferenceOntologies.getReferenceOntologybyNamespace(namespace)!=null){
+							ReferenceOntology refont = ReferenceOntologies.getReferenceOntologybyNamespace(namespace);
+							
+							// If the knowledge resource is part of the limited set used for SemSim annotation 
+							if(ontdomain.domainhasReferenceOntology(refont)){
+								SemSimRelation relation = (t==0) ? SemSimConstants.REFERS_TO_RELATION : SemSimConstants.BIOLOGICAL_QUALIFIER_TYPES_AND_RELATIONS.get(t);
+								
+								// If we haven't already applied an identity annotation for this sbml component
+								if(numidentityanns==0){
+									anns.add(new ReferenceOntologyAnnotation(relation, URI.create(uristring), uristring));
+									numidentityanns++;
+								}
+								else System.err.println("WARNING: Multiple reference annotations for " + 
+											getIDforSBaseObject(sbmlobject) + ". Ignoring annotation against " + uristring);
+							}
+						}
 					}
 				}
 			}
@@ -701,8 +679,13 @@ public class SBMLreader extends ModelReader{
 		return anns;
 	}
 	
-	// Get model qualifier annotations
-	private Set<ReferenceOntologyAnnotation> getModelQualifierAnnotations(SBase sbmlobject){
+	/**
+	 * Collects all model qualifier annotations for a given SBase object and 
+	 * converts them into a set of ReferenceOntologyAnnotations.
+	 * 
+	 * @param sbmlobject
+	 * @return The set of ReferenceOntologyAnnotations associated with the SBase object
+	 */	private Set<ReferenceOntologyAnnotation> getModelQualifierAnnotations(SBase sbmlobject){
 		
 		Set<ReferenceOntologyAnnotation> anns = new HashSet<ReferenceOntologyAnnotation>();
 		
@@ -727,16 +710,10 @@ public class SBMLreader extends ModelReader{
 	}
 	
 	// Assign a semsim physical entity object to an sbml model element
-	private PhysicalModelComponent getPhysicalComponentForSBMLobject(SBase sbmlobject){
+	private PhysicalModelComponent createPhysicalComponentForSBMLobject(SBase sbmlobject){
 		
-		String id = null;
-		boolean isentity = true;
-		if(sbmlobject instanceof Compartment) id = ((Compartment)sbmlobject).getId();
-		if(sbmlobject instanceof Species) id = ((Species)sbmlobject).getId();
-		if(sbmlobject instanceof Reaction){
-			id = ((Reaction)sbmlobject).getId();
-			isentity = false;
-		}
+		String id = getIDforSBaseObject(sbmlobject);
+		boolean isentity = isEntity(sbmlobject);
 		
 		PhysicalModelComponent pmc = isentity ? new CustomPhysicalEntity(id, "") : new CustomPhysicalProcess(id, "");
 	
@@ -755,48 +732,81 @@ public class SBMLreader extends ModelReader{
 		}
 		
 		tempanns.addAll(getModelQualifierAnnotations(sbmlobject));
-		
 		for(Annotation ann : tempanns) pmc.addAnnotation(ann);
 		
 		return pmc;
 	}
 	
+	
+	/**
+	 * 
+	 * @param sbmlel
+	 * @return Whether a given SBML element represents a physical entity
+	 */
+	private boolean isEntity(SBase sbmlel){
+		
+		if(sbmlel instanceof Compartment || sbmlel instanceof CompartmentType
+			|| sbmlel instanceof Species || sbmlel instanceof SpeciesType) return true;
+		else return false;
+	}
+	
+	/**
+	 * 
+	 * @param sbmlobject
+	 * @return The SBML ID for the object
+	 */
+	private String getIDforSBaseObject(SBase sbmlobject){
+		
+		String id = null;
+		boolean isentity = isEntity(sbmlobject);
+		
+		if(! isentity) id = ((Reaction)sbmlobject).getId();
+		else if(sbmlobject instanceof Compartment) id = ((Compartment)sbmlobject).getId();
+		else if(sbmlobject instanceof Species) id = ((Species)sbmlobject).getId();
+		return id;
+	}
+	
 	/**
 	 * Add an SBML parameter to the model. This can also be used for SBML LocalParameters.
 	 * @param p The SBML parameter to add to the SemSim model.
-	 */
-			
-	private void addParameter(Parameter p, String prefix){
+	 */	
+	private DataStructure addParameter(Parameter p, String prefix){
 
 		String ID = (prefix==null || prefix.equals("")) ? p.getId() : prefix + "." + p.getId();
 		
 		if(semsimmodel.containsDataStructure(ID)){
 			addErrorToModel("Multiple data structures with name " + ID);
+			return null;
 		}
+		
 		DataStructure ds = semsimmodel.addDataStructure(new Decimal(ID));
 		
 		UnitOfMeasurement unitforpar = semsimmodel.getUnit(p.getUnits());
 		ds.setUnit(unitforpar);
 		
 		ds.getComputation().setMathML("<cn>" + p.getValue() + "</cn>");
-		ds.getComputation().setComputationalCode(ID + " = " + Double.toString(p.getValue()));
+		//ds.getComputation().setComputationalCode(ID + " = " + Double.toString(p.getValue()));
 		
 		// Annotations, too?
 		collectSBaseData(p, ds);
+		
+		return ds;
 	}
 	
-	// Set et all the variables in a block of mathml as inputs to a particular data structure's computation
+	
+	// Set all the variables in a block of mathml as inputs to a particular data structure's computation
 	private void setComputationalInputsFromMathML(DataStructure outputds, String mathmlstring){
-		
-		Pattern p = Pattern.compile("<ci>\\.\\+</ci>");
+
+		Pattern p = Pattern.compile("<ci>.+</ci>");
 		Matcher m = p.matcher(mathmlstring);
 		boolean result = m.find();
 		
 		while(result){
-			String inputname = mathmlstring.substring(m.start()+4, m.end()-5);
+			
+			String inputname = mathmlstring.substring(m.start()+4, m.end()-5).trim();
 			String inputnamelocalfmt = outputds.getName() + "." + inputname;
 			String inputnametouse = inputname;
-			
+						
 			if(! semsimmodel.containsDataStructure(inputname)){
 				if(! semsimmodel.containsDataStructure(inputnamelocalfmt)){
 					addErrorToModel("Could not set inputs for variable " + outputds.getName() + " because input called " + inputname + " was not in model.");
@@ -810,6 +820,7 @@ public class SBMLreader extends ModelReader{
 			result = m.find();
 		}
 	}
+	
 	
 	// Select appropriate set of base units by SBML level and version number
 	private void setBaseUnits(){
@@ -826,5 +837,4 @@ public class SBMLreader extends ModelReader{
 		System.err.println(errmsg);
 		semsimmodel.addError(errmsg);
 	}
-
 }
