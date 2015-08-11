@@ -435,7 +435,6 @@ public class SemSimOWLwriter extends ModelWriter {
 		if(ds.hasAssociatedPhysicalComponent()){				
 			// Create the new physical model individual and get what it's a physical property of
 			PhysicalModelComponent pmc = ds.getAssociatedPhysicalModelComponent();
-			
 			// If it's not a composite physical entity
 			if(!pmc.getSemSimType().equals(SemSimTypes.COMPOSITE_PHYSICAL_ENTITY)){
 				String uristring = null;
@@ -465,6 +464,7 @@ public class SemSimOWLwriter extends ModelWriter {
 				setProcessParticipants((PhysicalProcess)pmc);
 			}
 			else {
+
 				URI indexuri = processCompositePhysicalEntity((CompositePhysicalEntity)pmc, namespace);
 				// Connect physical property to the index physical entity for the composite entity
 				SemSimOWLFactory.setIndObjectProperty(ont, SemSimOWLFactory.getURIforPhysicalProperty(semsimmodel, ds).toString(),

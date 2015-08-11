@@ -41,12 +41,12 @@ public class MergerTask extends SemGenTask {
     		for(DataStructure solutiondomds : ssm1clone.getSolutionDomains())
     			removeDomainBounds(solutiondomds.getName());
     			
-    		resolveSyntacticOverlap();
-			Merger merger = new Merger(ssm1clone, ssm2clone, overlapmap, choicelist, conversionfactors);
-			mergedmodel = merger.merge();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	    		resolveSyntacticOverlap();
+				Merger merger = new Merger(ssm1clone, ssm2clone, overlapmap, choicelist, conversionfactors);
+				mergedmodel = merger.merge();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
         return null;
     }
 
@@ -99,7 +99,7 @@ public class MergerTask extends SemGenTask {
 		ssm2clone.removeDataStructure(name + ".max");
 		ssm2clone.removeDataStructure(name + ".delta");
 	}
-	
+
     public SemSimModel getMergedModel() {
     	return mergedmodel;
     }

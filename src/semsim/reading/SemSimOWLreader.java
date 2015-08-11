@@ -86,7 +86,7 @@ public class SemSimOWLreader extends ModelReader {
 	
 	//*****************************READ METHODS*************************//
 		
-	public SemSimModel readFromFile() throws OWLException, CloneNotSupportedException{	
+	public SemSimModel readFromFile() throws OWLException{	
 		if (verifyModel()) return semsimmodel;
 		
 		collectModelAnnotations();

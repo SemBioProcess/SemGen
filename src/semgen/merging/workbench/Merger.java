@@ -63,14 +63,15 @@ public class Merger {
 		// Step through resolution points and replace/rewire codewords as needed
 		for (Pair<DataStructure, DataStructure> dsp : overlapmap.getDataStructurePairs()) {
 			if (choicelist.get(i).equals(ResolutionChoice.first)) {
-				discardedds = dsp.getRight();
-				keptds = dsp.getLeft();
+				
+				keptds = ssm1clone.getAssociatedDataStructure(dsp.getLeft().getName());
 				modelfordiscardedds = ssm2clone;
+				discardedds = modelfordiscardedds.getAssociatedDataStructure(dsp.getRight().getName());
 			}
 			else if(choicelist.get(i).equals(ResolutionChoice.second)){
-				discardedds = dsp.getLeft();
-				keptds = dsp.getRight();
+				keptds = ssm2clone.getAssociatedDataStructure(dsp.getRight().getName());
 				modelfordiscardedds = ssm1clone;
+				discardedds = modelfordiscardedds.getAssociatedDataStructure(dsp.getLeft().getName());
 			}
 			
 			// If "ignore equivalency" is NOT selected

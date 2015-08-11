@@ -149,7 +149,7 @@ public class SemSimCopy {
 		return unitmap;
 	}
 	
-	private HashMap<DataStructure, DataStructure> copyDataStructures(SemSimModel modeltocopy) {
+	private void copyDataStructures(SemSimModel modeltocopy) {
 		for (DataStructure ds : modeltocopy.getIntegers()) {
 			dsmap.put(ds, new SemSimInteger((SemSimInteger)ds));
 		}
@@ -182,7 +182,6 @@ public class SemSimCopy {
 		}
 		
 		remapDataStructures();
-		return dsmap;
 	}
 	
 	private void remapDataStructures() {

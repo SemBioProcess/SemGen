@@ -39,7 +39,7 @@ public class SemSimComponentImporter {
 		if(modeltype == ModelClassifier.SEMSIM_MODEL){
 			try {
 				importedmodel = new SemSimOWLreader(importedmodelfile).readFromFile();
-			} catch (OWLException | CloneNotSupportedException e) {
+			} catch (OWLException e) {
 				e.printStackTrace();
 			}
 		}

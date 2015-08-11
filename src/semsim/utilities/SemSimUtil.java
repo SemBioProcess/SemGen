@@ -74,7 +74,8 @@ public class SemSimUtil {
 				String neweq = dscheck.getComputation().getComputationalCode();
 				if(dscheck.getComputation().getComputationalCode()!=null){
 					neweq = replaceCodewordsInString(dscheck.getComputation().getComputationalCode(), replacementtext, oldtext);
-					modelfordiscardedds.getAssociatedDataStructure(dscheck.getName()).getComputation().setComputationalCode(neweq);
+					DataStructure ds = modelfordiscardedds.getAssociatedDataStructure(dscheck.getName());
+					ds.getComputation().setComputationalCode(neweq);
 				}
 	
 				// Assume that if discarded cdwd is in an IC for another cdwd, the discarded cdwd is set as an input to the other cdwd
