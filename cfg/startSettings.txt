@@ -1,4 +1,4 @@
-startDirectory; C:\Users\Christopher\Documents\SemGen Test Files
+startDirectory; C:\Users\Christopher\Documents\examples
 maximize; true
 screensize; 1938x1048
 screenpos; -9x-9

@@ -153,11 +153,12 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * @param sub The Submodel to be added.
 	 * @return The new Submodel added.
 	 */
-	public void addSubmodel(Submodel sub){
+	public Submodel addSubmodel(Submodel sub){
 		while(getSubmodel(sub.getName())!=null){
 			sub.setName(sub.getName() + "_");
 		}
 		submodels.add(sub);
+		return sub;
 	}
 	
 	

@@ -51,15 +51,17 @@ public abstract class SemSimCollection extends SemSimObject{
 	 * @param ds The DataStructure to add
 	 * @return The DataStructure to add
 	 */
-	public void addDataStructure(DataStructure ds){
+	public DataStructure addDataStructure(DataStructure ds){
 		if(!containsDataStructure(ds.getName())){
 			dataStructures.add(ds);
 		}
 		else System.err.println("Model already has data structure named " + ds.getName() + ". Using existing data structure.");
+		return ds;
 	}
 	
-	public void addSubmodel(Submodel submodel){
+	public Submodel addSubmodel(Submodel submodel){
 		submodels.add(submodel);
+		return submodel;
 	}
 	
 	public void setSubmodels(Set<Submodel> submodels) {

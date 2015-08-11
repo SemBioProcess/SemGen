@@ -1,5 +1,7 @@
 package semgen.visualizations;
 
+import com.google.gson.Gson;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -111,21 +113,13 @@ public class WebBrowserCommandSenderGenerator<T> {
 			
 			// Create a string of args to call the javascript method with
 			String argsString = "";
+			Gson gsonParser = new Gson();
 			if(args != null) {
 				for(int i = 0; i < args.length; i++) {
 					if(i != 0)
 						argsString += ", ";
-					
-					// Add single quotes around non-json strings so they're handled
-					// as strings in javascript. Do not add quotes around json
-					Object arg = args[i];
-					String argStringValue;
-					if(arg instanceof JsonString)
-						argStringValue = arg.toString();
-					else
-						argStringValue = String.format("'%s'", arg.toString());
-					
-					argsString += argStringValue;
+
+					argsString += gsonParser.toJson(args[i]);
 				}
 			}
 			
