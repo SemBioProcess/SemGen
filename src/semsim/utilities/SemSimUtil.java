@@ -142,6 +142,44 @@ public class SemSimUtil {
 		else return exp;
 	}
 	
+	/**
+	 *  Collect all the variables in a block of MathML that are inputs for the mathematical expression
+	 * @param semsimmodel The source SemSim model
+	 * @param mathmlstring The MathML string to process for inputs
+	 * @param nameprefix Prefix to use for inputs that are local to a submodel
+	 * @return
+	 */
+	public static Set<DataStructure> getComputationalInputsFromMathML(SemSimModel semsimmodel, String mathmlstring, String nameprefix){
+
+		Set<DataStructure> inputs = new HashSet<DataStructure>();
+		Pattern p = Pattern.compile("<ci>.+</ci>");
+		Matcher m = p.matcher(mathmlstring);
+		boolean result = m.find();
+		
+		while(result){
+			
+			String inputname = mathmlstring.substring(m.start()+4, m.end()-5).trim();
+			String inputnameprefixed = nameprefix + "." + inputname;
+			String inputnametouse = inputname;
+						
+			if(! semsimmodel.containsDataStructure(inputname)){
+				if(! semsimmodel.containsDataStructure(inputnameprefixed)){
+					String errmsg = "SEMSIM MODEL ERROR: MathML content refers to " + inputname + " but that variable is not in the model.";
+					semsimmodel.addError(errmsg);
+					System.err.println(errmsg);
+					return new HashSet<DataStructure>();
+				}
+				else inputnametouse = inputnameprefixed;
+			}
+			
+			DataStructure inputds = semsimmodel.getAssociatedDataStructure(inputnametouse);
+			inputs.add(inputds);
+			result = m.find();
+		}
+		
+		return inputs;
+	}
+	
 	
 	/**
 	 * Find the right hand side of the equation for a data structure from 
