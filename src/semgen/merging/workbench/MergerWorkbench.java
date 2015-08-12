@@ -135,7 +135,7 @@ public class MergerWorkbench extends Workbench {
 	public HashMap<String, String> createIdenticalSubmodelNameMap() {
 		HashMap<String, String> namemap = new HashMap<String, String>();
 		for (String name : overlapmap.getIdenticalSubmodelNames()) {
-			namemap.put(name, "");
+			namemap.put(new String(name), "");
 		}
 		return namemap;
 	}
@@ -157,7 +157,7 @@ public class MergerWorkbench extends Workbench {
 			// If an identical codeword mapping will be resolved by a semantic resolution step or a renaming of identically-named submodels, 
 		    // don't include in idneticalmap	
 			if (!identolnames.contains(name)) {
-				identicalmap.put(name, "");
+				identicalmap.put(new String(name), "");
 			}
 		}
 		return identicalmap;

@@ -188,9 +188,14 @@ public class SemSimCopy {
 		for (DataStructure ds : dsmap.values()) {
 			Computation comp = ds.getComputation();
 			if (comp!=null) {
-				Computation newcomp = new Computation(comp);
-				ds.setComputation(newcomp);
-				compmap.put(comp, newcomp);
+				if (compmap.containsKey(comp)) {
+					ds.setComputation(compmap.get(comp));
+				} 
+				else {
+					Computation newcomp = new Computation(comp);
+					ds.setComputation(newcomp);
+					compmap.put(comp, newcomp);
+				}
 			}
 			if (ds.hasAssociatedPhysicalComponent()) {
 				if (entities.containsKey(ds.getAssociatedPhysicalModelComponent())) {
@@ -221,7 +226,7 @@ public class SemSimCopy {
 				inputs.add(dsmap.get(in));
 			}
 			HashSet<DataStructure> outputs = new HashSet<DataStructure>();
-			for (DataStructure out : comp.getInputs()) {
+			for (DataStructure out : comp.getOutputs()) {
 				outputs.add(dsmap.get(out));
 			}
 			comp.setInputs(inputs);

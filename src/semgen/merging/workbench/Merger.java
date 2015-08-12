@@ -128,7 +128,10 @@ public class Merger {
 			mergedmodel.addReferencePhysicalProcess(pp);
 		}
 		
-		Map<UnitOfMeasurement,UnitOfMeasurement> equnitsmap = overlapmap.getEquivalentUnitPairs();
+		Map<UnitOfMeasurement,UnitOfMeasurement> equnitsmap = new HashMap<UnitOfMeasurement,UnitOfMeasurement>();
+		for (UnitOfMeasurement uom : overlapmap.getEquivalentUnitPairs().keySet()) {
+			equnitsmap.put(ssm1clone.getUnit(uom.getName()), ssm2clone.getUnit(overlapmap.getEquivalentUnitPairs().get(uom).getName()));
+		}
 		
 		// Create mirror map where model 2's units are the key set and model 1's are the values
 		Map<UnitOfMeasurement,UnitOfMeasurement> mirrorunitsmap = new HashMap<UnitOfMeasurement,UnitOfMeasurement>();
@@ -268,14 +271,11 @@ public class Merger {
 	private boolean replaceCodeWords(DataStructure keptds, DataStructure discardedds, 
 			SemSimModel modelfordiscardedds, DataStructure soldom1, int index) {
 		
-		// If we need to add in a unit conversion factor
-		String replacementtext = keptds.getName();
-		
 		Pair<Double, String> conversionfactor = conversionfactors.get(index);
 		
 		// if the two terms have different names, or a conversion factor is required
 		if(!discardedds.getName().equals(keptds.getName()) || conversionfactor.getLeft()!=1){
-			replacementtext = "(" + keptds.getName() + conversionfactor.getRight() + String.valueOf(conversionfactor.getLeft()) + ")";
+			String replacementtext = "(" + keptds.getName() + conversionfactor.getRight() + String.valueOf(conversionfactor.getLeft()) + ")";
 			SemSimUtil.replaceCodewordInAllEquations(discardedds, keptds, modelfordiscardedds, 
 					discardedds.getName(), replacementtext, conversionfactor.getLeft());
 		}

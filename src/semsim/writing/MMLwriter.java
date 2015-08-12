@@ -222,8 +222,6 @@ public class MMLwriter extends ModelWriter{
 
 		// Print the Initial conditions for the state variables
 		output = output.concat("\n\n\t// Boundary conditions\n\n");
-
-		String longestcodeword = "";
 		
 		ArrayList<String> alldsarray = new ArrayList<String>(semsimmodel.getDataStructureNames());
 		Collections.sort(alldsarray, byVarName);
@@ -233,9 +231,6 @@ public class MMLwriter extends ModelWriter{
 				output = output.concat("\twhen (" + onedatastr.getSolutionDomain().getName()
 						+ " = " + onedatastr.getSolutionDomain().getName() + ".min){ " 
 						+ onedatastr.getName() + " = " + onedatastr.getStartValue() + "; }\n");
-			}
-			if (onedatastr.getName().length() > longestcodeword.length()) {
-				longestcodeword = onedatastr.toString();
 			}
 		}
 
@@ -279,7 +274,7 @@ public class MMLwriter extends ModelWriter{
 		}
 		output = output.concat("-------------------------------\n");
 		output = output.concat("*/\n");
-		System.out.println(output);
+		//System.out.println(output);
 		return output;
 
 	}

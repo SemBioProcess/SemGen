@@ -53,7 +53,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		isDiscrete = dstocopy.isDiscrete;
 		isDeclared = dstocopy.isDeclared;
 		isImported = dstocopy.isImported;
-		if (startValue!=null) {
+		if (dstocopy.startValue!=null) {
 			startValue = new String(dstocopy.startValue);
 		}
 		unit = dstocopy.unit;

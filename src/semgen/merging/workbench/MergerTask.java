@@ -53,7 +53,7 @@ public class MergerTask extends SemGenTask {
 	private void resolveSyntacticOverlap() {
 		// First resolve the syntactic overlap between submodels
 		for(String oldsmname : submodnamemap.keySet()){
-			String newsmname = submodnamemap.get(oldsmname);
+			String newsmname = new String(submodnamemap.get(oldsmname));
 			Submodel renamedsm = ssm1clone.getSubmodel(oldsmname);
 			renamedsm.setName(newsmname);
 			renamedsm.setLocalName(newsmname);
@@ -67,7 +67,7 @@ public class MergerTask extends SemGenTask {
 		
 		// Then resolve for data structures
 		for (String dsname : cwnamemap.keySet()) {
-			String newdsname = cwnamemap.get(dsname);
+			String newdsname = new String(cwnamemap.get(dsname));
 			ssm1clone.getAssociatedDataStructure(dsname).setName(newdsname);
 			Boolean derivreplace = false;
 			String derivname = null;

@@ -34,7 +34,6 @@ import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
-import semsim.model.physical.object.PhysicalDependency;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.model.physical.object.ReferencePhysicalEntity;
@@ -503,7 +502,6 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		set.addAll(getPhysicalEntities());
 		set.addAll(getPhysicalProperties());
 		set.addAll(getPhysicalProcesses());
-		set.addAll(getPhysicalDependencies());
 		return set;
 	}
 	
@@ -708,20 +706,6 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 			if(proc.hasRefersToAnnotation()) refprocs.add((ReferencePhysicalProcess) proc);
 		}
 		return refprocs;
-	}
-	
-	/**
-	 * @return All PhysicalDependencies in the model.
-	 */
-	public Set<PhysicalDependency> getPhysicalDependencies() {
-		Set<PhysicalDependency> deps = new HashSet<PhysicalDependency>();
-		for(DataStructure ds : getAssociatedDataStructures()){
-			if(ds.getComputation()!=null){
-				if(ds.getComputation().getPhysicalDependency()!=null)
-					deps.add(ds.getComputation().getPhysicalDependency());
-			}
-		}
-		return deps;
 	}
 	
 	/**
