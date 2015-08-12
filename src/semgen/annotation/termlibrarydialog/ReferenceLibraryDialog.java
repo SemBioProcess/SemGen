@@ -97,7 +97,10 @@ public class ReferenceLibraryDialog extends JFrame implements ComponentListener,
 	}
 
 	@Override
-	public void componentShown(ComponentEvent e) {}
+	public void componentShown(ComponentEvent e) {
+		validate();
+		pack();
+	}
 
 	@Override
 	public void componentAdded(ContainerEvent e) {

@@ -8,6 +8,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.border.TitledBorder;
 
 import semgen.SemGenSettings;
 import semgen.annotation.workbench.AnnotatorWorkbench;
@@ -80,12 +81,10 @@ public class TermInformationPanel extends JPanel {
 		public InfoPanel(String name) {
 			setPreferredSize(dim);
 			setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS)); 
-			setBorder(BorderFactory.createEtchedBorder());
+			setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), name, TitledBorder.CENTER, 
+					TitledBorder.DEFAULT_POSITION ,SemGenFont.defaultBold(2)));
 			setBackground(SemGenSettings.lightblue);
-			JLabel namelbl = new JLabel(name);
-			namelbl.setFont(SemGenFont.defaultBold(2));
-			add(namelbl);
-			
+
 			list.setFont(SemGenFont.defaultPlain());
 			list.setEnabled(false);
 			add(new SemGenScrollPane(list));

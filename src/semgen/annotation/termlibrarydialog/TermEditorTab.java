@@ -47,9 +47,10 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Ance
 	private TermCollector affected;
 	private EditorToolbar toolbar= new EditorToolbar();
 	private ReplaceTermPane replacer;
-	private boolean repbtnpressed = false;
 	private JPanel editpane = new JPanel();
+	private JPanel editspacer = new JPanel();
 	private JPanel curpane;
+	private TermModifyPanel modifier;
 	
 	private SemSimTypes[] types = new SemSimTypes[]{
 			SemSimTypes.PHYSICAL_PROPERTY,
@@ -78,6 +79,9 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Ance
 		typechooser.setFont(SemGenFont.defaultPlain());
 		typechooser.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		typechooser.setAlignmentX(Box.LEFT_ALIGNMENT);
+		Dimension dim = new Dimension(300,160);
+		typechooser.setMinimumSize(dim);
+		typechooser.setMaximumSize(dim);
 		typechooser.setAlignmentY(TOP_ALIGNMENT);
 		typechooser.setListData(names);
 		typechooser.addListSelectionListener(this);
@@ -86,7 +90,9 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Ance
 		termlist.addListSelectionListener(this);
 		termlist.setFont(SemGenFont.defaultPlain());
 		SemGenScrollPane termscroller = new SemGenScrollPane(termlist);
-		termscroller.setPreferredSize(new Dimension(300,300));
+		Dimension tsdim = new Dimension(300,300);
+		termscroller.setPreferredSize(tsdim);
+		termscroller.setMaximumSize(tsdim);
 		termscroller.setAlignmentX(Box.LEFT_ALIGNMENT);
 		
 		JPanel typepane = new JPanel();
@@ -100,14 +106,28 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Ance
 		
 		tip = new TermInformationPanel(workbench);
 		replacer = new ReplaceTermPane(workbench);
+		modifier = new TermModifyPanel(workbench);
+		
+		for (ContainerListener l : this.getContainerListeners()) {
+			tip.addContainerListener(l);
+			replacer.addContainerListener(l);
+			modifier.addContainerListener(l);
+		}
+		for (ComponentListener l : getComponentListeners()) {
+			tip.addComponentListener(l);
+			replacer.addComponentListener(l);
+			modifier.addComponentListener(l);
+		}
 		
 		curpane = tip;
 		add(typepane);
 		editpane.setLayout(new BoxLayout(editpane, BoxLayout.PAGE_AXIS)); 
+		editpane.setBackground(SemGenSettings.lightblue);
 		editpane.add(toolbar);
 		editpane.add(curpane);
-		add(editpane);
-		//add(Box.createHorizontalGlue());
+		editspacer.add(editpane);
+		add(editspacer);
+		add(Box.createVerticalGlue());
 		validate();
 	}
 	
@@ -178,8 +198,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Ance
 	}
 	
 	private void replaceComponent() {
-		
-		if (repbtnpressed && affected.isUsed()) {
+		if (affected.isUsed()) {
 			replacer.showReplacementPanel(affected);
 			swapEditor(replacer);
 		}
@@ -187,7 +206,8 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Ance
 	}
 	
 	private void modifyComponent() {
-		
+		modifier.showModifier(affected.getTermLibraryIndex());
+		swapEditor(modifier);
 	}
 	
 	@Override
@@ -221,14 +241,16 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Ance
 
 	@Override
 	public void ancestorRemoved(AncestorEvent arg0) {
-		if (replacer!=null) {
 			for (ContainerListener listener : getContainerListeners()) {
 				replacer.removeContainerListener(listener);
+				modifier.removeContainerListener(listener);
+				tip.removeContainerListener(listener);
 			}
 			for (ComponentListener listener : getComponentListeners()) {
 				replacer.removeComponentListener(listener);
+				modifier.removeComponentListener(listener);
+				tip.removeComponentListener(listener);
 			}
-		}
 		workbench.deleteObserver(this);	
 	}
 
@@ -261,32 +283,26 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Ance
 			toggleButtons();
 		}
 		
-		//private void paintReplaceButton() {
-		//	if (repbtnpressed) replacebtn.setBorder(BorderFactory.createLineBorder(Color.green));
-		//	else replacebtn.setBorder(BorderFactory.createLineBorder(Color.red));
-		//}
-		
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			Object obj = arg0.getSource();
 			if (obj.equals(infobtn)) {
 				swapEditor(tip);
-				infobtn.toggleSelectionGraphic();
 			}
 			else if (obj.equals(modifybtn)) {
 				modifyComponent();
 			}
 			
 			else if (obj.equals(replacebtn)) {
-				repbtnpressed = !repbtnpressed;
-				//paintReplaceButton();
 				replaceComponent();
-				infobtn.toggleSelectionGraphic();
 			}
 			else if (obj.equals(removebtn)) {
 				removeComponent();
-				infobtn.toggleSelectionGraphic();
+				
 			}
+			infobtn.toggleSelectionGraphic();
+			modifybtn.toggleSelectionGraphic();
+			replacebtn.toggleSelectionGraphic();
 		}
 		
 		public void toggleButtons() {
