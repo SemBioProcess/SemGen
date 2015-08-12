@@ -108,17 +108,6 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Ance
 		replacer = new ReplaceTermPane(workbench);
 		modifier = new TermModifyPanel(workbench);
 		
-		for (ContainerListener l : this.getContainerListeners()) {
-			tip.addContainerListener(l);
-			replacer.addContainerListener(l);
-			modifier.addContainerListener(l);
-		}
-		for (ComponentListener l : getComponentListeners()) {
-			tip.addComponentListener(l);
-			replacer.addComponentListener(l);
-			modifier.addComponentListener(l);
-		}
-		
 		curpane = tip;
 		add(typepane);
 		editpane.setLayout(new BoxLayout(editpane, BoxLayout.PAGE_AXIS)); 
@@ -129,6 +118,19 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Ance
 		add(editspacer);
 		add(Box.createVerticalGlue());
 		validate();
+	}
+	
+	public void updateListeners() {
+		for (ContainerListener l : this.getContainerListeners()) {
+			tip.addContainerListener(l);
+			replacer.addContainerListener(l);
+			modifier.addContainerListener(l);
+		}
+		for (ComponentListener l : getComponentListeners()) {
+			tip.addComponentListener(l);
+			replacer.addComponentListener(l);
+			modifier.addComponentListener(l);
+		}
 	}
 	
 	private void updateList() {

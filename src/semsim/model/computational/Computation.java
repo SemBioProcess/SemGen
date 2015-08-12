@@ -12,7 +12,7 @@ import semsim.model.computational.datastructures.DataStructure;
 public class Computation extends ComputationalModelComponent{
 	private Set<DataStructure> outputs = new HashSet<DataStructure>();
 	private Set<DataStructure> inputs = new HashSet<DataStructure>();
-	private String computationalCode = new String("");
+	private String computationalCode = null;
 	private String mathML = new String("");
 	
 	/**

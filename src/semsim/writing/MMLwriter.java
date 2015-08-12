@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.HashSet;
 
 import semsim.model.collection.SemSimModel;
+import semsim.model.computational.Computation;
 import semsim.model.computational.RelationalConstraint;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.Decimal;
@@ -157,8 +158,9 @@ public class MMLwriter extends ModelWriter{
 				}
 				
 				// If the codeword is an extern variable
-				if(onedecimal.getComputation()!=null){
-					if(onedecimal.getComputation().getComputationalCode()==null){
+				Computation comp = onedecimal.getComputation();
+				if(comp!=null){
+					if(comp.getComputationalCode()==null){
 						declaration = "extern real";
 					}
 				}

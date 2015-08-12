@@ -65,6 +65,7 @@ public class ReferenceLibraryDialog extends JFrame implements ComponentListener,
 			comp.addComponentListener(this);
 			comp.setFont(SemGenFont.defaultPlain(1));
 		}
+		reftermpane.updateListeners();
 	}
 	
 	public void openCreatorTab() {

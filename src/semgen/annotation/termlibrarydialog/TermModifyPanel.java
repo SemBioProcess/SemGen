@@ -1,10 +1,14 @@
 package semgen.annotation.termlibrarydialog;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.ContainerListener;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import semgen.SemGenSettings;
@@ -19,6 +23,9 @@ public class TermModifyPanel extends JPanel implements Observer {
 	private SemSimTermLibrary library;
 	private JPanel modpane;
 	private Integer compindex;
+	private JPanel modcntrls = new JPanel();
+	private JLabel msglbl = new JLabel();
+	private JButton confirmbtn = new JButton("Modify");
 	
 	public TermModifyPanel(AnnotatorWorkbench wb) {
 		library = wb.openTermLibrary();
@@ -29,11 +36,26 @@ public class TermModifyPanel extends JPanel implements Observer {
 	private void createGUI() {
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS)); 
 		setBackground(SemGenSettings.lightblue);
+		modcntrls.setLayout(new BoxLayout(modcntrls, BoxLayout.LINE_AXIS));
+		modcntrls.setBackground(SemGenSettings.lightblue);
+		modcntrls.setAlignmentX(LEFT_ALIGNMENT);
+		modcntrls.add(confirmbtn);
+		modcntrls.add(msglbl);
 	}
 	
 	public void showModifier(int index) {
 		compindex = index;
-		if (modpane!=null) remove(modpane);
+		//Necessary to prevent memmory leaks
+		if (modpane!=null) {
+			for (ContainerListener listener : getContainerListeners()) {
+				modpane.removeContainerListener(listener);
+			}
+			for (ComponentListener listener : getComponentListeners()) {
+				modpane.removeComponentListener(listener);
+			}
+			remove(modpane);
+			remove(modcntrls);
+		}
 		
 		switch (library.getSemSimType(compindex)) {
 		case CUSTOM_PHYSICAL_ENTITY:
@@ -49,7 +71,15 @@ public class TermModifyPanel extends JPanel implements Observer {
 			break;
 		
 		}
+		for (ContainerListener listener : getContainerListeners()) {
+			modpane.addContainerListener(listener);
+		}
+		for (ComponentListener listener : getComponentListeners()) {
+			modpane.addComponentListener(listener);
+		}
+		
 		add(modpane);
+		add(modcntrls);
 		validate();
 	}
 	
@@ -93,8 +123,7 @@ public class TermModifyPanel extends JPanel implements Observer {
 		private CompositeCreator cpec;
 		
 		
-		public CPEPanel() {
-			
+		public CPEPanel() {		
 			cpec = new CompositeCreator(library);
 			setBackground(SemGenSettings.lightblue);
 			add(cpec);
@@ -103,7 +132,7 @@ public class TermModifyPanel extends JPanel implements Observer {
 	
 	private class CompositeCreator extends EntitySelectorGroup  {
 		private static final long serialVersionUID = 1L;
-
+				
 		public CompositeCreator(SemSimTermLibrary lib) {
 			super(lib,library.getCompositeEntityIndicies(compindex), true);
 			
@@ -113,7 +142,10 @@ public class TermModifyPanel extends JPanel implements Observer {
 		public void onChange() {
 			pollSelectors();
 			if (selections.contains(-1)) {
-
+				msglbl.setText("Composite entities cannot contain unspecified terms.");
+			}
+			else if (true) {
+				
 			}
 			else {
 
