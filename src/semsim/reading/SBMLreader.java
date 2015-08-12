@@ -16,6 +16,7 @@ import org.sbml.libsbml.CVTerm;
 import org.sbml.libsbml.Compartment;
 import org.sbml.libsbml.CompartmentType;
 import org.sbml.libsbml.Constraint;
+import org.sbml.libsbml.Delay;
 import org.sbml.libsbml.FunctionDefinition;
 import org.sbml.libsbml.InitialAssignment;
 import org.sbml.libsbml.KineticLaw;
@@ -23,6 +24,7 @@ import org.sbml.libsbml.ListOfFunctionDefinitions;
 import org.sbml.libsbml.LocalParameter;
 import org.sbml.libsbml.Model;
 import org.sbml.libsbml.Parameter;
+import org.sbml.libsbml.Priority;
 import org.sbml.libsbml.Reaction;
 import org.sbml.libsbml.Rule;
 import org.sbml.libsbml.SBMLDocument;
@@ -30,6 +32,7 @@ import org.sbml.libsbml.SBMLReader;
 import org.sbml.libsbml.SBase;
 import org.sbml.libsbml.Species;
 import org.sbml.libsbml.SpeciesType;
+import org.sbml.libsbml.Trigger;
 import org.sbml.libsbml.Unit;
 import org.sbml.libsbml.UnitDefinition;
 import org.sbml.libsbml.libsbml;
@@ -48,7 +51,9 @@ import semsim.annotation.StructuralRelation;
 import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
+import semsim.model.computational.Event.EventAssignment;
 import semsim.model.computational.RelationalConstraint;
+import semsim.model.computational.Event;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.Decimal;
 import semsim.model.computational.units.UnitFactor;
@@ -124,10 +129,6 @@ public class SBMLreader extends ModelReader{
 //		collectInitialAssignments();
 		if (sbmlmodel.getListOfInitialAssignments().size()>0)
 			addErrorToModel("SBML source model contains initial assignments but these are not yet supported in SemSim.");
-
-//		collectEvents();
-		if (sbmlmodel.getListOfEvents().size()>0)
-			addErrorToModel("SBML source model contains events but these are not yet supported in SemSim.");
 		
 		// Create submodels for compartments and species. Each reaction gets its own submodel later.
 		if(sbmlmodel.getListOfParameters().size()>0) 
@@ -151,6 +152,8 @@ public class SBMLreader extends ModelReader{
 		collectRules();
 		collectReactions();
 		collectConstraints();
+		collectEvents();
+
 		
 		return semsimmodel;
 	}
@@ -473,6 +476,56 @@ public class SBMLreader extends ModelReader{
 			String mathml = libsbml.writeMathMLToString(cons.getMath());
 			RelationalConstraint rc = new RelationalConstraint("", mathml, cons.getMessageString());
 			semsimmodel.addRelationalConstraint(rc);
+		}
+	}
+	
+	/**
+	 * Collect the SBML model's discrete events
+	 */
+	private void collectEvents(){
+		
+		for(int e=0; e<sbmlmodel.getListOfEvents().size(); e++){
+			org.sbml.libsbml.Event sbmlevent = sbmlmodel.getEvent(e);
+			
+			org.sbml.libsbml.Trigger sbmltrigger = sbmlevent.getTrigger();
+			String triggermathml = libsbml.writeMathMLToString(sbmltrigger.getMath());
+			
+			Event ssevent = new Event();
+			ssevent.getTrigger().setMathML(triggermathml);
+			
+			// collect inputs for trigger here
+			
+			// Process event assignments
+			for(int a=0; a<sbmlevent.getListOfEventAssignments().size(); a++){
+				org.sbml.libsbml.EventAssignment ea = sbmlevent.getEventAssignment(a);
+				EventAssignment ssea = ssevent.new EventAssignment();
+				ssea.setMathML(libsbml.writeMathMLToString(ea.getMath()));
+				ssea.setOutput(semsimmodel.getAssociatedDataStructure(ea.getVariable()));
+				
+				// set inputs
+				
+				
+				ssevent.addEventAssignment(ssea);
+				
+			}
+			
+			// Collect the delay info
+			if(sbmlevent.isSetDelay()){
+				Delay delay = sbmlevent.getDelay();
+				ssevent.setDelayMathML(libsbml.writeMathMLToString(delay.getMath()));
+			}
+			
+			// Collect priority (SBML level 3)
+			if(sbmlmodel.getLevel()==3 && sbmlevent.isSetPriority()){
+				Priority priority = sbmlevent.getPriority();
+				ssevent.setPriorityMathML(libsbml.writeMathMLToString(priority.getMath()));
+			}
+			
+			// Set the time units (SBML level 2 version 2 or version 1)
+			if(sbmlmodel.getLevel()==3 && sbmlmodel.getVersion()<3 && sbmlevent.isSetTimeUnits()){
+				String timeunitsname = sbmlevent.getTimeUnits();
+				ssevent.setTimeUnit(semsimmodel.getUnit(timeunitsname));
+			}
 		}
 	}
 	
