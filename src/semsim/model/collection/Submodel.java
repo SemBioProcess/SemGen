@@ -36,8 +36,7 @@ public class Submodel extends SemSimCollection implements Importable {
 		if (ssmtocopy.localName!=null) {
 			localName = new String(ssmtocopy.localName);
 		}
-		submodels.addAll(ssmtocopy.submodels);
-		dataStructures.addAll(ssmtocopy.dataStructures);
+
 	}
 	
 	// For Importable interface

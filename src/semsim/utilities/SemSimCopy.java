@@ -3,6 +3,7 @@ package semsim.utilities;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import semsim.annotation.Annotation;
@@ -274,6 +275,19 @@ public class SemSimCopy {
 			}
 			newsm.setAssociatedDataStructures(dsset);
 			newsm.setSubmodels(smset);
+			if (newsm.isFunctional()) {
+				FunctionalSubmodel fsm = (FunctionalSubmodel)newsm;
+				Map<String, Set<FunctionalSubmodel>> oldrelsmmap = fsm.getRelationshipSubmodelMap();
+				Map<String, Set<FunctionalSubmodel>> relsmmap = new HashMap<String, Set<FunctionalSubmodel>>();
+				for (String rel : oldrelsmmap.keySet()) {
+					Set<FunctionalSubmodel> rsmset = new HashSet<FunctionalSubmodel>();
+					for (FunctionalSubmodel rfsm : rsmset) {
+						rsmset.add((FunctionalSubmodel) smmap.get(rfsm));
+					}
+					relsmmap.put(new String(rel), rsmset);
+				}
+				fsm.setRelationshipSubmodelMap(relsmmap);
+			}
 		}
 	}
 }

@@ -19,7 +19,8 @@ public abstract class SemSimCollection extends SemSimObject{
 	
 	public SemSimCollection(SemSimCollection coltocopy) {
 		super(coltocopy);
-		
+		submodels.addAll(coltocopy.submodels);
+		dataStructures.addAll(coltocopy.dataStructures);
 	}
 	
 	/**
