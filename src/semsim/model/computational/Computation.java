@@ -41,7 +41,7 @@ public class Computation extends ComputationalModelComponent{
 		super(comptocopy);
 		
 		outputs.addAll(comptocopy.outputs);
-		outputs.addAll(comptocopy.inputs);
+		inputs.addAll(comptocopy.inputs);
 		if (comptocopy.computationalCode !=null) {
 			computationalCode = new String(comptocopy.computationalCode);
 		}
