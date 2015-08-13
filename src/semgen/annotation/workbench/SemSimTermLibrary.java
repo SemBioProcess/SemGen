@@ -170,21 +170,28 @@ public class SemSimTermLibrary extends Observable {
 		return i;
 	}
 	
-	public int createCompositePhysicalEntity(ArrayList<Integer> peindicies) {
-		//Avoid creating a composite with a null in the entity list
-		if (peindicies.contains(-1)) return -1;
+	private CompositePhysicalEntity makeCPE(ArrayList<Integer> peindicies) {
 		ArrayList<PhysicalEntity> pes = new ArrayList<PhysicalEntity>();
 		ArrayList<StructuralRelation> rels = new ArrayList<StructuralRelation>();
 		for (Integer i : peindicies) {
-			if (i==-1) pes.add(null); 
 			pes.add((PhysicalEntity)masterlist.get(i).getObject());
 			rels.add(SemSimConstants.PART_OF_RELATION);
 		}
 		if (!rels.isEmpty()) {
 			rels.remove(0);
 		}
-		
-		return addCompositePhysicalEntity(new CompositePhysicalEntity(pes, rels));
+		return new CompositePhysicalEntity(pes, rels);
+	}
+	
+	public int createCompositePhysicalEntity(ArrayList<Integer> peindicies) {
+		//Avoid creating a composite with a null in the entity list
+		if (peindicies.contains(-1)) return -1;
+
+		return addCompositePhysicalEntity(makeCPE(peindicies));	
+	}
+	
+	public boolean containsCompositeEntitywithTerms(ArrayList<Integer> peindicies) {
+		return getIndexofCompositePhysicalEntity(makeCPE(peindicies))!=-1;
 	}
 	
 	public int createReferencePhysicalProcess(String name, URI uri) {

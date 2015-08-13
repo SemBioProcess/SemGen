@@ -63,7 +63,7 @@ public class FunctionalSubmodel extends Submodel {
 		super(fsmtocopy);
 		relationshipSubmodelMap.putAll(fsmtocopy.relationshipSubmodelMap);
 		functional = true;
-		computation = new Computation();
+		computation = fsmtocopy.getComputation();
 	}
 	
 	public Map<String, Set<FunctionalSubmodel>> getRelationshipSubmodelMap() {

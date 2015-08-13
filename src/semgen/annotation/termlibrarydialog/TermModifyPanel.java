@@ -40,6 +40,7 @@ public class TermModifyPanel extends JPanel implements Observer {
 		modcntrls.setBackground(SemGenSettings.lightblue);
 		modcntrls.setAlignmentX(LEFT_ALIGNMENT);
 		modcntrls.add(confirmbtn);
+		confirmbtn.setEnabled(false);
 		modcntrls.add(msglbl);
 	}
 	
@@ -93,14 +94,11 @@ public class TermModifyPanel extends JPanel implements Observer {
 
 		public CustomProcessPane(SemSimTermLibrary lib) {
 			super(lib, compindex);
-
+			remove(confirmpan);
 		}
 
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			Object obj = arg0.getSource();
-			
-		}
+		public void actionPerformed(ActionEvent arg0) {}
 	}
 	
 	private class CustomEntityPane extends CustomTermOptionPane  {
@@ -108,13 +106,11 @@ public class TermModifyPanel extends JPanel implements Observer {
 
 		public CustomEntityPane(SemSimTermLibrary lib) {
 			super(lib, compindex);
-			remove(cancelbtn);
+			remove(confirmpan);
 		}
 
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
-
-		}
+		public void actionPerformed(ActionEvent arg0) {}
 		
 	}
 	
@@ -142,13 +138,16 @@ public class TermModifyPanel extends JPanel implements Observer {
 		public void onChange() {
 			pollSelectors();
 			if (selections.contains(-1)) {
+				confirmbtn.setEnabled(false);
 				msglbl.setText("Composite entities cannot contain unspecified terms.");
 			}
-			else if (true) {
-				
+			else if (library.containsCompositeEntitywithTerms(selections)) {
+				msglbl.setText("Composite physical entity with those terms already exists.");
+				confirmbtn.setEnabled(false);
 			}
 			else {
-
+				confirmbtn.setEnabled(true);
+				msglbl.setText("Valid composite physical entity");
 			}
 		}
 	

@@ -37,18 +37,24 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 	 * @param uomtocopy
 	 */
 	public UnitOfMeasurement(UnitOfMeasurement uomtocopy) {
-		setName(new String(uomtocopy.getName()));
+		super(uomtocopy);
 		computationalCode = new String(uomtocopy.computationalCode);
-		if (customDeclaration != null) {
+		if (uomtocopy.customDeclaration != null) {
 			customDeclaration = new String(uomtocopy.customDeclaration);
 		}
+		unitFactors.addAll(uomtocopy.unitFactors);
 		isFundamental = uomtocopy.isFundamental;
 		isFundamental = uomtocopy.isImported;
 		parentImport = uomtocopy.parentImport;
-		referencedName = uomtocopy.referencedName;
-		localName = uomtocopy.localName;
+		if (uomtocopy.referencedName != null) {
+			referencedName = new String(uomtocopy.referencedName);
+		}
+		if (uomtocopy.localName != null) {
+			localName = new String(uomtocopy.localName);
+		}
 		unitType = uomtocopy.unitType;
 	}
+	
 	public void addUnitFactor(UnitFactor factor){
 		unitFactors.add(factor);
 	}

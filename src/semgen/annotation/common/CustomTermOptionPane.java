@@ -33,6 +33,7 @@ public abstract class CustomTermOptionPane extends JPanel implements ActionListe
 	protected JButton createbtn = new JButton("Create");
 	protected JButton cancelbtn = new JButton("Cancel");
 	protected JLabel msgbox = new JLabel("Please enter a valid name");
+	protected JPanel confirmpan = new JPanel();
 	
 	public CustomTermOptionPane(SemSimTermLibrary lib) {
 		library = lib;
@@ -97,7 +98,7 @@ public abstract class CustomTermOptionPane extends JPanel implements ActionListe
 		createbtn.setEnabled(termindex!=-1);
 		createbtn.addActionListener(this);
 		cancelbtn.addActionListener(this);
-		JPanel confirmpan = new JPanel();
+		
 		confirmpan.setLayout(new BoxLayout(confirmpan, BoxLayout.X_AXIS));
 		confirmpan.add(msgbox);
 		confirmpan.add(createbtn);

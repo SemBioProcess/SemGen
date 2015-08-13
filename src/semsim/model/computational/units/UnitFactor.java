@@ -13,6 +13,7 @@ public class UnitFactor{
 	}
 
 	public UnitFactor(UnitFactor uftocopy) {
+		baseUnit = uftocopy.baseUnit;
 		exponent = uftocopy.exponent;
 		if (uftocopy.prefix!=null) {
 			prefix = new String(uftocopy.prefix);
