@@ -10,6 +10,9 @@ import javax.swing.JOptionPane;
 
 import semgen.SemGen;
 import semgen.search.CompositeAnnotationSearch;
+import semgen.stage.janet.Network;
+import semgen.stage.janet.janet_calls;
+import semgen.stage.janet.parseSearchResults;
 import semgen.stage.serialization.SemSimModelSerializer;
 import semgen.stage.serialization.SubModelNode;
 import semgen.utilities.Workbench;
@@ -165,8 +168,22 @@ public class StageWorkbench extends Workbench {
 		}
 		
 		public void onSearch(String searchString) throws FileNotFoundException {
-			JsonString searchResults = CompositeAnnotationSearch.compositeAnnotationSearch(searchString);
+		
+			String janetResults  = janet_calls.TrimParsedJanetData(searchString);
+			
+			JsonString searchResults;
+			if(janetResults==null)
+				searchResults = CompositeAnnotationSearch.compositeAnnotationSearch(searchString);
+			else
+				searchResults = SemSimModelSerializer.toJsonString(janetResults);
+			
+			System.out.println("function String = " + searchString);
+			System.out.println("jSon String = " + searchResults);
+			System.out.println("janetResults = " + janetResults);
 			_commandSender.search(searchResults);
+			
+		
+			
 		}
 		
 		public void onMerge(String modelName1, String modelName2) {
