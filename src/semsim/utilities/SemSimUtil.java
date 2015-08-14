@@ -28,6 +28,7 @@ import org.jdom.output.XMLOutputter;
 import semsim.SemSimConstants;
 import semsim.SemSimLibrary;
 import semsim.model.collection.SemSimModel;
+import semsim.model.computational.Event;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
@@ -152,34 +153,75 @@ public class SemSimUtil {
 	public static Set<DataStructure> getComputationalInputsFromMathML(SemSimModel semsimmodel, String mathmlstring, String nameprefix){
 
 		Set<DataStructure> inputs = new HashSet<DataStructure>();
-		Pattern p = Pattern.compile("<ci>.+</ci>");
-		Matcher m = p.matcher(mathmlstring);
-		boolean result = m.find();
-		
-		while(result){
+
+		if(semsimmodel!=null && mathmlstring!=null){
 			
-			String inputname = mathmlstring.substring(m.start()+4, m.end()-5).trim();
-			String inputnameprefixed = nameprefix + "." + inputname;
-			String inputnametouse = inputname;
-						
-			if(! semsimmodel.containsDataStructure(inputname)){
-				if(! semsimmodel.containsDataStructure(inputnameprefixed)){
-					String errmsg = "SEMSIM MODEL ERROR: MathML content refers to " + inputname + " but that variable is not in the model.";
-					semsimmodel.addError(errmsg);
-					System.err.println(errmsg);
-					return new HashSet<DataStructure>();
+			Pattern p = Pattern.compile("<ci>.+</ci>");
+			Matcher m = p.matcher(mathmlstring);
+			boolean result = m.find();
+			
+			while(result){
+				
+				String inputname = mathmlstring.substring(m.start()+4, m.end()-5).trim();
+				String inputnameprefixed = nameprefix + "." + inputname;
+				String inputnametouse = inputname;
+							
+				if(! semsimmodel.containsDataStructure(inputname)){
+					
+					if(! semsimmodel.containsDataStructure(inputnameprefixed)){
+						String errmsg = "SEMSIM MODEL ERROR: MathML content refers to " + inputname + " but that variable is not in the model.";
+						semsimmodel.addError(errmsg);
+						System.err.println(errmsg);
+						return new HashSet<DataStructure>();
+					}
+					else inputnametouse = inputnameprefixed;
 				}
-				else inputnametouse = inputnameprefixed;
-			}
-			
-			DataStructure inputds = semsimmodel.getAssociatedDataStructure(inputnametouse);
-			inputs.add(inputds);
-			result = m.find();
+				
+				DataStructure inputds = semsimmodel.getAssociatedDataStructure(inputnametouse);
+				inputs.add(inputds);
+				result = m.find();
+			}			
 		}
-		
 		return inputs;
 	}
 	
+	/**
+	 * Set the computational inputs for a DataStructure based on its main MathML block and the MathML
+	 * associated with any Event that effects the DataStructure's value.
+	 * @param semsimmodel The model containing the DataStructure
+	 * @param outputds The DataStructure that will have its computational inputs set
+	 * @param prefix An optional prefix to use for inputs that are local to a submodel
+	 */
+	public static void setComputationInputsForDataStructure(SemSimModel semsimmodel, DataStructure outputds, String prefix){
+		
+		outputds.getComputation().getInputs().clear();
+		Set<DataStructure> allinputs = new HashSet<DataStructure>();
+		
+		// Collect the inputs from the data structure's main mathml block
+		String mathmlstring = outputds.getComputation().getMathML();
+		for(DataStructure input : SemSimUtil.getComputationalInputsFromMathML(semsimmodel, mathmlstring, prefix)){
+			allinputs.add(input);
+		}
+		
+		// set inputs based on the Events that the data structure participates in
+		for(Event event : outputds.getComputation().getEvents()){
+			
+			// collect inputs for trigger
+			String triggermathml = event.getTriggerMathML();
+			Set<DataStructure> triggerinputs = SemSimUtil.getComputationalInputsFromMathML(semsimmodel, triggermathml, prefix);
+			allinputs.addAll(triggerinputs);
+			
+			// collect inputs from event assignment mathml
+			String assignmentmathml = event.getEventAssignmentForOutput(outputds).getMathML();
+			Set<DataStructure> assignmentinputs = SemSimUtil.getComputationalInputsFromMathML(semsimmodel, assignmentmathml, prefix);
+			allinputs.addAll(assignmentinputs);
+		}
+		
+		// Assert all the inputs
+		for(DataStructure input : allinputs){
+			if(! input.equals(outputds)) outputds.getComputation().addInput(input);
+		}
+	}
 	
 	/**
 	 * Find the right hand side of the equation for a data structure from 

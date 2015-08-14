@@ -10,7 +10,7 @@ import semsim.model.computational.units.UnitOfMeasurement;
 
 public class Event extends ComputationalModelComponent{
 
-	private EventTrigger trigger;
+	private String eventTriggerMathML;
 	private Set<EventAssignment> eventAssignments;
 	private String delayMathML;
 	private String priorityMathML; // only for SBML Level 3 models
@@ -18,20 +18,19 @@ public class Event extends ComputationalModelComponent{
 	
 	// Constructor
 	public Event(){
-		setTrigger(new EventTrigger());
 		eventAssignments = new HashSet<EventAssignment>();
 	} 
 	
 	
 	
-	public EventTrigger getTrigger() {
-		return trigger;
+	public String getTriggerMathML() {
+		return eventTriggerMathML;
 	}
 
 	
 	
-	public void setTrigger(EventTrigger trigger) {
-		this.trigger = trigger;
+	public void setTriggerMathML(String trigger) {
+		this.eventTriggerMathML = trigger;
 	}
 
 
@@ -56,6 +55,17 @@ public class Event extends ComputationalModelComponent{
 	
 	public void removeEventAssignment(EventAssignment ea){
 		this.getEventAssignments().remove(ea);
+	}
+	
+	
+	public EventAssignment getEventAssignmentForOutput(DataStructure outputds){
+		
+		for(EventAssignment ea : this.getEventAssignments()){
+			
+			if(ea.getOutput().equals(outputds)) return ea;
+		}
+		
+		return null;
 	}
 	
 	
@@ -94,49 +104,14 @@ public class Event extends ComputationalModelComponent{
 		this.timeUnit = timeUnit;
 	}
 
-
-
-	// Nested subclass for event trigger
-	public class EventTrigger{
-		private String mathML;
-		private Set<DataStructure> inputs;
-
-		// Constructor
-		public EventTrigger(){
-			inputs = new HashSet<DataStructure>();
-		} 
-		
-		public String getMathML() {
-			return mathML;
-		}
-
-		public void setMathML(String mathML) {
-			this.mathML = mathML;
-		}
-
-		public Set<DataStructure> getInputs() {
-			return inputs;
-		}
-
-		public void setInputs(Set<DataStructure> inputs) {
-			this.inputs = inputs;
-		}
-		
-		public void addInput(DataStructure input){
-			inputs.add(input);
-		}
-	}
 	
 	// Nested subclass for event assignments
-	public class EventAssignment{
+	public class EventAssignment extends ComputationalModelComponent{
 		private String mathML;
-		private Set<DataStructure> inputs;
 		private DataStructure output;
 		
 		// Constructor
-		public EventAssignment(){
-			inputs = new HashSet<DataStructure>();
-		}
+		public EventAssignment(){}
 
 		public String getMathML() {
 			return mathML;
@@ -144,18 +119,6 @@ public class Event extends ComputationalModelComponent{
 
 		public void setMathML(String mathML) {
 			this.mathML = mathML;
-		}
-
-		public Set<DataStructure> getInputs() {
-			return inputs;
-		}
-
-		public void setInputs(Set<DataStructure> inputs) {
-			this.inputs = inputs;
-		}
-		
-		public void addInput(DataStructure input){
-			inputs.add(input);
 		}
 
 		public DataStructure getOutput() {
@@ -164,6 +127,12 @@ public class Event extends ComputationalModelComponent{
 
 		public void setOutput(DataStructure output) {
 			this.output = output;
+		}
+
+		@Override
+		public URI getSemSimClassURI() {
+			// TODO Auto-generated method stub
+			return SemSimConstants.EVENT_ASSIGNMENT_CLASS_URI;
 		}
 	}
 	

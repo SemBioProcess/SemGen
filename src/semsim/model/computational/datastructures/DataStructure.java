@@ -135,7 +135,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	
 	/** @return Whether the DataStructure is solved as a non-continuous variable */
 	public Boolean isDiscrete(){
-		return isDiscrete;
+		return this.getComputation().getEvents().size()>0;
 	}
 	
 	/** @return Whether the DataStructure is a solution domain for the model */
@@ -172,11 +172,6 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 
 	public void setDeclared(boolean isDeclared) {
 		this.isDeclared = isDeclared;
-	}
-	
-	/** Set whether this DataStructure is solved as a non-continuous variable or not */
-	public void setDiscrete(boolean isdisc){
-		this.isDiscrete = isdisc;
 	}
 	
 	/** Set whether this DataStructure is a solution domain in the model or not */

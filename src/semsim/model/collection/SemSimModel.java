@@ -25,6 +25,7 @@ import semsim.annotation.SemSimRelation;
 import semsim.annotation.StructuralRelation;
 import semsim.model.SemSimComponent;
 import semsim.model.computational.ComputationalModelComponent;
+import semsim.model.computational.Event;
 import semsim.model.computational.RelationalConstraint;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.Decimal;
@@ -88,6 +89,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	private Set<DataStructure> dataStructures = new HashSet<DataStructure>();
 	private Set<RelationalConstraint> relationalConstraints = new HashSet<RelationalConstraint>(); 
 	private Set<UnitOfMeasurement> units = new HashSet<UnitOfMeasurement>();
+	private Set<Event> events = new HashSet<Event>();
 	
 	// Physical model components
 	private Set<Submodel> submodels = new HashSet<Submodel>();
@@ -394,6 +396,31 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 		}
 		else System.err.println("Model already has data structure named " + ds.getName() + ". Using existing data structure.");
 		return ds;
+	}
+	
+	/**
+	 * @return The set of all {@link Events} in the model
+	 */
+	public Set<Event> getEvents(){
+		return events;
+	}
+	
+	/**
+	 * Specify the set of {@link Events} in the model
+	 * @param theevents The set of {@link Events} that will be assigned to the model
+	 */
+	public void setEvents(Set<Event> theevents){
+		this.events.clear();
+		this.events.addAll(theevents);
+	}
+	
+	
+	/**
+	 * Add an {@link Event} to the model
+	 * @param theevent The {@link Event} to add
+	 */
+	public void addEvent(Event theevent){
+		this.events.add(theevent);
 	}
 	
 	/**

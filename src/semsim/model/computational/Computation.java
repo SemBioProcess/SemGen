@@ -17,7 +17,7 @@ public class Computation extends ComputationalModelComponent{
 	private Set<DataStructure> inputs = new HashSet<DataStructure>();
 	private String computationalCode;
 	private String mathML;
-	private Set<Event> events;
+	private Set<Event> events = new HashSet<Event>();
 	
 	/**
 	 * Class constructor with no output(s) specified

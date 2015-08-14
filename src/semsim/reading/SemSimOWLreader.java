@@ -316,7 +316,8 @@ public class SemSimOWLreader extends ModelReader {
 					ds.setDeclared(Boolean.parseBoolean(isdeclared));
 					
 					String isdiscrete = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, dsind, SemSimConstants.IS_DISCRETE_URI.toString());
-					ds.setDiscrete(Boolean.parseBoolean(isdiscrete));
+					
+					//ds.setDiscrete(Boolean.parseBoolean(isdiscrete));
 					
 					String issoldom = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, dsind, SemSimConstants.IS_SOLUTION_DOMAIN_URI.toString());
 					ds.setIsSolutionDomain(Boolean.parseBoolean(issoldom));
