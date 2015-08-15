@@ -9,7 +9,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.apache.commons.codec.binary.StringUtils;
 
-import semgen.visualizations.JsonString;
+//import semgen.visualizations.JsonString;
 
 public class parseSearchResults
 {

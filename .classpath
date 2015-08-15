@@ -44,5 +44,20 @@
 	<classpathentry kind="lib" path="thirdParty/jxbrowser/jxbrowser-win-5.2.jar"/>
 	<classpathentry kind="lib" path="thirdParty/jxbrowser/runtime-license-expires-5-1-2020.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="C:/Users/sven251/Desktop/github_clones/Semgen_Janet_branch/SemGen/thirdParty/janet/beansbinding-1.2.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/sven251/Desktop/github_clones/Semgen_Janet_branch/SemGen/thirdParty/janet/commons-codec-1.9.jar"/>
+	<classpathentry kind="lib" path="C:/Users/sven251/Desktop/github_clones/Semgen_Janet_branch/SemGen/thirdParty/janet/commons-io-2.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/sven251/Desktop/github_clones/Semgen_Janet_branch/SemGen/thirdParty/janet/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/sven251/Desktop/github_clones/Semgen_Janet_branch/SemGen/thirdParty/janet/commons-net-3.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/sven251/Desktop/github_clones/Semgen_Janet_branch/SemGen/thirdParty/janet/fluent-hc-4.4.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/sven251/Desktop/github_clones/Semgen_Janet_branch/SemGen/thirdParty/janet/forms-1.3.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/sven251/Desktop/github_clones/Semgen_Janet_branch/SemGen/thirdParty/janet/httpclient-4.4.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/sven251/Desktop/github_clones/Semgen_Janet_branch/SemGen/thirdParty/janet/httpclient-cache-4.4.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/sven251/Desktop/github_clones/Semgen_Janet_branch/SemGen/thirdParty/janet/httpclient-win-4.4.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/sven251/Desktop/github_clones/Semgen_Janet_branch/SemGen/thirdParty/janet/httpcore-4.4.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/sven251/Desktop/github_clones/Semgen_Janet_branch/SemGen/thirdParty/janet/httpmime-4.4.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/sven251/Desktop/github_clones/Semgen_Janet_branch/SemGen/thirdParty/janet/jna-4.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/sven251/Desktop/github_clones/Semgen_Janet_branch/SemGen/thirdParty/janet/jna-platform-4.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/sven251/Desktop/github_clones/Semgen_Janet_branch/SemGen/thirdParty/janet/json-simple-1.1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
