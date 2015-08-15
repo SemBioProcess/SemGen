@@ -41,8 +41,8 @@ public class MergerTask extends SemGenTask {
     		for(DataStructure solutiondomds : ssm1clone.getSolutionDomains())
     			removeDomainBounds(solutiondomds.getName());
     			
-	    		resolveSyntacticOverlap();
-				Merger merger = new Merger(ssm1clone, ssm2clone, overlapmap, choicelist, conversionfactors);
+    			HashMap<String, String> oldnewdsnamemap = resolveSyntacticOverlap();
+				Merger merger = new Merger(ssm1clone, ssm2clone, overlapmap, oldnewdsnamemap, choicelist, conversionfactors);
 				mergedmodel = merger.merge();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -50,8 +50,9 @@ public class MergerTask extends SemGenTask {
         return null;
     }
 
-	private void resolveSyntacticOverlap() {
+	private HashMap<String, String> resolveSyntacticOverlap() {
 		// First resolve the syntactic overlap between submodels
+		HashMap<String, String> oldnewdsnamemap = new HashMap<String,String>();
 		for(String oldsmname : submodnamemap.keySet()){
 			String newsmname = new String(submodnamemap.get(oldsmname));
 			Submodel renamedsm = ssm1clone.getSubmodel(oldsmname);
@@ -60,6 +61,7 @@ public class MergerTask extends SemGenTask {
 			for(DataStructure ds : renamedsm.getAssociatedDataStructures()){
 				String olddsname = ds.getName();
 				String newdsname = ds.getName().replace(oldsmname, newsmname);
+				oldnewdsnamemap.put(olddsname, newdsname);
 				ds.setName(newdsname);
 				cwnamemap.remove(olddsname);  // Remove duplicate codeword mapping if present in cwnamemap
 			}
@@ -91,6 +93,7 @@ public class MergerTask extends SemGenTask {
 						ssm1clone, derivname, derivname.replace(dsname, newdsname), 1);
 			}
 		}
+		return oldnewdsnamemap;
 	}
     
 	private void removeDomainBounds(String name) {

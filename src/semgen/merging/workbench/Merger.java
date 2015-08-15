@@ -29,16 +29,18 @@ public class Merger {
 	protected String error;
 	private ArrayList<ResolutionChoice> choicelist;
 	ArrayList<Pair<Double,String>> conversionfactors;
+	private HashMap<String, String> oldnewdsnamemap;
 	
 	public static enum ResolutionChoice {
 		noselection, first, second, ignore; 
 	}
 	
-	public Merger(SemSimModel model1, SemSimModel model2, ModelOverlapMap modelmap, 
+	public Merger(SemSimModel model1, SemSimModel model2, ModelOverlapMap modelmap, HashMap<String, String> dsnamemap,
 			ArrayList<ResolutionChoice> choices, ArrayList<Pair<Double,String>> conversions) {
 		ssm1clone = model1;
 		ssm2clone = model2;
 		overlapmap = modelmap;
+		oldnewdsnamemap =dsnamemap;
 		choicelist = choices;
 		conversionfactors = conversions;
 	}
@@ -63,15 +65,20 @@ public class Merger {
 		// Step through resolution points and replace/rewire codewords as needed
 		for (Pair<DataStructure, DataStructure> dsp : overlapmap.getDataStructurePairs()) {
 			if (choicelist.get(i).equals(ResolutionChoice.first)) {
-				
-				keptds = ssm1clone.getAssociatedDataStructure(dsp.getLeft().getName());
+				String newname = oldnewdsnamemap.get(dsp.getLeft().getName());
+				if (newname==null) newname=dsp.getLeft().getName();
+				keptds = ssm1clone.getAssociatedDataStructure(newname);
 				modelfordiscardedds = ssm2clone;
+				
 				discardedds = modelfordiscardedds.getAssociatedDataStructure(dsp.getRight().getName());
 			}
 			else if(choicelist.get(i).equals(ResolutionChoice.second)){
 				keptds = ssm2clone.getAssociatedDataStructure(dsp.getRight().getName());
 				modelfordiscardedds = ssm1clone;
-				discardedds = modelfordiscardedds.getAssociatedDataStructure(dsp.getLeft().getName());
+				
+				String newname = oldnewdsnamemap.get(dsp.getLeft().getName());
+				if (newname==null) newname=dsp.getLeft().getName();
+				discardedds = modelfordiscardedds.getAssociatedDataStructure(newname);
 			}
 			
 			// If "ignore equivalency" is NOT selected
