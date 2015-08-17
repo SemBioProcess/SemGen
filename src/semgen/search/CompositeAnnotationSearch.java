@@ -49,7 +49,8 @@ public class CompositeAnnotationSearch {
 			finalResults = compareResults.get(0);
 			finalResults.retainAll(resultSet);
 		}
-
+		System.out.println("finalResults = " + finalResults);
+		System.out.println("finalResults.len = " + finalResults.size());
 		return new SearchResultSet(SourceName, finalResults.toArray(new String[finalResults.size()]));
 	}
 }

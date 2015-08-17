@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 
 import semgen.SemGen;
 import semgen.search.CompositeAnnotationSearch;
+import semgen.stage.janet.janet_calls;
 import semgen.stage.serialization.SearchResultSet;
 import semgen.stage.serialization.SemSimModelSerializer;
 import semgen.stage.serialization.SubModelNode;
@@ -170,7 +171,20 @@ public class StageWorkbench extends Workbench {
 					CompositeAnnotationSearch.compositeAnnotationSearch(searchString),
 					// PMR results here
 			};
+			
+			
+			String janetResults  = janet_calls.TrimParsedJanetData(searchString);
+			//System.out.println("janetResults = " + janetResults.toString());
+			String[] janetstrArray = new String[] {janetResults};
+			
+			//JsonString searchResults;
+			//if(janetResults==null)
+			//	searchResults = CompositeAnnotationSearch.compositeAnnotationSearch(searchString);
+			
+			
+			
 
+			System.out.println("ResultSets = " + resultSets.toString() );
 			_commandSender.search(resultSets);
 		}
 		
