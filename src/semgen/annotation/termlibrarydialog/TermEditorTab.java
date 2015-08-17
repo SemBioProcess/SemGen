@@ -115,6 +115,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Ance
 		editpane.add(toolbar);
 		editpane.add(curpane);
 		editspacer.add(editpane);
+		editspacer.setBackground(SemGenSettings.lightblue);
 		add(editspacer);
 		add(Box.createVerticalGlue());
 		validate();
@@ -155,9 +156,9 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Ance
 			return;
 		}
 		
-		affected = workbench.collectAffiliatedTermsandCodewords(getTermSelection());
-		tip.updateInformation(affected);
-		replaceComponent();
+		affected = workbench.collectAffiliatedTermsandCodewords(getTermSelection());	
+		tip.updateInformation(affected);		
+		toolbar.selectInfoButton();
 	}
 	
 	private void clearPanel() {
@@ -331,6 +332,10 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Ance
 				removebtn.setEnabled(false);		
 				replacebtn.setEnabled(false);
 			}
+		}
+		
+		public void selectInfoButton() {
+			infobtn.doClick();
 		}
 	}
 }

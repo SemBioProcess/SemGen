@@ -82,7 +82,7 @@ public class SemSimCopy {
 		return annset;
 	}
 	
-	private HashMap<PhysicalEntity, PhysicalEntity> copyPhysicalEntities(SemSimModel modeltocopy) {
+	private void copyPhysicalEntities(SemSimModel modeltocopy) {
 		for (ReferencePhysicalEntity rpe : modeltocopy.getReferencePhysicalEntities()) {
 			entities.put(rpe,rpe);
 		}
@@ -106,11 +106,9 @@ public class SemSimCopy {
 			newcpe.setArrayListOfEntities(pes);
 			entities.put(cpe, newcpe);
 		}
-
-		return entities;
 	}
 	
-	private HashMap<PhysicalProcess, PhysicalProcess> copyPhysicalProcesses(SemSimModel modeltocopy) {		
+	private void copyPhysicalProcesses(SemSimModel modeltocopy) {		
 		for (ReferencePhysicalProcess rpp : modeltocopy.getReferencePhysicalProcesses()) {
 			procs.put(rpp,rpp);
 		}
@@ -122,11 +120,9 @@ public class SemSimCopy {
 			procs.put(cpp, newcpp);
 		}
 		
-		return procs;
 	}
 	
-	private HashMap<UnitOfMeasurement, UnitOfMeasurement> copyUnits() {
-		
+	private void copyUnits() {		
 		HashMap<UnitFactor, UnitFactor> ufactormap = new HashMap<UnitFactor, UnitFactor>();
 		for (UnitOfMeasurement old : modeltocopy.getUnits()) {
 			UnitOfMeasurement newunit = new UnitOfMeasurement(old);
@@ -149,11 +145,10 @@ public class SemSimCopy {
 			newunit.setAnnotations(copyAnnotations(old.getAnnotations()));
 		}
 		//Set unit factor base units using the new units
-		for (UnitFactor uf : ufactormap.keySet()) {
+		for (UnitFactor uf : ufactormap.values()) {
 			uf.setBaseUnit(unitmap.get(uf.getBaseUnit()));
 		}
 
-		return unitmap;
 	}
 	
 	private void copyDataStructures(SemSimModel modeltocopy) {

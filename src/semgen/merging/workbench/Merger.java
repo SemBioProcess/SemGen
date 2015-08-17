@@ -28,7 +28,7 @@ public class Merger {
 	private ModelOverlapMap overlapmap;
 	protected String error;
 	private ArrayList<ResolutionChoice> choicelist;
-	ArrayList<Pair<Double,String>> conversionfactors;
+	private ArrayList<Pair<Double,String>> conversionfactors;
 	private HashMap<String, String> oldnewdsnamemap;
 	
 	public static enum ResolutionChoice {
@@ -135,6 +135,7 @@ public class Merger {
 			mergedmodel.addReferencePhysicalProcess(pp);
 		}
 		
+		//Create map with units from the cloned model
 		Map<UnitOfMeasurement,UnitOfMeasurement> equnitsmap = new HashMap<UnitOfMeasurement,UnitOfMeasurement>();
 		for (UnitOfMeasurement uom : overlapmap.getEquivalentUnitPairs().keySet()) {
 			equnitsmap.put(ssm1clone.getUnit(uom.getName()), ssm2clone.getUnit(overlapmap.getEquivalentUnitPairs().get(uom).getName()));
