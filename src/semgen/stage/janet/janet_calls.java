@@ -1,12 +1,18 @@
 package semgen.stage.janet;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import semgen.stage.serialization.SearchResultSet;
+
 
 
 public class janet_calls
 {
 	
 	
-	public static String TrimParsedJanetData(String searchString) {
+	public static SearchResultSet TrimParsedJanetData(String searchString) {
 		
 		
 		
@@ -51,8 +57,15 @@ public class janet_calls
 				e.printStackTrace();
 			}
 	
-		
-		return janetSearchedStr;
+		// String[] janetstrArray = new String[] {janetSearchedStr};
+		 String[] janetstrArray = janetSearchedStr.split(","); 
+		 System.out.println("janetstrArray[0] = "  + janetstrArray[0]);
+		 System.out.println("janetstrArray[1] = "  + janetstrArray[1]);
+		// Set<String> mySet = new HashSet<String>(Arrays.asList(janetstrArray));
+		 //return new SearchResultSet("PMR", mySet.toArray(new String[mySet.size()]));
+		 
+		 return new SearchResultSet("PMR", janetstrArray);
+		//return janetstrArray;
 		
 		
 	}

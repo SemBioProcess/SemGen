@@ -283,7 +283,7 @@ public class parseSearchResults
       
          int col = 2;//wsname,filename
          String[][] string_2D_Array = new String [row+1][col+1];
-         String janet_searched_models_for_semgen="[";
+         String janet_searched_models_for_semgen = "";
          for(int i =0; i<row;i++)                   
          {
              string_2D_Array[i][0] = workspaceArray[i];
@@ -292,11 +292,11 @@ public class parseSearchResults
              //char Wtemp = '"';
              //String Wmastertemp = Wtemp + "W:" ;
              if(i<row-1)
-            	 janet_searched_models_for_semgen += "\"W:" +string_2D_Array[i][0].replaceAll("\\s+","") + " "  + "M:" + string_2D_Array[i][1].replaceAll("\\s+","")  +"\",";
+            	 janet_searched_models_for_semgen += "W:" +string_2D_Array[i][0].replaceAll("\\s+","") + " "  + "M:" + string_2D_Array[i][1].replaceAll("\\s+","")  +",";
              else
-            	 janet_searched_models_for_semgen += "W:" +string_2D_Array[i][0].replaceAll("\\s+","") + " "  + "M:" + string_2D_Array[i][1].replaceAll("\\s+","")  +"\"";
+            	 janet_searched_models_for_semgen += "W:" +string_2D_Array[i][0].replaceAll("\\s+","") + " "  + "M:" + string_2D_Array[i][1].replaceAll("\\s+","");
           }   
-         janet_searched_models_for_semgen+="]";
+         //janet_searched_models_for_semgen+="]";
                  
          for(int i =0; i<row;i++)
          {
